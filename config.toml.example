@@ -1,0 +1,92 @@
+# Copy this file to ~/.codex/config.toml and replace the placeholders.
+# Keep the real config.toml local and out of Git.
+
+model = "gpt-5.4"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+model_reasoning_effort = "high"
+notify = ["python3", "__CODEX_HOME__/bin/notify.py"]
+approvals_reviewer = "user"
+service_tier = "fast"
+
+[features]
+multi_agent = true
+
+[sandbox_workspace_write]
+network_access = false
+exclude_tmpdir_env_var = false
+exclude_slash_tmp = false
+
+[mcp_servers.convex]
+command = "bunx"
+args = ["-y", "convex", "mcp", "start"]
+
+[mcp_servers.sequential-thinking]
+command = "bunx"
+args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+
+# Add your real Ref key locally only.
+[mcp_servers.Ref]
+url = "https://api.ref.tools/mcp?apiKey=YOUR_REF_API_KEY"
+
+[mcp_servers.deepwiki]
+url = "https://mcp.deepwiki.com/mcp"
+
+[mcp_servers.grep]
+url = "https://mcp.grep.app"
+
+[agents]
+max_threads = 6
+max_depth = 1
+
+[agents.asset-generator]
+description = "Asset generation subagent for game/app art using Replicate MCP (and Fal AI references). Generates multiple options, saves them to assets/generated/, and reports choices."
+config_file = "agents/asset-generator.toml"
+
+[agents.bash-operator]
+description = "Specialist shell operator for filesystem/build/debug command workflows. Use proactively for multi-step terminal tasks that need efficient command selection, safety checks, verification, and rollback notes."
+config_file = "agents/bash-operator.toml"
+
+[agents.code-reviewer]
+description = "Comprehensive code review specialist that analyzes code for quality, error handling, type design, and simplification opportunities. Use proactively after completing features or before creating PRs."
+config_file = "agents/code-reviewer.toml"
+
+[agents.documentation-maintainer]
+description = "Meta-agent responsible for keeping the system's documentation (README, CHANGELOG) accurate and up-to-date by synthesizing recent research and project progress."
+config_file = "agents/documentation-maintainer.toml"
+
+[agents.documentation-searcher]
+description = "Specialist agent for fetching and synthesizing official documentation from specific URLs using Ref tools."
+config_file = "agents/documentation-searcher.toml"
+
+[agents.explore]
+description = "Combined agent for exploring local codebases. Handles locating files, analyzing implementations, and finding code patterns. Use for WHERE, HOW, or SHOW ME questions."
+config_file = "agents/explore.toml"
+
+[agents.frontend-designer]
+description = "Expert UI/UX designer for both app interfaces (shadcn, AI Elements) and cinematic landing pages (scroll narratives, WebGL). Creates distinctive designs that avoid AI-generated aesthetics."
+config_file = "agents/frontend-designer.toml"
+
+[agents.librarian]
+description = "Agent for exploring external codebases and patterns. Handles broad GitHub searches (DISCOVER) and deep-dives into specific repositories."
+config_file = "agents/librarian.toml"
+
+[agents.qa-tester]
+description = "QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, cinematic landing testing)."
+config_file = "agents/qa-tester.toml"
+
+[notice]
+hide_rate_limit_model_nudge = true
+hide_full_access_warning = true
+
+[notice.model_migrations]
+"gpt-5.3-codex" = "gpt-5.4"
+
+# Keep machine-specific trust entries local only.
+# Example:
+#
+# [projects."/absolute/path/to/project"]
+# trust_level = "trusted"
+
+[tui]
+status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit", "session-id"]

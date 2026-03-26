@@ -1,0 +1,337 @@
+# ~/.codex/rules/default.rules
+# Command approval rules for Codex.
+# Syntax: prefix_rule(pattern, decision, justification, match?, not_match?)
+# decision = "allow" | "prompt" | "forbidden"
+#
+# Read-only / inspection commands run without prompting.
+# Anything mutating or potentially destructive prompts first.
+
+# ---------------------------------------------------------------------------
+# Git — read-only ops: allow
+# ---------------------------------------------------------------------------
+prefix_rule(
+    pattern = ["git", "status"],
+    decision = "allow",
+    justification = "Read-only status check",
+)
+prefix_rule(
+    pattern = ["git", "log"],
+    decision = "allow",
+    justification = "Read-only history",
+)
+prefix_rule(
+    pattern = ["git", "diff"],
+    decision = "allow",
+    justification = "Read-only diff",
+)
+prefix_rule(
+    pattern = ["git", "show"],
+    decision = "allow",
+    justification = "Read-only object inspection",
+)
+prefix_rule(
+    pattern = ["git", "branch"],
+    decision = "allow",
+    justification = "Read-only branch listing",
+)
+prefix_rule(
+    pattern = ["git", "stash", "list"],
+    decision = "allow",
+    justification = "Read-only stash listing",
+)
+prefix_rule(
+    pattern = ["git", "remote"],
+    decision = "allow",
+    justification = "Read-only remote listing",
+)
+prefix_rule(
+    pattern = ["git", "tag"],
+    decision = "allow",
+    justification = "Read-only tag listing",
+)
+
+# ---------------------------------------------------------------------------
+# Git — writing ops: prompt before running
+# ---------------------------------------------------------------------------
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "prompt",
+    justification = "Creates a commit — verify message and scope before proceeding",
+)
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Writes to remote — verify branch and force flags",
+)
+prefix_rule(
+    pattern = ["git", "reset"],
+    decision = "prompt",
+    justification = "Can discard commits or staged changes",
+)
+prefix_rule(
+    pattern = ["git", "rebase"],
+    decision = "prompt",
+    justification = "Rewrites history — verify base and conflict strategy",
+)
+prefix_rule(
+    pattern = ["git", "merge"],
+    decision = "prompt",
+    justification = "Merges branches — verify target branch",
+)
+prefix_rule(
+    pattern = ["git", "checkout"],
+    decision = "prompt",
+    justification = "Switches branch or restores files",
+)
+prefix_rule(
+    pattern = ["git", "switch"],
+    decision = "prompt",
+    justification = "Switches branch",
+)
+prefix_rule(
+    pattern = ["git", "stash"],
+    decision = "prompt",
+    justification = "Stashes or applies changes",
+)
+prefix_rule(
+    pattern = ["git", "clean"],
+    decision = "prompt",
+    justification = "Deletes untracked files — verify scope",
+)
+
+# ---------------------------------------------------------------------------
+# Shell — safe read-only commands: allow
+# ---------------------------------------------------------------------------
+prefix_rule(
+    pattern = ["ls"],
+    decision = "allow",
+    justification = "Directory listing",
+)
+prefix_rule(
+    pattern = ["pwd"],
+    decision = "allow",
+    justification = "Print working directory",
+)
+prefix_rule(
+    pattern = ["echo"],
+    decision = "allow",
+    justification = "Print text",
+)
+prefix_rule(
+    pattern = ["cat"],
+    decision = "allow",
+    justification = "Read file contents",
+)
+prefix_rule(
+    pattern = ["head"],
+    decision = "allow",
+    justification = "Read first lines of file",
+)
+prefix_rule(
+    pattern = ["tail"],
+    decision = "allow",
+    justification = "Read last lines of file",
+)
+prefix_rule(
+    pattern = ["wc"],
+    decision = "allow",
+    justification = "Word/line count",
+)
+prefix_rule(
+    pattern = ["rg"],
+    decision = "allow",
+    justification = "Ripgrep search — read-only",
+)
+prefix_rule(
+    pattern = ["grep"],
+    decision = "allow",
+    justification = "Grep search — read-only",
+)
+
+# ---------------------------------------------------------------------------
+# Shell — destructive ops: prompt
+# ---------------------------------------------------------------------------
+prefix_rule(
+    pattern = ["rm"],
+    decision = "prompt",
+    justification = "Deletes files — verify scope before proceeding",
+    match = ["rm file.txt", "rm -rf dist/"],
+)
+prefix_rule(
+    pattern = ["mv"],
+    decision = "prompt",
+    justification = "Moves or renames files — can overwrite",
+)
+prefix_rule(
+    pattern = ["cp"],
+    decision = "allow",
+    justification = "Copies files — generally safe",
+)
+prefix_rule(
+    pattern = ["chmod"],
+    decision = "prompt",
+    justification = "Changes file permissions",
+)
+prefix_rule(
+    pattern = ["chown"],
+    decision = "prompt",
+    justification = "Changes file ownership",
+)
+prefix_rule(
+    pattern = ["sudo"],
+    decision = "prompt",
+    justification = "Elevated privileges — always verify",
+)
+prefix_rule(
+    pattern = ["kill"],
+    decision = "prompt",
+    justification = "Terminates processes",
+)
+prefix_rule(
+    pattern = ["pkill"],
+    decision = "prompt",
+    justification = "Terminates processes by name",
+)
+
+# ---------------------------------------------------------------------------
+# Package managers: prompt for installs, allow reads
+# ---------------------------------------------------------------------------
+prefix_rule(
+    pattern = ["npm", "install"],
+    decision = "prompt",
+    justification = "Installs packages — verify dependency list",
+)
+prefix_rule(
+    pattern = ["npm", "uninstall"],
+    decision = "prompt",
+    justification = "Removes packages",
+)
+prefix_rule(
+    pattern = ["pnpm", "install"],
+    decision = "prompt",
+    justification = "Installs packages — verify dependency list",
+)
+prefix_rule(
+    pattern = ["pnpm", "add"],
+    decision = "prompt",
+    justification = "Adds a package dependency",
+)
+prefix_rule(
+    pattern = ["pnpm", "remove"],
+    decision = "prompt",
+    justification = "Removes a package dependency",
+)
+prefix_rule(
+    pattern = ["npm", "run"],
+    decision = "allow",
+    justification = "Runs a script defined in package.json",
+)
+prefix_rule(
+    pattern = ["pnpm", "run"],
+    decision = "allow",
+    justification = "Runs a script defined in package.json",
+)
+
+# ---------------------------------------------------------------------------
+# GitHub CLI: read ops allow, write ops prompt
+# ---------------------------------------------------------------------------
+prefix_rule(
+    pattern = ["gh", "pr", "view"],
+    decision = "allow",
+    justification = "Read-only PR inspection",
+)
+prefix_rule(
+    pattern = ["gh", "pr", "list"],
+    decision = "allow",
+    justification = "Read-only PR listing",
+)
+prefix_rule(
+    pattern = ["gh", "issue", "list"],
+    decision = "allow",
+    justification = "Read-only issue listing",
+)
+prefix_rule(
+    pattern = ["gh", "pr", "create"],
+    decision = "prompt",
+    justification = "Opens a pull request — verify title, body, and target",
+)
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "prompt",
+    justification = "Merges a PR — irreversible",
+)
+prefix_rule(pattern=["npx", "@biomejs/biome", "check", "--write", "--unsafe", "--files-ignore-unknown=true", "cli/cli-utils.ts", "cli/onboarding-commands.ts"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "npm run typecheck >/tmp/shellcorp-typecheck.log && tail -n 5 /tmp/shellcorp-typecheck.log"], decision="allow")
+prefix_rule(pattern=["printf", "\\n--- UI PACKAGE ---\\n"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "git reset -- ui/src/features/office-system/components/employee/index.tsx ui/src/features/office-system/components/employee/use-employee-locomotion.ts ui/src/features/office-system/components/employee/employee-motion.ts ui/src/features/office-system/components/employee/employee-motion.test.ts docs/HISTORY.md docs/MEMORY.md >/dev/null 2>&1 || true && git add ui/src/features/office-system/components/employee/index.tsx ui/src/features/office-system/components/employee/use-employee-locomotion.ts ui/src/features/office-system/components/employee/employee-motion.ts ui/src/features/office-system/components/employee/employee-motion.test.ts && git diff --cached --name-only"], decision="allow")
+prefix_rule(pattern=["sed", "s#^#/#"], decision="allow")
+prefix_rule(pattern=["printf", "\\n---\\n"], decision="allow")
+prefix_rule(pattern=["npx", "@biomejs/biome", "check", "--files-ignore-unknown=true", "cli/cli-utils.ts", "cli/onboarding-commands.ts", "cli/ui-commands.ts", "cli/ui-commands.test.ts", "cli/shellcorp-cli.ts", "README.md", "docs/public-docs/getting-started.md", "docs/HISTORY.md", "docs/MEMORY.md"], decision="allow")
+prefix_rule(pattern=["npx", "@biomejs/biome", "check", "--files-ignore-unknown=true", "cli/onboarding-commands.ts", "cli/ui-commands.ts", "cli/ui-commands.test.ts", "README.md", "docs/public-docs/getting-started.md", "docs/HISTORY.md", "docs/MEMORY.md"], decision="allow")
+prefix_rule(pattern=["command", "-v", "shellcorp"], decision="allow")
+prefix_rule(pattern=["npx", "@biomejs/biome", "check", "--files-ignore-unknown=true", "cli/onboarding-commands.ts", "README.md", "docs/public-docs/getting-started.md"], decision="allow")
+prefix_rule(pattern=["git", "add"], decision="allow")
+prefix_rule(pattern=["git", "fetch"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "export SHELLCORP_AGENT_ID='shellcorp-dev-team-pm'; export SHELLCORP_TEAM_ID='team-proj-shellcorp-dev-team'; export SHELLCORP_PROJECT_ID='proj-shellcorp-dev-team'; export SHELLCORP_ACTOR_ROLE='pm'; npm run shell -- whoami --json"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "export SHELLCORP_AGENT_ID='shellcorp-dev-team-pm'; export SHELLCORP_TEAM_ID='team-proj-shellcorp-dev-team'; export SHELLCORP_PROJECT_ID='proj-shellcorp-dev-team'; export SHELLCORP_ACTOR_ROLE='pm'; npm run shell -- status \"agent-login live smoke fix $(date +%s)\" --state planning --json"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "export SHELLCORP_AGENT_ID='shellcorp-dev-team-pm'; export SHELLCORP_TEAM_ID='team-proj-shellcorp-dev-team'; export SHELLCORP_PROJECT_ID='proj-shellcorp-dev-team'; export SHELLCORP_ACTOR_ROLE='pm'; npm run shell -- team monitor --team-id team-proj-shellcorp-dev-team --json"], decision="allow")
+prefix_rule(pattern=["/home/kenjipcx/.cursor/scripts/sync-codex.sh"], decision="allow")
+prefix_rule(pattern=["git", "rev-parse"], decision="allow")
+prefix_rule(pattern=["git", "worktree", "add"], decision="allow")
+prefix_rule(pattern=["git", "cherry-pick"], decision="allow")
+prefix_rule(pattern=["ruff", "check"], decision="allow")
+prefix_rule(pattern=["openclaw", "logs"], decision="allow")
+prefix_rule(pattern=["shellcorp", "onboarding"], decision="allow")
+prefix_rule(pattern=["shellcorp", "office", "doctor"], decision="allow")
+prefix_rule(pattern=["node", "-e", "const fs=require(\"fs\"); const p=process.env.HOME+\"/.openclaw/openclaw.json\"; const data=JSON.parse(fs.readFileSync(p,\"utf8\")); data.skills ??= {}; data.skills.entries ??= {}; data.skills.entries[\"meshy-office-3d\"] = { enabled: true, env: { MESHY_API_KEY: \"PASTE_YOUR_MESHY_API_KEY_HERE\" } }; fs.writeFileSync(p, JSON.stringify(data, null, 2)+\"\\n\");"], decision="allow")
+prefix_rule(pattern=["node", "-e", "const fs=require(\"fs\"); const p=process.env.HOME+\"/.openclaw/openclaw.json\"; const data=JSON.parse(fs.readFileSync(p,\"utf8\")); data.skills ??= {}; data.skills.entries ??= {}; const current=data.skills.entries[\"world-monitor\"]; data.skills.entries[\"world-monitor\"] = current && typeof current === \"object\" ? { ...current, enabled: true } : { enabled: true }; fs.writeFileSync(p, JSON.stringify(data, null, 2)+\"\\n\");"], decision="allow")
+prefix_rule(pattern=["sort"], decision="allow")
+prefix_rule(pattern=["gh", "issue", "view"], decision="allow")
+prefix_rule(pattern=["uv", "run", "pytest"], decision="allow")
+prefix_rule(pattern=["git", "pull"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "-X", "POST", "http://127.0.0.1:3002/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "-X", "POST", "http://127.0.0.1:3003/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "http://127.0.0.1:3003/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "http://127.0.0.1:3004/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-v", "--max-time", "3", "http://127.0.0.1:3004/api/agent-search"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "node --experimental-strip-types ./frontend/scripts/dev-agent-api.ts >/tmp/agent-api.log 2>&1 & pid=$!; sleep 2; curl -N --max-time 45 -H 'content-type: application/json' -d '{\"prompt\":\"What does the MCP know about VS55?\",\"profile\":\"research\"}' http://127.0.0.1:3210/api/agent-search; status=$?; kill $pid >/dev/null 2>&1 || true; echo \"\\n--- CURL STATUS: $status ---\"; echo \"--- SERVER LOG ---\"; cat /tmp/agent-api.log"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "AGENT_API_PORT=3211 node --experimental-strip-types ./frontend/scripts/dev-agent-api.ts >/tmp/agent-api-3211.log 2>&1 & pid=$!; sleep 2; curl -i --max-time 10 -H 'Origin: http://127.0.0.1:3000' http://127.0.0.1:3211/api/agent-search; status=$?; kill $pid >/dev/null 2>&1 || true; echo \"\\n--- CURL STATUS: $status ---\"; echo \"--- SERVER LOG ---\"; cat /tmp/agent-api-3211.log"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "AGENT_API_PORT=3211 node --experimental-strip-types ./frontend/scripts/dev-agent-api.ts >/tmp/agent-api-3211.log 2>&1 & pid=$!; sleep 2; curl -N --max-time 20 -H 'Origin: http://127.0.0.1:3000' -H 'content-type: application/json' -d '{\"prompt\":\"What is VS55?\",\"profile\":\"research\"}' http://127.0.0.1:3211/api/agent-search; status=$?; kill $pid >/dev/null 2>&1 || true; echo \"\\n--- CURL STATUS: $status ---\"; echo \"--- SERVER LOG ---\"; cat /tmp/agent-api-3211.log"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "AGENT_API_PORT=3212 node --experimental-strip-types ./frontend/scripts/dev-agent-api.ts >/tmp/agent-api-3212.log 2>&1 & pid=$!; sleep 2; curl -N --max-time 90 -H 'Origin: http://127.0.0.1:3000' -H 'content-type: application/json' -d '{\"prompt\":\"What is VS55? Answer in 2 short paragraphs.\",\"profile\":\"research\"}' http://127.0.0.1:3212/api/agent-search > /tmp/agent-api-3212-stream.txt; status=$?; kill $pid >/dev/null 2>&1 || true; echo \"--- CURL STATUS: $status ---\"; tail -n 40 /tmp/agent-api-3212-stream.txt; echo \"--- SERVER LOG ---\"; cat /tmp/agent-api-3212.log"], decision="allow")
+prefix_rule(pattern=["pgrep", "-af", "node --experimental-strip-types ./scripts/dev-agent-api.ts"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "-X", "OPTIONS", "-H", "Origin: http://localhost:3000", "-H", "Access-Control-Request-Method: POST", "-H", "Access-Control-Request-Headers: content-type", "http://127.0.0.1:3210/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "5", "-X", "POST", "-H", "Origin: http://localhost:3000", "-H", "content-type: application/json", "-d", "{\"prompt\":\"hi\",\"profile\":\"research\"}", "http://127.0.0.1:3210/api/agent-search"], decision="allow")
+prefix_rule(pattern=["vercel", "deploy"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "-X", "OPTIONS", "-H", "Origin: https://example.com", "-H", "Access-Control-Request-Method: POST", "-H", "Access-Control-Request-Headers: content-type", "https://cryolens-1k3ygmfgy-kenjipcxs-projects.vercel.app/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "10", "-X", "POST", "-H", "Origin: https://example.com", "-H", "content-type: application/json", "-d", "{\"prompt\":\"What is VS55?\",\"profile\":\"research\"}", "https://cryolens-1k3ygmfgy-kenjipcxs-projects.vercel.app/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "-X", "OPTIONS", "-H", "Origin: https://example.com", "-H", "Access-Control-Request-Method: POST", "-H", "Access-Control-Request-Headers: content-type", "https://cryolens.vercel.app/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "10", "-X", "POST", "-H", "Origin: https://example.com", "-H", "content-type: application/json", "-d", "{\"prompt\":\"What is VS55?\",\"profile\":\"research\"}", "https://cryolens.vercel.app/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "-X", "OPTIONS", "-H", "Origin: https://example.com", "-H", "Access-Control-Request-Method: POST", "-H", "Access-Control-Request-Headers: content-type", "https://cryolens-c5ele7c46-kenjipcxs-projects.vercel.app/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "10", "-X", "POST", "-H", "Origin: https://example.com", "-H", "content-type: application/json", "-d", "{\"prompt\":\"What is VS55?\",\"profile\":\"research\"}", "https://cryolens-c5ele7c46-kenjipcxs-projects.vercel.app/api/agent-search"], decision="allow")
+prefix_rule(pattern=["pgrep", "-af", "dev-agent-api|vercel dev|vite --host 127.0.0.1 --port 5173"], decision="allow")
+prefix_rule(pattern=["git", "clone"], decision="allow")
+prefix_rule(pattern=["node", "--experimental-strip-types", "--input-type=module", "-e", "import handler from \"./frontend/lib/agent-search-route-local.ts\"; const response = await handler(new Request(\"http://localhost/api/agent-search\", { method: \"POST\", headers: {\"content-type\":\"application/json\"}, body: JSON.stringify({ prompt: \"What is VS55? Keep it brief.\", profile: \"research\" }) })); const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = \"\"; while (true) { const {done, value} = await reader.read(); if (done) break; buffer += decoder.decode(value, {stream:true}); const chunks = buffer.split(\"\\n\\n\"); buffer = chunks.pop() ?? \"\"; for (const chunk of chunks) { if (chunk.includes(\"message-debug\")) console.log(chunk); } } if (buffer.includes(\"message-debug\")) console.log(buffer);"], decision="allow")
+prefix_rule(pattern=["node", "--experimental-strip-types", "--input-type=module", "-e", "import handler from \"./frontend/lib/agent-search-route-local.ts\"; const response = await handler(new Request(\"http://localhost/api/agent-search\", { method: \"POST\", headers: {\"content-type\":\"application/json\"}, body: JSON.stringify({ prompt: \"What is VS55? Keep it brief.\", profile: \"research\" }) })); const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = \"\"; let sawOutput = false; while (true) { const {done, value} = await reader.read(); if (done) break; buffer += decoder.decode(value, {stream:true}); const chunks = buffer.split(\"\\n\\n\"); buffer = chunks.pop() ?? \"\"; for (const chunk of chunks) { if (chunk.includes(type:tool_output)) { console.log(chunk); sawOutput = true; process.exit(0); } } } if (buffer.includes(type:tool_output)) { console.log(buffer); sawOutput = true; } if (!sawOutput) { process.exit(1); }"], decision="allow")
+prefix_rule(pattern=["node", "--experimental-strip-types", "--input-type=module", "-e", "import handler from \"./frontend/lib/agent-search-route-local.ts\"; const response = await handler(new Request(\"http://localhost/api/agent-search\", { method: \"POST\", headers: {\"content-type\":\"application/json\"}, body: JSON.stringify({ prompt: \"What is VS55? Keep it brief.\", profile: \"research\" }) })); const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = \"\"; outer: while (true) { const {done, value} = await reader.read(); if (done) break; buffer += decoder.decode(value, {stream:true}); const chunks = buffer.split(\"\\n\\n\"); buffer = chunks.pop() ?? \"\"; for (const chunk of chunks) { if (chunk.includes(\"\\\"type\\\":\\\"tool_output\\\"\")) { console.log(chunk); break outer; } } }"], decision="allow")
+prefix_rule(pattern=["pgrep", "-af", "dev-agent-api|vercel dev|vite --host 127.0.0.1 --port 5173|experimental-strip-types --input-type=module"], decision="allow")
+prefix_rule(pattern=["ss", "-ltnp"], decision="allow")
+prefix_rule(pattern=["pgrep", "-af", "3000|vercel dev|vite"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "10", "-X", "OPTIONS", "-H", "Origin: http://localhost:3000", "-H", "Access-Control-Request-Method: POST", "-H", "Access-Control-Request-Headers: content-type", "http://127.0.0.1:3000/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "10", "-X", "POST", "-H", "Origin: http://localhost:3000", "-H", "content-type: application/json", "-d", "{\"prompt\":\"What is VS55?\",\"profile\":\"research\"}", "http://127.0.0.1:3000/api/agent-search"], decision="allow")
+prefix_rule(pattern=["readlink", "-f", "/proc/16899/cwd"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "5", "http://127.0.0.1:3000/"], decision="allow")
+prefix_rule(pattern=["vercel", "dev"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "10", "-X", "POST", "-H", "content-type: application/json", "-d", "{\"prompt\":\"What is VS55?\",\"profile\":\"research\"}", "http://127.0.0.1:3000/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "90", "-X", "POST", "-H", "content-type: application/json", "-d", "{\"prompt\":\"What is VS55?\",\"profile\":\"research\"}", "http://127.0.0.1:3000/api/agent-search"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "20", "-X", "POST"], decision="allow")
+prefix_rule(pattern=["curl", "-i", "--max-time", "10"], decision="allow")
+prefix_rule(pattern=["git", "restore", "--staged", "hackathon-slides-draft.md"], decision="allow")
+prefix_rule(pattern=["git", "worktree", "remove"], decision="allow")
+prefix_rule(pattern=["gh", "pr", "checks"], decision="allow")
+prefix_rule(pattern=["git", "-C", "/tmp/lightbulb-pr114-fix", "add", "backend/routers/generation.py", "frontend/app/components/course/CourseLayout.tsx", "frontend/app/components/course/CourseSidebar.tsx", "frontend/app/components/course/SectionContent.tsx", "frontend/app/components/course/blocks/BlockRenderer.tsx", "frontend/app/components/course/blocks/QuizBlock.tsx", "frontend/app/courses/[id]/page.tsx"], decision="allow")
+prefix_rule(pattern=["git", "-C", "/tmp/lightbulb-pr114-fix", "commit", "-m", "fix(course): resolve pr-114 format checks"], decision="allow")
+prefix_rule(pattern=["git", "-C", "/tmp/lightbulb-pr114-fix", "push", "origin", "kenji/course-regen"], decision="allow")
+prefix_rule(pattern=["git", "-C", "/tmp/lightbulb-pr114-fix", "add", "backend/agents/generator/agent.py", "backend/agents/generator/state.py", "backend/routers/generation.py", "backend/tests/test_generation_routes.py"], decision="allow")
+prefix_rule(pattern=["git", "-C", "/tmp/lightbulb-pr114-fix", "commit", "-m", "fix(generator): forward section instructions on initial generation"], decision="allow")
+prefix_rule(pattern=["git", "ls-remote"], decision="allow")
+prefix_rule(pattern=["git", "rm", "--cached", "state_5.sqlite-shm", "state_5.sqlite-wal"], decision="allow")

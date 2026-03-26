@@ -1,0 +1,1 @@
+2026-03-26 11:20 -0700 | INVARIANT | MEM-0001 | codex,harness,git,safety | Track reusable Codex harness config in Git, but never commit live auth, secrets, session history, logs, sqlite state, caches, or machine-local `config.toml`.

@@ -1,0 +1,33 @@
+# Reusable harness repo: keep live Codex state out of Git.
+
+# Secrets / local auth
+.credentials.json
+auth.json
+config.toml
+
+# Session and history state
+history.jsonl
+session_index.jsonl
+sessions/
+archived_sessions/
+shell_snapshots/
+
+# Logs / caches / databases
+log/
+logs_*.sqlite
+logs_*.sqlite-*
+state_*.sqlite
+state_*.sqlite-*
+models_cache.json
+version.json
+
+# Machine-local generated data
+memories/
+tmp/
+.personality_migration
+skills/.system/
+bin/__pycache__/
+*.pyc
+
+# OS noise
+.DS_Store
