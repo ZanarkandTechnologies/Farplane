@@ -3,6 +3,40 @@ import json
 import shutil
 import subprocess
 import sys
+from pathlib import Path
+
+
+MACOS_SOUND_PATH = Path("/System/Library/Sounds/Glass.aiff")
+
+
+def run_quiet(command: list[str]) -> int:
+    completed = subprocess.run(
+        command,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    return completed.returncode
+
+
+def play_macos_sound() -> int:
+    afplay = shutil.which("afplay")
+    if afplay and MACOS_SOUND_PATH.exists():
+        return run_quiet([afplay, str(MACOS_SOUND_PATH)])
+
+    osascript = shutil.which("osascript")
+    if osascript:
+        return run_quiet([osascript, "-e", "beep"])
+
+    return 1
+
+
+def speak_macos(message: str) -> int:
+    say = shutil.which("say")
+    if not say:
+        return 1
+
+    return run_quiet([say, message])
 
 
 def speak_espeak_ng(message: str) -> int:
@@ -10,13 +44,7 @@ def speak_espeak_ng(message: str) -> int:
     if not espeak:
         return 1
 
-    completed = subprocess.run(
-        [espeak, "-s", "165", message],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        check=False,
-    )
-    return completed.returncode
+    return run_quiet([espeak, "-s", "165", message])
 
 
 def speak_windows_tts(message: str) -> int:
@@ -30,13 +58,31 @@ def speak_windows_tts(message: str) -> int:
         f"$speaker.Speak('{message}');"
     )
 
-    completed = subprocess.run(
-        [powershell, "-NoProfile", "-NonInteractive", "-Command", command],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        check=False,
-    )
-    return completed.returncode
+    return run_quiet([powershell, "-NoProfile", "-NonInteractive", "-Command", command])
+
+
+def announce_message(message: str) -> int:
+    play_macos_sound()
+
+    if speak_macos(message) == 0:
+        return 0
+
+    if speak_espeak_ng(message) == 0:
+        return 0
+
+    if speak_windows_tts(message) == 0:
+        return 0
+
+    sys.stdout.write("\a")
+    sys.stdout.flush()
+    return 0
+
+
+def notification_message(notification: dict[str, object]) -> str | None:
+    if notification.get("type") != "agent-turn-complete":
+        return None
+
+    return "Task completed successfully"
 
 
 def main() -> int:
@@ -48,20 +94,11 @@ def main() -> int:
     except json.JSONDecodeError:
         return 1
 
-    if notification.get("type") != "agent-turn-complete":
+    message = notification_message(notification)
+    if message is None:
         return 0
 
-    message = "Task completed successfully"
-
-    if speak_espeak_ng(message) == 0:
-        return 0
-
-    if speak_windows_tts(message) == 0:
-        return 0
-
-    sys.stdout.write("\a")
-    sys.stdout.flush()
-    return 0
+    return announce_message(message)
 
 
 if __name__ == "__main__":

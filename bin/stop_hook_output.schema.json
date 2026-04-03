@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "reason",
+    "speak"
+  ],
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": [
+        "done",
+        "continue_same_ticket",
+        "optional_upsell",
+        "blocked"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "continuation_message": {
+      "type": "string"
+    },
+    "speak": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
