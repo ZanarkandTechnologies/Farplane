@@ -1,10 +1,22 @@
-# TASK-0001: bootstrap codex harness repo
+---
+ticket_id: TASK-0001
+title: bootstrap codex harness repo
+phase: building
+status: active
+owner: codex
+priority: medium
+depends_on: []
+blocked_by: []
+ready: true
+approval_required: false
+created_at: 2026-04-03T00:00:00Z
+updated_at: 2026-04-03T02:06:03Z
+next_action: add the remote repository URL and push the verified harness scaffold
+last_verification: reviewed git status plus bash -n install.sh and python3 -m py_compile bin/notify.py
+linked_docs: []
+---
 
-## Status
-- Lane: `building`
-- Owner: `codex`
-- Dependencies: `none`
-- Complexity: `S`
+# TASK-0001: bootstrap codex harness repo
 
 ## Summary
 Create the minimum repo harness needed to version reusable Codex configuration from this live `~/.codex` directory without leaking machine-local state.
@@ -69,6 +81,9 @@ init git and verify tracked file set
 - [x] AC-2: there is a documented bootstrap path for cloning directly into `~/.codex` or linking from another checkout
 - [x] AC-3: the harness has minimal docs and ticket scaffolding so future changes can follow repo contract
 
+## Working Notes
+- The ticket remains in `tickets/building/` until the repository can be pushed and the bootstrap work is fully closed out.
+
 ## Implementation Notes
 - Touched areas: root repo scaffold plus docs/tickets only
 - Reused patterns: local `AGENTS.md` contract and ticket template shape already used in nearby repos
@@ -82,6 +97,10 @@ init git and verify tracked file set
 
 ## Blockers
 - none
+
+## Handoff
+- Current state: scaffold is implemented and locally verified; remote publication is the remaining explicit next step.
+- Resume from: this ticket, `git status --short`, and the bootstrap docs/install surfaces.
 
 ## Writeback
 - Update this ticket as work progresses.

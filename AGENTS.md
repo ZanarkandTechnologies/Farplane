@@ -19,12 +19,14 @@ Equipped agents may load AGENTS.md without carrying README.md, so the minimum sy
 flowchart TD
     A[tickets/todo] --> B[tickets/review]
     B --> C[tickets/building]
-    C --> D[tickets/done]
-    B --> E[tech-impl-plan]
-    C --> F[build]
-    C --> G[qa-tester]
-    G --> H[visual-qa]
-    H --> C
+    C --> D[documenting phase]
+    D --> E[docs writeback]
+    E --> F[archive or delete ticket]
+    B --> G[tech-impl-plan]
+    C --> H[build]
+    C --> I[qa-tester]
+    I --> J[visual-qa]
+    J --> C
 ```
 
 ## DoD
@@ -32,6 +34,7 @@ flowchart TD
 Done only if relevant items pass:
 
 - plan exists + matches `skills/tech-impl-plan`
+- ticket frontmatter and body both reflect the final active-work state
 - tests pass
 - TS strict passes; no `any`
 - lint + format clean
@@ -90,6 +93,7 @@ Planning handoff rule:
 - code = source of truth
 - no speculative abstractions
 - MVP first: 1 -> 10 -> 100
+- ticket-metadata v1 ends at visible tickets/docs/config foundations; assisted continuation, stop hooks, and autonomy-mode runtime work stay outside v1 unless a later ticket explicitly re-opens them
 - user complaints about the current output are correction requests by default; fix first and explain briefly only when useful
 
 ## Module Scaffolding
@@ -224,22 +228,48 @@ Agents should update the ticket file and board state together so the filesystem 
 -->
 
 - new or split work -> create a ticket in `tickets/todo/`
+- deferred, quarantined, or out-of-rollout work -> keep the ticket in `tickets/todo/` with explicit blockers; do not leave it in `tickets/building/`
 - active planning / user approval -> keep the ticket in `tickets/review/`
 - approved execution -> move the ticket to `tickets/building/`
-- implementation + QA + evidence + final human confirmation -> move the ticket to `tickets/done/`
+- once implementation + QA pass -> update ticket `phase` to `documenting`, write durable docs, then archive/delete the ticket or move it to `tickets/done/` only if a short-lived done lane is still useful
+- do not keep README/config/install/runtime surfaces for quarantined tickets active in the tracked repo; parked work should stay unshipped or be documented only as out of scope
 
 Agents must:
 
 - follow the canonical ticket shape in `tickets/templates/ticket.md`
+- treat the ticket as the active task object:
+  - frontmatter = fixed machine-readable metadata
+  - body = task-local memory, plan, evidence, blockers, and handoff
+- use the same canonical dialect in `todo/`, `review/`, and `building/`; backlog tickets are not exempt
+- treat `tickets/INDEX.md` as a human summary only; automation truth lives in the ticket file plus its folder path
 - update the ticket file, not just chat
 - record blockers in the ticket
 - create linked follow-up tickets when scope splits or new work is discovered
-- update `tickets/INDEX.md` when a ticket changes state
+- update `tickets/INDEX.md` when a ticket changes state so the human summary stays readable
+- do not move a ticket into `tickets/building/` while `approval_required: true`, `blocked_by` is non-empty, or a required `depends_on` ticket is still unresolved for the requested slice
 
 Blocker rule:
 
 - execution blocker -> keep ticket in `tickets/building/` and record blocker
 - planning/scope blocker -> move ticket back to `tickets/review/`
+
+Ownership split:
+
+- `tickets/` = active work visibility + active task metadata
+- nearest folder `README.md` = local/module rationale
+- `docs/MEMORY.md`, `docs/HISTORY.md`, `docs/TROUBLES.md` = durable memory after completion
+
+Anti-goals:
+
+- no separate per-task runtime state file in v1
+- no `run_id` or parallel run tree for active work
+- no hidden automation or auto-continue behavior
+- no assumed runtime selector for \"the current active ticket\" in v1; downstream hook work must define that explicitly before mutating ticket metadata
+
+When changing ticket metadata contracts or moving many tickets:
+
+- run `python3 bin/check_ticket_metadata.py`
+- fix metadata drift before claiming the board is trustworthy
 
 ## Defaults
 
