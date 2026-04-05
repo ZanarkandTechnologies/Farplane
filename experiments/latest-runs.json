@@ -1,0 +1,62 @@
+[
+  {
+    "name": "planning_dry_run",
+    "ok": true,
+    "stdout": "{\n  \"ticket\": \"/Users/kenjipcx/coding-harness/Codexter/tickets/building/TASK-0011-ralph-hook-integration-and-evals.md\",\n  \"phase\": \"planning\",\n  \"run_state\": \"/Users/kenjipcx/coding-harness/Codexter/.ralph/runs/task-0011-planning-20260405T183312Z.json\",\n  \"worker_result\": \"RALPH_RESULT: status=plan_ready next=building reason=dry_run\",\n  \"judge_verdict\": {\n    \"schema_version\": \"1.0\",\n    \"ticket_id\": \"TASK-0011\",\n    \"current_phase\": \"planning\",\n    \"decision\": \"advance_ticket\",\n    \"next_phase\": \"building\",\n    \"reason\": \"dry_run\",\n    \"orchestrator_message\": \"advance TASK-0011 to building\",\n    \"evidence_ok\": true\n  }\n}",
+    "stderr": ""
+  },
+  {
+    "name": "hook_build_payload",
+    "ok": true,
+    "stdout": "{\"decision\": \"block\", \"reason\": \"rerun TASK-9998 in building with explicit missing evidence coverage\"}",
+    "stderr": ""
+  },
+  {
+    "name": "hook_plan_payload",
+    "ok": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "hook_current_run_selector",
+    "ok": true,
+    "stdout": "{\"decision\": \"block\", \"reason\": \"rerun TASK-9998 in building with explicit missing evidence coverage\"}",
+    "stderr": ""
+  },
+  {
+    "name": "judge_blocked",
+    "ok": true,
+    "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"ticket_id\": \"TASK-9999\",\n  \"current_phase\": \"building\",\n  \"decision\": \"block_ticket\",\n  \"next_phase\": \"none\",\n  \"reason\": \"fixture_blocked\",\n  \"orchestrator_message\": \"stop TASK-9999 and surface blocker\",\n  \"evidence_ok\": false\n}",
+    "stderr": ""
+  },
+  {
+    "name": "judge_continue_ralph",
+    "ok": true,
+    "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"ticket_id\": \"TASK-9999\",\n  \"current_phase\": \"building\",\n  \"decision\": \"repeat_ralph\",\n  \"next_phase\": \"building\",\n  \"reason\": \"fixture_continue\",\n  \"orchestrator_message\": \"rerun TASK-9999 in building\",\n  \"evidence_ok\": false\n}",
+    "stderr": ""
+  },
+  {
+    "name": "judge_build_complete_missing",
+    "ok": true,
+    "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"ticket_id\": \"TASK-9999\",\n  \"current_phase\": \"building\",\n  \"decision\": \"repeat_ralph\",\n  \"next_phase\": \"building\",\n  \"reason\": \"fixture_build_missing\",\n  \"orchestrator_message\": \"rerun TASK-9999 in building with explicit missing evidence coverage\",\n  \"evidence_ok\": false,\n  \"missing_evidence\": [\n    \"AC-1\",\n    \"Tests\"\n  ]\n}",
+    "stderr": ""
+  },
+  {
+    "name": "judge_build_complete_pass",
+    "ok": true,
+    "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"ticket_id\": \"TASK-9999\",\n  \"current_phase\": \"building\",\n  \"decision\": \"complete_ticket\",\n  \"next_phase\": \"done\",\n  \"reason\": \"fixture_build_complete\",\n  \"orchestrator_message\": \"mark TASK-9999 complete\",\n  \"evidence_ok\": true\n}",
+    "stderr": ""
+  },
+  {
+    "name": "judge_plan_ready",
+    "ok": true,
+    "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"ticket_id\": \"TASK-9999\",\n  \"current_phase\": \"planning\",\n  \"decision\": \"advance_ticket\",\n  \"next_phase\": \"building\",\n  \"reason\": \"fixture_plan_ready\",\n  \"orchestrator_message\": \"advance TASK-9999 to building\",\n  \"evidence_ok\": false\n}",
+    "stderr": ""
+  },
+  {
+    "name": "judge_docs_complete",
+    "ok": true,
+    "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"ticket_id\": \"TASK-9999\",\n  \"current_phase\": \"documenting\",\n  \"decision\": \"complete_ticket\",\n  \"next_phase\": \"done\",\n  \"reason\": \"fixture_docs_complete\",\n  \"orchestrator_message\": \"mark TASK-9999 complete\",\n  \"evidence_ok\": true\n}",
+    "stderr": ""
+  }
+]

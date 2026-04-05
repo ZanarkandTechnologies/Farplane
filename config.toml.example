@@ -12,6 +12,14 @@ service_tier = "fast"
 [features]
 multi_agent = true
 
+[env]
+USE_OMX_EXPLORE_CMD = "1"
+CODEXTER_HOME = "__CODEX_HOME__"
+CODEXTER_RALPH_HOOK = "1"
+# Optional legacy same-ticket continuation path:
+# CODEXTER_ASSISTED_CONTINUATION = "1"
+# Keep machine-specific hook tuning local if you need non-default behavior.
+
 [sandbox_workspace_write]
 network_access = false
 exclude_tmpdir_env_var = false

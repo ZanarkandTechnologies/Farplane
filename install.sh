@@ -43,7 +43,13 @@ fi
 
 link_path "$REPO_DIR/AGENTS.md" "$TARGET_DIR/AGENTS.md"
 link_path "$REPO_DIR/PROJECT_RULES.md" "$TARGET_DIR/PROJECT_RULES.md"
-link_path "$REPO_DIR/bin/notify.py" "$TARGET_DIR/bin/notify.py"
+if [ -f "$REPO_DIR/hooks.json" ]; then
+  link_path "$REPO_DIR/hooks.json" "$TARGET_DIR/hooks.json"
+fi
+
+for bin_file in "$REPO_DIR"/bin/*; do
+  link_path "$bin_file" "$TARGET_DIR/bin/$(basename "$bin_file")"
+done
 
 for agent_file in "$REPO_DIR"/agents/*.toml; do
   link_path "$agent_file" "$TARGET_DIR/agents/$(basename "$agent_file")"
@@ -70,3 +76,4 @@ fi
 
 echo "Done."
 echo "Next: edit $TARGET_DIR/config.toml and replace __CODEX_HOME__ plus any local MCP/project values."
+echo "Hooks config is linked when hooks.json exists; enable hook env vars in config.toml as needed."
