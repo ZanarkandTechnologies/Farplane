@@ -10,4 +10,5 @@
 2026-04-05 13:20 +0100 | FEAT | wire the tracked Ralph prototype toward actual stop-hook integration, add simpler ralphplan plus ralph prompts, and create a tracked experiments surface
 2026-04-05 13:32 +0100 | FEAT | add a 10-case Ralph smoke eval suite, project-local hook logs, and live ~/.codex hook activation for real-session testing
 2026-04-05 13:40 +0100 | CHORE | rewrite README into a high-density Ralph system story with minimal text and primary diagrams
+2026-04-05 13:48 +0100 | FEAT | add brainstorm and deep-interview skills as the front-end funnel before PRD/spec/ticket work
 2026-04-05 19:31 +0100 | FIX | make explicit Ralph ticket selectors override ambient current-run state and decouple smoke eval missing-evidence cases from TASK-0011 closeout

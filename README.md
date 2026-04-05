@@ -4,6 +4,8 @@ Ticket-first autonomous Codex harness.
 
 The core idea is simple:
 
+- `brainstorm` explores options before commitment
+- `deep-interview` sharpens vague inputs into clear product requirements
 - humans think in specs and tickets
 - `ralphplan` turns a ticket into an executable plan
 - `ralph` implements and gathers evidence
@@ -34,6 +36,18 @@ Long-running agent work fails in four predictable ways:
 - humans cannot tell what happened later
 
 Codexter solves that by making the **ticket** the canonical memory object and keeping sessions disposable.
+
+## Front-End Funnel
+
+```mermaid
+flowchart LR
+    A[idea or transcript] --> B[brainstorm]
+    B --> C[deep-interview]
+    C --> D[prd/specs]
+    D --> E[SLC tickets]
+    E --> F[ralphplan]
+    F --> G[ralph]
+```
 
 ## Story: Greenfield
 
@@ -119,6 +133,7 @@ This is the whole philosophy:
 ## What Is Canonical Today
 
 - Specs: [docs/specs](/Users/kenjipcx/coding-harness/Codexter/docs/specs)
+- Front-end skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview)
 - Prompts: [prompts](/Users/kenjipcx/coding-harness/Codexter/prompts)
 - Runtime scripts: [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
 - Active prototype ticket: [TASK-0011](/Users/kenjipcx/coding-harness/Codexter/tickets/building/TASK-0011-ralph-hook-integration-and-evals.md)
