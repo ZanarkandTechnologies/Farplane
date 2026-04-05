@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ralph Run State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "ticket_id",
+    "ticket_path",
+    "phase",
+    "status",
+    "attempt",
+    "prompt_file",
+    "compute_class",
+    "parallel_slots_reserved",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ticket_id": {
+      "type": "string",
+      "pattern": "^TASK-\\d{4}$"
+    },
+    "ticket_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "building",
+        "documenting"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "running",
+        "waiting_for_judge",
+        "waiting_for_worker",
+        "blocked",
+        "complete",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "prompt_file": {
+      "type": "string",
+      "pattern": "^prompts/ralph[a-z-]*\\.md$"
+    },
+    "compute_class": {
+      "type": "string",
+      "enum": [
+        "local",
+        "local_worktree",
+        "remote_vm",
+        "remote_container"
+      ]
+    },
+    "executor_target": {
+      "type": "string"
+    },
+    "parallel_slots_reserved": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "last_worker_result": {
+      "type": "string"
+    },
+    "last_judge_verdict": {
+      "type": "string"
+    },
+    "next_phase": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "building",
+        "documenting",
+        "done",
+        "none"
+      ]
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
