@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT_PATH="$(python3 - <<'PY' "${BASH_SOURCE[0]}"
+import os, sys
+print(os.path.realpath(sys.argv[1]))
+PY
+)"
+ROOT="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
 
 usage() {
   cat <<'EOF'
