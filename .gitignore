@@ -25,9 +25,30 @@ version.json
 memories/
 tmp/
 .personality_migration
+.omx/
+.ralph/
 skills/.system/
 bin/__pycache__/
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Local Python / test tooling noise
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Editor / temp noise
+*.swp
+*.swo
+*~
 
 # OS noise
 .DS_Store
+
+# Generated experiment outputs
+experiments/latest-runs.json

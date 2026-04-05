@@ -22,6 +22,7 @@ This repo versions the reusable parts of a Codex home directory while keeping ma
 
 - Never commit secrets, auth state, session history, logs, caches, or sqlite state.
 - Keep `config.toml` local; version only `config.toml.example`.
+- Keep generated `.ralph/` runtime state out of Git; track only Ralph prompts, scripts, specs, and experiment writeups.
 - Prefer relative repo structure plus a small installer over hardcoding machine-specific paths into tracked files.
 
 ## Quick Commands
