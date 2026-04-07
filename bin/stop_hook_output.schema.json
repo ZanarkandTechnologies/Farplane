@@ -2,18 +2,22 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "decision",
+    "action",
     "reason",
-    "speak"
+    "continuation_message",
+    "speak",
+    "next_ticket_id",
+    "next_phase"
   ],
   "properties": {
-    "decision": {
+    "action": {
       "type": "string",
       "enum": [
-        "done",
         "continue_same_ticket",
-        "optional_upsell",
-        "blocked"
+        "route_to_orchestrator",
+        "block_for_user",
+        "next_ticket",
+        "stop"
       ]
     },
     "reason": {
@@ -24,8 +28,21 @@
       "type": "string"
     },
     "speak": {
+      "type": "string"
+    },
+    "next_ticket_id": {
+      "type": "string"
+    },
+    "next_phase": {
       "type": "string",
-      "minLength": 1
+      "enum": [
+        "",
+        "planning",
+        "building",
+        "documenting",
+        "done",
+        "none"
+      ]
     }
   }
 }

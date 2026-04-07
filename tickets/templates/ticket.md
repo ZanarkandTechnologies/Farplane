@@ -2,7 +2,7 @@
 ticket_id: TASK-XXXX
 title: short title
 phase: planning
-status: active
+status: review
 owner: unassigned
 priority: medium
 depends_on: []
@@ -85,7 +85,6 @@ update docs/evidence
 
 ## Working Notes
 - Active task-local memory only. Durable cross-task lessons move to docs on completion.
-- Board lane comes from the ticket's folder path, not frontmatter.
 - `approval_required: true`, any active `blocked_by` entry, or an unresolved dependency that prevents the next step all imply `ready: false`.
 - `next_action` is the authoritative current step. Explain it here if useful, but do not create a second state field.
 - `last_verification` is the authoritative verification summary. Put detailed commands and observations in `Evidence`.
@@ -101,6 +100,15 @@ update docs/evidence
 - [ ] Lint
 - [ ] QA / manual verification
 
+## Review Packet
+- `reviewed_at:`
+- `rubrics_used:`
+- `overall_score:`
+- `overall_verdict:`
+- `rerun_required:`
+- `blocking_findings:`
+- `next_action:`
+
 ## Blockers
 - none
 
@@ -110,5 +118,5 @@ update docs/evidence
 
 ## Writeback
 - Update this ticket as work progresses.
-- If the ticket changes board state, move the file and update `tickets/INDEX.md` as a human summary.
-- When implementation and verification pass, move `phase` to `documenting`, write durable docs, then archive/delete the ticket or move it out of active lanes.
+- If the ticket changes queue state, update `status` and `phase` in frontmatter. Do not move the file.
+- When implementation and verification pass, move `phase` to `documenting`, write durable docs, then move the ticket into `tickets/archive/` or set `status: done` briefly if you intentionally keep a short-lived visible completion state first.

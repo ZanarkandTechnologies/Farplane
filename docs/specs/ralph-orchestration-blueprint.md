@@ -2,6 +2,10 @@
 
 Date: 2026-04-05
 
+> Historical prototype blueprint. The current public build-phase orchestration
+> surface is `$impl`; references here to removed binary-first prototype flows
+> are background only, not the preferred future control plane.
+
 ## Goal
 
 Define the practical system shape for a ticket-first `ralph` runtime that:
@@ -158,10 +162,10 @@ Suggested phase progression:
 
 Suggested lane progression:
 
-- `tickets/todo/`
-- `tickets/review/`
-- `tickets/building/`
-- `tickets/done/`
+- `tickets/`
+- `tickets/`
+- `tickets/`
+- `tickets/`
 
 Rules:
 - lane answers "where is this in the board?"
@@ -251,7 +255,7 @@ Preferred handoff shape:
 Thin wrapper example:
 
 ```bash
-RALPH_TICKET="tickets/building/TASK-0042-example.md" \
+RALPH_TICKET="tickets/TASK-0042-example.md" \
 RALPH_RUN_STATE=".ralph/runs/run-20260405-001.json" \
 codex exec --skip-git-repo-check -C "$ROOT" - < prompts/ralph.md
 ```

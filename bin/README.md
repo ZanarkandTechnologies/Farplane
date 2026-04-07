@@ -4,29 +4,59 @@ Executable helpers for the Codex harness.
 
 ## Purpose
 
-This folder contains small scripts used by the live Codex config and prototype orchestration flows.
+This folder contains small scripts used by the live Codex config plus a few
+transitional runtime helpers from the earlier Ralph prototype.
+
+Primary control plane:
+
+- `ralplan`
+- `$impl`
+- worker lanes such as `ralph`
+- `stop_hook.py`
+
+The `bin/` directory is now mostly shim/utility territory, not the main
+orchestration story.
 
 ## Entrypoints
 
 - `notify.py` - local notification helper
-- `check_ticket_metadata.py` - validates the canonical ticket contract
-- `stop_hook.py` - optional assisted stop-hook classifier
-- `ralph_worker.sh` - thin phase worker launcher for the Ralph prototype
-- `ralph_judge.py` - conservative judge for Ralph phase results
-- `ralph_orchestrate.py` - minimal orchestrator entrypoint for one ticket/phase
+- `stop_hook.py` - thin stop-hook/runtime shim
+
+## Runtime Decisions
+
+- `stop_hook.py`: keep
+
+See [ralph-runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md) for the canonical decision table.
 
 ## Minimal Example
 
 ```bash
-python3 bin/ralph_orchestrate.py \
-  --ticket tickets/building/TASK-0010-ralph-thin-prototype.md \
-  --phase planning \
+python3 skills/impl/scripts/tmux_helper.py launch \
+  --ticket tickets/TASK-0014-tmux-visibility-and-followup.md \
+  --phase building \
   --dry-run
+
+python3 skills/impl/scripts/tmux_helper.py followup \
+  --ticket tickets/TASK-0014-tmux-visibility-and-followup.md \
+  --phase documenting \
+  --reason "hook-driven follow-up"
+
+python3 skills/impl/scripts/tmux_helper.py status
+
 ```
+
+In the live interactive path, `$impl` is the orchestrator contract and
+`skills/impl/scripts/tmux_helper.py` is only a visibility/recovery helper.
+Same-lane continuations come from the normal Stop-hook block/continue flow.
+`followup` is the fallback path when a lane must be recreated or resumed from
+stored session metadata. `status` centralizes the active lane plus the latest
+hook verdict, falling back to the Stop-hook log when the live run state has
+already advanced.
 
 ## How To Test
 
-- `bash -n bin/ralph_worker.sh`
-- `python3 -m py_compile bin/ralph_judge.py`
-- `python3 -m py_compile bin/ralph_orchestrate.py`
-- `python3 bin/ralph_orchestrate.py --ticket <ticket> --phase planning --dry-run`
+- `python3 -m py_compile bin/stop_hook.py`
+- `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
+- `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`
+- `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run`
+- `python3 skills/impl/scripts/tmux_helper.py status`

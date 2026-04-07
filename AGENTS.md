@@ -1,49 +1,44 @@
+<!-- AUTONOMY DIRECTIVE — DO NOT REMOVE -->
+YOU ARE AN AUTONOMOUS CODING AGENT. EXECUTE TASKS TO COMPLETION WITHOUT ASKING FOR PERMISSION.
+DO NOT STOP TO ASK "SHOULD I PROCEED?" — PROCEED. DO NOT WAIT FOR CONFIRMATION ON OBVIOUS NEXT STEPS.
+IF BLOCKED, TRY AN ALTERNATIVE APPROACH. ONLY ASK WHEN TRULY AMBIGUOUS OR DESTRUCTIVE.
+USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES THROUGHPUT.
+<!-- END AUTONOMY DIRECTIVE -->
+
 # `AGENTS.md`
 
 Repo contract. More specific `AGENTS.md` wins.
 
-<!--
-Hot-path contract for equipped agents.
-Keep this file terse: embedded flow, guardrails, and state-machine rules only.
-Detailed workflow mechanics belong in skills.
--->
-
 ## System Map
-
-<!--
-Duplicated here on purpose.
-Equipped agents may load AGENTS.md without carrying README.md, so the minimum system flow must live here too.
--->
 
 ```mermaid
 flowchart TD
-    A[tickets/todo] --> B[tickets/review]
-    B --> C[tickets/building]
-    C --> D[documenting phase]
-    D --> E[docs writeback]
-    E --> F[archive or delete ticket]
-    B --> G[tech-impl-plan]
-    C --> H[build]
-    C --> I[qa-tester]
-    I --> J[visual-qa]
-    J --> C
+    A[tickets/TASK-*.md status review] --> B[tickets/TASK-*.md status building]
+    B --> C[phase documenting]
+    C --> D[docs writeback]
+    D --> E[tickets/archive]
+    A --> F[ralplan]
+    B --> G[build]
+    B --> H[qa-tester]
+    H --> I[visual-qa]
+    I --> B
 ```
 
 ## DoD
 
 Done only if relevant items pass:
 
-- plan exists + matches `skills/tech-impl-plan`
+- plan exists and matches `skills/ralplan`
 - ticket frontmatter and body both reflect the final active-work state
 - tests pass
 - TS strict passes; no `any`
-- lint + format clean
+- lint and format are clean
 - `docs/HISTORY.md` updated
 - durable rules promoted to `docs/MEMORY.md`
 - repeated failures or user correction patterns logged in `docs/TROUBLES.md` when applicable
-- new invariants logged + referenced
+- new invariants logged and referenced
 - review loop done; `visual-qa` only if UI changed
-- changes pushed to GitHub
+- changes pushed to GitHub when the workflow calls for publishing
 
 ## Boundary
 
@@ -52,33 +47,37 @@ Root file = repo guardrails only.
 Use:
 
 - `commit-message` for compact commit subject style
-- `tech-impl-plan` for planning shape
+- `ralplan` for ticket planning shape
 - `prd` when reqs are unclear
 - `spec-to-ticket` for slicing
 - `runtime-debugging` for repro/runtime issues
 - `visual-qa` for UI changes
-- `code-review` for final quality sweep
+- `review` for final quality sweep
+- `impl` when one approved ticket needs build-phase orchestration across implementation, review, QA, and evidence
+- `docs-closeout` when a built ticket only needs documenting/writeback/archive prep
 
 Avoid:
 
 - repeating skill internals here
-- committing live Codex state; track reusable harness config only (`agents/`, `skills/`, `rules/`, scripts, sanitized templates). See `MEM-0001`.
+- embedding multi-agent framework/runtime machinery here
+- committing live Codex state; track reusable harness config only (`agents/`, `skills/`, `rules/`, scripts, sanitized templates). See `MEM-0001`
 
 ## Context First
 
 Before edits:
 
-- read nearby specs / PRDs / module docs
+- read nearby specs, PRDs, and module docs
 - search for existing patterns
-- inspect affected files + interfaces
-- bootstrap from `tickets/review/*`, `tickets/building/*`, `tickets/todo/*`, `docs/prd.md`, `docs/specs/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`
+- inspect affected files and interfaces
+- bootstrap from active tickets, `docs/prd.md`, `docs/specs/*`, `docs/MEMORY.md`, and `docs/TROUBLES.md`
+- if the repo does not already have Codexter conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `tickets/`, start with `init-project` before applying the full spec or ticket workflow
 
 No blind edits.
 
 ## Modes
 
-- planning = work from `tickets/review/` until user approves
-- build = work from `tickets/building/` until implementation, QA, evidence, and review are complete
+- planning = work from tickets with `status: review` until approval
+- build = work from tickets with `status: building` until implementation, QA, evidence, and review are complete
 
 Planning handoff rule:
 
@@ -88,12 +87,16 @@ Planning handoff rule:
 
 ## Core Rules
 
+- verify before claiming completion
 - delete > accumulate
 - modular by default
 - code = source of truth
 - no speculative abstractions
 - MVP first: 1 -> 10 -> 100
-- ticket-metadata v1 ends at visible tickets/docs/config foundations; assisted continuation, stop hooks, and autonomy-mode runtime work stay outside v1 unless a later ticket explicitly re-opens them
+- delegate only when bounded and materially useful
+- continue on obvious reversible next steps
+- escalate only for destructive, irreversible, or materially branching decisions
+- ticket-metadata v1 ends at visible tickets, docs, and config foundations; assisted continuation, stop hooks, and autonomy-mode runtime work stay outside v1 unless a later ticket explicitly re-opens them
 - user complaints about the current output are correction requests by default; fix first and explain briefly only when useful
 
 ## Module Scaffolding
@@ -106,7 +109,7 @@ If a touched module lacks them, add:
 README should cover:
 
 - purpose
-- public API / entrypoints
+- public API or entrypoints
 - minimal example
 - how to test
 
@@ -126,7 +129,7 @@ Log when:
 
 - invariant
 - API or data model change
-- behavior / perf / security constraint
+- behavior, perf, or security constraint
 - migration
 - architecture shift
 
@@ -134,7 +137,7 @@ Troubles log when:
 
 - the same miss or correction happens more than once
 - the user has to restate a requirement because execution drifted
-- a preventable tool/process mistake blocks progress
+- a preventable tool or process mistake blocks progress
 - an expectation mismatch should feed future system tuning
 
 Troubles format:
@@ -161,45 +164,21 @@ If you introduce an invariant:
 - tests colocated when practical
 - modules should stay extractable
 
-Major logic files should start with the standard header block:
-
-```ts
-/**
- * MODULE NAME
- * ===========
- * Purpose
- *
- * KEY CONCEPTS:
- * -
- *
- * USAGE:
- * -
- *
- * MEMORY REFERENCES:
- * - MEM-####
- */
-```
-
 ## Delegation
 
 Use only when it materially improves outcome.
 
-<!--
-Delegation should be ticket-file-first.
-The delegated agent should receive the ticket path as the primary contract and use chat only for a short execution note.
--->
-
 Required:
 
-- repro/runtime bug w/ unclear cause -> `runtime-debugging`
-- UI behavior/layout/style change -> `visual-qa`
+- repro/runtime bug with unclear cause -> `runtime-debugging`
+- UI behavior, layout, or style change -> `visual-qa`
 - broad cross-module exploration -> `explore`
-- final quality sweep -> `code-review`
+- final quality sweep -> `review`
 
 Avoid:
 
 - forcing `runtime-debugging` for obvious stack-trace fixes
-- `visual-qa` for docs/rules-only changes
+- `visual-qa` for docs or rules-only changes
 - unnecessary delegation for small local edits
 
 If a plan delegates, include:
@@ -211,28 +190,18 @@ If a plan delegates, include:
 - exact ticket file path
 - required write-back target in that ticket
 
-Delegation protocol:
-
-- create or select the ticket first
-- pass the ticket path/reference to the delegated agent
-- keep the freeform prompt short and secondary to the ticket
-- require the delegated agent to reconcile progress back into that same ticket
-
 If none: `Not needed`.
 
 ## Ticket State Machine
 
-<!--
-Board movement is part of execution, not a chat convention.
-Agents should update the ticket file and board state together so the filesystem board stays trustworthy.
--->
-
-- new or split work -> create a ticket in `tickets/todo/`
-- deferred, quarantined, or out-of-rollout work -> keep the ticket in `tickets/todo/` with explicit blockers; do not leave it in `tickets/building/`
-- active planning / user approval -> keep the ticket in `tickets/review/`
-- approved execution -> move the ticket to `tickets/building/`
-- once implementation + QA pass -> update ticket `phase` to `documenting`, write durable docs, then archive/delete the ticket or move it to `tickets/done/` only if a short-lived done lane is still useful
-- do not keep README/config/install/runtime surfaces for quarantined tickets active in the tracked repo; parked work should stay unshipped or be documented only as out of scope
+- new or split work -> create a ticket in `tickets/`
+- deferred, quarantined, or out-of-rollout work -> keep the ticket in `tickets/` with explicit blockers; do not leave it looking active
+- active planning or user approval -> keep `status: review`
+- approved execution -> set `status: building`
+- execution blocker -> keep `status: building` and record the blocker
+- planning or scope blocker -> move back to `status: review`
+- once implementation and QA pass -> set `phase: documenting`, write durable docs, then move the ticket into `tickets/archive/` or briefly set `status: done` if a short-lived visible completion state is useful before archiving
+- do not keep README, config, install, or runtime surfaces for quarantined tickets active in the tracked repo; parked work should stay unshipped or be documented only as out of scope
 
 Agents must:
 
@@ -240,23 +209,16 @@ Agents must:
 - treat the ticket as the active task object:
   - frontmatter = fixed machine-readable metadata
   - body = task-local memory, plan, evidence, blockers, and handoff
-- use the same canonical dialect in `todo/`, `review/`, and `building/`; backlog tickets are not exempt
-- treat `tickets/INDEX.md` as a human summary only; automation truth lives in the ticket file plus its folder path
+- use the same canonical dialect for every active ticket
 - update the ticket file, not just chat
 - record blockers in the ticket
 - create linked follow-up tickets when scope splits or new work is discovered
-- update `tickets/INDEX.md` when a ticket changes state so the human summary stays readable
-- do not move a ticket into `tickets/building/` while `approval_required: true`, `blocked_by` is non-empty, or a required `depends_on` ticket is still unresolved for the requested slice
-
-Blocker rule:
-
-- execution blocker -> keep ticket in `tickets/building/` and record blocker
-- planning/scope blocker -> move ticket back to `tickets/review/`
+- do not set `status: building` while `approval_required: true`, `blocked_by` is non-empty, or a required dependency is unresolved for the requested slice
 
 Ownership split:
 
-- `tickets/` = active work visibility + active task metadata
-- nearest folder `README.md` = local/module rationale
+- `tickets/` = active work visibility and active task metadata
+- nearest folder `README.md` = local or module rationale
 - `docs/MEMORY.md`, `docs/HISTORY.md`, `docs/TROUBLES.md` = durable memory after completion
 
 Anti-goals:
@@ -264,11 +226,11 @@ Anti-goals:
 - no separate per-task runtime state file in v1
 - no `run_id` or parallel run tree for active work
 - no hidden automation or auto-continue behavior
-- no assumed runtime selector for \"the current active ticket\" in v1; downstream hook work must define that explicitly before mutating ticket metadata
+- no assumed runtime selector for "the current active ticket" in v1; downstream hook work must define that explicitly before mutating ticket metadata
 
 When changing ticket metadata contracts or moving many tickets:
 
-- run `python3 bin/check_ticket_metadata.py`
+- run `python3 tickets/scripts/check_ticket_metadata.py`
 - fix metadata drift before claiming the board is trustworthy
 
 ## Defaults
@@ -288,7 +250,7 @@ When changing ticket metadata contracts or moving many tickets:
 ## Stop If
 
 - scope conflicts or is unclear
-- API/interface contract is ambiguous
+- API or interface contract is ambiguous
 - migration is risky with no rollback
 - circular dependency appears
 

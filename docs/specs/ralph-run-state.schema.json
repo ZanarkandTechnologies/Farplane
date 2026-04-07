@@ -11,7 +11,7 @@
     "phase",
     "status",
     "attempt",
-    "prompt_file",
+    "skill_name",
     "compute_class",
     "parallel_slots_reserved",
     "updated_at"
@@ -61,9 +61,9 @@
       "type": "integer",
       "minimum": 1
     },
-    "prompt_file": {
+    "skill_name": {
       "type": "string",
-      "pattern": "^prompts/ralph[a-z-]*\\.md$"
+      "enum": ["ralplan", "ralph", "docs-closeout"]
     },
     "compute_class": {
       "type": "string",
@@ -77,6 +77,18 @@
     "executor_target": {
       "type": "string"
     },
+    "tmux_session": {
+      "type": "string"
+    },
+    "tmux_window": {
+      "type": "string"
+    },
+    "tmux_pane": {
+      "type": "string"
+    },
+    "auto_continue": {
+      "type": "boolean"
+    },
     "parallel_slots_reserved": {
       "type": "integer",
       "minimum": 1
@@ -86,6 +98,16 @@
     },
     "last_judge_verdict": {
       "type": "string"
+    },
+    "last_hook_decision": {
+      "type": "string"
+    },
+    "last_hook_summary": {
+      "type": "string"
+    },
+    "last_hook_timestamp": {
+      "type": "string",
+      "format": "date-time"
     },
     "next_phase": {
       "type": "string",

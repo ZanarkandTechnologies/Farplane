@@ -1,0 +1,684 @@
+#!/usr/bin/env python3
+"""
+IMPL TMUX HELPER
+================
+Purpose
+
+Launch and inspect visible tmux-backed Codex lanes for the `impl` skill.
+
+This helper owns tmux/session plumbing only. Orchestration policy lives in the
+`impl` skill and Stop-hook logic, not here.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import shlex
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+def now_stamp() -> str:
+    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+
+
+def now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def root() -> Path:
+    return Path(__file__).resolve().parents[3]
+
+
+def current_run_state_path() -> Path:
+    return root() / ".ralph" / "state" / "current-run.json"
+
+
+def run(
+    cmd: list[str],
+    *,
+    cwd: Path | None = None,
+    input_text: str | None = None,
+) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        cmd,
+        cwd=cwd or root(),
+        input=input_text,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def ensure_tmux() -> None:
+    result = run(["tmux", "-V"])
+    if result.returncode != 0:
+        raise SystemExit("tmux is not available")
+
+
+def current_tmux_session() -> str:
+    result = run(["tmux", "display-message", "-p", "#S"])
+    if result.returncode != 0 or not result.stdout.strip():
+        raise SystemExit("not inside a tmux session")
+    return result.stdout.strip()
+
+
+def ticket_id_from_path(path: Path) -> str:
+    match = re.search(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)", path.name)
+    if not match:
+        raise ValueError(f"could not determine ticket id from {path}")
+    return match.group(1)
+
+
+def default_run_state_path(ticket_id: str, phase: str) -> Path:
+    return root() / ".ralph" / "runs" / f"{ticket_id.lower()}-{phase}-{now_stamp()}.json"
+
+
+def path_stem(ticket_id: str, phase: str) -> str:
+    return f"run-{ticket_id.lower()}-{phase}-{now_stamp()}"
+
+
+def read_json(path: Path) -> dict[str, object]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def write_json(path: Path, payload: dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def skill_name_for_phase(phase: str) -> str:
+    mapping = {
+        "planning": "ralplan",
+        "building": "ralph",
+        "documenting": "docs-closeout",
+    }
+    return mapping[phase]
+
+
+def build_phase_prompt(ticket: Path, phase: str, followup_reason: str | None = None) -> str:
+    skill_name = skill_name_for_phase(phase)
+    ticket_id = ticket_id_from_path(ticket)
+    base = (
+        f"Run the `{skill_name}` skill on ticket `{ticket_id}`.\n"
+        "Resolve the ticket from active run state or the explicit ticket selector, stay within that ticket's scope, "
+        "write back to the ticket itself, and finish with one `RALPH_RESULT:` line.\n"
+    )
+    if not followup_reason:
+        return base
+    return (
+        "Continue the current Codex lane.\n\n"
+        f"Follow-up reason: {followup_reason.strip()}\n\n"
+        + base
+    )
+
+
+def write_current_run(payload: dict[str, object], run_state: Path) -> None:
+    current_payload = {
+        "schema_version": "1.0",
+        "run_id": payload["run_id"],
+        "ticket_id": payload["ticket_id"],
+        "ticket_path": payload["ticket_path"],
+        "phase": payload["phase"],
+        "status": payload["status"],
+        "skill_name": payload["skill_name"],
+        "compute_class": payload["compute_class"],
+        "updated_at": payload["updated_at"],
+        "run_state": str(run_state),
+    }
+    for key in (
+        "session_id",
+        "next_phase",
+        "last_judge_verdict",
+        "last_hook_decision",
+        "last_hook_summary",
+        "last_hook_timestamp",
+        "tmux_session",
+        "tmux_window",
+        "tmux_pane",
+        "auto_continue",
+    ):
+        if key in payload:
+            current_payload[key] = payload[key]
+    write_json(current_run_state_path(), current_payload)
+
+
+def build_run_state(
+    ticket: Path,
+    phase: str,
+    compute_class: str,
+    existing: dict[str, object] | None = None,
+) -> dict[str, object]:
+    ticket_id = ticket_id_from_path(ticket)
+    attempt = 1
+    if existing:
+        raw_attempt = existing.get("attempt")
+        if isinstance(raw_attempt, int) and raw_attempt >= 1:
+            attempt = raw_attempt + 1
+    payload: dict[str, object] = {
+        "schema_version": "1.0",
+        "run_id": path_stem(ticket_id, phase),
+        "ticket_id": ticket_id,
+        "ticket_path": str(ticket),
+        "phase": phase,
+        "status": "running",
+        "attempt": attempt,
+        "skill_name": skill_name_for_phase(phase),
+        "compute_class": compute_class,
+        "parallel_slots_reserved": 1,
+        "updated_at": now_iso(),
+    }
+    if existing:
+        for key in (
+            "executor_target",
+            "session_id",
+            "last_hook_decision",
+            "last_hook_summary",
+            "last_hook_timestamp",
+        ):
+            value = existing.get(key)
+            if isinstance(value, str) and value:
+                payload[key] = value
+    return payload
+
+
+def lane_thread_name(ticket_id: str) -> str:
+    return f"ralph-{ticket_id.lower()}"
+
+
+def lane_shell_command(
+    ticket: Path,
+    run_state: Path,
+    ticket_id: str,
+    phase: str,
+    executor_target: str | None,
+    prompt_text: str,
+    resume_session_id: str | None,
+    dry_run: bool,
+) -> str:
+    if dry_run:
+        return (
+            f"cd {shlex.quote(str(root()))} && "
+            f"printf '[impl tmux dry run] phase=%s ticket=%s\\n' "
+            f"{shlex.quote(phase)} {shlex.quote(ticket.name)}"
+        )
+
+    exports = [
+        f"export RALPH_TICKET={shlex.quote(str(ticket))}",
+        f"export RALPH_RUN_STATE={shlex.quote(str(run_state))}",
+    ]
+    if executor_target:
+        exports.append(f"export RALPH_EXECUTOR_TARGET={shlex.quote(executor_target)}")
+    args = [
+        "codex",
+        "--no-alt-screen",
+        "-C",
+        str(root()),
+        "-c",
+        f'thread_name="{lane_thread_name(ticket_id)}"',
+    ]
+    if resume_session_id:
+        args.extend(["resume", resume_session_id, prompt_text])
+    else:
+        args.append(prompt_text)
+    quoted = " ".join(shlex.quote(part) for part in args)
+    return (
+        f"cd {shlex.quote(str(root()))} && "
+        + " && ".join(exports)
+        + f" && {quoted}"
+    )
+
+
+def create_tmux_surface(session: str, layout: str, name: str) -> tuple[str, str, str, str]:
+    if layout == "window":
+        create = run(
+            [
+                "tmux",
+                "new-window",
+                "-d",
+                "-P",
+                "-F",
+                "#{session_name}\t#{window_id}\t#{window_index}\t#{pane_id}",
+                "-t",
+                session,
+                "-n",
+                name,
+            ]
+        )
+    else:
+        create = run(
+            [
+                "tmux",
+                "split-window",
+                "-d",
+                "-P",
+                "-F",
+                "#{session_name}\t#{window_id}\t#{window_index}\t#{pane_id}",
+                "-t",
+                session,
+            ]
+        )
+    if create.returncode != 0:
+        raise SystemExit(create.stderr.strip() or create.stdout.strip() or "tmux launch failed")
+    session_name, window_id, window_index, pane_id = create.stdout.strip().split("\t")
+    run(["tmux", "set-window-option", "-t", window_id, "remain-on-exit", "on"])
+    return session_name, window_id, window_index, pane_id
+
+
+def resolve_existing_path(raw: str) -> Path:
+    candidate = Path(raw)
+    if candidate.is_absolute():
+        return candidate
+    return (root() / candidate).resolve()
+
+
+def pane_metadata(pane: str) -> dict[str, str] | None:
+    result = run(
+        [
+            "tmux",
+            "display-message",
+            "-p",
+            "-t",
+            pane,
+            "#{session_name}\t#{window_id}\t#{window_index}\t#{pane_id}\t#{pane_dead}\t#{pane_current_command}",
+        ]
+    )
+    if result.returncode != 0 or not result.stdout.strip():
+        return None
+    session_name, window_id, window_index, pane_id, pane_dead, current_command = result.stdout.strip().split("\t")
+    return {
+        "tmux_session": session_name,
+        "tmux_window": window_id,
+        "tmux_window_index": window_index,
+        "tmux_pane": pane_id,
+        "pane_dead": pane_dead,
+        "pane_current_command": current_command,
+    }
+
+
+def summarize_hook_entry(ticket_id: str, entry: dict[str, object]) -> dict[str, str] | None:
+    timestamp = entry.get("timestamp")
+    if not isinstance(timestamp, str) or not timestamp:
+        return None
+    decision = entry.get("decision")
+    if isinstance(decision, str) and decision:
+        next_phase = entry.get("next_phase")
+        reason = entry.get("reason")
+        next_value = next_phase if isinstance(next_phase, str) and next_phase else "none"
+        reason_value = reason if isinstance(reason, str) and reason else "no reason recorded"
+        if decision in {"repeat_ralph", "repeat_ralphplan"}:
+            summary = f"Ralph repeat: {ticket_id} -> {next_value} ({reason_value})"
+        elif decision == "advance_ticket":
+            summary = f"Ralph advance: {ticket_id} -> {next_value} ({reason_value})"
+        elif decision == "complete_ticket":
+            summary = f"Ralph complete: {ticket_id} ({reason_value})"
+        elif decision == "block_ticket":
+            summary = f"Ralph blocked: {ticket_id} ({reason_value})"
+        else:
+            summary = f"Hook {decision}: {ticket_id} ({reason_value})"
+        return {
+            "last_hook_decision": decision,
+            "last_hook_summary": summary,
+            "last_hook_timestamp": timestamp,
+            "hook_status_source": "stop-hook-log",
+        }
+    outcome = entry.get("outcome")
+    if isinstance(outcome, str) and outcome == "missing_ralph_result":
+        phase = entry.get("phase")
+        phase_value = phase if isinstance(phase, str) and phase else "building"
+        return {
+            "last_hook_decision": outcome,
+            "last_hook_summary": f"Ralph missing result: {ticket_id} in {phase_value}",
+            "last_hook_timestamp": timestamp,
+            "hook_status_source": "stop-hook-log",
+        }
+    return None
+
+
+def latest_hook_status(ticket_id: str) -> dict[str, str] | None:
+    log_path = root() / ".ralph" / "logs" / "stop-hook.jsonl"
+    try:
+        lines = log_path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+    for line in reversed(lines):
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("ticket_id") != ticket_id:
+            continue
+        summarized = summarize_hook_entry(ticket_id, entry)
+        if summarized is not None:
+            return summarized
+    return None
+
+
+def resolve_run_state_path(raw: str | None, ticket_id: str, phase: str) -> Path:
+    if raw:
+        return resolve_existing_path(raw)
+    current_run = read_json(current_run_state_path())
+    current_ticket_id = current_run.get("ticket_id")
+    existing = current_run.get("run_state")
+    if (
+        isinstance(existing, str)
+        and existing
+        and isinstance(current_ticket_id, str)
+        and current_ticket_id == ticket_id
+    ):
+        return resolve_existing_path(existing)
+    return default_run_state_path(ticket_id, phase)
+
+
+def existing_state_for_path(run_state: Path, ticket_id: str) -> dict[str, object]:
+    payload = read_json(run_state)
+    if payload:
+        return payload
+    current_run = read_json(current_run_state_path())
+    if current_run.get("ticket_id") == ticket_id:
+        return current_run
+    return {}
+
+
+def persist_lane_state(
+    *,
+    ticket: Path,
+    phase: str,
+    run_state: Path,
+    compute_class: str,
+    tmux_session: str,
+    tmux_window: str,
+    tmux_pane: str,
+    auto_continue: bool,
+    existing: dict[str, object] | None,
+) -> dict[str, object]:
+    state = build_run_state(ticket, phase, compute_class, existing)
+    state["tmux_session"] = tmux_session
+    state["tmux_window"] = tmux_window
+    state["tmux_pane"] = tmux_pane
+    if auto_continue:
+        state["auto_continue"] = True
+    write_json(run_state, state)
+    write_current_run(state, run_state)
+    return state
+
+
+def launch(args: argparse.Namespace) -> int:
+    ensure_tmux()
+    ticket = resolve_existing_path(args.ticket)
+    if not ticket.is_file():
+        raise SystemExit(f"ticket not found: {ticket}")
+    ticket_id = ticket_id_from_path(ticket)
+    run_state = resolve_run_state_path(args.run_state, ticket_id, args.phase)
+    session = args.tmux_session or current_tmux_session()
+    session_name, window_id, window_index, pane_id = create_tmux_surface(
+        session,
+        args.layout,
+        args.name or f"ralph-{ticket_id.lower()}",
+    )
+    state = persist_lane_state(
+        ticket=ticket,
+        phase=args.phase,
+        run_state=run_state,
+        compute_class=args.compute_class,
+        tmux_session=session_name,
+        tmux_window=window_id,
+        tmux_pane=pane_id,
+        auto_continue=args.auto_continue,
+        existing=None,
+    )
+    command = lane_shell_command(
+        ticket,
+        run_state,
+        ticket_id,
+        args.phase,
+        None,
+        build_phase_prompt(ticket, args.phase),
+        None,
+        args.dry_run,
+    )
+    sent = run(["tmux", "send-keys", "-t", pane_id, command, "C-m"])
+    if sent.returncode != 0:
+        raise SystemExit(sent.stderr.strip() or sent.stdout.strip() or "tmux send-keys failed")
+    payload = {
+        "action": "launch",
+        "ticket": str(ticket),
+        "phase": args.phase,
+        "tmux_session": session_name,
+        "tmux_window": window_id,
+        "tmux_window_index": window_index,
+        "tmux_pane": pane_id,
+        "run_state": str(run_state),
+        "auto_continue": args.auto_continue,
+        "dry_run": args.dry_run,
+        "interactive_lane": not args.dry_run,
+    }
+    session_id = state.get("session_id")
+    if isinstance(session_id, str) and session_id:
+        payload["session_id"] = session_id
+    print(json.dumps(payload, indent=2))
+    return 0
+
+
+def followup(args: argparse.Namespace) -> int:
+    ensure_tmux()
+    ticket = resolve_existing_path(args.ticket)
+    if not ticket.is_file():
+        raise SystemExit(f"ticket not found: {ticket}")
+    ticket_id = ticket_id_from_path(ticket)
+    run_state = resolve_run_state_path(args.run_state, ticket_id, args.phase)
+    existing = existing_state_for_path(run_state, ticket_id)
+    current_run = read_json(current_run_state_path())
+    if current_run.get("ticket_id") == ticket_id:
+        existing = {**existing, **current_run}
+    compute_class = args.compute_class or str(existing.get("compute_class") or "local")
+    auto_continue = bool(existing.get("auto_continue")) or args.auto_continue
+    prompt_text = build_phase_prompt(ticket, args.phase, args.reason)
+
+    if args.dry_run:
+        session = args.tmux_session or str(existing.get("tmux_session") or current_tmux_session())
+        session_name, window_id, window_index, pane_id = create_tmux_surface(
+            session,
+            "pane",
+            f"ralph-{ticket_id.lower()}",
+        )
+        state = persist_lane_state(
+            ticket=ticket,
+            phase=args.phase,
+            run_state=run_state,
+            compute_class=compute_class,
+            tmux_session=session_name,
+            tmux_window=window_id,
+            tmux_pane=pane_id,
+            auto_continue=auto_continue,
+            existing=existing,
+        )
+        message = (
+            f"cd {shlex.quote(str(root()))} && "
+            f"printf '[impl tmux dry run] followup phase=%s ticket=%s\\n' "
+            f"{shlex.quote(args.phase)} {shlex.quote(ticket.name)}"
+        )
+        run(["tmux", "send-keys", "-t", pane_id, message, "C-m"])
+        payload = {
+            "action": "followup",
+            "ticket": str(ticket),
+            "phase": args.phase,
+            "tmux_session": session_name,
+            "tmux_window": window_id,
+            "tmux_window_index": window_index,
+            "tmux_pane": pane_id,
+            "run_state": str(run_state),
+            "dry_run": True,
+            "reused_existing_pane": False,
+        }
+        session_id = state.get("session_id")
+        if isinstance(session_id, str) and session_id:
+            payload["session_id"] = session_id
+        print(json.dumps(payload, indent=2))
+        return 0
+
+    session = args.tmux_session or str(existing.get("tmux_session") or current_tmux_session())
+    resume_session_id = existing.get("session_id")
+    resume_value = resume_session_id if isinstance(resume_session_id, str) and resume_session_id else None
+    session_name, window_id, window_index, pane_id = create_tmux_surface(
+        session,
+        "pane",
+        f"ralph-{ticket_id.lower()}",
+    )
+    state = persist_lane_state(
+        ticket=ticket,
+        phase=args.phase,
+        run_state=run_state,
+        compute_class=compute_class,
+        tmux_session=session_name,
+        tmux_window=window_id,
+        tmux_pane=pane_id,
+        auto_continue=auto_continue,
+        existing=existing,
+    )
+    command = lane_shell_command(
+        ticket,
+        run_state,
+        ticket_id,
+        args.phase,
+        str(existing.get("executor_target") or "") or None,
+        prompt_text,
+        resume_value,
+        False,
+    )
+    sent = run(["tmux", "send-keys", "-t", pane_id, command, "C-m"])
+    if sent.returncode != 0:
+        raise SystemExit(sent.stderr.strip() or sent.stdout.strip() or "tmux send-keys failed")
+    payload = {
+        "action": "followup",
+        "ticket": str(ticket),
+        "phase": args.phase,
+        "tmux_session": session_name,
+        "tmux_window": window_id,
+        "tmux_window_index": window_index,
+        "tmux_pane": pane_id,
+        "run_state": str(run_state),
+        "reused_existing_pane": False,
+        "resumed_session": bool(resume_value),
+    }
+    session_id = state.get("session_id")
+    if isinstance(session_id, str) and session_id:
+        payload["session_id"] = session_id
+    print(json.dumps(payload, indent=2))
+    return 0
+
+
+def attach(args: argparse.Namespace) -> int:
+    run_state = resolve_existing_path(args.run_state) if args.run_state else current_run_state_path()
+    payload = read_json(run_state)
+    pane = payload.get("tmux_pane")
+    window = payload.get("tmux_window")
+    session = payload.get("tmux_session")
+    if isinstance(window, str) and window:
+        run(["tmux", "select-window", "-t", window])
+    elif isinstance(session, str) and session:
+        run(["tmux", "switch-client", "-t", session])
+    if isinstance(pane, str) and pane:
+        run(["tmux", "select-pane", "-t", pane])
+    result = {"session": session, "window": window, "pane": pane}
+    session_id = payload.get("session_id")
+    if isinstance(session_id, str) and session_id:
+        result["session_id"] = session_id
+    print(json.dumps(result, indent=2))
+    return 0
+
+
+def status(args: argparse.Namespace) -> int:
+    run_state = resolve_existing_path(args.run_state) if args.run_state else current_run_state_path()
+    payload = read_json(run_state)
+    if not payload:
+        raise SystemExit(f"run state not found or unreadable: {run_state}")
+    ticket_id = payload.get("ticket_id")
+    if isinstance(ticket_id, str) and ticket_id and "last_hook_decision" not in payload:
+        hook_status = latest_hook_status(ticket_id)
+        if hook_status is not None:
+            payload.update(hook_status)
+    elif "last_hook_decision" in payload:
+        payload["hook_status_source"] = "run-state"
+    pane = payload.get("tmux_pane")
+    if isinstance(pane, str) and pane:
+        metadata = pane_metadata(pane)
+        if metadata:
+            payload.update(metadata)
+    print(json.dumps(payload, indent=2))
+    return 0
+
+
+def tail(args: argparse.Namespace) -> int:
+    run_state = resolve_existing_path(args.run_state) if args.run_state else current_run_state_path()
+    payload = read_json(run_state)
+    pane = payload.get("tmux_pane")
+    if not isinstance(pane, str) or not pane:
+        raise SystemExit("no tmux pane recorded in run state")
+    result = run(["tmux", "capture-pane", "-t", pane, "-p", "-S", f"-{args.lines}"])
+    if result.returncode != 0:
+        raise SystemExit(result.stderr.strip() or result.stdout.strip() or "tmux capture-pane failed")
+    sys.stdout.write(result.stdout)
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    p_launch = subparsers.add_parser("launch")
+    p_launch.add_argument("--ticket", required=True)
+    p_launch.add_argument("--phase", required=True, choices=["planning", "building", "documenting"])
+    p_launch.add_argument("--run-state")
+    p_launch.add_argument("--tmux-session")
+    p_launch.add_argument("--layout", choices=["pane", "window"], default="pane")
+    p_launch.add_argument("--name")
+    p_launch.add_argument("--compute-class", default="local")
+    p_launch.add_argument("--auto-continue", action="store_true")
+    p_launch.add_argument("--dry-run", action="store_true")
+    p_launch.set_defaults(func=launch)
+
+    p_followup = subparsers.add_parser("followup")
+    p_followup.add_argument("--ticket", required=True)
+    p_followup.add_argument("--phase", required=True, choices=["planning", "building", "documenting"])
+    p_followup.add_argument("--run-state")
+    p_followup.add_argument("--tmux-session")
+    p_followup.add_argument("--compute-class")
+    p_followup.add_argument("--reason")
+    p_followup.add_argument("--auto-continue", action="store_true")
+    p_followup.add_argument("--dry-run", action="store_true")
+    p_followup.set_defaults(func=followup)
+
+    p_attach = subparsers.add_parser("attach")
+    p_attach.add_argument("--run-state")
+    p_attach.set_defaults(func=attach)
+
+    p_status = subparsers.add_parser("status")
+    p_status.add_argument("--run-state")
+    p_status.set_defaults(func=status)
+
+    p_tail = subparsers.add_parser("tail")
+    p_tail.add_argument("--run-state")
+    p_tail.add_argument("--lines", type=int, default=80)
+    p_tail.set_defaults(func=tail)
+
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    args = parser.parse_args()
+    return int(args.func(args))
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

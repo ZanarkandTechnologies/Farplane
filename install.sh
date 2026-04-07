@@ -4,10 +4,13 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="${1:-$HOME/.codex}"
 STAMP="$(date +%Y%m%d-%H%M%S)"
+BACKUP_ROOT="${TARGET_DIR}/.install-backups/${STAMP}"
 
 link_path() {
   local src="$1"
   local dest="$2"
+  local relative
+  local backup_dest
 
   mkdir -p "$(dirname "$dest")"
 
@@ -16,7 +19,10 @@ link_path() {
   fi
 
   if [ -e "$dest" ] || [ -L "$dest" ]; then
-    mv "$dest" "${dest}.bak.${STAMP}"
+    relative="${dest#${TARGET_DIR}/}"
+    backup_dest="${BACKUP_ROOT}/${relative}"
+    mkdir -p "$(dirname "$backup_dest")"
+    mv "$dest" "$backup_dest"
   fi
 
   ln -s "$src" "$dest"
@@ -76,4 +82,5 @@ fi
 
 echo "Done."
 echo "Next: edit $TARGET_DIR/config.toml and replace __CODEX_HOME__ plus any local MCP/project values."
-echo "Hooks config is linked when hooks.json exists; enable hook env vars in config.toml as needed."
+echo "Hooks config is linked when hooks.json exists; hook env vars remain available as explicit overrides but normal Codexter runtime context should auto-activate the Stop hook."
+echo "Backups (when needed) are stored under $BACKUP_ROOT"

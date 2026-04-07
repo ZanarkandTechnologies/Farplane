@@ -132,7 +132,7 @@ linked_docs:
 Canonical version:
 
 ```bash
-RALPH_TICKET="tickets/review/TASK-0101-incident-ingest-ui-storage.md" \
+RALPH_TICKET="tickets/TASK-0101-incident-ingest-ui-storage.md" \
 RALPH_RUN_STATE=".ralph/runs/run-0101-plan-01.json" \
 codex exec --skip-git-repo-check -C "$ROOT" - < prompts/ralphplan.md
 ```
@@ -275,7 +275,7 @@ TASK-0207 fix expired-session redirect loop
 ### Canonical worker wrapper
 
 ```bash
-RALPH_TICKET="tickets/building/TASK-0207-fix-expired-session-redirect-loop.md" \
+RALPH_TICKET="tickets/TASK-0207-fix-expired-session-redirect-loop.md" \
 RALPH_RUN_STATE=".ralph/runs/run-0207-build-02.json" \
 codex exec --skip-git-repo-check -C "$ROOT" - < prompts/ralph.md
 ```
@@ -383,7 +383,7 @@ handoff notes
 ### Same ticket on remote compute
 
 ```bash
-RALPH_TICKET="tickets/building/TASK-0207-fix-expired-session-redirect-loop.md" \
+RALPH_TICKET="tickets/TASK-0207-fix-expired-session-redirect-loop.md" \
 RALPH_RUN_STATE=".ralph/runs/run-0207-build-03.json" \
 RALPH_EXECUTOR_TARGET="vm-eu-west-1-build-03" \
 codex exec --skip-git-repo-check -C "$ROOT" - < prompts/ralph.md

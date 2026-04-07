@@ -6,7 +6,7 @@
           {
             "type": "command",
             "command": "python3 \"$HOME/.codex/bin/stop_hook.py\"",
-            "statusMessage": "Checking assisted continuation",
+            "statusMessage": "Evaluating Ralph stop hook",
             "timeout": 30
           }
         ]

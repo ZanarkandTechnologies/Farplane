@@ -1,0 +1,79 @@
+---
+name: impl
+description: Build-phase orchestrator for one selected ticket. Runs ephemerally, coordinates builder/reviewer/QA/evidence-check lanes, and hands results back to the Stop hook.
+---
+
+# Impl
+
+`$impl` is the build-phase orchestration surface for Codexter.
+
+Use it when:
+
+- planning for a ticket is already complete
+- one ticket should move through implementation, QA, review, and evidence-check
+- the operator wants visible worker lanes instead of a hidden forever-running orchestrator
+
+Do not use it when:
+
+- the request is still ambiguous; use `brainstorm`, `deep-interview`, or `prd`
+- the selected ticket still needs architecture/test-shape planning; use `ralplan`
+- the task is already small enough for direct solo implementation
+
+## Contract
+
+- `$impl` owns one selected ticket/work package at a time.
+- An explicit ticket selector outranks ambient runtime state.
+- `$impl` reads the ticket plus linked specs/docs, launches the needed worker lanes, integrates their outputs, writes progress back to the ticket/progress surface, and exits.
+- `$impl` does not require or create a permanent orchestrator pane.
+- Worker panes are the primary visible runtime surface.
+
+## Default Worker Shape
+
+For a selected build ticket, `$impl` should coordinate:
+
+1. builder lane for implementation and local validation
+2. reviewer lane for rubric-based review
+3. QA lane for evidence gathering
+4. evidence-check lane for validating the QA evidence
+
+The orchestrator remains singular: worker lanes do not mutate queue state or claim completion on their own.
+
+## Selection Rules
+
+- Prefer an explicit ticket path or ticket id from the invocation.
+- If no explicit selector is provided, fall back to the current active ticket only when the surrounding run state is unambiguous.
+- Do not silently jump to another ready ticket while a selected ticket is still active.
+
+## Stop-Hook Re-entry
+
+- Stop-hook and judge outputs remain the continuation/completion gate.
+- When the verdict says repeat the same build work, the follow-up instruction should re-enter the same `$impl` contract for that ticket.
+- Re-entry should reuse the existing verdict fields and `orchestrator_message`; do not invent a second continuation artifact.
+
+## Operator UX
+
+- The operator should be able to see which ticket `$impl` selected.
+- The operator should be able to see which worker lanes were launched.
+- The operator should be able to recover by re-running `$impl` for the same ticket using the ticket plus the latest written evidence/handoff.
+
+## Tmux Helper
+
+When tmux-backed visible lanes are needed, `$impl` may use:
+
+- `skills/impl/scripts/tmux_helper.py`
+
+That helper is tmux/session plumbing only. It must not own orchestration
+policy, queue selection, or review logic.
+
+Reference:
+
+- `skills/impl/references/tmux-runtime.md`
+- `skills/impl/references/stop-hook-routing.md`
+
+## Guardrails
+
+- Keep the ticket as the canonical progress surface.
+- Keep QA and review separate.
+- Keep the orchestrator ephemeral.
+- Reuse existing hook verdicts instead of adding a parallel control plane.
+- Leave board-wide dispatch, worktree orchestration, and binary/runtime cleanup to separate tickets.
