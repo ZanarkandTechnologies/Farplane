@@ -1,3 +1,5 @@
 # Troubles
 
 Append repeated operator misses or preventable process failures here when patterns emerge.
+2026-04-05 22:25 +0100 | stop-hook,ralph,continuation | user reported the assistant saying "I'm doing it now" and then ending the session | Ralph-mode prose without `RALPH_RESULT` fell through to a success/stop path | treat missing `RALPH_RESULT` as an explicit same-ticket continuation requirement and add a replayable regression check | keep prose-only execution completions out of the success path unless a structured result or equivalent proof exists
+2026-04-05 22:50 +0100 | ralph,execution,sizing | user gave Ralph a well-sized ticket | Ralph execution wording still nudged toward "next item" / bounded-pass micro-slicing instead of treating the ticket as the unit of work | rewrite the Ralph prompt and live skill text so coherent tickets stay intact unless a real blocker forces a narrower step | keep anti-micro-slicing language in Ralph only and leave Ralphplan free to do planning/ticket decomposition

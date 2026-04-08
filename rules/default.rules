@@ -335,3 +335,5 @@ prefix_rule(pattern=["git", "-C", "/tmp/lightbulb-pr114-fix", "add", "backend/ag
 prefix_rule(pattern=["git", "-C", "/tmp/lightbulb-pr114-fix", "commit", "-m", "fix(generator): forward section instructions on initial generation"], decision="allow")
 prefix_rule(pattern=["git", "ls-remote"], decision="allow")
 prefix_rule(pattern=["git", "rm", "--cached", "state_5.sqlite-shm", "state_5.sqlite-wal"], decision="allow")
+prefix_rule(pattern=["git", "update-index", "--skip-worktree"], decision="allow")
+prefix_rule(pattern=["sleep", "3"], decision="allow")

@@ -26,7 +26,7 @@ Before finishing, save findings, commands, and artifact paths into:
 
 - `docs/research/qa-testing/<TICKET_ID>/YYYY-MM-DD_HHMMSS_<topic>/report.md`
 
-`TICKET_ID` comes from the delegated ticket path/section when available; otherwise use the active ticket in `tickets/building/`; otherwise use `uncategorized`.
+`TICKET_ID` comes from the delegated ticket path/section when available; otherwise use the active ticket in `tickets/TASK-*.md`; otherwise use `uncategorized`.
 
 The run folder must also contain:
 
@@ -40,7 +40,7 @@ The run folder must also contain:
 
 Before touching the browser, read:
 
-1. the delegated ticket file/section or active ticket in `tickets/building/`,
+1. the delegated ticket file/section or active ticket in `tickets/TASK-*.md`,
 2. the ticket `Agent Contract`:
    - `Open`
    - `Test hook`
@@ -191,7 +191,7 @@ Every UI QA report must include:
 
 If an item is not provable from captured artifacts, do not guess. Mark `NOT PROVABLE`.
 
-If QA discovers new required work, create a linked follow-up ticket in `tickets/todo/` instead of burying it in the report.
+If QA discovers new required work, create a linked follow-up ticket in `tickets/` instead of burying it in the report.
 
 Every QA pass should leave behind a review packet in the ticket:
 

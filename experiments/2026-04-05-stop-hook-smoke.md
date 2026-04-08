@@ -13,16 +13,6 @@ Verify that the tracked `Stop` hook can:
 
 ## Commands
 
-Planning dry-run through orchestrator:
-
-```bash
-python3 bin/ralph_orchestrate.py \
-  --ticket tickets/building/TASK-0010-ralph-thin-prototype.md \
-  --phase planning \
-  --dry-run \
-  --json
-```
-
 Manual hook-style payload for a fixture building ticket with missing evidence:
 
 ```bash
@@ -80,36 +70,21 @@ EOF
 
 ## Findings
 
-1. The local smoke-eval suite now covers **10 cases**, and all 10 currently pass:
+1. The local smoke-eval suite now covers **11 cases**, and the current supported-runtime set passes locally.
 
-- orchestrator planning dry-run
 - hook replay for missing build evidence
 - hook replay for accepted planning output
 - current-run selector replay without explicit ticket env
+- hook replay for Ralph-mode prose without `RALPH_RESULT`
 - judge blocked path
 - judge continue-rerun path
 - judge build-complete with missing evidence
 - judge build-complete with passing evidence
 - judge plan-ready advance path
 - judge docs-complete path
+- tmux follow-up lane spawn replay
 
-2. Planning dry-run through the orchestrator returned:
-
-```json
-{
-  "worker_result": "RALPH_RESULT: status=plan_ready next=building reason=dry_run",
-  "judge_verdict": {
-    "decision": "advance_ticket",
-    "next_phase": "building"
-  }
-}
-```
-
-Interpretation:
-- the simpler `ralphplan` path now advances directly to `building`
-- this matches the intended two-workflow model
-
-3. Hook-style payload for a fixture building ticket with missing evidence returned:
+2. Hook-style payload for a fixture building ticket with missing evidence returned:
 
 ```json
 {"decision": "block", "reason": "rerun TASK-9998 in building with explicit missing evidence coverage"}
@@ -121,18 +96,34 @@ Interpretation:
 - missing evidence correctly triggers same-ticket continuation
 - the missing-evidence regression no longer depends on leaving `TASK-0011` incomplete
 
-4. Hook-style payload for a planning ticket with `plan_ready` returned no stdout and exited `0`.
+3. Hook-style payload for a planning ticket with `plan_ready` returned no stdout and exited `0`.
 
 Interpretation:
 - the hook judged the ticket safe to stop
 - no same-ticket continuation was requested
 - this is the desired path for `ralphplan` success
 
-5. Payload replay using only `cwd` + `.ralph/state/current-run.json` also worked.
+4. Payload replay using only `cwd` + `.ralph/state/current-run.json` also worked.
 
 Interpretation:
 - the prototype no longer depends on `RALPH_TICKET` env as the primary selector
 - project-local run state is now sufficient for the hook in payload-driven tests
+
+5. Ralph-mode prose without `RALPH_RESULT` now returns an explicit same-ticket continuation instead of silently stopping as success.
+
+Observed replay:
+
+```json
+{
+  "decision": "block",
+  "reason": "Continue TASK-9997 in building. The last assistant message implied more same-ticket work but ended without an explicit RALPH_RESULT line. Continue the same ticket, update repo/ticket state, and finish with a RALPH_RESULT."
+}
+```
+
+Interpretation:
+- the hook now treats missing `RALPH_RESULT` in execution mode as a contract miss instead of a successful stop
+- the operator gets a concrete continuation reason instead of a false completion
+- this directly covers the reported "I'm doing it now" failure mode
 
 6. Real `codex exec` session with `codex_hooks` enabled printed:
 
@@ -223,6 +214,32 @@ Interpretation:
 Interpretation:
 - closeout evidence on the active ticket no longer changes the expected missing-evidence replay result
 - the smoke eval suite now tests both explicit-selector precedence and current-run selection without coupling to the live board state
+
+12. The tmux-backed follow-up replay now validates the supported helper surface instead of the retired `bin/ralph_orchestrate.py` / `bin/ralph_tmux.py` pair.
+
+Observed sequence:
+
+- `TASK-0014` was launched in tmux session `ai-brain-local`, pane `%13`
+- a `build_complete -> building` stop-hook replay was run in bounded dry-run mode
+- the hook log recorded:
+
+```json
+{
+  "mode": "ralph",
+  "ticket_id": "TASK-0014",
+  "event": "spawn_followup",
+  "followup": {
+    "phase": "building",
+    "tmux_session": "ai-brain-local",
+    "tmux_pane": "%14"
+  }
+}
+```
+
+Interpretation:
+- the hook can now hand off to a fresh visible tmux lane using `skills/impl/scripts/tmux_helper.py`
+- the new lane is inspectable with the helper's `tail` command or raw `tmux capture-pane`
+- the smoke suite now matches the current supported runtime surface
 
 ## Next Step
 

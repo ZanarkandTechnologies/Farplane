@@ -1,14 +1,8 @@
 [
   {
-    "name": "planning_dry_run",
-    "ok": true,
-    "stdout": "{\n  \"ticket\": \"/Users/kenjipcx/coding-harness/Codexter/tickets/building/TASK-0011-ralph-hook-integration-and-evals.md\",\n  \"phase\": \"planning\",\n  \"run_state\": \"/Users/kenjipcx/coding-harness/Codexter/.ralph/runs/task-0011-planning-20260405T183312Z.json\",\n  \"worker_result\": \"RALPH_RESULT: status=plan_ready next=building reason=dry_run\",\n  \"judge_verdict\": {\n    \"schema_version\": \"1.0\",\n    \"ticket_id\": \"TASK-0011\",\n    \"current_phase\": \"planning\",\n    \"decision\": \"advance_ticket\",\n    \"next_phase\": \"building\",\n    \"reason\": \"dry_run\",\n    \"orchestrator_message\": \"advance TASK-0011 to building\",\n    \"evidence_ok\": true\n  }\n}",
-    "stderr": ""
-  },
-  {
     "name": "hook_build_payload",
     "ok": true,
-    "stdout": "{\"decision\": \"block\", \"reason\": \"rerun TASK-9998 in building with explicit missing evidence coverage\"}",
+    "stdout": "{\"decision\": \"block\", \"reason\": \"rerun TASK-9998 in building with explicit missing evidence coverage\", \"systemMessage\": \"Stop hook: Ralph repeat: TASK-9998 -> building (eval_build)\"}",
     "stderr": ""
   },
   {
@@ -20,7 +14,13 @@
   {
     "name": "hook_current_run_selector",
     "ok": true,
-    "stdout": "{\"decision\": \"block\", \"reason\": \"rerun TASK-9998 in building with explicit missing evidence coverage\"}",
+    "stdout": "{\"decision\": \"block\", \"reason\": \"rerun TASK-9998 in building with explicit missing evidence coverage\", \"systemMessage\": \"Stop hook: Ralph repeat: TASK-9998 -> building (eval_state_selector)\"}",
+    "stderr": ""
+  },
+  {
+    "name": "hook_missing_ralph_result",
+    "ok": true,
+    "stdout": "{\"decision\": \"block\", \"reason\": \"Finish the remaining same-ticket closeout now: update the active ticket state and complete the Ralph pass cleanly before handing off.\", \"systemMessage\": \"Stop hook: reviewer: TASK-9997 -> continue_same_ticket (The latest assistant response explicitly says work remains: the ticket still needs updating and the Ralph pass has not been closed out cleanly. This is same-ticket completion work, not an orchestrator routing decision. The active ticket state also remains in `phase: building` / `status: building`, so evidence/writeback is not yet complete.)\"}",
     "stderr": ""
   },
   {
@@ -58,5 +58,45 @@
     "ok": true,
     "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"ticket_id\": \"TASK-9999\",\n  \"current_phase\": \"documenting\",\n  \"decision\": \"complete_ticket\",\n  \"next_phase\": \"done\",\n  \"reason\": \"fixture_docs_complete\",\n  \"orchestrator_message\": \"mark TASK-9999 complete\",\n  \"evidence_ok\": true\n}",
     "stderr": ""
+  },
+  {
+    "name": "hook_tmux_followup",
+    "ok": true,
+    "stdout": "{\"systemMessage\": \"Stop hook: Ralph repeat: TASK-9998 -> building (eval_tmux_followup)\"}",
+    "stderr": "",
+    "session_name": "codexter-smoke-15118-1775611099303330000",
+    "followup": {
+      "action": "followup",
+      "ticket": "/var/folders/98/ht394qw529jbzxvzl7ldp1040000gn/T/ralph-hook-fixtures-oyd2g23y/TASK-9998-hook-missing.md",
+      "phase": "building",
+      "tmux_session": "codexter-smoke-15118-1775611099303330000",
+      "tmux_window": "@33",
+      "tmux_window_index": "0",
+      "tmux_pane": "%56",
+      "run_state": "/Users/kenjipcx/coding-harness/Codexter/.ralph/runs/task-9998-building-20260408T011819434898Z.json",
+      "dry_run": true,
+      "reused_existing_pane": false
+    },
+    "run_state_json": {
+      "schema_version": "1.0",
+      "run_id": "run-task-9998-building-20260408T011819454929Z",
+      "ticket_id": "TASK-9998",
+      "ticket_path": "/var/folders/98/ht394qw529jbzxvzl7ldp1040000gn/T/ralph-hook-fixtures-oyd2g23y/TASK-9998-hook-missing.md",
+      "phase": "building",
+      "status": "running",
+      "attempt": 1,
+      "skill_name": "ralph",
+      "compute_class": "local",
+      "parallel_slots_reserved": 1,
+      "updated_at": "2026-04-08T01:18:19.455040Z",
+      "last_hook_decision": "repeat_ralph",
+      "last_hook_summary": "Ralph repeat: TASK-9998 -> building (eval_tmux_followup)",
+      "last_hook_timestamp": "2026-04-08T01:18:19.378298Z",
+      "tmux_session": "codexter-smoke-15118-1775611099303330000",
+      "tmux_window": "@33",
+      "tmux_pane": "%56",
+      "auto_continue": true
+    },
+    "lane_tail": "cd /Users/kenjipcx/coding-harness/Codexter && printf '[impl tmux dry run] follow\nup phase=%s ticket=%s\\n' building TASK-9998-hook-missing.md\n\ue0b0 kenjipcx@192.168.1.180 \ue0b0 \ueb06 \ue0b1 \uf115 \ue0b1 Codexter \ue0b0 \ue0a0main \ue0b0 cd /Users/kenjipcx/coding-\nharness/Codexter && printf '[impl tmux dry run] followup phase=%s ticket=%s\\n' b\nuilding TASK-9998-hook-missing.md\n[impl tmux dry run] followup phase=building ticket=TASK-9998-hook-missing.md\n\ue0b0 kenjipcx@192.168.1.180 \ue0b0 \ueb06 \ue0b1 \uf115 \ue0b1 Codexter \ue0b0 \ue0a0main \ue0b0                  02:18:19"
   }
 ]
