@@ -101,12 +101,19 @@ update docs/evidence
 - [ ] QA / manual verification
 
 ## Review Packet
-- `reviewed_at:`
-- `rubrics_used:`
+- Scores use the anchored `1.0`-to-`5.0` rubric scale.
+- `reviewed_at:` `YYYY-MM-DD HH:mm ±ZZZZ`
+- `rubrics_used:` `[]`
 - `overall_score:`
-- `overall_verdict:`
-- `rerun_required:`
-- `blocking_findings:`
+- `overall_threshold:`
+- `overall_verdict:` `pass|revise|block`
+- `rerun_required:` `true|false`
+- `evidence_quality:` `pass|fail`
+- `integration_readiness:` `pass|fail`
+- `traceability:` `pass|fail`
+- `freshness:` `pass|fail`
+- `hard_gate_failures:` `[]`
+- `blocking_findings:` `[]`
 - `next_action:`
 
 ## Blockers

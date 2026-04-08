@@ -5,26 +5,28 @@ This is the primary rubric map for the `review` skill.
 Use it to:
 
 - choose the right rubric families for the ticket
-- ask the right questions for each family
+- locate the correct family reference files
 - score each family consistently
 - write one `Review Packet` back into the ticket
 
 ## Scoring Model
 
-Score each dimension from `1` to `5`.
+Score each family and dimension from `1.0` to `5.0`.
 
-- `1` = fail
-- `2` = weak
-- `3` = acceptable
-- `4` = strong
-- `5` = excellent
+- `1`: failing, unsafe, contradictory, or largely absent
+- `3`: acceptable and directionally correct, but still ordinary or caveated
+- `5`: exemplary, persuasive, and hard to improve materially within scope
+
+Interpolate `2` and `4` between the written anchors.
+
+Each family has its own reference file. Read the selected family files before scoring.
 
 For each rubric family, return:
 
 - `score`
 - `threshold`
 - `pass`
-- `top_questions`
+- `dimension_scores`
 - `findings`
 - `next_action`
 
@@ -42,9 +44,9 @@ Default thresholds:
 
 Hard gates:
 
-- weak `evidence-quality` cannot pass overall review
-- weak `integration-readiness` cannot pass overall review
-- `ui-quality` cannot pass if functionality is failing
+- `evidence-quality` below threshold cannot pass overall review
+- `integration-readiness` below threshold cannot pass overall review
+- `ui-quality` cannot pass if `functionality` is failing
 
 ## Rubric Selection
 
@@ -78,152 +80,91 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
 ## Rubric Families
 
 ### 1. Spec Contract
-
-Dimensions:
-- story coherence
-- slice sizing
-- parallelization fit
-- acceptance testability
-- scope clarity
-
-Questions:
-- Does the user story make sense as one coherent unit of work?
-- Is the ticket sized correctly for one execution slice?
-- Does the proposed parallelization make sense, or is it fake concurrency?
-- Are success conditions testable?
-- Are dependencies and non-goals explicit enough to prevent drift?
+- File: `spec-contract.md`
+- Focus:
+  - does the user story make sense
+  - does the proposed parallelization make sense
+  - is the slice sized correctly
+  - are success conditions testable
+  - are boundaries explicit enough to prevent drift
 
 ### 2. Implementation Plan
-
-Dimensions:
-- human readability
-- bloat resistance
-- modularity
-- proof clarity
-- execution order
-- risk clarity
-
-Questions:
-- Can a human read the plan quickly and know what will happen?
-- Is the plan bloated with unnecessary abstraction or ceremony?
-- Is modularity preserved?
-- Does the plan explain how success will be proved?
-- Is the execution order sensible?
-- Are the main risks and weak assumptions explicit?
+- File: `implementation-plan.md`
+- Focus:
+  - readability for a human reviewer
+  - bloatability
+  - modularity
+  - proof clarity
+  - execution order
+  - risk clarity
 
 ### 3. Code Quality
-
-Dimensions:
-- modularity and reuse
-- bloat resistance
-- readability
-- boundary clarity
-- error handling
-- maintainability
-
-Questions:
-- Is the code modular and reusable where it should be?
-- Did the implementation remove dead code and unnecessary legacy?
-- Is the code readable and easy to reason about?
-- Are boundaries and responsibilities clear?
-- Is error handling sufficient?
-- Is this easy for the next engineer to modify safely?
+- File: `code-quality.md`
+- Focus:
+  - modularity / reusability
+  - bloatability and legacy cleanup
+  - readability
+  - boundaries
+  - error handling
+  - maintainability
+- Extra lenses:
+  - API
+  - backend
+  - types
 
 ### 4. UI Quality
-
-Dimensions:
-- originality
-- design quality
-- craft
-- functionality
-- fidelity to intent
-
-Questions:
-- Does the UI feel deliberate rather than template-like?
-- Are there original decisions instead of default component-library patterns?
-- Is the visual craft solid: hierarchy, spacing, typography, color, contrast?
-- Can users understand and use it without guessing?
-- Does it match the intended product feel and the best examples in its category?
+- File: `ui-quality.md`
+- Focus:
+  - originality against strong existing examples
+  - design quality
+  - craft
+  - functionality against strong examples
+  - fidelity to intent
 
 ### 5. Debloatability
-
-Dimensions:
-- dead-surface removal
-- compatibility cleanup
-- duplication reduction
-- clarity improvement
-- deletion safety
-
-Questions:
-- What can be deleted now without losing real capability?
-- What compatibility layer is still hanging around without earning its keep?
-- What is duplicated across docs, skills, helpers, or schemas?
-- What part of the system became clearer after the cleanup?
-- Was the deletion/simplification safe and well-bounded?
+- File: `debloatability.md`
+- Focus:
+  - what dead surface was removed
+  - what legacy/compatibility baggage was cleaned up
+  - what duplication was reduced
+  - whether clarity improved
+  - whether deletion was safe
 
 ### 6. Evidence Quality
-
-Dimensions:
-- sufficiency
-- reproducibility
-- traceability
-- consistency
-- inspectability
-
-Questions:
-- Do the artifacts actually prove the claims?
-- Are there enough screenshots, logs, commands, and verification results?
-- Can a human reproduce or inspect the proof quickly?
-- Is each acceptance criterion traceable to evidence?
-- Are any claims contradicted by the recorded artifacts?
+- File: `evidence-quality.md`
+- Focus:
+  - sufficiency
+  - reproducibility
+  - traceability
+  - consistency
+  - inspectability
 
 ### 7. Demo Quality
-
-Dimensions:
-- fidelity
-- realism
-- workflow coverage
-- trustworthiness
-- communication clarity
-
-Questions:
-- Does the demo honestly represent the product?
-- Is it realistic rather than staged or fake-feeling?
-- Does it cover the important workflow?
-- Would a skeptical reviewer trust what they are seeing?
-- Does it communicate the product clearly?
+- File: `demo-quality.md`
+- Focus:
+  - fidelity
+  - realism
+  - workflow coverage
+  - trustworthiness
+  - communication clarity
 
 ### 8. Video Quality
-
-Dimensions:
-- legibility
-- coverage
-- pacing
-- faithfulness
-- verification value
-
-Questions:
-- Is the video easy to read and follow?
-- Does it show the key interactions and states?
-- Is the pacing reasonable?
-- Is it faithful to the actual product state?
-- Does it help verification rather than just marketing?
+- File: `video-quality.md`
+- Focus:
+  - legibility
+  - coverage
+  - pacing
+  - faithfulness
+  - verification value
 
 ### 9. Integration Readiness
-
-Dimensions:
-- integration safety
-- contract correctness
-- dependency readiness
-- coupling risk
-- merge readiness
-
-Questions:
-- Does this integrate cleanly with the rest of the system?
-- Are interfaces and contracts preserved?
-- Are dependencies resolved and ready?
-- Is there hidden coupling or regression risk?
-- Is this actually safe to advance or merge?
+- File: `integration-readiness.md`
+- Focus:
+  - integration safety
+  - contract correctness
+  - dependency readiness
+  - coupling risk
+  - merge readiness
 
 ## Review Packet
 
@@ -234,8 +175,14 @@ Required fields:
 - `reviewed_at`
 - `rubrics_used`
 - `overall_score`
+- `overall_threshold`
 - `overall_verdict`
 - `rerun_required`
+- `evidence_quality`
+- `integration_readiness`
+- `traceability`
+- `freshness`
+- `hard_gate_failures`
 - `blocking_findings`
 - `next_action`
 
@@ -244,7 +191,7 @@ Then include one block per rubric family used:
 - `score`
 - `threshold`
 - `pass`
-- `top_questions`
+- `dimension_scores`
 - `findings`
 - `next_action`
 
@@ -253,10 +200,7 @@ Then include one block per rubric family used:
 Always ask:
 
 - What would make a skeptical human reviewer reject this?
-- What part is bloated?
-- What can be deleted safely right now?
-- What part is least legible to the next engineer?
 - What claim is not actually proven?
-- What feels generic or template-like?
-- What dependency or integration risk is hidden?
-- Does the ticket contract still match what was actually built?
+- What hard gate is failing?
+- What is the lowest-scoring family and why?
+- What concrete next pass would raise the score above threshold?

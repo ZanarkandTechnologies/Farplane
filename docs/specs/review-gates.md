@@ -72,19 +72,32 @@ Reviewer output should use one normalized shape:
 ```json
 {
   "work_type": ["ui", "api"],
-  "rubrics_used": ["ui-rubric", "api-rubric"],
+  "rubrics_used": ["ui-quality", "code-quality", "evidence-quality"],
   "summary": "short verdict summary",
-  "overall_score": 82,
-  "overall_threshold": 85,
+  "overall_score": 3.9,
+  "overall_threshold": 4.0,
   "verdict": "pass|revise|block",
   "rerun_required": true,
-  "dimensions": [
+  "evidence_quality": "pass|fail",
+  "integration_readiness": "pass|fail",
+  "traceability": "pass|fail",
+  "freshness": "pass|fail",
+  "hard_gate_failures": ["evidence-quality"],
+  "rubric_sections": [
     {
-      "name": "functionality_correctness",
-      "score": 78,
-      "threshold": 85,
+      "name": "evidence-quality",
+      "score": 3.2,
+      "threshold": 4.0,
       "pass": false,
-      "feedback": "Specific failure reason"
+      "dimension_scores": {
+        "sufficiency": 3.0,
+        "traceability": 3.0,
+        "inspectability": 3.5
+      },
+      "findings": [
+        "Main flow evidence exists, but the packet does not prove the edge-state claims."
+      ],
+      "next_action": "Capture traceable proof for the missing edge states and rerun review."
     }
   ],
   "blocking_findings": [
@@ -94,23 +107,30 @@ Reviewer output should use one normalized shape:
 }
 ```
 
-## Rubric Dimensions
+## Anchored Review Scale
 
-All work should be scored against:
+All review families use the same anchored `1.0`-to-`5.0` scale:
 
-- functionality correctness
-- regression / integration safety
-- evidence adequacy
+- `1`: failing, unsafe, contradictory, or largely absent
+- `3`: acceptable and directionally correct, but still ordinary or caveated
+- `5`: exemplary, persuasive, and hard to improve materially within scope
 
-Additional work-type-specific dimensions may be added by rubric.
+`2` and `4` are interpolation points between the written anchors.
+
+Detailed family anchors live in the per-family review references under:
+
+- `skills/review/references/*.md`
 
 ## Threshold Policy
 
 Default:
 
 - `pass` only if every required dimension passes its threshold
+- `pass` only if every required rubric family passes its threshold
 - `revise` if work is directionally correct but needs another pass
 - `block` if the work is materially off-target, underspecified, or unsafe
+- `evidence-quality` below threshold forces non-pass overall
+- `integration-readiness` below threshold forces non-pass overall
 
 ## Evidence Requirements
 
@@ -148,5 +168,10 @@ Every active feature work package should define:
 - which review rubrics apply
 - what QA must collect
 - what pass threshold matters
+
+For Ralph build/documenting completion paths, the ticket `Review Packet` is a
+required completion-gate artifact. Missing, malformed, weak, contradictory,
+stale, or untraceable packet state must prevent completion even when checklist
+boxes are checked.
 
 The ticket remains the place where that requirement is declared.
