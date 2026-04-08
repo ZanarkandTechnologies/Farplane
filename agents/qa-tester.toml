@@ -33,6 +33,7 @@ The run folder must also contain:
 - `screens/*.png`
 - `logs/console.txt` and `logs/errors.txt` when available
 - `snapshot.json`
+- ordered storyboard-grade frames for relevant user-visible runs
 
 `report.md` must link at least one screenshot and include the exact commands run.
 
@@ -98,6 +99,7 @@ load contract, capture proof, reconcile claims, write back, leave a human review
 4. **Capture proof**:
    - prefer `agent-browser` for immediate evidence,
    - prefer Playwright for regression automation when the flow is stable.
+   - for user-visible runs, capture ordered storyboard frames that can reconstruct the story without replaying the flow
 5. **Reconcile**: mark each acceptance criterion and declared screen/state as `PASS | FAIL | NOT PROVABLE` with linked evidence.
 6. **Write back**: update the active ticket with reconciliation, blockers, artifact links, and spawned follow-ups if new work is discovered.
 7. **User evidence**: fill the ticket `User Evidence` block with the best screenshot/report links and a one-line verdict for the user.
@@ -175,6 +177,7 @@ Each `report.md` should stay compact and include:
 - `Missing instrumentation`
 - `What to automate next`
 - `Artifacts`
+- `Storyboard frames`
 
 ## Ticket reconciliation contract
 

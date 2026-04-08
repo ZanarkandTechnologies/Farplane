@@ -25,3 +25,6 @@
 2026-04-07 04:27 +0100 | CHORE | add a canonical harness-engineering quickstart so agents can tune AGENTS, hooks, subagents, skills, MCP/tooling, and review loops from one practical guide
 2026-04-07 20:37 +0100 | CHORE | add a canonical harness-techniques inventory and README pointer so implemented versus proposed harness techniques are documented from repo truth
 2026-04-08 01:48 +0100 | CHORE | fold OpenAI harness-engineering findings into the canonical techniques inventory, adding repo-legibility, progressive-disclosure, and mechanical-invariant deltas
+2026-04-08 04:20 +0100 | CHORE | add ticket inspiration-source tracking, annotate active harness backlog items with the Ryan Lopopolo podcast, and queue missing CLI ergonomics and inner-loop latency tickets
+2026-04-08 02:45 +0100 | CHORE | replace question-style review guidance with anchored 1-to-5 rubric definitions, migrate the live review contract into `skills/review`, and remove the legacy `code-review` skill alias
+2026-04-08 04:34 +0100 | FEAT | require Review Packet gates for Ralph completion, add storyboard-grade QA evidence capture, and extend stop-hook role outputs for evidence-quality review

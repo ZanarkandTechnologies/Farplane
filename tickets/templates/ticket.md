@@ -89,6 +89,10 @@ update docs/evidence
 - `next_action` is the authoritative current step. Explain it here if useful, but do not create a second state field.
 - `last_verification` is the authoritative verification summary. Put detailed commands and observations in `Evidence`.
 
+## Inspiration
+- Optional: source links and a short note on which external idea, article, talk, or incident motivated this ticket.
+- Keep at least one durable source URL here when the ticket was created from outside inspiration.
+
 ## Implementation Notes
 - Touched areas:
 - Reused patterns:

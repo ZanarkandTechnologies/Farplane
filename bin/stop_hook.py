@@ -36,6 +36,7 @@ from notify import announce_message
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 SECTION_PATTERN = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 CHECKBOX_PATTERN = re.compile(r"^- \[( |x)\]\s+(.*)$")
+REVIEW_PACKET_FIELD_PATTERN = re.compile(r"^- `(?P<key>[^`]+)`\s*(?P<value>.*)$")
 RALPH_RESULT_PATTERN = re.compile(r"^RALPH_RESULT:\s+status=.*$", re.MULTILINE)
 PARSED_RESULT_PATTERN = re.compile(
     r"^RALPH_RESULT:\s+status=(?P<status>[A-Za-z0-9_-]+)\s+next=(?P<next>[A-Za-z0-9_-]+)(?:\s+reason=(?P<reason>.*))?$"
@@ -48,6 +49,21 @@ ROLE_ACTIONS = {
     "next_ticket",
     "stop",
 }
+REVIEW_PACKET_REQUIRED_FIELDS = {
+    "reviewed_at",
+    "overall_verdict",
+    "rerun_required",
+    "evidence_quality",
+    "integration_readiness",
+    "traceability",
+    "freshness",
+    "hard_gate_failures",
+    "blocking_findings",
+    "next_action",
+}
+PASS_FAIL_VALUES = {"pass", "fail"}
+REVIEW_VERDICTS = {"pass", "revise", "block"}
+REVIEW_PACKET_TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M %z"
 
 
 def env_enabled() -> bool:
@@ -316,6 +332,105 @@ def blocked_items(lines: list[str]) -> list[str]:
     return items
 
 
+def parse_review_packet_value(raw: str) -> object:
+    stripped = raw.strip()
+    if not stripped:
+        return ""
+    lowered = stripped.lower()
+    if lowered == "none":
+        return "none"
+    if stripped in {"true", "false"}:
+        return stripped == "true"
+    if stripped.startswith("[") or stripped.startswith("{"):
+        try:
+            return json.loads(stripped)
+        except json.JSONDecodeError:
+            return stripped
+    try:
+        return float(stripped)
+    except ValueError:
+        return stripped
+
+
+def parse_reviewed_at(raw: object) -> datetime | None:
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        parsed = datetime.strptime(raw.strip(), REVIEW_PACKET_TIMESTAMP_FORMAT)
+    except ValueError:
+        return None
+    return parsed.replace(second=0, microsecond=0)
+
+
+def parse_updated_at(raw: object) -> datetime | None:
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        parsed = datetime.fromisoformat(raw.strip().replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed.astimezone().replace(second=0, microsecond=0)
+
+
+def parse_review_packet(lines: list[str]) -> dict[str, object]:
+    fields: dict[str, object] = {}
+    errors: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        match = REVIEW_PACKET_FIELD_PATTERN.match(stripped)
+        if not match:
+            continue
+        key = match.group("key").strip().rstrip(":")
+        value = parse_review_packet_value(match.group("value"))
+        if key in {"rubrics_used", "hard_gate_failures", "blocking_findings"}:
+            if value == "none":
+                value = []
+            elif isinstance(value, str):
+                value = [value] if value else []
+            if not isinstance(value, list):
+                errors.append(f"{key} must be a list")
+                continue
+            if any(not isinstance(item, str) or not item.strip() for item in value):
+                errors.append(f"{key} must contain non-empty strings")
+                continue
+        fields[key] = value
+
+    missing = sorted(REVIEW_PACKET_REQUIRED_FIELDS - set(fields))
+
+    overall_verdict = fields.get("overall_verdict")
+    if overall_verdict is not None and overall_verdict not in REVIEW_VERDICTS:
+        errors.append("overall_verdict must be pass|revise|block")
+
+    rerun_required = fields.get("rerun_required")
+    if rerun_required is not None and not isinstance(rerun_required, bool):
+        errors.append("rerun_required must be true|false")
+
+    for key in ("evidence_quality", "integration_readiness", "traceability", "freshness"):
+        value = fields.get(key)
+        if value is not None and value not in PASS_FAIL_VALUES:
+            errors.append(f"{key} must be pass|fail")
+
+    next_action = fields.get("next_action")
+    if next_action is not None and (not isinstance(next_action, str) or not next_action.strip()):
+        errors.append("next_action must be a non-empty string")
+
+    reviewed_at = fields.get("reviewed_at")
+    if reviewed_at is not None and parse_reviewed_at(reviewed_at) is None:
+        errors.append("reviewed_at must match YYYY-MM-DD HH:mm ±ZZZZ")
+
+    overall_score = fields.get("overall_score")
+    if overall_score is not None and not isinstance(overall_score, (int, float)):
+        errors.append("overall_score must be numeric when present")
+
+    return {
+        "fields": fields,
+        "missing": missing,
+        "errors": errors,
+        "present": bool(lines),
+        "valid": bool(lines) and not missing and not errors,
+    }
+
+
 def extract_ticket_id(text: str) -> str | None:
     match = TICKET_ID_PATTERN.search(text)
     return match.group(0) if match else None
@@ -363,6 +478,7 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
     text = ticket_path.read_text(encoding="utf-8")
     frontmatter = parse_frontmatter(text)
     sections = parse_sections(text)
+    review_packet = parse_review_packet(sections.get("Review Packet", []))
     fallback_ticket_id = extract_ticket_id(ticket_path.name) or ticket_path.stem
     return {
         "path": ticket_path,
@@ -381,6 +497,11 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
         "acceptance_gaps": unchecked_items(sections.get("Acceptance Criteria", [])),
         "evidence_gaps": unchecked_items(sections.get("Evidence", [])),
         "blockers": blocked_items(sections.get("Blockers", [])),
+        "review_packet": review_packet["fields"],
+        "review_packet_missing": review_packet["missing"],
+        "review_packet_errors": review_packet["errors"],
+        "review_packet_present": review_packet["present"],
+        "review_packet_valid": review_packet["valid"],
     }
 
 
@@ -506,6 +627,7 @@ def ralph_verdict(
     orchestrator_message: str,
     evidence_ok: bool,
     missing_evidence: list[str] | None = None,
+    review_gate_failures: list[str] | None = None,
     blockers: list[str] | None = None,
 ) -> dict[str, object]:
     payload: dict[str, object] = {
@@ -520,9 +642,96 @@ def ralph_verdict(
     }
     if missing_evidence:
         payload["missing_evidence"] = missing_evidence
+    if review_gate_failures:
+        payload["review_gate_failures"] = review_gate_failures
     if blockers:
         payload["blockers"] = blockers
     return payload
+
+
+def review_packet_gate(ticket: dict[str, object]) -> tuple[bool, str, list[str]]:
+    if not ticket["review_packet_present"]:
+        return False, "review packet is missing", ["review packet missing"]
+
+    packet_errors = list(ticket["review_packet_errors"])
+    if packet_errors:
+        return False, "review packet is malformed", packet_errors
+
+    packet_missing = list(ticket["review_packet_missing"])
+    if packet_missing:
+        return False, "review packet is incomplete", [f"missing field: {item}" for item in packet_missing]
+
+    packet = dict(ticket["review_packet"])
+    failures: list[str] = []
+    reviewed_at = parse_reviewed_at(packet.get("reviewed_at"))
+    updated_at = parse_updated_at(ticket.get("updated_at"))
+
+    if packet.get("overall_verdict") != "pass":
+        failures.append(f"overall_verdict={packet.get('overall_verdict')}")
+    if bool(packet.get("rerun_required")):
+        failures.append("rerun_required=true")
+    for key in ("evidence_quality", "integration_readiness", "traceability", "freshness"):
+        if packet.get(key) != "pass":
+            failures.append(f"{key}={packet.get(key)}")
+
+    hard_gate_failures = packet.get("hard_gate_failures", [])
+    if isinstance(hard_gate_failures, list):
+        for item in hard_gate_failures:
+            if isinstance(item, str) and item.strip():
+                failures.append(f"hard_gate_failure={item.strip()}")
+
+    blocking_findings = packet.get("blocking_findings", [])
+    if isinstance(blocking_findings, list):
+        for item in blocking_findings:
+            if isinstance(item, str) and item.strip():
+                failures.append(f"blocking_finding={item.strip()}")
+
+    if reviewed_at is None:
+        failures.append("reviewed_at=invalid")
+    elif updated_at is not None and reviewed_at < updated_at:
+        failures.append("reviewed_at=stale")
+
+    if failures:
+        return False, "review packet gates are not passing", failures
+
+    return True, "", []
+
+
+def validate_evidence_review(review: dict[str, object]) -> tuple[bool, str, list[str]]:
+    missing: list[str] = []
+    required_scalar_fields = (
+        "overall_score",
+        "evidence_quality",
+        "integration_readiness",
+        "traceability",
+        "freshness",
+        "rerun_required",
+        "blocking_findings",
+    )
+    for field in required_scalar_fields:
+        if field not in review:
+            missing.append(field)
+
+    if missing:
+        return False, "evidence reviewer omitted required gate fields", [f"missing gate field: {item}" for item in missing]
+
+    failures: list[str] = []
+    for field in ("evidence_quality", "integration_readiness", "traceability", "freshness"):
+        if review.get(field) != "pass":
+            failures.append(f"{field}={review.get(field)}")
+    if bool(review.get("rerun_required")):
+        failures.append("rerun_required=true")
+
+    blocking_findings = review.get("blocking_findings", [])
+    if isinstance(blocking_findings, list):
+        for item in blocking_findings:
+            if isinstance(item, str) and item.strip():
+                failures.append(f"blocking_finding={item.strip()}")
+
+    if failures:
+        return False, "evidence reviewer gates are not passing", failures
+
+    return True, "", []
 
 
 def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worker_result: dict[str, str]) -> dict[str, object]:
@@ -582,6 +791,18 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
         )
 
     if status == "done":
+        packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
+        if not packet_ok:
+            return ralph_verdict(
+                ticket_id=ticket_id,
+                current_phase=current_phase,
+                decision="repeat_ralph",
+                next_phase="building",
+                reason=packet_reason,
+                orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
+                evidence_ok=False,
+                review_gate_failures=packet_failures,
+            )
         missing = acceptance_gaps + evidence_gaps
         if missing:
             return ralph_verdict(
@@ -605,6 +826,18 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
         )
 
     if status == "build_complete":
+        packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
+        if not packet_ok:
+            return ralph_verdict(
+                ticket_id=ticket_id,
+                current_phase=current_phase,
+                decision="repeat_ralph",
+                next_phase="building",
+                reason=packet_reason,
+                orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
+                evidence_ok=False,
+                review_gate_failures=packet_failures,
+            )
         missing = acceptance_gaps + evidence_gaps
         if missing:
             return ralph_verdict(
@@ -628,6 +861,18 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
         )
 
     if status == "docs_complete":
+        packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
+        if not packet_ok:
+            return ralph_verdict(
+                ticket_id=ticket_id,
+                current_phase=current_phase,
+                decision="repeat_ralph",
+                next_phase="building",
+                reason=packet_reason,
+                orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
+                evidence_ok=False,
+                review_gate_failures=packet_failures,
+            )
         missing = acceptance_gaps + evidence_gaps
         if missing:
             return ralph_verdict(
@@ -680,6 +925,39 @@ def run_ralph_judge(ticket: dict[str, object], worker_result: str, current_run: 
     except ValueError:
         return None
     return decide_ralph_transition(current_phase, ticket, parsed)
+
+
+def evidence_reviewer_prompt(
+    base: Path,
+    message: str,
+    ticket: dict[str, object],
+    current_run: dict[str, object] | None,
+    verdict: dict[str, object],
+) -> str:
+    ticket_snapshot = {
+        "ticket_id": ticket["ticket_id"],
+        "title": ticket["title"],
+        "phase": ticket["phase"],
+        "status": ticket["status"],
+        "next_action": ticket["next_action"],
+        "acceptance_gaps": ticket["acceptance_gaps"],
+        "evidence_gaps": ticket["evidence_gaps"],
+        "blockers": ticket["blockers"],
+        "review_packet": ticket["review_packet"],
+        "review_packet_missing": ticket["review_packet_missing"],
+        "review_packet_errors": ticket["review_packet_errors"],
+        "current_run": current_run or {},
+        "verdict": verdict,
+    }
+    return role_prompt_from_file(
+        base,
+        "evidence-reviewer",
+        "Context",
+        {
+            "latest_assistant_response": message,
+            "ticket": ticket_snapshot,
+        },
+    )
 
 
 def spawn_tmux_followup(
@@ -833,7 +1111,7 @@ def role_command(base: Path, output_path: Path) -> list[str]:
     return command
 
 
-def parse_role_output(output_path: Path) -> dict[str, str] | None:
+def parse_role_output(output_path: Path) -> dict[str, object] | None:
     try:
         payload = json.loads(output_path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
@@ -848,6 +1126,13 @@ def parse_role_output(output_path: Path) -> dict[str, str] | None:
     continuation_message = payload.get("continuation_message", "")
     next_ticket_id = payload.get("next_ticket_id", "")
     next_phase = payload.get("next_phase", "")
+    overall_score = payload.get("overall_score")
+    evidence_quality = payload.get("evidence_quality")
+    integration_readiness = payload.get("integration_readiness")
+    traceability = payload.get("traceability")
+    freshness = payload.get("freshness")
+    rerun_required = payload.get("rerun_required")
+    blocking_findings = payload.get("blocking_findings")
 
     if not isinstance(action, str) or action not in ROLE_ACTIONS:
         return None
@@ -861,8 +1146,20 @@ def parse_role_output(output_path: Path) -> dict[str, str] | None:
         return None
     if not isinstance(next_phase, str):
         return None
+    if overall_score is not None and not isinstance(overall_score, (int, float)):
+        return None
+    for value in (evidence_quality, integration_readiness, traceability, freshness):
+        if value is not None and value not in PASS_FAIL_VALUES:
+            return None
+    if rerun_required is not None and not isinstance(rerun_required, bool):
+        return None
+    if blocking_findings is not None:
+        if not isinstance(blocking_findings, list):
+            return None
+        if any(not isinstance(item, str) or not item.strip() for item in blocking_findings):
+            return None
 
-    return {
+    parsed: dict[str, object] = {
         "action": action,
         "reason": reason.strip(),
         "continuation_message": continuation_message.strip(),
@@ -870,9 +1167,24 @@ def parse_role_output(output_path: Path) -> dict[str, str] | None:
         "next_ticket_id": next_ticket_id.strip(),
         "next_phase": next_phase.strip(),
     }
+    if overall_score is not None:
+        parsed["overall_score"] = float(overall_score)
+    if evidence_quality is not None:
+        parsed["evidence_quality"] = evidence_quality
+    if integration_readiness is not None:
+        parsed["integration_readiness"] = integration_readiness
+    if traceability is not None:
+        parsed["traceability"] = traceability
+    if freshness is not None:
+        parsed["freshness"] = freshness
+    if rerun_required is not None:
+        parsed["rerun_required"] = rerun_required
+    if blocking_findings is not None:
+        parsed["blocking_findings"] = [str(item).strip() for item in blocking_findings]
+    return parsed
 
 
-def run_role(base: Path, prompt: str) -> dict[str, str] | None:
+def run_role(base: Path, prompt: str) -> dict[str, object] | None:
     with tempfile.NamedTemporaryFile(
         prefix="codexter-stop-hook-",
         suffix=".json",
@@ -1293,42 +1605,63 @@ def main() -> int:
                     announce=f"Ralph phase accepted. Next: {next_phase or 'none'}",
                 )
 
-            review = run_role(base, reviewer_prompt(base, message, ticket, current_run, verdict))
-            if review is None:
+            evidence_review = run_role(base, evidence_reviewer_prompt(base, message, ticket, current_run, verdict))
+            if evidence_review is None:
                 append_hook_log(
                     base,
                     {
                         "timestamp": now_iso(),
-                        "mode": "reviewer",
+                        "mode": "evidence-reviewer",
                         "ticket_id": str(ticket["ticket_id"]),
                         "outcome": "role_unavailable",
                     },
                 )
-                announce_message("Reviewer unavailable. Stopping safely.")
-                return emit_stop_payload(system_message=f"Stop hook: {hook_summary}. Reviewer unavailable.")
+                announce_message("Evidence reviewer unavailable. Stopping safely.")
+                return emit_stop_payload(system_message=f"Stop hook: {hook_summary}. Evidence reviewer unavailable.")
 
-            review_action = review["action"]
-            review_reason = review["reason"]
-            review_summary = summarize_role_action(str(ticket["ticket_id"]), "reviewer", review_action, review_reason)
+            review_action = str(evidence_review["action"])
+            review_reason = str(evidence_review["reason"])
+            review_summary = summarize_role_action(str(ticket["ticket_id"]), "evidence-reviewer", review_action, review_reason)
             append_hook_log(
                 base,
                 {
                     "timestamp": now_iso(),
-                    "mode": "reviewer",
+                    "mode": "evidence-reviewer",
                     "ticket_id": str(ticket["ticket_id"]),
                     "action": review_action,
                     "reason": review_reason,
+                    "overall_score": evidence_review.get("overall_score"),
+                    "evidence_quality": evidence_review.get("evidence_quality"),
+                    "integration_readiness": evidence_review.get("integration_readiness"),
+                    "traceability": evidence_review.get("traceability"),
+                    "freshness": evidence_review.get("freshness"),
+                    "rerun_required": evidence_review.get("rerun_required"),
+                    "blocking_findings": evidence_review.get("blocking_findings", []),
                 },
             )
             current_run = publish_hook_status(project_root, current_run, decision=review_action, summary=review_summary)
-            if review_action == "continue_same_ticket":
-                continuation_message = review["continuation_message"] or build_reason(ticket)
+            evidence_review_ok, evidence_review_reason, evidence_review_failures = validate_evidence_review(evidence_review)
+            if not evidence_review_ok:
+                continuation_message = (
+                    str(evidence_review.get("continuation_message", "")).strip()
+                    or f"Continue {ticket['ticket_id']} in building and resolve evidence-review failures: "
+                    + "; ".join(evidence_review_failures[:2])
+                )
                 return continue_hook_response(
                     payload=payload,
                     ticket=ticket,
                     continuation_message=continuation_message,
                     hook_summary=review_summary,
-                    announce=review["speak"] or review_reason,
+                    announce=evidence_review_reason,
+                )
+            if review_action == "continue_same_ticket":
+                continuation_message = str(evidence_review.get("continuation_message", "")).strip() or build_reason(ticket)
+                return continue_hook_response(
+                    payload=payload,
+                    ticket=ticket,
+                    continuation_message=continuation_message,
+                    hook_summary=review_summary,
+                    announce=str(evidence_review.get("speak", "")).strip() or review_reason,
                 )
             if review_action == "route_to_orchestrator":
                 return run_orchestrator_decision(
@@ -1340,7 +1673,7 @@ def main() -> int:
                     ticket=ticket,
                     verdict=verdict,
                 )
-            announce_message(review["speak"] or review_reason)
+            announce_message(str(evidence_review.get("speak", "")).strip() or review_reason)
             return emit_stop_payload(system_message=f"Stop hook: {review_summary}")
         announce_message(f"Stopping for operator review. {reason}")
         return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
@@ -1357,8 +1690,14 @@ def main() -> int:
                     "outcome": "role_unavailable",
                 },
             )
-            announce_message("Reviewer unavailable. Stopping safely.")
-            return emit_stop_payload(system_message="Stop hook: reviewer unavailable; stopping safely.")
+            continuation_message = build_missing_ralph_result_reason(ticket, current_run)
+            return continue_hook_response(
+                payload=payload,
+                ticket=ticket,
+                continuation_message=continuation_message,
+                hook_summary=f"reviewer: {ticket['ticket_id']} -> continue_same_ticket (reviewer unavailable)",
+                announce=f"Continuing {ticket['ticket_id']}. Missing RALPH_RESULT in Ralph mode.",
+            )
 
         proposal_action = review["action"]
         proposal_reason = review["reason"]

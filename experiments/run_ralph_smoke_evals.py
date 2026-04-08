@@ -104,11 +104,58 @@ def wait_for_lane_tail(run_state: Path, *, timeout_secs: float = 20.0) -> str:
     return latest
 
 
-def fixture_ticket(*, ticket_id: str, title: str, acceptance_checked: bool, evidence_checked: bool, blockers: list[str] | None = None, phase: str = "building") -> str:
+def fixture_review_packet(
+    *,
+    overall_verdict: str = "pass",
+    rerun_required: bool = False,
+    evidence_quality: str = "pass",
+    integration_readiness: str = "pass",
+    traceability: str = "pass",
+    freshness: str = "pass",
+    hard_gate_failures: list[str] | None = None,
+    blocking_findings: list[str] | None = None,
+    next_action: str = "none",
+    overall_score: float = 4.5,
+    overall_threshold: float = 4.0,
+) -> str:
+    hard_gate_failures = hard_gate_failures or []
+    blocking_findings = blocking_findings or []
+    return f"""
+## Review Packet
+- `reviewed_at:` 2026-04-05 00:00 +0100
+- `rubrics_used:` ["evidence-quality", "integration-readiness"]
+- `overall_score:` {overall_score}
+- `overall_threshold:` {overall_threshold}
+- `overall_verdict:` {overall_verdict}
+- `rerun_required:` {"true" if rerun_required else "false"}
+- `evidence_quality:` {evidence_quality}
+- `integration_readiness:` {integration_readiness}
+- `traceability:` {traceability}
+- `freshness:` {freshness}
+- `hard_gate_failures:` {json.dumps(hard_gate_failures)}
+- `blocking_findings:` {json.dumps(blocking_findings)}
+- `next_action:` {next_action}
+"""
+
+
+def fixture_ticket(
+    *,
+    ticket_id: str,
+    title: str,
+    acceptance_checked: bool,
+    evidence_checked: bool,
+    blockers: list[str] | None = None,
+    phase: str = "building",
+    review_packet_text: str | None = None,
+    updated_at: str = "2026-04-05T00:00:00Z",
+) -> str:
     acc = "x" if acceptance_checked else " "
     ev = "x" if evidence_checked else " "
     blocker_lines = ["- none"] if not blockers else [f"- {item}" for item in blockers]
     status = "review" if phase == "planning" else "building"
+    if review_packet_text is None and phase != "planning" and acceptance_checked and evidence_checked:
+        review_packet_text = fixture_review_packet()
+    review_packet_block = f"\n{review_packet_text.strip()}\n" if review_packet_text else "\n"
     return f"""---
 ticket_id: {ticket_id}
 title: {title}
@@ -121,7 +168,7 @@ blocked_by: []
 ready: true
 approval_required: false
 created_at: 2026-04-05T00:00:00Z
-updated_at: 2026-04-05T00:00:00Z
+updated_at: {updated_at}
 next_action: test fixture
 last_verification: none
 linked_docs: []
@@ -137,7 +184,7 @@ linked_docs: []
 
 ## Blockers
 {chr(10).join(blocker_lines)}
-"""
+{review_packet_block}"""
 
 
 def run_judge_fixture(*, ticket_text: str, phase: str, worker_result: str) -> subprocess.CompletedProcess[str]:
@@ -368,6 +415,98 @@ def main() -> int:
             )
             results.append({"name": "judge_build_complete_pass", "ok": build_complete.returncode == 0, "stdout": build_complete.stdout.strip(), "stderr": build_complete.stderr.strip()})
 
+            malformed_packet = run_judge_fixture(
+                ticket_text=fixture_ticket(
+                    ticket_id="TASK-9999",
+                    title="malformed packet fixture",
+                    acceptance_checked=True,
+                    evidence_checked=True,
+                    review_packet_text="""
+## Review Packet
+- `reviewed_at:` 2026-04-05 00:00 +0100
+- `overall_verdict:` pass
+- `rerun_required:` maybe
+""",
+                ),
+                phase="building",
+                worker_result="RALPH_RESULT: status=build_complete next=building reason=fixture_packet_malformed",
+            )
+            results.append({"name": "judge_build_complete_malformed_packet", "ok": malformed_packet.returncode == 0, "stdout": malformed_packet.stdout.strip(), "stderr": malformed_packet.stderr.strip()})
+
+            stale_packet = run_judge_fixture(
+                ticket_text=fixture_ticket(
+                    ticket_id="TASK-9999",
+                    title="stale packet fixture",
+                    acceptance_checked=True,
+                    evidence_checked=True,
+                    review_packet_text=fixture_review_packet(freshness="fail", hard_gate_failures=["freshness"]),
+                ),
+                phase="building",
+                worker_result="RALPH_RESULT: status=build_complete next=building reason=fixture_packet_stale",
+            )
+            results.append({"name": "judge_build_complete_stale_packet", "ok": stale_packet.returncode == 0, "stdout": stale_packet.stdout.strip(), "stderr": stale_packet.stderr.strip()})
+
+            contradictory_packet = run_judge_fixture(
+                ticket_text=fixture_ticket(
+                    ticket_id="TASK-9999",
+                    title="contradictory packet fixture",
+                    acceptance_checked=True,
+                    evidence_checked=True,
+                    review_packet_text=fixture_review_packet(
+                        overall_verdict="revise",
+                        rerun_required=True,
+                        evidence_quality="fail",
+                        integration_readiness="fail",
+                        hard_gate_failures=["evidence-quality", "integration-readiness"],
+                        blocking_findings=["empty state proof missing"],
+                        next_action="capture empty-state proof and rerun review",
+                    ),
+                ),
+                phase="building",
+                worker_result="RALPH_RESULT: status=build_complete next=building reason=fixture_packet_contradictory",
+            )
+            results.append({"name": "judge_build_complete_contradictory_packet", "ok": contradictory_packet.returncode == 0, "stdout": contradictory_packet.stdout.strip(), "stderr": contradictory_packet.stderr.strip()})
+
+            low_traceability_packet = run_judge_fixture(
+                ticket_text=fixture_ticket(
+                    ticket_id="TASK-9999",
+                    title="traceability packet fixture",
+                    acceptance_checked=True,
+                    evidence_checked=True,
+                    review_packet_text=fixture_review_packet(traceability="fail", hard_gate_failures=["traceability"]),
+                ),
+                phase="building",
+                worker_result="RALPH_RESULT: status=build_complete next=building reason=fixture_packet_traceability",
+            )
+            results.append({"name": "judge_build_complete_low_traceability_packet", "ok": low_traceability_packet.returncode == 0, "stdout": low_traceability_packet.stdout.strip(), "stderr": low_traceability_packet.stderr.strip()})
+
+            stale_timestamp_packet = run_judge_fixture(
+                ticket_text=fixture_ticket(
+                    ticket_id="TASK-9999",
+                    title="stale timestamp packet fixture",
+                    acceptance_checked=True,
+                    evidence_checked=True,
+                    updated_at="2026-04-05T01:30:00Z",
+                    review_packet_text=fixture_review_packet(freshness="pass"),
+                ),
+                phase="building",
+                worker_result="RALPH_RESULT: status=build_complete next=building reason=fixture_packet_timestamp_stale",
+            )
+            results.append({"name": "judge_build_complete_stale_timestamp_packet", "ok": stale_timestamp_packet.returncode == 0, "stdout": stale_timestamp_packet.stdout.strip(), "stderr": stale_timestamp_packet.stderr.strip()})
+
+            valid_packet_checkbox_gap = run_judge_fixture(
+                ticket_text=fixture_ticket(
+                    ticket_id="TASK-9999",
+                    title="valid packet checkbox gap fixture",
+                    acceptance_checked=False,
+                    evidence_checked=False,
+                    review_packet_text=fixture_review_packet(),
+                ),
+                phase="building",
+                worker_result="RALPH_RESULT: status=build_complete next=building reason=fixture_packet_checkbox_gap",
+            )
+            results.append({"name": "judge_build_complete_valid_packet_checkbox_gap", "ok": valid_packet_checkbox_gap.returncode == 0, "stdout": valid_packet_checkbox_gap.stdout.strip(), "stderr": valid_packet_checkbox_gap.stderr.strip()})
+
             # 10. judge: plan_ready
             plan_ready = run_judge_fixture(
                 ticket_text=fixture_ticket(ticket_id="TASK-9999", title="plan ready fixture", acceptance_checked=False, evidence_checked=False, phase="planning"),
@@ -518,14 +657,50 @@ def main() -> int:
     assert_case(
         results,
         name="judge_build_complete_missing",
-        predicate=lambda c: c["ok"] and '"decision": "repeat_ralph"' in str(c["stdout"]) and '"missing_evidence"' in str(c["stdout"]),
-        message="build_complete with gaps should repeat and list missing evidence",
+        predicate=lambda c: c["ok"] and '"decision": "repeat_ralph"' in str(c["stdout"]) and '"review_gate_failures"' in str(c["stdout"]),
+        message="build_complete with missing review packet should repeat and list review gate failures",
     )
     assert_case(
         results,
         name="judge_build_complete_pass",
         predicate=lambda c: c["ok"] and '"decision": "complete_ticket"' in str(c["stdout"]),
         message="build_complete with complete evidence should complete ticket",
+    )
+    assert_case(
+        results,
+        name="judge_build_complete_malformed_packet",
+        predicate=lambda c: c["ok"] and '"decision": "repeat_ralph"' in str(c["stdout"]) and "review packet is malformed" in str(c["stdout"]),
+        message="malformed review packet should repeat ralph",
+    )
+    assert_case(
+        results,
+        name="judge_build_complete_stale_packet",
+        predicate=lambda c: c["ok"] and '"decision": "repeat_ralph"' in str(c["stdout"]) and "hard_gate_failure=freshness" in str(c["stdout"]),
+        message="stale packet should repeat ralph",
+    )
+    assert_case(
+        results,
+        name="judge_build_complete_contradictory_packet",
+        predicate=lambda c: c["ok"] and '"decision": "repeat_ralph"' in str(c["stdout"]) and "blocking_finding=empty state proof missing" in str(c["stdout"]),
+        message="contradictory packet should repeat ralph and surface the blocking finding",
+    )
+    assert_case(
+        results,
+        name="judge_build_complete_low_traceability_packet",
+        predicate=lambda c: c["ok"] and '"decision": "repeat_ralph"' in str(c["stdout"]) and "hard_gate_failure=traceability" in str(c["stdout"]),
+        message="low-traceability packet should repeat ralph",
+    )
+    assert_case(
+        results,
+        name="judge_build_complete_stale_timestamp_packet",
+        predicate=lambda c: c["ok"] and '"decision": "repeat_ralph"' in str(c["stdout"]) and "reviewed_at=stale" in str(c["stdout"]),
+        message="stale reviewed_at timestamp should repeat ralph even when freshness says pass",
+    )
+    assert_case(
+        results,
+        name="judge_build_complete_valid_packet_checkbox_gap",
+        predicate=lambda c: c["ok"] and '"decision": "repeat_ralph"' in str(c["stdout"]) and '"missing_evidence"' in str(c["stdout"]),
+        message="valid packet with unchecked acceptance/evidence boxes should still repeat and list missing evidence",
     )
     assert_case(
         results,

@@ -102,13 +102,16 @@ Keep these sections:
 - `Plan`
 - `Acceptance Criteria`
 - `Working Notes`
+- `Inspiration` when the ticket comes from an external source, article, talk, incident, or benchmark
 - `Implementation Notes`
 - `Evidence`
+- `Review Packet`
 - `Blockers`
 - `Handoff`
 - `Writeback`
 
 Task-local notes stay in the ticket while work is active. Durable lessons move to `docs/` during `documenting`.
+When a ticket is inspired by an external source, store the durable source URL in an `Inspiration` section in the body instead of relying on chat history.
 
 Canonical policy references:
 

@@ -38,6 +38,7 @@ Done only if relevant items pass:
 - repeated failures or user correction patterns logged in `docs/TROUBLES.md` when applicable
 - new invariants logged and referenced
 - review loop done; `visual-qa` only if UI changed
+- Ralph build/documenting completion claims require both checklist proof and a passing `Review Packet`
 - changes pushed to GitHub when the workflow calls for publishing
 
 ## Boundary

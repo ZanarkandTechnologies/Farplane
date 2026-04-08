@@ -43,6 +43,37 @@
         "done",
         "none"
       ]
+    },
+    "overall_score": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "evidence_quality": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "integration_readiness": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "traceability": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "freshness": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "rerun_required": {
+      "type": "boolean"
+    },
+    "blocking_findings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     }
   }
 }
