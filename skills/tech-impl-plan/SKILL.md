@@ -15,11 +15,11 @@ Use for implementation planning. Optimize for approval speed. Plan only the next
 
 ## Core Prompt Wording
 
-0a. Study `@docs/prd.md` for outcomes + constraints.  
-0b. Study `@docs/specs/*` for spec truth.  
-0c. Study the active ticket in `@tickets/review/*` first; if none exists, inspect `@tickets/todo/*`.  
-0d. Study `@docs/MEMORY.md` for durable constraints.  
-0e. Study `@docs/TROUBLES.md` for repeated planning/execution misses when present.  
+0a. Study `@docs/prd.md` for outcomes + constraints.
+0b. Study `@docs/specs/*` for spec truth.
+0c. Study the active ticket in `@tickets/*` first; if none exists, inspect `@tickets/*`.
+0d. Study `@docs/MEMORY.md` for durable constraints.
+0e. Study `@docs/TROUBLES.md` for repeated planning/execution misses when present.
 0f. Search the codebase before assuming anything is missing.
 
 ## First-Load Contract
@@ -27,7 +27,7 @@ Use for implementation planning. Optimize for approval speed. Plan only the next
 ### Trigger Conditions
 
 - user asks for a plan, proposal, implementation approach, or approval-ready change summary
-- feature/refactor work needs a human yes/no before moving a ticket from `review` to `building`
+- feature/refactor work needs a human yes/no before changing a ticket from `status: review` to `status: building`
 - request is large enough that `B -> A` and proof should be made explicit
 
 ### Workflow (7 Steps)
@@ -85,9 +85,9 @@ Every plan must include:
    - skill/subagent only if needed
    - otherwise `Not needed`
 9. `Ticket Move`
-   - where the ticket should live now
+   - what `status` / `phase` it should have now
    - any spawned follow-up tickets
-   - whether it is blocked in `building/` or returned to `review/`
+   - whether it stays blocked in `status: building` or returns to `status: review`
 
 ## Efficiency Rules
 
@@ -96,7 +96,7 @@ Every plan must include:
 - Reuse existing modules; justify every new file or abstraction in one line.
 - Keep deeper implementation detail below the top section.
 - If the plan cannot be understood from `Pitch + B -> A + Core Flow`, it is not ready.
-- If planning reveals overflow scope, split it into new `tickets/todo/` follow-ups instead of stretching one ticket.
+- If planning reveals overflow scope, split it into new `tickets/` follow-ups instead of stretching one ticket.
 
 ## Plan Quality Gate
 

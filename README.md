@@ -279,6 +279,26 @@ The current prototype is narrower:
 - Archived prototypes/history: [archive](/Users/kenjipcx/coding-harness/Codexter/tickets/archive)
 - Experiments: [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)
 
+## Harness Techniques
+
+The canonical inventory of techniques now lives in:
+
+- [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
+
+Main live techniques today:
+
+- discovery-first intake before execution
+- spec-first ticketization with proof/testability contracts
+- per-ticket planning via `ralplan` and approval-first planning via `tech-impl-plan`
+- single-ticket orchestration via `$impl`
+- separated builder, reviewer, QA, and evidence-check roles
+- Stop-hook judgment as the final continuation/completion gate
+- tickets as durable task memory plus `HISTORY` / `MEMORY` / `TROUBLES` writeback
+- skills and subagents as the main reusable operating surfaces
+
+The full doc also distinguishes which techniques are only proposed experiments,
+so the repo does not blur current behavior with future ideas.
+
 ## Current Prototype Status
 
 What is proven:

@@ -1,15 +1,15 @@
 # Ticket Template
 
-Use this template to create ticket files under `tickets/todo/`, `tickets/review/`, `tickets/building/`, or `tickets/done/`.
+Use this template to create ticket files directly under `tickets/`.
 
 ## Ticket Lifecycle
 
 `todo -> review -> building -> done`
 
-- Start in `todo`.
-- Move to `review` while planning and human approval are happening.
-- Move to `building` only after approval.
-- Move to `done` only after implementation, QA, and final human confirmation.
+- Start with `status: todo`.
+- Set `status: review` while planning and human approval are happening.
+- Set `status: building` only after approval.
+- Set `status: done` only after implementation, QA, and final human confirmation.
 
 ## Template
 

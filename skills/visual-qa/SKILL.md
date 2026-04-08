@@ -33,7 +33,7 @@ If the ticket is underspecified, fail early instead of reward-hacking a route.
 
 Before judging any screen, read:
 
-1. the active ticket in `tickets/building/` or the delegated ticket file/section,
+1. the active ticket in `tickets/TASK-*.md` or the delegated ticket file/section,
 2. the ticket's UI contract (`Key screens/states`, `Taste refs`, `Expected artifacts`),
 3. the ticket `Evidence checklist`, if present,
 4. `docs/TASTE.md` when UI taste or layout quality is in scope.

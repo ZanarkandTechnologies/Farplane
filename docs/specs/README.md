@@ -6,6 +6,7 @@ Current design docs:
 
 - `context-and-handoff-policy.md`
 - `harness-engineering-quickstart.md`
+- `harness-techniques.md`
 - `orchestrator-subagent-loop.md`
 - `ralph-runtime-surface.md`
 - `ralph-orchestration-blueprint.md`

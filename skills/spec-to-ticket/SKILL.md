@@ -1,7 +1,7 @@
 ---
 name: spec-to-ticket
 version: 1.3.0
-description: "Phase-2 Ralph skill: convert one SLC slice from specs into raw ticket files under tickets/todo/, including compact agent-contract and evidence-checklist requirements for UI-bearing work."
+description: "Phase-2 Ralph skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact agent-contract and evidence-checklist requirements for UI-bearing work."
 ---
 
 # Spec-to-Ticket Skill
@@ -15,7 +15,7 @@ It should front-load testability and proof requirements so build and QA do not h
 
 ## Job
 
-Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionable raw ticket files under `tickets/todo/`.
+Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionable raw ticket files under `tickets/`.
 
 ## Rules
 
@@ -23,7 +23,7 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 2. One ticket = one build loop (default).
 3. Dependency order: schema -> backend -> UI -> integration.
 4. No implementation in this phase.
-5. Write ticket files to `tickets/todo/`; do not use `docs/progress.md` as the primary board.
+5. Write ticket files to `tickets/` with `status: todo`; do not use `docs/progress.md` as the primary board.
 6. If the slice includes any UI, the ticket must define agent testability and QA shape before build starts.
 7. If a UI flow is hard for an agent to access or stabilize, add testability instrumentation work into the slice instead of leaving QA to improvise.
 8. Every non-trivial ticket should declare a `Test hook`; if none is needed, say `none needed` explicitly.
@@ -37,7 +37,7 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 
 ## Output
 
-- `tickets/todo/*.md` ticket files with:
+- `tickets/*.md` ticket files with:
   - goal
   - acceptance criteria
   - dependencies
@@ -98,7 +98,7 @@ Default UI doctrine should live in `docs/TASTE.md`. Tickets should reference tas
 
 <!--
 The core planning loop here is:
-pick one slice, split it, add proof/testability, then write real ticket files into tickets/todo/.
+pick one slice, split it, add proof/testability, then write real ticket files into tickets/.
 -->
 
 1. Read `docs/specs/*.md` and pick exactly one SLC slice.
@@ -106,8 +106,8 @@ pick one slice, split it, add proof/testability, then write real ticket files in
 3. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
 4. For each UI-bearing ticket, add a compact `Agent Contract` block plus `Evidence checklist`.
 5. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
-6. If the slice is too large, split it into multiple smaller tickets in `tickets/todo/` immediately.
-7. Write the finished raw tickets into `tickets/todo/` using the ticket template.
+6. If the slice is too large, split it into multiple smaller tickets in `tickets/` immediately.
+7. Write the finished raw tickets into `tickets/` using the ticket template.
 8. Before handoff, read `references/review.md` and tighten the ticket set until it passes those checks.
 
 ## Top 3 Gotchas

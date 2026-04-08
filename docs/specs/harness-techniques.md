@@ -1,0 +1,125 @@
+# Harness Techniques
+
+Date: 2026-04-07
+
+## Goal
+
+Catalog the main techniques Codexter uses today and the highest-value
+techniques it is likely to adopt next.
+
+This document is a current-state inventory first. It is not a generic harness
+wishlist.
+
+## Status Legend
+
+- `Implemented`: real repo behavior or a documented active contract
+- `Partial`: the repo has the shape, but the full loop is not yet proven end to end
+- `Proposed`: a candidate technique or experiment, not current behavior
+
+## Audit Basis
+
+This inventory is grounded in:
+
+- root `AGENTS.md`
+- `README.md`
+- `docs/specs/*`
+- harness skills under `skills/`
+- subagent prompts under `agents/`
+- `hooks.json` and `bin/stop_hook.py`
+- `docs/MEMORY.md` and `docs/TROUBLES.md`
+
+## Implemented Techniques
+
+### Intake and planning
+
+| Technique | Status | Main surfaces | Why it matters | Current limit |
+| --- | --- | --- | --- | --- |
+| `AGENTS.md` as a map, not an encyclopedia | Implemented | root `AGENTS.md`, `docs/specs/*`, `docs/specs/harness-engineering-quickstart.md` | Keeps top-level instructions short and points agents toward deeper sources of truth | coverage depends on docs staying discoverable and current |
+| Repo docs as the system of record | Implemented | `docs/`, tickets, root `AGENTS.md`, `README.md` | Makes intent, plans, and constraints visible to agents instead of hiding them in chat | some knowledge still lives in research notes or discussion before promotion |
+| Discovery funnel before execution | Implemented | `skills/brainstorm`, `skills/deep-interview`, `skills/prd`, `README.md` | Pushes ambiguity reduction ahead of build work | still depends on operator choosing the right intake skill |
+| Spec-first before ticket execution | Implemented | `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps execution downstream of clarified specs | broad spec quality still determines downstream ticket quality |
+| Ticketization with proof/testability front-loaded | Implemented | `skills/spec-to-ticket`, `tickets/templates/ticket.md` | Converts intent into executable work with proof expectations early | ticket quality varies with planning rigor |
+| Per-ticket planning instead of whole-spec replanning | Implemented | `skills/ralplan`, `docs/specs/spec-first-execution-loop.md` | Keeps planning bounded to one work package | planner surface overlap with `tech-impl-plan` is still unresolved |
+| Approval-first implementation planning | Implemented | `skills/tech-impl-plan` | Adds compact `Req / Bet / Win`, `B -> A`, proof, and review before execution | separation from `ralplan` is conceptually blurry today |
+
+### Execution and orchestration
+
+| Technique | Status | Main surfaces | Why it matters | Current limit |
+| --- | --- | --- | --- | --- |
+| Ticket as durable task memory | Implemented | root `AGENTS.md`, `tickets/README.md`, ticket template | Reduces dependence on transcript memory | only as good as ticket writeback discipline |
+| Single-ticket orchestration via `$impl` | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md`, `README.md` | Makes one ticket the execution unit and keeps orchestration visible | no durable multi-ticket dispatcher yet |
+| Explicit worker-lane split | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Separates builder, reviewer, QA, and evidence-check responsibilities | actual staffing and reuse patterns are still evolving |
+| Ephemeral orchestrator, visible worker lanes | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Avoids a hidden forever-orchestrator and keeps runs legible | tmux/runtime surfaces are still prototype-weight |
+| Ralph persistence loop for bounded execution | Partial | `skills/ralph`, `docs/specs/ralph-v2-direction.md`, `README.md` | Keeps working until proof exists instead of stopping on partial progress | current `ralph` skill still carries older OMX-era assumptions and overlap |
+
+### Review, QA, and proof
+
+| Technique | Status | Main surfaces | Why it matters | Current limit |
+| --- | --- | --- | --- | --- |
+| Three-layer review gate: QA -> reviewer -> Stop hook | Implemented | `docs/specs/review-gates.md`, `skills/review`, `hooks.json`, `bin/stop_hook.py` | Makes evidence gathering, quality judgment, and continuation separate decisions | normalized scoring is specified more clearly than it is fully enforced |
+| QA separated from implementor | Implemented | `agents/qa-tester.toml`, `docs/specs/review-gates.md` | Reduces self-approval and gathers independent evidence | strongest for UI/browser work today |
+| Evidence-check as a separate skepticism lane | Implemented | `docs/specs/orchestrator-subagent-loop.md`, `skills/impl` | Catches overconfident QA and weak artifacts | dedicated evidence-check implementation is still light |
+| Rubric-driven review | Implemented | `skills/review`, `skills/review/references/*`, `docs/specs/review-gates.md` | Prevents “looks fine” review and pushes explicit pass/revise/block outputs | consistent write-back across all work types still needs more use |
+| Visual QA as a judgment-only layer | Implemented | `skills/visual-qa`, `agents/qa-tester.toml` | Keeps UI judgment separate from browser driving and implementation | depends on strong ticket contracts and good evidence capture |
+| Testability instrumentation as planned work | Implemented | `skills/spec-to-ticket`, `agents/qa-tester.toml` | Treats missing deterministic hooks as a planning failure, not a QA surprise | instrumentation quality varies by ticket |
+| Application UI made legible to the agent | Implemented | `skills/agent-browser`, `agents/qa-tester.toml`, `skills/visual-qa` | Lets agents inspect screenshots, DOM state, and browser behavior directly instead of relying on prose | stronger than before, but not yet paired with a full local observability loop |
+
+### Memory, progress, and control surfaces
+
+| Technique | Status | Main surfaces | Why it matters | Current limit |
+| --- | --- | --- | --- | --- |
+| Durable memory split by purpose | Implemented | `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, root `AGENTS.md` | Separates change log, invariants, and repeated misses | relies on disciplined promotion/writeback |
+| Progressive disclosure of context | Implemented | short `AGENTS.md`, `docs/specs/*`, skill references, tickets | Starts agents from a small stable entry point and teaches where to look next | not yet mechanically checked for freshness or cross-link quality |
+| Stop-hook continuation and judgment | Implemented | `hooks.json`, `bin/stop_hook.py`, `agents/orchestrator.md` | Gives visible turn-boundary continuation logic instead of pure transcript intuition | continuation policy is still being simplified and hardened |
+| Explicit ticket selectors outrank ambient state | Implemented | `docs/MEMORY.md`, `bin/stop_hook.py`, `docs/HISTORY.md` | Prevents stale run state from hijacking the wrong ticket | still mainly a runtime safety rule, not a full dispatcher model |
+| Lightweight runtime visibility | Partial | `skills/impl/scripts/tmux_helper.py`, `README.md`, `docs/specs/ralph-runtime-surface.md` | Exposes active lane/session/verdict without a heavyweight runtime plane | queue-wide runtime state remains minimal by design |
+
+### Skills, subagents, and tools
+
+| Technique | Status | Main surfaces | Why it matters | Current limit |
+| --- | --- | --- | --- | --- |
+| Skills as operational playbooks | Implemented | `skills/*`, `docs/specs/harness-engineering-quickstart.md` | Centralizes repeatable workflow detail outside root prompts | coverage still depends on which workflows have been encoded |
+| Subagents as bounded specialists | Implemented | `agents/*.toml`, `config.toml.example`, root `AGENTS.md` | Reduces context rot and enforces responsibility boundaries | some roles are richer than others; overlap remains in places |
+| MCP/tool surfaces as capability extensions | Implemented | `config.toml.example`, tool-facing skills, README setup | Extends evidence collection, docs access, browser operation, and external research | tool wiring exists, but some tools are not yet codified into stable loops |
+| Tmux-backed visible lanes | Partial | `README.md`, `skills/impl/scripts/tmux_helper.py`, `docs/specs/ralph-v2-direction.md` | Makes long-running worker sessions visible and reusable | still a prototype operational surface rather than a mature dispatcher |
+
+## Proposed Techniques and Experiments
+
+### Highest-value next techniques
+
+| Technique | Status | Delta from current system | Why it is promising | Suggested eval |
+| --- | --- | --- | --- | --- |
+| Stronger anti-self-agreement review loop | Proposed | Current system separates QA/review, but it still needs more deliberate adversarial critique and stronger refusal of weak evidence | Directly attacks “agent always agrees” and premature completion | replay one weak-proof ticket and measure false-pass reduction |
+| Final “would this impress the original user?” check | Proposed | Current review gates focus on ticket/evidence quality, not an explicit comparison back to original user intent | Adds a user-alignment gate after implementation and QA | compare final artifacts against original ask on a recent ticket |
+| Feature-taste review against neighboring features | Proposed | `visual-qa` is taste-aware, but there is no explicit “compare to surrounding product quality” loop | Helps avoid self-congratulatory UI review and local optima | use one UI change and require comparison against existing adjacent screens |
+| External design-tool-first workflow for UI | Proposed | Current UI flow is CLI-agent build + QA; there is no upstream design artifact requirement | Better for higher-taste UI work than hand-authoring from CLI alone | design in an external tool, then implement against it and run visual QA |
+
+### Structural follow-ups
+
+| Technique | Status | Delta from current system | Why it is promising | Suggested eval |
+| --- | --- | --- | --- | --- |
+| Planner-surface simplification | Proposed | `tech-impl-plan` and `ralplan` overlap conceptually today | Reduces confusion about when a plan is approval-facing vs execution-facing | classify 10 planning requests and see if routing becomes clearer |
+| Harder evidence-quality enforcement in Stop hook | Proposed | Stop-hook judgment exists, but stricter machine-readable evidence thresholds are still a direction more than a finished system | Tightens the highest-leverage harness lever: completion policy | replay smoke cases with stronger evidence-fail paths |
+| One main artifact for subagent grounding | Proposed | Tickets are durable memory already, but not every loop treats one file as the strict context anchor | Reduces context rot and ambiguous handoffs | require subagents to summarize the ticket before acting on one ticket run |
+| User-input-to-output impressed-user check | Proposed | user request is present in chat, but not normalized into a reusable final review artifact | Creates a direct loop between intake and final judgment | save original ask in the ticket or run artifact, then score final output against it |
+| Mechanical knowledge-base freshness checks | Proposed | Codexter has canonical docs, but not dedicated CI/lint checks for stale, uncrosslinked, or drifting harness docs | Keeps repo knowledge trustworthy as the system of record | add one doc validator over `docs/specs` and linked canonical docs |
+| Recurring doc-gardening / cleanup agent | Proposed | durable docs exist, but there is no explicit recurring documentation maintenance loop | Prevents stale rules and docs from quietly rotting | schedule one documentation-maintainer pass and measure stale-doc fixes found |
+| Mechanical architecture and taste invariants | Proposed | Codexter has prompt/rule guidance and some repo rules, but not strong custom structural checks with remediation-grade errors | High leverage for keeping fast agent output coherent | encode one or two domain or doc invariants as real validators or lints |
+| Agent-visible local observability stack | Proposed | QA/browser evidence is present, but logs/metrics/traces are not yet a first-class agent feedback loop | Would extend “agent legibility” beyond UI into performance and runtime reliability | expose one local log/metric path for a ticket and test a performance or reliability task |
+
+## Reading This Inventory
+
+When deciding what to tune next:
+
+1. start with `docs/specs/harness-engineering-quickstart.md`
+2. use this file to identify whether the technique is already live or still only proposed
+3. if proposed, ticket the smallest eval that can prove or kill it
+4. prefer review-loop and proof changes before broader generation changes
+
+## Canonical Companion Docs
+
+- `harness-engineering-quickstart.md` for how to tune the harness
+- `review-gates.md` for the QA/reviewer/Stop-hook split
+- `spec-first-execution-loop.md` for the end-to-end execution model
+- `orchestrator-subagent-loop.md` for `$impl` lane roles
+- `ralph-v2-direction.md` for open deltas and future runtime shape

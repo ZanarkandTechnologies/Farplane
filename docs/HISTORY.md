@@ -12,3 +12,16 @@
 2026-04-05 13:40 +0100 | CHORE | rewrite README into a high-density Ralph system story with minimal text and primary diagrams
 2026-04-05 13:48 +0100 | FEAT | add brainstorm and deep-interview skills as the front-end funnel before PRD/spec/ticket work
 2026-04-05 19:31 +0100 | FIX | make explicit Ralph ticket selectors override ambient current-run state and decouple smoke eval missing-evidence cases from TASK-0011 closeout
+2026-04-05 22:25 +0100 | FIX | stop treating Ralph-mode prose completions without RALPH_RESULT as successful stops and add a regression check for the missing-result path
+2026-04-05 23:08 +0100 | FEAT | turn Ralph tmux lanes into real interactive Codex sessions with same-pane follow-up reuse and session-id resume fallback
+2026-04-05 23:32 +0100 | FEAT | add stop-hook verdict observability via tmux-visible summaries and a centralized ralph_tmux status command with hook-log fallback
+2026-04-05 22:50 +0100 | FIX | make Ralph execution treat the active ticket as the default work unit instead of automatically shrinking coherent tickets into smaller tasks
+2026-04-06 02:09 +0100 | FIX | emit Stop-hook systemMessage summaries and replace the vague hook status label with an explicit Ralph verdict evaluation message
+2026-04-06 02:20 +0100 | CHORE | add a canonical Ralph v2 direction spec covering todo-list-first execution, future archive flow, dispatcher-v0 claims, planner simplification, and known follow-up bugs
+2026-04-06 06:38 +0100 | CHORE | expand README into the full staged Ralph model across spec, ticketization, per-ticket planning, dispatch, and build/proof/review loops
+2026-04-07 00:00 +0100 | CHORE | add a canonical spec-first execution-loop spec and begin queue cleanup around the newer work-package model
+2026-04-07 00:00 +0100 | CHORE | archive completed and superseded tickets so the active queue only contains the current review-gates, execution-loop, and handoff-policy work
+2026-04-06 06:38 +0100 | FEAT | pull the latest OMX base and add the first Codexter-to-OMX bridge exporter for ready Markdown tickets
+2026-04-07 04:27 +0100 | CHORE | add a canonical harness-engineering quickstart so agents can tune AGENTS, hooks, subagents, skills, MCP/tooling, and review loops from one practical guide
+2026-04-07 20:37 +0100 | CHORE | add a canonical harness-techniques inventory and README pointer so implemented versus proposed harness techniques are documented from repo truth
+2026-04-08 01:48 +0100 | CHORE | fold OpenAI harness-engineering findings into the canonical techniques inventory, adding repo-legibility, progressive-disclosure, and mechanical-invariant deltas

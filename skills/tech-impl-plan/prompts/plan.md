@@ -7,7 +7,7 @@ Keep this focused on the next commit and the next ticket move, not on implementa
 
 0a. Study `@docs/prd.md`.
 0b. Study `@docs/specs/*`.
-0c. Study the active ticket in `@tickets/review/*`; if none exists, inspect `@tickets/todo/*`.
+0c. Study the active ticket in `@tickets/*`; if none exists, inspect `@tickets/*`.
 0d. Study `@docs/MEMORY.md`.
 0e. Study `@docs/TROUBLES.md` if present.
 0f. Search the codebase first.
@@ -62,8 +62,8 @@ Requirements:
   - required write-back section in the ticket
 - End with `Ready: yes/no`.
 - Include `Ticket Move`:
-  - where the ticket should live after planning,
+  - which `status` / `phase` the ticket should have after planning,
   - whether any follow-up tickets should be spawned,
-  - whether the ticket stays in `review/` or is ready for `building/`.
+  - whether the ticket stays in `status: review` or is ready for `status: building`.
 
 Do not implement.

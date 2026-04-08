@@ -13,7 +13,7 @@ This file defines the project-specific technical rules, tech stack, and conventi
 - `src/`: Main source code
 - `tests/`: Test files
 - `docs/`: Canonical project state (`prd.md`, `specs/*`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
-- `tickets/`: Filesystem board (`todo/`, `review/`, `building/`, `done/`, `templates/`)
+- `tickets/`: Flat ticket board (`TASK-*.md`, `archive/`, `templates/`)
 - `...`: [Other key directories]
 
 ## 📜 Conventions

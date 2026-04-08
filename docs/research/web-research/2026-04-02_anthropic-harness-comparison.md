@@ -65,10 +65,10 @@ Evidence:
 ### 3. Filesystem board as the main coordination surface
 
 Codexter uses board lanes:
-- `tickets/todo/`
-- `tickets/review/`
-- `tickets/building/`
-- `tickets/done/`
+- `tickets/`
+- `tickets/`
+- `tickets/`
+- `tickets/`
 
 The ticket template is not just a task note. It carries:
 - pitch

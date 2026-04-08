@@ -9,7 +9,7 @@
 
 ### Outputs
 - A chosen slice summary
-- Raw ticket files in `tickets/todo/` scoped to the slice
+- Raw ticket files in `tickets/` scoped to the slice
 
 ### Story map (structure)
 Columns = journey backbone (activities). Rows = capability depth.

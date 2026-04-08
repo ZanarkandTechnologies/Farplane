@@ -1,19 +1,26 @@
 ---
 name: init-project
-version: 2.4.0
-description: "One-time setup workflow for new projects. Scaffold docs-first operating files, shared taste doctrine, filesystem ticket board, and reusable plan/build prompts."
+version: 2.5.0
+description: "One-time setup workflow for new projects. Scaffold docs-first operating files, shared taste doctrine, flat ticket state with archival, and reusable plan/build prompts."
 ---
 
 # Init Project Skill
 
-One-time setup for new projects. This skill scaffolds a docs-first workflow and gives copy/paste prompts for planning and building sessions.
+One-time setup for new projects. This skill scaffolds a docs-first workflow and gives the project an explicit front-end funnel before execution starts.
 
 ## What This Sets Up
 
 - `PROJECT_RULES.md` (project-specific stack + commands + conventions)
 - `AGENTS.md` (operational contract loaded every loop)
 - `docs/` state (`prd.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
-- `tickets/` board (`todo/`, `review/`, `building/`, `done/`, `templates/`, `INDEX.md`)
+- `tickets/` state (`*.md`, `archive/`, `templates/`, optional `README.md`)
+- discovery-to-execution funnel:
+  - `brainstorm`
+  - `deep-interview`
+  - `prd`
+  - `spec-to-ticket`
+  - `ralphplan`
+  - `ralph`
 
 ## Common Stack Setup
 
@@ -43,7 +50,7 @@ pnpm dlx convex@latest dev
 ### Fast path
 
 ```bash
-bash ~/.cursor/skills/init-project/scripts/bootstrap.sh
+bash ~/.codex/skills/init-project/scripts/bootstrap.sh
 ```
 
 ### Manual steps
@@ -53,12 +60,26 @@ bash ~/.cursor/skills/init-project/scripts/bootstrap.sh
 3. Create docs state:
    - `mkdir -p docs/specs`
    - `touch docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TASTE.md docs/TROUBLES.md`
-4. Create ticket board:
-   - `mkdir -p tickets/todo tickets/review tickets/building tickets/done tickets/templates`
+4. Create tickets state:
+   - `mkdir -p tickets tickets/archive tickets/templates`
    - copy the ticket template into `tickets/templates/`
-   - create `tickets/INDEX.md`
-5. Use `prd` skill for requirements and PRD authoring (HITL loop).
-6. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/todo/`.
+5. If the idea is still open-ended, use `brainstorm`.
+6. If the first slice is still too vague for a PRD, use `deep-interview`.
+7. Use `prd` skill for requirements and PRD authoring (HITL loop).
+8. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+
+### Existing-project migration
+
+If the project already exists:
+
+1. run the same bootstrap script in the repo root
+2. do **not** convert the whole backlog
+3. start with one PRD/spec and one ticket
+4. prove one `ralphplan -> ralph` cycle first
+
+Migration guide:
+
+- [README.md](README.md)
 
 ## Why This Structure
 
@@ -67,8 +88,9 @@ bash ~/.cursor/skills/init-project/scripts/bootstrap.sh
 - `docs/` is the canonical project state for planning and execution.
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
 - `docs/TROUBLES.md` is the append-only operator feedback log for repeated misses, failed attempts, and correction patterns that should feed future system improvements.
-- `tickets/` is the canonical execution board, so planning, build, and QA work from one file per ticket.
-- `tickets/INDEX.md` gives one quick board view, but the ticket files remain canonical.
+- `tickets/` is the canonical execution surface, so planning, build, and QA work from one file per active ticket, with completed tickets moved into `tickets/archive/`.
+- queue state should live in ticket frontmatter rather than folder lanes.
+- `brainstorm` and `deep-interview` keep weak ideas from reaching tickets too early.
 - Agents can find specs, plan, and validation commands without hunting through nested files.
 
 ## Planning Philosophy (Inherited Defaults)
@@ -88,6 +110,7 @@ The generated planning flow should follow these defaults:
 - Keep progress notes out of `AGENTS.md`; put them in the active ticket file.
 - Keep repeated failure feedback out of `docs/MEMORY.md`; log it in `docs/TROUBLES.md` first, then promote only durable lessons into `docs/MEMORY.md` or the relevant skill/contract.
 - First Convex cloud setup is interactive; stop and ask the human to run it.
+- Do not skip from a fuzzy idea directly to `prd`; use `brainstorm` or `deep-interview` first when the first slice is not obvious.
 
 ## Prompt Templates (Copy/Paste Ready)
 

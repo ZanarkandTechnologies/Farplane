@@ -31,4 +31,4 @@ Use this as the first session in the Ralph workflow.
 
 ## Handoff
 
-After PRD is accepted, run `spec-to-ticket` for slice decomposition into raw ticket files under `tickets/todo/`.
+After PRD is accepted, run `spec-to-ticket` for slice decomposition into raw ticket files under `tickets/`.
