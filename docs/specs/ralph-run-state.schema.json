@@ -109,6 +109,95 @@
       "type": "string",
       "format": "date-time"
     },
+    "last_user_turn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "turn_id",
+        "captured_at",
+        "source",
+        "raw_text",
+        "intent_mode",
+        "requested_outcome",
+        "explicit_ticket_id",
+        "hard_constraints",
+        "summary"
+      ],
+      "properties": {
+        "turn_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "captured_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intent_mode": {
+          "type": "string",
+          "enum": [
+            "planning",
+            "building",
+            "documenting",
+            "question",
+            "backlog",
+            "unknown"
+          ]
+        },
+        "requested_outcome": {
+          "type": "string",
+          "enum": [
+            "ticket_plan",
+            "code_change",
+            "docs_update",
+            "review_or_analysis",
+            "answer_only",
+            "unknown"
+          ]
+        },
+        "explicit_ticket_id": {
+          "type": "string"
+        },
+        "hard_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ticket_local_only",
+              "no_edits",
+              "source_required",
+              "specific_ticket_required"
+            ]
+          }
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "last_intent_alignment": {
+      "type": "string",
+      "enum": [
+        "aligned",
+        "soft_mismatch",
+        "hard_mismatch",
+        "unknown"
+      ]
+    },
+    "last_intent_alignment_reason": {
+      "type": "string"
+    },
+    "last_intent_turn_id": {
+      "type": "string"
+    },
     "next_phase": {
       "type": "string",
       "enum": [

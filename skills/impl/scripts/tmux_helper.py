@@ -22,6 +22,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+BIN_DIR = Path(__file__).resolve().parents[3] / "bin"
+if str(BIN_DIR) not in sys.path:
+    sys.path.insert(0, str(BIN_DIR))
+
+from user_turn import capture_user_turn
+
+
 def now_stamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
 
@@ -140,6 +147,10 @@ def write_current_run(payload: dict[str, object], run_state: Path) -> None:
         "last_hook_decision",
         "last_hook_summary",
         "last_hook_timestamp",
+        "last_user_turn",
+        "last_intent_alignment",
+        "last_intent_alignment_reason",
+        "last_intent_turn_id",
         "tmux_session",
         "tmux_window",
         "tmux_pane",
@@ -182,11 +193,27 @@ def build_run_state(
             "last_hook_decision",
             "last_hook_summary",
             "last_hook_timestamp",
+            "last_user_turn",
+            "last_intent_alignment",
+            "last_intent_alignment_reason",
+            "last_intent_turn_id",
         ):
             value = existing.get(key)
             if isinstance(value, str) and value:
                 payload[key] = value
+            elif key == "last_user_turn" and isinstance(value, dict) and value:
+                payload[key] = value
     return payload
+
+
+def capture_user_turn_fallback(prompt_text: str) -> None:
+    capture_user_turn(
+        project_root=root(),
+        raw_text=prompt_text,
+        turn_id=None,
+        source="tmux_helper_fallback",
+        only_if_missing=True,
+    )
 
 
 def lane_thread_name(ticket_id: str) -> str:
@@ -446,6 +473,7 @@ def launch(args: argparse.Namespace) -> int:
         None,
         args.dry_run,
     )
+    capture_user_turn_fallback(build_phase_prompt(ticket, args.phase))
     sent = run(["tmux", "send-keys", "-t", pane_id, command, "C-m"])
     if sent.returncode != 0:
         raise SystemExit(sent.stderr.strip() or sent.stdout.strip() or "tmux send-keys failed")
@@ -483,6 +511,7 @@ def followup(args: argparse.Namespace) -> int:
     compute_class = args.compute_class or str(existing.get("compute_class") or "local")
     auto_continue = bool(existing.get("auto_continue")) or args.auto_continue
     prompt_text = build_phase_prompt(ticket, args.phase, args.reason)
+    capture_user_turn_fallback(prompt_text)
 
     if args.dry_run:
         session = args.tmux_session or str(existing.get("tmux_session") or current_tmux_session())

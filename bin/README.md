@@ -19,12 +19,14 @@ orchestration story.
 
 ## Entrypoints
 
+- `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `notify.py` - local notification helper
 - `stop_hook.py` - thin stop-hook/runtime shim
 
 ## Runtime Decisions
 
 - `stop_hook.py`: keep
+- `capture_user_turn.py`: keep
 
 See [ralph-runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md) for the canonical decision table.
 
@@ -56,6 +58,7 @@ already advanced.
 ## How To Test
 
 - `python3 -m py_compile bin/stop_hook.py`
+- `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py`
 - `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
 - `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`
 - `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run`

@@ -29,4 +29,5 @@ For `ralph` prototype scripts:
 - tickets remain the canonical execution contract
 - explicit ticket selectors outrank ambient run-state when both are present
 - run-state files remain runtime-only and lightweight
+- current-turn user intent should be captured at `UserPromptSubmit` when available; worker-entry capture is fallback-only degraded mode
 - tmux lanes reuse a live interactive Codex pane before creating a replacement pane; stored `session_id` is the recovery path only. See `MEM-0005`.

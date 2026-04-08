@@ -33,6 +33,7 @@ Those are prototype or transitional surfaces.
 
 | Binary | Decision | Reason |
 | --- | --- | --- |
+| `capture_user_turn.py` | `keep` | lightweight input-hook writer that stores bounded current-turn intent for later relevance checks |
 | `notify.py` | `keep` | local utility with no orchestration overlap |
 | `tickets/scripts/check_ticket_metadata.py` | `keep` | canonical validator for the ticket surface and lives with the ticket system it validates |
 | `stop_hook.py` | `keep` | thin runtime shim that evaluates stop events, judges worker results, and handles re-entry decisions |
@@ -44,7 +45,7 @@ Those are prototype or transitional surfaces.
 ## Documentation Rules
 
 - Public docs should describe `$impl` as the build-phase orchestrator.
-- `skills/impl/scripts/tmux_helper.py` and `stop_hook.py` may be documented as operator/runtime shims.
+- `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
 - internal Stop-hook role instructions should live under `agents/`, not as giant string literals in Python helpers.
 - Any removed prototype binaries should remain only as historical references in
   archived tickets or older specs, not as live runtime files.

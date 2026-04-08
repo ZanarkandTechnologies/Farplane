@@ -23,6 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 STOP_HOOK_PATH = ROOT / "bin" / "stop_hook.py"
+CAPTURE_USER_TURN_PATH = ROOT / "bin" / "capture_user_turn.py"
 
 
 def run(cmd: list[str], *, cwd: Path | None = None, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
@@ -62,6 +63,14 @@ def read_jsonl(path: Path) -> list[dict[str, object]]:
         if isinstance(payload, dict):
             rows.append(payload)
     return rows
+
+
+def load_json(path: Path) -> dict[str, object]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
 
 
 def wait_for_json(path: Path, *, timeout_secs: float = 20.0) -> dict[str, object] | None:
@@ -210,6 +219,42 @@ def run_judge_fixture(*, ticket_text: str, phase: str, worker_result: str) -> su
         )
 
 
+def write_current_run_fixture(
+    *,
+    current_run_path: Path,
+    ticket_path: Path,
+    ticket_id: str,
+    phase: str,
+    run_state_path: Path,
+) -> None:
+    current_run_path.parent.mkdir(parents=True, exist_ok=True)
+    run_state_payload = {
+        "schema_version": "1.0",
+        "run_id": f"run-{ticket_id.lower()}-{phase}-fixture",
+        "ticket_id": ticket_id,
+        "ticket_path": str(ticket_path),
+        "phase": phase,
+        "status": "waiting_for_worker",
+        "skill_name": "ralph" if phase != "planning" else "ralplan",
+        "compute_class": "local",
+        "parallel_slots_reserved": 1,
+        "updated_at": "2026-04-05T00:00:00Z",
+    }
+    run_state_path.parent.mkdir(parents=True, exist_ok=True)
+    run_state_path.write_text(json.dumps(run_state_payload, indent=2) + "\n", encoding="utf-8")
+    current_run_path.write_text(
+        json.dumps(
+            {
+                **run_state_payload,
+                "run_state": str(run_state_path),
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     results: list[dict[str, object]] = []
     current_run_path = ROOT / ".ralph" / "state" / "current-run.json"
@@ -241,8 +286,57 @@ def main() -> int:
             ),
             encoding="utf-8",
         )
+        hook_planning_ticket = fixture_root / "TASK-9996-hook-planning.md"
+        hook_planning_ticket.write_text(
+            fixture_ticket(
+                ticket_id="TASK-9996",
+                title="hook planning fixture",
+                acceptance_checked=False,
+                evidence_checked=False,
+                phase="planning",
+            ),
+            encoding="utf-8",
+        )
 
         try:
+            capture_run_state = fixture_root / "run-task-9998-building-capture.json"
+            write_current_run_fixture(
+                current_run_path=current_run_path,
+                ticket_path=hook_missing_ticket,
+                ticket_id="TASK-9998",
+                phase="building",
+                run_state_path=capture_run_state,
+            )
+            capture_payload = json.dumps(
+                {
+                    "hook_event_name": "UserPromptSubmit",
+                    "cwd": str(ROOT),
+                    "turn_id": "turn-capture-build",
+                    "prompt": "Continue working on TASK-9998 with $impl and keep it ticket-local.",
+                }
+            )
+            capture_hook = subprocess.run(
+                ["python3", str(CAPTURE_USER_TURN_PATH)],
+                cwd=ROOT,
+                env={**os.environ, "CODEXTER_HOME": str(Path.home() / ".codex")},
+                input=capture_payload,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            captured_current_run = load_json(current_run_path)
+            captured_run_state = load_json(capture_run_state)
+            results.append(
+                {
+                    "name": "user_prompt_capture",
+                    "ok": capture_hook.returncode == 0,
+                    "stdout": capture_hook.stdout.strip(),
+                    "stderr": capture_hook.stderr.strip(),
+                    "current_run": captured_current_run,
+                    "run_state": captured_run_state,
+                }
+            )
+
             payload_input = json.dumps(
                 {
                     "hook_event_name": "Stop",
@@ -270,6 +364,116 @@ def main() -> int:
                     "ok": build.returncode == 0,
                     "stdout": build.stdout.strip(),
                     "stderr": build.stderr.strip(),
+                }
+            )
+
+            planning_run_state = fixture_root / "run-task-9996-planning-capture.json"
+            write_current_run_fixture(
+                current_run_path=current_run_path,
+                ticket_path=hook_planning_ticket,
+                ticket_id="TASK-9996",
+                phase="planning",
+                run_state_path=planning_run_state,
+            )
+            planning_capture_payload = json.dumps(
+                {
+                    "hook_event_name": "UserPromptSubmit",
+                    "cwd": str(ROOT),
+                    "turn_id": "turn-capture-plan",
+                    "prompt": "Return to TASK-9996 and produce the ticket plan only.",
+                }
+            )
+            subprocess.run(
+                ["python3", str(CAPTURE_USER_TURN_PATH)],
+                cwd=ROOT,
+                env={**os.environ, "CODEXTER_HOME": str(Path.home() / ".codex")},
+                input=planning_capture_payload,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            planning_mismatch_payload = json.dumps(
+                {
+                    "hook_event_name": "Stop",
+                    "cwd": str(ROOT),
+                    "last_assistant_message": "RALPH_RESULT: status=build_complete next=building reason=eval_planning_mismatch",
+                }
+            )
+            planning_mismatch = subprocess.run(
+                ["python3", "bin/stop_hook.py"],
+                cwd=ROOT,
+                env={
+                    **os.environ,
+                    "CODEXTER_RALPH_HOOK": "1",
+                    "CODEXTER_HOME": str(Path.home() / ".codex"),
+                    "RALPH_TICKET": str(hook_planning_ticket),
+                },
+                input=planning_mismatch_payload,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            results.append(
+                {
+                    "name": "hook_planning_soft_mismatch",
+                    "ok": planning_mismatch.returncode == 0,
+                    "stdout": planning_mismatch.stdout.strip(),
+                    "stderr": planning_mismatch.stderr.strip(),
+                }
+            )
+
+            mismatch_run_state = fixture_root / "run-task-9998-building-mismatch.json"
+            write_current_run_fixture(
+                current_run_path=current_run_path,
+                ticket_path=hook_missing_ticket,
+                ticket_id="TASK-9998",
+                phase="building",
+                run_state_path=mismatch_run_state,
+            )
+            mismatch_capture_payload = json.dumps(
+                {
+                    "hook_event_name": "UserPromptSubmit",
+                    "cwd": str(ROOT),
+                    "turn_id": "turn-capture-hard-mismatch",
+                    "prompt": "Continue working on TASK-9997 with $impl.",
+                }
+            )
+            subprocess.run(
+                ["python3", str(CAPTURE_USER_TURN_PATH)],
+                cwd=ROOT,
+                env={**os.environ, "CODEXTER_HOME": str(Path.home() / ".codex")},
+                input=mismatch_capture_payload,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            hard_mismatch_payload = json.dumps(
+                {
+                    "hook_event_name": "Stop",
+                    "cwd": str(ROOT),
+                    "last_assistant_message": "RALPH_RESULT: status=build_complete next=building reason=eval_hard_mismatch",
+                }
+            )
+            hard_mismatch = subprocess.run(
+                ["python3", "bin/stop_hook.py"],
+                cwd=ROOT,
+                env={
+                    **os.environ,
+                    "CODEXTER_RALPH_HOOK": "1",
+                    "CODEXTER_HOME": str(Path.home() / ".codex"),
+                    "RALPH_TICKET": str(hook_missing_ticket),
+                },
+                input=hard_mismatch_payload,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            results.append(
+                {
+                    "name": "hook_explicit_ticket_hard_mismatch",
+                    "ok": hard_mismatch.returncode == 0,
+                    "stdout": hard_mismatch.stdout.strip(),
+                    "stderr": hard_mismatch.stderr.strip(),
                 }
             )
 
@@ -614,9 +818,41 @@ def main() -> int:
     # Semantic assertions
     assert_case(
         results,
+        name="user_prompt_capture",
+        predicate=lambda c: c["ok"]
+        and isinstance(c.get("current_run"), dict)
+        and isinstance(c["current_run"].get("last_user_turn"), dict)
+        and c["current_run"]["last_user_turn"].get("turn_id") == "turn-capture-build"
+        and c["current_run"]["last_user_turn"].get("intent_mode") == "building"
+        and c["current_run"]["last_user_turn"].get("requested_outcome") == "code_change"
+        and c["current_run"]["last_user_turn"].get("explicit_ticket_id") == "TASK-9998"
+        and "ticket_local_only" in c["current_run"]["last_user_turn"].get("hard_constraints", [])
+        and isinstance(c.get("run_state"), dict)
+        and isinstance(c["run_state"].get("last_user_turn"), dict)
+        and c["run_state"]["last_user_turn"].get("turn_id") == "turn-capture-build",
+        message="UserPromptSubmit should persist the current-turn intent into both current-run and run-state files",
+    )
+    assert_case(
+        results,
         name="hook_build_payload",
         predicate=lambda c: c["ok"] and "rerun TASK-9998 in building" in str(c["stdout"]),
         message="build payload should request same-ticket rerun",
+    )
+    assert_case(
+        results,
+        name="hook_planning_soft_mismatch",
+        predicate=lambda c: c["ok"]
+        and '"decision": "block"' in str(c["stdout"])
+        and "requested `planning` work" in str(c["stdout"]),
+        message="planning-vs-building relevance mismatch should force same-ticket corrective continuation before normal continuation checks",
+    )
+    assert_case(
+        results,
+        name="hook_explicit_ticket_hard_mismatch",
+        predicate=lambda c: c["ok"]
+        and '"continue": false' in str(c["stdout"])
+        and "targets TASK-9997" in str(c["stdout"]),
+        message="explicit ticket mismatch should stop immediately instead of entering the continuation gate",
     )
     assert_case(
         results,

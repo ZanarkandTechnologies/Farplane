@@ -31,6 +31,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from notify import announce_message
+from user_turn import (
+    load_last_user_turn as load_persisted_last_user_turn,
+    project_root_from_payload as resolve_project_root_from_payload,
+)
 
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
@@ -64,6 +68,7 @@ REVIEW_PACKET_REQUIRED_FIELDS = {
 PASS_FAIL_VALUES = {"pass", "fail"}
 REVIEW_VERDICTS = {"pass", "revise", "block"}
 REVIEW_PACKET_TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M %z"
+INTENT_ALIGNMENT_STATES = {"aligned", "soft_mismatch", "hard_mismatch", "unknown"}
 
 
 def env_enabled() -> bool:
@@ -129,19 +134,7 @@ def codexter_home() -> Path:
 
 
 def project_root_from_payload(payload: dict[str, object]) -> Path | None:
-    for key in ("cwd", "workdir", "current_working_directory"):
-        raw = payload.get(key)
-        if isinstance(raw, str) and raw.strip():
-            path = Path(raw).expanduser()
-            if path.exists():
-                return path.resolve()
-    for raw_fallback in (os.environ.get("PWD", "").strip(), str(Path.cwd())):
-        if not raw_fallback:
-            continue
-        candidate = Path(raw_fallback).expanduser()
-        if candidate.exists() and ((candidate / ".ralph").exists() or (candidate / "tickets").exists()):
-            return candidate.resolve()
-    return None
+    return resolve_project_root_from_payload(payload)
 
 
 def runtime_root(home: Path, project_root: Path | None) -> Path:
@@ -261,6 +254,25 @@ def publish_hook_status(
             "last_hook_decision": decision,
             "last_hook_summary": summary,
             "last_hook_timestamp": now_iso(),
+        },
+    )
+
+
+def persist_intent_alignment(
+    project_root: Path | None,
+    current_run: dict[str, object] | None,
+    alignment: dict[str, object],
+) -> dict[str, object] | None:
+    if project_root is None or current_run is None:
+        return current_run
+    return persist_runtime_update(
+        project_root,
+        current_run,
+        {
+            "last_intent_alignment": str(alignment.get("state") or "unknown"),
+            "last_intent_alignment_reason": str(alignment.get("reason") or "").strip(),
+            "last_intent_turn_id": str(alignment.get("turn_id") or "").strip(),
+            "updated_at": now_iso(),
         },
     )
 
@@ -617,6 +629,175 @@ def parse_ralph_result(line: str) -> dict[str, str]:
     }
 
 
+def summarize_intent_alignment(ticket_id: str, alignment: dict[str, object]) -> str:
+    state = str(alignment.get("state", "unknown"))
+    reason = str(alignment.get("reason", "")).strip() or "no reason recorded"
+    return f"intent-alignment: {ticket_id} -> {state} ({reason})"
+
+
+def observed_phase_from_result(
+    ralph_result: str | None,
+    *,
+    current_phase: str,
+) -> tuple[str | None, dict[str, str] | None]:
+    if not ralph_result:
+        return None, None
+    try:
+        parsed = parse_ralph_result(ralph_result)
+    except ValueError:
+        return None, None
+
+    status = parsed["status"]
+    if status in {"continue_ralphplan", "plan_ready"}:
+        return "planning", parsed
+    if status == "docs_complete":
+        return "documenting", parsed
+    if status in {"continue_ralph", "build_complete", "done"}:
+        return "building", parsed
+    if status == "blocked":
+        return current_phase, parsed
+    if parsed["next"] in ALLOWED_PHASES:
+        return parsed["next"], parsed
+    return current_phase, parsed
+
+
+def classify_intent_alignment(
+    *,
+    last_user_turn: dict[str, object] | None,
+    ticket: dict[str, object],
+    message: str,
+    ralph_result: str | None,
+    current_run: dict[str, object] | None,
+) -> dict[str, object]:
+    ticket_id = str(ticket["ticket_id"])
+    if not last_user_turn:
+        return {
+            "state": "unknown",
+            "reason": "no captured current-turn user intent is available",
+            "turn_id": "",
+            "summary": "",
+            "expected_phase": "",
+            "observed_phase": "",
+            "continuation_message": "",
+            "announce": "",
+        }
+
+    intent_mode = str(last_user_turn.get("intent_mode") or "unknown")
+    requested_outcome = str(last_user_turn.get("requested_outcome") or "unknown")
+    summary = str(last_user_turn.get("summary") or "").strip()
+    turn_id = str(last_user_turn.get("turn_id") or "").strip()
+    explicit_ticket_id = str(last_user_turn.get("explicit_ticket_id") or "").strip()
+    hard_constraints = [
+        str(item).strip()
+        for item in last_user_turn.get("hard_constraints", [])
+        if isinstance(item, str) and item.strip()
+    ]
+
+    if intent_mode == "unknown" or requested_outcome == "unknown" or not summary:
+        return {
+            "state": "unknown",
+            "reason": "captured turn intent is incomplete or unknown",
+            "turn_id": turn_id,
+            "summary": summary,
+            "expected_phase": "",
+            "observed_phase": "",
+            "continuation_message": "",
+            "announce": "",
+        }
+
+    if explicit_ticket_id and explicit_ticket_id != ticket_id:
+        return {
+            "state": "hard_mismatch",
+            "reason": f"captured turn targets {explicit_ticket_id}, but the resolved ticket is {ticket_id}",
+            "turn_id": turn_id,
+            "summary": summary,
+            "expected_phase": "",
+            "observed_phase": "",
+            "continuation_message": "",
+            "announce": f"Stopping {ticket_id}. Current-turn intent targets {explicit_ticket_id}.",
+        }
+
+    current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
+    observed_phase, parsed_result = observed_phase_from_result(
+        ralph_result,
+        current_phase=current_phase,
+    )
+
+    if "no_edits" in hard_constraints and parsed_result is not None:
+        return {
+            "state": "hard_mismatch",
+            "reason": "the captured turn explicitly forbids edits, but the assistant produced a Ralph worker result",
+            "turn_id": turn_id,
+            "summary": summary,
+            "expected_phase": "",
+            "observed_phase": observed_phase or "",
+            "continuation_message": "",
+            "announce": f"Stopping {ticket_id}. The current turn asked for no edits.",
+        }
+
+    if "ticket_local_only" in hard_constraints:
+        mentioned_ticket = extract_ticket_id(message)
+        if mentioned_ticket and mentioned_ticket != ticket_id:
+            return {
+                "state": "hard_mismatch",
+                "reason": f"the captured turn is ticket-local to {ticket_id}, but the assistant referenced {mentioned_ticket}",
+                "turn_id": turn_id,
+                "summary": summary,
+                "expected_phase": "",
+                "observed_phase": observed_phase or "",
+                "continuation_message": "",
+                "announce": f"Stopping {ticket_id}. The assistant drifted to {mentioned_ticket}.",
+            }
+
+    expected_phase = ""
+    if intent_mode == "planning":
+        expected_phase = "planning"
+    elif intent_mode == "building":
+        expected_phase = "building"
+    elif intent_mode == "documenting":
+        expected_phase = "documenting"
+    elif intent_mode in {"question", "backlog"} and parsed_result is not None:
+        return {
+            "state": "hard_mismatch",
+            "reason": f"the captured turn is {intent_mode}, but the assistant produced a Ralph worker result",
+            "turn_id": turn_id,
+            "summary": summary,
+            "expected_phase": intent_mode,
+            "observed_phase": observed_phase or "",
+            "continuation_message": "",
+            "announce": f"Stopping {ticket_id}. The current turn asked for {intent_mode}, not ticket execution.",
+        }
+
+    if expected_phase and observed_phase and expected_phase != observed_phase:
+        observed_status = parsed_result["status"] if parsed_result is not None else "unknown"
+        continuation_message = (
+            f"Continue {ticket_id} and satisfy the current-turn intent captured at start of turn: {summary}. "
+            f"The assistant ended with `{observed_status}` for `{observed_phase}`, but this turn requested `{expected_phase}` work. "
+            f"Stay on the same ticket, produce the requested artifact, update the ticket state, and finish with a `RALPH_RESULT` aligned to `{expected_phase}`."
+        )
+        return {
+            "state": "soft_mismatch",
+            "reason": f"captured turn expects {expected_phase}, but the assistant produced {observed_phase}",
+            "turn_id": turn_id,
+            "summary": summary,
+            "expected_phase": expected_phase,
+            "observed_phase": observed_phase,
+            "continuation_message": continuation_message,
+            "announce": f"Re-running {ticket_id}. The last pass drifted from the current-turn intent.",
+        }
+
+    return {
+        "state": "aligned",
+        "reason": "captured turn intent matches the resolved ticket and observed phase",
+        "turn_id": turn_id,
+        "summary": summary,
+        "expected_phase": expected_phase,
+        "observed_phase": observed_phase or "",
+        "continuation_message": "",
+        "announce": "",
+    }
+
+
 def ralph_verdict(
     *,
     ticket_id: str,
@@ -947,6 +1128,10 @@ def evidence_reviewer_prompt(
         "review_packet_missing": ticket["review_packet_missing"],
         "review_packet_errors": ticket["review_packet_errors"],
         "current_run": current_run or {},
+        "last_user_turn": (current_run or {}).get("last_user_turn", {}),
+        "last_intent_alignment": (current_run or {}).get("last_intent_alignment", ""),
+        "last_intent_alignment_reason": (current_run or {}).get("last_intent_alignment_reason", ""),
+        "last_intent_turn_id": (current_run or {}).get("last_intent_turn_id", ""),
         "verdict": verdict,
     }
     return role_prompt_from_file(
@@ -1237,6 +1422,10 @@ def reviewer_prompt(
         "evidence_gaps": ticket["evidence_gaps"],
         "blockers": ticket["blockers"],
         "current_run": current_run or {},
+        "last_user_turn": (current_run or {}).get("last_user_turn", {}),
+        "last_intent_alignment": (current_run or {}).get("last_intent_alignment", ""),
+        "last_intent_alignment_reason": (current_run or {}).get("last_intent_alignment_reason", ""),
+        "last_intent_turn_id": (current_run or {}).get("last_intent_turn_id", ""),
         "verdict": verdict or {},
     }
     return role_prompt_from_file(
@@ -1474,6 +1663,55 @@ def main() -> int:
     )
     if not ralph_runtime_active:
         return 0
+
+    last_user_turn = (
+        load_persisted_last_user_turn(project_root, current_run)
+        if project_root is not None
+        else None
+    )
+    alignment = classify_intent_alignment(
+        last_user_turn=last_user_turn,
+        ticket=ticket,
+        message=message,
+        ralph_result=ralph_result,
+        current_run=current_run,
+    )
+    current_run = persist_intent_alignment(project_root, current_run, alignment)
+    hook_summary = summarize_intent_alignment(str(ticket["ticket_id"]), alignment)
+    append_hook_log(
+        base,
+        {
+            "timestamp": now_iso(),
+            "mode": "intent-alignment",
+            "ticket_id": str(ticket["ticket_id"]),
+            "state": alignment.get("state"),
+            "reason": alignment.get("reason"),
+            "summary": alignment.get("summary"),
+            "turn_id": alignment.get("turn_id"),
+            "expected_phase": alignment.get("expected_phase"),
+            "observed_phase": alignment.get("observed_phase"),
+        },
+    )
+
+    if alignment.get("state") == "hard_mismatch":
+        current_run = publish_hook_status(project_root, current_run, decision="block_for_user", summary=hook_summary)
+        announce_message(str(alignment.get("announce") or alignment.get("reason") or "Stopping for user review."))
+        return emit_stop_payload(
+            continue_value=False,
+            stop_reason=str(alignment.get("reason") or "").strip() or "intent alignment hard mismatch",
+            system_message=f"Stop hook: {hook_summary}",
+        )
+
+    if alignment.get("state") == "soft_mismatch":
+        current_run = publish_hook_status(project_root, current_run, decision="continue_same_ticket", summary=hook_summary)
+        return continue_hook_response(
+            payload=payload,
+            ticket=ticket,
+            continuation_message=str(alignment.get("continuation_message") or "").strip()
+            or build_reason(ticket),
+            hook_summary=hook_summary,
+            announce=str(alignment.get("announce") or alignment.get("reason") or "Continuing the same ticket."),
+        )
 
     if ralph_runtime_active and ralph_result:
         verdict = run_ralph_judge(ticket, ralph_result, current_run)

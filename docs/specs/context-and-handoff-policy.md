@@ -40,6 +40,8 @@ It may carry:
 - active ticket id/path
 - active phase
 - active session or pane id
+- latest captured current-turn user intent
+- latest intent-alignment result
 - latest worker result
 - latest judge/hook verdict
 - latest hook summary

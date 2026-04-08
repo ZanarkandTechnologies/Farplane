@@ -28,3 +28,4 @@
 2026-04-08 04:20 +0100 | CHORE | add ticket inspiration-source tracking, annotate active harness backlog items with the Ryan Lopopolo podcast, and queue missing CLI ergonomics and inner-loop latency tickets
 2026-04-08 02:45 +0100 | CHORE | replace question-style review guidance with anchored 1-to-5 rubric definitions, migrate the live review contract into `skills/review`, and remove the legacy `code-review` skill alias
 2026-04-08 04:34 +0100 | FEAT | require Review Packet gates for Ralph completion, add storyboard-grade QA evidence capture, and extend stop-hook role outputs for evidence-quality review
+2026-04-08 05:19 +0100 | FEAT | capture current-turn user intent at `UserPromptSubmit`, add stop-hook relevance gating before continuation, and persist intent alignment into Ralph run state
