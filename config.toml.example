@@ -62,6 +62,10 @@ config_file = "agents/bash-operator.toml"
 description = "Comprehensive code review specialist that analyzes code for quality, error handling, type design, and simplification opportunities. Use proactively after completing features or before creating PRs."
 config_file = "agents/code-reviewer.toml"
 
+[agents.orchestrator]
+description = "Stop-hook orchestrator for ticket handoff, continuation, and next-ticket routing."
+config_file = "agents/orchestrator.toml"
+
 [agents.documentation-maintainer]
 description = "Meta-agent responsible for keeping the system's documentation (README, CHANGELOG) accurate and up-to-date by synthesizing recent research and project progress."
 config_file = "agents/documentation-maintainer.toml"
@@ -85,6 +89,10 @@ config_file = "agents/librarian.toml"
 [agents.qa-tester]
 description = "QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, cinematic landing testing)."
 config_file = "agents/qa-tester.toml"
+
+[agents.reviewer]
+description = "Stop-hook reviewer for same-ticket continuation and completion gating."
+config_file = "agents/reviewer.toml"
 
 [notice]
 hide_rate_limit_model_nudge = true

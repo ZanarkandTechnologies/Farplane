@@ -167,7 +167,7 @@ Use:
 
 - `hooks.json`
 - `bin/stop_hook.py`
-- hook-adjacent agents such as `agents/orchestrator.md`
+- hook-role configs such as `agents/orchestrator.toml` and `agents/reviewer.toml`
 
 This surface controls:
 

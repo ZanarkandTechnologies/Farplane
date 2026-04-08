@@ -19,6 +19,7 @@ USAGE:
 MEMORY REFERENCES:
 - MEM-0002
 - MEM-0004
+- MEM-0010
 """
 
 import json
@@ -27,12 +28,15 @@ import re
 import subprocess
 import sys
 import tempfile
+import tomllib
 from datetime import datetime, timezone
 from pathlib import Path
 
 from notify import announce_message
 from user_turn import (
+    build_runtime_claim,
     load_last_user_turn as load_persisted_last_user_turn,
+    load_runtime_claim as load_persisted_runtime_claim,
     project_root_from_payload as resolve_project_root_from_payload,
 )
 
@@ -147,8 +151,34 @@ def schema_path() -> Path:
     return Path(__file__).with_name("stop_hook_output.schema.json")
 
 
-def agent_prompt_path(base: Path, name: str) -> Path:
-    return base / "agents" / f"{name}.md"
+def role_config_path(base: Path, name: str) -> Path:
+    return base / "agents" / f"{name}.toml"
+
+
+def load_role_config(base: Path, role_name: str) -> dict[str, str] | None:
+    try:
+        payload = tomllib.loads(role_config_path(base, role_name).read_text(encoding="utf-8"))
+    except (FileNotFoundError, tomllib.TOMLDecodeError):
+        return None
+
+    if not isinstance(payload, dict):
+        return None
+
+    developer_instructions = payload.get("developer_instructions")
+    if not isinstance(developer_instructions, str) or not developer_instructions.strip():
+        return None
+
+    parsed: dict[str, str] = {
+        "developer_instructions": developer_instructions.strip(),
+    }
+    for key in ("model", "model_reasoning_effort"):
+        value = payload.get(key)
+        if value is None:
+            continue
+        if not isinstance(value, str) or not value.strip():
+            return None
+        parsed[key] = value.strip()
+    return parsed
 
 
 def now_iso() -> str:
@@ -204,6 +234,9 @@ def persist_runtime_update(
     merged_current = dict(current_run)
     merged_current.update(updates)
     merged_current["updated_at"] = str(updates.get("updated_at") or now_iso())
+    claim = build_runtime_claim(merged_current)
+    if claim is not None:
+        merged_current["claim"] = claim
     write_json(current_run_state_path(project_root), merged_current)
 
     run_state = merged_current.get("run_state")
@@ -216,8 +249,33 @@ def persist_runtime_update(
                 existing_run_state = existing_payload
         except (FileNotFoundError, json.JSONDecodeError):
             existing_run_state = {}
+        for key in (
+            "schema_version",
+            "run_id",
+            "ticket_id",
+            "ticket_path",
+            "phase",
+            "status",
+            "attempt",
+            "skill_name",
+            "compute_class",
+            "parallel_slots_reserved",
+            "executor_target",
+            "session_id",
+            "tmux_session",
+            "tmux_window",
+            "tmux_pane",
+            "auto_continue",
+            "next_phase",
+        ):
+            value = merged_current.get(key)
+            if value is not None:
+                existing_run_state[key] = value
         existing_run_state.update(updates)
         existing_run_state["updated_at"] = merged_current["updated_at"]
+        claim = build_runtime_claim(existing_run_state) or build_runtime_claim(merged_current)
+        if claim is not None:
+            existing_run_state["claim"] = claim
         write_json(run_state_path, existing_run_state)
 
     return merged_current
@@ -503,6 +561,7 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
         "approval_required": bool(frontmatter.get("approval_required", False)),
         "depends_on": list(frontmatter.get("depends_on", [])) if isinstance(frontmatter.get("depends_on", []), list) else [],
         "frontmatter_blocked_by": list(frontmatter.get("blocked_by", [])) if isinstance(frontmatter.get("blocked_by", []), list) else [],
+        "updated_at": str(frontmatter.get("updated_at", "")).strip(),
         "next_action": str(frontmatter.get("next_action", "")).strip(),
         "last_verification": str(frontmatter.get("last_verification", "")).strip(),
         "linked_docs": list(frontmatter.get("linked_docs", [])) if isinstance(frontmatter.get("linked_docs", []), list) else [],
@@ -878,7 +937,7 @@ def review_packet_gate(ticket: dict[str, object]) -> tuple[bool, str, list[str]]
     return True, "", []
 
 
-def validate_evidence_review(review: dict[str, object]) -> tuple[bool, str, list[str]]:
+def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[str]]:
     missing: list[str] = []
     required_scalar_fields = (
         "overall_score",
@@ -894,7 +953,7 @@ def validate_evidence_review(review: dict[str, object]) -> tuple[bool, str, list
             missing.append(field)
 
     if missing:
-        return False, "evidence reviewer omitted required gate fields", [f"missing gate field: {item}" for item in missing]
+        return False, "reviewer omitted required completion-gate fields", [f"missing gate field: {item}" for item in missing]
 
     failures: list[str] = []
     for field in ("evidence_quality", "integration_readiness", "traceability", "freshness"):
@@ -910,7 +969,7 @@ def validate_evidence_review(review: dict[str, object]) -> tuple[bool, str, list
                 failures.append(f"blocking_finding={item.strip()}")
 
     if failures:
-        return False, "evidence reviewer gates are not passing", failures
+        return False, "reviewer completion gates are not passing", failures
 
     return True, "", []
 
@@ -1108,43 +1167,6 @@ def run_ralph_judge(ticket: dict[str, object], worker_result: str, current_run: 
     return decide_ralph_transition(current_phase, ticket, parsed)
 
 
-def evidence_reviewer_prompt(
-    base: Path,
-    message: str,
-    ticket: dict[str, object],
-    current_run: dict[str, object] | None,
-    verdict: dict[str, object],
-) -> str:
-    ticket_snapshot = {
-        "ticket_id": ticket["ticket_id"],
-        "title": ticket["title"],
-        "phase": ticket["phase"],
-        "status": ticket["status"],
-        "next_action": ticket["next_action"],
-        "acceptance_gaps": ticket["acceptance_gaps"],
-        "evidence_gaps": ticket["evidence_gaps"],
-        "blockers": ticket["blockers"],
-        "review_packet": ticket["review_packet"],
-        "review_packet_missing": ticket["review_packet_missing"],
-        "review_packet_errors": ticket["review_packet_errors"],
-        "current_run": current_run or {},
-        "last_user_turn": (current_run or {}).get("last_user_turn", {}),
-        "last_intent_alignment": (current_run or {}).get("last_intent_alignment", ""),
-        "last_intent_alignment_reason": (current_run or {}).get("last_intent_alignment_reason", ""),
-        "last_intent_turn_id": (current_run or {}).get("last_intent_turn_id", ""),
-        "verdict": verdict,
-    }
-    return role_prompt_from_file(
-        base,
-        "evidence-reviewer",
-        "Context",
-        {
-            "latest_assistant_response": message,
-            "ticket": ticket_snapshot,
-        },
-    )
-
-
 def spawn_tmux_followup(
     base: Path,
     ticket: dict[str, object],
@@ -1264,7 +1286,7 @@ def summarize_role_action(ticket_id: str, role: str, action: str, reason: str) -
     return f"{role}: {ticket_id} -> {action} ({reason})"
 
 
-def role_command(base: Path, output_path: Path) -> list[str]:
+def role_command(base: Path, output_path: Path, role_config: dict[str, str]) -> list[str]:
     command = [
         "codex",
         "exec",
@@ -1280,8 +1302,6 @@ def role_command(base: Path, output_path: Path) -> list[str]:
         "never",
         "-c",
         "notify=[]",
-        "-c",
-        'developer_instructions=""',
         "--output-schema",
         str(schema_path()),
         "--output-last-message",
@@ -1289,9 +1309,18 @@ def role_command(base: Path, output_path: Path) -> list[str]:
         "-",
     ]
 
-    model = os.environ.get("CODEXTER_STOP_HOOK_MODEL", "").strip()
+    model = os.environ.get("CODEXTER_STOP_HOOK_MODEL", "").strip() or role_config.get("model", "")
     if model:
         command[2:2] = ["-m", model]
+
+    reasoning_effort = role_config.get("model_reasoning_effort", "")
+    if reasoning_effort:
+        command[2:2] = ["-c", f"model_reasoning_effort={json.dumps(reasoning_effort)}"]
+
+    command[2:2] = [
+        "-c",
+        f"developer_instructions={json.dumps(role_config['developer_instructions'])}",
+    ]
 
     return command
 
@@ -1369,7 +1398,11 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
     return parsed
 
 
-def run_role(base: Path, prompt: str) -> dict[str, object] | None:
+def run_role(base: Path, role_name: str, prompt: str) -> dict[str, object] | None:
+    role_config = load_role_config(base, role_name)
+    if role_config is None:
+        return None
+
     with tempfile.NamedTemporaryFile(
         prefix="codexter-stop-hook-",
         suffix=".json",
@@ -1380,7 +1413,7 @@ def run_role(base: Path, prompt: str) -> dict[str, object] | None:
     try:
         try:
             completed = subprocess.run(
-                role_command(base, output_path),
+                role_command(base, output_path, role_config),
                 input=prompt,
                 text=True,
                 capture_output=True,
@@ -1396,21 +1429,17 @@ def run_role(base: Path, prompt: str) -> dict[str, object] | None:
         output_path.unlink(missing_ok=True)
 
 
-def role_prompt_from_file(base: Path, role_name: str, context_label: str, payload: dict[str, object]) -> str:
-    instructions = agent_prompt_path(base, role_name).read_text(encoding="utf-8").strip()
-    return (
-        f"{instructions}\n\n"
-        f"{context_label}:\n"
-        f"{json.dumps(payload, ensure_ascii=True, indent=2)}\n"
-    )
+def role_prompt(context_label: str, payload: dict[str, object]) -> str:
+    return f"{context_label}:\n{json.dumps(payload, ensure_ascii=True, indent=2)}\n"
 
 
 def reviewer_prompt(
-    base: Path,
     message: str,
     ticket: dict[str, object],
     current_run: dict[str, object] | None,
     verdict: dict[str, object] | None,
+    *,
+    mode: str,
 ) -> str:
     ticket_snapshot = {
         "ticket_id": ticket["ticket_id"],
@@ -1422,17 +1451,25 @@ def reviewer_prompt(
         "evidence_gaps": ticket["evidence_gaps"],
         "blockers": ticket["blockers"],
         "current_run": current_run or {},
+        "claim": (current_run or {}).get("claim", {}),
         "last_user_turn": (current_run or {}).get("last_user_turn", {}),
         "last_intent_alignment": (current_run or {}).get("last_intent_alignment", ""),
         "last_intent_alignment_reason": (current_run or {}).get("last_intent_alignment_reason", ""),
         "last_intent_turn_id": (current_run or {}).get("last_intent_turn_id", ""),
         "verdict": verdict or {},
     }
-    return role_prompt_from_file(
-        base,
-        "reviewer",
+    if mode == "completion_gate":
+        ticket_snapshot.update(
+            {
+                "review_packet": ticket["review_packet"],
+                "review_packet_missing": ticket["review_packet_missing"],
+                "review_packet_errors": ticket["review_packet_errors"],
+            }
+        )
+    return role_prompt(
         "Context",
         {
+            "mode": mode,
             "latest_assistant_response": message,
             "ticket": ticket_snapshot,
         },
@@ -1452,7 +1489,7 @@ def orchestrator_prompt(base: Path, ticket: dict[str, object], verdict: dict[str
         "verdict": verdict or {},
         "board": board,
     }
-    return role_prompt_from_file(base, "orchestrator", "Context", payload)
+    return role_prompt("Context", payload)
 
 
 def continue_hook_response(
@@ -1488,7 +1525,7 @@ def run_orchestrator_decision(
     ticket: dict[str, object],
     verdict: dict[str, object] | None,
 ) -> int:
-    role_output = run_role(base, orchestrator_prompt(base, ticket, verdict, board_snapshot(home, project_root)))
+    role_output = run_role(base, "orchestrator", orchestrator_prompt(base, ticket, verdict, board_snapshot(home, project_root)))
     if role_output is None:
         append_hook_log(
             base,
@@ -1594,6 +1631,23 @@ def main() -> int:
             current_run,
             {"session_id": payload_session_id.strip()},
         )
+    runtime_claim = (
+        load_persisted_runtime_claim(project_root, current_run)
+        if project_root is not None
+        else None
+    )
+    if (
+        project_root is not None
+        and current_run is not None
+        and isinstance(runtime_claim, dict)
+        and runtime_claim
+        and current_run.get("claim") != runtime_claim
+    ):
+        current_run = persist_runtime_update(
+            project_root,
+            current_run,
+            {"claim": runtime_claim},
+        )
     raw_message = payload.get("last_assistant_message") or ""
     message = raw_message if isinstance(raw_message, str) else ""
     ralph_result = extract_ralph_result(message or raw_payload)
@@ -1688,6 +1742,9 @@ def main() -> int:
             "reason": alignment.get("reason"),
             "summary": alignment.get("summary"),
             "turn_id": alignment.get("turn_id"),
+            "claim_ticket_id": str((runtime_claim or {}).get("ticket_id") or ""),
+            "claim_run_id": str((runtime_claim or {}).get("run_id") or ""),
+            "claim_session_id": str((runtime_claim or {}).get("session_id") or ""),
             "expected_phase": alignment.get("expected_phase"),
             "observed_phase": alignment.get("observed_phase"),
         },
@@ -1843,63 +1900,73 @@ def main() -> int:
                     announce=f"Ralph phase accepted. Next: {next_phase or 'none'}",
                 )
 
-            evidence_review = run_role(base, evidence_reviewer_prompt(base, message, ticket, current_run, verdict))
-            if evidence_review is None:
+            review = run_role(
+                base,
+                "reviewer",
+                reviewer_prompt(
+                    message,
+                    ticket,
+                    current_run,
+                    verdict,
+                    mode="completion_gate",
+                ),
+            )
+            if review is None:
                 append_hook_log(
                     base,
                     {
                         "timestamp": now_iso(),
-                        "mode": "evidence-reviewer",
+                        "mode": "reviewer",
                         "ticket_id": str(ticket["ticket_id"]),
                         "outcome": "role_unavailable",
                     },
                 )
-                announce_message("Evidence reviewer unavailable. Stopping safely.")
-                return emit_stop_payload(system_message=f"Stop hook: {hook_summary}. Evidence reviewer unavailable.")
+                announce_message("Reviewer unavailable. Stopping safely.")
+                return emit_stop_payload(system_message=f"Stop hook: {hook_summary}. Reviewer unavailable.")
 
-            review_action = str(evidence_review["action"])
-            review_reason = str(evidence_review["reason"])
-            review_summary = summarize_role_action(str(ticket["ticket_id"]), "evidence-reviewer", review_action, review_reason)
+            review_action = str(review["action"])
+            review_reason = str(review["reason"])
+            review_summary = summarize_role_action(str(ticket["ticket_id"]), "reviewer", review_action, review_reason)
             append_hook_log(
                 base,
                 {
                     "timestamp": now_iso(),
-                    "mode": "evidence-reviewer",
+                    "mode": "reviewer",
                     "ticket_id": str(ticket["ticket_id"]),
                     "action": review_action,
                     "reason": review_reason,
-                    "overall_score": evidence_review.get("overall_score"),
-                    "evidence_quality": evidence_review.get("evidence_quality"),
-                    "integration_readiness": evidence_review.get("integration_readiness"),
-                    "traceability": evidence_review.get("traceability"),
-                    "freshness": evidence_review.get("freshness"),
-                    "rerun_required": evidence_review.get("rerun_required"),
-                    "blocking_findings": evidence_review.get("blocking_findings", []),
+                    "overall_score": review.get("overall_score"),
+                    "evidence_quality": review.get("evidence_quality"),
+                    "integration_readiness": review.get("integration_readiness"),
+                    "traceability": review.get("traceability"),
+                    "freshness": review.get("freshness"),
+                    "rerun_required": review.get("rerun_required"),
+                    "blocking_findings": review.get("blocking_findings", []),
                 },
             )
             current_run = publish_hook_status(project_root, current_run, decision=review_action, summary=review_summary)
-            evidence_review_ok, evidence_review_reason, evidence_review_failures = validate_evidence_review(evidence_review)
-            if not evidence_review_ok:
+            reviewer_gate_ok, reviewer_gate_reason, reviewer_gate_failures = validate_reviewer_gate(review)
+            if not reviewer_gate_ok:
                 continuation_message = (
-                    str(evidence_review.get("continuation_message", "")).strip()
-                    or f"Continue {ticket['ticket_id']} in building and resolve evidence-review failures: "
-                    + "; ".join(evidence_review_failures[:2])
+                    str(review.get("continuation_message", "")).strip()
+                    or f"Continue {ticket['ticket_id']} in building and resolve reviewer gate failures: "
+                    + "; ".join(reviewer_gate_failures[:2])
                 )
                 return continue_hook_response(
                     payload=payload,
                     ticket=ticket,
                     continuation_message=continuation_message,
                     hook_summary=review_summary,
-                    announce=evidence_review_reason,
+                    announce=reviewer_gate_reason,
                 )
             if review_action == "continue_same_ticket":
-                continuation_message = str(evidence_review.get("continuation_message", "")).strip() or build_reason(ticket)
+                continuation_message = str(review.get("continuation_message", "")).strip() or build_reason(ticket)
                 return continue_hook_response(
                     payload=payload,
                     ticket=ticket,
                     continuation_message=continuation_message,
                     hook_summary=review_summary,
-                    announce=str(evidence_review.get("speak", "")).strip() or review_reason,
+                    announce=str(review.get("speak", "")).strip() or review_reason,
                 )
             if review_action == "route_to_orchestrator":
                 return run_orchestrator_decision(
@@ -1911,13 +1978,23 @@ def main() -> int:
                     ticket=ticket,
                     verdict=verdict,
                 )
-            announce_message(str(evidence_review.get("speak", "")).strip() or review_reason)
+            announce_message(str(review.get("speak", "")).strip() or review_reason)
             return emit_stop_payload(system_message=f"Stop hook: {review_summary}")
         announce_message(f"Stopping for operator review. {reason}")
         return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
 
     if ralph_runtime_active and not ralph_result:
-        review = run_role(base, reviewer_prompt(base, message, ticket, current_run, None))
+        review = run_role(
+            base,
+            "reviewer",
+            reviewer_prompt(
+                message,
+                ticket,
+                current_run,
+                None,
+                mode="missing_result_review",
+            ),
+        )
         if review is None:
             append_hook_log(
                 base,

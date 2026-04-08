@@ -7,7 +7,14 @@
     "continuation_message",
     "speak",
     "next_ticket_id",
-    "next_phase"
+    "next_phase",
+    "overall_score",
+    "evidence_quality",
+    "integration_readiness",
+    "traceability",
+    "freshness",
+    "rerun_required",
+    "blocking_findings"
   ],
   "properties": {
     "action": {
@@ -45,31 +52,31 @@
       ]
     },
     "overall_score": {
-      "type": "number",
+      "type": ["number", "null"],
       "minimum": 1,
       "maximum": 5
     },
     "evidence_quality": {
-      "type": "string",
+      "type": ["string", "null"],
       "enum": ["pass", "fail"]
     },
     "integration_readiness": {
-      "type": "string",
+      "type": ["string", "null"],
       "enum": ["pass", "fail"]
     },
     "traceability": {
-      "type": "string",
+      "type": ["string", "null"],
       "enum": ["pass", "fail"]
     },
     "freshness": {
-      "type": "string",
+      "type": ["string", "null"],
       "enum": ["pass", "fail"]
     },
     "rerun_required": {
-      "type": "boolean"
+      "type": ["boolean", "null"]
     },
     "blocking_findings": {
-      "type": "array",
+      "type": ["array", "null"],
       "items": {
         "type": "string",
         "minLength": 1

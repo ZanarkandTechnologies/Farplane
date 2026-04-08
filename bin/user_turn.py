@@ -9,6 +9,17 @@ from typing import Mapping
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 INTENT_MODES = {"planning", "building", "documenting", "question", "backlog", "unknown"}
+CLAIM_PHASES = {"planning", "building", "documenting"}
+CLAIM_STATUSES = {
+    "pending",
+    "running",
+    "waiting_for_judge",
+    "waiting_for_worker",
+    "blocked",
+    "complete",
+    "failed",
+    "cancelled",
+}
 REQUESTED_OUTCOMES = {
     "ticket_plan",
     "code_change",
@@ -80,6 +91,55 @@ def load_current_run(project_root: Path) -> dict[str, object] | None:
     return payload if payload else None
 
 
+def build_runtime_claim(payload: Mapping[str, object]) -> dict[str, object] | None:
+    existing_claim = payload.get("claim")
+
+    def claim_value(key: str) -> str:
+        direct = payload.get(key)
+        if isinstance(direct, str) and direct.strip():
+            return direct.strip()
+        if isinstance(existing_claim, Mapping):
+            nested = existing_claim.get(key)
+            if isinstance(nested, str) and nested.strip():
+                return nested.strip()
+        return ""
+
+    ticket_id = claim_value("ticket_id")
+    run_id = claim_value("run_id")
+    if not ticket_id or not run_id:
+        return None
+
+    claimed_at = claim_value("claimed_at")
+    if not claimed_at:
+        claimed_at = str(payload.get("updated_at") or "").strip() or now_iso()
+
+    phase = claim_value("phase")
+    status = claim_value("status")
+    claim: dict[str, object] = {
+        "ticket_id": ticket_id,
+        "run_id": run_id,
+        "claimed_at": claimed_at,
+        "phase": phase if phase in CLAIM_PHASES else "building",
+        "status": status if status in CLAIM_STATUSES else "running",
+    }
+
+    for key in (
+        "ticket_path",
+        "skill_name",
+        "compute_class",
+        "executor_target",
+        "session_id",
+        "tmux_session",
+        "tmux_window",
+        "tmux_pane",
+    ):
+        value = claim_value(key)
+        if value:
+            claim[key] = value
+
+    return claim
+
+
 def persist_runtime_update(
     project_root: Path,
     current_run: dict[str, object],
@@ -88,14 +148,42 @@ def persist_runtime_update(
     merged_current = dict(current_run)
     merged_current.update(updates)
     merged_current["updated_at"] = str(updates.get("updated_at") or now_iso())
+    claim = build_runtime_claim(merged_current)
+    if claim is not None:
+        merged_current["claim"] = claim
     write_json(current_run_state_path(project_root), merged_current)
 
     run_state = merged_current.get("run_state")
     if isinstance(run_state, str) and run_state.strip():
         run_state_path = resolve_runtime_path(project_root, run_state)
         existing_run_state = load_json_dict(run_state_path)
+        for key in (
+            "schema_version",
+            "run_id",
+            "ticket_id",
+            "ticket_path",
+            "phase",
+            "status",
+            "attempt",
+            "skill_name",
+            "compute_class",
+            "parallel_slots_reserved",
+            "executor_target",
+            "session_id",
+            "tmux_session",
+            "tmux_window",
+            "tmux_pane",
+            "auto_continue",
+            "next_phase",
+        ):
+            value = merged_current.get(key)
+            if value is not None:
+                existing_run_state[key] = value
         existing_run_state.update(updates)
         existing_run_state["updated_at"] = merged_current["updated_at"]
+        claim = build_runtime_claim(existing_run_state) or build_runtime_claim(merged_current)
+        if claim is not None:
+            existing_run_state["claim"] = claim
         write_json(run_state_path, existing_run_state)
 
     return merged_current
@@ -352,3 +440,28 @@ def load_last_user_turn(
             return nested
 
     return None
+
+
+def load_runtime_claim(
+    project_root: Path,
+    current_run: dict[str, object] | None = None,
+) -> dict[str, object] | None:
+    current_payload = current_run or load_current_run(project_root)
+    if current_payload is None:
+        return None
+
+    claim = current_payload.get("claim")
+    if isinstance(claim, dict) and claim:
+        return claim
+
+    run_state = current_payload.get("run_state")
+    if isinstance(run_state, str) and run_state.strip():
+        run_state_payload = load_json_dict(resolve_runtime_path(project_root, run_state))
+        nested = run_state_payload.get("claim")
+        if isinstance(nested, dict) and nested:
+            return nested
+        derived_run_state = build_runtime_claim(run_state_payload)
+        if derived_run_state is not None:
+            return derived_run_state
+
+    return build_runtime_claim(current_payload)

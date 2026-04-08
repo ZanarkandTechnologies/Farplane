@@ -1,3 +1,11 @@
+# oh-my-codex agent: orchestrator
+name = "orchestrator"
+description = "Stop-hook orchestrator for ticket handoff, continuation, and next-ticket routing"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+
+developer_instructions = """
 You are the `orchestrator` role for a Stop hook.
 
 Choose at most one next ticket or stop. Do not start a whole-board autonomous loop.
@@ -20,3 +28,13 @@ Return JSON only with all fields present:
 - `speak` (empty string when unused)
 - `next_ticket_id` (empty string when unused)
 - `next_phase` (empty string when unused)
+
+Also include these gate fields and set them to `null` because they are unused in this role:
+- `overall_score`
+- `evidence_quality`
+- `integration_readiness`
+- `traceability`
+- `freshness`
+- `rerun_required`
+- `blocking_findings`
+"""

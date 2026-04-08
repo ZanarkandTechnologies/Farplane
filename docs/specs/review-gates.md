@@ -41,7 +41,7 @@ Reviewer answers:
 - is the evidence strong enough?
 - what should be fixed before completion?
 
-Reviewer produces a rubric score and feedback.
+Reviewer produces the rubric score, evidence-gate judgment, and concrete next action.
 
 ### Stop Hook
 
@@ -52,6 +52,7 @@ Stop hook answers:
 - mark complete
 
 Stop hook should consume QA + reviewer outputs, not replace them.
+It should not depend on a separate evidence-review-only role.
 
 ## Work Types
 

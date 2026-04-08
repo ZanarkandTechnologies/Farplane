@@ -131,7 +131,7 @@ def fixture_review_packet(
     blocking_findings = blocking_findings or []
     return f"""
 ## Review Packet
-- `reviewed_at:` 2026-04-05 00:00 +0100
+- `reviewed_at:` 2026-04-05 01:00 +0100
 - `rubrics_used:` ["evidence-quality", "integration-readiness"]
 - `overall_score:` {overall_score}
 - `overall_threshold:` {overall_threshold}
@@ -477,7 +477,18 @@ def main() -> int:
                 }
             )
 
-            # 3. planning payload replay should stop safely (stdout empty) if ticket is in review
+            # 3. planning payload replay should advance the same planning
+            # fixture into building. Reset the runtime fixture first so the
+            # case does not inherit hard-mismatch `last_user_turn` state from
+            # the prior explicit-ticket mismatch scenario.
+            plan_replay_run_state = fixture_root / "run-task-9996-plan-replay.json"
+            write_current_run_fixture(
+                current_run_path=current_run_path,
+                ticket_path=hook_planning_ticket,
+                ticket_id="TASK-9996",
+                phase="planning",
+                run_state_path=plan_replay_run_state,
+            )
             planning_payload = json.dumps(
                 {
                     "hook_event_name": "Stop",
@@ -492,7 +503,7 @@ def main() -> int:
                     **os.environ,
                     "CODEXTER_RALPH_HOOK": "1",
                     "CODEXTER_HOME": str(Path.home() / ".codex"),
-                    "RALPH_TICKET": "tickets/TASK-0003-codexter-evaluator-scorecard.md",
+                    "RALPH_TICKET": str(hook_planning_ticket),
                 },
                 input=planning_payload,
                 text=True,
@@ -857,8 +868,10 @@ def main() -> int:
     assert_case(
         results,
         name="hook_plan_payload",
-        predicate=lambda c: c["ok"] and str(c["stdout"]) == "",
-        message="plan payload should stop safely with no continuation payload",
+        predicate=lambda c: c["ok"]
+        and '"decision": "block"' in str(c["stdout"])
+        and "advance TASK-9996 to building" in str(c["stdout"]),
+        message="plan payload should emit the planning-to-building continuation payload",
     )
     assert_case(
         results,
