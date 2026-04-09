@@ -47,7 +47,7 @@ if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   exit 0
 fi
 
-link_path "$REPO_DIR/AGENTS.md" "$TARGET_DIR/AGENTS.md"
+link_path "$REPO_DIR/templates/global/AGENTS.md" "$TARGET_DIR/AGENTS.md"
 link_path "$REPO_DIR/PROJECT_RULES.md" "$TARGET_DIR/PROJECT_RULES.md"
 if [ -f "$REPO_DIR/hooks.json" ]; then
   link_path "$REPO_DIR/hooks.json" "$TARGET_DIR/hooks.json"

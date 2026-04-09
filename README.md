@@ -353,9 +353,12 @@ bash install.sh
 
 The installer:
 
+- links `templates/global/AGENTS.md` into `~/.codex/AGENTS.md`
 - links tracked files into `~/.codex`
 - seeds `config.toml` if missing
 - links `hooks.json` when present
+
+Inside this repo, root [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md) is now project-local context for working on Codexter itself, not the shipped global install artifact.
 
 ## Bootstrap Checklist
 

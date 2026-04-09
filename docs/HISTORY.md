@@ -36,3 +36,4 @@
 2026-04-08 19:01 +0100 | CHORE | audit README against recent review and stop-hook commits, point feature inventory at harness-techniques, and remove the stale hardcoded empty-queue claim
 2026-04-08 19:06 +0100 | FEAT | add a narrow canonical-doc parity validator plus test coverage, document the doc-gardening loop, and make README/spec/ticket surface drift mechanically checkable
 2026-04-09 03:22 +0100 | FEAT | collapse `ralplan` and `tech-impl-plan` into `impl-plan`, update the ticket template to support richer planning artifacts, and switch live planning/runtime references to the new single planner surface
+2026-04-09 03:53 +0100 | CHORE | split the shipped global AGENTS contract into `templates/global/AGENTS.md`, rewrite root `AGENTS.md` as Codexter-local context, and point `install.sh` plus `README.md` at the new boundary
