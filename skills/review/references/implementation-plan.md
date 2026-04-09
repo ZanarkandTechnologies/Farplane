@@ -4,6 +4,16 @@ Use when reviewing an implementation plan, technical approach, or execution sequ
 
 Threshold: `4.0`
 
+## Family Score Guide
+
+- `1`: a reviewer cannot trust the plan to produce the intended change safely
+- `2`: the direction is partly visible, but sequencing, proof, or boundaries
+  are still too thin to hand off with confidence
+- `3`: understandable and workable, but still ordinary, inference-heavy, or
+  carrying avoidable plan risk
+- `4`: strong, pragmatic, and approval-ready with only minor caveats
+- `5`: unusually clear, economical, and resistant to skeptical review
+
 ## Dimensions
 
 - `human-readability`
@@ -13,43 +23,90 @@ Threshold: `4.0`
 - `execution-order`
 - `risk-clarity`
 
-## Anchors
-
 ### `human-readability`
 
-- `1`: a human reader cannot quickly tell what will happen
-- `3`: the plan is understandable, but still somewhat dense or awkward to scan
-- `5`: the plan is fast to read, logically ordered, and obvious to a human reviewer
+Inspect: whether a human reviewer can scan the delta, flow, and proof path
+quickly.
+
+Ask:
+
+- Can a reviewer understand the change without rereading the whole ticket?
+- Is the plan doing clarity work, or making the reader decode dense prose?
 
 ### `bloatability`
 
-- `1`: the plan is bloated with unnecessary abstraction, ceremony, or speculative scope
-- `3`: mostly lean, but still carrying some avoidable structure
-- `5`: sharply focused on the minimum durable change that solves the request
+Inspect: whether the plan is the minimum durable change or is padded with
+speculative abstractions and ceremony.
+
+Ask:
+
+- Does the plan add abstraction because it is needed, or because it sounds architectural?
+- Is there hidden multi-commit scope pretending to be one slice?
 
 ### `modularity`
 
-- `1`: the plan encourages tangled responsibilities or unclear boundaries
-- `3`: modularity is mostly preserved, but some boundaries remain fuzzy
-- `5`: module boundaries and ownership are explicit and clean
+Inspect: touched areas, ownership boundaries, and whether responsibilities stay
+localized.
+
+Ask:
+
+- Are touched areas justified and coherent?
+- Would this plan tangle responsibilities or preserve clean ownership?
 
 ### `proof-clarity`
 
-- `1`: there is no believable proof path
-- `3`: verification exists in outline, but proof expectations are still thin
-- `5`: the proof path is concrete, economical, and hard to game
+Inspect: whether the proof path is observable, concrete, and hard to game.
+
+Ask:
+
+- Would a reviewer know exactly what to check when the work is done?
+- Are the proof points concrete enough to distinguish success from storytelling?
 
 ### `execution-order`
 
-- `1`: sequencing is unsafe, incoherent, or ignores dependencies
-- `3`: the sequence is workable, but not obviously the clearest route
-- `5`: the order is dependency-aware, pragmatic, and easy to execute
+Inspect: sequencing, dependency awareness, and safety of the proposed order.
+
+Ask:
+
+- Does the order reduce risk and coordination churn?
+- Is the plan trying to validate too late or in the wrong place?
 
 ### `risk-clarity`
 
-- `1`: major risks and weak assumptions are hidden
-- `3`: main risks are mentioned, but mitigation is still thin
-- `5`: weak assumptions, failure modes, and rollback points are explicit
+Inspect: named weak assumptions, failure modes, containment, and rollback.
+
+Ask:
+
+- What could go wrong first, and is it named?
+- If the approach fails, is rollback or containment obvious?
+
+## Evidence and Finding Cues
+
+- Weak evidence usually looks like plausible implementation prose with no
+  credible proof path or risk section.
+- Ordinary evidence usually has a believable main path, but proof and rollback
+  stay thin.
+- Strong evidence makes the delta, order, and proof points easy to check.
+- Exceptional evidence teaches the approach clearly while still staying lean.
+- Findings should name the missing proof point, sequencing hazard, or unearned
+  abstraction instead of saying the plan needs "more detail."
+
+## Example Judgments
+
+- `2.0` example:
+  the plan names touched files and a rough intention, but proof is "run tests"
+  with no concrete checks, rollback is missing, and sequencing still assumes the
+  implementer will figure out the risky parts.
+- `3.0` example:
+  the plan has a believable delta and execution order, but edge-case proof,
+  ownership boundaries, or risk mitigation still require some inference.
+- `4.0` example:
+  the plan makes `Before -> After`, touched areas, proof points, and rollback
+  easy to scan, and a reviewer can approve it without major caveats.
+- `5.0` example:
+  the plan is as clear as a strong internal design note while still staying
+  lean; it explains the tradeoff, the order, and the proof path so well that
+  very little interpretive judgment is left for the implementer.
 
 ## Review Packet Attachment
 

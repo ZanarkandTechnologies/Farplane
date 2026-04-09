@@ -1,6 +1,6 @@
 # Review Gates
 
-Date: 2026-04-07
+Date: 2026-04-09
 
 ## Goal
 
@@ -112,11 +112,24 @@ Reviewer output should use one normalized shape:
 
 All review families use the same anchored `1.0`-to-`5.0` scale:
 
-- `1`: failing, unsafe, contradictory, or largely absent
-- `3`: acceptable and directionally correct, but still ordinary or caveated
-- `5`: exemplary, persuasive, and hard to improve materially within scope
+- `1.0`: failing, unsafe, contradictory, or largely absent
+- `2.0`: partially relevant, but still weak enough that key claims depend on
+  reviewer inference, thin proof, or unresolved defects
+- `3.0`: acceptable and directionally correct, but still ordinary or caveated
+- `4.0`: strong, trustworthy, and pass-worthy with only minor caveats
+- `5.0`: exemplary, persuasive, and hard to improve materially within scope
 
-`2` and `4` are interpolation points between the written anchors.
+Calibration rules:
+
+- use `2.0` when there is some real work, but not enough trust to treat the
+  result as close to review-ready
+- use `4.0` only when a skeptical reviewer would defend the work as pass-worthy
+  without major caveats
+- reserve `5.0` for clearly above-bar work with positive evidence, not just
+  lack of obvious defects
+
+Detailed family references should add skeptic questions, evidence cues, and
+family-specific score guidance so adjacent bands are easier to separate.
 
 Detailed family anchors live in the per-family review references under:
 

@@ -5,6 +5,16 @@ Use when deciding whether work is actually safe to advance, merge, or hand off.
 Threshold: `4.0`
 Hard gate: required for any overall `pass`
 
+## Family Score Guide
+
+- `1`: advancing this work would be obviously unsafe or incoherent
+- `2`: the change might work, but trust is still too low because dependencies,
+  contracts, or blast radius remain materially unresolved
+- `3`: close to ready and directionally sound, but still carrying visible
+  readiness caveats
+- `4`: strong, safe enough to advance, and pass-worthy with only minor caveats
+- `5`: unusually well-contained, low-risk, and easy to hand off or merge
+
 ## Dimensions
 
 - `integration-safety`
@@ -13,37 +23,78 @@ Hard gate: required for any overall `pass`
 - `coupling-risk`
 - `merge-readiness`
 
-## Anchors
-
 ### `integration-safety`
 
-- `1`: merging or advancing this work is obviously unsafe
-- `3`: likely safe, but still carrying visible regression or rollout risk
-- `5`: integration risk is well understood and acceptably low
+Inspect: regression risk, rollout safety, and the consequences of advancing now.
+
+Ask:
+
+- What is the most likely breakage if this lands today?
+- Is the risk understood and acceptably contained?
 
 ### `contract-correctness`
 
-- `1`: interfaces, schemas, or assumptions are broken or ambiguous
-- `3`: contracts mostly hold, but some assumptions still need checking
-- `5`: interfaces and assumptions look correct and stable
+Inspect: interfaces, schemas, assumptions, and compatibility with neighboring
+surfaces.
+
+Ask:
+
+- Are interfaces and assumptions actually correct, or only unchallenged?
+- Is there a schema or contract edge that still depends on luck?
 
 ### `dependency-readiness`
 
-- `1`: required dependencies or follow-on surfaces are not actually ready
-- `3`: mostly ready, but still depending on some manual or implied coordination
-- `5`: dependencies are resolved, explicit, and ready to advance
+Inspect: whether required upstream/downstream pieces are ready and explicit.
+
+Ask:
+
+- What other surface has to be true for this to work?
+- Is that dependency real and ready, or just assumed?
 
 ### `coupling-risk`
 
-- `1`: hidden coupling or blast radius is high
-- `3`: some coupling risk remains, but it appears manageable
-- `5`: coupling is low or intentionally contained
+Inspect: blast radius, hidden coupling, and whether this change is localized.
+
+Ask:
+
+- Did this change quietly increase coupling or coordination burden?
+- Is the blast radius obvious and acceptable?
 
 ### `merge-readiness`
 
-- `1`: the work should not advance in its current state
-- `3`: close to ready, but still needing one more focused pass
-- `5`: ready to advance without reviewer caveats
+Inspect: whether a skeptical reviewer would actually allow the work to advance.
+
+Ask:
+
+- What would still make a reviewer say "one more pass first"?
+- Is there any unresolved issue that should stop advancement today?
+
+## Evidence and Finding Cues
+
+- Weak evidence usually looks like "it seems fine" without explicit dependency
+  or contract review.
+- Ordinary evidence usually suggests the change is close, but still leaves some
+  handoff or merge caveats visible.
+- Strong evidence makes safety, dependencies, and readiness easy to defend.
+- Exceptional evidence keeps blast radius low and handoff confidence high.
+- Findings should name the unresolved dependency, unsafe assumption, or coupling
+  risk that keeps the work out of a passing band.
+
+## Example Judgments
+
+- `2.0` example:
+  the feature appears to work locally, but it depends on an undocumented schema
+  assumption, a manual coordination step, or a neighboring surface that has not
+  actually been verified.
+- `3.0` example:
+  the change is probably safe, but one dependency, rollout caveat, or hidden
+  coupling concern still makes "one more pass first" the safer call.
+- `4.0` example:
+  dependencies are explicit, contracts look correct, blast radius is understood,
+  and a reviewer could defend advancing the change with only minor caveats.
+- `5.0` example:
+  the work is unusually well-contained, easy to merge or hand off, and leaves
+  very little uncertainty about safety or neighboring impact.
 
 ## Review Packet Attachment
 

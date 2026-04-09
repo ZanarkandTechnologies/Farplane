@@ -4,6 +4,15 @@ Use when reviewing recorded verification videos, loom-style walkthroughs, or sto
 
 Threshold: `3.5`
 
+## Family Score Guide
+
+- `1`: the video is too unclear, incomplete, or misleading to support review
+- `2`: some useful footage exists, but legibility, coverage, or faithfulness is
+  still weak enough that trust remains low
+- `3`: review-useful in the main path, but still ordinary, selective, or rough
+- `4`: strong and verification-friendly with only minor caveats
+- `5`: unusually clear, faithful, and efficient for skeptical review
+
 ## Dimensions
 
 - `legibility`
@@ -12,37 +21,62 @@ Threshold: `3.5`
 - `faithfulness`
 - `verification-value`
 
-## Anchors
-
 ### `legibility`
 
-- `1`: key states or interactions are difficult to see
-- `3`: mostly readable, with some rough framing or zoom decisions
-- `5`: easy to read, pause, and inspect
+Inspect: framing, zoom, clarity of key states, and whether the reviewer can
+actually see what matters.
+
+Ask:
+
+- Can I pause and inspect the important state clearly?
+- Are key interactions too small, too fast, or too blurry?
 
 ### `coverage`
 
-- `1`: the video skips the states that matter most
-- `3`: main states are shown, but some verification-relevant coverage is absent
-- `5`: it captures the important interactions and outcomes end to end
+Inspect: whether the video captures the interactions and states that matter most.
+
+Ask:
+
+- Does the video cover the important claims end to end?
+- What verification-relevant state is still skipped?
 
 ### `pacing`
 
-- `1`: too rushed or too slow to support verification
-- `3`: acceptable, but not yet optimized for reviewer comprehension
-- `5`: paced for efficient understanding and inspection
+Inspect: whether the sequence supports comprehension rather than spectacle.
+
+Ask:
+
+- Is the pacing optimized for review, or for presentation?
+- Does the timing hide weak states or make inspection harder?
 
 ### `faithfulness`
 
-- `1`: editing or framing makes the state of the product ambiguous
-- `3`: mostly faithful, with some ambiguity left
-- `5`: clearly faithful to the product state and run sequence
+Inspect: whether editing, framing, or narration makes the true product state
+ambiguous.
+
+Ask:
+
+- Does anything in the recording make the sequence less trustworthy?
+- Could a reviewer misunderstand what was actually run?
 
 ### `verification-value`
 
-- `1`: more marketing than proof
-- `3`: somewhat useful for proof, but still secondary to other evidence
-- `5`: directly useful as verification evidence
+Inspect: whether the video materially helps review or is mostly presentation.
+
+Ask:
+
+- Is this video proof, or just a nice artifact?
+- What review question can this video answer better than static evidence?
+
+## Evidence and Finding Cues
+
+- Weak evidence usually looks like marketing footage pretending to be proof.
+- Ordinary evidence usually shows the main flow but leaves some reviewer
+  questions unanswered.
+- Strong evidence is readable, faithful, and directly useful for verification.
+- Exceptional evidence makes skeptical review faster rather than harder.
+- Findings should name the missing state, illegible moment, or misleading edit
+  instead of praising the recording for existing at all.
 
 ## Review Packet Attachment
 

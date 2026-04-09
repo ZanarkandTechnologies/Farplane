@@ -4,6 +4,17 @@ Use when reviewing a spec, ticket contract, or user-story slice before implement
 
 Threshold: `4.0`
 
+## Family Score Guide
+
+- `1`: the contract solves the wrong problem, is incoherent as one unit of
+  work, or is unsafe to execute
+- `2`: the intended work is partly visible, but important scope, sequencing, or
+  proof still depends on reviewer inference
+- `3`: workable and directionally right, but still ordinary or caveated enough
+  that a builder would need to infer some boundaries
+- `4`: strong, clear, and approval-ready with only minor ambiguity left
+- `5`: unusually crisp, testable, and resilient to skeptical review
+
 ## Dimensions
 
 - `story-coherence`
@@ -12,37 +23,67 @@ Threshold: `4.0`
 - `acceptance-testability`
 - `scope-clarity`
 
-## Anchors
-
 ### `story-coherence`
 
-- `1`: the user story does not make sense as one unit of work or solves the wrong problem
-- `3`: the core story mostly makes sense, but some boundaries or intent still need inference
-- `5`: the user story is coherent, aligned to the request, and easy to execute as written
+Inspect: actor, need, outcome, and whether the slice solves one coherent
+problem.
+
+Ask:
+
+- Does this ticket describe one believable unit of user value?
+- Would two competent implementers infer the same target behavior?
 
 ### `parallelization-fit`
 
-- `1`: the proposed parallelization is fake, conflicting, or hides critical-path dependencies
-- `3`: some parallelization is plausible, but the split is not obviously the cleanest or safest
-- `5`: the proposed parallelization is real, dependency-aware, and improves throughput without coordination churn
+Inspect: whether any proposed split is real, dependency-aware, and worth the
+coordination cost.
+
+Ask:
+
+- Is the parallelization real, or is it fake concurrency hiding a critical path?
+- Would the proposed split create coordination churn or merge conflicts?
 
 ### `slice-sizing`
 
-- `1`: the slice is too large, too fragmented, or impossible to finish safely in one loop
-- `3`: the size is workable, but still carries some decomposition or overflow risk
-- `5`: the slice is well-bounded for one implementation/review loop
+Inspect: whether the ticket is small enough for one implementation/review loop
+without becoming trivial or fragmented.
+
+Ask:
+
+- Can one builder/reviewer loop finish this safely?
+- Is the slice too large, or artificially broken into micro-steps?
 
 ### `acceptance-testability`
 
-- `1`: success conditions are too vague to verify
-- `3`: the main path is testable, but edge states or proof expectations remain loose
-- `5`: acceptance criteria are concrete, observable, and hard to misread
+Inspect: whether success criteria are observable, concrete, and resistant to
+misreading.
+
+Ask:
+
+- Can a reviewer tell exactly what passing behavior looks like?
+- Are important edge states or proof requirements missing?
 
 ### `scope-clarity`
 
-- `1`: in-scope vs out-of-scope boundaries are missing enough to invite drift
-- `3`: most boundaries exist, but some interpretation is still required
-- `5`: non-goals, dependencies, and boundaries are explicit and enforceable
+Inspect: boundaries, dependencies, non-goals, and drift prevention.
+
+Ask:
+
+- Is in-scope versus out-of-scope explicit?
+- Are dependency assumptions and non-goals strong enough to prevent drift?
+
+## Evidence and Finding Cues
+
+- Weak evidence usually looks like a plausible title plus loose prose that
+  leaves actor, outcome, or boundaries implied.
+- Ordinary evidence usually defines the main path but still leaves edge cases,
+  proof shape, or split logic somewhat fuzzy.
+- Strong evidence makes the slice, boundaries, and acceptance checks easy to
+  restate without reinterpreting the ticket.
+- Exceptional evidence makes the contract hard to misread and easy to execute
+  across different implementers.
+- Findings should name the missing boundary, testable behavior, or split error
+  rather than saying the spec is merely "unclear."
 
 ## Review Packet Attachment
 

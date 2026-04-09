@@ -9,17 +9,67 @@ Use it to:
 - score each family consistently
 - write one `Review Packet` back into the ticket
 
-## Scoring Model
+## Shared Score Contract
 
 Score each family and dimension from `1.0` to `5.0`.
 
-- `1`: failing, unsafe, contradictory, or largely absent
-- `3`: acceptable and directionally correct, but still ordinary or caveated
-- `5`: exemplary, persuasive, and hard to improve materially within scope
+- `1.0`: failing, unsafe, contradictory, or largely absent
+- `2.0`: partially relevant, but still weak enough that key claims depend on
+  reviewer inference, thin proof, or unresolved defects
+- `3.0`: acceptable and directionally correct, but ordinary, caveated, or still
+  missing some confidence-building detail
+- `4.0`: strong, trustworthy, and pass-worthy with only minor caveats
+- `5.0`: exemplary, persuasive, and hard to improve materially within scope
 
-Interpolate `2` and `4` between the written anchors.
+Calibration rules:
+
+- start at `3.0` only if the work is genuinely workable and directionally right
+- move down to `2.0` when the work has some substance but the reviewer still
+  would not trust it without a focused follow-up pass
+- move up to `4.0` only when the reviewer would defend a pass to a skeptical
+  human without needing major caveats
+- reserve `5.0` for clearly above-bar work with visible positive evidence, not
+  merely absence of defects
 
 Each family has its own reference file. Read the selected family files before scoring.
+
+## Calibration Examples
+
+Use examples like these to separate adjacent bands:
+
+- `2.0` vs `3.0`:
+  `2.0` = the work has substance, but a skeptical reviewer still cannot trust
+  it without a focused repair pass.
+  Example: the main feature works in one happy-path screenshot, but edge-state
+  claims remain unproven and the write-up overstates confidence.
+  `3.0` = the work is believable and directionally correct, but still thin or
+  ordinary enough that another pass is warranted.
+  Example: the main path is covered and the delta is coherent, but evidence for
+  failure states or neighboring integrations remains incomplete.
+- `3.0` vs `4.0`:
+  `3.0` = the reviewer still needs to attach visible caveats to justify trust.
+  `4.0` = the reviewer would defend a pass to a skeptical human with only minor
+  caveats.
+  Example: every important claim maps to an artifact, the touched surfaces are
+  coherent, and the remaining issues are polish-level rather than trust-level.
+- `4.0` vs `5.0`:
+  `4.0` = strong and ready.
+  `5.0` = unusually strong, with visible positive evidence that the work is not
+  just acceptable but difficult to improve materially within scope.
+  Example: the implementation or evidence packet not only satisfies the ticket,
+  but also improves surrounding clarity, removes dead weight, or makes skeptical
+  review unusually easy.
+
+## Family Template
+
+Every family reference should provide:
+
+- what the family is judging
+- a family-level `1/2/3/4/5` score guide
+- dimensions
+- skeptic questions for each dimension
+- evidence cues
+- finding cues
 
 For each rubric family, return:
 
@@ -201,6 +251,8 @@ Always ask:
 
 - What would make a skeptical human reviewer reject this?
 - What claim is not actually proven?
+- Which dimension is keeping this score out of the next higher band?
+- What specific weakness makes this a `2` instead of a `3`, or a `4` instead of a `5`?
 - What hard gate is failing?
 - What is the lowest-scoring family and why?
 - What concrete next pass would raise the score above threshold?

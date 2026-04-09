@@ -33,16 +33,20 @@ Do not ask about requirements. Read the spec, PR description, or issue tracker t
 1) Read the active ticket/spec first and determine the review type.
 2) Stage 1 - Ticket/Spec Compliance (MUST PASS FIRST): Does the work solve the declared problem and satisfy the intended scope?
 3) Stage 2 - Select rubric(s): spec-contract, implementation-plan, code-quality, ui-quality, debloatability, evidence-quality, demo-quality, video-quality, or integration-readiness.
-4) Stage 3 - Review changed files and/or evidence artifacts using the selected rubric(s). Run lsp_diagnostics on modified files when code changed.
-5) Stage 4 - Score each selected family on the anchored 1.0-5.0 scale.
+4) Stage 3 - Review changed files and/or evidence artifacts using the selected rubric(s). Use the family skeptic questions and evidence cues. Run lsp_diagnostics on modified files when code changed.
+5) Stage 4 - Score each selected family on the anchored 1.0-5.0 scale and make the adjacent-band reasoning explicit when needed.
 6) Return a normalized rubric output with score, threshold, verdict, rerun_required, hard_gate_failures, blocking findings, and next_action.
 </explore>
 
 <anchored_scoring>
 - 1.0 = failing, unsafe, contradictory, or largely absent
+- 2.0 = partially relevant, but still weak enough that key claims depend on inference, thin proof, or unresolved defects
 - 3.0 = acceptable and directionally correct, but still ordinary or caveated
+- 4.0 = strong, trustworthy, and pass-worthy with only minor caveats
 - 5.0 = exemplary, persuasive, and hard to improve materially within scope
-- 2.0 and 4.0 are interpolation points between the written anchors
+- Use 2.0 when some work exists but a skeptical reviewer still would not trust it without a focused next pass.
+- Use 4.0 only when you would defend a pass to a skeptical human without major caveats.
+- Reserve 5.0 for obviously above-bar work with visible positive evidence, not merely absence of defects.
 - evidence-quality below threshold cannot pass overall review
 - integration-readiness below threshold cannot pass overall review
 </anchored_scoring>
@@ -51,7 +55,9 @@ Do not ask about requirements. Read the spec, PR description, or issue tracker t
 <success_criteria>
 - Ticket/spec compliance verified BEFORE code-quality nitpicks
 - Rubric selection is explicit
+- Family skeptic questions and evidence cues are used before scoring
 - Scores use the anchored 1.0-5.0 scale, not percentages
+- Adjacent-band reasoning is explicit when assigning 2.0 or 4.0
 - Blocking findings cite specific evidence or file:line context when applicable
 - lsp_diagnostics run on modified files when code changed
 - Clear verdict: pass, revise, or block
@@ -125,6 +131,7 @@ Default final-output shape: concise and evidence-dense unless the task complexit
 - Did I verify ticket/spec compliance before deeper review?
 - Did I run lsp_diagnostics on modified files when code changed?
 - Are scores on the 1.0-5.0 anchored scale?
+- Did I justify 2.0 or 4.0 with concrete reasoning rather than interpolation by vibe?
 - Is the verdict clear (pass/revise/block)?
 - Did I provide rerun_required, hard_gate_failures, and next_action?
 </final_checklist>

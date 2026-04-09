@@ -4,6 +4,16 @@ Use when reviewing a live demo script, narrated walkthrough, or interactive demo
 
 Threshold: `3.5`
 
+## Family Score Guide
+
+- `1`: the demo misrepresents the product or is too staged to trust
+- `2`: the demo shows something real, but still feels selective, under-proven,
+  or confusing enough that confidence remains low
+- `3`: believable and directionally useful, but still incomplete as reviewer
+  evidence
+- `4`: strong, trustworthy, and useful for review with only minor caveats
+- `5`: unusually faithful, realistic, and verification-friendly
+
 ## Dimensions
 
 - `fidelity`
@@ -12,37 +22,61 @@ Threshold: `3.5`
 - `trustworthiness`
 - `communication-clarity`
 
-## Anchors
-
 ### `fidelity`
 
-- `1`: the demo misrepresents the actual product
-- `3`: mostly faithful, but still somewhat selective or incomplete
-- `5`: honest and faithful to the current product state
+Inspect: whether the demo is honest about the actual product state.
+
+Ask:
+
+- Is the demo showing the real product behavior rather than a polished illusion?
+- Are any key limitations being hidden?
 
 ### `realism`
 
-- `1`: the flow is staged or fake enough to undermine trust
-- `3`: plausible, but still polished around important rough edges
-- `5`: realistic enough that a skeptical reviewer would believe it
+Inspect: whether the demonstrated flow resembles how a real user or operator
+would actually use the product.
+
+Ask:
+
+- Does this feel like a real workflow or a carefully staged best-case path?
+- Are rough edges selectively avoided?
 
 ### `workflow-coverage`
 
-- `1`: the important user flow is barely shown
-- `3`: the main path is shown, but key edges or outcomes are skipped
-- `5`: the important workflow is covered in a way that supports verification
+Inspect: whether the important flow and outcomes are shown end to end.
+
+Ask:
+
+- Does the demo cover the workflow the ticket claims to improve?
+- What important branch or outcome is still missing?
 
 ### `trustworthiness`
 
-- `1`: the demo invites doubt rather than confidence
-- `3`: generally believable, but still light on proof value
-- `5`: it materially increases confidence in the shipped behavior
+Inspect: whether the demo increases trust or leaves important doubts.
+
+Ask:
+
+- Would a skeptical reviewer believe this demonstration?
+- Does the demo materially improve confidence, or just look polished?
 
 ### `communication-clarity`
 
-- `1`: the viewer cannot tell what is being shown or why it matters
-- `3`: understandable, but somewhat cluttered or under-explained
-- `5`: easy to follow and clearly tied to the ticket claims
+Inspect: whether the viewer can follow what is being shown and why it matters.
+
+Ask:
+
+- Can the viewer tell what changed and why it matters?
+- Is the walkthrough cluttered, rushed, or under-explained?
+
+## Evidence and Finding Cues
+
+- Weak evidence usually looks like a polished presentation that proves little.
+- Ordinary evidence usually shows the main path but leaves some important review
+  value on the table.
+- Strong evidence feels faithful, realistic, and easy to map back to ticket claims.
+- Exceptional evidence is both convincing as a demo and useful as verification.
+- Findings should name the staged moment, missing workflow, or misleading
+  omission rather than saying the demo needs "more polish."
 
 ## Review Packet Attachment
 

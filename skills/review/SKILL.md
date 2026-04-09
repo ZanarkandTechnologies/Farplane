@@ -16,11 +16,23 @@ Packet` back into the ticket.
 
 This skill uses the anchored `1.0`-to-`5.0` review contract:
 
-- `1`: failing, unsafe, contradictory, or largely absent
-- `3`: acceptable and directionally correct, but still ordinary or caveated
-- `5`: exemplary, persuasive, and hard to improve materially within scope
+- `1.0`: failing, unsafe, contradictory, or largely absent
+- `2.0`: partially relevant work exists, but trust is low because key claims
+  still depend on inference, thin proof, or unresolved defects
+- `3.0`: acceptable and directionally correct, but still ordinary, caveated, or
+  incomplete in ways a skeptical reviewer would notice
+- `4.0`: strong and trustworthy with only minor caveats; good enough to pass a
+  `4.0` threshold when no hard gate fails
+- `5.0`: exemplary, persuasive, and hard to improve materially within scope
 
-`2` and `4` are interpolation points, not separate prose categories.
+Calibration rules:
+
+- score `2.0` when the work has moved beyond total failure but is still not
+  close to review-ready trust
+- score `4.0` only when you would defend the result to a skeptical human
+  reviewer without needing to add major caveats
+- score `5.0` sparingly; it should require obvious positive evidence, not mere
+  absence of defects
 
 ## First-Load Checklist
 
@@ -35,10 +47,12 @@ Ensure an agent can execute the core path after only reading this file.
   1. read the active ticket
   2. open the rubric index
   3. choose the matching rubric families
-  4. inspect relevant code/evidence only
-  5. score the ticket on the anchored `1.0`-to-`5.0` scale
-  6. write the `Review Packet`
-  7. return the scored verdict
+  4. open each selected family file and use its skeptic questions
+  5. inspect relevant code/evidence only
+  6. score each family on the anchored `1.0`-to-`5.0` scale
+  7. explain the findings that prevented a lower or higher adjacent score
+  8. write the `Review Packet`
+  9. return the scored verdict
 - Core decision branches:
   - planning -> `spec-contract` + `implementation-plan`
   - code/backend/api -> `code-quality` + `integration-readiness` + `evidence-quality`
@@ -50,7 +64,8 @@ Ensure an agent can execute the core path after only reading this file.
   - do not approve weak evidence or weak integration readiness
 - Outcome contract:
   - the active ticket contains a `Review Packet`
-  - the review returns anchored scores, verdict, rerun flag, hard-gate failures, blocking findings, and next action
+  - the review returns anchored scores, verdict, rerun flag, hard-gate
+    failures, blocking findings, and next action
 
 ## Documentation Index
 
@@ -72,10 +87,13 @@ Ensure an agent can execute the core path after only reading this file.
 2. Open `references/review-rubric-index.md`.
 3. Determine which rubric families apply.
 4. Open the reference file for each selected rubric family.
-5. Read the changed code and/or evidence artifacts relevant to those rubric families.
-6. Score the work against the selected rubric dimensions using the anchored `1.0`-to-`5.0` scale.
-7. Write a `Review Packet` into the ticket.
-8. Return:
+5. Read the changed code and/or evidence artifacts relevant to those rubric
+   families.
+6. Use the family skeptic questions and evidence cues to challenge the work.
+7. Score the work against the selected rubric dimensions using the anchored
+   `1.0`-to-`5.0` scale.
+8. Write a `Review Packet` into the ticket.
+9. Return:
    - overall score
    - overall threshold
    - verdict
@@ -97,6 +115,8 @@ Ensure an agent can execute the core path after only reading this file.
 - `block` is reserved for materially unsafe, off-target, or contradictory work.
 - `revise` is the default when the work is directionally correct but not yet ready.
 - Do not emit a score without evidence from inspected code, artifacts, or the ticket.
+- Do not assign `2.0` or `4.0` by vibes alone; explain what separates the
+  chosen score from the adjacent band.
 
 ## Agent Delegation
 
@@ -110,6 +130,7 @@ Read the active ticket first.
 Open references/review-rubric-index.md first.
 Determine which rubric families apply.
 Open the matching family reference files.
+Use the family skeptic questions, score guide, and evidence cues.
 Select the matching rubric families and score the work against them on the anchored 1.0-5.0 scale.
 
 Scope:
@@ -181,6 +202,7 @@ Return:
 - [ ] Ticket/spec compliance checked before code-quality nitpicks
 - [ ] Relevant code/evidence actually inspected
 - [ ] Scores use the anchored `1.0`-to-`5.0` scale, not percentages
+- [ ] `2.0` and `4.0` are justified with concrete reasoning, not interpolation by vibe
 - [ ] Verdict is explicit: `pass`, `revise`, or `block`
 - [ ] `rerun_required` is explicit
 - [ ] Completion-gate fields are explicit when evidence is in scope

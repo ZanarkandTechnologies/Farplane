@@ -4,6 +4,18 @@ Use when reviewing UI, interaction, layout, routing, or other visible product be
 
 Threshold: `4.0`
 
+## Family Score Guide
+
+- `1`: the interface is broken, generic in damaging ways, or misses the product
+  intent badly enough to fail review
+- `2`: some useful UI work exists, but the result still feels weak, under-baked,
+  or too generic to trust as a strong product surface
+- `3`: functional and directionally aligned, but still ordinary, uneven, or
+  underpowered against the intended quality bar
+- `4`: strong, intentional, and pass-worthy with only minor rough edges
+- `5`: distinctive, polished, and hard to improve materially within the stated
+  intent
+
 ## Dimensions
 
 - `originality`
@@ -12,37 +24,82 @@ Threshold: `4.0`
 - `functionality`
 - `fidelity-to-intent`
 
-## Anchors
-
 ### `originality`
 
-- `1`: obvious stock/default patterns dominate and the result feels generic
-- `3`: some custom decisions are visible, but the result still feels mostly familiar
-- `5`: deliberate design choices are evident and the work compares well against strong existing examples
+Inspect: evidence of deliberate design choices versus stock layouts, library
+defaults, or recognizable AI slop patterns.
+
+Ask:
+
+- Does a human designer's taste show up here, or just safe defaults?
+- What choices make this feel specific rather than templated?
 
 ### `design-quality`
 
-- `1`: the interface feels incoherent, generic, or visually broken
-- `3`: functional and acceptable, but still plain or uneven
-- `5`: cohesive, intentional, and distinct without drifting from product purpose
+Inspect: cohesion of layout, mood, hierarchy, typography, color, and imagery.
+
+Ask:
+
+- Does the interface feel like one product, or a pile of parts?
+- Is there a clear aesthetic direction, or just acceptable UI?
 
 ### `craft`
 
-- `1`: hierarchy, spacing, typography, color, or contrast are materially weak
-- `3`: fundamentals are mostly sound, with visible rough edges
-- `5`: execution is polished and consistent across states
+Inspect: spacing, hierarchy, color harmony, contrast, responsive behavior, and
+state polish.
+
+Ask:
+
+- Are the fundamentals solid across states and breakpoints?
+- Do rough edges distract from otherwise good ideas?
 
 ### `functionality`
 
-- `1`: users cannot reliably complete the main interaction
-- `3`: the core flow works, but some state clarity or interaction quality remains weak
-- `5`: the interface works clearly and stands up well against strong reference examples
+Inspect: interaction clarity, task completion, state communication, and obvious
+usability traps.
+
+Ask:
+
+- Can users complete the core flow without guessing?
+- Are broken states, missing affordances, or unclear transitions hurting trust?
 
 ### `fidelity-to-intent`
 
-- `1`: the visible result misses the spec, taste target, or neighboring product quality
-- `3`: broadly aligned, but still missing intended feel or emphasis
-- `5`: clearly matches the intended direction and adjacent product quality bar
+Inspect: whether the result actually matches the ticket, taste target, and
+surrounding product quality bar.
+
+Ask:
+
+- Does the visible output match the requested direction?
+- What is still missing from the intended feel, emphasis, or interaction model?
+
+## Evidence and Finding Cues
+
+- Weak evidence usually looks like a working interface that is still obviously
+  generic, visually inconsistent, or too rough to trust.
+- Ordinary evidence usually covers the task but lacks distinctiveness, polish,
+  or tight alignment to the intended feel.
+- Strong evidence shows deliberate design choices, clean execution, and clear
+  usability.
+- Exceptional evidence feels authored, cohesive, and hard to confuse with stock
+  output.
+- Findings should name the generic pattern, broken hierarchy, missing affordance,
+  or fidelity miss instead of praising the page for merely being functional.
+
+## Example Judgments
+
+- `2.0` example:
+  the screen technically works, but it still looks like stock components with
+  default spacing and weak hierarchy, so the result feels under-baked and generic.
+- `3.0` example:
+  the interface is usable and broadly aligned to the brief, but the visual
+  direction is still ordinary and some states or interactions feel uneven.
+- `4.0` example:
+  the UI has a clear aesthetic direction, strong hierarchy, and reliable task
+  completion, with only minor rough edges in polish or responsiveness.
+- `5.0` example:
+  the result feels authored rather than templated, compares well against strong
+  references, and shows both taste and execution strength across states.
 
 ## Review Packet Attachment
 
