@@ -37,6 +37,12 @@ Runtime state stays lightweight and machine-facing. The grouped `claim` object
 tracks the active ticket/run/session ownership for hook consumers, while
 `last_user_turn` carries the saved current-turn user ask.
 
+Runtime routing is session-first for parallel Codex usage:
+
+- explicit run-state selector when a managed lane exports one
+- hook `session_id` for lane-scoped session state
+- `.ralph/state/current-run.json` only as compatibility fallback / last-active pointer
+
 See [ralph-runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md) for the canonical decision table.
 
 ## Minimal Example

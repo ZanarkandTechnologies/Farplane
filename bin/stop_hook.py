@@ -35,8 +35,11 @@ from pathlib import Path
 from notify import announce_message
 from user_turn import (
     build_runtime_claim,
+    explicit_run_state_selector as resolve_explicit_run_state_selector,
     load_last_user_turn as load_persisted_last_user_turn,
+    load_current_run as load_selected_runtime_state,
     load_runtime_claim as load_persisted_runtime_claim,
+    persist_runtime_update as persist_selected_runtime_update,
     project_root_from_payload as resolve_project_root_from_payload,
 )
 
@@ -210,13 +213,17 @@ def current_run_state_path(project_root: Path) -> Path:
     return project_root / ".ralph" / "state" / "current-run.json"
 
 
-def load_current_run(project_root: Path) -> dict[str, object] | None:
-    path = current_run_state_path(project_root)
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except (FileNotFoundError, json.JSONDecodeError):
-        return None
-    return payload if isinstance(payload, dict) else None
+def load_current_run(
+    project_root: Path,
+    *,
+    session_id: str | None = None,
+    explicit_run_state: str | None = None,
+) -> dict[str, object] | None:
+    return load_selected_runtime_state(
+        project_root,
+        session_id=session_id,
+        explicit_run_state=explicit_run_state,
+    )
 
 
 def resolve_runtime_path(project_root: Path, raw: str) -> Path:
@@ -231,54 +238,7 @@ def persist_runtime_update(
     current_run: dict[str, object],
     updates: dict[str, object],
 ) -> dict[str, object]:
-    merged_current = dict(current_run)
-    merged_current.update(updates)
-    merged_current["updated_at"] = str(updates.get("updated_at") or now_iso())
-    claim = build_runtime_claim(merged_current)
-    if claim is not None:
-        merged_current["claim"] = claim
-    write_json(current_run_state_path(project_root), merged_current)
-
-    run_state = merged_current.get("run_state")
-    if isinstance(run_state, str) and run_state.strip():
-        run_state_path = resolve_runtime_path(project_root, run_state)
-        existing_run_state = {}
-        try:
-            existing_payload = json.loads(run_state_path.read_text(encoding="utf-8"))
-            if isinstance(existing_payload, dict):
-                existing_run_state = existing_payload
-        except (FileNotFoundError, json.JSONDecodeError):
-            existing_run_state = {}
-        for key in (
-            "schema_version",
-            "run_id",
-            "ticket_id",
-            "ticket_path",
-            "phase",
-            "status",
-            "attempt",
-            "skill_name",
-            "compute_class",
-            "parallel_slots_reserved",
-            "executor_target",
-            "session_id",
-            "tmux_session",
-            "tmux_window",
-            "tmux_pane",
-            "auto_continue",
-            "next_phase",
-        ):
-            value = merged_current.get(key)
-            if value is not None:
-                existing_run_state[key] = value
-        existing_run_state.update(updates)
-        existing_run_state["updated_at"] = merged_current["updated_at"]
-        claim = build_runtime_claim(existing_run_state) or build_runtime_claim(merged_current)
-        if claim is not None:
-            existing_run_state["claim"] = claim
-        write_json(run_state_path, existing_run_state)
-
-    return merged_current
+    return persist_selected_runtime_update(project_root, current_run, updates)
 
 
 def show_tmux_verdict(current_run: dict[str, object] | None, summary: str) -> None:
@@ -1618,18 +1578,27 @@ def main() -> int:
     home = codexter_home()
     project_root = project_root_from_payload(payload)
     base = runtime_root(home, project_root)
-    current_run = load_current_run(project_root) if project_root is not None else None
     payload_session_id = payload.get("session_id")
+    resolved_session_id = payload_session_id.strip() if isinstance(payload_session_id, str) and payload_session_id.strip() else None
+    explicit_run_state = resolve_explicit_run_state_selector(payload) or None
+    current_run = (
+        load_current_run(
+            project_root,
+            session_id=resolved_session_id,
+            explicit_run_state=explicit_run_state,
+        )
+        if project_root is not None
+        else None
+    )
     if (
         project_root is not None
         and current_run is not None
-        and isinstance(payload_session_id, str)
-        and payload_session_id.strip()
+        and resolved_session_id is not None
     ):
         current_run = persist_runtime_update(
             project_root,
             current_run,
-            {"session_id": payload_session_id.strip()},
+            {"session_id": resolved_session_id},
         )
     runtime_claim = (
         load_persisted_runtime_claim(project_root, current_run)
@@ -1711,8 +1680,7 @@ def main() -> int:
         or has_explicit_ticket_selector()
     )
     live_interactive_lane = (
-        isinstance(payload_session_id, str)
-        and bool(payload_session_id.strip())
+        resolved_session_id is not None
         and os.environ.get("CODEXTER_RALPH_TMUX_DRY_RUN", "").lower() not in {"1", "true", "yes", "on"}
     )
     if not ralph_runtime_active:

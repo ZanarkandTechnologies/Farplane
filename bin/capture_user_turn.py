@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import sys
 
-from user_turn import capture_user_turn, project_root_from_payload
+from user_turn import capture_user_turn, explicit_run_state_selector, project_root_from_payload
 
 
 def read_payload() -> dict[str, object]:
@@ -36,6 +36,8 @@ def main() -> int:
         raw_text=prompt,
         turn_id=str(payload.get("turn_id") or "").strip() or None,
         source="user_prompt_submit_hook",
+        session_id=str(payload.get("session_id") or "").strip() or None,
+        explicit_run_state=explicit_run_state_selector(payload) or None,
     )
     return 0
 

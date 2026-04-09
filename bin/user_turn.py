@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -66,6 +67,26 @@ def current_run_state_path(project_root: Path) -> Path:
     return project_root / ".ralph" / "state" / "current-run.json"
 
 
+def session_state_dir(project_root: Path) -> Path:
+    return project_root / ".ralph" / "state" / "sessions"
+
+
+def normalize_session_id(raw: str | None) -> str:
+    if not isinstance(raw, str):
+        return ""
+    return raw.strip()
+
+
+def session_state_filename(session_id: str) -> str:
+    sanitized = re.sub(r"[^A-Za-z0-9._-]+", "_", session_id.strip())
+    sanitized = sanitized.strip("._") or "session"
+    return f"{sanitized}.json"
+
+
+def session_state_path(project_root: Path, session_id: str) -> Path:
+    return session_state_dir(project_root) / session_state_filename(session_id)
+
+
 def load_json_dict(path: Path) -> dict[str, object]:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -86,9 +107,93 @@ def resolve_runtime_path(project_root: Path, raw: str) -> Path:
     return (project_root / candidate).resolve()
 
 
-def load_current_run(project_root: Path) -> dict[str, object] | None:
-    payload = load_json_dict(current_run_state_path(project_root))
-    return payload if payload else None
+def current_session_id(payload: Mapping[str, object] | None) -> str:
+    if payload is None:
+        return ""
+    direct = payload.get("session_id")
+    if isinstance(direct, str) and direct.strip():
+        return direct.strip()
+    claim = payload.get("claim")
+    if isinstance(claim, Mapping):
+        nested = claim.get("session_id")
+        if isinstance(nested, str) and nested.strip():
+            return nested.strip()
+    return ""
+
+
+def explicit_run_state_selector(payload: Mapping[str, object] | None = None) -> str:
+    if payload is not None:
+        for key in ("run_state", "ralph_run_state"):
+            value = payload.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+    raw = os.environ.get("RALPH_RUN_STATE", "").strip()
+    if raw:
+        return raw
+    return ""
+
+
+def _with_runtime_metadata(
+    payload: dict[str, object],
+    *,
+    session_id: str = "",
+    explicit_run_state: str = "",
+) -> dict[str, object]:
+    merged = dict(payload)
+    if explicit_run_state and "run_state" not in merged:
+        merged["run_state"] = explicit_run_state
+    if session_id and "session_id" not in merged:
+        merged["session_id"] = session_id
+    return merged
+
+
+def _matches_session(payload: Mapping[str, object] | None, session_id: str) -> bool:
+    if not session_id:
+        return True
+    return current_session_id(payload) == session_id
+
+
+def load_current_run(
+    project_root: Path,
+    *,
+    session_id: str | None = None,
+    explicit_run_state: str | None = None,
+) -> dict[str, object] | None:
+    normalized_session_id = normalize_session_id(session_id)
+    selected_run_state = explicit_run_state.strip() if isinstance(explicit_run_state, str) else ""
+
+    if selected_run_state:
+        payload = load_json_dict(resolve_runtime_path(project_root, selected_run_state))
+        return (
+            _with_runtime_metadata(
+                payload,
+                session_id=normalized_session_id,
+                explicit_run_state=selected_run_state,
+            )
+            if payload
+            else None
+        )
+
+    if normalized_session_id:
+        payload = load_json_dict(session_state_path(project_root, normalized_session_id))
+        if payload:
+            return _with_runtime_metadata(payload, session_id=normalized_session_id)
+
+    current_payload = load_json_dict(current_run_state_path(project_root))
+    if not current_payload:
+        return None
+
+    current_with_metadata = _with_runtime_metadata(current_payload, session_id=normalized_session_id)
+    if _matches_session(current_with_metadata, normalized_session_id):
+        return current_with_metadata
+
+    run_state = current_payload.get("run_state")
+    if isinstance(run_state, str) and run_state.strip():
+        nested = load_json_dict(resolve_runtime_path(project_root, run_state))
+        if nested and _matches_session(nested, normalized_session_id):
+            return _with_runtime_metadata(nested, session_id=normalized_session_id, explicit_run_state=run_state.strip())
+
+    return None
 
 
 def build_runtime_claim(payload: Mapping[str, object]) -> dict[str, object] | None:
@@ -151,7 +256,15 @@ def persist_runtime_update(
     claim = build_runtime_claim(merged_current)
     if claim is not None:
         merged_current["claim"] = claim
+
+    current_session = current_session_id(merged_current)
+    if current_session:
+        merged_current["session_id"] = current_session
+
     write_json(current_run_state_path(project_root), merged_current)
+
+    if current_session:
+        write_json(session_state_path(project_root, current_session), merged_current)
 
     run_state = merged_current.get("run_state")
     if isinstance(run_state, str) and run_state.strip():
@@ -393,10 +506,16 @@ def capture_user_turn(
     raw_text: str,
     turn_id: str | None,
     source: str,
+    session_id: str | None = None,
+    explicit_run_state: str | None = None,
     captured_at: str | None = None,
     only_if_missing: bool = False,
 ) -> dict[str, object] | None:
-    current_run = load_current_run(project_root)
+    current_run = load_current_run(
+        project_root,
+        session_id=session_id,
+        explicit_run_state=explicit_run_state,
+    )
     if current_run is None:
         return None
 

@@ -26,7 +26,7 @@ BIN_DIR = Path(__file__).resolve().parents[3] / "bin"
 if str(BIN_DIR) not in sys.path:
     sys.path.insert(0, str(BIN_DIR))
 
-from user_turn import build_runtime_claim, capture_user_turn
+from user_turn import build_runtime_claim, capture_user_turn, current_session_id, session_state_path
 
 
 def now_stamp() -> str:
@@ -162,6 +162,9 @@ def write_current_run(payload: dict[str, object], run_state: Path) -> None:
     if claim is not None:
         current_payload["claim"] = claim
     write_json(current_run_state_path(), current_payload)
+    session_id = current_session_id(payload)
+    if session_id:
+        write_json(session_state_path(root(), session_id), current_payload)
 
 
 def build_run_state(

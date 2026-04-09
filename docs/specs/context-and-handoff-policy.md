@@ -33,18 +33,29 @@ It must carry:
 
 ### Runtime State
 
-`.ralph/state/current-run.json` is runtime-only.
+`.ralph/state/sessions/{session_id}.json` is the preferred runtime lane surface
+when hook `session_id` is available.
+
+`.ralph/state/current-run.json` is runtime-only compatibility state.
 
 It may carry:
 
+- active claim for the current ticket/run/session
 - active ticket id/path
 - active phase
 - active session or pane id
+- active run-state path
 - latest captured current-turn user intent
 - latest intent-alignment result
 - latest worker result
 - latest judge/hook verdict
 - latest hook summary
+
+Lookup precedence should be:
+
+1. explicit run-state selector for a managed lane
+2. hook `session_id` mapped to a session state file
+3. `.ralph/state/current-run.json` as compatibility fallback
 
 It must not become the durable source of:
 
