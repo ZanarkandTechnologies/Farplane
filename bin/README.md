@@ -9,16 +9,21 @@ transitional runtime helpers from the earlier Ralph prototype.
 
 Primary control plane:
 
-- `ralplan`
+- `impl-plan`
 - `$impl`
 - worker lanes such as `ralph`
 - `stop_hook.py`
+
+Stop-hook role instructions are canonical TOML configs under `agents/`.
+`stop_hook.py` reads those TOML files directly and injects their exact
+`developer_instructions` into `codex exec`.
 
 The `bin/` directory is now mostly shim/utility territory, not the main
 orchestration story.
 
 ## Entrypoints
 
+- `check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `notify.py` - local notification helper
 - `stop_hook.py` - thin stop-hook/runtime shim
@@ -27,6 +32,10 @@ orchestration story.
 
 - `stop_hook.py`: keep
 - `capture_user_turn.py`: keep
+
+Runtime state stays lightweight and machine-facing. The grouped `claim` object
+tracks the active ticket/run/session ownership for hook consumers, while
+`last_user_turn` carries the saved current-turn user ask.
 
 See [ralph-runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md) for the canonical decision table.
 
@@ -57,9 +66,13 @@ already advanced.
 
 ## How To Test
 
+- `python3 bin/check_doc_parity.py`
+- `python3 -m unittest bin/test_doc_parity.py`
 - `python3 -m py_compile bin/stop_hook.py`
 - `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py`
+- `python3 -m py_compile bin/check_doc_parity.py bin/test_doc_parity.py`
 - `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
+- `python3 -m unittest discover -s bin -p 'test_*.py'`
 - `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`
 - `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run`
 - `python3 skills/impl/scripts/tmux_helper.py status`

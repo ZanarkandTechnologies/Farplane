@@ -35,7 +35,7 @@ Ralph v2 should not be:
 Today the repo already has:
 
 - good ticket/spec discipline
-- a bounded `ralplan` / `ralph` execution model
+- a bounded `impl-plan` / `ralph` execution model
 - a judge and Stop-hook loop
 - tmux visibility for real interactive Codex lanes
 - centralized lane inspection through the `impl` tmux helper status surface
@@ -46,8 +46,7 @@ Today the repo does not yet have:
 - claim/worktree coordination for parallel tickets
 - a fully normalized evaluator/review loop
 - an archive surface for fully processed tickets
-- a cleaned-up planning surface with no overlap between `ralplan` and
-  `tech-impl-plan`
+- a cleaned-up execution surface with no overlap between `impl` and `ralph`
 
 ## Product Stance
 
@@ -150,10 +149,10 @@ The intended long-form loop is:
 Important separation:
 
 - spec decomposition belongs before ticket execution
-- `ralplan` should plan one selected ticket
+- `impl-plan` should plan one selected ticket
 - `ralph` should execute one selected ticket
 
-`ralplan` should not be the thing that explodes a broad spec into many tickets.
+`impl-plan` should not be the thing that explodes a broad spec into many tickets.
 
 ## Minimal Parallelism Model
 
@@ -205,19 +204,17 @@ Recommended split:
 
 ## Planning Surface Simplification
 
-Current overlap:
+The planning surface is now `impl-plan`.
+It should stay ticket-focused and keep consensus challenge as a mode instead of
+reintroducing a second public planner.
 
-- `tech-impl-plan`
-- `ralplan`
+Remaining naming overlap:
 
-Recommended v2 direction:
+- `impl`
+- `ralph`
 
-- collapse them into one planner with two modes, or
-- sharply separate them into:
-  - human-facing approval plan
-  - machine-facing ticket execution plan
-
-The repo should not keep two planner surfaces that feel like the same thing.
+The repo should next decide whether execution should also collapse to one public
+name, or whether the distinction is load-bearing enough to keep.
 
 ## Review Loop Direction
 
@@ -293,9 +290,10 @@ timeout assumption.
 The repo should define when to move tickets from `tickets/` to
 `tickets/archive/` and which states count as fully processed.
 
-### 3. Planner overlap needs simplification
+### 3. Execution-surface overlap needs simplification
 
-`ralplan` and `tech-impl-plan` need a clear consolidation or separation pass.
+`impl` and `ralph` still overlap in naming and operator mental model even
+though their behavior is not identical.
 
 ## Recommended Next Ticket Buckets
 
@@ -304,7 +302,7 @@ These should become tickets next, in roughly this order:
 1. `v2 direction accepted + ticketization pass`
 2. `archive completed tickets policy + tickets/archive/ surface`
 3. `stop-hook timeout verification/fix`
-4. `planner surface simplification`
+4. `execution surface simplification`
 5. `dispatcher v0`:
    - claim field
    - next-ready selector

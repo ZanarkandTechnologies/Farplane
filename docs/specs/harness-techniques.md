@@ -7,8 +7,8 @@ Date: 2026-04-07
 Catalog the main techniques Codexter uses today and the highest-value
 techniques it is likely to adopt next.
 
-This document is a current-state inventory first. It is not a generic harness
-wishlist.
+This document is the repo's current-state feature inventory first. It is not a
+generic harness wishlist.
 
 ## Status Legend
 
@@ -23,6 +23,7 @@ This inventory is grounded in:
 - root `AGENTS.md`
 - `README.md`
 - `docs/specs/*`
+- `tickets/README.md`
 - harness skills under `skills/`
 - subagent prompts under `agents/`
 - `hooks.json` and `bin/stop_hook.py`
@@ -39,8 +40,7 @@ This inventory is grounded in:
 | Discovery funnel before execution | Implemented | `skills/brainstorm`, `skills/deep-interview`, `skills/prd`, `README.md` | Pushes ambiguity reduction ahead of build work | still depends on operator choosing the right intake skill |
 | Spec-first before ticket execution | Implemented | `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps execution downstream of clarified specs | broad spec quality still determines downstream ticket quality |
 | Ticketization with proof/testability front-loaded | Implemented | `skills/spec-to-ticket`, `tickets/templates/ticket.md` | Converts intent into executable work with proof expectations early | ticket quality varies with planning rigor |
-| Per-ticket planning instead of whole-spec replanning | Implemented | `skills/ralplan`, `docs/specs/spec-first-execution-loop.md` | Keeps planning bounded to one work package | planner surface overlap with `tech-impl-plan` is still unresolved |
-| Approval-first implementation planning | Implemented | `skills/tech-impl-plan` | Adds compact `Req / Bet / Win`, `B -> A`, proof, and review before execution | separation from `ralplan` is conceptually blurry today |
+| Unified per-ticket planning via `impl-plan` | Implemented | `skills/impl-plan`, `docs/specs/spec-first-execution-loop.md` | Keeps planning bounded to one work package while keeping approval-first planning and consensus challenge in one public surface | default vs consensus mode still needs tight examples so richer detail does not become policy bloat |
 
 ### Execution and orchestration
 
@@ -60,6 +60,7 @@ This inventory is grounded in:
 | QA separated from implementor | Implemented | `agents/qa-tester.toml`, `docs/specs/review-gates.md` | Reduces self-approval and gathers independent evidence | strongest for UI/browser work today |
 | Evidence-check as a separate skepticism lane | Implemented | `docs/specs/orchestrator-subagent-loop.md`, `skills/impl` | Catches overconfident QA and weak artifacts | dedicated evidence-check implementation is still light |
 | Rubric-driven review | Implemented | `skills/review`, `skills/review/references/*`, `docs/specs/review-gates.md` | Prevents “looks fine” review and pushes explicit pass/revise/block outputs | consistent write-back across all work types still needs more use |
+| Ticket `Review Packet` completion gate | Implemented | `tickets/templates/ticket.md`, `docs/specs/review-gates.md`, `docs/MEMORY.md` | Prevents checklist theater or stale evidence from counting as completion | depends on each active ticket carrying a fresh, traceable packet |
 | Visual QA as a judgment-only layer | Implemented | `skills/visual-qa`, `agents/qa-tester.toml` | Keeps UI judgment separate from browser driving and implementation | depends on strong ticket contracts and good evidence capture |
 | Testability instrumentation as planned work | Implemented | `skills/spec-to-ticket`, `agents/qa-tester.toml` | Treats missing deterministic hooks as a planning failure, not a QA surprise | instrumentation quality varies by ticket |
 | Application UI made legible to the agent | Implemented | `skills/agent-browser`, `agents/qa-tester.toml`, `skills/visual-qa` | Lets agents inspect screenshots, DOM state, and browser behavior directly instead of relying on prose | stronger than before, but not yet paired with a full local observability loop |
@@ -70,7 +71,8 @@ This inventory is grounded in:
 | --- | --- | --- | --- | --- |
 | Durable memory split by purpose | Implemented | `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, root `AGENTS.md` | Separates change log, invariants, and repeated misses | relies on disciplined promotion/writeback |
 | Progressive disclosure of context | Implemented | short `AGENTS.md`, `docs/specs/*`, skill references, tickets | Starts agents from a small stable entry point and teaches where to look next | not yet mechanically checked for freshness or cross-link quality |
-| Stop-hook continuation and judgment | Implemented | `hooks.json`, `bin/stop_hook.py`, `agents/orchestrator.md` | Gives visible turn-boundary continuation logic instead of pure transcript intuition | continuation policy is still being simplified and hardened |
+| Stop-hook continuation and judgment | Implemented | `hooks.json`, `bin/stop_hook.py`, `agents/orchestrator.toml`, `agents/reviewer.toml` | Gives visible turn-boundary continuation logic instead of pure transcript intuition | continuation policy is still being simplified and hardened |
+| Current-turn intent relevance gate | Implemented | `bin/capture_user_turn.py`, `bin/stop_hook.py`, `docs/specs/context-and-handoff-policy.md`, `docs/MEMORY.md` | Keeps continuation and completion decisions anchored to the user's current ask instead of stale worker momentum | degraded fallback still exists when input-hook capture is missing |
 | Explicit ticket selectors outrank ambient state | Implemented | `docs/MEMORY.md`, `bin/stop_hook.py`, `docs/HISTORY.md` | Prevents stale run state from hijacking the wrong ticket | still mainly a runtime safety rule, not a full dispatcher model |
 | Lightweight runtime visibility | Partial | `skills/impl/scripts/tmux_helper.py`, `README.md`, `docs/specs/ralph-runtime-surface.md` | Exposes active lane/session/verdict without a heavyweight runtime plane | queue-wide runtime state remains minimal by design |
 
@@ -98,7 +100,7 @@ This inventory is grounded in:
 
 | Technique | Status | Delta from current system | Why it is promising | Suggested eval |
 | --- | --- | --- | --- | --- |
-| Planner-surface simplification | Proposed | `tech-impl-plan` and `ralplan` overlap conceptually today | Reduces confusion about when a plan is approval-facing vs execution-facing | classify 10 planning requests and see if routing becomes clearer |
+| Execution-surface simplification | Proposed | `impl` and `ralph` are still both public execution surfaces and the naming overlap remains confusing | Reduces confusion about when to use the build orchestrator vs the persistence loop | classify current `impl` vs `ralph` asks and test whether one public execution name can absorb the other cleanly |
 | Harder evidence-quality enforcement in Stop hook | Proposed | Stop-hook judgment exists, but stricter machine-readable evidence thresholds are still a direction more than a finished system | Tightens the highest-leverage harness lever: completion policy | replay smoke cases with stronger evidence-fail paths |
 | One main artifact for subagent grounding | Proposed | Tickets are durable memory already, but not every loop treats one file as the strict context anchor | Reduces context rot and ambiguous handoffs | require subagents to summarize the ticket before acting on one ticket run |
 | User-input-to-output impressed-user check | Proposed | user request is present in chat, but not normalized into a reusable final review artifact | Creates a direct loop between intake and final judgment | save original ask in the ticket or run artifact, then score final output against it |

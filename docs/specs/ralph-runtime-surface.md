@@ -16,7 +16,7 @@ This spec answers two questions:
 
 The primary control plane is now:
 
-- `ralplan` for ticket planning
+- `impl-plan` for ticket planning
 - `$impl` for build-phase orchestration
 - worker lanes such as `ralph` where a persistent build loop is useful
 - `stop_hook.py` for continuation/completion decisions
@@ -37,7 +37,7 @@ Those are prototype or transitional surfaces.
 | `notify.py` | `keep` | local utility with no orchestration overlap |
 | `tickets/scripts/check_ticket_metadata.py` | `keep` | canonical validator for the ticket surface and lives with the ticket system it validates |
 | `stop_hook.py` | `keep` | thin runtime shim that evaluates stop events, judges worker results, and handles re-entry decisions |
-| `skills/impl/scripts/tmux_helper.py` | `keep` | skill-local operator visibility and lane recovery helper, not the control plane |
+| `skills/impl/scripts/tmux_helper.py` | `keep` | skill-local operator visibility and lane recovery helper, not the control plane; it also writes the active runtime claim used by stop-hook consumers |
 | `ralph_orchestrate.py` | `retired` | superseded by `$impl`; removed from `bin/` once no live surfaces depended on it |
 | `ralph_worker.sh` | `retired` | old phase-launch wrapper removed in favor of direct prompt/`codex exec` worker lanes |
 | `export_omx_team_input.py` | `retired` | removed with the OMX bridge path because it is not part of the current skill-first runtime |

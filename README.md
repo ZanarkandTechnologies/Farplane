@@ -10,10 +10,11 @@ The core idea is simple:
 - `deep-interview` sharpens vague inputs into clear product requirements
 - humans think in specs and tickets
 - `spec-to-ticket` turns a coherent spec into dependency-linked work items
-- `ralplan` plans one selected ticket for execution
+- `impl-plan` plans one selected ticket for execution
 - `$impl` orchestrates one selected ticket through builder/reviewer/QA/evidence-check lanes
+- the reviewer writes an anchored rubric-based `Review Packet`
 - worker lanes such as `ralph` implement the selected ticket and gather evidence
-- a `Stop` `hook` judges the evidence
+- a `Stop` `hook` judges the evidence and current-turn intent alignment
 - the orchestrator decides whether to repeat, advance, block, complete, or move to the next ready ticket
 
 ## One Picture
@@ -24,7 +25,7 @@ flowchart LR
     B --> C[spec]
     C --> D[spec-to-ticket]
     D --> E[ready ticket set]
-    E --> F[ralplan]
+    E --> F[impl-plan]
     F --> G[$impl]
     G --> H[worker lanes]
     H --> I[QA / review evidence]
@@ -70,7 +71,7 @@ The key output is:
 
 This is per-ticket, not per-spec.
 
-- `ralplan` plans one selected ticket for execution
+- `impl-plan` plans one selected ticket for execution
 - the ticket should end this phase with a concrete execution plan and proof target
 
 Important boundary:
@@ -154,7 +155,7 @@ flowchart LR
     C --> D[prd/specs]
     D --> E[spec-to-ticket]
     E --> F[ready ticket set]
-    F --> G[ralplan]
+    F --> G[impl-plan]
     G --> H[$impl]
     H --> I[worker lanes]
 ```
@@ -166,7 +167,7 @@ flowchart TD
     A[customer call transcript] --> B[specs]
     B --> C[dependency-linked SLC tickets]
     C --> D[ready unblocked ticket set]
-    D --> E[ralphplan]
+    D --> E[impl-plan]
     E --> F[$impl on one selected ticket]
     F --> G[builder / review / qa lanes]
     G --> H[QA / review evidence]
@@ -191,7 +192,7 @@ Minimal interpretation:
 ```mermaid
 flowchart TD
     A[bug report] --> B[one ticket]
-    B --> C[ralphplan]
+    B --> C[impl-plan]
     C --> D[$impl]
     D --> E[worker lanes]
     E --> F[QA subagent]
@@ -264,6 +265,8 @@ The current prototype is narrower:
 - single-ticket `$impl`-style orchestration is now the intended public direction
 - single-ticket bounded Ralph loops are still the main worker/runtime surface
 - live Stop-hook continuation is real
+- anchored review rubrics and ticket `Review Packet` gates are real
+- current-turn intent capture now feeds Stop-hook relevance checks
 - tmux visibility is real
 - board-wide dispatch and archival are still future slices
 
@@ -272,10 +275,13 @@ The current prototype is narrower:
 - Specs: [docs/specs](/Users/kenjipcx/coding-harness/Codexter/docs/specs)
 - Current execution spec: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
 - V2 direction: [ralph-v2-direction.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-v2-direction.md)
-- Front-end skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview)
-- Runtime skills: [skills/ralplan](/Users/kenjipcx/coding-harness/Codexter/skills/ralplan), [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/ralph](/Users/kenjipcx/coding-harness/Codexter/skills/ralph), [skills/docs-closeout](/Users/kenjipcx/coding-harness/Codexter/skills/docs-closeout)
+- Intake skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview), [skills/prd](/Users/kenjipcx/coding-harness/Codexter/skills/prd)
+- Ticketization: [skills/spec-to-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket)
+- Planning: [skills/impl-plan](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan)
+- Execution and review skills: [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/ralph](/Users/kenjipcx/coding-harness/Codexter/skills/ralph), [skills/review](/Users/kenjipcx/coding-harness/Codexter/skills/review), [skills/docs-closeout](/Users/kenjipcx/coding-harness/Codexter/skills/docs-closeout)
+- Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Runtime scripts: [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
-- Active queue: none currently; the next slice should be opened as a new ticket
+- Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets) is the live board; do not rely on hardcoded queue summaries here
 - Archived prototypes/history: [archive](/Users/kenjipcx/coding-harness/Codexter/tickets/archive)
 - Experiments: [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)
 
@@ -289,7 +295,7 @@ Main live techniques today:
 
 - discovery-first intake before execution
 - spec-first ticketization with proof/testability contracts
-- per-ticket planning via `ralplan` and approval-first planning via `tech-impl-plan`
+- per-ticket planning via `impl-plan`, with approval-first default mode and consensus mode when stronger challenge is needed
 - single-ticket orchestration via `$impl`
 - separated builder, reviewer, QA, and evidence-check roles
 - Stop-hook judgment as the final continuation/completion gate
@@ -303,9 +309,12 @@ so the repo does not blur current behavior with future ideas.
 
 What is proven:
 
-- `ralphplan` dry-run advances to `building`
+- planning now routes through one public planner surface: `impl-plan`
 - `ralph` with missing evidence gets repeated
+- review now uses anchored rubric families plus hard `evidence-quality` and `integration-readiness` gates
+- ticket `Review Packet` state is part of Ralph completion gating
 - project-local `current-run.json` is enough for replay-level hook selection
+- current-turn user intent can be captured and used for Stop-hook relevance checks
 - real Codex sessions now fire the `Stop` `hook`
 - live sessions can produce `hook: Stop Blocked`
 - tmux-backed Ralph lanes can run as real interactive Codex sessions

@@ -63,7 +63,7 @@
     },
     "skill_name": {
       "type": "string",
-      "enum": ["ralplan", "ralph", "docs-closeout"]
+      "enum": ["impl-plan", "ralph", "docs-closeout"]
     },
     "compute_class": {
       "type": "string",
@@ -108,6 +108,84 @@
     "last_hook_timestamp": {
       "type": "string",
       "format": "date-time"
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ticket_id",
+        "run_id",
+        "claimed_at",
+        "phase",
+        "status"
+      ],
+      "properties": {
+        "ticket_id": {
+          "type": "string",
+          "pattern": "^TASK-\\d{4}$"
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claimed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "phase": {
+          "type": "string",
+          "enum": [
+            "planning",
+            "building",
+            "documenting"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "running",
+            "waiting_for_judge",
+            "waiting_for_worker",
+            "blocked",
+            "complete",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "ticket_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "skill_name": {
+          "type": "string",
+          "enum": ["impl-plan", "ralph", "docs-closeout"]
+        },
+        "compute_class": {
+          "type": "string",
+          "enum": [
+            "local",
+            "local_worktree",
+            "remote_vm",
+            "remote_container"
+          ]
+        },
+        "executor_target": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "tmux_session": {
+          "type": "string"
+        },
+        "tmux_window": {
+          "type": "string"
+        },
+        "tmux_pane": {
+          "type": "string"
+        }
+      }
     },
     "last_user_turn": {
       "type": "object",

@@ -36,7 +36,7 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 ## Progress Surface Policy
 
 - the ticket is the canonical durable progress surface
-- `.ralph/state/` is runtime-only and may track active lane/session/verdict state
+- `.ralph/state/` is runtime-only and may track active claim/lane/session/verdict state
 - transcripts are useful evidence but are not the canonical resume surface
 - deliberate reset/resume requires the ticket to carry a clear `next_action`,
   `last_verification`, and `Handoff` note
@@ -99,6 +99,12 @@ Keep these sections:
 
 - `Summary`
 - `Scope`
+- `User Story` when the work is material or ambiguous
+- `User Pain / JTBD` when the work is material or ambiguous
+- `Non-Goals` when the work is material or ambiguous
+- `High-Fidelity Example` when the work is material or ambiguous
+- `What Good Looks Like` when the work is material or ambiguous
+- `Proof Target` when the work is material or ambiguous
 - `Plan`
 - `Acceptance Criteria`
 - `Working Notes`

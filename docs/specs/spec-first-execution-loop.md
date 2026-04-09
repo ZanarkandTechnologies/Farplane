@@ -9,7 +9,7 @@ Define the current canonical execution model for Codexter:
 - user-guided discovery up front
 - spec-first planning
 - feature-sized work packages
-- per-work-package `ralplan`
+- per-work-package `impl-plan`
 - per-work-package `$impl` orchestration
 - worker lanes such as `ralph` where appropriate
 - separate QA and review roles
@@ -72,7 +72,7 @@ unless there is a real:
 
 ### 3. Planning
 
-`ralplan` plans one selected work package.
+`impl-plan` plans one selected work package.
 
 It should:
 

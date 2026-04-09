@@ -1,4 +1,4 @@
-# Tech Impl Plan Review
+# Impl Plan Review
 
 Run this review before handing off the plan.
 If any answer is weak, tighten the plan first.
@@ -12,6 +12,8 @@ If any answer is weak, tighten the plan first.
 - Are the proof points concrete and observable?
 - Are risk and rollback clear enough for the size of the change?
 - Is the plan concise enough for fast approval without hiding critical detail?
+- If narrative sections are present, are they concrete and distinct rather than duplicated filler?
+- If the work is material or ambiguous, did the plan actually include the required story/example sections?
 
 ## Ask If Relevant
 
@@ -21,6 +23,7 @@ If any answer is weak, tighten the plan first.
 - Are we saying too little for a risky or unfamiliar path?
 - Would a reviewer understand how the change happens without reading an appendix?
 - If the ticket depends on a `Test hook`, is that hook clearly good enough to support deterministic proof before build starts?
+- Is the top approval surface still short enough to skim quickly?
 
 ## Fail If
 
@@ -30,3 +33,6 @@ If any answer is weak, tighten the plan first.
 - the plan depends on tricky setup but never checks whether the ticket's `Test hook` is sufficient
 - the plan explains everything except the actual delta
 - the approval surface is bloated, vague, or unconvincing
+- `User Story` restates the title without actor, need, and outcome
+- `High-Fidelity Example` is placeholder text, generic boilerplate, or duplicates `Summary`
+- narrative sections are present only decoratively and do not improve implementation clarity

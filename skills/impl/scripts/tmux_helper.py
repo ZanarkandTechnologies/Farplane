@@ -26,7 +26,7 @@ BIN_DIR = Path(__file__).resolve().parents[3] / "bin"
 if str(BIN_DIR) not in sys.path:
     sys.path.insert(0, str(BIN_DIR))
 
-from user_turn import capture_user_turn
+from user_turn import build_runtime_claim, capture_user_turn
 
 
 def now_stamp() -> str:
@@ -103,7 +103,7 @@ def write_json(path: Path, payload: dict[str, object]) -> None:
 
 def skill_name_for_phase(phase: str) -> str:
     mapping = {
-        "planning": "ralplan",
+        "planning": "impl-plan",
         "building": "ralph",
         "documenting": "docs-closeout",
     }
@@ -158,6 +158,9 @@ def write_current_run(payload: dict[str, object], run_state: Path) -> None:
     ):
         if key in payload:
             current_payload[key] = payload[key]
+    claim = build_runtime_claim(payload)
+    if claim is not None:
+        current_payload["claim"] = claim
     write_json(current_run_state_path(), current_payload)
 
 
@@ -434,6 +437,9 @@ def persist_lane_state(
     state["tmux_pane"] = tmux_pane
     if auto_continue:
         state["auto_continue"] = True
+    claim = build_runtime_claim(state)
+    if claim is not None:
+        state["claim"] = claim
     write_json(run_state, state)
     write_current_run(state, run_state)
     return state

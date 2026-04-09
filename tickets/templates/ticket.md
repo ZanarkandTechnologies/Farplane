@@ -25,12 +25,38 @@ Short description of the next smallest executable slice.
 - In:
 - Out:
 
+## User Story
+- `Actor:`
+- `Need:`
+- `Outcome:`
+
+## User Pain / JTBD
+- `Current pain:`
+- `Why now:`
+
+## Non-Goals
+- `Do not solve:`
+
+## High-Fidelity Example
+- `Example flow/artifact:`
+
+## What Good Looks Like
+- `Quality bar:`
+
+## Proof Target
+- `Reviewer-visible proof:`
+
 ## Plan
 
 ### Pitch
 - `Req:`
 - `Bet:`
 - `Win:`
+
+### Recommendation
+- `Best:`
+- `Why:`
+- `Tradeoff accepted:`
 
 ### B -> A
 - `Before:`
@@ -64,6 +90,20 @@ update docs/evidence
 - `Guardrails:`
 - `Fixes:`
 
+### Options Appendix
+- `Option 1:`
+- `Pros:`
+- `Cons:`
+- `Why not chosen:`
+- `Option 2:`
+- `Pros:`
+- `Cons:`
+- `Why not chosen:`
+- `Option 3:`
+- `Pros:`
+- `Cons:`
+- `Why not chosen:`
+
 ### Delegation
 - `Need:`
 - `Why:`
@@ -88,6 +128,9 @@ update docs/evidence
 - `approval_required: true`, any active `blocked_by` entry, or an unresolved dependency that prevents the next step all imply `ready: false`.
 - `next_action` is the authoritative current step. Explain it here if useful, but do not create a second state field.
 - `last_verification` is the authoritative verification summary. Put detailed commands and observations in `Evidence`.
+- when the user did not provide a take on a material choice, capture three viable options plus the recommended path in the plan instead of leaving the tradeoff implicit
+- `User Story`, `User Pain / JTBD`, `Non-Goals`, `High-Fidelity Example`, `What Good Looks Like`, and `Proof Target` are required for material feature work, workflow/tooling changes, ambiguous implementation work, and any ticket where the implementer would otherwise need to infer desired behavior
+- those sections may be short or omitted for trivial, narrowly localized fixes where the file, symbol, or error already anchors the work concretely
 
 ## Inspiration
 - Optional: source links and a short note on which external idea, article, talk, or incident motivated this ticket.

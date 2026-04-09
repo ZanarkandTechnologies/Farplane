@@ -29,3 +29,10 @@
 2026-04-08 02:45 +0100 | CHORE | replace question-style review guidance with anchored 1-to-5 rubric definitions, migrate the live review contract into `skills/review`, and remove the legacy `code-review` skill alias
 2026-04-08 04:34 +0100 | FEAT | require Review Packet gates for Ralph completion, add storyboard-grade QA evidence capture, and extend stop-hook role outputs for evidence-quality review
 2026-04-08 05:19 +0100 | FEAT | capture current-turn user intent at `UserPromptSubmit`, add stop-hook relevance gating before continuation, and persist intent alignment into Ralph run state
+2026-04-08 16:00 +0100 | FEAT | add a grouped runtime claim object, preserve it across lane and hook updates, and expose claim plus saved user-turn input through the canonical stop-hook read path
+2026-04-08 16:58 +0100 | FIX | normalize stop-hook roles onto TOML configs, remove the standalone evidence-reviewer, and make reviewer own completion-gate output
+2026-04-08 18:03 +0100 | FIX | make the Ralph smoke eval hermetic for planning replay, restore ticket `updated_at` to stop-hook review gates, and unbreak stale timestamp smoke coverage
+2026-04-08 18:47 +0100 | FEAT | add consultant-thinking and functional-ui skills, require recommendation plus options appendix in planning surfaces, and route frontend-design behind workflow grounding
+2026-04-08 19:01 +0100 | CHORE | audit README against recent review and stop-hook commits, point feature inventory at harness-techniques, and remove the stale hardcoded empty-queue claim
+2026-04-08 19:06 +0100 | FEAT | add a narrow canonical-doc parity validator plus test coverage, document the doc-gardening loop, and make README/spec/ticket surface drift mechanically checkable
+2026-04-09 03:22 +0100 | FEAT | collapse `ralplan` and `tech-impl-plan` into `impl-plan`, update the ticket template to support richer planning artifacts, and switch live planning/runtime references to the new single planner surface

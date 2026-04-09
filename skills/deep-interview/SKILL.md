@@ -12,7 +12,7 @@ Deep Interview is an intent-first Socratic clarification loop before planning or
 - The request is broad, ambiguous, or missing concrete acceptance criteria
 - The user says "deep interview", "interview me", "ask me everything", "don't assume", or "ouroboros"
 - The user wants to avoid misaligned implementation from underspecified requirements
-- You need a requirements artifact before handing off to `ralplan`, `autopilot`, `ralph`, or `team`
+- You need a requirements artifact before handing off to `impl-plan`, `autopilot`, `ralph`, or `team`
 </Use_When>
 
 <Do_Not_Use_When>
@@ -200,7 +200,7 @@ When threshold is met (or user exits with warning / hard cap):
 
 Spec should include:
 - Metadata (profile, rounds, final ambiguity, threshold, context type)
-- Context snapshot reference/path (for ralplan/team reuse)
+- Context snapshot reference/path (for impl-plan/team reuse)
 - Clarity breakdown table
 - Intent (why the user wants this)
 - Desired Outcome
@@ -243,9 +243,9 @@ When the clarified task is specifically about `omx autoresearch`, or the skill i
 
 Present execution options after artifact generation using explicit handoff contracts. Treat the deep-interview spec as the current requirements source of truth and preserve intent, non-goals, decision boundaries, acceptance criteria, and any residual-risk warnings across the handoff.
 
-### 1. **`$ralplan` (Recommended)**
+### 1. **`$impl-plan` (Recommended)**
 - **Input Artifact:** `.omx/specs/deep-interview-{slug}.md` (optionally accompanied by the transcript/context snapshot for traceability)
-- **Invocation:** `$plan --consensus --direct <spec-path>`
+- **Invocation:** `$impl-plan --consensus <spec-path>`
 - **Consumer Behavior:** Treat the deep-interview spec as the requirements source of truth. Do not repeat the interview by default; refine architecture/feasibility around the clarified intent and boundaries instead.
 - **Skipped / Already-Satisfied Stages:** Requirements discovery, ambiguity clarification, and early intent-boundary elicitation
 - **Expected Output:** Canonical planning artifacts under `.omx/plans/`, especially `prd-*.md` and `test-spec-*.md`
@@ -321,7 +321,7 @@ Present execution options after artifact generation using explicit handoff contr
 - [ ] Transcript written to `.omx/interviews/{slug}-{timestamp}.md`
 - [ ] Spec written to `.omx/specs/deep-interview-{slug}.md`
 - [ ] Brownfield questions use evidence-backed confirmation when applicable
-- [ ] Handoff options provided (`$ralplan`, `$autopilot`, `$ralph`, `$team`)
+- [ ] Handoff options provided (`$impl-plan`, `$autopilot`, `$ralph`, `$team`)
 - [ ] No direct implementation performed in this mode
 </Final_Checklist>
 
@@ -347,11 +347,11 @@ If interrupted, rerun `$deep-interview`. Resume from persisted mode state via `s
 ## Recommended 3-Stage Pipeline
 
 ```
-deep-interview -> ralplan -> autopilot
+deep-interview -> impl-plan -> autopilot
 ```
 
 - Stage 1 (deep-interview): clarity gate
-- Stage 2 (ralplan): feasibility + architecture gate
+- Stage 2 (impl-plan): feasibility + architecture gate
 - Stage 3 (autopilot): execution + QA + validation gate
 </Advanced>
 

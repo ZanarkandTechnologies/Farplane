@@ -77,7 +77,7 @@ Use:
 - `tickets/templates/ticket.md`
 - `docs/specs/spec-first-execution-loop.md`
 - `docs/specs/orchestrator-subagent-loop.md`
-- `skills/ralplan/SKILL.md`
+- `skills/impl-plan/SKILL.md`
 - `skills/impl/SKILL.md`
 
 This surface controls:

@@ -1240,7 +1240,7 @@ def build_missing_ralph_result_reason(ticket: dict[str, object], current_run: di
 
 def skill_name_for_phase(phase: str) -> str:
     mapping = {
-        "planning": "ralplan",
+        "planning": "impl-plan",
         "building": "ralph",
         "documenting": "docs-closeout",
     }

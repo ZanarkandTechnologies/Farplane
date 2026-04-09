@@ -16,7 +16,7 @@ Use it when:
 Do not use it when:
 
 - the request is still ambiguous; use `brainstorm`, `deep-interview`, or `prd`
-- the selected ticket still needs architecture/test-shape planning; use `ralplan`
+- the selected ticket still needs architecture/test-shape planning; use `impl-plan`
 - the task is already small enough for direct solo implementation
 
 ## Contract

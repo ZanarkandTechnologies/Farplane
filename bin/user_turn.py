@@ -237,8 +237,9 @@ def classify_intent_mode(raw_text: str) -> str:
     if _contains_any(
         lowered,
         (
-            "$ralplan",
-            "ralplan",
+            "$impl-plan",
+            "impl-plan",
+            "impl plan",
             "plan ready",
             "ticket plan",
             "planning pass",

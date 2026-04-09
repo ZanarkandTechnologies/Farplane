@@ -235,7 +235,7 @@ def write_current_run_fixture(
         "ticket_path": str(ticket_path),
         "phase": phase,
         "status": "waiting_for_worker",
-        "skill_name": "ralph" if phase != "planning" else "ralplan",
+        "skill_name": "ralph" if phase != "planning" else "impl-plan",
         "compute_class": "local",
         "parallel_slots_reserved": 1,
         "updated_at": "2026-04-05T00:00:00Z",

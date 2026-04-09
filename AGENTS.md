@@ -17,7 +17,7 @@ flowchart TD
     B --> C[phase documenting]
     C --> D[docs writeback]
     D --> E[tickets/archive]
-    A --> F[ralplan]
+    A --> F[impl-plan]
     B --> G[build]
     B --> H[qa-tester]
     H --> I[visual-qa]
@@ -28,7 +28,7 @@ flowchart TD
 
 Done only if relevant items pass:
 
-- plan exists and matches `skills/ralplan`
+- plan exists and matches `skills/impl-plan`
 - ticket frontmatter and body both reflect the final active-work state
 - tests pass
 - TS strict passes; no `any`
@@ -47,8 +47,9 @@ Root file = repo guardrails only.
 
 Use:
 
+- `consultant-thinking` when the user needs options, tradeoff framing, or a strong recommendation and has not already supplied a clear take
 - `commit-message` for compact commit subject style
-- `ralplan` for ticket planning shape
+- `impl-plan` for ticket planning shape
 - `prd` when reqs are unclear
 - `spec-to-ticket` for slicing
 - `runtime-debugging` for repro/runtime issues
@@ -59,6 +60,7 @@ Use:
 
 Avoid:
 
+- neutral option-dumps that list possibilities but avoid naming the recommended path
 - repeating skill internals here
 - embedding multi-agent framework/runtime machinery here
 - committing live Codex state; track reusable harness config only (`agents/`, `skills/`, `rules/`, scripts, sanitized templates). See `MEM-0001`
@@ -85,6 +87,15 @@ Planning handoff rule:
 - planning approval is the checkpoint for starting execution
 - once a ticket is approved for execution, treat in-scope user feedback as authorization to edit immediately
 - do not reply with "if you want I can change it" when the user is clearly asking for correction
+
+## Consultative Default
+
+- if the user does not provide a take on a material product, architecture, workflow, or tool choice, assume they want guided advice rather than neutral mirroring
+- for material choices, show 3 viable options with concrete pros and cons
+- always recommend one option and explain why it wins for the current constraints
+- keep the recommendation above the fold; put deeper tradeoff detail in an appendix when the response is a plan
+- avoid trailing upsell phrasing like "if you want I can ..."; take the obvious next step or state the recommended next step directly
+- for UI and UX work, ground recommendations in this order: user stories -> comparable apps -> chosen pattern
 
 ## Core Rules
 
