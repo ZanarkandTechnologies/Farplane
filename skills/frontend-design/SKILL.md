@@ -1,13 +1,13 @@
 ---
 name: frontend-design
 version: 1.0.0
-description: Build production-grade app interfaces with shadcn, AI Elements, and curated registries. Distinct from cinematic-landing (which handles scroll narratives and landing pages).
+description: Build production-grade app interfaces with shadcn, AI Elements, and curated registries after the workflow and product UX shape are already grounded. Distinct from cinematic-landing (which handles scroll narratives and landing pages).
 allowed-tools: mcp__shadcn__*, Read, Write, Edit, LS
 ---
 
 # Frontend Design Skill
 
-> **Purpose**: Build distinctive, production-grade app interfaces using shadcn components, AI Elements, and curated registries. For landing pages with scroll narratives, use `cinematic-landing` instead.
+> **Purpose**: Build distinctive, production-grade app interfaces using shadcn components, AI Elements, and curated registries. For workflow-first UI planning, use `functional-ui` first. For landing pages with scroll narratives, use `cinematic-landing` instead.
 
 ## What Reference Do I Need?
 
@@ -17,6 +17,7 @@ allowed-tools: mcp__shadcn__*, Read, Write, Edit, LS
 | Need AI chat/workflow UI | [ai-elements.md](references/ai-elements.md) |
 | Looking for a component | Use **shadcn MCP** → [registries.md](references/registries.md) |
 | Theming/styling | [theming.md](references/theming.md) |
+| Workflow / IA / UX is still open | → `functional-ui` skill first |
 | Complex flow diagrams | → `react-flow` skill |
 | Landing page with scroll | → `cinematic-landing` skill |
 
@@ -102,7 +103,7 @@ npm i ai @ai-sdk/react zod
 
 ## Design Thinking
 
-Before coding, understand the context and commit to a **BOLD** aesthetic direction:
+Before coding, make sure the workflow is already grounded. If it is not, switch to `functional-ui` first. Once the product shape is settled, commit to a **BOLD** aesthetic direction:
 
 ### 1. Purpose
 What problem does this interface solve? Who uses it?
@@ -203,6 +204,7 @@ Create atmosphere and depth rather than defaulting to solid colors. Apply creati
 
 | Skill | Use When |
 |-------|----------|
+| `functional-ui` | Product workflow, IA, or interaction model is still open |
 | `cinematic-landing` | Scroll-scrubbed landing pages, video backgrounds, WebGL |
 | `react-flow` | Node-based flow diagrams, workflow visualization |
 | `convex` | Real-time backend, database, authentication |
