@@ -87,6 +87,36 @@ class StopHookRoleConfigTests(unittest.TestCase):
         self.assertIn("\\n", injected)
         self.assertIn("Line one", injected)
 
+    def test_parse_role_output_preserves_user_intent_gate_fields(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-output-") as td:
+            output_path = Path(td) / "review.json"
+            output_path.write_text(
+                """{
+  "action": "continue_same_ticket",
+  "reason": "user intent impression failed",
+  "continuation_message": "continue the same ticket and address the mismatch",
+  "speak": "continuing same ticket",
+  "next_ticket_id": "",
+  "next_phase": "",
+  "overall_score": 4.2,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "user_intent_impression": "fail",
+  "user_intent_mismatch_reason": "result undershoots the saved user ask",
+  "rerun_required": false,
+  "blocking_findings": []
+}""",
+                encoding="utf-8",
+            )
+
+            parsed = self.stop_hook.parse_role_output(output_path)
+
+        assert parsed is not None
+        self.assertEqual(parsed["user_intent_impression"], "fail")
+        self.assertEqual(parsed["user_intent_mismatch_reason"], "result undershoots the saved user ask")
+
 
 class StopHookReviewerPromptTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -153,6 +183,8 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "integration_readiness": "pass",
                 "traceability": "pass",
                 "freshness": "pass",
+                "user_intent_impression": "pass",
+                "user_intent_mismatch_reason": "",
                 "rerun_required": False,
                 "blocking_findings": [],
             }
@@ -161,6 +193,29 @@ class StopHookReviewerPromptTests(unittest.TestCase):
         self.assertTrue(ok)
         self.assertEqual(reason, "")
         self.assertEqual(failures, [])
+
+    def test_validate_reviewer_gate_fails_when_user_intent_impression_fails(self) -> None:
+        ok, reason, failures = self.stop_hook.validate_reviewer_gate(
+            {
+                "overall_score": 4.6,
+                "evidence_quality": "pass",
+                "integration_readiness": "pass",
+                "traceability": "pass",
+                "freshness": "pass",
+                "user_intent_impression": "fail",
+                "user_intent_mismatch_reason": "result is technically valid but undershoots the saved user ask",
+                "rerun_required": False,
+                "blocking_findings": [],
+            }
+        )
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "reviewer completion gates are not passing")
+        self.assertIn("user_intent_impression=fail", failures)
+        self.assertIn(
+            "user_intent_mismatch_reason=result is technically valid but undershoots the saved user ask",
+            failures,
+        )
 
 
 class StopHookGroundingSummaryTests(unittest.TestCase):

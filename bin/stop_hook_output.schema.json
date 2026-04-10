@@ -13,6 +13,8 @@
     "integration_readiness",
     "traceability",
     "freshness",
+    "user_intent_impression",
+    "user_intent_mismatch_reason",
     "rerun_required",
     "blocking_findings"
   ],
@@ -71,6 +73,13 @@
     "freshness": {
       "type": ["string", "null"],
       "enum": ["pass", "fail"]
+    },
+    "user_intent_impression": {
+      "type": ["string", "null"],
+      "enum": ["pass", "fail"]
+    },
+    "user_intent_mismatch_reason": {
+      "type": ["string", "null"]
     },
     "rerun_required": {
       "type": ["boolean", "null"]

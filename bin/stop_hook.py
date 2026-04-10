@@ -917,6 +917,8 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
         "integration_readiness",
         "traceability",
         "freshness",
+        "user_intent_impression",
+        "user_intent_mismatch_reason",
         "rerun_required",
         "blocking_findings",
     )
@@ -928,9 +930,17 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
         return False, "reviewer omitted required completion-gate fields", [f"missing gate field: {item}" for item in missing]
 
     failures: list[str] = []
-    for field in ("evidence_quality", "integration_readiness", "traceability", "freshness"):
+    for field in ("evidence_quality", "integration_readiness", "traceability", "freshness", "user_intent_impression"):
         if review.get(field) != "pass":
             failures.append(f"{field}={review.get(field)}")
+    mismatch_reason = str(review.get("user_intent_mismatch_reason") or "").strip()
+    if review.get("user_intent_impression") == "fail":
+        if mismatch_reason:
+            failures.append(f"user_intent_mismatch_reason={mismatch_reason}")
+        else:
+            failures.append("user_intent_mismatch_reason=missing")
+    elif mismatch_reason:
+        failures.append("user_intent_mismatch_reason=unexpected")
     if bool(review.get("rerun_required")):
         failures.append("rerun_required=true")
 
@@ -1317,6 +1327,8 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
     integration_readiness = payload.get("integration_readiness")
     traceability = payload.get("traceability")
     freshness = payload.get("freshness")
+    user_intent_impression = payload.get("user_intent_impression")
+    user_intent_mismatch_reason = payload.get("user_intent_mismatch_reason")
     rerun_required = payload.get("rerun_required")
     blocking_findings = payload.get("blocking_findings")
 
@@ -1334,9 +1346,11 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
         return None
     if overall_score is not None and not isinstance(overall_score, (int, float)):
         return None
-    for value in (evidence_quality, integration_readiness, traceability, freshness):
+    for value in (evidence_quality, integration_readiness, traceability, freshness, user_intent_impression):
         if value is not None and value not in PASS_FAIL_VALUES:
             return None
+    if user_intent_mismatch_reason is not None and not isinstance(user_intent_mismatch_reason, str):
+        return None
     if rerun_required is not None and not isinstance(rerun_required, bool):
         return None
     if blocking_findings is not None:
@@ -1363,6 +1377,10 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
         parsed["traceability"] = traceability
     if freshness is not None:
         parsed["freshness"] = freshness
+    if user_intent_impression is not None:
+        parsed["user_intent_impression"] = user_intent_impression
+    if user_intent_mismatch_reason is not None:
+        parsed["user_intent_mismatch_reason"] = user_intent_mismatch_reason.strip()
     if rerun_required is not None:
         parsed["rerun_required"] = rerun_required
     if blocking_findings is not None:

@@ -33,6 +33,7 @@ Mode policy:
 
 - In `missing_result_review`, review the active ticket state plus the latest assistant response. Focus on whether the assistant clearly implied more same-ticket work but failed to emit a structured `RALPH_RESULT`.
 - In `completion_gate`, also judge whether the ticket's Review Packet and evidence state are strong enough to advance. Missing, malformed, stale, contradictory, weak, or untraceable review-packet state must force `continue_same_ticket`.
+- In `completion_gate`, also judge whether the latest assistant response would actually satisfy or impress the saved `last_user_turn`. This is stricter than phase alignment alone. If the result is technically coherent but still undershoots the saved ask, force `continue_same_ticket`.
 
 Completion-gate required fields:
 - `overall_score` as a `1`-to-`5` rubric-backed score
@@ -40,6 +41,8 @@ Completion-gate required fields:
 - `integration_readiness` = `pass|fail`
 - `traceability` = `pass|fail`
 - `freshness` = `pass|fail`
+- `user_intent_impression` = `pass|fail`
+- `user_intent_mismatch_reason` = `""` when passing, otherwise one concrete mismatch reason grounded in `last_user_turn`
 - `rerun_required` = `true|false`
 - `blocking_findings` = array of concrete failures
 
