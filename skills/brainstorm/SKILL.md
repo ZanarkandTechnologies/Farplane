@@ -6,14 +6,15 @@ description: "Early-stage option exploration before requirements commitment."
 
 # Brainstorm
 
-Use this when the user wants to explore possibilities before locking a product direction.
+Use this when the user wants to explore possibilities before locking a product direction, including cases where the same public intake surface should shift from lightweight option exploration into more structured decomposition.
 
 ## Job
 
-1. Expand the space of plausible directions.
-2. Compare a few strong options.
+1. Expand the space of plausible directions when the problem still needs divergence.
+2. Switch into structured decomposition when the problem needs customer/data/workflow/system thinking.
 3. Expose tradeoffs, not implementation details.
-4. Stop before pretending the idea is ready for tickets.
+4. Recommend the best next direction or lens.
+5. Stop before pretending the idea is ready for tickets.
 
 ## Use When
 
@@ -21,6 +22,7 @@ Use this when the user wants to explore possibilities before locking a product d
 - the product direction is still fuzzy
 - multiple valid first-slice shapes exist
 - the user wants to think before writing a PRD
+- the user wants one public intake surface that can handle both loose ideation and structured decomposition
 
 ## Do Not Use When
 
@@ -31,13 +33,18 @@ Use this when the user wants to explore possibilities before locking a product d
 ## Process
 
 - propose 2-4 distinct directions
+- identify whether the problem still needs divergence or whether to switch into structured decomposition mode
 - compare them on:
   - user value
   - implementation risk
   - speed to first lovable slice
   - dependency cost
 - recommend one best next direction
-- if the user converges, hand off to `deep-interview` or `prd`
+- when structure is needed, use one explicit lens inside `brainstorm`:
+  - `palantir-customer-data-action` for user/data/action/write-back decomposition
+  - `mckinsey-issue-tree` for driver / workstream / root-cause decomposition
+- if the result is still fuzzy after that, hand off to `deep-interview`
+- if the result is coherent enough for requirements writing, hand off to `prd`
 
 ## Output
 
@@ -45,7 +52,9 @@ Produce a short exploration note with:
 
 - candidate directions
 - strongest tradeoffs
-- recommended first bet
+- recommended first bet or decomposition shape
+- chosen lens when structured decomposition is used
+- recommended next intake skill
 - what would need to be clarified next
 
 ## Handoff

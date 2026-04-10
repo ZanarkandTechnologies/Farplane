@@ -48,3 +48,4 @@
 2026-04-10 02:00 +0100 | FEAT | switch the preferred live runtime root from `.ralph` to `.harness`, keep legacy `.ralph` reads as compatibility fallback, and update the live runtime docs/rules accordingly
 2026-04-10 02:13 +0100 | FIX | stop ambient `.ralph` runtime fallback from hijacking hook ticket resolution and purge the local `.ralph` runtime tree
 2026-04-10 02:15 +0100 | FEAT | add a completion-only impressed-user gate to the stop-hook reviewer contract, require `user_intent_impression` plus a concrete mismatch reason, and document the stricter user-alignment completion policy
+2026-04-10 03:05 +0100 | FEAT | fold Palantir- and McKinsey-style decomposition lenses into the public `brainstorm` surface, keep one intake entrypoint, and update the documented intake funnel to treat structured decomposition as a brainstorm branch rather than a second public skill
