@@ -42,4 +42,9 @@
 2026-04-09 05:18 +0100 | FEAT | add the first explicit delegated-worker runtime contract with `worker_name`, `main_artifact_path`, and Stop-hook-captured `grounding_summary`, and document the new claim fields across impl/runtime surfaces
 2026-04-10 01:05 +0100 | FEAT | add advisory stale-wait backpressure metadata with `worker_started_at`, `last_checkpoint_at`, and `checkpoint_summary`, derive `over_budget` status in the tmux-helper read path, and document the visible no-watchdog backpressure contract
 2026-04-09 17:07 +0100 | CHORE | add a root architecture map, adopt hybrid structural-plus-prompt doc governance, and upgrade init-project to scaffold architecture/specs entry surfaces
+2026-04-10 02:55 +0100 | FEAT | add session aliasing on first user-prompt capture, mirror the human-facing claim alias onto tickets as `claimed_by`, and document the runtime-vs-ticket identity split
 2026-04-09 17:32 +0100 | FEAT | upgrade the live review contract with a repo-grounded desloppify search playbook, severity-ranked findings, compact search-scope reporting, and synced reviewer/spec/ticket template updates
+2026-04-10 01:53 +0100 | FIX | purge stale OMX-era live skill paths from deep-interview and ralph, add local skill docs, and re-anchor the live contract to tickets, docs, and `.ralph/state`
+2026-04-10 02:00 +0100 | FEAT | switch the preferred live runtime root from `.ralph` to `.harness`, keep legacy `.ralph` reads as compatibility fallback, and update the live runtime docs/rules accordingly
+2026-04-10 02:13 +0100 | FIX | stop ambient `.ralph` runtime fallback from hijacking hook ticket resolution and purge the local `.ralph` runtime tree
+2026-04-10 02:15 +0100 | FEAT | add a completion-only impressed-user gate to the stop-hook reviewer contract, require `user_intent_impression` plus a concrete mismatch reason, and document the stricter user-alignment completion policy

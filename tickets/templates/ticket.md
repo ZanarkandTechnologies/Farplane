@@ -4,6 +4,7 @@ title: short title
 phase: planning
 status: review
 owner: unassigned
+claimed_by:
 priority: medium
 depends_on: []
 blocked_by: []
@@ -126,6 +127,7 @@ update docs/evidence
 ## Working Notes
 - Active task-local memory only. Durable cross-task lessons move to docs on completion.
 - `approval_required: true`, any active `blocked_by` entry, or an unresolved dependency that prevents the next step all imply `ready: false`.
+- `owner` is the broad work owner; `claimed_by` is optional live-session claim state for board visibility. Do not store raw `session_id` values in ticket frontmatter.
 - `next_action` is the authoritative current step. Explain it here if useful, but do not create a second state field.
 - `last_verification` is the authoritative verification summary. Put detailed commands and observations in `Evidence`.
 - when the user did not provide a take on a material choice, capture three viable options plus the recommended path in the plan instead of leaving the tradeoff implicit
@@ -149,6 +151,8 @@ update docs/evidence
 
 ## Review Packet
 - Scores use the anchored `1.0`-to-`5.0` rubric scale.
+- `work_type:` `[]`
+- `search_scope:` `{changed_files: [], related_files: [], invariants_checked: [], docs_checked: []}`
 - `reviewed_at:` `YYYY-MM-DD HH:mm ±ZZZZ`
 - `rubrics_used:` `[]`
 - `overall_score:`
@@ -160,6 +164,7 @@ update docs/evidence
 - `traceability:` `pass|fail`
 - `freshness:` `pass|fail`
 - `hard_gate_failures:` `[]`
+- `finding_log:` `[]`
 - `blocking_findings:` `[]`
 - `next_action:`
 

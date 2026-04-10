@@ -236,6 +236,101 @@ class RuntimeClaimTests(unittest.TestCase):
 
         self.assertIsNone(current)
 
+    def test_capture_user_turn_initializes_session_alias_without_current_run(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="what is active in this repo?",
+                turn_id="turn-init",
+                source="test",
+                session_id="sess-init",
+            )
+
+            session_payload = json.loads(session_state_path(project_root, "sess-init").read_text(encoding="utf-8"))
+
+        self.assertIsNotNone(captured)
+        assert captured is not None
+        self.assertEqual(session_payload["session_id"], "sess-init")
+        self.assertEqual(session_payload["session_name"], "agent-01")
+        self.assertEqual(session_payload["last_user_turn"]["turn_id"], "turn-init")
+
+    def test_capture_user_turn_writes_claimed_by_to_ticket(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            state_dir = project_root / ".harness" / "state"
+            state_dir.mkdir(parents=True, exist_ok=True)
+            ticket_path = project_root / "tickets" / "TASK-1234-example.md"
+            ticket_path.parent.mkdir(parents=True, exist_ok=True)
+            ticket_path.write_text(
+                """---
+ticket_id: TASK-1234
+title: example
+phase: building
+status: building
+owner: codex
+priority: high
+depends_on: []
+blocked_by: []
+ready: true
+approval_required: false
+created_at: 2026-04-10T00:00:00Z
+updated_at: 2026-04-10T00:00:00Z
+next_action: continue implementation
+last_verification: none
+linked_docs: []
+---
+
+# TASK-1234: example
+""",
+                encoding="utf-8",
+            )
+            session_path = session_state_path(project_root, "sess-123")
+            session_path.parent.mkdir(parents=True, exist_ok=True)
+            session_path.write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-1234",
+                        "ticket_path": str(ticket_path),
+                        "run_id": "run-task-1234-building-01",
+                        "phase": "building",
+                        "status": "running",
+                        "session_id": "sess-123",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (state_dir / "current-run.json").write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-1234",
+                        "ticket_path": str(ticket_path),
+                        "run_id": "run-task-1234-building-01",
+                        "phase": "building",
+                        "status": "running",
+                        "session_id": "sess-123",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            capture_user_turn(
+                project_root=project_root,
+                raw_text="continue TASK-1234",
+                turn_id="turn-claim",
+                source="test",
+                session_id="sess-123",
+            )
+
+            ticket_text = ticket_path.read_text(encoding="utf-8")
+            session_payload = json.loads(session_path.read_text(encoding="utf-8"))
+
+        self.assertIn("claimed_by: agent-01", ticket_text)
+        self.assertEqual(session_payload["session_name"], "agent-01")
+        self.assertEqual(session_payload["current_ticket_id"], "TASK-1234")
+
     def test_capture_user_turn_updates_only_resolved_session_lane(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
@@ -331,6 +426,7 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(captured["turn_id"], "turn-a")
         self.assertEqual(session_a["last_user_turn"]["turn_id"], "turn-a")
         self.assertEqual(session_a["last_user_turn"]["raw_text"], "Implement TASK-0042 in this session only.")
+        self.assertEqual(session_a["session_name"], "agent-01")
         self.assertEqual(session_b["last_user_turn"]["turn_id"], "turn-b")
         self.assertEqual(persisted_run_state_a["last_user_turn"]["turn_id"], "turn-a")
 

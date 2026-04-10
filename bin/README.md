@@ -37,6 +37,13 @@ Runtime state stays lightweight and machine-facing. The grouped `claim` object
 tracks the active ticket/run/session ownership for hook consumers, while
 `last_user_turn` carries the saved current-turn user ask.
 
+For live multi-session coordination:
+
+- `session_id` remains the transport/runtime identity
+- `session_name` is the human-facing session alias, such as `agent-03`
+- ticket frontmatter may mirror only the human-facing alias as `claimed_by`
+- raw `session_id` should stay runtime-only
+
 Delegated worker metadata is additive:
 
 - `worker_name` identifies the lane role for the current live path

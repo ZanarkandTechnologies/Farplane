@@ -50,6 +50,7 @@ title: short title
 phase: planning
 status: review
 owner: codex
+claimed_by: agent-03  # optional active session claim alias
 priority: medium
 depends_on: []
 blocked_by: []
@@ -67,6 +68,8 @@ linked_docs: []
 
 - `phase`: `planning`, `building`, `documenting`, `complete`, `failed`
 - `status`: `todo`, `review`, `building`, `blocked`, `done`, `failed`
+- `owner`: broad work owner, not a live session id
+- `claimed_by`: optional human-facing active claim alias for the current live session, such as `agent-03`
 - `depends_on`: structural prerequisites
 - `blocked_by`: concrete ticket-ID blockers only
 - `ready`: whether `next_action` can be executed now
@@ -79,6 +82,7 @@ linked_docs: []
 - no `lane` field
 - no `## Status` body block
 - the H1 matches `ticket_id` and `title`
+- do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter
 - do not set `status: building` while `approval_required: true`
 - do not set `status: building` while `blocked_by` is non-empty
 - do not invent a second machine-readable state block in the body

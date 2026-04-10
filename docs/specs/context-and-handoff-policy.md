@@ -41,6 +41,7 @@ when hook `session_id` is available.
 It may carry:
 
 - active claim for the current ticket/run/session
+- human-readable session alias such as `session_name`
 - delegated worker identity such as `worker_name`
 - delegated main artifact path and latest `grounding_summary`
 - delegated wait/checkpoint timing such as `worker_started_at`, `last_checkpoint_at`, and `checkpoint_summary`
@@ -67,6 +68,7 @@ It must not become the durable source of:
 - acceptance criteria
 - blocker truth
 - final handoff instructions
+- the human-facing board claim alias; that belongs on the ticket when the claim is explicit
 
 ### Transcript
 

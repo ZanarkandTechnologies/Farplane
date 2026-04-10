@@ -35,6 +35,7 @@ HARD_CONSTRAINTS = {
     "source_required",
     "specific_ticket_required",
 }
+SESSION_ALIAS_POOL = tuple(f"agent-{index:02d}" for index in range(1, 11))
 
 
 def now_iso() -> str:
@@ -102,6 +103,124 @@ def load_json_dict(path: Path) -> dict[str, object]:
 def write_json(path: Path, payload: dict[str, object]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def read_ticket_text(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8")
+    except OSError:
+        return ""
+
+
+def split_frontmatter(text: str) -> tuple[str, str] | None:
+    if not text.startswith("---\n"):
+        return None
+    parts = text.split("\n---\n", 1)
+    if len(parts) != 2:
+        return None
+    return parts[0][4:], parts[1]
+
+
+def update_frontmatter_field(raw_frontmatter: str, key: str, value: str, *, after_key: str | None = None) -> str:
+    lines = raw_frontmatter.splitlines()
+    key_prefix = f"{key}:"
+    replacement = f"{key}: {value}"
+    for index, line in enumerate(lines):
+        if line.startswith(key_prefix):
+            lines[index] = replacement
+            return "\n".join(lines)
+
+    insert_at = len(lines)
+    if after_key:
+        after_prefix = f"{after_key}:"
+        for index, line in enumerate(lines):
+            if line.startswith(after_prefix):
+                insert_at = index + 1
+                break
+    lines.insert(insert_at, replacement)
+    return "\n".join(lines)
+
+
+def clear_frontmatter_field(raw_frontmatter: str, key: str) -> str:
+    key_prefix = f"{key}:"
+    lines = [line for line in raw_frontmatter.splitlines() if not line.startswith(key_prefix)]
+    return "\n".join(lines)
+
+
+def write_ticket_text(path: Path, raw_frontmatter: str, body: str) -> None:
+    path.write_text(f"---\n{raw_frontmatter}\n---\n{body}", encoding="utf-8")
+
+
+def resolve_ticket_path(project_root: Path, current_run: Mapping[str, object]) -> Path | None:
+    ticket_path = current_run.get("ticket_path")
+    if isinstance(ticket_path, str) and ticket_path.strip():
+        candidate = Path(ticket_path)
+        if not candidate.is_absolute():
+            candidate = (project_root / ticket_path).resolve()
+        if candidate.is_file():
+            return candidate
+
+    ticket_id = current_run.get("ticket_id")
+    if not isinstance(ticket_id, str) or not ticket_id.strip():
+        return None
+    matches = sorted((project_root / "tickets").glob(f"{ticket_id.strip()}*.md"))
+    return matches[0] if matches else None
+
+
+def set_ticket_claim_alias(project_root: Path, current_run: Mapping[str, object], session_name: str) -> None:
+    ticket_path = resolve_ticket_path(project_root, current_run)
+    if ticket_path is None:
+        return
+    text = read_ticket_text(ticket_path)
+    parts = split_frontmatter(text)
+    if parts is None:
+        return
+    raw_frontmatter, body = parts
+    updated_frontmatter = update_frontmatter_field(raw_frontmatter, "claimed_by", session_name, after_key="owner")
+    write_ticket_text(ticket_path, updated_frontmatter, body)
+
+
+def clear_ticket_claim_alias(project_root: Path, ticket_id: str, session_name: str) -> None:
+    matches = sorted((project_root / "tickets").glob(f"{ticket_id.strip()}*.md"))
+    if not matches:
+        return
+    ticket_path = matches[0]
+    text = read_ticket_text(ticket_path)
+    parts = split_frontmatter(text)
+    if parts is None:
+        return
+    raw_frontmatter, body = parts
+    claimed_prefix = "claimed_by:"
+    claimed_value = ""
+    for line in raw_frontmatter.splitlines():
+        if line.startswith(claimed_prefix):
+            claimed_value = line.split(":", 1)[1].strip()
+            break
+    if claimed_value != session_name:
+        return
+    updated_frontmatter = clear_frontmatter_field(raw_frontmatter, "claimed_by")
+    write_ticket_text(ticket_path, updated_frontmatter, body)
+
+
+def allocate_session_name(project_root: Path, session_id: str, existing_payload: Mapping[str, object] | None = None) -> str:
+    if isinstance(existing_payload, Mapping):
+        existing_name = existing_payload.get("session_name")
+        if isinstance(existing_name, str) and existing_name.strip():
+            return existing_name.strip()
+
+    used: set[str] = set()
+    for candidate in session_state_dir(project_root).glob("*.json"):
+        payload = load_json_dict(candidate)
+        if candidate == session_state_path(project_root, session_id):
+            continue
+        session_name = payload.get("session_name")
+        if isinstance(session_name, str) and session_name.strip():
+            used.add(session_name.strip())
+    for alias in SESSION_ALIAS_POOL:
+        if alias not in used:
+            return alias
+    suffix = re.sub(r"[^A-Za-z0-9]+", "", session_id)[-4:] or "x"
+    return f"agent-{suffix.lower()}"
 
 
 def resolve_runtime_path(project_root: Path, raw: str) -> Path:
@@ -237,6 +356,8 @@ def build_runtime_claim(payload: Mapping[str, object]) -> dict[str, object] | No
         "skill_name",
         "compute_class",
         "executor_target",
+        "session_name",
+        "current_ticket_id",
         "worker_name",
         "main_artifact_path",
         "grounding_summary",
@@ -316,6 +437,80 @@ def persist_runtime_update(
         write_json(run_state_path, existing_run_state)
 
     return merged_current
+
+
+def initialize_session_state(
+    *,
+    project_root: Path,
+    session_id: str,
+    current_run: Mapping[str, object] | None,
+    explicit_run_state: str | None,
+    captured_at: str,
+) -> dict[str, object]:
+    normalized_session_id = normalize_session_id(session_id)
+    if not normalized_session_id:
+        return {}
+
+    session_path = session_state_path(project_root, normalized_session_id)
+    existing_session = load_json_dict(session_path)
+    session_name = allocate_session_name(project_root, normalized_session_id, existing_session)
+    previous_ticket_id = ""
+    if isinstance(existing_session.get("current_ticket_id"), str):
+        previous_ticket_id = str(existing_session.get("current_ticket_id") or "").strip()
+
+    ticket_id = ""
+    ticket_path = ""
+    run_id = ""
+    phase = ""
+    status = ""
+    if isinstance(current_run, Mapping):
+        for key in ("ticket_id", "ticket_path", "run_id", "phase", "status"):
+            value = current_run.get(key)
+            if not isinstance(value, str) or not value.strip():
+                continue
+            if key == "ticket_id":
+                ticket_id = value.strip()
+            elif key == "ticket_path":
+                ticket_path = value.strip()
+            elif key == "run_id":
+                run_id = value.strip()
+            elif key == "phase":
+                phase = value.strip()
+            elif key == "status":
+                status = value.strip()
+
+    session_payload: dict[str, object] = dict(existing_session)
+    session_payload["session_id"] = normalized_session_id
+    session_payload["session_name"] = session_name
+    session_payload["last_seen_at"] = captured_at
+    session_payload["updated_at"] = captured_at
+    if explicit_run_state and "run_state" not in session_payload:
+        session_payload["run_state"] = explicit_run_state
+    elif isinstance(current_run, Mapping):
+        run_state = current_run.get("run_state")
+        if isinstance(run_state, str) and run_state.strip():
+            session_payload["run_state"] = run_state.strip()
+    if ticket_id:
+        session_payload["current_ticket_id"] = ticket_id
+    elif "current_ticket_id" not in session_payload:
+        session_payload["current_ticket_id"] = ""
+    if ticket_path:
+        session_payload["ticket_path"] = ticket_path
+    if run_id:
+        session_payload["run_id"] = run_id
+    if phase:
+        session_payload["phase"] = phase
+    if status:
+        session_payload["status"] = status
+
+    write_json(session_path, session_payload)
+
+    if previous_ticket_id and ticket_id and previous_ticket_id != ticket_id:
+        clear_ticket_claim_alias(project_root, previous_ticket_id, session_name)
+    if ticket_id and isinstance(current_run, Mapping):
+        set_ticket_claim_alias(project_root, current_run, session_name)
+
+    return session_payload
 
 
 def extract_ticket_id(text: str) -> str | None:
@@ -527,15 +722,27 @@ def capture_user_turn(
     captured_at: str | None = None,
     only_if_missing: bool = False,
 ) -> dict[str, object] | None:
+    captured_at_value = captured_at or now_iso()
     current_run = load_current_run(
         project_root,
         session_id=session_id,
         explicit_run_state=explicit_run_state,
     )
-    if current_run is None:
-        return None
+    normalized_session_id = normalize_session_id(session_id)
+    session_state = (
+        initialize_session_state(
+            project_root=project_root,
+            session_id=normalized_session_id,
+            current_run=current_run,
+            explicit_run_state=explicit_run_state,
+            captured_at=captured_at_value,
+        )
+        if normalized_session_id
+        else {}
+    )
 
-    existing = current_run.get("last_user_turn")
+    existing_source = current_run if current_run is not None else session_state
+    existing = existing_source.get("last_user_turn") if isinstance(existing_source, Mapping) else None
     if only_if_missing and isinstance(existing, dict) and existing:
         return existing
 
@@ -543,16 +750,32 @@ def capture_user_turn(
         raw_text,
         turn_id=turn_id,
         source=source,
-        captured_at=captured_at,
+        captured_at=captured_at_value,
     )
-    persist_runtime_update(
-        project_root,
-        current_run,
-        {
+    if current_run is not None:
+        updates: dict[str, object] = {
             "last_user_turn": last_user_turn,
             "updated_at": str(last_user_turn["captured_at"]),
-        },
-    )
+        }
+        if session_state:
+            session_name = session_state.get("session_name")
+            current_ticket_id = session_state.get("current_ticket_id")
+            if isinstance(session_name, str) and session_name.strip():
+                updates["session_name"] = session_name.strip()
+            if isinstance(current_ticket_id, str) and current_ticket_id.strip():
+                updates["current_ticket_id"] = current_ticket_id.strip()
+        persist_runtime_update(
+            project_root,
+            current_run,
+            updates,
+        )
+    elif normalized_session_id:
+        session_path = session_state_path(project_root, normalized_session_id)
+        payload = dict(session_state)
+        payload["last_user_turn"] = last_user_turn
+        payload["updated_at"] = str(last_user_turn["captured_at"])
+        payload["last_seen_at"] = str(last_user_turn["captured_at"])
+        write_json(session_path, payload)
     return last_user_turn
 
 
