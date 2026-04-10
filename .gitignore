@@ -53,3 +53,8 @@ htmlcov/
 
 # Generated experiment outputs
 experiments/latest-runs.json
+
+# Local ticket working set
+tickets/**/*.md
+!tickets/README.md
+!tickets/templates/ticket.md
