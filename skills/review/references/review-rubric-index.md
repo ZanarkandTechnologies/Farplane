@@ -5,6 +5,7 @@ This is the primary rubric map for the `review` skill.
 Use it to:
 
 - choose the right rubric families for the ticket
+- load the anti-slop search playbook when the review needs repo-grounded skepticism
 - locate the correct family reference files
 - score each family consistently
 - write one `Review Packet` back into the ticket
@@ -32,6 +33,9 @@ Calibration rules:
   merely absence of defects
 
 Each family has its own reference file. Read the selected family files before scoring.
+
+Also load `desloppify.md` whenever code, cleanup, integration, or evidence
+trust is in scope. It is a cross-cutting search playbook, not a scored family.
 
 ## Calibration Examples
 
@@ -131,6 +135,19 @@ Choose rubric families from the ticket context:
 If the reviewer wants to make stronger "worth it", willingness-to-pay, or competitive-market claims, the ticket/spec must already carry explicit user, alternative, and price-point evidence. Otherwise keep the judgment at the `user-intent-satisfaction` level and call the stronger market question underspecified.
 
 When unsure, prefer adding `evidence-quality` and `integration-readiness`.
+
+## Cross-Cutting Search Playbook
+
+- File: `desloppify.md`
+- Use when:
+  - code or docs may have neighboring-surface drift
+  - integration or invariant risk could hide outside the changed file
+  - AI-generated or rapid patches need an anti-slop consistency sweep
+  - evidence claims sound stronger than the attached proof
+- Focus:
+  - changed-file plus neighboring-surface search discipline
+  - severity/confidence-ranked findings
+  - invariant, naming, contract, and evidence drift
 
 ## Rubric Families
 
@@ -236,6 +253,8 @@ Write the final review back into the ticket under `Review Packet`.
 
 Required fields:
 
+- `work_type`
+- `search_scope`
 - `reviewed_at`
 - `rubrics_used`
 - `overall_score`
@@ -247,6 +266,7 @@ Required fields:
 - `traceability`
 - `freshness`
 - `hard_gate_failures`
+- `finding_log`
 - `blocking_findings`
 - `next_action`
 
@@ -270,3 +290,5 @@ Always ask:
 - What hard gate is failing?
 - What is the lowest-scoring family and why?
 - What concrete next pass would raise the score above threshold?
+- Which neighboring surface did I check to rule out or confirm drift?
+- Is this finding severe enough and proven enough to deserve a blocking slot?

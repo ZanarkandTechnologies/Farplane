@@ -60,6 +60,7 @@ Ask:
 
 - Do any artifacts contradict the summary?
 - Is the written claim stronger than the proof actually attached?
+- Does a nearby doc, ticket note, or test output reveal claim inflation or stale proof?
 
 ### `inspectability`
 
@@ -82,6 +83,15 @@ Ask:
   happened.
 - Findings should point to the exact unproven claim, missing artifact, or
   contradiction and tell the builder what proof to collect next.
+
+## Desloppify Cues
+
+When using the anti-slop playbook, search for:
+
+- claims in the ticket or summary that are not backed by the attached artifact set
+- screenshots/logs/tests that prove only the happy path while the prose claims broader coverage
+- contradictions between QA notes and the review summary
+- stale artifacts that predate the actual changed files or current ticket state
 
 ## Example Judgments
 

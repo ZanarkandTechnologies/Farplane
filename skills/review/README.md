@@ -1,6 +1,6 @@
 # Review
 
-Rubric-driven verification for plans, code, UI, evidence, demos, and integration readiness.
+Rubric-driven verification for plans, code, UI, evidence, demos, and integration readiness, with a repo-grounded anti-slop search playbook for substantive review.
 
 ## Purpose
 
@@ -12,6 +12,7 @@ or optimistic prose.
 
 - [`SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/SKILL.md): main review workflow
 - [`references/review-rubric-index.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md): family selection map, shared score contract, and threshold policy
+- [`references/desloppify.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/desloppify.md): cross-cutting anti-slop search playbook for neighboring-surface consistency checks
 - [`references/spec-contract.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/spec-contract.md)
 - [`references/implementation-plan.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/implementation-plan.md)
 - [`references/code-quality.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/code-quality.md)
@@ -29,7 +30,11 @@ or optimistic prose.
 ```text
 Use `review` on the active ticket.
 Select `code-quality`, `integration-readiness`, and `evidence-quality`.
+Load `references/desloppify.md` because consistency and integration trust are in scope.
+Search the changed files plus the smallest neighboring constants/docs/interfaces needed to test drift.
 Use the family skeptic questions and score each family on the anchored 1.0-5.0 scale.
+Add `user-intent-satisfaction` when the ticket is clearly user-facing and the review needs to judge whether the delivered result actually satisfies the ask.
+Return severity-ranked findings with concrete file refs.
 Explain why the result is not a lower or higher adjacent band.
 Return a `Review Packet` with a clear `pass|revise|block` verdict.
 ```
@@ -37,8 +42,11 @@ Return a `Review Packet` with a clear `pass|revise|block` verdict.
 ## How to Test
 
 - `git diff --check`
+- `rg -n "desloppify|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md skills/review/references agents/code-reviewer.toml docs/specs/review-gates.md tickets/templates/ticket.md`
+  and expect live matches in the updated review surfaces
 - `rg -n "interpolation points|interpolation-style|2\\.0 and 4\\.0 are interpolation|2 and 4 are interpolation" skills/review/SKILL.md skills/review/AGENTS.md skills/review/references agents/code-reviewer.toml docs/specs/review-gates.md tickets/templates/ticket.md`
   and expect no live matches
 - Manually verify that examples and thresholds in `SKILL.md`,
-  `references/review-rubric-index.md`, and `docs/specs/review-gates.md` all use
-  the same explicit `1.0`-to-`5.0` contract
+  `references/review-rubric-index.md`, `references/desloppify.md`, and
+  `docs/specs/review-gates.md` all use the same explicit `1.0`-to-`5.0`
+  contract and search/output expectations

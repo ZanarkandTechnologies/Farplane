@@ -41,6 +41,7 @@ Ask:
 
 - Are interfaces and assumptions actually correct, or only unchallenged?
 - Is there a schema or contract edge that still depends on luck?
+- Which neighboring file or doc defines the same contract, and does it still agree?
 
 ### `dependency-readiness`
 
@@ -79,6 +80,15 @@ Ask:
 - Exceptional evidence keeps blast radius low and handoff confidence high.
 - Findings should name the unresolved dependency, unsafe assumption, or coupling
   risk that keeps the work out of a passing band.
+
+## Desloppify Cues
+
+When using the anti-slop playbook, search for:
+
+- a related schema, type, or config file that still encodes the old rule
+- a dependency assumption that exists only in prose, not in verified repo state
+- a migration or compatibility path that was updated in one layer only
+- a merge blocker hidden in neighboring docs, tests, or entrypoints
 
 ## Example Judgments
 

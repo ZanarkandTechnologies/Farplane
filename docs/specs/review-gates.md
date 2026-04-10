@@ -40,6 +40,7 @@ Reviewer answers:
 - does the implementation satisfy the work package?
 - is the evidence strong enough?
 - what should be fixed before completion?
+- what neighboring repo surfaces were checked to rule out drift or hidden coupling?
 
 Reviewer produces the rubric score, evidence-gate judgment, and concrete next action.
 For user-facing work, reviewer rubric selection may also include a dedicated
@@ -56,6 +57,9 @@ Stop hook answers:
 
 Stop hook should consume QA + reviewer outputs, not replace them.
 It should not depend on a separate evidence-review-only role.
+On completion paths, it should also require an explicit judgment about whether
+the finished artifact would satisfy the saved user ask, not only whether the
+ticket and evidence look internally coherent.
 
 ## Work Types
 
@@ -76,6 +80,12 @@ Reviewer output should use one normalized shape:
 ```json
 {
   "work_type": ["ui", "api"],
+  "search_scope": {
+    "changed_files": ["src/example.ts"],
+    "related_files": ["src/exampleTypes.ts", "docs/specs/example.md"],
+    "invariants_checked": ["MEM-0006"],
+    "docs_checked": ["skills/review/references/code-quality.md"]
+  },
   "rubrics_used": ["ui-quality", "code-quality", "evidence-quality"],
   "summary": "short verdict summary",
   "overall_score": 3.9,
@@ -86,7 +96,20 @@ Reviewer output should use one normalized shape:
   "integration_readiness": "pass|fail",
   "traceability": "pass|fail",
   "freshness": "pass|fail",
+  "user_intent_impression": "pass|fail",
+  "user_intent_mismatch_reason": "",
   "hard_gate_failures": ["evidence-quality"],
+  "finding_log": [
+    {
+      "severity": "high",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "Specific issue that must be addressed",
+      "file_refs": ["src/example.ts", "src/exampleTypes.ts"],
+      "evidence": ["Short reason grounded in inspected code or artifacts"],
+      "next_action": "one concrete remediation step"
+    }
+  ],
   "rubric_sections": [
     {
       "name": "evidence-quality",
@@ -110,6 +133,10 @@ Reviewer output should use one normalized shape:
   "next_action": "one concrete next step"
 }
 ```
+
+`search_scope` should stay compact and explain which neighboring surfaces the
+review checked beyond the changed file. `finding_log` should stay high-signal:
+severity-ranked, evidence-backed, and concrete enough for a builder to act on.
 
 ## Anchored Review Scale
 
@@ -148,6 +175,21 @@ Default:
 - `block` if the work is materially off-target, underspecified, or unsafe
 - `evidence-quality` below threshold forces non-pass overall
 - `integration-readiness` below threshold forces non-pass overall
+- `user_intent_impression` below threshold forces non-pass overall on completion paths
+
+## Reviewer Search Discipline
+
+For code, cleanup, integration, and evidence-heavy review, the reviewer should
+not stop at the changed file when neighboring repo surfaces likely encode the
+same rule. The expected path is:
+
+1. changed files and ticket claims
+2. directly related interfaces, types, constants, or config
+3. canonical docs or memory entries for the same invariant
+4. nearby tests or evidence artifacts that should prove the claim
+
+This is a targeted search discipline, not permission to wander the whole repo
+without a hypothesis.
 
 ## Evidence Requirements
 

@@ -61,6 +61,7 @@ Ask:
 
 - Are responsibilities localized where a future fix would naturally look?
 - Did the change quietly move policy into the wrong layer?
+- Did a rename, rule, or invariant change in one file but not its neighboring ownership surfaces?
 
 ### `error-handling`
 
@@ -98,8 +99,19 @@ Use these lenses when relevant and include findings under this rubric:
   low surprise for future maintainers.
 - Exceptional evidence not only avoids defects, but also improves the shape of
   the surrounding code.
-- Findings should name the specific leak, duplication, brittle branch, or
-  failure-path miss with file context when possible.
+- Findings should name the specific leak, duplication, brittle branch,
+  neighboring-surface inconsistency, or failure-path miss with file context when
+  possible.
+
+## Desloppify Cues
+
+When using the anti-slop playbook, search for:
+
+- a duplicated constant, helper, or policy that should have changed too
+- a rename that stopped at the primary file
+- a stale caller or export contract
+- comments/docstrings that now lie about the implementation
+- dead compatibility branches or debug residue that no longer earn their keep
 
 ## Example Judgments
 
