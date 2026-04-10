@@ -4,6 +4,17 @@ Ticket-first autonomous Codex harness.
 
 If a repo does not already have Codexter conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `tickets/`, start with `init-project` before trying to use the full spec, ticket, and execution workflow.
 
+## Read This Repo
+
+Start with these entrypoints in order:
+
+- Repo-local operating map: [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
+- Top-level system map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
+- Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
+- Current-state feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
+- Ticket contract and live board: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md), [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
+- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
+
 The core idea is simple:
 
 - `brainstorm` explores options before commitment
@@ -16,6 +27,12 @@ The core idea is simple:
 - worker lanes such as `ralph` implement the selected ticket and gather evidence
 - a `Stop` `hook` judges the evidence and current-turn intent alignment
 - the orchestrator decides whether to repeat, advance, block, complete, or move to the next ready ticket
+
+Runtime state stays lightweight:
+
+- explicit run-state selectors outrank ambient state for managed lanes
+- hook `session_id` routes prompt capture and Stop-hook reads to the correct lane in parallel Codex usage
+- `.ralph/state/current-run.json` is only a compatibility fallback / last-active pointer, not the primary identity source
 
 ## One Picture
 
@@ -272,14 +289,18 @@ The current prototype is narrower:
 
 ## What Is Canonical Today
 
+- Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
 - Specs: [docs/specs](/Users/kenjipcx/coding-harness/Codexter/docs/specs)
+- Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
 - Current execution spec: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
 - V2 direction: [ralph-v2-direction.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-v2-direction.md)
 - Intake skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview), [skills/prd](/Users/kenjipcx/coding-harness/Codexter/skills/prd)
 - Ticketization: [skills/spec-to-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket)
 - Planning: [skills/impl-plan](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan)
 - Execution and review skills: [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/ralph](/Users/kenjipcx/coding-harness/Codexter/skills/ralph), [skills/review](/Users/kenjipcx/coding-harness/Codexter/skills/review), [skills/docs-closeout](/Users/kenjipcx/coding-harness/Codexter/skills/docs-closeout)
+- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
+- Doc governance: [doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md)
 - Runtime scripts: [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
 - Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets) is the live board; do not rely on hardcoded queue summaries here
 - Archived prototypes/history: [archive](/Users/kenjipcx/coding-harness/Codexter/tickets/archive)

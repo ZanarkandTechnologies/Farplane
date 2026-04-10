@@ -16,7 +16,9 @@ This file is loaded every loop. Keep it operational and project-specific.
 
 ## Docs State
 
+- Architecture: `ARCHITECTURE.md`
 - PRD: `docs/prd.md`
+- Specs index: `docs/specs/README.md`
 - Specs: `docs/specs/*`
 - History: `docs/HISTORY.md`
 - Memory: `docs/MEMORY.md`

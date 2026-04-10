@@ -37,6 +37,7 @@ Choose the smallest relevant reading set before editing.
 For general repo orientation:
 
 - `README.md`
+- `ARCHITECTURE.md`
 - `docs/specs/README.md`
 - active ticket under `tickets/`
 - `docs/MEMORY.md`

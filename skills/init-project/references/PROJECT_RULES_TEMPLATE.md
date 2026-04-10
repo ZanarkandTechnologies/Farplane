@@ -10,9 +10,10 @@ This file defines the project-specific technical rules, tech stack, and conventi
 - **Package Manager**: [e.g., pnpm, npm, poetry]
 
 ## 📁 Folder Structure
+- `ARCHITECTURE.md`: Top-level system map and canonical surface guide
 - `src/`: Main source code
 - `tests/`: Test files
-- `docs/`: Canonical project state (`prd.md`, `specs/*`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
+- `docs/`: Canonical project state (`prd.md`, `specs/README.md`, `specs/*`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
 - `tickets/`: Flat ticket board (`TASK-*.md`, `archive/`, `templates/`)
 - `...`: [Other key directories]
 

@@ -1,6 +1,6 @@
 # Harness Techniques
 
-Date: 2026-04-07
+Date: 2026-04-09
 
 ## Goal
 
@@ -36,6 +36,7 @@ This inventory is grounded in:
 | Technique | Status | Main surfaces | Why it matters | Current limit |
 | --- | --- | --- | --- | --- |
 | `AGENTS.md` as a map, not an encyclopedia | Implemented | root `AGENTS.md`, `docs/specs/*`, `docs/specs/harness-engineering-quickstart.md` | Keeps top-level instructions short and points agents toward deeper sources of truth | coverage depends on docs staying discoverable and current |
+| `ARCHITECTURE.md` as the top-level system map | Implemented | `ARCHITECTURE.md`, `README.md`, `docs/specs/README.md` | Gives one current-state architecture entrypoint between the short `AGENTS.md` map and the deeper specs/skills | stays useful only if it remains map-like and current-state-first |
 | Repo docs as the system of record | Implemented | `docs/`, tickets, root `AGENTS.md`, `README.md` | Makes intent, plans, and constraints visible to agents instead of hiding them in chat | some knowledge still lives in research notes or discussion before promotion |
 | Discovery funnel before execution | Implemented | `skills/brainstorm`, `skills/deep-interview`, `skills/prd`, `README.md` | Pushes ambiguity reduction ahead of build work | still depends on operator choosing the right intake skill |
 | Spec-first before ticket execution | Implemented | `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps execution downstream of clarified specs | broad spec quality still determines downstream ticket quality |
@@ -70,7 +71,9 @@ This inventory is grounded in:
 | Technique | Status | Main surfaces | Why it matters | Current limit |
 | --- | --- | --- | --- | --- |
 | Durable memory split by purpose | Implemented | `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, root `AGENTS.md` | Separates change log, invariants, and repeated misses | relies on disciplined promotion/writeback |
-| Progressive disclosure of context | Implemented | short `AGENTS.md`, `docs/specs/*`, skill references, tickets | Starts agents from a small stable entry point and teaches where to look next | not yet mechanically checked for freshness or cross-link quality |
+| Progressive disclosure of context | Implemented | short `AGENTS.md`, `ARCHITECTURE.md`, `docs/specs/*`, skill references, tickets | Starts agents from a small stable entry point and teaches where to look next | structural entrypoints are checked, but narrative doc quality still needs active audit |
+| Mechanical knowledge-base entrypoint checks | Implemented | `bin/check_doc_parity.py`, `docs/specs/doc-governance.md`, `README.md`, `ARCHITECTURE.md`, `docs/specs/README.md`, `tickets/README.md` | Keeps the top-level knowledge-base entry surfaces linked and catches stale queue claims without over-linting all prose | intentionally narrow; it does not replace narrative document review |
+| Doc-governance workflow for narrative drift | Implemented | `docs/specs/doc-governance.md`, `docs/specs/README.md` | Gives flexible docs a repeatable audit path without requiring brittle substring validators for every story change | still depends on humans running the audit loop; no recurring maintainer agent yet |
 | Stop-hook continuation and judgment | Implemented | `hooks.json`, `bin/stop_hook.py`, `agents/orchestrator.toml`, `agents/reviewer.toml` | Gives visible turn-boundary continuation logic instead of pure transcript intuition | continuation policy is still being simplified and hardened |
 | Current-turn intent relevance gate | Implemented | `bin/capture_user_turn.py`, `bin/stop_hook.py`, `docs/specs/context-and-handoff-policy.md`, `docs/MEMORY.md` | Keeps continuation and completion decisions anchored to the user's current ask instead of stale worker momentum | degraded fallback still exists when input-hook capture is missing |
 | Explicit ticket selectors outrank ambient state | Implemented | `docs/MEMORY.md`, `bin/stop_hook.py`, `docs/HISTORY.md` | Prevents stale run state from hijacking the wrong ticket | still mainly a runtime safety rule, not a full dispatcher model |
@@ -104,7 +107,6 @@ This inventory is grounded in:
 | Harder evidence-quality enforcement in Stop hook | Proposed | Stop-hook judgment exists, but stricter machine-readable evidence thresholds are still a direction more than a finished system | Tightens the highest-leverage harness lever: completion policy | replay smoke cases with stronger evidence-fail paths |
 | One main artifact for subagent grounding | Proposed | Tickets are durable memory already, but not every loop treats one file as the strict context anchor | Reduces context rot and ambiguous handoffs | require subagents to summarize the ticket before acting on one ticket run |
 | User-input-to-output impressed-user check | Proposed | user request is present in chat, but not normalized into a reusable final review artifact | Creates a direct loop between intake and final judgment | save original ask in the ticket or run artifact, then score final output against it |
-| Mechanical knowledge-base freshness checks | Proposed | Codexter has canonical docs, but not dedicated CI/lint checks for stale, uncrosslinked, or drifting harness docs | Keeps repo knowledge trustworthy as the system of record | add one doc validator over `docs/specs` and linked canonical docs |
 | Recurring doc-gardening / cleanup agent | Proposed | durable docs exist, but there is no explicit recurring documentation maintenance loop | Prevents stale rules and docs from quietly rotting | schedule one documentation-maintainer pass and measure stale-doc fixes found |
 | Mechanical architecture and taste invariants | Proposed | Codexter has prompt/rule guidance and some repo rules, but not strong custom structural checks with remediation-grade errors | High leverage for keeping fast agent output coherent | encode one or two domain or doc invariants as real validators or lints |
 | Agent-visible local observability stack | Proposed | QA/browser evidence is present, but logs/metrics/traces are not yet a first-class agent feedback loop | Would extend “agent legibility” beyond UI into performance and runtime reliability | expose one local log/metric path for a ticket and test a performance or reliability task |
@@ -121,6 +123,7 @@ When deciding what to tune next:
 ## Canonical Companion Docs
 
 - `harness-engineering-quickstart.md` for how to tune the harness
+- `doc-governance.md` for structural versus narrative doc-audit policy
 - `review-gates.md` for the QA/reviewer/Stop-hook split
 - `spec-first-execution-loop.md` for the end-to-end execution model
 - `orchestrator-subagent-loop.md` for `$impl` lane roles

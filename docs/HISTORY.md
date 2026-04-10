@@ -39,3 +39,7 @@
 2026-04-09 03:53 +0100 | CHORE | split the shipped global AGENTS contract into `templates/global/AGENTS.md`, rewrite root `AGENTS.md` as Codexter-local context, and point `install.sh` plus `README.md` at the new boundary
 2026-04-09 04:10 +0100 | FEAT | switch runtime lane routing to explicit-run-state then hook-session-id precedence, add per-session state files, and cover concurrent-session prompt capture with regression tests
 2026-04-09 04:48 +0100 | CHORE | deepen the live review contract into explicit 1-to-5 score bands, add skeptic questions and evidence cues across all review families, and sync the reviewer prompt plus review-gates spec
+2026-04-09 05:18 +0100 | FEAT | add the first explicit delegated-worker runtime contract with `worker_name`, `main_artifact_path`, and Stop-hook-captured `grounding_summary`, and document the new claim fields across impl/runtime surfaces
+2026-04-10 01:05 +0100 | FEAT | add advisory stale-wait backpressure metadata with `worker_started_at`, `last_checkpoint_at`, and `checkpoint_summary`, derive `over_budget` status in the tmux-helper read path, and document the visible no-watchdog backpressure contract
+2026-04-09 17:07 +0100 | CHORE | add a root architecture map, adopt hybrid structural-plus-prompt doc governance, and upgrade init-project to scaffold architecture/specs entry surfaces
+2026-04-09 17:32 +0100 | FEAT | upgrade the live review contract with a repo-grounded desloppify search playbook, severity-ranked findings, compact search-scope reporting, and synced reviewer/spec/ticket template updates

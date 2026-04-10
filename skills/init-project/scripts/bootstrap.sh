@@ -79,8 +79,10 @@ echo "Force overwrite: $FORCE"
 
 copy_file "${REF_DIR}/AGENTS_TEMPLATE.md" "${TARGET_DIR}/AGENTS.md"
 copy_file "${REF_DIR}/PROJECT_RULES_TEMPLATE.md" "${TARGET_DIR}/PROJECT_RULES.md"
+copy_file "${REF_DIR}/ARCHITECTURE_TEMPLATE.md" "${TARGET_DIR}/ARCHITECTURE.md"
 
 mkdir -p "${TARGET_DIR}/docs/specs"
+copy_file "${REF_DIR}/SPECS_README_TEMPLATE.md" "${TARGET_DIR}/docs/specs/README.md"
 
 write_file_if_missing "${TARGET_DIR}/docs/prd.md" "# PRD\n\n## Problem / Context\n\n## Audience\n\n## JTBD\n\n## SLC Slice\n\n## Goals\n\n## Non-Goals\n\n## Constraints\n\n## Risks\n\n## Backpressure\n"
 write_file_if_missing "${TARGET_DIR}/docs/HISTORY.md" "# HISTORY\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | MEM-#### | tags | text\n\n"
@@ -96,6 +98,7 @@ echo ""
 echo "Done."
 echo "Next:"
 echo "  - Fill in PROJECT_RULES.md and AGENTS.md."
+echo "  - Fill in ARCHITECTURE.md so the repo has one top-level system map."
 echo "  - Refine docs/TASTE.md so UI tickets and QA share one visual doctrine."
 echo "  - Use docs/TROUBLES.md for repeated misses; promote recurring lessons back into the system."
 echo "  - If the idea is still open-ended, start with brainstorm."

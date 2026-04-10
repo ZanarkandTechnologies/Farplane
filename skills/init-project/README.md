@@ -18,7 +18,7 @@ bash ~/.codex/skills/init-project/scripts/bootstrap.sh
 Then follow the funnel:
 
 ```text
-brainstorm -> deep-interview -> prd -> spec-to-ticket -> ralphplan -> ralph
+brainstorm -> deep-interview -> prd -> spec-to-ticket -> impl-plan -> ralph
 ```
 
 ## Brownfield Migration
@@ -29,13 +29,14 @@ If the repo already exists, do the smallest migration first.
 
 ```bash
 mkdir -p docs/specs tickets tickets/archive tickets/templates
-touch docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md
+touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md docs/specs/README.md
 ```
 
 Then copy in:
 
 - `PROJECT_RULES.md`
 - `AGENTS.md`
+- `ARCHITECTURE.md`
 - `docs/TASTE.md`
 - `tickets/templates/ticket.md`
 
@@ -53,7 +54,7 @@ Start with:
 
 - one PRD/spec
 - one real ticket
-- one `ralphplan -> ralph` cycle
+- one `impl-plan -> ralph` cycle
 
 Do not migrate every old issue into ticket files at once.
 
@@ -69,7 +70,7 @@ Then:
 
 - use `spec-to-ticket`
 - set the chosen ticket to `status: review`
-- run `ralphplan`
+- run `impl-plan`
 - set it to `status: building`
 - run `ralph`
 
@@ -96,10 +97,12 @@ Those can come after one clean ticket run.
 
 - [ ] `PROJECT_RULES.md` exists
 - [ ] `AGENTS.md` exists
+- [ ] `ARCHITECTURE.md` exists
 - [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md` exist
+- [ ] `docs/specs/README.md` exists
 - [ ] `tickets/` structure exists
 - [ ] `tickets/archive/` exists for completed tickets
 - [ ] one first ticket exists
-- [ ] one first `ralphplan` run is successful
+- [ ] one first `impl-plan` run is successful
 - [ ] one first `ralph` run is successful
 - [ ] repeated failures get logged to `docs/TROUBLES.md`

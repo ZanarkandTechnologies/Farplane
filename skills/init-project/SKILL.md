@@ -1,6 +1,6 @@
 ---
 name: init-project
-version: 2.5.0
+version: 2.6.0
 description: "One-time setup workflow for new projects. Scaffold docs-first operating files, shared taste doctrine, flat ticket state with archival, and reusable plan/build prompts."
 ---
 
@@ -12,14 +12,15 @@ One-time setup for new projects. This skill scaffolds a docs-first workflow and 
 
 - `PROJECT_RULES.md` (project-specific stack + commands + conventions)
 - `AGENTS.md` (operational contract loaded every loop)
-- `docs/` state (`prd.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
+- `ARCHITECTURE.md` (top-level system map for the repo)
+- `docs/` state (`prd.md`, `specs/README.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
 - `tickets/` state (`*.md`, `archive/`, `templates/`, optional `README.md`)
 - discovery-to-execution funnel:
   - `brainstorm`
   - `deep-interview`
   - `prd`
   - `spec-to-ticket`
-  - `ralphplan`
+  - `impl-plan`
   - `ralph`
 
 ## Common Stack Setup
@@ -57,16 +58,18 @@ bash ~/.codex/skills/init-project/scripts/bootstrap.sh
 
 1. Copy `references/PROJECT_RULES_TEMPLATE.md` -> `PROJECT_RULES.md`.
 2. Copy `references/AGENTS_TEMPLATE.md` -> `AGENTS.md`.
-3. Create docs state:
+3. Copy `references/ARCHITECTURE_TEMPLATE.md` -> `ARCHITECTURE.md`.
+4. Create docs state:
    - `mkdir -p docs/specs`
+   - copy `references/SPECS_README_TEMPLATE.md` -> `docs/specs/README.md`
    - `touch docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TASTE.md docs/TROUBLES.md`
-4. Create tickets state:
+5. Create tickets state:
    - `mkdir -p tickets tickets/archive tickets/templates`
    - copy the ticket template into `tickets/templates/`
-5. If the idea is still open-ended, use `brainstorm`.
-6. If the first slice is still too vague for a PRD, use `deep-interview`.
-7. Use `prd` skill for requirements and PRD authoring (HITL loop).
-8. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+6. If the idea is still open-ended, use `brainstorm`.
+7. If the first slice is still too vague for a PRD, use `deep-interview`.
+8. Use `prd` skill for requirements and PRD authoring (HITL loop).
+9. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration
 
@@ -75,7 +78,7 @@ If the project already exists:
 1. run the same bootstrap script in the repo root
 2. do **not** convert the whole backlog
 3. start with one PRD/spec and one ticket
-4. prove one `ralphplan -> ralph` cycle first
+4. prove one `impl-plan -> ralph` cycle first
 
 Migration guide:
 
@@ -85,6 +88,7 @@ Migration guide:
 
 - `PROJECT_RULES.md` centralizes stack details and backpressure commands.
 - `AGENTS.md` stays operational and lightweight because it is loaded every loop.
+- `ARCHITECTURE.md` gives the repo one top-level system map instead of pushing all orientation into `README.md` or `AGENTS.md`.
 - `docs/` is the canonical project state for planning and execution.
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
 - `docs/TROUBLES.md` is the append-only operator feedback log for repeated misses, failed attempts, and correction patterns that should feed future system improvements.
@@ -121,5 +125,7 @@ The generated planning flow should follow these defaults:
 
 - [PROJECT_RULES_TEMPLATE.md](references/PROJECT_RULES_TEMPLATE.md) - Project rules template.
 - [AGENTS_TEMPLATE.md](references/AGENTS_TEMPLATE.md) - AGENTS template.
+- [ARCHITECTURE_TEMPLATE.md](references/ARCHITECTURE_TEMPLATE.md) - Architecture map template.
+- [SPECS_README_TEMPLATE.md](references/SPECS_README_TEMPLATE.md) - Specs index template.
 - [TASTE_TEMPLATE.md](references/TASTE_TEMPLATE.md) - Shared visual doctrine template.
 - `tickets/templates/ticket.md` - Filesystem ticket template.
