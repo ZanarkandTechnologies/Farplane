@@ -51,7 +51,7 @@ The orchestrator remains singular: worker lanes do not mutate queue state or cla
 - Stop-hook and judge outputs remain the continuation/completion gate.
 - When the verdict says repeat the same build work, the follow-up instruction should re-enter the same `$impl` contract for that ticket.
 - Re-entry should reuse the existing verdict fields and `orchestrator_message`; do not invent a second continuation artifact.
-- Former Ralph-style persistence now lives here: repeated same-ticket execution is a normal `$impl` re-entry path, not a separate public skill.
+- Former persistence-loop behavior now lives here: repeated same-ticket execution is a normal `$impl` re-entry path, not a separate public skill.
 
 ## Operator UX
 

@@ -14,14 +14,18 @@ Current design docs:
 - `harness-engineering-quickstart.md`
 - `harness-techniques.md` - current-state feature and technique inventory
 - `orchestrator-subagent-loop.md`
-- `ralph-runtime-surface.md`
-- `ralph-orchestration-blueprint.md`
+- `runtime-surface.md`
 - `review-gates.md`
 - `spec-first-execution-loop.md`
-- `ralph-v2-direction.md`
-- `ralph-flow-examples.md` - start here for visual dry runs
-- `ralph-run-state.schema.json`
-- `ralph-judge-verdict.schema.json`
+
+Legacy or transitional references:
+
+- `legacy/ralph-runtime-surface.md`
+- `legacy/ralph-orchestration-blueprint.md`
+- `legacy/ralph-v2-direction.md`
+- `legacy/ralph-flow-examples.md`
+- `legacy/ralph-run-state.schema.json`
+- `legacy/ralph-judge-verdict.schema.json`
 
 Use this folder for:
 

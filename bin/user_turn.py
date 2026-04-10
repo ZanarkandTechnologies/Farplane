@@ -250,7 +250,7 @@ def explicit_run_state_selector(payload: Mapping[str, object] | None = None) -> 
             value = payload.get(key)
             if isinstance(value, str) and value.strip():
                 return value.strip()
-    raw = os.environ.get("RALPH_RUN_STATE", "").strip()
+    raw = os.environ.get("IMPL_RUN_STATE", "").strip()
     if raw:
         return raw
     return ""

@@ -30,12 +30,12 @@ Update the ticket with:
 
 Emit exactly one final line:
 
-`RALPH_RESULT: status=<enum> next=<enum> reason=<optional>`
+`IMPL_RESULT: status=<enum> next=<enum> reason=<optional>`
 
 Allowed statuses:
 
 - `docs_complete`
-- `continue_ralph`
+- `continue_impl`
 - `blocked`
 
 Allowed next values:

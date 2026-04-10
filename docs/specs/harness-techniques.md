@@ -38,7 +38,7 @@ This inventory is grounded in:
 | `AGENTS.md` as a map, not an encyclopedia | Implemented | root `AGENTS.md`, `docs/specs/*`, `docs/specs/harness-engineering-quickstart.md` | Keeps top-level instructions short and points agents toward deeper sources of truth | coverage depends on docs staying discoverable and current |
 | `ARCHITECTURE.md` as the top-level system map | Implemented | `ARCHITECTURE.md`, `README.md`, `docs/specs/README.md` | Gives one current-state architecture entrypoint between the short `AGENTS.md` map and the deeper specs/skills | stays useful only if it remains map-like and current-state-first |
 | Repo docs as the system of record | Implemented | `docs/`, tickets, root `AGENTS.md`, `README.md` | Makes intent, plans, and constraints visible to agents instead of hiding them in chat | some knowledge still lives in research notes or discussion before promotion |
-| Discovery funnel before execution | Implemented | `skills/brainstorm`, `skills/deep-interview`, `skills/prd`, `README.md` | Pushes ambiguity reduction ahead of build work | still depends on operator choosing the right intake skill |
+| Discovery funnel before execution | Implemented | `skills/brainstorm`, `skills/deep-interview`, `skills/prd`, `README.md` | Pushes ambiguity reduction ahead of build work while keeping one public brainstorm surface that can branch into structured decomposition when needed | still depends on operator choosing the right intake skill |
 | Spec-first before ticket execution | Implemented | `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps execution downstream of clarified specs | broad spec quality still determines downstream ticket quality |
 | Ticketization with proof/testability front-loaded | Implemented | `skills/spec-to-ticket`, `tickets/templates/ticket.md` | Converts intent into executable work with proof expectations early | ticket quality varies with planning rigor |
 | Unified per-ticket planning via `impl-plan` | Implemented | `skills/impl-plan`, `docs/specs/spec-first-execution-loop.md` | Keeps planning bounded to one work package while keeping approval-first planning and consensus challenge in one public surface | default vs consensus mode still needs tight examples so richer detail does not become policy bloat |
@@ -51,7 +51,7 @@ This inventory is grounded in:
 | Single-ticket orchestration via `$impl` | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md`, `README.md` | Makes one ticket the execution unit and keeps orchestration visible | no durable multi-ticket dispatcher yet |
 | Explicit worker-lane split | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Separates builder, reviewer, QA, and evidence-check responsibilities | actual staffing and reuse patterns are still evolving |
 | Ephemeral orchestrator, visible worker lanes | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Avoids a hidden forever-orchestrator and keeps runs legible | tmux/runtime surfaces are still prototype-weight |
-| Same-ticket re-entry via `$impl` + Stop hook | Partial | `skills/impl`, `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps working on one selected ticket until proof exists instead of stopping on partial progress | runtime/code migration still needs to finish removing older Ralph-named residue |
+| Same-ticket re-entry via `$impl` + Stop hook | Partial | `skills/impl`, `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps working on one selected ticket until proof exists instead of stopping on partial progress | runtime/code migration still needs to finish removing older legacy-named residue |
 
 ### Review, QA, and proof
 
@@ -77,7 +77,7 @@ This inventory is grounded in:
 | Stop-hook continuation and judgment | Implemented | `hooks.json`, `bin/stop_hook.py`, `agents/orchestrator.toml`, `agents/reviewer.toml` | Gives visible turn-boundary continuation logic instead of pure transcript intuition | continuation policy is still being simplified and hardened |
 | Current-turn intent relevance gate | Implemented | `bin/capture_user_turn.py`, `bin/stop_hook.py`, `docs/specs/context-and-handoff-policy.md`, `docs/MEMORY.md` | Keeps continuation and completion decisions anchored to the user's current ask instead of stale worker momentum | degraded fallback still exists when input-hook capture is missing |
 | Explicit ticket selectors outrank ambient state | Implemented | `docs/MEMORY.md`, `bin/stop_hook.py`, `docs/HISTORY.md` | Prevents stale run state from hijacking the wrong ticket | still mainly a runtime safety rule, not a full dispatcher model |
-| Lightweight runtime visibility | Partial | `skills/impl/scripts/tmux_helper.py`, `README.md`, `docs/specs/ralph-runtime-surface.md` | Exposes active lane/session/verdict without a heavyweight runtime plane | queue-wide runtime state remains minimal by design |
+| Lightweight runtime visibility | Partial | `skills/impl/scripts/tmux_helper.py`, `README.md`, legacy runtime-surface spec | Exposes active lane/session/verdict without a heavyweight runtime plane | queue-wide runtime state remains minimal by design |
 
 ### Skills, subagents, and tools
 
@@ -86,7 +86,7 @@ This inventory is grounded in:
 | Skills as operational playbooks | Implemented | `skills/*`, `docs/specs/harness-engineering-quickstart.md` | Centralizes repeatable workflow detail outside root prompts | coverage still depends on which workflows have been encoded |
 | Subagents as bounded specialists | Implemented | `agents/*.toml`, `config.toml.example`, root `AGENTS.md` | Reduces context rot and enforces responsibility boundaries | some roles are richer than others; overlap remains in places |
 | MCP/tool surfaces as capability extensions | Implemented | `config.toml.example`, tool-facing skills, README setup | Extends evidence collection, docs access, browser operation, and external research | tool wiring exists, but some tools are not yet codified into stable loops |
-| Tmux-backed visible lanes | Partial | `README.md`, `skills/impl/scripts/tmux_helper.py`, `docs/specs/ralph-v2-direction.md` | Makes long-running worker sessions visible and reusable | still a prototype operational surface rather than a mature dispatcher |
+| Tmux-backed visible lanes | Partial | `README.md`, `skills/impl/scripts/tmux_helper.py`, legacy v2 direction notes | Makes long-running worker sessions visible and reusable | still a prototype operational surface rather than a mature dispatcher |
 
 ## Proposed Techniques and Experiments
 
@@ -103,7 +103,7 @@ This inventory is grounded in:
 
 | Technique | Status | Delta from current system | Why it is promising | Suggested eval |
 | --- | --- | --- | --- | --- |
-| Finish removing Ralph-named residue from runtime/code surfaces | Proposed | public execution has collapsed to `impl`, but runtime helpers, schemas, and older specs still carry Ralph-era names | Reduces naming debt without reopening execution-surface design | migrate helpers, env selectors, and remaining specs onto the chosen neutral runtime naming |
+| Finish removing legacy runtime-named residue from runtime/code surfaces | Proposed | public execution has collapsed to `impl`, but runtime helpers, schemas, env vars, and older specs still carry older names | Reduces naming debt without reopening execution-surface design | migrate helpers, env selectors, and remaining specs onto the chosen neutral runtime naming |
 | Harder evidence-quality enforcement in Stop hook | Proposed | Stop-hook judgment exists, but stricter machine-readable evidence thresholds are still a direction more than a finished system | Tightens the highest-leverage harness lever: completion policy | replay smoke cases with stronger evidence-fail paths |
 | One main artifact for subagent grounding | Proposed | Tickets are durable memory already, but not every loop treats one file as the strict context anchor | Reduces context rot and ambiguous handoffs | require subagents to summarize the ticket before acting on one ticket run |
 | User-input-to-output impressed-user check | Partial | `last_user_turn` is already captured in runtime state and can now feed completion judgment, but the system still needs stronger rollout and evidence across more tickets | Creates a direct loop between intake and final judgment | replay recent completion cases against the saved user ask |
@@ -127,4 +127,4 @@ When deciding what to tune next:
 - `review-gates.md` for the QA/reviewer/Stop-hook split
 - `spec-first-execution-loop.md` for the end-to-end execution model
 - `orchestrator-subagent-loop.md` for `$impl` lane roles
-- `ralph-v2-direction.md` for open deltas and future runtime shape
+- legacy v2 direction notes for open deltas and future runtime shape

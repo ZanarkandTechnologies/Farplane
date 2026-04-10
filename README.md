@@ -293,7 +293,7 @@ The current prototype is narrower:
 - Specs: [docs/specs](/Users/kenjipcx/coding-harness/Codexter/docs/specs)
 - Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
 - Current execution spec: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
-- V2 direction: [ralph-v2-direction.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-v2-direction.md)
+- V2 direction: [legacy v2 direction notes](/Users/kenjipcx/coding-harness/Codexter/docs/specs/legacy/ralph-v2-direction.md)
 - Intake skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview), [skills/prd](/Users/kenjipcx/coding-harness/Codexter/skills/prd)
 - Ticketization: [skills/spec-to-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket)
 - Planning: [skills/impl-plan](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan)
@@ -398,4 +398,4 @@ bash -n install.sh
 
 Read the visual walkthrough:
 
-- [execution loop examples](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-flow-examples.md)
+- [legacy execution loop examples](/Users/kenjipcx/coding-harness/Codexter/docs/specs/legacy/ralph-flow-examples.md)

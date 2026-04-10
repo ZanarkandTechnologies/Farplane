@@ -15,10 +15,10 @@ multi_agent = true
 [env]
 USE_OMX_EXPLORE_CMD = "1"
 CODEXTER_HOME = "__CODEX_HOME__"
-CODEXTER_RALPH_HOOK = "1"
-# Optional explicit force-on for Ralph/Codexter hook behavior. The Stop hook
-# also auto-activates from clear runtime context such as `.harness/`,
-# `.harness/`, legacy `.ralph/` compatibility state, `tickets/`, `RALPH_RESULT`, or explicit ticket selectors.
+CODEXTER_IMPL_HOOK = "1"
+# Optional explicit force-on for Codexter hook behavior. The Stop hook also
+# auto-activates from clear runtime context such as `.harness/`, `tickets/`,
+# `IMPL_RESULT`, or explicit ticket selectors.
 # Optional legacy same-ticket continuation path:
 # CODEXTER_ASSISTED_CONTINUATION = "1"
 # Keep machine-specific hook tuning local if you need non-default behavior.

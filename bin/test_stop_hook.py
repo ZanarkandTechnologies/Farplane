@@ -229,7 +229,7 @@ class StopHookGroundingSummaryTests(unittest.TestCase):
                     "GROUNDING_SUMMARY: initial summary",
                     "working notes",
                     "GROUNDING_SUMMARY: reviewing TASK-0026 acceptance criteria",
-                    "RALPH_RESULT: status=continue_ralph next=building reason=test",
+                    "IMPL_RESULT: status=continue_impl next=building reason=test",
                 ]
             )
         )

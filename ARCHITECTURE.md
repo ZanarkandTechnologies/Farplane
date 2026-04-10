@@ -93,7 +93,7 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   Purpose: end-to-end execution model
 - [docs/specs/orchestrator-subagent-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/orchestrator-subagent-loop.md)
   Purpose: lane roles and orchestration boundaries
-- [docs/specs/ralph-runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md)
+- [docs/specs/runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md)
   Purpose: runtime state and operator-visible surfaces, with `.harness/` as the canonical live root
 - [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
   Purpose: hooks, validators, runtime helpers

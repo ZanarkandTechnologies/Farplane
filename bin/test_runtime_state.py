@@ -28,7 +28,7 @@ class RuntimeClaimTests(unittest.TestCase):
                 "run_id": "run-task-0035-building-01",
                 "phase": "building",
                 "status": "running",
-                "skill_name": "ralph",
+                "skill_name": "impl",
                 "worker_name": "builder",
                 "main_artifact_path": "/tmp/TASK-0035.md",
                 "grounding_summary": "reviewing TASK-0035 acceptance criteria",
@@ -52,7 +52,7 @@ class RuntimeClaimTests(unittest.TestCase):
                 "claimed_at": "2026-04-08T15:00:00Z",
                 "phase": "building",
                 "status": "running",
-                "skill_name": "ralph",
+                "skill_name": "impl",
                 "worker_name": "builder",
                 "main_artifact_path": "/tmp/TASK-0035.md",
                 "grounding_summary": "reviewing TASK-0035 acceptance criteria",
@@ -218,7 +218,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_load_current_run_ignores_legacy_ralph_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".ralph" / "state"
+            state_dir = project_root / ".legacy-runtime" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
             (state_dir / "current-run.json").write_text(
                 json.dumps(

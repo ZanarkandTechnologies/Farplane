@@ -5,7 +5,7 @@ Executable helpers for the Codex harness.
 ## Purpose
 
 This folder contains small scripts used by the live Codex config plus a few
-transitional runtime helpers from the earlier Ralph prototype.
+transitional runtime helpers from earlier prototype iterations.
 
 Primary control plane:
 
@@ -63,7 +63,7 @@ Runtime routing is session-first for parallel Codex usage:
 - hook `session_id` for lane-scoped session state
 - `.harness/state/current-run.json` as the live current-run pointer / last-active selector
 
-See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md) for the canonical decision table.
+See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md) for the canonical decision table.
 
 ## Minimal Example
 

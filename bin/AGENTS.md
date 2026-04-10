@@ -19,16 +19,16 @@ Scripts here are small operational helpers for the live Codex harness.
 - mutate ticket board state silently
 - require network services unless the script is explicitly for that purpose
 
-## Ralph Prototype Rules
+## Legacy Runtime Rules
 
-For `ralph` prototype scripts:
+For legacy runtime/prototype scripts that still carry older names:
 
 - worker launcher runs exactly one bounded phase
 - judge decides only from ticket + result + evidence state
 - orchestrator composes worker + judge; it does not implement code itself
 - tickets remain the canonical execution contract
 - explicit ticket selectors outrank ambient run-state when both are present
-- explicit run-state selectors outrank hook `session_id`, which outranks ambient `.harness/state/current-run.json`; legacy `.ralph/state/current-run.json` is fallback-only during migration
+- explicit run-state selectors outrank hook `session_id`, which outranks ambient `.harness/state/current-run.json`
 - run-state files remain runtime-only and lightweight
 - runtime state should group active execution ownership into a lightweight `claim` object instead of scattering claim semantics across multiple ad hoc top-level reads
 - delegated workers should keep `worker_name`, `main_artifact_path`, and `grounding_summary` visible in the same runtime contract when available

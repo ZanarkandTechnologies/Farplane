@@ -25,7 +25,7 @@ The first live delegated-worker contract is carried in runtime state:
 
 ```bash
 python3 skills/impl/scripts/tmux_helper.py launch \
-  --ticket tickets/TASK-0035-audit-full-user-turn-storage-in-ralph-run-state.md \
+  --ticket tickets/TASK-0026-enforce-delegated-worker-contract.md \
   --phase building \
   --worker-name builder \
   --dry-run

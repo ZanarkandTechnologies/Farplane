@@ -5,14 +5,14 @@ argument-hint: "[--quick|--standard|--deep] [--autoresearch] <idea or vague desc
 ---
 
 <Purpose>
-Deep Interview is an intent-first Socratic clarification loop before planning or implementation. It turns vague ideas into execution-ready specifications by asking targeted questions about why the user wants a change, how far it should go, what should stay out of scope, and what OMX may decide without confirmation.
+Deep Interview is an intent-first Socratic clarification loop before planning or implementation. It turns vague ideas into execution-ready specifications by asking targeted questions about why the user wants a change, how far it should go, what should stay out of scope, and what the agent may decide without confirmation.
 </Purpose>
 
 <Use_When>
 - The request is broad, ambiguous, or missing concrete acceptance criteria
 - The user says "deep interview", "interview me", "ask me everything", "don't assume", or "ouroboros"
 - The user wants to avoid misaligned implementation from underspecified requirements
-- You need a requirements artifact before handing off to `impl-plan`, `autopilot`, `ralph`, or `team`
+- You need a requirements artifact before handing off to `impl-plan`, `autopilot`, `impl`, or `team`
 </Use_When>
 
 <Do_Not_Use_When>
@@ -30,12 +30,12 @@ Execution quality is usually bottlenecked by intent clarity, not just missing im
 - **Quick (`--quick`)**: fast pre-PRD pass; target threshold `<= 0.30`; max rounds 5
 - **Standard (`--standard`, default)**: full requirement interview; target threshold `<= 0.20`; max rounds 12
 - **Deep (`--deep`)**: high-rigor exploration; target threshold `<= 0.15`; max rounds 20
-- **Autoresearch (`--autoresearch`)**: same interview rigor as Standard, but specialized for `omx autoresearch` launch readiness and `.omx/specs/` mission/sandbox artifact handoff
+- **Autoresearch (`--autoresearch`)**: same interview rigor as Standard, but specialized for research-brief launch readiness and a Codexter-native handoff through the active ticket or a deliberate `docs/research/` draft when the user explicitly wants durable research artifacts
 
 If no flag is provided, use **Standard**.
 
 <Mode_Flags>
-- **`--autoresearch`**: switch the interview into autoresearch-intake mode for `omx autoresearch` handoff. In this mode, the interview should converge on a launch-ready research mission, write canonical artifacts under `.omx/specs/`, and preserve the explicit `refine further` vs `launch` boundary for downstream CLI intake.
+- **`--autoresearch`**: switch the interview into research-intake mode. In this mode, the interview should converge on a launch-ready research mission, keep the current requirements brief on live Codexter surfaces, and preserve the explicit `refine further` vs `launch` boundary for downstream handoff.
 </Mode_Flags>
 </Depth_Profiles>
 
@@ -47,7 +47,7 @@ If no flag is provided, use **Standard**.
 - Do not rotate to a new clarity dimension just for coverage when the current answer is still vague; stay on the same thread until one layer deeper, one assumption clearer, or one boundary tighter
 - Before crystallizing, complete at least one explicit pressure pass that revisits an earlier answer with a deeper, assumption-focused, or tradeoff-focused follow-up
 - Gather codebase facts via `explore` before asking user about internals
-- When session guidance enables `USE_OMX_EXPLORE_CMD`, prefer `omx explore` for simple read-only brownfield fact gathering; keep prompts narrow and concrete, and keep ambiguous or non-shell-only investigation on the richer normal path and fall back normally if `omx explore` is unavailable.
+- For simple read-only brownfield fact gathering, prefer focused repo inspection (`rg`, nearby docs, narrow file reads) or the repo's normal explore path; keep prompts narrow and concrete and keep ambiguous investigation on the richer normal path.
 - Always run a preflight context intake before the first interview question
 - Reduce user effort: ask only the highest-leverage unresolved question, and never ask the user for codebase facts that can be discovered directly
 - For brownfield work, prefer evidence-backed confirmation questions such as "I found X in Y. Should this change follow that pattern?"
@@ -64,7 +64,7 @@ If no flag is provided, use **Standard**.
 ## Phase 0: Preflight Context Intake
 
 1. Parse `{{ARGUMENTS}}` and derive a short task slug.
-2. Attempt to load the latest relevant context snapshot from `.omx/context/{slug}-*.md`.
+2. Attempt to load the latest relevant context from the active ticket, linked docs, and any persisted `state_read(mode="deep-interview")` snapshot.
 3. If no snapshot exists, create a minimum context snapshot with:
    - Task statement
    - Desired outcome
@@ -75,7 +75,7 @@ If no flag is provided, use **Standard**.
    - Unknowns/open questions
    - Decision-boundary unknowns
    - Likely codebase touchpoints
-4. Save snapshot to `.omx/context/{slug}-{timestamp}.md` (UTC `YYYYMMDDTHHMMSSZ`) and reference it in mode state.
+4. Persist the snapshot in mode state and, when a ticket already exists, mirror the key points into the ticket `Working Notes` instead of creating `.omx/context/*` files.
 
 ## Phase 1: Initialize
 
@@ -102,7 +102,7 @@ If no flag is provided, use **Standard**.
     "codebase_context": null,
     "current_stage": "intent-first",
     "current_focus": "intent",
-    "context_snapshot_path": ".omx/context/<slug>-<timestamp>.md"
+    "context_surface": "ticket:<path>#Working Notes | state:deep-interview.context_snapshot"
   }
 }
 ```
@@ -193,10 +193,11 @@ Track used modes in state to prevent repetition.
 When threshold is met (or user exits with warning / hard cap):
 
 1. Write interview transcript summary to:
-   - `.omx/interviews/{slug}-{timestamp}.md`
-     (kept for ralph PRD compatibility)
+   - the active ticket `Working Notes` / `Handoff` when a ticket already exists
+   - otherwise the current response as a compact `Deep-Interview Summary`
 2. Write execution-ready spec to:
-   - `.omx/specs/deep-interview-{slug}.md`
+   - the active ticket when one already exists
+   - otherwise the current response handoff plus the next canonical Codexter artifact owner selected for handoff, such as `prd` for `docs/prd.md`
 
 Spec should include:
 - Metadata (profile, rounds, final ambiguity, threshold, context type)
@@ -206,7 +207,7 @@ Spec should include:
 - Desired Outcome
 - In-Scope
 - Out-of-Scope / Non-goals
-- Decision Boundaries (what OMX may decide without confirmation)
+- Decision Boundaries (what the agent may decide without confirmation)
 - Constraints
 - Testable acceptance criteria
 - Assumptions exposed + resolutions
@@ -217,25 +218,27 @@ Spec should include:
 
 ### Autoresearch specialization
 
-When the clarified task is specifically about `omx autoresearch`, or the skill is invoked with `--autoresearch`, keep the interview domain-specific and emit launch-consumable artifacts without skipping clarification.
+When the clarified task is specifically about a research brief, or the skill is invoked with `--autoresearch`, keep the interview domain-specific and emit launch-consumable artifacts without skipping clarification.
 
 - **Accepted seed inputs:** `topic`, `evaluator`, `keep-policy`, `slug`, existing mission draft text, and prior evaluator examples/templates
 - **Required interview focus:** mission clarity, evaluator readiness, keep policy, slug/session naming, and whether the draft is ready to launch now or should refine further
-- **Canonical artifact path:** `.omx/specs/deep-interview-autoresearch-{slug}.md`
-- **Launch artifact bundle:** `.omx/specs/autoresearch-{slug}/mission.md`, `.omx/specs/autoresearch-{slug}/sandbox.md`, and `.omx/specs/autoresearch-{slug}/result.json`
-- **Launch artifact directory:** `.omx/specs/autoresearch-{slug}/`
+- **Canonical artifact surface:** the active ticket when one exists, or a deliberate draft under `docs/research/` when the user explicitly wants a durable research brief
+- **Launch artifact bundle:** one current Codexter brief containing `Mission Draft`, `Evaluator Draft`, `Launch Readiness`, `Seed Inputs`, and `Confirmation Bridge`
+- **Launch artifact location:** keep it on the chosen live Codexter surface above; do not create `.omx/specs/*`
 - **Required artifact sections:**
   - `Mission Draft`
   - `Evaluator Draft`
   - `Launch Readiness`
   - `Seed Inputs`
   - `Confirmation Bridge`
-- **Required launch artifacts under `.omx/specs/autoresearch-{slug}/`:**
-  - `mission.md`
-  - `sandbox.md`
-  - `result.json`
+- **Required launch content:**
+  - `Mission Draft`
+  - `Evaluator Draft`
+  - `Launch Readiness`
+  - `Seed Inputs`
+  - `Confirmation Bridge`
 - **Launch-readiness rule:** mark the draft as **not launch-ready** while the evaluator command still contains placeholder markers such as `<...>`, `TODO`, `TBD`, `REPLACE_ME`, `CHANGEME`, or `your-command-here`
-- **Structured result contract:** `result.json` should point to the draft + mission/sandbox artifacts and carry the finalized `topic`, `evaluatorCommand`, `keepPolicy`, `slug`, `launchReady`, and `blockedReasons` fields so `omx autoresearch` can consume it directly
+- **Structured result contract:** the chosen brief should carry the finalized `topic`, `evaluatorCommand`, `keepPolicy`, `slug`, `launchReady`, and `blockedReasons` fields so the downstream research runner can consume it directly
 - **Confirmation bridge:** after artifact generation, offer at least `refine further` and `launch`; do not launch detached tmux until the user explicitly confirms `launch`
 - **Handoff rule:** downstream execution must preserve the clarified mission intent, evaluator expectations, decision boundaries, and launch-readiness status from this artifact rather than bypassing the draft review step
 
@@ -244,43 +247,43 @@ When the clarified task is specifically about `omx autoresearch`, or the skill i
 Present execution options after artifact generation using explicit handoff contracts. Treat the deep-interview spec as the current requirements source of truth and preserve intent, non-goals, decision boundaries, acceptance criteria, and any residual-risk warnings across the handoff.
 
 ### 1. **`$impl-plan` (Recommended)**
-- **Input Artifact:** `.omx/specs/deep-interview-{slug}.md` (optionally accompanied by the transcript/context snapshot for traceability)
-- **Invocation:** `$impl-plan --consensus <spec-path>`
+- **Input Artifact:** the active ticket path plus the current deep-interview summary / requirements brief
+- **Invocation:** `$impl-plan --consensus <ticket-or-brief>`
 - **Consumer Behavior:** Treat the deep-interview spec as the requirements source of truth. Do not repeat the interview by default; refine architecture/feasibility around the clarified intent and boundaries instead.
 - **Skipped / Already-Satisfied Stages:** Requirements discovery, ambiguity clarification, and early intent-boundary elicitation
-- **Expected Output:** Canonical planning artifacts under `.omx/plans/`, especially `prd-*.md` and `test-spec-*.md`
+- **Expected Output:** an updated ticket plan or other approved Codexter planning artifact that preserves the clarified requirements
 - **Best When:** Requirements are clear enough to stop interviewing, but architectural validation / consensus planning is still desirable
-- **Next Recommended Step:** Use the approved planning artifacts with `$autopilot`, `$ralph`, or `$team` depending on the desired execution style
+- **Next Recommended Step:** Use the approved planning artifacts with `$autopilot`, `$impl`, or `$team` depending on the desired execution style
 
 ### 2. **`$autopilot`**
-- **Input Artifact:** `.omx/specs/deep-interview-{slug}.md`
-- **Invocation:** `$autopilot <spec-path>`
+- **Input Artifact:** the current deep-interview summary / requirements brief
+- **Invocation:** `$autopilot <brief>`
 - **Consumer Behavior:** Use the deep-interview spec as the clarified execution brief. Preserve intent, non-goals, decision boundaries, and acceptance criteria as binding context for planning/execution.
 - **Skipped / Already-Satisfied Stages:** Initial requirement discovery and ambiguity reduction
 - **Expected Output:** Planning/execution progress, QA evidence, and validation artifacts produced by autopilot
 - **Best When:** The clarified spec is already strong enough for direct planning + execution without an additional consensus gate
-- **Next Recommended Step:** Continue through autopilot's execution/QA/validation flow; if coordination-heavy execution emerges, prefer a follow-up `$team` or `$ralph` lane as appropriate
+- **Next Recommended Step:** Continue through autopilot's execution/QA/validation flow; if coordination-heavy execution emerges, prefer a follow-up `$team` or `$impl` pass as appropriate
 
-### 3. **`$ralph`**
-- **Input Artifact:** `.omx/specs/deep-interview-{slug}.md`
-- **Invocation:** `$ralph <spec-path>`
-- **Consumer Behavior:** Use the spec's acceptance criteria and boundary constraints as the persistence target. Do not reopen requirements discovery unless the user explicitly asks to refine further.
+### 3. **`$impl`**
+- **Input Artifact:** the selected ticket plus the current deep-interview summary / requirements brief
+- **Invocation:** `$impl <ticket>`
+- **Consumer Behavior:** Use the ticket's acceptance criteria and boundary constraints as the execution target. Do not reopen requirements discovery unless the user explicitly asks to refine further.
 - **Skipped / Already-Satisfied Stages:** Requirement interview, ambiguity clarification, and initial scope-definition work
-- **Expected Output:** Iterative execution progress and verification evidence tracked against the clarified criteria
-- **Best When:** The task benefits from persistent sequential completion pressure and the user wants execution to keep moving until the criteria are satisfied or a real blocker exists
-- **Next Recommended Step:** Continue Ralph's persistence loop; if work expands into coordination-heavy lanes, hand off to `$team` and keep Ralph for verification continuity
+- **Expected Output:** iterative execution progress plus QA/review evidence tracked against the clarified criteria
+- **Best When:** The task is ready for one selected-ticket build loop with implementation, QA, review, and evidence collection
+- **Next Recommended Step:** Continue re-entering the same `$impl` contract until the criteria are satisfied or a real blocker exists
 
 ### 4. **`$team`**
-- **Input Artifact:** `.omx/specs/deep-interview-{slug}.md`
-- **Invocation:** `$team <spec-path>`
+- **Input Artifact:** the current deep-interview summary / requirements brief
+- **Invocation:** `$team <brief>`
 - **Consumer Behavior:** Treat the spec as shared execution context for coordinated parallel work. Preserve the clarified intent, non-goals, decision boundaries, and acceptance criteria as common lane constraints.
 - **Skipped / Already-Satisfied Stages:** Requirement clarification and early ambiguity reduction
-- **Expected Output:** Coordinated multi-agent execution against the shared spec, with evidence that can later feed a Ralph verification pass when appropriate
+- **Expected Output:** Coordinated multi-agent execution against the shared spec, with evidence that can later feed an `$impl` verification pass when appropriate
 - **Best When:** The task is large, multi-lane, or blocker-sensitive enough to justify coordinated parallel execution instead of a single persistent loop
-- **Next Recommended Step:** Follow the team verification path when the coordinated execution phase finishes; escalate to a separate Ralph loop only when a later persistent verification/fix owner is still needed
+- **Next Recommended Step:** Follow the team verification path when the coordinated execution phase finishes; escalate to a separate `$impl` re-entry loop only when a later persistent verification/fix owner is still needed
 
 ### 5. **Refine further**
-- **Input Artifact:** Existing transcript, context snapshot, and current spec draft
+- **Input Artifact:** existing ticket context, current interview summary, and the current requirements brief
 - **Invocation:** Continue the interview loop
 - **Consumer Behavior:** Re-enter questioning to resolve the highest-leverage remaining uncertainty
 - **Skipped / Already-Satisfied Stages:** None beyond already-captured context
@@ -299,8 +302,8 @@ Present execution options after artifact generation using explicit handoff contr
 - Use `request_user_input` / structured user-input tool for each interview round when available
 - If structured question tools are unavailable, use plain-text single-question rounds and keep the same stage order
 - Use `state_write` / `state_read` for resumable mode state
-- Read/write context snapshots under `.omx/context/`
-- Save transcript/spec artifacts under `.omx/interviews/` and `.omx/specs/`
+- Reuse the active ticket, linked docs, and mode state as the live context surface; do not create `.omx/*` artifacts
+- Save durable interview outputs on current Codexter surfaces such as the active ticket, or hand the brief to `prd` when `docs/prd.md` is the next owner
 </Tool_Usage>
 
 <Escalation_And_Stop_Conditions>
@@ -311,17 +314,17 @@ Present execution options after artifact generation using explicit handoff contr
 </Escalation_And_Stop_Conditions>
 
 <Final_Checklist>
-- [ ] Preflight context snapshot exists under `.omx/context/{slug}-{timestamp}.md`
+- [ ] Preflight context snapshot exists in mode state and, when applicable, the active ticket
 - [ ] Ambiguity score shown each round
 - [ ] Intent-first stage priority used before implementation detail
 - [ ] Weakest-dimension targeting used within the active stage
 - [ ] At least one explicit assumption probe happened before crystallization
 - [ ] At least one persistent follow-up / pressure pass deepened a prior answer
 - [ ] Challenge modes triggered at thresholds (when applicable)
-- [ ] Transcript written to `.omx/interviews/{slug}-{timestamp}.md`
-- [ ] Spec written to `.omx/specs/deep-interview-{slug}.md`
+- [ ] Interview summary written to the active ticket or the current response handoff
+- [ ] Requirements brief written to the active ticket or the selected Codexter handoff artifact
 - [ ] Brownfield questions use evidence-backed confirmation when applicable
-- [ ] Handoff options provided (`$impl-plan`, `$autopilot`, `$ralph`, `$team`)
+- [ ] Handoff options provided (`$impl-plan`, `$autopilot`, `$impl`, `$team`)
 - [ ] No direct implementation performed in this mode
 </Final_Checklist>
 
@@ -329,7 +332,7 @@ Present execution options after artifact generation using explicit handoff contr
 ## Suggested Config (optional)
 
 ```toml
-[omx.deepInterview]
+[codexter.deepInterview]
 defaultProfile = "standard"
 quickThreshold = 0.30
 standardThreshold = 0.20

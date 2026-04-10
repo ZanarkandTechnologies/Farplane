@@ -1,12 +1,12 @@
 ---
 name: prd
 version: 1.0.0
-description: "Phase-1 Ralph skill for requirements gathering and PRD authoring."
+description: "Phase-1 Codexter skill for requirements gathering and PRD authoring."
 ---
 
 # PRD Skill
 
-Use this as the first session in the Ralph workflow.
+Use this as the first session in the Codexter workflow.
 
 ## Job
 

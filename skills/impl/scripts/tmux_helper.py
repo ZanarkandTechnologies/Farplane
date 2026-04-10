@@ -163,7 +163,7 @@ def annotate_backpressure(payload: dict[str, object], *, now: datetime | None = 
 def skill_name_for_phase(phase: str) -> str:
     mapping = {
         "planning": "impl-plan",
-        "building": "ralph",
+        "building": "impl",
         "documenting": "docs-closeout",
     }
     return mapping[phase]
@@ -194,7 +194,7 @@ def build_phase_prompt(
         "Before substantive work, read that artifact and begin your first response with one line in the exact form "
         "`GROUNDING_SUMMARY: <one-sentence summary>`. Keep the summary specific to the artifact and the lane's role.\n"
         "Resolve the ticket from active run state or the explicit ticket selector, stay within that ticket's scope, "
-        "write back to the ticket itself, and finish with one `RALPH_RESULT:` line.\n"
+        "write back to the ticket itself, and finish with one `IMPL_RESULT:` line.\n"
     )
     if not followup_reason:
         return base
@@ -315,7 +315,7 @@ def capture_user_turn_fallback(prompt_text: str) -> None:
 
 
 def lane_thread_name(ticket_id: str) -> str:
-    return f"ralph-{ticket_id.lower()}"
+    return f"impl-{ticket_id.lower()}"
 
 
 def lane_shell_command(
@@ -336,11 +336,11 @@ def lane_shell_command(
         )
 
     exports = [
-        f"export RALPH_TICKET={shlex.quote(str(ticket))}",
-        f"export RALPH_RUN_STATE={shlex.quote(str(run_state))}",
+        f"export CODEXTER_ACTIVE_TICKET={shlex.quote(str(ticket))}",
+        f"export IMPL_RUN_STATE={shlex.quote(str(run_state))}",
     ]
     if executor_target:
-        exports.append(f"export RALPH_EXECUTOR_TARGET={shlex.quote(executor_target)}")
+        exports.append(f"export CODEXTER_EXECUTOR_TARGET={shlex.quote(executor_target)}")
     args = [
         "codex",
         "--no-alt-screen",
@@ -438,14 +438,14 @@ def summarize_hook_entry(ticket_id: str, entry: dict[str, object]) -> dict[str, 
         reason = entry.get("reason")
         next_value = next_phase if isinstance(next_phase, str) and next_phase else "none"
         reason_value = reason if isinstance(reason, str) and reason else "no reason recorded"
-        if decision in {"repeat_ralph", "repeat_ralphplan"}:
-            summary = f"Ralph repeat: {ticket_id} -> {next_value} ({reason_value})"
+        if decision in {"repeat_impl", "repeat_impl_plan"}:
+            summary = f"Impl repeat: {ticket_id} -> {next_value} ({reason_value})"
         elif decision == "advance_ticket":
-            summary = f"Ralph advance: {ticket_id} -> {next_value} ({reason_value})"
+            summary = f"Impl advance: {ticket_id} -> {next_value} ({reason_value})"
         elif decision == "complete_ticket":
-            summary = f"Ralph complete: {ticket_id} ({reason_value})"
+            summary = f"Impl complete: {ticket_id} ({reason_value})"
         elif decision == "block_ticket":
-            summary = f"Ralph blocked: {ticket_id} ({reason_value})"
+            summary = f"Impl blocked: {ticket_id} ({reason_value})"
         else:
             summary = f"Hook {decision}: {ticket_id} ({reason_value})"
         return {
@@ -455,12 +455,12 @@ def summarize_hook_entry(ticket_id: str, entry: dict[str, object]) -> dict[str, 
             "hook_status_source": "stop-hook-log",
         }
     outcome = entry.get("outcome")
-    if isinstance(outcome, str) and outcome == "missing_ralph_result":
+    if isinstance(outcome, str) and outcome == "missing_impl_result":
         phase = entry.get("phase")
         phase_value = phase if isinstance(phase, str) and phase else "building"
         return {
             "last_hook_decision": outcome,
-            "last_hook_summary": f"Ralph missing result: {ticket_id} in {phase_value}",
+            "last_hook_summary": f"Impl missing result: {ticket_id} in {phase_value}",
             "last_hook_timestamp": timestamp,
             "hook_status_source": "stop-hook-log",
         }
@@ -555,7 +555,7 @@ def launch(args: argparse.Namespace) -> int:
     session_name, window_id, window_index, pane_id = create_tmux_surface(
         session,
         args.layout,
-        args.name or f"ralph-{ticket_id.lower()}",
+        args.name or f"impl-{ticket_id.lower()}",
     )
     state = persist_lane_state(
         ticket=ticket,
@@ -630,7 +630,7 @@ def followup(args: argparse.Namespace) -> int:
         session_name, window_id, window_index, pane_id = create_tmux_surface(
             session,
             "pane",
-            f"ralph-{ticket_id.lower()}",
+            f"impl-{ticket_id.lower()}",
         )
         state = persist_lane_state(
             ticket=ticket,
@@ -677,7 +677,7 @@ def followup(args: argparse.Namespace) -> int:
     session_name, window_id, window_index, pane_id = create_tmux_surface(
         session,
         "pane",
-        f"ralph-{ticket_id.lower()}",
+        f"impl-{ticket_id.lower()}",
     )
     state = persist_lane_state(
         ticket=ticket,

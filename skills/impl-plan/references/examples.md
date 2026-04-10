@@ -9,7 +9,7 @@
 - Win: one public planner, less routing ambiguity, and a clearer handoff story
 
 ## Recommendation
-- Best: collapse into `impl-plan`, keep ticket planning only, and leave `impl` / `ralph` for a later ticket
+- Best: collapse into `impl-plan`, keep ticket planning only, and leave execution-surface cleanup for a later ticket
 - Why: it fixes the current confusion without expanding into execution-surface redesign
 - Tradeoff accepted: the cutover touches several docs and runtime mappings in one pass
 
@@ -50,7 +50,7 @@ finish with proof and ticket move guidance
 - Why now: planner naming confusion is blocking trust in the planning flow itself
 
 ## Non-Goals
-- Do not collapse `impl` and `ralph` in this ticket
+- Do not reopen public execution-surface naming in this ticket
 - Do not replace discovery surfaces with the merged planner
 
 ## High-Fidelity Example

@@ -1,12 +1,12 @@
 ---
 name: spec-to-ticket
 version: 1.3.0
-description: "Phase-2 Ralph skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact agent-contract and evidence-checklist requirements for UI-bearing work."
+description: "Phase-2 Codexter skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact agent-contract and evidence-checklist requirements for UI-bearing work."
 ---
 
 # Spec-to-Ticket Skill
 
-Use this as the second session in the Ralph workflow.
+Use this as the second session in the Codexter workflow.
 
 <!--
 This skill is where product intent becomes executable ticket truth.

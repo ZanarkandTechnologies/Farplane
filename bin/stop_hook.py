@@ -48,9 +48,9 @@ TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 SECTION_PATTERN = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 CHECKBOX_PATTERN = re.compile(r"^- \[( |x)\]\s+(.*)$")
 REVIEW_PACKET_FIELD_PATTERN = re.compile(r"^- `(?P<key>[^`]+)`\s*(?P<value>.*)$")
-RALPH_RESULT_PATTERN = re.compile(r"^RALPH_RESULT:\s+status=.*$", re.MULTILINE)
-PARSED_RESULT_PATTERN = re.compile(
-    r"^RALPH_RESULT:\s+status=(?P<status>[A-Za-z0-9_-]+)\s+next=(?P<next>[A-Za-z0-9_-]+)(?:\s+reason=(?P<reason>.*))?$"
+IMPL_RESULT_PATTERN = re.compile(r"^IMPL_RESULT:\s+status=.*$", re.MULTILINE)
+PARSED_IMPL_RESULT_PATTERN = re.compile(
+    r"^IMPL_RESULT:\s+status=(?P<status>[A-Za-z0-9_-]+)\s+next=(?P<next>[A-Za-z0-9_-]+)(?:\s+reason=(?P<reason>.*))?$"
 )
 ALLOWED_PHASES = {"planning", "building", "documenting"}
 ROLE_ACTIONS = {
@@ -85,13 +85,13 @@ def env_enabled() -> bool:
         "yes",
         "on",
     }
-    ralph = os.environ.get("CODEXTER_RALPH_HOOK", "").lower() in {
+    impl = os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
         "1",
         "true",
         "yes",
         "on",
     }
-    return legacy or ralph
+    return legacy or impl
 
 
 def has_project_runtime_context(project_root: Path | None) -> bool:
@@ -102,7 +102,7 @@ def has_project_runtime_context(project_root: Path | None) -> bool:
 
 def has_explicit_ticket_selector() -> bool:
     return bool(
-        os.environ.get("RALPH_TICKET", "").strip()
+        os.environ.get("IMPL_TICKET", "").strip()
         or os.environ.get("CODEXTER_ACTIVE_TICKET", "").strip()
     )
 
@@ -110,14 +110,14 @@ def has_explicit_ticket_selector() -> bool:
 def hook_enabled_for_context(
     project_root: Path | None,
     current_run: dict[str, object] | None,
-    ralph_result: str | None,
+    impl_result: str | None,
 ) -> bool:
     # Keep the env flag as an explicit override, but auto-activate when the
-    # hook is clearly running inside a Codexter/Ralph context.
+    # hook is clearly running inside a Codexter/impl context.
     return (
         env_enabled()
         or current_run is not None
-        or ralph_result is not None
+        or impl_result is not None
         or has_explicit_ticket_selector()
         or has_project_runtime_context(project_root)
     )
@@ -573,7 +573,7 @@ def board_snapshot(home: Path, project_root: Path | None) -> list[dict[str, obje
 def resolve_ticket(home: Path, project_root: Path | None, message: str) -> dict[str, object] | None:
     # An explicit per-run selector must outrank ambient state so callers can
     # safely override stale current-run metadata. MEM-0004.
-    explicit_path = os.environ.get("RALPH_TICKET", "").strip()
+    explicit_path = os.environ.get("IMPL_TICKET", "").strip()
     if explicit_path:
         candidate = Path(explicit_path).expanduser()
         if not candidate.is_absolute() and project_root is not None:
@@ -632,8 +632,8 @@ def resolve_ticket(home: Path, project_root: Path | None, message: str) -> dict[
     return None
 
 
-def extract_ralph_result(message: str) -> str | None:
-    matches = RALPH_RESULT_PATTERN.findall(message)
+def extract_impl_result(message: str) -> str | None:
+    matches = IMPL_RESULT_PATTERN.findall(message)
     return matches[-1].strip() if matches else None
 
 
@@ -649,10 +649,10 @@ def extract_grounding_summary(message: str) -> str | None:
     return None
 
 
-def parse_ralph_result(line: str) -> dict[str, str]:
-    match = PARSED_RESULT_PATTERN.match(line.strip())
+def parse_impl_result(line: str) -> dict[str, str]:
+    match = PARSED_IMPL_RESULT_PATTERN.match(line.strip())
     if not match:
-        raise ValueError("invalid RALPH_RESULT line")
+        raise ValueError("invalid IMPL_RESULT line")
     return {
         "status": match.group("status"),
         "next": match.group("next"),
@@ -667,23 +667,23 @@ def summarize_intent_alignment(ticket_id: str, alignment: dict[str, object]) -> 
 
 
 def observed_phase_from_result(
-    ralph_result: str | None,
+    impl_result: str | None,
     *,
     current_phase: str,
 ) -> tuple[str | None, dict[str, str] | None]:
-    if not ralph_result:
+    if not impl_result:
         return None, None
     try:
-        parsed = parse_ralph_result(ralph_result)
+        parsed = parse_impl_result(impl_result)
     except ValueError:
         return None, None
 
     status = parsed["status"]
-    if status in {"continue_ralphplan", "plan_ready"}:
+    if status in {"continue_impl_plan", "plan_ready"}:
         return "planning", parsed
     if status == "docs_complete":
         return "documenting", parsed
-    if status in {"continue_ralph", "build_complete", "done"}:
+    if status in {"continue_impl", "build_complete", "done"}:
         return "building", parsed
     if status == "blocked":
         return current_phase, parsed
@@ -697,7 +697,7 @@ def classify_intent_alignment(
     last_user_turn: dict[str, object] | None,
     ticket: dict[str, object],
     message: str,
-    ralph_result: str | None,
+    impl_result: str | None,
     current_run: dict[str, object] | None,
 ) -> dict[str, object]:
     ticket_id = str(ticket["ticket_id"])
@@ -750,14 +750,14 @@ def classify_intent_alignment(
 
     current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
     observed_phase, parsed_result = observed_phase_from_result(
-        ralph_result,
+        impl_result,
         current_phase=current_phase,
     )
 
     if "no_edits" in hard_constraints and parsed_result is not None:
         return {
             "state": "hard_mismatch",
-            "reason": "the captured turn explicitly forbids edits, but the assistant produced a Ralph worker result",
+            "reason": "the captured turn explicitly forbids edits, but the assistant produced an impl worker result",
             "turn_id": turn_id,
             "summary": summary,
             "expected_phase": "",
@@ -790,7 +790,7 @@ def classify_intent_alignment(
     elif intent_mode in {"question", "backlog"} and parsed_result is not None:
         return {
             "state": "hard_mismatch",
-            "reason": f"the captured turn is {intent_mode}, but the assistant produced a Ralph worker result",
+            "reason": f"the captured turn is {intent_mode}, but the assistant produced an impl worker result",
             "turn_id": turn_id,
             "summary": summary,
             "expected_phase": intent_mode,
@@ -804,7 +804,7 @@ def classify_intent_alignment(
         continuation_message = (
             f"Continue {ticket_id} and satisfy the current-turn intent captured at start of turn: {summary}. "
             f"The assistant ended with `{observed_status}` for `{observed_phase}`, but this turn requested `{expected_phase}` work. "
-            f"Stay on the same ticket, produce the requested artifact, update the ticket state, and finish with a `RALPH_RESULT` aligned to `{expected_phase}`."
+            f"Stay on the same ticket, produce the requested artifact, update the ticket state, and finish with a `IMPL_RESULT` aligned to `{expected_phase}`."
         )
         return {
             "state": "soft_mismatch",
@@ -829,7 +829,7 @@ def classify_intent_alignment(
     }
 
 
-def ralph_verdict(
+def impl_verdict(
     *,
     ticket_id: str,
     current_phase: str,
@@ -956,7 +956,7 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
     return True, "", []
 
 
-def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worker_result: dict[str, str]) -> dict[str, object]:
+def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker_result: dict[str, str]) -> dict[str, object]:
     ticket_id = str(ticket["ticket_id"])
     blockers = list(ticket["blockers"])
     acceptance_gaps = list(ticket["acceptance_gaps"])
@@ -966,7 +966,7 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
     reason_suffix = worker_result["reason"]
 
     if blockers:
-        return ralph_verdict(
+        return impl_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="block_ticket",
@@ -979,7 +979,7 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
 
     if status == "blocked":
         reason = reason_suffix or "worker reported blocked"
-        return ralph_verdict(
+        return impl_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="block_ticket",
@@ -989,12 +989,12 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
             evidence_ok=False,
         )
 
-    if status in {"continue_ralphplan", "continue_ralph"}:
+    if status in {"continue_impl_plan", "continue_impl"}:
         next_phase = current_phase if next_value in {"planning", "building", "none"} else next_value
-        return ralph_verdict(
+        return impl_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
-            decision="repeat_ralphplan" if current_phase == "planning" else "repeat_ralph",
+            decision="repeat_impl_plan" if current_phase == "planning" else "repeat_impl",
             next_phase=next_phase,
             reason=reason_suffix or "skill requires another bounded pass",
             orchestrator_message=f"rerun {ticket_id} in {next_phase}",
@@ -1002,7 +1002,7 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
         )
 
     if status == "plan_ready":
-        return ralph_verdict(
+        return impl_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="advance_ticket",
@@ -1015,10 +1015,10 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
     if status == "done":
         packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
         if not packet_ok:
-            return ralph_verdict(
+            return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_ralph",
+                decision="repeat_impl",
                 next_phase="building",
                 reason=packet_reason,
                 orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
@@ -1027,17 +1027,17 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
             )
         missing = acceptance_gaps + evidence_gaps
         if missing:
-            return ralph_verdict(
+            return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_ralph",
+                decision="repeat_impl",
                 next_phase="building",
                 reason="ticket marked done but required proof remains incomplete",
                 orchestrator_message=f"rerun {ticket_id} in building and resolve missing proof",
                 evidence_ok=False,
                 missing_evidence=missing,
             )
-        return ralph_verdict(
+        return impl_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="complete_ticket",
@@ -1050,10 +1050,10 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
     if status == "build_complete":
         packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
         if not packet_ok:
-            return ralph_verdict(
+            return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_ralph",
+                decision="repeat_impl",
                 next_phase="building",
                 reason=packet_reason,
                 orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
@@ -1062,17 +1062,17 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
             )
         missing = acceptance_gaps + evidence_gaps
         if missing:
-            return ralph_verdict(
+            return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_ralph",
+                decision="repeat_impl",
                 next_phase="building",
                 reason=reason_suffix or "evidence is incomplete",
                 orchestrator_message=f"rerun {ticket_id} in building with explicit missing evidence coverage",
                 evidence_ok=False,
                 missing_evidence=missing,
             )
-        return ralph_verdict(
+        return impl_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="complete_ticket",
@@ -1085,10 +1085,10 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
     if status == "docs_complete":
         packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
         if not packet_ok:
-            return ralph_verdict(
+            return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_ralph",
+                decision="repeat_impl",
                 next_phase="building",
                 reason=packet_reason,
                 orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
@@ -1097,17 +1097,17 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
             )
         missing = acceptance_gaps + evidence_gaps
         if missing:
-            return ralph_verdict(
+            return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_ralph",
+                decision="repeat_impl",
                 next_phase="building",
                 reason="documentation completed but required proof remains incomplete",
                 orchestrator_message=f"rerun {ticket_id} in building and resolve missing proof",
                 evidence_ok=False,
                 missing_evidence=missing,
             )
-        return ralph_verdict(
+        return impl_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="complete_ticket",
@@ -1119,7 +1119,7 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
 
     next_phase = next_value if next_value in ALLOWED_PHASES or next_value in {"done", "none"} else "none"
     if next_phase == "none":
-        return ralph_verdict(
+        return impl_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="escalate_to_operator",
@@ -1129,7 +1129,7 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
             evidence_ok=not evidence_gaps,
         )
 
-    return ralph_verdict(
+    return impl_verdict(
         ticket_id=ticket_id,
         current_phase=current_phase,
         decision="advance_ticket",
@@ -1140,13 +1140,13 @@ def decide_ralph_transition(current_phase: str, ticket: dict[str, object], worke
     )
 
 
-def run_ralph_judge(ticket: dict[str, object], worker_result: str, current_run: dict[str, object] | None = None) -> dict[str, object] | None:
+def run_impl_judge(ticket: dict[str, object], worker_result: str, current_run: dict[str, object] | None = None) -> dict[str, object] | None:
     current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
     try:
-        parsed = parse_ralph_result(worker_result)
+        parsed = parse_impl_result(worker_result)
     except ValueError:
         return None
-    return decide_ralph_transition(current_phase, ticket, parsed)
+    return decide_impl_transition(current_phase, ticket, parsed)
 
 
 def spawn_tmux_followup(
@@ -1181,7 +1181,7 @@ def spawn_tmux_followup(
         cmd.extend(["--reason", reason])
     # Bounded smoke evals can ask the follow-up launcher to stay in dry-run mode
     # so we can validate the tmux handoff without spawning a live Codex worker.
-    if os.environ.get("CODEXTER_RALPH_TMUX_DRY_RUN", "").lower() in {"1", "true", "yes", "on"}:
+    if os.environ.get("CODEXTER_IMPL_TMUX_DRY_RUN", "").lower() in {"1", "true", "yes", "on"}:
         cmd.append("--dry-run")
     completed = subprocess.run(cmd, text=True, capture_output=True, check=False, cwd=base)
     if completed.returncode != 0:
@@ -1210,23 +1210,23 @@ def build_reason(ticket: dict[str, object]) -> str:
     return "Continue the current ticket and finish the remaining same-ticket work."
 
 
-def build_missing_ralph_result_reason(ticket: dict[str, object], current_run: dict[str, object] | None) -> str:
+def build_missing_impl_result_reason(ticket: dict[str, object], current_run: dict[str, object] | None) -> str:
     ticket_id = str(ticket["ticket_id"])
     current_phase = str(ticket["phase"] or (current_run or {}).get("phase") or "building")
     return (
         f"Continue {ticket_id} in {current_phase}. The last assistant message implied more same-ticket work "
-        "but ended without an explicit RALPH_RESULT line. Continue the same ticket, update repo/ticket state, "
-        "and finish with a RALPH_RESULT."
+        "but ended without an explicit IMPL_RESULT line. Continue the same ticket, update repo/ticket state, "
+        "and finish with a IMPL_RESULT."
     )
 
 
 def skill_name_for_phase(phase: str) -> str:
     mapping = {
         "planning": "impl-plan",
-        "building": "ralph",
+        "building": "impl",
         "documenting": "docs-closeout",
     }
-    return mapping.get(phase, "ralph")
+    return mapping.get(phase, "impl")
 
 
 def build_live_followup_reason(phase: str, orchestrator_message: str, ticket: dict[str, object]) -> str:
@@ -1240,18 +1240,18 @@ def build_live_followup_reason(phase: str, orchestrator_message: str, ticket: di
     )
 
 
-def summarize_ralph_hook(ticket_id: str, decision: str, next_phase: str, reason: str) -> str:
-    if decision in {"repeat_ralphplan", "repeat_ralph"}:
+def summarize_impl_hook(ticket_id: str, decision: str, next_phase: str, reason: str) -> str:
+    if decision in {"repeat_impl_plan", "repeat_impl"}:
         target = next_phase or "same-phase"
-        return f"Ralph repeat: {ticket_id} -> {target} ({reason})"
+        return f"Impl repeat: {ticket_id} -> {target} ({reason})"
     if decision == "advance_ticket":
         target = next_phase or "next-phase"
-        return f"Ralph advance: {ticket_id} -> {target} ({reason})"
+        return f"Impl advance: {ticket_id} -> {target} ({reason})"
     if decision == "complete_ticket":
-        return f"Ralph complete: {ticket_id} ({reason})"
+        return f"Impl complete: {ticket_id} ({reason})"
     if decision == "block_ticket":
-        return f"Ralph blocked: {ticket_id} ({reason})"
-    return f"Ralph review: {ticket_id} ({reason})"
+        return f"Impl blocked: {ticket_id} ({reason})"
+    return f"Impl review: {ticket_id} ({reason})"
 
 
 def summarize_legacy_hook(ticket_id: str, decision: str, reason: str) -> str:
@@ -1491,10 +1491,10 @@ def continue_hook_response(
     announce: str,
 ) -> int:
     if payload.get("stop_hook_active"):
-        announce_message("Stopping after one Ralph-assisted continuation pass")
+        announce_message("Stopping after one impl-assisted continuation pass")
         return emit_stop_payload(
             continue_value=False,
-            stop_reason="Stopping after one Ralph-assisted continuation pass",
+            stop_reason="Stopping after one impl-assisted continuation pass",
             system_message=f"Stop hook: {hook_summary}. Already continued once.",
         )
     announce_message(announce)
@@ -1649,9 +1649,9 @@ def main() -> int:
         )
     raw_message = payload.get("last_assistant_message") or ""
     message = raw_message if isinstance(raw_message, str) else ""
-    ralph_result = extract_ralph_result(message or raw_payload)
+    impl_result = extract_impl_result(message or raw_payload)
 
-    if not hook_enabled_for_context(project_root, current_run, ralph_result):
+    if not hook_enabled_for_context(project_root, current_run, impl_result):
         return 0
 
     append_hook_log(
@@ -1710,23 +1710,23 @@ def main() -> int:
         )
         return 0
 
-    ralph_mode_enabled = os.environ.get("CODEXTER_RALPH_HOOK", "").lower() in {
+    impl_mode_enabled = os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
         "1",
         "true",
         "yes",
         "on",
     }
-    ralph_runtime_active = (
-        ralph_mode_enabled
+    impl_runtime_active = (
+        impl_mode_enabled
         or current_run is not None
-        or ralph_result is not None
+        or impl_result is not None
         or has_explicit_ticket_selector()
     )
     live_interactive_lane = (
         resolved_session_id is not None
-        and os.environ.get("CODEXTER_RALPH_TMUX_DRY_RUN", "").lower() not in {"1", "true", "yes", "on"}
+        and os.environ.get("CODEXTER_IMPL_TMUX_DRY_RUN", "").lower() not in {"1", "true", "yes", "on"}
     )
-    if not ralph_runtime_active:
+    if not impl_runtime_active:
         return 0
 
     last_user_turn = (
@@ -1738,7 +1738,7 @@ def main() -> int:
         last_user_turn=last_user_turn,
         ticket=ticket,
         message=message,
-        ralph_result=ralph_result,
+        impl_result=impl_result,
         current_run=current_run,
     )
     current_run = persist_intent_alignment(project_root, current_run, alignment)
@@ -1781,30 +1781,30 @@ def main() -> int:
             announce=str(alignment.get("announce") or alignment.get("reason") or "Continuing the same ticket."),
         )
 
-    if ralph_runtime_active and ralph_result:
-        verdict = run_ralph_judge(ticket, ralph_result, current_run)
+    if impl_runtime_active and impl_result:
+        verdict = run_impl_judge(ticket, impl_result, current_run)
         if verdict is None:
             append_hook_log(
                 base,
                 {
                     "timestamp": now_iso(),
-                    "mode": "ralph",
+                    "mode": "impl",
                     "ticket_id": str(ticket["ticket_id"]),
                     "phase": str(ticket["phase"] or ""),
-                    "worker_result": ralph_result,
+                    "worker_result": impl_result,
                     "outcome": "judge_unavailable",
                 },
             )
-            announce_message("Ralph stop check unavailable. Stopping safely.")
-            return emit_stop_payload(system_message="Stop hook: Ralph judge unavailable; stopping safely.")
+            announce_message("Impl stop check unavailable. Stopping safely.")
+            return emit_stop_payload(system_message="Stop hook: Impl judge unavailable; stopping safely.")
         decision = str(verdict.get("decision", ""))
         next_phase = str(verdict.get("next_phase", ""))
-        reason = str(verdict.get("reason", "")).strip() or "ralph verdict available"
+        reason = str(verdict.get("reason", "")).strip() or "impl verdict available"
         orchestrator_message = str(verdict.get("orchestrator_message", "")).strip() or reason
-        hook_summary = summarize_ralph_hook(str(ticket["ticket_id"]), decision, next_phase, reason)
+        hook_summary = summarize_impl_hook(str(ticket["ticket_id"]), decision, next_phase, reason)
         if project_root is not None and current_run is not None:
             state_updates: dict[str, object] = {
-                "last_worker_result": ralph_result,
+                "last_worker_result": impl_result,
                 "last_judge_verdict": decision,
                 "status": (
                     "complete"
@@ -1820,17 +1820,17 @@ def main() -> int:
             base,
             {
                 "timestamp": now_iso(),
-                "mode": "ralph",
+                "mode": "impl",
                 "ticket_id": str(ticket["ticket_id"]),
                 "phase": str(ticket["phase"] or ""),
-                "worker_result": ralph_result,
+                "worker_result": impl_result,
                 "decision": decision,
                 "next_phase": next_phase,
                 "reason": reason,
             },
         )
         current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
-        if decision in {"repeat_ralphplan", "repeat_ralph"}:
+        if decision in {"repeat_impl_plan", "repeat_impl"}:
             target_phase = next_phase if next_phase in {"planning", "building", "documenting"} else str(ticket["phase"] or "building")
             if live_interactive_lane:
                 continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket)
@@ -1839,7 +1839,7 @@ def main() -> int:
                     ticket=ticket,
                     continuation_message=continuation_message,
                     hook_summary=hook_summary,
-                    announce=f"Continuing {ticket['ticket_id']} in the live Ralph lane.",
+                    announce=f"Continuing {ticket['ticket_id']} in the live impl lane.",
                 )
             followup = spawn_tmux_followup(
                 base,
@@ -1853,13 +1853,13 @@ def main() -> int:
                     base,
                     {
                         "timestamp": now_iso(),
-                        "mode": "ralph",
+                        "mode": "impl",
                         "ticket_id": str(ticket["ticket_id"]),
                         "event": "spawn_followup",
                         "followup": followup,
                     },
                 )
-                announce_message(f"spawned next ralph pass in {followup.get('tmux_pane') or followup.get('tmux_window')}")
+                announce_message(f"spawned next impl pass in {followup.get('tmux_pane') or followup.get('tmux_window')}")
                 return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
             return continue_hook_response(
                 payload=payload,
@@ -1881,7 +1881,7 @@ def main() -> int:
                         ticket=ticket,
                         continuation_message=continuation_message,
                         hook_summary=hook_summary,
-                        announce=f"Advancing {ticket['ticket_id']} inside the live Ralph lane.",
+                        announce=f"Advancing {ticket['ticket_id']} inside the live impl lane.",
                     )
                 followup = spawn_tmux_followup(
                     base,
@@ -1895,7 +1895,7 @@ def main() -> int:
                         base,
                         {
                             "timestamp": now_iso(),
-                            "mode": "ralph",
+                            "mode": "impl",
                             "ticket_id": str(ticket["ticket_id"]),
                             "event": "spawn_followup",
                             "followup": followup,
@@ -1908,7 +1908,7 @@ def main() -> int:
                     ticket=ticket,
                     continuation_message=orchestrator_message,
                     hook_summary=hook_summary,
-                    announce=f"Ralph phase accepted. Next: {next_phase or 'none'}",
+                    announce=f"Impl phase accepted. Next: {next_phase or 'none'}",
                 )
 
             review = run_role(
@@ -1994,7 +1994,7 @@ def main() -> int:
         announce_message(f"Stopping for operator review. {reason}")
         return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
 
-    if ralph_runtime_active and not ralph_result:
+    if impl_runtime_active and not impl_result:
         review = run_role(
             base,
             "reviewer",
@@ -2016,13 +2016,13 @@ def main() -> int:
                     "outcome": "role_unavailable",
                 },
             )
-            continuation_message = build_missing_ralph_result_reason(ticket, current_run)
+            continuation_message = build_missing_impl_result_reason(ticket, current_run)
             return continue_hook_response(
                 payload=payload,
                 ticket=ticket,
                 continuation_message=continuation_message,
                 hook_summary=f"reviewer: {ticket['ticket_id']} -> continue_same_ticket (reviewer unavailable)",
-                announce=f"Continuing {ticket['ticket_id']}. Missing RALPH_RESULT in Ralph mode.",
+                announce=f"Continuing {ticket['ticket_id']}. Missing IMPL_RESULT in impl mode.",
             )
 
         proposal_action = review["action"]
@@ -2041,13 +2041,13 @@ def main() -> int:
         current_run = publish_hook_status(project_root, current_run, decision=proposal_action, summary=proposal_summary)
 
         if proposal_action == "continue_same_ticket":
-            continuation_message = review["continuation_message"] or build_missing_ralph_result_reason(ticket, current_run)
+            continuation_message = review["continuation_message"] or build_missing_impl_result_reason(ticket, current_run)
             return continue_hook_response(
                 payload=payload,
                 ticket=ticket,
                 continuation_message=continuation_message,
                 hook_summary=proposal_summary,
-                announce=review["speak"] or f"Continuing {ticket['ticket_id']}. Missing RALPH_RESULT in Ralph mode.",
+                announce=review["speak"] or f"Continuing {ticket['ticket_id']}. Missing IMPL_RESULT in impl mode.",
             )
 
         if proposal_action == "route_to_orchestrator":
