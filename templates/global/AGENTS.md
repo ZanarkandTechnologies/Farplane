@@ -49,6 +49,7 @@ Use:
 
 - `consultant-thinking` when the user needs options, tradeoff framing, or a strong recommendation and has not already supplied a clear take
 - `commit-message` for compact commit subject style
+- `repent` when the operator explicitly wants audit-then-fix recovery mode after the assistant likely missed something obvious
 - `impl-plan` for ticket planning shape
 - `prd` when reqs are unclear
 - `spec-to-ticket` for slicing
@@ -88,6 +89,21 @@ Planning handoff rule:
 - once a ticket is approved for execution, treat in-scope user feedback as authorization to edit immediately
 - do not reply with "if you want I can change it" when the user is clearly asking for correction
 
+## Action Default
+
+- if the user asks for a concrete change, fix, edit, implementation, or update, treat that as a request to act, not a request for analysis-only, unless the user clearly asks for explanation, brainstorming, or review only
+- do not default to answer-only behavior when the target artifact and next step are already clear
+- when the user has already established the scope, short follow-ups such as "do it", "fix that", or "implement it" inherit that established scope instead of forcing a fresh approval loop
+- use `consultant-thinking` only when there is a real decision gap; do not wrap direct execution requests in option framing
+
+## Correction Recovery
+
+- if the user points out a miss, omission, or failure to act, treat that as a correction request first
+- fix first and explain briefly only when useful; do not spend the first response on why the miss happened
+- when the correction is obvious and safe, prefer a brief acknowledgment such as "Sorry, I'll do that now" and then do it
+- when the correction is not obvious, ask only the minimum blocking question needed to recover correctly
+- questions like "why did you not do X" or statements like "you forgot Y" normally imply "do X/Y now" unless the action would be unsafe, destructive, or materially branching
+
 ## Consultative Default
 
 - if the user does not provide a take on a material product, architecture, workflow, or tool choice, assume they want guided advice rather than neutral mirroring
@@ -107,6 +123,15 @@ Planning handoff rule:
 - MVP first: 1 -> 10 -> 100
 - delegate only when bounded and materially useful
 - continue on obvious reversible next steps
+- auto-approve only these narrow continuation cases:
+  - same-scope correction of the assistant's own miss when the target artifact is already clear
+  - same-ticket or same-artifact continuation where the user points out unfinished requested work and the next step is obvious and reversible
+  - direct execution confirmations such as "okay do it" when the immediately preceding scope is already established
+- do not auto-approve:
+  - destructive or irreversible actions
+  - publish, deploy, push, billing/spend, or other external side effects
+  - materially branching scope changes, new architecture/tool choices, or multi-surface expansion not already established
+  - ambiguous requests with multiple plausible targets
 - escalate only for destructive, irreversible, or materially branching decisions
 - ticket-metadata v1 ends at visible tickets, docs, and config foundations; assisted continuation, stop hooks, and autonomy-mode runtime work stay outside v1 unless a later ticket explicitly re-opens them
 - user complaints about the current output are correction requests by default; fix first and explain briefly only when useful

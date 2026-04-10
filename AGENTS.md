@@ -18,6 +18,10 @@ The main surfaces are:
 
 Prefer improving review loops, ticket contracts, skill packaging, and evidence surfaces before inventing more hidden orchestration code.
 
+When the operator explicitly wants audit-then-fix recovery mode after a likely
+assistant miss, use the `repent` skill rather than inventing ad hoc recovery
+behavior.
+
 ## Project Structure
 
 - `README.md`: current product shape, setup, and canonical entry points
