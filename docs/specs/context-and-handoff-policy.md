@@ -59,7 +59,7 @@ Lookup precedence should be:
 
 1. explicit run-state selector for a managed lane
 2. hook `session_id` mapped to a session state file
-3. `.harness/state/current-run.json`, with `.ralph/state/current-run.json` as legacy compatibility fallback while the rename remains in flight
+3. `.harness/state/current-run.json`
 
 It must not become the durable source of:
 

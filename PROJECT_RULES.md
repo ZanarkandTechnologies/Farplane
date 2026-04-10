@@ -22,7 +22,7 @@ This repo versions the reusable parts of a Codex home directory while keeping ma
 
 - Never commit secrets, auth state, session history, logs, caches, or sqlite state.
 - Keep `config.toml` local; version only `config.toml.example`.
-- Keep generated `.harness/` runtime state out of Git; `.ralph/` remains compatibility-only legacy runtime state while the rename is in flight.
+- Keep generated `.harness/` runtime state out of Git.
 - Prefer relative repo structure plus a small installer over hardcoding machine-specific paths into tracked files.
 
 ## Quick Commands

@@ -32,7 +32,7 @@ Runtime state stays lightweight:
 
 - explicit run-state selectors outrank ambient state for managed lanes
 - hook `session_id` routes prompt capture and Stop-hook reads to the correct lane in parallel Codex usage
-- `.harness/state/current-run.json` is the runtime compatibility pointer / last-active selector, with `.ralph/state/current-run.json` treated as legacy fallback during migration
+- `.harness/state/current-run.json` is the live runtime pointer / last-active selector
 
 ## One Picture
 

@@ -46,7 +46,7 @@ Same-ticket repeats re-enter `$impl`.
 ## Documentation Rules
 
 - Public docs should describe `$impl` as the build-phase orchestrator.
-- Public docs should describe `.harness/` as the canonical live runtime root and `.ralph/` as compatibility-only legacy state during migration.
+- Public docs should describe `.harness/` as the canonical live runtime root.
 - `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
 - internal Stop-hook role instructions should live under `agents/`, not as giant string literals in Python helpers.
 - Any removed prototype binaries should remain only as historical references in

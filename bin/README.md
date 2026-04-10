@@ -54,7 +54,7 @@ Runtime routing is session-first for parallel Codex usage:
 
 - explicit run-state selector when a managed lane exports one
 - hook `session_id` for lane-scoped session state
-- `.harness/state/current-run.json` as the compatibility pointer / last-active selector, with `.ralph/state/current-run.json` kept only as legacy fallback during migration
+- `.harness/state/current-run.json` as the live current-run pointer / last-active selector
 
 See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md) for the canonical decision table.
 

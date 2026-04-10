@@ -48,7 +48,7 @@ def discover_project_root(start: Path | None) -> Path | None:
     if current.is_file():
         current = current.parent
     for candidate in (current, *current.parents):
-        if (candidate / ".harness").exists() or (candidate / ".ralph").exists() or (candidate / "tickets").exists():
+        if (candidate / ".harness").exists() or (candidate / "tickets").exists():
             return candidate
     return None
 
@@ -67,25 +67,12 @@ def runtime_dir(project_root: Path) -> Path:
     return project_root / ".harness"
 
 
-def legacy_runtime_dir(project_root: Path) -> Path:
-    return project_root / ".ralph"
+def current_run_state_path(project_root: Path) -> Path:
+    return runtime_dir(project_root) / "state" / "current-run.json"
 
 
-def current_run_state_path(project_root: Path, *, legacy: bool = False) -> Path:
-    base = legacy_runtime_dir(project_root) if legacy else runtime_dir(project_root)
-    return base / "state" / "current-run.json"
-
-
-def current_run_state_candidates(project_root: Path) -> tuple[Path, ...]:
-    return (
-        current_run_state_path(project_root),
-        current_run_state_path(project_root, legacy=True),
-    )
-
-
-def session_state_dir(project_root: Path, *, legacy: bool = False) -> Path:
-    base = legacy_runtime_dir(project_root) if legacy else runtime_dir(project_root)
-    return base / "state" / "sessions"
+def session_state_dir(project_root: Path) -> Path:
+    return runtime_dir(project_root) / "state" / "sessions"
 
 
 def normalize_session_id(raw: str | None) -> str:
@@ -100,15 +87,8 @@ def session_state_filename(session_id: str) -> str:
     return f"{sanitized}.json"
 
 
-def session_state_path(project_root: Path, session_id: str, *, legacy: bool = False) -> Path:
-    return session_state_dir(project_root, legacy=legacy) / session_state_filename(session_id)
-
-
-def session_state_candidates(project_root: Path, session_id: str) -> tuple[Path, ...]:
-    return (
-        session_state_path(project_root, session_id),
-        session_state_path(project_root, session_id, legacy=True),
-    )
+def session_state_path(project_root: Path, session_id: str) -> Path:
+    return session_state_dir(project_root) / session_state_filename(session_id)
 
 
 def load_json_dict(path: Path) -> dict[str, object]:
@@ -199,16 +179,11 @@ def load_current_run(
         )
 
     if normalized_session_id:
-        for candidate in session_state_candidates(project_root, normalized_session_id):
-            payload = load_json_dict(candidate)
-            if payload:
-                return _with_runtime_metadata(payload, session_id=normalized_session_id)
+        payload = load_json_dict(session_state_path(project_root, normalized_session_id))
+        if payload:
+            return _with_runtime_metadata(payload, session_id=normalized_session_id)
 
-    current_payload: dict[str, object] = {}
-    for candidate in current_run_state_candidates(project_root):
-        current_payload = load_json_dict(candidate)
-        if current_payload:
-            break
+    current_payload = load_json_dict(current_run_state_path(project_root))
     if not current_payload:
         return None
 
@@ -297,14 +272,9 @@ def persist_runtime_update(
         merged_current["session_id"] = current_session
 
     write_json(current_run_state_path(project_root), merged_current)
-    legacy_dir = legacy_runtime_dir(project_root)
-    if legacy_dir.exists():
-        write_json(current_run_state_path(project_root, legacy=True), merged_current)
 
     if current_session:
         write_json(session_state_path(project_root, current_session), merged_current)
-        if legacy_dir.exists():
-            write_json(session_state_path(project_root, current_session, legacy=True), merged_current)
 
     run_state = merged_current.get("run_state")
     if isinstance(run_state, str) and run_state.strip():

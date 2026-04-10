@@ -215,7 +215,7 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(current["ticket_id"], "TASK-0042")
         self.assertEqual(current["run_state"], str(run_state.relative_to(project_root)))
 
-    def test_load_current_run_falls_back_to_legacy_ralph_state(self) -> None:
+    def test_load_current_run_ignores_legacy_ralph_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             state_dir = project_root / ".ralph" / "state"
@@ -234,9 +234,7 @@ class RuntimeClaimTests(unittest.TestCase):
 
             current = load_current_run(project_root)
 
-        self.assertIsNotNone(current)
-        assert current is not None
-        self.assertEqual(current["ticket_id"], "TASK-7777")
+        self.assertIsNone(current)
 
     def test_capture_user_turn_updates_only_resolved_session_lane(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
