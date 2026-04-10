@@ -50,16 +50,11 @@ Discovery still belongs to `brainstorm`, `deep-interview`, `prd`, and
 
 Before finalizing the plan or handing off to execution:
 
-1. Derive a task slug from the request or ticket.
-2. Reuse the latest relevant context snapshot in `.omx/context/{slug}-*.md`
-   when available.
-3. If none exists, create `.omx/context/{slug}-{timestamp}.md` with:
-   - task statement
-   - desired outcome
-   - known facts/evidence
-   - constraints
-   - unknowns/open questions
-   - likely codebase touchpoints
+1. Derive a task slug from the request or ticket for your own reasoning only.
+2. Reuse the active ticket, linked docs, and canonical specs as the planning
+   context surface.
+3. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
+   older OMX-era pattern and not the active repo contract.
 4. If ambiguity remains high even after codebase inspection, use
    `deep-interview --quick` before planning deeper.
 
