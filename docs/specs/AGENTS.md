@@ -23,3 +23,4 @@ Files here define buildable system behavior, schemas, and flows.
 
 - update `README.md` when adding new canonical spec files
 - update `docs/HISTORY.md` when specs materially change the target system shape
+- run `python3 bin/check_doc_parity.py` when changing canonical README/spec/ticket docs that define the current public harness story

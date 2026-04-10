@@ -126,4 +126,4 @@ When a ticket is inspired by an external source, store the durable source URL in
 Canonical policy references:
 
 - [context-and-handoff-policy.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/context-and-handoff-policy.md)
-- [runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md)
+- [runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md)

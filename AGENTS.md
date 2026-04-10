@@ -69,6 +69,8 @@ For harness-design research and external patterns:
 
 - No blind edits. Read the relevant spec, ticket, and nearby module docs first.
 - Tickets and docs are the source of truth; do not hide state in chat.
+- Keep live repo-owned skills and docs Codexter-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
+- Prefer `.harness/` for live runtime state.
 - Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.
 - When changing harness behavior, prefer the smallest lever that fixes the real failure:
   - review loop and proof requirements first
