@@ -163,6 +163,25 @@ class StopHookReviewerPromptTests(unittest.TestCase):
         self.assertEqual(failures, [])
 
 
+class StopHookGroundingSummaryTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.stop_hook = load_stop_hook_module()
+
+    def test_extract_grounding_summary_uses_first_non_empty_line_only(self) -> None:
+        summary = self.stop_hook.extract_grounding_summary(
+            "\n".join(
+                [
+                    "GROUNDING_SUMMARY: initial summary",
+                    "working notes",
+                    "GROUNDING_SUMMARY: reviewing TASK-0026 acceptance criteria",
+                    "RALPH_RESULT: status=continue_ralph next=building reason=test",
+                ]
+            )
+        )
+
+        self.assertEqual(summary, "initial summary")
+
+
 class StopHookReviewPacketGateTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stop_hook = load_stop_hook_module()

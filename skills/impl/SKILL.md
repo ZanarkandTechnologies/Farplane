@@ -24,6 +24,7 @@ Do not use it when:
 - `$impl` owns one selected ticket/work package at a time.
 - An explicit ticket selector outranks ambient runtime state.
 - `$impl` reads the ticket plus linked specs/docs, launches the needed worker lanes, integrates their outputs, writes progress back to the ticket/progress surface, and exits.
+- Delegated lanes should expose a small shared contract: `worker_name`, `main_artifact_path`, and a short `grounding_summary`.
 - `$impl` does not require or create a permanent orchestrator pane.
 - Worker panes are the primary visible runtime surface.
 
@@ -73,6 +74,7 @@ Reference:
 ## Guardrails
 
 - Keep the ticket as the canonical progress surface.
+- Keep the delegated main artifact explicit instead of relying on transcript memory.
 - Keep QA and review separate.
 - Keep the orchestrator ephemeral.
 - Reuse existing hook verdicts instead of adding a parallel control plane.

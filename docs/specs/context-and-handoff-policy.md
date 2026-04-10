@@ -41,6 +41,9 @@ when hook `session_id` is available.
 It may carry:
 
 - active claim for the current ticket/run/session
+- delegated worker identity such as `worker_name`
+- delegated main artifact path and latest `grounding_summary`
+- delegated wait/checkpoint timing such as `worker_started_at`, `last_checkpoint_at`, and `checkpoint_summary`
 - active ticket id/path
 - active phase
 - active session or pane id
@@ -50,6 +53,7 @@ It may carry:
 - latest worker result
 - latest judge/hook verdict
 - latest hook summary
+- advisory backpressure status derived from stale delegated waits
 
 Lookup precedence should be:
 

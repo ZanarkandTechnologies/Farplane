@@ -37,6 +37,19 @@ Runtime state stays lightweight and machine-facing. The grouped `claim` object
 tracks the active ticket/run/session ownership for hook consumers, while
 `last_user_turn` carries the saved current-turn user ask.
 
+Delegated worker metadata is additive:
+
+- `worker_name` identifies the lane role for the current live path
+- `main_artifact_path` points at the worker's canonical work object
+- `grounding_summary` captures the worker's explicit artifact-grounding line when available
+- `worker_started_at`, `last_checkpoint_at`, and `checkpoint_summary` support stale-wait backpressure reads
+
+The live `status` surface now derives a first advisory backpressure signal:
+
+- `backpressure_state`: `within_budget`, `over_budget`, `inactive`, or `unknown`
+- `stale_for_secs`: elapsed seconds since the latest checkpoint when available
+- `recommended_action`: present for over-budget waits
+
 Runtime routing is session-first for parallel Codex usage:
 
 - explicit run-state selector when a managed lane exports one

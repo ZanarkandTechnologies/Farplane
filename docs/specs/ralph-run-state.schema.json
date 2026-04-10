@@ -57,6 +57,26 @@
     "session_id": {
       "type": "string"
     },
+    "worker_name": {
+      "type": "string"
+    },
+    "main_artifact_path": {
+      "type": "string"
+    },
+    "grounding_summary": {
+      "type": "string"
+    },
+    "worker_started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_checkpoint_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "checkpoint_summary": {
+      "type": "string"
+    },
     "attempt": {
       "type": "integer",
       "minimum": 1
@@ -171,6 +191,26 @@
           ]
         },
         "executor_target": {
+          "type": "string"
+        },
+        "worker_name": {
+          "type": "string"
+        },
+        "main_artifact_path": {
+          "type": "string"
+        },
+        "grounding_summary": {
+          "type": "string"
+        },
+        "worker_started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_checkpoint_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "checkpoint_summary": {
           "type": "string"
         },
         "session_id": {

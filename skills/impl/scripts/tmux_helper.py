@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shlex
 import subprocess
@@ -101,6 +102,64 @@ def write_json(path: Path, payload: dict[str, object]) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
+def parse_iso_timestamp(raw: object) -> datetime | None:
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    normalized = raw.strip().replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def stale_budget_secs() -> int:
+    raw = str(os.environ.get("CODEXTER_WORKER_STALE_BUDGET_SECS", "")).strip()
+    if not raw:
+        return 60
+    try:
+        parsed = int(float(raw))
+    except ValueError:
+        return 60
+    return max(parsed, 1)
+
+
+def annotate_backpressure(payload: dict[str, object], *, now: datetime | None = None) -> dict[str, object]:
+    enriched = dict(payload)
+    status = str(payload.get("status") or "").strip()
+    pane_dead = str(payload.get("pane_dead") or "").strip()
+    if status not in {"running", "waiting_for_worker"} or pane_dead == "1":
+        enriched["backpressure_state"] = "inactive"
+        return enriched
+
+    budget = stale_budget_secs()
+    reference_timestamp = parse_iso_timestamp(payload.get("last_checkpoint_at"))
+    basis = "last_checkpoint_at"
+    if reference_timestamp is None:
+        reference_timestamp = parse_iso_timestamp(payload.get("worker_started_at"))
+        basis = "worker_started_at"
+    if reference_timestamp is None:
+        enriched["backpressure_state"] = "unknown"
+        enriched["backpressure_budget_secs"] = budget
+        return enriched
+
+    current_time = now or datetime.now(timezone.utc)
+    stale_for_secs = max(int((current_time - reference_timestamp).total_seconds()), 0)
+    enriched["backpressure_budget_secs"] = budget
+    enriched["stale_for_secs"] = stale_for_secs
+    enriched["backpressure_basis"] = basis
+    if stale_for_secs > budget:
+        enriched["backpressure_state"] = "over_budget"
+        enriched["recommended_action"] = (
+            "split work, add instrumentation, narrow scope, or continue with explicit justification"
+        )
+    else:
+        enriched["backpressure_state"] = "within_budget"
+    return enriched
+
+
 def skill_name_for_phase(phase: str) -> str:
     mapping = {
         "planning": "impl-plan",
@@ -110,11 +169,30 @@ def skill_name_for_phase(phase: str) -> str:
     return mapping[phase]
 
 
-def build_phase_prompt(ticket: Path, phase: str, followup_reason: str | None = None) -> str:
+def default_worker_name(phase: str) -> str:
+    mapping = {
+        "planning": "planner",
+        "building": "builder",
+        "documenting": "docs-closeout",
+    }
+    return mapping[phase]
+
+
+def build_phase_prompt(
+    ticket: Path,
+    phase: str,
+    worker_name: str,
+    main_artifact_path: str,
+    followup_reason: str | None = None,
+) -> str:
     skill_name = skill_name_for_phase(phase)
     ticket_id = ticket_id_from_path(ticket)
     base = (
         f"Run the `{skill_name}` skill on ticket `{ticket_id}`.\n"
+        f"You are the `{worker_name}` lane.\n"
+        f"Your main artifact is `{main_artifact_path}`.\n"
+        "Before substantive work, read that artifact and begin your first response with one line in the exact form "
+        "`GROUNDING_SUMMARY: <one-sentence summary>`. Keep the summary specific to the artifact and the lane's role.\n"
         "Resolve the ticket from active run state or the explicit ticket selector, stay within that ticket's scope, "
         "write back to the ticket itself, and finish with one `RALPH_RESULT:` line.\n"
     )
@@ -151,6 +229,12 @@ def write_current_run(payload: dict[str, object], run_state: Path) -> None:
         "last_intent_alignment",
         "last_intent_alignment_reason",
         "last_intent_turn_id",
+        "worker_name",
+        "main_artifact_path",
+        "grounding_summary",
+        "worker_started_at",
+        "last_checkpoint_at",
+        "checkpoint_summary",
         "tmux_session",
         "tmux_window",
         "tmux_pane",
@@ -171,6 +255,8 @@ def build_run_state(
     ticket: Path,
     phase: str,
     compute_class: str,
+    worker_name: str,
+    main_artifact_path: str,
     existing: dict[str, object] | None = None,
 ) -> dict[str, object]:
     ticket_id = ticket_id_from_path(ticket)
@@ -189,6 +275,11 @@ def build_run_state(
         "attempt": attempt,
         "skill_name": skill_name_for_phase(phase),
         "compute_class": compute_class,
+        "worker_name": worker_name,
+        "main_artifact_path": main_artifact_path,
+        "worker_started_at": now_iso(),
+        "last_checkpoint_at": now_iso(),
+        "checkpoint_summary": "worker launched",
         "parallel_slots_reserved": 1,
         "updated_at": now_iso(),
     }
@@ -203,6 +294,7 @@ def build_run_state(
             "last_intent_alignment",
             "last_intent_alignment_reason",
             "last_intent_turn_id",
+            "grounding_summary",
         ):
             value = existing.get(key)
             if isinstance(value, str) and value:
@@ -428,13 +520,15 @@ def persist_lane_state(
     phase: str,
     run_state: Path,
     compute_class: str,
+    worker_name: str,
+    main_artifact_path: str,
     tmux_session: str,
     tmux_window: str,
     tmux_pane: str,
     auto_continue: bool,
     existing: dict[str, object] | None,
 ) -> dict[str, object]:
-    state = build_run_state(ticket, phase, compute_class, existing)
+    state = build_run_state(ticket, phase, compute_class, worker_name, main_artifact_path, existing)
     state["tmux_session"] = tmux_session
     state["tmux_window"] = tmux_window
     state["tmux_pane"] = tmux_pane
@@ -454,6 +548,8 @@ def launch(args: argparse.Namespace) -> int:
     if not ticket.is_file():
         raise SystemExit(f"ticket not found: {ticket}")
     ticket_id = ticket_id_from_path(ticket)
+    worker_name = args.worker_name or default_worker_name(args.phase)
+    main_artifact_path = str(ticket)
     run_state = resolve_run_state_path(args.run_state, ticket_id, args.phase)
     session = args.tmux_session or current_tmux_session()
     session_name, window_id, window_index, pane_id = create_tmux_surface(
@@ -466,23 +562,26 @@ def launch(args: argparse.Namespace) -> int:
         phase=args.phase,
         run_state=run_state,
         compute_class=args.compute_class,
+        worker_name=worker_name,
+        main_artifact_path=main_artifact_path,
         tmux_session=session_name,
         tmux_window=window_id,
         tmux_pane=pane_id,
         auto_continue=args.auto_continue,
         existing=None,
     )
+    prompt_text = build_phase_prompt(ticket, args.phase, worker_name, main_artifact_path)
     command = lane_shell_command(
         ticket,
         run_state,
         ticket_id,
         args.phase,
         None,
-        build_phase_prompt(ticket, args.phase),
+        prompt_text,
         None,
         args.dry_run,
     )
-    capture_user_turn_fallback(build_phase_prompt(ticket, args.phase))
+    capture_user_turn_fallback(prompt_text)
     sent = run(["tmux", "send-keys", "-t", pane_id, command, "C-m"])
     if sent.returncode != 0:
         raise SystemExit(sent.stderr.strip() or sent.stdout.strip() or "tmux send-keys failed")
@@ -490,6 +589,8 @@ def launch(args: argparse.Namespace) -> int:
         "action": "launch",
         "ticket": str(ticket),
         "phase": args.phase,
+        "worker_name": worker_name,
+        "main_artifact_path": main_artifact_path,
         "tmux_session": session_name,
         "tmux_window": window_id,
         "tmux_window_index": window_index,
@@ -519,7 +620,9 @@ def followup(args: argparse.Namespace) -> int:
         existing = {**existing, **current_run}
     compute_class = args.compute_class or str(existing.get("compute_class") or "local")
     auto_continue = bool(existing.get("auto_continue")) or args.auto_continue
-    prompt_text = build_phase_prompt(ticket, args.phase, args.reason)
+    worker_name = args.worker_name or str(existing.get("worker_name") or default_worker_name(args.phase))
+    main_artifact_path = str(existing.get("main_artifact_path") or ticket)
+    prompt_text = build_phase_prompt(ticket, args.phase, worker_name, main_artifact_path, args.reason)
     capture_user_turn_fallback(prompt_text)
 
     if args.dry_run:
@@ -534,6 +637,8 @@ def followup(args: argparse.Namespace) -> int:
             phase=args.phase,
             run_state=run_state,
             compute_class=compute_class,
+            worker_name=worker_name,
+            main_artifact_path=main_artifact_path,
             tmux_session=session_name,
             tmux_window=window_id,
             tmux_pane=pane_id,
@@ -550,6 +655,8 @@ def followup(args: argparse.Namespace) -> int:
             "action": "followup",
             "ticket": str(ticket),
             "phase": args.phase,
+            "worker_name": worker_name,
+            "main_artifact_path": main_artifact_path,
             "tmux_session": session_name,
             "tmux_window": window_id,
             "tmux_window_index": window_index,
@@ -577,6 +684,8 @@ def followup(args: argparse.Namespace) -> int:
         phase=args.phase,
         run_state=run_state,
         compute_class=compute_class,
+        worker_name=worker_name,
+        main_artifact_path=main_artifact_path,
         tmux_session=session_name,
         tmux_window=window_id,
         tmux_pane=pane_id,
@@ -600,6 +709,8 @@ def followup(args: argparse.Namespace) -> int:
         "action": "followup",
         "ticket": str(ticket),
         "phase": args.phase,
+        "worker_name": worker_name,
+        "main_artifact_path": main_artifact_path,
         "tmux_session": session_name,
         "tmux_window": window_id,
         "tmux_window_index": window_index,
@@ -652,6 +763,7 @@ def status(args: argparse.Namespace) -> int:
         metadata = pane_metadata(pane)
         if metadata:
             payload.update(metadata)
+    payload = annotate_backpressure(payload)
     print(json.dumps(payload, indent=2))
     return 0
 
@@ -681,6 +793,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_launch.add_argument("--layout", choices=["pane", "window"], default="pane")
     p_launch.add_argument("--name")
     p_launch.add_argument("--compute-class", default="local")
+    p_launch.add_argument("--worker-name")
     p_launch.add_argument("--auto-continue", action="store_true")
     p_launch.add_argument("--dry-run", action="store_true")
     p_launch.set_defaults(func=launch)
@@ -691,6 +804,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_followup.add_argument("--run-state")
     p_followup.add_argument("--tmux-session")
     p_followup.add_argument("--compute-class")
+    p_followup.add_argument("--worker-name")
     p_followup.add_argument("--reason")
     p_followup.add_argument("--auto-continue", action="store_true")
     p_followup.add_argument("--dry-run", action="store_true")

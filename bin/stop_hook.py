@@ -637,6 +637,18 @@ def extract_ralph_result(message: str) -> str | None:
     return matches[-1].strip() if matches else None
 
 
+def extract_grounding_summary(message: str) -> str | None:
+    for line in message.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if not stripped.startswith("GROUNDING_SUMMARY:"):
+            return None
+        summary = stripped.partition(":")[2].strip()
+        return summary or None
+    return None
+
+
 def parse_ralph_result(line: str) -> dict[str, str]:
     match = PARSED_RESULT_PATTERN.match(line.strip())
     if not match:
@@ -1653,6 +1665,19 @@ def main() -> int:
             },
         )
         return 0
+
+    grounding_summary = extract_grounding_summary(message or raw_payload)
+    if project_root is not None and current_run is not None and grounding_summary:
+        current_run = persist_runtime_update(
+            project_root,
+            current_run,
+            {
+                "grounding_summary": grounding_summary,
+                "last_checkpoint_at": now_iso(),
+                "checkpoint_summary": grounding_summary,
+                "updated_at": now_iso(),
+            },
+        )
 
     ticket = resolve_ticket(home, project_root, message)
     if ticket is None:
