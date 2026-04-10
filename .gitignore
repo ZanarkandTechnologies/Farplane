@@ -26,6 +26,7 @@ memories/
 tmp/
 .personality_migration
 .omx/
+.harness/
 .ralph/
 skills/.system/
 bin/__pycache__/

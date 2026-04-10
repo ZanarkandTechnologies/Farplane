@@ -18,7 +18,7 @@ bash ~/.codex/skills/init-project/scripts/bootstrap.sh
 Then follow the funnel:
 
 ```text
-brainstorm -> deep-interview -> prd -> spec-to-ticket -> impl-plan -> ralph
+brainstorm -> deep-interview -> prd -> spec-to-ticket -> impl-plan -> impl
 ```
 
 ## Brownfield Migration
@@ -54,7 +54,7 @@ Start with:
 
 - one PRD/spec
 - one real ticket
-- one `impl-plan -> ralph` cycle
+- one `impl-plan -> impl` cycle
 
 Do not migrate every old issue into ticket files at once.
 
@@ -72,7 +72,7 @@ Then:
 - set the chosen ticket to `status: review`
 - run `impl-plan`
 - set it to `status: building`
-- run `ralph`
+- run `impl`
 
 ### 4. Keep migration scope small
 
@@ -104,5 +104,5 @@ Those can come after one clean ticket run.
 - [ ] `tickets/archive/` exists for completed tickets
 - [ ] one first ticket exists
 - [ ] one first `impl-plan` run is successful
-- [ ] one first `ralph` run is successful
+- [ ] one first `impl` run is successful
 - [ ] repeated failures get logged to `docs/TROUBLES.md`

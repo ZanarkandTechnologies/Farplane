@@ -21,7 +21,7 @@ One-time setup for new projects. This skill scaffolds a docs-first workflow and 
   - `prd`
   - `spec-to-ticket`
   - `impl-plan`
-  - `ralph`
+  - `impl`
 
 ## Common Stack Setup
 
@@ -78,7 +78,7 @@ If the project already exists:
 1. run the same bootstrap script in the repo root
 2. do **not** convert the whole backlog
 3. start with one PRD/spec and one ticket
-4. prove one `impl-plan -> ralph` cycle first
+4. prove one `impl-plan -> impl` cycle first
 
 Migration guide:
 

@@ -10,9 +10,9 @@ blocked_by: []
 ready: true
 approval_required: false
 created_at: 2026-04-09T03:54:42Z
-updated_at: 2026-04-09T04:27:58Z
+updated_at: 2026-04-09T03:31:49Z
 next_action: short-lived done state; archive after adjacent queue cleanup
-last_verification: `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py bin/stop_hook.py skills/impl/scripts/tmux_helper.py bin/test_runtime_state.py`, `python3 -m unittest bin/test_runtime_state.py`, `python3 -m unittest bin/test_stop_hook.py`, `python3 -m unittest discover -s bin -p 'test_*.py'`, and `python3 tickets/scripts/check_ticket_metadata.py` all passed on 2026-04-09; an additional script-level smoke against `bin/capture_user_turn.py` proved distinct `session_id` payloads persisted separate `.ralph/state/sessions/*.json` records without cross-session prompt overwrite
+last_verification: `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py bin/stop_hook.py skills/impl/scripts/tmux_helper.py bin/test_runtime_state.py`, `python3 -m unittest bin/test_runtime_state.py`, `python3 -m unittest bin/test_stop_hook.py`, `python3 -m unittest discover -s bin -p 'test_*.py'`, and `python3 tickets/scripts/check_ticket_metadata.py` all passed on 2026-04-09; an additional script-level smoke against `bin/capture_user_turn.py` proved distinct `session_id` payloads persisted separate `.ralph/state/sessions/*.json` records without cross-session prompt overwrite; this final pass refreshed the review-packet timestamp so the stop-hook freshness gate also passes
 linked_docs:
   - bin/capture_user_turn.py
   - bin/user_turn.py
@@ -176,7 +176,7 @@ prove two concurrent sessions do not overwrite each other
   - ran a disposable hook-payload smoke with `capture_user_turn.py` using `session_id: sess-a` and `session_id: sess-b`; confirmed `.ralph/state/sessions/sess-a.json` and `.ralph/state/sessions/sess-b.json` retained distinct `last_user_turn` values while `.ralph/state/current-run.json` only tracked the last-active compatibility pointer
 
 ## Review Packet
-- `reviewed_at:` 2026-04-09 04:27 +0100
+- `reviewed_at:` 2026-04-09 04:32 +0100
 - `rubrics_used:` ["code-quality","integration-readiness","evidence-quality"]
 - `overall_score:` 4.7
 - `overall_threshold:` 4.0
@@ -197,7 +197,7 @@ prove two concurrent sessions do not overwrite each other
 - none
 
 ## Handoff
-- Current state: implementation, docs writeback, and review are complete. Runtime lane routing now resolves explicit run-state selector first, hook `session_id` second, and singleton `current-run.json` last; session-backed state files keep concurrent prompt capture isolated.
+- Current state: implementation, docs writeback, and review are complete. Runtime lane routing now resolves explicit run-state selector first, hook `session_id` second, and singleton `current-run.json` last; session-backed state files keep concurrent prompt capture isolated. This final ticket-only pass refreshed the review-packet freshness timestamp to satisfy the stop-hook gate.
 - Resume from: if a follow-up is needed, inspect `bin/user_turn.py`, `bin/capture_user_turn.py`, `bin/stop_hook.py`, `skills/impl/scripts/tmux_helper.py`, and `bin/test_runtime_state.py` together because the routing contract spans all five.
 
 ## Writeback
