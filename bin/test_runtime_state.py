@@ -91,9 +91,9 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_load_runtime_claim_prefers_nested_run_state_claim(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".ralph" / "state"
+            state_dir = project_root / ".harness" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
-            run_state = project_root / ".ralph" / "runs" / "task-0035-building.json"
+            run_state = project_root / ".harness" / "runs" / "task-0035-building.json"
             run_state.parent.mkdir(parents=True, exist_ok=True)
             run_state.write_text(
                 json.dumps(
@@ -136,7 +136,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_load_current_run_prefers_session_state_over_global_pointer(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".ralph" / "state"
+            state_dir = project_root / ".harness" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
             session_path = session_state_path(project_root, "sess-123")
             session_path.parent.mkdir(parents=True, exist_ok=True)
@@ -176,7 +176,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_load_current_run_explicit_run_state_outranks_session_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            run_state = project_root / ".ralph" / "runs" / "task-0042-building.json"
+            run_state = project_root / ".harness" / "runs" / "task-0042-building.json"
             run_state.parent.mkdir(parents=True, exist_ok=True)
             run_state.write_text(
                 json.dumps(
@@ -215,14 +215,37 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(current["ticket_id"], "TASK-0042")
         self.assertEqual(current["run_state"], str(run_state.relative_to(project_root)))
 
-    def test_capture_user_turn_updates_only_resolved_session_lane(self) -> None:
+    def test_load_current_run_falls_back_to_legacy_ralph_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             state_dir = project_root / ".ralph" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
+            (state_dir / "current-run.json").write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-7777",
+                        "run_id": "run-task-7777-building-01",
+                        "phase": "building",
+                        "status": "running",
+                    }
+                ),
+                encoding="utf-8",
+            )
 
-            run_state_a = project_root / ".ralph" / "runs" / "task-0042-building.json"
-            run_state_b = project_root / ".ralph" / "runs" / "task-0041-planning.json"
+            current = load_current_run(project_root)
+
+        self.assertIsNotNone(current)
+        assert current is not None
+        self.assertEqual(current["ticket_id"], "TASK-7777")
+
+    def test_capture_user_turn_updates_only_resolved_session_lane(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            state_dir = project_root / ".harness" / "state"
+            state_dir.mkdir(parents=True, exist_ok=True)
+
+            run_state_a = project_root / ".harness" / "runs" / "task-0042-building.json"
+            run_state_b = project_root / ".harness" / "runs" / "task-0041-planning.json"
             run_state_a.parent.mkdir(parents=True, exist_ok=True)
             run_state_a.write_text(
                 json.dumps(

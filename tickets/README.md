@@ -6,7 +6,7 @@ One source of truth per concern:
 
 - frontmatter = queue state and execution state
 - body = plan, evidence, blockers, and handoff
-- `.ralph/state/` = live runtime state
+- `.harness/state/` = live runtime state
 - `docs/` = durable knowledge after the ticket is done
 - transcript = disposable context, not the canonical resume surface
 
@@ -36,7 +36,7 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 ## Progress Surface Policy
 
 - the ticket is the canonical durable progress surface
-- `.ralph/state/` is runtime-only and may track active claim/lane/session/verdict state
+- `.harness/state/` is runtime-only and may track active claim/lane/session/verdict state
 - transcripts are useful evidence but are not the canonical resume surface
 - deliberate reset/resume requires the ticket to carry a clear `next_action`,
   `last_verification`, and `Handoff` note
@@ -122,4 +122,4 @@ When a ticket is inspired by an external source, store the durable source URL in
 Canonical policy references:
 
 - [context-and-handoff-policy.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/context-and-handoff-policy.md)
-- [ralph-runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md)
+- [runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md)

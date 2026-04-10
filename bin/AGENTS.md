@@ -28,7 +28,7 @@ For `ralph` prototype scripts:
 - orchestrator composes worker + judge; it does not implement code itself
 - tickets remain the canonical execution contract
 - explicit ticket selectors outrank ambient run-state when both are present
-- explicit run-state selectors outrank hook `session_id`, which outranks ambient `.ralph/state/current-run.json` for runtime lane routing
+- explicit run-state selectors outrank hook `session_id`, which outranks ambient `.harness/state/current-run.json`; legacy `.ralph/state/current-run.json` is fallback-only during migration
 - run-state files remain runtime-only and lightweight
 - runtime state should group active execution ownership into a lightweight `claim` object instead of scattering claim semantics across multiple ad hoc top-level reads
 - delegated workers should keep `worker_name`, `main_artifact_path`, and `grounding_summary` visible in the same runtime contract when available

@@ -30,7 +30,7 @@ idea/request
   -> specs (`docs/specs/*`)
   -> ticketization (`skills/spec-to-ticket`)
   -> per-ticket planning (`impl-plan`)
-  -> execution (`$impl`, `ralph`, runtime helpers)
+  -> execution (`$impl`, runtime helpers)
   -> proof/review (`review`, QA, Stop hook)
   -> writeback (`docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`)
 ```
@@ -94,7 +94,7 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - [docs/specs/orchestrator-subagent-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/orchestrator-subagent-loop.md)
   Purpose: lane roles and orchestration boundaries
 - [docs/specs/ralph-runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md)
-  Purpose: runtime state and operator-visible surfaces
+  Purpose: runtime state and operator-visible surfaces, with `.harness/` as the canonical live root
 - [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
   Purpose: hooks, validators, runtime helpers
 - [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)

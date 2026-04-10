@@ -1,4 +1,4 @@
-# Ralph Runtime Surface
+# Runtime Surface
 
 Date: 2026-04-07
 
@@ -18,7 +18,7 @@ The primary control plane is now:
 
 - `impl-plan` for ticket planning
 - `$impl` for build-phase orchestration
-- worker lanes such as `ralph` where a persistent build loop is useful
+- worker lanes and runtime helpers behind the canonical `$impl` surface
 - `stop_hook.py` for continuation/completion decisions
 
 The primary control plane is not:
@@ -27,7 +27,8 @@ The primary control plane is not:
 - `ralph_worker.sh`
 - direct binary-first orchestration docs
 
-Those are prototype or transitional surfaces.
+There is no separate public `skills/ralph` execution surface anymore.
+Same-ticket repeats re-enter `$impl`.
 
 ## Binary Decisions
 
@@ -45,6 +46,7 @@ Those are prototype or transitional surfaces.
 ## Documentation Rules
 
 - Public docs should describe `$impl` as the build-phase orchestrator.
+- Public docs should describe `.harness/` as the canonical live runtime root and `.ralph/` as compatibility-only legacy state during migration.
 - `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
 - internal Stop-hook role instructions should live under `agents/`, not as giant string literals in Python helpers.
 - Any removed prototype binaries should remain only as historical references in

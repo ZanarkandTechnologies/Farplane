@@ -33,10 +33,10 @@ It must carry:
 
 ### Runtime State
 
-`.ralph/state/sessions/{session_id}.json` is the preferred runtime lane surface
+`.harness/state/sessions/{session_id}.json` is the preferred runtime lane surface
 when hook `session_id` is available.
 
-`.ralph/state/current-run.json` is runtime-only compatibility state.
+`.harness/state/current-run.json` is the runtime-only compatibility state.
 
 It may carry:
 
@@ -59,7 +59,7 @@ Lookup precedence should be:
 
 1. explicit run-state selector for a managed lane
 2. hook `session_id` mapped to a session state file
-3. `.ralph/state/current-run.json` as compatibility fallback
+3. `.harness/state/current-run.json`, with `.ralph/state/current-run.json` as legacy compatibility fallback while the rename remains in flight
 
 It must not become the durable source of:
 

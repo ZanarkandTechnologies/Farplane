@@ -11,7 +11,7 @@ Define the current canonical execution model for Codexter:
 - feature-sized work packages
 - per-work-package `impl-plan`
 - per-work-package `$impl` orchestration
-- worker lanes such as `ralph` where appropriate
+- worker lanes launched by `$impl` where appropriate
 - separate QA and review roles
 - Stop hook as the final continuation/completion gate
 
@@ -95,8 +95,8 @@ It should:
 - write progress and next action back to the ticket/progress surface
 - exit after the round instead of becoming a permanent orchestrator pane
 
-Worker lanes may include `ralph` where that remains the right build surface, but
-the public build-phase entrypoint is `$impl`.
+Worker lanes may vary by ticket, but the public build-phase entrypoint is
+`$impl`.
 
 ### 5. QA + Review
 

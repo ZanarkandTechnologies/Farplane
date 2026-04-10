@@ -1,6 +1,6 @@
 # Stop Hook Routing
 
-The Stop hook is the central router for active `ralph` / `impl` ticket work.
+The Stop hook is the central router for active `$impl` ticket work.
 
 It uses two internal role passes, and only when needed:
 

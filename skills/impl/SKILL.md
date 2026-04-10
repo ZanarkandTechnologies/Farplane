@@ -11,6 +11,7 @@ Use it when:
 
 - planning for a ticket is already complete
 - one ticket should move through implementation, QA, review, and evidence-check
+- the same ticket may need repeated build/review/fix passes until proof is good enough
 - the operator wants visible worker lanes instead of a hidden forever-running orchestrator
 
 Do not use it when:
@@ -50,6 +51,7 @@ The orchestrator remains singular: worker lanes do not mutate queue state or cla
 - Stop-hook and judge outputs remain the continuation/completion gate.
 - When the verdict says repeat the same build work, the follow-up instruction should re-enter the same `$impl` contract for that ticket.
 - Re-entry should reuse the existing verdict fields and `orchestrator_message`; do not invent a second continuation artifact.
+- Former Ralph-style persistence now lives here: repeated same-ticket execution is a normal `$impl` re-entry path, not a separate public skill.
 
 ## Operator UX
 
@@ -77,5 +79,6 @@ Reference:
 - Keep the delegated main artifact explicit instead of relying on transcript memory.
 - Keep QA and review separate.
 - Keep the orchestrator ephemeral.
+- Keep one canonical public execution surface: `$impl`.
 - Reuse existing hook verdicts instead of adding a parallel control plane.
 - Leave board-wide dispatch, worktree orchestration, and binary/runtime cleanup to separate tickets.

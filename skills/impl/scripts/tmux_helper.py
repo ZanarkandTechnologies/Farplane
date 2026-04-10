@@ -43,7 +43,7 @@ def root() -> Path:
 
 
 def current_run_state_path() -> Path:
-    return root() / ".ralph" / "state" / "current-run.json"
+    return root() / ".harness" / "state" / "current-run.json"
 
 
 def run(
@@ -83,7 +83,7 @@ def ticket_id_from_path(path: Path) -> str:
 
 
 def default_run_state_path(ticket_id: str, phase: str) -> Path:
-    return root() / ".ralph" / "runs" / f"{ticket_id.lower()}-{phase}-{now_stamp()}.json"
+    return root() / ".harness" / "runs" / f"{ticket_id.lower()}-{phase}-{now_stamp()}.json"
 
 
 def path_stem(ticket_id: str, phase: str) -> str:
@@ -468,7 +468,7 @@ def summarize_hook_entry(ticket_id: str, entry: dict[str, object]) -> dict[str, 
 
 
 def latest_hook_status(ticket_id: str) -> dict[str, str] | None:
-    log_path = root() / ".ralph" / "logs" / "stop-hook.jsonl"
+    log_path = root() / ".harness" / "logs" / "stop-hook.jsonl"
     try:
         lines = log_path.read_text(encoding="utf-8").splitlines()
     except OSError:

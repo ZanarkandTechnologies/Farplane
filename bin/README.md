@@ -11,7 +11,7 @@ Primary control plane:
 
 - `impl-plan`
 - `$impl`
-- worker lanes such as `ralph`
+- persistent builder lanes
 - `stop_hook.py`
 
 Stop-hook role instructions are canonical TOML configs under `agents/`.
@@ -54,9 +54,9 @@ Runtime routing is session-first for parallel Codex usage:
 
 - explicit run-state selector when a managed lane exports one
 - hook `session_id` for lane-scoped session state
-- `.ralph/state/current-run.json` only as compatibility fallback / last-active pointer
+- `.harness/state/current-run.json` as the compatibility pointer / last-active selector, with `.ralph/state/current-run.json` kept only as legacy fallback during migration
 
-See [ralph-runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md) for the canonical decision table.
+See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-runtime-surface.md) for the canonical decision table.
 
 ## Minimal Example
 

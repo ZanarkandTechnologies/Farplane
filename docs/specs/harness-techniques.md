@@ -51,7 +51,7 @@ This inventory is grounded in:
 | Single-ticket orchestration via `$impl` | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md`, `README.md` | Makes one ticket the execution unit and keeps orchestration visible | no durable multi-ticket dispatcher yet |
 | Explicit worker-lane split | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Separates builder, reviewer, QA, and evidence-check responsibilities | actual staffing and reuse patterns are still evolving |
 | Ephemeral orchestrator, visible worker lanes | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Avoids a hidden forever-orchestrator and keeps runs legible | tmux/runtime surfaces are still prototype-weight |
-| Ralph persistence loop for bounded execution | Partial | `skills/ralph`, `docs/specs/ralph-v2-direction.md`, `README.md` | Keeps working until proof exists instead of stopping on partial progress | current `ralph` skill still carries older OMX-era assumptions and overlap |
+| Same-ticket re-entry via `$impl` + Stop hook | Partial | `skills/impl`, `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps working on one selected ticket until proof exists instead of stopping on partial progress | runtime/code migration still needs to finish removing older Ralph-named residue |
 
 ### Review, QA, and proof
 
@@ -95,7 +95,7 @@ This inventory is grounded in:
 | Technique | Status | Delta from current system | Why it is promising | Suggested eval |
 | --- | --- | --- | --- | --- |
 | Stronger anti-self-agreement review loop | Proposed | Current system separates QA/review, but it still needs more deliberate adversarial critique and stronger refusal of weak evidence | Directly attacks “agent always agrees” and premature completion | replay one weak-proof ticket and measure false-pass reduction |
-| Final “would this impress the original user?” check | Proposed | Current review gates focus on ticket/evidence quality, not an explicit comparison back to original user intent | Adds a user-alignment gate after implementation and QA | compare final artifacts against original ask on a recent ticket |
+| Final “would this impress the original user?” check | Partial | Current review gates now carry an explicit completion-gate field for impressed-user judgment, but the path still needs broader use and replay coverage | Adds a user-alignment gate after implementation and QA | compare final artifacts against original ask on a recent ticket |
 | Feature-taste review against neighboring features | Proposed | `visual-qa` is taste-aware, but there is no explicit “compare to surrounding product quality” loop | Helps avoid self-congratulatory UI review and local optima | use one UI change and require comparison against existing adjacent screens |
 | External design-tool-first workflow for UI | Proposed | Current UI flow is CLI-agent build + QA; there is no upstream design artifact requirement | Better for higher-taste UI work than hand-authoring from CLI alone | design in an external tool, then implement against it and run visual QA |
 
@@ -103,10 +103,10 @@ This inventory is grounded in:
 
 | Technique | Status | Delta from current system | Why it is promising | Suggested eval |
 | --- | --- | --- | --- | --- |
-| Execution-surface simplification | Proposed | `impl` and `ralph` are still both public execution surfaces and the naming overlap remains confusing | Reduces confusion about when to use the build orchestrator vs the persistence loop | classify current `impl` vs `ralph` asks and test whether one public execution name can absorb the other cleanly |
+| Finish removing Ralph-named residue from runtime/code surfaces | Proposed | public execution has collapsed to `impl`, but runtime helpers, schemas, and older specs still carry Ralph-era names | Reduces naming debt without reopening execution-surface design | migrate helpers, env selectors, and remaining specs onto the chosen neutral runtime naming |
 | Harder evidence-quality enforcement in Stop hook | Proposed | Stop-hook judgment exists, but stricter machine-readable evidence thresholds are still a direction more than a finished system | Tightens the highest-leverage harness lever: completion policy | replay smoke cases with stronger evidence-fail paths |
 | One main artifact for subagent grounding | Proposed | Tickets are durable memory already, but not every loop treats one file as the strict context anchor | Reduces context rot and ambiguous handoffs | require subagents to summarize the ticket before acting on one ticket run |
-| User-input-to-output impressed-user check | Proposed | user request is present in chat, but not normalized into a reusable final review artifact | Creates a direct loop between intake and final judgment | save original ask in the ticket or run artifact, then score final output against it |
+| User-input-to-output impressed-user check | Partial | `last_user_turn` is already captured in runtime state and can now feed completion judgment, but the system still needs stronger rollout and evidence across more tickets | Creates a direct loop between intake and final judgment | replay recent completion cases against the saved user ask |
 | Recurring doc-gardening / cleanup agent | Proposed | durable docs exist, but there is no explicit recurring documentation maintenance loop | Prevents stale rules and docs from quietly rotting | schedule one documentation-maintainer pass and measure stale-doc fixes found |
 | Mechanical architecture and taste invariants | Proposed | Codexter has prompt/rule guidance and some repo rules, but not strong custom structural checks with remediation-grade errors | High leverage for keeping fast agent output coherent | encode one or two domain or doc invariants as real validators or lints |
 | Agent-visible local observability stack | Proposed | QA/browser evidence is present, but logs/metrics/traces are not yet a first-class agent feedback loop | Would extend “agent legibility” beyond UI into performance and runtime reliability | expose one local log/metric path for a ticket and test a performance or reliability task |

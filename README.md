@@ -24,7 +24,7 @@ The core idea is simple:
 - `impl-plan` plans one selected ticket for execution
 - `$impl` orchestrates one selected ticket through builder/reviewer/QA/evidence-check lanes
 - the reviewer writes an anchored rubric-based `Review Packet`
-- worker lanes such as `ralph` implement the selected ticket and gather evidence
+- worker lanes launched by `$impl` implement the selected ticket and gather evidence
 - a `Stop` `hook` judges the evidence and current-turn intent alignment
 - the orchestrator decides whether to repeat, advance, block, complete, or move to the next ready ticket
 
@@ -32,7 +32,7 @@ Runtime state stays lightweight:
 
 - explicit run-state selectors outrank ambient state for managed lanes
 - hook `session_id` routes prompt capture and Stop-hook reads to the correct lane in parallel Codex usage
-- `.ralph/state/current-run.json` is only a compatibility fallback / last-active pointer, not the primary identity source
+- `.harness/state/current-run.json` is the runtime compatibility pointer / last-active selector, with `.ralph/state/current-run.json` treated as legacy fallback during migration
 
 ## One Picture
 
@@ -280,7 +280,7 @@ This is the intended final shape.
 The current prototype is narrower:
 
 - single-ticket `$impl`-style orchestration is now the intended public direction
-- single-ticket bounded Ralph loops are still the main worker/runtime surface
+- single-ticket `$impl` rounds plus persistent builder lanes are still the main live execution surface
 - live Stop-hook continuation is real
 - anchored review rubrics and ticket `Review Packet` gates are real
 - current-turn intent capture now feeds Stop-hook relevance checks
@@ -297,7 +297,7 @@ The current prototype is narrower:
 - Intake skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview), [skills/prd](/Users/kenjipcx/coding-harness/Codexter/skills/prd)
 - Ticketization: [skills/spec-to-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket)
 - Planning: [skills/impl-plan](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan)
-- Execution and review skills: [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/ralph](/Users/kenjipcx/coding-harness/Codexter/skills/ralph), [skills/review](/Users/kenjipcx/coding-harness/Codexter/skills/review), [skills/docs-closeout](/Users/kenjipcx/coding-harness/Codexter/skills/docs-closeout)
+- Execution and review skills: [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/review](/Users/kenjipcx/coding-harness/Codexter/skills/review), [skills/docs-closeout](/Users/kenjipcx/coding-harness/Codexter/skills/docs-closeout)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Doc governance: [doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md)
@@ -331,14 +331,14 @@ so the repo does not blur current behavior with future ideas.
 What is proven:
 
 - planning now routes through one public planner surface: `impl-plan`
-- `ralph` with missing evidence gets repeated
+- the same `$impl` build pass gets repeated when evidence is weak
 - review now uses anchored rubric families plus hard `evidence-quality` and `integration-readiness` gates
-- ticket `Review Packet` state is part of Ralph completion gating
+- ticket `Review Packet` state is part of completion gating
 - project-local `current-run.json` is enough for replay-level hook selection
 - current-turn user intent can be captured and used for Stop-hook relevance checks
 - real Codex sessions now fire the `Stop` `hook`
 - live sessions can produce `hook: Stop Blocked`
-- tmux-backed Ralph lanes can run as real interactive Codex sessions
+- tmux-backed builder lanes can run as real interactive Codex sessions
 - live Stop-hook repeats can keep the same tmux pane active instead of falling back to a fresh wrapper lane
 - `python3 skills/impl/scripts/tmux_helper.py status` now centralizes the active lane, session id, judge verdict, next phase, and latest hook summary
 
@@ -346,7 +346,7 @@ Where to see that:
 
 - [2026-04-05-stop-hook-smoke.md](/Users/kenjipcx/coding-harness/Codexter/experiments/2026-04-05-stop-hook-smoke.md)
 - [latest-runs.json](/Users/kenjipcx/coding-harness/Codexter/experiments/latest-runs.json)
-- [stop-hook.jsonl](/Users/kenjipcx/coding-harness/Codexter/.ralph/logs/stop-hook.jsonl)
+- [stop-hook.jsonl](/Users/kenjipcx/coding-harness/Codexter/.harness/logs/stop-hook.jsonl)
 
 Main remaining gap:
 
@@ -398,4 +398,4 @@ bash -n install.sh
 
 Read the visual walkthrough:
 
-- [ralph-flow-examples.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-flow-examples.md)
+- [execution loop examples](/Users/kenjipcx/coding-harness/Codexter/docs/specs/ralph-flow-examples.md)

@@ -256,7 +256,7 @@ Thin wrapper example:
 
 ```bash
 RALPH_TICKET="tickets/TASK-0042-example.md" \
-RALPH_RUN_STATE=".ralph/runs/run-20260405-001.json" \
+RALPH_RUN_STATE=".harness/runs/run-20260405-001.json" \
 codex exec --skip-git-repo-check -C "$ROOT" - < prompts/ralph.md
 ```
 
