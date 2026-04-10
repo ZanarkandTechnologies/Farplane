@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+
+from __future__ import annotations
+
+import subprocess
+import sys
+import tempfile
+import textwrap
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = ROOT / "bin" / "check_harness_invariants.py"
+
+
+ROOT_AGENTS_TEXT = """\
+# Codexter AGENTS.md
+
+This file is the project-local context for developing Codexter itself.
+
+The install-time global harness contract now lives at `templates/global/AGENTS.md` and is what `install.sh` links into the live Codex home as `~/.codex/AGENTS.md`.
+
+## Local Operating Rules
+
+- Prefer `.harness/` for live runtime state.
+"""
+
+RUNTIME_SURFACE_TEXT = """\
+# Runtime Surface
+
+There is no separate public legacy execution surface anymore.
+
+## Documentation Rules
+
+- Public docs should describe `.harness/` as the canonical live runtime root.
+"""
+
+BIN_README_TEXT = """\
+# Bin
+
+- raw `session_id` should stay runtime-only
+- `.harness/state/current-run.json`
+"""
+
+TICKETS_README_TEXT = """\
+# Tickets
+
+claimed_by: agent-03  # optional active session claim alias
+
+- do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter
+"""
+
+TICKET_TEMPLATE_TEXT = """\
+---
+claimed_by:
+---
+
+- Do not store raw `session_id` values in ticket frontmatter.
+"""
+
+
+def write_file(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(textwrap.dedent(text), encoding="utf-8")
+
+
+class CheckHarnessInvariantsTest(unittest.TestCase):
+    def build_repo(self, root: Path) -> None:
+        write_file(root / "AGENTS.md", ROOT_AGENTS_TEXT)
+        write_file(root / "docs/specs/runtime-surface.md", RUNTIME_SURFACE_TEXT)
+        write_file(root / "bin/README.md", BIN_README_TEXT)
+        write_file(root / "tickets/README.md", TICKETS_README_TEXT)
+        write_file(root / "tickets/templates/ticket.md", TICKET_TEMPLATE_TEXT)
+
+    def run_validator(self, root: Path) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, str(SCRIPT), "--root", str(root)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+    def test_validator_passes_for_valid_fixture(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            result = self.run_validator(root)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("harness invariants OK", result.stdout)
+
+    def test_validator_fails_when_root_agents_loses_global_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            write_file(
+                root / "AGENTS.md",
+                """\
+# Codexter AGENTS.md
+
+This file is generic instructions.
+""",
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("templates/global/AGENTS.md", result.stdout)
+            self.assertIn("remediation", result.stdout)
+
+    def test_validator_fails_on_legacy_runtime_root(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            write_file(
+                root / "docs/specs/runtime-surface.md",
+                RUNTIME_SURFACE_TEXT + "\nLegacy note: `.ralph/state/current-run.json`\n",
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("contains forbidden legacy text", result.stdout)
+            self.assertIn(".ralph/", result.stdout)
+
+    def test_validator_fails_when_ticket_template_drops_session_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            write_file(
+                root / "tickets/templates/ticket.md",
+                """\
+---
+claimed_by:
+---
+""",
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("session_id", result.stdout)
+
+
+if __name__ == "__main__":
+    unittest.main()

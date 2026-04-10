@@ -97,6 +97,11 @@ def validate_ticket(path: Path) -> list[str]:
     if "lane" in frontmatter:
         errors.append(f"{rel}: lane must not appear in frontmatter")
 
+    if "session_id" in frontmatter:
+        errors.append(
+            f"{rel}: session_id must not appear in frontmatter; use claimed_by for the human-facing alias only"
+        )
+
     ticket_id = str(frontmatter.get("ticket_id", "")).strip()
     if not TICKET_ID_RE.match(ticket_id):
         errors.append(f"{rel}: invalid ticket_id {ticket_id!r}")
