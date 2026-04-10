@@ -56,7 +56,7 @@ Ensure an agent can execute the core path after only reading this file.
 - Core decision branches:
   - planning -> `spec-contract` + `implementation-plan`
   - code/backend/api -> `code-quality` + `integration-readiness` + `evidence-quality`
-  - UI -> `ui-quality` + `code-quality` + `evidence-quality` plus demo/video when present
+  - UI or user-facing workflow -> `user-intent-satisfaction` + the relevant quality/evidence families
   - cleanup/refactor/runtime/doc simplification -> add `debloatability`
 - Top 3 gotchas:
   - do not review before reading the active ticket
@@ -75,6 +75,7 @@ Ensure an agent can execute the core path after only reading this file.
   - `references/implementation-plan.md`
   - `references/code-quality.md`
   - `references/ui-quality.md`
+  - `references/user-intent-satisfaction.md`
   - `references/evidence-quality.md`
   - `references/demo-quality.md`
   - `references/video-quality.md`
@@ -129,6 +130,7 @@ delegate(
 Read the active ticket first.
 Open references/review-rubric-index.md first.
 Determine which rubric families apply.
+Open references/desloppify.md for code, cleanup, integration, and evidence-heavy review.
 Open the matching family reference files.
 Use the family skeptic questions, score guide, and evidence cues.
 Select the matching rubric families and score the work against them on the anchored 1.0-5.0 scale.

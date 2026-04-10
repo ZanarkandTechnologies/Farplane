@@ -87,6 +87,7 @@ Default thresholds:
 - `code-quality`: `4.0`
 - `debloatability`: `4.0`
 - `ui-quality`: `4.0`
+- `user-intent-satisfaction`: `4.0`
 - `evidence-quality`: `4.0`
 - `demo-quality`: `3.5`
 - `video-quality`: `3.5`
@@ -115,15 +116,19 @@ Choose rubric families from the ticket context:
   - `evidence-quality` when claims depend on proof
 - UI work:
   - `ui-quality`
+  - `user-intent-satisfaction` when the ticket clearly expresses the user-facing ask or success feel
   - `code-quality`
   - `evidence-quality`
   - `demo-quality` when a demo is present
   - `video-quality` when a video is present
 - final completion review:
+  - `user-intent-satisfaction` when the ticket is user-facing
   - `integration-readiness`
   - `evidence-quality`
   - optional `demo-quality`
   - optional `video-quality`
+
+If the reviewer wants to make stronger "worth it", willingness-to-pay, or competitive-market claims, the ticket/spec must already carry explicit user, alternative, and price-point evidence. Otherwise keep the judgment at the `user-intent-satisfaction` level and call the stronger market question underspecified.
 
 When unsure, prefer adding `evidence-quality` and `integration-readiness`.
 
@@ -215,6 +220,15 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - dependency readiness
   - coupling risk
   - merge readiness
+
+### 10. User Intent Satisfaction
+- File: `user-intent-satisfaction.md`
+- Focus:
+  - fidelity to the saved user ask
+  - completeness of the promised outcome
+  - leverage or worth-it feel for the intended user
+  - whether the result would actually satisfy or impress the user
+  - evidence confidence for any stronger value claims
 
 ## Review Packet
 

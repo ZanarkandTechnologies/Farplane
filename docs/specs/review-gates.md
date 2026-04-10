@@ -42,6 +42,9 @@ Reviewer answers:
 - what should be fixed before completion?
 
 Reviewer produces the rubric score, evidence-gate judgment, and concrete next action.
+For user-facing work, reviewer rubric selection may also include a dedicated
+user-intent-satisfaction family so the system can judge "correct" separately
+from "actually satisfying for the intended user."
 
 ### Stop Hook
 

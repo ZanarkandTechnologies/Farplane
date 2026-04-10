@@ -16,6 +16,7 @@ or optimistic prose.
 - [`references/implementation-plan.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/implementation-plan.md)
 - [`references/code-quality.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/code-quality.md)
 - [`references/ui-quality.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/ui-quality.md)
+- [`references/user-intent-satisfaction.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/user-intent-satisfaction.md)
 - [`references/evidence-quality.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/evidence-quality.md)
 - [`references/demo-quality.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/demo-quality.md)
 - [`references/video-quality.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/video-quality.md)
