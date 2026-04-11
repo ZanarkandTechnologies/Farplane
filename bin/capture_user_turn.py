@@ -4,7 +4,12 @@ from __future__ import annotations
 import json
 import sys
 
-from user_turn import capture_user_turn, explicit_run_state_selector, project_root_from_payload
+from user_turn import (
+    capture_user_turn,
+    explicit_run_state_selector,
+    is_internal_user_prompt,
+    project_root_from_payload,
+)
 
 
 def read_payload() -> dict[str, object]:
@@ -25,6 +30,8 @@ def main() -> int:
 
     prompt = payload.get("prompt")
     if not isinstance(prompt, str) or not prompt.strip():
+        return 0
+    if is_internal_user_prompt(prompt):
         return 0
 
     project_root = project_root_from_payload(payload)

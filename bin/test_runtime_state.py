@@ -13,6 +13,8 @@ if str(ROOT) not in sys.path:
 from user_turn import (
     build_runtime_claim,
     capture_user_turn,
+    current_run_state_path,
+    is_internal_user_prompt,
     load_current_run,
     load_runtime_claim,
     session_state_path,
@@ -236,7 +238,32 @@ class RuntimeClaimTests(unittest.TestCase):
 
         self.assertIsNone(current)
 
-    def test_capture_user_turn_initializes_session_alias_without_current_run(self) -> None:
+    def test_capture_user_turn_initializes_control_session_and_current_run_without_existing_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="okay please $impl",
+                turn_id="turn-init",
+                source="test",
+                session_id="sess-init",
+            )
+
+            session_payload = json.loads(session_state_path(project_root, "sess-init").read_text(encoding="utf-8"))
+            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
+
+        self.assertIsNotNone(captured)
+        assert captured is not None
+        self.assertEqual(session_payload["session_id"], "sess-init")
+        self.assertEqual(session_payload["session_name"], "agent-01")
+        self.assertEqual(session_payload["last_user_turn"]["turn_id"], "turn-init")
+        self.assertEqual(session_payload["session_origin"], "control")
+        self.assertEqual(current_run["session_id"], "sess-init")
+        self.assertEqual(current_run["session_origin"], "control")
+
+    def test_capture_user_turn_ignores_non_control_session_without_existing_origin(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
@@ -244,18 +271,14 @@ class RuntimeClaimTests(unittest.TestCase):
             captured = capture_user_turn(
                 project_root=project_root,
                 raw_text="what is active in this repo?",
-                turn_id="turn-init",
+                turn_id="turn-plain",
                 source="test",
-                session_id="sess-init",
+                session_id="sess-plain",
             )
 
-            session_payload = json.loads(session_state_path(project_root, "sess-init").read_text(encoding="utf-8"))
-
-        self.assertIsNotNone(captured)
-        assert captured is not None
-        self.assertEqual(session_payload["session_id"], "sess-init")
-        self.assertEqual(session_payload["session_name"], "agent-01")
-        self.assertEqual(session_payload["last_user_turn"]["turn_id"], "turn-init")
+        self.assertIsNone(captured)
+        self.assertFalse(session_state_path(project_root, "sess-plain").exists())
+        self.assertFalse(current_run_state_path(project_root).exists())
 
     def test_capture_user_turn_writes_claimed_by_to_ticket(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -298,6 +321,7 @@ linked_docs: []
                         "phase": "building",
                         "status": "running",
                         "session_id": "sess-123",
+                        "session_origin": "control",
                     }
                 ),
                 encoding="utf-8",
@@ -311,6 +335,7 @@ linked_docs: []
                         "phase": "building",
                         "status": "running",
                         "session_id": "sess-123",
+                        "session_origin": "control",
                     }
                 ),
                 encoding="utf-8",
@@ -348,6 +373,12 @@ linked_docs: []
                         "phase": "building",
                         "status": "running",
                         "session_id": "sess-a",
+                        "last_user_turn": {
+                            "turn_id": "turn-a0",
+                            "raw_text": "$impl TASK-0042",
+                            "control_surface": "impl",
+                            "explicit_impl_requested": True,
+                        },
                     }
                 ),
                 encoding="utf-8",
@@ -377,6 +408,12 @@ linked_docs: []
                         "status": "running",
                         "session_id": "sess-a",
                         "run_state": str(run_state_a.relative_to(project_root)),
+                        "last_user_turn": {
+                            "turn_id": "turn-a0",
+                            "raw_text": "$impl TASK-0042",
+                            "control_surface": "impl",
+                            "explicit_impl_requested": True,
+                        },
                     }
                 ),
                 encoding="utf-8",
@@ -426,9 +463,139 @@ linked_docs: []
         self.assertEqual(captured["turn_id"], "turn-a")
         self.assertEqual(session_a["last_user_turn"]["turn_id"], "turn-a")
         self.assertEqual(session_a["last_user_turn"]["raw_text"], "Implement TASK-0042 in this session only.")
+        self.assertEqual(session_a["session_origin"], "control")
+        self.assertFalse(session_a["impl_loop_active"])
         self.assertEqual(session_a["session_name"], "agent-01")
         self.assertEqual(session_b["last_user_turn"]["turn_id"], "turn-b")
+        self.assertNotIn("impl_loop_active", session_b)
+        self.assertFalse(persisted_run_state_a["impl_loop_active"])
         self.assertEqual(persisted_run_state_a["last_user_turn"]["turn_id"], "turn-a")
+
+    def test_capture_user_turn_explicit_impl_activates_only_resolved_session_lane(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            state_dir = project_root / ".harness" / "state"
+            state_dir.mkdir(parents=True, exist_ok=True)
+
+            run_state_a = project_root / ".harness" / "runs" / "task-0042-building.json"
+            run_state_b = project_root / ".harness" / "runs" / "task-0041-planning.json"
+            run_state_a.parent.mkdir(parents=True, exist_ok=True)
+            run_state_a.write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0042",
+                        "run_id": "run-task-0042-building-01",
+                        "phase": "building",
+                        "status": "running",
+                        "session_id": "sess-a",
+                        "skill_name": "impl",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            run_state_b.write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0041",
+                        "run_id": "run-task-0041-planning-01",
+                        "phase": "planning",
+                        "status": "running",
+                        "session_id": "sess-b",
+                        "last_user_turn": {"turn_id": "turn-b", "raw_text": "plan task 41"},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            session_state_a = session_state_path(project_root, "sess-a")
+            session_state_b = session_state_path(project_root, "sess-b")
+            session_state_a.parent.mkdir(parents=True, exist_ok=True)
+            session_state_a.write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0042",
+                        "run_id": "run-task-0042-building-01",
+                        "phase": "building",
+                        "status": "running",
+                        "skill_name": "impl",
+                        "session_id": "sess-a",
+                        "run_state": str(run_state_a.relative_to(project_root)),
+                    }
+                ),
+                encoding="utf-8",
+            )
+            session_state_b.write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0041",
+                        "run_id": "run-task-0041-planning-01",
+                        "phase": "planning",
+                        "status": "running",
+                        "session_id": "sess-b",
+                        "run_state": str(run_state_b.relative_to(project_root)),
+                        "last_user_turn": {"turn_id": "turn-b", "raw_text": "plan task 41"},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (state_dir / "current-run.json").write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0041",
+                        "run_id": "run-task-0041-planning-01",
+                        "phase": "planning",
+                        "status": "running",
+                        "session_id": "sess-b",
+                        "run_state": str(run_state_b.relative_to(project_root)),
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="$impl TASK-0042 in this session only.",
+                turn_id="turn-impl",
+                source="test",
+                session_id="sess-a",
+            )
+
+            session_a = json.loads(session_state_a.read_text(encoding="utf-8"))
+            session_b = json.loads(session_state_b.read_text(encoding="utf-8"))
+            persisted_run_state_a = json.loads(run_state_a.read_text(encoding="utf-8"))
+
+        self.assertIsNotNone(captured)
+        assert captured is not None
+        self.assertTrue(captured["explicit_impl_requested"])
+        self.assertTrue(session_a["impl_loop_active"])
+        self.assertEqual(session_a["last_user_turn"]["turn_id"], "turn-impl")
+        self.assertEqual(session_a["session_origin"], "control")
+        self.assertNotIn("impl_loop_active", session_b)
+        self.assertTrue(persisted_run_state_a["impl_loop_active"])
+
+    def test_is_internal_user_prompt_rejects_approval_reviewer_requests(self) -> None:
+        prompt = (
+            "The following is the Codex agent history whose request action you are assessing.\n"
+            ">>> APPROVAL REQUEST START\n"
+            "Assess the exact planned action below.\n"
+        )
+
+        self.assertTrue(is_internal_user_prompt(prompt))
+
+    def test_is_internal_user_prompt_rejects_delegated_read_only_lanes(self) -> None:
+        prompt = (
+            "TASK-0007 reviewer lane. Inspect the upcoming batch-first enrichment contract changes. "
+            "Do not edit files. Return: worker_name, main_artifact_path, grounding_summary, and findings."
+        )
+
+        self.assertTrue(is_internal_user_prompt(prompt))
+
+    def test_is_internal_user_prompt_keeps_real_operator_requests(self) -> None:
+        prompt = (
+            "please investigate why the hook is creating extra runs in "
+            "/Users/kenjipcx/60x/ai-brain/.harness and fix the harness bug"
+        )
+
+        self.assertFalse(is_internal_user_prompt(prompt))
 
 
 if __name__ == "__main__":

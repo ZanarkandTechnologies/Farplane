@@ -9,6 +9,19 @@ from typing import Mapping
 
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
+EXPLICIT_IMPL_PATTERN = re.compile(r"(?<!\S)\$impl\b", re.IGNORECASE)
+CONTROL_SURFACE_PATTERN = re.compile(
+    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|docs-closeout)\b",
+    re.IGNORECASE,
+)
+APPROVAL_REVIEW_PROMPT_PREFIX = (
+    "The following is the Codex agent history whose request action you are assessing."
+)
+DELEGATED_LANE_PROMPT_PATTERN = re.compile(
+    r"^TASK-\d{4}\s+(?:review|reviewer|qa(?:/evidence| evidence)?)\s+lane[.,]",
+    re.IGNORECASE,
+)
+DELEGATED_REVIEW_PROMPT_PATTERN = re.compile(r"^(?:Review|QA-check)\s+TASK-\d{4}\b")
 INTENT_MODES = {"planning", "building", "documenting", "question", "backlog", "unknown"}
 CLAIM_PHASES = {"planning", "building", "documenting"}
 CLAIM_STATUSES = {
@@ -35,6 +48,7 @@ HARD_CONSTRAINTS = {
     "source_required",
     "specific_ticket_required",
 }
+SESSION_ORIGINS = {"control", "internal", "non_owning"}
 SESSION_ALIAS_POOL = tuple(f"agent-{index:02d}" for index in range(1, 11))
 
 
@@ -256,6 +270,20 @@ def explicit_run_state_selector(payload: Mapping[str, object] | None = None) -> 
     return ""
 
 
+def normalize_session_origin(raw: object) -> str:
+    if not isinstance(raw, str):
+        return ""
+    normalized = raw.strip().lower()
+    return normalized if normalized in SESSION_ORIGINS else ""
+
+
+def extract_control_surface(raw_text: str) -> str:
+    match = CONTROL_SURFACE_PATTERN.search(raw_text)
+    if not match:
+        return ""
+    return str(match.group("skill") or "").strip().lower()
+
+
 def _with_runtime_metadata(
     payload: dict[str, object],
     *,
@@ -424,6 +452,10 @@ def persist_runtime_update(
             "tmux_window",
             "tmux_pane",
             "auto_continue",
+            "impl_loop_active",
+            "session_origin",
+            "session_origin_source",
+            "session_origin_reason",
             "next_phase",
         ):
             value = merged_current.get(key)
@@ -446,6 +478,9 @@ def initialize_session_state(
     current_run: Mapping[str, object] | None,
     explicit_run_state: str | None,
     captured_at: str,
+    session_origin: str = "",
+    session_origin_source: str = "",
+    session_origin_reason: str = "",
 ) -> dict[str, object]:
     normalized_session_id = normalize_session_id(session_id)
     if not normalized_session_id:
@@ -484,6 +519,12 @@ def initialize_session_state(
     session_payload["session_name"] = session_name
     session_payload["last_seen_at"] = captured_at
     session_payload["updated_at"] = captured_at
+    if session_origin:
+        session_payload["session_origin"] = session_origin
+    if session_origin_source:
+        session_payload["session_origin_source"] = session_origin_source
+    if session_origin_reason:
+        session_payload["session_origin_reason"] = session_origin_reason
     if explicit_run_state and "run_state" not in session_payload:
         session_payload["run_state"] = explicit_run_state
     elif isinstance(current_run, Mapping):
@@ -502,6 +543,8 @@ def initialize_session_state(
         session_payload["phase"] = phase
     if status:
         session_payload["status"] = status
+    if isinstance(current_run, Mapping) and isinstance(current_run.get("impl_loop_active"), bool):
+        session_payload["impl_loop_active"] = bool(current_run.get("impl_loop_active"))
 
     write_json(session_path, session_payload)
 
@@ -516,6 +559,90 @@ def initialize_session_state(
 def extract_ticket_id(text: str) -> str | None:
     match = TICKET_ID_PATTERN.search(text)
     return match.group(0) if match else None
+
+
+def has_explicit_impl_invocation(text: str) -> bool:
+    return bool(EXPLICIT_IMPL_PATTERN.search(text))
+
+
+def infer_session_origin_from_state(payload: Mapping[str, object] | None) -> tuple[str, str, str]:
+    if not isinstance(payload, Mapping):
+        return "", "", ""
+
+    stored_origin = normalize_session_origin(payload.get("session_origin"))
+    if stored_origin:
+        source = str(payload.get("session_origin_source") or "").strip() or "stored_session_origin"
+        reason = str(payload.get("session_origin_reason") or "").strip() or f"session origin already marked {stored_origin}"
+        return stored_origin, source, reason
+
+    last_user_turn = payload.get("last_user_turn")
+    if not isinstance(last_user_turn, Mapping):
+        return "", "", ""
+
+    control_surface = str(last_user_turn.get("control_surface") or "").strip().lower()
+    if control_surface:
+        return "control", "legacy_last_user_turn", f"persisted last_user_turn invoked ${control_surface}"
+
+    raw_text = last_user_turn.get("raw_text")
+    if isinstance(raw_text, str) and raw_text.strip():
+        if is_internal_user_prompt(raw_text):
+            return "internal", "legacy_last_user_turn", "persisted raw_text matches internal prompt signature"
+        legacy_control_surface = extract_control_surface(raw_text)
+        if legacy_control_surface:
+            return "control", "legacy_last_user_turn", f"persisted raw_text invoked ${legacy_control_surface}"
+
+    if bool(last_user_turn.get("explicit_impl_requested")):
+        return "control", "legacy_last_user_turn", "persisted explicit impl request implies a control session"
+
+    return "", "", ""
+
+
+def resolve_session_origin(
+    raw_text: str,
+    *,
+    current_run: Mapping[str, object] | None,
+    existing_session: Mapping[str, object] | None,
+) -> tuple[str, str, str]:
+    for payload in (existing_session, current_run):
+        inferred_origin, inferred_source, inferred_reason = infer_session_origin_from_state(payload)
+        if inferred_origin:
+            return inferred_origin, inferred_source, inferred_reason
+
+    if is_internal_user_prompt(raw_text):
+        return "internal", "internal_prompt_signature", "prompt matches an internal harness prompt signature"
+
+    control_surface = extract_control_surface(raw_text)
+    if control_surface:
+        return "control", "first_prompt_control_surface", f"first prompt invoked ${control_surface}"
+
+    return "non_owning", "default_non_owning", "session did not begin with a public control-skill invocation"
+
+
+def is_internal_user_prompt(raw_text: str) -> bool:
+    text = raw_text.strip()
+    if not text:
+        return False
+
+    lowered = text.lower()
+    has_structured_return = "return:" in lowered or "return only:" in lowered
+    is_read_only_contract = "do not edit" in lowered or "read-only only." in lowered
+
+    if text.startswith(APPROVAL_REVIEW_PROMPT_PREFIX):
+        return True
+    if text.startswith("Continue the current live Codex lane."):
+        return True
+    if text.startswith("Continue the current Codex lane."):
+        return True
+    if text.startswith("Run the `impl` skill on ticket "):
+        return True
+    if DELEGATED_LANE_PROMPT_PATTERN.match(text):
+        return True
+    if DELEGATED_REVIEW_PROMPT_PATTERN.match(text) and has_structured_return and is_read_only_contract:
+        return True
+    if lowered.startswith("use agent-browser") and has_structured_return and is_read_only_contract:
+        return True
+
+    return False
 
 
 def _contains_any(text: str, patterns: tuple[str, ...]) -> bool:
@@ -692,6 +819,8 @@ def normalize_user_turn(
     raw_text = raw_text.strip()
     captured_at_value = captured_at or now_iso()
     explicit_ticket_id = extract_ticket_id(raw_text)
+    control_surface = extract_control_surface(raw_text)
+    explicit_impl_requested = has_explicit_impl_invocation(raw_text)
     intent_mode = classify_intent_mode(raw_text)
     requested_outcome = classify_requested_outcome(raw_text, intent_mode)
     hard_constraints = classify_hard_constraints(raw_text, explicit_ticket_id)
@@ -706,6 +835,8 @@ def normalize_user_turn(
         "intent_mode": intent_mode if intent_mode in INTENT_MODES else "unknown",
         "requested_outcome": requested_outcome if requested_outcome in REQUESTED_OUTCOMES else "unknown",
         "explicit_ticket_id": explicit_ticket_id or "",
+        "control_surface": control_surface,
+        "explicit_impl_requested": explicit_impl_requested,
         "hard_constraints": hard_constraints,
         "summary": summary,
     }
@@ -729,6 +860,15 @@ def capture_user_turn(
         explicit_run_state=explicit_run_state,
     )
     normalized_session_id = normalize_session_id(session_id)
+    existing_session = load_json_dict(session_state_path(project_root, normalized_session_id)) if normalized_session_id else {}
+    session_origin, session_origin_source, session_origin_reason = resolve_session_origin(
+        raw_text,
+        current_run=current_run,
+        existing_session=existing_session,
+    )
+    if session_origin != "control":
+        return None
+
     session_state = (
         initialize_session_state(
             project_root=project_root,
@@ -736,6 +876,9 @@ def capture_user_turn(
             current_run=current_run,
             explicit_run_state=explicit_run_state,
             captured_at=captured_at_value,
+            session_origin=session_origin,
+            session_origin_source=session_origin_source,
+            session_origin_reason=session_origin_reason,
         )
         if normalized_session_id
         else {}
@@ -755,6 +898,10 @@ def capture_user_turn(
     if current_run is not None:
         updates: dict[str, object] = {
             "last_user_turn": last_user_turn,
+            "impl_loop_active": bool(last_user_turn.get("explicit_impl_requested")),
+            "session_origin": session_origin,
+            "session_origin_source": session_origin_source,
+            "session_origin_reason": session_origin_reason,
             "updated_at": str(last_user_turn["captured_at"]),
         }
         if session_state:
@@ -773,9 +920,11 @@ def capture_user_turn(
         session_path = session_state_path(project_root, normalized_session_id)
         payload = dict(session_state)
         payload["last_user_turn"] = last_user_turn
+        payload["impl_loop_active"] = bool(last_user_turn.get("explicit_impl_requested"))
         payload["updated_at"] = str(last_user_turn["captured_at"])
         payload["last_seen_at"] = str(last_user_turn["captured_at"])
         write_json(session_path, payload)
+        write_json(current_run_state_path(project_root), payload)
     return last_user_turn
 
 
