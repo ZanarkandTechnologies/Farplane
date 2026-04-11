@@ -27,7 +27,7 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 6. If the slice includes any UI, the ticket must define agent testability and QA shape before build starts.
 7. If a UI flow is hard for an agent to access or stabilize, add testability instrumentation work into the slice instead of leaving QA to improvise.
 8. Every non-trivial ticket should declare a `Test hook`; if none is needed, say `none needed` explicitly.
-9. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` using the canonical Mermaid delta convention before the longer plan prose.
+9. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
 
 ## Inputs
 
@@ -106,7 +106,7 @@ pick one slice, split it, add proof/testability, then write real ticket files in
 1. Read `docs/specs/*.md` and pick exactly one SLC slice.
 2. Split the slice into dependency-ordered tickets.
 3. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
-4. For each material ticket, write a compact `Diagram Summary` with one top-level delta map and inline signatures where the interfaces matter.
+4. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
 5. For each UI-bearing ticket, add a compact `Agent Contract` block plus `Evidence checklist`.
 6. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
 7. If the slice is too large, split it into multiple smaller tickets in `tickets/` immediately.

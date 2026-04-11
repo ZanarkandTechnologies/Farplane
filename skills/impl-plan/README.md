@@ -6,6 +6,9 @@ Guide agents to produce one clear per-ticket planning artifact, with a compact
 diagram-first approval surface by default and optional consensus challenge for
 riskier work.
 
+For standalone diagram work or deeper diagram taste/pattern guidance, use
+[`diagramming`](/Users/kenjipcx/coding-harness/Codexter/skills/diagramming/SKILL.md).
+
 ## Public API / Entrypoints
 
 - `SKILL.md`: main planning contract

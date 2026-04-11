@@ -27,6 +27,7 @@ Rules:
 8. Add appendix detail only if risk or novelty justifies it, but always include the options appendix for material choices.
 9. Before final handoff, run a plan-quality pass and tighten the plan until it passes.
 10. For material, cross-module, or architecture-facing work, lead with one Mermaid delta diagram and an optional numbered data-flow or zoom-in view before prose.
+11. When diagrams are used, follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for compactness, delta coloring, inline signatures, and anti-bloat rules.
 
 Output shape:
 
@@ -67,7 +68,7 @@ Requirements:
 - `Recommendation` must appear near the top and must name the chosen path directly.
 - `Diagram Summary` is required for material or cross-module work.
 - Use one legend-backed delta diagram instead of separate before/after diagrams unless the split is clearly simpler.
-- Put short signatures inside diagram nodes when the interface or ownership boundary matters.
+- Follow `diagramming` for compact node labels, color/legend use, and inline-signature practice.
 - `Core Flow` should prefer a compact numbered Mermaid data-flow diagram for material work and use short pseudocode only when that is clearer.
 - Proof must use concrete checks, not generic test categories.
 - Narrative sections must be concrete and distinct from `Summary` and `Scope`.

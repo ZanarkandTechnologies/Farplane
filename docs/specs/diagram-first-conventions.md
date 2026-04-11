@@ -7,6 +7,9 @@ Date: 2026-04-11
 Make spec and ticket approval surfaces faster to understand by defaulting to
 compact Mermaid diagrams for system shape, delta, and data flow before prose.
 
+For standalone diagram work outside planning, use
+[`skills/diagramming/SKILL.md`](../../skills/diagramming/SKILL.md).
+
 ## Approval Surface
 
 Use a tiered visual summary for any material, cross-module, workflow/tooling,

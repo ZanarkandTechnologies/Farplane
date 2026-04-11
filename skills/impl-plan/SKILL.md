@@ -25,6 +25,11 @@ Discovery still belongs to `brainstorm`, `deep-interview`, `prd`, and
 <!-- MEM-0008 decision: root AGENTS should stay repo-only and terse; skill internals belong in skills, not repo contract text. -->
 <!-- MEM-0030 decision: material plans default to a diagram-first approval surface with one top-level Mermaid delta map, optional zoom-in/data-flow, and inline signatures when interface shape matters. -->
 
+When this skill needs diagram taste or pattern depth, reuse
+`skills/diagramming/SKILL.md` plus
+`docs/specs/diagram-first-conventions.md` instead of inventing a second diagram
+style here.
+
 ## Modes
 
 - **Default:** approval-first planning with a concise top section and richer
@@ -82,7 +87,10 @@ Do not hand off to execution while the plan still depends on avoidable unknowns.
    story, JTBD, non-goals, example behavior, quality target, and proof target.
 8. **Teach**: for material, cross-module, or architecture-facing work, start
    with one Mermaid delta diagram plus an optional zoom-in or data-flow view;
-   keep prose below that. For trivial localized fixes, diagrams stay optional.
+   keep prose below that. For compactness, color/legend practice, and
+   inline-signature patterns, follow `diagramming` and the canonical
+   diagram-first spec guide. For trivial localized fixes, diagrams stay
+   optional.
 9. **Review + ask**: run the plan through the quality gate, fix weak spots before handoff, then show proof points and `Ready: yes/no`.
 
 ### Workflow (`--consensus` Mode)
@@ -120,6 +128,8 @@ Use consensus mode when:
    enough.
 4. Do not fall back to essays when one top-level delta diagram plus one
    data-flow view would explain the plan faster.
+5. Do not restate the whole reusable diagram style guide here; reference
+   `diagramming` for deeper pattern guidance.
 
 ### Applicability Rule
 
@@ -149,8 +159,8 @@ Every plan must include:
 3. `Diagram Summary`
    - `Tier 1:` one top-level Mermaid delta diagram
    - `Legend:` keep / change / add / remove
-   - short inline signatures in nodes when the interface or ownership boundary
-     matters
+   - follow `diagramming` and `docs/specs/diagram-first-conventions.md` for
+     compact color/legend use, inline signatures, and anti-bloat rules
    - optional `Tier 2:` zoom-in or component diagram only if Tier 1 is not
      enough
 4. `B -> A`
@@ -213,8 +223,9 @@ Every plan must include:
 - For material work, the approval surface starts with diagrams, not paragraphs.
 - If the user did not provide a take, default to consultative guidance instead of neutral mirroring.
 - Prefer symbols and compact labels over repeated prose.
-- Prefer one top-level delta diagram over separate before/after diagrams.
-- Put short signatures inside nodes when interface shape is the point.
+- Reuse the `diagramming` skill's compact delta-map, color/legend, and
+  inline-signature patterns instead of inventing a new diagram style in each
+  plan.
 - Reuse existing modules; justify every new file or abstraction in one line.
 - Keep deeper implementation detail below the top section.
 - If the plan cannot be understood from `Recommendation + Diagram Summary + Core Flow`, it is not ready.

@@ -14,6 +14,8 @@
 - Keep repo rules in root `AGENTS.md`; keep planning mechanics in this skill.
 - Keep the top approval surface compact.
 - Make the top approval surface diagram-first for material work. See `MEM-0030`.
+- Keep reusable diagram taste and pattern depth in `skills/diagramming/*`; keep
+  only planning-specific diagram rules here.
 - Add deeper user-story/example detail only when the applicability rule requires it.
 - Keep consensus challenge inside this skill instead of reviving a second public planner.
 
@@ -21,8 +23,9 @@
 
 - Lead with one top-level delta diagram before the deeper prose when the work is material or cross-module.
 - Keep the recommendation above the fold.
-- Prefer a numbered data-flow diagram over long dry-runs.
-- Use one legend-backed delta diagram instead of separate before/after diagrams unless the split is materially clearer.
+- When diagrams are needed, reference `skills/diagramming/SKILL.md` and
+  `docs/specs/diagram-first-conventions.md` for compactness, color/legend
+  practice, and inline-signature patterns.
 - Reference `MEM-0007` for the compact plan contract.
 - Reference `MEM-0008` for the root-AGENTS compression boundary.
 - Reference `MEM-0030` for the diagram-first contract.
