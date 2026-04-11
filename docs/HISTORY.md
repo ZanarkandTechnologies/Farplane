@@ -58,3 +58,4 @@
 2026-04-10 17:28 +0100 | FEAT | add a `repent` recovery skill as an explicit operator escape hatch for audit-then-fix mode when the assistant likely missed something obvious on the current task
 2026-04-10 18:35 +0100 | FIX | stop `UserPromptSubmit` from persisting approval-review and delegated read-only agent prompts as user turns, and add regression coverage for the polluted `.harness` session cases
 2026-04-11 02:06 +0100 | FEAT | add first-pass skill `todos.md` sidecars as plain natural-language checkbox templates with Markdown skill links, add candidate examples across review/impl/debugging/planning/QA/ticketization skills, and document the anti-parser boundary in repo docs
+2026-04-11 02:22 +0100 | FEAT | add a canonical diagram-first planning/spec convention, require top-level Mermaid delta maps for material `impl-plan` tickets, and push inline-signature plus data-flow guidance into the live ticket/template surfaces

@@ -12,6 +12,19 @@
 - `Why:`
 - `Tradeoff accepted:`
 
+## Diagram Summary
+
+- `Required:` yes for material or cross-module work; optional for trivial localized fixes
+- `Legend:` keep | change | add | remove
+
+```mermaid
+flowchart LR
+  %% Tier 1: top-level delta map
+  %% Put short signatures in nodes when the interface or ownership boundary matters.
+```
+
+- `Tier 2:` optional zoom-in only when the top-level map is not enough
+
 ## B -> A
 
 - `Before:`
@@ -27,6 +40,11 @@
 
 ## Core Flow
 
+```mermaid
+flowchart LR
+  %% Prefer a numbered critical-path data-flow diagram for material work.
+```
+
 ```pseudo
 input/request
 -> inspect current path
@@ -35,8 +53,6 @@ input/request
 -> persist/render/return
 -> verify proof points
 ```
-
-- `New path?` if yes, add tiny diagram
 
 ## Proof
 

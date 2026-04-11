@@ -10,7 +10,7 @@ Files here define buildable system behavior, schemas, and flows.
 
 - canonical
 - concise
-- visual when possible
+- diagram-first for material flow or architecture changes; see `MEM-0030`
 - specific about data flow and responsibilities
 
 ## Do Not
@@ -18,6 +18,7 @@ Files here define buildable system behavior, schemas, and flows.
 - duplicate exploratory research
 - mix settled specs with open-ended comparison notes
 - bury executable contracts in long prose when diagrams or examples would be clearer
+- do not split simple delta views into separate before/after diagrams when one legend-backed diagram would be clearer
 
 ## Required Maintenance
 

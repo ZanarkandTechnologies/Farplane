@@ -9,6 +9,7 @@ Top-level companion docs:
 
 Current design docs:
 
+- `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy
 - `context-and-handoff-policy.md`
 - `harness-engineering-quickstart.md`

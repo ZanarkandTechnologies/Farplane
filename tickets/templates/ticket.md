@@ -49,6 +49,16 @@ Short description of the next smallest executable slice.
 
 ## Plan
 
+### Diagram Summary
+- `Required:` yes for material, cross-module, workflow/tooling, or architecture-facing work; optional for trivial localized fixes
+- `Legend:` keep | change | add | remove
+```mermaid
+flowchart LR
+  %% Tier 1: top-level delta map
+  %% Put short signatures in nodes when the interface or ownership boundary matters.
+```
+- `Tier 2:` optional zoom-in or component view only when Tier 1 is not enough
+
 ### Pitch
 - `Req:`
 - `Bet:`
@@ -71,6 +81,10 @@ Short description of the next smallest executable slice.
 - `Delete/Avoid:`
 
 ### Core Flow
+```mermaid
+flowchart LR
+  %% Prefer a numbered critical-path data-flow diagram for material work.
+```
 ```pseudo
 inspect current state
 apply smallest safe delta
@@ -130,6 +144,7 @@ update docs/evidence
 - `owner` is the broad work owner; `claimed_by` is optional live-session claim state for board visibility. Do not store raw `session_id` values in ticket frontmatter.
 - `next_action` is the authoritative current step. Explain it here if useful, but do not create a second state field.
 - `last_verification` is the authoritative verification summary. Put detailed commands and observations in `Evidence`.
+- for material work, the top of the plan should be approvable from `Recommendation + Diagram Summary + Core Flow` before the reviewer reads the lower prose
 - when the user did not provide a take on a material choice, capture three viable options plus the recommended path in the plan instead of leaving the tradeoff implicit
 - `User Story`, `User Pain / JTBD`, `Non-Goals`, `High-Fidelity Example`, `What Good Looks Like`, and `Proof Target` are required for material feature work, workflow/tooling changes, ambiguous implementation work, and any ticket where the implementer would otherwise need to infer desired behavior
 - those sections may be short or omitted for trivial, narrowly localized fixes where the file, symbol, or error already anchors the work concretely

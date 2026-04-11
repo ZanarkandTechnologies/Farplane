@@ -13,23 +13,26 @@
 - Keep one public planner only: `impl-plan`. See `MEM-0014`.
 - Keep repo rules in root `AGENTS.md`; keep planning mechanics in this skill.
 - Keep the top approval surface compact.
+- Make the top approval surface diagram-first for material work. See `MEM-0030`.
 - Add deeper user-story/example detail only when the applicability rule requires it.
 - Keep consensus challenge inside this skill instead of reviving a second public planner.
 
 ## Conventions
 
-- Lead with `Pitch` + `B -> A`.
+- Lead with one top-level delta diagram before the deeper prose when the work is material or cross-module.
 - Keep the recommendation above the fold.
-- Prefer `Core Flow` pseudocode over long dry-runs.
-- Diagrams are optional, not default.
+- Prefer a numbered data-flow diagram over long dry-runs.
+- Use one legend-backed delta diagram instead of separate before/after diagrams unless the split is materially clearer.
 - Reference `MEM-0007` for the compact plan contract.
 - Reference `MEM-0008` for the root-AGENTS compression boundary.
+- Reference `MEM-0030` for the diagram-first contract.
 - Make narrative sections fail if they are decorative, duplicated, or placeholder-only.
 - If `todos.md` exists here, keep it as plain natural-language checklist text with Markdown links rather than a custom mini-language. See `MEM-0028`.
 
 ## Checks
 
 - `Pitch`, `B -> A`, `Delta`, `Core Flow`, `Proof`, `Ask` are all present.
+- `Diagram Summary` is present for any material or cross-module plan.
 - `Recommendation` and `Options Appendix` are present.
 - Split rule remains explicit.
 - Proof remains concrete.
@@ -43,4 +46,5 @@
 - Re-read `SKILL.md` once and confirm the contract is executable without references.
 - Compare prompt/template/example against `SKILL.md` for drift.
 - Confirm high-signal content appears before appendix content.
+- Confirm the diagram-first approval surface can be skimmed without the appendix.
 - Confirm the recommendation is directly justified against the listed options.

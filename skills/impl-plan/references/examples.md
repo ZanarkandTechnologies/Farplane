@@ -13,6 +13,27 @@
 - Why: it fixes the current confusion without expanding into execution-surface redesign
 - Tradeoff accepted: the cutover touches several docs and runtime mappings in one pass
 
+## Diagram Summary
+- Legend: gray = keep, amber = change, green = add, red dashed = remove
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef change fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef add fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef remove fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  user[/operator/]:::keep
+  both["public planner story<br/>`ralplan` + `tech-impl-plan`"]:::remove
+  merged["impl-plan<br/>planTicket(ticket): PlanArtifact"]:::add
+  runtime["runtime mappings<br/>emitPlanner(): impl-plan"]:::change
+  docs[(docs + tickets)]:::change
+
+  user --> merged
+  merged --> runtime
+  merged --> docs
+```
+
 ## B -> A
 - Before: `ralplan` and `tech-impl-plan` both exist and the repo documents both
 - After: `impl-plan` is the only public planner, with consensus available as a mode inside it
@@ -25,13 +46,19 @@
 - Delete/Avoid: permanent public aliases and a second planner story
 
 ## Core Flow
-```pseudo
-read the selected ticket
-decide default mode or consensus mode
-keep the top approval surface concise
-add richer story/example sections if the work needs them
-run Architect/Critic only when consensus mode is active
-finish with proof and ticket move guidance
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef change fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef add fill:#dcfce7,stroke:#15803d,color:#111827
+
+  ticket[(selected ticket)]:::keep
+  mode["choose mode<br/>default | consensus"]:::change
+  map["draw delta map<br/>top approval surface"]:::add
+  flow["show critical flow<br/>numbered arrows"]:::add
+  proof["proof + ticket move"]:::change
+
+  ticket -->|1| mode -->|2| map -->|3| flow -->|4| proof
 ```
 
 ## Proof
@@ -102,6 +129,7 @@ Why bad:
 
 - no sharp req understanding
 - no recommendation
+- no diagram-first approval surface
 - no real option comparison
 - `Before -> After` buried or missing
 - no explicit user-facing problem
