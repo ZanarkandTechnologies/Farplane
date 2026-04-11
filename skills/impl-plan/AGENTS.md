@@ -25,6 +25,7 @@
 - Reference `MEM-0007` for the compact plan contract.
 - Reference `MEM-0008` for the root-AGENTS compression boundary.
 - Make narrative sections fail if they are decorative, duplicated, or placeholder-only.
+- If `todos.md` exists here, keep it as plain natural-language checklist text with Markdown links rather than a custom mini-language. See `MEM-0028`.
 
 ## Checks
 

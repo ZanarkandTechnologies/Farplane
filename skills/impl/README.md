@@ -10,6 +10,7 @@ tmux-backed lane launcher and follow-up utilities.
 ## Public Entrypoints
 
 - `SKILL.md` - build-phase orchestration contract
+- `todos.md` - example natural-language todo template for orchestration and review/evidence phases
 - `scripts/tmux_helper.py` - launch, follow up, and inspect visible tmux lanes
 
 The first live delegated-worker contract is carried in runtime state:
@@ -35,6 +36,8 @@ python3 skills/impl/scripts/tmux_helper.py launch \
 
 - `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
 - `python3 -m unittest bin/test_tmux_helper.py`
+- `sed -n '1,80p' skills/impl/todos.md`
+  and expect a plain `# Todos` checklist with natural-language orchestration steps
 - `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`
 - `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run`
 - `python3 skills/impl/scripts/tmux_helper.py status --run-state <run-state>`

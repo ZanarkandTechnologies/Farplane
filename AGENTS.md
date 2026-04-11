@@ -82,6 +82,7 @@ For harness-design research and external patterns:
   - skills and subagent boundaries after that
   - root prompt rewrites last
 - Do not treat Codexter like an app repo with one central runtime to extend by default. Most work here is about better orchestration surfaces, not more orchestration code.
+- For early skill-todo experiments, prefer plain `todos.md` checkbox templates with Markdown links to related skills before inventing parser syntax or persisted workflow state.
 
 ## Durable Truth
 
