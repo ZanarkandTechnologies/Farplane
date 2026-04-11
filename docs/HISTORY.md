@@ -51,6 +51,7 @@
 2026-04-10 03:05 +0100 | FEAT | fold Palantir- and McKinsey-style decomposition lenses into the public `brainstorm` surface, keep one intake entrypoint, and update the documented intake funnel to treat structured decomposition as a brainstorm branch rather than a second public skill
 2026-04-10 04:15 +0100 | FIX | raise the tracked Stop-hook command timeout from 30 seconds to 90 seconds so slow review passes do not fail prematurely
 2026-04-10 10:42 +0100 | FEAT | add a narrow harness-invariant validator for root/runtime/ticket boundary rules and reject raw session_id in ticket frontmatter
+2026-04-11 02:18 +0100 | FEAT | add a demo-realism skill for believable mvp examples, realistic demo data, and presentation-worthiness rubrics before design/build
 2026-04-10 04:18 +0100 | FEAT | make `tmux_helper followup` default to a compact success line, keep structured payloads behind `--json`, preserve actionable failure output, and document the preferred agent-facing command surface
 2026-04-10 04:24 +0100 | FEAT | add explicit `$impl` loop activation state to runtime/session captures, gate Stop-hook same-ticket continuation on that flag plus matching claim ownership, and document that tmux `auto_continue` is follow-up plumbing rather than the global build-loop switch
 2026-04-10 17:19 +0100 | FEAT | tighten the shipped global agent contract so direct user requests default to action, missed-work complaints trigger fix-first correction recovery, and auto-approval stays limited to obvious same-scope continuation
