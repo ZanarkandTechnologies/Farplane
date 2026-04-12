@@ -23,6 +23,7 @@ orchestration story.
 
 ## Entrypoints
 
+- `check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
 - `check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `notify.py` - local notification helper
@@ -41,6 +42,7 @@ For live multi-session coordination:
 
 - `session_id` remains the transport/runtime identity
 - `session_name` is the human-facing session alias, such as `agent-03`
+- `session_origin` records whether a session is `control`, `internal`, or `non_owning`
 - ticket frontmatter may mirror only the human-facing alias as `claimed_by`
 - raw `session_id` should stay runtime-only
 
@@ -62,8 +64,34 @@ Runtime routing is session-first for parallel Codex usage:
 - explicit run-state selector when a managed lane exports one
 - hook `session_id` for lane-scoped session state
 - `.harness/state/current-run.json` as the live current-run pointer / last-active selector
+- only `session_origin=control` sessions may persist canonical `last_user_turn` and advance the live current-run pointer
 
 See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md) for the canonical decision table.
+
+## Preferred Agent-Facing Command Surfaces
+
+Use the existing helpers directly, but prefer output modes that keep routine
+success quiet and make failure output the thing that stands out.
+
+- `python3 skills/impl/scripts/tmux_helper.py followup ...`
+  Default mode: one-line success summary for operator/agent scans
+- `python3 skills/impl/scripts/tmux_helper.py followup ... --json`
+  Use when a script or hook needs the structured payload
+- `python3 skills/impl/scripts/tmux_helper.py status`
+  Current mode: full JSON because this is still primarily a machine/state read surface
+- `python3 tickets/scripts/check_ticket_metadata.py`
+  Current mode: already near the desired quiet-success shape; keep the single-line pass output
+
+Examples:
+
+```text
+followup ok: TASK-0033 -> building pane=%42 session=main run=.harness/runs/task-0033-building-20260410T091500000000Z.json dry-run
+```
+
+```text
+followup failed: TASK-0033 -> building | tmux send-keys failed | pane=%42
+no current client
+```
 
 ## Minimal Example
 
@@ -77,6 +105,12 @@ python3 skills/impl/scripts/tmux_helper.py followup \
   --ticket tickets/TASK-0014-tmux-visibility-and-followup.md \
   --phase documenting \
   --reason "hook-driven follow-up"
+
+python3 skills/impl/scripts/tmux_helper.py followup \
+  --ticket tickets/TASK-0014-tmux-visibility-and-followup.md \
+  --phase documenting \
+  --reason "hook-driven follow-up" \
+  --json
 
 python3 skills/impl/scripts/tmux_helper.py status
 
@@ -92,13 +126,18 @@ already advanced.
 
 ## How To Test
 
+- `python3 bin/check_harness_invariants.py`
 - `python3 bin/check_doc_parity.py`
+- `python3 -m unittest bin/test_harness_invariants.py`
 - `python3 -m unittest bin/test_doc_parity.py`
+- `python3 -m unittest bin/test_ticket_metadata.py`
 - `python3 -m py_compile bin/stop_hook.py`
 - `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py`
+- `python3 -m py_compile bin/check_harness_invariants.py bin/test_harness_invariants.py`
 - `python3 -m py_compile bin/check_doc_parity.py bin/test_doc_parity.py`
 - `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
 - `python3 -m unittest discover -s bin -p 'test_*.py'`
 - `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`
 - `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run`
+- `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run --json`
 - `python3 skills/impl/scripts/tmux_helper.py status`

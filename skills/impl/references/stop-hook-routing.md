@@ -16,6 +16,10 @@ Rules:
 
 - do not call both roles on every Stop event
 - disable hooks on inner `codex exec` role calls
+- same-ticket `$impl` continuation requires both:
+  1. a loopable build ticket state
+  2. an active session-scoped `impl_loop_active` gate plus matching runtime `claim`
+- tmux `auto_continue` only controls whether the helper may spawn or reuse a visible lane; it is not sufficient on its own to authorize same-ticket continuation
 - ticket selection precedence is:
   1. explicit selector
   2. current-run state

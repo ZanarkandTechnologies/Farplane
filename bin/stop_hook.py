@@ -76,6 +76,7 @@ PASS_FAIL_VALUES = {"pass", "fail"}
 REVIEW_VERDICTS = {"pass", "revise", "block"}
 REVIEW_PACKET_TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M %z"
 INTENT_ALIGNMENT_STATES = {"aligned", "soft_mismatch", "hard_mismatch", "unknown"}
+IMPL_LOOPABLE_PHASES = {"building"}
 
 
 def env_enabled() -> bool:
@@ -121,6 +122,75 @@ def hook_enabled_for_context(
         or has_explicit_ticket_selector()
         or has_project_runtime_context(project_root)
     )
+
+
+def impl_loop_flag_active(
+    current_run: dict[str, object] | None,
+    runtime_claim: dict[str, object] | None,
+    session_id: str | None,
+) -> bool:
+    # MEM-0025: same-ticket impl continuation needs a dedicated session gate
+    # in addition to claim ownership; tmux auto_continue is not enough.
+    if current_run is None or not bool(current_run.get("impl_loop_active")):
+        return False
+    claim = runtime_claim if isinstance(runtime_claim, dict) else {}
+    skill_name = str(claim.get("skill_name") or current_run.get("skill_name") or "").strip()
+    if skill_name and skill_name != "impl":
+        return False
+    if session_id:
+        claim_session_id = str(claim.get("session_id") or current_run.get("session_id") or "").strip()
+        if claim_session_id and claim_session_id != session_id:
+            return False
+    return True
+
+
+def ticket_is_impl_loopable(ticket: dict[str, object], current_run: dict[str, object] | None) -> bool:
+    phase = str((current_run or {}).get("phase") or ticket.get("phase") or "").strip()
+    status = str(ticket.get("status") or "").strip()
+    return phase in IMPL_LOOPABLE_PHASES and status not in {"blocked", "done", "failed"}
+
+
+def impl_loop_matches_ticket(
+    ticket: dict[str, object],
+    current_run: dict[str, object] | None,
+    runtime_claim: dict[str, object] | None,
+    session_id: str | None,
+) -> bool:
+    ticket_id = str(ticket.get("ticket_id") or "").strip()
+    if not ticket_id:
+        return False
+    claim = runtime_claim if isinstance(runtime_claim, dict) else {}
+    claim_ticket_id = str(claim.get("ticket_id") or (current_run or {}).get("ticket_id") or "").strip()
+    if claim_ticket_id != ticket_id:
+        return False
+    if session_id:
+        claim_session_id = str(claim.get("session_id") or (current_run or {}).get("session_id") or "").strip()
+        if claim_session_id and claim_session_id != session_id:
+            return False
+    return True
+
+
+def impl_loop_continuation_allowed(
+    ticket: dict[str, object],
+    current_run: dict[str, object] | None,
+    runtime_claim: dict[str, object] | None,
+    session_id: str | None,
+) -> bool:
+    return (
+        impl_loop_flag_active(current_run, runtime_claim, session_id)
+        and ticket_is_impl_loopable(ticket, current_run)
+        and impl_loop_matches_ticket(ticket, current_run, runtime_claim, session_id)
+    )
+
+
+def next_impl_loop_active_for_action(action: str, *, next_phase: str = "", current_phase: str = "") -> bool:
+    if action == "repeat_impl":
+        return True
+    if action == "advance_ticket" and next_phase == "building":
+        return True
+    if action == "continue_same_ticket" and current_phase == "building":
+        return True
+    return False
 
 
 def read_payload() -> tuple[dict[str, object], str]:
@@ -239,6 +309,16 @@ def persist_runtime_update(
     updates: dict[str, object],
 ) -> dict[str, object]:
     return persist_selected_runtime_update(project_root, current_run, updates)
+
+
+def persist_impl_loop_active(
+    project_root: Path | None,
+    current_run: dict[str, object] | None,
+    active: bool,
+) -> dict[str, object] | None:
+    if project_root is None or current_run is None:
+        return current_run
+    return persist_runtime_update(project_root, current_run, {"impl_loop_active": active})
 
 
 def show_tmux_verdict(current_run: dict[str, object] | None, summary: str) -> None:
@@ -1167,6 +1247,7 @@ def spawn_tmux_followup(
         sys.executable,
         str(base / "skills" / "impl" / "scripts" / "tmux_helper.py"),
         "followup",
+        "--json",
         "--ticket",
         str(ticket["path"]),
         "--phase",
@@ -1710,15 +1791,21 @@ def main() -> int:
         )
         return 0
 
+    last_user_turn = (
+        load_persisted_last_user_turn(project_root, current_run)
+        if project_root is not None
+        else None
+    )
     impl_mode_enabled = os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
         "1",
         "true",
         "yes",
         "on",
     }
+    impl_loop_flag = impl_loop_flag_active(current_run, runtime_claim, resolved_session_id)
     impl_runtime_active = (
         impl_mode_enabled
-        or current_run is not None
+        or impl_loop_flag
         or impl_result is not None
         or has_explicit_ticket_selector()
     )
@@ -1729,10 +1816,11 @@ def main() -> int:
     if not impl_runtime_active:
         return 0
 
-    last_user_turn = (
-        load_persisted_last_user_turn(project_root, current_run)
-        if project_root is not None
-        else None
+    impl_loop_allowed = impl_loop_continuation_allowed(
+        ticket,
+        current_run,
+        runtime_claim,
+        resolved_session_id,
     )
     alignment = classify_intent_alignment(
         last_user_turn=last_user_turn,
@@ -1762,6 +1850,7 @@ def main() -> int:
     )
 
     if alignment.get("state") == "hard_mismatch":
+        current_run = persist_impl_loop_active(project_root, current_run, False)
         current_run = publish_hook_status(project_root, current_run, decision="block_for_user", summary=hook_summary)
         announce_message(str(alignment.get("announce") or alignment.get("reason") or "Stopping for user review."))
         return emit_stop_payload(
@@ -1771,6 +1860,14 @@ def main() -> int:
         )
 
     if alignment.get("state") == "soft_mismatch":
+        if not impl_loop_allowed:
+            current_run = persist_impl_loop_active(project_root, current_run, False)
+            announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
+            return emit_stop_payload(
+                continue_value=False,
+                stop_reason="impl loop continuation requested without an active session claim",
+                system_message=f"Stop hook: {hook_summary}",
+            )
         current_run = publish_hook_status(project_root, current_run, decision="continue_same_ticket", summary=hook_summary)
         return continue_hook_response(
             payload=payload,
@@ -1784,6 +1881,7 @@ def main() -> int:
     if impl_runtime_active and impl_result:
         verdict = run_impl_judge(ticket, impl_result, current_run)
         if verdict is None:
+            current_run = persist_impl_loop_active(project_root, current_run, False)
             append_hook_log(
                 base,
                 {
@@ -1831,6 +1929,23 @@ def main() -> int:
         )
         current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
         if decision in {"repeat_impl_plan", "repeat_impl"}:
+            if decision == "repeat_impl" and not impl_loop_allowed:
+                current_run = persist_impl_loop_active(project_root, current_run, False)
+                announce_message("Stopping safely. Repeat impl work is not active for this session.")
+                return emit_stop_payload(
+                    continue_value=False,
+                    stop_reason="repeat_impl requested without an active impl session claim",
+                    system_message=f"Stop hook: {hook_summary}",
+                )
+            current_run = persist_impl_loop_active(
+                project_root,
+                current_run,
+                next_impl_loop_active_for_action(
+                    decision,
+                    next_phase=next_phase,
+                    current_phase=current_phase,
+                ),
+            )
             target_phase = next_phase if next_phase in {"planning", "building", "documenting"} else str(ticket["phase"] or "building")
             if live_interactive_lane:
                 continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket)
@@ -1869,10 +1984,12 @@ def main() -> int:
                 announce=orchestrator_message,
             )
         if decision == "block_ticket":
+            current_run = persist_impl_loop_active(project_root, current_run, False)
             announce_message(f"Stopping for review. {reason}")
             return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
         if decision in {"advance_ticket", "complete_ticket"}:
             if decision == "advance_ticket" and current_phase == "planning" and next_phase == "building":
+                current_run = persist_impl_loop_active(project_root, current_run, True)
                 target_phase = next_phase if next_phase in {"planning", "building", "documenting"} else str(ticket["phase"] or "building")
                 if live_interactive_lane:
                     continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket)
@@ -1923,6 +2040,7 @@ def main() -> int:
                 ),
             )
             if review is None:
+                current_run = persist_impl_loop_active(project_root, current_run, False)
                 append_hook_log(
                     base,
                     {
@@ -1958,6 +2076,15 @@ def main() -> int:
             current_run = publish_hook_status(project_root, current_run, decision=review_action, summary=review_summary)
             reviewer_gate_ok, reviewer_gate_reason, reviewer_gate_failures = validate_reviewer_gate(review)
             if not reviewer_gate_ok:
+                if not impl_loop_allowed:
+                    current_run = persist_impl_loop_active(project_root, current_run, False)
+                    announce_message("Stopping safely. Reviewer asked for same-ticket impl continuation without an active session claim.")
+                    return emit_stop_payload(
+                        continue_value=False,
+                        stop_reason="reviewer requested same-ticket impl continuation without an active impl loop",
+                        system_message=f"Stop hook: {review_summary}",
+                    )
+                current_run = persist_impl_loop_active(project_root, current_run, True)
                 continuation_message = (
                     str(review.get("continuation_message", "")).strip()
                     or f"Continue {ticket['ticket_id']} in building and resolve reviewer gate failures: "
@@ -1971,6 +2098,15 @@ def main() -> int:
                     announce=reviewer_gate_reason,
                 )
             if review_action == "continue_same_ticket":
+                if not impl_loop_allowed:
+                    current_run = persist_impl_loop_active(project_root, current_run, False)
+                    announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
+                    return emit_stop_payload(
+                        continue_value=False,
+                        stop_reason="continue_same_ticket requested without an active impl loop",
+                        system_message=f"Stop hook: {review_summary}",
+                    )
+                current_run = persist_impl_loop_active(project_root, current_run, True)
                 continuation_message = str(review.get("continuation_message", "")).strip() or build_reason(ticket)
                 return continue_hook_response(
                     payload=payload,
@@ -1980,6 +2116,7 @@ def main() -> int:
                     announce=str(review.get("speak", "")).strip() or review_reason,
                 )
             if review_action == "route_to_orchestrator":
+                current_run = persist_impl_loop_active(project_root, current_run, False)
                 return run_orchestrator_decision(
                     base=base,
                     home=home,
@@ -1989,8 +2126,10 @@ def main() -> int:
                     ticket=ticket,
                     verdict=verdict,
                 )
+            current_run = persist_impl_loop_active(project_root, current_run, False)
             announce_message(str(review.get("speak", "")).strip() or review_reason)
             return emit_stop_payload(system_message=f"Stop hook: {review_summary}")
+        current_run = persist_impl_loop_active(project_root, current_run, False)
         announce_message(f"Stopping for operator review. {reason}")
         return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
 
@@ -2007,6 +2146,15 @@ def main() -> int:
             ),
         )
         if review is None:
+            if not impl_loop_allowed:
+                current_run = persist_impl_loop_active(project_root, current_run, False)
+                announce_message("Stopping safely. Missing IMPL_RESULT and no active impl loop is owned by this session.")
+                return emit_stop_payload(
+                    continue_value=False,
+                    stop_reason="missing IMPL_RESULT without an active impl loop",
+                    system_message=f"Stop hook: reviewer unavailable for {ticket['ticket_id']}",
+                )
+            current_run = persist_impl_loop_active(project_root, current_run, True)
             append_hook_log(
                 base,
                 {
@@ -2041,6 +2189,15 @@ def main() -> int:
         current_run = publish_hook_status(project_root, current_run, decision=proposal_action, summary=proposal_summary)
 
         if proposal_action == "continue_same_ticket":
+            if not impl_loop_allowed:
+                current_run = persist_impl_loop_active(project_root, current_run, False)
+                announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
+                return emit_stop_payload(
+                    continue_value=False,
+                    stop_reason="missing-result continuation requested without an active impl loop",
+                    system_message=f"Stop hook: {proposal_summary}",
+                )
+            current_run = persist_impl_loop_active(project_root, current_run, True)
             continuation_message = review["continuation_message"] or build_missing_impl_result_reason(ticket, current_run)
             return continue_hook_response(
                 payload=payload,
@@ -2051,6 +2208,7 @@ def main() -> int:
             )
 
         if proposal_action == "route_to_orchestrator":
+            current_run = persist_impl_loop_active(project_root, current_run, False)
             return run_orchestrator_decision(
                 base=base,
                 home=home,
@@ -2061,6 +2219,7 @@ def main() -> int:
                 verdict=None,
             )
 
+        current_run = persist_impl_loop_active(project_root, current_run, False)
         announce_message(review["speak"] or proposal_reason)
         return emit_stop_payload(system_message=f"Stop hook: {proposal_summary}")
 

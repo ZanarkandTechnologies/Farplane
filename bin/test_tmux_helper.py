@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import sys
 import unittest
+from contextlib import redirect_stderr
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -65,3 +67,43 @@ class TmuxHelperBackpressureTests(unittest.TestCase):
     def test_annotate_backpressure_marks_inactive_non_running_payloads(self) -> None:
         annotated = self.tmux_helper.annotate_backpressure({"status": "complete"})
         self.assertEqual(annotated["backpressure_state"], "inactive")
+
+
+class TmuxHelperOutputFormattingTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.tmux_helper = load_tmux_helper_module()
+
+    def test_format_followup_success_compacts_payload_for_default_output(self) -> None:
+        line = self.tmux_helper.format_followup_success(
+            {
+                "ticket": str(ROOT / "tickets" / "TASK-0025-capture-turn-start-intent-for-stop-hook.md"),
+                "phase": "building",
+                "tmux_pane": "%42",
+                "tmux_session": "main",
+                "run_state": str(
+                    ROOT / ".harness" / "runs" / "task-0025-building-20260410T091500000000Z.json"
+                ),
+            }
+        )
+
+        self.assertEqual(
+            line,
+            "followup ok: TASK-0025 -> building pane=%42 session=main run=.harness/runs/task-0025-building-20260410T091500000000Z.json",
+        )
+
+    def test_print_followup_failure_keeps_actionable_shape(self) -> None:
+        stderr_buffer = io.StringIO()
+        with redirect_stderr(stderr_buffer):
+            exit_code = self.tmux_helper.print_followup_failure(
+                "TASK-0025",
+                "building",
+                "tmux send-keys failed",
+                pane_id="%42",
+                stderr="pane no longer exists",
+            )
+
+        self.assertEqual(exit_code, 1)
+        self.assertEqual(
+            stderr_buffer.getvalue(),
+            "followup failed: TASK-0025 -> building | tmux send-keys failed | pane=%42\npane no longer exists\n",
+        )

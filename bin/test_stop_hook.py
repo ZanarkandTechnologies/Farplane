@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -218,6 +220,42 @@ class StopHookReviewerPromptTests(unittest.TestCase):
         )
 
 
+class StopHookTmuxFollowupTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.stop_hook = load_stop_hook_module()
+
+    def test_spawn_tmux_followup_requests_json_output(self) -> None:
+        ticket = {"path": "tickets/TASK-0033-tighten-agent-facing-cli-surfaces.md"}
+        current_run = {
+            "tmux_session": "main",
+            "auto_continue": True,
+            "run_state": ".harness/runs/task-0033-building.json",
+        }
+        captured: dict[str, object] = {}
+
+        def fake_run(cmd, text, capture_output, check, cwd):
+            captured["cmd"] = cmd
+            captured["cwd"] = cwd
+            return self.stop_hook.subprocess.CompletedProcess(
+                cmd,
+                0,
+                stdout=json.dumps({"action": "followup", "tmux_pane": "%42"}),
+                stderr="",
+            )
+
+        with patch.object(self.stop_hook.subprocess, "run", side_effect=fake_run):
+            result = self.stop_hook.spawn_tmux_followup(
+                ROOT,
+                ticket,
+                "building",
+                current_run,
+                "hook-driven follow-up",
+            )
+
+        self.assertEqual(result, {"action": "followup", "tmux_pane": "%42"})
+        self.assertIn("--json", captured["cmd"])
+
+
 class StopHookGroundingSummaryTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stop_hook = load_stop_hook_module()
@@ -235,6 +273,96 @@ class StopHookGroundingSummaryTests(unittest.TestCase):
         )
 
         self.assertEqual(summary, "initial summary")
+
+
+class StopHookImplLoopGateTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.stop_hook = load_stop_hook_module()
+        self.ticket = {
+            "ticket_id": "TASK-0053",
+            "title": "define impl session activation and stop-hook loop gating",
+            "phase": "building",
+            "status": "building",
+        }
+        self.current_run = {
+            "ticket_id": "TASK-0053",
+            "phase": "building",
+            "status": "waiting_for_worker",
+            "skill_name": "impl",
+            "session_id": "sess-123",
+            "impl_loop_active": True,
+        }
+        self.runtime_claim = {
+            "ticket_id": "TASK-0053",
+            "phase": "building",
+            "status": "running",
+            "skill_name": "impl",
+            "session_id": "sess-123",
+        }
+
+    def test_impl_loop_continuation_allowed_requires_flag_ticket_and_session_match(self) -> None:
+        self.assertTrue(
+            self.stop_hook.impl_loop_continuation_allowed(
+                self.ticket,
+                self.current_run,
+                self.runtime_claim,
+                "sess-123",
+            )
+        )
+
+    def test_impl_loop_continuation_rejects_auto_continue_without_activation_flag(self) -> None:
+        current_run = dict(self.current_run)
+        current_run["impl_loop_active"] = False
+        current_run["auto_continue"] = True
+
+        self.assertFalse(
+            self.stop_hook.impl_loop_continuation_allowed(
+                self.ticket,
+                current_run,
+                self.runtime_claim,
+                "sess-123",
+            )
+        )
+
+    def test_impl_loop_continuation_rejects_mismatched_session_claim(self) -> None:
+        runtime_claim = dict(self.runtime_claim)
+        runtime_claim["session_id"] = "sess-other"
+
+        self.assertFalse(
+            self.stop_hook.impl_loop_continuation_allowed(
+                self.ticket,
+                self.current_run,
+                runtime_claim,
+                "sess-123",
+            )
+        )
+
+    def test_next_impl_loop_active_for_action_clears_terminal_paths(self) -> None:
+        self.assertTrue(
+            self.stop_hook.next_impl_loop_active_for_action(
+                "repeat_impl",
+                next_phase="building",
+                current_phase="building",
+            )
+        )
+        self.assertTrue(
+            self.stop_hook.next_impl_loop_active_for_action(
+                "continue_same_ticket",
+                current_phase="building",
+            )
+        )
+        self.assertFalse(
+            self.stop_hook.next_impl_loop_active_for_action(
+                "block_ticket",
+                current_phase="building",
+            )
+        )
+        self.assertFalse(
+            self.stop_hook.next_impl_loop_active_for_action(
+                "route_to_orchestrator",
+                current_phase="building",
+            )
+        )
 
 
 class StopHookReviewPacketGateTests(unittest.TestCase):

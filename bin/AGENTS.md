@@ -31,8 +31,10 @@ For legacy runtime/prototype scripts that still carry older names:
 - explicit run-state selectors outrank hook `session_id`, which outranks ambient `.harness/state/current-run.json`
 - run-state files remain runtime-only and lightweight
 - runtime state should group active execution ownership into a lightweight `claim` object instead of scattering claim semantics across multiple ad hoc top-level reads
+- same-ticket `$impl` continuation must require both an explicit session-scoped loop gate and a matching runtime `claim`; tmux `auto_continue` is only lane follow-up plumbing, not the global activation truth. See `MEM-0025`.
 - delegated workers should keep `worker_name`, `main_artifact_path`, and `grounding_summary` visible in the same runtime contract when available
 - delegated stale-wait reads should stay advisory-first and use explicit checkpoint timing instead of hidden watchdog behavior
 - current-turn user intent should be captured at `UserPromptSubmit` when available; worker-entry capture is fallback-only degraded mode
+- canonical current-turn capture belongs only to control sessions whose first owned prompt explicitly invokes a public control skill; internal or non-owning sessions must not overwrite `.harness/state/current-run.json`. See `MEM-0029`.
 - tmux lanes reuse a live interactive Codex pane before creating a replacement pane; stored `session_id` is the recovery path only. See `MEM-0005`.
 - stop-hook role configs are TOML-backed under `agents/*.toml`; load exact `developer_instructions` from TOML instead of relying on prompt-level agent-name loading. See `MEM-0010`.

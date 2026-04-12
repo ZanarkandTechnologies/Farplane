@@ -239,6 +239,7 @@ def write_current_run(payload: dict[str, object], run_state: Path) -> None:
         "tmux_window",
         "tmux_pane",
         "auto_continue",
+        "impl_loop_active",
     ):
         if key in payload:
             current_payload[key] = payload[key]
@@ -283,6 +284,7 @@ def build_run_state(
         "parallel_slots_reserved": 1,
         "updated_at": now_iso(),
     }
+    payload["impl_loop_active"] = phase == "building"
     if existing:
         for key in (
             "executor_target",
@@ -402,6 +404,57 @@ def resolve_existing_path(raw: str) -> Path:
     if candidate.is_absolute():
         return candidate
     return (root() / candidate).resolve()
+
+
+def relpath_for_display(raw: str) -> str:
+    try:
+        return str(Path(raw).resolve().relative_to(root()))
+    except ValueError:
+        return raw
+
+
+def compact_ticket_label(raw_ticket: str, fallback_path: str = "") -> str:
+    raw_name = Path(raw_ticket).name if raw_ticket else Path(fallback_path).name
+    match = re.search(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)", raw_name)
+    if match:
+        return match.group(1)
+    return raw_name or fallback_path or "ticket"
+
+
+def format_followup_success(payload: dict[str, object]) -> str:
+    ticket_label = compact_ticket_label(str(payload.get("ticket") or ""), str(payload.get("run_state") or ""))
+    phase = str(payload.get("phase") or "building")
+    parts = [f"followup ok: {ticket_label} -> {phase}"]
+    pane = str(payload.get("tmux_pane") or "").strip()
+    session = str(payload.get("tmux_session") or "").strip()
+    run_state = str(payload.get("run_state") or "").strip()
+    if pane:
+        parts.append(f"pane={pane}")
+    if session:
+        parts.append(f"session={session}")
+    if run_state:
+        parts.append(f"run={relpath_for_display(run_state)}")
+    if bool(payload.get("dry_run")):
+        parts.append("dry-run")
+    return " ".join(parts)
+
+
+def print_followup_failure(
+    ticket_id: str,
+    phase: str,
+    detail: str,
+    *,
+    pane_id: str | None = None,
+    stderr: str | None = None,
+) -> int:
+    line = f"followup failed: {ticket_id} -> {phase} | {detail}"
+    if pane_id:
+        line += f" | pane={pane_id}"
+    print(line, file=sys.stderr)
+    extra = (stderr or "").strip()
+    if extra:
+        print(extra, file=sys.stderr)
+    return 1
 
 
 def pane_metadata(pane: str) -> dict[str, str] | None:
@@ -611,7 +664,8 @@ def followup(args: argparse.Namespace) -> int:
     ensure_tmux()
     ticket = resolve_existing_path(args.ticket)
     if not ticket.is_file():
-        raise SystemExit(f"ticket not found: {ticket}")
+        ticket_label = compact_ticket_label(args.ticket, str(ticket))
+        return print_followup_failure(ticket_label, args.phase, "ticket not found", stderr=str(ticket))
     ticket_id = ticket_id_from_path(ticket)
     run_state = resolve_run_state_path(args.run_state, ticket_id, args.phase)
     existing = existing_state_for_path(run_state, ticket_id)
@@ -626,12 +680,18 @@ def followup(args: argparse.Namespace) -> int:
     capture_user_turn_fallback(prompt_text)
 
     if args.dry_run:
-        session = args.tmux_session or str(existing.get("tmux_session") or current_tmux_session())
-        session_name, window_id, window_index, pane_id = create_tmux_surface(
-            session,
-            "pane",
-            f"impl-{ticket_id.lower()}",
-        )
+        try:
+            session = args.tmux_session or str(existing.get("tmux_session") or current_tmux_session())
+        except SystemExit as exc:
+            return print_followup_failure(ticket_id, args.phase, "resolve tmux session failed", stderr=str(exc))
+        try:
+            session_name, window_id, window_index, pane_id = create_tmux_surface(
+                session,
+                "pane",
+                f"impl-{ticket_id.lower()}",
+            )
+        except SystemExit as exc:
+            return print_followup_failure(ticket_id, args.phase, "tmux launch failed", stderr=str(exc))
         state = persist_lane_state(
             ticket=ticket,
             phase=args.phase,
@@ -650,7 +710,15 @@ def followup(args: argparse.Namespace) -> int:
             f"printf '[impl tmux dry run] followup phase=%s ticket=%s\\n' "
             f"{shlex.quote(args.phase)} {shlex.quote(ticket.name)}"
         )
-        run(["tmux", "send-keys", "-t", pane_id, message, "C-m"])
+        sent = run(["tmux", "send-keys", "-t", pane_id, message, "C-m"])
+        if sent.returncode != 0:
+            return print_followup_failure(
+                ticket_id,
+                args.phase,
+                "tmux send-keys failed",
+                pane_id=pane_id,
+                stderr=sent.stderr.strip() or sent.stdout.strip(),
+            )
         payload = {
             "action": "followup",
             "ticket": str(ticket),
@@ -668,17 +736,26 @@ def followup(args: argparse.Namespace) -> int:
         session_id = state.get("session_id")
         if isinstance(session_id, str) and session_id:
             payload["session_id"] = session_id
-        print(json.dumps(payload, indent=2))
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(format_followup_success(payload))
         return 0
 
-    session = args.tmux_session or str(existing.get("tmux_session") or current_tmux_session())
+    try:
+        session = args.tmux_session or str(existing.get("tmux_session") or current_tmux_session())
+    except SystemExit as exc:
+        return print_followup_failure(ticket_id, args.phase, "resolve tmux session failed", stderr=str(exc))
     resume_session_id = existing.get("session_id")
     resume_value = resume_session_id if isinstance(resume_session_id, str) and resume_session_id else None
-    session_name, window_id, window_index, pane_id = create_tmux_surface(
-        session,
-        "pane",
-        f"impl-{ticket_id.lower()}",
-    )
+    try:
+        session_name, window_id, window_index, pane_id = create_tmux_surface(
+            session,
+            "pane",
+            f"impl-{ticket_id.lower()}",
+        )
+    except SystemExit as exc:
+        return print_followup_failure(ticket_id, args.phase, "tmux launch failed", stderr=str(exc))
     state = persist_lane_state(
         ticket=ticket,
         phase=args.phase,
@@ -704,7 +781,13 @@ def followup(args: argparse.Namespace) -> int:
     )
     sent = run(["tmux", "send-keys", "-t", pane_id, command, "C-m"])
     if sent.returncode != 0:
-        raise SystemExit(sent.stderr.strip() or sent.stdout.strip() or "tmux send-keys failed")
+        return print_followup_failure(
+            ticket_id,
+            args.phase,
+            "tmux send-keys failed",
+            pane_id=pane_id,
+            stderr=sent.stderr.strip() or sent.stdout.strip(),
+        )
     payload = {
         "action": "followup",
         "ticket": str(ticket),
@@ -722,7 +805,10 @@ def followup(args: argparse.Namespace) -> int:
     session_id = state.get("session_id")
     if isinstance(session_id, str) and session_id:
         payload["session_id"] = session_id
-    print(json.dumps(payload, indent=2))
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    else:
+        print(format_followup_success(payload))
     return 0
 
 
@@ -808,6 +894,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_followup.add_argument("--reason")
     p_followup.add_argument("--auto-continue", action="store_true")
     p_followup.add_argument("--dry-run", action="store_true")
+    p_followup.add_argument("--json", action="store_true")
     p_followup.set_defaults(func=followup)
 
     p_attach = subparsers.add_parser("attach")

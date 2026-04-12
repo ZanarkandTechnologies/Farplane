@@ -30,6 +30,14 @@ The primary control plane is not:
 There is no separate public legacy execution surface anymore.
 Same-ticket repeats re-enter `$impl`.
 
+For same-ticket build looping, the runtime contract is:
+
+- ticket `phase/status` says the work is still in a loopable build state
+- runtime `claim` says which session/lane currently owns that work
+- session ownership is explicit: only control sessions that entered through a public skill invocation may own canonical current-turn intent
+- `impl_loop_active` says this session is currently allowed to auto-continue the `$impl` loop
+- tmux `auto_continue` only says whether a visible follow-up lane may be spawned or reused; it is not the global activation gate
+
 ## Binary Decisions
 
 | Binary | Decision | Reason |
@@ -48,6 +56,9 @@ Same-ticket repeats re-enter `$impl`.
 - Public docs should describe `$impl` as the build-phase orchestrator.
 - Public docs should describe `.harness/` as the canonical live runtime root.
 - `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
+- Public docs should describe `current-run.json` as control-session-owned state, not a generic sink for every prompt-bearing session.
+- Public docs should describe same-ticket `$impl` continuation as requiring both the session-scoped loop gate and the matching runtime claim.
+- Public docs should describe tmux `auto_continue` as lane-follow-up plumbing, not as the source of truth for whether the `$impl` loop is active.
 - internal Stop-hook role instructions should live under `agents/`, not as giant string literals in Python helpers.
 - Any removed prototype binaries should remain only as historical references in
   archived tickets or older specs, not as live runtime files.

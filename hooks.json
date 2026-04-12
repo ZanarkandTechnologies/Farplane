@@ -19,7 +19,7 @@
             "type": "command",
             "command": "python3 \"$HOME/.codex/bin/stop_hook.py\"",
             "statusMessage": "Evaluating Ralph stop hook",
-            "timeout": 30
+            "timeout": 90
           }
         ]
       }
