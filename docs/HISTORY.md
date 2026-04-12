@@ -61,3 +61,4 @@
 2026-04-11 02:06 +0100 | FEAT | add first-pass skill `todos.md` sidecars as plain natural-language checkbox templates with Markdown skill links, add candidate examples across review/impl/debugging/planning/QA/ticketization skills, and document the anti-parser boundary in repo docs
 2026-04-11 02:22 +0100 | FEAT | add a canonical diagram-first planning/spec convention, require top-level Mermaid delta maps for material `impl-plan` tickets, and push inline-signature plus data-flow guidance into the live ticket/template surfaces
 2026-04-11 02:50 +0100 | FEAT | add a reusable `diagramming` skill for compact Mermaid delta maps, zoom-ins, numbered data-flow traces, and inline-signature system diagrams
+2026-04-13 00:03 +0100 | FIX | make explicit `$impl` activation derive from exact parsed control-skill tokens, stop `$impl-plan` from arming the `$impl` loop, and add runtime-state regressions for exact-dollar-skill capture

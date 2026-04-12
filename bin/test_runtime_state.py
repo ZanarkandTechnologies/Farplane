@@ -14,14 +14,49 @@ from user_turn import (
     build_runtime_claim,
     capture_user_turn,
     current_run_state_path,
+    has_explicit_impl_invocation,
     is_internal_user_prompt,
     load_current_run,
     load_runtime_claim,
+    normalize_user_turn,
     session_state_path,
 )
 
 
 class RuntimeClaimTests(unittest.TestCase):
+    def test_has_explicit_impl_invocation_requires_exact_impl_token(self) -> None:
+        self.assertTrue(has_explicit_impl_invocation("$impl TASK-0061"))
+        self.assertTrue(has_explicit_impl_invocation("please $impl TASK-0061"))
+        self.assertTrue(has_explicit_impl_invocation("please $impl, continue TASK-0061"))
+        self.assertFalse(has_explicit_impl_invocation("$impl-plan TASK-0061"))
+        self.assertFalse(has_explicit_impl_invocation("$impl-plan-extra TASK-0061"))
+        self.assertFalse(has_explicit_impl_invocation("impl TASK-0061"))
+
+    def test_normalize_user_turn_keeps_impl_plan_out_of_impl_loop(self) -> None:
+        normalized = normalize_user_turn(
+            "$impl-plan TASK-0061",
+            turn_id="turn-plan",
+            source="test",
+            captured_at="2026-04-13T00:00:00Z",
+        )
+
+        self.assertEqual(normalized["control_surface"], "impl-plan")
+        self.assertFalse(normalized["explicit_impl_requested"])
+        self.assertEqual(normalized["intent_mode"], "planning")
+        self.assertEqual(normalized["requested_outcome"], "ticket_plan")
+
+    def test_normalize_user_turn_rejects_hyphen_suffixed_skill_lookalikes(self) -> None:
+        normalized = normalize_user_turn(
+            "$impl-plan-extra TASK-0061",
+            turn_id="turn-invalid",
+            source="test",
+            captured_at="2026-04-13T00:00:00Z",
+        )
+
+        self.assertEqual(normalized["control_surface"], "")
+        self.assertFalse(normalized["explicit_impl_requested"])
+        self.assertEqual(normalized["intent_mode"], "unknown")
+
     def test_build_runtime_claim_groups_active_ownership(self) -> None:
         claim = build_runtime_claim(
             {
@@ -263,6 +298,30 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(current_run["session_id"], "sess-init")
         self.assertEqual(current_run["session_origin"], "control")
 
+    def test_capture_user_turn_impl_plan_stays_control_but_does_not_activate_impl_loop(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="please $impl-plan TASK-0061",
+                turn_id="turn-plan",
+                source="test",
+                session_id="sess-plan",
+            )
+
+            session_payload = json.loads(session_state_path(project_root, "sess-plan").read_text(encoding="utf-8"))
+            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
+
+        self.assertIsNotNone(captured)
+        assert captured is not None
+        self.assertEqual(captured["control_surface"], "impl-plan")
+        self.assertFalse(captured["explicit_impl_requested"])
+        self.assertEqual(captured["intent_mode"], "planning")
+        self.assertFalse(session_payload["impl_loop_active"])
+        self.assertFalse(current_run["impl_loop_active"])
+
     def test_capture_user_turn_ignores_non_control_session_without_existing_origin(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
@@ -278,6 +337,40 @@ class RuntimeClaimTests(unittest.TestCase):
 
         self.assertIsNone(captured)
         self.assertFalse(session_state_path(project_root, "sess-plain").exists())
+        self.assertFalse(current_run_state_path(project_root).exists())
+
+    def test_capture_user_turn_requires_dollar_prefixed_control_skill(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="impl TASK-0061",
+                turn_id="turn-no-dollar",
+                source="test",
+                session_id="sess-no-dollar",
+            )
+
+        self.assertIsNone(captured)
+        self.assertFalse(session_state_path(project_root, "sess-no-dollar").exists())
+        self.assertFalse(current_run_state_path(project_root).exists())
+
+    def test_capture_user_turn_rejects_hyphen_suffixed_skill_lookalike(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="$impl-plan-extra TASK-0061",
+                turn_id="turn-invalid-skill",
+                source="test",
+                session_id="sess-invalid-skill",
+            )
+
+        self.assertIsNone(captured)
+        self.assertFalse(session_state_path(project_root, "sess-invalid-skill").exists())
         self.assertFalse(current_run_state_path(project_root).exists())
 
     def test_capture_user_turn_writes_claimed_by_to_ticket(self) -> None:

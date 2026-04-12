@@ -9,9 +9,8 @@ from typing import Mapping
 
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
-EXPLICIT_IMPL_PATTERN = re.compile(r"(?<!\S)\$impl\b", re.IGNORECASE)
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|docs-closeout)\b",
+    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
     re.IGNORECASE,
 )
 APPROVAL_REVIEW_PROMPT_PREFIX = (
@@ -562,7 +561,7 @@ def extract_ticket_id(text: str) -> str | None:
 
 
 def has_explicit_impl_invocation(text: str) -> bool:
-    return bool(EXPLICIT_IMPL_PATTERN.search(text))
+    return extract_control_surface(text) == "impl"
 
 
 def infer_session_origin_from_state(payload: Mapping[str, object] | None) -> tuple[str, str, str]:
@@ -651,11 +650,20 @@ def _contains_any(text: str, patterns: tuple[str, ...]) -> bool:
 
 def classify_intent_mode(raw_text: str) -> str:
     lowered = raw_text.lower()
+    control_surface = extract_control_surface(raw_text)
+
+    if control_surface == "impl-plan":
+        return "planning"
+
+    if control_surface == "impl":
+        return "building"
+
+    if control_surface == "docs-closeout":
+        return "documenting"
 
     if _contains_any(
         lowered,
         (
-            "$impl",
             "implement",
             "implementation",
             "build it",
@@ -673,7 +681,6 @@ def classify_intent_mode(raw_text: str) -> str:
     if _contains_any(
         lowered,
         (
-            "docs-closeout",
             "documenting",
             "close out",
             "closeout",
@@ -688,8 +695,6 @@ def classify_intent_mode(raw_text: str) -> str:
     if _contains_any(
         lowered,
         (
-            "$impl-plan",
-            "impl-plan",
             "impl plan",
             "plan ready",
             "ticket plan",
