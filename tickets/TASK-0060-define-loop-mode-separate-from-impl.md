@@ -295,8 +295,8 @@ persist mode-specific state and summaries
 - none
 
 ## Handoff
-- Current state: loop v1 is implemented, verified, and documented.
-- Resume from: open a new ticket if you want to add command-exit predicates, Escape-aware stop signaling, or tmux-backed loop workers.
+- Current state: loop v1 runtime and stop-hook support are implemented, verified, and documented; the missing operator-facing skill artifact was split into `TASK-0070`.
+- Resume from: `tickets/TASK-0070-add-loop-skill-surface.md` for the public `skills/loop` package, or open a new ticket if you want to add command-exit predicates, Escape-aware stop signaling, or tmux-backed loop workers.
 
 ## Writeback
 - Update this ticket as work progresses.

@@ -48,6 +48,7 @@ This inventory is grounded in:
 | Technique | Status | Main surfaces | Why it matters | Current limit |
 | --- | --- | --- | --- | --- |
 | Ticket as durable task memory | Implemented | root `AGENTS.md`, `tickets/README.md`, ticket template | Reduces dependence on transcript memory | only as good as ticket writeback discipline |
+| Bounded same-session persistence via `$loop` | Implemented | `skills/loop`, `docs/specs/runtime-surface.md`, `README.md` | Keeps short deterministic work out of ticket orchestration while staying visible and local | v1 predicates are intentionally narrow and same-session only |
 | Single-ticket orchestration via `$impl` | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md`, `README.md` | Makes one ticket the execution unit and keeps orchestration visible | no durable multi-ticket dispatcher yet |
 | Explicit worker-lane split | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Separates builder, reviewer, QA, and evidence-check responsibilities | actual staffing and reuse patterns are still evolving |
 | Ephemeral orchestrator, visible worker lanes | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Avoids a hidden forever-orchestrator and keeps runs legible | tmux/runtime surfaces are still prototype-weight |

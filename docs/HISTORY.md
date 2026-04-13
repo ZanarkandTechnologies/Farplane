@@ -77,3 +77,4 @@
 2026-04-13 20:54 +0100 | FEAT | make `init-project` scaffold repo-local pre-commit and pre-push validator scripts, route the pre-push hook through local checks first, and chain CodeRabbit only as an explicit optional follow-up
 2026-04-13 20:58 +0100 | FIX | decouple `init-project`'s scaffolded CodeRabbit pre-push path from Codexter-owned helpers and invoke the standalone `coderabbit` CLI directly after local validators
 2026-04-13 19:43 +0100 | FEAT | make `spec-to-ticket` capability-first by default, keep coherent greenfield fullstack features bundled as one ticket, encode explicit split triggers, and align the module review/todo/invariant surfaces with the new sizing rule
+2026-04-13 21:41 +0100 | FIX | add the missing `skills/loop` package, promote `$loop` into the live skill inventory, and align the control-skill docs with the shipped runtime contract

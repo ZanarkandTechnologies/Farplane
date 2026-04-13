@@ -300,7 +300,7 @@ The current prototype is narrower:
 - Intake skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview), [skills/prd](/Users/kenjipcx/coding-harness/Codexter/skills/prd)
 - Ticketization: [skills/spec-to-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket)
 - Planning: [skills/impl-plan](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan)
-- Execution and review skills: [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/review](/Users/kenjipcx/coding-harness/Codexter/skills/review), [skills/docs-closeout](/Users/kenjipcx/coding-harness/Codexter/skills/docs-closeout)
+- Execution and review skills: [skills/loop](/Users/kenjipcx/coding-harness/Codexter/skills/loop), [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/review](/Users/kenjipcx/coding-harness/Codexter/skills/review), [skills/docs-closeout](/Users/kenjipcx/coding-harness/Codexter/skills/docs-closeout)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Doc governance: [doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md)
@@ -321,6 +321,7 @@ Main live techniques today:
 - spec-first ticketization with proof/testability contracts
 - per-ticket planning via `impl-plan`, with approval-first default mode and consensus mode when stronger challenge is needed
 - single-ticket orchestration via `$impl`
+- bounded same-session persistence via `$loop`
 - separated builder, reviewer, QA, and evidence-check roles
 - Stop-hook judgment as the final continuation/completion gate
 - tickets as durable task memory plus `HISTORY` / `MEMORY` / `TROUBLES` writeback
