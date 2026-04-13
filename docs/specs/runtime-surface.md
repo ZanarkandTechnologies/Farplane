@@ -18,6 +18,7 @@ The primary control plane is now:
 
 - `impl-plan` for ticket planning
 - `$impl` for build-phase orchestration
+- `$loop` for bounded same-session persistence without ticket orchestration
 - worker lanes and runtime helpers behind the canonical `$impl` surface
 - `stop_hook.py` for continuation/completion decisions
 
@@ -39,6 +40,15 @@ For same-ticket build looping, the runtime contract is:
 - `impl_loop_active` says this session is currently allowed to auto-continue the `$impl` loop
 - tmux `auto_continue` only says whether a visible follow-up lane may be spawned or reused; it is not the global activation gate
 
+For bounded same-session `$loop`, the runtime contract is:
+
+- `$loop` is session-owned, not ticket-owned
+- `bin/user_turn.py` seeds `skill_name: "loop"`, `loop_active`, and `loop_contract` into `.harness/state/current-run.json` plus the matching session state
+- `bin/stop_hook.py` branches early on active loop state before ticket resolution
+- v1 loop predicates are local and deterministic only: `completion_marker_seen`, `path_exists`, and `file_contains`
+- explicit same-session stop intent clears `loop_active`; Escape/cancel is not the canonical loop-stop contract
+- `skills/impl/scripts/tmux_helper.py` remains `$impl`-only in v1 and is not part of loop ownership
+
 ## Binary Decisions
 
 | Binary | Decision | Reason |
@@ -59,7 +69,9 @@ For same-ticket build looping, the runtime contract is:
 - `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
 - Public docs should describe `current-run.json` as control-session-owned state, not a generic sink for every prompt-bearing session.
 - Public docs should describe same-ticket `$impl` continuation as requiring both the session-scoped loop gate and the matching runtime claim.
+- Public docs should describe `$loop` as session-owned state with explicit local predicates, not as a ticket/run-state or tmux-worker surface.
 - Public docs should describe tmux `auto_continue` as lane-follow-up plumbing, not as the source of truth for whether the `$impl` loop is active.
+- Public docs should describe explicit same-session stop intent, not Escape/cancel, as the supported v1 loop-stop control.
 - internal Stop-hook role instructions should live under `agents/`, not as giant string literals in Python helpers.
 - Any removed prototype binaries should remain only as historical references in
   archived tickets or older specs, not as live runtime files.

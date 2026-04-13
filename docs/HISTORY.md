@@ -67,7 +67,9 @@
 2026-04-13 17:58 +0100 | FEAT | strengthen the Stop-hook reviewer completion gate with explicit obvious-next-step fields so orchestrator routing requires reviewer proof that no clear same-ticket action still remains
 2026-04-13 18:41 +0100 | FEAT | make Stop-hook reviewer completion gates explicitly ground through the `review` skill contract and return one consultant-style best immediate next step when continuing same-ticket work
 2026-04-13 18:49 +0100 | FEAT | make Stop-hook reviewer completion gates explicitly invoke `$review` before `$consultant-thinking` so continuation advice is grounded first and narrowed second
+2026-04-13 19:29 +0100 | FEAT | add session-owned `$loop` runtime capture, early Stop-hook loop routing with deterministic local predicates, and explicit same-session stop handling without relying on Escape
 2026-04-13 20:08 +0100 | CHORE | rename the public advisory skill from `consultant-thinking` to `advise`, move the skill module, and update live reviewer/global-contract references to the new name
 2026-04-13 09:55 +0100 | FEAT | add a `pr-splitting` skill for post-build non-stacked PR decomposition with feature-first preference, layer fallbacks, hunk-avoidance rules, and explicit PR-plan output
 2026-04-13 12:33 +0100 | FIX | seed selected-ticket runtime ownership on explicit `$impl` control-session invocations, let runtime loading fall through session-only stubs to richer same-session run payloads, and add regressions for the reproduced missing-ownership stop-hook failure
 2026-04-13 17:49 +0100 | CHORE | review the active ticket board, archive completed recent tickets, keep TASK-0060 as the next active focus, and retain TASK-0031 as lower-priority backlog
+2026-04-13 20:33 +0100 | FEAT | add a `coderabbit-review` skill plus an opt-in stage-aware runner and sample git hooks for explicit pre-push or PR CodeRabbit CLI review outside the Stop-hook loop

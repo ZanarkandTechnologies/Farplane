@@ -193,6 +193,146 @@ def next_impl_loop_active_for_action(action: str, *, next_phase: str = "", curre
     return False
 
 
+def loop_skill_active(current_run: dict[str, object] | None) -> bool:
+    if current_run is None:
+        return False
+    return str(current_run.get("skill_name") or "").strip() == "loop" and bool(current_run.get("loop_active"))
+
+
+def loop_stop_requested(last_user_turn: dict[str, object] | None) -> bool:
+    if not isinstance(last_user_turn, dict):
+        return False
+    return bool(last_user_turn.get("explicit_loop_stop_requested"))
+
+
+def loop_contract_predicates(current_run: dict[str, object] | None) -> list[dict[str, object]]:
+    if current_run is None:
+        return []
+    contract = current_run.get("loop_contract")
+    if not isinstance(contract, dict):
+        return []
+
+    predicates: list[dict[str, object]] = []
+    done_when = contract.get("done_when")
+    if isinstance(done_when, list):
+        for item in done_when:
+            if isinstance(item, dict):
+                predicates.append(dict(item))
+
+    completion_marker = contract.get("completion_marker")
+    if isinstance(completion_marker, str) and completion_marker.strip():
+        marker = completion_marker.strip()
+        if not any(
+            str(item.get("kind") or "").strip() == "completion_marker_seen"
+            and str(item.get("text") or "").strip() == marker
+            for item in predicates
+        ):
+            predicates.append({"kind": "completion_marker_seen", "text": marker})
+    return predicates
+
+
+def resolve_loop_path(project_root: Path | None, raw_path: object) -> Path | None:
+    if project_root is None or not isinstance(raw_path, str) or not raw_path.strip():
+        return None
+    candidate = Path(raw_path.strip()).expanduser()
+    if candidate.is_absolute():
+        return candidate
+    return (project_root / candidate).resolve()
+
+
+def evaluate_loop_predicate(
+    *,
+    project_root: Path | None,
+    message: str,
+    predicate: dict[str, object],
+) -> tuple[bool, str]:
+    kind = str(predicate.get("kind") or "").strip()
+    if kind == "completion_marker_seen":
+        text = str(predicate.get("text") or "").strip()
+        if not text:
+            return False, "completion_marker_seen missing text"
+        return text in message, f"completion_marker_seen:{text}"
+    if kind == "path_exists":
+        target = resolve_loop_path(project_root, predicate.get("path"))
+        if target is None:
+            return False, "path_exists missing path"
+        return target.exists(), f"path_exists:{target}"
+    if kind == "file_contains":
+        target = resolve_loop_path(project_root, predicate.get("path"))
+        text = str(predicate.get("text") or "").strip()
+        if target is None or not text:
+            return False, "file_contains missing path/text"
+        try:
+            haystack = target.read_text(encoding="utf-8")
+        except OSError:
+            return False, f"file_contains:{target}"
+        return text in haystack, f"file_contains:{target}:{text}"
+    return False, f"unsupported:{kind or 'unknown'}"
+
+
+def evaluate_loop_contract(
+    *,
+    project_root: Path | None,
+    current_run: dict[str, object] | None,
+    message: str,
+    last_user_turn: dict[str, object] | None,
+) -> dict[str, object]:
+    if current_run is None:
+        return {
+            "decision": "stop_loop",
+            "reason": "loop runtime state missing",
+            "summary": "Loop stop: runtime state missing",
+            "status": "blocked",
+        }
+
+    if loop_stop_requested(last_user_turn):
+        return {
+            "decision": "stop_loop",
+            "reason": "explicit same-session stop requested",
+            "summary": "Loop stop: explicit operator stop requested",
+            "status": "blocked",
+        }
+
+    predicates = loop_contract_predicates(current_run)
+    if not predicates:
+        return {
+            "decision": "stop_loop",
+            "reason": "loop contract missing supported predicates",
+            "summary": "Loop stop: missing supported loop contract",
+            "status": "blocked",
+        }
+
+    checks: list[str] = []
+    for predicate in predicates:
+        passed, label = evaluate_loop_predicate(
+            project_root=project_root,
+            message=message,
+            predicate=predicate,
+        )
+        checks.append(f"{label}={'pass' if passed else 'fail'}")
+        if not passed:
+            retry_message = str(
+                ((current_run.get("loop_contract") or {}) if isinstance(current_run.get("loop_contract"), dict) else {}).get(
+                    "retry_message"
+                )
+                or "Continue the current loop until the loop contract is satisfied."
+            ).strip()
+            return {
+                "decision": "continue_loop",
+                "reason": f"loop predicate not yet satisfied: {label}",
+                "summary": "Loop continue: " + "; ".join(checks),
+                "status": "running",
+                "retry_message": retry_message,
+            }
+
+    return {
+        "decision": "complete_loop",
+        "reason": "all loop predicates satisfied",
+        "summary": "Loop complete: " + "; ".join(checks),
+        "status": "complete",
+    }
+
+
 def read_payload() -> tuple[dict[str, object], str]:
     raw = sys.stdin.read()
     try:
@@ -1608,7 +1748,7 @@ def orchestrator_prompt(base: Path, ticket: dict[str, object], verdict: dict[str
 def continue_hook_response(
     *,
     payload: dict[str, object],
-    ticket: dict[str, object],
+    ticket: dict[str, object] | None,
     continuation_message: str,
     hook_summary: str,
     announce: str,
@@ -1820,6 +1960,56 @@ def main() -> int:
             },
         )
 
+    last_user_turn = (
+        load_persisted_last_user_turn(project_root, current_run)
+        if project_root is not None
+        else None
+    )
+
+    if loop_skill_active(current_run):
+        loop_verdict = evaluate_loop_contract(
+            project_root=project_root,
+            current_run=current_run,
+            message=message,
+            last_user_turn=last_user_turn,
+        )
+        loop_decision = str(loop_verdict.get("decision") or "stop_loop")
+        loop_reason = str(loop_verdict.get("reason") or "").strip() or "loop verdict available"
+        loop_summary = str(loop_verdict.get("summary") or "").strip() or f"Loop review: {loop_reason}"
+        loop_status = str(loop_verdict.get("status") or "blocked").strip() or "blocked"
+        if project_root is not None and current_run is not None:
+            state_updates: dict[str, object] = {
+                "status": loop_status,
+                "loop_last_checked_at": now_iso(),
+                "loop_last_check_summary": loop_summary,
+            }
+            if loop_decision in {"stop_loop", "complete_loop"}:
+                state_updates["loop_active"] = False
+            current_run = persist_runtime_update(project_root, current_run, state_updates)
+            current_run = publish_hook_status(project_root, current_run, decision=loop_decision, summary=loop_summary)
+        append_hook_log(
+            base,
+            {
+                "timestamp": now_iso(),
+                "mode": "loop",
+                "decision": loop_decision,
+                "reason": loop_reason,
+                "summary": loop_summary,
+                "loop_active": bool((current_run or {}).get("loop_active")),
+            },
+        )
+        if loop_decision == "continue_loop":
+            return continue_hook_response(
+                payload=payload,
+                ticket=None,
+                continuation_message=str(loop_verdict.get("retry_message") or "").strip()
+                or "Continue the current loop until the loop contract is satisfied.",
+                hook_summary=loop_summary,
+                announce=loop_reason,
+            )
+        announce_message(loop_reason)
+        return emit_stop_payload(system_message=f"Stop hook: {loop_summary}")
+
     ticket = resolve_ticket(home, project_root, message)
     if ticket is None:
         append_hook_log(
@@ -1833,11 +2023,6 @@ def main() -> int:
         )
         return 0
 
-    last_user_turn = (
-        load_persisted_last_user_turn(project_root, current_run)
-        if project_root is not None
-        else None
-    )
     impl_mode_enabled = os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
         "1",
         "true",

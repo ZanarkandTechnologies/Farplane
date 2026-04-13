@@ -1,6 +1,7 @@
 # Stop Hook Routing
 
-The Stop hook is the central router for active `$impl` ticket work.
+The Stop hook is the central router for active `$impl` ticket work and bounded
+same-session `$loop` work.
 
 It uses two internal role passes, and only when needed:
 
@@ -23,10 +24,12 @@ Rules:
 - do not call both roles on every Stop event
 - do not add a fourth foresight role until the stronger reviewer gate proves insufficient
 - disable hooks on inner `codex exec` role calls
+- active `$loop` should branch before ticket resolution, evaluate only its local deterministic predicates, and either continue the same session or stop safely without entering reviewer/orchestrator routing
 - same-ticket `$impl` continuation requires both:
   1. a loopable build ticket state
   2. an active session-scoped `impl_loop_active` gate plus matching runtime `claim`
 - tmux `auto_continue` only controls whether the helper may spawn or reuse a visible lane; it is not sufficient on its own to authorize same-ticket continuation
+- explicit same-session stop intent is the v1 `$loop` stop control; Escape/cancel is not a reliable harness-level stop signal
 - ticket selection precedence is:
   1. explicit selector
   2. current-run state

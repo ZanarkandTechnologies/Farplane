@@ -14,6 +14,7 @@ Start with these entrypoints in order:
 - Current-state feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Ticket contract and live board: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md), [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
+- Heavy external PR gate: [skills/coderabbit-review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/README.md)
 - Post-build PR decomposition: [skills/pr-splitting/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-splitting/README.md)
 
 The core idea is simple:
@@ -24,6 +25,7 @@ The core idea is simple:
 - `spec-to-ticket` turns a coherent spec into dependency-linked work items
 - `impl-plan` plans one selected ticket for execution
 - `$impl` orchestrates one selected ticket through builder/reviewer/QA/evidence-check lanes
+- `$loop` keeps one bounded same-session task running until local completion checks pass or the operator explicitly stops it
 - the reviewer writes an anchored rubric-based `Review Packet`
 - worker lanes launched by `$impl` implement the selected ticket and gather evidence
 - a `Stop` `hook` judges the evidence and current-turn intent alignment
