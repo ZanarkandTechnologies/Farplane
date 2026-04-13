@@ -210,6 +210,71 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(current["ticket_id"], "TASK-1234")
         self.assertEqual(current["session_id"], "sess-123")
 
+    def test_load_current_run_falls_through_session_stub_to_same_session_global_run_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            state_dir = project_root / ".harness" / "state"
+            state_dir.mkdir(parents=True, exist_ok=True)
+            run_state = project_root / ".harness" / "runs" / "task-0016-building.json"
+            run_state.parent.mkdir(parents=True, exist_ok=True)
+            run_state.write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0016",
+                        "ticket_path": str(project_root / "tickets" / "TASK-0016-example.md"),
+                        "run_id": "run-task-0016-building-01",
+                        "phase": "building",
+                        "status": "running",
+                        "skill_name": "impl",
+                        "session_id": "sess-123",
+                        "impl_loop_active": True,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            session_path = session_state_path(project_root, "sess-123")
+            session_path.parent.mkdir(parents=True, exist_ok=True)
+            session_path.write_text(
+                json.dumps(
+                    {
+                        "session_id": "sess-123",
+                        "session_origin": "control",
+                        "last_user_turn": {
+                            "turn_id": "turn-a",
+                            "raw_text": "please $impl this",
+                            "control_surface": "impl",
+                            "explicit_impl_requested": True,
+                        },
+                        "impl_loop_active": True,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (state_dir / "current-run.json").write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0016",
+                        "ticket_path": str(project_root / "tickets" / "TASK-0016-example.md"),
+                        "run_id": "run-task-0016-building-01",
+                        "phase": "building",
+                        "status": "running",
+                        "skill_name": "impl",
+                        "session_id": "sess-123",
+                        "run_state": str(run_state.relative_to(project_root)),
+                        "impl_loop_active": True,
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            current = load_current_run(project_root, session_id="sess-123")
+
+        self.assertIsNotNone(current)
+        assert current is not None
+        self.assertEqual(current["ticket_id"], "TASK-0016")
+        self.assertEqual(current["run_state"], str(run_state.relative_to(project_root)))
+        self.assertEqual(current["skill_name"], "impl")
+
     def test_load_current_run_explicit_run_state_outranks_session_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
@@ -321,6 +386,61 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(captured["intent_mode"], "planning")
         self.assertFalse(session_payload["impl_loop_active"])
         self.assertFalse(current_run["impl_loop_active"])
+
+    def test_capture_user_turn_explicit_impl_seeds_unambiguous_active_ticket_runtime(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            state_dir = project_root / ".harness" / "state"
+            state_dir.mkdir(parents=True, exist_ok=True)
+            ticket_path = project_root / "tickets" / "TASK-0016-example.md"
+            ticket_path.parent.mkdir(parents=True, exist_ok=True)
+            ticket_path.write_text(
+                """---
+ticket_id: TASK-0016
+title: example
+phase: building
+status: building
+owner: codex
+priority: high
+depends_on: []
+blocked_by: []
+ready: true
+approval_required: false
+created_at: 2026-04-10T00:00:00Z
+updated_at: 2026-04-10T00:00:00Z
+next_action: continue implementation
+last_verification: none
+linked_docs: []
+---
+
+# TASK-0016: example
+""",
+                encoding="utf-8",
+            )
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="please $impl this",
+                turn_id="turn-impl-seed",
+                source="test",
+                session_id="sess-seed",
+            )
+
+            session_payload = json.loads(session_state_path(project_root, "sess-seed").read_text(encoding="utf-8"))
+            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
+
+        self.assertIsNotNone(captured)
+        assert captured is not None
+        self.assertTrue(captured["explicit_impl_requested"])
+        self.assertEqual(session_payload["ticket_id"], "TASK-0016")
+        self.assertEqual(session_payload["current_ticket_id"], "TASK-0016")
+        self.assertEqual(session_payload["phase"], "building")
+        self.assertEqual(session_payload["status"], "running")
+        self.assertEqual(session_payload["skill_name"], "impl")
+        self.assertTrue(session_payload["impl_loop_active"])
+        self.assertEqual(current_run["ticket_id"], "TASK-0016")
+        self.assertEqual(current_run["claim"]["ticket_id"], "TASK-0016")
+        self.assertEqual(current_run["claim"]["session_id"], "sess-seed")
 
     def test_capture_user_turn_ignores_non_control_session_without_existing_origin(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

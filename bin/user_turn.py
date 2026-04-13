@@ -180,6 +180,25 @@ def resolve_ticket_path(project_root: Path, current_run: Mapping[str, object]) -
     return matches[0] if matches else None
 
 
+def has_runtime_ownership(payload: Mapping[str, object] | None) -> bool:
+    if not isinstance(payload, Mapping):
+        return False
+    run_state = payload.get("run_state")
+    if isinstance(run_state, str) and run_state.strip():
+        return True
+    claim = payload.get("claim")
+    if isinstance(claim, Mapping) and claim:
+        return True
+    ticket_id = payload.get("ticket_id")
+    run_id = payload.get("run_id")
+    return (
+        isinstance(ticket_id, str)
+        and bool(ticket_id.strip())
+        and isinstance(run_id, str)
+        and bool(run_id.strip())
+    )
+
+
 def set_ticket_claim_alias(project_root: Path, current_run: Mapping[str, object], session_name: str) -> None:
     ticket_path = resolve_ticket_path(project_root, current_run)
     if ticket_path is None:
@@ -324,17 +343,21 @@ def load_current_run(
             else None
         )
 
+    session_payload_fallback: dict[str, object] | None = None
     if normalized_session_id:
         payload = load_json_dict(session_state_path(project_root, normalized_session_id))
         if payload:
-            return _with_runtime_metadata(payload, session_id=normalized_session_id)
+            session_payload = _with_runtime_metadata(payload, session_id=normalized_session_id)
+            if has_runtime_ownership(session_payload):
+                return session_payload
+            session_payload_fallback = session_payload
 
     current_payload = load_json_dict(current_run_state_path(project_root))
     if not current_payload:
-        return None
+        return session_payload_fallback
 
     current_with_metadata = _with_runtime_metadata(current_payload, session_id=normalized_session_id)
-    if _matches_session(current_with_metadata, normalized_session_id):
+    if _matches_session(current_with_metadata, normalized_session_id) and has_runtime_ownership(current_with_metadata):
         return current_with_metadata
 
     run_state = current_payload.get("run_state")
@@ -343,6 +366,10 @@ def load_current_run(
         if nested and _matches_session(nested, normalized_session_id):
             return _with_runtime_metadata(nested, session_id=normalized_session_id, explicit_run_state=run_state.strip())
 
+    if session_payload_fallback is not None:
+        return session_payload_fallback
+    if _matches_session(current_with_metadata, normalized_session_id):
+        return current_with_metadata
     return None
 
 
@@ -401,6 +428,87 @@ def build_runtime_claim(payload: Mapping[str, object]) -> dict[str, object] | No
             claim[key] = value
 
     return claim
+
+
+def ticket_frontmatter_value(text: str, key: str) -> str:
+    parts = split_frontmatter(text)
+    if parts is None:
+        return ""
+    raw_frontmatter, _ = parts
+    prefix = f"{key}:"
+    for line in raw_frontmatter.splitlines():
+        if line.startswith(prefix):
+            return line.split(":", 1)[1].strip()
+    return ""
+
+
+def resolve_ticket_for_impl_seed(project_root: Path, explicit_ticket_id: str) -> tuple[str, str] | None:
+    ticket_root = project_root / "tickets"
+    if explicit_ticket_id:
+        matches = sorted(ticket_root.glob(f"{explicit_ticket_id}*.md"))
+        if len(matches) == 1:
+            ticket_path = matches[0]
+            return (explicit_ticket_id, str(ticket_path))
+        return None
+
+    all_tickets = sorted(ticket_root.glob("TASK-*.md"))
+    if not all_tickets:
+        return None
+
+    active_matches: list[Path] = []
+    for ticket_path in all_tickets:
+        status = ticket_frontmatter_value(read_ticket_text(ticket_path), "status").strip()
+        if status in {"review", "building"}:
+            active_matches.append(ticket_path)
+
+    candidates = active_matches if len(active_matches) == 1 else all_tickets if len(all_tickets) == 1 else []
+    if len(candidates) != 1:
+        return None
+
+    ticket_path = candidates[0]
+    ticket_id = extract_ticket_id(ticket_path.name) or ticket_path.stem
+    return ticket_id, str(ticket_path)
+
+
+def seeded_impl_run_id(ticket_id: str, session_id: str) -> str:
+    suffix = re.sub(r"[^A-Za-z0-9]+", "", session_id.strip().lower())[:8] or "session"
+    return f"run-{ticket_id.lower()}-building-seed-{suffix}"
+
+
+def maybe_seed_impl_runtime(
+    *,
+    project_root: Path,
+    current_run: Mapping[str, object] | None,
+    last_user_turn: Mapping[str, object],
+    session_id: str,
+) -> dict[str, object] | None:
+    if has_runtime_ownership(current_run):
+        return dict(current_run) if isinstance(current_run, Mapping) else None
+    if str(last_user_turn.get("control_surface") or "").strip().lower() != "impl":
+        return dict(current_run) if isinstance(current_run, Mapping) else None
+    if not bool(last_user_turn.get("explicit_impl_requested")):
+        return dict(current_run) if isinstance(current_run, Mapping) else None
+
+    explicit_ticket_id = str(last_user_turn.get("explicit_ticket_id") or "").strip()
+    selection = resolve_ticket_for_impl_seed(project_root, explicit_ticket_id)
+    if selection is None:
+        return dict(current_run) if isinstance(current_run, Mapping) else None
+
+    ticket_id, ticket_path = selection
+    seeded = dict(current_run) if isinstance(current_run, Mapping) else {}
+    seeded["ticket_id"] = ticket_id
+    seeded["current_ticket_id"] = ticket_id
+    seeded["ticket_path"] = ticket_path
+    seeded["run_id"] = str(seeded.get("run_id") or seeded_impl_run_id(ticket_id, session_id))
+    seeded["phase"] = "building"
+    seeded["status"] = "running"
+    seeded["skill_name"] = "impl"
+    if session_id:
+        seeded["session_id"] = session_id
+    seeded["impl_loop_active"] = True
+    if "next_phase" not in seeded:
+        seeded["next_phase"] = "building"
+    return seeded
 
 
 def persist_runtime_update(
@@ -874,6 +982,18 @@ def capture_user_turn(
     if session_origin != "control":
         return None
 
+    last_user_turn = normalize_user_turn(
+        raw_text,
+        turn_id=turn_id,
+        source=source,
+        captured_at=captured_at_value,
+    )
+    current_run = maybe_seed_impl_runtime(
+        project_root=project_root,
+        current_run=current_run,
+        last_user_turn=last_user_turn,
+        session_id=normalized_session_id,
+    )
     session_state = (
         initialize_session_state(
             project_root=project_root,
@@ -894,12 +1014,6 @@ def capture_user_turn(
     if only_if_missing and isinstance(existing, dict) and existing:
         return existing
 
-    last_user_turn = normalize_user_turn(
-        raw_text,
-        turn_id=turn_id,
-        source=source,
-        captured_at=captured_at_value,
-    )
     if current_run is not None:
         updates: dict[str, object] = {
             "last_user_turn": last_user_turn,
