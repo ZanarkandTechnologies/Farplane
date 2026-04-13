@@ -41,18 +41,84 @@ Runtime state stays lightweight:
 
 ```mermaid
 flowchart LR
-    A[idea or transcript] --> B[brainstorm / deep-interview / prd]
-    B --> C[spec]
-    C --> D[spec-to-ticket]
-    D --> E[ready ticket set]
-    E --> F[impl-plan]
-    F --> G[$impl]
-    G --> H[worker lanes]
-    H --> I[QA / review evidence]
-    I --> J[Stop hook judge]
-    J -->|repeat| H
-    J -->|advance| K[next ready ticket or closeout]
+    classDef input fill:#e0f2fe,stroke:#0369a1,color:#0f172a
+    classDef surface fill:#e2e8f0,stroke:#475569,color:#0f172a
+    classDef shaping fill:#fef3c7,stroke:#b45309,color:#0f172a
+    classDef execution fill:#dcfce7,stroke:#15803d,color:#0f172a
+    classDef quality fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+    classDef closeout fill:#ccfbf1,stroke:#0f766e,color:#0f172a
+
+    req[/idea, bug, transcript, repo gap/]:::input
+
+    maps[(AGENTS.md<br/>README.md<br/>ARCHITECTURE.md)]:::surface
+    specs[(docs/specs/*)]:::surface
+    tickets[(tickets/TASK-*.md)]:::surface
+    runtime[(.harness/state/*<br/>bin/* + hooks.json)]:::surface
+    memory[(docs/HISTORY.md<br/>docs/MEMORY.md<br/>docs/TROUBLES.md)]:::surface
+
+    bootstrap["init-project"]:::shaping
+    intake["brainstorm<br/>deep-interview<br/>prd"]:::shaping
+    framing["advise<br/>deep-system-design<br/>deep-ui-design<br/>functional-ui<br/>demo-realism"]:::shaping
+    grounding["summarize<br/>documentation<br/>external-patterns<br/>find-skills"]:::shaping
+    ticketize["spec-to-ticket"]:::shaping
+    plan["impl-plan<br/>diagramming"]:::shaping
+
+    exec["$impl<br/>$loop"]:::execution
+    buildhelp["runtime-debugging<br/>codebase-analysis<br/>bash-efficiency<br/>repent"]:::execution
+    domain["frontend-design<br/>cinematic-landing<br/>convex<br/>react-flow<br/>three-js<br/>data-viz<br/>agent-browser<br/>apify<br/>vercel-react-best-practices"]:::execution
+
+    proof["testing<br/>visual-qa<br/>web-design-guidelines"]:::quality
+    review["review<br/>coderabbit-review"]:::quality
+
+    close["docs-closeout<br/>commit-message<br/>pr-splitting"]:::closeout
+    ship["archive, PR slices,<br/>doc writeback"]:::closeout
+
+    req --> bootstrap
+    req --> intake
+    req --> framing
+    req --> grounding
+
+    bootstrap --> maps
+    maps -. guidance .-> intake
+    maps -. guidance .-> ticketize
+    maps -. guidance .-> plan
+    maps -. guidance .-> exec
+
+    intake --> specs
+    framing --> specs
+    grounding --> specs
+    specs --> ticketize
+    ticketize --> tickets
+    tickets --> plan
+    specs --> plan
+    plan --> tickets
+    plan --> exec
+
+    exec --> buildhelp
+    exec --> domain
+    exec --> runtime
+    buildhelp --> runtime
+    domain --> proof
+    runtime --> proof
+    proof --> review
+    review -->|repeat| exec
+    review -->|pass| close
+    close --> ship
+    ship --> tickets
+    ship --> memory
 ```
+
+Legend:
+
+- `blue` = operator input
+- `gray` = durable repo surfaces
+- `amber` = intake and planning skills
+- `green` = execution and specialist build skills
+- `rose` = proof and review gates
+- `teal` = closeout and publishing
+
+Grouped nodes keep the whole stack in one readable picture while still naming
+the skills that plug into each stage.
 
 ## Phase Model
 
