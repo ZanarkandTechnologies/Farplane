@@ -15,6 +15,10 @@
     "freshness",
     "user_intent_impression",
     "user_intent_mismatch_reason",
+    "obvious_next_step_exists",
+    "next_step_safe",
+    "obvious_next_step",
+    "user_would_expect_more",
     "rerun_required",
     "blocking_findings"
   ],
@@ -80,6 +84,18 @@
     },
     "user_intent_mismatch_reason": {
       "type": ["string", "null"]
+    },
+    "obvious_next_step_exists": {
+      "type": ["boolean", "null"]
+    },
+    "next_step_safe": {
+      "type": ["boolean", "null"]
+    },
+    "obvious_next_step": {
+      "type": ["string", "null"]
+    },
+    "user_would_expect_more": {
+      "type": ["boolean", "null"]
     },
     "rerun_required": {
       "type": ["boolean", "null"]

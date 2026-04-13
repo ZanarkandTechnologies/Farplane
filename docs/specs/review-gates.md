@@ -41,11 +41,16 @@ Reviewer answers:
 - is the evidence strong enough?
 - what should be fixed before completion?
 - what neighboring repo surfaces were checked to rule out drift or hidden coupling?
+- if continuation is required, what is the single best immediate next same-ticket step?
 
 Reviewer produces the rubric score, evidence-gate judgment, and concrete next action.
 For user-facing work, reviewer rubric selection may also include a dedicated
 user-intent-satisfaction family so the system can judge "correct" separately
 from "actually satisfying for the intended user."
+For Stop-hook completion paths, reviewer should ground that judgment through the
+live `$review` skill contract and then make one narrow `$consultant-thinking`
+recommendation for the best immediate same-ticket next step when continuation is
+required.
 
 ### Stop Hook
 
@@ -60,6 +65,9 @@ It should not depend on a separate evidence-review-only role.
 On completion paths, it should also require an explicit judgment about whether
 the finished artifact would satisfy the saved user ask, not only whether the
 ticket and evidence look internally coherent.
+On completion paths, the main model's "done" claim is only a candidate stop.
+Reviewer judgment is the authority for whether one obvious in-scope next step
+still remains before orchestrator routing is allowed.
 
 ## Work Types
 
@@ -98,6 +106,10 @@ Reviewer output should use one normalized shape:
   "freshness": "pass|fail",
   "user_intent_impression": "pass|fail",
   "user_intent_mismatch_reason": "",
+  "obvious_next_step_exists": false,
+  "next_step_safe": false,
+  "obvious_next_step": "",
+  "user_would_expect_more": false,
   "hard_gate_failures": ["evidence-quality"],
   "finding_log": [
     {
@@ -176,6 +188,8 @@ Default:
 - `evidence-quality` below threshold forces non-pass overall
 - `integration-readiness` below threshold forces non-pass overall
 - `user_intent_impression` below threshold forces non-pass overall on completion paths
+- `obvious_next_step_exists = true` forces non-pass overall on completion paths
+- `user_would_expect_more = true` forces non-pass overall on completion paths
 
 ## Reviewer Search Discipline
 

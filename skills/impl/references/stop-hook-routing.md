@@ -8,6 +8,12 @@ It uses two internal role passes, and only when needed:
    - decides whether same-ticket work clearly remains
    - may route directly to orchestrator or block for user
    - may judge evidence sufficiency as part of the same review decision
+   - on completion paths, treats the main model's completion claim as a
+     candidate only and must explicitly judge whether one obvious next step
+     still remains
+   - should explicitly run `$review` to ground completion judgment and then
+     `$consultant-thinking` to return one best immediate next same-ticket step
+     when continuing
 2. `orchestrator`
    - chooses at most one next ticket or stops
    - may return the same ticket for a new explicit phase such as documenting
@@ -15,6 +21,7 @@ It uses two internal role passes, and only when needed:
 Rules:
 
 - do not call both roles on every Stop event
+- do not add a fourth foresight role until the stronger reviewer gate proves insufficient
 - disable hooks on inner `codex exec` role calls
 - same-ticket `$impl` continuation requires both:
   1. a loopable build ticket state

@@ -999,6 +999,10 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
         "freshness",
         "user_intent_impression",
         "user_intent_mismatch_reason",
+        "obvious_next_step_exists",
+        "next_step_safe",
+        "obvious_next_step",
+        "user_would_expect_more",
         "rerun_required",
         "blocking_findings",
     )
@@ -1021,6 +1025,26 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
             failures.append("user_intent_mismatch_reason=missing")
     elif mismatch_reason:
         failures.append("user_intent_mismatch_reason=unexpected")
+
+    obvious_next_step_exists = bool(review.get("obvious_next_step_exists"))
+    next_step_safe = bool(review.get("next_step_safe"))
+    obvious_next_step = str(review.get("obvious_next_step") or "").strip()
+    user_would_expect_more = bool(review.get("user_would_expect_more"))
+
+    if obvious_next_step_exists:
+        if obvious_next_step:
+            failures.append(f"obvious_next_step={obvious_next_step}")
+        else:
+            failures.append("obvious_next_step=missing")
+    elif obvious_next_step:
+        failures.append("obvious_next_step=unexpected")
+
+    if user_would_expect_more:
+        failures.append("user_would_expect_more=true")
+
+    if next_step_safe and not obvious_next_step_exists:
+        failures.append("next_step_safe=unexpected")
+
     if bool(review.get("rerun_required")):
         failures.append("rerun_required=true")
 
@@ -1410,6 +1434,10 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
     freshness = payload.get("freshness")
     user_intent_impression = payload.get("user_intent_impression")
     user_intent_mismatch_reason = payload.get("user_intent_mismatch_reason")
+    obvious_next_step_exists = payload.get("obvious_next_step_exists")
+    next_step_safe = payload.get("next_step_safe")
+    obvious_next_step = payload.get("obvious_next_step")
+    user_would_expect_more = payload.get("user_would_expect_more")
     rerun_required = payload.get("rerun_required")
     blocking_findings = payload.get("blocking_findings")
 
@@ -1431,6 +1459,11 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
         if value is not None and value not in PASS_FAIL_VALUES:
             return None
     if user_intent_mismatch_reason is not None and not isinstance(user_intent_mismatch_reason, str):
+        return None
+    for value in (obvious_next_step_exists, next_step_safe, user_would_expect_more):
+        if value is not None and not isinstance(value, bool):
+            return None
+    if obvious_next_step is not None and not isinstance(obvious_next_step, str):
         return None
     if rerun_required is not None and not isinstance(rerun_required, bool):
         return None
@@ -1462,6 +1495,14 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
         parsed["user_intent_impression"] = user_intent_impression
     if user_intent_mismatch_reason is not None:
         parsed["user_intent_mismatch_reason"] = user_intent_mismatch_reason.strip()
+    if obvious_next_step_exists is not None:
+        parsed["obvious_next_step_exists"] = obvious_next_step_exists
+    if next_step_safe is not None:
+        parsed["next_step_safe"] = next_step_safe
+    if obvious_next_step is not None:
+        parsed["obvious_next_step"] = obvious_next_step.strip()
+    if user_would_expect_more is not None:
+        parsed["user_would_expect_more"] = user_would_expect_more
     if rerun_required is not None:
         parsed["rerun_required"] = rerun_required
     if blocking_findings is not None:
@@ -1532,6 +1573,7 @@ def reviewer_prompt(
     if mode == "completion_gate":
         ticket_snapshot.update(
             {
+                "completion_claim_is_candidate_only": True,
                 "review_packet": ticket["review_packet"],
                 "review_packet_missing": ticket["review_packet_missing"],
                 "review_packet_errors": ticket["review_packet_errors"],

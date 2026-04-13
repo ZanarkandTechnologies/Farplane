@@ -107,6 +107,10 @@ class StopHookRoleConfigTests(unittest.TestCase):
   "freshness": "pass",
   "user_intent_impression": "fail",
   "user_intent_mismatch_reason": "result undershoots the saved user ask",
+  "obvious_next_step_exists": true,
+  "next_step_safe": true,
+  "obvious_next_step": "update the active ticket with the missing proof and rerun review",
+  "user_would_expect_more": true,
   "rerun_required": false,
   "blocking_findings": []
 }""",
@@ -118,6 +122,9 @@ class StopHookRoleConfigTests(unittest.TestCase):
         assert parsed is not None
         self.assertEqual(parsed["user_intent_impression"], "fail")
         self.assertEqual(parsed["user_intent_mismatch_reason"], "result undershoots the saved user ask")
+        self.assertTrue(parsed["obvious_next_step_exists"])
+        self.assertEqual(parsed["obvious_next_step"], "update the active ticket with the missing proof and rerun review")
+        self.assertTrue(parsed["user_would_expect_more"])
 
 
 class StopHookReviewerPromptTests(unittest.TestCase):
@@ -154,6 +161,7 @@ class StopHookReviewerPromptTests(unittest.TestCase):
         )
 
         self.assertIn('"mode": "completion_gate"', prompt)
+        self.assertIn('"completion_claim_is_candidate_only": true', prompt)
         self.assertIn('"review_packet"', prompt)
         self.assertIn('"claim"', prompt)
         self.assertIn('"last_intent_alignment"', prompt)
@@ -187,6 +195,10 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "freshness": "pass",
                 "user_intent_impression": "pass",
                 "user_intent_mismatch_reason": "",
+                "obvious_next_step_exists": False,
+                "next_step_safe": False,
+                "obvious_next_step": "",
+                "user_would_expect_more": False,
                 "rerun_required": False,
                 "blocking_findings": [],
             }
@@ -206,6 +218,10 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "freshness": "pass",
                 "user_intent_impression": "fail",
                 "user_intent_mismatch_reason": "result is technically valid but undershoots the saved user ask",
+                "obvious_next_step_exists": False,
+                "next_step_safe": False,
+                "obvious_next_step": "",
+                "user_would_expect_more": False,
                 "rerun_required": False,
                 "blocking_findings": [],
             }
@@ -218,6 +234,30 @@ class StopHookReviewerPromptTests(unittest.TestCase):
             "user_intent_mismatch_reason=result is technically valid but undershoots the saved user ask",
             failures,
         )
+
+    def test_validate_reviewer_gate_fails_when_obvious_next_step_exists(self) -> None:
+        ok, reason, failures = self.stop_hook.validate_reviewer_gate(
+            {
+                "overall_score": 4.6,
+                "evidence_quality": "pass",
+                "integration_readiness": "pass",
+                "traceability": "pass",
+                "freshness": "pass",
+                "user_intent_impression": "pass",
+                "user_intent_mismatch_reason": "",
+                "obvious_next_step_exists": True,
+                "next_step_safe": True,
+                "obvious_next_step": "run one more same-ticket pass to attach the missing proof",
+                "user_would_expect_more": True,
+                "rerun_required": False,
+                "blocking_findings": [],
+            }
+        )
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "reviewer completion gates are not passing")
+        self.assertIn("obvious_next_step=run one more same-ticket pass to attach the missing proof", failures)
+        self.assertIn("user_would_expect_more=true", failures)
 
 
 class StopHookTmuxFollowupTests(unittest.TestCase):
