@@ -14,6 +14,7 @@ Start with these entrypoints in order:
 - Current-state feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Ticket contract and live board: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md), [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
+- Post-build PR decomposition: [skills/pr-splitting/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-splitting/README.md)
 
 The core idea is simple:
 
