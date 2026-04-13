@@ -49,8 +49,18 @@ Short description of the next smallest executable slice.
 
 ## Plan
 
-### Diagram Summary
-- `Required:` yes for material, cross-module, workflow/tooling, or architecture-facing work; optional for trivial localized fixes
+### Human
+
+#### Decision
+- `Req:`
+- `Best:`
+- `Why:`
+- `Tradeoff accepted:`
+- `Not chosen:`
+
+#### Diagram
+- `Required:` yes for material, cross-module, workflow/tooling, or
+  architecture-facing work; optional for trivial localized fixes
 - `Legend:` keep | change | add | remove
 ```mermaid
 flowchart LR
@@ -59,53 +69,58 @@ flowchart LR
 ```
 - `Tier 2:` optional zoom-in or component view only when Tier 1 is not enough
 
-### Pitch
-- `Req:`
-- `Bet:`
-- `Win:`
+#### Signature Sketch
+- `Format:` `module / symbol(input): output`
+- `Use:` 3-7 seams that prove codebase understanding
+- `Avoid:` full type dumps
 
-### Recommendation
-- `Best:`
-- `Why:`
-- `Tradeoff accepted:`
-
-### B -> A
+#### B -> A
 - `Before:`
 - `After:`
 - `Outcome:`
 
-### Delta
+#### Proof
+- `P1:`
+- `P2:`
+- `Risk:`
+- `Rollback:`
+
+#### Ask
+- `Ready: yes|no`
+- `Next:`
+
+### Agent
+
+#### Delta
 - `Touch:`
 - `Keep:`
 - `Change:`
 - `Delete/Avoid:`
 
-### Core Flow
+#### Execution Plan
 ```mermaid
 flowchart LR
   %% Prefer a numbered critical-path data-flow diagram for material work.
 ```
 ```pseudo
 inspect current state
+name the real seams
 apply smallest safe delta
 validate changed surfaces
 update docs/evidence
 ```
 
-### Proof
-- `P1:`
-- `P2:`
-- `Risk:`
+#### Risk / Rollback
+- `Primary risk:`
+- `Containment:`
 - `Rollback:`
 
-### Plan Review
+#### Plan Review
 - `Refs:`
-- `Scope:`
-- `Proof:`
-- `Guardrails:`
+- `Checks:`
 - `Fixes:`
 
-### Options Appendix
+#### Options Appendix
 - `Option 1:`
 - `Pros:`
 - `Cons:`
@@ -119,16 +134,12 @@ update docs/evidence
 - `Cons:`
 - `Why not chosen:`
 
-### Delegation
+#### Delegation
 - `Need:`
 - `Why:`
 - `Artifact:`
 
-### Ask
-- `Ready: yes|no`
-- `Next:`
-
-### Ticket Move
+#### Ticket Move
 - `Now:`
 - `On approval:`
 - `Follow-ups:`
@@ -144,7 +155,7 @@ update docs/evidence
 - `owner` is the broad work owner; `claimed_by` is optional live-session claim state for board visibility. Do not store raw `session_id` values in ticket frontmatter.
 - `next_action` is the authoritative current step. Explain it here if useful, but do not create a second state field.
 - `last_verification` is the authoritative verification summary. Put detailed commands and observations in `Evidence`.
-- for material work, the top of the plan should be approvable from `Recommendation + Diagram Summary + Core Flow` before the reviewer reads the lower prose
+- for material work, the top of the plan should be approvable from `Decision + Diagram + Signature Sketch + B -> A + Proof` before the reviewer reads the lower prose
 - when the user did not provide a take on a material choice, capture three viable options plus the recommended path in the plan instead of leaving the tradeoff implicit
 - `User Story`, `User Pain / JTBD`, `Non-Goals`, `High-Fidelity Example`, `What Good Looks Like`, and `Proof Target` are required for material feature work, workflow/tooling changes, ambiguous implementation work, and any ticket where the implementer would otherwise need to infer desired behavior
 - those sections may be short or omitted for trivial, narrowly localized fixes where the file, symbol, or error already anchors the work concretely

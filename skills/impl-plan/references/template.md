@@ -1,20 +1,19 @@
 # Impl Plan Template
 
-## Pitch
+## Human
+
+### Decision
 
 - `Req:`
-- `Bet:`
-- `Win:`
-
-## Recommendation
-
 - `Best:`
 - `Why:`
 - `Tradeoff accepted:`
+- `Not chosen:`
 
-## Diagram Summary
+### Diagram
 
-- `Required:` yes for material or cross-module work; optional for trivial localized fixes
+- `Required:` yes for material or cross-module work; optional for trivial
+  localized fixes
 - `Legend:` keep | change | add | remove
 
 ```mermaid
@@ -23,22 +22,44 @@ flowchart LR
   %% Put short signatures in nodes when the interface or ownership boundary matters.
 ```
 
-- `Tier 2:` optional zoom-in only when the top-level map is not enough
+- `Tier 2:` optional zoom-in or numbered data flow only when Tier 1 is not
+  enough
 
-## B -> A
+### Signature Sketch
+
+- `Format:` `module / symbol(input): output`
+- `Use:` 3-7 seams that prove codebase understanding
+- `Avoid:` full type dumps
+
+### B -> A
 
 - `Before:`
 - `After:`
 - `Outcome:`
 
-## Delta
+### Proof
+
+- `P1:`
+- `P2:`
+- `Risk:`
+- `Rollback:`
+
+### Ask
+
+- `Ready:` yes / no
+- `Next:`
+- `If split:`
+
+## Agent
+
+### Delta
 
 - `Touch:`
 - `Keep:`
 - `Change:`
 - `Delete/Avoid:`
 
-## Core Flow
+### Execution Plan
 
 ```mermaid
 flowchart LR
@@ -46,58 +67,53 @@ flowchart LR
 ```
 
 ```pseudo
-input/request
--> inspect current path
--> decide split or single-commit
--> apply minimal delta
--> persist/render/return
--> verify proof points
+inspect current path
+name the real seams
+apply minimal delta
+verify proof points
+update ticket move
 ```
 
-## Proof
+### Risk / Rollback
 
-- `P1:`
-- `P2:`
-- `Risk:`
+- `Primary risk:`
+- `Containment:`
 - `Rollback:`
 
-## User Story
+### User Story
 
 - `Actor:`
 - `Need:`
 - `Outcome:`
 
-## User Pain / JTBD
+### User Pain / JTBD
 
 - `Current pain:`
 - `Why now:`
 
-## Non-Goals
+### Non-Goals
 
 - `Do not solve:`
 
-## High-Fidelity Example
+### High-Fidelity Example
 
 - `Example flow/artifact:`
 
-## What Good Looks Like
+### What Good Looks Like
 
 - `Quality bar:`
 
-## Proof Target
+### Proof Target
 
 - `Reviewer-visible proof:`
 
-## Plan Review
+### Plan Review
 
 - `Refs:` prd/spec/ticket/memory/troubles/code
-- `Scope:` pass / fix
-- `Proof:` pass / fix
-- `Guardrails:` pass / fix
-- `Recommendation:` pass / fix
+- `Checks:` scope / proof / guardrails / diagram / signatures / rollback
 - `Fixes:` none / short note
 
-## Options Appendix
+### Options Appendix
 
 - `Option 1:`
 - `Pros:`
@@ -112,17 +128,18 @@ input/request
 - `Cons:`
 - `Why not chosen:`
 
-## Delegation
+### Delegation
 
 - `Need:` `Not needed` / skill / subagent
 - `Why:`
 - `Artifact:`
 
-## Ask
+### Ticket Move
 
-- `Ready:` yes / no
-- `Next:`
-- `If split:`
+- `Now:`
+- `On approval:`
+- `Follow-ups:`
+- `Blocked in building?:`
 
 ## Optional Appendix
 
@@ -130,8 +147,9 @@ input/request
 
 ## Applicability Rule
 
-- Required for material feature work, workflow/tooling changes, ambiguous
-  implementation work, and any ticket where desired behavior would otherwise be
-  inferred.
-- May be short or omitted for trivial, narrowly localized fixes where the code
-  context already anchors the expected behavior.
+- `Human` comes first.
+- `Diagram` plus `Signature Sketch` are required for material feature work,
+  workflow/tooling changes, ambiguous implementation work, and any ticket where
+  trust depends on seeing changed components or interfaces.
+- Narrative sections may be short or omitted for trivial, narrowly localized
+  fixes where the code context already anchors the expected behavior.

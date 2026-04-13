@@ -37,7 +37,7 @@ Done only if relevant items pass:
 - durable rules promoted to `docs/MEMORY.md`
 - repeated failures or user correction patterns logged in `docs/TROUBLES.md` when applicable
 - new invariants logged and referenced
-- review loop done; `visual-qa` only if UI changed
+- review loop done; auto-run `review` at the end of `impl-plan` and at the end of `impl`, run it after other meaningful planning/build/doc passes when warranted, and always run it before any completion claim; `visual-qa` only if UI changed
 - Ralph build/documenting completion claims require both checklist proof and a passing `Review Packet`
 - changes pushed to GitHub when the workflow calls for publishing
 
@@ -55,7 +55,7 @@ Use:
 - `spec-to-ticket` for slicing
 - `runtime-debugging` for repro/runtime issues
 - `visual-qa` for UI changes
-- `review` for final quality sweep
+- `review` for auto review at the end of `impl-plan` and `impl`, other meaningful pass-level quality sweeps, and final quality sweep
 - `impl` when one approved ticket needs build-phase orchestration across implementation, review, QA, and evidence
 - `docs-closeout` when a built ticket only needs documenting/writeback/archive prep
 
@@ -113,6 +113,15 @@ Planning handoff rule:
 - avoid trailing upsell phrasing like "if you want I can ..."; take the obvious next step or state the recommended next step directly
 - for UI and UX work, ground recommendations in this order: user stories -> comparable apps -> chosen pattern
 
+## Communication
+
+- keep chat replies concise by default; do not dump the full working state into chat when the user mainly needs the conclusion and next step
+- put detailed reasoning, plans, evidence, inventories, and handoff context into visible repo artifacts first: the active ticket, the nearest canonical doc, or module README/AGENTS when applicable
+- prefer enriching existing visible artifacts over inventing ad hoc sidecar files
+- create a new file only when the repo contract, ticket workflow, or module scaffolding rules call for one, or when the detail is durable enough to earn its own artifact
+- when a lot of detail exists, respond in chat with the shortest summary that gets the user back up to speed and point to the durable artifact rather than re-pasting it
+- if the detail is ephemeral, low-value, or only useful for the current thought process, keep it out of both chat and the repo
+
 ## Core Rules
 
 - verify before claiming completion
@@ -135,6 +144,7 @@ Planning handoff rule:
 - escalate only for destructive, irreversible, or materially branching decisions
 - ticket-metadata v1 ends at visible tickets, docs, and config foundations; assisted continuation, stop hooks, and autonomy-mode runtime work stay outside v1 unless a later ticket explicitly re-opens them
 - user complaints about the current output are correction requests by default; fix first and explain briefly only when useful
+- prefer artifact-first detail and summary-first chat: write the deep context to the right visible surface, then give the user the concise spoken update
 
 ## Module Scaffolding
 
@@ -210,12 +220,13 @@ Required:
 - repro/runtime bug with unclear cause -> `runtime-debugging`
 - UI behavior, layout, or style change -> `visual-qa`
 - broad cross-module exploration -> `explore`
-- final quality sweep -> `review`
+- auto-run at the end of `impl-plan` and `impl`, at other meaningful planning/build/doc checkpoints when warranted, and before a completion claim -> `review`
 
 Avoid:
 
 - forcing `runtime-debugging` for obvious stack-trace fixes
 - `visual-qa` for docs or rules-only changes
+- running `review` after every microscopic edit when no meaningful pass boundary has been reached
 - unnecessary delegation for small local edits
 
 If a plan delegates, include:
