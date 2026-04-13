@@ -1,4 +1,4 @@
-# Consultant Thinking
+# Advise
 
 ## Purpose
 

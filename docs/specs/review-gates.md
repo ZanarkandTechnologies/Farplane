@@ -48,7 +48,7 @@ For user-facing work, reviewer rubric selection may also include a dedicated
 user-intent-satisfaction family so the system can judge "correct" separately
 from "actually satisfying for the intended user."
 For Stop-hook completion paths, reviewer should ground that judgment through the
-live `$review` skill contract and then make one narrow `$consultant-thinking`
+live `$review` skill contract and then make one narrow `$advise`
 recommendation for the best immediate same-ticket next step when continuation is
 required.
 

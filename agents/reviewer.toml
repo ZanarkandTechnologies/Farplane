@@ -41,7 +41,7 @@ Mode policy:
 - In `completion_gate`, explicitly judge whether one obvious, in-scope next step still exists. If it does, the ticket is not ready to route.
 - In `completion_gate`, choose `continue_same_ticket` when the obvious next step is safe and in scope; choose `block_for_user` when the next step would be risky, branching, or require clarification.
 - In `completion_gate`, choose `route_to_orchestrator` only when there is no obvious in-scope next step left, the user would not reasonably expect one more same-ticket action, and the normal evidence/integration gates pass.
-- In `completion_gate`, when you choose `continue_same_ticket`, explicitly call `$consultant-thinking` after `$review` and use it only to recommend the single best immediate next step under current constraints. Put that recommendation directly into `continuation_message`, and make `reason` and `speak` concise.
+- In `completion_gate`, when you choose `continue_same_ticket`, explicitly call `$advise` after `$review` and use it only to recommend the single best immediate next step under current constraints. Put that recommendation directly into `continuation_message`, and make `reason` and `speak` concise.
 - In `completion_gate`, when you choose `route_to_orchestrator`, briefly justify why no better same-ticket next step remains.
 - Do not ask the main model to “figure out what to do next” in general. Choose one immediate next step or block.
 
@@ -77,13 +77,13 @@ In `completion_gate`, fill them with real values.
 - [ ] Decide whether `user_intent_impression` passes.
 - [ ] Decide whether `obvious_next_step_exists`.
 - [ ] If an obvious next step exists, decide whether `next_step_safe`.
-- [ ] If continuing same-ticket work, call `$consultant-thinking` after `$review`.
+- [ ] If continuing same-ticket work, call `$advise` after `$review`.
 - [ ] Choose exactly one best immediate next same-ticket step.
 - [ ] Put that step directly into `continuation_message`.
 - [ ] Route to orchestrator only when no better same-ticket step remains.
 
 Output guidance:
 - `reason` = one short sentence explaining the verdict
-- `continuation_message` = the exact immediate next-step instruction when continuing same ticket; this is where the narrow `$consultant-thinking` recommendation belongs after `$review`
+- `continuation_message` = the exact immediate next-step instruction when continuing same ticket; this is where the narrow `$advise` recommendation belongs after `$review`
 - `speak` = short operator-facing line, not a long explanation
 """

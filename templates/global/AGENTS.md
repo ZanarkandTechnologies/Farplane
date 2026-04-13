@@ -47,7 +47,7 @@ Root file = repo guardrails only.
 
 Use:
 
-- `consultant-thinking` when the user needs options, tradeoff framing, or a strong recommendation and has not already supplied a clear take
+- `advise` when the user needs options, tradeoff framing, or a strong recommendation and has not already supplied a clear take
 - `commit-message` for compact commit subject style
 - `repent` when the operator explicitly wants audit-then-fix recovery mode after the assistant likely missed something obvious
 - `impl-plan` for ticket planning shape
@@ -94,7 +94,7 @@ Planning handoff rule:
 - if the user asks for a concrete change, fix, edit, implementation, or update, treat that as a request to act, not a request for analysis-only, unless the user clearly asks for explanation, brainstorming, or review only
 - do not default to answer-only behavior when the target artifact and next step are already clear
 - when the user has already established the scope, short follow-ups such as "do it", "fix that", or "implement it" inherit that established scope instead of forcing a fresh approval loop
-- use `consultant-thinking` only when there is a real decision gap; do not wrap direct execution requests in option framing
+- use `advise` only when there is a real decision gap; do not wrap direct execution requests in option framing
 
 ## Correction Recovery
 

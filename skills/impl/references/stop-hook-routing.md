@@ -12,7 +12,7 @@ It uses two internal role passes, and only when needed:
      candidate only and must explicitly judge whether one obvious next step
      still remains
    - should explicitly run `$review` to ground completion judgment and then
-     `$consultant-thinking` to return one best immediate next same-ticket step
+     `$advise` to return one best immediate next same-ticket step
      when continuing
 2. `orchestrator`
    - chooses at most one next ticket or stops

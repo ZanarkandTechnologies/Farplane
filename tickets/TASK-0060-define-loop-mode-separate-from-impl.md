@@ -126,7 +126,7 @@ persist mode-specific state and summaries
 - `Scope:` pass; focused on public execution-surface split and runtime contract
 - `Proof:` pass; planning artifact can be reviewed before any runtime changes land
 - `Guardrails:` pass; avoids hidden continuation default, preserves multi-panel state, and does not widen `$impl`
-- `Fixes:` rename the short-task concept from `ralph` to `loop` and make the workload split explicit
+- `Fixes:` rename the short-task concept from `ralph` to `loop`, keep `advise` out of Stop-hook inference, and narrow v1 predicates to surfaces the current hook can actually evaluate deterministically
 
 ### Options Appendix
 - `Option 1:` add a dedicated `loop` mode and keep `$impl` ticketed
@@ -168,7 +168,7 @@ persist mode-specific state and summaries
 - The operator prefers same-session continuation over a separate verifier agent deciding for the session from outside.
 - Anthropic's plugin is useful as a control-shape reference, but Codexter needs per-session state instead of one shared state file because multiple panels may run concurrently.
 - A likely open question is whether `loop` completion should be pure keyword/promise based, or keyword plus lightweight same-session “is this actually done?” guidance in the prompt contract.
-- Another open question is whether `consultant-thinking` should be an explicit pre-loop step for ambiguous work rather than something the Stop hook tries to infer later.
+- Chosen `advise` role: optional pre-loop helper for ambiguous work; the Stop hook should not infer or invoke `advise` during deterministic loop continuation.
 - Repro note: current control-session capture only recognizes the literal `$impl` token. Prompts like `impl TASK-0060`, `please impl TASK-0060`, or `Impul TASK-0060` do not activate control-session ownership or `impl_loop_active`.
 - Repro note: the current `$impl` detector also matches `$impl-plan`, so planning prompts can be misclassified as explicit impl/build-loop requests. The trigger substrate needs cleanup regardless of whether `loop` is added.
 

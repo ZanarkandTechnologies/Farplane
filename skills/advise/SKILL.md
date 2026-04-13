@@ -1,9 +1,9 @@
 ---
-name: consultant-thinking
+name: advise
 description: Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.
 ---
 
-# Consultant Thinking
+# Advise
 
 Use this when the user is looking for judgment, not just a menu of possibilities.
 
