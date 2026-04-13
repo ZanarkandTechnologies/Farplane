@@ -57,7 +57,8 @@ Use:
 - `visual-qa` for UI changes
 - `review` for auto review at the end of `impl-plan` and `impl`, other meaningful pass-level quality sweeps, and final quality sweep
 - `impl` when one approved ticket needs build-phase orchestration across implementation, review, QA, and evidence
-- `docs-closeout` when a built ticket only needs documenting/writeback/archive prep
+- `close-ticket` when a built ticket only needs final writeback, checks, commit
+  prep, and archive or publish closeout
 
 Avoid:
 

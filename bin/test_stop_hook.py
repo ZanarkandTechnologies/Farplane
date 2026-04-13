@@ -260,6 +260,14 @@ class StopHookReviewerPromptTests(unittest.TestCase):
         self.assertIn("user_would_expect_more=true", failures)
 
 
+class StopHookSkillRoutingTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.stop_hook = load_stop_hook_module()
+
+    def test_skill_name_for_phase_uses_close_ticket_for_documenting(self) -> None:
+        self.assertEqual(self.stop_hook.skill_name_for_phase("documenting"), "close-ticket")
+
+
 class StopHookTmuxFollowupTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stop_hook = load_stop_hook_module()

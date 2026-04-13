@@ -64,6 +64,30 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertFalse(normalized["explicit_impl_requested"])
         self.assertEqual(normalized["intent_mode"], "unknown")
 
+    def test_normalize_user_turn_uses_close_ticket_as_canonical_closeout_name(self) -> None:
+        normalized = normalize_user_turn(
+            "$close-ticket TASK-0061",
+            turn_id="turn-close",
+            source="test",
+            captured_at="2026-04-13T00:00:00Z",
+        )
+
+        self.assertEqual(normalized["control_surface"], "close-ticket")
+        self.assertEqual(normalized["intent_mode"], "documenting")
+        self.assertEqual(normalized["requested_outcome"], "docs_update")
+
+    def test_normalize_user_turn_maps_docs_closeout_alias_to_close_ticket(self) -> None:
+        normalized = normalize_user_turn(
+            "$docs-closeout TASK-0061",
+            turn_id="turn-close-alias",
+            source="test",
+            captured_at="2026-04-13T00:00:00Z",
+        )
+
+        self.assertEqual(normalized["control_surface"], "close-ticket")
+        self.assertEqual(normalized["intent_mode"], "documenting")
+        self.assertEqual(normalized["requested_outcome"], "docs_update")
+
     def test_normalize_user_turn_parses_loop_contract(self) -> None:
         normalized = normalize_user_turn(
             "\n".join(

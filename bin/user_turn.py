@@ -10,9 +10,12 @@ from typing import Mapping
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|loop|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
+    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|loop|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
     re.IGNORECASE,
 )
+CONTROL_SURFACE_ALIASES = {
+    "docs-closeout": "close-ticket",
+}
 APPROVAL_REVIEW_PROMPT_PREFIX = (
     "The following is the Codex agent history whose request action you are assessing."
 )
@@ -299,7 +302,8 @@ def extract_control_surface(raw_text: str) -> str:
     match = CONTROL_SURFACE_PATTERN.search(raw_text)
     if not match:
         return ""
-    return str(match.group("skill") or "").strip().lower()
+    matched = str(match.group("skill") or "").strip().lower()
+    return CONTROL_SURFACE_ALIASES.get(matched, matched)
 
 
 def parse_inline_json(raw: str) -> object:
@@ -901,7 +905,7 @@ def classify_intent_mode(raw_text: str) -> str:
     if control_surface == "loop":
         return "building"
 
-    if control_surface == "docs-closeout":
+    if control_surface == "close-ticket":
         return "documenting"
 
     if _contains_any(

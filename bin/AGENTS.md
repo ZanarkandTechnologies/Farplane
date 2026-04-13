@@ -34,6 +34,9 @@ For legacy runtime/prototype scripts that still carry older names:
 - same-ticket `$impl` continuation must require both an explicit session-scoped loop gate and a matching runtime `claim`; tmux `auto_continue` is only lane follow-up plumbing, not the global activation truth. See `MEM-0025`.
 - explicit `$impl` control-session turns must seed selected-ticket runtime ownership when ticket resolution is explicit or unambiguous; a session-only control stub is not enough for Stop-hook same-ticket continuation. See `MEM-0032`.
 - bounded `$loop` runtime is session-owned, not ticket-owned: `bin/user_turn.py` seeds `skill_name: "loop"`, `loop_active`, and `loop_contract`, while `bin/stop_hook.py` evaluates only local deterministic predicates and explicit stop intent. Escape/cancel is not the canonical loop-stop contract. See `MEM-0038`.
+- `close-ticket` is the canonical live documenting-phase control skill. Runtime
+  parsing may still accept `$docs-closeout` as an alias, but live prompts and
+  handoffs should use `$close-ticket`. See `MEM-0043`.
 - on completion-like paths, Stop-hook reviewer judgment is the authority for routing to the orchestrator; the main model's completion claim is candidate-only, and reviewer must fail completion when an obvious in-scope next step still remains. See `MEM-0034`.
 - delegated workers should keep `worker_name`, `main_artifact_path`, and `grounding_summary` visible in the same runtime contract when available
 - delegated stale-wait reads should stay advisory-first and use explicit checkpoint timing instead of hidden watchdog behavior

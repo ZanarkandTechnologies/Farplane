@@ -33,6 +33,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from notify import announce_message
+from runtime_telemetry import emit_hook_telemetry
 from user_turn import (
     build_runtime_claim,
     explicit_run_state_selector as resolve_explicit_run_state_selector,
@@ -1469,7 +1470,7 @@ def skill_name_for_phase(phase: str) -> str:
     mapping = {
         "planning": "impl-plan",
         "building": "impl",
-        "documenting": "docs-closeout",
+        "documenting": "close-ticket",
     }
     return mapping.get(phase, "impl")
 
@@ -1964,6 +1965,20 @@ def main() -> int:
         load_persisted_last_user_turn(project_root, current_run)
         if project_root is not None
         else None
+    )
+    emit_hook_telemetry(
+        event_type="stop_hook",
+        hook_event_name="Stop",
+        payload=payload,
+        project_root=project_root,
+        current_run=current_run,
+        runtime_claim=runtime_claim,
+        extra={
+            "source": "stop_hook.py",
+            "message_length": len(message),
+            "last_user_turn_id": str((last_user_turn or {}).get("turn_id") or "").strip(),
+            "intent_mode": str((last_user_turn or {}).get("intent_mode") or "").strip(),
+        },
     )
 
     if loop_skill_active(current_run):

@@ -164,7 +164,7 @@ def skill_name_for_phase(phase: str) -> str:
     mapping = {
         "planning": "impl-plan",
         "building": "impl",
-        "documenting": "docs-closeout",
+        "documenting": "close-ticket",
     }
     return mapping[phase]
 
@@ -173,7 +173,7 @@ def default_worker_name(phase: str) -> str:
     mapping = {
         "planning": "planner",
         "building": "builder",
-        "documenting": "docs-closeout",
+        "documenting": "close-ticket",
     }
     return mapping[phase]
 

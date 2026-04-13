@@ -79,3 +79,4 @@
 2026-04-13 19:43 +0100 | FEAT | make `spec-to-ticket` capability-first by default, keep coherent greenfield fullstack features bundled as one ticket, encode explicit split triggers, and align the module review/todo/invariant surfaces with the new sizing rule
 2026-04-13 21:41 +0100 | FIX | add the missing `skills/loop` package, promote `$loop` into the live skill inventory, and align the control-skill docs with the shipped runtime contract
 2026-04-13 22:49 +0100 | CHORE | restore the README top-level diagram as a color-coded super stack map that overlays the main flow, durable surfaces, and the major skill groups in one picture
+2026-04-13 23:05 +0100 | FEAT | replace `docs-closeout` with the canonical `close-ticket` skill, add a parent closeout todo flow for docs/checks/commit/push, and keep `$docs-closeout` as a runtime compatibility alias
