@@ -1,6 +1,6 @@
 ---
 name: init-project
-version: 2.6.0
+version: 2.8.0
 description: "One-time setup workflow for new projects. Scaffold docs-first operating files, shared taste doctrine, flat ticket state with archival, and reusable plan/build prompts."
 ---
 
@@ -15,6 +15,10 @@ One-time setup for new projects. This skill scaffolds a docs-first workflow and 
 - `ARCHITECTURE.md` (top-level system map for the repo)
 - `docs/` state (`prd.md`, `specs/README.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
 - `tickets/` state (`*.md`, `archive/`, `templates/`, optional `README.md`)
+- optional `.githooks/` samples (`README.md`, `pre-commit`, `pre-push`) for
+  local quality gates
+- optional `scripts/pre_commit_check.sh` and `scripts/pre_push_check.sh`
+  templates for repo-local validators
 - discovery-to-execution funnel:
   - `brainstorm`
   - `deep-interview`
@@ -66,10 +70,18 @@ bash ~/.codex/skills/init-project/scripts/bootstrap.sh
 5. Create tickets state:
    - `mkdir -p tickets tickets/archive tickets/templates`
    - copy the ticket template into `tickets/templates/`
-6. If the idea is still open-ended, use `brainstorm`.
-7. If the first slice is still too vague for a PRD, use `deep-interview`.
-8. Use `prd` skill for requirements and PRD authoring (HITL loop).
-9. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+6. Create optional git hook samples:
+   - `mkdir -p .githooks`
+   - copy the hook README and the sample `pre-commit` / `pre-push` scripts
+   - do **not** activate them automatically
+7. Create optional repo-local validation scripts:
+   - `mkdir -p scripts`
+   - copy `pre_commit_check.sh` and `pre_push_check.sh`
+   - fill `pre_push_check.sh` with lint, typecheck, and test commands for the stack
+8. If the idea is still open-ended, use `brainstorm`.
+9. If the first slice is still too vague for a PRD, use `deep-interview`.
+10. Use `prd` skill for requirements and PRD authoring (HITL loop).
+11. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration
 
@@ -93,6 +105,10 @@ Migration guide:
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
 - `docs/TROUBLES.md` is the append-only operator feedback log for repeated misses, failed attempts, and correction patterns that should feed future system improvements.
 - `tickets/` is the canonical execution surface, so planning, build, and QA work from one file per active ticket, with completed tickets moved into `tickets/archive/`.
+- `.githooks/` gives each repo one visible place for optional local gates
+  without silently mutating git config during bootstrap.
+- repo-local `scripts/pre_push_check.sh` keeps the actual validation contract in
+  the project instead of burying lint/typecheck/test commands in the git hook.
 - queue state should live in ticket frontmatter rather than folder lanes.
 - `brainstorm` and `deep-interview` keep weak ideas from reaching tickets too early.
 - Agents can find specs, plan, and validation commands without hunting through nested files.
@@ -115,6 +131,14 @@ The generated planning flow should follow these defaults:
 - Keep repeated failure feedback out of `docs/MEMORY.md`; log it in `docs/TROUBLES.md` first, then promote only durable lessons into `docs/MEMORY.md` or the relevant skill/contract.
 - First Convex cloud setup is interactive; stop and ask the human to run it.
 - Do not skip from a fuzzy idea directly to `prd`; use `brainstorm` or `deep-interview` first when the first slice is not obvious.
+- Do not auto-enable the scaffolded git hooks; leave activation as an explicit
+  `git config core.hooksPath .githooks` choice by the human.
+- Put project-specific lint, typecheck, test, and build gates into
+  `scripts/pre_push_check.sh`; treat CodeRabbit as optional after those local
+  checks, not as the only pre-push gate.
+- If the repo wants CodeRabbit in `pre-push`, call the standalone `coderabbit`
+  CLI directly from the hook. Do not make the initialized project depend on a
+  Codexter-owned global helper path.
 
 ## Prompt Templates (Copy/Paste Ready)
 
@@ -128,4 +152,9 @@ The generated planning flow should follow these defaults:
 - [ARCHITECTURE_TEMPLATE.md](references/ARCHITECTURE_TEMPLATE.md) - Architecture map template.
 - [SPECS_README_TEMPLATE.md](references/SPECS_README_TEMPLATE.md) - Specs index template.
 - [TASTE_TEMPLATE.md](references/TASTE_TEMPLATE.md) - Shared visual doctrine template.
+- [GITHOOKS_README_TEMPLATE.md](references/GITHOOKS_README_TEMPLATE.md) - Optional local hook setup guide.
+- [PRE_COMMIT_HOOK_TEMPLATE.sh](references/PRE_COMMIT_HOOK_TEMPLATE.sh) - Optional pre-commit sample.
+- [PRE_PUSH_HOOK_TEMPLATE.sh](references/PRE_PUSH_HOOK_TEMPLATE.sh) - Optional pre-push sample.
+- [PRE_COMMIT_CHECK_TEMPLATE.sh](references/PRE_COMMIT_CHECK_TEMPLATE.sh) - Repo-local pre-commit validator template.
+- [PRE_PUSH_CHECK_TEMPLATE.sh](references/PRE_PUSH_CHECK_TEMPLATE.sh) - Repo-local pre-push validator template.
 - `tickets/templates/ticket.md` - Filesystem ticket template.

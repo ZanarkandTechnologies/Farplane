@@ -33,6 +33,9 @@ This file defines the project-specific technical rules, tech stack, and conventi
 # Run tests
 [command]
 
+# Run the local pre-push gate
+bash scripts/pre_push_check.sh
+
 # Build project
 [command]
 ```

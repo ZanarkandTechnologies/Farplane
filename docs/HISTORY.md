@@ -73,4 +73,7 @@
 2026-04-13 12:33 +0100 | FIX | seed selected-ticket runtime ownership on explicit `$impl` control-session invocations, let runtime loading fall through session-only stubs to richer same-session run payloads, and add regressions for the reproduced missing-ownership stop-hook failure
 2026-04-13 17:49 +0100 | CHORE | review the active ticket board, archive completed recent tickets, keep TASK-0060 as the next active focus, and retain TASK-0031 as lower-priority backlog
 2026-04-13 20:33 +0100 | FEAT | add a `coderabbit-review` skill plus an opt-in stage-aware runner and sample git hooks for explicit pre-push or PR CodeRabbit CLI review outside the Stop-hook loop
+2026-04-13 20:41 +0100 | FEAT | make `init-project` scaffold optional `.githooks/` samples for CodeRabbit pre-commit/pre-push workflows while keeping hook activation manual and preferring pre-push
+2026-04-13 20:54 +0100 | FEAT | make `init-project` scaffold repo-local pre-commit and pre-push validator scripts, route the pre-push hook through local checks first, and chain CodeRabbit only as an explicit optional follow-up
+2026-04-13 20:58 +0100 | FIX | decouple `init-project`'s scaffolded CodeRabbit pre-push path from Codexter-owned helpers and invoke the standalone `coderabbit` CLI directly after local validators
 2026-04-13 19:43 +0100 | FEAT | make `spec-to-ticket` capability-first by default, keep coherent greenfield fullstack features bundled as one ticket, encode explicit split triggers, and align the module review/todo/invariant surfaces with the new sizing rule
