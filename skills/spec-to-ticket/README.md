@@ -5,6 +5,8 @@ Turn one bounded spec slice into raw executable tickets.
 ## Purpose
 
 Help agents convert product/spec intent into capability-first ticket truth while front-loading diagram-first approval summaries, testability, QA shape, and evidence expectations.
+When an `Agent Testability Brief` exists, this skill should carry its surfaces
+forward into the ticket contract instead of inventing them again.
 
 ## Public API / Entrypoints
 
@@ -30,4 +32,5 @@ Help agents convert product/spec intent into capability-first ticket truth while
 - Confirm capability-first packaging is the default and the split triggers are explicit.
 - Confirm `todos.md` reinforces planning/testability behaviors as plain natural-language checklist text without becoming a second ticket template.
 - Confirm UI-bearing ticket requirements remain explicit.
+- Confirm `Agent Testability Brief` guidance is preserved when present.
 - Confirm the linked references exist and match the live ticket contract.

@@ -9,6 +9,7 @@ Top-level companion docs:
 
 Current design docs:
 
+- `agent-testability-surfaces.md` - post-system-design doctrine for control accelerators, state probes, coordination views, and proof surfaces
 - `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy
 - `context-and-handoff-policy.md`
@@ -34,6 +35,7 @@ Use this folder for:
 - artifact and schema specs
 - orchestration flow docs
 - `skill` / `subagent` / `hook` stories tied to buildable system behavior
+- reusable planning doctrine that later tickets and skills should consume
 
 Keep exploratory source comparison notes and one-off research in `docs/research/`.
 

@@ -6,6 +6,8 @@ Guide agents to produce one clear per-ticket planning artifact, with a compact
 diagram-first approval surface by default, a skimmable top `Human` lane, a
 lower `Agent` execution lane, and optional consensus challenge for riskier
 work.
+When an `Agent Testability Brief` exists, `impl-plan` should preserve that
+doctrine in the resulting proof and execution plan.
 
 For standalone diagram work or deeper diagram taste/pattern guidance, use
 [`diagramming`](/Users/kenjipcx/coding-harness/Codexter/skills/diagramming/SKILL.md).
@@ -42,3 +44,4 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 - Confirm narrative sections are required only when the applicability rule says
   they should be.
 - Confirm consensus mode still preserves Planner/Architect/Critic challenge inside the same public skill.
+- Confirm any `Agent Testability Brief` is carried into the proof/testability shape instead of being ignored.

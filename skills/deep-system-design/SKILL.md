@@ -13,7 +13,7 @@ Deep System Design is an architecture-first Socratic clarification loop before i
 - The request is clear at the product level but still vague at the system-design level
 - The user wants architecture and decomposition before code
 - The user says "deep system design", "do the system design first", "figure out the signatures", "what are the tables", or "work backward from the data/customer"
-- `deep-interview` or normal discussion has clarified intent, but `impl-plan` would still have to invent major system shape
+- `deep-interview` or normal discussion has clarified intent, but `agent-testability-plan`, `impl-plan`, or `spec-to-ticket` would still have to invent major system shape
 - You need a strict intermediate spec between the idea and implementation
 </Use_When>
 
@@ -310,7 +310,7 @@ When threshold is met (or the user exits with warning / hard cap):
 2. Write the execution-ready system-design artifact to:
    - `docs/specs/<slug>.md` when the project has a specs surface and the design is spec-level
    - otherwise the active ticket when one already exists
-   - otherwise the current response handoff plus the next canonical artifact owner, usually `impl-plan` or `spec-to-ticket`
+   - otherwise the current response handoff plus the next canonical artifact owner, usually `agent-testability-plan`, `impl-plan`, or `spec-to-ticket`
 
 ### Canonical write-back rule
 
@@ -390,18 +390,24 @@ is still under-designed and ambiguity should remain above threshold.
 
 Present execution options after artifact generation using explicit handoff contracts.
 
-### 1. `impl-plan` (Recommended)
+### 1. `agent-testability-plan` (Recommended when agent operability is the next question)
+- **Input Artifact:** the current `System Design Brief`
+- **Consumer Behavior:** treat the `System Design Brief` as the system source of truth, then derive the control accelerators, state probes, coordination views, and proof surfaces the agent will need later
+- **Expected Output:** a reusable `Agent Testability Brief` on a visible spec/ticket surface
+- **Best When:** the system shape is clear, but future tickets or plans would still have to guess what utilities, probes, or dashboards the agent should have
+
+### 2. `impl-plan`
 - **Input Artifact:** the current `System Design Brief` plus the active ticket when available
 - **Consumer Behavior:** treat the `System Design Brief` as the system source of truth; do not reinvent entities, signatures, or runtime boundaries by default
 - **Expected Output:** an implementation plan that preserves the designed system shape and proof requirements
 - **Best When:** architecture is clarified and the next step is approval-ready execution planning
 
-### 2. `spec-to-ticket`
+### 3. `spec-to-ticket`
 - **Input Artifact:** the current `System Design Brief`
 - **Consumer Behavior:** preserve the decomposition, contracts, and proof shape when splitting into tickets
 - **Best When:** the architecture is clear but the work still needs dependency-ordered ticketization
 
-### 3. `runtime-debugging`
+### 4. `runtime-debugging`
 - **Input Artifact:** the current `System Design Brief`
 - **Consumer Behavior:** use the explicit runtime boundaries, queues, and reliability assumptions as the debugging baseline
 - **Best When:** the design work is for a failing brownfield system that will likely need instrumentation or root-cause proof next
@@ -423,6 +429,6 @@ When this skill is used, the response or artifact must include:
 5. Entity/storage map
 6. Endpoint/signature pack
 7. Execution/reliability model
-8. Clear handoff target (`impl-plan`, `spec-to-ticket`, or `runtime-debugging`)
+8. Clear handoff target (`agent-testability-plan`, `impl-plan`, `spec-to-ticket`, or `runtime-debugging`)
 
 </Steps>

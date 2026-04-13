@@ -8,6 +8,7 @@ Define the current canonical execution model for Codexter:
 
 - user-guided discovery up front
 - spec-first planning
+- post-system-design agent testability planning when the system will be hard for agents to reach, inspect, or coordinate
 - feature-sized work packages
 - per-work-package `impl-plan`
 - per-work-package `$impl` orchestration
@@ -51,9 +52,24 @@ Purpose:
 
 The output of this stage is one coherent spec.
 
-### 2. Work Packaging
+### 2. Agent Testability Planning
 
-After the spec is coherent, convert it into work packages.
+When the designed system will be hard for an agent to operate directly, run
+`agent-testability-plan` before ticketization or per-ticket planning.
+
+Purpose:
+
+- decide which control accelerators the agent should have
+- decide which hidden-state probes the agent should have
+- decide whether multi-part execution needs one coordination view
+- define the proof surfaces later tickets should preserve
+
+The output of this stage is one visible `Agent Testability Brief`.
+
+### 3. Work Packaging
+
+After the spec is coherent, and after any needed testability planning, convert
+it into work packages.
 
 Default rule:
 
@@ -70,20 +86,21 @@ unless there is a real:
 - brownfield integration boundary
 - execution-risk boundary
 
-### 3. Planning
+### 4. Planning
 
 `impl-plan` plans one selected work package.
 
 It should:
 
 - inspect linked specs
+- inspect any linked `Agent Testability Brief`
 - inspect the relevant code
 - write the execution plan into the ticket/progress surface
 - define how the work will be proved
 
 It should **not** decompose the whole spec into many micro-tasks.
 
-### 4. Build Loop
+### 5. Build Loop
 
 `$impl` orchestrates one selected work package.
 
@@ -98,7 +115,7 @@ It should:
 Worker lanes may vary by ticket, but the public build-phase entrypoint is
 `$impl`.
 
-### 5. QA + Review
+### 6. QA + Review
 
 These are separate roles and should stay separate.
 
@@ -125,7 +142,7 @@ Review judges implementation quality:
 
 Review does not own screenshot gathering.
 
-### 6. Stop Hook
+### 7. Stop Hook
 
 The Stop hook is the final gate.
 

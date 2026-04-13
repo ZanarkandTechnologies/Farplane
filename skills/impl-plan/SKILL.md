@@ -61,7 +61,7 @@ A + Proof`, the plan is not ready.
 ## Core Prompt Wording
 
 0a. Study `@docs/prd.md` for outcomes + constraints.
-0b. Study `@docs/specs/*` for spec truth.
+0b. Study `@docs/specs/*` for spec truth, including any `Agent Testability Brief` when present.
 0c. Study the active ticket in `@tickets/*` first; if none exists, inspect
 `@tickets/*`.
 0d. Study `@docs/MEMORY.md` for durable constraints.
@@ -75,12 +75,15 @@ Before finalizing the plan or handing off to execution:
 
 1. Reuse the active ticket, linked docs, and canonical specs as the planning
    context surface.
-2. Read enough nearby code to name real files, seams, and signatures instead of
+2. When an `Agent Testability Brief` exists, preserve its control accelerators,
+   state probes, coordination views, and proof surfaces in the plan instead of
+   inventing testability doctrine again.
+3. Read enough nearby code to name real files, seams, and signatures instead of
    inventing them.
-3. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
+4. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
    older OMX-era pattern and not the active repo contract.
-4. If intent is still vague, use `deep-interview --quick`.
-5. If system shape is still vague, use `deep-system-design`.
+5. If intent is still vague, use `deep-interview --quick`.
+6. If system shape is still vague, use `deep-system-design`.
 
 Do not hand off to execution while the plan still depends on avoidable
 unknowns.
@@ -135,6 +138,7 @@ Use consensus mode when:
 - **High ambiguity / risk:** keep the `Human` lane short and push detail below
   fold.
 - **High risk / architectural tension:** prefer `--consensus`.
+- **Linked `Agent Testability Brief`:** carry it into proof/testability sections instead of re-deriving shortcuts, probes, or coordination surfaces ad hoc.
 - **Multi-commit work:** split before planning in detail.
 - **Docs-only / rule-text-only:** no specialized QA delegation.
 

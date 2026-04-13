@@ -21,6 +21,7 @@ The core idea is simple:
 
 - `brainstorm` explores options before commitment
 - `deep-interview` sharpens vague inputs into clear product requirements
+- `agent-testability-plan` turns a system design into the utilities, probes, and proof surfaces the agent will need later
 - humans think in specs and tickets
 - `spec-to-ticket` turns a coherent spec into dependency-linked work items
 - `impl-plan` plans one selected ticket for execution
@@ -59,6 +60,7 @@ flowchart LR
     bootstrap["init-project"]:::shaping
     intake["brainstorm<br/>deep-interview<br/>prd"]:::shaping
     framing["advise<br/>deep-system-design<br/>deep-ui-design<br/>functional-ui<br/>demo-realism"]:::shaping
+    agentux["agent-testability-plan"]:::shaping
     grounding["summarize<br/>documentation<br/>external-patterns<br/>find-skills"]:::shaping
     ticketize["spec-to-ticket"]:::shaping
     plan["impl-plan<br/>diagramming"]:::shaping
@@ -87,6 +89,10 @@ flowchart LR
     intake --> specs
     framing --> specs
     grounding --> specs
+    specs --> agentux
+    agentux --> specs
+    agentux --> ticketize
+    agentux --> plan
     specs --> ticketize
     ticketize --> tickets
     tickets --> plan
@@ -144,6 +150,7 @@ This phase should be good at:
 This is where a coherent spec becomes executable work.
 
 - `spec-to-ticket` should split the spec into dependency-linked tickets
+- when the system will be hard for agents to drive or observe, `agent-testability-plan` should run before ticketization or per-ticket planning
 - tickets should stay small enough to execute, but large enough to be meaningful
 - dependencies should make the next ready set obvious
 
@@ -158,6 +165,7 @@ The key output is:
 This is per-ticket, not per-spec.
 
 - `impl-plan` plans one selected ticket for execution
+- when an `Agent Testability Brief` exists, `impl-plan` should preserve it in the proof/testability shape
 - the ticket should end this phase with a concrete execution plan and proof target
 
 Important boundary:
@@ -239,11 +247,13 @@ flowchart LR
     A[idea or transcript] --> B[brainstorm]
     B --> C[deep-interview]
     C --> D[prd/specs]
-    D --> E[spec-to-ticket]
-    E --> F[ready ticket set]
-    F --> G[impl-plan]
-    G --> H[$impl]
-    H --> I[worker lanes]
+    D --> E[deep-system-design or direct spec]
+    E --> F[agent-testability-plan when needed]
+    F --> G[spec-to-ticket]
+    G --> H[ready ticket set]
+    H --> I[impl-plan]
+    I --> J[$impl]
+    J --> K[worker lanes]
 ```
 
 ## Story: Greenfield
@@ -365,7 +375,7 @@ The current prototype is narrower:
 - V2 direction: [legacy v2 direction notes](/Users/kenjipcx/coding-harness/Codexter/docs/specs/legacy/ralph-v2-direction.md)
 - Intake skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview), [skills/prd](/Users/kenjipcx/coding-harness/Codexter/skills/prd)
 - Ticketization: [skills/spec-to-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket)
-- Planning: [skills/impl-plan](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan)
+- Planning: [skills/agent-testability-plan](/Users/kenjipcx/coding-harness/Codexter/skills/agent-testability-plan), [skills/impl-plan](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan)
 - Execution and review skills: [skills/loop](/Users/kenjipcx/coding-harness/Codexter/skills/loop), [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/review](/Users/kenjipcx/coding-harness/Codexter/skills/review), [skills/close-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/close-ticket)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
@@ -385,6 +395,7 @@ Main live techniques today:
 
 - discovery-first intake before execution
 - spec-first ticketization with proof/testability contracts
+- post-system-design agent testability planning when the system will be hard for agents to operate directly
 - per-ticket planning via `impl-plan`, with approval-first default mode and consensus mode when stronger challenge is needed
 - single-ticket orchestration via `$impl`
 - bounded same-session persistence via `$loop`

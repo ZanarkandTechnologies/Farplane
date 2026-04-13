@@ -7,7 +7,7 @@ detail lower for the implementing agent.
 -->
 
 0a. Study `@docs/prd.md`.
-0b. Study `@docs/specs/*`.
+0b. Study `@docs/specs/*`, including any `Agent Testability Brief` when present.
 0c. Study the active ticket in `@tickets/*`; if none exists, inspect
 `@tickets/*`.
 0d. Study `@docs/MEMORY.md`.
@@ -40,7 +40,9 @@ Rules:
 13. When diagrams are used, follow `skills/diagramming/SKILL.md` plus
     `docs/specs/diagram-first-conventions.md` for compactness, delta coloring,
     inline signatures, and anti-bloat rules.
-14. If the plan still depends on invented entities, storage ownership, or
+14. If an `Agent Testability Brief` exists, preserve its proof/testability
+    surfaces instead of re-deriving them ad hoc.
+15. If the plan still depends on invented entities, storage ownership, or
     runtime boundaries, stop and use `deep-system-design` first.
 
 Output shape:

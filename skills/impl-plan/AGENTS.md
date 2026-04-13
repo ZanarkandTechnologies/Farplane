@@ -16,6 +16,8 @@
 - Make the top approval surface diagram-first for material work. See `MEM-0030`.
 - Keep the top of the ticket split into `Human` first and `Agent` second. See
   `MEM-0031`.
+- When an `Agent Testability Brief` exists, preserve its proof/testability
+  doctrine in the plan rather than re-deriving it. See `MEM-0043`.
 - Keep reusable diagram taste and pattern depth in `skills/diagramming/*`; keep
   only planning-specific diagram rules here.
 - Add deeper user-story/example detail only when the applicability rule requires it.
@@ -65,4 +67,5 @@
   `Agent` lane or appendix.
 - Confirm the signature sketch proves real code understanding without becoming a
   type dump.
+- Confirm any `Agent Testability Brief` is reflected in proof/testability planning.
 - Confirm the recommendation is directly justified against the listed options.

@@ -1,7 +1,7 @@
 ---
 name: spec-to-ticket
 version: 1.5.0
-description: "Phase-2 Codexter skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work."
+description: "Phase-2 Codexter skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work, and consume an Agent Testability Brief when present."
 ---
 
 # Spec-to-Ticket Skill
@@ -30,11 +30,13 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 9. If the slice includes any UI, the ticket must define agent testability and QA shape before build starts.
 10. If a UI flow is hard for an agent to access or stabilize, add testability instrumentation work into the slice instead of leaving QA to improvise.
 11. Every non-trivial ticket should declare a `Test hook`; if none is needed, say `none needed` explicitly.
-12. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
+12. When an `Agent Testability Brief` exists, carry its control accelerators, state probes, coordination views, and proof surfaces into the ticket contract instead of re-deriving them.
+13. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
 
 ## Inputs
 
 - `docs/specs/*.md`
+- optionally `docs/specs/*-agent-testability.md` or `docs/specs/agent-testability-surfaces.md`
 - optionally `docs/prd.md` for slice intent
 - optionally `docs/TASTE.md` for shared UI doctrine
 - `tickets/templates/ticket.md`
@@ -60,6 +62,8 @@ If this block is vague, build and QA will reward-hack route completion instead o
 -->
 
 For any ticket that changes UI, canvas rendering, user-visible flows, or browser interaction, add a compact `Agent Contract` block.
+
+When an `Agent Testability Brief` exists, use it to fill these fields instead of inventing new testability doctrine from scratch.
 
 Required fields:
 
@@ -107,14 +111,15 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
 -->
 
 1. Read `docs/specs/*.md` and pick exactly one SLC slice.
-2. Start with the largest coherent self-contained feature ticket that would feel like one strong fullstack engineer assignment.
-3. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above instead of falling back to layer boundaries.
-4. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
-5. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
-6. For each UI-bearing ticket, add a compact `Agent Contract` block plus `Evidence checklist`.
-7. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
-8. Write the finished raw tickets into `tickets/` using the ticket template.
-9. Before handoff, read `references/review.md` and tighten the ticket set until it passes those checks.
+2. Read the `Agent Testability Brief` when one exists and note the required control accelerators, state probes, coordination views, and proof surfaces for the chosen slice.
+3. Start with the largest coherent self-contained feature ticket that would feel like one strong fullstack engineer assignment.
+4. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above instead of falling back to layer boundaries.
+5. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
+6. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
+7. For each UI-bearing or agentically hard ticket, add a compact `Agent Contract` block plus `Evidence checklist`, carrying forward the brief's recommended surfaces when relevant.
+8. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
+9. Write the finished raw tickets into `tickets/` using the ticket template.
+10. Before handoff, read `references/review.md` and tighten the ticket set until it passes those checks.
 
 ## Capability-First Examples
 

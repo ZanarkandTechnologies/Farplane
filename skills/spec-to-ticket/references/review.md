@@ -24,6 +24,7 @@ If any answer is weak, tighten the tickets first.
 - Are we saying too much, or too little, for an agent to execute reliably?
 - Did we call out any instrumentation work needed for difficult UI or runtime verification?
 - Are we defining proof in the cheapest deterministic way, for example a CLI check, seed path, debug route, or sanity script?
+- If an `Agent Testability Brief` exists, did we actually preserve its surfaces in the ticket contract instead of re-deriving them inconsistently?
 - For UI work, is the design intent readable for a human reviewer rather than only executable by an agent?
 - Are we reusing existing shared UI patterns/libraries where possible instead of silently inventing another one?
 - Did we keep backend and frontend together when they are part of one human-testable capability?
@@ -40,3 +41,4 @@ If any answer is weak, tighten the tickets first.
 - important dependencies or packages are assumed but never named
 - delegated work is described only in prose without an exact ticket reference
 - a split claims to be necessary but no real hard trigger is named
+- an `Agent Testability Brief` exists, but the resulting ticket never turns it into concrete `Test hook`, `Stabilize`, `Inspect`, or proof expectations

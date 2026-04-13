@@ -2,6 +2,7 @@
 
 - [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, and nearby code.
 - [ ] Decide whether this is really one executable slice or whether it should be split first.
+- [ ] If an `Agent Testability Brief` exists, carry its surfaces into the proof and execution plan.
 - [ ] Compare 3 viable options and recommend one clearly.
 - [ ] Start the ticket plan with a short `Human` lane before the deeper `Agent` lane.
 - [ ] Make the top lane carry `Decision`, diagram, `Signature Sketch`, `B -> A`, proof, and ask.

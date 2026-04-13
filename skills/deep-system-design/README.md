@@ -3,7 +3,8 @@
 ## Purpose
 
 `deep-system-design` turns a vague architecture ask into a reusable `System
-Design Brief` before `impl-plan`, `spec-to-ticket`, or implementation.
+Design Brief` before `agent-testability-plan`, `impl-plan`,
+`spec-to-ticket`, or implementation.
 
 ## Public Entrypoints
 
@@ -24,3 +25,6 @@ $deep-system-design --data-first "design the ingestion and indexing system for t
   and execution boundaries before handoff.
 - Confirm the output contract produces a reusable `System Design Brief` instead
   of implementation steps.
+- Confirm the handoff boundary to `agent-testability-plan` is clear when the
+  next missing question is agent operability/testability rather than
+  architecture.
