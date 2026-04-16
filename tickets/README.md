@@ -87,6 +87,15 @@ linked_docs: []
 - do not set `status: building` while `blocked_by` is non-empty
 - do not invent a second machine-readable state block in the body
 
+## Sizing Doctrine
+
+- default ticket = the largest coherent capability an agent can build and prove in one strong pass
+- CRUD workflows stay whole by default: schema, handlers, UI, validation, and proof belong together when they serve one operator workflow
+- for complex systems, the first ticket should usually create one reusable proof surface plus one minimal end-to-end happy path
+- split later work by shared proof surface, reusable foundation, risky migration, external blocker, or real service/runtime boundary
+- do not split a pipeline into one ticket per internal step unless those steps are truly separate ownership or proof boundaries
+- do not invent microservices during planning just to make the board look neat; split by service only when the runtime boundary is real
+
 ## Validator
 
 Run:

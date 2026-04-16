@@ -20,18 +20,19 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 ## Rules
 
 1. One SLC slice per planning pass.
-2. One ticket = one build loop (default).
-3. Default to the largest self-contained feature-sized ticket that still fits one build loop.
-4. In greenfield work, keep endpoint, backend logic, UI, and tests together when they serve one coherent human-testable capability.
-5. Split only when a real trigger applies: shared platform work reused by multiple future features; risky migration/backfill/rollout work; external dependency/provisioning work that can block independently; or unresolved feasibility that needs an investigation/proof step first.
-6. When a split is needed, make dependency order explicit from the real boundary; do not split by schema/backend/UI layers just because they differ architecturally.
-7. No implementation in this phase.
-8. Write ticket files to `tickets/` with `status: todo`; do not use `docs/progress.md` as the primary board.
-9. If the slice includes any UI, the ticket must define agent testability and QA shape before build starts.
-10. If a UI flow is hard for an agent to access or stabilize, add testability instrumentation work into the slice instead of leaving QA to improvise.
-11. Every non-trivial ticket should declare a `Test hook`; if none is needed, say `none needed` explicitly.
-12. When an `Agent Testability Brief` exists, carry its control accelerators, state probes, coordination views, and proof surfaces into the ticket contract instead of re-deriving them.
-13. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
+2. One ticket = one ambitious build loop (default), not one timid checkpoint.
+3. Default to the largest self-contained feature-sized ticket that still fits one strong build-and-proof pass.
+4. In greenfield work, keep endpoint, backend logic, UI, and tests together when they serve one coherent human-testable capability. CRUD workflows stay one ticket by default.
+5. Split only when a real trigger applies: shared platform work reused by multiple future features; risky migration/backfill/rollout work; external dependency/provisioning work that can block independently; unresolved feasibility that needs an investigation/proof step first; or a real service/runtime boundary that will be independently owned or scaled.
+6. When a split is needed, group work by proof surface, reusable foundation, or independently blocking boundary; do not split by schema/backend/UI layers or by individual pipeline stages just because those steps exist.
+7. For complex systems, the first ticket should usually leave behind both a reusable proof surface and one minimal end-to-end happy path rather than scaffolding with no operator-visible proof.
+8. No implementation in this phase.
+9. Write ticket files to `tickets/` with `status: todo`; do not use `docs/progress.md` as the primary board.
+10. If the slice includes any UI, the ticket must define agent testability and QA shape before build starts.
+11. If a UI flow is hard for an agent to access or stabilize, add testability instrumentation work into the slice instead of leaving QA to improvise.
+12. Every non-trivial ticket should declare a `Test hook`; if none is needed, say `none needed` explicitly.
+13. When an `Agent Testability Brief` exists, carry its control accelerators, state probes, coordination views, and proof surfaces into the ticket contract instead of re-deriving them.
+14. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
 
 ## Inputs
 
@@ -112,14 +113,24 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
 
 1. Read `docs/specs/*.md` and pick exactly one SLC slice.
 2. Read the `Agent Testability Brief` when one exists and note the required control accelerators, state probes, coordination views, and proof surfaces for the chosen slice.
-3. Start with the largest coherent self-contained feature ticket that would feel like one strong fullstack engineer assignment.
-4. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above instead of falling back to layer boundaries.
+3. Start with the largest coherent self-contained feature ticket that would feel like one strong fullstack engineer or agent assignment.
+4. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above and choose the boundary that removes the most future friction while preserving strong proof.
 5. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
 6. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
 7. For each UI-bearing or agentically hard ticket, add a compact `Agent Contract` block plus `Evidence checklist`, carrying forward the brief's recommended surfaces when relevant.
 8. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
 9. Write the finished raw tickets into `tickets/` using the ticket template.
 10. Before handoff, read `references/review.md` and tighten the ticket set until it passes those checks.
+
+## Ambition-Aware Sizing
+
+Choose the split shape from complexity and proof structure, not from how many internal steps happen inside the system.
+
+- Simple workflow or CRUD capability: keep the whole workflow in one ticket when one agent can change the schema, handlers, UI, validation, and proof in one pass.
+- Compound capability with one main proof surface: keep the first ticket broad enough to ship a minimal end-to-end happy path plus the cheapest reusable proof harness, then group later adjacent expansions into a small number of follow-up tickets.
+- Platform- or service-heavy system: split when a reusable foundation, risky migration, external blocker, or real service boundary would otherwise distort the main feature ticket.
+
+The first ticket for a complex feature should remove the biggest uncertainty class, not just complete the first implementation step.
 
 ## Capability-First Examples
 
@@ -134,6 +145,16 @@ Split when one of the explicit hard triggers makes the work stop being one coher
 - Split out migration/backfill work: the feature plus a risky migration of existing data or rollout/backfill plan should become at least two tickets.
 - Split out external dependency setup: the feature plus vendor provisioning, IAM/webhook setup, or another separately blocking external dependency should become at least two tickets.
 - Split out unresolved feasibility: a speculative retrieval or ranking approach that still needs proof should get an investigation/proof ticket before the main build ticket.
+- Split out a real service boundary: if one part will be deployed, scaled, or owned as its own service, that can justify a separate ticket; do not invent a service split only for planning neatness.
+
+## Complexity Examples
+
+- CRUD admin flow: one ticket for schema, create/edit/delete handlers, form/table UI, validation, and proof.
+- Complex ingestion system:
+  - Ticket 1: one source -> parse -> persist -> observable proof path, plus the harness or debug surfaces needed to prove it cheaply.
+  - Ticket 2: grouped reliability or enrichment work such as retries, dedupe, chunk tuning, and operator observability when those changes share the same proof surface.
+  - Ticket 3: cloud hardening, backfill, vendor/IAM setup, or a separately deployed worker/service when those are independently blocking or scalable concerns.
+- Avoid parse/chunk/embed/index/search as five tickets unless those are truly separate ownership or proof boundaries.
 
 ## Top Gotchas
 
@@ -142,8 +163,10 @@ Split when one of the explicit hard triggers makes the work stop being one coher
 3. Do not leave testability implicit; a ticket should say what the agent runs or opens to prove the feature.
 4. Do not write vague visual criteria like "looks good"; encode the key screens, states, and expected proof artifacts.
 5. Do not split a coherent feature into schema/backend/UI tickets just because those layers differ.
-6. Do not hide overflow scope in prose; if a real split trigger exists, spawn the follow-up ticket explicitly.
-7. Do not use "one big feature ticket" as cover for multiple unrelated capabilities; the ticket must still read like one self-contained build loop.
+6. Do not split a complex pipeline into one ticket per internal step when one grouped foundation or expansion ticket would be more executable.
+7. Do not let the first ticket be empty scaffolding; it should leave a reusable proof path behind.
+8. Do not hide overflow scope in prose; if a real split trigger exists, spawn the follow-up ticket explicitly.
+9. Do not use "one big feature ticket" as cover for multiple unrelated capabilities; the ticket must still read like one self-contained build loop.
 
 ## Templates
 

@@ -25,7 +25,7 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 
 1. Read `SKILL.md`.
 2. Read `todos.md` if using skill todos.
-3. Decide `one commit` vs `split`.
+3. Decide whether the selected ticket stays whole or needs a real boundary-based split.
 4. Choose default mode or `--consensus`.
 5. Output a top `Human` lane with decision, diagram, signature sketch,
    before/after, proof, and ask.

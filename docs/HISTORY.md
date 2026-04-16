@@ -81,3 +81,4 @@
 2026-04-13 22:49 +0100 | CHORE | restore the README top-level diagram as a color-coded super stack map that overlays the main flow, durable surfaces, and the major skill groups in one picture
 2026-04-13 23:05 +0100 | FEAT | replace `docs-closeout` with the canonical `close-ticket` skill, add a parent closeout todo flow for docs/checks/commit/push, and keep `$docs-closeout` as a runtime compatibility alias
 2026-04-14 00:15 +0100 | FEAT | add an `agent-testability-plan` skill plus the canonical `agent-testability-surfaces` doctrine, wire `deep-system-design` to hand off into it, and teach `spec-to-ticket` / `impl-plan` to consume the resulting brief when present
+2026-04-16 01:04 +0100 | FEAT | make ticket sizing ambition-aware across `spec-to-ticket`, `impl-plan`, and ticket docs so CRUD stays whole and complex systems split by proof/foundation or real runtime boundaries instead of micro-steps

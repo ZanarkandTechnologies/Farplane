@@ -29,6 +29,10 @@ If any answer is weak, tighten the tickets first.
 - Are we reusing existing shared UI patterns/libraries where possible instead of silently inventing another one?
 - Did we keep backend and frontend together when they are part of one human-testable capability?
 - If a split happened, was it because of shared platform work, migration/backfill, external dependency, or unresolved feasibility?
+- For a complex system, does the first ticket create a reusable proof surface plus one minimal happy path instead of empty scaffolding?
+- Are CRUD-style workflows still whole unless a real hard trigger forced a split?
+- If a service split happened, is it a real ownership/runtime boundary instead of planning neatness?
+- Are follow-up tickets grouped by shared proof surface or adjacent operator value instead of one internal stage each?
 
 ## Fail If
 
@@ -42,3 +46,6 @@ If any answer is weak, tighten the tickets first.
 - delegated work is described only in prose without an exact ticket reference
 - a split claims to be necessary but no real hard trigger is named
 - an `Agent Testability Brief` exists, but the resulting ticket never turns it into concrete `Test hook`, `Stabilize`, `Inspect`, or proof expectations
+- a complex pipeline is split into parse/chunk/embed/index-style microtickets without a true boundary trigger
+- the first ticket ships only scaffolding and no usable proof path
+- a CRUD workflow is split into multiple tickets without a real blocker or shared-platform reason

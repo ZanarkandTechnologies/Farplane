@@ -2,7 +2,10 @@
 
 - [ ] Read the chosen spec slice and confirm it is small enough for one planning pass.
 - [ ] Start from the largest coherent self-contained feature ticket; do not split by schema/backend/UI layers just because those layers differ.
-- [ ] Split only when a hard trigger applies: shared platform reuse, migration/backfill/rollout risk, external dependency/provisioning, or unresolved feasibility.
+- [ ] Keep CRUD and other narrow operator workflows in one ticket by default.
+- [ ] Split only when a hard trigger applies: shared platform reuse, migration/backfill/rollout risk, external dependency/provisioning, unresolved feasibility, or a real service/runtime boundary.
+- [ ] For complex systems, make the first ticket leave behind a minimal end-to-end happy path plus a reusable proof surface instead of empty scaffolding.
+- [ ] Group later follow-up tickets by shared proof surface or adjacent operator value, not one internal pipeline stage per ticket.
 - [ ] Make acceptance criteria, evidence needs, and control fields concrete in each ticket.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the ticket contract instead of re-deriving them.
 - [ ] If a ticket includes UI, define the `Agent Contract`, `Evidence checklist`, and testability shape up front.

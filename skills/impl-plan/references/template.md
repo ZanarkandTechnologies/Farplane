@@ -110,7 +110,7 @@ update ticket move
 ### Plan Review
 
 - `Refs:` prd/spec/ticket/memory/troubles/code
-- `Checks:` scope / proof / guardrails / diagram / signatures / rollback
+- `Checks:` scope / split-boundary / proof / guardrails / diagram / signatures / rollback
 - `Fixes:` none / short note
 
 ### Options Appendix

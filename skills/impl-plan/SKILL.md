@@ -100,8 +100,8 @@ unknowns.
 
 ## Workflow (Default Mode)
 
-1. **Scope:** choose the next smallest executable slice.
-2. **Split check:** if not one commit, stop and ask to split.
+1. **Scope:** keep the approved coherent ticket intact unless it clearly hides multiple independent build loops or a real split boundary emerged.
+2. **Split check:** split only when proof, reuse, blocking risk, external dependency, or runtime ownership genuinely improves; do not force a split just because the work will span multiple commits.
 3. **Compare:** show 3 viable options with bounded pros/cons.
 4. **Recommend:** state the best option and the tradeoff being accepted.
 5. **Build the `Human` lane first:** decision, diagram, signature sketch,
@@ -139,7 +139,7 @@ Use consensus mode when:
   fold.
 - **High risk / architectural tension:** prefer `--consensus`.
 - **Linked `Agent Testability Brief`:** carry it into proof/testability sections instead of re-deriving shortcuts, probes, or coordination surfaces ad hoc.
-- **Multi-commit work:** split before planning in detail.
+- **Multi-commit work:** acceptable when the ticket is still one coherent build-and-proof loop; split only when a real boundary appears.
 - **Docs-only / rule-text-only:** no specialized QA delegation.
 
 ## Human Lane
@@ -316,8 +316,8 @@ Before returning the plan, run these checks against the drafted output:
      troubles, and local code context?
    - If a source was skipped, is that omission safe and explicit?
 2. **Scope discipline**
-   - Is this really one commit?
-   - If not, stop and split instead of hiding extra scope in prose.
+   - Is this still one coherent build-and-proof loop?
+   - If not, is the split boundary real and explicit rather than just commit-count driven?
 3. **Recommendation quality**
    - Did the plan compare real options instead of cosmetic variants?
    - Is the chosen path clearly recommended, not merely listed?

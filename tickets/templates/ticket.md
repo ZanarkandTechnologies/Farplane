@@ -20,7 +20,7 @@ linked_docs: []
 # TASK-XXXX: title
 
 ## Summary
-Short description of the next smallest executable slice.
+Short description of the next ambitious executable slice.
 
 ## Scope
 - In:
@@ -157,6 +157,7 @@ update docs/evidence
 - `last_verification` is the authoritative verification summary. Put detailed commands and observations in `Evidence`.
 - for material work, the top of the plan should be approvable from `Decision + Diagram + Signature Sketch + B -> A + Proof` before the reviewer reads the lower prose
 - when the user did not provide a take on a material choice, capture three viable options plus the recommended path in the plan instead of leaving the tradeoff implicit
+- when this ticket exists because a larger capability was split, name the real split trigger and show why this slice is proof-coherent, foundation-coherent, or value-coherent rather than an arbitrary micro-step
 - `User Story`, `User Pain / JTBD`, `Non-Goals`, `High-Fidelity Example`, `What Good Looks Like`, and `Proof Target` are required for material feature work, workflow/tooling changes, ambiguous implementation work, and any ticket where the implementer would otherwise need to infer desired behavior
 - those sections may be short or omitted for trivial, narrowly localized fixes where the file, symbol, or error already anchors the work concretely
 

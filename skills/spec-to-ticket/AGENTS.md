@@ -9,6 +9,7 @@ Own the planning-only slice-to-ticket conversion contract for Codexter.
 - `spec-to-ticket` remains planning-only; it does not implement features.
 - Ticket files stay the primary output surface, not `docs/progress.md` or hidden run state.
 - Capability-first packaging is the default: start from one self-contained feature-sized ticket and split only on real boundary triggers. See `MEM-0041`.
+- Ambition-aware sizing refines that default: keep CRUD and other narrow workflows whole, and for complex systems split by proof/foundation boundaries or real reuse/runtime seams instead of by each internal stage. See `MEM-0044`.
 - UI-bearing tickets must front-load testability and QA shape instead of leaving QA to improvise later.
 - When an `Agent Testability Brief` exists, preserve it in ticket proof/testability fields instead of re-deriving that doctrine ad hoc. See `MEM-0043`.
 - When a split is needed, dependency order remains explicit and conservative.

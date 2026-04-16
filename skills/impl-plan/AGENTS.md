@@ -20,6 +20,7 @@
   doctrine in the plan rather than re-deriving it. See `MEM-0043`.
 - Keep reusable diagram taste and pattern depth in `skills/diagramming/*`; keep
   only planning-specific diagram rules here.
+- `impl-plan` should keep an approved coherent ticket intact by default. Do not force "one commit" or smallest-slice decomposition unless a real proof, blocker, reuse, or runtime boundary requires it. See `MEM-0044`.
 - Add deeper user-story/example detail only when the applicability rule requires it.
 - Keep consensus challenge inside this skill instead of reviving a second public planner.
 

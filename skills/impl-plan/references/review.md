@@ -5,7 +5,7 @@ If any answer is weak, tighten the plan first.
 
 ## Must Pass
 
-- Is this still one commit, or should it be split?
+- Is this still one coherent build-and-proof loop, or did a real split boundary emerge?
 - Did the plan actually use the right references: PRD, specs, ticket, memory, troubles, code?
 - Does the ticket start with a useful `Human` lane instead of a long mixed plan?
 - For material work, does the top of the plan include a useful Mermaid delta diagram with a clear legend?
@@ -30,10 +30,12 @@ If any answer is weak, tighten the plan first.
 - Did we bury the trust-building code understanding below the fold instead of showing a compact signature sketch near the top?
 - If the ticket depends on a `Test hook`, is that hook clearly good enough to support deterministic proof before build starts?
 - Is the top approval surface still short enough to skim quickly?
+- If a split is proposed, is it because of proof, reuse, blocker risk, or runtime boundary rather than commit count?
 
 ## Fail If
 
-- multi-commit scope is hidden inside a "single" plan
+- the plan forces a split only because the work spans multiple commits
+- multiple independent build loops are hidden inside a "single" plan without naming a boundary
 - references were skipped without saying so
 - proof is generic rather than observable
 - the ticket opens with agent-detail prose instead of a reviewer-facing `Human` skim lane

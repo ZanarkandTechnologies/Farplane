@@ -14,35 +14,36 @@ detail lower for the implementing agent.
 0e. Study `@docs/TROUBLES.md` if present.
 0f. Search the codebase first.
 
-Plan only. Target one selected ticket or one selected next-commit slice.
+Plan only. Target one selected ticket or one selected capability-sized execution slice.
 
 Rules:
 
-1. First decide: `one commit` or `split`.
-2. If split, stop and ask before planning deeper.
-3. Keep one public planning artifact; do not create a second execution brief.
-4. Write the plan in two lanes: `Human` first, `Agent` second.
-5. The `Human` lane should let a reviewer approve or reject quickly.
-6. The `Agent` lane should remove implementation ambiguity without bloating the
+1. First decide whether the selected ticket should stay whole or whether a real boundary justifies a split.
+2. If split, name the boundary explicitly: proof surface, reusable foundation, risky migration, external blocker, or real runtime/service boundary.
+3. Do not force a split just because the work will span multiple commits.
+4. Keep one public planning artifact; do not create a second execution brief.
+5. Write the plan in two lanes: `Human` first, `Agent` second.
+6. The `Human` lane should let a reviewer approve or reject quickly.
+7. The `Agent` lane should remove implementation ambiguity without bloating the
    top of the ticket.
-7. If the user did not provide a take on a material choice, act like a
+8. If the user did not provide a take on a material choice, act like a
    consultant: compare real options and recommend one.
-8. If `--consensus` is active, run Planner -> Architect -> Critic before final
+9. If `--consensus` is active, run Planner -> Architect -> Critic before final
    handoff.
-9. Add appendix detail only if risk or novelty justifies it, but always include
+10. Add appendix detail only if risk or novelty justifies it, but always include
    the options appendix for material choices.
-10. Before final handoff, run a plan-quality pass and tighten the plan until it
+11. Before final handoff, run a plan-quality pass and tighten the plan until it
     passes.
-11. For material, cross-module, or architecture-facing work, lead with one
+12. For material, cross-module, or architecture-facing work, lead with one
     Mermaid delta diagram and an optional numbered data-flow or zoom-in view.
-12. Add a compact `Signature Sketch` near the top whenever interface shape,
+13. Add a compact `Signature Sketch` near the top whenever interface shape,
     ownership boundaries, or changed handlers/files are important to trust.
-13. When diagrams are used, follow `skills/diagramming/SKILL.md` plus
+14. When diagrams are used, follow `skills/diagramming/SKILL.md` plus
     `docs/specs/diagram-first-conventions.md` for compactness, delta coloring,
     inline signatures, and anti-bloat rules.
-14. If an `Agent Testability Brief` exists, preserve its proof/testability
+15. If an `Agent Testability Brief` exists, preserve its proof/testability
     surfaces instead of re-deriving them ad hoc.
-15. If the plan still depends on invented entities, storage ownership, or
+16. If the plan still depends on invented entities, storage ownership, or
     runtime boundaries, stop and use `deep-system-design` first.
 
 Output shape:
@@ -95,7 +96,8 @@ Requirements:
   pros, cons, and `Why not chosen`.
 - `Plan Review` must state:
   - which references were actually used,
-  - whether scope is still one commit,
+  - whether scope is still one coherent build-and-proof loop,
+  - whether any proposed split names a real boundary,
   - whether proof/risk/rollback are concrete enough,
   - whether the recommendation is actually justified against the listed
     options,
