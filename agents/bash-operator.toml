@@ -1,4 +1,6 @@
 # Description: Specialist shell operator for filesystem/build/debug command workflows. Use proactively for multi-step terminal tasks that need efficient command selection, safety checks, verification, and rollback notes.
+name = "bash-operator"
+description = "Specialist shell operator for filesystem, build, and debug command workflows"
 # Bash Operator — unchanged
 model = "gpt-5.3-codex"
 sandbox_mode = "workspace-write"

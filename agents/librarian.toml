@@ -1,4 +1,6 @@
 # Description: Agent for exploring external codebases and patterns. Handles broad GitHub searches (DISCOVER) and deep-dives into specific repositories (DEEP DIVE).
+name = "librarian"
+description = "Agent for exploring external codebases and implementation patterns"
 # Librarian — remapped from claude-4.6-sonnet-medium-thinking -> gpt-5.4 + high reasoning
 model = "gpt-5.4"
 model_reasoning_effort = "high"

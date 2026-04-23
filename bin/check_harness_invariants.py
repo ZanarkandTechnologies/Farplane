@@ -10,6 +10,7 @@ without trying to lint every surface in the repo.
 from __future__ import annotations
 
 import argparse
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -113,6 +114,45 @@ def validate_root(root: Path) -> list[str]:
                     f"{rule.relative_path}: contains forbidden legacy text: {snippet!r} | "
                     f"remediation: {rule.remediation}"
                 )
+    errors.extend(validate_agent_roles(root))
+    return errors
+
+
+def validate_agent_roles(root: Path) -> list[str]:
+    errors: list[str] = []
+    agents_dir = root / "agents"
+    if not agents_dir.is_dir():
+        errors.append(
+            "agents/: missing directory | remediation: keep canonical subagent role "
+            "configs under `agents/*.toml`"
+        )
+        return errors
+
+    for path in sorted(agents_dir.glob("*.toml")):
+        relative_path = path.relative_to(root)
+        try:
+            payload = tomllib.loads(path.read_text(encoding="utf-8"))
+        except tomllib.TOMLDecodeError as exc:
+            errors.append(
+                f"{relative_path}: invalid TOML: {exc} | remediation: keep agent "
+                "role configs parseable TOML"
+            )
+            continue
+
+        name = payload.get("name")
+        if not isinstance(name, str) or not name.strip():
+            errors.append(
+                f"{relative_path}: missing non-empty `name` | remediation: set "
+                f"`name = \"{path.stem}\"`"
+            )
+            continue
+
+        if name.strip() != path.stem:
+            errors.append(
+                f"{relative_path}: `name` must match filename stem {path.stem!r} | "
+                "remediation: keep role name and filename aligned"
+            )
+
     return errors
 
 
@@ -142,7 +182,11 @@ def main() -> int:
         len(rule.required_substrings) + len(rule.forbidden_substrings)
         for rule in RULES
     )
-    print(f"harness invariants OK ({len(RULES)} files checked, {rule_count} rules)")
+    agent_count = len(list((root / "agents").glob("*.toml")))
+    print(
+        f"harness invariants OK ({len(RULES)} files checked, {agent_count} agents, "
+        f"{rule_count} rules)"
+    )
     return 0
 
 

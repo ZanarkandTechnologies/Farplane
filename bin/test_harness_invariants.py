@@ -68,6 +68,14 @@ def write_file(path: Path, text: str) -> None:
 class CheckHarnessInvariantsTest(unittest.TestCase):
     def build_repo(self, root: Path) -> None:
         write_file(root / "AGENTS.md", ROOT_AGENTS_TEXT)
+        write_file(
+            root / "agents" / "reviewer.toml",
+            """\
+name = "reviewer"
+model = "gpt-5.4"
+developer_instructions = "review"
+""",
+        )
         write_file(root / "docs/specs/runtime-surface.md", RUNTIME_SURFACE_TEXT)
         write_file(root / "bin/README.md", BIN_README_TEXT)
         write_file(root / "tickets/README.md", TICKETS_README_TEXT)
@@ -134,6 +142,39 @@ claimed_by:
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("session_id", result.stdout)
+
+    def test_validator_fails_when_agent_role_missing_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            write_file(
+                root / "agents" / "reviewer.toml",
+                """\
+model = "gpt-5.4"
+developer_instructions = "review"
+""",
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("agents/reviewer.toml", result.stdout)
+            self.assertIn("missing non-empty `name`", result.stdout)
+
+    def test_validator_fails_when_agent_role_name_does_not_match_filename(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            write_file(
+                root / "agents" / "reviewer.toml",
+                """\
+name = "not-reviewer"
+model = "gpt-5.4"
+developer_instructions = "review"
+""",
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("agents/reviewer.toml", result.stdout)
+            self.assertIn("name` must match filename stem", result.stdout)
 
 
 if __name__ == "__main__":

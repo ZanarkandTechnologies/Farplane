@@ -1,4 +1,6 @@
 # Description: Agent for searching and analyzing the project's research cache. Use to find previous research, extract historical decisions, and understand what we already know.
+name = "memory"
+description = "Agent for searching and analyzing the project's research cache"
 # Memory — remapped from claude-4.6-sonnet-medium-thinking -> gpt-5.4 + high reasoning
 model = "gpt-5.4"
 model_reasoning_effort = "high"

@@ -1,4 +1,6 @@
 # Description: General research agent for web, video tutorials, and academic papers. Now enhanced with context-awareness and sequential thinking to create targeted search strategies.
+name = "deep-researcher"
+description = "General research agent for web, video tutorials, and academic papers"
 # Deep Researcher — remapped from claude-4.6-sonnet-medium-thinking -> gpt-5.4 + high reasoning
 model = "gpt-5.4"
 model_reasoning_effort = "high"

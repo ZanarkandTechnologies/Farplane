@@ -1,4 +1,6 @@
 # Description: Specialist architect agent that creates structured implementation plans, using sequential thinking only for decision-making and large-input summarization (research is optional and late).
+name = "planner-agent"
+description = "Specialist architect agent that creates structured implementation plans"
 # Planner Agent — remapped from claude-4.6-opus-high-thinking -> gpt-5.4 + high reasoning
 model = "gpt-5.4"
 model_reasoning_effort = "high"
