@@ -1,0 +1,121 @@
+{
+  "work_type": ["skills", "docs", "workflow"],
+  "search_scope": {
+    "changed_files": [
+      "skills/parity-research/SKILL.md",
+      "skills/parity-research/AGENTS.md",
+      "skills/parity-research/README.md",
+      "skills/gap-analysis/SKILL.md",
+      "skills/gap-analysis/AGENTS.md",
+      "skills/gap-analysis/README.md",
+      "AGENTS.md",
+      "templates/global/AGENTS.md",
+      "docs/specs/harness-techniques.md",
+      "docs/HISTORY.md",
+      "docs/MEMORY.md",
+      "tickets/TASK-0094-add-parity-research-skill.md"
+    ],
+    "related_files": [
+      "skills/external-patterns/SKILL.md",
+      "skills/runtime-debugging/SKILL.md",
+      "docs/specs/harness-engineering-doctrine.md",
+      "tickets/README.md",
+      ".gitignore"
+    ],
+    "invariants_checked": ["MEM-0046", "MEM-0053"],
+    "docs_checked": [
+      "AGENTS.md",
+      "templates/global/AGENTS.md",
+      "docs/specs/harness-techniques.md"
+    ]
+  },
+  "rubrics_used": [
+    "user-intent-satisfaction",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "summary": "The parity-skill split still passes review: the boundary between external parity comparison and local gap scoping is explicit across the shipped surfaces, and the evidence is strong enough to defend a pass. The one residual caveat is unchanged: the repo's `.gitignore` still ignores new ticket markdown files by default, so future tickets still need an ignore-rule change or force-add when they should be tracked in Git.",
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "The existing `.gitignore` rule ignores new `tickets/**/*.md` by default, so new tickets require an ignore-rule change or force-add when they should be tracked in Git.",
+      "file_refs": [
+        ".gitignore",
+        "tickets/TASK-0094-add-parity-research-skill.md"
+      ],
+      "evidence": [
+        "`.gitignore` contains `tickets/**/*.md` with only `tickets/README.md` and `tickets/templates/ticket.md` unignored.",
+        "`git check-ignore -v tickets/TASK-0094-add-parity-research-skill.md` resolves to the `.gitignore` ticket-working-set rule."
+      ],
+      "next_action": "Relax the ignore rule for ticket markdown files or keep force-adding ticket files when they need to be tracked in Git."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "user-intent-satisfaction",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "ask-fidelity": 4.6,
+        "outcome-completeness": 4.3,
+        "worth-it-feel": 4.2,
+        "impressiveness": 4.0,
+        "evidence-confidence": 4.6
+      },
+      "findings": [
+        "The delivered split still matches the user ask directly: `parity-research` is separate, `gap-analysis` stays narrower, and the committed router/docs surfaces advertise that boundary."
+      ],
+      "next_action": "No repair pass needed for intent alignment."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.1,
+        "contract-correctness": 4.3,
+        "dependency-readiness": 4.0,
+        "coupling-risk": 4.1,
+        "merge-readiness": 3.8
+      },
+      "findings": [
+        "The new skill is contained to skill/docs surfaces, the `gap-analysis` boundary is explicit, and the shipped entry surfaces remain in sync.",
+        "Merge readiness is slightly reduced because the repo's current `.gitignore` still ignores new ticket markdown files by default."
+      ],
+      "next_action": "Safe to advance, but relax the default ticket ignore rule or keep force-adding ticket files when they need to be tracked."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.3,
+        "reproducibility": 4.5,
+        "traceability": 4.6,
+        "consistency": 4.4,
+        "inspectability": 4.4
+      },
+      "findings": [
+        "Ticket claims map cleanly to the new skill files, committed router/doc updates, and passing validator output.",
+        "The evidence remains pass-worthy because the ticket file is present locally and was directly inspected, but the current ignore rule weakens Git-level traceability slightly."
+      ],
+      "next_action": "Evidence is sufficient for completion."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "No rework required for the skill split itself; future tracked tickets still need an ignore-rule change or force-add."
+}

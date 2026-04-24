@@ -51,6 +51,7 @@ Use:
 - `advise` when the user needs options, tradeoff framing, or a strong recommendation and has not already supplied a clear take
 - `commit-message` for compact commit subject style
 - `desloppify` when the operator wants repo cleanup driven by the `desloppify` CLI or wants that cleanup delegated to one bounded worker
+- `parity-research` when the main question is what comparable products, standards, or open-source repos include for a capability before local scope is locked
 - `repent` when the operator explicitly wants audit-then-fix recovery mode after the assistant likely missed something obvious
 - `impl-plan` for ticket planning shape
 - `prd` when reqs are unclear

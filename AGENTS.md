@@ -31,6 +31,11 @@ what a production-grade version should include, use `gap-analysis` before
 locking the ticket plan so current-state gaps and external comparables are
 explicit instead of implied.
 
+When the main planning question is broader external parity such as what peer
+products, standards, or open-source repos consistently include for a
+capability, use `parity-research` first and then route the result into
+`gap-analysis`, `functional-ui`, or `impl-plan`.
+
 ## Project Structure
 
 - `README.md`: current product shape, setup, and canonical entry points
