@@ -1,0 +1,29 @@
+# `skills/init-project/AGENTS.md`
+
+Rules for the `init-project` skill surface.
+
+## Purpose
+
+`skills/init-project/` owns project bootstrap scaffolding and the generated
+artifact defaults for new or migrated repos.
+
+## Keep
+
+- bootstrap as a docs-first, visible-artifact workflow
+- `deep-interview` as the canonical intake engine for ambiguous bootstrap work
+- `docs/bootstrap-brief.md` as the visible bootstrap brief surface
+- optional `.githooks/` plus repo-local `scripts/pre_*_check.sh`
+- manual hook activation and explicit project-owned validator commands
+
+## Do Not
+
+- duplicate the `deep-interview` loop inside `init-project`
+- auto-enable git hooks during bootstrap
+- make generated repos depend on Codexter-owned helper paths for push gates
+- turn utility-duplication heuristics into hard blockers in the default template
+
+## Invariants
+
+- `MEM-0054`: `init-project` should reuse `deep-interview`-quality intake and
+  generate a visible bootstrap brief rather than inventing a second shallow
+  bootstrap interview flow.

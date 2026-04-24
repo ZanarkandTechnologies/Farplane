@@ -3,7 +3,7 @@
 ## Purpose
 
 `deep-interview` turns a vague request into a clarified requirements brief
-before `prd`, `impl-plan`, or execution.
+before `prd`, `impl-plan`, bootstrap scaffolding, or execution.
 
 ## Public Entrypoints
 
@@ -13,6 +13,10 @@ before `prd`, `impl-plan`, or execution.
 
 ```text
 $deep-interview --quick "clarify the first acceptable slice for TASK-0048"
+```
+
+```text
+$deep-interview --bootstrap "clarify repo topology, stack, and push gates for a new project"
 ```
 
 ## How To Test

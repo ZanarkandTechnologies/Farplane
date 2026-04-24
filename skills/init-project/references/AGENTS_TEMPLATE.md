@@ -56,5 +56,9 @@ This file is loaded every loop. Keep it operational and project-specific.
 
 - Don’t assume not implemented: search first.
 - Prefer local patterns, then docs, then external examples.
+- Before adding new helper logic, search for existing shared utilities and
+  follow the utility-placement rule in `PROJECT_RULES.md`.
+- If the same helper logic is appearing across multiple modules, extract it to
+  the approved shared utility surface instead of copying it again.
 - Update ticket status, phase, blockers, and spawned follow-ups in the ticket file as work progresses. When a ticket is complete and its writeback is done, move it into `tickets/archive/`.
 - If the same failure or user correction happens more than once, append a short entry to `docs/TROUBLES.md` with the miss, the correction, and the prevention idea.

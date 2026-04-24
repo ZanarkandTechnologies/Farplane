@@ -15,6 +15,11 @@ if ! command -v coderabbit >/dev/null 2>&1; then
   exit 0
 fi
 
+if ! coderabbit auth status >/dev/null 2>&1; then
+  echo "Skip CodeRabbit pre-push: coderabbit CLI is not authenticated" >&2
+  exit 0
+fi
+
 BASE_BRANCH="${CODERABBIT_BASE_BRANCH:-}"
 
 if [ -z "$BASE_BRANCH" ]; then

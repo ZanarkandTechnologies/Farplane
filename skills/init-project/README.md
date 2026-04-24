@@ -1,9 +1,9 @@
 # Init Project
 
 Bootstrap or migrate a project into the docs-first, ticket-first harness model.
-This setup now also scaffolds optional `.githooks/` samples plus project-local
-`scripts/pre_*_check.sh` files for local quality gates, without enabling them
-automatically.
+This setup should start with a deep-interview-quality bootstrap intake, then
+scaffold optional `.githooks/` samples plus project-local `scripts/pre_*_check.sh`
+files for local quality gates, without enabling them automatically.
 
 ## Use Cases
 
@@ -18,11 +18,14 @@ Use the bootstrap script:
 bash ~/.codex/skills/init-project/scripts/bootstrap.sh
 ```
 
-That also writes `.githooks/README.md`, `.githooks/pre-commit`,
-`.githooks/pre-push`, `scripts/pre_commit_check.sh`, and
-`scripts/pre_push_check.sh` as opt-in samples. The recommended default is to
-put lint, typecheck, and tests into `scripts/pre_push_check.sh`, then activate
-only `pre-push` unless the repo wants an extra pre-commit gate.
+Before finalizing the scaffold, run a bootstrap intake with the same discipline
+as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
+
+That also writes `docs/bootstrap-brief.md`, `.githooks/README.md`,
+`.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
+and `scripts/pre_push_check.sh` as opt-in samples. The recommended default is
+to keep the large-file scan, fill in lint/typecheck/test/build commands, and
+activate only `pre-push` unless the repo wants an extra pre-commit gate.
 
 Then follow the funnel:
 
@@ -68,7 +71,8 @@ Leave `pre-commit` disabled unless the project explicitly wants the heavier
 local gate on every commit.
 
 If `coderabbit` is installed, the scaffolded `pre-push` hook will run it after
-local validators. Override the review base branch if needed:
+local validators and only when authenticated. Override the review base branch if
+needed:
 
 ```bash
 CODERABBIT_BASE_BRANCH=develop
@@ -89,7 +93,9 @@ Do not migrate every old issue into ticket files at once.
 For an existing repo:
 
 - use `brainstorm` if you still need options
-- use `deep-interview` if the first slice is unclear
+- use `deep-interview --bootstrap` if stack, topology, or quality-gate shape is
+  still unclear
+- use `deep-interview` if the first feature slice is unclear
 - use `prd` once the first slice is coherent
 
 Then:
@@ -121,6 +127,7 @@ Those can come after one clean ticket run.
 
 ## Migration Checklist
 
+- [ ] `docs/bootstrap-brief.md` exists and captures stack/topology/gate decisions
 - [ ] `PROJECT_RULES.md` exists
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists

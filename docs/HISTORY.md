@@ -102,3 +102,4 @@
 2026-04-24 22:12 +0100 | FEAT | realign impl-plan to the canonical single-surface ticket template and add compact typed data-flow planning through type sketches and golden-path examples
 2026-04-24 22:40 +0100 | CHORE | rename the Stop-hook role file from `reviewer` to `completion-reviewer` so it is easier to distinguish from the deeper `code-reviewer` agent
 2026-04-24 18:51 +0100 | FEAT | tighten the shipped global response contract so implemented feature summaries default to short bullets with `Before` / `After` framing and a tiny concrete example when helpful
+2026-04-24 19:43 +0100 | FEAT | make `init-project` use a visible bootstrap brief and deep-interview-quality intake, add a real pre-push template with large-file gates plus soft shared-utility warnings, and keep generated hook guidance aligned with optional CodeRabbit/desloppify follow-up
