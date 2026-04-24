@@ -82,7 +82,7 @@ RULES: tuple[HarnessRule, ...] = (
         relative_path="tickets/templates/ticket.md",
         required_substrings=(
             "claimed_by:",
-            "Do not store raw `session_id` values in ticket frontmatter.",
+            "Result summary:",
         ),
         remediation=(
             "keep the ticket template aligned with the ticket/runtime identity split"

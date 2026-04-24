@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "bin" / "check_doc_parity.py"
+SUBPROCESS_TIMEOUT_SECONDS = 5
 
 
 README_TEXT = """\
@@ -91,7 +92,8 @@ python3 tickets/scripts/check_ticket_metadata.py
 
 ## Body Contract
 
-- `Review Packet`
+- The default `Plan` should answer four things:
+- Store ticket artifacts under `tickets/artifacts/TASK-XXXX/`.
 
 ## Progress Surface Policy
 
@@ -119,6 +121,7 @@ class CheckDocParityTest(unittest.TestCase):
             capture_output=True,
             text=True,
             check=False,
+            timeout=SUBPROCESS_TIMEOUT_SECONDS,
         )
 
     def test_validator_passes_for_valid_fixture(self) -> None:

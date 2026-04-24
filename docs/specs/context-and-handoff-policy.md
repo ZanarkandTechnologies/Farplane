@@ -24,10 +24,8 @@ It must carry:
 - frontmatter queue/execution state
 - summary and scope
 - current plan
-- acceptance criteria
 - evidence status
 - blockers
-- handoff notes
 - next action
 - last verification
 
@@ -90,7 +88,6 @@ Prepare a deliberate reset/resume only after the ticket is updated with:
 - `last_verification`
 - current blocker state
 - any new evidence references
-- a short `Handoff` note saying where to resume
 
 Do not rely on chat memory alone for deliberate resume.
 
@@ -109,13 +106,9 @@ Before ending a ticket session that may need resume, update:
 - body:
   - `Evidence`
   - `Blockers`
-  - `Handoff`
 
-The `Handoff` section should always answer:
-
-- current state
-- what remains
-- where to resume first
+If extra resume context is still needed after frontmatter plus evidence/blockers,
+add a short `Notes` entry instead of a dedicated handoff template.
 
 ## Documenting Phase
 
@@ -143,7 +136,6 @@ Before archive:
 
 - `status` should be `done` or `failed`
 - `phase` should reflect terminal state such as `complete` or `failed`
-- `Writeback` and `Handoff` should be coherent
 - durable docs should already be linked from `linked_docs` when applicable
 
 Archive is history, not hot execution state.
