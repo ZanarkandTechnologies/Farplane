@@ -49,6 +49,7 @@ For general repo orientation:
 
 For harness tuning and repo-shape changes:
 
+- `docs/specs/harness-engineering-doctrine.md`
 - `docs/specs/harness-engineering-quickstart.md`
 - `docs/specs/harness-techniques.md`
 - `docs/specs/spec-first-execution-loop.md`
@@ -78,6 +79,8 @@ For harness-design research and external patterns:
 - Keep live repo-owned skills and docs Codexter-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
 - Prefer `.harness/` for live runtime state.
 - Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.
+- For Codexter harness brainstorming, explicitly compare repo-local `AGENTS.md`, `templates/global/AGENTS.md`, `skills/*`, `agents/*.toml`, and hooks / `bin/*`, then explain why the chosen surface should change now and why the others should not be the primary change surface.
+- For harness-surface placement decisions, use `docs/specs/harness-engineering-doctrine.md` before expanding root policy, subagents, hooks, or validators.
 - When changing harness behavior, prefer the smallest lever that fixes the real failure:
   - review loop and proof requirements first
   - ticket/task-shaping contracts next

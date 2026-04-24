@@ -50,6 +50,8 @@ idea/request
 
 - [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
   Purpose: index of canonical behavior and execution specs
+- [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
+  Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
@@ -117,8 +119,9 @@ When orienting on the repo:
 2. Read [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md).
 3. Read [README.md](/Users/kenjipcx/coding-harness/Codexter/README.md) for product/setup context.
 4. Read [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md).
-5. Read the active ticket and [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md).
-6. Follow links into the specific spec, skill, or runtime surface you actually need.
+5. Read [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md) when the task changes the harness itself.
+6. Read the active ticket and [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md).
+7. Follow links into the specific spec, skill, or runtime surface you actually need.
 
 ## Current Limits
 

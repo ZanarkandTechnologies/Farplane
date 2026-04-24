@@ -36,6 +36,7 @@ This inventory is grounded in:
 | Technique | Status | Main surfaces | Why it matters | Current limit |
 | --- | --- | --- | --- | --- |
 | `AGENTS.md` as a map, not an encyclopedia | Implemented | root `AGENTS.md`, `docs/specs/*`, `docs/specs/harness-engineering-quickstart.md` | Keeps top-level instructions short and points agents toward deeper sources of truth | coverage depends on docs staying discoverable and current |
+| Harness-engineering routing doctrine | Implemented | `docs/specs/harness-engineering-doctrine.md`, root `AGENTS.md` | Gives one standard question set for deciding whether a change belongs in policy, specs, skills, subagents, hooks, ticket contracts, validators, or tools | intentionally Codexter-first; generalization should wait until the doctrine proves durable |
 | `ARCHITECTURE.md` as the top-level system map | Implemented | `ARCHITECTURE.md`, `README.md`, `docs/specs/README.md` | Gives one current-state architecture entrypoint between the short `AGENTS.md` map and the deeper specs/skills | stays useful only if it remains map-like and current-state-first |
 | Repo docs as the system of record | Implemented | `docs/`, tickets, root `AGENTS.md`, `README.md` | Makes intent, plans, and constraints visible to agents instead of hiding them in chat | some knowledge still lives in research notes or discussion before promotion |
 | Discovery funnel before execution | Implemented | `skills/brainstorm`, `skills/deep-interview`, `skills/prd`, `README.md` | Pushes ambiguity reduction ahead of build work while keeping one public brainstorm surface that can branch into structured decomposition when needed | still depends on operator choosing the right intake skill |
@@ -126,6 +127,7 @@ When deciding what to tune next:
 ## Canonical Companion Docs
 
 - `harness-engineering-quickstart.md` for how to tune the harness
+- `harness-engineering-doctrine.md` for how to decide which harness surface should own a change
 - `doc-governance.md` for structural versus narrative doc-audit policy
 - `review-gates.md` for the QA/reviewer/Stop-hook split
 - `spec-first-execution-loop.md` for the end-to-end execution model

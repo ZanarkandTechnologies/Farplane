@@ -122,6 +122,7 @@ Planning handoff rule:
 - create a new file only when the repo contract, ticket workflow, or module scaffolding rules call for one, or when the detail is durable enough to earn its own artifact
 - when a lot of detail exists, respond in chat with the shortest summary that gets the user back up to speed and point to the durable artifact rather than re-pasting it
 - if the detail is ephemeral, low-value, or only useful for the current thought process, keep it out of both chat and the repo
+- before a substantive user-facing answer about changed repo state after a meaningful pass boundary, run `review` before deciding the final response; interim progress updates are exempt, and do not give a completion claim, stable recommendation, or "done" answer on repo changes without a fresh review pass
 
 ## Core Rules
 
