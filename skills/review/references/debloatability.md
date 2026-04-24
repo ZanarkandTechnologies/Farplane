@@ -81,9 +81,9 @@ Ask:
 - Findings should name the dead surface that remains or the safety proof that is
   still missing.
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

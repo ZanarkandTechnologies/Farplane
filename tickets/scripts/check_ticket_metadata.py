@@ -128,6 +128,14 @@ def validate_ticket(path: Path) -> list[str]:
                 errors.append(f"{rel}: blocked_by entries must be ticket IDs only: {item!r}")
 
     approval_required = bool(frontmatter.get("approval_required", False))
+    requires_qa = frontmatter.get("requires_qa", None)
+    requires_demo = frontmatter.get("requires_demo", None)
+    if requires_qa is not None and not isinstance(requires_qa, bool):
+        errors.append(f"{rel}: requires_qa must be true|false when present")
+    if requires_demo is not None and not isinstance(requires_demo, bool):
+        errors.append(f"{rel}: requires_demo must be true|false when present")
+    if requires_demo is True and requires_qa is False:
+        errors.append(f"{rel}: requires_demo=true requires requires_qa=true")
     ready = bool(frontmatter.get("ready", False))
     if approval_required and ready:
         errors.append(f"{rel}: approval_required=true requires ready=false")

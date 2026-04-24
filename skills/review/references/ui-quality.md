@@ -101,9 +101,9 @@ Ask:
   the result feels authored rather than templated, compares well against strong
   references, and shows both taste and execution strength across states.
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

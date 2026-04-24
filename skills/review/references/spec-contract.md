@@ -85,9 +85,9 @@ Ask:
 - Findings should name the missing boundary, testable behavior, or split error
   rather than saying the spec is merely "unclear."
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

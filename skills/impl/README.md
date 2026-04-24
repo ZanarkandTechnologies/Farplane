@@ -22,6 +22,12 @@ The first live delegated-worker contract is carried in runtime state:
 - `last_checkpoint_at`
 - `checkpoint_summary`
 
+For build tickets, the default delegated lane set is:
+
+- `builder`
+- `reviewer`
+- `qa`
+
 ## Minimal Example
 
 ```bash

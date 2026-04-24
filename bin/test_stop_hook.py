@@ -3,9 +3,11 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
@@ -35,13 +37,13 @@ class StopHookRoleConfigTests(unittest.TestCase):
             base = Path(td)
             agents = base / "agents"
             agents.mkdir(parents=True)
-            (agents / "reviewer.toml").write_text(
+            (agents / "completion-reviewer.toml").write_text(
                 '\n'.join(
                     [
                         'model = "gpt-5.4"',
                         'model_reasoning_effort = "high"',
                         'developer_instructions = """',
-                        'You are the reviewer.',
+                        'You are the completion reviewer.',
                         '"""',
                         "",
                     ]
@@ -49,12 +51,12 @@ class StopHookRoleConfigTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            parsed = self.stop_hook.load_role_config(base, "reviewer")
+            parsed = self.stop_hook.load_role_config(base, "completion-reviewer")
 
             self.assertEqual(
                 parsed,
                 {
-                    "developer_instructions": "You are the reviewer.",
+                    "developer_instructions": "You are the completion reviewer.",
                     "model": "gpt-5.4",
                     "model_reasoning_effort": "high",
                 },
@@ -65,9 +67,9 @@ class StopHookRoleConfigTests(unittest.TestCase):
             base = Path(td)
             agents = base / "agents"
             agents.mkdir(parents=True)
-            (agents / "reviewer.toml").write_text('model = "gpt-5.4"\n', encoding="utf-8")
+            (agents / "completion-reviewer.toml").write_text('model = "gpt-5.4"\n', encoding="utf-8")
 
-            parsed = self.stop_hook.load_role_config(base, "reviewer")
+            parsed = self.stop_hook.load_role_config(base, "completion-reviewer")
 
             self.assertIsNone(parsed)
 
@@ -105,6 +107,12 @@ class StopHookRoleConfigTests(unittest.TestCase):
   "integration_readiness": "pass",
   "traceability": "pass",
   "freshness": "pass",
+  "qa_quality": "pass",
+  "demo_quality": "fail",
+  "stakeholder_readiness": "fail",
+  "stakeholder_readiness_reason": "demo does not yet tell a convincing story",
+  "best_demo_artifact": "",
+  "storyline_gaps": ["missing the key before/after proof frame"],
   "user_intent_impression": "fail",
   "user_intent_mismatch_reason": "result undershoots the saved user ask",
   "obvious_next_step_exists": true,
@@ -120,6 +128,9 @@ class StopHookRoleConfigTests(unittest.TestCase):
             parsed = self.stop_hook.parse_role_output(output_path)
 
         assert parsed is not None
+        self.assertEqual(parsed["qa_quality"], "pass")
+        self.assertEqual(parsed["demo_quality"], "fail")
+        self.assertEqual(parsed["stakeholder_readiness"], "fail")
         self.assertEqual(parsed["user_intent_impression"], "fail")
         self.assertEqual(parsed["user_intent_mismatch_reason"], "result undershoots the saved user ask")
         self.assertTrue(parsed["obvious_next_step_exists"])
@@ -139,9 +150,12 @@ class StopHookReviewerPromptTests(unittest.TestCase):
             "acceptance_gaps": [],
             "evidence_gaps": [],
             "blockers": [],
-            "review_packet": {"overall_verdict": "pass"},
-            "review_packet_missing": [],
-            "review_packet_errors": [],
+            "requires_qa": True,
+            "requires_demo": False,
+            "artifact_root": ROOT / "tickets" / "artifacts" / "TASK-0038",
+            "linked_artifacts": [str(ROOT / "tickets" / "artifacts" / "TASK-0038" / "qa" / "report.md")],
+            "missing_artifacts": [],
+            "artifact_files": [str(ROOT / "tickets" / "artifacts" / "TASK-0038" / "qa" / "report.md")],
         }
         self.current_run = {
             "claim": {"status": "build_complete"},
@@ -151,7 +165,7 @@ class StopHookReviewerPromptTests(unittest.TestCase):
             "last_intent_turn_id": "turn-123",
         }
 
-    def test_reviewer_prompt_completion_gate_includes_review_packet(self) -> None:
+    def test_reviewer_prompt_completion_gate_includes_artifact_state(self) -> None:
         prompt = self.stop_hook.reviewer_prompt(
             "latest response",
             self.ticket,
@@ -162,11 +176,12 @@ class StopHookReviewerPromptTests(unittest.TestCase):
 
         self.assertIn('"mode": "completion_gate"', prompt)
         self.assertIn('"completion_claim_is_candidate_only": true', prompt)
-        self.assertIn('"review_packet"', prompt)
+        self.assertIn('"artifact_root"', prompt)
+        self.assertIn('"linked_artifacts"', prompt)
         self.assertIn('"claim"', prompt)
         self.assertIn('"last_intent_alignment"', prompt)
 
-    def test_reviewer_prompt_missing_result_review_excludes_review_packet(self) -> None:
+    def test_reviewer_prompt_missing_result_review_excludes_artifact_state(self) -> None:
         prompt = self.stop_hook.reviewer_prompt(
             "latest response",
             self.ticket,
@@ -176,7 +191,7 @@ class StopHookReviewerPromptTests(unittest.TestCase):
         )
 
         self.assertIn('"mode": "missing_result_review"', prompt)
-        self.assertNotIn('"review_packet"', prompt)
+        self.assertNotIn('"artifact_root"', prompt)
 
     def test_validate_reviewer_gate_requires_completion_fields(self) -> None:
         ok, reason, failures = self.stop_hook.validate_reviewer_gate({"action": "continue_same_ticket"})
@@ -193,6 +208,12 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "integration_readiness": "pass",
                 "traceability": "pass",
                 "freshness": "pass",
+                "qa_quality": "pass",
+                "demo_quality": "pass",
+                "stakeholder_readiness": "pass",
+                "stakeholder_readiness_reason": "",
+                "best_demo_artifact": "tickets/artifacts/TASK-0038/demo/demo.html",
+                "storyline_gaps": [],
                 "user_intent_impression": "pass",
                 "user_intent_mismatch_reason": "",
                 "obvious_next_step_exists": False,
@@ -216,6 +237,12 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "integration_readiness": "pass",
                 "traceability": "pass",
                 "freshness": "pass",
+                "qa_quality": "pass",
+                "demo_quality": "pass",
+                "stakeholder_readiness": "pass",
+                "stakeholder_readiness_reason": "",
+                "best_demo_artifact": "tickets/artifacts/TASK-0038/demo/demo.html",
+                "storyline_gaps": [],
                 "user_intent_impression": "fail",
                 "user_intent_mismatch_reason": "result is technically valid but undershoots the saved user ask",
                 "obvious_next_step_exists": False,
@@ -228,7 +255,7 @@ class StopHookReviewerPromptTests(unittest.TestCase):
         )
 
         self.assertFalse(ok)
-        self.assertEqual(reason, "reviewer completion gates are not passing")
+        self.assertEqual(reason, "completion-reviewer completion gates are not passing")
         self.assertIn("user_intent_impression=fail", failures)
         self.assertIn(
             "user_intent_mismatch_reason=result is technically valid but undershoots the saved user ask",
@@ -243,6 +270,12 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "integration_readiness": "pass",
                 "traceability": "pass",
                 "freshness": "pass",
+                "qa_quality": "pass",
+                "demo_quality": "pass",
+                "stakeholder_readiness": "pass",
+                "stakeholder_readiness_reason": "",
+                "best_demo_artifact": "tickets/artifacts/TASK-0038/demo/demo.html",
+                "storyline_gaps": [],
                 "user_intent_impression": "pass",
                 "user_intent_mismatch_reason": "",
                 "obvious_next_step_exists": True,
@@ -255,9 +288,116 @@ class StopHookReviewerPromptTests(unittest.TestCase):
         )
 
         self.assertFalse(ok)
-        self.assertEqual(reason, "reviewer completion gates are not passing")
+        self.assertEqual(reason, "completion-reviewer completion gates are not passing")
         self.assertIn("obvious_next_step=run one more same-ticket pass to attach the missing proof", failures)
         self.assertIn("user_would_expect_more=true", failures)
+
+    def test_validate_reviewer_gate_fails_when_stakeholder_readiness_fails(self) -> None:
+        ok, reason, failures = self.stop_hook.validate_reviewer_gate(
+            {
+                "overall_score": 4.4,
+                "evidence_quality": "pass",
+                "integration_readiness": "pass",
+                "traceability": "pass",
+                "freshness": "pass",
+                "qa_quality": "pass",
+                "demo_quality": "fail",
+                "stakeholder_readiness": "fail",
+                "stakeholder_readiness_reason": "demo is technically correct but not yet fit to show to leadership",
+                "best_demo_artifact": "",
+                "storyline_gaps": ["missing a clear wow moment"],
+                "user_intent_impression": "pass",
+                "user_intent_mismatch_reason": "",
+                "obvious_next_step_exists": False,
+                "next_step_safe": False,
+                "obvious_next_step": "",
+                "user_would_expect_more": False,
+                "rerun_required": False,
+                "blocking_findings": [],
+            }
+        )
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "completion-reviewer completion gates are not passing")
+        self.assertIn("demo_quality=fail", failures)
+        self.assertIn("stakeholder_readiness=fail", failures)
+        self.assertIn("stakeholder_readiness_reason=demo is technically correct but not yet fit to show to leadership", failures)
+        self.assertIn("storyline_gap=missing a clear wow moment", failures)
+
+
+class StopHookExecutionPhaseTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.stop_hook = load_stop_hook_module()
+
+    def test_decide_impl_transition_advances_impl_to_qa_when_required(self) -> None:
+        verdict = self.stop_hook.decide_impl_transition(
+            "building",
+            {
+                "ticket_id": "TASK-0042",
+                "blockers": [],
+                "acceptance_gaps": [],
+                "evidence_gaps": [],
+                "requires_qa": True,
+                "requires_demo": False,
+                "artifact_root": ROOT / "tickets" / "artifacts" / "TASK-0042",
+                "linked_artifacts": [],
+                "missing_artifacts": [],
+                "artifact_files": [],
+            },
+            {"status": "build_complete", "next": "building", "reason": "builder finished"},
+            {"execution_phase": "impl", "requires_qa": True, "requires_demo": False},
+        )
+
+        self.assertEqual(verdict["decision"], "advance_execution_phase")
+        self.assertEqual(verdict["next_execution_phase"], "qa")
+
+    def test_phase_result_gate_accepts_passing_linked_qa_result(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-qa-") as td:
+            root = Path(td)
+            result_path = root / "tickets" / "artifacts" / "TASK-0042" / "qa" / "2026-04-24T210000Z" / "result.json"
+            result_path.parent.mkdir(parents=True, exist_ok=True)
+            result_path.write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0042",
+                        "phase": "qa",
+                        "verdict": "pass",
+                        "summary": "qa passed",
+                        "artifacts": [str(result_path.parent / "report.md")],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (result_path.parent / "report.md").write_text("report", encoding="utf-8")
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "updated_at": "2026-04-24T00:00:00Z",
+                "artifact_root": (root / "tickets" / "artifacts" / "TASK-0042").resolve(),
+                "linked_artifacts": [str(result_path.resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str(result_path.resolve())],
+                "requires_qa": True,
+                "requires_demo": False,
+            }
+            current_run = {
+                "execution_phase": "qa",
+                "phase_requirements": {
+                    "impl": {"completion_statuses": ["build_complete", "done"], "artifact_root": str(ticket["artifact_root"])},
+                    "qa": {
+                        "artifact_root": str((ticket["artifact_root"] / "qa").resolve()),
+                        "result_glob": "**/result.json",
+                        "required_verdict": "pass",
+                    },
+                },
+            }
+
+            ok, reason, failures, payload = self.stop_hook.phase_result_gate(ticket, current_run, "qa")
+
+        self.assertTrue(ok)
+        self.assertEqual(reason, "")
+        self.assertEqual(failures, [])
+        assert payload is not None
+        self.assertEqual(payload["phase"], "qa")
 
 
 class StopHookSkillRoutingTests(unittest.TestCase):
@@ -485,13 +625,17 @@ class StopHookLoopModeTests(unittest.TestCase):
         self.assertEqual(verdict["status"], "blocked")
 
 
-class StopHookReviewPacketGateTests(unittest.TestCase):
+class StopHookEvidenceArtifactGateTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stop_hook = load_stop_hook_module()
 
-    def test_load_ticket_exposes_updated_at_for_review_packet_gate(self) -> None:
+    def test_load_ticket_exposes_linked_artifacts_for_evidence_gate(self) -> None:
         with tempfile.TemporaryDirectory(prefix="stop-hook-ticket-") as td:
-            ticket_path = Path(td) / "TASK-9999.md"
+            root = Path(td)
+            ticket_path = root / "tickets" / "TASK-9999.md"
+            artifact_path = root / "tickets" / "artifacts" / "TASK-9999" / "qa" / "report.md"
+            artifact_path.parent.mkdir(parents=True, exist_ok=True)
+            artifact_path.write_text("ok", encoding="utf-8")
             ticket_path.write_text(
                 """---
 ticket_id: TASK-9999
@@ -517,36 +661,70 @@ linked_docs: []
 - [x] AC-1
 
 ## Evidence
-- [x] Tests
+- [QA report](tickets/artifacts/TASK-9999/qa/report.md)
 
 ## Blockers
 - none
-
-## Review Packet
-- `reviewed_at:` 2026-04-05 00:00 +0100
-- `rubrics_used:` ["evidence-quality", "integration-readiness"]
-- `overall_score:` 4.5
-- `overall_threshold:` 4.0
-- `overall_verdict:` pass
-- `rerun_required:` false
-- `evidence_quality:` pass
-- `integration_readiness:` pass
-- `traceability:` pass
-- `freshness:` pass
-- `hard_gate_failures:` []
-- `blocking_findings:` []
-- `next_action:` none
 """,
                 encoding="utf-8",
             )
 
             ticket = self.stop_hook.load_ticket(ticket_path)
-            ok, reason, failures = self.stop_hook.review_packet_gate(ticket)
+            ok, reason, failures = self.stop_hook.evidence_artifact_gate(ticket)
 
             self.assertEqual(ticket["updated_at"], "2026-04-05T01:30:00Z")
+            self.assertTrue(ok)
+            self.assertEqual(reason, "")
+            self.assertEqual(failures, [])
+
+    def test_evidence_artifact_gate_fails_when_linked_artifact_is_stale(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-ticket-") as td:
+            root = Path(td)
+            ticket_path = root / "tickets" / "TASK-9999.md"
+            artifact_path = root / "tickets" / "artifacts" / "TASK-9999" / "qa" / "report.md"
+            artifact_path.parent.mkdir(parents=True, exist_ok=True)
+            artifact_path.write_text("old", encoding="utf-8")
+            old_timestamp = datetime(2026, 4, 5, 0, 0, tzinfo=timezone.utc).timestamp()
+            os.utime(artifact_path, (old_timestamp, old_timestamp))
+            ticket_path.write_text(
+                """---
+ticket_id: TASK-9999
+title: stale evidence fixture
+phase: building
+status: building
+owner: codex
+priority: medium
+depends_on: []
+blocked_by: []
+ready: true
+approval_required: false
+created_at: 2026-04-05T00:00:00Z
+updated_at: 2026-04-05T01:30:00Z
+next_action: test fixture
+last_verification: none
+linked_docs: []
+---
+
+# TASK-9999: stale evidence fixture
+
+## Acceptance Criteria
+- [x] AC-1
+
+## Evidence
+- [QA report](tickets/artifacts/TASK-9999/qa/report.md)
+
+## Blockers
+- none
+""",
+                encoding="utf-8",
+            )
+
+            ticket = self.stop_hook.load_ticket(ticket_path)
+            ok, reason, failures = self.stop_hook.evidence_artifact_gate(ticket)
+
             self.assertFalse(ok)
-            self.assertEqual(reason, "review packet gates are not passing")
-            self.assertIn("reviewed_at=stale", failures)
+            self.assertEqual(reason, "evidence artifact gates are not passing")
+            self.assertIn("linked_artifacts=stale", failures)
 
 
 if __name__ == "__main__":

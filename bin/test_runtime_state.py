@@ -39,6 +39,27 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertFalse(has_explicit_loop_invocation("$loop-extra"))
         self.assertFalse(has_explicit_loop_invocation("loop this task"))
 
+    def test_normalize_user_turn_detects_qa_and_demo_execution_phases(self) -> None:
+        qa = normalize_user_turn(
+            "$qa TASK-0061",
+            turn_id="turn-qa",
+            source="test",
+            captured_at="2026-04-24T00:00:00Z",
+        )
+        demo = normalize_user_turn(
+            "$demo TASK-0061",
+            turn_id="turn-demo",
+            source="test",
+            captured_at="2026-04-24T00:00:00Z",
+        )
+
+        self.assertEqual(qa["control_surface"], "qa")
+        self.assertEqual(qa["requested_execution_phase"], "qa")
+        self.assertEqual(qa["requested_outcome"], "qa_pass")
+        self.assertEqual(demo["control_surface"], "demo")
+        self.assertEqual(demo["requested_execution_phase"], "demo")
+        self.assertEqual(demo["requested_outcome"], "demo_pass")
+
     def test_normalize_user_turn_keeps_impl_plan_out_of_impl_loop(self) -> None:
         normalized = normalize_user_turn(
             "$impl-plan TASK-0061",
@@ -496,6 +517,10 @@ linked_docs: []
         self.assertEqual(session_payload["phase"], "building")
         self.assertEqual(session_payload["status"], "running")
         self.assertEqual(session_payload["skill_name"], "impl")
+        self.assertEqual(session_payload["execution_phase"], "impl")
+        self.assertTrue(session_payload["requires_qa"])
+        self.assertFalse(session_payload["requires_demo"])
+        self.assertIn("qa", session_payload["phase_requirements"])
         self.assertTrue(session_payload["impl_loop_active"])
         self.assertEqual(current_run["ticket_id"], "TASK-0016")
         self.assertEqual(current_run["claim"]["ticket_id"], "TASK-0016")
@@ -959,6 +984,106 @@ linked_docs: []
         self.assertEqual(session_a["session_origin"], "control")
         self.assertNotIn("impl_loop_active", session_b)
         self.assertTrue(persisted_run_state_a["impl_loop_active"])
+
+    def test_capture_user_turn_explicit_qa_seeds_execution_phase(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            state_dir = project_root / ".harness" / "state"
+            state_dir.mkdir(parents=True, exist_ok=True)
+            ticket_path = project_root / "tickets" / "TASK-0042-example.md"
+            ticket_path.parent.mkdir(parents=True, exist_ok=True)
+            ticket_path.write_text(
+                """---
+ticket_id: TASK-0042
+title: example
+phase: building
+status: building
+owner: codex
+priority: high
+depends_on: []
+blocked_by: []
+ready: true
+approval_required: false
+requires_qa: true
+requires_demo: false
+created_at: 2026-04-10T00:00:00Z
+updated_at: 2026-04-10T00:00:00Z
+next_action: run qa
+last_verification: none
+linked_docs: []
+---
+
+# TASK-0042: example
+""",
+                encoding="utf-8",
+            )
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="$qa TASK-0042",
+                turn_id="turn-qa",
+                source="test",
+                session_id="sess-qa",
+            )
+
+            session_payload = json.loads(session_state_path(project_root, "sess-qa").read_text(encoding="utf-8"))
+
+        self.assertIsNotNone(captured)
+        assert captured is not None
+        self.assertEqual(session_payload["skill_name"], "qa")
+        self.assertEqual(session_payload["execution_phase"], "qa")
+        self.assertTrue(session_payload["requires_qa"])
+        self.assertFalse(session_payload["requires_demo"])
+
+    def test_capture_user_turn_explicit_demo_forces_demo_requirement(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            state_dir = project_root / ".harness" / "state"
+            state_dir.mkdir(parents=True, exist_ok=True)
+            ticket_path = project_root / "tickets" / "TASK-0043-example.md"
+            ticket_path.parent.mkdir(parents=True, exist_ok=True)
+            ticket_path.write_text(
+                """---
+ticket_id: TASK-0043
+title: example
+phase: building
+status: building
+owner: codex
+priority: high
+depends_on: []
+blocked_by: []
+ready: true
+approval_required: false
+requires_qa: true
+requires_demo: false
+created_at: 2026-04-10T00:00:00Z
+updated_at: 2026-04-10T00:00:00Z
+next_action: run demo
+last_verification: none
+linked_docs: []
+---
+
+# TASK-0043: example
+""",
+                encoding="utf-8",
+            )
+
+            captured = capture_user_turn(
+                project_root=project_root,
+                raw_text="$demo TASK-0043",
+                turn_id="turn-demo",
+                source="test",
+                session_id="sess-demo",
+            )
+
+            session_payload = json.loads(session_state_path(project_root, "sess-demo").read_text(encoding="utf-8"))
+
+        self.assertIsNotNone(captured)
+        assert captured is not None
+        self.assertEqual(session_payload["skill_name"], "demo")
+        self.assertEqual(session_payload["execution_phase"], "demo")
+        self.assertTrue(session_payload["requires_qa"])
+        self.assertTrue(session_payload["requires_demo"])
 
     def test_is_internal_user_prompt_rejects_approval_reviewer_requests(self) -> None:
         prompt = (

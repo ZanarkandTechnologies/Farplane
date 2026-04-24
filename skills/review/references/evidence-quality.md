@@ -108,9 +108,9 @@ When using the anti-slop playbook, search for:
   the packet is traceable, replayable, well-organized, and persuasive enough
   that very little reviewer interpretation is required.
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

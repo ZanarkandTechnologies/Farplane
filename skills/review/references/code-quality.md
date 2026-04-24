@@ -128,9 +128,9 @@ When using the anti-slop playbook, search for:
   the code solves the ticket and also improves the surrounding module shape by
   removing dead weight, clarifying ownership, or making future changes obviously easier.
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

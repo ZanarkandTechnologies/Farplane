@@ -81,6 +81,24 @@
 2026-04-13 22:49 +0100 | CHORE | restore the README top-level diagram as a color-coded super stack map that overlays the main flow, durable surfaces, and the major skill groups in one picture
 2026-04-13 23:05 +0100 | FEAT | replace `docs-closeout` with the canonical `close-ticket` skill, add a parent closeout todo flow for docs/checks/commit/push, and keep `$docs-closeout` as a runtime compatibility alias
 2026-04-14 00:15 +0100 | FEAT | add an `agent-testability-plan` skill plus the canonical `agent-testability-surfaces` doctrine, wire `deep-system-design` to hand off into it, and teach `spec-to-ticket` / `impl-plan` to consume the resulting brief when present
+2026-04-14 01:10 +0100 | CHORE | audit the autonomy checklist against the live repo, seed roadmap tickets for the real missing gaps, and slim the README around current state plus roadmap
+2026-04-16 01:02 +0100 | FEAT | add a public `desloppify` skill with explicit main-agent versus worker modes, ignore local `.desloppify/` state, and promote the shipped workflow into the canonical inventory
 2026-04-16 01:04 +0100 | FEAT | make ticket sizing ambition-aware across `spec-to-ticket`, `impl-plan`, and ticket docs so CRUD stays whole and complex systems split by proof/foundation or real runtime boundaries instead of micro-steps
+2026-04-16 01:46 +0100 | FIX | narrow the `desloppify` skill so the main agent delegates one worker, reviewer roles stay out of the workflow, and worker mode hands nested `--runner codex` subjective review back instead of recursing
 2026-04-23 02:07 +0100 | FIX | add required top-level names to all custom agent role TOMLs and backstop agent role metadata with the harness invariant checker
-2026-04-24 20:18 +0100 | CHORE | add a harness-engineering doctrine, distinguish repo-local versus global `AGENTS.md` placement, and require fresh review before substantive final repo-state answers after meaningful pass boundaries
+2026-04-23 21:55 +0100 | CHORE | reset the active board around file-map-first planning, evidence enforcement, compaction-safe handoffs, and answer-plan-act routing, and archive the superseded roadmap tickets
+2026-04-24 15:38 +0100 | CHORE | collapse the ticket plan shape into a compact file-map-first contract, remove empty review/handoff boilerplate from the template, and define per-ticket artifact storage under `tickets/artifacts/`
+2026-04-24 17:20 +0100 | CHORE | add a canonical harness-engineering doctrine spec, route root docs toward it, and document the new placement rubric in the live techniques inventory
+2026-04-24 19:05 +0100 | FEAT | add a `gap-analysis` planning skill and make feature-gap research a first-class ticket section for missing or parity-driven work
+2026-04-24 20:10 +0100 | FEAT | render `config.toml` on every install from a sanitized template plus local env/TOML overlays instead of seed-once local drift
+2026-04-24 19:18 +0100 | FIX | align the harness-engineering doctrine equations with the existing quickstart model and add the doctrine to the architecture entry surfaces
+2026-04-24 19:31 +0100 | FEAT | require harness brainstorming to compare `AGENTS.md`, skills, subagents, and hooks explicitly and explain why the chosen surface wins over the others
+2026-04-24 19:40 +0100 | FIX | move harness-surface comparison guidance out of the shared `brainstorm` skill and into Codexter's local `AGENTS.md`
+2026-04-24 19:52 +0100 | FEAT | require a fresh `review` pass before substantive user-facing answers about changed Codexter repo state, exempting only interim progress updates
+2026-04-24 21:15 +0100 | FEAT | cut QA and completion gating over to ticket artifact roots, require delegated builder/reviewer/qa lanes in build prompts, and replace legacy `Review Packet` parsing with artifact-linked Stop-hook evidence checks
+2026-04-24 22:05 +0100 | FEAT | add an explicit `$impl` execution-phase contract with `requires_qa`, `requires_demo`, `execution_phase`, public `$qa`/`$demo` recovery surfaces, and Stop-hook phase progression from impl to qa to demo before final completion review
+2026-04-24 20:01 +0100 | FIX | move the fresh-review-before-final-answer rule into `templates/global/AGENTS.md` and treat repo-local plus global `AGENTS.md` as separate harness-placement candidates
+2026-04-24 20:18 +0100 | FIX | narrow the global fresh-review-before-final-answer rule so it applies only after meaningful pass boundaries and no longer conflicts with the no-microscopic-review guardrail
+2026-04-24 22:12 +0100 | FEAT | realign impl-plan to the canonical single-surface ticket template and add compact typed data-flow planning through type sketches and golden-path examples
+2026-04-24 22:40 +0100 | CHORE | rename the Stop-hook role file from `reviewer` to `completion-reviewer` so it is easier to distinguish from the deeper `code-reviewer` agent
+2026-04-24 18:51 +0100 | FEAT | tighten the shipped global response contract so implemented feature summaries default to short bullets with `Before` / `After` framing and a tiny concrete example when helpful

@@ -18,9 +18,18 @@ The main surfaces are:
 
 Prefer improving review loops, ticket contracts, skill packaging, and evidence surfaces before inventing more hidden orchestration code.
 
+Do not describe a workflow as a shipped public capability until the repo
+actually contains the discoverable `skills/<name>/` package and the canonical
+inventory/docs point to it. See `MEM-0044`.
+
 When the operator explicitly wants audit-then-fix recovery mode after a likely
 assistant miss, use the `repent` skill rather than inventing ad hoc recovery
 behavior.
+
+When planning a missing or partially implemented feature depends on understanding
+what a production-grade version should include, use `gap-analysis` before
+locking the ticket plan so current-state gaps and external comparables are
+explicit instead of implied.
 
 ## Project Structure
 
@@ -75,6 +84,9 @@ For harness-design research and external patterns:
 - No blind edits. Read the relevant spec, ticket, and nearby module docs first.
 - Tickets and docs are the source of truth; do not hide state in chat.
 - Keep chat concise and put deep detail into visible repo artifacts such as the active ticket and canonical docs.
+- When summarizing implemented feature changes to the operator, prefer `Before` / `After` / `Example` bullets over one dense prose block. See `MEM-0051`.
+- Keep QA and completion proof artifact-first: link ticket-scoped evidence from `tickets/artifacts/TASK-XXXX/`, and for UI/user-visible work keep browser capture separate from final `visual-qa` judgment. See `MEM-0048`.
+- Treat `$impl` as the public execution surface, with internal `execution_phase` progression through `impl`, `qa`, and `demo` when required. Stop-hook should advance those phases mechanically before final completion review. See `MEM-0049`.
 - Auto-run `review` at the end of `impl-plan` and at the end of `impl` when working inside Codexter.
 - Keep live repo-owned skills and docs Codexter-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
 - Prefer `.harness/` for live runtime state.
@@ -91,7 +103,8 @@ For harness-design research and external patterns:
 
 ## Durable Truth
 
-- `tickets/`: active task object, plan, evidence, blockers, handoff
+- `tickets/`: active task object, plan, evidence, blockers, and any short
+  resume notes when needed
 - `docs/HISTORY.md`: append-only change log
 - `docs/MEMORY.md`: curated invariants and constraints
 - `docs/TROUBLES.md`: repeated misses and prevention ideas

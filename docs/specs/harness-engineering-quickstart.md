@@ -167,7 +167,7 @@ Use:
 
 - `hooks.json`
 - `bin/stop_hook.py`
-- hook-role configs such as `agents/orchestrator.toml` and `agents/reviewer.toml`
+- hook-role configs such as `agents/orchestrator.toml` and `agents/completion-reviewer.toml`
 
 This surface controls:
 

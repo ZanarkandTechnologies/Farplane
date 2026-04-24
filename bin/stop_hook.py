@@ -48,7 +48,8 @@ from user_turn import (
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 SECTION_PATTERN = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 CHECKBOX_PATTERN = re.compile(r"^- \[( |x)\]\s+(.*)$")
-REVIEW_PACKET_FIELD_PATTERN = re.compile(r"^- `(?P<key>[^`]+)`\s*(?P<value>.*)$")
+MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+ARTIFACT_PATH_PATTERN = re.compile(r"(?P<path>(?:^|[\s(])(?:/?(?:[^)\s`]*?/)?tickets/artifacts/[^)\s`]+))")
 IMPL_RESULT_PATTERN = re.compile(r"^IMPL_RESULT:\s+status=.*$", re.MULTILINE)
 PARSED_IMPL_RESULT_PATTERN = re.compile(
     r"^IMPL_RESULT:\s+status=(?P<status>[A-Za-z0-9_-]+)\s+next=(?P<next>[A-Za-z0-9_-]+)(?:\s+reason=(?P<reason>.*))?$"
@@ -61,21 +62,7 @@ ROLE_ACTIONS = {
     "next_ticket",
     "stop",
 }
-REVIEW_PACKET_REQUIRED_FIELDS = {
-    "reviewed_at",
-    "overall_verdict",
-    "rerun_required",
-    "evidence_quality",
-    "integration_readiness",
-    "traceability",
-    "freshness",
-    "hard_gate_failures",
-    "blocking_findings",
-    "next_action",
-}
 PASS_FAIL_VALUES = {"pass", "fail"}
-REVIEW_VERDICTS = {"pass", "revise", "block"}
-REVIEW_PACKET_TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M %z"
 INTENT_ALIGNMENT_STATES = {"aligned", "soft_mismatch", "hard_mismatch", "unknown"}
 IMPL_LOOPABLE_PHASES = {"building"}
 
@@ -136,7 +123,7 @@ def impl_loop_flag_active(
         return False
     claim = runtime_claim if isinstance(runtime_claim, dict) else {}
     skill_name = str(claim.get("skill_name") or current_run.get("skill_name") or "").strip()
-    if skill_name and skill_name != "impl":
+    if skill_name and skill_name not in {"impl", "qa", "demo"}:
         return False
     if session_id:
         claim_session_id = str(claim.get("session_id") or current_run.get("session_id") or "").strip()
@@ -186,6 +173,8 @@ def impl_loop_continuation_allowed(
 
 def next_impl_loop_active_for_action(action: str, *, next_phase: str = "", current_phase: str = "") -> bool:
     if action == "repeat_impl":
+        return True
+    if action == "advance_execution_phase":
         return True
     if action == "advance_ticket" and next_phase == "building":
         return True
@@ -583,34 +572,8 @@ def blocked_items(lines: list[str]) -> list[str]:
     return items
 
 
-def parse_review_packet_value(raw: str) -> object:
-    stripped = raw.strip()
-    if not stripped:
-        return ""
-    lowered = stripped.lower()
-    if lowered == "none":
-        return "none"
-    if stripped in {"true", "false"}:
-        return stripped == "true"
-    if stripped.startswith("[") or stripped.startswith("{"):
-        try:
-            return json.loads(stripped)
-        except json.JSONDecodeError:
-            return stripped
-    try:
-        return float(stripped)
-    except ValueError:
-        return stripped
-
-
-def parse_reviewed_at(raw: object) -> datetime | None:
-    if not isinstance(raw, str) or not raw.strip():
-        return None
-    try:
-        parsed = datetime.strptime(raw.strip(), REVIEW_PACKET_TIMESTAMP_FORMAT)
-    except ValueError:
-        return None
-    return parsed.replace(second=0, microsecond=0)
+def ticket_repo_root(ticket_path: Path) -> Path:
+    return ticket_path.parent.parent
 
 
 def parse_updated_at(raw: object) -> datetime | None:
@@ -623,63 +586,59 @@ def parse_updated_at(raw: object) -> datetime | None:
     return parsed.astimezone().replace(second=0, microsecond=0)
 
 
-def parse_review_packet(lines: list[str]) -> dict[str, object]:
-    fields: dict[str, object] = {}
-    errors: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        match = REVIEW_PACKET_FIELD_PATTERN.match(stripped)
-        if not match:
+def normalize_artifact_reference(ticket_path: Path, raw: str) -> Path | None:
+    cleaned = raw.strip().strip("<>").strip()
+    if not cleaned:
+        return None
+    if cleaned.startswith("/"):
+        path_text = cleaned
+    else:
+        path_text = str((ticket_repo_root(ticket_path) / cleaned).resolve())
+    if re.match(r"^/.+:\d+$", path_text):
+        path_text = path_text.rsplit(":", 1)[0]
+    candidate = Path(path_text)
+    return candidate
+
+
+def extract_artifact_references(ticket_path: Path, lines: list[str]) -> list[str]:
+    refs: list[str] = []
+    text = "\n".join(lines)
+    for match in MARKDOWN_LINK_PATTERN.finditer(text):
+        target = match.group(1).strip()
+        if "tickets/artifacts/" in target:
+            refs.append(target)
+    for match in ARTIFACT_PATH_PATTERN.finditer(text):
+        target = match.group("path").strip()
+        if target.startswith("("):
+            target = target[1:]
+        if "tickets/artifacts/" in target:
+            refs.append(target)
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for raw in refs:
+        candidate = normalize_artifact_reference(ticket_path, raw)
+        if candidate is None:
             continue
-        key = match.group("key").strip().rstrip(":")
-        value = parse_review_packet_value(match.group("value"))
-        if key in {"rubrics_used", "hard_gate_failures", "blocking_findings"}:
-            if value == "none":
-                value = []
-            elif isinstance(value, str):
-                value = [value] if value else []
-            if not isinstance(value, list):
-                errors.append(f"{key} must be a list")
-                continue
-            if any(not isinstance(item, str) or not item.strip() for item in value):
-                errors.append(f"{key} must contain non-empty strings")
-                continue
-        fields[key] = value
+        resolved = str(candidate.resolve())
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        normalized.append(resolved)
+    return normalized
 
-    missing = sorted(REVIEW_PACKET_REQUIRED_FIELDS - set(fields))
 
-    overall_verdict = fields.get("overall_verdict")
-    if overall_verdict is not None and overall_verdict not in REVIEW_VERDICTS:
-        errors.append("overall_verdict must be pass|revise|block")
+def artifact_root_for_ticket(ticket_path: Path, ticket_id: str) -> Path:
+    return ticket_repo_root(ticket_path) / "tickets" / "artifacts" / ticket_id
 
-    rerun_required = fields.get("rerun_required")
-    if rerun_required is not None and not isinstance(rerun_required, bool):
-        errors.append("rerun_required must be true|false")
 
-    for key in ("evidence_quality", "integration_readiness", "traceability", "freshness"):
-        value = fields.get(key)
-        if value is not None and value not in PASS_FAIL_VALUES:
-            errors.append(f"{key} must be pass|fail")
-
-    next_action = fields.get("next_action")
-    if next_action is not None and (not isinstance(next_action, str) or not next_action.strip()):
-        errors.append("next_action must be a non-empty string")
-
-    reviewed_at = fields.get("reviewed_at")
-    if reviewed_at is not None and parse_reviewed_at(reviewed_at) is None:
-        errors.append("reviewed_at must match YYYY-MM-DD HH:mm ±ZZZZ")
-
-    overall_score = fields.get("overall_score")
-    if overall_score is not None and not isinstance(overall_score, (int, float)):
-        errors.append("overall_score must be numeric when present")
-
-    return {
-        "fields": fields,
-        "missing": missing,
-        "errors": errors,
-        "present": bool(lines),
-        "valid": bool(lines) and not missing and not errors,
-    }
+def collect_artifact_files(root_path: Path) -> list[str]:
+    if not root_path.exists():
+        return []
+    files: list[str] = []
+    for path in sorted(root_path.rglob("*")):
+        if path.is_file():
+            files.append(str(path.resolve()))
+    return files
 
 
 def extract_ticket_id(text: str) -> str | None:
@@ -729,17 +688,23 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
     text = ticket_path.read_text(encoding="utf-8")
     frontmatter = parse_frontmatter(text)
     sections = parse_sections(text)
-    review_packet = parse_review_packet(sections.get("Review Packet", []))
     fallback_ticket_id = extract_ticket_id(ticket_path.name) or ticket_path.stem
+    ticket_id = extract_ticket_id(text) or fallback_ticket_id
+    artifact_root = artifact_root_for_ticket(ticket_path, ticket_id).resolve()
+    linked_artifacts = extract_artifact_references(ticket_path, sections.get("Evidence", []))
+    artifact_files = collect_artifact_files(artifact_root)
+    missing_artifacts = [path for path in linked_artifacts if not Path(path).exists()]
     return {
         "path": ticket_path,
         "text": text,
-        "ticket_id": extract_ticket_id(text) or fallback_ticket_id,
+        "ticket_id": ticket_id,
         "title": str(frontmatter.get("title", "")).strip(),
         "phase": str(frontmatter.get("phase", "")).strip(),
         "status": str(frontmatter.get("status", "")).strip(),
         "ready": bool(frontmatter.get("ready", False)),
         "approval_required": bool(frontmatter.get("approval_required", False)),
+        "requires_qa": bool(frontmatter.get("requires_qa", True)),
+        "requires_demo": bool(frontmatter.get("requires_demo", False)),
         "depends_on": list(frontmatter.get("depends_on", [])) if isinstance(frontmatter.get("depends_on", []), list) else [],
         "frontmatter_blocked_by": list(frontmatter.get("blocked_by", [])) if isinstance(frontmatter.get("blocked_by", []), list) else [],
         "updated_at": str(frontmatter.get("updated_at", "")).strip(),
@@ -749,11 +714,10 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
         "acceptance_gaps": unchecked_items(sections.get("Acceptance Criteria", [])),
         "evidence_gaps": unchecked_items(sections.get("Evidence", [])),
         "blockers": blocked_items(sections.get("Blockers", [])),
-        "review_packet": review_packet["fields"],
-        "review_packet_missing": review_packet["missing"],
-        "review_packet_errors": review_packet["errors"],
-        "review_packet_present": review_packet["present"],
-        "review_packet_valid": review_packet["valid"],
+        "artifact_root": artifact_root,
+        "linked_artifacts": linked_artifacts,
+        "missing_artifacts": missing_artifacts,
+        "artifact_files": artifact_files,
     }
 
 
@@ -904,7 +868,7 @@ def observed_phase_from_result(
         return "planning", parsed
     if status == "docs_complete":
         return "documenting", parsed
-    if status in {"continue_impl", "build_complete", "done"}:
+    if status in {"continue_impl", "build_complete", "done", "qa_complete", "demo_complete"}:
         return "building", parsed
     if status == "blocked":
         return current_phase, parsed
@@ -939,6 +903,7 @@ def classify_intent_alignment(
     summary = str(last_user_turn.get("summary") or "").strip()
     turn_id = str(last_user_turn.get("turn_id") or "").strip()
     explicit_ticket_id = str(last_user_turn.get("explicit_ticket_id") or "").strip()
+    requested_execution_phase = str(last_user_turn.get("requested_execution_phase") or "").strip()
     hard_constraints = [
         str(item).strip()
         for item in last_user_turn.get("hard_constraints", [])
@@ -974,6 +939,12 @@ def classify_intent_alignment(
         impl_result,
         current_phase=current_phase,
     )
+    observed_execution_phase = current_execution_phase(current_run) if observed_phase == "building" else ""
+    if parsed_result is not None:
+        if parsed_result["status"] == "qa_complete":
+            observed_execution_phase = "qa"
+        elif parsed_result["status"] == "demo_complete":
+            observed_execution_phase = "demo"
 
     if "no_edits" in hard_constraints and parsed_result is not None:
         return {
@@ -1038,6 +1009,29 @@ def classify_intent_alignment(
             "announce": f"Re-running {ticket_id}. The last pass drifted from the current-turn intent.",
         }
 
+    if (
+        expected_phase == "building"
+        and requested_execution_phase in {"impl", "qa", "demo"}
+        and observed_execution_phase
+        and requested_execution_phase != observed_execution_phase
+    ):
+        observed_status = parsed_result["status"] if parsed_result is not None else "unknown"
+        continuation_message = (
+            f"Continue {ticket_id} and satisfy the current-turn execution phase captured at start of turn: {summary}. "
+            f"The assistant ended with `{observed_status}` for `{observed_execution_phase}`, but this turn requested `{requested_execution_phase}`. "
+            f"Stay on the same ticket, run the `{requested_execution_phase}` phase, update artifacts, and finish with a matching `IMPL_RESULT`."
+        )
+        return {
+            "state": "soft_mismatch",
+            "reason": f"captured turn expects execution phase {requested_execution_phase}, but the assistant produced {observed_execution_phase}",
+            "turn_id": turn_id,
+            "summary": summary,
+            "expected_phase": expected_phase,
+            "observed_phase": observed_phase,
+            "continuation_message": continuation_message,
+            "announce": f"Re-running {ticket_id}. The last pass drifted from the requested {requested_execution_phase} phase.",
+        }
+
     return {
         "state": "aligned",
         "reason": "captured turn intent matches the resolved ticket and observed phase",
@@ -1059,6 +1053,7 @@ def impl_verdict(
     reason: str,
     orchestrator_message: str,
     evidence_ok: bool,
+    next_execution_phase: str | None = None,
     missing_evidence: list[str] | None = None,
     review_gate_failures: list[str] | None = None,
     blockers: list[str] | None = None,
@@ -1073,6 +1068,8 @@ def impl_verdict(
         "orchestrator_message": orchestrator_message,
         "evidence_ok": evidence_ok,
     }
+    if next_execution_phase:
+        payload["next_execution_phase"] = next_execution_phase
     if missing_evidence:
         payload["missing_evidence"] = missing_evidence
     if review_gate_failures:
@@ -1082,52 +1079,152 @@ def impl_verdict(
     return payload
 
 
-def review_packet_gate(ticket: dict[str, object]) -> tuple[bool, str, list[str]]:
-    if not ticket["review_packet_present"]:
-        return False, "review packet is missing", ["review packet missing"]
-
-    packet_errors = list(ticket["review_packet_errors"])
-    if packet_errors:
-        return False, "review packet is malformed", packet_errors
-
-    packet_missing = list(ticket["review_packet_missing"])
-    if packet_missing:
-        return False, "review packet is incomplete", [f"missing field: {item}" for item in packet_missing]
-
-    packet = dict(ticket["review_packet"])
+def evidence_artifact_gate(ticket: dict[str, object]) -> tuple[bool, str, list[str]]:
     failures: list[str] = []
-    reviewed_at = parse_reviewed_at(packet.get("reviewed_at"))
     updated_at = parse_updated_at(ticket.get("updated_at"))
+    artifact_root = ticket.get("artifact_root")
+    linked_artifacts = list(ticket.get("linked_artifacts") or [])
+    missing_artifacts = list(ticket.get("missing_artifacts") or [])
+    artifact_files = list(ticket.get("artifact_files") or [])
 
-    if packet.get("overall_verdict") != "pass":
-        failures.append(f"overall_verdict={packet.get('overall_verdict')}")
-    if bool(packet.get("rerun_required")):
-        failures.append("rerun_required=true")
-    for key in ("evidence_quality", "integration_readiness", "traceability", "freshness"):
-        if packet.get(key) != "pass":
-            failures.append(f"{key}={packet.get(key)}")
+    if not linked_artifacts:
+        failures.append("linked_artifacts=missing")
+    for item in missing_artifacts:
+        failures.append(f"missing_artifact={item}")
+    if not artifact_files:
+        failures.append("artifact_root=empty")
 
-    hard_gate_failures = packet.get("hard_gate_failures", [])
-    if isinstance(hard_gate_failures, list):
-        for item in hard_gate_failures:
-            if isinstance(item, str) and item.strip():
-                failures.append(f"hard_gate_failure={item.strip()}")
+    artifact_root_str = str(artifact_root) if isinstance(artifact_root, Path) else ""
+    if linked_artifacts and artifact_root_str and not any(path.startswith(artifact_root_str) for path in linked_artifacts):
+        failures.append("linked_artifacts=outside_ticket_root")
 
-    blocking_findings = packet.get("blocking_findings", [])
-    if isinstance(blocking_findings, list):
-        for item in blocking_findings:
-            if isinstance(item, str) and item.strip():
-                failures.append(f"blocking_finding={item.strip()}")
-
-    if reviewed_at is None:
-        failures.append("reviewed_at=invalid")
-    elif updated_at is not None and reviewed_at < updated_at:
-        failures.append("reviewed_at=stale")
+    if updated_at is not None:
+        existing_artifacts = [Path(path) for path in linked_artifacts if Path(path).exists()]
+        if existing_artifacts:
+            newest_artifact = max(
+                datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).astimezone()
+                for path in existing_artifacts
+            )
+            if newest_artifact.replace(second=0, microsecond=0) < updated_at:
+                failures.append("linked_artifacts=stale")
 
     if failures:
-        return False, "review packet gates are not passing", failures
+        return False, "evidence artifact gates are not passing", failures
 
     return True, "", []
+
+
+def current_execution_phase(current_run: dict[str, object] | None) -> str:
+    phase = str((current_run or {}).get("execution_phase") or "").strip().lower()
+    return phase if phase in {"impl", "qa", "demo"} else "impl"
+
+
+def execution_requirements(ticket: dict[str, object], current_run: dict[str, object] | None) -> dict[str, object]:
+    runtime_requirements = (current_run or {}).get("phase_requirements")
+    if isinstance(runtime_requirements, dict) and runtime_requirements:
+        return dict(runtime_requirements)
+    artifact_root = ticket.get("artifact_root")
+    artifact_root_str = str(artifact_root) if isinstance(artifact_root, Path) else ""
+    requirements: dict[str, object] = {
+        "impl": {
+            "completion_statuses": ["build_complete", "done"],
+            "artifact_root": artifact_root_str,
+        }
+    }
+    if bool((current_run or {}).get("requires_qa", ticket.get("requires_qa", True))):
+        requirements["qa"] = {
+            "artifact_root": str(Path(artifact_root_str) / "qa") if artifact_root_str else "",
+            "result_glob": "**/result.json",
+            "required_verdict": "pass",
+        }
+    if bool((current_run or {}).get("requires_demo", ticket.get("requires_demo", False))):
+        requirements["demo"] = {
+            "artifact_root": str(Path(artifact_root_str) / "demo") if artifact_root_str else "",
+            "result_glob": "**/result.json",
+            "required_verdict": "pass",
+        }
+    return requirements
+
+
+def linked_artifacts_for_phase(ticket: dict[str, object], phase_name: str) -> list[str]:
+    marker = f"/{phase_name}/"
+    return [path for path in list(ticket.get("linked_artifacts") or []) if marker in path]
+
+
+def latest_phase_result(ticket: dict[str, object], current_run: dict[str, object] | None, phase_name: str) -> tuple[dict[str, object] | None, list[str]]:
+    requirements = execution_requirements(ticket, current_run)
+    requirement = requirements.get(phase_name)
+    if not isinstance(requirement, dict):
+        return None, [f"phase_requirement={phase_name}:missing"]
+    artifact_root = str(requirement.get("artifact_root") or "").strip()
+    result_glob = str(requirement.get("result_glob") or "**/result.json").strip() or "**/result.json"
+    if not artifact_root:
+        return None, [f"{phase_name}_artifact_root=missing"]
+    root_path = Path(artifact_root)
+    if not root_path.exists():
+        return None, [f"{phase_name}_artifact_root=missing"]
+    matches = sorted(
+        [path for path in root_path.glob(result_glob) if path.is_file()],
+        key=lambda item: item.stat().st_mtime,
+        reverse=True,
+    )
+    if not matches:
+        return None, [f"{phase_name}_result=missing"]
+    result_path = matches[0]
+    try:
+        payload = json.loads(result_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None, [f"{phase_name}_result=invalid_json"]
+    if not isinstance(payload, dict):
+        return None, [f"{phase_name}_result=invalid_shape"]
+    payload = dict(payload)
+    payload["_path"] = str(result_path.resolve())
+    return payload, []
+
+
+def phase_result_gate(ticket: dict[str, object], current_run: dict[str, object] | None, phase_name: str) -> tuple[bool, str, list[str], dict[str, object] | None]:
+    payload, failures = latest_phase_result(ticket, current_run, phase_name)
+    if payload is None:
+        return False, f"{phase_name} result gates are not passing", failures, None
+
+    requirements = execution_requirements(ticket, current_run)
+    requirement = requirements.get(phase_name) if isinstance(requirements.get(phase_name), dict) else {}
+    required_verdict = str((requirement or {}).get("required_verdict") or "pass").strip()
+    result_path = str(payload.get("_path") or "").strip()
+    verdict = str(payload.get("verdict") or "").strip()
+    artifacts = payload.get("artifacts")
+    phase = str(payload.get("phase") or "").strip()
+    ticket_id = str(payload.get("ticket_id") or "").strip()
+    updated_at = parse_updated_at(ticket.get("updated_at"))
+    failures = []
+
+    if phase and phase != phase_name:
+        failures.append(f"{phase_name}_result_phase={phase}")
+    if ticket_id and ticket_id != str(ticket["ticket_id"]):
+        failures.append(f"{phase_name}_result_ticket_id={ticket_id}")
+    if verdict != required_verdict:
+        failures.append(f"{phase_name}_verdict={verdict or 'missing'}")
+    if not isinstance(artifacts, list) or not artifacts:
+        failures.append(f"{phase_name}_artifacts=missing")
+    else:
+        for item in artifacts:
+            if not isinstance(item, str) or not item.strip():
+                failures.append(f"{phase_name}_artifacts=invalid")
+                break
+    linked_artifacts = linked_artifacts_for_phase(ticket, phase_name)
+    if not linked_artifacts:
+        failures.append(f"{phase_name}_linked_artifacts=missing")
+    elif result_path and result_path not in linked_artifacts and not any(result_path.startswith(str(Path(path).resolve()).rsplit("/", 1)[0]) for path in linked_artifacts):
+        failures.append(f"{phase_name}_result=unlinked")
+    if updated_at is not None and result_path:
+        result_time = datetime.fromtimestamp(Path(result_path).stat().st_mtime, timezone.utc).astimezone().replace(second=0, microsecond=0)
+        if result_time < updated_at:
+            failures.append(f"{phase_name}_result=stale")
+
+    if failures:
+        return False, f"{phase_name} result gates are not passing", failures, payload
+
+    return True, "", [], payload
 
 
 def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[str]]:
@@ -1138,6 +1235,12 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
         "integration_readiness",
         "traceability",
         "freshness",
+        "qa_quality",
+        "demo_quality",
+        "stakeholder_readiness",
+        "stakeholder_readiness_reason",
+        "best_demo_artifact",
+        "storyline_gaps",
         "user_intent_impression",
         "user_intent_mismatch_reason",
         "obvious_next_step_exists",
@@ -1152,13 +1255,24 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
             missing.append(field)
 
     if missing:
-        return False, "reviewer omitted required completion-gate fields", [f"missing gate field: {item}" for item in missing]
+        return False, "completion-reviewer omitted required completion-gate fields", [f"missing gate field: {item}" for item in missing]
 
     failures: list[str] = []
-    for field in ("evidence_quality", "integration_readiness", "traceability", "freshness", "user_intent_impression"):
+    for field in (
+        "evidence_quality",
+        "integration_readiness",
+        "traceability",
+        "freshness",
+        "qa_quality",
+        "demo_quality",
+        "stakeholder_readiness",
+        "user_intent_impression",
+    ):
         if review.get(field) != "pass":
             failures.append(f"{field}={review.get(field)}")
     mismatch_reason = str(review.get("user_intent_mismatch_reason") or "").strip()
+    stakeholder_reason = str(review.get("stakeholder_readiness_reason") or "").strip()
+    best_demo_artifact = str(review.get("best_demo_artifact") or "").strip()
     if review.get("user_intent_impression") == "fail":
         if mismatch_reason:
             failures.append(f"user_intent_mismatch_reason={mismatch_reason}")
@@ -1166,6 +1280,28 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
             failures.append("user_intent_mismatch_reason=missing")
     elif mismatch_reason:
         failures.append("user_intent_mismatch_reason=unexpected")
+
+    if review.get("stakeholder_readiness") == "fail":
+        if stakeholder_reason:
+            failures.append(f"stakeholder_readiness_reason={stakeholder_reason}")
+        else:
+            failures.append("stakeholder_readiness_reason=missing")
+    elif stakeholder_reason:
+        failures.append("stakeholder_readiness_reason=unexpected")
+
+    if review.get("demo_quality") == "pass":
+        if not best_demo_artifact:
+            failures.append("best_demo_artifact=missing")
+    elif best_demo_artifact:
+        failures.append("best_demo_artifact=unexpected")
+
+    storyline_gaps = review.get("storyline_gaps", [])
+    if isinstance(storyline_gaps, list):
+        if review.get("stakeholder_readiness") == "pass" and storyline_gaps:
+            failures.append("storyline_gaps=unexpected")
+        for item in storyline_gaps:
+            if isinstance(item, str) and item.strip():
+                failures.append(f"storyline_gap={item.strip()}")
 
     obvious_next_step_exists = bool(review.get("obvious_next_step_exists"))
     next_step_safe = bool(review.get("next_step_safe"))
@@ -1196,12 +1332,12 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
                 failures.append(f"blocking_finding={item.strip()}")
 
     if failures:
-        return False, "reviewer completion gates are not passing", failures
+        return False, "completion-reviewer completion gates are not passing", failures
 
     return True, "", []
 
 
-def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker_result: dict[str, str]) -> dict[str, object]:
+def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker_result: dict[str, str], current_run: dict[str, object] | None = None) -> dict[str, object]:
     ticket_id = str(ticket["ticket_id"])
     blockers = list(ticket["blockers"])
     acceptance_gaps = list(ticket["acceptance_gaps"])
@@ -1209,6 +1345,10 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
     status = worker_result["status"]
     next_value = worker_result["next"]
     reason_suffix = worker_result["reason"]
+    execution_phase = current_execution_phase(current_run)
+    phase_requirements = execution_requirements(ticket, current_run)
+    qa_required = "qa" in phase_requirements
+    demo_required = "demo" in phase_requirements
 
     if blockers:
         return impl_verdict(
@@ -1257,18 +1397,101 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             evidence_ok=not evidence_gaps,
         )
 
-    if status == "done":
-        packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
-        if not packet_ok:
+    if current_phase == "building" and execution_phase == "impl" and status in {"build_complete", "done", "docs_complete"}:
+        if qa_required:
+            return impl_verdict(
+                ticket_id=ticket_id,
+                current_phase=current_phase,
+                decision="advance_execution_phase",
+                next_phase="building",
+                next_execution_phase="qa",
+                reason=reason_suffix or "implementation is ready for QA",
+                orchestrator_message=f"continue {ticket_id} in qa and produce ticket-scoped proof artifacts",
+                evidence_ok=False,
+            )
+        if demo_required:
+            return impl_verdict(
+                ticket_id=ticket_id,
+                current_phase=current_phase,
+                decision="advance_execution_phase",
+                next_phase="building",
+                next_execution_phase="demo",
+                reason=reason_suffix or "implementation is ready for demo",
+                orchestrator_message=f"continue {ticket_id} in demo and produce demo artifacts",
+                evidence_ok=False,
+            )
+
+    if current_phase == "building" and execution_phase == "qa" and status in {"qa_complete", "build_complete", "done"}:
+        qa_ok, qa_reason, qa_failures, _ = phase_result_gate(ticket, current_run, "qa")
+        if not qa_ok:
             return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
                 decision="repeat_impl",
                 next_phase="building",
-                reason=packet_reason,
-                orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
+                next_execution_phase="qa",
+                reason=qa_reason,
+                orchestrator_message=f"continue {ticket_id} in qa and resolve qa artifact failures",
                 evidence_ok=False,
-                review_gate_failures=packet_failures,
+                review_gate_failures=qa_failures,
+            )
+        if demo_required:
+            return impl_verdict(
+                ticket_id=ticket_id,
+                current_phase=current_phase,
+                decision="advance_execution_phase",
+                next_phase="building",
+                next_execution_phase="demo",
+                reason=reason_suffix or "qa passed and demo is required",
+                orchestrator_message=f"continue {ticket_id} in demo and produce demo artifacts",
+                evidence_ok=False,
+            )
+        return impl_verdict(
+            ticket_id=ticket_id,
+            current_phase=current_phase,
+            decision="complete_ticket",
+            next_phase="done",
+            reason=reason_suffix or "qa passed",
+            orchestrator_message=f"mark {ticket_id} complete",
+            evidence_ok=True,
+        )
+
+    if current_phase == "building" and execution_phase == "demo" and status in {"demo_complete", "build_complete", "done"}:
+        demo_ok, demo_reason, demo_failures, _ = phase_result_gate(ticket, current_run, "demo")
+        if not demo_ok:
+            return impl_verdict(
+                ticket_id=ticket_id,
+                current_phase=current_phase,
+                decision="repeat_impl",
+                next_phase="building",
+                next_execution_phase="demo",
+                reason=demo_reason,
+                orchestrator_message=f"continue {ticket_id} in demo and resolve demo artifact failures",
+                evidence_ok=False,
+                review_gate_failures=demo_failures,
+            )
+        return impl_verdict(
+            ticket_id=ticket_id,
+            current_phase=current_phase,
+            decision="complete_ticket",
+            next_phase="done",
+            reason=reason_suffix or "demo passed",
+            orchestrator_message=f"mark {ticket_id} complete",
+            evidence_ok=True,
+        )
+
+    if status == "done":
+        artifact_ok, artifact_reason, artifact_failures = evidence_artifact_gate(ticket)
+        if not artifact_ok:
+            return impl_verdict(
+                ticket_id=ticket_id,
+                current_phase=current_phase,
+                decision="repeat_impl",
+                next_phase="building",
+                reason=artifact_reason,
+                orchestrator_message=f"rerun {ticket_id} in building and resolve evidence artifact failures",
+                evidence_ok=False,
+                review_gate_failures=artifact_failures,
             )
         missing = acceptance_gaps + evidence_gaps
         if missing:
@@ -1293,17 +1516,17 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
         )
 
     if status == "build_complete":
-        packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
-        if not packet_ok:
+        artifact_ok, artifact_reason, artifact_failures = evidence_artifact_gate(ticket)
+        if not artifact_ok:
             return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
                 decision="repeat_impl",
                 next_phase="building",
-                reason=packet_reason,
-                orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
+                reason=artifact_reason,
+                orchestrator_message=f"rerun {ticket_id} in building and resolve evidence artifact failures",
                 evidence_ok=False,
-                review_gate_failures=packet_failures,
+                review_gate_failures=artifact_failures,
             )
         missing = acceptance_gaps + evidence_gaps
         if missing:
@@ -1328,17 +1551,17 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
         )
 
     if status == "docs_complete":
-        packet_ok, packet_reason, packet_failures = review_packet_gate(ticket)
-        if not packet_ok:
+        artifact_ok, artifact_reason, artifact_failures = evidence_artifact_gate(ticket)
+        if not artifact_ok:
             return impl_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
                 decision="repeat_impl",
                 next_phase="building",
-                reason=packet_reason,
-                orchestrator_message=f"rerun {ticket_id} in building and resolve review packet failures",
+                reason=artifact_reason,
+                orchestrator_message=f"rerun {ticket_id} in building and resolve evidence artifact failures",
                 evidence_ok=False,
-                review_gate_failures=packet_failures,
+                review_gate_failures=artifact_failures,
             )
         missing = acceptance_gaps + evidence_gaps
         if missing:
@@ -1391,7 +1614,7 @@ def run_impl_judge(ticket: dict[str, object], worker_result: str, current_run: d
         parsed = parse_impl_result(worker_result)
     except ValueError:
         return None
-    return decide_impl_transition(current_phase, ticket, parsed)
+    return decide_impl_transition(current_phase, ticket, parsed, current_run)
 
 
 def spawn_tmux_followup(
@@ -1400,6 +1623,7 @@ def spawn_tmux_followup(
     next_phase: str,
     current_run: dict[str, object] | None,
     reason: str,
+    execution_phase: str = "",
 ) -> dict[str, object] | None:
     if current_run is None:
         return None
@@ -1419,6 +1643,8 @@ def spawn_tmux_followup(
         next_phase,
         "--auto-continue",
     ]
+    if execution_phase:
+        cmd.extend(["--execution-phase", execution_phase])
     if isinstance(session, str) and session:
         cmd.extend(["--tmux-session", session])
     if isinstance(run_state, str) and run_state:
@@ -1466,7 +1692,9 @@ def build_missing_impl_result_reason(ticket: dict[str, object], current_run: dic
     )
 
 
-def skill_name_for_phase(phase: str) -> str:
+def skill_name_for_phase(phase: str, execution_phase: str = "") -> str:
+    if phase == "building" and execution_phase in {"qa", "demo"}:
+        return execution_phase
     mapping = {
         "planning": "impl-plan",
         "building": "impl",
@@ -1475,8 +1703,8 @@ def skill_name_for_phase(phase: str) -> str:
     return mapping.get(phase, "impl")
 
 
-def build_live_followup_reason(phase: str, orchestrator_message: str, ticket: dict[str, object]) -> str:
-    skill_name = skill_name_for_phase(phase)
+def build_live_followup_reason(phase: str, orchestrator_message: str, ticket: dict[str, object], execution_phase: str = "") -> str:
+    skill_name = skill_name_for_phase(phase, execution_phase)
     return (
         "Continue the current live Codex lane.\n\n"
         f"Follow-up reason: {orchestrator_message}\n\n"
@@ -1490,6 +1718,9 @@ def summarize_impl_hook(ticket_id: str, decision: str, next_phase: str, reason: 
     if decision in {"repeat_impl_plan", "repeat_impl"}:
         target = next_phase or "same-phase"
         return f"Impl repeat: {ticket_id} -> {target} ({reason})"
+    if decision == "advance_execution_phase":
+        target = next_phase or "building"
+        return f"Impl advance execution: {ticket_id} -> {target} ({reason})"
     if decision == "advance_ticket":
         target = next_phase or "next-phase"
         return f"Impl advance: {ticket_id} -> {target} ({reason})"
@@ -1575,6 +1806,12 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
     freshness = payload.get("freshness")
     user_intent_impression = payload.get("user_intent_impression")
     user_intent_mismatch_reason = payload.get("user_intent_mismatch_reason")
+    qa_quality = payload.get("qa_quality")
+    demo_quality = payload.get("demo_quality")
+    stakeholder_readiness = payload.get("stakeholder_readiness")
+    stakeholder_readiness_reason = payload.get("stakeholder_readiness_reason")
+    best_demo_artifact = payload.get("best_demo_artifact")
+    storyline_gaps = payload.get("storyline_gaps")
     obvious_next_step_exists = payload.get("obvious_next_step_exists")
     next_step_safe = payload.get("next_step_safe")
     obvious_next_step = payload.get("obvious_next_step")
@@ -1596,10 +1833,23 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
         return None
     if overall_score is not None and not isinstance(overall_score, (int, float)):
         return None
-    for value in (evidence_quality, integration_readiness, traceability, freshness, user_intent_impression):
+    for value in (
+        evidence_quality,
+        integration_readiness,
+        traceability,
+        freshness,
+        qa_quality,
+        demo_quality,
+        stakeholder_readiness,
+        user_intent_impression,
+    ):
         if value is not None and value not in PASS_FAIL_VALUES:
             return None
     if user_intent_mismatch_reason is not None and not isinstance(user_intent_mismatch_reason, str):
+        return None
+    if stakeholder_readiness_reason is not None and not isinstance(stakeholder_readiness_reason, str):
+        return None
+    if best_demo_artifact is not None and not isinstance(best_demo_artifact, str):
         return None
     for value in (obvious_next_step_exists, next_step_safe, user_would_expect_more):
         if value is not None and not isinstance(value, bool):
@@ -1612,6 +1862,11 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
         if not isinstance(blocking_findings, list):
             return None
         if any(not isinstance(item, str) or not item.strip() for item in blocking_findings):
+            return None
+    if storyline_gaps is not None:
+        if not isinstance(storyline_gaps, list):
+            return None
+        if any(not isinstance(item, str) or not item.strip() for item in storyline_gaps):
             return None
 
     parsed: dict[str, object] = {
@@ -1632,6 +1887,18 @@ def parse_role_output(output_path: Path) -> dict[str, object] | None:
         parsed["traceability"] = traceability
     if freshness is not None:
         parsed["freshness"] = freshness
+    if qa_quality is not None:
+        parsed["qa_quality"] = qa_quality
+    if demo_quality is not None:
+        parsed["demo_quality"] = demo_quality
+    if stakeholder_readiness is not None:
+        parsed["stakeholder_readiness"] = stakeholder_readiness
+    if stakeholder_readiness_reason is not None:
+        parsed["stakeholder_readiness_reason"] = stakeholder_readiness_reason.strip()
+    if best_demo_artifact is not None:
+        parsed["best_demo_artifact"] = best_demo_artifact.strip()
+    if storyline_gaps is not None:
+        parsed["storyline_gaps"] = [str(item).strip() for item in storyline_gaps]
     if user_intent_impression is not None:
         parsed["user_intent_impression"] = user_intent_impression
     if user_intent_mismatch_reason is not None:
@@ -1703,6 +1970,8 @@ def reviewer_prompt(
         "acceptance_gaps": ticket["acceptance_gaps"],
         "evidence_gaps": ticket["evidence_gaps"],
         "blockers": ticket["blockers"],
+        "requires_qa": ticket["requires_qa"],
+        "requires_demo": ticket["requires_demo"],
         "current_run": current_run or {},
         "claim": (current_run or {}).get("claim", {}),
         "last_user_turn": (current_run or {}).get("last_user_turn", {}),
@@ -1715,9 +1984,12 @@ def reviewer_prompt(
         ticket_snapshot.update(
             {
                 "completion_claim_is_candidate_only": True,
-                "review_packet": ticket["review_packet"],
-                "review_packet_missing": ticket["review_packet_missing"],
-                "review_packet_errors": ticket["review_packet_errors"],
+                "execution_phase": current_execution_phase(current_run),
+                "artifact_root": str(ticket["artifact_root"]),
+                "linked_artifacts": ticket["linked_artifacts"],
+                "missing_artifacts": ticket["missing_artifacts"],
+                "artifact_files": ticket["artifact_files"][:20],
+                "artifact_file_count": len(ticket["artifact_files"]),
             }
         )
     return role_prompt(
@@ -2139,6 +2411,7 @@ def main() -> int:
             return emit_stop_payload(system_message="Stop hook: Impl judge unavailable; stopping safely.")
         decision = str(verdict.get("decision", ""))
         next_phase = str(verdict.get("next_phase", ""))
+        next_execution_phase = str(verdict.get("next_execution_phase", "")).strip()
         reason = str(verdict.get("reason", "")).strip() or "impl verdict available"
         orchestrator_message = str(verdict.get("orchestrator_message", "")).strip() or reason
         hook_summary = summarize_impl_hook(str(ticket["ticket_id"]), decision, next_phase, reason)
@@ -2154,6 +2427,9 @@ def main() -> int:
             }
             if next_phase:
                 state_updates["next_phase"] = next_phase
+            if next_execution_phase:
+                state_updates["execution_phase"] = next_execution_phase
+                state_updates["skill_name"] = next_execution_phase
             current_run = persist_runtime_update(project_root, current_run, state_updates)
             current_run = publish_hook_status(project_root, current_run, decision=decision, summary=hook_summary)
         append_hook_log(
@@ -2166,11 +2442,13 @@ def main() -> int:
                 "worker_result": impl_result,
                 "decision": decision,
                 "next_phase": next_phase,
+                "next_execution_phase": next_execution_phase,
                 "reason": reason,
             },
         )
         current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
-        if decision in {"repeat_impl_plan", "repeat_impl"}:
+        execution_phase = str((current_run or {}).get("execution_phase") or current_execution_phase(current_run))
+        if decision in {"repeat_impl_plan", "repeat_impl", "advance_execution_phase"}:
             if decision == "repeat_impl" and not impl_loop_allowed:
                 current_run = persist_impl_loop_active(project_root, current_run, False)
                 announce_message("Stopping safely. Repeat impl work is not active for this session.")
@@ -2189,8 +2467,9 @@ def main() -> int:
                 ),
             )
             target_phase = next_phase if next_phase in {"planning", "building", "documenting"} else str(ticket["phase"] or "building")
+            target_execution_phase = next_execution_phase or execution_phase
             if live_interactive_lane:
-                continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket)
+                continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket, target_execution_phase)
                 return continue_hook_response(
                     payload=payload,
                     ticket=ticket,
@@ -2204,6 +2483,7 @@ def main() -> int:
                 target_phase,
                 current_run,
                 orchestrator_message,
+                target_execution_phase,
             )
             if followup is not None:
                 append_hook_log(
@@ -2233,8 +2513,9 @@ def main() -> int:
             if decision == "advance_ticket" and current_phase == "planning" and next_phase == "building":
                 current_run = persist_impl_loop_active(project_root, current_run, True)
                 target_phase = next_phase if next_phase in {"planning", "building", "documenting"} else str(ticket["phase"] or "building")
+                target_execution_phase = next_execution_phase or current_execution_phase(current_run)
                 if live_interactive_lane:
-                    continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket)
+                    continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket, target_execution_phase)
                     return continue_hook_response(
                         payload=payload,
                         ticket=ticket,
@@ -2248,6 +2529,7 @@ def main() -> int:
                     target_phase,
                     current_run,
                     orchestrator_message,
+                    target_execution_phase,
                 )
                 if followup is not None:
                     append_hook_log(
@@ -2272,7 +2554,7 @@ def main() -> int:
 
             review = run_role(
                 base,
-                "reviewer",
+                "completion-reviewer",
                 reviewer_prompt(
                     message,
                     ticket,
@@ -2287,7 +2569,7 @@ def main() -> int:
                     base,
                     {
                         "timestamp": now_iso(),
-                        "mode": "reviewer",
+                        "mode": "completion-reviewer",
                         "ticket_id": str(ticket["ticket_id"]),
                         "outcome": "role_unavailable",
                     },
@@ -2297,12 +2579,12 @@ def main() -> int:
 
             review_action = str(review["action"])
             review_reason = str(review["reason"])
-            review_summary = summarize_role_action(str(ticket["ticket_id"]), "reviewer", review_action, review_reason)
+            review_summary = summarize_role_action(str(ticket["ticket_id"]), "completion-reviewer", review_action, review_reason)
             append_hook_log(
                 base,
                 {
                     "timestamp": now_iso(),
-                    "mode": "reviewer",
+                    "mode": "completion-reviewer",
                     "ticket_id": str(ticket["ticket_id"]),
                     "action": review_action,
                     "reason": review_reason,
@@ -2311,6 +2593,12 @@ def main() -> int:
                     "integration_readiness": review.get("integration_readiness"),
                     "traceability": review.get("traceability"),
                     "freshness": review.get("freshness"),
+                    "qa_quality": review.get("qa_quality"),
+                    "demo_quality": review.get("demo_quality"),
+                    "stakeholder_readiness": review.get("stakeholder_readiness"),
+                    "stakeholder_readiness_reason": review.get("stakeholder_readiness_reason"),
+                    "best_demo_artifact": review.get("best_demo_artifact"),
+                    "storyline_gaps": review.get("storyline_gaps", []),
                     "rerun_required": review.get("rerun_required"),
                     "blocking_findings": review.get("blocking_findings", []),
                 },
@@ -2323,13 +2611,13 @@ def main() -> int:
                     announce_message("Stopping safely. Reviewer asked for same-ticket impl continuation without an active session claim.")
                     return emit_stop_payload(
                         continue_value=False,
-                        stop_reason="reviewer requested same-ticket impl continuation without an active impl loop",
+                        stop_reason="completion-reviewer requested same-ticket impl continuation without an active impl loop",
                         system_message=f"Stop hook: {review_summary}",
                     )
                 current_run = persist_impl_loop_active(project_root, current_run, True)
                 continuation_message = (
                     str(review.get("continuation_message", "")).strip()
-                    or f"Continue {ticket['ticket_id']} in building and resolve reviewer gate failures: "
+                    or f"Continue {ticket['ticket_id']} in building and resolve completion-reviewer gate failures: "
                     + "; ".join(reviewer_gate_failures[:2])
                 )
                 return continue_hook_response(
@@ -2378,8 +2666,8 @@ def main() -> int:
     if impl_runtime_active and not impl_result:
         review = run_role(
             base,
-            "reviewer",
-            reviewer_prompt(
+                "completion-reviewer",
+                reviewer_prompt(
                 message,
                 ticket,
                 current_run,
@@ -2394,14 +2682,14 @@ def main() -> int:
                 return emit_stop_payload(
                     continue_value=False,
                     stop_reason="missing IMPL_RESULT without an active impl loop",
-                    system_message=f"Stop hook: reviewer unavailable for {ticket['ticket_id']}",
+                    system_message=f"Stop hook: completion-reviewer unavailable for {ticket['ticket_id']}",
                 )
             current_run = persist_impl_loop_active(project_root, current_run, True)
             append_hook_log(
                 base,
                 {
                     "timestamp": now_iso(),
-                    "mode": "reviewer",
+                    "mode": "completion-reviewer",
                     "ticket_id": str(ticket["ticket_id"]),
                     "outcome": "role_unavailable",
                 },
@@ -2411,18 +2699,18 @@ def main() -> int:
                 payload=payload,
                 ticket=ticket,
                 continuation_message=continuation_message,
-                hook_summary=f"reviewer: {ticket['ticket_id']} -> continue_same_ticket (reviewer unavailable)",
+                hook_summary=f"completion-reviewer: {ticket['ticket_id']} -> continue_same_ticket (completion-reviewer unavailable)",
                 announce=f"Continuing {ticket['ticket_id']}. Missing IMPL_RESULT in impl mode.",
             )
 
         proposal_action = review["action"]
         proposal_reason = review["reason"]
-        proposal_summary = summarize_role_action(str(ticket["ticket_id"]), "reviewer", proposal_action, proposal_reason)
+        proposal_summary = summarize_role_action(str(ticket["ticket_id"]), "completion-reviewer", proposal_action, proposal_reason)
         append_hook_log(
             base,
             {
                 "timestamp": now_iso(),
-                "mode": "reviewer",
+                "mode": "completion-reviewer",
                 "ticket_id": str(ticket["ticket_id"]),
                 "action": proposal_action,
                 "reason": proposal_reason,

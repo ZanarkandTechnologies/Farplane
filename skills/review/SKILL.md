@@ -12,8 +12,8 @@ feedback about whether another pass is required.
 
 Use this skill to review one active ticket by selecting the right rubric
 families, inspecting the relevant code/evidence plus the smallest neighboring
-surfaces needed to test consistency, and writing a `Review Packet` back into
-the ticket.
+surfaces needed to test consistency, and producing a structured review result
+that the ticket links from `Evidence`.
 
 This skill uses the anchored `1.0`-to-`5.0` review contract:
 
@@ -54,7 +54,7 @@ Ensure an agent can execute the core path after only reading this file.
   7. rank substantive findings by severity and confidence
   8. score each family on the anchored `1.0`-to-`5.0` scale
   9. explain the findings that prevented a lower or higher adjacent score
-  10. write the `Review Packet`
+  10. write the structured review result
   11. return the scored verdict
 - Core decision branches:
   - planning -> `spec-contract` + `implementation-plan`
@@ -66,7 +66,7 @@ Ensure an agent can execute the core path after only reading this file.
   - do not output only questions; return anchored scores, findings, and next actions
   - do not approve weak evidence or weak integration readiness
 - Outcome contract:
-  - the active ticket contains a `Review Packet`
+  - the active ticket links the review result from `Evidence`
   - the review returns anchored scores, search scope, severity-ranked findings,
     verdict, rerun flag, hard-gate failures, blocking findings, and next action
 
@@ -101,7 +101,7 @@ Ensure an agent can execute the core path after only reading this file.
 8. Rank substantive findings with severity, confidence, and concrete file refs.
 9. Score the work against the selected rubric dimensions using the anchored
    `1.0`-to-`5.0` scale.
-10. Write a `Review Packet` into the ticket.
+10. Write the review result and make sure the ticket links it from `Evidence`.
 11. Return:
    - work_type
    - search_scope
@@ -253,7 +253,7 @@ Return:
 - [ ] Completion-gate fields are explicit when evidence is in scope
 - [ ] Substantive findings include severity or priority, concrete file refs, and a next action
 - [ ] `next_action` is concrete
-- [ ] `Review Packet` written back into the ticket
+- [ ] Review result written and linked from the ticket `Evidence` section
 
 ## Use with the Loop
 

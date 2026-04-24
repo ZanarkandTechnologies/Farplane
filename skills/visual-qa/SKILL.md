@@ -160,7 +160,7 @@ Use the ticket's declared screens/states to decide what to capture; do not rely 
 
 <!--
 This report format is the handoff boundary between visual judgment and ticket write-back.
-qa-tester should surface the best evidence item into the ticket's User Evidence block.
+qa-tester should surface the best evidence item into the ticket's `Evidence` section.
 -->
 
 Use this exact structure:
@@ -174,11 +174,11 @@ Use this exact structure:
 - `Severity`: `blocker | major | minor`
 - `Fix directives`: exact implementation changes (component/class/CSS-level)
 - `Artifacts`: paths to snapshots/screenshots/logs/traces
-- `Best evidence item`: the screenshot/artifact `qa-tester` should surface in the ticket `User Evidence` section
+- `Best evidence item`: the screenshot/artifact `qa-tester` should surface in the ticket `Evidence` section
 
 Write the report to:
 
-- `docs/research/qa-testing/YYYY-MM-DD_visual-qa.md`
+- `tickets/artifacts/TASK-XXXX/qa/<timestamp>/visual-qa.md`
 
 ## PR enforcement guidance
 

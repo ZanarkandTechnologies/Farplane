@@ -11,7 +11,7 @@
 ## Workflow: Quick smoke test (no Playwright)
 
 ```bash
-RUN_DIR="docs/research/qa-testing/$(date -u +%F_%H%M%S)_smoke"
+RUN_DIR="tickets/artifacts/TASK-XXXX/qa/$(date -u +%F_%H%M%S)_smoke"
 mkdir -p "$RUN_DIR/screens" "$RUN_DIR/logs"
 
 agent-browser open http://localhost:3000
@@ -38,10 +38,10 @@ agent-browser --session A close
 agent-browser --session B close
 ```
 
-## Workflow: Capture evidence for `docs/research/qa-testing/`
+## Workflow: Capture evidence for `tickets/artifacts/TASK-XXXX/qa/`
 
 ```bash
-RUN_DIR="docs/research/qa-testing/$(date -u +%F_%H%M%S)_smoke"
+RUN_DIR="tickets/artifacts/TASK-XXXX/qa/$(date -u +%F_%H%M%S)_smoke"
 mkdir -p "$RUN_DIR/screens" "$RUN_DIR/logs"
 
 agent-browser open http://localhost:3000

@@ -106,9 +106,9 @@ When using the anti-slop playbook, search for:
   the work is unusually well-contained, easy to merge or hand off, and leaves
   very little uncertainty about safety or neighboring impact.
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

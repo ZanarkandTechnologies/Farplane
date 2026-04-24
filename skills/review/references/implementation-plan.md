@@ -108,9 +108,9 @@ Ask:
   lean; it explains the tradeoff, the order, and the proof path so well that
   very little interpretive judgment is left for the implementer.
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

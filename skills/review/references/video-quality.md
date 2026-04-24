@@ -78,9 +78,9 @@ Ask:
 - Findings should name the missing state, illegible moment, or misleading edit
   instead of praising the recording for existing at all.
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

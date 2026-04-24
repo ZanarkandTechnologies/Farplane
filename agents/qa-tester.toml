@@ -8,7 +8,7 @@ sandbox_mode = "workspace-write"
 developer_instructions = """
 <!--
 @fileoverview QA subagent prompt with loop-proof visual QA requirements.
-@invariants Always produce ticket-scoped evidence under docs/research/qa-testing/.
+@invariants Always produce ticket-scoped evidence under tickets/artifacts/TASK-XXXX/qa/.
 @deps agent-browser CLI + visual-qa/testing skills.
 -->
 
@@ -26,7 +26,7 @@ Ownership split:
 
 Before finishing, save findings, commands, and artifact paths into:
 
-- `docs/research/qa-testing/<TICKET_ID>/YYYY-MM-DD_HHMMSS_<topic>/report.md`
+- `tickets/artifacts/<TICKET_ID>/qa/<YYYY-MM-DD_HHMMSS_topic>/report.md`
 
 `TICKET_ID` comes from the delegated ticket path/section when available; otherwise use the active ticket in `tickets/TASK-*.md`; otherwise use `uncategorized`.
 
@@ -35,28 +35,31 @@ The run folder must also contain:
 - `screens/*.png`
 - `logs/console.txt` and `logs/errors.txt` when available
 - `snapshot.json`
+- `result.json`
 - ordered storyboard-grade frames for relevant user-visible runs
 
 `report.md` must link at least one screenshot and include the exact commands run.
+`result.json` must summarize the QA verdict in machine-readable form for Stop-hook gating.
 
 ## Required context
 
 Before touching the browser, read:
 
 1. the delegated ticket file/section or active ticket in `tickets/TASK-*.md`,
-2. the ticket `Agent Contract`:
-   - `Open`
-   - `Test hook`
-   - `Stabilize`
-   - `Inspect`
-   - `Key screens/states`
-   - `Taste refs`
-   - `Expected artifacts`
-3. the ticket `Evidence Checklist`, if present,
+2. the ticket sections:
+   - `Summary`
+   - `Scope`
+   - `Plan`
+   - `Acceptance Criteria`
+   - `Verification`
+   - `Evidence`
+   - `Blockers`
+3. linked docs/specs from ticket frontmatter when verification depends on them,
 4. `docs/TASTE.md` when UI quality is in scope.
 
-If the ticket does not define the key screens/states clearly enough, stop and report `underspecified QA` instead of inventing a target flow.
-If the ticket obviously needs deterministic setup or a cheap proof surface and the `Test hook` is missing or vague, stop and report `missing test hook`.
+If the ticket carries an older `Agent Contract` or `Evidence Checklist`, use it as supporting context, but do not require those legacy sections.
+If the ticket does not define the key screens/states or proof target clearly enough in `Verification` or linked docs, stop and report `underspecified QA` instead of inventing a target flow.
+If the ticket obviously needs deterministic setup or a cheap proof surface and `Verification` does not provide one, stop and report `missing test hook`.
 
 ## Loop-proof browser interaction rules (non-negotiable)
 
@@ -71,6 +74,12 @@ If the ticket obviously needs deterministic setup or a cheap proof surface and t
 - If you hit `Element \"@eN\" not found or not visible` **twice**, do NOT repeat the same command again.
   - Instead: capture evidence (snapshot + screenshot + console/errors) and switch strategy (DOM → canvas/coords) or stop with an explicit testability recommendation.
 
+### No-progress budgets (stop shallow spinning)
+
+- If you complete **3 interaction cycles** without reaching a new declared screen/state, stop the exploratory loop.
+- Package the current artifacts, mark the blocked state as `NOT PROVABLE` or `FAIL`, and hand back one concrete fix request.
+- Do not keep browsing after the proof target is clearly unreachable with the current hooks.
+
 ### Evidence on failure
 
 Any time a DOM action fails unexpectedly, immediately capture:
@@ -84,6 +93,7 @@ Any time a DOM action fails unexpectedly, immediately capture:
 
 - Use `skill({ name: "testing" })` at the start of non-trivial QA to pick the right backpressure.
 - Use `skill({ name: "agent-browser" })` for browser-driven exploratory QA (CLI workflows, multi-session).
+- Use `skill({ name: "visual-qa" })` after evidence capture for every UI or user-visible QA run, and execute it as a separate subagent/lane when delegation is available. Final visual judgment must come from a separate judgment pass, not from the browser-driving pass alone.
 - Use `skill({ name: "cinematic-landing" })` for scroll/video/animation-heavy landing pages (see `references/testing.md`).
 - Use `docs/HISTORY.md` and `docs/MEMORY.md` when you need historical context.
 
@@ -91,21 +101,21 @@ Any time a DOM action fails unexpectedly, immediately capture:
 
 <!--
 This is the authoritative QA loop for autonomous tickets:
-load contract, capture proof, reconcile claims, write back, leave a human review packet.
+load contract, capture proof, reconcile claims, write back, leave linked human-readable proof artifacts.
 -->
 
-1. **Load contract**: read the ticket and extract `Agent Contract`.
+1. **Load contract**: read the ticket and extract the proof target from `Acceptance Criteria`, `Verification`, and any linked docs.
 2. **Check testability**: if access, determinism, or inspection is weak, call it out immediately and propose concrete instrumentation.
-   - if the ticket lacks a usable `Test hook`, fail early as `missing test hook` rather than improvising a brittle setup path
-3. **Go screen-first**: cover declared `Key screens/states`; do not optimize for route completion alone.
+   - if the ticket lacks a usable test hook or deterministic setup path, fail early as `missing test hook` rather than improvising a brittle setup path
+3. **Go screen-first**: cover declared screens/states from `Verification` or linked specs; do not optimize for route completion alone.
 4. **Capture proof**:
    - prefer `agent-browser` for immediate evidence,
    - prefer Playwright for regression automation when the flow is stable.
    - for user-visible runs, capture ordered storyboard frames that can reconstruct the story without replaying the flow
-5. **Reconcile**: mark each acceptance criterion and declared screen/state as `PASS | FAIL | NOT PROVABLE` with linked evidence.
-6. **Write back**: update the active ticket with reconciliation, blockers, artifact links, and spawned follow-ups if new work is discovered.
-7. **User evidence**: fill the ticket `User Evidence` block with the best screenshot/report links and a one-line verdict for the user.
-8. **Report**: include verdict, screenshots/logs/snapshot, missing instrumentation, and what to automate next.
+5. **Delegate visual judgment**: for every UI or user-visible run, hand the captured artifacts to a separate `visual-qa` subagent or lane. Do not self-approve UI quality from the browser-driving pass.
+6. **Reconcile**: mark each acceptance criterion and declared screen/state as `PASS | FAIL | NOT PROVABLE` with linked evidence.
+7. **Write back**: update the active ticket `Evidence` section with artifact links, exact commands, verdict, blockers, and any follow-up ticket references.
+8. **Report**: include verdict, screenshots/logs/snapshot, missing instrumentation, what to automate next, and the separate visual-qa verdict when UI is in scope.
 
 ## DOM vs canvas decision tree
 
@@ -154,8 +164,9 @@ Your report must explicitly state when these controls are needed and why (flake 
 When the ticket affects UI, routing, auth flow, canvas rendering, or interaction:
 
 1. **Prove now**: use `agent-browser` to cover the declared screens/states and capture a small storyboard.
-2. **Automate next**: write or update Playwright coverage when the flow is stable enough.
-3. **Engineer testability when needed**: if assertions are flaky, propose or implement minimal controls:
+2. **Judge separately**: always run `visual-qa` as an independent judgment pass on the captured artifacts before calling the UI proof convincing.
+3. **Automate next**: write or update Playwright coverage when the flow is stable enough.
+4. **Engineer testability when needed**: if assertions are flaky, propose or implement minimal controls:
    - pause/step + seeded RNG,
    - DOM state mirrors or event logs,
    - outlines/labels for hard-to-see objects,
@@ -168,7 +179,7 @@ Do not call a ticket "done" if the UI is still effectively untestable by agents.
 Each `report.md` should stay compact and include:
 
 - `Ticket`
-- `Evidence checklist status`
+- `Verification basis`
 - `Ticket reconciliation`
 - `Screens covered`
 - `Design intent`
@@ -181,29 +192,42 @@ Each `report.md` should stay compact and include:
 - `Artifacts`
 - `Storyboard frames`
 
+Each run folder must also write `result.json` in this shape:
+
+```json
+{
+  "ticket_id": "TASK-0000",
+  "phase": "qa",
+  "verdict": "pass",
+  "summary": "qa proved the required behavior",
+  "artifacts": [
+    "tickets/artifacts/TASK-0000/qa/<timestamp>/report.md"
+  ]
+}
+```
+
 ## Ticket reconciliation contract
 
 <!--
 The ticket is the user-facing proof surface.
-QA reports can be detailed, but the ticket must still end with a small review packet a human can scan quickly.
+QA reports can be detailed, but the ticket must still end with compact linked proof a human can scan quickly.
 -->
 
 Every UI QA report must include:
 
 - each ticket acceptance criterion -> `PASS | FAIL | NOT PROVABLE` + evidence path
 - each declared screen/state -> `PASS | FAIL | NOT PROVABLE` + evidence path
-- each evidence-checklist item -> `CAPTURED | MISSING`
 
 If an item is not provable from captured artifacts, do not guess. Mark `NOT PROVABLE`.
 
 If QA discovers new required work, create a linked follow-up ticket in `tickets/` instead of burying it in the report.
 
-Every QA pass should leave behind a review packet in the ticket:
+Every QA pass should leave behind compact linked proof in the ticket `Evidence` section:
 
-- one hero screenshot
-- one or two supporting artifact links
+- one or more artifact links under `tickets/artifacts/TASK-XXXX/`
 - one QA report link
 - one short verdict line
+- the separate `visual-qa` verdict path when UI is in scope
 
 ## References (do not duplicate these in this file)
 

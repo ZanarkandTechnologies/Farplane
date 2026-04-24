@@ -7,4 +7,4 @@
 - [ ] If UI judgment is needed, use the [Visual QA](../visual-qa/SKILL.md) skill rather than faking visual review inside this skill.
 - [ ] If the ticket claims screenshots, traces, logs, or QA artifacts, qualify that evidence before passing review.
 - [ ] Rank substantive findings by severity and confidence instead of returning generic questions.
-- [ ] Write the `Review Packet` with scores, verdict, hard-gate failures if any, and the concrete next action.
+- [ ] Write the review result with scores, verdict, hard-gate failures if any, and the concrete next action, then make sure the ticket links it from `Evidence`.

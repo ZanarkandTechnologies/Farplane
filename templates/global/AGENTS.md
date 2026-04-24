@@ -38,7 +38,8 @@ Done only if relevant items pass:
 - repeated failures or user correction patterns logged in `docs/TROUBLES.md` when applicable
 - new invariants logged and referenced
 - review loop done; auto-run `review` at the end of `impl-plan` and at the end of `impl`, run it after other meaningful planning/build/doc passes when warranted, and always run it before any completion claim; `visual-qa` only if UI changed
-- Ralph build/documenting completion claims require both checklist proof and a passing `Review Packet`
+- build/documenting completion claims require both checklist proof and a fresh
+  review result attached through the ticket evidence/artifact surface
 - changes pushed to GitHub when the workflow calls for publishing
 
 ## Boundary
@@ -49,6 +50,7 @@ Use:
 
 - `advise` when the user needs options, tradeoff framing, or a strong recommendation and has not already supplied a clear take
 - `commit-message` for compact commit subject style
+- `desloppify` when the operator wants repo cleanup driven by the `desloppify` CLI or wants that cleanup delegated to one bounded worker
 - `repent` when the operator explicitly wants audit-then-fix recovery mode after the assistant likely missed something obvious
 - `impl-plan` for ticket planning shape
 - `prd` when reqs are unclear
@@ -122,6 +124,10 @@ Planning handoff rule:
 - create a new file only when the repo contract, ticket workflow, or module scaffolding rules call for one, or when the detail is durable enough to earn its own artifact
 - when a lot of detail exists, respond in chat with the shortest summary that gets the user back up to speed and point to the durable artifact rather than re-pasting it
 - if the detail is ephemeral, low-value, or only useful for the current thought process, keep it out of both chat and the repo
+- when summarizing implemented features or changed behavior for the user, prefer `2-4` short flat bullets over one dense paragraph when there is more than one meaningful change to explain
+- for implemented feature explanations, use explicit `Before:` and `After:` framing when it makes the behavior change easier to scan
+- add one tiny `Example:` when helpful, especially when the behavior change is easier to understand from a concrete scenario than from implementation terms
+- keep feature explanations simple and concrete enough that a child could follow the causal change, without becoming childish or inaccurate
 - before a substantive user-facing answer about changed repo state after a meaningful pass boundary, run `review` before deciding the final response; interim progress updates are exempt, and do not give a completion claim, stable recommendation, or "done" answer on repo changes without a fresh review pass
 
 ## Core Rules
@@ -221,6 +227,8 @@ Required:
 
 - repro/runtime bug with unclear cause -> `runtime-debugging`
 - UI behavior, layout, or style change -> `visual-qa`
+- meaningful QA or evidence gathering for implemented work should run through a
+  specialist lane rather than being self-approved by the builder
 - broad cross-module exploration -> `explore`
 - auto-run at the end of `impl-plan` and `impl`, at other meaningful planning/build/doc checkpoints when warranted, and before a completion claim -> `review`
 
@@ -231,16 +239,8 @@ Avoid:
 - running `review` after every microscopic edit when no meaningful pass boundary has been reached
 - unnecessary delegation for small local edits
 
-If a plan delegates, include:
-
-- delegated agent
-- skill
-- one-line why
-- expected artifact
-- exact ticket file path
-- required write-back target in that ticket
-
-If none: `Not needed`.
+Keep delegation policy here and in orchestration specs, not duplicated inside
+every ticket body.
 
 ## Ticket State Machine
 

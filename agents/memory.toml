@@ -43,7 +43,7 @@ docs/research/
 ├── librarian/             # External patterns & repo analysis
 ├── remote-documentation/  # Official documentation synthesis
 ├── web-research/          # General web research
-└── qa-testing/            # Test reports
+└── qa-testing/            # Historical test reports
 ```
 
 File naming: `YYYY-MM-DD_[topic].md`
@@ -72,7 +72,7 @@ Discover what research already exists on a topic.
 | "What do the docs say?" | `docs/research/remote-documentation/` |
 | "What are best practices?" | `docs/research/web-research/` |
 | "What was the plan for X?" | `docs/progress.md` |
-| "What did tests find?" | `docs/research/qa-testing/` |
+| "What did tests find?" | `tickets/artifacts/` first, then `docs/research/qa-testing/` for historical reports |
 
 ---
 

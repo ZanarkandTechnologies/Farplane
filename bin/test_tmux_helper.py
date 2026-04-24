@@ -107,3 +107,41 @@ class TmuxHelperOutputFormattingTests(unittest.TestCase):
             stderr_buffer.getvalue(),
             "followup failed: TASK-0025 -> building | tmux send-keys failed | pane=%42\npane no longer exists\n",
         )
+
+
+class TmuxHelperLaneContractTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.tmux_helper = load_tmux_helper_module()
+
+    def test_required_worker_names_for_building_include_reviewer_and_qa(self) -> None:
+        self.assertEqual(
+            self.tmux_helper.required_worker_names("building"),
+            ["builder", "reviewer", "qa"],
+        )
+
+    def test_default_main_artifact_path_routes_qa_to_ticket_artifacts(self) -> None:
+        ticket = ROOT / "tickets" / "TASK-0025-capture-turn-start-intent-for-stop-hook.md"
+        artifact_path = self.tmux_helper.default_main_artifact_path(ticket, "building", "qa")
+
+        self.assertTrue(artifact_path.endswith("tickets/artifacts/TASK-0025/qa"))
+
+    def test_build_phase_prompt_makes_building_delegation_explicit(self) -> None:
+        ticket = ROOT / "tickets" / "TASK-0025-capture-turn-start-intent-for-stop-hook.md"
+        prompt = self.tmux_helper.build_phase_prompt(ticket, "building", "builder", str(ticket), "impl")
+
+        self.assertIn("Required lanes for this phase: builder, reviewer, qa.", prompt)
+        self.assertIn("spawn independent reviewer and QA", prompt)
+
+    def test_build_phase_prompt_routes_qa_execution_phase_to_qa_skill(self) -> None:
+        ticket = ROOT / "tickets" / "TASK-0025-capture-turn-start-intent-for-stop-hook.md"
+        prompt = self.tmux_helper.build_phase_prompt(
+            ticket,
+            "building",
+            "qa",
+            str(ROOT / "tickets" / "artifacts" / "TASK-0025" / "qa"),
+            "qa",
+        )
+
+        self.assertIn("Run the `qa` skill on ticket `TASK-0025`.", prompt)
+        self.assertIn("Execution phase: `qa`.", prompt)
+        self.assertIn("status=qa_complete", prompt)

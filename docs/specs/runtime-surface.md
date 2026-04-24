@@ -34,10 +34,12 @@ Same-ticket repeats re-enter `$impl`.
 For same-ticket build looping, the runtime contract is:
 
 - ticket `phase/status` says the work is still in a loopable build state
+- ticket frontmatter may declare durable execution requirements such as `requires_qa` and `requires_demo`
 - runtime `claim` says which session/lane currently owns that work
 - session ownership is explicit: only control sessions that entered through a public skill invocation may own canonical current-turn intent
 - explicit `$impl` control-session invocations must seed selected-ticket runtime ownership when ticket resolution is explicit or unambiguous; a session-only control stub is not sufficient
 - `impl_loop_active` says this session is currently allowed to auto-continue the `$impl` loop
+- runtime `execution_phase` plus `phase_requirements` define whether the active build loop is in `impl`, `qa`, or `demo`
 - tmux `auto_continue` only says whether a visible follow-up lane may be spawned or reused; it is not the global activation gate
 
 For bounded same-session `$loop`, the runtime contract is:

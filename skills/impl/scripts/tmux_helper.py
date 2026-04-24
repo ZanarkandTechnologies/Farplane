@@ -160,7 +160,9 @@ def annotate_backpressure(payload: dict[str, object], *, now: datetime | None = 
     return enriched
 
 
-def skill_name_for_phase(phase: str) -> str:
+def skill_name_for_phase(phase: str, execution_phase: str = "") -> str:
+    if phase == "building" and execution_phase in {"impl", "qa", "demo"}:
+        return execution_phase
     mapping = {
         "planning": "impl-plan",
         "building": "impl",
@@ -169,7 +171,19 @@ def skill_name_for_phase(phase: str) -> str:
     return mapping[phase]
 
 
-def default_worker_name(phase: str) -> str:
+def required_worker_names(phase: str, execution_phase: str = "") -> list[str]:
+    if phase == "building" and execution_phase == "qa":
+        return ["qa"]
+    if phase == "building" and execution_phase == "demo":
+        return ["demo"]
+    if phase == "building":
+        return ["builder", "reviewer", "qa"]
+    return [default_worker_name(phase, execution_phase)]
+
+
+def default_worker_name(phase: str, execution_phase: str = "") -> str:
+    if phase == "building" and execution_phase in {"qa", "demo"}:
+        return execution_phase
     mapping = {
         "planning": "planner",
         "building": "builder",
@@ -178,19 +192,64 @@ def default_worker_name(phase: str) -> str:
     return mapping[phase]
 
 
+def default_main_artifact_path(ticket: Path, phase: str, worker_name: str, execution_phase: str = "") -> str:
+    ticket_id = ticket_id_from_path(ticket)
+    effective_phase = execution_phase or worker_name
+    if phase == "building" and effective_phase == "qa":
+        return str(root() / "tickets" / "artifacts" / ticket_id / "qa")
+    if phase == "building" and effective_phase == "demo":
+        return str(root() / "tickets" / "artifacts" / ticket_id / "demo")
+    if phase == "building" and worker_name == "reviewer":
+        return str(root() / "tickets" / "artifacts" / ticket_id)
+    return str(ticket)
+
+
+def lane_directive(phase: str, worker_name: str, execution_phase: str = "") -> str:
+    if phase != "building":
+        return ""
+    if execution_phase == "qa" or worker_name == "qa":
+        return (
+            "You are the independent QA lane. Capture proof under `tickets/artifacts/TASK-XXXX/qa/`. "
+            "For any UI or user-visible run, always hand the captured artifacts to a separate `visual-qa` judgment pass, "
+            "write `result.json`, and finish with `IMPL_RESULT: status=qa_complete next=building reason=...`.\n"
+        )
+    if execution_phase == "demo" or worker_name == "demo":
+        return (
+            "You are the demo lane. Reuse passing QA artifacts to produce demo-ready outputs under "
+            "`tickets/artifacts/TASK-XXXX/demo/`, write `result.json`, and finish with "
+            "`IMPL_RESULT: status=demo_complete next=building reason=...`.\n"
+        )
+    if worker_name == "builder":
+        return (
+            "You are the implementation lane. Before claiming `build_complete` or `done`, "
+            "spawn independent reviewer and QA subagents or lanes and integrate their outputs. "
+            "Do not self-approve implementation quality or user-visible proof.\n"
+        )
+    if worker_name == "reviewer":
+        return (
+            "You are the independent reviewer lane. Run the `review` skill against the active ticket, "
+            "use linked evidence artifacts, and return a skeptical verdict grounded in the current repo state.\n"
+        )
+    return ""
+
+
 def build_phase_prompt(
     ticket: Path,
     phase: str,
     worker_name: str,
     main_artifact_path: str,
+    execution_phase: str = "",
     followup_reason: str | None = None,
 ) -> str:
-    skill_name = skill_name_for_phase(phase)
+    skill_name = skill_name_for_phase(phase, execution_phase)
     ticket_id = ticket_id_from_path(ticket)
     base = (
         f"Run the `{skill_name}` skill on ticket `{ticket_id}`.\n"
         f"You are the `{worker_name}` lane.\n"
         f"Your main artifact is `{main_artifact_path}`.\n"
+        f"Execution phase: `{execution_phase or 'impl'}`.\n"
+        f"Required lanes for this phase: {', '.join(required_worker_names(phase, execution_phase))}.\n"
+        f"{lane_directive(phase, worker_name, execution_phase)}"
         "Before substantive work, read that artifact and begin your first response with one line in the exact form "
         "`GROUNDING_SUMMARY: <one-sentence summary>`. Keep the summary specific to the artifact and the lane's role.\n"
         "Resolve the ticket from active run state or the explicit ticket selector, stay within that ticket's scope, "
@@ -230,6 +289,12 @@ def write_current_run(payload: dict[str, object], run_state: Path) -> None:
         "last_intent_alignment_reason",
         "last_intent_turn_id",
         "worker_name",
+        "lane_role",
+        "execution_phase",
+        "requires_qa",
+        "requires_demo",
+        "phase_requirements",
+        "required_worker_names",
         "main_artifact_path",
         "grounding_summary",
         "worker_started_at",
@@ -258,6 +323,7 @@ def build_run_state(
     compute_class: str,
     worker_name: str,
     main_artifact_path: str,
+    execution_phase: str,
     existing: dict[str, object] | None = None,
 ) -> dict[str, object]:
     ticket_id = ticket_id_from_path(ticket)
@@ -274,9 +340,12 @@ def build_run_state(
         "phase": phase,
         "status": "running",
         "attempt": attempt,
-        "skill_name": skill_name_for_phase(phase),
+        "skill_name": skill_name_for_phase(phase, execution_phase),
+        "execution_phase": execution_phase or "impl",
         "compute_class": compute_class,
         "worker_name": worker_name,
+        "lane_role": worker_name,
+        "required_worker_names": required_worker_names(phase, execution_phase),
         "main_artifact_path": main_artifact_path,
         "worker_started_at": now_iso(),
         "last_checkpoint_at": now_iso(),
@@ -297,6 +366,10 @@ def build_run_state(
             "last_intent_alignment_reason",
             "last_intent_turn_id",
             "grounding_summary",
+            "required_worker_names",
+            "requires_qa",
+            "requires_demo",
+            "phase_requirements",
         ):
             value = existing.get(key)
             if isinstance(value, str) and value:
@@ -575,13 +648,14 @@ def persist_lane_state(
     compute_class: str,
     worker_name: str,
     main_artifact_path: str,
+    execution_phase: str,
     tmux_session: str,
     tmux_window: str,
     tmux_pane: str,
     auto_continue: bool,
     existing: dict[str, object] | None,
 ) -> dict[str, object]:
-    state = build_run_state(ticket, phase, compute_class, worker_name, main_artifact_path, existing)
+    state = build_run_state(ticket, phase, compute_class, worker_name, main_artifact_path, execution_phase, existing)
     state["tmux_session"] = tmux_session
     state["tmux_window"] = tmux_window
     state["tmux_pane"] = tmux_pane
@@ -601,8 +675,9 @@ def launch(args: argparse.Namespace) -> int:
     if not ticket.is_file():
         raise SystemExit(f"ticket not found: {ticket}")
     ticket_id = ticket_id_from_path(ticket)
-    worker_name = args.worker_name or default_worker_name(args.phase)
-    main_artifact_path = str(ticket)
+    execution_phase = args.execution_phase or ("impl" if args.phase == "building" else "")
+    worker_name = args.worker_name or default_worker_name(args.phase, execution_phase)
+    main_artifact_path = default_main_artifact_path(ticket, args.phase, worker_name, execution_phase)
     run_state = resolve_run_state_path(args.run_state, ticket_id, args.phase)
     session = args.tmux_session or current_tmux_session()
     session_name, window_id, window_index, pane_id = create_tmux_surface(
@@ -617,13 +692,14 @@ def launch(args: argparse.Namespace) -> int:
         compute_class=args.compute_class,
         worker_name=worker_name,
         main_artifact_path=main_artifact_path,
+        execution_phase=execution_phase,
         tmux_session=session_name,
         tmux_window=window_id,
         tmux_pane=pane_id,
         auto_continue=args.auto_continue,
         existing=None,
     )
-    prompt_text = build_phase_prompt(ticket, args.phase, worker_name, main_artifact_path)
+    prompt_text = build_phase_prompt(ticket, args.phase, worker_name, main_artifact_path, execution_phase)
     command = lane_shell_command(
         ticket,
         run_state,
@@ -642,6 +718,7 @@ def launch(args: argparse.Namespace) -> int:
         "action": "launch",
         "ticket": str(ticket),
         "phase": args.phase,
+        "execution_phase": execution_phase,
         "worker_name": worker_name,
         "main_artifact_path": main_artifact_path,
         "tmux_session": session_name,
@@ -674,9 +751,10 @@ def followup(args: argparse.Namespace) -> int:
         existing = {**existing, **current_run}
     compute_class = args.compute_class or str(existing.get("compute_class") or "local")
     auto_continue = bool(existing.get("auto_continue")) or args.auto_continue
-    worker_name = args.worker_name or str(existing.get("worker_name") or default_worker_name(args.phase))
-    main_artifact_path = str(existing.get("main_artifact_path") or ticket)
-    prompt_text = build_phase_prompt(ticket, args.phase, worker_name, main_artifact_path, args.reason)
+    execution_phase = str(args.execution_phase or existing.get("execution_phase") or ("impl" if args.phase == "building" else "")).strip()
+    worker_name = args.worker_name or str(existing.get("worker_name") or default_worker_name(args.phase, execution_phase))
+    main_artifact_path = str(existing.get("main_artifact_path") or default_main_artifact_path(ticket, args.phase, worker_name, execution_phase))
+    prompt_text = build_phase_prompt(ticket, args.phase, worker_name, main_artifact_path, execution_phase, args.reason)
     capture_user_turn_fallback(prompt_text)
 
     if args.dry_run:
@@ -699,6 +777,7 @@ def followup(args: argparse.Namespace) -> int:
             compute_class=compute_class,
             worker_name=worker_name,
             main_artifact_path=main_artifact_path,
+            execution_phase=execution_phase,
             tmux_session=session_name,
             tmux_window=window_id,
             tmux_pane=pane_id,
@@ -723,6 +802,7 @@ def followup(args: argparse.Namespace) -> int:
             "action": "followup",
             "ticket": str(ticket),
             "phase": args.phase,
+            "execution_phase": execution_phase,
             "worker_name": worker_name,
             "main_artifact_path": main_artifact_path,
             "tmux_session": session_name,
@@ -763,6 +843,7 @@ def followup(args: argparse.Namespace) -> int:
         compute_class=compute_class,
         worker_name=worker_name,
         main_artifact_path=main_artifact_path,
+        execution_phase=execution_phase,
         tmux_session=session_name,
         tmux_window=window_id,
         tmux_pane=pane_id,
@@ -792,6 +873,7 @@ def followup(args: argparse.Namespace) -> int:
         "action": "followup",
         "ticket": str(ticket),
         "phase": args.phase,
+        "execution_phase": execution_phase,
         "worker_name": worker_name,
         "main_artifact_path": main_artifact_path,
         "tmux_session": session_name,
@@ -880,6 +962,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_launch.add_argument("--name")
     p_launch.add_argument("--compute-class", default="local")
     p_launch.add_argument("--worker-name")
+    p_launch.add_argument("--execution-phase", choices=["impl", "qa", "demo"])
     p_launch.add_argument("--auto-continue", action="store_true")
     p_launch.add_argument("--dry-run", action="store_true")
     p_launch.set_defaults(func=launch)
@@ -891,6 +974,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_followup.add_argument("--tmux-session")
     p_followup.add_argument("--compute-class")
     p_followup.add_argument("--worker-name")
+    p_followup.add_argument("--execution-phase", choices=["impl", "qa", "demo"])
     p_followup.add_argument("--reason")
     p_followup.add_argument("--auto-continue", action="store_true")
     p_followup.add_argument("--dry-run", action="store_true")

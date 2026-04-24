@@ -8,7 +8,7 @@ Use it to:
 - load the anti-slop search playbook when the review needs repo-grounded skepticism
 - locate the correct family reference files
 - score each family consistently
-- write one `Review Packet` back into the ticket
+- write one structured review result and link it from the ticket `Evidence` section
 
 ## Shared Score Contract
 
@@ -247,9 +247,9 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - whether the result would actually satisfy or impress the user
   - evidence confidence for any stronger value claims
 
-## Review Packet
+## Review Result
 
-Write the final review back into the ticket under `Review Packet`.
+Write the final review as a linked artifact and surface it from the ticket `Evidence` section.
 
 Required fields:
 

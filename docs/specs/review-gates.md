@@ -62,9 +62,15 @@ Stop hook answers:
 
 Stop hook should consume QA + reviewer outputs, not replace them.
 It should not depend on a separate evidence-review-only role.
+On build paths, it should first check the active execution phase contract
+mechanically: `impl`, `qa`, and `demo` may each require distinct artifacts
+before completion review is even eligible.
 On completion paths, it should also require an explicit judgment about whether
 the finished artifact would satisfy the saved user ask, not only whether the
 ticket and evidence look internally coherent.
+For user-facing QA and demo paths, completion review should also judge whether
+the final output is presentation-ready enough to show upward to a PM or CEO,
+not merely technically valid.
 On completion paths, the main model's "done" claim is only a candidate stop.
 Reviewer judgment is the authority for whether one obvious in-scope next step
 still remains before orchestrator routing is allowed.
@@ -104,6 +110,12 @@ Reviewer output should use one normalized shape:
   "integration_readiness": "pass|fail",
   "traceability": "pass|fail",
   "freshness": "pass|fail",
+  "qa_quality": "pass|fail",
+  "demo_quality": "pass|fail",
+  "stakeholder_readiness": "pass|fail",
+  "stakeholder_readiness_reason": "",
+  "best_demo_artifact": "",
+  "storyline_gaps": [],
   "user_intent_impression": "pass|fail",
   "user_intent_mismatch_reason": "",
   "obvious_next_step_exists": false,
@@ -187,6 +199,9 @@ Default:
 - `block` if the work is materially off-target, underspecified, or unsafe
 - `evidence-quality` below threshold forces non-pass overall
 - `integration-readiness` below threshold forces non-pass overall
+- `qa_quality` below threshold forces non-pass overall on completion paths that required QA
+- `demo_quality` below threshold forces non-pass overall on completion paths that required demo
+- `stakeholder_readiness` below threshold forces non-pass overall on user-facing completion paths
 - `user_intent_impression` below threshold forces non-pass overall on completion paths
 - `obvious_next_step_exists = true` forces non-pass overall on completion paths
 - `user_would_expect_more = true` forces non-pass overall on completion paths
@@ -242,9 +257,10 @@ Every active feature work package should define:
 - what QA must collect
 - what pass threshold matters
 
-For Ralph build/documenting completion paths, the ticket `Review Packet` is a
-required completion-gate artifact. Missing, malformed, weak, contradictory,
-stale, or untraceable packet state must prevent completion even when checklist
-boxes are checked.
+For build/documenting completion paths, a fresh review result plus a traceable
+evidence pack are required completion-gate artifacts. Missing, malformed, weak,
+contradictory, stale, or untraceable review output or evidence must prevent
+completion even when checklist boxes are checked.
 
-The ticket remains the place where that requirement is declared.
+The ticket should link those artifacts from `Evidence`; it should not prefill an
+empty review-output stub in advance.

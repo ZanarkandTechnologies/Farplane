@@ -38,7 +38,7 @@ Use the family skeptic questions and score each family on the anchored 1.0-5.0 s
 Add `user-intent-satisfaction` when the ticket is clearly user-facing and the review needs to judge whether the delivered result actually satisfies the ask.
 Return severity-ranked findings with concrete file refs.
 Explain why the result is not a lower or higher adjacent band.
-Return a `Review Packet` with a clear `pass|revise|block` verdict.
+Return a linked review artifact and clear `pass|revise|block` verdict grounded in the ticket `Evidence` artifacts.
 ```
 
 ## How to Test

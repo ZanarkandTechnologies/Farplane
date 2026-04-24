@@ -112,6 +112,16 @@ It should:
 - write progress and next action back to the ticket/progress surface
 - exit after the round instead of becoming a permanent orchestrator pane
 
+Inside `status: building`, runtime may progress through internal execution
+subphases:
+
+- `impl`
+- `qa`
+- `demo`
+
+`$qa` and `$demo` may also be used as explicit recovery surfaces for those
+subphases, but `$impl` remains the default public execution entrypoint.
+
 Worker lanes may vary by ticket, but the public build-phase entrypoint is
 `$impl`.
 

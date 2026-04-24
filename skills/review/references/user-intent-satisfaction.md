@@ -123,9 +123,9 @@ at the user-ask level instead of bluffing market truth.
   the result not only fulfills the ask but feels especially strong, satisfying,
   or high-leverage within the ticket’s scope and evidence.
 
-## Review Packet Attachment
+## Review Artifact Attachment
 
-Attach this rubric under the ticket `Review Packet` when used:
+Attach this rubric in the linked review artifact when used:
 
 - `score`
 - `threshold`

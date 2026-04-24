@@ -6,7 +6,7 @@
   and `last_verification`.
 - [ ] Update durable docs that changed in the final pass: `docs/HISTORY.md`,
   `docs/MEMORY.md`, `docs/TROUBLES.md`, README, or the nearest `AGENTS.md`.
-- [ ] If the final proof or `Review Packet` is stale, use the
+- [ ] If the final proof or linked review artifact is stale, use the
   [Review](../review/SKILL.md) skill before closing the ticket.
 - [ ] Run the repo-local validators and final checks that actually match the
   touched surfaces.

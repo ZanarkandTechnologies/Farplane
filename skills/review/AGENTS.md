@@ -22,4 +22,4 @@ Own the live rubric-driven review contract for Codexter.
 - Keep one reference file per review family in `references/`.
 - Keep `references/desloppify.md` cross-cutting rather than turning it into a second public review skill.
 - Each family file should stay skimmable while still including skeptic questions plus evidence/finding cues.
-- If the review contract changes, update `docs/specs/review-gates.md` and the ticket `Review Packet` template in the same change.
+- If the review contract changes, update `docs/specs/review-gates.md` and the ticket/evidence artifact contract in the same change.

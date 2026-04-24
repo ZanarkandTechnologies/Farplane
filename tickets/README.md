@@ -5,7 +5,7 @@ Active work lives in `tickets/TASK-*.md`.
 One source of truth per concern:
 
 - frontmatter = queue state and execution state
-- body = plan, evidence, blockers, and handoff
+- body = plan, evidence, and blockers
 - `.harness/state/` = live runtime state
 - `docs/` = durable knowledge after the ticket is done
 - transcript = disposable context, not the canonical resume surface
@@ -39,7 +39,7 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 - `.harness/state/` is runtime-only and may track active claim/lane/session/verdict state
 - transcripts are useful evidence but are not the canonical resume surface
 - deliberate reset/resume requires the ticket to carry a clear `next_action`,
-  `last_verification`, and `Handoff` note
+  `last_verification`, blockers, and evidence references
 
 ## Canonical Frontmatter
 
@@ -56,6 +56,8 @@ depends_on: []
 blocked_by: []
 ready: false
 approval_required: true
+requires_qa: true
+requires_demo: false
 created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
 next_action: await approval to set status: building
@@ -74,6 +76,8 @@ linked_docs: []
 - `blocked_by`: concrete ticket-ID blockers only
 - `ready`: whether `next_action` can be executed now
 - `approval_required`: explicit approval gate
+- `requires_qa`: whether `$impl` must produce a passing QA phase before completion
+- `requires_demo`: whether `$impl` must also produce a passing demo phase after QA
 - `next_action`: the one authoritative next step
 - `last_verification`: the authoritative verification summary
 
@@ -85,6 +89,7 @@ linked_docs: []
 - do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter
 - do not set `status: building` while `approval_required: true`
 - do not set `status: building` while `blocked_by` is non-empty
+- `requires_demo: true` implies `requires_qa: true`
 - do not invent a second machine-readable state block in the body
 
 ## Sizing Doctrine
@@ -108,29 +113,80 @@ The validator intentionally only checks the flat `tickets/TASK-*.md` surface.
 
 ## Body Contract
 
-Keep these sections:
+Keep the body short by default. The main job of a ticket body is to let a
+developer or subagent understand the code shape without opening files first.
+
+Default sections:
 
 - `Summary`
 - `Scope`
-- `User Story` when the work is material or ambiguous
-- `User Pain / JTBD` when the work is material or ambiguous
-- `Non-Goals` when the work is material or ambiguous
-- `High-Fidelity Example` when the work is material or ambiguous
-- `What Good Looks Like` when the work is material or ambiguous
-- `Proof Target` when the work is material or ambiguous
 - `Plan`
 - `Acceptance Criteria`
-- `Working Notes`
-- `Inspiration` when the ticket comes from an external source, article, talk, incident, or benchmark
-- `Implementation Notes`
+- `Verification`
 - `Evidence`
-- `Review Packet`
 - `Blockers`
-- `Handoff`
-- `Writeback`
 
-Task-local notes stay in the ticket while work is active. Durable lessons move to `docs/` during `documenting`.
-When a ticket is inspired by an external source, store the durable source URL in an `Inspiration` section in the body instead of relying on chat history.
+Optional sections only when they add signal:
+
+- `Gap Analysis`
+- `Diagram`
+- `Refs`
+
+The default `Plan` should answer four things:
+
+1. what changes and why now
+2. where the change lives: touched files, inspected files, signature deltas,
+   and key type/data shapes when they matter
+3. blast radius: callers, workflows, or systems that could break
+4. how to verify: tests, checks, and strongest evidence to gather
+
+For material, stateful, interface-heavy, or cross-boundary work, the `Plan`
+should also show:
+
+1. a compact `Type Sketch` naming the important structs, records, or payloads
+2. one `Typed flow example` showing a representative object or payload evolving
+   through the main path
+
+Keep both compact. The point is to make typed data continuity legible in plain
+text, not to dump full schemas into the ticket.
+
+Use `Gap Analysis` when the work is about a missing, partial, parity-driven, or
+otherwise under-specified feature and the main planning question is "what does
+a production-grade version of this capability actually need?"
+
+That section should answer:
+
+1. what exists today and where it stops
+2. what a credible production implementation usually includes
+3. which gaps matter for this ticket now versus later
+4. which comparable apps, repos, docs, or standards grounded that judgment
+
+`Acceptance Criteria` should define what "done now" means in concrete,
+measurable terms.
+
+`Verification` should say how each criterion is measured: test passes, manual
+checks, and required evidence.
+
+Do not duplicate the same idea across multiple headings. If a short summary and
+the plan already explain the change, do not add more ceremony.
+
+Use `Refs` for durable source URLs, specs, issues, websites, or comparable
+examples instead of spreading links across extra note sections.
+
+## Evidence Artifacts
+
+Store ticket artifacts under `tickets/artifacts/TASK-XXXX/`.
+
+Examples:
+
+- screenshots
+- logs
+- exported review JSON
+- short clips
+- seed or fixture notes that help reproduce the proof surface
+
+Link those artifacts from the ticket `Evidence` section instead of preallocating
+empty review-output fields in the template.
 
 Canonical policy references:
 

@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "bin" / "check_harness_invariants.py"
+SUBPROCESS_TIMEOUT_SECONDS = 5
 
 
 ROOT_AGENTS_TEXT = """\
@@ -56,6 +57,7 @@ TICKET_TEMPLATE_TEXT = """\
 claimed_by:
 ---
 
+- Result summary:
 - Do not store raw `session_id` values in ticket frontmatter.
 """
 
@@ -69,9 +71,9 @@ class CheckHarnessInvariantsTest(unittest.TestCase):
     def build_repo(self, root: Path) -> None:
         write_file(root / "AGENTS.md", ROOT_AGENTS_TEXT)
         write_file(
-            root / "agents" / "reviewer.toml",
+            root / "agents" / "completion-reviewer.toml",
             """\
-name = "reviewer"
+name = "completion-reviewer"
 model = "gpt-5.4"
 developer_instructions = "review"
 """,
@@ -87,6 +89,7 @@ developer_instructions = "review"
             capture_output=True,
             text=True,
             check=False,
+            timeout=SUBPROCESS_TIMEOUT_SECONDS,
         )
 
     def test_validator_passes_for_valid_fixture(self) -> None:
@@ -127,28 +130,26 @@ This file is generic instructions.
             self.assertIn("contains forbidden legacy text", result.stdout)
             self.assertIn(".ralph/", result.stdout)
 
-    def test_validator_fails_when_ticket_template_drops_session_boundary(self) -> None:
+    def test_validator_fails_when_ticket_template_drops_claim_alias_boundary(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
                 root / "tickets/templates/ticket.md",
                 """\
----
-claimed_by:
----
+- Result summary:
 """,
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("session_id", result.stdout)
+            self.assertIn("claimed_by", result.stdout)
 
     def test_validator_fails_when_agent_role_missing_name(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "agents" / "reviewer.toml",
+                root / "agents" / "completion-reviewer.toml",
                 """\
 model = "gpt-5.4"
 developer_instructions = "review"
@@ -156,7 +157,7 @@ developer_instructions = "review"
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("agents/reviewer.toml", result.stdout)
+            self.assertIn("agents/completion-reviewer.toml", result.stdout)
             self.assertIn("missing non-empty `name`", result.stdout)
 
     def test_validator_fails_when_agent_role_name_does_not_match_filename(self) -> None:
@@ -164,16 +165,16 @@ developer_instructions = "review"
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "agents" / "reviewer.toml",
+                root / "agents" / "completion-reviewer.toml",
                 """\
-name = "not-reviewer"
+name = "not-completion-reviewer"
 model = "gpt-5.4"
 developer_instructions = "review"
 """,
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("agents/reviewer.toml", result.stdout)
+            self.assertIn("agents/completion-reviewer.toml", result.stdout)
             self.assertIn("name` must match filename stem", result.stdout)
 
 

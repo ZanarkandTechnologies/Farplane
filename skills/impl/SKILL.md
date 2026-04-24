@@ -10,7 +10,7 @@ description: Build-phase orchestrator for one selected ticket. Runs ephemerally,
 Use it when:
 
 - planning for a ticket is already complete
-- one ticket should move through implementation, QA, review, and evidence-check
+- one ticket should move through implementation and, when required, internal `qa` and `demo` subphases
 - the same ticket may need repeated build/review/fix passes until proof is good enough
 - the operator wants visible worker lanes instead of a hidden forever-running orchestrator
 
@@ -25,6 +25,7 @@ Do not use it when:
 - `$impl` owns one selected ticket/work package at a time.
 - An explicit ticket selector outranks ambient runtime state.
 - `$impl` reads the ticket plus linked specs/docs, launches the needed worker lanes, integrates their outputs, writes progress back to the ticket/progress surface, and exits.
+- `$impl` is the public execution surface; `qa` and `demo` may run as internal subphases or explicit recovery surfaces.
 - Delegated lanes should expose a small shared contract: `worker_name`, `main_artifact_path`, and a short `grounding_summary`.
 - `$impl` does not require or create a permanent orchestrator pane.
 - Worker panes are the primary visible runtime surface.
@@ -38,7 +39,25 @@ For a selected build ticket, `$impl` should coordinate:
 3. QA lane for evidence gathering
 4. evidence-check lane for validating the QA evidence
 
+Default enforced runtime set today:
+
+- `builder`
+- `reviewer`
+- `qa`
+
+`evidence-check` stays optional until it has a real agent/runtime implementation.
+
 The orchestrator remains singular: worker lanes do not mutate queue state or claim completion on their own.
+
+## Execution Subphases
+
+Inside `status: building`, the runtime may progress through:
+
+1. `impl`
+2. `qa`
+3. `demo`
+
+The Stop hook should continue the same ticket until the required subphase artifacts exist.
 
 ## Selection Rules
 
