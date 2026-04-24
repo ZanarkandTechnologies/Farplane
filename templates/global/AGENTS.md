@@ -135,7 +135,7 @@ Planning handoff rule:
 
 - verify before claiming completion
 - delete > accumulate
-- modular by default
+- modular by default; bias toward extracting real modules earlier than strictly necessary
 - code = source of truth
 - no speculative abstractions
 - MVP first: 1 -> 10 -> 100
@@ -154,6 +154,16 @@ Planning handoff rule:
 - ticket-metadata v1 ends at visible tickets, docs, and config foundations; assisted continuation, stop hooks, and autonomy-mode runtime work stay outside v1 unless a later ticket explicitly re-opens them
 - user complaints about the current output are correction requests by default; fix first and explain briefly only when useful
 - prefer artifact-first detail and summary-first chat: write the deep context to the right visible surface, then give the user the concise spoken update
+
+## Modularity Bias
+
+- prefer feature-first folders over type-first folders
+- when UI code grows custom behavior, state, or variants, extract it into its own feature or component directory with colocated subfiles instead of growing one oversized component file
+- keep utilities modular and purpose-specific; prefer small named modules over catch-all helper files
+- keep local helpers near the owning feature; promote them to shared utilities only after real multi-caller reuse appears
+- shape backend modules around explicit contracts and seams so the capability could later be split into a separate service without rethinking the domain boundary
+- plan tickets and delegation around module ownership; favor seams that one subagent can own with minimal overlap or cross-file contention
+- keep the main loop and root entrypoints focused on the smallest high-impact integration path; push secondary logic and customization into modules
 
 ## Module Scaffolding
 
@@ -218,7 +228,7 @@ If you introduce an invariant:
 - explicit return types on exported APIs
 - side-effects at edges
 - tests colocated when practical
-- modules should stay extractable
+- modules should stay extractable and easy to own independently
 
 ## Delegation
 

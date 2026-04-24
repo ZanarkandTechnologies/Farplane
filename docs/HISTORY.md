@@ -109,3 +109,4 @@
 2026-04-24 19:43 +0100 | FEAT | make `init-project` use a visible bootstrap brief and deep-interview-quality intake, add a real pre-push template with large-file gates plus soft shared-utility warnings, and keep generated hook guidance aligned with optional CodeRabbit/desloppify follow-up
 2026-04-24 20:50 +0100 | CHORE | refresh README and architecture so the top-level repo story reflects shipped file-map-first planning, artifact-first tickets, and visible bootstrap/qa surfaces
 2026-04-24 21:35 +0100 | FIX | harden Stop-hook output by keeping notification fallback off stdout and emitting explicit allow-stop JSON on Stop-event no-op branches
+2026-04-24 20:23 +0100 | FEAT | strengthen the shipped global modularity doctrine around feature-first modules, extractable UI and backend seams, and subagent-friendly planning boundaries
