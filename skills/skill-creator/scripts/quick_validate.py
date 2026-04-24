@@ -8,6 +8,7 @@ import re
 import yaml
 from pathlib import Path
 
+
 def validate_skill(skill_path):
     """Basic validation of a skill"""
     skill_path = Path(skill_path)
@@ -75,11 +76,16 @@ def validate_skill(skill_path):
 
     return True, "Skill is valid!"
 
-if __name__ == "__main__":
+
+def main() -> int:
     if len(sys.argv) != 2:
         print("Usage: python quick_validate.py <skill_directory>")
-        sys.exit(1)
-    
+        return 1
+
     valid, message = validate_skill(sys.argv[1])
     print(f"[{'PASSED' if valid else 'FAILED'}] {message}")
-    sys.exit(0 if valid else 1)
+    return 0 if valid else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

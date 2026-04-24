@@ -28,6 +28,8 @@ tmp/
 .omx/
 .harness/
 .ralph/
+.agents/
+.desloppify/
 skills/.system/
 bin/__pycache__/
 __pycache__/
@@ -58,3 +60,4 @@ experiments/latest-runs.json
 tickets/**/*.md
 !tickets/README.md
 !tickets/templates/ticket.md
+artifacts/
