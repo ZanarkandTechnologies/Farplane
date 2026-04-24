@@ -2,481 +2,168 @@
 
 Ticket-first autonomous Codex harness.
 
-If a repo does not already have Codexter conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `tickets/`, start with `init-project` before trying to use the full spec, ticket, and execution workflow.
+Codexter turns fuzzy product asks into visible specs, tickets, execution rounds,
+evidence-backed review, and closeout. The harness is strongest today at
+single-ticket engineering with explicit proof and Stop-hook judgment. It is not
+yet a fully autonomous multi-ticket dispatcher.
 
-## Read This Repo
+If a repo does not already have Codexter conventions such as `AGENTS.md`,
+`docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and
+`tickets/`, start with `init-project` before trying to use the full spec,
+ticket, and execution workflow.
 
-Start with these entrypoints in order:
+## Start Here
 
 - Repo-local operating map: [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
-- Top-level system map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
-- Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
-- Current-state feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
-- Ticket contract and live board: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md), [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
-- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
-- Heavy external PR gate: [skills/coderabbit-review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/README.md)
-- Post-build PR decomposition: [skills/pr-splitting/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-splitting/README.md)
-
-The core idea is simple:
-
-- `brainstorm` explores options before commitment
-- `deep-interview` sharpens vague inputs into clear product requirements
-- `agent-testability-plan` turns a system design into the utilities, probes, and proof surfaces the agent will need later
-- humans think in specs and tickets
-- `spec-to-ticket` turns a coherent spec into dependency-linked work items
-- `impl-plan` plans one selected ticket for execution
-- `$impl` orchestrates one selected ticket through builder/reviewer/QA/evidence-check lanes
-- `$loop` keeps one bounded same-session task running until local completion checks pass or the operator explicitly stops it
-- the reviewer writes an anchored rubric-based `Review Packet`
-- worker lanes launched by `$impl` implement the selected ticket and gather evidence
-- a `Stop` `hook` judges the evidence and current-turn intent alignment
-- the orchestrator decides whether to repeat, advance, block, complete, or move to the next ready ticket
-
-Runtime state stays lightweight:
-
-- explicit run-state selectors outrank ambient state for managed lanes
-- hook `session_id` routes prompt capture and Stop-hook reads to the correct lane in parallel Codex usage
-- `.harness/state/current-run.json` is the live runtime pointer / last-active selector
-
-## One Picture
-
-```mermaid
-flowchart LR
-    classDef input fill:#e0f2fe,stroke:#0369a1,color:#0f172a
-    classDef surface fill:#e2e8f0,stroke:#475569,color:#0f172a
-    classDef shaping fill:#fef3c7,stroke:#b45309,color:#0f172a
-    classDef execution fill:#dcfce7,stroke:#15803d,color:#0f172a
-    classDef quality fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
-    classDef closeout fill:#ccfbf1,stroke:#0f766e,color:#0f172a
-
-    req[/idea, bug, transcript, repo gap/]:::input
-
-    maps[(AGENTS.md<br/>README.md<br/>ARCHITECTURE.md)]:::surface
-    specs[(docs/specs/*)]:::surface
-    tickets[(tickets/TASK-*.md)]:::surface
-    runtime[(.harness/state/*<br/>bin/* + hooks.json)]:::surface
-    memory[(docs/HISTORY.md<br/>docs/MEMORY.md<br/>docs/TROUBLES.md)]:::surface
-
-    bootstrap["init-project"]:::shaping
-    intake["brainstorm<br/>deep-interview<br/>prd"]:::shaping
-    framing["advise<br/>deep-system-design<br/>deep-ui-design<br/>functional-ui<br/>demo-realism"]:::shaping
-    agentux["agent-testability-plan"]:::shaping
-    grounding["summarize<br/>documentation<br/>external-patterns<br/>find-skills"]:::shaping
-    ticketize["spec-to-ticket"]:::shaping
-    plan["impl-plan<br/>diagramming"]:::shaping
-
-    exec["$impl<br/>$loop"]:::execution
-    buildhelp["runtime-debugging<br/>codebase-analysis<br/>bash-efficiency<br/>repent"]:::execution
-    domain["frontend-design<br/>cinematic-landing<br/>convex<br/>react-flow<br/>three-js<br/>data-viz<br/>agent-browser<br/>apify<br/>vercel-react-best-practices"]:::execution
-
-    proof["testing<br/>visual-qa<br/>web-design-guidelines"]:::quality
-    review["review<br/>coderabbit-review"]:::quality
-
-    close["close-ticket<br/>commit-message<br/>pr-splitting"]:::closeout
-    ship["archive, PR slices,<br/>doc writeback"]:::closeout
-
-    req --> bootstrap
-    req --> intake
-    req --> framing
-    req --> grounding
-
-    bootstrap --> maps
-    maps -. guidance .-> intake
-    maps -. guidance .-> ticketize
-    maps -. guidance .-> plan
-    maps -. guidance .-> exec
-
-    intake --> specs
-    framing --> specs
-    grounding --> specs
-    specs --> agentux
-    agentux --> specs
-    agentux --> ticketize
-    agentux --> plan
-    specs --> ticketize
-    ticketize --> tickets
-    tickets --> plan
-    specs --> plan
-    plan --> tickets
-    plan --> exec
-
-    exec --> buildhelp
-    exec --> domain
-    exec --> runtime
-    buildhelp --> runtime
-    domain --> proof
-    runtime --> proof
-    proof --> review
-    review -->|repeat| exec
-    review -->|pass| close
-    close --> ship
-    ship --> tickets
-    ship --> memory
-```
-
-Legend:
-
-- `blue` = operator input
-- `gray` = durable repo surfaces
-- `amber` = intake and planning skills
-- `green` = execution and specialist build skills
-- `rose` = proof and review gates
-- `teal` = closeout and publishing
-
-Grouped nodes keep the whole stack in one readable picture while still naming
-the skills that plug into each stage.
-
-## Phase Model
-
-The intended system has five broad phases.
-
-### 1. Spec Phase
-
-This is the fuzzy-input funnel.
-
-- `brainstorm` explores options when the request is still loose
-- `deep-interview` narrows scope and constraints
-- `prd` writes the product or feature brief when needed
-- the output is one coherent spec, not executable tickets yet
-
-This phase should be good at:
-
-- turning vague requests into something real
-- deciding whether the work is one slice or many
-- clarifying success criteria before execution starts
-
-### 2. Ticketization Phase
-
-This is where a coherent spec becomes executable work.
-
-- `spec-to-ticket` should split the spec into dependency-linked tickets
-- when the system will be hard for agents to drive or observe, `agent-testability-plan` should run before ticketization or per-ticket planning
-- tickets should stay small enough to execute, but large enough to be meaningful
-- dependencies should make the next ready set obvious
-
-The key output is:
-
-- a Markdown ticket board in `tickets/*.md`
-- explicit `depends_on`
-- explicit readiness/blocking state
-
-### 3. Planning Phase
-
-This is per-ticket, not per-spec.
-
-- `impl-plan` plans one selected ticket for execution
-- when an `Agent Testability Brief` exists, `impl-plan` should preserve it in the proof/testability shape
-- the ticket should end this phase with a concrete execution plan and proof target
-
-Important boundary:
-
-- broad decomposition belongs before this phase
-- this phase should plan one ticket, not explode a whole spec into many tickets
-
-### 4. Build Orchestration Phase
-
-This is the per-ticket orchestration layer.
-
-The goal is simple:
-
-- read one selected approved ticket
-- launch the right worker lanes
-- keep the ticket as the visible progress surface
-- let the Stop hook decide continuation vs completion
-
-In the smallest useful form, `$impl` should:
-
-- take an explicit ticket selector, or fall back to the active ticket only when state is unambiguous
-- launch builder/reviewer/QA/evidence-check lanes
-- integrate their outputs into the ticket
-- exit after the round
-
-This does not require cloud by default.
-Execution lanes could be:
-
-- local tmux panes
-- local worktrees
-- prompt-mode worker processes
-- cloud runners later if ever needed
-
-### 5. Build / Proof / Review Phase
-
-This is the long-running per-ticket execution loop.
-
-For one selected ticket, the worker lanes should:
-
-1. build
-2. prove
-3. review
-4. fix if needed
-5. gather evidence
-6. hand results to the judge
-
-This is where the multi-step work lives:
-
-- implementation
-- debloating/refinement
-- code review
-- tests/typecheck/lint
-- QA subagents
-- visual or runtime evidence collection
-- repeated repair until the judge accepts the result
-
-After the judge accepts the ticket, closeout can include:
-
-- commit
-- PR
-- final documentation writeback
-- archive when the ticket is fully processed
-
-## Why This Exists
-
-Long-running agent work fails in four predictable ways:
-
-- vague work starts too early
-- one giant transcript drifts
-- evidence is logged but not sanity-checked
-- humans cannot tell what happened later
-
-Codexter solves that by making the **ticket** the canonical memory object and keeping sessions disposable.
-
-## Front-End Funnel
-
-```mermaid
-flowchart LR
-    A[idea or transcript] --> B[brainstorm]
-    B --> C[deep-interview]
-    C --> D[prd/specs]
-    D --> E[deep-system-design or direct spec]
-    E --> F[agent-testability-plan when needed]
-    F --> G[spec-to-ticket]
-    G --> H[ready ticket set]
-    H --> I[impl-plan]
-    I --> J[$impl]
-    J --> K[worker lanes]
-```
-
-## Story: Greenfield
-
-```mermaid
-flowchart TD
-    A[customer call transcript] --> B[specs]
-    B --> C[dependency-linked SLC tickets]
-    C --> D[ready unblocked ticket set]
-    D --> E[impl-plan]
-    E --> F[$impl on one selected ticket]
-    F --> G[builder / review / qa lanes]
-    G --> H[QA / review evidence]
-    H --> I[Stop hook]
-    I -->|evidence weak| G
-    I -->|evidence good| J[next ready ticket or closeout]
-```
-
-Minimal interpretation:
-
-1. You ingest a messy idea.
-2. It becomes specs.
-3. Specs become dependency-aware tickets.
-4. The next unblocked ticket set becomes available.
-5. A selected ticket gets planned.
-6. `$impl` orchestrates the selected ticket.
-7. Evidence is gathered.
-8. The hook either forces another pass or lets the system move on.
-
-## Story: Brownfield
-
-```mermaid
-flowchart TD
-    A[bug report] --> B[one ticket]
-    B --> C[impl-plan]
-    C --> D[$impl]
-    D --> E[worker lanes]
-    E --> F[QA subagent]
-    F --> G[Stop hook]
-    G -->|bad evidence| E
-    G -->|good evidence| H[complete]
-```
-
-This is the same system, just with one ticket instead of many.
-
-## The Important Boundary
-
-```mermaid
-flowchart LR
-    A[ticket] -->|durable memory| B[plan, notes, evidence, blockers]
-    C[run state] -->|volatile memory| D[current ticket, skill, verdict]
-    E[transcript] -->|disposable| F[helpful but not canonical]
-```
-
-- **ticket** = durable task memory
-- **run state** = machine-readable current step
-- **transcript** = disposable
-
-That is why the system can recover from resets without losing the real task state.
-
-## Evidence Gate
-
-```mermaid
-sequenceDiagram
-    participant O as Orchestrator
-    participant R as worker lane
-    participant Q as QA subagent
-    participant H as Stop hook
-    participant T as Ticket
-
-    O->>R: run on selected ticket
-    R->>T: implementation notes
-    R->>Q: gather evidence
-    Q->>T: screenshots/tests/QA notes
-    R-->>O: build result
-    O->>H: stop event fires
-    H->>T: read acceptance + evidence
-    H-->>O: repeat or advance
-```
-
-This is the whole philosophy:
-
-- the `skill` produces evidence
-- the `hook` decides whether that evidence is actually good enough
-
-## Target Loop
-
-The target end-to-end loop is:
-
-1. input arrives as an idea, bug, spec, or board item
-2. spec-stage skills clarify it until success is legible
-3. ticketization converts it into dependency-linked tickets
-4. planning writes an execution-ready plan into one selected ticket
-5. `$impl` selects one approved ticket and launches the worker lanes
-6. worker lanes run the selected ticket
-7. QA/review/test evidence is collected
-8. the Stop hook judges whether the evidence is good enough
-9. accepted tickets move to closeout, commit/PR, and eventual archive
-10. remaining unblocked tickets are selected next
-
-This is the intended final shape.
-
-The current prototype is narrower:
-
-- single-ticket `$impl`-style orchestration is now the intended public direction
-- single-ticket `$impl` rounds plus persistent builder lanes are still the main live execution surface
-- live Stop-hook continuation is real
-- anchored review rubrics and ticket `Review Packet` gates are real
-- current-turn intent capture now feeds Stop-hook relevance checks
-- tmux visibility is real
-- board-wide dispatch and archival are still future slices
-
-## What Is Canonical Today
-
 - Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
-- Specs: [docs/specs](/Users/kenjipcx/coding-harness/Codexter/docs/specs)
 - Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
-- Current execution spec: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
-- V2 direction: [legacy v2 direction notes](/Users/kenjipcx/coding-harness/Codexter/docs/specs/legacy/ralph-v2-direction.md)
-- Intake skills: [skills/brainstorm](/Users/kenjipcx/coding-harness/Codexter/skills/brainstorm), [skills/deep-interview](/Users/kenjipcx/coding-harness/Codexter/skills/deep-interview), [skills/prd](/Users/kenjipcx/coding-harness/Codexter/skills/prd)
-- Ticketization: [skills/spec-to-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket)
-- Planning: [skills/agent-testability-plan](/Users/kenjipcx/coding-harness/Codexter/skills/agent-testability-plan), [skills/impl-plan](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan)
-- Execution and review skills: [skills/loop](/Users/kenjipcx/coding-harness/Codexter/skills/loop), [skills/impl](/Users/kenjipcx/coding-harness/Codexter/skills/impl), [skills/review](/Users/kenjipcx/coding-harness/Codexter/skills/review), [skills/close-ticket](/Users/kenjipcx/coding-harness/Codexter/skills/close-ticket)
-- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md), [review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
+- Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
-- Doc governance: [doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md)
-- Runtime scripts: [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
-- Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets) is the live board; do not rely on hardcoded queue summaries here
-- Archived prototypes/history: [archive](/Users/kenjipcx/coding-harness/Codexter/tickets/archive)
-- Experiments: [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)
+- Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
+- QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
+- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
+- CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/desloppify/README.md)
+- Parity-comparison workflow: [skills/parity-research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/parity-research/README.md)
+- Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
+- Project bootstrap: [skills/init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/init-project/README.md)
 
-## Harness Techniques
+## Current State
 
-The canonical inventory of techniques now lives in:
+Implemented now:
 
-- [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
+- discovery-first intake through `brainstorm`, `deep-interview`, `prd`,
+  `deep-system-design`, `deep-ui-design`, and `agent-testability-plan`
+- capability-first ticketization through `spec-to-ticket`
+- bootstrap testability defaults propagated into ticket `Agent Contract` and
+  `qa/cookbook` seeds through `spec-to-ticket`
+- per-ticket planning through `impl-plan`
+- feature-gap research through `gap-analysis` when net-new or partial feature
+  scope depends on production-grade expectations
+- parity-comparison research through `parity-research` when the main question is
+  what other products, standards, or codebases consistently include
+- single-ticket execution through `$impl`
+- anchored `review` rubrics plus evidence-gated completion
+- `desloppify` for CLI-driven anti-slop cleanup, with default worker delegation
+- same-session bounded persistence through `$loop`
+- documenting and closeout through `close-ticket`
+- Stop-hook phase routing and current-turn relevance checks
+- optional `init-project` scaffolding for `.githooks/`,
+  `scripts/pre_commit_check.sh`, `scripts/pre_push_check.sh`, a starter `qa/`
+  cookbook surface, and explicit `coderabbit-review`
 
-Main live techniques today:
+Partial today:
 
-- discovery-first intake before execution
-- spec-first ticketization with proof/testability contracts
-- post-system-design agent testability planning when the system will be hard for agents to operate directly
-- per-ticket planning via `impl-plan`, with approval-first default mode and consensus mode when stronger challenge is needed
-- single-ticket orchestration via `$impl`
-- bounded same-session persistence via `$loop`
-- separated builder, reviewer, QA, and evidence-check roles
-- Stop-hook judgment as the final continuation/completion gate
-- tickets as durable task memory plus `HISTORY` / `MEMORY` / `TROUBLES` writeback
-- skills and subagents as the main reusable operating surfaces
+- same-ticket auto-reentry is real, but the autonomous loop still centers on one
+  selected ticket at a time
+- tmux-backed worker lanes exist, but the runtime is still prototype-weight
+- runtime observability doctrine is shipped, while hosted telemetry is still in
+  progress in [TASK-0073](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0073-add-convex-runtime-uptime-telemetry.md)
+- anti-slop review exists in `review`, but there is not yet a separate
+  human-grade report/video proof pack
 
-The full doc also distinguishes which techniques are only proposed experiments,
-so the repo does not blur current behavior with future ideas.
+Still missing:
 
-## Current Prototype Status
+- tighter QA routing and standard evidence packs that stop weak proof from
+  counting as done
+- compaction-safe reset and handoff discipline so long runs resume from the
+  ticket instead of transcript drift
+- clearer answer/plan/act routing plus deterministic subagent selection for
+  direct user asks
+- worktree-backed multi-session execution and a cloud-ready lane boundary
+- transparency and ablation evals for measuring whether autonomy changes
+  actually improve outcomes
 
-What is proven:
+## Core Flow
 
-- planning now routes through one public planner surface: `impl-plan`
-- the same `$impl` build pass gets repeated when evidence is weak
-- review now uses anchored rubric families plus hard `evidence-quality` and `integration-readiness` gates
-- ticket `Review Packet` state is part of completion gating
-- project-local `current-run.json` is enough for replay-level hook selection
-- current-turn user intent can be captured and used for Stop-hook relevance checks
-- real Codex sessions now fire the `Stop` `hook`
-- live sessions can produce `hook: Stop Blocked`
-- tmux-backed builder lanes can run as real interactive Codex sessions
-- live Stop-hook repeats can keep the same tmux pane active instead of falling back to a fresh wrapper lane
-- `python3 skills/impl/scripts/tmux_helper.py status` now centralizes the active lane, session id, judge verdict, next phase, and latest hook summary
+```mermaid
+flowchart LR
+    A[idea or repo gap] --> B[init-project when repo needs bootstrap]
+    A --> C[deep-interview / prd]
+    B --> D[bootstrap brief + qa cookbook]
+    C --> E[spec-to-ticket]
+    D --> E
+    E --> F[impl-plan]
+    F --> G[$impl]
+    G --> H[qa + review]
+    H --> I[Stop hook]
+    I -->|revise| G
+    I -->|pass| J[close-ticket]
+```
 
-Where to see that:
+## Roadmap
 
-- [2026-04-05-stop-hook-smoke.md](/Users/kenjipcx/coding-harness/Codexter/experiments/2026-04-05-stop-hook-smoke.md)
-- [latest-runs.json](/Users/kenjipcx/coding-harness/Codexter/experiments/latest-runs.json)
-- [stop-hook.jsonl](/Users/kenjipcx/coding-harness/Codexter/.harness/logs/stop-hook.jsonl)
+Now:
 
-Main remaining gap:
+- [TASK-0086: tighten planning around touched files, signature deltas, and oversized-file decisions](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0086-tighten-planning-around-files-signatures-and-refactors.md)
+- [TASK-0087: enforce QA routing and evidence packs before completion](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0087-enforce-qa-routing-and-evidence-packs.md)
+- [TASK-0088: make reset and resume handoffs concise and compaction-safe](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0088-make-reset-resume-handoffs-compaction-safe.md)
+- [TASK-0089: make execution routing default to answer, plan, or act](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0089-make-execution-routing-answer-plan-or-act.md)
 
-- long-running multi-ticket client work is not proven yet
-- there is still no durable multi-ticket dispatcher or OMX-style mailbox/claim/worktree runtime
+Next:
+
+- [TASK-0081: add a worktree-backed multi-session runtime with a cloud-ready boundary](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081-add-worktree-backed-runtime-scaling.md)
+
+Later:
+
+- [TASK-0082: add transparency and ablation evals for autonomy changes](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0082-add-transparency-and-ablation-evals.md)
+
+The roadmap above reflects the current audit:
+
+- the intake, per-ticket planning, review, Stop-hook gating, and closeout stack
+  are already live
+- the main missing product leap is not more mode sprawl; it is making plans,
+  proof, and handoffs legible enough that the runtime can be trusted
+- bigger runtime scale still matters, but only after the contract-first tickets
+  make file ownership, evidence quality, and resume behavior harder to fake
 
 ## Setup
 
-### Option A: Clone straight into `~/.codex`
+### Option A
+
+Clone straight into `~/.codex`:
 
 ```bash
 git clone <your-remote-url> ~/.codex
-cp ~/.codex/config.toml.example ~/.codex/config.toml
+cp ~/.codex/config.local.env.example ~/.codex/config.local.env
 ```
 
-Then replace placeholders and local secrets in `~/.codex/config.toml`.
+### Option B
 
-### Option B: Keep the repo elsewhere and link it into `~/.codex`
+Keep the repo elsewhere and link it into `~/.codex`:
 
 ```bash
-git clone <your-remote-url> ~/src/codex-harness
-cd ~/src/codex-harness
+git clone <your-remote-url> ~/src/codexter
+cd ~/src/codexter
 bash install.sh
 ```
 
-The installer:
+The installer links the tracked Codex-home surfaces, renders `config.toml` from
+the tracked template on every run, and keeps secrets plus machine-local values
+out of Git via:
 
-- links `templates/global/AGENTS.md` into `~/.codex/AGENTS.md`
-- links tracked files into `~/.codex`
-- seeds `config.toml` if missing
-- links `hooks.json` when present
+- `~/.codex/config.local.env` for required placeholder values like `CODEX_HOME`
+  and `REF_API_KEY`
+- `~/.codex/config.local.toml` for trust entries, plugins, and any other
+  machine-local TOML you want appended verbatim
 
-Inside this repo, root [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md) is now project-local context for working on Codexter itself, not the shipped global install artifact.
+The shipped global contract stays in `templates/global/AGENTS.md`.
 
-## Bootstrap Checklist
+## Canonical Surfaces
 
-1. Copy `config.toml.example` to `config.toml`.
-2. Replace `__CODEX_HOME__` with the real absolute path.
-3. Add secret MCP URLs locally only.
-4. Add trust entries locally only.
-5. Run:
+- Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
+- Specs: [docs/specs](/Users/kenjipcx/coding-harness/Codexter/docs/specs)
+- Bootstrap brief: [skills/init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md](/Users/kenjipcx/coding-harness/Codexter/skills/init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md)
+- Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
+- Current execution model: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
+- Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
+- Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
+- QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
+- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
+- Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 
-```bash
-python3 -m py_compile bin/notify.py
-bash -n install.sh
-```
+## Current Limitation
 
-## If You Only Read One More Thing
-
-Read the visual walkthrough:
-
-- [legacy execution loop examples](/Users/kenjipcx/coding-harness/Codexter/docs/specs/legacy/ralph-flow-examples.md)
+Codexter already has the pieces for a strong spec -> ticket -> plan -> build ->
+review loop. What it does not yet have is the final operator-trustworthy layer
+that makes file-level intent, evidence quality, resume state, and action bias
+consistently trustworthy enough to scale into multi-ticket automation.

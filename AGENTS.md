@@ -43,6 +43,7 @@ capability, use `parity-research` first and then route the result into
 - `bin/`: hook and runtime scripts
 - `docs/`: durable specs, history, memory, troubles, and research
 - `experiments/`: smoke runs, eval outputs, and prototype evidence
+- `qa/`: reusable browser-QA runbooks, shortcuts, and deterministic test-entry guides
 - `rules/`: reusable policy fragments
 - `skills/`: operational playbooks, references, scripts, and templates
 - `templates/global/`: install-only template artifacts shipped into the live Codex home

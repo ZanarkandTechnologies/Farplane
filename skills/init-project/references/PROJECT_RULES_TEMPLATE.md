@@ -39,6 +39,13 @@ This file defines the project-specific technical rules, tech stack, and conventi
   - Desloppify: `[command or disabled]`
   - CodeRabbit: `coderabbit review --plain --type committed --base [branch]`
 
+## 🤖 Agent QA / Testability
+- **Reusable QA runbooks live in**: `qa/cookbook/`
+- **Stable browser regression tool**: [e.g., Playwright]
+- **Interactive browser debugging tool**: [e.g., agent-browser]
+- **Preferred fast-entry helpers**: [e.g., deep links, seeded states, keyboard shortcuts, debug routes]
+- **Required state probes for complex UI**: [e.g., HUDs, DOM mirrors, overlays, event logs]
+
 ## 🚀 Quick Commands
 ```bash
 # Install dependencies

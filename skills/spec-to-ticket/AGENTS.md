@@ -12,6 +12,10 @@ Own the planning-only slice-to-ticket conversion contract for Codexter.
 - Ambition-aware sizing refines that default: keep CRUD and other narrow workflows whole, and for complex systems split by proof/foundation boundaries or real reuse/runtime seams instead of by each internal stage. See `MEM-0044`.
 - UI-bearing tickets must front-load testability and QA shape instead of leaving QA to improvise later.
 - When an `Agent Testability Brief` exists, preserve it in ticket proof/testability fields instead of re-deriving that doctrine ad hoc. See `MEM-0043`.
+- When `docs/bootstrap-brief.md` carries `Agent Experience / Testability`
+  defaults, use them as the fallback seed for the first UI-bearing or
+  agentically hard ticket instead of making the operator restate the same
+  shortcuts, probes, and proof surfaces from memory.
 - When a split is needed, dependency order remains explicit and conservative.
 - `todos.md` here is anti-forgetting scaffolding, preferably plain natural-language checklist text with Markdown links, not a second ticket template. See `MEM-0028`.
 

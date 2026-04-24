@@ -42,9 +42,11 @@ Use this template to create ticket files directly under `tickets/`.
 
 ### Agent Contract
 - Open:
+- Test hook:
 - Stabilize:
 - Inspect:
 - Key screens/states:
+- QA cookbook:
 - Taste refs:
 - Expected artifacts:
 - Delegate with:

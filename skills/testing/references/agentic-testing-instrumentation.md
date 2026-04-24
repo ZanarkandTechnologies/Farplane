@@ -5,6 +5,8 @@ Agents can’t “understand” a UI the way humans do. When testing is hard, th
 ### 1) Always add stable selectors
 - Add `data-testid` for any critical interactive element and any assertion target.
 - Prefer `getByTestId`, `getByRole`, `getByLabel` in Playwright.
+- Record the intended selector contract in `qa/cookbook/*.md` when the repo has
+  a QA cookbook surface.
 
 ### 2) Add a debug overlay for complex UIs
 For canvas/diagram/video/complex layouts, add a debug overlay in dev/test modes:
@@ -24,6 +26,16 @@ Add a test-only API (guarded by env flag) such as:
 - Or a `/test/seed` endpoint for fixtures
 - Or a hidden debug panel enabled only in `NODE_ENV=test`
 
+### 4.5) Add access accelerators, not just assertions
+When QA keeps repeating the same setup path, add fast-entry controls:
+- deep links to the right screen or panel
+- a shortcut button to open the target panel directly
+- reset / seed / pause / resume / step helpers
+- a debug route or mode that jumps to the scenario under test
+
+Document those helpers in `qa/cookbook/*.md` so Playwright and `agent-browser`
+both reuse the same deterministic entry path.
+
 ### 5) Multiplayer: always provide a multi-client harness
 Agents must be able to run two (or more) clients simultaneously.
 Recommended patterns:
@@ -40,4 +52,3 @@ If a behavior is hard to assert visually, assert via instrumentation:
 
 ### Golden rule
 If the agent can’t reliably assert it, add instrumentation until it can.
-

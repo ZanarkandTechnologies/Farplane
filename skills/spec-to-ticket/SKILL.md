@@ -32,14 +32,18 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 11. If a UI flow is hard for an agent to access or stabilize, add testability instrumentation work into the slice instead of leaving QA to improvise.
 12. Every non-trivial ticket should declare a `Test hook`; if none is needed, say `none needed` explicitly.
 13. When an `Agent Testability Brief` exists, carry its control accelerators, state probes, coordination views, and proof surfaces into the ticket contract instead of re-deriving them.
-14. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
+14. When `docs/bootstrap-brief.md` includes `Agent Experience / Testability` defaults and there is no richer `Agent Testability Brief`, use those defaults as the fallback source for the first UI-bearing or agentically hard ticket.
+15. When the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry so QA inherits the same fast-entry, stabilize, inspect, and proof surfaces as the ticket.
+16. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
 
 ## Inputs
 
 - `docs/specs/*.md`
 - optionally `docs/specs/*-agent-testability.md` or `docs/specs/agent-testability-surfaces.md`
+- optionally `docs/bootstrap-brief.md`
 - optionally `docs/prd.md` for slice intent
 - optionally `docs/TASTE.md` for shared UI doctrine
+- optionally `qa/cookbook/*.md` when the repo already keeps reusable QA workflows
 - `tickets/templates/ticket.md`
 
 ## Output
@@ -53,6 +57,8 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
   - required evidence/backpressure
   - control fields for state movement
   - for UI-bearing tickets: `Agent Contract` + `Evidence checklist`
+  - when the repo has `qa/cookbook/` and the slice is UI-bearing or
+    agentically hard: matching cookbook seed or update
   - `User Evidence` placeholders
 
 ## UI-bearing Ticket Contract
@@ -65,6 +71,9 @@ If this block is vague, build and QA will reward-hack route completion instead o
 For any ticket that changes UI, canvas rendering, user-visible flows, or browser interaction, add a compact `Agent Contract` block.
 
 When an `Agent Testability Brief` exists, use it to fill these fields instead of inventing new testability doctrine from scratch.
+If there is no richer testability brief yet but `docs/bootstrap-brief.md`
+includes `Agent Experience / Testability`, use those bootstrap defaults as the
+fallback source.
 
 Required fields:
 
@@ -73,6 +82,8 @@ Required fields:
 - `Stabilize`: reset/seed path plus shortcuts/debug controls if determinism matters
 - `Inspect`: required hooks, selectors, overlays, or DOM mirrors
 - `Key screens/states`: the important surfaces QA must reach and compare
+- `QA cookbook`: matching `qa/cookbook/<workflow>.md` path when the repo keeps
+  reusable QA workflows, otherwise `none yet`
 - `Taste refs`: the relevant visual doctrine from `docs/TASTE.md`, plus any local exception
 - `Expected artifacts`: screenshots, snapshots, traces, or other proof
 - `Delegate with`: ticket ID, ticket file path/section, recommended assignee, expected output artifact
@@ -113,14 +124,18 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
 
 1. Read `docs/specs/*.md` and pick exactly one SLC slice.
 2. Read the `Agent Testability Brief` when one exists and note the required control accelerators, state probes, coordination views, and proof surfaces for the chosen slice.
-3. Start with the largest coherent self-contained feature ticket that would feel like one strong fullstack engineer or agent assignment.
-4. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above and choose the boundary that removes the most future friction while preserving strong proof.
-5. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
-6. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
-7. For each UI-bearing or agentically hard ticket, add a compact `Agent Contract` block plus `Evidence checklist`, carrying forward the brief's recommended surfaces when relevant.
-8. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
-9. Write the finished raw tickets into `tickets/` using the ticket template.
-10. Before handoff, read `references/review.md` and tighten the ticket set until it passes those checks.
+3. If there is no richer testability brief yet, read `docs/bootstrap-brief.md`
+   and reuse its `Agent Experience / Testability` defaults for the first
+   UI-bearing or agentically hard slice.
+4. Start with the largest coherent self-contained feature ticket that would feel like one strong fullstack engineer or agent assignment.
+5. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above and choose the boundary that removes the most future friction while preserving strong proof.
+6. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
+7. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
+8. For each UI-bearing or agentically hard ticket, add a compact `Agent Contract` block plus `Evidence checklist`, carrying forward the brief or bootstrap surfaces when relevant.
+9. If the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry from the same `Open`, `Stabilize`, `Inspect`, and proof assumptions.
+10. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
+11. Write the finished raw tickets into `tickets/` using the ticket template.
+12. Before handoff, read `references/review.md` and tighten the ticket set until it passes those checks.
 
 ## Ambition-Aware Sizing
 

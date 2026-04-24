@@ -55,7 +55,9 @@ Before touching the browser, read:
    - `Evidence`
    - `Blockers`
 3. linked docs/specs from ticket frontmatter when verification depends on them,
-4. `docs/TASTE.md` when UI quality is in scope.
+4. `docs/TASTE.md` when UI quality is in scope,
+5. `qa/README.md` and the relevant `qa/cookbook/*.md` page when the repo
+   provides reusable browser-entry guidance.
 
 If the ticket carries an older `Agent Contract` or `Evidence Checklist`, use it as supporting context, but do not require those legacy sections.
 If the ticket does not define the key screens/states or proof target clearly enough in `Verification` or linked docs, stop and report `underspecified QA` instead of inventing a target flow.
@@ -107,10 +109,14 @@ load contract, capture proof, reconcile claims, write back, leave linked human-r
 1. **Load contract**: read the ticket and extract the proof target from `Acceptance Criteria`, `Verification`, and any linked docs.
 2. **Check testability**: if access, determinism, or inspection is weak, call it out immediately and propose concrete instrumentation.
    - if the ticket lacks a usable test hook or deterministic setup path, fail early as `missing test hook` rather than improvising a brittle setup path
+   - if `qa/cookbook/` documents a shortcut, deep link, seeded state, or debug
+     control, use that before exploring the UI manually
 3. **Go screen-first**: cover declared screens/states from `Verification` or linked specs; do not optimize for route completion alone.
 4. **Capture proof**:
-   - prefer `agent-browser` for immediate evidence,
-   - prefer Playwright for regression automation when the flow is stable.
+   - prefer `agent-browser` for immediate evidence, first-pass discovery, and debugging
+     when a scripted browser test is failing,
+   - prefer Playwright for stable regression automation when the flow is
+     understood and deterministic.
    - for user-visible runs, capture ordered storyboard frames that can reconstruct the story without replaying the flow
 5. **Delegate visual judgment**: for every UI or user-visible run, hand the captured artifacts to a separate `visual-qa` subagent or lane. Do not self-approve UI quality from the browser-driving pass.
 6. **Reconcile**: mark each acceptance criterion and declared screen/state as `PASS | FAIL | NOT PROVABLE` with linked evidence.

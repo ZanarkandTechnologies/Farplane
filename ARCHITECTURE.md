@@ -26,12 +26,14 @@ The repo is organized around five concerns:
 AGENTS.md -> ARCHITECTURE.md -> canonical docs/tickets -> skills/agents/bin
 
 idea/request
+  -> bootstrap when needed (`init-project`, `docs/bootstrap-brief.md`)
   -> discovery (`brainstorm`, `deep-interview`, `prd`)
   -> specs (`docs/specs/*`)
   -> ticketization (`skills/spec-to-ticket`)
   -> per-ticket planning (`impl-plan`)
   -> execution (`$impl`, runtime helpers)
   -> proof/review (`review`, QA, Stop hook)
+  -> reusable QA guidance (`qa/cookbook/*`)
   -> writeback (`docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`)
 ```
 
@@ -66,13 +68,17 @@ idea/request
   Purpose: repeated misses, user corrections, and prevention ideas
 - [docs/TASTE.md](/Users/kenjipcx/coding-harness/Codexter/docs/TASTE.md)
   Purpose: shared visual doctrine when a repo has UI work
+- [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
+  Purpose: repo-owned QA/browser-test entry guidance and cookbook policy
+- [qa/cookbook](/Users/kenjipcx/coding-harness/Codexter/qa/cookbook)
+  Purpose: reusable shortcuts, deep links, seeds, probes, and workflow runbooks for agent-efficient QA
 
 ### Execution surfaces
 
 - [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
   Purpose: ticket lifecycle, frontmatter contract, and durable progress policy
 - [tickets/templates/ticket.md](/Users/kenjipcx/coding-harness/Codexter/tickets/templates/ticket.md)
-  Purpose: canonical ticket shape for planning, evidence, and review packets
+  Purpose: canonical ticket shape for planning, artifact-first evidence, and optional `Agent Contract` / `Evidence Checklist` sections for UI-bearing work
 - [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
   Purpose: active ticket board
 - [tickets/archive](/Users/kenjipcx/coding-harness/Codexter/tickets/archive)
@@ -107,6 +113,8 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - Root docs should stay map-like.
 - Detailed behavior belongs in `docs/specs/*`.
 - Ticket-local state belongs in `tickets/TASK-*.md`, not in chat.
+- Reusable QA shortcuts and deterministic browser-entry guidance belong in
+  `qa/cookbook/*`, not in ticket prose or transient chat.
 - Review scoring belongs in `skills/review/*`.
 - Runtime machinery belongs in `bin/`, `hooks.json`, and the runtime specs.
 - Reusable workflow detail belongs in `skills/*`.

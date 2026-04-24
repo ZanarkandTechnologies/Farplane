@@ -130,6 +130,8 @@ Optional sections only when they add signal:
 
 - `Gap Analysis`
 - `Diagram`
+- `Agent Contract`
+- `Evidence Checklist`
 - `Refs`
 
 The default `Plan` should answer four things:
@@ -166,6 +168,31 @@ measurable terms.
 
 `Verification` should say how each criterion is measured: test passes, manual
 checks, and required evidence.
+
+For UI-bearing, browser-driven, canvas/game, or otherwise agentically hard
+tickets, add:
+
+1. `Agent Contract`
+2. `Evidence Checklist`
+
+The `Agent Contract` should make QA fast and deterministic instead of leaving
+browser navigation to improvisation. It should name:
+
+1. `Open`
+2. `Test hook`
+3. `Stabilize`
+4. `Inspect`
+5. `Key screens/states`
+6. `QA cookbook`
+7. `Taste refs`
+8. `Expected artifacts`
+9. `Delegate with`
+
+When the repo has `docs/bootstrap-brief.md` with `Agent Experience /
+Testability` defaults, or a richer `Agent Testability Brief`, carry those
+surfaces into the first relevant ticket instead of restating them from memory.
+When the repo has `qa/cookbook/`, point the ticket at the matching workflow doc
+or seed one during planning.
 
 Do not duplicate the same idea across multiple headings. If a short summary and
 the plan already explain the change, do not add more ceremony.

@@ -3,7 +3,8 @@
 Bootstrap or migrate a project into the docs-first, ticket-first harness model.
 This setup should start with a deep-interview-quality bootstrap intake, then
 scaffold optional `.githooks/` samples plus project-local `scripts/pre_*_check.sh`
-files for local quality gates, without enabling them automatically.
+files for local quality gates, plus a repo-owned `qa/` cookbook surface for
+agent-efficient verification guidance, without enabling hooks automatically.
 
 ## Use Cases
 
@@ -21,7 +22,8 @@ bash ~/.codex/skills/init-project/scripts/bootstrap.sh
 Before finalizing the scaffold, run a bootstrap intake with the same discipline
 as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
 
-That also writes `docs/bootstrap-brief.md`, `.githooks/README.md`,
+That also writes `docs/bootstrap-brief.md`, `qa/README.md`,
+`qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
 and `scripts/pre_push_check.sh` as opt-in samples. The recommended default is
 to keep the large-file scan, fill in lint/typecheck/test/build commands, and
@@ -50,6 +52,7 @@ Then copy in:
 - `AGENTS.md`
 - `ARCHITECTURE.md`
 - `docs/TASTE.md`
+- `qa/`
 - `tickets/templates/ticket.md`
 
 The bootstrap script can still help:
@@ -111,6 +114,7 @@ Then:
 The first migration slice should only prove:
 
 - ticket structure works
+- qa cookbook structure exists for future agent-facing shortcuts and probes
 - `Stop` hook works
 - the project can produce one good ticket outcome
 
@@ -128,10 +132,12 @@ Those can come after one clean ticket run.
 ## Migration Checklist
 
 - [ ] `docs/bootstrap-brief.md` exists and captures stack/topology/gate decisions
+- [ ] `docs/bootstrap-brief.md` captures agent-experience/testability decisions
 - [ ] `PROJECT_RULES.md` exists
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists
 - [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md` exist
+- [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
 - [ ] `docs/specs/README.md` exists
 - [ ] `tickets/` structure exists
 - [ ] `tickets/archive/` exists for completed tickets

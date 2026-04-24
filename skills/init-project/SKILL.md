@@ -9,7 +9,8 @@ description: "One-time setup workflow for new projects. Use a deep-interview-qua
 One-time setup for new projects. This skill should not feel like a shallow
 scaffold dump. Start with a deep-interview-quality bootstrap intake, capture a
 visible `docs/bootstrap-brief.md`, then scaffold a docs-first workflow and the
-project's initial quality gates.
+project's initial quality gates plus a repo-owned `qa/` cookbook surface for
+agent-efficient verification guidance.
 
 ## What This Sets Up
 
@@ -17,6 +18,7 @@ project's initial quality gates.
 - `AGENTS.md` (operational contract loaded every loop)
 - `ARCHITECTURE.md` (top-level system map for the repo)
 - `docs/` state (`bootstrap-brief.md`, `prd.md`, `specs/README.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
+- `qa/` state (`README.md`, `AGENTS.md`, `cookbook/README.md`, `cookbook/TEMPLATE.md`)
 - `tickets/` state (`*.md`, `archive/`, `templates/`, optional `README.md`)
 - optional `.githooks/` samples (`README.md`, `pre-commit`, `pre-push`) for
   local quality gates
@@ -74,6 +76,8 @@ bootstrap source of truth for:
 - stack choices and defaults
 - required local validators (`lint`, `typecheck`, `test`, optional `build`)
 - optional heavy gates (`desloppify`, `CodeRabbit`)
+- agent-experience/testability defaults such as shortcuts, seed/reset paths,
+  probes, and browser proof strategy
 - large-file policy (`500` warn, `1000` block by default)
 - shared utility placement convention
 - decision boundaries for what the scaffold may choose automatically
@@ -100,23 +104,32 @@ repo.
    - copy `references/BOOTSTRAP_BRIEF_TEMPLATE.md` -> `docs/bootstrap-brief.md`
    - copy `references/SPECS_README_TEMPLATE.md` -> `docs/specs/README.md`
    - `touch docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TASTE.md docs/TROUBLES.md`
-6. Create tickets state:
+6. Create QA state:
+   - `mkdir -p qa/cookbook`
+   - copy `references/qa/AGENTS.md` -> `qa/AGENTS.md`
+   - copy `references/qa/README.md` -> `qa/README.md`
+   - copy `references/qa/cookbook/README.md` -> `qa/cookbook/README.md`
+   - copy `references/qa/cookbook/TEMPLATE.md` -> `qa/cookbook/TEMPLATE.md`
+7. Create tickets state:
    - `mkdir -p tickets tickets/archive tickets/templates`
    - copy the ticket template into `tickets/templates/`
-7. Create optional git hook samples:
+8. Create optional git hook samples:
    - `mkdir -p .githooks`
    - copy the hook README and the sample `pre-commit` / `pre-push` scripts
    - do **not** activate them automatically
-8. Create optional repo-local validation scripts:
+9. Create optional repo-local validation scripts:
    - `mkdir -p scripts`
    - copy `pre_commit_check.sh` and `pre_push_check.sh`
    - keep the file-size scan as-is
    - fill the project commands for `lint`, `typecheck`, `test`, optional
      `build`, and optional `desloppify`
-9. If the idea is still open-ended, use `brainstorm`.
-10. If the first slice or bootstrap shape is still vague, use `deep-interview`.
-11. Use `prd` skill for requirements and PRD authoring (HITL loop).
-12. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+10. Fill the bootstrap brief's `Agent Experience / Testability` section so the
+    repo has an early answer for how agents should reach, inspect, stabilize,
+    and verify important app states.
+11. If the idea is still open-ended, use `brainstorm`.
+12. If the first slice or bootstrap shape is still vague, use `deep-interview`.
+13. Use `prd` skill for requirements and PRD authoring (HITL loop).
+14. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration
 
@@ -139,6 +152,8 @@ Migration guide:
 - `docs/` is the canonical project state for planning and execution.
 - `docs/bootstrap-brief.md` keeps bootstrap decisions on a visible project
   surface instead of burying them in chat.
+- `qa/` gives each repo one visible home for durable shortcuts, deep links,
+  seeded states, and probes that make agent QA faster and less flaky.
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
 - `docs/TROUBLES.md` is the append-only operator feedback log for repeated misses, failed attempts, and correction patterns that should feed future system improvements.
 - `tickets/` is the canonical execution surface, so planning, build, and QA work from one file per active ticket, with completed tickets moved into `tickets/archive/`.
@@ -150,6 +165,8 @@ Migration guide:
 - `brainstorm` and `deep-interview` keep weak ideas from reaching tickets too early.
 - `deep-interview` owns the interview loop quality. `init-project` should reuse
   that discipline, not fork it into a second shallow intake.
+- bootstrap should ask how agents move through the product efficiently and
+  should leave behind visible QA surfaces instead of keeping those answers in chat
 - Agents can find specs, plan, and validation commands without hunting through nested files.
 
 ## Planning Philosophy (Inherited Defaults)
@@ -196,6 +213,7 @@ The generated planning flow should follow these defaults:
 - [AGENTS_TEMPLATE.md](references/AGENTS_TEMPLATE.md) - AGENTS template.
 - [ARCHITECTURE_TEMPLATE.md](references/ARCHITECTURE_TEMPLATE.md) - Architecture map template.
 - [BOOTSTRAP_BRIEF_TEMPLATE.md](references/BOOTSTRAP_BRIEF_TEMPLATE.md) - Bootstrap intake brief template.
+- `references/qa/` - QA module templates scaffolded into new repos.
 - [SPECS_README_TEMPLATE.md](references/SPECS_README_TEMPLATE.md) - Specs index template.
 - [TASTE_TEMPLATE.md](references/TASTE_TEMPLATE.md) - Shared visual doctrine template.
 - [GITHOOKS_README_TEMPLATE.md](references/GITHOOKS_README_TEMPLATE.md) - Optional local hook setup guide.

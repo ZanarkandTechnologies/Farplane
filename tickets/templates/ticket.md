@@ -75,6 +75,29 @@ flowchart LR
 - `Evidence required:` strongest artifacts needed to show the work is done
 - `Artifacts path:` `tickets/artifacts/TASK-XXXX/`
 
+## Agent Contract
+- Optional for non-UI work. Add when the ticket changes UI, canvas rendering,
+  user-visible flows, browser interaction, or any flow that is hard for agents
+  to reach or inspect reliably.
+- `Open:` launch path or command, plus stable route/deeplink if available
+- `Test hook:` cheapest deterministic proof surface, or `none needed`
+- `Stabilize:` reset/seed path plus shortcuts/debug controls if determinism matters
+- `Inspect:` selectors, overlays, DOM mirrors, HUDs, or logs the agent should rely on
+- `Key screens/states:` important surfaces QA must reach and compare
+- `QA cookbook:` matching `qa/cookbook/<workflow>.md` path when the repo keeps
+  reusable QA workflows, otherwise `none yet`
+- `Taste refs:` relevant visual doctrine and any local exception
+- `Expected artifacts:` screenshots, snapshots, traces, reports, or clips
+- `Delegate with:` ticket path/section, recommended assignee, expected artifact
+
+## Evidence Checklist
+- Optional for non-UI work. Keep it short and concrete for UI-bearing or
+  agentically hard tickets.
+- [ ] Screenshot:
+- [ ] Screenshot:
+- [ ] Snapshot:
+- [ ] QA report linked:
+
 ## Refs
 - Optional links only: specs, docs, issues, websites, or comparable examples
 - Do not store raw `session_id` values in ticket frontmatter.

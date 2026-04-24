@@ -12,6 +12,8 @@ artifact defaults for new or migrated repos.
 - bootstrap as a docs-first, visible-artifact workflow
 - `deep-interview` as the canonical intake engine for ambiguous bootstrap work
 - `docs/bootstrap-brief.md` as the visible bootstrap brief surface
+- bootstrap-owned agent-experience/testability decisions captured in
+  `docs/bootstrap-brief.md` and scaffolded `qa/` surfaces
 - optional `.githooks/` plus repo-local `scripts/pre_*_check.sh`
 - manual hook activation and explicit project-owned validator commands
 

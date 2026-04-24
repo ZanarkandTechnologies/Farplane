@@ -8,7 +8,9 @@
 - [ ] Group later follow-up tickets by shared proof surface or adjacent operator value, not one internal pipeline stage per ticket.
 - [ ] Make acceptance criteria, evidence needs, and control fields concrete in each ticket.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the ticket contract instead of re-deriving them.
+- [ ] If there is no richer testability brief yet but `docs/bootstrap-brief.md` has `Agent Experience / Testability`, use it as the fallback seed for the first UI-bearing or agentically hard ticket.
 - [ ] If a ticket includes UI, define the `Agent Contract`, `Evidence checklist`, and testability shape up front.
+- [ ] If the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update the matching workflow entry.
 - [ ] If determinism or agent access looks weak, turn that into explicit instrumentation work now instead of hoping QA can improvise later.
 - [ ] Write the raw tickets into `tickets/` with the correct state fields.
 - [ ] Tighten the result against the [review guide](./references/review.md) before handoff.

@@ -13,6 +13,9 @@ If any answer is weak, tighten the tickets first.
 - Do acceptance criteria explain the minimum necessary change clearly?
 - For UI-bearing tickets, do `Agent Contract` and `Evidence checklist` make QA realistic?
 - Does each non-trivial ticket declare a usable `Test hook`, not just vague “verify manually” language?
+- If bootstrap testability defaults exist, did we actually carry them into the
+  first UI-bearing or agentically hard ticket instead of making the operator
+  restate them?
 - If delegation is expected, does `Delegate with` point to the exact ticket path/section and write-back target?
 - For UI-bearing tickets, is the intended layout or screen structure clear enough to review later without guessing?
 
@@ -25,6 +28,9 @@ If any answer is weak, tighten the tickets first.
 - Did we call out any instrumentation work needed for difficult UI or runtime verification?
 - Are we defining proof in the cheapest deterministic way, for example a CLI check, seed path, debug route, or sanity script?
 - If an `Agent Testability Brief` exists, did we actually preserve its surfaces in the ticket contract instead of re-deriving them inconsistently?
+- If the repo has `qa/cookbook/`, did we seed or update the matching workflow
+  entry for the slice instead of leaving QA to rediscover the flow from the
+  ticket alone?
 - For UI work, is the design intent readable for a human reviewer rather than only executable by an agent?
 - Are we reusing existing shared UI patterns/libraries where possible instead of silently inventing another one?
 - Did we keep backend and frontend together when they are part of one human-testable capability?
@@ -46,6 +52,10 @@ If any answer is weak, tighten the tickets first.
 - delegated work is described only in prose without an exact ticket reference
 - a split claims to be necessary but no real hard trigger is named
 - an `Agent Testability Brief` exists, but the resulting ticket never turns it into concrete `Test hook`, `Stabilize`, `Inspect`, or proof expectations
+- bootstrap `Agent Experience / Testability` defaults exist, but the first
+  UI-bearing or agentically hard ticket ignores them
+- the repo has `qa/cookbook/`, but the planning output never seeds a matching
+  workflow entry for the ticket's proof path
 - a complex pipeline is split into parse/chunk/embed/index-style microtickets without a true boundary trigger
 - the first ticket ships only scaffolding and no usable proof path
 - a CRUD workflow is split into multiple tickets without a real blocker or shared-platform reason

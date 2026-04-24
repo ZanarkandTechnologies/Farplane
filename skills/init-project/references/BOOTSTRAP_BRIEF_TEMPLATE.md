@@ -32,6 +32,14 @@ finalizing the scaffold.
 - Hook policy:
 - TypeScript typecheck policy:
 
+## Agent Experience / Testability
+- Important states the agent must reach quickly:
+- Fast-entry surfaces to create or preserve:
+- Reset / seed / fixture strategy:
+- Hidden state that needs probes, HUDs, or DOM mirrors:
+- Preferred browser proof stack:
+- Initial QA cookbook workflows to document:
+
 ## File-Size Policy
 - Warn threshold:
 - Block threshold:
