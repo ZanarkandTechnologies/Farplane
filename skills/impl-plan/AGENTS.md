@@ -13,9 +13,10 @@
 - Keep one public planner only: `impl-plan`. See `MEM-0014`.
 - Keep repo rules in root `AGENTS.md`; keep planning mechanics in this skill.
 - Keep the top approval surface compact and explicitly reviewer-facing.
-- Make the top approval surface diagram-first for material work. See `MEM-0030`.
-- Keep the top of the ticket split into `Human` first and `Agent` second. See
-  `MEM-0031`.
+- Use diagram-first approval only when material work needs a diagram because the
+  file map alone is not enough. See `MEM-0030`.
+- Keep `impl-plan` aligned with the canonical ticket template instead of
+  inventing a parallel `Human` / `Agent` contract. See `MEM-0031`.
 - When an `Agent Testability Brief` exists, preserve its proof/testability
   doctrine in the plan rather than re-deriving it. See `MEM-0043`.
 - Keep reusable diagram taste and pattern depth in `skills/diagramming/*`; keep
@@ -26,10 +27,13 @@
 
 ## Conventions
 
-- Lead with one top-level delta diagram before the deeper prose when the work
-  is material or cross-module.
-- Require a compact `Signature Sketch` near the top when trust depends on
+- Lead with one top-level delta diagram before the deeper prose only when the
+  work needs a diagram because flow, ownership, or typed data path is not
+  obvious from the file map alone.
+- Require compact callable seams in `Signature delta` when trust depends on
   seeing code seams, interfaces, ownership boundaries, or changed handlers.
+- Require `Type Sketch` plus one `Typed flow example` when trust depends on
+  seeing structs, objects, payloads, or typed state evolve across boundaries.
 - Keep the recommendation above the fold.
 - When diagrams are needed, reference `skills/diagramming/SKILL.md` and
   `docs/specs/diagram-first-conventions.md` for compactness, color/legend
@@ -37,36 +41,35 @@
 - Reference `MEM-0007` for the compact plan contract.
 - Reference `MEM-0008` for the root-AGENTS compression boundary.
 - Reference `MEM-0030` for the diagram-first contract.
-- Reference `MEM-0031` for the `Human` / `Agent` split plus signature-sketch
-  contract.
-- Make narrative sections fail if they are decorative, duplicated, or placeholder-only.
-- If `todos.md` exists here, keep it as plain natural-language checklist text with Markdown links rather than a custom mini-language. See `MEM-0028`.
+- Reference `MEM-0031` for the compact file-map-first single-plan contract.
+- Reference `MEM-0050` for the typed-data planning contract.
+- Make optional sections fail if they are decorative, duplicated, or
+  placeholder-only.
+- If `todos.md` exists here, keep it as plain natural-language checklist text
+  with Markdown links rather than a custom mini-language. See `MEM-0028`.
 
 ## Checks
 
-- `Human` and `Agent` are both present and `Human` comes first.
-- `Decision`, `B -> A`, `Proof`, and `Ask` are all present in `Human`.
-- `Diagram` is present for any material or cross-module plan.
-- `Signature Sketch` is present when interface shape matters.
-- `Delta`, `Execution Plan`, `Plan Review`, and `Ticket Move` are present in
-  `Agent`.
-- `Options Appendix` is present for material choices.
+- The output matches the canonical ticket-body shape.
+- `Diagram` is present when a material or cross-module plan needs one because
+  flow, ownership, or typed data path is not obvious from the file map alone.
+- `Signature delta` is present when interface shape matters.
+- `Type Sketch` plus `Typed flow example` are present when typed data flow
+  matters.
+- A compact recommendation plus 3 viable options exist when the ticket
+  involves a material choice.
 - Split rule remains explicit.
 - Proof remains concrete.
-- 3 viable options with pros/cons exist when the ticket involves a material choice.
 - The applicability rule is explicit.
-- `User Story` / `High-Fidelity Example` are either required and useful, or
-  intentionally omitted for a truly narrow fix.
 - Template and prompt match `SKILL.md`.
 
 ## Testing
 
 - Re-read `SKILL.md` once and confirm the contract is executable without references.
 - Compare prompt/template/example against `SKILL.md` for drift.
-- Confirm high-signal `Human` content appears before appendix content.
-- Confirm the diagram-first approval surface can be skimmed without the
-  `Agent` lane or appendix.
-- Confirm the signature sketch proves real code understanding without becoming a
-  type dump.
+- Confirm the diagram-first approval surface can be skimmed without an
+  appendix.
+- Confirm the callable seams and type shapes prove real code understanding
+  without becoming a type dump.
 - Confirm any `Agent Testability Brief` is reflected in proof/testability planning.
 - Confirm the recommendation is directly justified against the listed options.

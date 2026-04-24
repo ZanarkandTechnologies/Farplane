@@ -1,0 +1,168 @@
+{
+  "work_type": ["planning", "docs", "cleanup"],
+  "search_scope": {
+    "changed_files": [
+      "skills/impl-plan/SKILL.md",
+      "skills/impl-plan/prompts/plan.md",
+      "skills/impl-plan/references/template.md",
+      "skills/impl-plan/references/examples.md",
+      "skills/impl-plan/references/review.md",
+      "skills/impl-plan/README.md",
+      "skills/impl-plan/AGENTS.md",
+      "skills/impl-plan/todos.md",
+      "tickets/templates/ticket.md",
+      "tickets/README.md",
+      "tickets/TASK-0086-tighten-planning-around-files-signatures-and-refactors.md",
+      "docs/MEMORY.md",
+      "docs/HISTORY.md"
+    ],
+    "related_files": [
+      "docs/specs/spec-first-execution-loop.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/debloatability.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "invariants_checked": ["MEM-0031", "MEM-0048", "MEM-0049", "MEM-0050"],
+    "docs_checked": [
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/debloatability.md"
+    ]
+  },
+  "reviewed_at": "2026-04-24 18:54 +0100",
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "debloatability",
+    "evidence-quality",
+    "integration-readiness"
+  ],
+  "summary": "The `impl-plan` realignment is directionally strong and materially simpler, but the shipped typed-data planning contract still cites the wrong memory invariant, so the repo now teaches one rule in `docs/MEMORY.md` and a different identifier in the live skill package.",
+  "overall_score": 3.9,
+  "overall_threshold": 4.0,
+  "verdict": "revise",
+  "rerun_required": true,
+  "evidence_quality": "pass",
+  "integration_readiness": "fail",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": ["integration-readiness"],
+  "finding_log": [
+    {
+      "severity": "high",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "The new typed-data planning rule was logged as `MEM-0050`, but the live `impl-plan` package still cites `MEM-0049`, which actually belongs to the `$impl` execution-phase contract.",
+      "file_refs": [
+        "skills/impl-plan/AGENTS.md:43",
+        "skills/impl-plan/SKILL.md:26",
+        "docs/MEMORY.md:55",
+        "docs/MEMORY.md:56"
+      ],
+      "evidence": [
+        "`skills/impl-plan/AGENTS.md` says `Reference MEM-0049 for the typed-data planning contract.`",
+        "`skills/impl-plan/SKILL.md` embeds `<!-- MEM-0049 decision: ... typed data flow ... -->`.",
+        "`docs/MEMORY.md` defines `MEM-0049` as the `$impl` execution-phase contract and `MEM-0050` as the typed-data planning contract."
+      ],
+      "next_action": "Update the `impl-plan` package to cite `MEM-0050` anywhere it references the typed-data planning rule, then rerun review."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.5,
+        "parallelization-fit": 4.2,
+        "slice-sizing": 4.2,
+        "acceptance-testability": 4.1,
+        "scope-clarity": 4.3
+      },
+      "findings": [
+        "The ticket remains one coherent contract-cleanup slice and the acceptance criteria are concrete enough to challenge the work."
+      ],
+      "next_action": "No ticket-contract rewrite is needed for this pass."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.4,
+        "bloatability": 4.3,
+        "modularity": 4.1,
+        "proof-clarity": 4.0,
+        "execution-order": 4.2,
+        "risk-clarity": 4.0
+      },
+      "findings": [
+        "The plan is materially easier to scan and the new typed-data fields fit the existing compact contract instead of recreating a second artifact."
+      ],
+      "next_action": "Keep the proof path artifact-first after the invariant reference is corrected."
+    },
+    {
+      "name": "debloatability",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead-surface-removal": 4.5,
+        "compatibility-cleanup": 4.2,
+        "duplication-reduction": 4.4,
+        "clarity-improvement": 4.5,
+        "deletion-safety": 4.1
+      },
+      "findings": [
+        "The `Human` / `Agent` split and related boilerplate were removed cleanly, and the single-surface plan shape is easier to reason about."
+      ],
+      "next_action": "No additional cleanup is required before rerunning review."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.0,
+        "reproducibility": 4.1,
+        "traceability": 4.0,
+        "consistency": 4.0,
+        "inspectability": 4.0
+      },
+      "findings": [
+        "Fresh validator results were rerun during review and are recorded in this artifact with explicit commands and verdict."
+      ],
+      "next_action": "Keep this artifact linked from the ticket so the review result stays traceable."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 3.4,
+      "threshold": 4.0,
+      "pass": false,
+      "dimension_scores": {
+        "integration-safety": 3.8,
+        "contract-correctness": 2.8,
+        "dependency-readiness": 3.8,
+        "coupling-risk": 4.0,
+        "merge-readiness": 3.4
+      },
+      "findings": [
+        "The functional direction is sound, but the new invariant identifier is wrong in the shipped `impl-plan` package, so the live docs and durable memory disagree about the same rule."
+      ],
+      "next_action": "Fix the `MEM-0049` to `MEM-0050` drift in the `impl-plan` package and rerun review."
+    }
+  ],
+  "blocking_findings": [
+    "Typed-data planning surfaces cite `MEM-0049` instead of `MEM-0050`, leaving the live skill package out of sync with durable memory."
+  ],
+  "next_action": "Update the typed-data planning references in `skills/impl-plan/SKILL.md` and `skills/impl-plan/AGENTS.md` to `MEM-0050`, then rerun `$review`."
+}

@@ -3,18 +3,69 @@
 ## Good
 
 ````md
-## Human
+## Summary
+Realign `impl-plan` with the canonical ticket template and make typed data flow
+explicit in the plan instead of proving only callable seams. This keeps plans
+compact while making stateful or interface-heavy work readable in plain text.
 
-### Decision
-- Req: make `impl-plan` easy to approve from the top of the ticket instead of forcing the reviewer through a long mixed artifact
-- Best: split the plan into a top `Human` lane and a lower `Agent` lane, and add a compact signature sketch beside the diagram
-- Why: this keeps the reviewer-facing decision surface short while still proving codebase understanding
-- Tradeoff accepted: the skill, prompt, template, and examples all need to move together
-- Not chosen:
-  - keep the current mixed shape and just trim prose
-  - move signatures into a detached appendix
+## Scope
+- In:
+  - remove the stale `Human` / `Agent` split from the skill package
+  - add `Type Sketch` and `Typed flow example` to the compact plan contract
+- Out:
+  - expanding `impl-plan` into full system-design interviews
+  - exhaustive schema dumps
 
-### Diagram
+## Plan
+- `Change:` remove the stale `Human` / `Agent` split from `impl-plan` and add
+  compact typed-data planning to the single ticket `Plan` section
+- `Why:` `MEM-0031` says `impl-plan` should stay compact and avoid parallel
+  human-versus-agent documents, but the live skill package still teaches the
+  split
+- `Before -> After:` before, the skill proves callable seams but leaves typed
+  payload continuity implicit; after, the ticket stays single-surface and
+  shows both callable and data-shape seams
+- `Touch:` `skills/impl-plan/SKILL.md`, `prompts/plan.md`,
+  `references/template.md`, `references/examples.md`, `references/review.md`,
+  `README.md`, `AGENTS.md`, `todos.md`, `tickets/templates/ticket.md`,
+  `tickets/README.md`
+- `Inspect:` `docs/MEMORY.md`, `tickets/TASK-0086-*.md`,
+  `docs/specs/spec-first-execution-loop.md`
+- `Signature delta:`
+  - `skills/impl-plan/SKILL.md / plan(ticket): TicketPlan`
+  - `skills/impl-plan/prompts/plan.md / outputShape(mode): TicketBody`
+  - `tickets/templates/ticket.md / Plan fields(...): compact plan contract`
+- `Type Sketch:`
+  - `PlanField { label: string, required: boolean, note?: string }`
+  - `TypeSketchEntry { name: string, fields: string[] }`
+  - `TypedFlowStep { stage: string, input: string, output: string }`
+- `Typed flow example:`
+  - `DraftPlanTicket { touch, inspect, signatureDelta }`
+  - `ReviewedPlanTicket { typeSketch, typedFlowExample, recommendation }`
+  - `ApprovedPlanTicket { verification, evidence, ready }`
+- `Recommendation:` keep one compact plan surface and add typed planning inside
+  `Plan`
+- `Options considered:`
+  - `Option 1:` keep `Human` / `Agent` and add type sections there
+    - `Pros:` smallest diff to recent skill package
+    - `Cons:` preserves the drift against `MEM-0031` and the ticket template
+    - `Why not chosen:` it keeps the wrong public contract alive
+  - `Option 2:` collapse to one plan surface without typed examples
+    - `Pros:` simpler template
+    - `Cons:` still leaves data-shape continuity implicit
+    - `Why not chosen:` it solves drift but not the typed-flow planning gap
+  - `Option 3:` collapse to one plan surface and add `Type Sketch` plus one
+    golden-path typed flow
+    - `Pros:` template-aligned, readable, and strong enough for interface-heavy
+      work
+    - `Cons:` needs coordinated changes across the package
+    - `Why not chosen:` n/a
+- `Blast radius:` every future `impl-plan` ticket, examples, and review pass
+  will read differently; the biggest risk is over-correcting into type bloat
+- `Risks:` one file may keep the stale split, or the typed-flow example may
+  expand into a schema dump if the contract is too loose
+
+## Diagram
 - Legend: gray = keep, amber = change, green = add, red dashed = remove
 
 ```mermaid
@@ -26,98 +77,63 @@ flowchart LR
 
   user[/operator/]:::keep
   plan["ticket plan"]:::change
-  human["Human lane<br/>Decision + Diagram + Signature Sketch"]:::add
-  agent["Agent lane<br/>Delta + Execution Plan + Ticket Move"]:::add
-  prose["long mixed plan surface"]:::remove
+  compact["single plan surface<br/>Summary + Plan + Verification"]:::add
+  types["Type Sketch<br/>Typed flow example"]:::add
+  split["Human / Agent split"]:::remove
   refs[(skill refs)]:::change
 
   user --> plan
-  plan --> human
-  plan --> agent
+  plan --> compact
+  compact --> types
   plan --> refs
 ```
 
-### Signature Sketch
-- `skills/impl-plan/SKILL.md / buildHumanLane(ticket): HumanPlan`
-- `skills/impl-plan/SKILL.md / buildAgentLane(ticket): AgentPlan`
-- `references/template.md / Signature Sketch: SignatureLine[]`
-- `prompts/plan.md / outputShape(mode): HumanThenAgent`
+## Acceptance Criteria
+- [ ] AC-1: the live `impl-plan` package no longer uses `Human` / `Agent` as
+      the public output contract
+- [ ] AC-2: the ticket template and `impl-plan` references share the same
+      compact plan shape
+- [ ] AC-3: material plans can show callable seams, data shapes, and one typed
+      golden path without turning into an appendix dump
 
-### B -> A
-- Before: the top of the plan mixes approval context, execution detail, and narrative sections into one long read
-- After: the reviewer sees one short `Human` lane first, then the implementer gets a lower `Agent` lane
-- Outcome: the ticket becomes easier to trust quickly without losing execution detail
+## Verification
+- `Tests:` compare the skill package files and ticket template for contract
+  drift; run repo validators that cover ticket metadata and doc parity
+- `Manual checks:` inspect the good example and template to confirm the typed
+  flow is readable without `Human` / `Agent`
+- `Evidence required:` updated skill surfaces plus passing validator output
+- `Artifacts path:` `tickets/artifacts/TASK-0086/`
 
-### Proof
-- P1: the live skill contract explicitly requires `Human` before `Agent`
-- P2: the prompt, template, and example all show a compact signature sketch near the top
-- Risk: one file keeps the old shape and teaches the wrong contract
-- Rollback: revert to the prior mixed format only if the split proves less clear in real tickets
+## Evidence
+- `Artifacts:` updated skill surfaces and validator output linked from the
+  ticket
+- `Commands:` `python3 tickets/scripts/check_ticket_metadata.py`; `python3
+  bin/check_doc_parity.py`; `python3 bin/check_harness_invariants.py`
+- `Plan review:`
+  - `Refs used:` ticket, memory, spec-first execution-loop spec, current
+    `impl-plan` package
+  - `Checks:` scope pass; template-alignment pass; signature pass; type-flow
+    pass; rollback pass
+  - `Fixes:` removed the stale split and made typed data planning explicit
+- `Result summary:` the single-surface ticket contract is now the only public
+  `impl-plan` shape
+- `Ready:` yes
 
-### Ask
-- Ready: yes
-- Next: patch the package files so future plans render with the new top-of-ticket shape
-
-## Agent
-
-### Delta
-- Touch: `SKILL.md`, `prompts/plan.md`, `references/template.md`, `references/examples.md`, `references/review.md`
-- Keep: one public planner, consultative recommendation, diagram-first material plans
-- Change: output shape and top-of-ticket emphasis
-- Delete/Avoid: essay-like approval surfaces and detached signature appendices
-
-### Execution Plan
-1. rewrite the skill contract around `Human` and `Agent`
-2. make the `Signature Sketch` a first-class field near the top
-3. align the prompt and reference template
-4. replace the example so the new shape is visible immediately
-5. tighten the review checklist around skimability and signatures
-
-### Risk / Rollback
-- Primary risk: the new split becomes another wrapper without actually reducing reading time
-- Containment: keep the required top lane very small and push optional narrative sections lower
-- Rollback: restore the prior section layout if the new top lane proves less clear in real use
-
-### Plan Review
-- Refs: current skill package, diagram-first spec, memory, troubles, nearby examples
-- Checks: scope pass; proof pass; guardrails pass; diagram pass; signatures pass; rollback pass
-- Fixes: moved signatures from implicit inline advice into an explicit top-level field
-
-### Options Appendix
-- Option 1: keep the current shape and just tighten wording
-- Pros: smallest textual diff
-- Cons: the reviewer still has to scan the same mixed artifact
-- Why not chosen: it trims words but not structure
-- Option 2: keep one mixed plan and add a signature appendix
-- Pros: preserves most of the old contract
-- Cons: signatures stay below the fold, so the trust-building piece still arrives late
-- Why not chosen: it does not solve the skim problem
-- Option 3: split the plan into `Human` and `Agent`, with a top-level signature sketch
-- Pros: faster approval skim, clearer execution handoff, visible code understanding
-- Cons: requires coordinated updates across the skill package
-- Why not chosen: n/a, this is the recommended path
-
-### Delegation
-- Need: Not needed
-
-### Ticket Move
-- Now: `status: review`
-- On approval: `status: building`
-- Follow-ups: none
-- Blocked in building?: no
+## Blockers
+- none
 ````
 
 ## Bad
 
 ```md
-We should improve the plan a bit and maybe add some more detail about signatures later.
+We should improve the plan a bit and maybe add some more detail about types later.
 ```
 
 Why bad:
 
-- no `Human` skim lane
-- no diagram or signature sketch
+- no canonical ticket shape
+- no real callable seams
+- no typed data continuity
 - no real recommendation or rejected options
 - no proof
-- no agent-facing execution shape
 - still sounds like hand-wavy prose instead of a believable ticket plan

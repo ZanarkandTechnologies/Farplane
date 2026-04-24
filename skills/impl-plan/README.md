@@ -3,8 +3,8 @@
 ## Purpose
 
 Guide agents to produce one clear per-ticket planning artifact, with a compact
-diagram-first approval surface by default, a skimmable top `Human` lane, a
-lower `Agent` execution lane, and optional consensus challenge for riskier
+approval surface, one compact ticket-body plan shape, conditional diagrams when
+the file map alone is not enough, and optional consensus challenge for riskier
 work.
 When an `Agent Testability Brief` exists, `impl-plan` should preserve that
 doctrine in the resulting proof and execution plan.
@@ -27,21 +27,22 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 2. Read `todos.md` if using skill todos.
 3. Decide whether the selected ticket stays whole or needs a real boundary-based split.
 4. Choose default mode or `--consensus`.
-5. Output a top `Human` lane with decision, diagram, signature sketch,
-   before/after, proof, and ask.
-6. Output a lower `Agent` lane with delta, execution order, risk/rollback, and
-   ticket move.
+5. Output one compact ticket plan with summary, scope, `Plan`, and only the
+   optional sections the ticket actually needs.
+6. Use `Signature delta` for callable seams and `Type Sketch` plus `Typed flow
+   example` when typed data continuity matters.
 
 ## How to Test
 
-- Confirm `Human` appears before `Agent`.
-- Confirm the diagram appears near the top for material work.
-- Confirm a compact `Signature Sketch` appears near the top when interfaces
-  matter.
-- Confirm `B -> A` appears near the top.
+- Confirm the output matches the canonical ticket-body shape.
+- Confirm the diagram appears near the top when material work needs one to make
+  flow, ownership, or typed data path legible.
+- Confirm a compact `Signature delta` appears when interfaces matter.
+- Confirm `Type Sketch` plus `Typed flow example` appear for material,
+  stateful, or interface-heavy work.
 - Confirm `todos.md` reinforces planning behaviors as plain natural-language checklist text without becoming a second template.
 - Confirm the recommendation appears near the top.
-- Confirm narrative sections are required only when the applicability rule says
+- Confirm optional sections are required only when the applicability rule says
   they should be.
 - Confirm consensus mode still preserves Planner/Architect/Critic challenge inside the same public skill.
 - Confirm any `Agent Testability Brief` is carried into the proof/testability shape instead of being ignored.

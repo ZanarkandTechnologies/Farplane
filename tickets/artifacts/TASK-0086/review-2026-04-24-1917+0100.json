@@ -1,0 +1,159 @@
+{
+  "work_type": ["planning", "docs", "cleanup"],
+  "search_scope": {
+    "changed_files": [
+      "skills/impl-plan/SKILL.md",
+      "skills/impl-plan/prompts/plan.md",
+      "skills/impl-plan/references/template.md",
+      "skills/impl-plan/references/examples.md",
+      "skills/impl-plan/references/review.md",
+      "skills/impl-plan/README.md",
+      "skills/impl-plan/AGENTS.md",
+      "skills/impl-plan/todos.md",
+      "tickets/templates/ticket.md",
+      "tickets/README.md",
+      "tickets/TASK-0086-tighten-planning-around-files-signatures-and-refactors.md",
+      "docs/MEMORY.md",
+      "docs/HISTORY.md"
+    ],
+    "related_files": [
+      "tickets/artifacts/TASK-0086/review-2026-04-24-1854+0100.json",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/desloppify.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/debloatability.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "docs/specs/spec-first-execution-loop.md"
+    ],
+    "invariants_checked": [
+      "MEM-0030",
+      "MEM-0031",
+      "MEM-0045",
+      "MEM-0048",
+      "MEM-0050"
+    ],
+    "docs_checked": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/desloppify.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/debloatability.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "docs/MEMORY.md",
+      "docs/HISTORY.md",
+      "tickets/README.md"
+    ]
+  },
+  "reviewed_at": "2026-04-24 19:17 +0100",
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "debloatability",
+    "evidence-quality",
+    "integration-readiness"
+  ],
+  "summary": "Pass. The prior typed-data invariant drift is resolved: the live `impl-plan` package now points typed-data planning to `MEM-0050`, and the `skills/impl-plan/*` surfaces consistently describe diagrams as conditional when the file map alone is insufficient. The compact single-surface planning contract, ticket template, and ticket docs are now coherent enough to defend to a skeptical reviewer, with fresh validator proof rerun on the current tree.",
+  "overall_score": 4.4,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.5,
+        "parallelization-fit": 4.2,
+        "slice-sizing": 4.3,
+        "acceptance-testability": 4.4,
+        "scope-clarity": 4.5
+      },
+      "findings": [
+        "The ticket still reads as one coherent contract-cleanup slice, and the acceptance criteria remain concrete enough to test against the shipped surfaces."
+      ],
+      "next_action": "No spec rewrite needed for this ticket."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.6,
+        "bloatability": 4.5,
+        "modularity": 4.3,
+        "proof-clarity": 4.2,
+        "execution-order": 4.4,
+        "risk-clarity": 4.2
+      },
+      "findings": [
+        "The plan contract is materially easier to scan than the old split-lane shape, and the callable-seam plus typed-flow guidance is now explicit without turning into schema-heavy planning."
+      ],
+      "next_action": "Keep future impl-plan changes anchored to the same compact file-map-first shape."
+    },
+    {
+      "name": "debloatability",
+      "score": 4.6,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead-surface-removal": 4.7,
+        "compatibility-cleanup": 4.4,
+        "duplication-reduction": 4.6,
+        "clarity-improvement": 4.7,
+        "deletion-safety": 4.4
+      },
+      "findings": [
+        "The shipped package now teaches one public planning shape instead of preserving stale `Human` / `Agent` duplication, and the remaining optional sections are framed as conditional rather than mandatory ceremony."
+      ],
+      "next_action": "No additional cleanup is required in this slice."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.2,
+        "reproducibility": 4.3,
+        "traceability": 4.1,
+        "consistency": 4.2,
+        "inspectability": 4.2
+      },
+      "findings": [
+        "The review is backed by direct inspection of the changed planning surfaces, comparison against the prior review artifact, and fresh reruns of `python3 tickets/scripts/check_ticket_metadata.py`, `python3 bin/check_doc_parity.py`, and `python3 bin/check_harness_invariants.py`."
+      ],
+      "next_action": "Attach this review JSON under `tickets/artifacts/TASK-0086/` and link it from the ticket `Evidence` section."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.3,
+        "contract-correctness": 4.3,
+        "dependency-readiness": 4.2,
+        "coupling-risk": 4.4,
+        "merge-readiness": 4.3
+      },
+      "findings": [
+        "The earlier contract blocker is fixed, no stale `MEM-0049` typed-planning references remain under the reviewed `impl-plan` package, and diagram applicability language is consistently conditional across the touched skill surfaces."
+      ],
+      "next_action": "This slice is ready to advance through documenting/archive flow once the new review artifact is recorded on the ticket."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Store this result at `tickets/artifacts/TASK-0086/`, add it to the ticket `Evidence` links, update the ticket summary to reflect the passing final review, and continue the documenting/archive closeout."
+}

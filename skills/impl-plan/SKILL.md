@@ -1,7 +1,7 @@
 ---
 name: impl-plan
-version: 2.2.0
-description: "Unified per-ticket planning skill with a skimmable Human approval surface, a lower Agent execution surface, and signature-first diagrammed plans."
+version: 2.5.0
+description: "Unified per-ticket planning skill with a compact file-map-first plan centered on callable seams, typed data flow, blast radius, verification, and explicit gap analysis for missing or partial features."
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -21,8 +21,9 @@ Discovery still belongs to `brainstorm`, `deep-interview`, `prd`, and
 
 <!-- MEM-0007 decision: planning output should be approval-first and compact: pitch, before->after, delta, core flow, proof, ask. -->
 <!-- MEM-0008 decision: root AGENTS should stay repo-only and terse; skill internals belong in skills, not repo contract text. -->
-<!-- MEM-0030 decision: material plans default to a diagram-first approval surface with one top-level Mermaid delta map, optional zoom-in/data-flow, and inline signatures when interface shape matters. -->
-<!-- MEM-0031 decision: impl-plan approval surfaces should split into a top Human skim lane and a lower Agent execution lane, with a compact signature sketch near the top whenever interface shape drives trust. -->
+<!-- MEM-0030 decision: material plans may use one top-level Mermaid delta map when flow or ownership is not obvious from files and signatures alone. -->
+<!-- MEM-0031 decision: impl-plan should stay compact and file-map-first: change, why, touched files, signature deltas, blast radius, and verification. -->
+<!-- MEM-0050 decision: impl-plan must align with the canonical single-surface ticket template and make typed data flow explicit when it materially affects trust. -->
 
 When this skill needs diagram taste or pattern depth, reuse
 `skills/diagramming/SKILL.md` plus
@@ -32,25 +33,30 @@ style here.
 When the architecture itself is still under-specified, or the plan would have
 to invent entities, storage ownership, or runtime boundaries, stop and use
 `deep-system-design` before finishing the plan. `impl-plan` owns a compact
-signature sketch, not a full system-design interview.
+call-and-data shape sketch, not a full system-design interview.
 
 ## Intent
 
-This skill now writes for two readers:
+This skill should produce one compact plan in the canonical ticket-body shape,
+not parallel documents for different readers.
 
-- `Human:` the top skim surface at the start of the ticket. It should answer
-  "is this the right move?" without forcing the reviewer through the whole
-  ticket.
-- `Agent:` the lower execution surface. It should answer "what exactly do I
-  touch, in what order, and how do I prove it?"
+The highest-signal plan answers:
 
-If the human cannot approve from `Decision + Diagram + Signature Sketch + B ->
-A + Proof`, the plan is not ready.
+- what changes and why now
+- where it lives: touched files, inspected files, signature deltas, and key
+  data shapes
+- for incomplete feature work: what production-grade capability looks like and
+  what the repo is still missing
+- blast radius: callers, systems, workflows, or edges that could break
+- how to verify it: tests, checks, and strongest evidence
+
+If the plan cannot do that without repeated prose, it is too long.
 
 ## Modes
 
-- **Default:** approval-first planning with a short top section and a lower
-  execution section only as detailed as the ticket needs
+- **Default:** approval-first planning in the canonical ticket-body shape,
+  keeping the top compact and the lower detail only as rich as the ticket
+  needs
 - **`--consensus`:** run the former `ralplan` challenge loop with
   Planner/Architect/Critic before presenting the final plan
 - **`--interactive`:** consensus mode only; present the draft and final plan
@@ -68,6 +74,9 @@ A + Proof`, the plan is not ready.
 0e. Study `@docs/TROUBLES.md` for repeated planning/execution misses when
 present.
 0f. Search the codebase before assuming anything is missing.
+0g. When repo-local context cannot define expected feature scope, ground the
+target with the best available installed research surfaces: comparable
+codebases, official docs, standards, or repo-search/doc MCPs when available.
 
 ## Pre-context Intake
 
@@ -78,12 +87,14 @@ Before finalizing the plan or handing off to execution:
 2. When an `Agent Testability Brief` exists, preserve its control accelerators,
    state probes, coordination views, and proof surfaces in the plan instead of
    inventing testability doctrine again.
-3. Read enough nearby code to name real files, seams, and signatures instead of
-   inventing them.
+3. Read enough nearby code to name real files, seams, signatures, and typed
+   data shapes instead of inventing them.
 4. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
    older OMX-era pattern and not the active repo contract.
 5. If intent is still vague, use `deep-interview --quick`.
 6. If system shape is still vague, use `deep-system-design`.
+7. If the repo does not yet implement the target capability clearly enough to
+   scope the work, run `gap-analysis` before finalizing the ticket plan.
 
 Do not hand off to execution while the plan still depends on avoidable
 unknowns.
@@ -100,14 +111,19 @@ unknowns.
 
 ## Workflow (Default Mode)
 
-1. **Scope:** keep the approved coherent ticket intact unless it clearly hides multiple independent build loops or a real split boundary emerged.
-2. **Split check:** split only when proof, reuse, blocking risk, external dependency, or runtime ownership genuinely improves; do not force a split just because the work will span multiple commits.
-3. **Compare:** show 3 viable options with bounded pros/cons.
+1. **Scope:** keep the approved coherent ticket intact unless it clearly hides
+   multiple independent build loops or a real split boundary emerged.
+2. **Split check:** split only when proof, reuse, blocking risk, external
+   dependency, or runtime ownership genuinely improves; do not force a split
+   just because the work will span multiple commits.
+3. **Compare:** show 3 viable options with bounded pros/cons when the user did
+   not already provide a take on a material choice.
 4. **Recommend:** state the best option and the tradeoff being accepted.
-5. **Build the `Human` lane first:** decision, diagram, signature sketch,
-   before/after, proof, ask.
-6. **Build the `Agent` lane second:** delta, execution order, risk/rollback,
-   ticket move, and any appendix detail.
+5. **Gap check when needed:** for missing or partial feature work, define the
+   current state, production expectation, missing gaps, grounding references,
+   and recommended now/later boundary.
+6. **Build one compact plan:** use the canonical ticket sections and keep the
+   `Plan` section compact but believable.
 7. **Review + ask:** run the plan through the quality gate, fix weak spots
    before handoff, then show `Ready: yes/no`.
 
@@ -115,10 +131,10 @@ unknowns.
 
 Consensus mode preserves the former `ralplan` behavior inside this one skill.
 
-1. Planner drafts the `Human` lane and the smallest useful `Agent` lane.
+1. Planner drafts one compact file-grounded plan.
 2. Architect reviews for steelman antithesis, tradeoff tension, and synthesis.
-3. Critic evaluates for option quality, signature clarity, risk clarity, and
-   concrete verification.
+3. Critic evaluates for option quality, signature clarity, type-flow clarity,
+   risk clarity, and concrete verification.
 4. If Critic does not approve, revise and repeat the Architect -> Critic loop.
 5. Present the final consensus-backed plan.
 
@@ -132,180 +148,101 @@ Use consensus mode when:
 
 - **Low risk / obvious fit:** keep the whole plan short; text-only is okay if
   the change is truly localized.
-- **Material / cross-module:** require a diagram-first `Human` lane.
-- **Interface-heavy / signature-heavy:** require a `Signature Sketch` near the
-  top.
-- **High ambiguity / risk:** keep the `Human` lane short and push detail below
-  fold.
+- **Material / cross-module:** require a clear file map and add a diagram only
+  when the flow, ownership, or typed data path is not obvious from the file
+  map alone.
+- **Interface-heavy / data-shape-heavy:** require compact signature deltas,
+  type sketches, and one typed flow example through the main path.
+- **High ambiguity / risk:** add only the extra sections that reduce ambiguity.
 - **High risk / architectural tension:** prefer `--consensus`.
-- **Linked `Agent Testability Brief`:** carry it into proof/testability sections instead of re-deriving shortcuts, probes, or coordination surfaces ad hoc.
-- **Multi-commit work:** acceptable when the ticket is still one coherent build-and-proof loop; split only when a real boundary appears.
+- **Linked `Agent Testability Brief`:** carry it into proof/testability
+  sections instead of re-deriving shortcuts, probes, or coordination surfaces
+  ad hoc.
+- **Multi-commit work:** acceptable when the ticket is still one coherent
+  build-and-proof loop; split only when a real boundary appears.
 - **Docs-only / rule-text-only:** no specialized QA delegation.
 
-## Human Lane
+## Plan Shape
 
-The start of the ticket should carry a skimmable `Human` section. It is the
-approval surface, not an appendix.
+Use the canonical ticket-body shape:
 
-### Required `Human` fields
+- `Summary`
+- `Scope`
+- `Plan`
+- optional `Gap Analysis`
+- optional `Diagram`
+- `Acceptance Criteria`
+- `Verification`
+- optional `Refs`
+- `Evidence`
+- `Blockers`
 
-1. `Decision`
-   - `Req:` what I think you want
-   - `Best:` chosen option
-   - `Why:` why it fits the current constraints
-   - `Tradeoff accepted:` the main downside you are knowingly taking
-   - `Not chosen:` short note for the rejected viable paths
-2. `Diagram`
-   - `Tier 1:` one top-level Mermaid delta diagram for material or cross-module
-     work
-   - `Legend:` keep / change / add / remove
-   - show the new or changed components directly
-   - if interface shape matters, embed short signatures in the relevant nodes
-   - optional `Tier 2:` numbered data-flow or zoom-in only if Tier 1 is not
-     enough
-3. `Signature Sketch`
-   - 3-7 important seams when the plan changes interfaces, ownership
-     boundaries, data shape, handlers, jobs, or state flow
-   - format should stay compact, for example
-     `module / symbol(input): output`
-   - name real files, handlers, jobs, helpers, state atoms, or schema seams
-   - this exists to prove codebase understanding and build trust
-   - do **not** paste full type dumps
-4. `B -> A`
-   - before
-   - after
-   - user/dev outcome
-5. `Proof`
-   - 2-4 concrete checks
-   - main risk
-   - rollback or containment note
-6. `Ask`
-   - `Ready: yes/no`
-   - next step after approval
+`Plan` is the compact heart of the ticket and should include:
 
-### `Human` lane guidance
-
-- Lead with the diagram before long prose for material work.
-- Keep the top section skimmable in under a minute.
-- Use the signature sketch to show the important code contracts, not every
-  helper.
-- If the reviewer still needs the lower section to understand the plan, tighten
-  the `Human` lane.
-
-## Agent Lane
-
-The lower `Agent` section is the execution-facing contract. It exists to remove
-implementation ambiguity without turning the top of the ticket into an essay.
-
-### Required `Agent` fields
-
-1. `Delta`
-   - touched files/modules
-   - keep/change/delete
-2. `Execution Plan`
-   - 3-7 concrete steps or one compact numbered data-flow diagram
-   - enough detail that the build shape is obvious
-3. `Risk / Rollback`
-   - what could go wrong first
-   - how to contain or undo it
-4. `Plan Review`
-   - `Refs:` confirm which sources were actually used:
-     PRD/spec/ticket/memory/troubles/code
-   - `Checks:` pass/fix for scope, proof, guardrails, diagram usefulness,
-     signature usefulness, and rollback clarity
-   - `Fixes:` what was tightened before handoff, or `none`
-5. `Delegation`
-   - skill/subagent only if needed
-   - otherwise `Not needed`
-6. `Ticket Move`
-   - what `status` / `phase` it should have now
-   - any spawned follow-up tickets
-   - whether it stays blocked in `status: building` or returns to
-     `status: review`
-
-### Optional `Agent` fields
-
-Only add these when they materially reduce ambiguity:
-
-- `User Story`
-- `User Pain / JTBD`
-- `Non-Goals`
-- `High-Fidelity Example`
-- `What Good Looks Like`
-- `Proof Target`
-- `Options Appendix`
-
-Narrative sections are required for material feature work, workflow/tooling
-changes, ambiguous implementation work, and any ticket where the implementer
-would otherwise need to infer desired behavior. They are optional or short for
-trivial localized fixes.
+1. `Change`
+2. `Why`
+3. `Before -> After`
+4. `Touch`
+5. `Inspect`
+6. `Signature delta`
+   - compact callable seams in the form `file / symbol(input): output`
+7. `Type Sketch`
+   - compact struct/type shapes for the data crossing boundaries
+   - only the fields that matter
+   - never a full dump
+8. `Typed flow example`
+   - one golden-path dry run showing a representative object or payload
+     evolving through the main stages
+9. `Recommendation`
+10. `Options considered`
+    - only when the user did not already provide a take on a material choice
+11. `Blast radius`
+12. `Risks`
 
 ## Applicability Rule
 
-- **Diagram + signature sketch required:** material feature work,
+- **File map + signature delta required:** material feature work,
   workflow/tooling changes, ambiguous implementation work, cross-module
-  changes, or any ticket where trust depends on seeing new components, changed
-  data flow, or important code seams.
-- **Diagram required, signature sketch optional:** when system shape matters but
-  the interface seam is already obvious from one symbol or file.
+  changes, or any ticket where trust depends on seeing real code seams.
+- **Type Sketch + Typed flow example required:** material, stateful,
+  interface-heavy, or cross-boundary work where trust depends on seeing data
+  shapes stay coherent across steps.
+- **Diagram optional but expected for material work:** when system shape, flow,
+  ownership, or typed data path is not obvious from the file map alone.
+- **Gap Analysis required:** missing or partially implemented feature work,
+  parity work, or tickets whose scope depends on external expectations rather
+  than an already-clear local implementation.
 - **Text-only allowed:** trivial, single-bug, or narrowly localized fixes where
   the file, symbol, or error already anchors the work concretely.
 
 ## Top Gotchas
 
 1. Do not implement; this skill is plan-only.
-2. Do not turn the `Human` lane into the whole ticket.
-3. Do not hide the key interfaces in prose when a short signature sketch would
+2. Do not duplicate the same idea across summary, plan, criteria, and evidence.
+3. Do not hide the key interfaces in prose when a short signature delta would
    prove understanding faster.
-4. Do not paste large raw type dumps into the ticket.
-5. Do not create two separate plan artifacts when one `Human` + `Agent` split
-   is enough.
-6. Do not skip the option comparison for material choices.
-
-## Outcome Contract
-
-Every plan must include:
-
-1. `Human`
-   - `Decision`
-   - `Diagram`
-   - `Signature Sketch` when the applicability rule says it is required
-   - `B -> A`
-   - `Proof`
-   - `Ask`
-2. `Agent`
-   - `Delta`
-   - `Execution Plan`
-   - `Risk / Rollback`
-   - `Plan Review`
-   - `Delegation`
-   - `Ticket Move`
-3. `Options Appendix`
-   - exactly 3 viable options for material choices
-   - each option gets concrete pros/cons
-   - each non-chosen option gets `Why not chosen`
-   - if the path is effectively forced, still name the rejected fallback shapes
-     briefly
+4. Do not show callable seams without the matching data seams when the change
+   depends on typed payloads, structs, or objects crossing boundaries.
+5. Do not preallocate empty review output inside the input ticket.
+6. Do not make `Acceptance Criteria` and `Verification` say the same thing;
+   criteria define done, verification defines measurement.
+7. Do not skip the option comparison for material choices.
+8. Do not guess at "production-ready" scope from intuition alone when
+   comparable products, codebases, or official docs can ground it.
 
 ## Efficiency Rules
 
-- Lead with the approval surface, not the appendix.
-- Keep the `Human` lane short enough to skim quickly.
-- For material work, the approval surface starts with diagrams, not paragraphs.
+- Lead with the compact plan, not the appendix.
 - If the user did not provide a take, default to consultative guidance instead
   of neutral mirroring.
 - Prefer symbols and compact labels over repeated prose.
-- Reuse the `diagramming` skill's compact delta-map, color/legend, and
-  inline-signature patterns instead of inventing a new diagram style in each
-  plan.
+- Reuse the `diagramming` skill's compact delta-map patterns instead of
+  inventing a new diagram style in each plan.
 - Reuse existing modules; justify every new file or abstraction in one line.
-- Keep deeper implementation detail in the `Agent` lane, not above it.
-- If the plan cannot be understood from `Decision + Diagram + Signature Sketch
-  + B -> A + Proof`, it is not ready.
 - If planning reveals overflow scope, split it into new `tickets/` follow-ups
   instead of stretching one ticket.
-- Do not force the richer narrative sections onto trivial localized fixes when
-  the work is already concrete from code context.
+- Do not force the richer sections onto trivial localized fixes when the work
+  is already concrete from code context.
 
 ## Plan Quality Gate
 
@@ -317,33 +254,38 @@ Before returning the plan, run these checks against the drafted output:
    - If a source was skipped, is that omission safe and explicit?
 2. **Scope discipline**
    - Is this still one coherent build-and-proof loop?
-   - If not, is the split boundary real and explicit rather than just commit-count driven?
+   - If not, is the split boundary real and explicit rather than just
+     commit-count driven?
 3. **Recommendation quality**
    - Did the plan compare real options instead of cosmetic variants?
    - Is the chosen path clearly recommended, not merely listed?
 4. **Diagram usefulness**
-   - For material work, is there one top-level delta diagram rather than a
-     prose-only explanation?
-   - Does the legend make `keep / change / add / remove` obvious?
-   - Are short signatures embedded directly in nodes when interfaces matter?
+   - For material work, would a compact diagram make the flow or ownership
+     easier to skim?
+   - If no diagram is present, is the file map alone clearly enough?
 5. **Signature usefulness**
-   - Does the `Signature Sketch` name the real seams that matter?
+   - Does the signature delta name the real seams that matter?
    - Is it compact enough to skim?
    - Would it convince a reviewer that the planner understands the codebase?
-6. **Agent usefulness**
-   - Does the lower section remove implementation ambiguity without bloating the
-     ticket?
-   - Are touched files and execution order explicit?
+6. **Type-flow usefulness**
+   - Do the named types prove how data crosses the important seams?
+   - Is one golden-path object or payload trace enough to make the flow
+     believable?
+   - Did we avoid turning the plan into a schema dump?
 7. **Proof quality**
    - Are the checks concrete and observable?
    - Would a reviewer know exactly how to tell success from failure?
 8. **Risk clarity**
    - Is the main risk named?
    - Is rollback or containment clear enough for the size of the change?
-9. **Narrative usefulness**
-   - If narrative sections are present, do they actually reduce ambiguity?
+9. **Gap grounding**
+   - If the work depends on external expectations, does the plan show what is
+     currently missing and what comparable implementations prove should exist?
+   - Are the references concrete instead of hand-wavy product intuition?
+10. **Narrative usefulness**
+   - If optional sections are present, do they actually reduce ambiguity?
    - Are they concrete rather than decorative or duplicated filler?
-10. **Architecture boundary**
+11. **Architecture boundary**
    - If the plan still depends on invented entities, storage ownership, or
      runtime boundaries, did we stop and route to `deep-system-design`?
 
@@ -360,4 +302,3 @@ should show the review result, not the draft that failed it.
 ## Final Check
 
 Before handoff, read `references/review.md` and tighten the plan until it passes
-those checks.
