@@ -1,5 +1,8 @@
-# Copy this file to ~/.codex/config.toml and replace the placeholders.
-# Keep the real config.toml local and out of Git.
+# Managed template for ~/.codex/config.toml.
+# Do not put machine-local secrets or trust entries here.
+# `install.sh` renders this template using values from:
+#   - ~/.codex/config.local.env
+#   - ~/.codex/config.local.toml (optional, appended verbatim)
 
 model = "gpt-5.4"
 approval_policy = "never"
@@ -16,6 +19,10 @@ multi_agent = true
 USE_OMX_EXPLORE_CMD = "1"
 CODEXTER_HOME = "__CODEX_HOME__"
 CODEXTER_IMPL_HOOK = "1"
+# Optional hosted telemetry for hook activity. Leave unset until your backend exists.
+# CODEXTER_TELEMETRY_API_URL = "https://your-backend.example.com/api/codex/activity"
+# CODEXTER_TELEMETRY_API_TOKEN = "replace-me"
+# CODEXTER_TELEMETRY_TIMEOUT_SECS = "2.0"
 # Optional explicit force-on for Codexter hook behavior. The Stop hook also
 # auto-activates from clear runtime context such as `.harness/`, `tickets/`,
 # `IMPL_RESULT`, or explicit ticket selectors.
@@ -29,16 +36,16 @@ exclude_tmpdir_env_var = false
 exclude_slash_tmp = false
 
 [mcp_servers.convex]
-command = "bunx"
+command = "npx"
 args = ["-y", "convex", "mcp", "start"]
 
 [mcp_servers.sequential-thinking]
-command = "bunx"
+command = "npx"
 args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
 
 # Add your real Ref key locally only.
 [mcp_servers.Ref]
-url = "https://api.ref.tools/mcp?apiKey=YOUR_REF_API_KEY"
+url = "https://api.ref.tools/mcp?apiKey=__REF_API_KEY__"
 
 [mcp_servers.deepwiki]
 url = "https://mcp.deepwiki.com/mcp"
@@ -101,11 +108,7 @@ hide_full_access_warning = true
 [notice.model_migrations]
 "gpt-5.3-codex" = "gpt-5.4"
 
-# Keep machine-specific trust entries local only.
-# Example:
-#
-# [projects."/absolute/path/to/project"]
-# trust_level = "trusted"
+# Keep machine-specific trust entries local only in `~/.codex/config.local.toml`.
 
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit", "session-id"]
