@@ -7,15 +7,20 @@ from pathlib import Path
 
 
 MACOS_SOUND_PATH = Path("/System/Library/Sounds/Glass.aiff")
+COMMAND_TIMEOUT_SECONDS = 5
 
 
 def run_quiet(command: list[str]) -> int:
-    completed = subprocess.run(
-        command,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        check=False,
-    )
+    try:
+        completed = subprocess.run(
+            command,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+            timeout=COMMAND_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired:
+        return 1
     return completed.returncode
 
 
@@ -73,8 +78,9 @@ def announce_message(message: str) -> int:
     if speak_windows_tts(message) == 0:
         return 0
 
-    sys.stdout.write("\a")
-    sys.stdout.flush()
+    # Stop-hook callers reserve stdout for machine-readable JSON only.
+    sys.stderr.write("\a")
+    sys.stderr.flush()
     return 0
 
 

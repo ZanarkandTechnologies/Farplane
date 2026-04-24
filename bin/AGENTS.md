@@ -44,3 +44,4 @@ For legacy runtime/prototype scripts that still carry older names:
 - canonical current-turn capture belongs only to control sessions whose first owned prompt explicitly invokes a public control skill; internal or non-owning sessions must not overwrite `.harness/state/current-run.json`. See `MEM-0029`.
 - tmux lanes reuse a live interactive Codex pane before creating a replacement pane; stored `session_id` is the recovery path only. See `MEM-0005`.
 - stop-hook role configs are TOML-backed under `agents/*.toml`; load exact `developer_instructions` from TOML instead of relying on prompt-level agent-name loading. See `MEM-0010`.
+- Stop-hook stdout is machine-only. When `bin/stop_hook.py` handles a `Stop` event, reserve stdout for one valid JSON payload and send notification fallbacks or diagnostics to stderr instead. See `MEM-0056`.

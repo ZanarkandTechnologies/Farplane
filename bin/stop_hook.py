@@ -20,6 +20,7 @@ MEMORY REFERENCES:
 - MEM-0002
 - MEM-0004
 - MEM-0010
+- MEM-0056
 """
 
 import json
@@ -528,6 +529,13 @@ def emit_stop_payload(
         json.dump(payload, sys.stdout)
         sys.stdout.write("\n")
     return 0
+
+
+def emit_stop_passthrough(*, system_message: str | None = None) -> int:
+    return emit_stop_payload(
+        continue_value=True,
+        system_message=system_message,
+    )
 
 
 def classifier_timeout_secs() -> float:
@@ -2144,6 +2152,7 @@ def main() -> int:
     home = codexter_home()
     project_root = project_root_from_payload(payload)
     base = runtime_root(home, project_root)
+    hook_event_name = str(payload.get("hook_event_name") or "").strip()
     payload_session_id = payload.get("session_id")
     resolved_session_id = payload_session_id.strip() if isinstance(payload_session_id, str) and payload_session_id.strip() else None
     explicit_run_state = resolve_explicit_run_state_selector(payload) or None
@@ -2188,6 +2197,10 @@ def main() -> int:
     impl_result = extract_impl_result(message or raw_payload)
 
     if not hook_enabled_for_context(project_root, current_run, impl_result):
+        if hook_event_name == "Stop":
+            return emit_stop_passthrough(
+                system_message="Stop hook: no Codexter runtime context; allowing stop."
+            )
         return 0
 
     append_hook_log(
@@ -2205,7 +2218,7 @@ def main() -> int:
         },
     )
 
-    if payload.get("hook_event_name") != "Stop":
+    if hook_event_name != "Stop":
         return 0
 
     if not isinstance(message, str) or not message.strip():
@@ -2218,7 +2231,9 @@ def main() -> int:
                 "payload_keys": sorted(payload.keys()),
             },
         )
-        return 0
+        return emit_stop_passthrough(
+            system_message="Stop hook: missing assistant message; allowing stop."
+        )
 
     grounding_summary = extract_grounding_summary(message or raw_payload)
     if project_root is not None and current_run is not None and grounding_summary:
@@ -2308,7 +2323,9 @@ def main() -> int:
                 "cwd": str(project_root) if project_root else None,
             },
         )
-        return 0
+        return emit_stop_passthrough(
+            system_message="Stop hook: no active ticket resolved; allowing stop."
+        )
 
     impl_mode_enabled = os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
         "1",
@@ -2328,7 +2345,9 @@ def main() -> int:
         and os.environ.get("CODEXTER_IMPL_TMUX_DRY_RUN", "").lower() not in {"1", "true", "yes", "on"}
     )
     if not impl_runtime_active:
-        return 0
+        return emit_stop_passthrough(
+            system_message="Stop hook: impl runtime inactive; allowing stop."
+        )
 
     impl_loop_allowed = impl_loop_continuation_allowed(
         ticket,
@@ -2753,7 +2772,9 @@ def main() -> int:
         announce_message(review["speak"] or proposal_reason)
         return emit_stop_payload(system_message=f"Stop hook: {proposal_summary}")
 
-    return 0
+    return emit_stop_passthrough(
+        system_message="Stop hook: no continuation action requested; allowing stop."
+    )
 
 
 if __name__ == "__main__":

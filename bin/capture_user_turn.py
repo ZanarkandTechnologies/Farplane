@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import sys
 
+from runtime_telemetry import emit_hook_telemetry
 from user_turn import (
     capture_user_turn,
     explicit_run_state_selector,
@@ -45,6 +46,16 @@ def main() -> int:
         source="user_prompt_submit_hook",
         session_id=str(payload.get("session_id") or "").strip() or None,
         explicit_run_state=explicit_run_state_selector(payload) or None,
+    )
+    emit_hook_telemetry(
+        event_type="user_prompt_submit",
+        hook_event_name="UserPromptSubmit",
+        payload=payload,
+        project_root=project_root,
+        extra={
+            "prompt_length": len(prompt),
+            "source": "capture_user_turn.py",
+        },
     )
     return 0
 

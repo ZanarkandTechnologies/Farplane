@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import json
 import os
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
@@ -136,6 +138,105 @@ class StopHookRoleConfigTests(unittest.TestCase):
         self.assertTrue(parsed["obvious_next_step_exists"])
         self.assertEqual(parsed["obvious_next_step"], "update the active ticket with the missing proof and rerun review")
         self.assertTrue(parsed["user_would_expect_more"])
+
+
+class StopHookPayloadTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.stop_hook = load_stop_hook_module()
+
+    def test_emit_stop_passthrough_emits_explicit_continue_json(self) -> None:
+        stdout_buffer = io.StringIO()
+
+        with redirect_stdout(stdout_buffer):
+            result = self.stop_hook.emit_stop_passthrough(system_message="Stop hook: allowing stop.")
+
+        self.assertEqual(result, 0)
+        self.assertEqual(
+            json.loads(stdout_buffer.getvalue()),
+            {
+                "systemMessage": "Stop hook: allowing stop.",
+                "continue": True,
+            },
+        )
+
+
+class StopHookMainOutputTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.stop_hook = load_stop_hook_module()
+
+    def run_main_with_payload(self, payload: dict[str, object]) -> tuple[int, dict[str, object], str]:
+        stdout_buffer = io.StringIO()
+        stderr_buffer = io.StringIO()
+        stdin_buffer = io.StringIO(json.dumps(payload))
+
+        with (
+            patch.object(sys, "argv", ["stop_hook.py"]),
+            patch.object(sys, "stdin", stdin_buffer),
+            redirect_stdout(stdout_buffer),
+            redirect_stderr(stderr_buffer),
+        ):
+            result = self.stop_hook.main()
+
+        return result, json.loads(stdout_buffer.getvalue()), stderr_buffer.getvalue()
+
+    def test_main_emits_continue_json_when_stop_message_is_missing(self) -> None:
+        with patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True):
+            result, payload, stderr_output = self.run_main_with_payload({"hook_event_name": "Stop"})
+
+        self.assertEqual(result, 0)
+        self.assertTrue(payload["continue"])
+        self.assertIn("missing assistant message", payload["systemMessage"])
+        self.assertEqual(stderr_output, "")
+
+    def test_main_emits_continue_json_when_stop_has_no_runtime_context(self) -> None:
+        with patch.object(self.stop_hook, "hook_enabled_for_context", return_value=False):
+            result, payload, stderr_output = self.run_main_with_payload({"hook_event_name": "Stop"})
+
+        self.assertEqual(result, 0)
+        self.assertTrue(payload["continue"])
+        self.assertIn("no Codexter runtime context", payload["systemMessage"])
+        self.assertEqual(stderr_output, "")
+
+    def test_main_emits_continue_json_when_ticket_is_unresolved(self) -> None:
+        with patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True):
+            result, payload, stderr_output = self.run_main_with_payload(
+                {
+                    "hook_event_name": "Stop",
+                    "last_assistant_message": "work finished without a task reference",
+                }
+            )
+
+        self.assertEqual(result, 0)
+        self.assertTrue(payload["continue"])
+        self.assertIn("no active ticket resolved", payload["systemMessage"])
+        self.assertEqual(stderr_output, "")
+
+    def test_main_emits_continue_json_when_impl_runtime_is_inactive(self) -> None:
+        with (
+            patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
+            patch.object(
+                self.stop_hook,
+                "resolve_ticket",
+                return_value={
+                    "ticket_id": "TASK-9999",
+                    "phase": "documenting",
+                    "status": "building",
+                },
+            ),
+            patch.object(self.stop_hook, "impl_loop_flag_active", return_value=False),
+            patch.object(self.stop_hook, "has_explicit_ticket_selector", return_value=False),
+        ):
+            result, payload, stderr_output = self.run_main_with_payload(
+                {
+                    "hook_event_name": "Stop",
+                    "last_assistant_message": "Finished TASK-9999 without impl loop metadata.",
+                }
+            )
+
+        self.assertEqual(result, 0)
+        self.assertTrue(payload["continue"])
+        self.assertIn("impl runtime inactive", payload["systemMessage"])
+        self.assertEqual(stderr_output, "")
 
 
 class StopHookReviewerPromptTests(unittest.TestCase):
