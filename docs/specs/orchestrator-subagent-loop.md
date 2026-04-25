@@ -23,6 +23,8 @@ For a selected work package, the default execution pattern is:
 4. **evidence-check** subagent verifies whether the QA evidence actually makes
    sense
 5. the main agent integrates the outputs and decides the next iteration
+6. when Stop hook requests final completion review, the visible reviewer lane
+   writes a nonce-matched completion receipt artifact before the next stop pass
 
 The visible runtime surface is the worker lanes, not a long-lived hidden
 orchestrator.

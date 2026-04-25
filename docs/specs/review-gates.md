@@ -65,6 +65,10 @@ It should not depend on a separate evidence-review-only role.
 On build paths, it should first check the active execution phase contract
 mechanically: `impl`, `qa`, and `demo` may each require distinct artifacts
 before completion review is even eligible.
+On completion paths, it should keep the final sufficiency gate inspectable:
+when mechanical artifact gates pass, Stop hook should request one visible
+completion-review receipt keyed by a nonce, then validate that linked receipt
+instead of hiding the final judgment in another background review pass.
 On completion paths, it should also require an explicit judgment about whether
 the finished artifact would satisfy the saved user ask, not only whether the
 ticket and evidence look internally coherent.
@@ -261,6 +265,10 @@ For build/documenting completion paths, a fresh review result plus a traceable
 evidence pack are required completion-gate artifacts. Missing, malformed, weak,
 contradictory, stale, or untraceable review output or evidence must prevent
 completion even when checklist boxes are checked.
+When Stop hook requests visible completion review, the ticket must also link a
+fresh `completion-review` receipt artifact under `tickets/TASK-XXXX/artifacts/review/`
+that includes the requested nonce, the artifacts reviewed, the verdict, and the
+user-query satisfaction judgment.
 
 The ticket should link those artifacts from `Evidence`; it should not prefill an
 empty review-output stub in advance.

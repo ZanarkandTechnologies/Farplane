@@ -229,7 +229,10 @@ def lane_directive(phase: str, worker_name: str, execution_phase: str = "") -> s
     if worker_name == "reviewer":
         return (
             "You are the independent reviewer lane. Run the `review` skill against the active ticket, "
-            "use linked evidence artifacts, and return a skeptical verdict grounded in the current repo state.\n"
+            "use linked evidence artifacts, and return a skeptical verdict grounded in the current repo state. "
+            "If Stop hook requests visible completion review with a nonce, write "
+            "`tickets/TASK-XXXX/artifacts/review/<timestamp>-completion-receipt.json`, link it from the ticket `Evidence` section, "
+            "and finish with `IMPL_RESULT: status=done next=building reason=completion review receipt written`.\n"
         )
     return ""
 
