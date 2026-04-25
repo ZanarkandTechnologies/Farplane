@@ -3,21 +3,25 @@
 The Stop hook is the central router for active `$impl` ticket work and bounded
 same-session `$loop` work.
 
-It uses two internal role passes, and only when needed:
+It uses one internal review role plus one routing role, and only when needed:
 
-1. `reviewer`
+1. `completion-reviewer`
    - decides whether same-ticket work clearly remains
-   - may route directly to orchestrator or block for user
-   - may judge evidence sufficiency as part of the same review decision
-   - on completion paths, treats the main model's completion claim as a
-     candidate only and must explicitly judge whether one obvious next step
-     still remains
-   - should explicitly run `$review` to ground completion judgment and then
-     `$advise` to return one best immediate next same-ticket step
-     when continuing
+   - currently handles missing-result review for impl-mode stops
+   - may route directly to orchestrator or block for user when the assistant
+     implied more same-ticket work but did not emit a structured `IMPL_RESULT`
 2. `orchestrator`
    - chooses at most one next ticket or stops
    - may return the same ticket for a new explicit phase such as documenting
+
+Final completion review should be visible instead of hidden:
+
+- when mechanical phase and artifact gates pass, Stop hook should request one
+  visible completion-review receipt keyed by a nonce
+- the live reviewer lane should run `review`, write the receipt under
+  `tickets/TASK-XXXX/artifacts/review/`, and link it from the ticket `Evidence`
+- Stop hook should validate that receipt on the next Stop event before routing
+  to orchestrator or completion
 
 Rules:
 

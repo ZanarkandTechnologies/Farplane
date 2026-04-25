@@ -107,6 +107,8 @@ flowchart LR
 ## Evidence
 - Store screenshots, logs, exported review JSON, and clips under
   `tickets/TASK-XXXX/artifacts/` and link them here.
+  For build/documenting completion paths, also link the visible completion
+  receipt artifact here when Stop hook requested one.
 - `Artifacts:`
 - `Commands:`
 - `Result summary:`

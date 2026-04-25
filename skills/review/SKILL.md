@@ -119,6 +119,23 @@ Ensure an agent can execute the core path after only reading this file.
    - blocking findings
    - next_action
 
+When Stop hook requests visible completion review with a nonce, also write a
+ticket-scoped completion receipt under
+`tickets/TASK-XXXX/artifacts/review/<timestamp>-completion-receipt.json` and
+link it from the ticket `Evidence` section. That receipt should include:
+
+- `receipt_type: "completion_review"`
+- `ticket_id`
+- `nonce`
+- `reviewed_at`
+- `reviewer_mode: "visible_review_lane"`
+- `reviewed_artifacts`
+- `verdict`
+- `satisfies_user_query`
+- `user_query_reason`
+- `obvious_next_step`
+- `review_artifact`
+
 ## Scoring Rules
 
 - Overall verdict is `pass` only if every required rubric meets threshold.
