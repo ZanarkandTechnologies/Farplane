@@ -51,12 +51,30 @@ For bounded same-session `$loop`, the runtime contract is:
 - explicit same-session stop intent clears `loop_active`; Escape/cancel is not the canonical loop-stop contract
 - `skills/impl/scripts/tmux_helper.py` remains `$impl`-only in v1 and is not part of loop ownership
 
+For ticket-scoped isolated checkout and local QA targeting, runtime may also
+persist ticket runtime records under:
+
+- `.harness/state/tickets/TASK-XXXX.runtime.json`
+
+Those records are runtime-only and may carry:
+
+- branch
+- checkout mode
+- checkout path
+- runtime mode
+- declared frontend/backend targets
+- reserved ports
+- declared frontend/backend/compose commands
+- launched process or compose metadata
+- owner session alias
+
 ## Binary Decisions
 
 | Binary | Decision | Reason |
 | --- | --- | --- |
 | `capture_user_turn.py` | `keep` | lightweight input-hook writer that stores bounded current-turn intent for later relevance checks |
 | `notify.py` | `keep` | local utility with no orchestration overlap |
+| `ticket_runtime.py` | `keep` | narrow local helper for ticket runtime records, optional isolated checkout creation, local runtime launch/stop, port reservation, and QA target publication |
 | `tickets/scripts/check_ticket_metadata.py` | `keep` | canonical validator for the ticket surface and lives with the ticket system it validates |
 | `stop_hook.py` | `keep` | thin runtime shim that evaluates stop events, judges worker results, and handles re-entry decisions |
 | `skills/impl/scripts/tmux_helper.py` | `keep` | skill-local operator visibility and lane recovery helper, not the control plane; it also writes the active runtime claim used by stop-hook consumers |
@@ -69,7 +87,11 @@ For bounded same-session `$loop`, the runtime contract is:
 - Public docs should describe `$impl` as the build-phase orchestrator.
 - Public docs should describe `.harness/` as the canonical live runtime root.
 - `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
+- `ticket_runtime.py` may be documented as the narrow ticket-runtime shim for
+  isolated checkout, declared runtime launch/stop, and live QA target setup.
 - Public docs should describe `current-run.json` as control-session-owned state, not a generic sink for every prompt-bearing session.
+- Public docs should describe `.harness/state/tickets/*.runtime.json` as
+  runtime-only metadata, not as a durable replacement for ticket truth.
 - Public docs should describe same-ticket `$impl` continuation as requiring both the session-scoped loop gate and the matching runtime claim.
 - Public docs should describe `$loop` as session-owned state with explicit local predicates, not as a ticket/run-state or tmux-worker surface.
 - Public docs should describe tmux `auto_continue` as lane-follow-up plumbing, not as the source of truth for whether the `$impl` loop is active.

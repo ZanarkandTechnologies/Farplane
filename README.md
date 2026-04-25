@@ -9,7 +9,7 @@ yet a fully autonomous multi-ticket dispatcher.
 
 If a repo does not already have Codexter conventions such as `AGENTS.md`,
 `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and
-`tickets/`, start with `init-project` before trying to use the full spec,
+`tickets/`, start with `deep-init-project` before trying to use the full spec,
 ticket, and execution workflow.
 
 ## Start Here
@@ -24,8 +24,9 @@ ticket, and execution workflow.
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
 - CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/desloppify/README.md)
 - Parity-comparison workflow: [skills/parity-research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/parity-research/README.md)
+- PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
 - Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
-- Project bootstrap: [skills/init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/init-project/README.md)
+- Project bootstrap: [skills/deep-init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/README.md)
 
 ## Current State
 
@@ -46,8 +47,10 @@ Implemented now:
 - `desloppify` for CLI-driven anti-slop cleanup, with default worker delegation
 - same-session bounded persistence through `$loop`
 - documenting and closeout through `close-ticket`
+- isolated PR follow-up and concurrent-writer checkout setup plus ticket-scoped
+  runtime launch/teardown through `pr-runtime` plus `ticket-runtime`
 - Stop-hook phase routing and current-turn relevance checks
-- optional `init-project` scaffolding for `.githooks/`,
+- optional `deep-init-project` scaffolding for `.githooks/`,
   `scripts/pre_commit_check.sh`, `scripts/pre_push_check.sh`, a starter `qa/`
   cookbook surface, and explicit `coderabbit-review`
 
@@ -57,7 +60,7 @@ Partial today:
   selected ticket at a time
 - tmux-backed worker lanes exist, but the runtime is still prototype-weight
 - runtime observability doctrine is shipped, while hosted telemetry is still in
-  progress in [TASK-0073](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0073-add-convex-runtime-uptime-telemetry.md)
+  progress in [TASK-0073](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0073/ticket.md)
 - anti-slop review exists in `review`, but there is not yet a separate
   human-grade report/video proof pack
 
@@ -77,7 +80,7 @@ Still missing:
 
 ```mermaid
 flowchart LR
-    A[idea or repo gap] --> B[init-project when repo needs bootstrap]
+    A[idea or repo gap] --> B[deep-init-project when repo needs bootstrap]
     A --> C[deep-interview / prd]
     B --> D[bootstrap brief + qa cookbook]
     C --> E[spec-to-ticket]
@@ -94,18 +97,18 @@ flowchart LR
 
 Now:
 
-- [TASK-0086: tighten planning around touched files, signature deltas, and oversized-file decisions](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0086-tighten-planning-around-files-signatures-and-refactors.md)
-- [TASK-0087: enforce QA routing and evidence packs before completion](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0087-enforce-qa-routing-and-evidence-packs.md)
-- [TASK-0088: make reset and resume handoffs concise and compaction-safe](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0088-make-reset-resume-handoffs-compaction-safe.md)
-- [TASK-0089: make execution routing default to answer, plan, or act](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0089-make-execution-routing-answer-plan-or-act.md)
+- [TASK-0086: tighten planning around touched files, signature deltas, and oversized-file decisions](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0086/ticket.md)
+- [TASK-0087: enforce QA routing and evidence packs before completion](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0087/ticket.md)
+- [TASK-0088: make reset and resume handoffs concise and compaction-safe](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0088/ticket.md)
+- [TASK-0089: make execution routing default to answer, plan, or act](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0089/ticket.md)
 
 Next:
 
-- [TASK-0081: add a worktree-backed multi-session runtime with a cloud-ready boundary](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081-add-worktree-backed-runtime-scaling.md)
+- [TASK-0081: add a worktree-backed multi-session runtime with a cloud-ready boundary](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081/ticket.md)
 
 Later:
 
-- [TASK-0082: add transparency and ablation evals for autonomy changes](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0082-add-transparency-and-ablation-evals.md)
+- [TASK-0082: add transparency and ablation evals for autonomy changes](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0082/ticket.md)
 
 The roadmap above reflects the current audit:
 
@@ -152,13 +155,14 @@ The shipped global contract stays in `templates/global/AGENTS.md`.
 
 - Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
 - Specs: [docs/specs](/Users/kenjipcx/coding-harness/Codexter/docs/specs)
-- Bootstrap brief: [skills/init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md](/Users/kenjipcx/coding-harness/Codexter/skills/init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md)
+- Bootstrap brief: [skills/deep-init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md)
 - Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - Current execution model: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
 - QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
+- PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
 - Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 
 ## Current Limitation

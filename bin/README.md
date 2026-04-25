@@ -28,11 +28,15 @@ orchestration story.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `notify.py` - local notification helper
 - `stop_hook.py` - thin stop-hook/runtime shim
+- `ticket_runtime.py` / `ticket-runtime` - local helper for ticket runtime
+  records, optional isolated checkouts, port reservation, runtime
+  launch/teardown, and QA target lookup
 
 ## Runtime Decisions
 
 - `stop_hook.py`: keep
 - `capture_user_turn.py`: keep
+- `ticket_runtime.py`: keep
 
 Runtime state stays lightweight and machine-facing. The grouped `claim` object
 tracks the active ticket/run/session ownership for hook consumers, while
@@ -79,6 +83,18 @@ success quiet and make failure output the thing that stands out.
   Use when a script or hook needs the structured payload
 - `python3 skills/impl/scripts/tmux_helper.py status`
   Current mode: full JSON because this is still primarily a machine/state read surface
+- `python3 bin/ticket_runtime.py ensure ...`
+  Use when a skill or operator needs a ticket-scoped runtime record, optional
+  isolated checkout path, declared commands, and QA targets without launching yet
+- `python3 bin/ticket_runtime.py up ...`
+  Use when the ticket runtime should actually start configured frontend/backend
+  processes or a compose-backed runtime
+- `python3 bin/ticket_runtime.py qa ...`
+  Use when QA needs the current runtime status plus only the live targets that
+  are actually open for the ticket right now
+- `python3 bin/ticket_runtime.py down ...`
+  Use when the helper should stop tracked processes or run the declared
+  compose-down command, then release reserved ports
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
 
@@ -97,22 +113,37 @@ no current client
 
 ```bash
 python3 skills/impl/scripts/tmux_helper.py launch \
-  --ticket tickets/TASK-0014-tmux-visibility-and-followup.md \
+  --ticket tickets/TASK-0014/ticket.md \
   --phase building \
   --dry-run
 
 python3 skills/impl/scripts/tmux_helper.py followup \
-  --ticket tickets/TASK-0014-tmux-visibility-and-followup.md \
+  --ticket tickets/TASK-0014/ticket.md \
   --phase documenting \
   --reason "hook-driven follow-up"
 
 python3 skills/impl/scripts/tmux_helper.py followup \
-  --ticket tickets/TASK-0014-tmux-visibility-and-followup.md \
+  --ticket tickets/TASK-0014/ticket.md \
   --phase documenting \
   --reason "hook-driven follow-up" \
   --json
 
 python3 skills/impl/scripts/tmux_helper.py status
+
+python3 bin/ticket_runtime.py up \
+  --ticket TASK-0014 \
+  --branch pr-123 \
+  --checkout-mode worktree \
+  --runtime-mode branch-runtime \
+  --create-worktree \
+  --reserve frontend \
+  --reserve backend \
+  --frontend-cmd "npm run dev" \
+  --backend-cmd "npm run api" \
+  --json
+
+python3 bin/ticket_runtime.py qa --ticket TASK-0014 --json
+python3 bin/ticket_runtime.py down --ticket TASK-0014 --json
 
 ```
 
@@ -131,7 +162,9 @@ already advanced.
 - `python3 -m unittest bin/test_harness_invariants.py`
 - `python3 -m unittest bin/test_doc_parity.py`
 - `python3 -m unittest bin/test_ticket_metadata.py`
+- `python3 -m unittest bin/test_ticket_runtime.py`
 - `python3 -m py_compile bin/stop_hook.py`
+- `python3 -m py_compile bin/ticket_runtime.py bin/test_ticket_runtime.py`
 - `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py`
 - `python3 -m py_compile bin/check_harness_invariants.py bin/test_harness_invariants.py`
 - `python3 -m py_compile bin/check_doc_parity.py bin/test_doc_parity.py`

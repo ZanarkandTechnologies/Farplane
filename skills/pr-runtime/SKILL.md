@@ -1,0 +1,113 @@
+---
+name: pr-runtime
+version: 0.1.0
+description: "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer or declared QA target."
+allowed-tools: Read, Glob, Grep
+---
+
+# PR Runtime
+
+Use when the task is modifying an existing PR branch, when multiple live
+writers would otherwise share one filesystem, or when QA needs a declared
+ticket-scoped target instead of guessed ports.
+
+This skill is not a git tutorial. It standardizes when isolation is required,
+where runtime state lives, how ticket runtime commands are launched, and how QA
+reads the target.
+
+## First-Load Contract
+
+### Trigger Conditions
+
+- user asks to address PR comments or update an existing PR branch
+- more than one live writer would otherwise share one filesystem
+- the task needs a ticket-scoped frontend/backend target for QA
+
+### Workflow
+
+1. Resolve the ticket, PR branch, or working branch.
+2. Decide whether the task can stay `shared` or needs `worktree` checkout mode.
+3. Decide runtime mode:
+   - `shared`
+   - `branch-runtime`
+   - `branch-compose`
+4. Run the helper to create or refresh the runtime record.
+5. If isolated checkout is required, create or reuse it through the helper.
+6. If QA needs a live target, run `up` with the declared frontend/backend or
+   compose command set.
+7. Publish live QA targets through the runtime record.
+8. Do the work.
+9. Hand QA the runtime record instead of telling it to infer local ports.
+
+### Core Decision Branches
+
+- `existing PR branch` -> use isolated checkout by default
+- `multiple live writers` -> use isolated checkout
+- `single writer, low-risk local work` -> shared checkout is allowed
+- `DB or risky integration work` -> prefer `branch-compose`
+- `ordinary UI/API work needing ticket-scoped QA` -> prefer `branch-runtime`
+
+### Top 3 Gotchas
+
+1. Treating a branch name as filesystem isolation when two live writers still
+   share the same checkout.
+2. Storing live ports or runtime targets in tracked repo files instead of
+   `.harness/state/`.
+3. Making QA guess the correct target from chat instead of reading the runtime
+   record.
+
+### Outcome Contract
+
+When this skill is used, return:
+
+1. `Best:` chosen checkout mode and runtime mode
+2. `Runtime record:` path under `.harness/state/`
+3. `QA target:` live frontend/backend target or explicit `none`
+4. `Why:` one short line explaining why isolation was or was not required
+
+## Guardrails
+
+- Never allow more than one live writer in the same filesystem.
+- Tickets remain the durable task surface; runtime records stay under
+  `.harness/state/`.
+- Existing PR branch follow-up should default to isolated checkout.
+- Keep the runtime helper local-first and minimal; do not expand this skill
+  into generic dispatch or cloud orchestration.
+- Use the lightest sufficient runtime mode.
+
+## Helper Surface
+
+Use:
+
+- `python3 bin/ticket_runtime.py ensure ...`
+- `python3 bin/ticket_runtime.py up ...`
+- `python3 bin/ticket_runtime.py status ...`
+- `python3 bin/ticket_runtime.py qa ...`
+- `python3 bin/ticket_runtime.py down ...`
+
+Runtime records live at:
+
+- `.harness/state/tickets/TASK-XXXX.runtime.json`
+
+Port reservations live at:
+
+- `.harness/state/ports.json`
+
+## Minimal Example
+
+```bash
+python3 bin/ticket_runtime.py up \
+  --ticket TASK-0123 \
+  --branch pr-123 \
+  --checkout-mode worktree \
+  --runtime-mode branch-runtime \
+  --create-worktree \
+  --reserve frontend \
+  --reserve backend \
+  --frontend-cmd "npm run dev" \
+  --backend-cmd "npm run api" \
+  --json
+
+python3 bin/ticket_runtime.py qa --ticket TASK-0123 --json
+python3 bin/ticket_runtime.py down --ticket TASK-0123 --json
+```

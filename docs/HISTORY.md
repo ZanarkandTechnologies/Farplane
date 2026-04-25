@@ -116,5 +116,6 @@
 2026-04-25 01:23 +0100 | FIX | make `impl-plan` and the canonical ticket template require detailed, action-oriented plans with explicit execution steps and stronger recommendation tone instead of thin approval-first summaries
 2026-04-25 12:15 +0100 | FEAT | add a discoverable `pr-runtime` skill plus a minimal `ticket_runtime` helper for isolated PR follow-up, concurrent-writer checkout safety, ticket-scoped runtime records under `.harness/state/tickets/`, and declared QA target lookup
 2026-04-25 12:45 +0100 | FEAT | extend `ticket_runtime` from metadata-only records into a real local launcher that can start and stop configured frontend/backend processes or compose commands, persist process metadata, and publish QA targets from the same ticket runtime record
+2026-04-25 12:55 +0100 | FIX | make `ticket_runtime` keep reserved ports when teardown fails, make `qa` report only live targets with explicit runtime status, and persist launch-failure state instead of overstating availability
 2026-04-25 01:22 +0100 | FEAT | tighten the shipped global contract around complaint-shaped recovery, skill todo-list loading, and action-ordered ticket plans
 2026-04-25 01:29 +0100 | FIX | align `repent`, `impl-plan` README, and the techniques inventory with the new complaint-recovery and skill-checklist doctrine
