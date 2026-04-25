@@ -38,11 +38,16 @@ from runtime_telemetry import emit_hook_telemetry
 from user_turn import (
     build_runtime_claim,
     explicit_run_state_selector as resolve_explicit_run_state_selector,
+    iter_active_ticket_files,
     load_last_user_turn as load_persisted_last_user_turn,
     load_current_run as load_selected_runtime_state,
     load_runtime_claim as load_persisted_runtime_claim,
     persist_runtime_update as persist_selected_runtime_update,
     project_root_from_payload as resolve_project_root_from_payload,
+    resolve_ticket_path_by_id,
+    ticket_artifact_root,
+    ticket_id_from_path,
+    tickets_dir as user_turn_tickets_dir,
 )
 
 
@@ -50,7 +55,9 @@ TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 SECTION_PATTERN = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
 CHECKBOX_PATTERN = re.compile(r"^- \[( |x)\]\s+(.*)$")
 MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
-ARTIFACT_PATH_PATTERN = re.compile(r"(?P<path>(?:^|[\s(])(?:/?(?:[^)\s`]*?/)?tickets/artifacts/[^)\s`]+))")
+ARTIFACT_PATH_PATTERN = re.compile(
+    r"(?P<path>(?:^|[\s(])(?:/?(?:[^)\s`]*?/)?tickets/(?:artifacts/[^)\s`]+|TASK-\d{4}/artifacts/[^)\s`]+|archive/TASK-\d{4}/artifacts/[^)\s`]+)))"
+)
 IMPL_RESULT_PATTERN = re.compile(r"^IMPL_RESULT:\s+status=.*$", re.MULTILINE)
 PARSED_IMPL_RESULT_PATTERN = re.compile(
     r"^IMPL_RESULT:\s+status=(?P<status>[A-Za-z0-9_-]+)\s+next=(?P<next>[A-Za-z0-9_-]+)(?:\s+reason=(?P<reason>.*))?$"
@@ -581,7 +588,11 @@ def blocked_items(lines: list[str]) -> list[str]:
 
 
 def ticket_repo_root(ticket_path: Path) -> Path:
-    return ticket_path.parent.parent
+    current = ticket_path.resolve().parent
+    for candidate in (current, *current.parents):
+        if candidate.name == "tickets":
+            return candidate.parent
+    return ticket_path.resolve().parents[1]
 
 
 def parse_updated_at(raw: object) -> datetime | None:
@@ -613,13 +624,13 @@ def extract_artifact_references(ticket_path: Path, lines: list[str]) -> list[str
     text = "\n".join(lines)
     for match in MARKDOWN_LINK_PATTERN.finditer(text):
         target = match.group(1).strip()
-        if "tickets/artifacts/" in target:
+        if "tickets/" in target and "/artifacts/" in target:
             refs.append(target)
     for match in ARTIFACT_PATH_PATTERN.finditer(text):
         target = match.group("path").strip()
         if target.startswith("("):
             target = target[1:]
-        if "tickets/artifacts/" in target:
+        if "tickets/" in target and "/artifacts/" in target:
             refs.append(target)
     normalized: list[str] = []
     seen: set[str] = set()
@@ -636,7 +647,7 @@ def extract_artifact_references(ticket_path: Path, lines: list[str]) -> list[str
 
 
 def artifact_root_for_ticket(ticket_path: Path, ticket_id: str) -> Path:
-    return ticket_repo_root(ticket_path) / "tickets" / "artifacts" / ticket_id
+    return ticket_artifact_root(ticket_repo_root(ticket_path), ticket_path, ticket_id)
 
 
 def collect_artifact_files(root_path: Path) -> list[str]:
@@ -696,7 +707,7 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
     text = ticket_path.read_text(encoding="utf-8")
     frontmatter = parse_frontmatter(text)
     sections = parse_sections(text)
-    fallback_ticket_id = extract_ticket_id(ticket_path.name) or ticket_path.stem
+    fallback_ticket_id = ticket_id_from_path(ticket_path) or extract_ticket_id(ticket_path.name) or ticket_path.stem
     ticket_id = extract_ticket_id(text) or fallback_ticket_id
     artifact_root = artifact_root_for_ticket(ticket_path, ticket_id).resolve()
     linked_artifacts = extract_artifact_references(ticket_path, sections.get("Evidence", []))
@@ -730,21 +741,19 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
 
 
 def ticket_root(home: Path, project_root: Path | None) -> Path:
-    return (project_root or home) / "tickets"
+    return user_turn_tickets_dir(project_root or home)
 
 
 def resolve_ticket_by_id(home: Path, project_root: Path | None, ticket_id: str) -> dict[str, object] | None:
     if not ticket_id.strip():
         return None
-    for ticket_file in sorted(ticket_root(home, project_root).glob("TASK-*.md")):
-        if ticket_file.name.startswith(ticket_id):
-            return load_ticket(ticket_file)
-    return None
+    ticket_file = resolve_ticket_path_by_id(project_root or home, ticket_id)
+    return load_ticket(ticket_file) if ticket_file is not None else None
 
 
 def board_snapshot(home: Path, project_root: Path | None) -> list[dict[str, object]]:
     snapshot: list[dict[str, object]] = []
-    for ticket_file in sorted(ticket_root(home, project_root).glob("TASK-*.md")):
+    for ticket_file in iter_active_ticket_files(project_root or home):
         ticket = load_ticket(ticket_file)
         snapshot.append(
             {
@@ -790,12 +799,12 @@ def resolve_ticket(home: Path, project_root: Path | None, message: str) -> dict[
                     return load_ticket(candidate)
             ticket_id = current_run.get("ticket_id")
             if isinstance(ticket_id, str) and ticket_id.strip():
-                candidate = project_root / "tickets" / f"{ticket_id}.md"
-                if candidate.is_file():
+                candidate = resolve_ticket_path_by_id(project_root, ticket_id.strip())
+                if candidate is not None and candidate.is_file():
                     return load_ticket(candidate)
 
-    ticket_root = (project_root or home) / "tickets"
-    all_ticket_files = sorted(ticket_root.glob("TASK-*.md"))
+    root = project_root or home
+    all_ticket_files = iter_active_ticket_files(root)
     if not all_ticket_files:
         return None
 
@@ -807,9 +816,9 @@ def resolve_ticket(home: Path, project_root: Path | None, message: str) -> dict[
 
     explicit_ticket = os.environ.get("CODEXTER_ACTIVE_TICKET", "").strip()
     if explicit_ticket:
-        for ticket_file in all_ticket_files:
-            if ticket_file.name.startswith(explicit_ticket):
-                return load_ticket(ticket_file)
+        candidate = resolve_ticket_path_by_id(root, explicit_ticket)
+        if candidate is not None and candidate in all_ticket_files:
+            return load_ticket(candidate)
 
     active_files = [
         ticket_file

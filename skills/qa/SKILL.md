@@ -21,7 +21,7 @@ Do not use it when:
 ## Contract
 
 - Read the selected ticket plus linked docs/specs.
-- Gather ticket-scoped proof under `tickets/artifacts/TASK-XXXX/qa/`.
+- Gather ticket-scoped proof under `tickets/TASK-XXXX/artifacts/qa/`.
 - For UI or user-visible work, use `visual-qa` as a separate judgment pass.
 - Update the ticket `Evidence` section with the strongest artifact links.
 - Write `result.json` under the QA artifact root and finish with:
@@ -42,7 +42,7 @@ Do not use it when:
   "verdict": "pass",
   "summary": "qa proved the required behavior",
   "artifacts": [
-    "tickets/artifacts/TASK-0000/qa/2026-04-24T210000Z/report.md"
+    "tickets/TASK-0000/artifacts/qa/2026-04-24T210000Z/report.md"
   ]
 }
 ```

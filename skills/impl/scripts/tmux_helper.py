@@ -76,10 +76,11 @@ def current_tmux_session() -> str:
 
 
 def ticket_id_from_path(path: Path) -> str:
-    match = re.search(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)", path.name)
-    if not match:
-        raise ValueError(f"could not determine ticket id from {path}")
-    return match.group(1)
+    for candidate in (path.parent.name, path.name, path.stem):
+        match = re.search(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)", candidate)
+        if match:
+            return match.group(1)
+    raise ValueError(f"could not determine ticket id from {path}")
 
 
 def default_run_state_path(ticket_id: str, phase: str) -> Path:
@@ -196,11 +197,11 @@ def default_main_artifact_path(ticket: Path, phase: str, worker_name: str, execu
     ticket_id = ticket_id_from_path(ticket)
     effective_phase = execution_phase or worker_name
     if phase == "building" and effective_phase == "qa":
-        return str(root() / "tickets" / "artifacts" / ticket_id / "qa")
+        return str(root() / "tickets" / ticket_id / "artifacts" / "qa")
     if phase == "building" and effective_phase == "demo":
-        return str(root() / "tickets" / "artifacts" / ticket_id / "demo")
+        return str(root() / "tickets" / ticket_id / "artifacts" / "demo")
     if phase == "building" and worker_name == "reviewer":
-        return str(root() / "tickets" / "artifacts" / ticket_id)
+        return str(root() / "tickets" / ticket_id / "artifacts")
     return str(ticket)
 
 
@@ -209,14 +210,14 @@ def lane_directive(phase: str, worker_name: str, execution_phase: str = "") -> s
         return ""
     if execution_phase == "qa" or worker_name == "qa":
         return (
-            "You are the independent QA lane. Capture proof under `tickets/artifacts/TASK-XXXX/qa/`. "
+            "You are the independent QA lane. Capture proof under `tickets/TASK-XXXX/artifacts/qa/`. "
             "For any UI or user-visible run, always hand the captured artifacts to a separate `visual-qa` judgment pass, "
             "write `result.json`, and finish with `IMPL_RESULT: status=qa_complete next=building reason=...`.\n"
         )
     if execution_phase == "demo" or worker_name == "demo":
         return (
             "You are the demo lane. Reuse passing QA artifacts to produce demo-ready outputs under "
-            "`tickets/artifacts/TASK-XXXX/demo/`, write `result.json`, and finish with "
+            "`tickets/TASK-XXXX/artifacts/demo/`, write `result.json`, and finish with "
             "`IMPL_RESULT: status=demo_complete next=building reason=...`.\n"
         )
     if worker_name == "builder":
@@ -407,7 +408,7 @@ def lane_shell_command(
         return (
             f"cd {shlex.quote(str(root()))} && "
             f"printf '[impl tmux dry run] phase=%s ticket=%s\\n' "
-            f"{shlex.quote(phase)} {shlex.quote(ticket.name)}"
+            f"{shlex.quote(phase)} {shlex.quote(ticket_id)}"
         )
 
     exports = [
@@ -487,11 +488,18 @@ def relpath_for_display(raw: str) -> str:
 
 
 def compact_ticket_label(raw_ticket: str, fallback_path: str = "") -> str:
-    raw_name = Path(raw_ticket).name if raw_ticket else Path(fallback_path).name
-    match = re.search(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)", raw_name)
-    if match:
-        return match.group(1)
-    return raw_name or fallback_path or "ticket"
+    candidates: list[str] = []
+    if raw_ticket:
+        ticket_path = Path(raw_ticket)
+        candidates.extend([ticket_path.parent.name, ticket_path.name, ticket_path.stem])
+    elif fallback_path:
+        fallback = Path(fallback_path)
+        candidates.extend([fallback.parent.name, fallback.name, fallback.stem])
+    for raw_name in candidates:
+        match = re.search(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)", raw_name)
+        if match:
+            return match.group(1)
+    return candidates[1] if len(candidates) > 1 else fallback_path or "ticket"
 
 
 def format_followup_success(payload: dict[str, object]) -> str:
@@ -787,7 +795,7 @@ def followup(args: argparse.Namespace) -> int:
         message = (
             f"cd {shlex.quote(str(root()))} && "
             f"printf '[impl tmux dry run] followup phase=%s ticket=%s\\n' "
-            f"{shlex.quote(args.phase)} {shlex.quote(ticket.name)}"
+            f"{shlex.quote(args.phase)} {shlex.quote(ticket_id)}"
         )
         sent = run(["tmux", "send-keys", "-t", pane_id, message, "C-m"])
         if sent.returncode != 0:

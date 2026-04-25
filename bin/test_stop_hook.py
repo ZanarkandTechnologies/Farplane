@@ -253,10 +253,10 @@ class StopHookReviewerPromptTests(unittest.TestCase):
             "blockers": [],
             "requires_qa": True,
             "requires_demo": False,
-            "artifact_root": ROOT / "tickets" / "artifacts" / "TASK-0038",
-            "linked_artifacts": [str(ROOT / "tickets" / "artifacts" / "TASK-0038" / "qa" / "report.md")],
+            "artifact_root": ROOT / "tickets" / "TASK-0038" / "artifacts",
+            "linked_artifacts": [str(ROOT / "tickets" / "TASK-0038" / "artifacts" / "qa" / "report.md")],
             "missing_artifacts": [],
-            "artifact_files": [str(ROOT / "tickets" / "artifacts" / "TASK-0038" / "qa" / "report.md")],
+            "artifact_files": [str(ROOT / "tickets" / "TASK-0038" / "artifacts" / "qa" / "report.md")],
         }
         self.current_run = {
             "claim": {"status": "build_complete"},
@@ -313,7 +313,7 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "demo_quality": "pass",
                 "stakeholder_readiness": "pass",
                 "stakeholder_readiness_reason": "",
-                "best_demo_artifact": "tickets/artifacts/TASK-0038/demo/demo.html",
+                "best_demo_artifact": "tickets/TASK-0038/artifacts/demo/demo.html",
                 "storyline_gaps": [],
                 "user_intent_impression": "pass",
                 "user_intent_mismatch_reason": "",
@@ -342,7 +342,7 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "demo_quality": "pass",
                 "stakeholder_readiness": "pass",
                 "stakeholder_readiness_reason": "",
-                "best_demo_artifact": "tickets/artifacts/TASK-0038/demo/demo.html",
+                "best_demo_artifact": "tickets/TASK-0038/artifacts/demo/demo.html",
                 "storyline_gaps": [],
                 "user_intent_impression": "fail",
                 "user_intent_mismatch_reason": "result is technically valid but undershoots the saved user ask",
@@ -375,7 +375,7 @@ class StopHookReviewerPromptTests(unittest.TestCase):
                 "demo_quality": "pass",
                 "stakeholder_readiness": "pass",
                 "stakeholder_readiness_reason": "",
-                "best_demo_artifact": "tickets/artifacts/TASK-0038/demo/demo.html",
+                "best_demo_artifact": "tickets/TASK-0038/artifacts/demo/demo.html",
                 "storyline_gaps": [],
                 "user_intent_impression": "pass",
                 "user_intent_mismatch_reason": "",
@@ -440,7 +440,7 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
                 "evidence_gaps": [],
                 "requires_qa": True,
                 "requires_demo": False,
-                "artifact_root": ROOT / "tickets" / "artifacts" / "TASK-0042",
+                "artifact_root": ROOT / "tickets" / "TASK-0042" / "artifacts",
                 "linked_artifacts": [],
                 "missing_artifacts": [],
                 "artifact_files": [],
@@ -455,7 +455,7 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
     def test_phase_result_gate_accepts_passing_linked_qa_result(self) -> None:
         with tempfile.TemporaryDirectory(prefix="stop-hook-qa-") as td:
             root = Path(td)
-            result_path = root / "tickets" / "artifacts" / "TASK-0042" / "qa" / "2026-04-24T210000Z" / "result.json"
+            result_path = root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "2026-04-24T210000Z" / "result.json"
             result_path.parent.mkdir(parents=True, exist_ok=True)
             result_path.write_text(
                 json.dumps(
@@ -473,7 +473,7 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
             ticket = {
                 "ticket_id": "TASK-0042",
                 "updated_at": "2026-04-24T00:00:00Z",
-                "artifact_root": (root / "tickets" / "artifacts" / "TASK-0042").resolve(),
+                "artifact_root": (root / "tickets" / "TASK-0042" / "artifacts").resolve(),
                 "linked_artifacts": [str(result_path.resolve())],
                 "missing_artifacts": [],
                 "artifact_files": [str(result_path.resolve())],
@@ -514,7 +514,7 @@ class StopHookTmuxFollowupTests(unittest.TestCase):
         self.stop_hook = load_stop_hook_module()
 
     def test_spawn_tmux_followup_requests_json_output(self) -> None:
-        ticket = {"path": "tickets/TASK-0033-tighten-agent-facing-cli-surfaces.md"}
+        ticket = {"path": "tickets/TASK-0033/ticket.md"}
         current_run = {
             "tmux_session": "main",
             "auto_continue": True,
@@ -733,8 +733,8 @@ class StopHookEvidenceArtifactGateTests(unittest.TestCase):
     def test_load_ticket_exposes_linked_artifacts_for_evidence_gate(self) -> None:
         with tempfile.TemporaryDirectory(prefix="stop-hook-ticket-") as td:
             root = Path(td)
-            ticket_path = root / "tickets" / "TASK-9999.md"
-            artifact_path = root / "tickets" / "artifacts" / "TASK-9999" / "qa" / "report.md"
+            ticket_path = root / "tickets" / "TASK-9999" / "ticket.md"
+            artifact_path = root / "tickets" / "TASK-9999" / "artifacts" / "qa" / "report.md"
             artifact_path.parent.mkdir(parents=True, exist_ok=True)
             artifact_path.write_text("ok", encoding="utf-8")
             ticket_path.write_text(
@@ -762,7 +762,7 @@ linked_docs: []
 - [x] AC-1
 
 ## Evidence
-- [QA report](tickets/artifacts/TASK-9999/qa/report.md)
+- [QA report](tickets/TASK-9999/artifacts/qa/report.md)
 
 ## Blockers
 - none
@@ -781,8 +781,8 @@ linked_docs: []
     def test_evidence_artifact_gate_fails_when_linked_artifact_is_stale(self) -> None:
         with tempfile.TemporaryDirectory(prefix="stop-hook-ticket-") as td:
             root = Path(td)
-            ticket_path = root / "tickets" / "TASK-9999.md"
-            artifact_path = root / "tickets" / "artifacts" / "TASK-9999" / "qa" / "report.md"
+            ticket_path = root / "tickets" / "TASK-9999" / "ticket.md"
+            artifact_path = root / "tickets" / "TASK-9999" / "artifacts" / "qa" / "report.md"
             artifact_path.parent.mkdir(parents=True, exist_ok=True)
             artifact_path.write_text("old", encoding="utf-8")
             old_timestamp = datetime(2026, 4, 5, 0, 0, tzinfo=timezone.utc).timestamp()
@@ -812,7 +812,7 @@ linked_docs: []
 - [x] AC-1
 
 ## Evidence
-- [QA report](tickets/artifacts/TASK-9999/qa/report.md)
+- [QA report](tickets/TASK-9999/artifacts/qa/report.md)
 
 ## Blockers
 - none

@@ -35,7 +35,7 @@ class TmuxHelperBackpressureTests(unittest.TestCase):
             "worker_started_at": "2026-04-10T00:00:00Z",
             "last_checkpoint_at": "2026-04-10T00:00:00Z",
             "worker_name": "builder",
-            "main_artifact_path": "tickets/TASK-0034.md",
+            "main_artifact_path": "tickets/TASK-0034/ticket.md",
         }
 
         annotated = self.tmux_helper.annotate_backpressure(
@@ -76,7 +76,7 @@ class TmuxHelperOutputFormattingTests(unittest.TestCase):
     def test_format_followup_success_compacts_payload_for_default_output(self) -> None:
         line = self.tmux_helper.format_followup_success(
             {
-                "ticket": str(ROOT / "tickets" / "TASK-0025-capture-turn-start-intent-for-stop-hook.md"),
+                "ticket": str(ROOT / "tickets" / "TASK-0025" / "ticket.md"),
                 "phase": "building",
                 "tmux_pane": "%42",
                 "tmux_session": "main",
@@ -120,25 +120,25 @@ class TmuxHelperLaneContractTests(unittest.TestCase):
         )
 
     def test_default_main_artifact_path_routes_qa_to_ticket_artifacts(self) -> None:
-        ticket = ROOT / "tickets" / "TASK-0025-capture-turn-start-intent-for-stop-hook.md"
+        ticket = ROOT / "tickets" / "TASK-0025" / "ticket.md"
         artifact_path = self.tmux_helper.default_main_artifact_path(ticket, "building", "qa")
 
-        self.assertTrue(artifact_path.endswith("tickets/artifacts/TASK-0025/qa"))
+        self.assertTrue(artifact_path.endswith("tickets/TASK-0025/artifacts/qa"))
 
     def test_build_phase_prompt_makes_building_delegation_explicit(self) -> None:
-        ticket = ROOT / "tickets" / "TASK-0025-capture-turn-start-intent-for-stop-hook.md"
+        ticket = ROOT / "tickets" / "TASK-0025" / "ticket.md"
         prompt = self.tmux_helper.build_phase_prompt(ticket, "building", "builder", str(ticket), "impl")
 
         self.assertIn("Required lanes for this phase: builder, reviewer, qa.", prompt)
         self.assertIn("spawn independent reviewer and QA", prompt)
 
     def test_build_phase_prompt_routes_qa_execution_phase_to_qa_skill(self) -> None:
-        ticket = ROOT / "tickets" / "TASK-0025-capture-turn-start-intent-for-stop-hook.md"
+        ticket = ROOT / "tickets" / "TASK-0025" / "ticket.md"
         prompt = self.tmux_helper.build_phase_prompt(
             ticket,
             "building",
             "qa",
-            str(ROOT / "tickets" / "artifacts" / "TASK-0025" / "qa"),
+            str(ROOT / "tickets" / "TASK-0025" / "artifacts" / "qa"),
             "qa",
         )
 

@@ -21,8 +21,8 @@ Do not use it when:
 ## Contract
 
 - Read the selected ticket plus linked docs/specs.
-- Reuse QA artifacts from `tickets/artifacts/TASK-XXXX/qa/`.
-- Write demo outputs under `tickets/artifacts/TASK-XXXX/demo/`.
+- Reuse QA artifacts from `tickets/TASK-XXXX/artifacts/qa/`.
+- Write demo outputs under `tickets/TASK-XXXX/artifacts/demo/`.
 - Update the ticket `Evidence` section with demo artifact links.
 - Write `result.json` under the demo artifact root and finish with:
   - `IMPL_RESULT: status=demo_complete next=building reason=...`
@@ -41,7 +41,7 @@ Do not use it when:
   "verdict": "pass",
   "summary": "demo artifacts are ready",
   "artifacts": [
-    "tickets/artifacts/TASK-0000/demo/2026-04-24T211500Z/demo.html"
+    "tickets/TASK-0000/artifacts/demo/2026-04-24T211500Z/demo.html"
   ]
 }
 ```

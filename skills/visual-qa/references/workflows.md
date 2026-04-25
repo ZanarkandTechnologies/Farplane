@@ -56,7 +56,7 @@ agent-browser console > test-results/console.txt || true
 agent-browser errors > test-results/errors.txt || true
 ```
 
-Report repro steps plus artifact paths in `tickets/artifacts/TASK-XXXX/qa/<timestamp>/visual-qa.md`, and name which declared screen/state the bundle corresponds to.
+Report repro steps plus artifact paths in `tickets/TASK-XXXX/artifacts/qa/<timestamp>/visual-qa.md`, and name which declared screen/state the bundle corresponds to.
 
 ## Variant: Trace capture
 

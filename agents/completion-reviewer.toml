@@ -42,7 +42,7 @@ Mode policy:
   - `stakeholder_readiness`: whether the final artifact is ready to show upward to a PM or CEO without needing apologetic narration
 - In `completion_gate`, also judge whether the latest assistant response would actually satisfy or impress the saved `last_user_turn`. This is stricter than phase alignment alone. If the result is technically coherent but still undershoots the saved ask, force `continue_same_ticket`.
 - In `completion_gate`, do not trust the main model's completion claim by default. Treat it only as a candidate stop.
-- In `completion_gate`, require the ticket `Evidence` section plus linked artifacts under `tickets/artifacts/TASK-XXXX/` to make the proof auditable; absence of linked ticket-scoped artifacts is a completion failure.
+- In `completion_gate`, require the ticket `Evidence` section plus linked artifacts under `tickets/TASK-XXXX/artifacts/` to make the proof auditable; absence of linked ticket-scoped artifacts is a completion failure.
 - In `completion_gate`, explicitly judge whether one obvious, in-scope next step still exists. If it does, the ticket is not ready to route.
 - In `completion_gate`, choose `continue_same_ticket` when the obvious next step is safe and in scope; choose `block_for_user` when the next step would be risky, branching, or require clarification.
 - In `completion_gate`, choose `route_to_orchestrator` only when there is no obvious in-scope next step left, the user would not reasonably expect one more same-ticket action, and the normal evidence/integration gates pass.

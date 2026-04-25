@@ -16,13 +16,13 @@ Typical commands:
 
 ```bash
 python3 skills/impl/scripts/tmux_helper.py launch \
-  --ticket tickets/TASK-1234-example.md \
+  --ticket tickets/TASK-1234/ticket.md \
   --phase building
 
 python3 skills/impl/scripts/tmux_helper.py status
 
 python3 skills/impl/scripts/tmux_helper.py followup \
-  --ticket tickets/TASK-1234-example.md \
+  --ticket tickets/TASK-1234/ticket.md \
   --phase documenting \
   --reason "hook-driven continuation"
 ```

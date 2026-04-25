@@ -32,7 +32,7 @@ agent-browser state load test-results/auth.json
 
 ## Escalation notes
 
-- Always include artifact paths in `tickets/artifacts/TASK-XXXX/qa/<timestamp>/visual-qa.md`.
+- Always include artifact paths in `tickets/TASK-XXXX/artifacts/qa/<timestamp>/visual-qa.md`.
 - If the UI is hard to assert (canvas/video/timeline), add stable selectors (`data-testid`) or expose critical state text in DOM.
 - Keep final report shape aligned with `../SKILL.md`: `Expected UI Spec -> Observed Snapshot Report -> Diff Report -> Fix Plan`.
 - If the ticket does not declare the screens/states clearly enough to compare, stop and report underspecified QA before doing deeper browser exploration.

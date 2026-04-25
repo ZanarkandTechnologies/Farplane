@@ -55,6 +55,7 @@ HARD_CONSTRAINTS = {
 SESSION_ORIGINS = {"control", "internal", "non_owning"}
 SESSION_ALIAS_POOL = tuple(f"agent-{index:02d}" for index in range(1, 11))
 EXECUTION_PHASES = {"impl", "qa", "demo"}
+TICKET_PATH_ID_PATTERN = re.compile(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)")
 
 
 def now_iso() -> str:
@@ -131,6 +132,95 @@ def read_ticket_text(path: Path) -> str:
         return ""
 
 
+def tickets_dir(project_root: Path) -> Path:
+    return project_root / "tickets"
+
+
+def ticket_id_from_path(path: Path) -> str:
+    for candidate in (path.parent.name, path.stem, path.name):
+        match = TICKET_PATH_ID_PATTERN.search(candidate)
+        if match:
+            return match.group(1)
+    return ""
+
+
+def canonical_active_ticket_path(project_root: Path, ticket_id: str) -> Path:
+    return tickets_dir(project_root) / ticket_id / "ticket.md"
+
+
+def canonical_archive_ticket_path(project_root: Path, ticket_id: str) -> Path:
+    return tickets_dir(project_root) / "archive" / ticket_id / "ticket.md"
+
+
+def legacy_active_ticket_candidates(project_root: Path, ticket_id: str) -> list[Path]:
+    return sorted(
+        path for path in tickets_dir(project_root).glob(f"{ticket_id}*.md") if path.is_file()
+    )
+
+
+def legacy_archive_ticket_candidates(project_root: Path, ticket_id: str) -> list[Path]:
+    archive_dir = tickets_dir(project_root) / "archive"
+    return sorted(path for path in archive_dir.glob(f"{ticket_id}*.md") if path.is_file())
+
+
+def ticket_path_candidates(project_root: Path, ticket_id: str) -> list[Path]:
+    candidates: list[Path] = []
+    for path in (
+        canonical_active_ticket_path(project_root, ticket_id),
+        *legacy_active_ticket_candidates(project_root, ticket_id),
+        canonical_archive_ticket_path(project_root, ticket_id),
+        *legacy_archive_ticket_candidates(project_root, ticket_id),
+    ):
+        if path not in candidates:
+            candidates.append(path)
+    return candidates
+
+
+def resolve_ticket_path_by_id(
+    project_root: Path,
+    ticket_id: str,
+    *,
+    prefer_archive: bool = False,
+) -> Path | None:
+    if not ticket_id.strip():
+        return None
+    candidates = ticket_path_candidates(project_root, ticket_id.strip())
+    if prefer_archive:
+        candidates = sorted(
+            candidates,
+            key=lambda path: (
+                0 if path.parent.name == ticket_id.strip() and path.parent.parent.name == "archive" else 1,
+                str(path),
+            ),
+        )
+    for path in candidates:
+        if path.is_file():
+            return path
+    return None
+
+
+def iter_active_ticket_files(project_root: Path) -> list[Path]:
+    ticket_root = tickets_dir(project_root)
+    directory_tickets = sorted(
+        path
+        for path in ticket_root.glob("TASK-*/ticket.md")
+        if path.is_file()
+    )
+    legacy_tickets = sorted(
+        path
+        for path in ticket_root.glob("TASK-*.md")
+        if path.is_file()
+    )
+    return directory_tickets + legacy_tickets
+
+
+def ticket_artifact_root(project_root: Path, ticket_path: Path, ticket_id: str = "") -> Path:
+    resolved_ticket_id = ticket_id.strip() or ticket_id_from_path(ticket_path)
+    if ticket_path.name == "ticket.md" and ticket_path.parent.name.startswith("TASK-"):
+        return ticket_path.parent / "artifacts"
+    return tickets_dir(project_root) / "artifacts" / resolved_ticket_id
+
+
 def split_frontmatter(text: str) -> tuple[str, str] | None:
     if not text.startswith("---\n"):
         return None
@@ -182,8 +272,7 @@ def resolve_ticket_path(project_root: Path, current_run: Mapping[str, object]) -
     ticket_id = current_run.get("ticket_id")
     if not isinstance(ticket_id, str) or not ticket_id.strip():
         return None
-    matches = sorted((project_root / "tickets").glob(f"{ticket_id.strip()}*.md"))
-    return matches[0] if matches else None
+    return resolve_ticket_path_by_id(project_root, ticket_id.strip())
 
 
 def has_runtime_ownership(payload: Mapping[str, object] | None) -> bool:
@@ -219,10 +308,9 @@ def set_ticket_claim_alias(project_root: Path, current_run: Mapping[str, object]
 
 
 def clear_ticket_claim_alias(project_root: Path, ticket_id: str, session_name: str) -> None:
-    matches = sorted((project_root / "tickets").glob(f"{ticket_id.strip()}*.md"))
-    if not matches:
+    ticket_path = resolve_ticket_path_by_id(project_root, ticket_id.strip())
+    if ticket_path is None:
         return
-    ticket_path = matches[0]
     text = read_ticket_text(ticket_path)
     parts = split_frontmatter(text)
     if parts is None:
@@ -527,7 +615,7 @@ def ticket_frontmatter_bool(text: str, key: str, *, default: bool = False) -> bo
 
 
 def build_phase_requirements(project_root: Path, ticket_id: str, *, requires_qa: bool, requires_demo: bool) -> dict[str, object]:
-    artifact_root = project_root / "tickets" / "artifacts" / ticket_id
+    artifact_root = canonical_active_ticket_path(project_root, ticket_id).parent / "artifacts"
     requirements: dict[str, object] = {
         "impl": {
             "completion_statuses": ["build_complete", "done"],
@@ -561,7 +649,7 @@ def load_ticket_execution_contract(project_root: Path, ticket_path: str, *, cont
     if control_surface == "demo":
         requires_qa = True
         requires_demo = True
-    ticket_id = extract_ticket_id(ticket_candidate.name) or ticket_candidate.stem
+    ticket_id = ticket_id_from_path(ticket_candidate) or extract_ticket_id(ticket_candidate.name) or ticket_candidate.stem
     return {
         "requires_qa": requires_qa,
         "requires_demo": requires_demo,
@@ -581,15 +669,13 @@ def requested_execution_phase(control_surface: str) -> str:
 
 
 def resolve_ticket_for_impl_seed(project_root: Path, explicit_ticket_id: str) -> tuple[str, str] | None:
-    ticket_root = project_root / "tickets"
     if explicit_ticket_id:
-        matches = sorted(ticket_root.glob(f"{explicit_ticket_id}*.md"))
-        if len(matches) == 1:
-            ticket_path = matches[0]
+        ticket_path = resolve_ticket_path_by_id(project_root, explicit_ticket_id)
+        if ticket_path is not None:
             return (explicit_ticket_id, str(ticket_path))
         return None
 
-    all_tickets = sorted(ticket_root.glob("TASK-*.md"))
+    all_tickets = iter_active_ticket_files(project_root)
     if not all_tickets:
         return None
 
@@ -604,7 +690,7 @@ def resolve_ticket_for_impl_seed(project_root: Path, explicit_ticket_id: str) ->
         return None
 
     ticket_path = candidates[0]
-    ticket_id = extract_ticket_id(ticket_path.name) or ticket_path.stem
+    ticket_id = ticket_id_from_path(ticket_path) or extract_ticket_id(ticket_path.name) or ticket_path.stem
     return ticket_id, str(ticket_path)
 
 

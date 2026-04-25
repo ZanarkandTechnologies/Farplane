@@ -93,7 +93,7 @@ python3 tickets/scripts/check_ticket_metadata.py
 ## Body Contract
 
 - The default `Plan` should answer four things:
-- Store ticket artifacts under `tickets/artifacts/TASK-XXXX/`.
+- Store ticket artifacts under `tickets/TASK-XXXX/artifacts/`.
 
 ## Progress Surface Policy
 

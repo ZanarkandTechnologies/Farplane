@@ -61,7 +61,7 @@ class CheckTicketMetadataTest(unittest.TestCase):
     def test_validator_passes_for_valid_ticket(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
             root = Path(tmpdir)
-            path = root / "TASK-9999-valid-ticket.md"
+            path = root / "TASK-9999" / "ticket.md"
             write_file(path, VALID_TICKET_TEXT)
             errors = self.ticket_metadata.validate_ticket(path)
             self.assertEqual(errors, [])
@@ -69,7 +69,7 @@ class CheckTicketMetadataTest(unittest.TestCase):
     def test_validator_rejects_session_id_in_frontmatter(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
             root = Path(tmpdir)
-            path = root / "TASK-9999-valid-ticket.md"
+            path = root / "TASK-9999" / "ticket.md"
             write_file(
                 path,
                 VALID_TICKET_TEXT.replace("claimed_by:\n", "claimed_by:\nsession_id: sess-123\n"),

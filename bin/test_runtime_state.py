@@ -301,7 +301,7 @@ class RuntimeClaimTests(unittest.TestCase):
                 json.dumps(
                     {
                         "ticket_id": "TASK-0016",
-                        "ticket_path": str(project_root / "tickets" / "TASK-0016-example.md"),
+                        "ticket_path": str(project_root / "tickets" / "TASK-0016" / "ticket.md"),
                         "run_id": "run-task-0016-building-01",
                         "phase": "building",
                         "status": "running",
@@ -334,7 +334,7 @@ class RuntimeClaimTests(unittest.TestCase):
                 json.dumps(
                     {
                         "ticket_id": "TASK-0016",
-                        "ticket_path": str(project_root / "tickets" / "TASK-0016-example.md"),
+                        "ticket_path": str(project_root / "tickets" / "TASK-0016" / "ticket.md"),
                         "run_id": "run-task-0016-building-01",
                         "phase": "building",
                         "status": "running",
@@ -472,7 +472,7 @@ class RuntimeClaimTests(unittest.TestCase):
             project_root = Path(tmp)
             state_dir = project_root / ".harness" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
-            ticket_path = project_root / "tickets" / "TASK-0016-example.md"
+            ticket_path = project_root / "tickets" / "TASK-0016" / "ticket.md"
             ticket_path.parent.mkdir(parents=True, exist_ok=True)
             ticket_path.write_text(
                 """---
@@ -611,7 +611,7 @@ linked_docs: []
             payload = {
                 "ticket_id": "TASK-0042",
                 "current_ticket_id": "TASK-0042",
-                "ticket_path": str(project_root / "tickets" / "TASK-0042.md"),
+                "ticket_path": str(project_root / "tickets" / "TASK-0042" / "ticket.md"),
                 "run_id": "run-task-0042-building-01",
                 "phase": "building",
                 "status": "running",
@@ -698,7 +698,7 @@ linked_docs: []
             project_root = Path(tmp)
             state_dir = project_root / ".harness" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
-            ticket_path = project_root / "tickets" / "TASK-1234-example.md"
+            ticket_path = project_root / "tickets" / "TASK-1234" / "ticket.md"
             ticket_path.parent.mkdir(parents=True, exist_ok=True)
             ticket_path.write_text(
                 """---
@@ -990,7 +990,7 @@ linked_docs: []
             project_root = Path(tmp)
             state_dir = project_root / ".harness" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
-            ticket_path = project_root / "tickets" / "TASK-0042-example.md"
+            ticket_path = project_root / "tickets" / "TASK-0042" / "ticket.md"
             ticket_path.parent.mkdir(parents=True, exist_ok=True)
             ticket_path.write_text(
                 """---
@@ -1040,7 +1040,7 @@ linked_docs: []
             project_root = Path(tmp)
             state_dir = project_root / ".harness" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
-            ticket_path = project_root / "tickets" / "TASK-0043-example.md"
+            ticket_path = project_root / "tickets" / "TASK-0043" / "ticket.md"
             ticket_path.parent.mkdir(parents=True, exist_ok=True)
             ticket_path.write_text(
                 """---

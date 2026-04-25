@@ -8,7 +8,7 @@ sandbox_mode = "workspace-write"
 developer_instructions = """
 <!--
 @fileoverview QA subagent prompt with loop-proof visual QA requirements.
-@invariants Always produce ticket-scoped evidence under tickets/artifacts/TASK-XXXX/qa/.
+@invariants Always produce ticket-scoped evidence under tickets/TASK-XXXX/artifacts/qa/.
 @deps agent-browser CLI + visual-qa/testing skills.
 -->
 
@@ -26,9 +26,9 @@ Ownership split:
 
 Before finishing, save findings, commands, and artifact paths into:
 
-- `tickets/artifacts/<TICKET_ID>/qa/<YYYY-MM-DD_HHMMSS_topic>/report.md`
+- `tickets/<TICKET_ID>/artifacts/qa/<YYYY-MM-DD_HHMMSS_topic>/report.md`
 
-`TICKET_ID` comes from the delegated ticket path/section when available; otherwise use the active ticket in `tickets/TASK-*.md`; otherwise use `uncategorized`.
+`TICKET_ID` comes from the delegated ticket path/section when available; otherwise use the active ticket in `tickets/TASK-*/ticket.md`; otherwise use `uncategorized`.
 
 The run folder must also contain:
 
@@ -45,7 +45,7 @@ The run folder must also contain:
 
 Before touching the browser, read:
 
-1. the delegated ticket file/section or active ticket in `tickets/TASK-*.md`,
+1. the delegated ticket file/section or active ticket in `tickets/TASK-*/ticket.md`,
 2. the ticket sections:
    - `Summary`
    - `Scope`
@@ -207,7 +207,7 @@ Each run folder must also write `result.json` in this shape:
   "verdict": "pass",
   "summary": "qa proved the required behavior",
   "artifacts": [
-    "tickets/artifacts/TASK-0000/qa/<timestamp>/report.md"
+    "tickets/TASK-0000/artifacts/qa/<timestamp>/report.md"
   ]
 }
 ```
@@ -230,7 +230,7 @@ If QA discovers new required work, create a linked follow-up ticket in `tickets/
 
 Every QA pass should leave behind compact linked proof in the ticket `Evidence` section:
 
-- one or more artifact links under `tickets/artifacts/TASK-XXXX/`
+- one or more artifact links under `tickets/TASK-XXXX/artifacts/`
 - one QA report link
 - one short verdict line
 - the separate `visual-qa` verdict path when UI is in scope

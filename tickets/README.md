@@ -1,6 +1,6 @@
 # Tickets
 
-Active work lives in `tickets/TASK-*.md`.
+Active work lives in `tickets/TASK-*/ticket.md`.
 
 One source of truth per concern:
 
@@ -14,10 +14,15 @@ One source of truth per concern:
 
 ```text
 tickets/
-  TASK-0001-example.md
-  TASK-0002-example.md
+  TASK-0001/
+    ticket.md
+    artifacts/
+  TASK-0002/
+    ticket.md
   archive/
-    TASK-0000-finished-example.md
+    TASK-0000/
+      ticket.md
+      artifacts/
   templates/
     ticket.md
 ```
@@ -109,7 +114,8 @@ Run:
 python3 tickets/scripts/check_ticket_metadata.py
 ```
 
-The validator intentionally only checks the flat `tickets/TASK-*.md` surface.
+The validator treats `tickets/TASK-*/ticket.md` as canonical and still tolerates
+legacy flat `tickets/TASK-*.md` files during migration.
 
 ## Body Contract
 
@@ -202,7 +208,7 @@ examples instead of spreading links across extra note sections.
 
 ## Evidence Artifacts
 
-Store ticket artifacts under `tickets/artifacts/TASK-XXXX/`.
+Store ticket artifacts under `tickets/TASK-XXXX/artifacts/`.
 
 Examples:
 

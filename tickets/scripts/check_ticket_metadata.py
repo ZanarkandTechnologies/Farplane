@@ -36,6 +36,7 @@ REQUIRED_FIELDS = {
 }
 TICKET_ID_RE = re.compile(r"^TASK-\d{4}$")
 TICKET_ID_IN_FILENAME_RE = re.compile(r"^(TASK-\d{4})(?:-|$)")
+CANONICAL_TICKET_FILENAME = "ticket.md"
 
 
 def load_ticket(path: Path) -> tuple[dict[str, object], str]:
@@ -106,9 +107,13 @@ def validate_ticket(path: Path) -> list[str]:
     if not TICKET_ID_RE.match(ticket_id):
         errors.append(f"{rel}: invalid ticket_id {ticket_id!r}")
     else:
-        match = TICKET_ID_IN_FILENAME_RE.match(path.stem)
-        if not match or match.group(1) != ticket_id:
-            errors.append(f"{rel}: filename does not match ticket_id {ticket_id}")
+        if path.name == CANONICAL_TICKET_FILENAME:
+            if path.parent.name != ticket_id:
+                errors.append(f"{rel}: parent directory does not match ticket_id {ticket_id}")
+        else:
+            match = TICKET_ID_IN_FILENAME_RE.match(path.stem)
+            if not match or match.group(1) != ticket_id:
+                errors.append(f"{rel}: filename does not match ticket_id {ticket_id}")
 
     phase = str(frontmatter.get("phase", "")).strip()
     if phase and phase not in ALLOWED_PHASES:
@@ -156,7 +161,12 @@ def validate_ticket(path: Path) -> list[str]:
 
 
 def main() -> int:
-    ticket_files = sorted(p for p in TICKETS_DIR.glob("TASK-*.md") if p.is_file())
+    ticket_files = sorted(
+        [
+            *(p for p in TICKETS_DIR.glob("TASK-*/ticket.md") if p.is_file()),
+            *(p for p in TICKETS_DIR.glob("TASK-*.md") if p.is_file()),
+        ]
+    )
     errors: list[str] = []
     for path in ticket_files:
         errors.extend(validate_ticket(path))

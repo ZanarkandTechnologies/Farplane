@@ -72,7 +72,7 @@ Discover what research already exists on a topic.
 | "What do the docs say?" | `docs/research/remote-documentation/` |
 | "What are best practices?" | `docs/research/web-research/` |
 | "What was the plan for X?" | `docs/progress.md` |
-| "What did tests find?" | `tickets/artifacts/` first, then `docs/research/qa-testing/` for historical reports |
+| "What did tests find?" | ticket-local `tickets/TASK-XXXX/artifacts/` first, then `docs/research/qa-testing/` for historical reports |
 
 ---
 
