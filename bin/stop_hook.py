@@ -26,6 +26,7 @@ MEMORY REFERENCES:
 import json
 import os
 import re
+import secrets
 import subprocess
 import sys
 import tempfile
@@ -73,6 +74,7 @@ ROLE_ACTIONS = {
 PASS_FAIL_VALUES = {"pass", "fail"}
 INTENT_ALIGNMENT_STATES = {"aligned", "soft_mismatch", "hard_mismatch", "unknown"}
 IMPL_LOOPABLE_PHASES = {"building"}
+COMPLETION_REVIEW_VERDICTS = {"pass", "revise", "block"}
 
 
 def env_enabled() -> bool:
@@ -603,6 +605,16 @@ def parse_updated_at(raw: object) -> datetime | None:
     except ValueError:
         return None
     return parsed.astimezone().replace(second=0, microsecond=0)
+
+
+def parse_timestamp(raw: object) -> datetime | None:
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        parsed = datetime.fromisoformat(raw.strip().replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed.astimezone()
 
 
 def normalize_artifact_reference(ticket_path: Path, raw: str) -> Path | None:
@@ -1242,6 +1254,182 @@ def phase_result_gate(ticket: dict[str, object], current_run: dict[str, object] 
         return False, f"{phase_name} result gates are not passing", failures, payload
 
     return True, "", [], payload
+
+
+def completion_review_receipt_paths(paths: list[str]) -> list[str]:
+    return [
+        path
+        for path in paths
+        if "/review/" in path and path.endswith(".json") and "completion-receipt" in Path(path).name
+    ]
+
+
+def generate_completion_review_nonce() -> str:
+    return "CR-" + secrets.token_hex(3).upper()
+
+
+def build_completion_review_request(
+    ticket: dict[str, object],
+    current_run: dict[str, object] | None,
+    last_user_turn: dict[str, object] | None,
+) -> dict[str, object]:
+    linked_artifacts = [str(item) for item in list(ticket.get("linked_artifacts") or []) if isinstance(item, str)]
+    return {
+        "ticket_id": str(ticket["ticket_id"]),
+        "nonce": generate_completion_review_nonce(),
+        "requested_at": now_iso(),
+        "artifact_root": str(ticket.get("artifact_root") or ""),
+        "execution_phase": current_execution_phase(current_run),
+        "last_user_turn_summary": str((last_user_turn or {}).get("summary") or "").strip(),
+        "required_artifacts": linked_artifacts[:12],
+        "reason": "run visible completion review",
+    }
+
+
+def build_completion_review_request_message(
+    ticket: dict[str, object],
+    request: dict[str, object],
+    *,
+    failure_reason: str = "",
+) -> str:
+    ticket_id = str(ticket["ticket_id"])
+    nonce = str(request.get("nonce") or "").strip()
+    artifacts = [
+        f"- `{item}`"
+        for item in request.get("required_artifacts", [])
+        if isinstance(item, str) and item.strip()
+    ]
+    artifact_block = "\n".join(artifacts) if artifacts else "- linked ticket-scoped artifacts already on the ticket"
+    reason_prefix = (
+        f"Stop hook validated the phase and artifact gates, but {failure_reason.strip()}.\n\n"
+        if failure_reason.strip()
+        else "Stop hook validated the phase and artifact gates, but final completion still needs a visible review receipt.\n\n"
+    )
+    return (
+        f"Continue {ticket_id} in building.\n\n"
+        + reason_prefix
+        + "Run a visible reviewer pass now. Use the `review` skill against the active ticket, then write "
+        f"`tickets/{ticket_id}/artifacts/review/<timestamp>-completion-receipt.json` with this exact nonce: `{nonce}`.\n\n"
+        "Required receipt fields:\n"
+        "- `receipt_type`: `completion_review`\n"
+        f"- `ticket_id`: `{ticket_id}`\n"
+        f"- `nonce`: `{nonce}`\n"
+        "- `reviewed_at`: ISO timestamp\n"
+        "- `reviewer_mode`: `visible_review_lane`\n"
+        "- `reviewed_artifacts`: array of artifact paths you judged\n"
+        "- `verdict`: `pass|revise|block`\n"
+        "- `satisfies_user_query`: boolean\n"
+        "- `user_query_reason`: concrete reason\n"
+        "- `obvious_next_step`: concrete next step or empty string\n"
+        "- `review_artifact`: path to the main linked review artifact\n\n"
+        "Artifacts this receipt should cover:\n"
+        f"{artifact_block}\n\n"
+        "Link the receipt from the ticket `Evidence` section and finish with "
+        "`IMPL_RESULT: status=done next=building reason=completion review receipt written`."
+    )
+
+
+def load_completion_review_receipt(path: Path) -> dict[str, object] | None:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(payload, dict):
+        return None
+    receipt = dict(payload)
+    receipt["_path"] = str(path.resolve())
+    return receipt
+
+
+def completion_review_receipt_gate(
+    ticket: dict[str, object],
+    current_run: dict[str, object] | None,
+) -> tuple[bool, str, list[str], dict[str, object] | None]:
+    failures: list[str] = []
+    pending_nonce = str((current_run or {}).get("completion_review_nonce") or "").strip()
+    if not pending_nonce:
+        return False, "completion review receipt gates are not passing", ["completion_review_nonce=missing"], None
+
+    requested_at = parse_timestamp((current_run or {}).get("completion_review_requested_at"))
+    linked_paths = completion_review_receipt_paths([str(item) for item in list(ticket.get("linked_artifacts") or []) if isinstance(item, str)])
+    artifact_paths = completion_review_receipt_paths([str(item) for item in list(ticket.get("artifact_files") or []) if isinstance(item, str)])
+
+    if not linked_paths:
+        if artifact_paths:
+            failures.append(f"completion_review_receipt=unlinked:{artifact_paths[-1]}")
+        else:
+            failures.append("completion_review_receipt=missing")
+        return False, "completion review receipt gates are not passing", failures, None
+
+    candidates: list[dict[str, object]] = []
+    for raw_path in linked_paths:
+        receipt = load_completion_review_receipt(Path(raw_path))
+        if receipt is None:
+            failures.append(f"completion_review_receipt=invalid_json:{raw_path}")
+            continue
+        candidates.append(receipt)
+
+    matching = [item for item in candidates if str(item.get("nonce") or "").strip() == pending_nonce]
+    if not matching:
+        if candidates:
+            observed = str(candidates[-1].get("nonce") or "").strip() or "missing"
+            failures.append(f"completion_review_nonce=mismatch:{observed}")
+        else:
+            failures.append("completion_review_receipt=missing")
+        return False, "completion review receipt gates are not passing", failures, None
+
+    receipt = max(
+        matching,
+        key=lambda item: Path(str(item["_path"])).stat().st_mtime,
+    )
+    receipt_path = Path(str(receipt["_path"]))
+    ticket_id = str(receipt.get("ticket_id") or "").strip()
+    verdict = str(receipt.get("verdict") or "").strip()
+    receipt_type = str(receipt.get("receipt_type") or "").strip()
+    reviewer_mode = str(receipt.get("reviewer_mode") or "").strip()
+    review_artifact = str(receipt.get("review_artifact") or "").strip()
+    user_query_reason = str(receipt.get("user_query_reason") or "").strip()
+    obvious_next_step = str(receipt.get("obvious_next_step") or "").strip()
+    reviewed_artifacts = receipt.get("reviewed_artifacts")
+    satisfies_user_query = receipt.get("satisfies_user_query")
+    receipt_time = parse_timestamp(receipt.get("reviewed_at"))
+    if receipt_time is None:
+        receipt_time = datetime.fromtimestamp(receipt_path.stat().st_mtime, timezone.utc).astimezone()
+    ticket_updated_at = parse_updated_at(ticket.get("updated_at"))
+
+    if receipt_type != "completion_review":
+        failures.append(f"completion_review_receipt_type={receipt_type or 'missing'}")
+    if ticket_id != str(ticket["ticket_id"]):
+        failures.append(f"completion_review_ticket_id={ticket_id or 'missing'}")
+    if reviewer_mode != "visible_review_lane":
+        failures.append(f"completion_review_reviewer_mode={reviewer_mode or 'missing'}")
+    if verdict not in COMPLETION_REVIEW_VERDICTS:
+        failures.append(f"completion_review_verdict={verdict or 'missing'}")
+    elif verdict != "pass":
+        failures.append(f"completion_review_verdict={verdict}")
+    if not isinstance(reviewed_artifacts, list) or not reviewed_artifacts:
+        failures.append("completion_review_reviewed_artifacts=missing")
+    elif any(not isinstance(item, str) or not item.strip() for item in reviewed_artifacts):
+        failures.append("completion_review_reviewed_artifacts=invalid")
+    if not isinstance(satisfies_user_query, bool):
+        failures.append("completion_review_satisfies_user_query=missing")
+    elif not satisfies_user_query:
+        failures.append("completion_review_satisfies_user_query=false")
+    if not review_artifact:
+        failures.append("completion_review_review_artifact=missing")
+    if requested_at is not None and receipt_time.replace(second=0, microsecond=0) < requested_at.replace(second=0, microsecond=0):
+        failures.append("completion_review_receipt=stale")
+    if ticket_updated_at is not None and receipt_time.replace(second=0, microsecond=0) < ticket_updated_at:
+        failures.append("completion_review_receipt=stale")
+    if not satisfies_user_query and user_query_reason:
+        failures.append(f"completion_review_user_query_reason={user_query_reason}")
+    if verdict in {"revise", "block"} and obvious_next_step:
+        failures.append(f"completion_review_next_step={obvious_next_step}")
+
+    if failures:
+        return False, "completion review receipt gates are not passing", failures, receipt
+
+    return True, "", [], receipt
 
 
 def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[str]]:
@@ -2580,113 +2768,154 @@ def main() -> int:
                     announce=f"Impl phase accepted. Next: {next_phase or 'none'}",
                 )
 
-            review = run_role(
-                base,
-                "completion-reviewer",
-                reviewer_prompt(
-                    message,
-                    ticket,
-                    current_run,
-                    verdict,
-                    mode="completion_gate",
-                ),
-            )
-            if review is None:
-                current_run = persist_impl_loop_active(project_root, current_run, False)
+            if project_root is None or current_run is None:
                 append_hook_log(
                     base,
                     {
                         "timestamp": now_iso(),
-                        "mode": "completion-reviewer",
+                        "mode": "completion-review",
                         "ticket_id": str(ticket["ticket_id"]),
-                        "outcome": "role_unavailable",
+                        "outcome": "runtime_state_missing",
                     },
                 )
-                announce_message("Reviewer unavailable. Stopping safely.")
-                return emit_stop_payload(system_message=f"Stop hook: {hook_summary}. Reviewer unavailable.")
+                current_run = persist_impl_loop_active(project_root, current_run, False)
+                announce_message("Completion review requires active runtime state. Stopping safely.")
+                return emit_stop_payload(system_message=f"Stop hook: {hook_summary}. Completion review runtime state missing.")
 
-            review_action = str(review["action"])
-            review_reason = str(review["reason"])
-            review_summary = summarize_role_action(str(ticket["ticket_id"]), "completion-reviewer", review_action, review_reason)
-            append_hook_log(
-                base,
-                {
-                    "timestamp": now_iso(),
-                    "mode": "completion-reviewer",
-                    "ticket_id": str(ticket["ticket_id"]),
-                    "action": review_action,
-                    "reason": review_reason,
-                    "overall_score": review.get("overall_score"),
-                    "evidence_quality": review.get("evidence_quality"),
-                    "integration_readiness": review.get("integration_readiness"),
-                    "traceability": review.get("traceability"),
-                    "freshness": review.get("freshness"),
-                    "qa_quality": review.get("qa_quality"),
-                    "demo_quality": review.get("demo_quality"),
-                    "stakeholder_readiness": review.get("stakeholder_readiness"),
-                    "stakeholder_readiness_reason": review.get("stakeholder_readiness_reason"),
-                    "best_demo_artifact": review.get("best_demo_artifact"),
-                    "storyline_gaps": review.get("storyline_gaps", []),
-                    "rerun_required": review.get("rerun_required"),
-                    "blocking_findings": review.get("blocking_findings", []),
-                },
-            )
-            current_run = publish_hook_status(project_root, current_run, decision=review_action, summary=review_summary)
-            reviewer_gate_ok, reviewer_gate_reason, reviewer_gate_failures = validate_reviewer_gate(review)
-            if not reviewer_gate_ok:
-                if not impl_loop_allowed:
-                    current_run = persist_impl_loop_active(project_root, current_run, False)
-                    announce_message("Stopping safely. Reviewer asked for same-ticket impl continuation without an active session claim.")
-                    return emit_stop_payload(
-                        continue_value=False,
-                        stop_reason="completion-reviewer requested same-ticket impl continuation without an active impl loop",
-                        system_message=f"Stop hook: {review_summary}",
-                    )
+            pending_nonce = str(current_run.get("completion_review_nonce") or "").strip()
+            if not pending_nonce:
+                request = build_completion_review_request(ticket, current_run, last_user_turn)
+                request_summary = f"completion-review-request: {ticket['ticket_id']} -> {request['nonce']}"
                 current_run = persist_impl_loop_active(project_root, current_run, True)
-                continuation_message = (
-                    str(review.get("continuation_message", "")).strip()
-                    or f"Continue {ticket['ticket_id']} in building and resolve completion-reviewer gate failures: "
-                    + "; ".join(reviewer_gate_failures[:2])
+                current_run = persist_runtime_update(
+                    project_root,
+                    current_run,
+                    {
+                        "completion_review_requested": True,
+                        "completion_review_nonce": str(request["nonce"]),
+                        "completion_review_requested_at": str(request["requested_at"]),
+                        "completion_review_receipt_path": "",
+                        "completion_review_receipt_status": "requested",
+                        "status": "waiting_for_worker",
+                    },
+                )
+                current_run = publish_hook_status(
+                    project_root,
+                    current_run,
+                    decision="continue_same_ticket",
+                    summary=request_summary,
+                )
+                append_hook_log(
+                    base,
+                    {
+                        "timestamp": now_iso(),
+                        "mode": "completion-review",
+                        "ticket_id": str(ticket["ticket_id"]),
+                        "action": "request_receipt",
+                        "nonce": request["nonce"],
+                        "required_artifacts": request["required_artifacts"],
+                    },
                 )
                 return continue_hook_response(
                     payload=payload,
                     ticket=ticket,
-                    continuation_message=continuation_message,
-                    hook_summary=review_summary,
-                    announce=reviewer_gate_reason,
+                    continuation_message=build_completion_review_request_message(ticket, request),
+                    hook_summary=request_summary,
+                    announce=f"Visible completion review required for {ticket['ticket_id']}.",
                 )
-            if review_action == "continue_same_ticket":
+
+            receipt_ok, receipt_reason, receipt_failures, receipt = completion_review_receipt_gate(ticket, current_run)
+            receipt_path = str((receipt or {}).get("_path") or "").strip()
+            receipt_summary = (
+                f"completion-review-receipt: {ticket['ticket_id']} -> pass"
+                if receipt_ok
+                else f"completion-review-receipt: {ticket['ticket_id']} -> continue_same_ticket ({receipt_reason})"
+            )
+            append_hook_log(
+                base,
+                {
+                    "timestamp": now_iso(),
+                    "mode": "completion-review",
+                    "ticket_id": str(ticket["ticket_id"]),
+                    "nonce": pending_nonce,
+                    "receipt_path": receipt_path,
+                    "receipt_ok": receipt_ok,
+                    "failures": receipt_failures,
+                },
+            )
+            if not receipt_ok:
                 if not impl_loop_allowed:
                     current_run = persist_impl_loop_active(project_root, current_run, False)
                     announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
                     return emit_stop_payload(
                         continue_value=False,
-                        stop_reason="continue_same_ticket requested without an active impl loop",
-                        system_message=f"Stop hook: {review_summary}",
+                        stop_reason="completion review receipt requested without an active impl loop",
+                        system_message=f"Stop hook: {receipt_summary}",
                     )
                 current_run = persist_impl_loop_active(project_root, current_run, True)
-                continuation_message = str(review.get("continuation_message", "")).strip() or build_reason(ticket)
+                current_run = persist_runtime_update(
+                    project_root,
+                    current_run,
+                    {
+                        "completion_review_requested": True,
+                        "completion_review_receipt_path": receipt_path,
+                        "completion_review_receipt_status": "failed",
+                        "status": "waiting_for_worker",
+                    },
+                )
+                current_run = publish_hook_status(
+                    project_root,
+                    current_run,
+                    decision="continue_same_ticket",
+                    summary=receipt_summary,
+                )
+                request = {
+                    "ticket_id": str(ticket["ticket_id"]),
+                    "nonce": pending_nonce,
+                    "required_artifacts": list(ticket.get("linked_artifacts") or [])[:12],
+                }
+                failure_message = receipt_failures[0] if receipt_failures else receipt_reason
+                continuation_message = build_completion_review_request_message(
+                    ticket,
+                    request,
+                    failure_reason=f"the completion review receipt is still not acceptable ({failure_message})",
+                )
                 return continue_hook_response(
                     payload=payload,
                     ticket=ticket,
                     continuation_message=continuation_message,
-                    hook_summary=review_summary,
-                    announce=str(review.get("speak", "")).strip() or review_reason,
+                    hook_summary=receipt_summary,
+                    announce=receipt_reason,
                 )
-            if review_action == "route_to_orchestrator":
-                current_run = persist_impl_loop_active(project_root, current_run, False)
-                return run_orchestrator_decision(
-                    base=base,
-                    home=home,
-                    project_root=project_root,
-                    payload=payload,
-                    current_run=current_run,
-                    ticket=ticket,
-                    verdict=verdict,
-                )
+
             current_run = persist_impl_loop_active(project_root, current_run, False)
-            announce_message(str(review.get("speak", "")).strip() or review_reason)
-            return emit_stop_payload(system_message=f"Stop hook: {review_summary}")
+            current_run = persist_runtime_update(
+                project_root,
+                current_run,
+                {
+                    "completion_review_requested": False,
+                    "completion_review_nonce": "",
+                    "completion_review_requested_at": "",
+                    "completion_review_receipt_path": receipt_path,
+                    "completion_review_receipt_status": "pass",
+                    "status": "complete",
+                },
+            )
+            current_run = publish_hook_status(
+                project_root,
+                current_run,
+                decision="route_to_orchestrator",
+                summary=receipt_summary,
+            )
+            return run_orchestrator_decision(
+                base=base,
+                home=home,
+                project_root=project_root,
+                payload=payload,
+                current_run=current_run,
+                ticket=ticket,
+                verdict=verdict,
+            )
         current_run = persist_impl_loop_active(project_root, current_run, False)
         announce_message(f"Stopping for operator review. {reason}")
         return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
