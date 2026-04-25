@@ -4,7 +4,7 @@ Reusable browser-QA guidance lives here.
 
 This folder is for durable how-to surfaces that make UI verification fast,
 deterministic, and easy to automate. It is not the place for per-ticket proof
-artifacts. Those still belong under `tickets/artifacts/TASK-XXXX/`.
+artifacts. Those still belong under `tickets/TASK-XXXX/artifacts/`.
 
 ## Recommendation
 

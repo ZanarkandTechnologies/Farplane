@@ -26,7 +26,7 @@ The repo is organized around five concerns:
 AGENTS.md -> ARCHITECTURE.md -> canonical docs/tickets -> skills/agents/bin
 
 idea/request
-  -> bootstrap when needed (`init-project`, `docs/bootstrap-brief.md`)
+  -> bootstrap when needed (`deep-init-project`, `docs/bootstrap-brief.md`)
   -> discovery (`brainstorm`, `deep-interview`, `prd`)
   -> specs (`docs/specs/*`)
   -> ticketization (`skills/spec-to-ticket`)
@@ -112,7 +112,7 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 
 - Root docs should stay map-like.
 - Detailed behavior belongs in `docs/specs/*`.
-- Ticket-local state belongs in `tickets/TASK-*.md`, not in chat.
+- Ticket-local state belongs in `tickets/TASK-*/ticket.md`, not in chat.
 - Reusable QA shortcuts and deterministic browser-entry guidance belong in
   `qa/cookbook/*`, not in ticket prose or transient chat.
 - Review scoring belongs in `skills/review/*`.

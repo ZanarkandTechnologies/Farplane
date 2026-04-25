@@ -8,13 +8,13 @@ and humans reach important app states quickly and deterministically.
 - keep durable browser-test entry guidance out of chat transcripts
 - store shortcuts, deep links, seeded fixtures, and debug hooks that make UI
   proof fast
-- complement `tickets/artifacts/` instead of replacing it
+- complement ticket-local `tickets/TASK-XXXX/artifacts/` instead of replacing it
 
 ## Rules
 
 - use `qa/` for reusable guidance, not per-run evidence
 - keep screenshots, logs, traces, and one-off reports under
-  `tickets/artifacts/TASK-XXXX/`
+  `tickets/TASK-XXXX/artifacts/`
 - prefer Playwright for stable UX regression coverage
 - use `agent-browser` to discover flows quickly, capture proof while iterating,
   and debug failing Playwright coverage

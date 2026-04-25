@@ -314,7 +314,7 @@ When threshold is met (or the user exits with warning / hard cap):
 
 ### Canonical write-back rule
 
-When the project has been bootstrapped with `init-project`, durable system design should live on normal Codexter surfaces:
+When the project has been bootstrapped with `deep-init-project`, durable system design should live on normal Codexter surfaces:
 
 - spec-level reusable architecture doctrine -> `docs/specs/<slug>.md`
 - ticket-local implementation-oriented design summary -> active ticket

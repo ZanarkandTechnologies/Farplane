@@ -14,7 +14,7 @@ Deep Interview is an intent-first Socratic clarification loop before planning or
 - The user wants to avoid misaligned implementation from underspecified requirements
 - You need a requirements artifact before handing off to `impl-plan`, `autopilot`, `impl`, or `team`
 - You are bootstrapping a new or migrated project and need stack, topology, and
-  quality-gate decisions clarified before `init-project` scaffolds files
+  quality-gate decisions clarified before `deep-init-project` scaffolds files
 </Use_When>
 
 <Do_Not_Use_When>
@@ -33,7 +33,7 @@ Execution quality is usually bottlenecked by intent clarity, not just missing im
 - **Standard (`--standard`, default)**: full requirement interview; target threshold `<= 0.20`; max rounds 12
 - **Deep (`--deep`)**: high-rigor exploration; target threshold `<= 0.15`; max rounds 20
 - **Autoresearch (`--autoresearch`)**: same interview rigor as Standard, but specialized for research-brief launch readiness and a Codexter-native handoff through the active ticket or a deliberate `docs/research/` draft when the user explicitly wants durable research artifacts
-- **Bootstrap (`--bootstrap`)**: same interview rigor as Standard, but specialized for project bootstrap readiness and a Codexter-native handoff through `docs/bootstrap-brief.md` for `init-project`
+- **Bootstrap (`--bootstrap`)**: same interview rigor as Standard, but specialized for project bootstrap readiness and a Codexter-native handoff through `docs/bootstrap-brief.md` for `deep-init-project`
 
 If no flag is provided, use **Standard**.
 
@@ -42,7 +42,7 @@ If no flag is provided, use **Standard**.
   mode, the interview should converge on a scaffold-ready bootstrap brief that
   captures project goal, topology recommendation, stack choices, local quality
   gates, large-file policy, shared utility conventions, and explicit decision
-  boundaries for `init-project`.
+  boundaries for `deep-init-project`.
 - **`--autoresearch`**: switch the interview into research-intake mode. In this mode, the interview should converge on a launch-ready research mission, keep the current requirements brief on live Codexter surfaces, and preserve the explicit `refine further` vs `launch` boundary for downstream handoff.
 </Mode_Flags>
 </Depth_Profiles>
@@ -258,8 +258,9 @@ and emit a scaffold-consumable artifact without skipping clarification.
 
 - **Required interview focus:** project goal, audience, likely scale, topology
   recommendation, stack defaults, required local checks, optional heavy checks,
-  large-file policy, shared utility convention, and what `init-project` may
-  decide without further confirmation
+  local git-hook activation policy, local-vs-CI/deploy gate split,
+  large-file policy, shared utility convention, and what `deep-init-project`
+  may decide without further confirmation
 - **Canonical artifact surface:** `docs/bootstrap-brief.md`
 - **Bootstrap artifact bundle:** one current Codexter brief containing
   `Summary`, `Intent`, `Recommended Shape`, `Stack Decisions`,
@@ -267,9 +268,10 @@ and emit a scaffold-consumable artifact without skipping clarification.
   `Decision Boundaries`, and `Defaults Chosen`
 - **Structured result contract:** the chosen brief should carry the finalized
   `projectShape`, `topologyRecommendation`, `stackDefaults`, `localChecks`,
-  `heavyChecks`, `fileSizePolicy`, `utilityPolicy`, and `defaultsChosen` fields
-  so `init-project` can scaffold from it directly
-- **Handoff rule:** downstream `init-project` scaffolding should preserve the
+  `heavyChecks`, `hookPolicy`, `hookActivationChoice`, `deployGatePolicy`,
+  `fileSizePolicy`, `utilityPolicy`, and `defaultsChosen` fields so
+  `deep-init-project` can scaffold from it directly
+- **Handoff rule:** downstream `deep-init-project` scaffolding should preserve the
   clarified bootstrap intent and decision boundaries instead of re-asking the
   same bootstrap questions in a second shallow loop
 
@@ -277,12 +279,13 @@ and emit a scaffold-consumable artifact without skipping clarification.
 
 Present execution options after artifact generation using explicit handoff contracts. Treat the deep-interview spec as the current requirements source of truth and preserve intent, non-goals, decision boundaries, acceptance criteria, and any residual-risk warnings across the handoff.
 
-### 0. **`init-project`**
+### 0. **`deep-init-project`**
 - **Input Artifact:** `docs/bootstrap-brief.md`
-- **Invocation:** `$init-project <repo or migration target>`
+- **Invocation:** `$deep-init-project <repo or migration target>`
 - **Consumer Behavior:** Treat the bootstrap brief as the current source of
-  truth for scaffold defaults, topology recommendation, validator shape, and
-  shared utility conventions
+  truth for scaffold defaults, topology recommendation, validator shape,
+  hook-routing policy, CI/deploy gate decisions, and shared utility
+  conventions
 - **Skipped / Already-Satisfied Stages:** bootstrap ambiguity reduction and
   project-shape intake
 - **Expected Output:** scaffolded project files, visible hook samples, and
@@ -370,7 +373,7 @@ Present execution options after artifact generation using explicit handoff contr
 - [ ] Interview summary written to the active ticket or the current response handoff
 - [ ] Requirements brief written to the active ticket or the selected Codexter handoff artifact
 - [ ] Brownfield questions use evidence-backed confirmation when applicable
-- [ ] Handoff options provided (`$init-project`, `$impl-plan`, `$autopilot`, `$impl`, `$team`)
+- [ ] Handoff options provided (`$deep-init-project`, `$impl-plan`, `$autopilot`, `$impl`, `$team`)
 - [ ] No direct implementation performed in this mode
 </Final_Checklist>
 

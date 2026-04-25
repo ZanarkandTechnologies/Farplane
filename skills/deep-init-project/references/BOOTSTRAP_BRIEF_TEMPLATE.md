@@ -28,8 +28,13 @@ finalizing the scaffold.
 
 ## Validation and Hooks
 - Required local checks:
-- Optional heavy checks:
+- Optional heavy local checks:
 - Hook policy:
+- Hook activation choice:
+- Preferred hook stages:
+- CodeRabbit policy:
+- Desloppify policy:
+- Separate CI / deployment gate:
 - TypeScript typecheck policy:
 
 ## Agent Experience / Testability

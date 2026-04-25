@@ -24,7 +24,7 @@ This file is loaded every loop. Keep it operational and project-specific.
 - Memory: `docs/MEMORY.md`
 - Troubles: `docs/TROUBLES.md`
 - Taste: `docs/TASTE.md`
-- Tickets: active `tickets/TASK-*.md`, completed `tickets/archive/TASK-*.md`
+- Tickets: active `tickets/TASK-*/ticket.md`, completed `tickets/archive/TASK-*/ticket.md`
 
 ## Context First (Always)
 

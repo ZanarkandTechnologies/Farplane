@@ -221,7 +221,7 @@ When threshold is met (or the user exits with warning / hard cap):
 
 ### Canonical write-back rule
 
-When the project has been bootstrapped with `init-project`, `docs/TASTE.md` is
+When the project has been bootstrapped with `deep-init-project`, `docs/TASTE.md` is
 the canonical durable home for the full `Taste Brief`.
 
 Use this write-back policy:

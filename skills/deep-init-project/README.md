@@ -1,4 +1,4 @@
-# Init Project
+# Deep Init Project
 
 Bootstrap or migrate a project into the docs-first, ticket-first harness model.
 This setup should start with a deep-interview-quality bootstrap intake, then
@@ -16,11 +16,15 @@ agent-efficient verification guidance, without enabling hooks automatically.
 Use the bootstrap script:
 
 ```bash
-bash ~/.codex/skills/init-project/scripts/bootstrap.sh
+bash ~/.codex/skills/deep-init-project/scripts/bootstrap.sh
 ```
 
 Before finalizing the scaffold, run a bootstrap intake with the same discipline
 as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
+That intake should explicitly answer whether local hooks should be enabled, what
+belongs in `pre-push` or `pre-commit`, which heavy local checks such as
+`desloppify` or `CodeRabbit` are desired, and whether a separate CI/deployment
+gate exists.
 
 That also writes `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
@@ -58,7 +62,7 @@ Then copy in:
 The bootstrap script can still help:
 
 ```bash
-bash ~/.codex/skills/init-project/scripts/bootstrap.sh .
+bash ~/.codex/skills/deep-init-project/scripts/bootstrap.sh .
 ```
 
 Use `--force` only if you want to overwrite files that already exist.
@@ -132,6 +136,7 @@ Those can come after one clean ticket run.
 ## Migration Checklist
 
 - [ ] `docs/bootstrap-brief.md` exists and captures stack/topology/gate decisions
+- [ ] `docs/bootstrap-brief.md` captures local-hook, heavy-check, and CI/deploy-gate decisions
 - [ ] `docs/bootstrap-brief.md` captures agent-experience/testability decisions
 - [ ] `PROJECT_RULES.md` exists
 - [ ] `AGENTS.md` exists

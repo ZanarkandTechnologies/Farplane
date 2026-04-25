@@ -1,10 +1,10 @@
 ---
-name: init-project
-version: 2.9.0
-description: "One-time setup workflow for new projects. Use a deep-interview-quality bootstrap intake, then scaffold docs-first operating files, visible quality gates, and reusable plan/build prompts."
+name: deep-init-project
+version: 3.0.0
+description: "Deep bootstrap workflow for new projects. Use a deep-interview-quality intake, then scaffold docs-first operating files, explicit local-vs-deploy quality-gate decisions, and reusable plan/build prompts."
 ---
 
-# Init Project Skill
+# Deep Init Project Skill
 
 One-time setup for new projects. This skill should not feel like a shallow
 scaffold dump. Start with a deep-interview-quality bootstrap intake, capture a
@@ -76,16 +76,36 @@ bootstrap source of truth for:
 - stack choices and defaults
 - required local validators (`lint`, `typecheck`, `test`, optional `build`)
 - optional heavy gates (`desloppify`, `CodeRabbit`)
+- whether local git hooks should stay manual, be suggested for activation, or
+  stay disabled
+- which hook stages matter (`pre-push`, `pre-commit`, neither, or both)
+- whether CodeRabbit and `desloppify` belong in local hooks, separate manual
+  workflows, CI, or nowhere for v1
+- whether a separate CI or deployment gate exists beyond local git hooks
 - agent-experience/testability defaults such as shortcuts, seed/reset paths,
   probes, and browser proof strategy
 - large-file policy (`500` warn, `1000` block by default)
 - shared utility placement convention
 - decision boundaries for what the scaffold may choose automatically
 
+Required gate questions:
+
+1. Should local git hooks remain opt-in, or should the repo recommend enabling
+   `.githooks` immediately after bootstrap?
+2. Which local hook stages should exist for this repo: `pre-push`, `pre-commit`,
+   both, or neither?
+3. Which local validators must run before push: `lint`, `typecheck`, `test`,
+   optional `build`, or other project-specific checks?
+4. Should heavy local checks such as `desloppify` or `CodeRabbit` run in local
+   hooks, manual workflows, CI, or not at all initially?
+5. What separate CI or deployment gate exists, and which checks belong there
+   instead of local hooks?
+6. What should the scaffold leave manual versus auto-decided for the operator?
+
 ### Fast path
 
 ```bash
-bash ~/.codex/skills/init-project/scripts/bootstrap.sh
+bash ~/.codex/skills/deep-init-project/scripts/bootstrap.sh
 ```
 
 The bootstrap script writes the visible brief template plus the scaffold files.
@@ -94,8 +114,8 @@ repo.
 
 ### Manual steps
 
-1. Run a deep-interview-quality bootstrap intake and write the answers into
-   `docs/bootstrap-brief.md`.
+1. Run a deep-interview-quality bootstrap intake, answer the required
+   gate-routing questions, and write the answers into `docs/bootstrap-brief.md`.
 2. Copy `references/PROJECT_RULES_TEMPLATE.md` -> `PROJECT_RULES.md`.
 3. Copy `references/AGENTS_TEMPLATE.md` -> `AGENTS.md`.
 4. Copy `references/ARCHITECTURE_TEMPLATE.md` -> `ARCHITECTURE.md`.
@@ -123,6 +143,8 @@ repo.
    - keep the file-size scan as-is
    - fill the project commands for `lint`, `typecheck`, `test`, optional
      `build`, and optional `desloppify`
+   - align hook activation, local heavy checks, and any separate CI/deploy gate
+     with the brief instead of guessing
 10. Fill the bootstrap brief's `Agent Experience / Testability` section so the
     repo has an early answer for how agents should reach, inspect, stabilize,
     and verify important app states.
@@ -163,8 +185,11 @@ Migration guide:
   the project instead of burying lint/typecheck/test commands in the git hook.
 - queue state should live in ticket frontmatter rather than folder lanes.
 - `brainstorm` and `deep-interview` keep weak ideas from reaching tickets too early.
-- `deep-interview` owns the interview loop quality. `init-project` should reuse
+- `deep-interview` owns the interview loop quality. `deep-init-project` should reuse
   that discipline, not fork it into a second shallow intake.
+- bootstrap should ask explicitly how local git hooks relate to CI or deploy
+  protection so generated repos do not confuse optional local gates with actual
+  deployment checks
 - bootstrap should ask how agents move through the product efficiently and
   should leave behind visible QA surfaces instead of keeping those answers in chat
 - Agents can find specs, plan, and validation commands without hunting through nested files.
@@ -189,6 +214,9 @@ The generated planning flow should follow these defaults:
 - Do not skip from a fuzzy idea directly to `prd`; use `brainstorm` or `deep-interview` first when the first slice is not obvious.
 - Do not auto-enable the scaffolded git hooks; leave activation as an explicit
   `git config core.hooksPath .githooks` choice by the human.
+- Do not blur local hook policy with deploy/CI policy; capture both explicitly
+  in `docs/bootstrap-brief.md` before treating them as part of the scaffold
+  default.
 - Put project-specific lint, typecheck, test, and optional build gates into
   `scripts/pre_push_check.sh`; keep the large-file scan intact and treat
   CodeRabbit as optional after those local checks, not as the only pre-push

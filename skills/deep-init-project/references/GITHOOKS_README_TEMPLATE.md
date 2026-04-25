@@ -1,6 +1,6 @@
 # Git Hooks
 
-These hooks are optional. `init-project` scaffolds them so each repo has a
+These hooks are optional. `deep-init-project` scaffolds them so each repo has a
 clear place for local quality gates, but nothing is enabled automatically.
 
 ## Recommended Default
