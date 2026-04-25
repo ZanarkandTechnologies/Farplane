@@ -1,6 +1,7 @@
 # Spec Contract
 
-Use when reviewing a spec, ticket contract, or user-story slice before implementation.
+Use when reviewing a spec, ticket contract, or ticket plan before
+implementation.
 
 Threshold: `4.0`
 
@@ -19,13 +20,13 @@ Threshold: `4.0`
 
 - `story-coherence`
 - `parallelization-fit`
-- `slice-sizing`
+- `ticket-sizing`
 - `acceptance-testability`
 - `scope-clarity`
 
 ### `story-coherence`
 
-Inspect: actor, need, outcome, and whether the slice solves one coherent
+Inspect: actor, need, outcome, and whether the ticket solves one coherent
 problem.
 
 Ask:
@@ -43,15 +44,16 @@ Ask:
 - Is the parallelization real, or is it fake concurrency hiding a critical path?
 - Would the proposed split create coordination churn or merge conflicts?
 
-### `slice-sizing`
+### `ticket-sizing`
 
-Inspect: whether the ticket is small enough for one implementation/review loop
-without becoming trivial or fragmented.
+Inspect: whether the ticket is sized for one strong implementation/review loop
+without becoming trivial, fragmented, or prematurely downscoped.
 
 Ask:
 
 - Can one builder/reviewer loop finish this safely?
-- Is the slice too large, or artificially broken into micro-steps?
+- Is the ticket too large, or is a coherent ticket being artificially broken
+  into micro-steps or a fake "first slice"?
 
 ### `acceptance-testability`
 
@@ -78,7 +80,7 @@ Ask:
   leaves actor, outcome, or boundaries implied.
 - Ordinary evidence usually defines the main path but still leaves edge cases,
   proof shape, or split logic somewhat fuzzy.
-- Strong evidence makes the slice, boundaries, and acceptance checks easy to
+- Strong evidence makes the ticket boundary and acceptance checks easy to
   restate without reinterpreting the ticket.
 - Exceptional evidence makes the contract hard to misread and easy to execute
   across different implementers.

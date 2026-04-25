@@ -1,7 +1,8 @@
 # Impl Plan Template
 
 ## Summary
-2-3 sentences on what changes and why it matters now.
+2-3 sentences on what changes, why it matters now, and the decisive path being
+recommended.
 
 ## Scope
 
@@ -24,6 +25,8 @@
   - `Avoid:` full dumps
 - `Typed flow example:`
   - one golden-path dry run using the named types
+- `Execution steps:`
+  - ordered build steps with concrete verbs
 - `Recommendation:`
 - `Options considered:`
   - only when a material choice exists
@@ -75,7 +78,7 @@ flowchart LR
 - `Tests:`
 - `Manual checks:`
 - `Evidence required:`
-- `Artifacts path:` `tickets/artifacts/TASK-XXXX/`
+- `Artifacts path:` `tickets/TASK-XXXX/artifacts/`
 
 ## Refs
 
@@ -88,6 +91,7 @@ flowchart LR
 - `Plan review:`
   - `Refs used:`
   - `Checks:`
+  - `Tone:`
   - `Fixes:`
 - `Result summary:`
 - `Ready:` yes / no

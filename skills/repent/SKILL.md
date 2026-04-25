@@ -1,6 +1,6 @@
 ---
 name: repent
-description: Operator-forced recovery mode for when the assistant missed something obvious, got defensive, or explained instead of acting. Use when the user explicitly says `repent`, asks why the agent did not do something, says the agent forgot a requirement, or otherwise wants audit-then-fix behavior on the current task.
+description: Operator-forced recovery mode for when the assistant missed something obvious, got defensive, or explained instead of acting. Use when the user explicitly says `repent` or otherwise clearly asks for audit-then-fix behavior on the current task after the default correction-recovery behavior was not enough.
 ---
 
 # Repent
@@ -9,10 +9,13 @@ description: Operator-forced recovery mode for when the assistant missed somethi
 
 Use it when the assistant has likely missed an obvious requirement and the user
 wants the agent to stop defending itself, verify the complaint, and recover
-immediately.
+immediately, with an explicit operator-forced audit-then-fix posture.
 
 Do not use it for broad new work, destructive requests, or ambiguous direction
 changes. This is a same-task recovery skill, not a replacement for planning.
+Ordinary complaint-shaped follow-ups such as "why are we not doing that" should
+already be handled by the default global correction-recovery contract; `repent`
+is for when the operator explicitly wants a stricter audit-then-fix pass.
 
 ## Recovery Workflow
 

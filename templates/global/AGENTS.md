@@ -13,7 +13,7 @@ Repo contract. More specific `AGENTS.md` wins.
 
 ```mermaid
 flowchart TD
-    A[tickets/TASK-*.md status review] --> B[tickets/TASK-*.md status building]
+    A[tickets/TASK-*/ticket.md status review] --> B[tickets/TASK-*/ticket.md status building]
     B --> C[phase documenting]
     C --> D[docs writeback]
     D --> E[tickets/archive]
@@ -78,9 +78,18 @@ Before edits:
 - search for existing patterns
 - inspect affected files and interfaces
 - bootstrap from active tickets, `docs/prd.md`, `docs/specs/*`, `docs/MEMORY.md`, and `docs/TROUBLES.md`
-- if the repo does not already have Codexter conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `tickets/`, start with `init-project` before applying the full spec or ticket workflow
+- if the repo does not already have Codexter conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `tickets/`, start with `deep-init-project` before applying the full spec or ticket workflow
 
 No blind edits.
+
+## Skill Loading
+
+- when a relevant skill is in play, read `SKILL.md` first
+- if that skill has `todos.md`, load it near the start of the pass and use it
+  as the ordered anti-forgetting checklist instead of treating it as optional
+  extra reading
+- prefer the skill's existing todo list over inventing a fresh mini-workflow
+  in chat unless the current task clearly needs a deviation
 
 ## Modes
 
@@ -92,9 +101,22 @@ Planning handoff rule:
 - planning approval is the checkpoint for starting execution
 - once a ticket is approved for execution, treat in-scope user feedback as authorization to edit immediately
 - do not reply with "if you want I can change it" when the user is clearly asking for correction
+- once specs are already decomposed into modular tickets, treat the selected
+  ticket as the default planning, build, and review unit. `impl-plan` should
+  plan the whole ticket, `$impl` should try to land the whole ticket, and
+  `review` should judge the whole ticket unless a real blocker, proof
+  boundary, safety issue, or explicit follow-up ticket makes narrower scope
+  real. See `MEM-0061`.
 
 ## Action Default
 
+- classify each user turn into one primary mode: `answer`, `plan`, or `act`
+- `act` is the default for direct change requests, concrete fix/update asks,
+  and complaint-shaped follow-ups about missing work on the current task
+- `plan` is for explicit planning/proposal requests or when implementation
+  would require a new material decision first
+- `answer` is for explanation or information requests when no missing action is
+  implied
 - if the user asks for a concrete change, fix, edit, implementation, or update, treat that as a request to act, not a request for analysis-only, unless the user clearly asks for explanation, brainstorming, or review only
 - do not default to answer-only behavior when the target artifact and next step are already clear
 - when the user has already established the scope, short follow-ups such as "do it", "fix that", or "implement it" inherit that established scope instead of forcing a fresh approval loop
@@ -107,6 +129,14 @@ Planning handoff rule:
 - when the correction is obvious and safe, prefer a brief acknowledgment such as "Sorry, I'll do that now" and then do it
 - when the correction is not obvious, ask only the minimum blocking question needed to recover correctly
 - questions like "why did you not do X" or statements like "you forgot Y" normally imply "do X/Y now" unless the action would be unsafe, destructive, or materially branching
+- questions like "why are we not doing that", "aren't we doing Y", or other
+  challenge-shaped follow-ups about the current task usually mean the user is
+  calling out missed execution and wants recovery now, not a literal
+  explanation-only answer
+- do a quick reality check before responding literally: if the miss is real and
+  recovery is safe, apologize briefly and do it now; if the complaint is false,
+  show concrete evidence; if the target is ambiguous, ask the minimum blocking
+  question
 
 ## Consultative Default
 
@@ -120,6 +150,9 @@ Planning handoff rule:
 ## Communication
 
 - keep chat replies concise by default; do not dump the full working state into chat when the user mainly needs the conclusion and next step
+- keep chat concise, but make planning artifacts detailed and action-oriented:
+  a strong ticket plan should say what will be built, in what order, and how
+  it will be proved without timid "maybe/could" language. See `MEM-0062`.
 - put detailed reasoning, plans, evidence, inventories, and handoff context into visible repo artifacts first: the active ticket, the nearest canonical doc, or module README/AGENTS when applicable
 - prefer enriching existing visible artifacts over inventing ad hoc sidecar files
 - create a new file only when the repo contract, ticket workflow, or module scaffolding rules call for one, or when the detail is durable enough to earn its own artifact
@@ -141,6 +174,8 @@ Planning handoff rule:
 - MVP first: 1 -> 10 -> 100
 - delegate only when bounded and materially useful
 - continue on obvious reversible next steps
+- use an isolated checkout or worktree when addressing an existing PR branch or
+  when more than one live writer would otherwise share one filesystem
 - auto-approve only these narrow continuation cases:
   - same-scope correction of the assistant's own miss when the target artifact is already clear
   - same-ticket or same-artifact continuation where the user points out unfinished requested work and the next step is obvious and reversible
@@ -163,7 +198,9 @@ Planning handoff rule:
 - keep local helpers near the owning feature; promote them to shared utilities only after real multi-caller reuse appears
 - shape backend modules around explicit contracts and seams so the capability could later be split into a separate service without rethinking the domain boundary
 - plan tickets and delegation around module ownership; favor seams that one subagent can own with minimal overlap or cross-file contention
-- keep the main loop and root entrypoints focused on the smallest high-impact integration path; push secondary logic and customization into modules
+- keep the main loop and root entrypoints focused on the primary high-impact
+  integration seam for the selected ticket; push secondary logic and
+  customization into modules
 
 ## Module Scaffolding
 
@@ -274,7 +311,9 @@ Agents must:
 - update the ticket file, not just chat
 - record blockers in the ticket
 - create linked follow-up tickets when scope splits or new work is discovered
-- do not set `status: building` while `approval_required: true`, `blocked_by` is non-empty, or a required dependency is unresolved for the requested slice
+- do not set `status: building` while `approval_required: true`, `blocked_by`
+  is non-empty, or a required dependency is unresolved for the requested
+  ticket scope
 
 Ownership split:
 

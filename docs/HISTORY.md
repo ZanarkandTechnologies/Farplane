@@ -108,5 +108,13 @@
 2026-04-24 19:42 +0100 | FEAT | add a separate `parity-research` skill, tighten the `gap-analysis` boundary, and document external parity research as a first-class planning surface
 2026-04-24 19:43 +0100 | FEAT | make `init-project` use a visible bootstrap brief and deep-interview-quality intake, add a real pre-push template with large-file gates plus soft shared-utility warnings, and keep generated hook guidance aligned with optional CodeRabbit/desloppify follow-up
 2026-04-24 20:50 +0100 | CHORE | refresh README and architecture so the top-level repo story reflects shipped file-map-first planning, artifact-first tickets, and visible bootstrap/qa surfaces
+2026-04-24 23:35 +0100 | CHORE | migrate the ticket board from flat `TASK-*.md` files plus `tickets/artifacts/` into per-ticket directories with canonical `ticket.md` files, sibling `artifacts/`, and matching runtime/template/doc updates
 2026-04-24 21:35 +0100 | FIX | harden Stop-hook output by keeping notification fallback off stdout and emitting explicit allow-stop JSON on Stop-event no-op branches
+2026-04-24 22:45 +0100 | FEAT | rename `init-project` to `deep-init-project` and make bootstrap ask explicit local-hook, heavy-check, and CI/deploy-gate questions before scaffolding defaults
 2026-04-24 20:23 +0100 | FEAT | strengthen the shipped global modularity doctrine around feature-first modules, extractable UI and backend seams, and subagent-friendly planning boundaries
+2026-04-25 01:13 +0100 | FIX | make `impl-plan`, `$impl`, `review`, and the live `AGENTS` contract treat the selected ticket as the default planning/build/review unit instead of shrinking coherent tickets into smaller internal slices
+2026-04-25 01:23 +0100 | FIX | make `impl-plan` and the canonical ticket template require detailed, action-oriented plans with explicit execution steps and stronger recommendation tone instead of thin approval-first summaries
+2026-04-25 12:15 +0100 | FEAT | add a discoverable `pr-runtime` skill plus a minimal `ticket_runtime` helper for isolated PR follow-up, concurrent-writer checkout safety, ticket-scoped runtime records under `.harness/state/tickets/`, and declared QA target lookup
+2026-04-25 12:45 +0100 | FEAT | extend `ticket_runtime` from metadata-only records into a real local launcher that can start and stop configured frontend/backend processes or compose commands, persist process metadata, and publish QA targets from the same ticket runtime record
+2026-04-25 01:22 +0100 | FEAT | tighten the shipped global contract around complaint-shaped recovery, skill todo-list loading, and action-ordered ticket plans
+2026-04-25 01:29 +0100 | FIX | align `repent`, `impl-plan` README, and the techniques inventory with the new complaint-recovery and skill-checklist doctrine

@@ -6,20 +6,23 @@
 ## Summary
 Realign `impl-plan` with the canonical ticket template and make typed data flow
 explicit in the plan instead of proving only callable seams. This keeps plans
-compact while making stateful or interface-heavy work readable in plain text.
+detailed enough to build from directly while keeping stateful or
+interface-heavy work readable in plain text.
 
 ## Scope
 - In:
   - remove the stale `Human` / `Agent` split from the skill package
-  - add `Type Sketch` and `Typed flow example` to the compact plan contract
+  - add `Type Sketch`, `Typed flow example`, and `Execution steps` to the live
+    plan contract
 - Out:
   - expanding `impl-plan` into full system-design interviews
   - exhaustive schema dumps
 
 ## Plan
 - `Change:` remove the stale `Human` / `Agent` split from `impl-plan` and add
-  compact typed-data planning to the single ticket `Plan` section
-- `Why:` `MEM-0031` says `impl-plan` should stay compact and avoid parallel
+  typed-data planning and explicit execution steps to the single ticket `Plan`
+  section
+- `Why:` `MEM-0031` says `impl-plan` should stay single-surface and avoid parallel
   human-versus-agent documents, but the live skill package still teaches the
   split
 - `Before -> After:` before, the skill proves callable seams but leaves typed
@@ -29,12 +32,12 @@ compact while making stateful or interface-heavy work readable in plain text.
   `references/template.md`, `references/examples.md`, `references/review.md`,
   `README.md`, `AGENTS.md`, `todos.md`, `tickets/templates/ticket.md`,
   `tickets/README.md`
-- `Inspect:` `docs/MEMORY.md`, `tickets/TASK-0086-*.md`,
+- `Inspect:` `docs/MEMORY.md`, `tickets/archive/TASK-0086/ticket.md`,
   `docs/specs/spec-first-execution-loop.md`
 - `Signature delta:`
   - `skills/impl-plan/SKILL.md / plan(ticket): TicketPlan`
   - `skills/impl-plan/prompts/plan.md / outputShape(mode): TicketBody`
-  - `tickets/templates/ticket.md / Plan fields(...): compact plan contract`
+  - `tickets/templates/ticket.md / Plan fields(...): detailed single-plan contract`
 - `Type Sketch:`
   - `PlanField { label: string, required: boolean, note?: string }`
   - `TypeSketchEntry { name: string, fields: string[] }`
@@ -43,8 +46,14 @@ compact while making stateful or interface-heavy work readable in plain text.
   - `DraftPlanTicket { touch, inspect, signatureDelta }`
   - `ReviewedPlanTicket { typeSketch, typedFlowExample, recommendation }`
   - `ApprovedPlanTicket { verification, evidence, ready }`
-- `Recommendation:` keep one compact plan surface and add typed planning inside
-  `Plan`
+- `Execution steps:`
+  - `1.` remove the stale `Human` / `Agent` contract from `SKILL.md`,
+    `prompts/plan.md`, and the template
+  - `2.` add typed-data and sequencing fields to the shared plan surfaces
+  - `3.` align the review checklist and example so the stronger plan shape is
+    judged consistently
+- `Recommendation:` keep one single plan surface and add typed planning plus
+  execution steps inside `Plan`
 - `Options considered:`
   - `Option 1:` keep `Human` / `Agent` and add type sections there
     - `Pros:` smallest diff to recent skill package
@@ -102,7 +111,7 @@ flowchart LR
 - `Manual checks:` inspect the good example and template to confirm the typed
   flow is readable without `Human` / `Agent`
 - `Evidence required:` updated skill surfaces plus passing validator output
-- `Artifacts path:` `tickets/artifacts/TASK-0086/`
+- `Artifacts path:` `tickets/archive/TASK-0086/artifacts/`
 
 ## Evidence
 - `Artifacts:` updated skill surfaces and validator output linked from the
@@ -134,6 +143,6 @@ Why bad:
 - no canonical ticket shape
 - no real callable seams
 - no typed data continuity
-- no real recommendation or rejected options
+- no real recommendation, action order, or rejected options
 - no proof
 - still sounds like hand-wavy prose instead of a believable ticket plan

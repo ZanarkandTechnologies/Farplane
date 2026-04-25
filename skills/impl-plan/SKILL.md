@@ -1,18 +1,18 @@
 ---
 name: impl-plan
 version: 2.5.0
-description: "Unified per-ticket planning skill with a compact file-map-first plan centered on callable seams, typed data flow, blast radius, verification, and explicit gap analysis for missing or partial features."
+description: "Unified per-ticket planning skill with a detailed file-map-first plan centered on ordered action, callable seams, typed data flow, blast radius, verification, and explicit gap analysis for missing or partial features."
 allowed-tools: Read, Glob, Grep
 ---
 
 # Impl Plan
 
-Use this for per-ticket implementation planning after a bounded ticket or
-execution slice already exists.
+Use this for per-ticket implementation planning after a bounded ticket already
+exists.
 
 `impl-plan` remains the one public planner:
 
-- default mode: approval-first ticket planning
+- default mode: detailed, action-oriented ticket planning
 - `--consensus`: Planner/Architect/Critic loop for higher-risk or more
   contentious work
 
@@ -24,6 +24,7 @@ Discovery still belongs to `brainstorm`, `deep-interview`, `prd`, and
 <!-- MEM-0030 decision: material plans may use one top-level Mermaid delta map when flow or ownership is not obvious from files and signatures alone. -->
 <!-- MEM-0031 decision: impl-plan should stay compact and file-map-first: change, why, touched files, signature deltas, blast radius, and verification. -->
 <!-- MEM-0050 decision: impl-plan must align with the canonical single-surface ticket template and make typed data flow explicit when it materially affects trust. -->
+<!-- MEM-0062 decision: compact chat does not mean thin planning; impl-plan should be detailed and action-oriented enough that a builder can execute the ticket without inventing the missing order or tone. -->
 
 When this skill needs diagram taste or pattern depth, reuse
 `skills/diagramming/SKILL.md` plus
@@ -32,13 +33,18 @@ style here.
 
 When the architecture itself is still under-specified, or the plan would have
 to invent entities, storage ownership, or runtime boundaries, stop and use
-`deep-system-design` before finishing the plan. `impl-plan` owns a compact
+`deep-system-design` before finishing the plan. `impl-plan` owns a detailed
 call-and-data shape sketch, not a full system-design interview.
 
 ## Intent
 
-This skill should produce one compact plan in the canonical ticket-body shape,
+This skill should produce one detailed plan in the canonical ticket-body shape,
 not parallel documents for different readers.
+
+After spec work has already been decomposed into modular tickets, the selected
+ticket is the planning boundary by default. Plan the whole ticket, not a safer
+"first slice," unless a real blocker, proof boundary, safety issue, or
+explicit follow-up ticket makes narrower scope real.
 
 The highest-signal plan answers:
 
@@ -50,13 +56,14 @@ The highest-signal plan answers:
 - blast radius: callers, systems, workflows, or edges that could break
 - how to verify it: tests, checks, and strongest evidence
 
-If the plan cannot do that without repeated prose, it is too long.
+If the plan leaves the builder inventing execution steps or the next concrete
+move, it is too thin.
 
 ## Modes
 
-- **Default:** approval-first planning in the canonical ticket-body shape,
-  keeping the top compact and the lower detail only as rich as the ticket
-  needs
+- **Default:** detailed, action-oriented planning in the canonical
+  ticket-body shape, keeping the top skimmable while making the execution path
+  explicit enough to build from directly
 - **`--consensus`:** run the former `ralplan` challenge loop with
   Planner/Architect/Critic before presenting the final plan
 - **`--interactive`:** consensus mode only; present the draft and final plan
@@ -111,27 +118,30 @@ unknowns.
 
 ## Workflow (Default Mode)
 
-1. **Scope:** keep the approved coherent ticket intact unless it clearly hides
-   multiple independent build loops or a real split boundary emerged.
+1. **Scope:** treat the selected ticket as the execution ambition by default.
+   Keep the approved coherent ticket intact unless it clearly hides multiple
+   independent build loops or a real split boundary emerged.
 2. **Split check:** split only when proof, reuse, blocking risk, external
    dependency, or runtime ownership genuinely improves; do not force a split
-   just because the work will span multiple commits.
+   just because the work will span multiple commits, feels safer, or could be
+   shipped incrementally.
 3. **Compare:** show 3 viable options with bounded pros/cons when the user did
    not already provide a take on a material choice.
 4. **Recommend:** state the best option and the tradeoff being accepted.
 5. **Gap check when needed:** for missing or partial feature work, define the
    current state, production expectation, missing gaps, grounding references,
    and recommended now/later boundary.
-6. **Build one compact plan:** use the canonical ticket sections and keep the
-   `Plan` section compact but believable.
-7. **Review + ask:** run the plan through the quality gate, fix weak spots
-   before handoff, then show `Ready: yes/no`.
+6. **Build one detailed plan:** use the canonical ticket sections and make the
+   `Plan` section explicit enough that the builder does not have to invent the
+   sequence.
+7. **Review + handoff:** run the plan through the quality gate, fix weak spots
+   before handoff, then end with a decisive readiness call and next move.
 
 ## Workflow (`--consensus` Mode)
 
 Consensus mode preserves the former `ralplan` behavior inside this one skill.
 
-1. Planner drafts one compact file-grounded plan.
+1. Planner drafts one detailed file-grounded plan.
 2. Architect reviews for steelman antithesis, tradeoff tension, and synthesis.
 3. Critic evaluates for option quality, signature clarity, type-flow clarity,
    risk clarity, and concrete verification.
@@ -146,12 +156,13 @@ Use consensus mode when:
 
 ## Core Decision Branches
 
-- **Low risk / obvious fit:** keep the whole plan short; text-only is okay if
-  the change is truly localized.
+- **Low risk / obvious fit:** keep the whole plan lean, but still state the
+  concrete action sequence plainly; text-only is okay if the change is truly
+  localized.
 - **Material / cross-module:** require a clear file map and add a diagram only
   when the flow, ownership, or typed data path is not obvious from the file
   map alone.
-- **Interface-heavy / data-shape-heavy:** require compact signature deltas,
+- **Interface-heavy / data-shape-heavy:** require explicit signature deltas,
   type sketches, and one typed flow example through the main path.
 - **High ambiguity / risk:** add only the extra sections that reduce ambiguity.
 - **High risk / architectural tension:** prefer `--consensus`.
@@ -160,6 +171,9 @@ Use consensus mode when:
   ad hoc.
 - **Multi-commit work:** acceptable when the ticket is still one coherent
   build-and-proof loop; split only when a real boundary appears.
+- **Already modularized tickets:** assume ticketization already did the
+  decomposition work; default to planning full-ticket completion instead of a
+  smaller internal phase.
 - **Docs-only / rule-text-only:** no specialized QA delegation.
 
 ## Plan Shape
@@ -177,7 +191,7 @@ Use the canonical ticket-body shape:
 - `Evidence`
 - `Blockers`
 
-`Plan` is the compact heart of the ticket and should include:
+`Plan` is the action core of the ticket and should include:
 
 1. `Change`
 2. `Why`
@@ -193,11 +207,13 @@ Use the canonical ticket-body shape:
 8. `Typed flow example`
    - one golden-path dry run showing a representative object or payload
      evolving through the main stages
-9. `Recommendation`
-10. `Options considered`
+9. `Execution steps`
+   - ordered implementation steps using concrete verbs
+10. `Recommendation`
+11. `Options considered`
     - only when the user did not already provide a take on a material choice
-11. `Blast radius`
-12. `Risks`
+12. `Blast radius`
+13. `Risks`
 
 ## Applicability Rule
 
@@ -223,19 +239,25 @@ Use the canonical ticket-body shape:
    prove understanding faster.
 4. Do not show callable seams without the matching data seams when the change
    depends on typed payloads, structs, or objects crossing boundaries.
-5. Do not preallocate empty review output inside the input ticket.
-6. Do not make `Acceptance Criteria` and `Verification` say the same thing;
+5. Do not leave the builder inferring the execution sequence when the ticket is
+   material enough to need an explicit order of operations.
+6. Do not preallocate empty review output inside the input ticket.
+7. Do not make `Acceptance Criteria` and `Verification` say the same thing;
    criteria define done, verification defines measurement.
-7. Do not skip the option comparison for material choices.
-8. Do not guess at "production-ready" scope from intuition alone when
+8. Do not skip the option comparison for material choices.
+9. Do not guess at "production-ready" scope from intuition alone when
    comparable products, codebases, or official docs can ground it.
+10. Do not rewrite a coherent ticket into "part 1" or "first slice" just
+   because that feels safer than planning the full ticket.
+11. Do not use timid language like "maybe", "might", or "could" where the plan
+   should be making a recommendation or naming an execution step.
 
 ## Efficiency Rules
 
-- Lead with the compact plan, not the appendix.
+- Lead with the plan, not the appendix.
 - If the user did not provide a take, default to consultative guidance instead
   of neutral mirroring.
-- Prefer symbols and compact labels over repeated prose.
+- Prefer clear action language over hedging.
 - Reuse the `diagramming` skill's compact delta-map patterns instead of
   inventing a new diagram style in each plan.
 - Reuse existing modules; justify every new file or abstraction in one line.
@@ -256,6 +278,8 @@ Before returning the plan, run these checks against the drafted output:
    - Is this still one coherent build-and-proof loop?
    - If not, is the split boundary real and explicit rather than just
      commit-count driven?
+   - If the ticket was already modularized from the spec, does the plan still
+     target the whole ticket instead of inventing a narrower first pass?
 3. **Recommendation quality**
    - Did the plan compare real options instead of cosmetic variants?
    - Is the chosen path clearly recommended, not merely listed?
@@ -265,7 +289,7 @@ Before returning the plan, run these checks against the drafted output:
    - If no diagram is present, is the file map alone clearly enough?
 5. **Signature usefulness**
    - Does the signature delta name the real seams that matter?
-   - Is it compact enough to skim?
+   - Is it explicit enough to guide implementation?
    - Would it convince a reviewer that the planner understands the codebase?
 6. **Type-flow usefulness**
    - Do the named types prove how data crosses the important seams?
@@ -285,6 +309,8 @@ Before returning the plan, run these checks against the drafted output:
 10. **Narrative usefulness**
    - If optional sections are present, do they actually reduce ambiguity?
    - Are they concrete rather than decorative or duplicated filler?
+   - Does the plan speak in decisive action language instead of hedged
+     possibilities?
 11. **Architecture boundary**
    - If the plan still depends on invented entities, storage ownership, or
      runtime boundaries, did we stop and route to `deep-system-design`?

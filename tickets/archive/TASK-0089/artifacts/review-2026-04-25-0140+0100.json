@@ -1,0 +1,147 @@
+{
+  "work_type": [
+    "planning",
+    "docs"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "AGENTS.md",
+      "templates/global/AGENTS.md",
+      "docs/HISTORY.md",
+      "docs/MEMORY.md",
+      "docs/TROUBLES.md",
+      "docs/specs/harness-techniques.md",
+      "skills/repent/SKILL.md",
+      "skills/impl-plan/AGENTS.md",
+      "skills/impl-plan/README.md",
+      "skills/impl-plan/SKILL.md",
+      "skills/impl-plan/todos.md",
+      "skills/impl-plan/prompts/plan.md",
+      "skills/impl-plan/references/template.md",
+      "skills/impl-plan/references/examples.md",
+      "skills/impl-plan/references/review.md",
+      "skills/impl/SKILL.md",
+      "skills/impl/README.md",
+      "skills/impl/todos.md",
+      "skills/review/SKILL.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/spec-contract.md",
+      "tickets/templates/ticket.md",
+      "tickets/TASK-0089/ticket.md"
+    ],
+    "related_files": [
+      "docs/specs/spec-first-execution-loop.md",
+      "docs/specs/orchestrator-subagent-loop.md",
+      "skills/review/references/desloppify.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md"
+    ],
+    "invariants_checked": [
+      "MEM-0028",
+      "MEM-0061",
+      "MEM-0062",
+      "MEM-0063"
+    ],
+    "docs_checked": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/desloppify.md"
+    ]
+  },
+  "reviewed_at": "2026-04-25 01:40 +0100",
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "summary": "The final contract slice is coherent and closeout-ready. The global routing doctrine, planning/action-order rules, review criteria, techniques inventory, durable memory, and canonical ticket template now teach the same behavior without blocking drift.",
+  "overall_score": 4.5,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.5,
+        "parallelization-fit": 4.4,
+        "ticket-sizing": 4.5,
+        "acceptance-testability": 4.4,
+        "scope-clarity": 4.4
+      },
+      "findings": [
+        "The ticket and canonical template now express the same explicit execution contract, including ordered execution steps and decisive summaries.",
+        "The selected ticket remains one coherent planning/build/review unit instead of being re-sliced into smaller internal phases."
+      ],
+      "next_action": "None."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.6,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.5,
+        "bloatability": 4.5,
+        "modularity": 4.4,
+        "proof-clarity": 4.6,
+        "execution-order": 4.6,
+        "risk-clarity": 4.4,
+        "decision-tone": 4.7
+      },
+      "findings": [
+        "The planning package now requires ordered execution steps and a decisive recommendation tone, and the supporting template/example/review surfaces match that contract.",
+        "The `impl` and `review` surfaces now reinforce the same whole-ticket ambition instead of teaching a smaller internal slice."
+      ],
+      "next_action": "None."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.4,
+        "contract-correctness": 4.5,
+        "dependency-readiness": 4.3,
+        "coupling-risk": 4.3,
+        "merge-readiness": 4.5
+      },
+      "findings": [
+        "Neighboring-surface drift identified in earlier review passes is resolved across AGENTS, impl-plan, impl, review, and the techniques inventory."
+      ],
+      "next_action": "None."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.5,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.5,
+        "reproducibility": 4.5,
+        "traceability": 4.5,
+        "consistency": 4.5,
+        "inspectability": 4.4
+      },
+      "findings": [
+        "The closeout packet includes durable doc updates, ticket writeback, explicit validator output, and linked review artifacts for the full contract slice."
+      ],
+      "next_action": "None."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "None."
+}

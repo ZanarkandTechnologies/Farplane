@@ -1,0 +1,84 @@
+{
+  "work_type": [
+    "planning"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "skills/review/references/review-rubric-index.md",
+      "tickets/templates/ticket.md",
+      "tickets/TASK-0089/ticket.md"
+    ],
+    "related_files": [
+      "skills/review/references/implementation-plan.md",
+      "skills/impl-plan/references/template.md",
+      "AGENTS.md",
+      "templates/global/AGENTS.md"
+    ],
+    "invariants_checked": [
+      "MEM-0061",
+      "MEM-0062"
+    ],
+    "docs_checked": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/desloppify.md"
+    ]
+  },
+  "reviewed_at": "2026-04-25 01:35 +0100",
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan"
+  ],
+  "summary": "The follow-up pass resolves the remaining planning-contract drift and restores traceable alignment between the review index, the canonical ticket template, and the active ticket surface.",
+  "overall_score": 4.4,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.4,
+        "parallelization-fit": 4.2,
+        "ticket-sizing": 4.3,
+        "acceptance-testability": 4.3,
+        "scope-clarity": 4.4
+      },
+      "findings": [
+        "The active ticket now records the contract-cleanup follow-up directly, which restores visible traceability for the change set."
+      ],
+      "next_action": "None."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.5,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.4,
+        "bloatability": 4.5,
+        "modularity": 4.4,
+        "proof-clarity": 4.5,
+        "execution-order": 4.4,
+        "risk-clarity": 4.3,
+        "decision-tone": 4.6
+      },
+      "findings": [
+        "The review index and canonical ticket template now expose the same planning contract the lower-level references teach."
+      ],
+      "next_action": "None."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "None."
+}

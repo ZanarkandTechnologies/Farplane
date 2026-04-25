@@ -12,7 +12,8 @@
 
 - Keep one public planner only: `impl-plan`. See `MEM-0014`.
 - Keep repo rules in root `AGENTS.md`; keep planning mechanics in this skill.
-- Keep the top approval surface compact and explicitly reviewer-facing.
+- Keep the plan detailed enough that a builder can execute it without
+  inventing missing steps, while still staying skimmable from the top.
 - Use diagram-first approval only when material work needs a diagram because the
   file map alone is not enough. See `MEM-0030`.
 - Keep `impl-plan` aligned with the canonical ticket template instead of
@@ -30,19 +31,23 @@
 - Lead with one top-level delta diagram before the deeper prose only when the
   work needs a diagram because flow, ownership, or typed data path is not
   obvious from the file map alone.
+- Require explicit `Execution steps` when the ticket is material enough that
+  the builder should not have to infer sequencing.
 - Require compact callable seams in `Signature delta` when trust depends on
   seeing code seams, interfaces, ownership boundaries, or changed handlers.
 - Require `Type Sketch` plus one `Typed flow example` when trust depends on
   seeing structs, objects, payloads, or typed state evolve across boundaries.
-- Keep the recommendation above the fold.
+- Keep the recommendation above the fold and phrased as a decisive action, not
+  a tentative suggestion.
 - When diagrams are needed, reference `skills/diagramming/SKILL.md` and
   `docs/specs/diagram-first-conventions.md` for compactness, color/legend
   practice, and inline-signature patterns.
-- Reference `MEM-0007` for the compact plan contract.
+- Reference `MEM-0007` for the original compact plan contract.
 - Reference `MEM-0008` for the root-AGENTS compression boundary.
 - Reference `MEM-0030` for the diagram-first contract.
 - Reference `MEM-0031` for the compact file-map-first single-plan contract.
 - Reference `MEM-0050` for the typed-data planning contract.
+- Reference `MEM-0062` for the detailed, action-oriented planning contract.
 - Make optional sections fail if they are decorative, duplicated, or
   placeholder-only.
 - If `todos.md` exists here, keep it as plain natural-language checklist text
@@ -56,8 +61,9 @@
 - `Signature delta` is present when interface shape matters.
 - `Type Sketch` plus `Typed flow example` are present when typed data flow
   matters.
-- A compact recommendation plus 3 viable options exist when the ticket
-  involves a material choice.
+- `Execution steps` are present when sequencing is non-trivial.
+- The recommendation is decisive and action-oriented when the ticket involves a
+  material choice.
 - Split rule remains explicit.
 - Proof remains concrete.
 - The applicability rule is explicit.

@@ -22,6 +22,7 @@ Threshold: `4.0`
 - `proof-clarity`
 - `execution-order`
 - `risk-clarity`
+- `decision-tone`
 
 ### `human-readability`
 
@@ -41,7 +42,8 @@ speculative abstractions and ceremony.
 Ask:
 
 - Does the plan add abstraction because it is needed, or because it sounds architectural?
-- Is there hidden multi-commit scope pretending to be one slice?
+- Is there hidden multi-loop scope pretending to be one ticket, or is a
+  coherent ticket being needlessly shrunk into a fake "part 1"?
 
 ### `modularity`
 
@@ -80,6 +82,17 @@ Ask:
 - What could go wrong first, and is it named?
 - If the approach fails, is rollback or containment obvious?
 
+### `decision-tone`
+
+Inspect: whether the plan speaks in decisive, execution-ready language rather
+than timid possibilities.
+
+Ask:
+
+- Does the plan name the recommended path directly?
+- Would a builder know what to do next without translating hedge words into a
+  real instruction?
+
 ## Evidence and Finding Cues
 
 - Weak evidence usually looks like plausible implementation prose with no
@@ -87,6 +100,7 @@ Ask:
 - Ordinary evidence usually has a believable main path, but proof and rollback
   stay thin.
 - Strong evidence makes the delta, order, and proof points easy to check.
+- Strong evidence also makes the next action and chosen path sound decisive.
 - Exceptional evidence teaches the approach clearly while still staying lean.
 - Findings should name the missing proof point, sequencing hazard, or unearned
   abstraction instead of saying the plan needs "more detail."

@@ -2,6 +2,8 @@
 
 - [ ] Read the selected ticket and linked docs before launching any lanes.
 - [ ] Confirm the ticket is actually ready for build orchestration rather than still needing planning.
+- [ ] Aim the run at whole-ticket completion; do not voluntarily shrink a
+  coherent ticket into an internal "part 1".
 - [ ] Decide which lanes are needed for this ticket: builder, reviewer, QA, and evidence-check.
 - [ ] Make the delegated `worker_name`, `main_artifact_path`, and `grounding_summary` explicit before delegating.
 - [ ] Launch the visible lanes and keep their responsibilities distinct.

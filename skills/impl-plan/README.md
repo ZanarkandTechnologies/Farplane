@@ -2,10 +2,9 @@
 
 ## Purpose
 
-Guide agents to produce one clear per-ticket planning artifact, with a compact
-approval surface, one compact ticket-body plan shape, conditional diagrams when
-the file map alone is not enough, and optional consensus challenge for riskier
-work.
+Guide agents to produce one clear per-ticket planning artifact, with a detailed
+action-oriented ticket-body plan shape, conditional diagrams when the file map
+alone is not enough, and optional consensus challenge for riskier work.
 When an `Agent Testability Brief` exists, `impl-plan` should preserve that
 doctrine in the resulting proof and execution plan.
 
@@ -15,7 +14,7 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 ## Public API / Entrypoints
 
 - `SKILL.md`: main planning contract
-- `todos.md`: example natural-language todo template for approval-first planning
+- `todos.md`: example natural-language todo template for detailed ticket planning
 - `prompts/plan.md`: operator prompt
 - `references/template.md`: merged plan template
 - `references/examples.md`: good/bad examples
@@ -24,10 +23,12 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 ## Minimal Example
 
 1. Read `SKILL.md`.
-2. Read `todos.md` if using skill todos.
-3. Decide whether the selected ticket stays whole or needs a real boundary-based split.
+2. Read `todos.md` near the start when using this skill so the ordered
+   checklist stays loaded during the pass.
+3. Treat the selected ticket as the planning boundary by default, and split
+   only if a real boundary justifies it.
 4. Choose default mode or `--consensus`.
-5. Output one compact ticket plan with summary, scope, `Plan`, and only the
+5. Output one detailed ticket plan with summary, scope, `Plan`, and only the
    optional sections the ticket actually needs.
 6. Use `Signature delta` for callable seams and `Type Sketch` plus `Typed flow
    example` when typed data continuity matters.
@@ -35,6 +36,10 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 ## How to Test
 
 - Confirm the output matches the canonical ticket-body shape.
+- Confirm the plan targets the full selected ticket instead of inventing a
+  smaller internal "first slice" without a real boundary.
+- Confirm `Execution steps` make the next build steps explicit when sequencing
+  matters.
 - Confirm the diagram appears near the top when material work needs one to make
   flow, ownership, or typed data path legible.
 - Confirm a compact `Signature delta` appears when interfaces matter.

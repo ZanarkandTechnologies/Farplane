@@ -22,7 +22,8 @@ linked_docs: []
 # TASK-XXXX: title
 
 ## Summary
-2-3 sentences on what changes and why it matters now.
+2-3 sentences on what changes, why it matters now, and the decisive path being
+recommended.
 
 ## Scope
 - In:
@@ -39,6 +40,7 @@ linked_docs: []
   or changing shape; include only the fields that matter
 - `Typed flow example:` one golden-path dry run showing a representative
   payload/object evolving through the main stages when typed data flow matters
+- `Execution steps:` ordered implementation steps with concrete verbs
 - `Recommendation:` chosen path when a material decision exists
 - `Options considered:` 3 viable options only when the user did not already
   provide a take on a material choice
@@ -73,7 +75,7 @@ flowchart LR
 - `Tests:` what should pass
 - `Manual checks:` any direct checks that matter
 - `Evidence required:` strongest artifacts needed to show the work is done
-- `Artifacts path:` `tickets/artifacts/TASK-XXXX/`
+- `Artifacts path:` `tickets/TASK-XXXX/artifacts/`
 
 ## Agent Contract
 - Optional for non-UI work. Add when the ticket changes UI, canvas rendering,
@@ -104,7 +106,7 @@ flowchart LR
 
 ## Evidence
 - Store screenshots, logs, exported review JSON, and clips under
-  `tickets/artifacts/TASK-XXXX/` and link them here.
+  `tickets/TASK-XXXX/artifacts/` and link them here.
 - `Artifacts:`
 - `Commands:`
 - `Result summary:`

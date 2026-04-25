@@ -40,8 +40,8 @@ Calibration rules:
 Ensure an agent can execute the core path after only reading this file.
 
 - Trigger conditions:
-  - after implementing a work package
-  - after writing a plan that needs challenge/review
+  - after implementing a selected ticket
+  - after writing a ticket plan that needs challenge/review
   - before claiming a ticket is ready for Stop-hook completion
   - whenever the user asks for review
 - Workflow:
@@ -89,7 +89,7 @@ Ensure an agent can execute the core path after only reading this file.
 
 ## Review Flow
 
-1. Read the active ticket / work package.
+1. Read the active ticket first.
 2. Open `references/review-rubric-index.md`.
 3. Determine which rubric families apply.
 4. Open the reference file for each selected rubric family.
@@ -124,6 +124,9 @@ Ensure an agent can execute the core path after only reading this file.
 - Overall verdict is `pass` only if every required rubric meets threshold.
 - `evidence-quality` below threshold forces non-pass overall.
 - `integration-readiness` below threshold forces non-pass overall.
+- When the selected ticket already defines a coherent scope, treat artificial
+  downscoping to a smaller internal "first slice" as a planning/execution
+  failure unless the ticket or blockers made that narrower boundary explicit.
 - select `user-intent-satisfaction` for user-facing completion review when the ticket clearly expresses the intended user ask.
 - `block` is reserved for materially unsafe, off-target, or contradictory work.
 - `revise` is the default when the work is directionally correct but not yet ready.
@@ -153,7 +156,7 @@ Use the family skeptic questions, score guide, and evidence cues.
 Select the matching rubric families and score the work against them on the anchored 1.0-5.0 scale.
 
 Scope:
-- active ticket/work package
+- active ticket
 - changed files and evidence artifacts
 - the minimum neighboring files, invariants, docs, or constants needed to test consistency and integration risk
 
@@ -205,7 +208,7 @@ Return:
       "confidence": "high",
       "rubric": "evidence-quality",
       "summary": "Edge-state claims are not backed by attached proof.",
-      "file_refs": ["tickets/TASK-0047-upgrade-review-into-a-desloppify-pass.md"],
+      "file_refs": ["tickets/archive/TASK-0047/ticket.md"],
       "evidence": [
         "The ticket claims broader coverage than the attached artifacts prove."
       ],

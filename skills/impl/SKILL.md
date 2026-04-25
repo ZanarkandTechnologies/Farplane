@@ -10,6 +10,8 @@ description: Build-phase orchestrator for one selected ticket. Runs ephemerally,
 Use it when:
 
 - planning for a ticket is already complete
+- the selected ticket should be attempted end-to-end rather than downscoped
+  into an internal "part 1"
 - one ticket should move through implementation and, when required, internal `qa` and `demo` subphases
 - the same ticket may need repeated build/review/fix passes until proof is good enough
 - the operator wants visible worker lanes instead of a hidden forever-running orchestrator
@@ -23,6 +25,9 @@ Do not use it when:
 ## Contract
 
 - `$impl` owns one selected ticket/work package at a time.
+- `$impl` treats the selected ticket as the execution unit for the run. Builder,
+  review, and QA passes may iterate, but the target is whole-ticket completion
+  unless a blocker or explicit follow-up ticket makes narrower scope real.
 - An explicit ticket selector outranks ambient runtime state.
 - `$impl` reads the ticket plus linked specs/docs, launches the needed worker lanes, integrates their outputs, writes progress back to the ticket/progress surface, and exits.
 - `$impl` is the public execution surface; `qa` and `demo` may run as internal subphases or explicit recovery surfaces.
@@ -95,6 +100,9 @@ Reference:
 ## Guardrails
 
 - Keep the ticket as the canonical progress surface.
+- Aim to land the whole selected ticket; do not voluntarily turn a coherent
+  ticket into an arbitrary "first slice" just because partial progress is
+  easier to claim.
 - Keep the delegated main artifact explicit instead of relying on transcript memory.
 - Keep QA and review separate.
 - Keep the orchestrator ephemeral.

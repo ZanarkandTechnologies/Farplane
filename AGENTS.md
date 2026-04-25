@@ -77,7 +77,7 @@ For install and bootstrap work:
 - `templates/global/AGENTS.md`
 - `PROJECT_RULES.md`
 - `config.toml.example`
-- `skills/init-project/SKILL.md`
+- `skills/deep-init-project/SKILL.md`
 
 For harness-design research and external patterns:
 
@@ -90,9 +90,19 @@ For harness-design research and external patterns:
 - No blind edits. Read the relevant spec, ticket, and nearby module docs first.
 - Tickets and docs are the source of truth; do not hide state in chat.
 - Keep chat concise and put deep detail into visible repo artifacts such as the active ticket and canonical docs.
+- Keep chat concise, but make planning artifacts detailed and action-oriented.
+  A strong ticket plan should say what will be built, in what order, and how
+  it will be proved without falling back to timid "maybe/could" language. See
+  `MEM-0062`.
 - When summarizing implemented feature changes to the operator, prefer `Before` / `After` / `Example` bullets over one dense prose block. See `MEM-0051`.
-- Keep QA and completion proof artifact-first: link ticket-scoped evidence from `tickets/artifacts/TASK-XXXX/`, and for UI/user-visible work keep browser capture separate from final `visual-qa` judgment. See `MEM-0048`.
+- Keep QA and completion proof artifact-first: link ticket-scoped evidence from `tickets/TASK-XXXX/artifacts/`, and for UI/user-visible work keep browser capture separate from final `visual-qa` judgment. See `MEM-0048`.
 - Treat `$impl` as the public execution surface, with internal `execution_phase` progression through `impl`, `qa`, and `demo` when required. Stop-hook should advance those phases mechanically before final completion review. See `MEM-0049`.
+- Once specs are already decomposed into modular tickets, treat the selected
+  ticket as the default planning, build, and review unit. `impl-plan` should
+  plan the whole ticket, `$impl` should try to land the whole ticket, and
+  `review` should judge the whole ticket unless a real blocker, proof
+  boundary, safety issue, or explicit follow-up ticket makes narrower scope
+  real. See `MEM-0061`.
 - Auto-run `review` at the end of `impl-plan` and at the end of `impl` when working inside Codexter.
 - Keep live repo-owned skills and docs Codexter-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
 - Prefer `.harness/` for live runtime state.
@@ -110,7 +120,8 @@ For harness-design research and external patterns:
 ## Durable Truth
 
 - `tickets/`: active task object, plan, evidence, blockers, and any short
-  resume notes when needed
+  resume notes when needed, with canonical ticket files at
+  `tickets/TASK-XXXX/ticket.md` and `tickets/archive/TASK-XXXX/ticket.md`
 - `docs/HISTORY.md`: append-only change log
 - `docs/MEMORY.md`: curated invariants and constraints
 - `docs/TROUBLES.md`: repeated misses and prevention ideas

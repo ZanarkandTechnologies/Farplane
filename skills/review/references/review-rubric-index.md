@@ -156,7 +156,7 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
 - Focus:
   - does the user story make sense
   - does the proposed parallelization make sense
-  - is the slice sized correctly
+  - does the selected ticket stay whole unless a real boundary exists
   - are success conditions testable
   - are boundaries explicit enough to prevent drift
 
@@ -169,6 +169,7 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - proof clarity
   - execution order
   - risk clarity
+  - decision tone
 
 ### 3. Code Quality
 - File: `code-quality.md`

@@ -6,6 +6,8 @@ Support files for the `impl` skill live here.
 
 This area contains orchestration helpers used by `$impl`, especially the
 tmux-backed lane launcher and follow-up utilities.
+The ambition target is the whole selected ticket; repeated passes are for
+finishing that ticket, not for inventing a smaller internal ticket boundary.
 
 ## Public Entrypoints
 
@@ -32,7 +34,7 @@ For build tickets, the default delegated lane set is:
 
 ```bash
 python3 skills/impl/scripts/tmux_helper.py launch \
-  --ticket tickets/TASK-0026-enforce-delegated-worker-contract.md \
+  --ticket tickets/TASK-0026/ticket.md \
   --phase building \
   --worker-name builder \
   --dry-run
