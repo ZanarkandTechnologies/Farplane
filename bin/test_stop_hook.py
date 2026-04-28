@@ -501,6 +501,590 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
         self.assertEqual(payload["phase"], "qa")
 
 
+class StopHookCompletionReviewReceiptTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.stop_hook = load_stop_hook_module()
+
+    def test_extract_completion_password_reads_explicit_line(self) -> None:
+        password = self.stop_hook.extract_completion_password(
+            "work complete\nCOMPLETION_PASSWORD: CR-ABC123\nIMPL_RESULT: status=done next=building reason=ready"
+        )
+
+        self.assertEqual(password, "CR-ABC123")
+
+    def test_completion_review_receipt_gate_accepts_matching_linked_receipt(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-completion-receipt-") as td:
+            root = Path(td)
+            reviewed_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json"
+            review_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "review.json"
+            receipt_path = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "2026-04-25T020000Z-completion-receipt.json"
+            receipt_path.parent.mkdir(parents=True, exist_ok=True)
+            reviewed_artifact.parent.mkdir(parents=True, exist_ok=True)
+            reviewed_artifact.write_text("{}", encoding="utf-8")
+            review_artifact.write_text("{}", encoding="utf-8")
+            receipt_path.write_text(
+                json.dumps(
+                    {
+                        "receipt_type": "completion_review",
+                        "ticket_id": "TASK-0042",
+                        "nonce": "CR-123ABC",
+                        "reviewed_at": "2026-04-25T02:00:00Z",
+                        "reviewer_mode": "visible_review_lane",
+                        "reviewed_artifacts": [str(reviewed_artifact)],
+                        "verdict": "pass",
+                        "satisfies_user_query": True,
+                        "user_query_reason": "",
+                        "obvious_next_step": "",
+                        "review_artifact": str(review_artifact),
+                    }
+                ),
+                encoding="utf-8",
+            )
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": (root / "tickets" / "TASK-0042" / "artifacts").resolve(),
+                "linked_artifacts": [str(receipt_path.resolve()), str(review_artifact.resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str(receipt_path.resolve()), str(review_artifact.resolve()), str(reviewed_artifact.resolve())],
+            }
+            current_run = {
+                "completion_review_nonce": "CR-123ABC",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+                "completion_review_required_artifacts": [str(reviewed_artifact.resolve())],
+            }
+
+            ok, reason, failures, receipt = self.stop_hook.completion_review_receipt_gate(ticket, current_run)
+
+        self.assertTrue(ok)
+        self.assertEqual(reason, "")
+        self.assertEqual(failures, [])
+        assert receipt is not None
+        self.assertEqual(receipt["nonce"], "CR-123ABC")
+
+    def test_completion_review_receipt_gate_fails_when_nonce_mismatches(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-completion-receipt-") as td:
+            root = Path(td)
+            receipt_path = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "2026-04-25T020000Z-completion-receipt.json"
+            receipt_path.parent.mkdir(parents=True, exist_ok=True)
+            receipt_path.write_text(
+                json.dumps(
+                    {
+                        "receipt_type": "completion_review",
+                        "ticket_id": "TASK-0042",
+                        "nonce": "CR-OLD123",
+                        "reviewed_at": "2026-04-25T02:00:00Z",
+                        "reviewer_mode": "visible_review_lane",
+                        "reviewed_artifacts": [str(receipt_path)],
+                        "verdict": "pass",
+                        "satisfies_user_query": True,
+                        "user_query_reason": "",
+                        "obvious_next_step": "",
+                        "review_artifact": str(receipt_path),
+                    }
+                ),
+                encoding="utf-8",
+            )
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": (root / "tickets" / "TASK-0042" / "artifacts").resolve(),
+                "linked_artifacts": [str(receipt_path.resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str(receipt_path.resolve())],
+            }
+            current_run = {
+                "completion_review_nonce": "CR-NEWWWW",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+            }
+
+            ok, reason, failures, receipt = self.stop_hook.completion_review_receipt_gate(ticket, current_run)
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "completion review receipt gates are not passing")
+        self.assertIn("completion_review_nonce=mismatch:CR-OLD123", failures)
+        self.assertIsNone(receipt)
+
+    def test_completion_review_receipt_gate_fails_when_receipt_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-completion-receipt-") as td:
+            root = Path(td)
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": (root / "tickets" / "TASK-0042" / "artifacts").resolve(),
+                "linked_artifacts": [],
+                "missing_artifacts": [],
+                "artifact_files": [],
+            }
+            current_run = {
+                "completion_review_nonce": "CR-123ABC",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+            }
+
+            ok, reason, failures, receipt = self.stop_hook.completion_review_receipt_gate(ticket, current_run)
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "completion review receipt gates are not passing")
+        self.assertIn("completion_review_receipt=missing", failures)
+        self.assertIsNone(receipt)
+
+    def test_completion_review_receipt_gate_fails_when_receipt_is_stale(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-completion-receipt-") as td:
+            root = Path(td)
+            reviewed_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json"
+            review_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "review.json"
+            receipt_path = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "2026-04-25T015700Z-completion-receipt.json"
+            reviewed_artifact.parent.mkdir(parents=True, exist_ok=True)
+            review_artifact.parent.mkdir(parents=True, exist_ok=True)
+            reviewed_artifact.write_text("{}", encoding="utf-8")
+            review_artifact.write_text("{}", encoding="utf-8")
+            receipt_path.write_text(
+                json.dumps(
+                    {
+                        "receipt_type": "completion_review",
+                        "ticket_id": "TASK-0042",
+                        "nonce": "CR-123ABC",
+                        "reviewed_at": "2026-04-25T01:57:00Z",
+                        "reviewer_mode": "visible_review_lane",
+                        "reviewed_artifacts": [str(reviewed_artifact)],
+                        "verdict": "pass",
+                        "satisfies_user_query": True,
+                        "user_query_reason": "",
+                        "obvious_next_step": "",
+                        "review_artifact": str(review_artifact),
+                    }
+                ),
+                encoding="utf-8",
+            )
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": (root / "tickets" / "TASK-0042" / "artifacts").resolve(),
+                "linked_artifacts": [str(receipt_path.resolve()), str(review_artifact.resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str(receipt_path.resolve()), str(review_artifact.resolve()), str(reviewed_artifact.resolve())],
+            }
+            current_run = {
+                "completion_review_nonce": "CR-123ABC",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+                "completion_review_required_artifacts": [str(reviewed_artifact.resolve())],
+            }
+
+            ok, reason, failures, receipt = self.stop_hook.completion_review_receipt_gate(ticket, current_run)
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "completion review receipt gates are not passing")
+        self.assertIn("completion_review_receipt=stale", failures)
+        self.assertIsNotNone(receipt)
+
+    def test_completion_review_receipt_gate_fails_when_receipt_verdict_is_non_pass(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-completion-receipt-") as td:
+            root = Path(td)
+            reviewed_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json"
+            review_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "review.json"
+            receipt_path = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "2026-04-25T020000Z-completion-receipt.json"
+            reviewed_artifact.parent.mkdir(parents=True, exist_ok=True)
+            review_artifact.parent.mkdir(parents=True, exist_ok=True)
+            reviewed_artifact.write_text("{}", encoding="utf-8")
+            review_artifact.write_text("{}", encoding="utf-8")
+            receipt_path.write_text(
+                json.dumps(
+                    {
+                        "receipt_type": "completion_review",
+                        "ticket_id": "TASK-0042",
+                        "nonce": "CR-123ABC",
+                        "reviewed_at": "2026-04-25T02:00:00Z",
+                        "reviewer_mode": "visible_review_lane",
+                        "reviewed_artifacts": [str(reviewed_artifact)],
+                        "verdict": "revise",
+                        "satisfies_user_query": False,
+                        "user_query_reason": "still missing the final linked review artifact",
+                        "obvious_next_step": "rerun visible completion review after linking the review artifact",
+                        "review_artifact": str(review_artifact),
+                    }
+                ),
+                encoding="utf-8",
+            )
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": (root / "tickets" / "TASK-0042" / "artifacts").resolve(),
+                "linked_artifacts": [str(receipt_path.resolve()), str(review_artifact.resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str(receipt_path.resolve()), str(review_artifact.resolve()), str(reviewed_artifact.resolve())],
+            }
+            current_run = {
+                "completion_review_nonce": "CR-123ABC",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+                "completion_review_required_artifacts": [str(reviewed_artifact.resolve())],
+            }
+
+            ok, reason, failures, receipt = self.stop_hook.completion_review_receipt_gate(ticket, current_run)
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "completion review receipt gates are not passing")
+        self.assertIn("completion_review_verdict=revise", failures)
+        self.assertIn("completion_review_satisfies_user_query=false", failures)
+        self.assertIn("completion_review_user_query_reason=still missing the final linked review artifact", failures)
+        self.assertIsNotNone(receipt)
+
+    def test_completion_review_receipt_gate_fails_when_required_artifact_was_not_reviewed(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-completion-receipt-") as td:
+            root = Path(td)
+            required_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json"
+            substituted_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "other.json"
+            review_artifact = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "review.json"
+            receipt_path = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "2026-04-25T020000Z-completion-receipt.json"
+            required_artifact.parent.mkdir(parents=True, exist_ok=True)
+            review_artifact.parent.mkdir(parents=True, exist_ok=True)
+            required_artifact.write_text("{}", encoding="utf-8")
+            substituted_artifact.write_text("{}", encoding="utf-8")
+            review_artifact.write_text("{}", encoding="utf-8")
+            receipt_path.write_text(
+                json.dumps(
+                    {
+                        "receipt_type": "completion_review",
+                        "ticket_id": "TASK-0042",
+                        "nonce": "CR-123ABC",
+                        "reviewed_at": "2026-04-25T02:00:00Z",
+                        "reviewer_mode": "visible_review_lane",
+                        "reviewed_artifacts": [str(substituted_artifact)],
+                        "verdict": "pass",
+                        "satisfies_user_query": True,
+                        "user_query_reason": "",
+                        "obvious_next_step": "",
+                        "review_artifact": str(review_artifact),
+                    }
+                ),
+                encoding="utf-8",
+            )
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": (root / "tickets" / "TASK-0042" / "artifacts").resolve(),
+                "linked_artifacts": [str(receipt_path.resolve()), str(review_artifact.resolve()), str(required_artifact.resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [
+                    str(receipt_path.resolve()),
+                    str(review_artifact.resolve()),
+                    str(required_artifact.resolve()),
+                    str(substituted_artifact.resolve()),
+                ],
+            }
+            current_run = {
+                "completion_review_nonce": "CR-123ABC",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+                "completion_review_required_artifacts": [str(required_artifact.resolve())],
+            }
+
+            ok, reason, failures, receipt = self.stop_hook.completion_review_receipt_gate(ticket, current_run)
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "completion review receipt gates are not passing")
+        self.assertIn(f"completion_review_required_artifact=unreviewed:{required_artifact.resolve()}", failures)
+        self.assertIsNotNone(receipt)
+
+    def test_main_requests_visible_completion_review_without_hidden_role(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-main-") as td:
+            root = Path(td)
+            payload = {
+                "hook_event_name": "Stop",
+                "session_id": "sess-123",
+                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nIMPL_RESULT: status=done next=building reason=ready for completion gate",
+            }
+            current_run = {
+                "ticket_id": "TASK-0042",
+                "phase": "building",
+                "status": "waiting_for_worker",
+                "skill_name": "impl",
+                "session_id": "sess-123",
+                "impl_loop_active": True,
+                "execution_phase": "impl",
+            }
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "title": "receipt gate fixture",
+                "phase": "building",
+                "status": "building",
+                "next_action": "test",
+                "acceptance_gaps": [],
+                "evidence_gaps": [],
+                "blockers": [],
+                "requires_qa": True,
+                "requires_demo": False,
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": root / "tickets" / "TASK-0042" / "artifacts",
+                "linked_artifacts": [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+            }
+            stdout_buffer = io.StringIO()
+            stderr_buffer = io.StringIO()
+            stdin_buffer = io.StringIO(json.dumps(payload))
+
+            with (
+                patch.object(sys, "argv", ["stop_hook.py"]),
+                patch.object(sys, "stdin", stdin_buffer),
+                redirect_stdout(stdout_buffer),
+                redirect_stderr(stderr_buffer),
+                patch.object(self.stop_hook, "project_root_from_payload", return_value=root),
+                patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
+                patch.object(self.stop_hook, "load_current_run", return_value=current_run),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "impl"}),
+                patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value={"summary": "finish the ticket", "intent_mode": "building", "requested_outcome": "done"}),
+                patch.object(self.stop_hook, "resolve_ticket", return_value=ticket),
+                patch.object(self.stop_hook, "classify_intent_alignment", return_value={"state": "aligned", "reason": "aligned", "turn_id": "turn-1", "summary": "finish the ticket", "expected_phase": "building", "observed_phase": "building", "continuation_message": "", "announce": ""}),
+                patch.object(self.stop_hook, "run_impl_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
+                patch.object(self.stop_hook, "emit_hook_telemetry"),
+                patch.object(self.stop_hook, "announce_message"),
+                patch.object(self.stop_hook, "persist_runtime_update", wraps=self.stop_hook.persist_runtime_update) as persist_runtime_update_mock,
+                patch.object(self.stop_hook, "run_role") as run_role_mock,
+            ):
+                result = self.stop_hook.main()
+
+        self.assertEqual(result, 0)
+        response = json.loads(stdout_buffer.getvalue())
+        self.assertEqual(response["decision"], "block")
+        self.assertIn("Call the completion reviewer now", response["reason"])
+        self.assertIn("COMPLETION_PASSWORD:", response["reason"])
+        request_updates = [
+            call.args[2]
+            for call in persist_runtime_update_mock.call_args_list
+            if len(call.args) >= 3 and isinstance(call.args[2], dict) and "completion_review_requested" in call.args[2]
+        ]
+        self.assertTrue(request_updates)
+        self.assertTrue(request_updates[-1]["completion_review_requested"])
+        self.assertEqual(request_updates[-1]["completion_review_receipt_status"], "requested")
+        self.assertRegex(str(request_updates[-1]["completion_review_nonce"]), r"^CR-[0-9A-F]{6}$")
+        self.assertEqual(
+            request_updates[-1]["completion_review_required_artifacts"],
+            [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+        )
+        run_role_mock.assert_not_called()
+
+    def test_main_requires_completion_password_without_rerunning_review_when_receipt_is_already_valid(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-main-") as td:
+            root = Path(td)
+            receipt_path = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "2026-04-25T020000Z-completion-receipt.json"
+            payload = {
+                "hook_event_name": "Stop",
+                "session_id": "sess-123",
+                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nIMPL_RESULT: status=done next=building reason=ready for completion gate",
+            }
+            current_run = {
+                "ticket_id": "TASK-0042",
+                "phase": "building",
+                "status": "waiting_for_worker",
+                "skill_name": "impl",
+                "session_id": "sess-123",
+                "impl_loop_active": True,
+                "execution_phase": "impl",
+                "completion_review_requested": True,
+                "completion_review_nonce": "CR-123ABC",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+                "completion_review_required_artifacts": [
+                    str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())
+                ],
+            }
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "title": "receipt gate fixture",
+                "phase": "building",
+                "status": "building",
+                "next_action": "test",
+                "acceptance_gaps": [],
+                "evidence_gaps": [],
+                "blockers": [],
+                "requires_qa": True,
+                "requires_demo": False,
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": root / "tickets" / "TASK-0042" / "artifacts",
+                "linked_artifacts": [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+            }
+            stdout_buffer = io.StringIO()
+            stderr_buffer = io.StringIO()
+            stdin_buffer = io.StringIO(json.dumps(payload))
+
+            with (
+                patch.object(sys, "argv", ["stop_hook.py"]),
+                patch.object(sys, "stdin", stdin_buffer),
+                redirect_stdout(stdout_buffer),
+                redirect_stderr(stderr_buffer),
+                patch.object(self.stop_hook, "project_root_from_payload", return_value=root),
+                patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
+                patch.object(self.stop_hook, "load_current_run", return_value=current_run),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "impl"}),
+                patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value={"summary": "finish the ticket", "intent_mode": "building", "requested_outcome": "done"}),
+                patch.object(self.stop_hook, "resolve_ticket", return_value=ticket),
+                patch.object(self.stop_hook, "classify_intent_alignment", return_value={"state": "aligned", "reason": "aligned", "turn_id": "turn-1", "summary": "finish the ticket", "expected_phase": "building", "observed_phase": "building", "continuation_message": "", "announce": ""}),
+                patch.object(self.stop_hook, "run_impl_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
+                patch.object(self.stop_hook, "emit_hook_telemetry"),
+                patch.object(self.stop_hook, "announce_message"),
+                patch.object(self.stop_hook, "completion_review_receipt_gate", return_value=(True, "", [], {"_path": str(receipt_path)})) as receipt_gate_mock,
+            ):
+                result = self.stop_hook.main()
+
+        self.assertEqual(result, 0)
+        response = json.loads(stdout_buffer.getvalue())
+        self.assertEqual(response["decision"], "block")
+        self.assertIn("completion review password is missing", response["reason"])
+        self.assertIn("COMPLETION_PASSWORD: CR-123ABC", response["reason"])
+        self.assertIn("Do not rerun completion review", response["reason"])
+        self.assertNotIn("Call the completion reviewer now", response["reason"])
+        receipt_gate_mock.assert_called_once()
+
+    def test_main_requests_reviewer_again_when_password_is_missing_and_receipt_is_not_ready(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-main-") as td:
+            root = Path(td)
+            payload = {
+                "hook_event_name": "Stop",
+                "session_id": "sess-123",
+                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nIMPL_RESULT: status=done next=building reason=ready for completion gate",
+            }
+            current_run = {
+                "ticket_id": "TASK-0042",
+                "phase": "building",
+                "status": "waiting_for_worker",
+                "skill_name": "impl",
+                "session_id": "sess-123",
+                "impl_loop_active": True,
+                "execution_phase": "impl",
+                "completion_review_requested": True,
+                "completion_review_nonce": "CR-123ABC",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+                "completion_review_required_artifacts": [
+                    str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())
+                ],
+            }
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "title": "receipt gate fixture",
+                "phase": "building",
+                "status": "building",
+                "next_action": "test",
+                "acceptance_gaps": [],
+                "evidence_gaps": [],
+                "blockers": [],
+                "requires_qa": True,
+                "requires_demo": False,
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": root / "tickets" / "TASK-0042" / "artifacts",
+                "linked_artifacts": [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+            }
+            stdout_buffer = io.StringIO()
+            stderr_buffer = io.StringIO()
+            stdin_buffer = io.StringIO(json.dumps(payload))
+
+            with (
+                patch.object(sys, "argv", ["stop_hook.py"]),
+                patch.object(sys, "stdin", stdin_buffer),
+                redirect_stdout(stdout_buffer),
+                redirect_stderr(stderr_buffer),
+                patch.object(self.stop_hook, "project_root_from_payload", return_value=root),
+                patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
+                patch.object(self.stop_hook, "load_current_run", return_value=current_run),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "impl"}),
+                patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value={"summary": "finish the ticket", "intent_mode": "building", "requested_outcome": "done"}),
+                patch.object(self.stop_hook, "resolve_ticket", return_value=ticket),
+                patch.object(self.stop_hook, "classify_intent_alignment", return_value={"state": "aligned", "reason": "aligned", "turn_id": "turn-1", "summary": "finish the ticket", "expected_phase": "building", "observed_phase": "building", "continuation_message": "", "announce": ""}),
+                patch.object(self.stop_hook, "run_impl_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
+                patch.object(self.stop_hook, "emit_hook_telemetry"),
+                patch.object(self.stop_hook, "announce_message"),
+                patch.object(self.stop_hook, "completion_review_receipt_gate", return_value=(False, "completion review receipt gates are not passing", ["completion_review_receipt=missing"], None)) as receipt_gate_mock,
+            ):
+                result = self.stop_hook.main()
+
+        self.assertEqual(result, 0)
+        response = json.loads(stdout_buffer.getvalue())
+        self.assertEqual(response["decision"], "block")
+        self.assertIn("completion review password is missing", response["reason"])
+        self.assertIn("Call the completion reviewer now", response["reason"])
+        self.assertNotIn("Do not rerun completion review", response["reason"])
+        receipt_gate_mock.assert_called_once()
+
+    def test_main_routes_to_orchestrator_after_password_and_receipt_pass(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-main-") as td:
+            root = Path(td)
+            receipt_path = root / "tickets" / "TASK-0042" / "artifacts" / "review" / "2026-04-25T020000Z-completion-receipt.json"
+            payload = {
+                "hook_event_name": "Stop",
+                "session_id": "sess-123",
+                "last_assistant_message": (
+                    "GROUNDING_SUMMARY: reviewer receipt requested\n"
+                    "COMPLETION_PASSWORD: CR-123ABC\n"
+                    "IMPL_RESULT: status=done next=building reason=ready for completion gate"
+                ),
+            }
+            current_run = {
+                "ticket_id": "TASK-0042",
+                "phase": "building",
+                "status": "waiting_for_worker",
+                "skill_name": "impl",
+                "session_id": "sess-123",
+                "impl_loop_active": True,
+                "execution_phase": "impl",
+                "completion_review_requested": True,
+                "completion_review_nonce": "CR-123ABC",
+                "completion_review_requested_at": "2026-04-25T01:58:00Z",
+                "completion_review_required_artifacts": [
+                    str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())
+                ],
+            }
+            ticket = {
+                "ticket_id": "TASK-0042",
+                "title": "receipt gate fixture",
+                "phase": "building",
+                "status": "building",
+                "next_action": "test",
+                "acceptance_gaps": [],
+                "evidence_gaps": [],
+                "blockers": [],
+                "requires_qa": True,
+                "requires_demo": False,
+                "updated_at": "2026-04-25T01:59:00Z",
+                "artifact_root": root / "tickets" / "TASK-0042" / "artifacts",
+                "linked_artifacts": [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+                "missing_artifacts": [],
+                "artifact_files": [str((root / "tickets" / "TASK-0042" / "artifacts" / "qa" / "result.json").resolve())],
+            }
+            stdout_buffer = io.StringIO()
+            stderr_buffer = io.StringIO()
+            stdin_buffer = io.StringIO(json.dumps(payload))
+
+            def fake_orchestrator(**_: object) -> int:
+                return self.stop_hook.emit_stop_payload(system_message="Stop hook: orchestrator reached")
+
+            with (
+                patch.object(sys, "argv", ["stop_hook.py"]),
+                patch.object(sys, "stdin", stdin_buffer),
+                redirect_stdout(stdout_buffer),
+                redirect_stderr(stderr_buffer),
+                patch.object(self.stop_hook, "project_root_from_payload", return_value=root),
+                patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
+                patch.object(self.stop_hook, "load_current_run", return_value=current_run),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "impl"}),
+                patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value={"summary": "finish the ticket", "intent_mode": "building", "requested_outcome": "done"}),
+                patch.object(self.stop_hook, "resolve_ticket", return_value=ticket),
+                patch.object(self.stop_hook, "classify_intent_alignment", return_value={"state": "aligned", "reason": "aligned", "turn_id": "turn-1", "summary": "finish the ticket", "expected_phase": "building", "observed_phase": "building", "continuation_message": "", "announce": ""}),
+                patch.object(self.stop_hook, "run_impl_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
+                patch.object(self.stop_hook, "completion_review_receipt_gate", return_value=(True, "", [], {"_path": str(receipt_path)})) as receipt_gate_mock,
+                patch.object(self.stop_hook, "run_orchestrator_decision", side_effect=fake_orchestrator) as orchestrator_mock,
+                patch.object(self.stop_hook, "emit_hook_telemetry"),
+                patch.object(self.stop_hook, "announce_message"),
+            ):
+                result = self.stop_hook.main()
+
+        self.assertEqual(result, 0)
+        response = json.loads(stdout_buffer.getvalue())
+        self.assertEqual(response["systemMessage"], "Stop hook: orchestrator reached")
+        receipt_gate_mock.assert_called_once()
+        orchestrator_mock.assert_called_once()
+
+
 class StopHookSkillRoutingTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stop_hook = load_stop_hook_module()

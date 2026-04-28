@@ -63,6 +63,10 @@ IMPL_RESULT_PATTERN = re.compile(r"^IMPL_RESULT:\s+status=.*$", re.MULTILINE)
 PARSED_IMPL_RESULT_PATTERN = re.compile(
     r"^IMPL_RESULT:\s+status=(?P<status>[A-Za-z0-9_-]+)\s+next=(?P<next>[A-Za-z0-9_-]+)(?:\s+reason=(?P<reason>.*))?$"
 )
+COMPLETION_PASSWORD_PATTERN = re.compile(
+    r"^COMPLETION_PASSWORD:\s*(?P<password>CR-[0-9A-Z]+)\s*$",
+    re.MULTILINE,
+)
 ALLOWED_PHASES = {"planning", "building", "documenting"}
 ROLE_ACTIONS = {
     "continue_same_ticket",
@@ -1267,6 +1271,15 @@ def generate_completion_review_nonce() -> str:
     return "CR-" + secrets.token_hex(3).upper()
 
 
+def extract_completion_password(message: str) -> str:
+    if not message.strip():
+        return ""
+    match = COMPLETION_PASSWORD_PATTERN.search(message)
+    if match is None:
+        return ""
+    return str(match.group("password") or "").strip()
+
+
 def build_completion_review_request(
     ticket: dict[str, object],
     current_run: dict[str, object] | None,
@@ -1290,6 +1303,7 @@ def build_completion_review_request_message(
     request: dict[str, object],
     *,
     failure_reason: str = "",
+    password_failure_reason: str = "",
 ) -> str:
     ticket_id = str(ticket["ticket_id"])
     nonce = str(request.get("nonce") or "").strip()
@@ -1299,15 +1313,15 @@ def build_completion_review_request_message(
         if isinstance(item, str) and item.strip()
     ]
     artifact_block = "\n".join(artifacts) if artifacts else "- linked ticket-scoped artifacts already on the ticket"
-    reason_prefix = (
-        f"Stop hook validated the phase and artifact gates, but {failure_reason.strip()}.\n\n"
-        if failure_reason.strip()
-        else "Stop hook validated the phase and artifact gates, but final completion still needs a visible review receipt.\n\n"
-    )
+    failure_parts = [item.strip() for item in (password_failure_reason, failure_reason) if item.strip()]
+    if failure_parts:
+        reason_prefix = "Stop hook validated the phase and artifact gates, but " + " and ".join(failure_parts) + ".\n\n"
+    else:
+        reason_prefix = "Stop hook validated the phase and artifact gates, but final completion still needs visible reviewer signoff.\n\n"
     return (
         f"Continue {ticket_id} in building.\n\n"
         + reason_prefix
-        + "Run a visible reviewer pass now. Use the `review` skill against the active ticket, then write "
+        + "Call the completion reviewer now. Use the `review` skill against the active ticket, hand it this one-time password, then write "
         f"`tickets/{ticket_id}/artifacts/review/<timestamp>-completion-receipt.json` with this exact nonce: `{nonce}`.\n\n"
         "Required receipt fields:\n"
         "- `receipt_type`: `completion_review`\n"
@@ -1323,8 +1337,25 @@ def build_completion_review_request_message(
         "- `review_artifact`: path to the main linked review artifact\n\n"
         "Artifacts this receipt should cover:\n"
         f"{artifact_block}\n\n"
-        "Link the receipt from the ticket `Evidence` section and finish with "
-        "`IMPL_RESULT: status=done next=building reason=completion review receipt written`."
+        "Link the receipt from the ticket `Evidence` section and finish your next final response with both:\n"
+        f"- `COMPLETION_PASSWORD: {nonce}`\n"
+        "- `IMPL_RESULT: status=done next=building reason=completion review receipt written`"
+    )
+
+
+def build_completion_password_retry_message(
+    ticket: dict[str, object],
+    nonce: str,
+    *,
+    password_failure_reason: str,
+) -> str:
+    ticket_id = str(ticket["ticket_id"])
+    return (
+        f"Continue {ticket_id} in building.\n\n"
+        f"Stop hook validated the linked completion review receipt, but {password_failure_reason.strip()}.\n\n"
+        "Do not rerun completion review. Keep the existing linked receipt and resend your next final response with both:\n"
+        f"- `COMPLETION_PASSWORD: {nonce}`\n"
+        "- `IMPL_RESULT: status=done next=building reason=completion review receipt written`"
     )
 
 
@@ -1340,6 +1371,23 @@ def load_completion_review_receipt(path: Path) -> dict[str, object] | None:
     return receipt
 
 
+def completion_review_password_gate(
+    pending_nonce: str,
+    message: str,
+) -> tuple[bool, str, list[str], str]:
+    observed = extract_completion_password(message)
+    if not observed:
+        return False, "completion review password is missing from the final response", ["completion_review_password=missing"], ""
+    if observed != pending_nonce:
+        return (
+            False,
+            "completion review password does not match the requested nonce",
+            [f"completion_review_password=mismatch:{observed}"],
+            observed,
+        )
+    return True, "", [], observed
+
+
 def completion_review_receipt_gate(
     ticket: dict[str, object],
     current_run: dict[str, object] | None,
@@ -1349,8 +1397,20 @@ def completion_review_receipt_gate(
     if not pending_nonce:
         return False, "completion review receipt gates are not passing", ["completion_review_nonce=missing"], None
 
+    linked_artifacts = [str(item) for item in list(ticket.get("linked_artifacts") or []) if isinstance(item, str)]
     requested_at = parse_timestamp((current_run or {}).get("completion_review_requested_at"))
-    linked_paths = completion_review_receipt_paths([str(item) for item in list(ticket.get("linked_artifacts") or []) if isinstance(item, str)])
+    required_artifacts = [
+        str(item)
+        for item in list((current_run or {}).get("completion_review_required_artifacts") or [])
+        if isinstance(item, str) and item.strip()
+    ]
+    if not required_artifacts:
+        required_artifacts = [
+            item
+            for item in linked_artifacts
+            if "/review/" not in item or "completion-receipt" not in Path(item).name
+        ]
+    linked_paths = completion_review_receipt_paths(linked_artifacts)
     artifact_paths = completion_review_receipt_paths([str(item) for item in list(ticket.get("artifact_files") or []) if isinstance(item, str)])
 
     if not linked_paths:
@@ -1382,6 +1442,8 @@ def completion_review_receipt_gate(
         key=lambda item: Path(str(item["_path"])).stat().st_mtime,
     )
     receipt_path = Path(str(receipt["_path"]))
+    artifact_root = ticket.get("artifact_root")
+    artifact_root_path = artifact_root if isinstance(artifact_root, Path) else None
     ticket_id = str(receipt.get("ticket_id") or "").strip()
     verdict = str(receipt.get("verdict") or "").strip()
     receipt_type = str(receipt.get("receipt_type") or "").strip()
@@ -1410,12 +1472,41 @@ def completion_review_receipt_gate(
         failures.append("completion_review_reviewed_artifacts=missing")
     elif any(not isinstance(item, str) or not item.strip() for item in reviewed_artifacts):
         failures.append("completion_review_reviewed_artifacts=invalid")
+    else:
+        reviewed_artifact_paths = {
+            str(Path(str(item)).expanduser().resolve())
+            for item in reviewed_artifacts
+            if isinstance(item, str) and item.strip()
+        }
+        for item in reviewed_artifacts:
+            candidate = Path(str(item)).expanduser()
+            if not candidate.exists():
+                failures.append(f"completion_review_reviewed_artifact=missing:{candidate}")
+                continue
+            resolved_candidate = candidate.resolve()
+            if artifact_root_path is not None and not str(resolved_candidate).startswith(str(artifact_root_path.resolve())):
+                failures.append(f"completion_review_reviewed_artifact=outside_ticket_root:{resolved_candidate}")
+        for item in required_artifacts:
+            candidate = Path(item).expanduser()
+            resolved_candidate = str(candidate.resolve()) if candidate.exists() else str(candidate)
+            if resolved_candidate not in reviewed_artifact_paths:
+                failures.append(f"completion_review_required_artifact=unreviewed:{resolved_candidate}")
     if not isinstance(satisfies_user_query, bool):
         failures.append("completion_review_satisfies_user_query=missing")
     elif not satisfies_user_query:
         failures.append("completion_review_satisfies_user_query=false")
     if not review_artifact:
         failures.append("completion_review_review_artifact=missing")
+    else:
+        review_artifact_path = Path(review_artifact).expanduser()
+        if not review_artifact_path.exists():
+            failures.append(f"completion_review_review_artifact=missing:{review_artifact_path}")
+        else:
+            resolved_review_artifact = str(review_artifact_path.resolve())
+            if artifact_root_path is not None and not resolved_review_artifact.startswith(str(artifact_root_path.resolve())):
+                failures.append(f"completion_review_review_artifact=outside_ticket_root:{resolved_review_artifact}")
+            if resolved_review_artifact not in linked_artifacts:
+                failures.append(f"completion_review_review_artifact=unlinked:{resolved_review_artifact}")
     if requested_at is not None and receipt_time.replace(second=0, microsecond=0) < requested_at.replace(second=0, microsecond=0):
         failures.append("completion_review_receipt=stale")
     if ticket_updated_at is not None and receipt_time.replace(second=0, microsecond=0) < ticket_updated_at:
@@ -2793,6 +2884,7 @@ def main() -> int:
                         "completion_review_requested": True,
                         "completion_review_nonce": str(request["nonce"]),
                         "completion_review_requested_at": str(request["requested_at"]),
+                        "completion_review_required_artifacts": list(request.get("required_artifacts") or []),
                         "completion_review_receipt_path": "",
                         "completion_review_receipt_status": "requested",
                         "status": "waiting_for_worker",
@@ -2821,6 +2913,85 @@ def main() -> int:
                     continuation_message=build_completion_review_request_message(ticket, request),
                     hook_summary=request_summary,
                     announce=f"Visible completion review required for {ticket['ticket_id']}.",
+                )
+
+            password_ok, password_reason, password_failures, observed_password = completion_review_password_gate(
+                pending_nonce,
+                message,
+            )
+            if not password_ok:
+                password_receipt_ok, _, _, password_receipt = completion_review_receipt_gate(ticket, current_run)
+                password_receipt_path = str((password_receipt or {}).get("_path") or "").strip()
+                if not impl_loop_allowed:
+                    current_run = persist_impl_loop_active(project_root, current_run, False)
+                    announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
+                    return emit_stop_payload(
+                        continue_value=False,
+                        stop_reason="completion review password requested without an active impl loop",
+                        system_message=f"Stop hook: completion-review-password: {ticket['ticket_id']} -> continue_same_ticket ({password_reason})",
+                    )
+                current_run = persist_impl_loop_active(project_root, current_run, True)
+                current_run = persist_runtime_update(
+                    project_root,
+                    current_run,
+                    {
+                        "completion_review_requested": True,
+                        "completion_review_required_artifacts": list(
+                            (current_run or {}).get("completion_review_required_artifacts") or []
+                        ),
+                        "completion_review_receipt_path": password_receipt_path,
+                        "completion_review_receipt_status": "pass" if password_receipt_ok else "requested",
+                        "status": "waiting_for_worker",
+                    },
+                )
+                password_summary = f"completion-review-password: {ticket['ticket_id']} -> continue_same_ticket ({password_reason})"
+                current_run = publish_hook_status(
+                    project_root,
+                    current_run,
+                    decision="continue_same_ticket",
+                    summary=password_summary,
+                )
+                append_hook_log(
+                    base,
+                    {
+                        "timestamp": now_iso(),
+                        "mode": "completion-review",
+                        "ticket_id": str(ticket["ticket_id"]),
+                        "nonce": pending_nonce,
+                        "observed_password": observed_password,
+                        "password_ok": False,
+                        "receipt_ok": password_receipt_ok,
+                        "receipt_path": password_receipt_path,
+                        "failures": password_failures,
+                    },
+                )
+                if password_receipt_ok:
+                    continuation_message = build_completion_password_retry_message(
+                        ticket,
+                        pending_nonce,
+                        password_failure_reason=password_reason,
+                    )
+                else:
+                    request = {
+                        "ticket_id": str(ticket["ticket_id"]),
+                        "nonce": pending_nonce,
+                        "required_artifacts": list(
+                            (current_run or {}).get("completion_review_required_artifacts")
+                            or ticket.get("linked_artifacts")
+                            or []
+                        )[:12],
+                    }
+                    continuation_message = build_completion_review_request_message(
+                        ticket,
+                        request,
+                        password_failure_reason=password_reason,
+                    )
+                return continue_hook_response(
+                    payload=payload,
+                    ticket=ticket,
+                    continuation_message=continuation_message,
+                    hook_summary=password_summary,
+                    announce=password_reason,
                 )
 
             receipt_ok, receipt_reason, receipt_failures, receipt = completion_review_receipt_gate(ticket, current_run)
@@ -2857,6 +3028,9 @@ def main() -> int:
                     current_run,
                     {
                         "completion_review_requested": True,
+                        "completion_review_required_artifacts": list(
+                            (current_run or {}).get("completion_review_required_artifacts") or []
+                        ),
                         "completion_review_receipt_path": receipt_path,
                         "completion_review_receipt_status": "failed",
                         "status": "waiting_for_worker",
@@ -2871,7 +3045,11 @@ def main() -> int:
                 request = {
                     "ticket_id": str(ticket["ticket_id"]),
                     "nonce": pending_nonce,
-                    "required_artifacts": list(ticket.get("linked_artifacts") or [])[:12],
+                    "required_artifacts": list(
+                        (current_run or {}).get("completion_review_required_artifacts")
+                        or ticket.get("linked_artifacts")
+                        or []
+                    )[:12],
                 }
                 failure_message = receipt_failures[0] if receipt_failures else receipt_reason
                 continuation_message = build_completion_review_request_message(
@@ -2895,6 +3073,7 @@ def main() -> int:
                     "completion_review_requested": False,
                     "completion_review_nonce": "",
                     "completion_review_requested_at": "",
+                    "completion_review_required_artifacts": [],
                     "completion_review_receipt_path": receipt_path,
                     "completion_review_receipt_status": "pass",
                     "status": "complete",

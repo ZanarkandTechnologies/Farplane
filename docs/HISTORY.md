@@ -119,5 +119,7 @@
 2026-04-25 12:55 +0100 | FIX | make `ticket_runtime` keep reserved ports when teardown fails, make `qa` report only live targets with explicit runtime status, and persist launch-failure state instead of overstating availability
 2026-04-25 01:22 +0100 | FEAT | tighten the shipped global contract around complaint-shaped recovery, skill todo-list loading, and action-ordered ticket plans
 2026-04-25 01:29 +0100 | FIX | align `repent`, `impl-plan` README, and the techniques inventory with the new complaint-recovery and skill-checklist doctrine
+2026-04-25 02:06 +0100 | FEAT | replace hidden Stop-hook completion-gate review with a visible nonce-backed completion-review receipt flow, teach reviewer lanes to write linked receipt artifacts, and gate completion on that receipt plus targeted stop-hook tests
 2026-04-29 17:10 +0800 | CHORE | separate HISTORY and MEMORY formats so change chronology and durable rules use distinct one-line contracts
 2026-04-29 06:21 +0800 | FIX | simplify the ticket contract so durable links live in `Refs`, detailed proof lives in `Evidence`, and the validator/runtime surfaces no longer require `linked_docs`
+2026-04-29 06:52 +0800 | FEAT | require active impl-loop password echo for Stop-hook completion review so the hook issues the nonce on demand and the next final response must return `COMPLETION_PASSWORD` alongside the linked receipt

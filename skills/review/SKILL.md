@@ -136,6 +136,11 @@ link it from the ticket `Evidence` section. That receipt should include:
 - `obvious_next_step`
 - `review_artifact`
 
+The calling lane should then use that same nonce as the one-time completion
+password in its next final response:
+
+- `COMPLETION_PASSWORD: <nonce>`
+
 ## Scoring Rules
 
 - Overall verdict is `pass` only if every required rubric meets threshold.

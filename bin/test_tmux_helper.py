@@ -145,3 +145,16 @@ class TmuxHelperLaneContractTests(unittest.TestCase):
         self.assertIn("Run the `qa` skill on ticket `TASK-0025`.", prompt)
         self.assertIn("Execution phase: `qa`.", prompt)
         self.assertIn("status=qa_complete", prompt)
+
+    def test_build_phase_prompt_tells_reviewer_lane_to_write_completion_receipt_when_requested(self) -> None:
+        ticket = ROOT / "tickets" / "TASK-0025" / "ticket.md"
+        prompt = self.tmux_helper.build_phase_prompt(
+            ticket,
+            "building",
+            "reviewer",
+            str(ROOT / "tickets" / "TASK-0025" / "artifacts"),
+            "impl",
+        )
+
+        self.assertIn("completion-receipt.json", prompt)
+        self.assertIn("completion review receipt written", prompt)

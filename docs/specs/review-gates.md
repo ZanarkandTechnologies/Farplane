@@ -48,9 +48,9 @@ For user-facing work, reviewer rubric selection may also include a dedicated
 user-intent-satisfaction family so the system can judge "correct" separately
 from "actually satisfying for the intended user."
 For Stop-hook completion paths, reviewer should ground that judgment through the
-live `$review` skill contract and then make one narrow `$advise`
-recommendation for the best immediate same-ticket next step when continuation is
-required.
+live `$review` skill contract in a visible reviewer lane, write a linked
+completion-review receipt when final completion is being judged, and make one
+narrow same-ticket next-step recommendation when continuation is required.
 
 ### Stop Hook
 
@@ -69,6 +69,10 @@ On completion paths, it should keep the final sufficiency gate inspectable:
 when mechanical artifact gates pass, Stop hook should request one visible
 completion-review receipt keyed by a nonce, then validate that linked receipt
 instead of hiding the final judgment in another background review pass.
+That nonce should be issued only inside an active ticket-backed `impl` loop,
+returned to the live lane through the Stop-hook continuation message, and
+echoed back in the next final assistant response as
+`COMPLETION_PASSWORD: <nonce>` before completion may pass.
 On completion paths, it should also require an explicit judgment about whether
 the finished artifact would satisfy the saved user ask, not only whether the
 ticket and evidence look internally coherent.
@@ -165,6 +169,10 @@ Reviewer output should use one normalized shape:
 `search_scope` should stay compact and explain which neighboring surfaces the
 review checked beyond the changed file. `finding_log` should stay high-signal:
 severity-ranked, evidence-backed, and concrete enough for a builder to act on.
+For completion routing, this structured review output should live in the linked
+review artifact that the completion receipt points at; Stop hook should validate
+the linked receipt plus artifact freshness, not require a second hidden copy of
+these fields from an internal role response.
 
 ## Anchored Review Scale
 
@@ -269,6 +277,9 @@ When Stop hook requests visible completion review, the ticket must also link a
 fresh `completion-review` receipt artifact under `tickets/TASK-XXXX/artifacts/review/`
 that includes the requested nonce, the artifacts reviewed, the verdict, and the
 user-query satisfaction judgment.
+The next final assistant response must also include
+`COMPLETION_PASSWORD: <nonce>` matching that same receipt; password text alone
+is not sufficient without the linked receipt artifact.
 
 The ticket should link those artifacts from `Evidence`; it should not prefill an
 empty review-output stub in advance.
