@@ -16,7 +16,6 @@ created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
 next_action: define the one current step and keep it in this field
 last_verification: none
-linked_docs: []
 ---
 
 # TASK-XXXX: title
@@ -75,7 +74,6 @@ flowchart LR
 - `Tests:` what should pass
 - `Manual checks:` any direct checks that matter
 - `Evidence required:` strongest artifacts needed to show the work is done
-- `Artifacts path:` `tickets/TASK-XXXX/artifacts/`
 
 ## Agent Contract
 - Optional for non-UI work. Add when the ticket changes UI, canvas rendering,
@@ -101,7 +99,10 @@ flowchart LR
 - [ ] QA report linked:
 
 ## Refs
-- Optional links only: specs, docs, issues, websites, or comparable examples
+- Optional durable links only: specs, docs, issues, websites, or comparable
+  examples
+- This is the canonical place for linked docs. Do not mirror them in
+  frontmatter.
 - Do not store raw `session_id` values in ticket frontmatter.
 
 ## Evidence
@@ -109,6 +110,8 @@ flowchart LR
   `tickets/TASK-XXXX/artifacts/` and link them here.
   For build/documenting completion paths, also link the visible completion
   receipt artifact here when Stop hook requested one.
+- Keep detailed proof here. `last_verification` in frontmatter should stay a
+  one-line current verdict, not a second evidence section.
 - `Artifacts:`
 - `Commands:`
 - `Result summary:`

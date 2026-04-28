@@ -753,7 +753,6 @@ created_at: 2026-04-05T00:00:00Z
 updated_at: 2026-04-05T01:30:00Z
 next_action: test fixture
 last_verification: none
-linked_docs: []
 ---
 
 # TASK-9999: stale packet fixture
@@ -803,7 +802,6 @@ created_at: 2026-04-05T00:00:00Z
 updated_at: 2026-04-05T01:30:00Z
 next_action: test fixture
 last_verification: none
-linked_docs: []
 ---
 
 # TASK-9999: stale evidence fixture

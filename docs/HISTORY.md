@@ -119,3 +119,4 @@
 2026-04-25 12:55 +0100 | FIX | make `ticket_runtime` keep reserved ports when teardown fails, make `qa` report only live targets with explicit runtime status, and persist launch-failure state instead of overstating availability
 2026-04-25 01:22 +0100 | FEAT | tighten the shipped global contract around complaint-shaped recovery, skill todo-list loading, and action-ordered ticket plans
 2026-04-25 01:29 +0100 | FIX | align `repent`, `impl-plan` README, and the techniques inventory with the new complaint-recovery and skill-checklist doctrine
+2026-04-29 06:21 +0800 | FIX | simplify the ticket contract so durable links live in `Refs`, detailed proof lives in `Evidence`, and the validator/runtime surfaces no longer require `linked_docs`

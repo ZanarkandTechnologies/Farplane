@@ -111,7 +111,6 @@ flowchart LR
 - `Manual checks:` inspect the good example and template to confirm the typed
   flow is readable without `Human` / `Agent`
 - `Evidence required:` updated skill surfaces plus passing validator output
-- `Artifacts path:` `tickets/archive/TASK-0086/artifacts/`
 
 ## Evidence
 - `Artifacts:` updated skill surfaces and validator output linked from the

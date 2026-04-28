@@ -32,7 +32,6 @@ REQUIRED_FIELDS = {
     "updated_at",
     "next_action",
     "last_verification",
-    "linked_docs",
 }
 TICKET_ID_RE = re.compile(r"^TASK-\d{4}$")
 TICKET_ID_IN_FILENAME_RE = re.compile(r"^(TASK-\d{4})(?:-|$)")

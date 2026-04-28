@@ -78,22 +78,21 @@ flowchart LR
 - `Tests:`
 - `Manual checks:`
 - `Evidence required:`
-- `Artifacts path:` `tickets/TASK-XXXX/artifacts/`
 
 ## Refs
 
-- optional durable links only
+- optional durable links only; this is the canonical place for linked docs
 
 ## Evidence
 
 - `Artifacts:`
 - `Commands:`
+- `Result summary:`
 - `Plan review:`
   - `Refs used:`
   - `Checks:`
   - `Tone:`
   - `Fixes:`
-- `Result summary:`
 - `Ready:` yes / no
 
 ## Blockers

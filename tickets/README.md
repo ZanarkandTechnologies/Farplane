@@ -5,7 +5,7 @@ Active work lives in `tickets/TASK-*/ticket.md`.
 One source of truth per concern:
 
 - frontmatter = queue state and execution state
-- body = plan, evidence, and blockers
+- body = plan, references, evidence, and blockers
 - `.harness/state/` = live runtime state
 - `docs/` = durable knowledge after the ticket is done
 - transcript = disposable context, not the canonical resume surface
@@ -67,7 +67,6 @@ created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
 next_action: await approval to set status: building
 last_verification: none
-linked_docs: []
 ---
 ```
 
@@ -84,7 +83,8 @@ linked_docs: []
 - `requires_qa`: whether `$impl` must produce a passing QA phase before completion
 - `requires_demo`: whether `$impl` must also produce a passing demo phase after QA
 - `next_action`: the one authoritative next step
-- `last_verification`: the authoritative verification summary
+- `last_verification`: the one-line authoritative verification summary; keep
+  detailed commands and artifacts in `Evidence`
 
 ## Invariants
 
@@ -129,6 +129,7 @@ Default sections:
 - `Plan`
 - `Acceptance Criteria`
 - `Verification`
+- `Refs`
 - `Evidence`
 - `Blockers`
 
@@ -138,7 +139,6 @@ Optional sections only when they add signal:
 - `Diagram`
 - `Agent Contract`
 - `Evidence Checklist`
-- `Refs`
 
 The default `Plan` should answer four things:
 
@@ -204,7 +204,8 @@ Do not duplicate the same idea across multiple headings. If a short summary and
 the plan already explain the change, do not add more ceremony.
 
 Use `Refs` for durable source URLs, specs, issues, websites, or comparable
-examples instead of spreading links across extra note sections.
+examples instead of spreading links across extra note sections or duplicating
+them in frontmatter.
 
 ## Evidence Artifacts
 
@@ -219,7 +220,8 @@ Examples:
 - seed or fixture notes that help reproduce the proof surface
 
 Link those artifacts from the ticket `Evidence` section instead of preallocating
-empty review-output fields in the template.
+empty review-output fields in the template or repeating the artifact path under
+`Verification`.
 
 Canonical policy references:
 

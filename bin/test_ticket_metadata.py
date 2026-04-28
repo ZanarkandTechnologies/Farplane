@@ -30,7 +30,6 @@ created_at: 2026-04-10T00:00:00Z
 updated_at: 2026-04-10T00:00:00Z
 next_action: wait for approval
 last_verification: none
-linked_docs: []
 ---
 
 # TASK-9999: valid ticket

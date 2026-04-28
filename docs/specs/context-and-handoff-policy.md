@@ -29,6 +29,9 @@ It must carry:
 - next action
 - last verification
 
+`last_verification` should stay a one-line current verdict. Detailed proof
+belongs in the ticket `Evidence` section.
+
 ### Runtime State
 
 `.harness/state/sessions/{session_id}.json` is the preferred runtime lane surface
@@ -102,8 +105,8 @@ Before ending a ticket session that may need resume, update:
   - `blocked_by`
   - `next_action`
   - `last_verification`
-  - `linked_docs`
 - body:
+  - `Refs` when durable linked docs changed
   - `Evidence`
   - `Blockers`
 
@@ -136,7 +139,8 @@ Before archive:
 
 - `status` should be `done` or `failed`
 - `phase` should reflect terminal state such as `complete` or `failed`
-- durable docs should already be linked from `linked_docs` when applicable
+- durable docs and proof links should already be visible from `Refs` and
+  `Evidence` when applicable
 
 Archive is history, not hot execution state.
 

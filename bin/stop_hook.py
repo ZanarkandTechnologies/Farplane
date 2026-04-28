@@ -741,7 +741,6 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
         "updated_at": str(frontmatter.get("updated_at", "")).strip(),
         "next_action": str(frontmatter.get("next_action", "")).strip(),
         "last_verification": str(frontmatter.get("last_verification", "")).strip(),
-        "linked_docs": list(frontmatter.get("linked_docs", [])) if isinstance(frontmatter.get("linked_docs", []), list) else [],
         "acceptance_gaps": unchecked_items(sections.get("Acceptance Criteria", [])),
         "evidence_gaps": unchecked_items(sections.get("Evidence", [])),
         "blockers": blocked_items(sections.get("Blockers", [])),
