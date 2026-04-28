@@ -86,8 +86,8 @@ copy_file "${REF_DIR}/SPECS_README_TEMPLATE.md" "${TARGET_DIR}/docs/specs/README
 copy_file "${REF_DIR}/BOOTSTRAP_BRIEF_TEMPLATE.md" "${TARGET_DIR}/docs/bootstrap-brief.md"
 
 write_file_if_missing "${TARGET_DIR}/docs/prd.md" "# PRD\n\n## Problem / Context\n\n## Audience\n\n## JTBD\n\n## SLC Slice\n\n## Goals\n\n## Non-Goals\n\n## Constraints\n\n## Risks\n\n## Backpressure\n"
-write_file_if_missing "${TARGET_DIR}/docs/HISTORY.md" "# HISTORY\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | MEM-#### | tags | text\n\n"
-write_file_if_missing "${TARGET_DIR}/docs/MEMORY.md" "# MEMORY\n\nCurated durable constraints promoted from HISTORY.\n\n"
+write_file_if_missing "${TARGET_DIR}/docs/HISTORY.md" "# HISTORY\n\nAppend-only change log.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | summary\n\n"
+write_file_if_missing "${TARGET_DIR}/docs/MEMORY.md" "# MEMORY\n\nCurated durable constraints and invariants future work must obey.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | MEM-#### | tags | durable rule\n\n"
 write_file_if_missing "${TARGET_DIR}/docs/TROUBLES.md" "# TROUBLES\n\nAppend-only log for repeated failures, user corrections, and preventable misses.\n\nFormat:\nYYYY-MM-DD HH:mm Z | area,tags | request | miss | correction | prevention\n\nPromote only durable lessons from here into docs/MEMORY.md or the relevant skill/contract.\n\n"
 copy_file "${REF_DIR}/TASTE_TEMPLATE.md" "${TARGET_DIR}/docs/TASTE.md"
 

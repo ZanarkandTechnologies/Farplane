@@ -220,21 +220,25 @@ README should cover:
 
 Files:
 
-- `docs/HISTORY.md` = append-only
-- `docs/MEMORY.md` = curated constraints
+- `docs/HISTORY.md` = append-only change log
+- `docs/MEMORY.md` = curated durable constraints and invariants
 - `docs/TROUBLES.md` = append-only repeated-failure and correction log
 
 Format:
 
-- `YYYY-MM-DD HH:mm Z | TYPE | MEM-#### | tags | text`
+- `docs/HISTORY.md`: `YYYY-MM-DD HH:mm Z | TYPE | summary`
+- `docs/MEMORY.md`: `YYYY-MM-DD HH:mm Z | TYPE | MEM-#### | tags | durable rule`
 
 Log when:
 
-- invariant
-- API or data model change
-- behavior, perf, or security constraint
-- migration
-- architecture shift
+- `docs/HISTORY.md`
+  - shipped or durable repo change
+  - migration or cleanup worth preserving chronologically
+  - behavior, API, or architecture change
+- `docs/MEMORY.md`
+  - invariant
+  - operating constraint
+  - behavior, perf, or security rule future work must obey
 
 Troubles log when:
 

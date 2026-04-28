@@ -122,8 +122,8 @@ For harness-design research and external patterns:
 - `tickets/`: active task object, plan, evidence, blockers, and any short
   resume notes when needed, with canonical ticket files at
   `tickets/TASK-XXXX/ticket.md` and `tickets/archive/TASK-XXXX/ticket.md`
-- `docs/HISTORY.md`: append-only change log
-- `docs/MEMORY.md`: curated invariants and constraints
+- `docs/HISTORY.md`: append-only change log of what changed
+- `docs/MEMORY.md`: curated invariants and constraints that future work must obey
 - `docs/TROUBLES.md`: repeated misses and prevention ideas
 - `experiments/`: proof artifacts and smoke outputs
 
