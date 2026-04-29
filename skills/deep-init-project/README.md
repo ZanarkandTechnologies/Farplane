@@ -3,8 +3,9 @@
 Bootstrap or migrate a project into the docs-first, ticket-first harness model.
 This setup should start with a deep-interview-quality bootstrap intake, then
 scaffold optional `.githooks/` samples plus project-local `scripts/pre_*_check.sh`
-files for local quality gates, plus a repo-owned `qa/` cookbook surface for
-agent-efficient verification guidance, without enabling hooks automatically.
+files for local quality gates, plus repo-owned runtime and `qa/` guidance so
+agents can launch the app and capture evidence without guessing, all without
+enabling hooks automatically.
 
 ## Use Cases
 
@@ -24,14 +25,18 @@ as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
 That intake should explicitly answer whether local hooks should be enabled, what
 belongs in `pre-push` or `pre-commit`, which heavy local checks such as
 `desloppify` or `CodeRabbit` are desired, and whether a separate CI/deployment
-gate exists.
+gate exists. It should also name the canonical app-only run path, canonical
+full QA or evidence-capture path, required services such as DB or orchestration
+tools, and any port or environment-variable assumptions.
 
 That also writes `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
 and `scripts/pre_push_check.sh` as opt-in samples. The recommended default is
 to keep the large-file scan, fill in lint/typecheck/test/build commands, and
-activate only `pre-push` unless the repo wants an extra pre-commit gate.
+activate only `pre-push` unless the repo wants an extra pre-commit gate. The
+other required follow-through is to fill `PROJECT_RULES.md` and `qa/` with the
+authoritative launch path agents should use for ordinary app work versus QA.
 
 Then follow the funnel:
 
@@ -119,6 +124,7 @@ The first migration slice should only prove:
 
 - ticket structure works
 - qa cookbook structure exists for future agent-facing shortcuts and probes
+- canonical app and QA launch commands are documented on visible repo surfaces
 - `Stop` hook works
 - the project can produce one good ticket outcome
 
@@ -137,12 +143,15 @@ Those can come after one clean ticket run.
 
 - [ ] `docs/bootstrap-brief.md` exists and captures stack/topology/gate decisions
 - [ ] `docs/bootstrap-brief.md` captures local-hook, heavy-check, and CI/deploy-gate decisions
+- [ ] `docs/bootstrap-brief.md` captures canonical app/QA run paths plus required services and port/env assumptions
 - [ ] `docs/bootstrap-brief.md` captures agent-experience/testability decisions
 - [ ] `PROJECT_RULES.md` exists
+- [ ] `PROJECT_RULES.md` names the authoritative app-only and QA/evidence launch commands
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists
 - [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
+- [ ] one QA cookbook page records the evidence-capture launch path and expected targets
 - [ ] `docs/specs/README.md` exists
 - [ ] `tickets/` structure exists
 - [ ] `tickets/archive/` exists for completed tickets

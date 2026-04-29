@@ -1,7 +1,7 @@
 ---
 name: deep-init-project
 version: 3.0.0
-description: "Deep bootstrap workflow for new projects. Use a deep-interview-quality intake, then scaffold docs-first operating files, explicit local-vs-deploy quality-gate decisions, and reusable plan/build prompts."
+description: "Deep bootstrap workflow for new projects. Use a deep-interview-quality intake, then scaffold docs-first operating files, explicit local-vs-deploy quality-gate decisions, canonical runtime/QA command guidance, and reusable plan/build prompts."
 ---
 
 # Deep Init Project Skill
@@ -14,7 +14,7 @@ agent-efficient verification guidance.
 
 ## What This Sets Up
 
-- `PROJECT_RULES.md` (project-specific stack + commands + conventions)
+- `PROJECT_RULES.md` (project-specific stack, canonical runtime/QA commands, and conventions)
 - `AGENTS.md` (operational contract loaded every loop)
 - `ARCHITECTURE.md` (top-level system map for the repo)
 - `docs/` state (`bootstrap-brief.md`, `prd.md`, `specs/README.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
@@ -76,6 +76,10 @@ bootstrap source of truth for:
 - stack choices and defaults
 - required local validators (`lint`, `typecheck`, `test`, optional `build`)
 - optional heavy gates (`desloppify`, `CodeRabbit`)
+- preferred app-only run path for local development
+- preferred full QA or evidence-capture run path for agents
+- required local services such as DB, queues, or orchestration tools
+- port and environment-variable assumptions that launchers and QA must honor
 - whether local git hooks should stay manual, be suggested for activation, or
   stay disabled
 - which hook stages matter (`pre-push`, `pre-commit`, neither, or both)
@@ -101,6 +105,8 @@ Required gate questions:
 5. What separate CI or deployment gate exists, and which checks belong there
    instead of local hooks?
 6. What should the scaffold leave manual versus auto-decided for the operator?
+7. What are the canonical app-only and QA/evidence run paths, which services do
+   they require, and which ports or env vars must stay configurable?
 
 ### Fast path
 
@@ -117,6 +123,9 @@ repo.
 1. Run a deep-interview-quality bootstrap intake, answer the required
    gate-routing questions, and write the answers into `docs/bootstrap-brief.md`.
 2. Copy `references/PROJECT_RULES_TEMPLATE.md` -> `PROJECT_RULES.md`.
+   Fill the canonical app-only run path, QA/evidence run path, required
+   services, and port/env assumptions there even if the repo keeps using
+   package-manager-native scripts under the hood.
 3. Copy `references/AGENTS_TEMPLATE.md` -> `AGENTS.md`.
 4. Copy `references/ARCHITECTURE_TEMPLATE.md` -> `ARCHITECTURE.md`.
 5. Create docs state:
@@ -145,13 +154,19 @@ repo.
      `build`, and optional `desloppify`
    - align hook activation, local heavy checks, and any separate CI/deploy gate
      with the brief instead of guessing
-10. Fill the bootstrap brief's `Agent Experience / Testability` section so the
+10. Fill `PROJECT_RULES.md`, `docs/bootstrap-brief.md`, and the first relevant
+    `qa/` cookbook page with the canonical runtime contract:
+    - app-only run path
+    - QA/evidence run path
+    - required services
+    - expected local targets, ports, and env vars
+11. Fill the bootstrap brief's `Agent Experience / Testability` section so the
     repo has an early answer for how agents should reach, inspect, stabilize,
     and verify important app states.
-11. If the idea is still open-ended, use `brainstorm`.
-12. If the first slice or bootstrap shape is still vague, use `deep-interview`.
-13. Use `prd` skill for requirements and PRD authoring (HITL loop).
-14. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+12. If the idea is still open-ended, use `brainstorm`.
+13. If the first slice or bootstrap shape is still vague, use `deep-interview`.
+14. Use `prd` skill for requirements and PRD authoring (HITL loop).
+15. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration
 
@@ -169,6 +184,8 @@ Migration guide:
 ## Why This Structure
 
 - `PROJECT_RULES.md` centralizes stack details and backpressure commands.
+- `PROJECT_RULES.md` is also the canonical agent-facing runtime command surface,
+  so repos do not rely on remembered shell snippets for app launch or QA.
 - `AGENTS.md` stays operational and lightweight because it is loaded every loop.
 - `ARCHITECTURE.md` gives the repo one top-level system map instead of pushing all orientation into `README.md` or `AGENTS.md`.
 - `docs/` is the canonical project state for planning and execution.
@@ -176,6 +193,8 @@ Migration guide:
   surface instead of burying them in chat.
 - `qa/` gives each repo one visible home for durable shortcuts, deep links,
   seeded states, and probes that make agent QA faster and less flaky.
+- `qa/` also gives the repo one reusable place to say how evidence capture
+  should launch the app and which URLs or services QA should trust.
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
 - `docs/TROUBLES.md` is the append-only operator feedback log for repeated misses, failed attempts, and correction patterns that should feed future system improvements.
 - `tickets/` is the canonical execution surface, so planning, build, and QA work from one file per active ticket, with completed tickets moved into `tickets/archive/`.
@@ -214,9 +233,15 @@ The generated planning flow should follow these defaults:
 - Do not skip from a fuzzy idea directly to `prd`; use `brainstorm` or `deep-interview` first when the first slice is not obvious.
 - Do not auto-enable the scaffolded git hooks; leave activation as an explicit
   `git config core.hooksPath .githooks` choice by the human.
+- Do not require `Makefile` targets when existing `package.json`, `pyproject`,
+  shell, or compose commands already form a good runtime surface; document the
+  authoritative commands instead of adding wrappers for their own sake.
 - Do not blur local hook policy with deploy/CI policy; capture both explicitly
   in `docs/bootstrap-brief.md` before treating them as part of the scaffold
   default.
+- Put the canonical app-only run path, QA/evidence run path, service
+  dependencies, and port/env assumptions in `PROJECT_RULES.md` and the relevant
+  `qa/` cookbook page instead of leaving them in chat.
 - Put project-specific lint, typecheck, test, and optional build gates into
   `scripts/pre_push_check.sh`; keep the large-file scan intact and treat
   CodeRabbit as optional after those local checks, not as the only pre-push

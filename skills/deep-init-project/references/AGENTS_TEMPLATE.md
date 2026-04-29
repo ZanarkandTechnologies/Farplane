@@ -5,7 +5,8 @@ This file is loaded every loop. Keep it operational and project-specific.
 ## Build & Run
 
 - Install: `[your command]`
-- Dev: `[your command]`
+- Dev: `[authoritative app-only command from PROJECT_RULES.md]`
+- QA path: `[authoritative QA or evidence command from PROJECT_RULES.md]`
 
 ## Validation (Backpressure)
 
@@ -58,6 +59,8 @@ This file is loaded every loop. Keep it operational and project-specific.
 - Prefer local patterns, then docs, then external examples.
 - Before adding new helper logic, search for existing shared utilities and
   follow the utility-placement rule in `PROJECT_RULES.md`.
+- Before launching the app for QA or evidence capture, read `PROJECT_RULES.md`
+  and the relevant `qa/` cookbook page instead of guessing commands or ports.
 - If the same helper logic is appearing across multiple modules, extract it to
   the approved shared utility surface instead of copying it again.
 - Update ticket status, phase, blockers, and spawned follow-ups in the ticket file as work progresses. When a ticket is complete and its writeback is done, move it into `tickets/archive/`.

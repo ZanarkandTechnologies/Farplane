@@ -9,9 +9,12 @@
 - Panel or mode to open directly:
 
 ## Setup
+- Preferred launch path:
 - Auth / fixture / seed:
 - Reset path:
 - Commands:
+- Targets / ports:
+- Required services:
 
 ## Stable Selectors
 - `data-testid`:

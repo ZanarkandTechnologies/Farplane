@@ -39,6 +39,15 @@ This file defines the project-specific technical rules, tech stack, and conventi
   - Desloppify: `[command or disabled]`
   - CodeRabbit: `coderabbit review --plain --type committed --base [branch]`
 
+## ▶ Runtime / QA Commands
+- **Authoritative app-only run path**: [e.g., `pnpm dev`, `npm run dev`, `uv run fastapi dev app/main.py`]
+- **Authoritative QA / evidence run path**: [e.g., `pnpm run dev:qa`, `docker compose up app db`, `./scripts/qa_up.sh`]
+- **Required local services**: [e.g., `postgres`, `redis`, `dagster`, `none`]
+- **Launch shape**: [plain processes, compose, mixed]
+- **Expected targets / base URLs**: [e.g., `http://127.0.0.1:3000`, `http://127.0.0.1:8000`]
+- **Port / env contract**: [which vars may be overridden, such as `PORT`, `HOST`, `DATABASE_URL`]
+- **Source of truth note**: [if package scripts or compose files are authoritative, say so here instead of adding wrappers]
+
 ## 🤖 Agent QA / Testability
 - **Reusable QA runbooks live in**: `qa/cookbook/`
 - **Stable browser regression tool**: [e.g., Playwright]
@@ -51,7 +60,10 @@ This file defines the project-specific technical rules, tech stack, and conventi
 # Install dependencies
 [command]
 
-# Run development server
+# Run the preferred app-only path
+[command]
+
+# Run the preferred QA / evidence path
 [command]
 
 # Run tests
@@ -59,6 +71,9 @@ This file defines the project-specific technical rules, tech stack, and conventi
 
 # Run the local pre-push gate
 bash scripts/pre_push_check.sh
+
+# Optional: stop or clean up the QA path
+[command or n/a]
 
 # Build project
 [command]

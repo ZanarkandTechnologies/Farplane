@@ -15,6 +15,8 @@ and humans reach important app states quickly and deterministically.
 - use `qa/` for reusable guidance, not per-run evidence
 - keep screenshots, logs, traces, and one-off reports under
   `tickets/TASK-XXXX/artifacts/`
+- keep the canonical evidence-capture launch path, required services, and
+  expected targets visible here rather than in chat memory
 - prefer Playwright for stable UX regression coverage
 - use `agent-browser` to discover flows quickly, capture proof while iterating,
   and debug failing Playwright coverage
@@ -33,5 +35,6 @@ Each cookbook page should stay short and answer:
 
 1. how QA reaches the target state quickly
 2. which shortcuts, deep links, seeds, or fixtures make it deterministic
-3. what Playwright should automate
-4. when to fall back to `agent-browser`
+3. which launch path, services, targets, or ports QA should trust
+4. what Playwright should automate
+5. when to fall back to `agent-browser`

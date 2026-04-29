@@ -26,6 +26,15 @@ finalizing the scaffold.
 - Runtime / package manager:
 - Deployment target:
 
+## Runtime / QA Commands
+- Preferred app-only run path:
+- Preferred QA / evidence-capture run path:
+- Required local services:
+- Process vs compose expectation:
+- Expected targets or base URLs:
+- Port / env assumptions agents must honor:
+- Evidence-capture notes:
+
 ## Validation and Hooks
 - Required local checks:
 - Optional heavy local checks:

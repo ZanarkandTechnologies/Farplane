@@ -123,3 +123,4 @@
 2026-04-29 17:10 +0800 | CHORE | separate HISTORY and MEMORY formats so change chronology and durable rules use distinct one-line contracts
 2026-04-29 06:21 +0800 | FIX | simplify the ticket contract so durable links live in `Refs`, detailed proof lives in `Evidence`, and the validator/runtime surfaces no longer require `linked_docs`
 2026-04-29 06:52 +0800 | FEAT | require active impl-loop password echo for Stop-hook completion review so the hook issues the nonce on demand and the next final response must return `COMPLETION_PASSWORD` alongside the linked receipt
+2026-04-29 08:08 +0800 | FEAT | make `deep-init-project` require visible canonical app and QA runtime command guidance in the bootstrap brief, project rules, and QA cookbook templates instead of pushing repos toward mandatory Makefile wrappers

@@ -8,7 +8,8 @@ Keep each page short and biased toward deterministic access.
 
 - `Goal:` what the workflow proves
 - `Fast entry:` route, deep link, shortcut, or debug control
-- `Setup:` seed, reset, auth, fixture, or local command
+- `Setup:` seed, reset, auth, fixture, local command, or runtime profile
+- `Targets:` frontend/backend URLs, ports, or supporting services QA should trust
 - `Stable selectors:` the roles, labels, or `data-testid` values that should
   stay reliable
 - `Playwright path:` the canonical automated happy path
