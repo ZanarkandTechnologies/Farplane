@@ -124,3 +124,8 @@
 2026-04-29 06:21 +0800 | FIX | simplify the ticket contract so durable links live in `Refs`, detailed proof lives in `Evidence`, and the validator/runtime surfaces no longer require `linked_docs`
 2026-04-29 06:52 +0800 | FEAT | require active impl-loop password echo for Stop-hook completion review so the hook issues the nonce on demand and the next final response must return `COMPLETION_PASSWORD` alongside the linked receipt
 2026-04-29 08:08 +0800 | FEAT | make `deep-init-project` require visible canonical app and QA runtime command guidance in the bootstrap brief, project rules, and QA cookbook templates instead of pushing repos toward mandatory Makefile wrappers
+2026-04-30 02:35 +0800 | FIX | update the managed Codex config template to register `completion-reviewer` instead of the removed `reviewer` role so fresh installs and re-renders stop pointing at a missing agent file
+2026-04-30 14:20 +0800 | FIX | make live `$qa` followups prefer a delegated QA lane and explicitly forbid the coordinating lane from using `agent-browser` directly when `qa-tester` delegation is available
+2026-04-30 15:05 +0800 | FIX | make the shipped and repo-local agent contracts state that native `qa-tester` delegation is the default QA path and that tmux lanes are only optional visibility plumbing
+2026-04-30 15:40 +0800 | CHORE | bump all tracked and installed subagent role model defaults to `gpt-5.4` so no live Codexter agent remains on `gpt-4.1` or `gpt-5.3`
+2026-05-02 03:31 +0800 | CHORE | narrow `docs/HISTORY.md` into a milestone and project-event ledger so routine code deltas stay in git and durable rules stay in `docs/MEMORY.md`

@@ -220,7 +220,8 @@ README should cover:
 
 Files:
 
-- `docs/HISTORY.md` = append-only change log
+- `docs/HISTORY.md` = append-only event ledger for meaningful shipped
+  milestones, migrations, and project-shaping decisions
 - `docs/MEMORY.md` = curated durable constraints and invariants
 - `docs/TROUBLES.md` = append-only repeated-failure and correction log
 
@@ -232,9 +233,13 @@ Format:
 Log when:
 
 - `docs/HISTORY.md`
-  - shipped or durable repo change
-  - migration or cleanup worth preserving chronologically
-  - behavior, API, or architecture change
+  - shipped milestone that changes how the project is used, operated, or
+    understood
+  - migration, archive, or cleanup event worth preserving chronologically
+  - behavior, API, architecture, workflow, or governance shift that needs a
+    timeline entry but is not itself a reusable rule
+  - do not log routine commits, typo/format-only edits, mechanical refactors, or
+    file-level summaries that git already answers; see `MEM-0071`
 - `docs/MEMORY.md`
   - invariant
   - operating constraint
