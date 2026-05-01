@@ -2000,10 +2000,18 @@ def skill_name_for_phase(phase: str, execution_phase: str = "") -> str:
 
 def build_live_followup_reason(phase: str, orchestrator_message: str, ticket: dict[str, object], execution_phase: str = "") -> str:
     skill_name = skill_name_for_phase(phase, execution_phase)
+    delegation_note = ""
+    if phase == "building" and execution_phase == "qa":
+        delegation_note = (
+            "This live lane stays in coordinator mode for QA. Spawn the `qa-tester` subagent or lane to own browser "
+            "driving, artifact capture, and ticket-scoped QA proof, and do not use `agent-browser` directly from this "
+            "coordinating lane unless delegation is impossible.\n"
+        )
     return (
         "Continue the current live Codex lane.\n\n"
         f"Follow-up reason: {orchestrator_message}\n\n"
         f"Run the `{skill_name}` skill on ticket `{ticket['ticket_id']}`.\n"
+        f"{delegation_note}"
         "Resolve ticket context from the active ticket state first, then update the ticket itself with any new evidence, blockers, handoff, "
         "next action, and verification before you stop.\n"
     )
@@ -2774,6 +2782,31 @@ def main() -> int:
             )
             target_phase = next_phase if next_phase in {"planning", "building", "documenting"} else str(ticket["phase"] or "building")
             target_execution_phase = next_execution_phase or execution_phase
+            # Prefer a dedicated QA lane over reusing the live coordinator lane. See MEM-0069.
+            if target_execution_phase == "qa":
+                followup = spawn_tmux_followup(
+                    base,
+                    ticket,
+                    target_phase,
+                    current_run,
+                    orchestrator_message,
+                    target_execution_phase,
+                )
+                if followup is not None:
+                    append_hook_log(
+                        base,
+                        {
+                            "timestamp": now_iso(),
+                            "mode": "impl",
+                            "ticket_id": str(ticket["ticket_id"]),
+                            "event": "spawn_followup",
+                            "followup": followup,
+                        },
+                    )
+                    announce_message(
+                        f"spawned delegated QA follow-up in {followup.get('tmux_pane') or followup.get('tmux_window')}"
+                    )
+                    return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
             if live_interactive_lane:
                 continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket, target_execution_phase)
                 return continue_hook_response(

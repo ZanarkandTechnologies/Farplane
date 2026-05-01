@@ -29,6 +29,11 @@ For a selected work package, the default execution pattern is:
 The visible runtime surface is the worker lanes, not a long-lived hidden
 orchestrator.
 
+Native Codex subagents are the default implementation of those worker roles
+when in-session delegation is available. Tmux-backed lanes are only an optional
+visibility/runtime wrapper for cases where long-lived visible workers are
+useful; they are not the core QA delegation rule.
+
 ## Ticket Selection
 
 `$impl` should choose the ticket this way:
@@ -127,6 +132,8 @@ Do not add a second orchestrator-only continuation artifact.
 ## Guardrails
 
 - reviewer and QA are separate by default
+- when the main agent needs QA, prefer spawning the native `qa-tester`
+  subagent instead of personally driving browser/tool QA
 - evidence-check exists because QA evidence can be weak or overconfident
 - subagents may work in worktrees or file-scoped ownership later, but that is
   not required for this contract

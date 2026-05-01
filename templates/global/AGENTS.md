@@ -280,7 +280,9 @@ Required:
 - repro/runtime bug with unclear cause -> `runtime-debugging`
 - UI behavior, layout, or style change -> `visual-qa`
 - meaningful QA or evidence gathering for implemented work should run through a
-  specialist lane rather than being self-approved by the builder
+  specialist lane rather than being self-approved by the builder; when native
+  subagents are available, prefer spawning `qa-tester` as the default QA lane
+  instead of having the main agent drive browser/tool QA itself
 - broad cross-module exploration -> `explore`
 - auto-run at the end of `impl-plan` and `impl`, at other meaningful planning/build/doc checkpoints when warranted, and before a completion claim -> `review`
 

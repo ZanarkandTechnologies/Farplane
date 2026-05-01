@@ -21,6 +21,7 @@ Do not use it when:
 ## Contract
 
 - Read the selected ticket plus linked docs/specs.
+- When `$qa` is entered from a live orchestration lane and delegation is available, keep the coordinating lane out of browser driving: spawn `qa-tester` to own browser/tool use, artifact capture, and ticket-scoped proof.
 - Gather ticket-scoped proof under `tickets/TASK-XXXX/artifacts/qa/`.
 - For UI or user-visible work, use `visual-qa` as a separate judgment pass.
 - Update the ticket `Evidence` section with the strongest artifact links.

@@ -430,6 +430,18 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stop_hook = load_stop_hook_module()
 
+    def test_build_live_followup_reason_for_qa_requires_delegated_qa_tester(self) -> None:
+        prompt = self.stop_hook.build_live_followup_reason(
+            "building",
+            "continue TASK-0042 in qa and produce ticket-scoped proof artifacts",
+            {"ticket_id": "TASK-0042"},
+            "qa",
+        )
+
+        self.assertIn("Run the `qa` skill on ticket `TASK-0042`.", prompt)
+        self.assertIn("Spawn the `qa-tester` subagent or lane", prompt)
+        self.assertIn("do not use `agent-browser` directly", prompt)
+
     def test_decide_impl_transition_advances_impl_to_qa_when_required(self) -> None:
         verdict = self.stop_hook.decide_impl_transition(
             "building",
