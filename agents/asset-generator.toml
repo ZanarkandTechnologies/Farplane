@@ -1,8 +1,8 @@
 # Description: Asset generation subagent for game/app art using Replicate MCP (and Fal AI references). Generates multiple options, saves them to assets/generated/, and reports choices.
 name = "asset-generator"
 description = "Asset generation subagent for game/app art using Replicate MCP and Fal AI references"
-# Asset Generator — remapped from gemini-3-pro -> gpt-5.3-codex
-model = "gpt-5.3-codex"
+# Asset Generator — remapped from gemini-3-pro -> gpt-5.4
+model = "gpt-5.4"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

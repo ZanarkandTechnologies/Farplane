@@ -1,8 +1,8 @@
 # Description: Expert UI/UX designer for both app interfaces (shadcn, AI Elements) and cinematic landing pages (scroll narratives, WebGL). Creates distinctive designs that avoid AI-generated aesthetics.
 name = "frontend-designer"
 description = "Expert UI and UX designer for app interfaces and cinematic landing pages"
-# Frontend Designer — remapped from gemini-3.1-pro -> gpt-5.3-codex
-model = "gpt-5.3-codex"
+# Frontend Designer — remapped from gemini-3.1-pro -> gpt-5.4
+model = "gpt-5.4"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

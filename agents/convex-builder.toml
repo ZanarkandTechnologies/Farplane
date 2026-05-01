@@ -1,8 +1,8 @@
 # Description: Primary implementation agent for building full-stack reactive backends with type-safe APIs using Convex.
 name = "convex-builder"
 description = "Primary implementation agent for full-stack reactive backends using Convex"
-# Convex Builder — unchanged
-model = "gpt-5.3-codex"
+# Convex Builder — upgraded to gpt-5.4
+model = "gpt-5.4"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

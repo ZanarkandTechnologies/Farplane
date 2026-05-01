@@ -1,8 +1,8 @@
 # Description: QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, cinematic landing testing).
 name = "qa-tester"
 description = "QA subagent that plans and executes tests"
-# Qa Tester — remapped from gemini-3-flash -> gpt-4.1
-model = "gpt-4.1"
+# Qa Tester — remapped from gemini-3-flash -> gpt-5.4
+model = "gpt-5.4"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """
