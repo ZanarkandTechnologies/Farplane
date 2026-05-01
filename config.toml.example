@@ -53,6 +53,9 @@ url = "https://mcp.deepwiki.com/mcp"
 [mcp_servers.grep]
 url = "https://mcp.grep.app"
 
+[mcp_servers.notion]
+url = "https://mcp.notion.com/mcp"
+
 [agents]
 max_threads = 6
 max_depth = 1
@@ -97,9 +100,9 @@ config_file = "agents/librarian.toml"
 description = "QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, cinematic landing testing)."
 config_file = "agents/qa-tester.toml"
 
-[agents.reviewer]
-description = "Stop-hook reviewer for same-ticket continuation and completion gating."
-config_file = "agents/reviewer.toml"
+[agents.completion-reviewer]
+description = "Stop-hook reviewer for missing-result impl continuation checks."
+config_file = "agents/completion-reviewer.toml"
 
 [notice]
 hide_rate_limit_model_nudge = true

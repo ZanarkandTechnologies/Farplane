@@ -8,6 +8,12 @@
             "command": "python3 \"$HOME/.codex/bin/capture_user_turn.py\"",
             "statusMessage": "Capturing current-turn user intent",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/aikage_ping.py\"",
+            "statusMessage": "Sending Aikage heartbeat",
+            "timeout": 30
           }
         ]
       }
