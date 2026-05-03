@@ -24,11 +24,15 @@ ticket, and execution workflow.
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
 - CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/desloppify/README.md)
 - Parity-comparison workflow: [skills/parity-research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/parity-research/README.md)
+- Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/best-of-worlds/SKILL.md)
 - PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
 - Frontend implementation orchestrator: [skills/frontend-craft/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/frontend-craft/SKILL.md)
 - Functional UI redesign: [skills/functional-ui/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/functional-ui/SKILL.md)
 - Visual design direction: [skills/visual-design/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/visual-design/SKILL.md)
 - Landing page planning: [skills/landing-page/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/landing-page/SKILL.md)
+- Autoresearch planning: [skills/autoresearch-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-plan/SKILL.md)
+- Autoresearch execution: [skills/autoresearch-exec/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-exec/SKILL.md)
+- Skill self-improvement: [skills/self-improve/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/self-improve/SKILL.md)
 - Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 - Project bootstrap: [skills/deep-init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/README.md)
 
@@ -46,9 +50,14 @@ Implemented now:
   scope depends on production-grade expectations
 - parity-comparison research through `parity-research` when the main question is
   what other products, standards, or codebases consistently include
+- best-of-worlds synthesis through `best-of-worlds` when the source set is
+  known and the work is to extract, score, and adapt the strongest techniques
 - frontend implementation through `frontend-craft`, with `functional-ui` for
   UX/workflow and broken-UI redesign, `visual-design` for look/taste/visual
   systems, and `landing-page` for one-page marketing or scrolltelling surfaces
+- metric-driven improvement sessions through `autoresearch-plan` and
+  `autoresearch-exec`, with `self-improve` for binary-eval-based skill
+  optimization on the same artifact contract
 - single-ticket execution through `$impl`
 - anchored `review` rubrics plus evidence-gated completion
 - `desloppify` for CLI-driven anti-slop cleanup, with default worker delegation

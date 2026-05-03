@@ -9,6 +9,8 @@ Top-level companion docs:
 
 Current design docs:
 
+- `autoresearch-skill-suite.md` - metric-driven autoresearch planning, execution, and skill self-improvement contract
+- `best-of-worlds-workflow.md` - multi-source synthesis workflow for extracting, scoring, and adapting the best transferable features
 - `agent-testability-surfaces.md` - post-system-design doctrine for control accelerators, state probes, coordination views, and proof surfaces
 - `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy
