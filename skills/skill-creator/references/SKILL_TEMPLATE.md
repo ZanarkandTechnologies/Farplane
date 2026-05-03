@@ -19,6 +19,7 @@ Ensure an agent can execute the core path after only reading this file.
 - 5-8 step workflow
 - Core decision branches
 - Top 3 gotchas
+- Judgement questions that should route to `advise`
 - Outcome contract (files/outputs that must exist or be updated)
 
 ## Documentation Index (Source of Truth)
@@ -39,6 +40,14 @@ Ensure an agent can execute the core path after only reading this file.
 
 - **Branch A (default)**: [TODO: shortest successful path]
 - **Branch B (alternative)**: [TODO: when and why to use]
+
+## Judgement Questions
+
+Use `advise` when these cannot be answered mechanically:
+
+- [TODO: Material decision question 1]
+- [TODO: Metric, guard, scope, or quality question 2]
+- [TODO: Rejection/defer question 3]
 
 ## Architectural Decisions
 
@@ -79,3 +88,4 @@ Include copy/paste prompts when the workflow repeats across sessions.
 - [references/workflows.md](references/workflows.md) - Optional: variant-heavy branches only.
 - [references/architecture.md](references/architecture.md) - Optional: deep tradeoff history.
 - [references/gotchas.md](references/gotchas.md) - Optional: long-tail edge cases.
+- [references/judgement-questions.md](references/judgement-questions.md) - Optional: reusable advise-style decisions.

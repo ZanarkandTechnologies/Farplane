@@ -22,6 +22,11 @@ Do not describe a workflow as a shipped public capability until the repo
 actually contains the discoverable `skills/<name>/` package and the canonical
 inventory/docs point to it. See `MEM-0044`.
 
+Codexter skills are stable local contracts. Treat external skills, repos,
+blogs, and command families as research inputs rather than live dependencies;
+import ideas through reviewed `adopt`, `adapt`, `reject`, or `defer` decisions,
+usually via `best-of-worlds`. See `MEM-0073`.
+
 When the operator explicitly wants audit-then-fix recovery mode after a likely
 assistant miss, use the `repent` skill rather than inventing ad hoc recovery
 behavior.

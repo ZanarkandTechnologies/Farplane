@@ -8,6 +8,8 @@ Use this decision table when deciding whether content lives in `SKILL.md` or `re
 | :--- | :--- | :--- |
 | Mission-critical and short (<~100 lines) | `SKILL.md` | Must survive first load |
 | Baseline execution path | `SKILL.md` | Agents need this immediately |
+| Short judgement questions | `SKILL.md` | Agents need to know when to use `advise` |
+| Long judgement rubric | `references/` | Keeps decision nuance out of first load |
 | Variant-heavy branches | `references/` | Reduces SKILL.md bloat |
 | Verbose domain docs and schemas | `references/` | Loaded on demand |
 | Copy/paste session instructions | `prompts/` | Operator speed and consistency |
@@ -63,3 +65,22 @@ After this skill executes:
 - `path/to/file-b` is created or updated
 - Validation evidence exists at `path/to/evidence`
 ```
+
+## Judgement Questions Pattern
+
+Use this when a skill has choices that cannot be solved by a command or static
+rule:
+
+```markdown
+## Judgement Questions
+
+Use `advise` when these cannot be answered mechanically:
+
+- What user or artifact is this skill optimizing for?
+- What primary metric or success signal should decide keep/discard?
+- What guard prevents the chosen metric from being gamed?
+- What should be rejected or deferred even if it looks attractive?
+```
+
+Keep 3-7 questions in `SKILL.md`. Move longer scoring detail into
+`references/judgement-questions.md`.

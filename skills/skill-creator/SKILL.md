@@ -65,13 +65,21 @@ Think of Claude as exploring a path: a narrow bridge with cliffs needs specific 
 
 If an agent only reads `SKILL.md` once and skips all references, it should still execute correctly.
 
+Codexter skills are stable local contracts. External skills, repos, blogs, and
+command families are research inputs, not live dependencies. Do not create thin
+wrappers that auto-sync upstream behavior; use `best-of-worlds` to import ideas
+through explicit `adopt`, `adapt`, `reject`, or `defer` decisions. See
+`MEM-0073`.
+
 Every new skill must include this minimum contract directly in `SKILL.md`:
 
 1. **Trigger conditions**: Explicit user/task signals that should activate the skill.
 2. **5-8 step workflow**: End-to-end path with ordered steps.
 3. **Core decision branches**: Primary conditional paths (A vs B).
 4. **Top 3 gotchas**: High-risk failure modes and stop-and-ask points.
-5. **Outcome contract**: Which files or outputs must exist/be updated when done.
+5. **Judgement questions**: Material choices that should use `advise` when the
+   answer is not mechanically determined.
+6. **Outcome contract**: Which files or outputs must exist/be updated when done.
 
 Rule of thumb: **If skipping all references would make the skill fail, `SKILL.md` is too thin.**
 
@@ -320,6 +328,15 @@ Only create/populate these when they add value beyond SKILL.md:
 *   **architecture.md**: Use when decision history or tradeoffs are substantial.
 *   **workflows.md**: Use when variants/branches cannot be expressed clearly inline.
 *   **gotchas.md**: Use for long-tail edge cases; keep the top 3 gotchas in SKILL.md.
+*   **judgement-questions.md**: Use when the skill has reusable ambiguity,
+    metric-selection, or adoption questions that would bloat `SKILL.md`.
+
+Local references:
+
+*   `references/architecture.md`
+*   `references/workflows.md`
+*   `references/gotchas.md`
+*   `references/judgement-questions.md`
 
 #### Populate Prompt Files (When Workflow Repeats)
 
