@@ -5,8 +5,8 @@ Rules for the `deep-ui-design` skill surface.
 ## Purpose
 
 `skills/deep-ui-design/` owns the ambiguity-reduction contract that sharpens a
-user's visual taste before `frontend-design`, `cinematic-landing`, or
-UI-focused planning.
+user's visual taste before `visual-design`, `landing-page`, or UI-focused
+planning.
 
 ## Keep
 

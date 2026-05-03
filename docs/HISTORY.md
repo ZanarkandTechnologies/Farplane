@@ -129,3 +129,5 @@
 2026-04-30 15:05 +0800 | FIX | make the shipped and repo-local agent contracts state that native `qa-tester` delegation is the default QA path and that tmux lanes are only optional visibility plumbing
 2026-04-30 15:40 +0800 | CHORE | bump all tracked and installed subagent role model defaults to `gpt-5.4` so no live Codexter agent remains on `gpt-4.1` or `gpt-5.3`
 2026-05-02 03:31 +0800 | CHORE | narrow `docs/HISTORY.md` into a milestone and project-event ledger so routine code deltas stay in git and durable rules stay in `docs/MEMORY.md`
+2026-05-03 22:58 +0800 | FEAT | add the frontend skill topology with frontend-craft orchestration, functional-ui redesign, visual-design taste direction, landing-page planning, and cinematic-landing compatibility routing
+2026-05-03 23:29 +0800 | CLEANUP | remove the old cinematic landing compatibility skill and route live landing, animation, and QA prompts through landing-page instead

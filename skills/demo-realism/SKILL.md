@@ -17,7 +17,7 @@ context?"
 4. Derive realistic entities, records, timelines, edge cases, and empty/error states.
 5. Produce a demo-realism pack the next skill can build from.
 6. Score the result with a realism and presentation-worthiness rubric.
-7. Hand off to `functional-ui`, `frontend-design`, `impl-plan`, or `impl`.
+7. Hand off to `functional-ui`, `visual-design`, `frontend-craft`, `impl-plan`, or `impl`.
 
 ## Use When
 
@@ -31,7 +31,8 @@ context?"
 
 - the workflow is already believable and only visual execution remains
 - the task is exact customer research or factual discovery; use research/documentation paths
-- the task is final UI design; use `frontend-design`
+- the task is final UI implementation; use `frontend-craft`
+- the task is visual taste/system direction; use `visual-design`
 - the task is already narrowed to interaction structure only; use `functional-ui`
 - the task is final quality judgment after implementation; use `review`
 
@@ -93,7 +94,8 @@ Produce one compact realism pack with:
 6. Score the result using the realism rubric in [`references/rubric.md`](references/rubric.md).
 7. Hand off:
    - `functional-ui` if workflow shape still needs product/UI planning
-   - `frontend-design` if realism is settled and visual execution should start
+   - `visual-design` if realism is settled and visual direction should start
+   - `frontend-craft` if realism is settled and implementation should start
    - `impl-plan` if the realism pack should become a scoped execution plan
    - `impl` if a ticket already exists and build can start directly
 
@@ -124,4 +126,3 @@ Produce one compact realism pack with:
 - Detailed workflow: [`references/workflows.md`](references/workflows.md)
 - Failure modes: [`references/gotchas.md`](references/gotchas.md)
 - Scoring rubric: [`references/rubric.md`](references/rubric.md)
-

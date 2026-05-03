@@ -102,6 +102,6 @@ agent-browser --session B close
 
 For long narrative pages, timeline scrubbing, and animation validation:
 
-- Use `cinematic-landing` -> `references/testing.md`
+- Use `landing-page` -> `references/qa.md` for landing QA.
 - Reuse the same `Expected UI Spec -> Observed Snapshot Report -> Diff Report -> Fix Plan` format from `../SKILL.md`
 - Keep the ticket's design intent and `docs/TASTE.md` visible in the report even when the page is animation-heavy.

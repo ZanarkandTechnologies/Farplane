@@ -206,4 +206,4 @@ Before handoff, read `references/review.md` and tighten the QA verdict until it 
 - `agent-browser` -> `references/qa-workflows.md` (advanced refs, sessions, JSON outputs)
 - `visual-qa` -> `references/workflows.md` (extended workflow variants)
 - `visual-qa` -> `references/debugging.md` (debug escalation recipes)
-- For animation-heavy landings: `cinematic-landing` -> `references/testing.md`
+- For animation-heavy landings: `landing-page` -> `references/qa.md`

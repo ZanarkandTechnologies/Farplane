@@ -25,6 +25,10 @@ ticket, and execution workflow.
 - CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/desloppify/README.md)
 - Parity-comparison workflow: [skills/parity-research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/parity-research/README.md)
 - PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
+- Frontend implementation orchestrator: [skills/frontend-craft/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/frontend-craft/SKILL.md)
+- Functional UI redesign: [skills/functional-ui/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/functional-ui/SKILL.md)
+- Visual design direction: [skills/visual-design/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/visual-design/SKILL.md)
+- Landing page planning: [skills/landing-page/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/landing-page/SKILL.md)
 - Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 - Project bootstrap: [skills/deep-init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/README.md)
 
@@ -42,6 +46,9 @@ Implemented now:
   scope depends on production-grade expectations
 - parity-comparison research through `parity-research` when the main question is
   what other products, standards, or codebases consistently include
+- frontend implementation through `frontend-craft`, with `functional-ui` for
+  UX/workflow and broken-UI redesign, `visual-design` for look/taste/visual
+  systems, and `landing-page` for one-page marketing or scrolltelling surfaces
 - single-ticket execution through `$impl`
 - anchored `review` rubrics plus evidence-gated completion
 - `desloppify` for CLI-driven anti-slop cleanup, with default worker delegation

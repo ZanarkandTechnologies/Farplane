@@ -57,8 +57,10 @@ ad hoc spreadsheets?
 
 - use `functional-ui` when the realism pack is strong but the actual workflow
   interaction model still needs product/UI planning
-- use `frontend-design` when the workflow and data feel believable and visual
-  execution should start
+- use `visual-design` when the workflow and data feel believable and visual
+  direction should start
+- use `frontend-craft` when the workflow and data feel believable and
+  implementation should start
 - use `impl-plan` when the realism pack should turn into a scoped build plan
 - use `impl` only when a ticket already exists and the realism pack is good
   enough to build directly

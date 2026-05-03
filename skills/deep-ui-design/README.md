@@ -3,7 +3,7 @@
 ## Purpose
 
 `deep-ui-design` turns a vague visual ask into a reusable `Taste Brief` before
-`frontend-design`, `cinematic-landing`, or UI-facing implementation planning.
+`visual-design`, `landing-page`, or UI-facing implementation planning.
 
 ## Public Entrypoints
 

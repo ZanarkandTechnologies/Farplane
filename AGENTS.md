@@ -36,6 +36,13 @@ products, standards, or open-source repos consistently include for a
 capability, use `parity-research` first and then route the result into
 `gap-analysis`, `functional-ui`, or `impl-plan`.
 
+For frontend work, use the Codexter frontend topology: `frontend-craft` is the
+implementation orchestrator, `functional-ui` owns UX/workflow and broken-UI
+redesign, `visual-design` owns look/taste/visual systems, and `landing-page`
+owns one-page marketing or scrolltelling surfaces. Keep `frontend-design` as an
+app-UI implementation reference. The old cinematic landing skill package was
+removed; route those asks to `landing-page`. See `MEM-0072`.
+
 ## Project Structure
 
 - `README.md`: current product shape, setup, and canonical entry points

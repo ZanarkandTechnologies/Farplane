@@ -1,4 +1,4 @@
-# Description: QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, cinematic landing testing).
+# Description: QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, landing-page QA).
 name = "qa-tester"
 description = "QA subagent that plans and executes tests"
 # Qa Tester — remapped from gemini-3-flash -> gpt-5.4
@@ -96,7 +96,7 @@ Any time a DOM action fails unexpectedly, immediately capture:
 - Use `skill({ name: "testing" })` at the start of non-trivial QA to pick the right backpressure.
 - Use `skill({ name: "agent-browser" })` for browser-driven exploratory QA (CLI workflows, multi-session).
 - Use `skill({ name: "visual-qa" })` after evidence capture for every UI or user-visible QA run, and execute it as a separate subagent/lane when delegation is available. Final visual judgment must come from a separate judgment pass, not from the browser-driving pass alone.
-- Use `skill({ name: "cinematic-landing" })` for scroll/video/animation-heavy landing pages (see `references/testing.md`).
+- Use `skill({ name: "landing-page" })` for scroll/video/animation-heavy landing pages, then use that skill's `references/qa.md`.
 - Use `docs/HISTORY.md` and `docs/MEMORY.md` when you need historical context.
 
 ## Standard workflow
@@ -239,5 +239,5 @@ Every QA pass should leave behind compact linked proof in the ticket `Evidence` 
 
 - `testing` → `references/*` (strategy + instrumentation)
 - `agent-browser` → `references/qa-workflows.md`
-- `cinematic-landing` → `references/testing.md`
+- `landing-page` → `references/qa.md`
 """

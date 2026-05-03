@@ -13,14 +13,15 @@ Deep UI Design is a taste-first Socratic clarification loop before visual implem
 - The workflow is already mostly clear, but the look/feel is not
 - The user wants a distinctive style instead of generic AI-default UI
 - The user says "deep UI design", "extract my taste", "ask me design questions", "figure out the vibe", or "do not make this look the same as everything else"
-- `functional-ui` has already clarified how the product should work, but `frontend-design` still lacks a strong visual brief
+- `functional-ui` has already clarified how the product should work, but `visual-design` or `frontend-craft` still lacks a strong visual brief
 - You need a reusable intermediate spec between product/workflow intent and visual build execution
 </Use_When>
 
 <Do_Not_Use_When>
 - The task is about workflow, IA, or interaction structure rather than aesthetics; use `functional-ui`
 - A strong visual system or brand brief already exists and implementation should begin
-- The request is pure UI execution or polish on an already chosen direction; use `frontend-design`
+- The request is pure visual polish on an already chosen direction; use `visual-design`
+- The request is implementation on an already chosen direction; use `frontend-craft`
 - The task is a final UI review; use `visual-qa` or `web-design-guidelines`
 </Do_Not_Use_When>
 
@@ -217,7 +218,7 @@ When threshold is met (or the user exits with warning / hard cap):
 2. Write the execution-ready taste artifact to:
    - `docs/TASTE.md` when that file exists
    - otherwise the active ticket when one already exists
-   - otherwise the current response handoff plus the next canonical artifact owner, usually `frontend-design`
+   - otherwise the current response handoff plus the next canonical artifact owner, usually `visual-design`
 
 ### Canonical write-back rule
 
@@ -272,18 +273,23 @@ If those are missing, the brief is not implementation-ready.
 
 Present execution options after artifact generation using explicit handoff contracts.
 
-### 1. `frontend-design` (Recommended)
+### 1. `visual-design` (Recommended)
 - **Input Artifact:** the current `Taste Brief` plus any existing workflow plan from `functional-ui`
 - **Consumer Behavior:** treat the `Taste Brief` as the visual source of truth; do not re-run taste extraction by default
-- **Expected Output:** a visually distinctive interface that follows the extracted doctrine instead of falling back to generic defaults
+- **Expected Output:** a visual brief and constraints that follow the extracted doctrine instead of falling back to generic defaults
 - **Best When:** the workflow is already clear and the remaining uncertainty is visual execution
 
-### 2. `cinematic-landing`
+### 2. `landing-page`
 - **Input Artifact:** the current `Taste Brief`
 - **Consumer Behavior:** preserve the extracted emotional tone, references, motion appetite, and anti-slop rules in a narrative landing-page treatment
 - **Best When:** the output is a marketing or narrative landing page rather than an app workflow
 
-### 3. `impl-plan`
+### 3. `frontend-craft`
+- **Input Artifact:** the current `Taste Brief`, any `functional-ui` handoff, and the requested implementation scope
+- **Consumer Behavior:** implement the frontend while preserving the taste doctrine and proof target
+- **Best When:** the user has approved the direction and wants code now
+
+### 4. `impl-plan`
 - **Input Artifact:** the current `Taste Brief` plus the active ticket
 - **Consumer Behavior:** preserve the taste doctrine in the plan and proof target; do not weaken it into generic UI language
 - **Best When:** a ticket needs approval-ready implementation planning before build starts
@@ -292,7 +298,7 @@ Present execution options after artifact generation using explicit handoff contr
 
 1. Do not confuse workflow questions with taste questions; `functional-ui` owns workflow.
 2. Do not accept named references without asking what specifically is attractive or repulsive about them.
-3. Do not crystallize a brief that lacks explicit anti-slop rules; otherwise `frontend-design` will still converge on generic output.
+3. Do not crystallize a brief that lacks explicit anti-slop rules; otherwise `visual-design` or `frontend-craft` will still converge on generic output.
 
 ## Outcome Contract
 
@@ -304,6 +310,6 @@ When this skill is used, the response or artifact must include:
 4. A reusable `Taste Brief`, written to `docs/TASTE.md` when that surface exists
 5. Reference and anti-reference set
 6. Reusable component/page doctrine
-7. Clear handoff target (`frontend-design`, `cinematic-landing`, or `impl-plan`)
+7. Clear handoff target (`visual-design`, `landing-page`, `frontend-craft`, or `impl-plan`)
 
 </Steps>

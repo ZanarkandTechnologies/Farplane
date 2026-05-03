@@ -1,0 +1,20 @@
+# Landing Page Maintenance
+
+## Scope
+
+- `SKILL.md`
+- `README.md`
+- `AGENTS.md`
+- `references/*`
+
+## Boundaries
+
+- `landing-page` owns one-page story, sections, visual scenes, media, and scrolltelling plans.
+- `visual-design` owns visual system decisions.
+- `frontend-craft` owns implementation orchestration.
+- Official GreenSock skills or docs own GSAP implementation details.
+
+## Checks
+
+- Keep first-load instructions enough to produce a landing brief without references.
+- Keep motion guidance as routing, not stale API snippets.

@@ -1,25 +1,27 @@
 ---
 name: frontend-design
-version: 1.0.0
-description: Build production-grade app interfaces with shadcn, AI Elements, and curated registries after the workflow and product UX shape are already grounded. Distinct from cinematic-landing (which handles scroll narratives and landing pages).
+version: 1.1.0
+description: App-UI implementation reference for shadcn, AI Elements, curated registries, theming, and component construction after functional-ui and visual-design have settled the workflow and look. For new frontend implementation, prefer frontend-craft as the public orchestrator.
 allowed-tools: mcp__shadcn__*, Read, Write, Edit, LS
 ---
 
 # Frontend Design Skill
 
-> **Purpose**: Build distinctive, production-grade app interfaces using shadcn components, AI Elements, and curated registries. For workflow-first UI planning, use `functional-ui` first. For landing pages with scroll narratives, use `cinematic-landing` instead.
+> **Purpose**: Provide app-UI implementation guidance for shadcn components, AI Elements, registries, and theming. For new frontend implementation, use `frontend-craft`; for workflow redesign use `functional-ui`; for visual taste use `visual-design`; for one-page marketing or scrolltelling use `landing-page`.
 
 ## What Reference Do I Need?
 
 | I'm doing... | Load this |
 |--------------|-----------|
+| Building a frontend end to end | → `frontend-craft` |
 | Setting up new project | [shadcn-setup.md](references/shadcn-setup.md) |
 | Need AI chat/workflow UI | [ai-elements.md](references/ai-elements.md) |
 | Looking for a component | Use **shadcn MCP** → [registries.md](references/registries.md) |
 | Theming/styling | [theming.md](references/theming.md) |
 | Workflow / IA / UX is still open | → `functional-ui` skill first |
+| Visual system / taste is open | → `visual-design` skill first |
 | Complex flow diagrams | → `react-flow` skill |
-| Landing page with scroll | → `cinematic-landing` skill |
+| Landing page / scrolltelling | → `landing-page` skill |
 
 ---
 
@@ -103,7 +105,7 @@ npm i ai @ai-sdk/react zod
 
 ## Design Thinking
 
-Before coding, make sure the workflow is already grounded. If it is not, switch to `functional-ui` first. Once the product shape is settled, commit to a **BOLD** aesthetic direction:
+Before coding, make sure the workflow is already grounded through `functional-ui` and the visual direction is settled through `visual-design` or an existing design system. Once those are settled, this skill helps pick implementation components, themes, registries, and interaction polish.
 
 ### 1. Purpose
 What problem does this interface solve? Who uses it?
@@ -193,6 +195,9 @@ Create atmosphere and depth rather than defaulting to solid colors. Apply creati
 ### Setup & Configuration
 - [shadcn-setup.md](references/shadcn-setup.md) - MCP init, components.json, one-time setup
 - [theming.md](references/theming.md) - Theme configuration, darkmatter, tweakcn
+- [architecture.md](references/architecture.md) - current implementation-reference boundary
+- [workflows.md](references/workflows.md) - app UI implementation and component sourcing paths
+- [gotchas.md](references/gotchas.md) - stale routing and default-component mistakes
 
 ### Components & Patterns
 - [registries.md](references/registries.md) - Deep dive on each registry
@@ -204,7 +209,9 @@ Create atmosphere and depth rather than defaulting to solid colors. Apply creati
 
 | Skill | Use When |
 |-------|----------|
+| `frontend-craft` | Building or implementing a frontend end to end |
 | `functional-ui` | Product workflow, IA, or interaction model is still open |
-| `cinematic-landing` | Scroll-scrubbed landing pages, video backgrounds, WebGL |
+| `visual-design` | Visual system, taste, typography, color, and layout rhythm are open |
+| `landing-page` | One-page marketing, launch pages, scrolltelling, video backgrounds, WebGL |
 | `react-flow` | Node-based flow diagrams, workflow visualization |
 | `convex` | Real-time backend, database, authentication |

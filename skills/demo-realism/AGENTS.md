@@ -11,4 +11,4 @@ Local rules for the `demo-realism` skill.
   - screen/state
   - data
 - If the realism pack is still vague at the workflow level, do not jump to screen-level examples yet.
-- If the realism pack is good enough, hand off to `functional-ui`, `frontend-design`, `impl-plan`, or `impl` instead of expanding scope here.
+- If the realism pack is good enough, hand off to `functional-ui`, `visual-design`, `frontend-craft`, `impl-plan`, or `impl` instead of expanding scope here.
