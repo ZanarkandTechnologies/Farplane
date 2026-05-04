@@ -15,6 +15,12 @@ so future dependency tooling can discover the composition graph:
 
 - [summarize](../summarize/SKILL.md) for URL, video, transcript, and article
   extraction
+- [codebase-analysis](../codebase-analysis/SKILL.md) when local registry/docs
+  search does not settle whether Codexter already has a behavior
+- [external-patterns](../external-patterns/SKILL.md) when a source points to a
+  repo or implementation pattern that should be checked in real code
+- [documentation](../documentation/SKILL.md) when a candidate depends on
+  official API, library, or platform behavior
 - [parity-research](../parity-research/SKILL.md) when the source makes a broad
   "state of the art" claim
 - [gap-analysis](../gap-analysis/SKILL.md) when a useful source feature is
@@ -23,8 +29,47 @@ so future dependency tooling can discover the composition graph:
   synthesized
 - [advise](../advise/SKILL.md) when a decision depends on judgment rather than
   direct evidence
+- [brainstorm](../brainstorm/SKILL.md) when the operator wants several
+  workflow shapes before scoring a source idea
+- [autoresearch-plan](../autoresearch-plan/SKILL.md) when a repeated candidate
+  needs a real metric-backed benchmark plan beyond the manual scorecard
+- [self-improve](../self-improve/SKILL.md) when the adopted idea changes a
+  skill and needs skill-specific evals
 - [impl-plan](../impl-plan/SKILL.md) when an adopted/adapted feature needs a
   ticket plan
+- [review](../review/SKILL.md) after meaningful scout artifact, registry, or
+  ticket-handoff changes
+
+## Skill Routing Map
+
+Use Markdown links for skill references so future dependency tooling can parse
+the composition graph. These are conditional routes, not instructions to load
+every skill on every run.
+
+| Phase | Skill route | Use when |
+| --- | --- | --- |
+| Source extraction | [summarize](../summarize/SKILL.md) | The input is a URL, video, transcript, article, or local media file. |
+| Workflow optioning | [brainstorm](../brainstorm/SKILL.md) | The operator wants alternate scout workflows, scorecard shapes, or ticket-splitting approaches before committing. |
+| Local baseline search | [codebase-analysis](../codebase-analysis/SKILL.md) | Registry/docs search is not enough to decide whether Codexter already implements the behavior. |
+| Source implementation check | [external-patterns](../external-patterns/SKILL.md) | The source is a repo or makes a code-level implementation claim. |
+| Official behavior check | [documentation](../documentation/SKILL.md) | The candidate depends on current official docs, APIs, standards, or platform behavior. |
+| External convergence | [parity-research](../parity-research/SKILL.md) | The source claims a broad "state of the art" or peer-product norm. |
+| Local missing-scope check | [gap-analysis](../gap-analysis/SKILL.md) | A candidate is absent or partial locally and needs production-grade scope before ticketing. |
+| Multi-source synthesis | [best-of-worlds](../best-of-worlds/SKILL.md) | Several sources mention similar features or competing implementations. |
+| Judgment call | [advise](../advise/SKILL.md) | Evidence leaves a real choice about value, risk, or timing. |
+| Benchmark planning | [autoresearch-plan](../autoresearch-plan/SKILL.md) | A manual scorecard is not enough and a metric-driven experiment is worth scoping. |
+| Skill improvement follow-up | [self-improve](../self-improve/SKILL.md) | The candidate changes a skill and needs eval-backed variants. |
+| Ticket planning | [impl-plan](../impl-plan/SKILL.md) | An `adopt` or `adapt` decision becomes implementation work. |
+| Quality gate | [review](../review/SKILL.md) | Scout output changed durable artifacts or created a handoff that needs trust. |
+
+`sequential thinking` is useful as a reasoning pattern or tool when the source
+analysis is tangled, but it is not listed as a skill dependency unless a local
+`skills/sequential-thinking/` package exists.
+
+When several independent candidates exist, split the analysis mentally or with
+bounded parallel lanes by candidate: local baseline, external evidence,
+gap/parity, and scorecard work can proceed independently as long as all lanes
+write back to one decision matrix.
 
 ## Trigger Conditions
 
@@ -62,7 +107,9 @@ needed; use [summarize](../summarize/SKILL.md) directly.
    guardrails, metrics, architecture claims, and operational practices.
 8. **Dedupe locally:** search `docs/features/registry.jsonl`,
    `docs/specs/harness-techniques.md`, `README.md`, `ARCHITECTURE.md`,
-   `skills/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and tickets.
+   `skills/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and tickets. Use
+   [codebase-analysis](../codebase-analysis/SKILL.md) when the local match
+   depends on code or cross-file behavior.
 9. **Route research:** use [parity-research](../parity-research/SKILL.md) for
    external convergence claims, [gap-analysis](../gap-analysis/SKILL.md) for
    repo-specific missing scope, and

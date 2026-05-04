@@ -16,6 +16,9 @@
   [best-of-worlds](../../best-of-worlds/SKILL.md),
   [gap-analysis](../../gap-analysis/SKILL.md), and
   [impl-plan](../../impl-plan/SKILL.md) gates first.
+- Do not list tools as skill dependencies. For example, sequential thinking may
+  help analysis, but it is not a dependency unless it becomes a local skill
+  package.
 - Do not store bulky transcripts in `docs/`, `skills/`, or tickets. Keep public
   source extraction artifacts in `experiments/`.
 - Do not store private source extracts, secrets, tokens, cookies, credentials,
