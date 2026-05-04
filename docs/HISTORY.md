@@ -136,3 +136,5 @@
 2026-05-04 00:03 +0800 | POLICY | codify stable local skill contracts so external skills and repos are imported only through reviewed best-of-worlds decisions, not auto-synced as live dependencies
 2026-05-04 01:28 +0800 | FEAT | add Autonomy Readiness across planning surfaces and ship a serial `$ralph` dispatcher skill with a read-only filesystem-ticket selector
 2026-05-04 02:37 +0800 | DOCS | restore colored whole-system README and architecture maps with the current skill topology, serial `$ralph`, Autonomy Readiness, autoresearch, best-of-worlds, and frontend routing surfaces
+2026-05-04 19:04 +0800 | FEAT | add a structured feature registry plus `harness-scout` source-ingestion workflow for deduping external harness ideas, decision matrices, and manual scorecards
+2026-05-04 23:11 +0800 | DOCS | run `harness-scout` against the self-evolving agents video as a duplicate source pass, add a compact technique dedupe table, and seed follow-up tickets for gated skill review plus hook-reminder benchmarking

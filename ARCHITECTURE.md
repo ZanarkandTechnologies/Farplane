@@ -45,6 +45,7 @@ flowchart LR
   subgraph Knowledge["Durable Knowledge"]
     specs[(docs/specs/*<br/>behavior specs)]:::surface
     techniques[(harness-techniques.md<br/>current inventory)]:::surface
+    featureRegistry[(docs/features<br/>structured feature registry)]:::surface
     doctrine[(harness-engineering-doctrine.md<br/>surface routing)]:::surface
     memories[(HISTORY.md<br/>MEMORY.md<br/>TROUBLES.md)]:::memory
   end
@@ -52,7 +53,7 @@ flowchart LR
   subgraph Skills["Skill Layer"]
     intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
     readiness["agent-testability-plan<br/>Autonomy Readiness"]:::callout
-    research["documentation<br/>external-patterns<br/>parity-research<br/>gap-analysis<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
+    research["documentation<br/>external-patterns<br/>harness-scout<br/>parity-research<br/>gap-analysis<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     execSkill["$impl<br/>$loop<br/>$ralph"]:::callout
@@ -88,6 +89,7 @@ flowchart LR
   globalAgents -. installed policy .-> localAgents
   architecture --> specs
   architecture --> techniques
+  techniques --> featureRegistry
   doctrine -. placement decisions .-> intake
 
   specs --> intake
@@ -147,6 +149,9 @@ Legend:
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
+- [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
+  Purpose: structured feature registry contract for dedupe, provenance, source
+  references, evidence links, known limits, and benchmark metrics
 - [docs/specs/doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md)
   Purpose: structural versus narrative doc-audit policy and the doc-gardening
   workflow
@@ -199,7 +204,8 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
   Purpose: hooks, validators, runtime helpers
 - [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)
-  Purpose: smoke runs, eval outputs, and proof artifacts
+  Purpose: smoke runs, source-ingestion fixtures, eval outputs, and proof
+  artifacts
 
 ## Ownership Boundaries
 

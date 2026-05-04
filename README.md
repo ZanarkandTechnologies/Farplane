@@ -20,12 +20,14 @@ ticket, and execution workflow.
 - Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
 - Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
+- Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
 - Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
 - QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
 - CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/desloppify/README.md)
 - Parity-comparison workflow: [skills/parity-research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/parity-research/README.md)
 - Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/best-of-worlds/SKILL.md)
+- Harness source scouting: [skills/harness-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/harness-scout/SKILL.md)
 - PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
 - Frontend implementation orchestrator: [skills/frontend-craft/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/frontend-craft/SKILL.md)
 - Functional UI redesign: [skills/functional-ui/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/functional-ui/SKILL.md)
@@ -56,6 +58,9 @@ Implemented now:
   what other products, standards, or codebases consistently include
 - best-of-worlds synthesis through `best-of-worlds` when the source set is
   known and the work is to extract, score, and adapt the strongest techniques
+- structured feature records through `docs/features/registry.jsonl` and
+  source-to-feature scouting through `harness-scout` for videos, blogs, repos,
+  and transcripts that may contain harness improvements
 - frontend implementation through `frontend-craft`, with `functional-ui` for
   UX/workflow and broken-UI redesign, `visual-design` for look/taste/visual
   systems, and `landing-page` for one-page marketing or scrolltelling surfaces
@@ -134,8 +139,8 @@ flowchart LR
     end
 
     subgraph Research["Research + Synthesis Sidecars"]
-      grounding["summarize<br/>documentation<br/>external-patterns<br/>find-skills<br/>apify"]:::research
-      parity["parity-research<br/>gap-analysis<br/>best-of-worlds"]:::research
+      grounding["summarize<br/>harness-scout<br/>documentation<br/>external-patterns<br/>find-skills<br/>apify"]:::research
+      parity["parity-research<br/>gap-analysis<br/>best-of-worlds<br/>docs/features registry"]:::research
       improve["autoresearch-plan<br/>autoresearch-exec<br/>self-improve<br/>skill-creator"]:::research
     end
 
@@ -318,6 +323,7 @@ The shipped global contract stays in `templates/global/AGENTS.md`.
 - Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - Current execution model: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
+- Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
 - Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
 - QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)

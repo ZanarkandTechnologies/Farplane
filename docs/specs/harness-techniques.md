@@ -10,6 +10,10 @@ techniques it is likely to adopt next.
 This document is the repo's current-state feature inventory first. It is not a
 generic harness wishlist.
 
+For structured feature records, provenance, source references, known limits, and
+benchmark metrics, use `docs/features/registry.jsonl`. This Markdown inventory
+stays the skimmable human map.
+
 ## Status Legend
 
 - `Implemented`: real repo behavior or a documented active contract
@@ -28,6 +32,7 @@ This inventory is grounded in:
 - subagent prompts under `agents/`
 - `hooks.json` and `bin/stop_hook.py`
 - `docs/MEMORY.md` and `docs/TROUBLES.md`
+- `docs/features/registry.jsonl`
 
 ## Implemented Techniques
 
@@ -48,6 +53,7 @@ This inventory is grounded in:
 | Feature-gap research before implementation planning | Implemented | `skills/gap-analysis`, `skills/impl-plan`, `tickets/templates/ticket.md` | Grounds missing or parity-driven feature work in comparable apps, codebases, and official docs so tickets say what a production-grade version actually needs | depends on the available research tools and disciplined use of real comparables instead of intuition |
 | External parity research before local scoping | Implemented | `skills/parity-research`, `skills/gap-analysis`, `skills/functional-ui` | Grounds "what do peers include?" questions in comparable products, official docs, standards, and open-source repos before the work collapses into repo-specific scope | depends on good source selection and on keeping parity targets proportional instead of importing every adjacent premium feature |
 | Best-of-worlds synthesis | Implemented | `skills/best-of-worlds`, `skills/advise`, `docs/specs/best-of-worlds-workflow.md` | Lets agents compare a provided set of projects/repos/blogs, extract transferable features, discover metrics, and make adopt/adapt/reject/defer calls before implementation | depends on source quality and on agents recording decisions instead of copying every attractive feature |
+| Structured feature registry and source scouting | Implemented | `docs/features/registry.jsonl`, `docs/features/README.md`, `skills/harness-scout`, `experiments/harness-scout` | Gives source-ingestion passes stable feature IDs, dedupe, provenance, local match evidence, decision matrices, and manual scorecards before opening tickets | manual scorecards are judgment aids, not scientific benchmarks; no cron, feed polling, or async Codex benchmark runner yet |
 | Frontend skill topology | Implemented | `skills/frontend-craft`, `skills/functional-ui`, `skills/visual-design`, `skills/landing-page`, `skills/frontend-design` | Keeps frontend work routed by job: implementation orchestration, UX/workflow redesign, visual taste/system direction, one-page/scrolltelling planning, and app-UI implementation references | depends on agents respecting the wrapper-plus-granular routing instead of treating every UI ask as styling |
 | Metric-driven autoresearch sessions | Implemented | `skills/autoresearch-plan`, `skills/autoresearch-exec`, `skills/self-improve`, `docs/specs/autoresearch-skill-suite.md` | Gives agents one artifact-backed way to plan, run, and resume keep/discard improvement loops against a mechanical metric | v1 is skill-and-script based, not a full dashboard or extension runtime |
 | Skill judgement questions | Implemented | `skills/skill-creator`, `skills/advise`, `skills/best-of-worlds` | Gives skills a declared list of ambiguity and metric-selection questions that should route through judgement instead of hidden intuition | existing skills adopt the pattern opportunistically; not every legacy skill has its own questions yet |

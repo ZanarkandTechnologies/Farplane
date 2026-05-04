@@ -1,0 +1,16 @@
+# Feature Ledger
+
+| Feature | Source anchor | Source evidence | Local matches | Notes |
+| --- | --- | --- | --- | --- |
+| Program-driven autoresearch loop | `00:59-02:15` | Program file, harness mutation, eval, baseline, keep/discard loop. | `FEAT-0005`, `skills/autoresearch-plan`, `skills/autoresearch-exec`, `docs/specs/autoresearch-skill-suite.md` | Codexter already has this as a skill/script artifact contract. |
+| Skill-specific eval improvement | `00:59-02:15`, `10:54-12:47` | Agent harness and procedural knowledge improve through evaluated or reviewed changes. | `FEAT-0006`, `skills/self-improve` | Codexter has binary skill evals and `program.md` memory. |
+| Hot/warm memory split | `04:30-08:52`, `12:49-14:59` | Always-loaded memory index versus on-demand memory/skills/history. | `FEAT-0001`, `FEAT-0007`, `AGENTS.md`, `README.md`, `skills/*`, `docs/*` | Codexter has a map-plus-progressive-disclosure version, not an agent memory product. |
+| Async memory consolidation | `07:57-08:52` | Background process reviews memory and session history after a run. | partial: `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, closeout writeback | Codexter writeback is explicit and ticket/docs-first, not autonomous session consolidation. |
+| Searchable raw conversation history | `09:11-10:18`, `13:17-14:59` | Search across memory files and raw conversation/session history. | partial/rejected-by-policy: `docs/specs/context-and-handoff-policy.md` says transcript is disposable | Likely reject; visible tickets beat hidden transcript dependence for Codexter. |
+| Autonomous skill generation after N steps | `10:54-12:47` | Background skill reviewer looks for non-trivial approaches and proposes skill updates. | partial: `skills/skill-creator`, `skills/self-improve`, `skills/find-skills`, `FEAT-0006` | Adapt as a gated skill-opportunity review, not auto-write in v1. |
+| Skill safety scan / reject patterns | `12:17-12:38` | Guard checks reject unsafe generated skills before saving. | partial: `skills/skill-creator/scripts/quick_validate.py`, review gates | Useful if autonomous skill proposals become real. |
+| Hook-driven learning reminders | `15:21-16:24` | Prompt and tool-result hooks nudge memory/error learning updates. | partial: `hooks.json`, `bin/capture_user_turn.py`, `bin/stop_hook.py`, `docs/TROUBLES.md` | Codexter has hooks, but not a PostToolUse learning-reminder loop. |
+| Error/learnings folder | `15:21-16:24` | Learning and error files store recurring corrections and failures. | `docs/TROUBLES.md`, `docs/MEMORY.md` | Codexter has a curated failure/memory split; could structure source ingestion similarly. |
+| Strict memory caps | `12:49-13:42` | Hot user/project memory is kept under a small total size. | partial: concise root maps and progressive disclosure, no character validator | Defer until prompt-bloat failures repeat. |
+| Semantic memory layer | `13:17-14:59` | Optional semantic memory layer can be plugged in. | none active | Defer; too heavy for current high-ROI slice. |
+| Choosing deterministic workflow versus agentic autonomy | `03:12-04:30` | Source warns that more agentic architecture is not always better. | `FEAT-0009`, `skills/ralph`, `docs/MEMORY.md#MEM-0074` | Codexter already takes the conservative serial/visible approach. |
