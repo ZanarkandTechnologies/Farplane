@@ -1,0 +1,21 @@
+{
+  "command": [
+    "pi",
+    "--model",
+    "openrouter/moonshotai/kimi-k2.6",
+    "--thinking",
+    "high",
+    "--skill",
+    "/Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/profiles/frontend-pi-kimi/skills/frontend-craft",
+    "--skill",
+    "/Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/profiles/frontend-pi-kimi/skills/functional-ui",
+    "--skill",
+    "/Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/profiles/frontend-pi-kimi/skills/visual-design",
+    "--skill",
+    "/Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/profiles/frontend-pi-kimi/skills/landing-page",
+    "--skill",
+    "/Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/profiles/frontend-pi-kimi/skills/frontend-design",
+    "-p",
+    "@/Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/runs/20260504T181200Z-frontend-pi-kimi-review-hardened/prompt.md"
+  ]
+}

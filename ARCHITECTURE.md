@@ -57,6 +57,7 @@ flowchart LR
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     execSkill["$impl<br/>$loop<br/>$ralph"]:::callout
+    externalCli["delegate-cli<br/>delegate-frontend"]:::skill
     closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
   end
 
@@ -107,6 +108,9 @@ flowchart LR
   execSkill --> agentsDir
   execSkill --> bin
   execSkill --> harness
+  execSkill --> externalCli
+  externalCli --> bin
+  externalCli --> harness
   execSkill --> qa
   hooks --> stop
   harness --> stop
@@ -201,6 +205,13 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/SKILL.md)
   Purpose: public serial dispatcher that selects one eligible filesystem
   ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
+- [skills/delegate-cli/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/SKILL.md)
+  Purpose: public external CLI delegation workflow for routing bounded builder
+  work through profile/adapter contracts while Codexter keeps ticket, QA, and
+  review authority
+- [skills/delegate-frontend/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/SKILL.md)
+  Purpose: first external CLI profile surface, routing frontend implementation
+  and design-polish work through the Pi plus Kimi K2.6 profile
 - [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
   Purpose: hooks, validators, runtime helpers
 - [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)

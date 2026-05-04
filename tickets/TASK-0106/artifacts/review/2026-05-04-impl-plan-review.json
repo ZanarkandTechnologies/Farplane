@@ -1,0 +1,93 @@
+{
+  "work_type": ["planning", "harness-tooling"],
+  "reviewed_at": "2026-05-04T17:53:39Z",
+  "ticket_id": "TASK-0106",
+  "search_scope": {
+    "changed_files": [
+      "tickets/TASK-0106/ticket.md"
+    ],
+    "related_files": [
+      "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "docs/specs/harness-engineering-doctrine.md",
+      "docs/specs/runtime-surface.md",
+      "docs/specs/orchestrator-subagent-loop.md",
+      "tickets/README.md",
+      "tickets/templates/ticket.md",
+      "bin/AGENTS.md",
+      "bin/README.md",
+      "bin/ticket_runtime.py",
+      "bin/test_ticket_runtime.py",
+      "skills/pr-runtime/SKILL.md",
+      "skills/frontend-craft/SKILL.md",
+      "docs/MEMORY.md",
+      "docs/TROUBLES.md",
+      "docs/prd.md"
+    ],
+    "invariants_checked": [
+      "MEM-0030",
+      "MEM-0031",
+      "MEM-0044",
+      "MEM-0046",
+      "MEM-0050",
+      "MEM-0060",
+      "MEM-0061",
+      "MEM-0062",
+      "MEM-0072",
+      "MEM-0073"
+    ],
+    "docs_checked": [
+      "skills/impl-plan/SKILL.md",
+      "skills/impl-plan/todos.md",
+      "skills/impl-plan/references/review.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md"
+    ]
+  },
+  "rubrics_used": ["spec-contract", "implementation-plan"],
+  "overall_score": 4.3,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "not_applicable_for_plan_only_review",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": {
+    "spec-contract": {
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.5,
+        "parallelization-fit": 4.0,
+        "ticket-sizing": 4.5,
+        "acceptance-testability": 4.4,
+        "scope-clarity": 4.5
+      },
+      "findings": [],
+      "next_action": "Approve or refine the whole TASK-0106 plan; no split is needed before implementation."
+    },
+    "implementation-plan": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.1,
+        "bloatability": 4.0,
+        "modularity": 4.3,
+        "proof-clarity": 4.3,
+        "execution-order": 4.4,
+        "risk-clarity": 4.1,
+        "decision-tone": 4.5,
+        "autonomy-readiness": 4.2
+      },
+      "findings": [],
+      "next_action": "On approval, implement the delegate-cli platform first, then wire delegate-frontend as the first profile."
+    }
+  },
+  "blocking_findings": [],
+  "next_action": "Await operator approval or refinement before changing TASK-0106 to building."
+}

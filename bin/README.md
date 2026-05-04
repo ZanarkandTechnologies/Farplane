@@ -26,6 +26,8 @@ orchestration story.
 - `check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
 - `check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
+- `delegate_cli_agent.py` - external CLI delegation helper for profile setup,
+  dry-run command rendering, execution logs, and ticket evidence copyback
 - `notify.py` - local notification helper
 - `stop_hook.py` - thin stop-hook/runtime shim
 - `ticket_runtime.py` / `ticket-runtime` - local helper for ticket runtime
@@ -95,6 +97,12 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/ticket_runtime.py down ...`
   Use when the helper should stop tracked processes or run the declared
   compose-down command, then release reserved ports
+- `python3 bin/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json`
+  Use before a live external CLI run to check the profile templates, copied
+  skill sources, executable, and required environment variables
+- `python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket <ticket> --dry-run --json`
+  Use to render the Pi/Kimi frontend delegation prompt, command, runtime logs,
+  and durable ticket artifacts without spending tokens or editing files
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
 
@@ -145,6 +153,13 @@ python3 bin/ticket_runtime.py up \
 python3 bin/ticket_runtime.py qa --ticket TASK-0014 --json
 python3 bin/ticket_runtime.py down --ticket TASK-0014 --json
 
+python3 bin/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json
+python3 bin/delegate_cli_agent.py run \
+  --profile frontend-pi-kimi \
+  --ticket tickets/TASK-0014/ticket.md \
+  --dry-run \
+  --json
+
 ```
 
 In the live interactive path, `$impl` is the orchestrator contract and
@@ -161,6 +176,7 @@ already advanced.
 - `python3 bin/check_doc_parity.py`
 - `python3 -m unittest bin/test_harness_invariants.py`
 - `python3 -m unittest bin/test_doc_parity.py`
+- `python3 -m unittest bin/test_delegate_cli_agent.py`
 - `python3 -m unittest bin/test_ticket_metadata.py`
 - `python3 -m unittest bin/test_ticket_runtime.py`
 - `python3 -m py_compile bin/stop_hook.py`
@@ -168,6 +184,7 @@ already advanced.
 - `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py`
 - `python3 -m py_compile bin/check_harness_invariants.py bin/test_harness_invariants.py`
 - `python3 -m py_compile bin/check_doc_parity.py bin/test_doc_parity.py`
+- `python3 -m py_compile bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py`
 - `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
 - `python3 -m unittest discover -s bin -p 'test_*.py'`
 - `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`

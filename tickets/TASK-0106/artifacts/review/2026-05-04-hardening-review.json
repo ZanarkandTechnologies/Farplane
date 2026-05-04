@@ -1,0 +1,169 @@
+{
+  "work_type": "security-hardening-review",
+  "reviewed_at": "2026-05-04T18:15:10Z",
+  "verdict": "pass",
+  "overall_score": 4.35,
+  "overall_threshold": 4.0,
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "bin/delegate_cli_agent.py",
+      "bin/test_delegate_cli_agent.py",
+      "skills/delegate-cli/**",
+      "skills/delegate-frontend/**",
+      "templates/external-cli/**",
+      "README.md",
+      "ARCHITECTURE.md",
+      "bin/README.md",
+      "docs/specs/harness-techniques.md",
+      "docs/HISTORY.md",
+      "tickets/TASK-0106/ticket.md"
+    ],
+    "related_files": [
+      ".gitignore",
+      "tickets/scripts/check_ticket_metadata.py",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/desloppify.md",
+      "skills/review/references/code-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md"
+    ],
+    "evidence_artifacts": [
+      "tickets/TASK-0106/artifacts/external-cli/20260504T181200Z-frontend-pi-kimi-review-hardened/**",
+      "tickets/TASK-0106/artifacts/review/2026-05-04-impl-plan-review.json",
+      "tickets/TASK-0106/artifacts/review/2026-05-04-impl-review.json"
+    ]
+  },
+  "summary": "Review found and fixed concrete hardening gaps around path traversal, nonexistent ticket artifact creation, live credential gates, and prompt safety-rule rendering. The resulting delegation platform is dry-run-first, ticket-evidence-backed, and still keeps live spend behind explicit operator setup.",
+  "finding_log": [
+    {
+      "severity": "high",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "User-provided run ids could include path separators and escape the intended run/evidence directory layout.",
+      "file_refs": [
+        "bin/delegate_cli_agent.py"
+      ],
+      "evidence": [
+        "The original run directory was built directly from the user-provided run id."
+      ],
+      "next_action": "Fixed with validate_run_id and regression coverage for '../escape'."
+    },
+    {
+      "severity": "medium",
+      "confidence": "high",
+      "rubric": "evidence-quality",
+      "summary": "A supplied but nonexistent ticket could still create durable artifact directories, weakening traceability.",
+      "file_refs": [
+        "bin/delegate_cli_agent.py"
+      ],
+      "evidence": [
+        "The original path normalized the ticket id before verifying that the ticket file existed."
+      ],
+      "next_action": "Fixed by rejecting missing tickets before artifact creation."
+    },
+    {
+      "severity": "medium",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "Live runs did not fail early when provider environment variables were missing.",
+      "file_refs": [
+        "bin/delegate_cli_agent.py"
+      ],
+      "evidence": [
+        "Doctor reported env status, but command_run originally invoked the external CLI without checking required live env first."
+      ],
+      "next_action": "Fixed with missing_live_env and a live-run preflight guard."
+    },
+    {
+      "severity": "medium",
+      "confidence": "high",
+      "rubric": "code-quality",
+      "summary": "The safety text in APPEND_SYSTEM.md existed but was not rendered into the delegated prompt.",
+      "file_refs": [
+        "templates/external-cli/profiles/frontend-pi-kimi/APPEND_SYSTEM.md",
+        "templates/external-cli/profiles/frontend-pi-kimi/prompt.md.tpl",
+        "bin/delegate_cli_agent.py"
+      ],
+      "evidence": [
+        "The previous prompt template did not include append_system."
+      ],
+      "next_action": "Fixed by rendering APPEND_SYSTEM.md into the prompt and verifying the copied ticket artifact contains the safety section."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity-reusability": 4.2,
+        "bloatability": 4.2,
+        "readability": 4.3,
+        "boundary-clarity": 4.4,
+        "error-handling": 4.4,
+        "maintainability": 4.3
+      },
+      "findings": [],
+      "next_action": "No blocker remains. Future adapters should add the same validation helpers rather than duplicating unchecked path or credential handling."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.4,
+        "contract-correctness": 4.4,
+        "dependency-readiness": 4.3,
+        "coupling-risk": 4.3,
+        "merge-readiness": 4.5
+      },
+      "findings": [],
+      "next_action": "Ready to merge as a dry-run-first external CLI delegation surface. Live Pi/Kimi execution still requires explicit provider credentials and spend approval."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.35,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.4,
+        "reproducibility": 4.4,
+        "traceability": 4.3,
+        "consistency": 4.3,
+        "inspectability": 4.3,
+        "autonomy-readiness": 4.4
+      },
+      "findings": [],
+      "next_action": "Evidence is fresh and replayable. The next proof boundary is a separate live external-CLI smoke with explicit credentials/spend approval."
+    }
+  ],
+  "hard_gate_failures": [],
+  "blocking_findings": [],
+  "evidence_checked": [
+    "python3 -m unittest discover -s bin -p 'test_*.py' -> 117 tests passed",
+    "python3 -m unittest bin.test_delegate_cli_agent -> 10 tests passed",
+    "python3 -m py_compile bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py -> passed",
+    "python3 skills/skill-creator/scripts/quick_validate.py skills/delegate-cli -> passed",
+    "python3 skills/skill-creator/scripts/quick_validate.py skills/delegate-frontend -> passed",
+    "python3 tickets/scripts/check_ticket_metadata.py -> passed",
+    "python3 bin/check_doc_parity.py -> passed",
+    "python3 bin/check_harness_invariants.py -> passed",
+    "python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --run-id ../escape --dry-run --json -> failed as expected",
+    "python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket TASK-NOTREAL --dry-run --json -> failed as expected",
+    "python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --run-id live-missing-env-review --json -> failed as expected before invoking Pi",
+    "rg -n 'Delegate System Rules|Do not push|spend model credits|Codexter owns' tickets/TASK-0106/artifacts/external-cli/20260504T181200Z-frontend-pi-kimi-review-hardened/prompt.md -> safety rules present"
+  ],
+  "next_action": "Commit and push the external CLI delegation platform plus hardening fixes."
+}

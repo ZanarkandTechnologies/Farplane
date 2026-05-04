@@ -138,3 +138,4 @@
 2026-05-04 02:37 +0800 | DOCS | restore colored whole-system README and architecture maps with the current skill topology, serial `$ralph`, Autonomy Readiness, autoresearch, best-of-worlds, and frontend routing surfaces
 2026-05-04 19:04 +0800 | FEAT | add a structured feature registry plus `harness-scout` source-ingestion workflow for deduping external harness ideas, decision matrices, and manual scorecards
 2026-05-04 23:11 +0800 | DOCS | run `harness-scout` against the self-evolving agents video as a duplicate source pass, add a compact technique dedupe table, and seed follow-up tickets for gated skill review plus hook-reminder benchmarking
+2026-05-05 02:02 +0800 | FEAT | add delegate-cli external CLI delegation with a Pi/Kimi delegate-frontend profile, deterministic dry-run helper, templates, docs, and ticket evidence handoff

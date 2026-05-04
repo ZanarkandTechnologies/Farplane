@@ -29,6 +29,8 @@ ticket, and execution workflow.
 - Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/best-of-worlds/SKILL.md)
 - Harness source scouting: [skills/harness-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/harness-scout/SKILL.md)
 - PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
+- External CLI delegation: [skills/delegate-cli/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/README.md)
+- Frontend external CLI profile: [skills/delegate-frontend/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/README.md)
 - Frontend implementation orchestrator: [skills/frontend-craft/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/frontend-craft/SKILL.md)
 - Functional UI redesign: [skills/functional-ui/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/functional-ui/SKILL.md)
 - Visual design direction: [skills/visual-design/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/visual-design/SKILL.md)
@@ -76,6 +78,8 @@ Implemented now:
 - documenting and closeout through `close-ticket`
 - isolated PR follow-up and concurrent-writer checkout setup plus ticket-scoped
   runtime launch/teardown through `pr-runtime` plus `ticket-runtime`
+- external CLI delegation through `delegate-cli`, with `delegate-frontend` as
+  the first profile for Pi plus Kimi K2.6 dry-run/live handoffs
 - Stop-hook phase routing and current-turn relevance checks
 - optional `deep-init-project` scaffolding for `.githooks/`,
   `scripts/pre_commit_check.sh`, `scripts/pre_push_check.sh`, a starter `qa/`
@@ -166,6 +170,7 @@ flowchart LR
     subgraph Build["Build + Specialist Skills"]
       builders["frontend-craft<br/>frontend-design<br/>convex<br/>react-flow<br/>three-js<br/>data-viz"]:::execution
       uiSkills["functional-ui<br/>visual-design<br/>landing-page<br/>vercel-react-best-practices"]:::execution
+      externalCli["delegate-cli<br/>delegate-frontend<br/>external CLI profiles"]:::execution
       debug["runtime-debugging<br/>codebase-analysis<br/>bash-efficiency<br/>repent<br/>agent-browser"]:::execution
     end
 
@@ -225,9 +230,11 @@ flowchart LR
 
     impl --> builders
     impl --> uiSkills
+    impl --> externalCli
     impl --> debug
     builders --> qa
     uiSkills --> qa
+    externalCli --> qa
     debug --> qa
     impl --> qa
     qa --> review
