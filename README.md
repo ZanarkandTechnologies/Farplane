@@ -4,8 +4,9 @@ Ticket-first autonomous Codex harness.
 
 Codexter turns fuzzy product asks into visible specs, tickets, execution rounds,
 evidence-backed review, and closeout. The harness is strongest today at
-single-ticket engineering with explicit proof and Stop-hook judgment. It is not
-yet a fully autonomous multi-ticket dispatcher.
+single-ticket engineering with explicit proof and Stop-hook judgment, with a
+guarded serial `$ralph` dispatcher for prepared filesystem ticket boards. It is
+not yet a parallel multi-agent dispatcher.
 
 If a repo does not already have Codexter conventions such as `AGENTS.md`,
 `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and
@@ -33,6 +34,7 @@ ticket, and execution workflow.
 - Autoresearch planning: [skills/autoresearch-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-plan/SKILL.md)
 - Autoresearch execution: [skills/autoresearch-exec/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-exec/SKILL.md)
 - Skill self-improvement: [skills/self-improve/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/self-improve/SKILL.md)
+- Serial board drain: [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/SKILL.md)
 - Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 - Project bootstrap: [skills/deep-init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/README.md)
 
@@ -42,6 +44,8 @@ Implemented now:
 
 - discovery-first intake through `brainstorm`, `deep-interview`, `prd`,
   `deep-system-design`, `deep-ui-design`, and `agent-testability-plan`
+- `Autonomy Readiness` captured across bootstrap, PRD, design, ticketization,
+  implementation planning, and review surfaces
 - capability-first ticketization through `spec-to-ticket`
 - bootstrap testability defaults propagated into ticket `Agent Contract` and
   `qa/cookbook` seeds through `spec-to-ticket`
@@ -59,6 +63,8 @@ Implemented now:
   `autoresearch-exec`, with `self-improve` for binary-eval-based skill
   optimization on the same artifact contract
 - single-ticket execution through `$impl`
+- serial filesystem-ticket board draining through `$ralph`, which selects one
+  eligible ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
 - anchored `review` rubrics plus evidence-gated completion
 - `desloppify` for CLI-driven anti-slop cleanup, with default worker delegation
 - same-session bounded persistence through `$loop`
@@ -73,7 +79,7 @@ Implemented now:
 Partial today:
 
 - same-ticket auto-reentry is real, but the autonomous loop still centers on one
-  selected ticket at a time
+  selected ticket at a time; `$ralph` drains serially rather than in parallel
 - tmux-backed worker lanes exist, but the runtime is still prototype-weight
 - runtime observability doctrine is shipped, while hosted telemetry is still in
   progress in [TASK-0073](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0073/ticket.md)
@@ -89,25 +95,161 @@ Still missing:
 - clearer answer/plan/act routing plus deterministic subagent selection for
   direct user asks
 - worktree-backed multi-session execution and a cloud-ready lane boundary
+- N-agent parallel Ralph with claims, leases, merge policy, stale-worker
+  handling, and batch/release QA
 - transparency and ablation evals for measuring whether autonomy changes
   actually improve outcomes
 
-## Core Flow
+## Whole-System Workflow
 
 ```mermaid
 flowchart LR
-    A[idea or repo gap] --> B[deep-init-project when repo needs bootstrap]
-    A --> C[deep-interview / prd]
-    B --> D[bootstrap brief + qa cookbook]
-    C --> E[spec-to-ticket]
-    D --> E
-    E --> F[impl-plan]
-    F --> G[$impl]
-    G --> H[qa + review]
-    H --> I[Stop hook]
-    I -->|revise| G
-    I -->|pass| J[close-ticket]
+    classDef input fill:#dbeafe,stroke:#2563eb,color:#111827
+    classDef surface fill:#e5e7eb,stroke:#4b5563,color:#111827
+    classDef discovery fill:#fef3c7,stroke:#b45309,color:#111827
+    classDef planning fill:#fde68a,stroke:#92400e,color:#111827
+    classDef research fill:#ede9fe,stroke:#7c3aed,color:#111827
+    classDef execution fill:#dcfce7,stroke:#15803d,color:#111827
+    classDef quality fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+    classDef closeout fill:#ccfbf1,stroke:#0f766e,color:#111827
+    classDef runtime fill:#cffafe,stroke:#0891b2,color:#111827
+    classDef future fill:#f5f3ff,stroke:#8b5cf6,color:#111827,stroke-dasharray: 5 3
+    classDef callout fill:#facc15,stroke:#854d0e,stroke-width:3px,color:#111827
+
+    req[/operator ask<br/>idea, bug, repo gap, board drain/]:::input
+
+    subgraph Map["Durable Map Surfaces"]
+      agents[(AGENTS.md)]:::surface
+      readme[(README.md<br/>whole-system map)]:::surface
+      arch[(ARCHITECTURE.md<br/>ownership map)]:::surface
+      specs[(docs/specs/*)]:::surface
+      history[(HISTORY / MEMORY / TROUBLES)]:::surface
+    end
+
+    subgraph Intake["1. Discovery + Direction"]
+      bootstrap["deep-init-project<br/>repo bootstrap"]:::callout
+      fuzzy["brainstorm<br/>deep-interview<br/>prd"]:::discovery
+      design["deep-system-design<br/>deep-ui-design<br/>agent-testability-plan"]:::discovery
+      advice["advise<br/>functional-ui<br/>visual-design<br/>landing-page<br/>demo-realism"]:::discovery
+    end
+
+    subgraph Research["Research + Synthesis Sidecars"]
+      grounding["summarize<br/>documentation<br/>external-patterns<br/>find-skills<br/>apify"]:::research
+      parity["parity-research<br/>gap-analysis<br/>best-of-worlds"]:::research
+      improve["autoresearch-plan<br/>autoresearch-exec<br/>self-improve<br/>skill-creator"]:::research
+    end
+
+    subgraph Package["2. Package Work"]
+      readiness["Autonomy Readiness<br/>inputs, credentials, compute, tools,<br/>QA risk, human gates"]:::callout
+      ticketize["spec-to-ticket<br/>capability-sized tickets"]:::callout
+      tickets[(tickets/TASK-*/ticket.md<br/>Plan + Evidence + Blockers)]:::surface
+      qaCookbook[(qa/cookbook/*<br/>shortcuts, seeds, probes)]:::surface
+    end
+
+    subgraph Plan["3. Per-Ticket Plan"]
+      implplan["impl-plan<br/>file map, signatures, proof path"]:::callout
+      diagram["diagramming<br/>colored delta maps"]:::planning
+    end
+
+    subgraph Dispatch["4. Execution Dispatch"]
+      ralph["$ralph<br/>serial board drain"]:::callout
+      loop["$loop<br/>same-session bounded persistence"]:::execution
+      impl["$impl<br/>one-ticket build loop"]:::callout
+      prRuntime["pr-runtime<br/>isolated checkout + QA target"]:::runtime
+    end
+
+    subgraph Build["Build + Specialist Skills"]
+      builders["frontend-craft<br/>frontend-design<br/>convex<br/>react-flow<br/>three-js<br/>data-viz"]:::execution
+      uiSkills["functional-ui<br/>visual-design<br/>landing-page<br/>vercel-react-best-practices"]:::execution
+      debug["runtime-debugging<br/>codebase-analysis<br/>bash-efficiency<br/>repent<br/>agent-browser"]:::execution
+    end
+
+    subgraph Proof["5. Proof + Review Gates"]
+      qa["qa<br/>testing<br/>visual-qa<br/>web-design-guidelines"]:::quality
+      review["review<br/>anchored rubric gate"]:::callout
+      heavy["coderabbit-review<br/>desloppify"]:::quality
+      stop["Stop hook<br/>continue, block, or complete"]:::quality
+    end
+
+    subgraph Close["6. Closeout + Publishing Prep"]
+      close["close-ticket<br/>docs writeback + archive"]:::callout
+      finish["commit-message<br/>pr-splitting<br/>demo"]:::closeout
+      archive[(tickets/archive<br/>docs writeback)]:::surface
+    end
+
+    subgraph Later["Future Scale Boundary"]
+      parallel["Parallel Ralph later<br/>leases, worktrees, merge policy,<br/>stale-worker recovery, batch QA"]:::future
+    end
+
+    req --> bootstrap
+    req --> fuzzy
+    req --> design
+    req --> grounding
+
+    agents -. guide .-> bootstrap
+    readme -. guide .-> fuzzy
+    arch -. guide .-> implplan
+    specs -. source .-> ticketize
+    history -. constraints .-> implplan
+
+    bootstrap --> readiness
+    fuzzy --> specs
+    design --> readiness
+    advice --> specs
+    grounding --> specs
+    parity --> specs
+    improve --> specs
+
+    readiness --> ticketize
+    specs --> ticketize
+    ticketize --> tickets
+    ticketize --> qaCookbook
+    tickets --> implplan
+    qaCookbook -. proof paths .-> implplan
+    implplan --> diagram
+    diagram --> tickets
+
+    tickets --> ralph
+    ralph -->|planning ticket| implplan
+    ralph -->|building ticket| impl
+    ralph -->|documenting ticket| close
+    tickets --> impl
+    implplan --> impl
+    loop -. local task only .-> impl
+    prRuntime -. isolated writer .-> impl
+
+    impl --> builders
+    impl --> uiSkills
+    impl --> debug
+    builders --> qa
+    uiSkills --> qa
+    debug --> qa
+    impl --> qa
+    qa --> review
+    heavy --> review
+    review --> stop
+    stop -->|revise same ticket| impl
+    stop -->|phase: documenting| close
+    close --> finish
+    close --> archive
+    archive --> history
+    archive --> tickets
+    ralph -. future only .-> parallel
 ```
+
+Legend:
+
+- `blue` = operator input
+- `gray` = durable repo surfaces
+- `amber` = discovery, readiness, ticketization, and planning
+- `purple` = research, parity, synthesis, and skill improvement
+- `green` = execution and build specialists
+- `red` = QA, review, and Stop-hook gates
+- `teal` = runtime helpers and closeout
+- `dashed purple` = future scale boundary, not current behavior
+
+The yellow callout boxes are the main handoff skills/operators: `deep-init-project`,
+`spec-to-ticket`, `impl-plan`, `$ralph`, `$impl`, `review`, and `close-ticket`.
 
 ## Roadmap
 
@@ -117,6 +259,7 @@ Now:
 - [TASK-0087: enforce QA routing and evidence packs before completion](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0087/ticket.md)
 - [TASK-0088: make reset and resume handoffs concise and compaction-safe](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0088/ticket.md)
 - [TASK-0089: make execution routing default to answer, plan, or act](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0089/ticket.md)
+- [TASK-0102: add autonomy readiness and serial ralph dispatcher](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0102/ticket.md)
 
 Next:
 
@@ -184,6 +327,7 @@ The shipped global contract stays in `templates/global/AGENTS.md`.
 ## Current Limitation
 
 Codexter already has the pieces for a strong spec -> ticket -> plan -> build ->
-review loop. What it does not yet have is the final operator-trustworthy layer
-that makes file-level intent, evidence quality, resume state, and action bias
-consistently trustworthy enough to scale into multi-ticket automation.
+review loop plus a guarded serial `$ralph` board drain. What it does not yet
+have is the parallel operator-trustworthy layer that makes file-level intent,
+evidence quality, resume state, claims, leases, merges, and batch QA
+consistently trustworthy enough to scale into N-agent ticket automation.

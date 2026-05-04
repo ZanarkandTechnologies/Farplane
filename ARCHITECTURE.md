@@ -22,20 +22,110 @@ The repo is organized around five concerns:
 
 ## One Picture
 
-```text
-AGENTS.md -> ARCHITECTURE.md -> canonical docs/tickets -> skills/agents/bin
+```mermaid
+flowchart LR
+  classDef entry fill:#dbeafe,stroke:#2563eb,color:#111827
+  classDef surface fill:#e5e7eb,stroke:#4b5563,color:#111827
+  classDef skill fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef callout fill:#facc15,stroke:#854d0e,stroke-width:3px,color:#111827
+  classDef runtime fill:#cffafe,stroke:#0891b2,color:#111827
+  classDef quality fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  classDef memory fill:#ccfbf1,stroke:#0f766e,color:#111827
+  classDef future fill:#f5f3ff,stroke:#8b5cf6,color:#111827,stroke-dasharray: 5 3
 
-idea/request
-  -> bootstrap when needed (`deep-init-project`, `docs/bootstrap-brief.md`)
-  -> discovery (`brainstorm`, `deep-interview`, `prd`)
-  -> specs (`docs/specs/*`)
-  -> ticketization (`skills/spec-to-ticket`)
-  -> per-ticket planning (`impl-plan`)
-  -> execution (`$impl`, runtime helpers)
-  -> proof/review (`review`, QA, Stop hook)
-  -> reusable QA guidance (`qa/cookbook/*`)
-  -> writeback (`docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`)
+  request[/idea, ticket, bug,<br/>research ask, board drain/]:::entry
+
+  subgraph Entry["Entry + Policy Surfaces"]
+    localAgents[(AGENTS.md<br/>repo-local map)]:::surface
+    globalAgents[(templates/global/AGENTS.md<br/>install contract)]:::surface
+    readme[(README.md<br/>product + workflow map)]:::surface
+    architecture[(ARCHITECTURE.md<br/>ownership guide)]:::surface
+  end
+
+  subgraph Knowledge["Durable Knowledge"]
+    specs[(docs/specs/*<br/>behavior specs)]:::surface
+    techniques[(harness-techniques.md<br/>current inventory)]:::surface
+    doctrine[(harness-engineering-doctrine.md<br/>surface routing)]:::surface
+    memories[(HISTORY.md<br/>MEMORY.md<br/>TROUBLES.md)]:::memory
+  end
+
+  subgraph Skills["Skill Layer"]
+    intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
+    readiness["agent-testability-plan<br/>Autonomy Readiness"]:::callout
+    research["documentation<br/>external-patterns<br/>parity-research<br/>gap-analysis<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
+    ticketSkill["spec-to-ticket"]:::callout
+    planSkill["impl-plan<br/>diagramming"]:::callout
+    execSkill["$impl<br/>$loop<br/>$ralph"]:::callout
+    closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
+  end
+
+  subgraph Board["Ticket + QA Surfaces"]
+    tickets[(tickets/TASK-*/ticket.md<br/>state, plan, evidence, blockers)]:::surface
+    template[(tickets/templates/ticket.md<br/>canonical shape)]:::surface
+    cookbook[(qa/cookbook/*<br/>agent-efficient proof paths)]:::surface
+  end
+
+  subgraph Runtime["Runtime + Tooling"]
+    hooks[(hooks.json<br/>Stop + input hooks)]:::runtime
+    bin[(bin/*<br/>runtime, validators, launchers)]:::runtime
+    harness[(.harness/state/*<br/>session + ticket runtime)]:::runtime
+    agentsDir[(agents/*.toml<br/>bounded specialists)]:::runtime
+  end
+
+  subgraph Proof["Proof + Review"]
+    qa["qa-tester<br/>testing<br/>visual-qa<br/>agent-browser"]:::quality
+    review["review<br/>completion-reviewer<br/>coderabbit-review<br/>desloppify"]:::callout
+    stop["Stop hook<br/>continue, phase advance, block, complete"]:::quality
+  end
+
+  subgraph Scale["Explicit Future Boundary"]
+    parallel["Parallel Ralph later<br/>leases, worktrees, merge queue,<br/>stale-worker recovery, batch QA"]:::future
+  end
+
+  request --> localAgents
+  request --> readme
+  localAgents --> architecture
+  globalAgents -. installed policy .-> localAgents
+  architecture --> specs
+  architecture --> techniques
+  doctrine -. placement decisions .-> intake
+
+  specs --> intake
+  intake --> readiness
+  research --> readiness
+  readiness --> ticketSkill
+  ticketSkill --> tickets
+  template -. shapes .-> tickets
+  ticketSkill --> cookbook
+  tickets --> planSkill
+  cookbook -. proof contract .-> planSkill
+  planSkill --> tickets
+
+  tickets --> execSkill
+  execSkill --> agentsDir
+  execSkill --> bin
+  execSkill --> harness
+  execSkill --> qa
+  hooks --> stop
+  harness --> stop
+  qa --> review
+  review --> stop
+  stop -->|revise| execSkill
+  stop -->|documenting| closeSkill
+  closeSkill --> memories
+  closeSkill --> tickets
+  execSkill -. serial only today .-> parallel
 ```
+
+Legend:
+
+- `blue` = incoming operator surface
+- `gray` = durable docs, specs, and ticket files
+- `amber/yellow` = skill contracts and highlighted handoff skills
+- `cyan` = runtime helpers and specialist process surfaces
+- `red` = proof, review, and Stop-hook gates
+- `teal` = memory/writeback
+- `dashed purple` = future scale boundary, not shipped behavior
 
 ## Canonical Surfaces
 
@@ -78,7 +168,7 @@ idea/request
 - [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
   Purpose: ticket lifecycle, frontmatter contract, and durable progress policy
 - [tickets/templates/ticket.md](/Users/kenjipcx/coding-harness/Codexter/tickets/templates/ticket.md)
-  Purpose: canonical ticket shape for planning, artifact-first evidence, and optional `Agent Contract` / `Evidence Checklist` sections for UI-bearing work
+  Purpose: canonical ticket shape for planning, artifact-first evidence, and optional `Agent Contract`, `Autonomy Readiness`, and `Evidence Checklist` sections for UI-bearing or unattended work
 - [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
   Purpose: active ticket board
 - [tickets/archive](/Users/kenjipcx/coding-harness/Codexter/tickets/archive)
@@ -103,6 +193,9 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   Purpose: lane roles and orchestration boundaries
 - [docs/specs/runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md)
   Purpose: runtime state and operator-visible surfaces, with `.harness/` as the canonical live root
+- [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/SKILL.md)
+  Purpose: public serial dispatcher that selects one eligible filesystem
+  ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
 - [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
   Purpose: hooks, validators, runtime helpers
 - [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)
@@ -135,7 +228,8 @@ When orienting on the repo:
 
 - The architecture map is intentionally current-state-first and should not become
   a second encyclopedia.
-- Codexter has strong single-ticket orchestration and proof surfaces, but not a
-  durable multi-ticket dispatcher yet.
+- Codexter has strong single-ticket orchestration and a guarded serial
+  filesystem-ticket dispatcher, but not parallel N-agent dispatch with leases,
+  worktrees, merge policy, stale-worker recovery, and batch QA yet.
 - Doc governance is hybrid by design: structural entrypoint checks are
   mechanical, while narrative drift is audited with a prompt-driven workflow.

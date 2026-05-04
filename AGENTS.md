@@ -106,11 +106,19 @@ For harness-design research and external patterns:
   A strong ticket plan should say what will be built, in what order, and how
   it will be proved without falling back to timid "maybe/could" language. See
   `MEM-0062`.
+- Preserve the colored whole-system workflow/skill map in both `README.md` and
+  `ARCHITECTURE.md`; do not compress it into a tiny linear chart during
+  concision passes unless an equally complete replacement exists. See
+  `MEM-0075`.
 - When summarizing implemented feature changes to the operator, prefer `Before` / `After` / `Example` bullets over one dense prose block. See `MEM-0051`.
 - Keep QA and completion proof artifact-first: link ticket-scoped evidence from `tickets/TASK-XXXX/artifacts/`, and for UI/user-visible work keep browser capture separate from final `visual-qa` judgment. See `MEM-0048`.
 - In live `$impl` loops, treat `$qa` as a delegated lane: the coordinating lane should hand browser driving and proof capture to `qa-tester` instead of using `agent-browser` directly. See `MEM-0069`.
 - Outside tmux or lane-specific runtime flows, keep the same ownership split: native `qa-tester` delegation is the default way to run meaningful QA or browser proof, and the main agent should not personally use `agent-browser` when that QA ownership can be isolated. See `MEM-0070`.
 - Treat `$impl` as the public execution surface, with internal `execution_phase` progression through `impl`, `qa`, and `demo` when required. Stop-hook should advance those phases mechanically before final completion review. See `MEM-0049`.
+- Treat `$ralph` as the public serial board-draining dispatcher only. It
+  selects ready filesystem tickets and hands them to `impl-plan`, `$impl`, or
+  `close-ticket`; parallel dispatch, leases, merge policy, and batch-QA
+  orchestration remain future work. See `MEM-0074`.
 - Final Stop-hook completion in Codexter should remain mechanical and visible: after impl/qa/demo gates pass, request one linked nonce-backed completion-review receipt from the visible reviewer lane instead of hiding the final judgment in a background review pass. Only active ticket-backed `impl` loops should receive that nonce, and the next final response must echo it as `COMPLETION_PASSWORD: <nonce>` alongside the matching receipt. See `MEM-0064`, `MEM-0067`.
 - Once specs are already decomposed into modular tickets, treat the selected
   ticket as the default planning, build, and review unit. `impl-plan` should
