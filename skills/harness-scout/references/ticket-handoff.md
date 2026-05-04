@@ -2,7 +2,8 @@
 
 Create a handoff only for strong `adopt` or `adapt` decisions.
 
-The handoff should be compact enough to paste into an `impl-plan` ticket:
+The handoff should be compact enough to paste into an
+[impl-plan](../../impl-plan/SKILL.md) ticket:
 
 ```text
 Summary:

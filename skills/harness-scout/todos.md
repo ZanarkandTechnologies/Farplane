@@ -20,11 +20,16 @@
 - [ ] Search `docs/features/registry.jsonl` before declaring anything new.
 - [ ] Search local docs, skills, memory, troubles, tickets, README, and
   ARCHITECTURE for matching behavior.
-- [ ] Route external convergence through `parity-research` when needed.
-- [ ] Route repo-specific missing scope through `gap-analysis` before ticketing.
-- [ ] Use `best-of-worlds` for multi-source synthesis.
-- [ ] Use `advise` for material judgment calls that evidence cannot settle.
+- [ ] Route external convergence through
+  [parity-research](../parity-research/SKILL.md) when needed.
+- [ ] Route repo-specific missing scope through
+  [gap-analysis](../gap-analysis/SKILL.md) before ticketing.
+- [ ] Use [best-of-worlds](../best-of-worlds/SKILL.md) for multi-source
+  synthesis.
+- [ ] Use [advise](../advise/SKILL.md) for material judgment calls that
+  evidence cannot settle.
 - [ ] Score each candidate and choose `adopt`, `adapt`, `reject`, or `defer`.
-- [ ] Create an `impl-plan` handoff only for strong `adopt` or `adapt` items.
+- [ ] Create an [impl-plan](../impl-plan/SKILL.md) handoff only for strong
+  `adopt` or `adapt` items.
 - [ ] Keep raw transcripts and bulky logs out of canonical docs.
 - [ ] Update the feature registry only for durable feature knowledge.

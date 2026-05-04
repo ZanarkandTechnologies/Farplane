@@ -11,18 +11,20 @@ runtime.
 
 ## Upstream Inputs
 
-- `summarize`: extracts source content
+- [summarize](../../summarize/SKILL.md): extracts source content
 - `docs/features/registry.jsonl`: dedupe and local baseline
 - `docs/specs/harness-techniques.md`: human-readable current inventory
-- `skills/parity-research`: external convergence checks
-- `skills/gap-analysis`: repo-specific missing-scope checks
-- `skills/best-of-worlds`: multi-source synthesis
+- [parity-research](../../parity-research/SKILL.md): external convergence
+  checks
+- [gap-analysis](../../gap-analysis/SKILL.md): repo-specific missing-scope
+  checks
+- [best-of-worlds](../../best-of-worlds/SKILL.md): multi-source synthesis
 
 ## Downstream Outputs
 
 - decision matrix
 - manual scorecard
-- optional `impl-plan` ticket handoff
+- optional [impl-plan](../../impl-plan/SKILL.md) ticket handoff
 - optional feature registry update
 
 ## Boundaries

@@ -13,7 +13,9 @@
 - Do not turn 1-10 scorecards into fake precision. Always include confidence
   and anti-metrics.
 - Do not let the scout workflow mutate live skills automatically. Use
-  `best-of-worlds`, `gap-analysis`, and `impl-plan` gates first.
+  [best-of-worlds](../../best-of-worlds/SKILL.md),
+  [gap-analysis](../../gap-analysis/SKILL.md), and
+  [impl-plan](../../impl-plan/SKILL.md) gates first.
 - Do not store bulky transcripts in `docs/`, `skills/`, or tickets. Keep public
   source extraction artifacts in `experiments/`.
 - Do not store private source extracts, secrets, tokens, cookies, credentials,

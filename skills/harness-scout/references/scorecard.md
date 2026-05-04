@@ -6,18 +6,20 @@ Use this before building async benchmark infrastructure.
 
 - `missing-feature`: Codexter has no meaningful local match. The scorecard can
   be lighter; focus on source credibility, local fit, cost, and risk before
-  opening an `impl-plan` handoff.
+  opening an [impl-plan](../../impl-plan/SKILL.md) handoff.
 - `competing-implementation`: Codexter already has a local version and the
   source claims a better approach. Pick one small representative task and
-  compare `current-codexter`, `source-proposed`, and `best-of-worlds` before
-  recommending replacement or expansion.
+  compare `current-codexter`, `source-proposed`, and
+  [best-of-worlds](../../best-of-worlds/SKILL.md) before recommending
+  replacement or expansion.
 
 Compare three variants on one small task:
 
 1. `current-codexter`: use the existing Codexter workflow.
 2. `source-proposed`: emulate the external source's proposed technique as
    instructions or a manual process, without changing repo contracts.
-3. `best-of-worlds`: combine the source idea with Codexter conventions.
+3. [best-of-worlds](../../best-of-worlds/SKILL.md): combine the source idea
+   with Codexter conventions.
 
 ## Dimensions
 
