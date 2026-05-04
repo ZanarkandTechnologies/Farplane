@@ -26,6 +26,7 @@ covering:
 - `Coordination Views`
 - `Tooling / Infra`
 - `Proof Surfaces`
+- `Autonomy Readiness`
 
 ## Use When
 
@@ -67,20 +68,23 @@ covering:
    - hidden-state visibility
    - multi-part coordination visibility
    - proof/evidence difficulty
-3. Derive the smallest useful surfaces in five buckets:
+3. Derive the smallest useful surfaces in six buckets:
    - `Control Accelerators`
    - `State Probes`
    - `Coordination Views`
    - `Tooling / Infra`
    - `Proof Surfaces`
-4. Set explicit `Non-Goals` and `Decision Boundaries`, especially the existing
+4. Add `Autonomy Readiness`: inputs/assets, permissions, credentials, compute,
+   missing tools, hard-to-QA surfaces, and human gates that must be known before
+   unattended execution.
+5. Set explicit `Non-Goals` and `Decision Boundaries`, especially the existing
    no-autonomous publish/deploy/spend boundary.
-5. Write a visible `Agent Testability Brief` to:
+6. Write a visible `Agent Testability Brief` to:
    - `docs/specs/<slug>-agent-testability.md` when the brief is spec-level and reusable
    - otherwise the active ticket when the guidance is ticket-local
-6. Add consumer guidance for `spec-to-ticket` and `impl-plan` so later planning
+7. Add consumer guidance for `spec-to-ticket`, `impl-plan`, and `$ralph` so later planning
    surfaces know how to use the brief.
-7. Read [references/review.md](references/review.md) and tighten the output
+8. Read [references/review.md](references/review.md) and tighten the output
    before handoff. When an active ticket exists, point the workflow at the
    shared `review` skill for the final plan/spec challenge pass.
 
@@ -120,10 +124,11 @@ The output must include:
 5. `Coordination Views`
 6. `Tooling / Infra`
 7. `Proof Surfaces`
-8. `Non-Goals`
-9. `Decision Boundaries`
-10. `Consumer Guidance`
-11. `Follow-Up Candidates` when the brief exposes implementation-sized deltas
+8. `Autonomy Readiness`
+9. `Non-Goals`
+10. `Decision Boundaries`
+11. `Consumer Guidance`
+12. `Follow-Up Candidates` when the brief exposes implementation-sized deltas
 
 ## Core Question Families
 
@@ -142,6 +147,9 @@ Ask and answer these directly in the brief:
    - what deterministic proof surfaces should later tickets and QA require?
 5. **Boundaries**
    - what should stay out of scope, and what autonomy limits still apply?
+6. **Autonomy Readiness**
+   - what must be provided or approved before an agent can run the work
+     unattended without blocking mid-implementation?
 
 ## Output Shape
 
@@ -175,6 +183,16 @@ Keep the brief compact and directly reusable.
 ## Proof Surfaces
 - ...
 
+## Autonomy Readiness
+- human inputs/assets:
+- permissions/credentials:
+- external services:
+- compute/runtime needs:
+- tooling gaps:
+- QA risks:
+- human gates:
+- agent decision boundaries:
+
 ## Non-Goals
 - ...
 
@@ -184,6 +202,7 @@ Keep the brief compact and directly reusable.
 ## Consumer Guidance
 - spec-to-ticket:
 - impl-plan:
+- ralph:
 - qa/debugging:
 
 ## Follow-Up Candidates
@@ -197,6 +216,8 @@ Keep the brief compact and directly reusable.
   relevant.
 - `impl-plan` should preserve the brief in proof and testability planning
   rather than re-deriving it from scratch.
+- `$ralph` should stop before selecting risky tickets whose readiness fields do
+  not name required inputs, permissions, compute, QA surfaces, and human gates.
 - `qa-tester`, `visual-qa`, and `runtime-debugging` should treat the resulting
   surfaces as expected proof/testability aids, not last-minute inventions.
 

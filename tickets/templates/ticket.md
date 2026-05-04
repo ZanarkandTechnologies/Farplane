@@ -90,6 +90,18 @@ flowchart LR
 - `Expected artifacts:` screenshots, snapshots, traces, reports, or clips
 - `Delegate with:` ticket path/section, recommended assignee, expected artifact
 
+## Autonomy Readiness
+- Optional for trivial/manual tickets. Required when the ticket may run under
+  `$ralph`, unattended loops, external services, hard-to-QA UI/motion/canvas,
+  async jobs, deploy/spend/destructive boundaries, or long-running work.
+- `Human inputs/assets:`
+- `Credentials / external access:`
+- `Compute/runtime needs:`
+- `Tooling gaps:`
+- `QA risks:`
+- `Human gates:`
+- `Agent decision boundaries:`
+
 ## Evidence Checklist
 - Optional for non-UI work. Keep it short and concrete for UI-bearing or
   agentically hard tickets.

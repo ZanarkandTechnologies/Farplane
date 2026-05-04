@@ -67,6 +67,20 @@ When [context], I want to [action], so I can [outcome].
 - Platform:
 - Budget/time:
 
+## Autonomy Readiness
+- Human inputs/assets needed:
+- Credentials / external services:
+- Compute or runtime needs:
+- Tooling or testability gaps:
+- Hard-to-QA surfaces:
+- Human gates:
+  - Plan approval:
+  - QA approval:
+  - Deploy/publish:
+  - Spend/billing:
+  - Destructive/migration actions:
+- Agent decision boundaries:
+
 ## Risks / Unknowns
 - [Top unknown that might change approach]
 

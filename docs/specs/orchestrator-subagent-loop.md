@@ -11,6 +11,11 @@ acting as orchestrator through the user-facing `$impl` skill.
 ephemerally, launches the needed worker lanes, writes progress back to the
 ticket/progress surface, and exits. It is not a permanent orchestration pane.
 
+`$ralph` can sit one layer above this loop as a serial dispatcher that chooses
+the next eligible filesystem ticket, then hands that one ticket to `impl-plan`,
+`$impl`, or `close-ticket`. Once `$impl` starts, this document's single-ticket
+orchestration rules take over.
+
 ## Main Principle
 
 The main agent should orchestrate a work package, not personally do every step.
@@ -43,6 +48,10 @@ useful; they are not the core QA delegation rule.
 
 Do not silently switch to another ready ticket while the selected ticket is
 still active.
+
+Board-wide ticket selection belongs to `$ralph` v0 and stays serial. Parallel
+selection requires separate worktree, lease, merge, stale-worker, and batch-QA
+policy before it becomes part of `$impl`.
 
 ## Ownership Rules
 
@@ -139,3 +148,5 @@ Do not add a second orchestrator-only continuation artifact.
   not required for this contract
 - integration remains singular
 - keep the orchestrator ephemeral
+- keep `$ralph` out of worker-lane internals; it selects the next ticket, while
+  `$impl` owns the selected ticket's build/review/QA loop

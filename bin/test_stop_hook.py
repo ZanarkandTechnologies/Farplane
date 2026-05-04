@@ -1222,6 +1222,19 @@ class StopHookImplLoopGateTests(unittest.TestCase):
             )
         )
 
+    def test_impl_loop_continuation_rejects_ralph_dispatcher_claim(self) -> None:
+        runtime_claim = dict(self.runtime_claim)
+        runtime_claim["skill_name"] = "ralph"
+
+        self.assertFalse(
+            self.stop_hook.impl_loop_continuation_allowed(
+                self.ticket,
+                self.current_run,
+                runtime_claim,
+                "sess-123",
+            )
+        )
+
     def test_next_impl_loop_active_for_action_clears_terminal_paths(self) -> None:
         self.assertTrue(
             self.stop_hook.next_impl_loop_active_for_action(

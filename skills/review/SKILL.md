@@ -60,6 +60,8 @@ Ensure an agent can execute the core path after only reading this file.
   - planning -> `spec-contract` + `implementation-plan`
   - code/backend/api -> `code-quality` + `integration-readiness` + `evidence-quality`
   - UI or user-facing workflow -> `user-intent-satisfaction` + the relevant quality/evidence families
+  - `$ralph` or unattended-run work -> include autonomy-readiness checks in
+    `implementation-plan`, `integration-readiness`, and `evidence-quality`
   - cleanup/refactor/runtime/doc simplification -> add `debloatability`
 - Top 3 gotchas:
   - do not review before reading the active ticket
@@ -149,6 +151,9 @@ password in its next final response:
 - When the selected ticket already defines a coherent scope, treat artificial
   downscoping to a smaller internal "first slice" as a planning/execution
   failure unless the ticket or blockers made that narrower boundary explicit.
+- For `$ralph` or long-running autonomous work, missing or vague
+  `Autonomy Readiness` is an integration/evidence risk, not a cosmetic docs
+  nit.
 - select `user-intent-satisfaction` for user-facing completion review when the ticket clearly expresses the intended user ask.
 - `block` is reserved for materially unsafe, off-target, or contradictory work.
 - `revise` is the default when the work is directionally correct but not yet ready.

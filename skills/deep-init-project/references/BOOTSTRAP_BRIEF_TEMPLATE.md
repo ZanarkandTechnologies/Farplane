@@ -54,6 +54,21 @@ finalizing the scaffold.
 - Preferred browser proof stack:
 - Initial QA cookbook workflows to document:
 
+## Autonomy Readiness
+- Human inputs/assets needed before unattended work:
+- Credentials / external-service access needed:
+- Compute needs such as GPU, queues, workers, or long-running jobs:
+- Tooling gaps the agent should surface before implementation:
+- Hard-to-QA or hard-to-inspect surfaces:
+- Required human gates:
+  - Plan review:
+  - QA review:
+  - Deploy/publish:
+  - Spend/billing:
+  - Destructive or migration actions:
+- Decisions the agent may make autonomously:
+- Decisions that must stop and ask:
+
 ## File-Size Policy
 - Warn threshold:
 - Block threshold:

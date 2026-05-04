@@ -23,6 +23,7 @@ Threshold: `4.0`
 - `execution-order`
 - `risk-clarity`
 - `decision-tone`
+- `autonomy-readiness`
 
 ### `human-readability`
 
@@ -93,6 +94,19 @@ Ask:
 - Would a builder know what to do next without translating hedge words into a
   real instruction?
 
+### `autonomy-readiness`
+
+Inspect: whether a plan intended for `$ralph`, unattended execution, external
+services, hard-to-QA UI, or long-running work names the inputs and gates that
+would otherwise interrupt the run.
+
+Ask:
+
+- Are required user inputs, assets, credentials, compute, tools, QA risks, and
+  human gates explicit?
+- Does the plan say what the agent may decide autonomously and what must stop
+  for approval?
+
 ## Evidence and Finding Cues
 
 - Weak evidence usually looks like plausible implementation prose with no
@@ -100,6 +114,8 @@ Ask:
 - Ordinary evidence usually has a believable main path, but proof and rollback
   stay thin.
 - Strong evidence makes the delta, order, and proof points easy to check.
+- Strong evidence for autonomous work also names readiness blockers before the
+  build starts instead of letting them surface mid-run.
 - Strong evidence also makes the next action and chosen path sound decisive.
 - Exceptional evidence teaches the approach clearly while still staying lean.
 - Findings should name the missing proof point, sequencing hazard, or unearned

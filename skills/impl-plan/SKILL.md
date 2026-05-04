@@ -94,13 +94,17 @@ Before finalizing the plan or handing off to execution:
 2. When an `Agent Testability Brief` exists, preserve its control accelerators,
    state probes, coordination views, and proof surfaces in the plan instead of
    inventing testability doctrine again.
-3. Read enough nearby code to name real files, seams, signatures, and typed
+3. Preserve any `Autonomy Readiness` fields from the ticket, PRD, bootstrap
+   brief, system design, taste brief, or agent-testability brief; for `$ralph`
+   or long-running execution, name missing inputs, permissions, compute, tools,
+   QA risks, and human gates before handoff.
+4. Read enough nearby code to name real files, seams, signatures, and typed
    data shapes instead of inventing them.
-4. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
+5. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
    older OMX-era pattern and not the active repo contract.
-5. If intent is still vague, use `deep-interview --quick`.
-6. If system shape is still vague, use `deep-system-design`.
-7. If the repo does not yet implement the target capability clearly enough to
+6. If intent is still vague, use `deep-interview --quick`.
+7. If system shape is still vague, use `deep-system-design`.
+8. If the repo does not yet implement the target capability clearly enough to
    scope the work, run `gap-analysis` before finalizing the ticket plan.
 
 Do not hand off to execution while the plan still depends on avoidable
@@ -187,6 +191,7 @@ Use the canonical ticket-body shape:
 - optional `Diagram`
 - `Acceptance Criteria`
 - `Verification`
+- optional `Autonomy Readiness`
 - optional `Refs`
 - `Evidence`
 - `Blockers`
@@ -228,6 +233,9 @@ Use the canonical ticket-body shape:
 - **Gap Analysis required:** missing or partially implemented feature work,
   parity work, or tickets whose scope depends on external expectations rather
   than an already-clear local implementation.
+- **Autonomy Readiness required:** tickets intended for `$ralph`, unattended
+  long-running work, external-service work, hard-to-QA UI/motion/simulation, or
+  deploy/spend/destructive boundaries.
 - **Text-only allowed:** trivial, single-bug, or narrowly localized fixes where
   the file, symbol, or error already anchors the work concretely.
 
@@ -248,9 +256,11 @@ Use the canonical ticket-body shape:
 9. Do not guess at "production-ready" scope from intuition alone when
    comparable products, codebases, or official docs can ground it.
 10. Do not rewrite a coherent ticket into "part 1" or "first slice" just
-   because that feels safer than planning the full ticket.
+    because that feels safer than planning the full ticket.
 11. Do not use timid language like "maybe", "might", or "could" where the plan
-   should be making a recommendation or naming an execution step.
+    should be making a recommendation or naming an execution step.
+12. Do not hand off a `$ralph`-eligible ticket with vague autonomy-readiness
+    fields; name the blockers or keep the ticket gated.
 
 ## Efficiency Rules
 

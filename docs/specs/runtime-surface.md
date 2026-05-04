@@ -19,6 +19,7 @@ The primary control plane is now:
 - `impl-plan` for ticket planning
 - `$impl` for build-phase orchestration
 - `$loop` for bounded same-session persistence without ticket orchestration
+- `$ralph` for serial board draining over prepared filesystem tickets
 - worker lanes and runtime helpers behind the canonical `$impl` surface
 - `stop_hook.py` for continuation/completion decisions
 
@@ -30,6 +31,9 @@ The primary control plane is not:
 
 There is no separate public legacy execution surface anymore.
 Same-ticket repeats re-enter `$impl`.
+Serial board drains enter through `$ralph`, which selects one eligible active
+ticket and then hands that ticket to `impl-plan`, `$impl`, or `close-ticket`.
+It does not revive legacy binary-first orchestration.
 
 For same-ticket build looping, the runtime contract is:
 
@@ -50,6 +54,17 @@ For bounded same-session `$loop`, the runtime contract is:
 - v1 loop predicates are local and deterministic only: `completion_marker_seen`, `path_exists`, and `file_contains`
 - explicit same-session stop intent clears `loop_active`; Escape/cancel is not the canonical loop-stop contract
 - `skills/impl/scripts/tmux_helper.py` remains `$impl`-only in v1 and is not part of loop ownership
+
+For serial `$ralph`, the runtime contract is:
+
+- ticket frontmatter and body remain the queue source of truth
+- selector helpers are read-only and may not create claims, mutate tickets, or
+  launch agents
+- each selected ticket is handed to the existing phase skill
+- `$ralph` stops on no ready ticket, human gate, blocker, failed handoff, or
+  loop limit
+- parallel dispatch stays out of scope until worktrees, leases, merge policy,
+  stale-worker handling, and batch QA are specified
 
 For ticket-scoped isolated checkout and local QA targeting, runtime may also
 persist ticket runtime records under:
@@ -94,12 +109,17 @@ Those records are runtime-only and may carry:
   runtime-only metadata, not as a durable replacement for ticket truth.
 - Public docs should describe same-ticket `$impl` continuation as requiring both the session-scoped loop gate and the matching runtime claim.
 - Public docs should describe `$loop` as session-owned state with explicit local predicates, not as a ticket/run-state or tmux-worker surface.
+- Public docs should describe `$ralph` as a serial filesystem-ticket
+  dispatcher over existing phase skills, not as a second executor or hidden
+  runtime plane.
 - Public docs should describe tmux `auto_continue` as lane-follow-up plumbing, not as the source of truth for whether the `$impl` loop is active.
 - Public docs should describe explicit same-session stop intent, not Escape/cancel, as the supported v1 loop-stop control.
 - internal Stop-hook role instructions should live under `agents/`, not as giant string literals in Python helpers.
 - Any removed prototype binaries should remain only as historical references in
   archived tickets or older specs, not as live runtime files.
 - Do not present `ralph_orchestrate.py` as the preferred future entrypoint.
+- Do not present the legacy Ralph runtime directory or `docs/progress.md` as
+  live queue state.
 
 ## Immediate Cleanup Scope
 

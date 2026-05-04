@@ -134,3 +134,5 @@
 2026-05-03 23:29 +0800 | CLEANUP | remove the old cinematic landing compatibility skill and route live landing, animation, and QA prompts through landing-page instead
 2026-05-03 23:42 +0800 | FEAT | add best-of-worlds synthesis, prompt-profile self-improvement scaffolding, and skill judgement-question guidance for metric and adoption decisions
 2026-05-04 00:03 +0800 | POLICY | codify stable local skill contracts so external skills and repos are imported only through reviewed best-of-worlds decisions, not auto-synced as live dependencies
+2026-05-04 01:28 +0800 | FEAT | add Autonomy Readiness across planning surfaces and ship a serial `$ralph` dispatcher skill with a read-only filesystem-ticket selector
+2026-05-04 02:37 +0800 | DOCS | restore colored whole-system README and architecture maps with the current skill topology, serial `$ralph`, Autonomy Readiness, autoresearch, best-of-worlds, and frontend routing surfaces

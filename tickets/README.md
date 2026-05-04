@@ -86,6 +86,10 @@ last_verification: none
 - `last_verification`: the one-line authoritative verification summary; keep
   detailed commands and artifacts in `Evidence`
 
+For `$ralph`, a ticket is selectable only when `ready: true`,
+`approval_required: false`, `blocked_by: []`, `claimed_by:` is empty, and every
+dependency is complete, archived, or explicitly waived in the ticket body.
+
 ## Invariants
 
 - no `lane` field
@@ -138,6 +142,7 @@ Optional sections only when they add signal:
 - `Gap Analysis`
 - `Diagram`
 - `Agent Contract`
+- `Autonomy Readiness`
 - `Evidence Checklist`
 
 The default `Plan` should answer four things:
@@ -199,6 +204,20 @@ Testability` defaults, or a richer `Agent Testability Brief`, carry those
 surfaces into the first relevant ticket instead of restating them from memory.
 When the repo has `qa/cookbook/`, point the ticket at the matching workflow doc
 or seed one during planning.
+
+For tickets that may be drained by `$ralph` or run unattended, add `Autonomy
+Readiness` and name:
+
+1. human inputs/assets
+2. credentials or external access
+3. compute/runtime needs
+4. tooling gaps
+5. QA risks and which QA ring applies
+6. human gates for plan review, QA review, deploy, spend, or destructive work
+7. decisions the agent may make autonomously
+
+If those answers are missing, keep the ticket gated instead of marking it ready
+for the board-draining loop.
 
 Do not duplicate the same idea across multiple headings. If a short summary and
 the plan already explain the change, do not add more ceremony.

@@ -51,6 +51,15 @@ Use this template to create ticket files directly under `tickets/`.
 - Expected artifacts:
 - Delegate with:
 
+### Autonomy Readiness
+- Human inputs/assets:
+- Credentials / external access:
+- Compute/runtime needs:
+- Tooling gaps:
+- QA risks:
+- Human gates:
+- Agent decision boundaries:
+
 ### Evidence Checklist
 - [ ] Screenshot:
 - [ ] Screenshot:

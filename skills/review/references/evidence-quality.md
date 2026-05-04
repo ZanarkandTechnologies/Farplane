@@ -22,6 +22,7 @@ Hard gate: required for any overall `pass`
 - `traceability`
 - `consistency`
 - `inspectability`
+- `autonomy-readiness`
 
 ### `sufficiency`
 
@@ -72,6 +73,18 @@ Ask:
 - Can a skeptical reviewer verify the result quickly?
 - Is the packet organized for audit, or dumped in a way that hides weak spots?
 
+### `autonomy-readiness`
+
+Inspect: whether evidence for autonomous or `$ralph` work proves that blockers
+and human gates were identified before execution.
+
+Ask:
+
+- Does the evidence show the required commands, tools, credentials/permission
+  assumptions, QA surfaces, and stop reason?
+- If heavy QA was deferred to batch/release QA, is that deferral explicit and
+  proportional to the ticket risk?
+
 ## Evidence and Finding Cues
 
 - Weak evidence usually looks like a correct-sounding summary with partial logs
@@ -79,6 +92,8 @@ Ask:
 - Ordinary evidence usually proves the main path but leaves edge states or
   ticket-to-artifact mapping somewhat loose.
 - Strong evidence is traceable, replayable, and easy to audit.
+- Strong `$ralph` evidence includes selector output, skipped-ticket reasons,
+  stop conditions, and the QA ring chosen for the ticket.
 - Exceptional evidence gives a skeptical reviewer very little room to doubt what
   happened.
 - Findings should point to the exact unproven claim, missing artifact, or

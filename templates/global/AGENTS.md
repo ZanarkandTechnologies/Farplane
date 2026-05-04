@@ -186,7 +186,11 @@ Planning handoff rule:
   - materially branching scope changes, new architecture/tool choices, or multi-surface expansion not already established
   - ambiguous requests with multiple plausible targets
 - escalate only for destructive, irreversible, or materially branching decisions
-- ticket-metadata v1 ends at visible tickets, docs, and config foundations; assisted continuation, stop hooks, and autonomy-mode runtime work stay outside v1 unless a later ticket explicitly re-opens them
+- ticket-metadata v1 ends at visible tickets, docs, config foundations, and
+  guarded public skill dispatch. `$ralph` v0 may drain ready filesystem tickets
+  serially through `impl-plan`, `$impl`, and `close-ticket`, but parallel
+  autonomy-mode runtime work stays outside v1 unless a later ticket explicitly
+  re-opens leases, worktrees, merge policy, and batch QA. See `MEM-0074`.
 - user complaints about the current output are correction requests by default; fix first and explain briefly only when useful
 - prefer artifact-first detail and summary-first chat: write the deep context to the right visible surface, then give the user the concise spoken update
 
@@ -337,6 +341,7 @@ Anti-goals:
 - no separate per-task runtime state file in v1
 - no `run_id` or parallel run tree for active work
 - no hidden automation or auto-continue behavior
+- `$ralph` is visible serial dispatch only; no hidden parallel queue runner
 - no assumed runtime selector for "the current active ticket" in v1; downstream hook work must define that explicitly before mutating ticket metadata
 
 When changing ticket metadata contracts or moving many tickets:

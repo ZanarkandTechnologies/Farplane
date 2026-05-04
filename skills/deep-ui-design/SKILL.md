@@ -51,7 +51,9 @@ If no flag is provided, use **Standard**.
 - In Codex CLI, prefer `request_user_input` when available; otherwise use concise plain-text one-question turns
 - Re-score ambiguity after each answer and show progress transparently
 - Do not hand off to implementation while ambiguity remains above threshold unless the user explicitly opts to proceed with warning
-- Do not crystallize or hand off while `Anti-goals`, `Taste Boundaries`, or the required readiness gates remain unresolved, even if the weighted ambiguity threshold is met
+- Do not crystallize or hand off while `Anti-goals`, `Taste Boundaries`,
+  visual `Autonomy Readiness`, or the required readiness gates remain
+  unresolved, even if the weighted ambiguity threshold is met
 - Treat early exit as a safety valve, not the default success path
 - Persist mode state for resume safety (`state_write` / `state_read`)
 </Execution_Policy>
@@ -178,6 +180,9 @@ Readiness gate:
 - `Taste Boundaries` must be explicit
 - At least two strong positive references must be named or described concretely
 - At least one anti-reference must be explicit
+- Visual `Autonomy Readiness` must name hard-to-QA surfaces such as motion,
+  canvas, drag/drop, timing, responsive breakpoints, screenshots, fixtures,
+  browser paths, and human visual-review gates
 - A pressure pass must be complete: at least one earlier answer has been revisited with a contradiction, specificity, or tradeoff follow-up
 - If any gate is unresolved, continue interviewing even when weighted ambiguity is below threshold
 
@@ -247,6 +252,8 @@ The `Taste Brief` should include:
 - Color/material doctrine
 - Density/spacing doctrine
 - Motion doctrine
+- Visual Autonomy Readiness: browser path, stable states, screenshots/clips,
+  hard-to-QA motion or responsive behavior, and human visual-review gates
 - Component doctrine
 - Hero moments
 - Anti-goals / anti-slop rules
@@ -265,6 +272,8 @@ Do not exit with only aesthetic prose. The minimum brief must contain reusable b
 - explicit color/material direction
 - explicit motion comfort level
 - explicit anti-slop rules
+- explicit visual autonomy-readiness notes for motion, canvas, responsive, or
+  subjective surfaces that QA cannot prove cheaply
 - reusable guidance for buttons, cards/panels, navigation, and forms
 
 If those are missing, the brief is not implementation-ready.
@@ -310,6 +319,7 @@ When this skill is used, the response or artifact must include:
 4. A reusable `Taste Brief`, written to `docs/TASTE.md` when that surface exists
 5. Reference and anti-reference set
 6. Reusable component/page doctrine
-7. Clear handoff target (`visual-design`, `landing-page`, `frontend-craft`, or `impl-plan`)
+7. Visual autonomy-readiness blockers and proof gates
+8. Clear handoff target (`visual-design`, `landing-page`, `frontend-craft`, or `impl-plan`)
 
 </Steps>

@@ -20,6 +20,8 @@ agent-efficient verification guidance.
 - `docs/` state (`bootstrap-brief.md`, `prd.md`, `specs/README.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
 - `qa/` state (`README.md`, `AGENTS.md`, `cookbook/README.md`, `cookbook/TEMPLATE.md`)
 - `tickets/` state (`*.md`, `archive/`, `templates/`, optional `README.md`)
+- `Autonomy Readiness` defaults for permissions, compute, tools, testability,
+  QA risk, and human gates
 - optional `.githooks/` samples (`README.md`, `pre-commit`, `pre-push`) for
   local quality gates
 - optional `scripts/pre_commit_check.sh` and `scripts/pre_push_check.sh`
@@ -88,6 +90,9 @@ bootstrap source of truth for:
 - whether a separate CI or deployment gate exists beyond local git hooks
 - agent-experience/testability defaults such as shortcuts, seed/reset paths,
   probes, and browser proof strategy
+- autonomy-readiness defaults: human-provided inputs/assets, credentials,
+  external services, compute needs, tooling gaps, hard-to-QA surfaces, and
+  human gates for plan review, QA, deploy, spend, or destructive actions
 - large-file policy (`500` warn, `1000` block by default)
 - shared utility placement convention
 - decision boundaries for what the scaffold may choose automatically
@@ -107,6 +112,9 @@ Required gate questions:
 6. What should the scaffold leave manual versus auto-decided for the operator?
 7. What are the canonical app-only and QA/evidence run paths, which services do
    they require, and which ports or env vars must stay configurable?
+8. What must the agent ask for before attempting unattended work: credentials,
+   assets, external access, GPU/compute, missing tools, hard-to-QA surfaces, or
+   human plan/QA/deploy/spend/destructive approvals?
 
 ### Fast path
 
@@ -163,10 +171,13 @@ repo.
 11. Fill the bootstrap brief's `Agent Experience / Testability` section so the
     repo has an early answer for how agents should reach, inspect, stabilize,
     and verify important app states.
-12. If the idea is still open-ended, use `brainstorm`.
-13. If the first slice or bootstrap shape is still vague, use `deep-interview`.
-14. Use `prd` skill for requirements and PRD authoring (HITL loop).
-15. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+12. Fill the bootstrap brief's `Autonomy Readiness` section so future
+    `spec-to-ticket`, `impl-plan`, and `$ralph` runs know what the agent may do
+    without stopping and what must remain a human gate.
+13. If the idea is still open-ended, use `brainstorm`.
+14. If the first slice or bootstrap shape is still vague, use `deep-interview`.
+15. Use `prd` skill for requirements and PRD authoring (HITL loop).
+16. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration
 
@@ -211,6 +222,9 @@ Migration guide:
   deployment checks
 - bootstrap should ask how agents move through the product efficiently and
   should leave behind visible QA surfaces instead of keeping those answers in chat
+- bootstrap should ask autonomy-readiness questions up front so long-running
+  board drains do not discover missing credentials, compute, tools, assets,
+  or human gates mid-implementation
 - Agents can find specs, plan, and validation commands without hunting through nested files.
 
 ## Planning Philosophy (Inherited Defaults)

@@ -56,7 +56,9 @@ If no flag is provided, use **Standard**.
 - In Codex CLI, prefer `request_user_input` when available; otherwise use concise plain-text one-question turns
 - Re-score ambiguity after each answer and show progress transparently
 - Do not hand off to implementation while ambiguity remains above threshold unless the user explicitly opts to proceed with warning
-- Do not crystallize or hand off while `Non-goals`, `Decision Boundaries`, or the required readiness gates remain unresolved, even if the weighted ambiguity threshold is met
+- Do not crystallize or hand off while `Non-goals`, `Decision Boundaries`,
+  `Autonomy Readiness`, or the required readiness gates remain unresolved, even
+  if the weighted ambiguity threshold is met
 - Treat early exit as a safety valve, not the default success path
 - Persist mode state for resume safety (`state_write` / `state_read`)
 </Execution_Policy>
@@ -269,6 +271,8 @@ Readiness gate:
 - Retry / idempotency / rate-limit policy must be explicit where relevant
 - UX-speed rationale must be explicit for major sync/async and queue decisions
 - DevX rationale must be explicit for major queue/orchestrator/reliability decisions
+- `Autonomy Readiness` must name required human inputs, permissions,
+  credentials, compute, tools, QA risks, and human gates for unattended work
 - A pressure pass must be complete: at least one earlier answer has been revisited with a dependency, failure, or simplification follow-up
 - If any gate is unresolved, continue interviewing even when weighted ambiguity is below threshold
 
@@ -343,6 +347,9 @@ The `System Design Brief` should include:
 - DevX rationale
 - Runtime/deployment topology
 - Configuration contracts
+- Autonomy Readiness: inputs/assets, permissions/credentials, external
+  services, compute/runtime needs, tooling gaps, QA risks, human gates, and
+  agent decision boundaries
 - Coding pattern decisions
 - Brownfield evidence vs inference notes for any repository-grounded confirmation questions
 - Pressure-pass findings (which answer was revisited, and what changed)
@@ -363,6 +370,8 @@ Do not exit with only architecture prose. The minimum brief must contain reusabl
 - explicit UX-speed rationale for major execution choices
 - explicit DevX rationale for major execution choices
 - explicit runtime/deployment notes
+- explicit autonomy-readiness notes for anything that can block a long-running
+  agent mid-implementation or QA
 - explicit coding-pattern constraints for downstream implementation agents
 
 If those are missing, the brief is not implementation-ready.
@@ -429,6 +438,7 @@ When this skill is used, the response or artifact must include:
 5. Entity/storage map
 6. Endpoint/signature pack
 7. Execution/reliability model
-8. Clear handoff target (`agent-testability-plan`, `impl-plan`, `spec-to-ticket`, or `runtime-debugging`)
+8. Autonomy-readiness blockers and human gates
+9. Clear handoff target (`agent-testability-plan`, `impl-plan`, `spec-to-ticket`, or `runtime-debugging`)
 
 </Steps>

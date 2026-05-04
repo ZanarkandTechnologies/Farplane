@@ -9,9 +9,11 @@ Define the current canonical execution model for Codexter:
 - user-guided discovery up front
 - spec-first planning
 - post-system-design agent testability planning when the system will be hard for agents to reach, inspect, or coordinate
+- autonomy-readiness capture before long-running or board-draining execution
 - feature-sized work packages
 - per-work-package `impl-plan`
 - per-work-package `$impl` orchestration
+- optional serial `$ralph` dispatch over ready filesystem tickets
 - worker lanes launched by `$impl` where appropriate
 - separate QA and review roles
 - Stop hook as the final continuation/completion gate
@@ -31,6 +33,8 @@ Use these terms precisely:
 - **Claim**: which execution lane currently owns a work package
 - **Progress surface**: the visible file/state that says what is active, what is
   done, and what is next
+- **Autonomy Readiness**: the explicit inputs, permissions, compute, tools, QA
+  risks, and human gates an agent needs before running unattended
 
 Avoid using bare `lane` when you mean board state.
 
@@ -86,6 +90,11 @@ unless there is a real:
 - brownfield integration boundary
 - execution-risk boundary
 
+Each work package that may be run unattended or drained by `$ralph` should carry
+`Autonomy Readiness`: required user inputs/assets, credentials, external
+services, compute, tooling gaps, QA risks, human gates, and agent decision
+boundaries.
+
 ### 4. Planning
 
 `impl-plan` plans one selected work package.
@@ -124,6 +133,23 @@ subphases, but `$impl` remains the default public execution entrypoint.
 
 Worker lanes may vary by ticket, but the public build-phase entrypoint is
 `$impl`.
+
+### 5b. Optional Serial Board Drain
+
+`$ralph` may run after tickets are prepared.
+
+It should:
+
+- read active filesystem tickets
+- select one ready, unblocked, dependency-safe, unclaimed, approval-free ticket
+- hand planning tickets to `impl-plan`
+- hand building tickets to `$impl`
+- hand documenting tickets to `close-ticket`
+- reread the board after each phase
+- stop on no ready work, human gates, blockers, failed handoff, or loop limit
+
+`$ralph` does not replace `$impl` and does not own parallel dispatch in the
+current system.
 
 ### 6. QA + Review
 
@@ -211,6 +237,7 @@ Optional dimensions:
 - backend/data correctness
 - security
 - performance
+- autonomy readiness for unattended or `$ralph` work
 
 The review output should be explicit enough that the Stop hook can sanity-check
 it without guessing.
@@ -226,6 +253,13 @@ Why:
 - screenshots are required for UI trust
 - logs are still useful supporting evidence
 - video generation is deferred for now
+
+For `$ralph` board drains, use three QA rings:
+
+1. cheap per-ticket checks every time
+2. targeted heavy QA only for risky tickets
+3. batch or release QA after a declared milestone when multiple related tickets
+   were drained
 
 ## Queue / Archive Policy
 
@@ -254,4 +288,5 @@ This means:
 - stronger review loop first
 - clearer progress surface first
 - cleaner continuation behavior first
-- dispatcher/worktrees later if still needed
+- serial dispatcher over filesystem tickets now
+- parallel dispatcher/worktrees later if still needed

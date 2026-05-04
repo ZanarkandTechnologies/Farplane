@@ -33,8 +33,11 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 12. Every non-trivial ticket should declare a `Test hook`; if none is needed, say `none needed` explicitly.
 13. When an `Agent Testability Brief` exists, carry its control accelerators, state probes, coordination views, and proof surfaces into the ticket contract instead of re-deriving them.
 14. When `docs/bootstrap-brief.md` includes `Agent Experience / Testability` defaults and there is no richer `Agent Testability Brief`, use those defaults as the fallback source for the first UI-bearing or agentically hard ticket.
-15. When the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry so QA inherits the same fast-entry, stabilize, inspect, and proof surfaces as the ticket.
-16. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
+15. Carry `Autonomy Readiness` from the PRD, bootstrap brief, system design,
+    taste brief, or agent testability brief into any ticket expected to run
+    unattended or under `$ralph`.
+16. When the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry so QA inherits the same fast-entry, stabilize, inspect, and proof surfaces as the ticket.
+17. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
 
 ## Inputs
 
@@ -59,6 +62,8 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
   - for UI-bearing tickets: `Agent Contract` + `Evidence checklist`
   - when the repo has `qa/cookbook/` and the slice is UI-bearing or
     agentically hard: matching cookbook seed or update
+  - `Autonomy Readiness` for any ticket whose execution might be delegated,
+    looped, or drained by `$ralph`
   - `User Evidence` placeholders
 
 ## UI-bearing Ticket Contract
@@ -132,10 +137,13 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
 6. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
 7. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
 8. For each UI-bearing or agentically hard ticket, add a compact `Agent Contract` block plus `Evidence checklist`, carrying forward the brief or bootstrap surfaces when relevant.
-9. If the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry from the same `Open`, `Stabilize`, `Inspect`, and proof assumptions.
-10. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
-11. Write the finished raw tickets into `tickets/` using the ticket template.
-12. Before handoff, read `references/review.md` and tighten the ticket set until it passes those checks.
+9. For each `$ralph`-ready or long-running ticket, add `Autonomy Readiness`
+   with needed inputs/assets, credentials, compute, tools, QA risks, and human
+   gates.
+10. If the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry from the same `Open`, `Stabilize`, `Inspect`, and proof assumptions.
+11. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
+12. Write the finished raw tickets into `tickets/` using the ticket template.
+13. Before handoff, read `references/review.md` and tighten the ticket set until it passes those checks.
 
 ## Ambition-Aware Sizing
 
@@ -177,11 +185,13 @@ Split when one of the explicit hard triggers makes the work stop being one coher
 2. Do not defer missing testability controls to QA if you can already see they are needed.
 3. Do not leave testability implicit; a ticket should say what the agent runs or opens to prove the feature.
 4. Do not write vague visual criteria like "looks good"; encode the key screens, states, and expected proof artifacts.
-5. Do not split a coherent feature into schema/backend/UI tickets just because those layers differ.
-6. Do not split a complex pipeline into one ticket per internal step when one grouped foundation or expansion ticket would be more executable.
-7. Do not let the first ticket be empty scaffolding; it should leave a reusable proof path behind.
-8. Do not hide overflow scope in prose; if a real split trigger exists, spawn the follow-up ticket explicitly.
-9. Do not use "one big feature ticket" as cover for multiple unrelated capabilities; the ticket must still read like one self-contained build loop.
+5. Do not mark tickets `$ralph`-ready when credentials, compute, external
+   access, hard-to-QA surfaces, or human gates are still unnamed.
+6. Do not split a coherent feature into schema/backend/UI tickets just because those layers differ.
+7. Do not split a complex pipeline into one ticket per internal step when one grouped foundation or expansion ticket would be more executable.
+8. Do not let the first ticket be empty scaffolding; it should leave a reusable proof path behind.
+9. Do not hide overflow scope in prose; if a real split trigger exists, spawn the follow-up ticket explicitly.
+10. Do not use "one big feature ticket" as cover for multiple unrelated capabilities; the ticket must still read like one self-contained build loop.
 
 ## Templates
 

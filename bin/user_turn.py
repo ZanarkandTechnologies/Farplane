@@ -10,7 +10,7 @@ from typing import Mapping
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|qa|demo|loop|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
+    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|qa|demo|loop|ralph|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
     re.IGNORECASE,
 )
 CONTROL_SURFACE_ALIASES = {
@@ -1102,6 +1102,9 @@ def classify_intent_mode(raw_text: str) -> str:
         return "building"
 
     if control_surface == "loop":
+        return "building"
+
+    if control_surface == "ralph":
         return "building"
 
     if control_surface == "close-ticket":
