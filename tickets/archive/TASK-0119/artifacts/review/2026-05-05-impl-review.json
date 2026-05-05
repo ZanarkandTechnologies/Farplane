@@ -1,0 +1,107 @@
+{
+  "work_type": ["runtime", "code", "docs"],
+  "search_scope": {
+    "changed_files": [
+      "skills/ralph/scripts/select_next_ticket.py",
+      "skills/ralph/scripts/test_select_next_ticket.py",
+      "skills/ralph/SKILL.md",
+      "skills/ralph/README.md",
+      "bin/README.md",
+      "tickets/archive/TASK-0119/ticket.md",
+      "tickets/archive/TASK-0119/artifacts/selector/current-board-selector.json"
+    ],
+    "related_files": [
+      "bin/codexter_boards.py",
+      "bin/codexter_compute.py",
+      "bin/codexter_invocation.py",
+      "WORKFLOW.md",
+      "docs/specs/board-compute-orchestration.md",
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "docs/MEMORY.md"
+    ],
+    "invariants_checked": ["MEM-0074", "MEM-0077"],
+    "docs_checked": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/code-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/desloppify.md"
+    ]
+  },
+  "rubrics_used": ["code-quality", "integration-readiness", "evidence-quality"],
+  "summary": "Ralph selection now reuses the canonical filesystem board adapter and compute selector while preserving serial, read-only dispatch. Tests cover archived dependency satisfaction, local_shared compatibility, local_worktree runtime hints, and future-target blocking.",
+  "overall_score": 4.3,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity-reusability": 4.4,
+        "bloatability": 4.0,
+        "readability": 4.0,
+        "boundary-clarity": 4.4,
+        "error-handling": 4.1,
+        "maintainability": 4.2
+      },
+      "findings": [],
+      "next_action": "No code revision required for this ticket."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.4,
+        "contract-correctness": 4.5,
+        "dependency-readiness": 4.4,
+        "coupling-risk": 4.2,
+        "merge-readiness": 4.4
+      },
+      "findings": [],
+      "next_action": "Keep future parallel Ralph, worktree launch, and external adapter work in separate tickets."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.4,
+        "reproducibility": 4.4,
+        "traceability": 4.3,
+        "consistency": 4.3,
+        "inspectability": 4.1,
+        "autonomy-readiness": 4.3
+      },
+      "findings": [],
+      "next_action": "No additional evidence required."
+    }
+  ],
+  "blocking_findings": [],
+  "commands_reviewed": [
+    "python3 -m py_compile skills/ralph/scripts/select_next_ticket.py skills/ralph/scripts/test_select_next_ticket.py bin/codexter_boards.py bin/codexter_compute.py bin/codexter_invocation.py",
+    "python3 skills/ralph/scripts/test_select_next_ticket.py",
+    "python3 -m unittest bin/test_codexter_boards.py bin/test_codexter_compute.py bin/test_codexter_invocation.py",
+    "python3 -m unittest discover -s bin -p 'test_*.py'",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "python3 bin/check_doc_parity.py",
+    "python3 bin/check_harness_invariants.py",
+    "python3 skills/ralph/scripts/select_next_ticket.py --root . --json",
+    "python3 skills/ralph/scripts/select_next_ticket.py --root .",
+    "git diff --check -- skills/ralph/scripts/select_next_ticket.py skills/ralph/scripts/test_select_next_ticket.py skills/ralph/SKILL.md skills/ralph/README.md bin/README.md tickets/archive/TASK-0119/ticket.md tickets/archive/TASK-0119/artifacts/selector/current-board-selector.json"
+  ],
+  "reviewed_at": "2026-05-05T19:54:02Z",
+  "next_action": "Close TASK-0119 after ticket writeback and commit."
+}

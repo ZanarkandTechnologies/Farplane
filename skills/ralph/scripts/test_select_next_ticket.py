@@ -75,6 +75,7 @@ class RalphSelectorTests(unittest.TestCase):
         self.assertEqual(result["status"], "selected")
         self.assertEqual(result["selected_ticket_id"], "TASK-0002")
         self.assertEqual(result["recommended_skill"], "impl")
+        self.assertEqual(result["selected"]["compute"]["target"], "local_shared")
 
     def test_stops_when_human_gate_is_required(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -119,6 +120,50 @@ class RalphSelectorTests(unittest.TestCase):
 
         self.assertEqual(result["status"], "selected")
         self.assertEqual(result["selected_ticket_id"], "TASK-0003")
+
+    def test_future_compute_targets_are_skipped_without_local_fallback(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-0001", {"compute_target": "symphony"})
+            write_ticket(root, "TASK-0002", {"compute_target": "codex_cloud"})
+
+            result = selector.select_next_ticket(selector.load_board(root))
+            skipped = {item["ticket_id"]: item for item in result["skipped"]}
+
+        self.assertEqual(result["status"], "stop")
+        self.assertIsNone(result["selected_ticket_id"])
+        self.assertIn("unsupported_target", skipped["TASK-0001"]["blocker_codes"])
+        self.assertIn("unsupported_target", skipped["TASK-0002"]["blocker_codes"])
+        self.assertEqual(skipped["TASK-0001"]["compute"]["target"], "symphony")
+        self.assertEqual(skipped["TASK-0002"]["compute"]["target"], "codex_cloud")
+
+    def test_local_worktree_requires_runtime_record_and_setup_hint(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-0001", {"compute_target": "local_worktree"})
+
+            result = selector.select_next_ticket(selector.load_board(root))
+            skipped = result["skipped"][0]
+
+        self.assertEqual(result["status"], "stop")
+        self.assertIn("missing_worktree_runtime", skipped["blocker_codes"])
+        self.assertIn("ticket_runtime.py ensure", skipped["required_setup"][0])
+        self.assertEqual(skipped["compute"]["target"], "local_worktree")
+
+    def test_local_worktree_selects_when_runtime_record_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-0001", {"compute_target": "local_worktree"})
+            runtime_record = root / ".harness" / "state" / "tickets" / "TASK-0001.runtime.json"
+            runtime_record.parent.mkdir(parents=True, exist_ok=True)
+            runtime_record.write_text('{"ticket_id":"TASK-0001"}\n', encoding="utf-8")
+
+            result = selector.select_next_ticket(selector.load_board(root))
+
+        self.assertEqual(result["status"], "selected")
+        self.assertEqual(result["selected_ticket_id"], "TASK-0001")
+        self.assertEqual(result["selected"]["compute"]["target"], "local_worktree")
+        self.assertEqual(result["selected"]["compute"]["runtimeRecordPath"], str(runtime_record.resolve()))
 
 
 if __name__ == "__main__":

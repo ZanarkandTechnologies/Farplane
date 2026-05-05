@@ -31,7 +31,9 @@ multi-agent dispatch.
    `docs/TROUBLES.md` for queue and autonomy constraints.
 2. Run a read-only selector pass. Prefer
    `python3 skills/ralph/scripts/select_next_ticket.py --root . --json` when
-   working in this repo.
+   working in this repo. The helper reads tickets through `FileTicketAdapter`
+   and applies `ComputeSelector`; it reports compute blockers and setup hints
+   but never mutates tickets, launches Codex, or creates worktrees.
 3. Stop immediately when the selector reports no eligible ticket, a human gate,
    unresolved blockers, unresolved dependencies, or the configured loop limit.
 4. If the selected ticket is `phase: planning`, run `impl-plan` for that ticket.
@@ -54,6 +56,8 @@ A ticket is eligible only when all are true:
 - `claimed_by:` is empty
 - every `depends_on` ticket is complete, archived, or explicitly waived in the
   ticket body
+- the ticket's requested or default compute target is allowed by the repo
+  `WORKFLOW.md` compute policy
 - `phase` maps to a supported handoff:
   - `planning` -> `impl-plan`
   - `building` -> `$impl`
@@ -72,6 +76,8 @@ Stop instead of improvising when:
 - the next ticket requires human plan review or human QA
 - a dependency, blocker, claim, missing permission, missing credential, missing
   compute resource, missing tool, or destructive/deploy/spend action is needed
+- the selector reports a compute blocker such as `missing_worktree_runtime`,
+  `unsupported_target`, or `disallowed_by_workflow`
 - the selected phase skill fails or returns a revise/block result
 - the loop reaches the operator-specified maximum iteration count
 - QA risk is too high for the available proof surfaces
@@ -123,6 +129,9 @@ Use `advise` before continuing when these choices are not mechanically clear:
    it is not an implementation permission by itself.
 3. Do not let selector output mutate tickets or launch agents directly. Policy
    belongs in this skill and ticket evidence; the helper stays read-only.
+4. Do not silently fall back from `local_worktree`, `symphony`, or
+   `codex_cloud` to `local_shared`. Compute blockers are operator-visible
+   stops until the right runtime or external adapter exists.
 
 ## Outcome Contract
 

@@ -3,7 +3,9 @@
 ## Purpose
 
 This package contains the public `$ralph` dispatcher contract and a small
-read-only selector helper for filesystem ticket boards.
+read-only selector helper for filesystem ticket boards. The selector now uses
+the canonical `FileTicketAdapter` and `ComputeSelector` contracts so Ralph's
+serial queue choice matches Codexter invocation policy.
 
 `$ralph` selects one eligible ticket at a time and hands it to `impl-plan`,
 `$impl`, or `close-ticket`. It does not replace those phase skills and does not
@@ -16,7 +18,8 @@ own parallel execution in v0.
 - `references/parallel-ralph.md`: design-only future N-agent Ralph contract
   covering leases, worktrees, merge policy, stale recovery, and batch QA
 - `scripts/select_next_ticket.py`: deterministic read-only selector and smoke
-  helper
+  helper; it emits selected/skipped rows with compute details and setup hints
+  but does not mutate tickets or launch runners
 
 ## Minimal Example
 
@@ -25,6 +28,10 @@ python3 skills/ralph/scripts/select_next_ticket.py --root . --json
 ```
 
 Then run the recommended skill on the selected ticket path.
+
+If a ticket requests `local_worktree`, `symphony`, or `codex_cloud` before the
+needed runtime or adapter exists, the selector stops with explicit blocker
+codes instead of falling back to shared local compute.
 
 ## How to Test
 

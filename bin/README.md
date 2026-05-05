@@ -37,6 +37,9 @@ orchestration story.
 - `codexter_invocation.py` - contract helper for `WORKFLOW.md`,
   `CodexterRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
+- `../skills/ralph/scripts/select_next_ticket.py` - serial Ralph selector that
+  consumes `FileTicketAdapter` and `ComputeSelector` so board draining uses the
+  same work-item and compute admission policy as invocation prep
 - `notify.py` - local notification helper
 - `stop_hook.py` - thin stop-hook/runtime shim
 - `ticket_runtime.py` / `ticket-runtime` - local helper for ticket runtime
@@ -121,6 +124,9 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/codexter_invocation.py prepare --ticket <ticket> --phase planning --proof .harness/results/<ticket>.proof.json`
   Use to validate a local Codexter invocation envelope and inspect the selected
   skill route without launching Codex
+- `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
+  Use to inspect the next serial Ralph handoff plus compute blockers without
+  mutating tickets, creating worktrees, or launching Codex
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
 
@@ -203,6 +209,8 @@ already advanced.
 - `python3 -m py_compile bin/check_harness_invariants.py bin/test_harness_invariants.py`
 - `python3 -m py_compile bin/check_doc_parity.py bin/test_doc_parity.py`
 - `python3 -m py_compile bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py`
+- `python3 -m py_compile skills/ralph/scripts/select_next_ticket.py`
+- `python3 skills/ralph/scripts/test_select_next_ticket.py`
 - `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
 - `python3 -m unittest discover -s bin -p 'test_*.py'`
 - `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`
