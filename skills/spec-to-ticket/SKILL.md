@@ -129,6 +129,10 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
 
 1. Read `docs/specs/*.md` and pick exactly one SLC slice.
 2. Read the `Agent Testability Brief` when one exists and note the required control accelerators, state probes, coordination views, and proof surfaces for the chosen slice.
+2a. When the source spec includes a conformance matrix from
+    `docs/specs/spec-authoring-contract.md`, slice tickets around proofable
+    requirements and carry the relevant `Profile`, `Proof`, and `Ticket` rows
+    into the ticket's acceptance criteria and verification plan.
 3. If there is no richer testability brief yet, read `docs/bootstrap-brief.md`
    and reuse its `Agent Experience / Testability` defaults for the first
    UI-bearing or agentically hard slice.
@@ -195,6 +199,7 @@ Split when one of the explicit hard triggers makes the work stop being one coher
 
 ## Templates
 
+- Complex spec structure: `../../docs/specs/spec-authoring-contract.md`
 - Spec structure: `references/spec-template.md`
 - Ticket structure: `references/ticket-template.md`
 - SLC framing: `references/story-map-slc.md`

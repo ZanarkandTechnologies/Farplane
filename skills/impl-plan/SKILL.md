@@ -75,6 +75,10 @@ move, it is too thin.
 
 0a. Study `@docs/prd.md` for outcomes + constraints.
 0b. Study `@docs/specs/*` for spec truth, including any `Agent Testability Brief` when present.
+0b2. For complex runtime/service specs, use
+`@docs/specs/spec-authoring-contract.md` to distinguish PRD, system-spec, and
+ticket responsibilities; do not push system-spec state machines or conformance
+matrices into the ticket plan unless the ticket needs the specific proof row.
 0c. Study the active ticket in `@tickets/*` first; if none exists, inspect
 `@tickets/*`.
 0d. Study `@docs/MEMORY.md` for durable constraints.

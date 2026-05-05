@@ -1,0 +1,201 @@
+{
+  "work_type": ["spec", "governance", "skill-docs"],
+  "ticket_id": "TASK-0116",
+  "reviewed_at": "2026-05-05T17:08:00+08:00",
+  "reviewer": "codex-review-skill",
+  "user_story_groups": [
+    {
+      "group": "system-design author",
+      "story": "When a future Codexter system is runtime-like, I need a reusable template that tells me which domain, state, config, failure, observability, and conformance sections belong in the spec."
+    },
+    {
+      "group": "PRD reader",
+      "story": "When reading the PRD, I should not be forced through service-runtime implementation details that belong in specs."
+    },
+    {
+      "group": "ticket implementer",
+      "story": "When implementing a ticket sliced from a complex spec, I need the ticket to carry concrete proof rows, not the whole system spec copied into the ticket body."
+    },
+    {
+      "group": "reviewer/maintainer",
+      "story": "When reviewing future specs, I need a conformance matrix to catch missing config, state, failure, and test coverage before implementation starts."
+    }
+  ],
+  "search_scope": {
+    "changed_files": [
+      "docs/specs/spec-authoring-contract.md",
+      "docs/specs/README.md",
+      "skills/deep-system-design/SKILL.md",
+      "skills/spec-to-ticket/SKILL.md",
+      "skills/impl-plan/SKILL.md",
+      "docs/specs/harness-techniques.md",
+      "docs/features/registry.jsonl",
+      "docs/sources/registry.jsonl",
+      "tickets/TASK-0116/ticket.md"
+    ],
+    "related_files": [
+      "docs/specs/board-compute-orchestration.md",
+      "docs/specs/runtime-surface.md",
+      "docs/specs/review-gates.md",
+      "docs/prd.md",
+      "docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md"
+    ],
+    "rubric_refs": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/user-intent-satisfaction.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/debloatability.md",
+      "skills/review/references/desloppify.md"
+    ]
+  },
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "user-intent-satisfaction",
+    "evidence-quality",
+    "integration-readiness",
+    "debloatability"
+  ],
+  "summary": "The spec authoring contract provides a useful depth decision and conformance matrix template without forcing Symphony-style ceremony onto PRDs or small tickets. Skill pointers are minimal and route future agents to the canonical doc instead of duplicating long instructions.",
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story_coherence": 4.4,
+        "parallelization_fit": 4.0,
+        "ticket_sizing": 4.2,
+        "acceptance_testability": 4.5,
+        "scope_clarity": 4.4
+      },
+      "findings": [
+        "The guide names the layer split and spec depth levels clearly enough for future agents to decide when heavyweight sections are warranted."
+      ],
+      "next_action": "Use the contract for complex system specs and keep simple tickets light."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human_readability": 4.2,
+        "bloatability": 4.1,
+        "modularity": 4.0,
+        "proof_clarity": 4.2,
+        "execution_order": 4.0,
+        "risk_clarity": 4.1,
+        "decision_tone": 4.2,
+        "autonomy_readiness": 4.0
+      },
+      "findings": [
+        "The skill updates are small pointers rather than duplicated policy blocks."
+      ],
+      "next_action": "Avoid expanding the skill pointers unless a repeated miss proves they are too thin."
+    },
+    {
+      "name": "user-intent-satisfaction",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "ask_fidelity": 4.3,
+        "outcome_completeness": 4.1,
+        "worth_it_feel": 4.1,
+        "impressiveness": 4.0,
+        "evidence_confidence": 4.3
+      },
+      "findings": [
+        "The result adopts the useful Symphony spec discipline while explicitly preserving PRD and ticket lightness."
+      ],
+      "next_action": "Apply the template to later runtime/service specs, not to every doc."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.0,
+        "reproducibility": 4.3,
+        "traceability": 4.2,
+        "consistency": 4.1,
+        "inspectability": 4.0,
+        "autonomy_readiness": 4.0
+      },
+      "findings": [
+        "Doc parity, harness invariants, registry validators, and ticket metadata are enough proof for a docs/governance ticket."
+      ],
+      "next_action": "Keep the validation commands in ticket Evidence."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration_safety": 4.1,
+        "contract_correctness": 4.3,
+        "dependency_readiness": 4.1,
+        "coupling_risk": 4.0,
+        "merge_readiness": 4.1
+      },
+      "findings": [
+        "The contract is linked from the specs index, skill pointers, techniques inventory, feature registry, and source registry."
+      ],
+      "next_action": "Commit this ticket slice."
+    },
+    {
+      "name": "debloatability",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead_surface_removal": 3.9,
+        "compatibility_cleanup": 4.0,
+        "duplication_reduction": 4.3,
+        "clarity_improvement": 4.4,
+        "deletion_safety": 4.0
+      },
+      "findings": [
+        "The guide centralizes conformance guidance in one spec rather than copying long templates into PRD, tickets, or multiple skills."
+      ],
+      "next_action": "Keep future additions in this contract unless a local module needs a narrow pointer."
+    }
+  ],
+  "blocking_findings": [],
+  "commands": [
+    {
+      "command": "python3 docs/sources/validate_sources.py",
+      "result": "source registry contract OK (7 records)"
+    },
+    {
+      "command": "feature registry validation snippet from docs/features/README.md",
+      "result": "feature registry contract OK (16 records)"
+    },
+    {
+      "command": "python3 bin/check_doc_parity.py",
+      "result": "structural doc parity OK (6 files checked, 29 rules)"
+    },
+    {
+      "command": "python3 bin/check_harness_invariants.py",
+      "result": "harness invariants OK (5 files checked, 15 agents, 13 rules)"
+    }
+  ],
+  "next_action": "Close TASK-0116 and commit the spec-authoring contract slice."
+}

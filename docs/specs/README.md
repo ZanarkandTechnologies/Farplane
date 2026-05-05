@@ -24,6 +24,8 @@ Current design docs:
 - `runtime-surface.md`
 - `review-gates.md`
 - `spec-first-execution-loop.md`
+- `spec-authoring-contract.md` - PRD/spec/ticket layer split, spec depth
+  decisions, service-runtime spec template, and conformance matrix format
 - `symphony-compatible-codexter-runner.md` - invocation contract that lets a
   normal Codex session run Codexter locally now and lets Symphony invoke
   Codexter-equipped Codex later

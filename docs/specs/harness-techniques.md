@@ -50,6 +50,7 @@ This inventory is grounded in:
 | Post-system-design agent testability planning | Implemented | `skills/agent-testability-plan`, `docs/specs/agent-testability-surfaces.md`, `skills/spec-to-ticket`, `skills/impl-plan` | Turns system design into reusable control accelerators, state probes, coordination views, and proof surfaces before later ticket/build planning has to guess them | still needs broader rollout and concrete follow-up tickets to prove the doctrine across more repos |
 | Autonomy Readiness surfaced before execution | Implemented | `skills/deep-init-project`, `skills/prd`, `skills/spec-to-ticket`, `tickets/templates/ticket.md`, `skills/review` | Forces missing inputs, permissions, compute, tools, QA risks, and human gates to be named before long-running or `$ralph` runs discover them late | useful only when tickets keep readiness concrete instead of decorative |
 | Spec-first before ticket execution | Implemented | `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps execution downstream of clarified specs | broad spec quality still determines downstream ticket quality |
+| Symphony-style spec authoring contract | Implemented | `docs/specs/spec-authoring-contract.md`, `skills/deep-system-design`, `skills/spec-to-ticket`, `skills/impl-plan` | Gives complex runtime/service specs explicit depth, domain model, state, config, failure, observability, and conformance sections while keeping PRDs and tickets lighter | useful only when applied selectively; small tickets should not inherit service-runtime ceremony |
 | Ticketization with proof/testability front-loaded | Implemented | `skills/spec-to-ticket`, `tickets/templates/ticket.md` | Converts intent into executable work with proof expectations early | ticket quality varies with planning rigor |
 | Board and compute orchestration doctrine | Implemented | `docs/specs/board-compute-orchestration.md`, `WORKFLOW.md`, `skills/codexter-invocation` | Keeps Codex, Codexter, Symphony, boards, compute targets, and ProofPackets in one ownership model so future adapter work does not drift | doctrine only; adapter and compute-selector implementation continue in follow-up tickets |
 | Feature-gap research before implementation planning | Implemented | `skills/gap-analysis`, `skills/impl-plan`, `tickets/templates/ticket.md` | Grounds missing or parity-driven feature work in comparable apps, codebases, and official docs so tickets say what a production-grade version actually needs | depends on the available research tools and disciplined use of real comparables instead of intuition |
@@ -153,6 +154,8 @@ When deciding what to tune next:
 - `harness-engineering-doctrine.md` for how to decide which harness surface should own a change
 - `board-compute-orchestration.md` for BoardAdapter, ComputeSelector, local
   Codexter, Ralph, and future Symphony/shared-board ownership boundaries
+- `spec-authoring-contract.md` for PRD/spec/ticket split, spec depth decisions,
+  and conformance matrix templates
 - `doc-governance.md` for structural versus narrative doc-audit policy
 - `review-gates.md` for the QA/reviewer/Stop-hook split
 - `spec-first-execution-loop.md` for the end-to-end execution model
