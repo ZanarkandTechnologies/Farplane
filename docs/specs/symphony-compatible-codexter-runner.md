@@ -363,6 +363,16 @@ Runtime-only:
 5. Symphony can attach or link the proof back to Linear, but Codexter's proof
    gate decides whether the ticket is actually done.
 
+The concrete v1 shim lives in:
+
+- `skills/codexter-invocation/templates/symphony-run-envelope.json`
+- `skills/codexter-invocation/references/symphony.md`
+
+The template uses `mode: "symphony_worker"` and `computeTarget:
+"local_shared"`. This is intentional: once Symphony has launched a per-ticket
+workspace, Codexter's local view of that workspace is shared/local. The
+`symphony` compute target remains blocked until a real adapter exists.
+
 ## Reliability Policy
 
 V1 local:
@@ -442,6 +452,8 @@ Required before unattended or remote execution:
 - Ensure the same envelope works in a per-ticket workspace launched by
   Symphony's normal Codex runner.
 - Document exactly what Symphony must provide and what Codexter returns.
+- Current artifact: `skills/codexter-invocation/references/symphony.md` and
+  `templates/symphony-run-envelope.json`.
 
 ### Ticket 6: Parallel/remote follow-up
 

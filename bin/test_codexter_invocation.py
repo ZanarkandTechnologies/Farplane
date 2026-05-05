@@ -140,6 +140,37 @@ class CodexterInvocationTests(unittest.TestCase):
             self.assertEqual(plan.status, "ready")
             self.assertIn("project-tickets/TASK-1234/ticket.md", plan.work_item.local_ticket_path)
 
+    def test_symphony_envelope_template_prepares_from_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write(root / "WORKFLOW.md", WORKFLOW_TEXT)
+            write(
+                root / "tickets" / "TASK-0112" / "ticket.md",
+                TICKET_TEXT.replace("TASK-1234", "TASK-0112"),
+            )
+            template = (
+                Path(__file__).resolve().parents[1]
+                / "skills"
+                / "codexter-invocation"
+                / "templates"
+                / "symphony-run-envelope.json"
+            )
+
+            envelope = codexter_invocation.parse_run_envelope(template, root)
+            plan = codexter_invocation.prepare_invocation(envelope, root)
+
+            self.assertEqual(plan.status, "ready")
+            self.assertEqual(plan.envelope.mode, "symphony_worker")
+            self.assertEqual(plan.compute.target, "local_shared")
+            self.assertEqual(plan.route.skill_name, "impl-plan")
+            expected_proof = (
+                root / ".harness" / "results" / "symphony-task-0112.proof.json"
+            ).resolve()
+            self.assertEqual(
+                plan.proof_packet_path,
+                str(expected_proof),
+            )
+
     def test_building_invocation_blocks_approval_gated_ticket(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

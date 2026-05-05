@@ -56,6 +56,14 @@ instead of silently mutating ticket files.
 `local_shared`, defer `local_worktree` until `.harness/state/tickets/*.runtime.json`
 exists, and block `symphony` or `codex_cloud` until external adapters exist.
 
+For Symphony-shaped requests, read
+`skills/codexter-invocation/references/symphony.md` and use
+`skills/codexter-invocation/templates/symphony-run-envelope.json` as the
+request-file fixture. The fixture intentionally uses `mode: "symphony_worker"`
+with `computeTarget: "local_shared"` because Symphony has already chosen the
+workspace; `computeTarget: "symphony"` remains a future adapter target and
+blocks in local Codexter.
+
 ## Local Example
 
 ```bash

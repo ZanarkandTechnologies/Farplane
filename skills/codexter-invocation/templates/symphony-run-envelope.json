@@ -1,0 +1,11 @@
+{
+  "workflowPath": "WORKFLOW.md",
+  "workItemId": null,
+  "workItemPath": "tickets/TASK-0112/ticket.md",
+  "computeTarget": "local_shared",
+  "phase": "planning",
+  "mode": "symphony_worker",
+  "requestedBy": "symphony",
+  "requestedAt": "2026-05-05T00:00:00Z",
+  "proofPacketPath": ".harness/results/symphony-task-0112.proof.json"
+}

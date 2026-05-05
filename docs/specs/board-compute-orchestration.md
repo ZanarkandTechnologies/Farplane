@@ -413,7 +413,7 @@ Future runner observability:
 | Unsupported compute | `symphony` and `codex_cloud` block locally until adapters exist | core | prepare JSON fixtures |
 | Local conversational | one envelope routes to the expected skill and proof path | core | invocation prepare/write-proof tests |
 | Ralph | serial selector hands one eligible ticket to phase skill and stops on human gates | core | Ralph selector tests |
-| Symphony shim | example workflow/prompt shows Symphony launching normal Codex with Codexter installed | extension | `TASK-0112` smoke |
+| Symphony shim | example workflow/prompt shows Symphony launching normal Codex with Codexter installed | extension | `skills/codexter-invocation/templates/symphony-run-envelope.json` and `TASK-0112` smoke |
 | Parallel Ralph | leases, worktrees, merge policy, stale recovery, batch QA specified before implementation | extension | `TASK-0115` design review |
 | Spec discipline | complex specs include domain model, state, config, failures, observability, and tests | governance | `TASK-0116` template |
 
