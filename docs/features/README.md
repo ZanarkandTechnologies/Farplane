@@ -13,8 +13,11 @@ agent needs to answer:
 - what limits or metrics should future work consider?
 
 `docs/specs/harness-techniques.md` remains the skimmable human inventory.
-`docs/features/registry.jsonl` is the queryable record for dedupe, provenance,
-and benchmark history.
+`docs/features/registry.jsonl` is the queryable feature record for technique
+dedupe, provenance, and benchmark history. `docs/sources/registry.jsonl` is the
+source provenance registry; use `SRC-*` there to dedupe blogs, specs, videos,
+docs, and repos before deciding whether they introduce or update `FEAT-*`
+records.
 
 ## Record Shape
 
@@ -45,8 +48,8 @@ Each line in `registry.jsonl` is one JSON object:
 - `category`: broad grouping such as `planning`, `proof`, `memory`,
   `source-ingestion`, or `improvement-loop`.
 - `surfaces`: repo paths that own the live behavior.
-- `source_refs`: local docs, tickets, memories, or specs that explain why the
-  feature exists.
+- `source_refs`: `SRC-*` records, local docs, tickets, memories, or specs that
+  explain why the feature exists.
 - `external_refs`: outside URLs, repos, videos, or standards that influenced the
   feature.
 - `evidence_refs`: tickets, artifacts, commands, or experiment outputs that
@@ -66,8 +69,9 @@ Each line in `registry.jsonl` is one JSON object:
 3. Link to ticket evidence instead of copying proof into the record.
 4. Keep `harness-techniques.md` synchronized at the category/status level, but
    do not duplicate every registry field there.
-5. When a source proposes a feature, use `harness-scout` to search this registry
-   before creating a new ticket.
+5. When a source proposes a feature, use `harness-scout` to search
+   `docs/sources/registry.jsonl` first for source dedupe, then this registry
+   for feature dedupe before creating a new ticket.
 
 ## ID Allocation
 

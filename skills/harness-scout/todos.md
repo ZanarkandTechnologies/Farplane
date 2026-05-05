@@ -2,6 +2,8 @@
 
 - [ ] Capture source URL, title, creator/channel, source type, date when
   visible, and extraction command.
+- [ ] Search `docs/sources/registry.jsonl` by canonical URL, canonical key,
+  title, and linked local artifacts before creating a new source identity.
 - [ ] Search existing source runs by URL, URL hash, title, or slug before
   creating a new run folder.
 - [ ] Use `summarize --extract` unless the user provided transcript/content
@@ -33,3 +35,5 @@
   `adopt` or `adapt` items.
 - [ ] Keep raw transcripts and bulky logs out of canonical docs.
 - [ ] Update the feature registry only for durable feature knowledge.
+- [ ] Update or create the matching `SRC-*` record with local artifacts,
+  feature refs, and the final adopt/adapt/reject/defer/duplicate decision.

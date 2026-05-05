@@ -1,0 +1,175 @@
+{
+  "work_type": ["docs", "governance", "source-registry"],
+  "ticket_id": "TASK-0110",
+  "reviewed_at": "2026-05-05T16:20:00+08:00",
+  "reviewer": "codex-review-skill",
+  "user_story_groups": [
+    {
+      "group": "solo Codexter operator",
+      "story": "When I paste Symphony or another source again, future Codex runs should detect the prior source record and avoid redoing the same scout work."
+    },
+    {
+      "group": "future Symphony integration builder",
+      "story": "When I need provenance for the Symphony integration direction, I should see that Symphony is scheduler/runtime inspiration while Codexter remains normal Codex plus installed skills and ProofPacket output."
+    },
+    {
+      "group": "harness researcher or reviewer",
+      "story": "When a source inspires several features, I should be able to inspect one source record and follow it to feature records, scout runs, research memos, and tickets without raw transcript bloat."
+    }
+  ],
+  "search_scope": {
+    "changed_files": [
+      "docs/sources/AGENTS.md",
+      "docs/sources/README.md",
+      "docs/sources/registry.jsonl",
+      "docs/sources/validate_sources.py",
+      "docs/features/README.md",
+      "skills/harness-scout/SKILL.md",
+      "skills/harness-scout/todos.md",
+      "skills/harness-scout/references/architecture.md",
+      "skills/harness-scout/references/workflows.md",
+      "blockers.md"
+    ],
+    "related_files": [
+      "docs/features/registry.jsonl",
+      "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/source-summary.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md",
+      "docs/specs/harness-engineering-quickstart.md"
+    ],
+    "rubric_refs": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/user-intent-satisfaction.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/debloatability.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "invariants_checked": ["MEM-0073", "MEM-0077"]
+  },
+  "rubrics_used": [
+    "user-intent-satisfaction",
+    "evidence-quality",
+    "integration-readiness",
+    "debloatability"
+  ],
+  "summary": "The source registry cleanly separates source provenance from feature inventory, validates locally, and teaches harness-scout to check SRC records before source-run folders or FEAT dedupe. It directly preserves the user's Symphony/Codexter boundary: Symphony can launch normal Codex in a Codexter-installed workspace, while Codexter routes skills and writes proof.",
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": "medium",
+      "rubric": "integration-readiness",
+      "summary": "Top-level README and ARCHITECTURE source-registry links were not included in this slice to avoid sweeping unrelated pre-existing dirty hunks into the commit.",
+      "file_refs": ["blockers.md"],
+      "evidence": [
+        "The registry is discoverable through docs/sources/README.md, docs/features/README.md, and harness-scout workflow docs.",
+        "The workspace already had unrelated dirty README/ARCHITECTURE changes before this ticket."
+      ],
+      "next_action": "Add top-level source-registry links in a later clean doc-navigation slice if they are still missing after the current dirty doc work is reconciled."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "user-intent-satisfaction",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "ask_fidelity": 4.5,
+        "outcome_completeness": 4.0,
+        "worth_it_feel": 4.2,
+        "impressiveness": 4.0,
+        "evidence_confidence": 4.4
+      },
+      "findings": [
+        "The implementation gives future agents a concrete way to remember Symphony and other sources without re-scouting or confusing source provenance with feature records."
+      ],
+      "next_action": "Use the source registry in future harness-scout passes."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.2,
+        "reproducibility": 4.5,
+        "traceability": 4.3,
+        "consistency": 4.0,
+        "inspectability": 4.2,
+        "autonomy_readiness": 4.0
+      },
+      "findings": [
+        "Validation commands cover the new source registry, the existing feature registry, ticket metadata, Python syntax, and whitespace."
+      ],
+      "next_action": "Keep command output linked from the ticket Evidence section."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration_safety": 4.0,
+        "contract_correctness": 4.3,
+        "dependency_readiness": 4.2,
+        "coupling_risk": 4.0,
+        "merge_readiness": 4.0
+      },
+      "findings": [
+        "The new validator checks local artifacts and FEAT references, and harness-scout now names the source registry before source-run and feature dedupe."
+      ],
+      "next_action": "Proceed to commit this ticket slice."
+    },
+    {
+      "name": "debloatability",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead_surface_removal": 3.8,
+        "compatibility_cleanup": 4.0,
+        "duplication_reduction": 4.2,
+        "clarity_improvement": 4.2,
+        "deletion_safety": 4.0
+      },
+      "findings": [
+        "The change avoids building a crawler, database, vector store, or raw transcript archive and keeps the feature/source split explicit."
+      ],
+      "next_action": "Do not expand beyond JSONL plus validator until repeated source volume proves the need."
+    }
+  ],
+  "blocking_findings": [],
+  "commands": [
+    {
+      "command": "python3 docs/sources/validate_sources.py",
+      "result": "source registry contract OK (7 records)"
+    },
+    {
+      "command": "python3 -m py_compile docs/sources/validate_sources.py",
+      "result": "pass"
+    },
+    {
+      "command": "feature registry validation snippet from docs/features/README.md",
+      "result": "feature registry contract OK (14 records)"
+    },
+    {
+      "command": "python3 tickets/scripts/check_ticket_metadata.py",
+      "result": "ticket metadata OK (22 ticket files checked)"
+    },
+    {
+      "command": "git diff --check -- docs/sources/... docs/features/README.md skills/harness-scout/... blockers.md",
+      "result": "pass"
+    }
+  ],
+  "next_action": "Close TASK-0110 and commit the source-registry slice."
+}
