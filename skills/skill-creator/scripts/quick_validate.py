@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick validation script for skills - Meta-Brain version
+Quick validation script for skills.
 """
 
 import sys
@@ -64,15 +64,17 @@ def validate_skill(skill_path):
     if not re.match(r'^[a-z0-9-]+$', str(name)):
         return False, f"Name '{name}' should be hyphen-case"
 
-    # Validate core reference files (Meta-Brain requirement)
+    # Validate the reference surface without enforcing a fixed file taxonomy.
     references_dir = skill_path / 'references'
     if not references_dir.exists() or not references_dir.is_dir():
         return False, "Missing 'references/' directory"
 
-    REQUIRED_REFS = ['architecture.md', 'workflows.md', 'gotchas.md']
-    missing_refs = [ref for ref in REQUIRED_REFS if not (references_dir / ref).exists()]
-    if missing_refs:
-        return False, f"Missing required reference files: {', '.join(missing_refs)}"
+    reference_files = [
+        p for p in references_dir.rglob('*.md')
+        if p.is_file()
+    ]
+    if not reference_files:
+        return False, "Missing reference markdown files under 'references/'"
 
     return True, "Skill is valid!"
 

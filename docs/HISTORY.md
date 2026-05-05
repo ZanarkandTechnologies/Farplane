@@ -142,3 +142,4 @@
 2026-05-05 04:57 +0800 | FEAT | integrate web-design-guidelines as a source-fresh frontend review metric beside ui-quality and frontend visual QA
 2026-05-05 05:28 +0800 | FEAT | add an asset-first cinematic scroll landing guideline based on Terminal Industries and the Nomous agency prototype
 2026-05-05 15:33 +0800 | FEAT | add JSON landing-page registries for recipes, taste profiles, and effect stacks with the first industrial mission-control cinematic route
+2026-05-06 03:25 +0800 | FEAT | add merged-root video-generation and separate remotion-render skills backed by inference.sh references and frontend asset routing

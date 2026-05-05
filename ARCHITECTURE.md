@@ -57,6 +57,7 @@ flowchart LR
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     execSkill["codexter-invocation<br/>$impl<br/>$loop<br/>$ralph"]:::callout
+    assetSkill["video-generation<br/>remotion-render<br/>imagegen"]:::skill
     externalCli["delegate-cli<br/>delegate-frontend"]:::skill
     closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
   end
@@ -105,6 +106,7 @@ flowchart LR
   planSkill --> tickets
 
   tickets --> execSkill
+  execSkill --> assetSkill
   execSkill --> agentsDir
   execSkill --> bin
   execSkill --> harness
