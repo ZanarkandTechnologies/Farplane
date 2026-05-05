@@ -30,6 +30,8 @@ skills, templates, hooks, and rules have been installed.
    - `status: ready` means follow `route.skill_name`.
    - `status: blocked` means stop and report `compute.blockers` or missing
      route information.
+   - `compute.requiredSetup` is an operator/agent setup hint, not permission for
+     this helper to launch worktrees, Symphony, or cloud tasks.
 6. Invoke the existing phase skill named by `route.skill_name`.
 7. Keep the ticket evidence updated.
 8. Write or validate a `ProofPacket` at the requested `proofPacketPath`.
@@ -49,6 +51,10 @@ another external runner may own those orchestration concerns later.
 `FileTicketAdapter` is read-first in v1. It rejects ticket paths outside the
 configured board source and returns a manual writeback result for evidence
 instead of silently mutating ticket files.
+
+`codexter_compute.py` is also read-first/admission-only. It can select
+`local_shared`, defer `local_worktree` until `.harness/state/tickets/*.runtime.json`
+exists, and block `symphony` or `codex_cloud` until external adapters exist.
 
 ## Local Example
 

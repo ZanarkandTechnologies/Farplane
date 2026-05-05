@@ -1,0 +1,130 @@
+{
+  "run_id": "task-0114-planning-20260505T081357Z",
+  "status": "ready",
+  "envelope": {
+    "workflowPath": "WORKFLOW.md",
+    "workItemId": "TASK-0114",
+    "workItemPath": null,
+    "computeTarget": null,
+    "phase": "planning",
+    "mode": "local_codex",
+    "requestedBy": "local-operator",
+    "requestedAt": "2026-05-05T08:13:57.393831Z",
+    "proofPacketPath": "tickets/TASK-0114/artifacts/compute/local-shared.proof.json"
+  },
+  "workflow": {
+    "path": "/Users/kenjipcx/coding-harness/Codexter/WORKFLOW.md",
+    "name": "codexter-invocation",
+    "version": 1,
+    "prompt_template": "# Codexter Invocation Workflow\n\nUse this file as the repo-local invocation policy for Codexter-equipped Codex.\nDo not duplicate detailed skill contracts here. A run should load one\n`CodexterRunEnvelope`, normalize one work item, select allowed compute, route to\nthe existing phase skill, and write the requested `ProofPacket`.\n\nCodexter is normal Codex with this repository's installed skills, hooks,\ntemplates, and proof conventions. This workflow is not a daemon and not a\nstandalone `codexter run` CLI.",
+    "board_adapter": "filesystem",
+    "board_source": "tickets/",
+    "active_phases": [
+      "planning",
+      "building",
+      "documenting"
+    ],
+    "terminal_statuses": [
+      "done",
+      "failed"
+    ],
+    "compute_default": "local_shared",
+    "compute_allowed": [
+      "local_shared",
+      "local_worktree"
+    ],
+    "ticket_override_field": "compute_target",
+    "routing": {
+      "planning": "impl-plan",
+      "building": "impl",
+      "qa": "qa",
+      "review": "review",
+      "documenting": "close-ticket"
+    },
+    "quality": {
+      "requires_ticket_evidence": true,
+      "requires_review": true,
+      "requires_qa_from_ticket": true,
+      "writes_proof_packet": true
+    }
+  },
+  "work_item": {
+    "source": "filesystem",
+    "id": "TASK-0114",
+    "identifier": "TASK-0114",
+    "title": "implement compute selector v2",
+    "description": "# TASK-0114: implement compute selector v2\n\n## Summary\nTurn `compute_target` from a validated string into a real admission policy for\nwhere a ticket runs. The first production-grade selector should support\n`local_shared` and `local_worktree`, explicitly block `symphony` and\n`codex_cloud` until adapters exist, and produce clear reasons that a human,\nRalph, or future external runner can inspect.\n\n## Scope\n- In:\n  - Compute policy model from `WORKFLOW.md`.\n  - Ticket-level `compute_target` override.\n  - Envelope-level compute override.\n  - Capability/admission matrix for `local_shared`, `local_worktree`,\n    `symphony`, and `codex_cloud`.\n  - Runtime hints for `local_worktree`, likely integrating with `pr-runtime` or\n    ticket runtime records.\n  - Explicit blockers for approval-required, blocked, dependency-unmet,\n    disallowed, unsupported, or missing-runtime cases.\n  - Tests for precedence, blocking, and future targets.\n- Out:\n  - No actual cloud execution.\n  - No real Symphony worker launch.\n  - No automatic worktree creation unless the ticket explicitly chooses to wire\n    existing `pr-runtime` helpers and tests prove it.\n  - No merge queue or parallel dispatch.\n\n## Plan\n- `Change:` Replace string-only compute selection with a typed policy and\n  explicit admission decisions.\n- `Why:` The central user requirement is choosing where each ticket runs. The\n  current helper chooses local compute but does not yet model capability,\n  isolation level, human gates, or future remote targets deeply enough.\n- `Before -> After:`\n  - Before: `compute_target` can be validated and blocked, but the policy is\n    minimal.\n  - After: compute selection is inspectable, testable, and ready for local\n    shared/worktree decisions while future targets remain blocked with precise\n    reasons.\n- `Touch:`\n  - `docs/specs/board-compute-orchestration.md`\n  - `WORKFLOW.md`\n  - `bin/codexter_invocation.py` or new compute module\n  - `bin/test_codexter_invocation.py` or new compute tests\n  - `skills/codexter-invocation/SKILL.md`\n  - `skills/pr-runtime/SKILL.md`\n  - `bin/ticket_runtime.py`\n  - `tickets/README.md`\n  - `docs/HISTORY.md`\n- `Inspect:`\n  - `TASK-0081` selective branch runtime planning.\n  - `skills/pr-runtime/SKILL.md`\n  - `bin/ticket_runtime.py`\n  - `.harness/state/tickets` runtime record conventions.\n  - `WORKFLOW.md` compute section.\n  - `tickets/scripts/check_ticket_metadata.py`.\n- `Signature delta:`\n  - `select_compute(item, envelope, policy, runtime_state): ComputeDecision`\n  - `ComputeDecision.target`\n  - `ComputeDecision.allowed`\n  - `ComputeDecision.blockers`\n  - `ComputeDecision.runtime_record_path`\n  - `ComputeDecision.required_setup`\n- `Type Sketch:`\n  - `ComputeCapability`: `requires_worktree`, `requires_network`,\n    `requires_external_runner`, `supports_local_tools`, `implemented`.\n  - `ComputeDecision`: `target`, `allowed`, `reason`, `blockers`,\n    `runtime_record_path`, `required_setup`, `handoff`.\n  - `Blocker`: `approval_required | dependency_unmet | unsupported_target |\n    disallowed_by_workflow | missing_worktree_runtime | blocked_ticket`.\n- `Typed flow example:`\n  1. Ticket has `compute_target: local_worktree`.\n  2. Envelope does not override compute.\n  3. Workflow allows `local_worktree`.\n  4. Selector checks ticket status and blockers.\n  5. Selector returns `allowed=true`, `target=local_worktree`, and\n     `runtime_record_path=.harness/state/tickets/TASK-XXXX.runtime.json`.\n  6. If no runtime exists, the decision includes `required_setup:\n     pr-runtime up` rather than silently falling back to shared checkout.\n- `Execution steps:`\n  1. Read `TASK-0111` and `TASK-0113`.\n  2. Define compute capability matrix in docs and code.\n  3. Implement selector precedence: envelope override, ticket override,\n     workflow default.\n  4. Add admission blockers for workflow disallow, unsupported future target,\n     approval/build gating, blockers, dependencies, and local runtime needs.\n  5. Wire local_worktree hints to existing runtime record paths without\n     creating worktrees unless explicitly in scope.\n  6. Add tests and smoke artifacts.\n  7. Update docs and review.\n- `Recommendation:` Make this an admission-policy ticket, not a runner ticket.\n  It should answer \"can/where should this run?\" but not execute the run.\n- `Options considered:`\n  - Keep current minimal string selector: too thin for future local/cloud split.\n  - Admission policy only: recommended.\n  - Admission plus runtime launch: too much scope and overlaps `pr-runtime`.\n- `Blast radius:` invocation helper, ticket metadata docs, pr-runtime, Ralph\n  future parallel mode, Symphony shim.\n- `Risks:`\n  - Selector starts doing runtime orchestration. Containment: output required\n    setup as hints; leave launch to phase skills or runtime helpers.\n  - Future targets look available. Containment: explicit unsupported blockers.\n\n## Gap Analysis\n- `Current state:` `TASK-0107` selects local compute and blocks unsupported\n  future targets, but capability and runtime setup are shallow.\n- `Production expectation:` A multi-compute ticketing system needs a policy that\n  explains why a ticket can or cannot run on each target and what setup is\n  required before dispatch.\n- `Missing gaps:`\n  - No capability matrix.\n  - No structured blocker taxonomy.\n  - No first-class local_worktree runtime requirement.\n  - No dependency/approval admission model beyond simple blockers.\n  - No visible handoff for future cloud/Symphony targets.\n- `Comparable implementations:` Symphony worker/SSH extension, Codexter\n  pr-runtime, `TASK-0081`, current invocation helper.\n- `Recommendation:` Implement compute selector v2 after BoardAdapter v1.\n\n## Diagram\n```mermaid\nflowchart LR\n  classDef input fill:#dbeafe,stroke:#2563eb,color:#111827\n  classDef policy fill:#fef3c7,stroke:#b45309,color:#111827\n  classDef decision fill:#dcfce7,stroke:#15803d,color:#111827\n  classDef blocked fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d\n\n  Envelope[\"Envelope override\"]:::input --> Selector[\"ComputeSelector v2\"]:::policy\n  Ticket[\"Ticket compute_target\"]:::input --> Selector\n  Workflow[\"WORKFLOW allowed/default\"]:::input --> Selector\n  Runtime[\"Runtime state\"]:::input --> Selector\n  Selector --> Allowed[\"allowed decision\"]:::decision\n  Selector --> Blocked[\"blocked decision + reasons\"]:::blocked\n```\n\n## Acceptance Criteria\n- [ ] Compute selector precedence is documented and tested.\n- [ ] `local_shared` and `local_worktree` decisions produce clear runtime\n  expectations.\n- [ ] `symphony` and `codex_cloud` remain blocked with explicit future-adapter\n  reasons.\n- [ ] Approval, blocker, dependency, workflow-disallow, and unsupported-target\n  blockers are represented in tests.\n- [ ] Existing invocation prepare output remains parseable.\n\n## Verification\n- `Tests:`\n  - compute selector unit tests.\n  - invocation helper tests.\n  - ticket metadata validator.\n- `Manual checks:`\n  - Try envelope override, ticket override, and workflow default examples.\n  - Confirm no target silently falls back to a different compute target.\n- `Evidence required:`\n  - JSON prepare artifacts for allowed shared, allowed/deferred worktree, and\n    blocked Symphony/cloud.\n  - Review artifact.\n\n## Agent Contract\n- `Open:` no UI.\n- `Test hook:` unit tests plus prepare command examples.\n- `Stabilize:` use fixture tickets with explicit metadata.\n- `Inspect:` JSON output blockers and runtime hints.\n- `Key screens/states:` none.\n- `QA cookbook:` none needed.\n- `Taste refs:` none.\n- `Expected artifacts:` prepare JSON outputs and review JSON.\n- `Delegate with:` this ticket, `TASK-0111`, `TASK-0113`, and `TASK-0081`.\n\n## Autonomy Readiness\n- `Human inputs/assets:` approval of compute policy.\n- `Credentials / external access:` none.\n- `Compute/runtime needs:` local Python; optional existing pr-runtime records.\n- `Tooling gaps:` may need small module extraction.\n- `QA risks:` accidental execution or silent fallback. Tests must assert neither\n  happens.\n- `Human gates:` approval before implementation.\n- `Agent decision boundaries:` may output runtime setup hints; may not launch\n  worktrees/cloud/Symphony.\n\n## Evidence Checklist\n- [ ] Allowed local_shared JSON.\n- [ ] local_worktree JSON with runtime hint.\n- [ ] Blocked Symphony/cloud JSON.\n- [ ] Review JSON linked.\n\n## Refs\n- `WORKFLOW.md`\n- `bin/codexter_invocation.py`\n- `skills/pr-runtime/SKILL.md`\n- `bin/ticket_runtime.py`\n- `tickets/TASK-0081/ticket.md`\n\n## Evidence\n- `Artifacts:`\n  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)\n- `Commands:`\n- `Result summary:`\n\n## Blockers\n- none",
+    "state": "review",
+    "phase": "planning",
+    "status": "review",
+    "priority": "high",
+    "labels": [],
+    "blockedBy": [],
+    "dependsOn": [
+      "TASK-0111",
+      "TASK-0113"
+    ],
+    "ready": false,
+    "approvalRequired": true,
+    "requiresQa": false,
+    "requiresDemo": false,
+    "computeTarget": null,
+    "localTicketPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/ticket.md",
+    "artifactsPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/artifacts",
+    "url": null,
+    "metadata": {
+      "ticket_id": "TASK-0114",
+      "title": "implement compute selector v2",
+      "phase": "planning",
+      "status": "review",
+      "owner": "unassigned",
+      "claimed_by": [],
+      "priority": "high",
+      "depends_on": [
+        "TASK-0111",
+        "TASK-0113"
+      ],
+      "blocked_by": [],
+      "ready": false,
+      "approval_required": true,
+      "requires_qa": false,
+      "requires_demo": false,
+      "created_at": "2026-05-05T07:27:16Z",
+      "updated_at": "2026-05-05T07:27:16Z",
+      "next_action": "wait for BoardAdapter contract, then plan compute selector v2",
+      "last_verification": "none"
+    }
+  },
+  "compute": {
+    "target": "local_shared",
+    "reason": "allowed compute target",
+    "allowed": true,
+    "blockers": [],
+    "blockerCodes": [],
+    "runtimeRecordPath": null,
+    "runtimeHints": [
+      "runs in the current checkout; no runtime record required"
+    ],
+    "requiredSetup": [],
+    "handoff": "route to the selected Codexter phase skill in this workspace",
+    "capability": {
+      "target": "local_shared",
+      "implemented": true,
+      "isolation": "current checkout",
+      "requiresWorktree": false,
+      "requiresExternalRunner": false,
+      "requiresRuntimeRecord": false,
+      "setupHint": "normal Codex session in the current checkout",
+      "handoff": "route to the selected Codexter phase skill in this workspace"
+    }
+  },
+  "route": {
+    "phase": "planning",
+    "skillName": "impl-plan",
+    "ticketPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/ticket.md",
+    "handoffPrompt": "Use `$impl-plan` for TASK-0114: implement compute selector v2. Ticket: /Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/ticket.md. Keep ticket evidence updated and write the requested ProofPacket.",
+    "requiresApprovalBeforeBuild": false
+  },
+  "proof_packet_path": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/artifacts/compute/local-shared.proof.json",
+  "generated_at": "2026-05-05T08:13:57.395746Z"
+}

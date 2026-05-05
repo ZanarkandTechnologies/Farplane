@@ -31,6 +31,9 @@ orchestration story.
 - `codexter_boards.py` - board adapter contract plus the filesystem
   `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a
   `WorkItem`
+- `codexter_compute.py` - compute admission policy for `local_shared`,
+  `local_worktree`, `symphony`, and `codex_cloud`; it emits blockers and setup
+  hints but never launches compute
 - `codexter_invocation.py` - contract helper for `WORKFLOW.md`,
   `CodexterRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
@@ -112,6 +115,9 @@ success quiet and make failure output the thing that stands out.
 - `python3 -m unittest bin/test_codexter_boards.py`
   Use to prove the filesystem BoardAdapter path containment and ticket
   normalization contract before changing invocation or Ralph selection behavior
+- `python3 -m unittest bin/test_codexter_compute.py`
+  Use to prove compute precedence, blockers, worktree runtime hints, and future
+  target behavior without launching local or remote compute
 - `python3 bin/codexter_invocation.py prepare --ticket <ticket> --phase planning --proof .harness/results/<ticket>.proof.json`
   Use to validate a local Codexter invocation envelope and inspect the selected
   skill route without launching Codex

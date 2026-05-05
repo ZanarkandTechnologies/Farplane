@@ -213,7 +213,11 @@ type ComputeDecision = {
   target: ComputeTarget;
   reason: string;
   blockers: string[];
+  blockerCodes: string[];
   runtimeHints: string[];
+  requiredSetup: string[];
+  handoff: string;
+  capability: ComputeCapability;
   requiredHumanGate?: string;
   proofPacketPath: string;
 };
@@ -228,6 +232,20 @@ Selector precedence:
 
 The selector must not silently fall back from an unsupported target to a
 different target. Unsupported compute returns `allowed: false` with blockers.
+
+The live selector is `bin/codexter_compute.py`. It is an admission policy, not a
+runner:
+
+- `local_shared` is implemented and needs no runtime record.
+- `local_worktree` is implemented only when a ticket runtime record already
+  exists at `.harness/state/tickets/<ticket>.runtime.json`; otherwise it returns
+  `missing_worktree_runtime` and a `bin/ticket_runtime.py ensure ...` setup
+  hint.
+- `symphony` and `codex_cloud` always return `unsupported_target` until real
+  external adapters exist. They must still launch normal Codex with Codexter
+  installed and exchange a `CodexterRunEnvelope` plus `ProofPacket`.
+- Approval, blocked status, blocker tickets, and unresolved dependencies block
+  non-planning phases.
 
 ### `CodexterRunEnvelope`
 

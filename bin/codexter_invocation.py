@@ -18,8 +18,8 @@ from codexter_boards import (
     WorkItemSelector,
     normalize_ticket_id as normalize_board_ticket_id,
 )
+from codexter_compute import ComputeDecision, select_compute
 
-LOCAL_COMPUTE_TARGETS = ("local_shared", "local_worktree")
 PHASES = ("planning", "building", "qa", "review", "documenting")
 VERDICTS = ("pass", "revise", "block", "failed")
 # MEM-0077: this helper validates invocation contracts and proof artifacts only;
@@ -70,24 +70,6 @@ class CodexterRunEnvelope:
             "requestedBy": self.requested_by,
             "requestedAt": self.requested_at,
             "proofPacketPath": self.proof_packet_path,
-        }
-
-
-@dataclass(frozen=True)
-class ComputeDecision:
-    target: str
-    reason: str
-    allowed: bool
-    blockers: tuple[str, ...]
-    runtime_record_path: str | None
-
-    def public_dict(self) -> dict[str, Any]:
-        return {
-            "target": self.target,
-            "reason": self.reason,
-            "allowed": self.allowed,
-            "blockers": list(self.blockers),
-            "runtimeRecordPath": self.runtime_record_path,
         }
 
 
@@ -413,43 +395,6 @@ def resolve_proof_path(path: str, item: WorkItem, root: Path) -> Path:
     return resolved
 
 
-def select_compute(
-    item: WorkItem,
-    envelope: CodexterRunEnvelope,
-    policy: WorkflowPolicy,
-    root: Path | None = None,
-) -> ComputeDecision:
-    resolved_root = root or project_root()
-    target = envelope.compute_target or item.compute_target or policy.compute_default
-    blockers: list[str] = []
-    if target not in COMPUTE_TARGETS:
-        blockers.append(f"unknown compute target: {target}")
-    else:
-        if target not in policy.compute_allowed:
-            blockers.append(f"compute target {target} is not allowed by WORKFLOW.md")
-        if target not in LOCAL_COMPUTE_TARGETS:
-            blockers.append(f"compute target {target} is documented for future adapters but not implemented in v1")
-    if envelope.phase != "planning":
-        if item.approval_required:
-            blockers.append("ticket requires approval before non-planning execution")
-        if item.blocked_by:
-            blockers.append(f"ticket has blockers: {', '.join(item.blocked_by)}")
-        if item.status == "blocked":
-            blockers.append("ticket status is blocked")
-    runtime_path = None
-    if target == "local_worktree":
-        runtime_path = str(resolved_root / ".harness" / "state" / "tickets" / f"{item.identifier}.runtime.json")
-    allowed = not blockers
-    reason = "allowed local compute target" if allowed else "; ".join(blockers)
-    return ComputeDecision(
-        target=target,
-        reason=reason,
-        allowed=allowed,
-        blockers=tuple(blockers),
-        runtime_record_path=runtime_path,
-    )
-
-
 def route_phase(
     item: WorkItem, envelope: CodexterRunEnvelope, policy: WorkflowPolicy
 ) -> SkillRoute | None:
@@ -481,7 +426,14 @@ def prepare_invocation(
         root=resolved_root,
     )
     proof_path = resolve_proof_path(envelope.proof_packet_path, item, resolved_root)
-    compute = select_compute(item, envelope, workflow, resolved_root)
+    compute = select_compute(
+        item,
+        envelope_compute_target=envelope.compute_target,
+        phase=envelope.phase,
+        workflow_default=workflow.compute_default,
+        workflow_allowed=workflow.compute_allowed,
+        root=resolved_root,
+    )
     route = route_phase(item, envelope, workflow)
     blockers = list(compute.blockers)
     if route is None:

@@ -82,6 +82,11 @@ last_verification: none
   are `local_shared`, `local_worktree`, `symphony`, and `codex_cloud`; future
   targets may be recorded but remain blocked unless the active workflow and
   adapter support them.
+  - `local_shared` runs in the current checkout.
+  - `local_worktree` requires a ticket runtime record under
+    `.harness/state/tickets/TASK-XXXX.runtime.json`.
+  - `symphony` and `codex_cloud` are future external-adapter targets and must
+    stay blocked in local Codexter until those adapters exist.
 - `depends_on`: structural prerequisites
 - `blocked_by`: concrete ticket-ID blockers only
 - `ready`: whether `next_action` can be executed now
