@@ -119,6 +119,8 @@ Use `advise` before continuing when these choices are not mechanically clear:
    hidden queue state as live surfaces.
 2. Do not run multiple tickets in parallel from `$ralph` v0. Parallel dispatch
    needs worktrees, leases, merge policy, stale-worker handling, and batch QA.
+   The design-only reference is `skills/ralph/references/parallel-ralph.md`;
+   it is not an implementation permission by itself.
 3. Do not let selector output mutate tickets or launch agents directly. Policy
    belongs in this skill and ticket evidence; the helper stays read-only.
 

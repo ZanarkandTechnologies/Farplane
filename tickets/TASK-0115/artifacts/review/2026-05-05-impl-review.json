@@ -1,0 +1,76 @@
+{
+  "ticket_id": "TASK-0115",
+  "reviewed_at": "2026-05-05T08:25:02Z",
+  "verdict": "pass",
+  "score": 4.1,
+  "review_skill": "review",
+  "rubrics": {
+    "spec_contract": 4,
+    "implementation_plan": 4,
+    "user_intent_satisfaction": 4,
+    "evidence_quality": 4,
+    "integration_readiness": 4,
+    "debloatability": 5
+  },
+  "user_story_groups": [
+    {
+      "group": "solo Codexter operator",
+      "story": "As the main operator, I can see exactly what must exist before I trust N-agent Ralph, without losing today's safe serial Ralph mode.",
+      "result": "pass",
+      "evidence": [
+        "parallel-ralph.md states serial Ralph remains the only runnable dispatcher today",
+        "design requires local_worktree lanes and explicit proof before integration"
+      ]
+    },
+    {
+      "group": "future parallel Ralph builder",
+      "story": "As a future builder, I can implement lease acquisition, worktree setup, proof collection, integration, and batch QA from a concrete contract.",
+      "result": "pass",
+      "evidence": [
+        "design includes ParallelBatch, LeaseRecord, WriteScope, StopReason, lifecycle diagram, and follow-up ticket map",
+        "Ralph docs link the design-only reference"
+      ]
+    },
+    {
+      "group": "future Symphony or external-runner integrator",
+      "story": "As an external-runner integrator, I can tell which responsibilities stay local to Ralph and which should be delegated to a scheduler like Symphony later.",
+      "result": "pass",
+      "evidence": [
+        "design forbids cloud/Symphony backend inside Ralph",
+        "board-compute spec still identifies Symphony as future scheduler owner"
+      ]
+    },
+    {
+      "group": "reviewer or maintainer",
+      "story": "As a maintainer, I can audit that no hidden parallel runtime shipped in this design ticket.",
+      "result": "pass",
+      "evidence": [
+        "no Ralph selector/runtime code changed",
+        "docs checks, metadata, source registry, and feature registry validation pass"
+      ]
+    }
+  ],
+  "findings": [],
+  "risks": [
+    {
+      "risk": "The design is not yet executable and future implementation tickets still need fixtures.",
+      "severity": "medium",
+      "decision": "accept",
+      "reason": "TASK-0115 is intentionally design-only. The follow-up ticket map defines the implementation slices and proof expectations."
+    },
+    {
+      "risk": "Write-scope inference can be hard for real tickets.",
+      "severity": "medium",
+      "decision": "defer",
+      "reason": "The design requires conservative inference or explicit metadata before selecting overlapping tickets."
+    }
+  ],
+  "commands": [
+    "python3 docs/sources/validate_sources.py",
+    "python3 - <<'PY' ... feature registry status-aware validation ... PY",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "python3 bin/check_doc_parity.py",
+    "python3 bin/check_harness_invariants.py"
+  ],
+  "blockers": []
+}

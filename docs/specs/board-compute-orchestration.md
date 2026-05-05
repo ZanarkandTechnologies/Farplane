@@ -414,7 +414,7 @@ Future runner observability:
 | Local conversational | one envelope routes to the expected skill and proof path | core | invocation prepare/write-proof tests |
 | Ralph | serial selector hands one eligible ticket to phase skill and stops on human gates | core | Ralph selector tests |
 | Symphony shim | example workflow/prompt shows Symphony launching normal Codex with Codexter installed | extension | `skills/codexter-invocation/templates/symphony-run-envelope.json` and `TASK-0112` smoke |
-| Parallel Ralph | leases, worktrees, merge policy, stale recovery, batch QA specified before implementation | extension | `TASK-0115` design review |
+| Parallel Ralph | leases, worktrees, merge policy, stale recovery, batch QA specified before implementation | extension | `skills/ralph/references/parallel-ralph.md` and `TASK-0115` design review |
 | Spec discipline | complex specs include domain model, state, config, failures, observability, and tests | governance | `TASK-0116` template |
 
 ## 13. Follow-Up Ticket Map
