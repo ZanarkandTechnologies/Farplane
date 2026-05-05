@@ -150,9 +150,14 @@ type BoardAdapter = {
 Requirements:
 
 - `filesystem` is the only implemented adapter today.
+- The live filesystem implementation is `bin/codexter_boards.py`:
+  `FileTicketAdapter` reads `tickets/TASK-*/ticket.md`, rejects selectors
+  outside the configured board source, and returns a normalized `WorkItem`.
 - External adapters must normalize into the same `WorkItem` shape.
 - Adapter writes must be explicit and traceable; Codexter should not silently
   mutate external board state as a side effect of reading.
+- BoardAdapter v1 keeps evidence writeback manual. Future writeback support must
+  reuse ticket metadata rules and produce a traceable `WriteResult`.
 
 ### `WorkItem`
 

@@ -15,7 +15,10 @@ skills, templates, hooks, and rules have been installed.
 
 1. Read `WORKFLOW.md`.
 2. Read or construct one `CodexterRunEnvelope`.
-3. Run the diagnostic helper to prepare the invocation:
+3. Load the selected board item through the configured BoardAdapter. V1 only
+   supports `board.adapter: filesystem`, implemented by
+   `bin/codexter_boards.py`, and normalizes one ticket into `WorkItem`.
+4. Run the diagnostic helper to prepare the invocation:
 
    ```bash
    python3 bin/codexter_invocation.py prepare --envelope <json-or-file>
@@ -23,13 +26,13 @@ skills, templates, hooks, and rules have been installed.
 
    For conversational local use, pass `--ticket`, `--phase`, `--compute`, and
    `--proof` instead of `--envelope`.
-4. Inspect the returned JSON:
+5. Inspect the returned JSON:
    - `status: ready` means follow `route.skill_name`.
    - `status: blocked` means stop and report `compute.blockers` or missing
      route information.
-5. Invoke the existing phase skill named by `route.skill_name`.
-6. Keep the ticket evidence updated.
-7. Write or validate a `ProofPacket` at the requested `proofPacketPath`.
+6. Invoke the existing phase skill named by `route.skill_name`.
+7. Keep the ticket evidence updated.
+8. Write or validate a `ProofPacket` at the requested `proofPacketPath`.
 
 ## Boundaries
 
@@ -42,6 +45,10 @@ skills, templates, hooks, and rules have been installed.
 The helper validates and writes artifacts. It does not launch Codex, poll a
 board, claim tickets, retry failed work, or manage remote workspaces. Symphony or
 another external runner may own those orchestration concerns later.
+
+`FileTicketAdapter` is read-first in v1. It rejects ticket paths outside the
+configured board source and returns a manual writeback result for evidence
+instead of silently mutating ticket files.
 
 ## Local Example
 

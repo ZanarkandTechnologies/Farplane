@@ -5,17 +5,23 @@ import argparse
 import json
 import re
 import sys
-from dataclasses import dataclass, field, fields, is_dataclass
+from dataclasses import dataclass, fields, is_dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from codexter_boards import (
+    COMPUTE_TARGETS,
+    BoardAdapterError,
+    FileTicketAdapter,
+    WorkItem,
+    WorkItemSelector,
+    normalize_ticket_id as normalize_board_ticket_id,
+)
 
-COMPUTE_TARGETS = ("local_shared", "local_worktree", "symphony", "codex_cloud")
 LOCAL_COMPUTE_TARGETS = ("local_shared", "local_worktree")
 PHASES = ("planning", "building", "qa", "review", "documenting")
 VERDICTS = ("pass", "revise", "block", "failed")
-TICKET_ID_RE = re.compile(r"^TASK-\d{4}$")
 # MEM-0077: this helper validates invocation contracts and proof artifacts only;
 # normal Codex plus installed skills remains the execution surface.
 
@@ -64,56 +70,6 @@ class CodexterRunEnvelope:
             "requestedBy": self.requested_by,
             "requestedAt": self.requested_at,
             "proofPacketPath": self.proof_packet_path,
-        }
-
-
-@dataclass(frozen=True)
-class WorkItem:
-    source: str
-    id: str
-    identifier: str
-    title: str
-    description: str
-    state: str
-    phase: str
-    status: str
-    priority: str
-    labels: tuple[str, ...]
-    blocked_by: tuple[str, ...]
-    depends_on: tuple[str, ...]
-    ready: bool
-    approval_required: bool
-    requires_qa: bool
-    requires_demo: bool
-    compute_target: str | None
-    local_ticket_path: str
-    artifacts_path: str
-    url: str | None
-    metadata: dict[str, Any] = field(default_factory=dict)
-
-    def public_dict(self) -> dict[str, Any]:
-        return {
-            "source": self.source,
-            "id": self.id,
-            "identifier": self.identifier,
-            "title": self.title,
-            "description": self.description,
-            "state": self.state,
-            "phase": self.phase,
-            "status": self.status,
-            "priority": self.priority,
-            "labels": list(self.labels),
-            "blockedBy": list(self.blocked_by),
-            "dependsOn": list(self.depends_on),
-            "ready": self.ready,
-            "approvalRequired": self.approval_required,
-            "requiresQa": self.requires_qa,
-            "requiresDemo": self.requires_demo,
-            "computeTarget": self.compute_target,
-            "localTicketPath": self.local_ticket_path,
-            "artifactsPath": self.artifacts_path,
-            "url": self.url,
-            "metadata": self.metadata,
         }
 
 
@@ -175,10 +131,10 @@ def now_iso() -> str:
 
 
 def normalize_ticket_id(value: str) -> str:
-    ticket_id = value.strip().upper()
-    if not TICKET_ID_RE.fullmatch(ticket_id):
-        raise InvocationError(f"invalid ticket id: {value}")
-    return ticket_id
+    try:
+        return normalize_board_ticket_id(value)
+    except BoardAdapterError as exc:
+        raise InvocationError(str(exc)) from exc
 
 
 def parse_scalar(raw: str) -> Any:
@@ -355,87 +311,21 @@ def load_workflow(path: str | Path, root: Path | None = None) -> WorkflowPolicy:
     )
 
 
-def normalize_bool(value: Any) -> bool:
-    return value is True or value == "true"
-
-
-def normalize_string_list(value: Any) -> tuple[str, ...]:
-    if isinstance(value, list):
-        return tuple(str(item).strip() for item in value if str(item).strip())
-    return ()
-
-
-def h1_title(body: str) -> str:
-    for line in body.splitlines():
-        stripped = line.strip()
-        if stripped.startswith("# "):
-            title = stripped[2:].strip()
-            if ": " in title:
-                return title.split(": ", 1)[1].strip()
-            return title
-    return ""
-
-
-def ticket_path_from_selector(
-    *, work_item_id: str | None, work_item_path: str | None, root: Path
-) -> Path:
-    if work_item_path:
-        path = resolve_path(work_item_path, root)
-    elif work_item_id:
-        path = root / "tickets" / normalize_ticket_id(work_item_id) / "ticket.md"
-    else:
-        raise InvocationError("run envelope must include workItemId or workItemPath")
-    if not path.exists():
-        raise InvocationError(f"ticket not found: {path}")
-    if path.name != "ticket.md":
-        raise InvocationError(f"ticket path must point to ticket.md: {path}")
-    if not is_under(path, root / "tickets"):
-        raise InvocationError(f"ticket path must stay under tickets/: {path}")
-    return path
-
-
 def load_work_item(
     *,
     work_item_id: str | None = None,
     work_item_path: str | None = None,
+    board_source: str = "tickets/",
     root: Path | None = None,
 ) -> WorkItem:
     resolved_root = root or project_root()
-    path = ticket_path_from_selector(
-        work_item_id=work_item_id, work_item_path=work_item_path, root=resolved_root
-    )
-    frontmatter, body = parse_frontmatter_markdown(path.read_text(encoding="utf-8"))
-    ticket_id = normalize_ticket_id(str(frontmatter.get("ticket_id") or path.parent.name))
-    title = str(frontmatter.get("title") or h1_title(body) or ticket_id).strip()
-    phase = str(frontmatter.get("phase") or "").strip()
-    status = str(frontmatter.get("status") or "").strip()
-    compute_target = frontmatter.get("compute_target")
-    if compute_target is not None:
-        compute_target = require_string(compute_target, "compute_target")
-    metadata = dict(frontmatter)
-    return WorkItem(
-        source="filesystem",
-        id=ticket_id,
-        identifier=ticket_id,
-        title=title,
-        description=body.strip(),
-        state=status,
-        phase=phase,
-        status=status,
-        priority=str(frontmatter.get("priority") or "").strip(),
-        labels=normalize_string_list(frontmatter.get("labels")),
-        blocked_by=normalize_string_list(frontmatter.get("blocked_by")),
-        depends_on=normalize_string_list(frontmatter.get("depends_on")),
-        ready=normalize_bool(frontmatter.get("ready")),
-        approval_required=normalize_bool(frontmatter.get("approval_required")),
-        requires_qa=normalize_bool(frontmatter.get("requires_qa")),
-        requires_demo=normalize_bool(frontmatter.get("requires_demo")),
-        compute_target=compute_target,
-        local_ticket_path=str(path),
-        artifacts_path=str(path.parent / "artifacts"),
-        url=None,
-        metadata=metadata,
-    )
+    try:
+        adapter = FileTicketAdapter(resolved_root, board_source)
+        return adapter.read_work_item(
+            WorkItemSelector(work_item_id=work_item_id, work_item_path=work_item_path)
+        )
+    except BoardAdapterError as exc:
+        raise InvocationError(str(exc)) from exc
 
 
 def envelope_value(payload: dict[str, Any], camel: str, snake: str, default: Any = None) -> Any:
@@ -587,6 +477,7 @@ def prepare_invocation(
     item = load_work_item(
         work_item_id=envelope.work_item_id,
         work_item_path=envelope.work_item_path,
+        board_source=workflow.board_source,
         root=resolved_root,
     )
     proof_path = resolve_proof_path(envelope.proof_packet_path, item, resolved_root)

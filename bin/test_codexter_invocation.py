@@ -115,6 +115,31 @@ class CodexterInvocationTests(unittest.TestCase):
             self.assertEqual(plan.work_item.identifier, "TASK-1234")
             self.assertTrue(plan.compute.allowed)
 
+    def test_prepare_uses_configured_board_source(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write(
+                root / "WORKFLOW.md",
+                WORKFLOW_TEXT.replace("source: tickets/", "source: project-tickets/"),
+            )
+            write(root / "project-tickets" / "TASK-1234" / "ticket.md", TICKET_TEXT)
+            envelope = codexter_invocation.parse_run_envelope(
+                json.dumps(
+                    {
+                        "workflowPath": "WORKFLOW.md",
+                        "workItemId": "TASK-1234",
+                        "phase": "planning",
+                        "proofPacketPath": ".harness/results/task-1234-proof.json",
+                    }
+                ),
+                root,
+            )
+
+            plan = codexter_invocation.prepare_invocation(envelope, root)
+
+            self.assertEqual(plan.status, "ready")
+            self.assertIn("project-tickets/TASK-1234/ticket.md", plan.work_item.local_ticket_path)
+
     def test_building_invocation_blocks_approval_gated_ticket(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

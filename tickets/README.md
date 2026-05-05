@@ -96,6 +96,11 @@ For `$ralph`, a ticket is selectable only when `ready: true`,
 `approval_required: false`, `blocked_by: []`, `claimed_by:` is empty, and every
 dependency is complete, archived, or explicitly waived in the ticket body.
 
+For Codexter invocation, `bin/codexter_boards.py` is the canonical v1
+BoardAdapter surface for reading filesystem tickets into normalized `WorkItem`
+JSON. It is intentionally read-first: evidence links still belong in the
+ticket `Evidence` section until a later ticket ships traceable writeback.
+
 ## Invariants
 
 - no `lane` field

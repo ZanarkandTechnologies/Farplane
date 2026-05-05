@@ -28,8 +28,11 @@ orchestration story.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `delegate_cli_agent.py` - external CLI delegation helper for profile setup,
   dry-run command rendering, execution logs, and ticket evidence copyback
+- `codexter_boards.py` - board adapter contract plus the filesystem
+  `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a
+  `WorkItem`
 - `codexter_invocation.py` - contract helper for `WORKFLOW.md`,
-  `CodexterRunEnvelope`, filesystem `WorkItem`, compute selection, skill
+  `CodexterRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
 - `notify.py` - local notification helper
 - `stop_hook.py` - thin stop-hook/runtime shim
@@ -106,6 +109,9 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket <ticket> --dry-run --json`
   Use to render the Pi/Kimi frontend delegation prompt, command, runtime logs,
   and durable ticket artifacts without spending tokens or editing files
+- `python3 -m unittest bin/test_codexter_boards.py`
+  Use to prove the filesystem BoardAdapter path containment and ticket
+  normalization contract before changing invocation or Ralph selection behavior
 - `python3 bin/codexter_invocation.py prepare --ticket <ticket> --phase planning --proof .harness/results/<ticket>.proof.json`
   Use to validate a local Codexter invocation envelope and inspect the selected
   skill route without launching Codex
