@@ -15,9 +15,9 @@ approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-05T19:45:00Z
-updated_at: 2026-05-05T19:54:02Z
+updated_at: 2026-05-05T19:58:30Z
 next_action: archived after commit
-last_verification: selector tests, bin contract tests, full bin unittest discovery, metadata, doc parity, harness invariants, diff check, selector smoke, and implementation review passed on 2026-05-05T19:54:02Z
+last_verification: follow-up review fixed configured-board archive-source drift; selector tests, bin contract tests, full bin unittest discovery, metadata, doc parity, harness invariants, selector smoke, and review passed on 2026-05-05T19:58:30Z
 ---
 
 # TASK-0119: route Ralph selection through BoardAdapter and ComputeSelector
@@ -306,6 +306,8 @@ flowchart LR
   commands listed below passed.
 - [x] Review JSON linked:
   [2026-05-05-impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0119/artifacts/review/2026-05-05-impl-review.json)
+  and
+  [2026-05-05-followup-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0119/artifacts/review/2026-05-05-followup-review.json)
 
 ## Refs
 - [board-compute orchestration](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
@@ -321,11 +323,14 @@ flowchart LR
 - `Artifacts:`
   - [selector current board JSON](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0119/artifacts/selector/current-board-selector.json)
   - [implementation review JSON](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0119/artifacts/review/2026-05-05-impl-review.json)
+  - [follow-up review JSON](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0119/artifacts/review/2026-05-05-followup-review.json)
 - `Commands:`
   - `python3 -m py_compile skills/ralph/scripts/select_next_ticket.py skills/ralph/scripts/test_select_next_ticket.py bin/codexter_boards.py bin/codexter_compute.py bin/codexter_invocation.py`
   - `python3 skills/ralph/scripts/test_select_next_ticket.py`
   - `python3 -m unittest bin/test_codexter_boards.py bin/test_codexter_compute.py bin/test_codexter_invocation.py`
   - `python3 -m unittest discover -s bin -p 'test_*.py'`
+  - `python3 -m unittest bin.test_ticket_runtime.TicketRuntimeTests.test_up_persists_launch_failure_after_stopping_existing_runtime`
+  - `python3 -m unittest bin/test_ticket_runtime.py`
   - `python3 tickets/scripts/check_ticket_metadata.py`
   - `python3 bin/check_doc_parity.py`
   - `python3 bin/check_harness_invariants.py`
@@ -342,13 +347,16 @@ flowchart LR
     additive compute details on selected and compute-blocked rows.
   - Future compute targets and missing local worktree runtime records stop the
     selector with explicit blocker codes and no fallback to `local_shared`.
+  - Follow-up review fixed custom board-source archive drift:
+    `board.source: project-tickets/` now satisfies completed dependencies from
+    `project-tickets/archive/` instead of the default `tickets/archive`.
 
 ## Blockers
 - None.
 
 ## Handoff
 - `Outcome:` implemented and reviewed.
-- `Commit scope:` Ralph selector, Ralph/bin docs, and this ticket's selector
-  and review artifacts.
+- `Commit scope:` initial Ralph selector/docs commit plus follow-up review fix
+  for configured board archive-source derivation.
 - `Follow-up:` keep parallel Ralph, leases, worktree launch, Symphony runner
   adapters, and external board adapters in their existing future tickets.

@@ -1,0 +1,125 @@
+{
+  "work_type": ["runtime", "code", "docs"],
+  "search_scope": {
+    "changed_files": [
+      "skills/ralph/scripts/select_next_ticket.py",
+      "skills/ralph/scripts/test_select_next_ticket.py",
+      "tickets/archive/TASK-0119/ticket.md",
+      "tickets/archive/TASK-0119/artifacts/selector/current-board-selector.json"
+    ],
+    "related_files": [
+      "bin/codexter_boards.py",
+      "bin/codexter_compute.py",
+      "bin/codexter_invocation.py",
+      "bin/test_codexter_invocation.py",
+      "WORKFLOW.md",
+      "skills/ralph/SKILL.md",
+      "skills/ralph/README.md",
+      "bin/README.md",
+      "docs/MEMORY.md"
+    ],
+    "invariants_checked": ["MEM-0074", "MEM-0077"],
+    "docs_checked": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/code-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/desloppify.md"
+    ]
+  },
+  "rubrics_used": ["code-quality", "integration-readiness", "evidence-quality"],
+  "summary": "Follow-up review found and fixed one contract drift issue: Ralph honored custom WORKFLOW.md board.source for active tickets but still used tickets/archive for archived dependency satisfaction. The selector now derives the archive source from the configured board source, with a regression test for project-tickets/archive.",
+  "overall_score": 4.4,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "medium",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "Fixed custom board-source archive drift.",
+      "file_refs": [
+        "skills/ralph/scripts/select_next_ticket.py",
+        "skills/ralph/scripts/test_select_next_ticket.py"
+      ],
+      "evidence": [
+        "Before this review pass, load_workflow_policy read workflow.board_source for active tickets but left archive_source at the default tickets/archive.",
+        "A board configured as project-tickets/ would not satisfy dependencies from project-tickets/archive/.",
+        "The fix derives archive_source from workflow.board_source and adds test_configured_board_source_uses_matching_archive_source."
+      ],
+      "next_action": "No further action; regression is covered."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity-reusability": 4.5,
+        "bloatability": 4.1,
+        "readability": 4.2,
+        "boundary-clarity": 4.5,
+        "error-handling": 4.2,
+        "maintainability": 4.3
+      },
+      "findings": [],
+      "next_action": "No code-quality follow-up required."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.4,
+        "contract-correctness": 4.5,
+        "dependency-readiness": 4.4,
+        "coupling-risk": 4.3,
+        "merge-readiness": 4.4
+      },
+      "findings": [
+        "The custom board-source archive contract is now covered by a fixture test."
+      ],
+      "next_action": "Keep future non-filesystem archive semantics in adapter-specific tickets."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.5,
+        "reproducibility": 4.5,
+        "traceability": 4.4,
+        "consistency": 4.3,
+        "inspectability": 4.2,
+        "autonomy-readiness": 4.4
+      },
+      "findings": [],
+      "next_action": "No additional evidence required."
+    }
+  ],
+  "blocking_findings": [],
+  "commands_reviewed": [
+    "python3 -m py_compile skills/ralph/scripts/select_next_ticket.py skills/ralph/scripts/test_select_next_ticket.py bin/codexter_boards.py bin/codexter_compute.py bin/codexter_invocation.py",
+    "python3 skills/ralph/scripts/test_select_next_ticket.py",
+    "python3 -m unittest bin/test_codexter_boards.py bin/test_codexter_compute.py bin/test_codexter_invocation.py",
+    "python3 -m unittest discover -s bin -p 'test_*.py'",
+    "python3 -m unittest bin.test_ticket_runtime.TicketRuntimeTests.test_up_persists_launch_failure_after_stopping_existing_runtime",
+    "python3 -m unittest bin/test_ticket_runtime.py",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "python3 bin/check_doc_parity.py",
+    "python3 bin/check_harness_invariants.py",
+    "python3 skills/ralph/scripts/select_next_ticket.py --root . --json"
+  ],
+  "reviewed_at": "2026-05-05T19:58:30Z",
+  "next_action": "Commit the follow-up fix."
+}

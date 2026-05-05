@@ -34,6 +34,13 @@ DEFAULT_ACTIVE_PHASES = ("planning", "building", "documenting")
 DEFAULT_COMPUTE_ALLOWED = ("local_shared", "local_worktree")
 
 
+def archive_source_for_board_source(board_source: str) -> str:
+    normalized = board_source.rstrip("/")
+    if not normalized:
+        return "archive"
+    return f"{normalized}/archive"
+
+
 @dataclass(frozen=True)
 class RalphWorkflowPolicy:
     board_source: str = "tickets/"
@@ -163,6 +170,7 @@ def load_workflow_policy(root: Path) -> RalphWorkflowPolicy:
     workflow = load_workflow(workflow_path, root)
     return RalphWorkflowPolicy(
         board_source=workflow.board_source,
+        archive_source=archive_source_for_board_source(workflow.board_source),
         active_phases=workflow.active_phases,
         workflow_default_compute=workflow.compute_default,
         workflow_allowed_compute=workflow.compute_allowed,
