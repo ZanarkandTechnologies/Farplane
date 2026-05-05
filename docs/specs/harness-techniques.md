@@ -33,6 +33,7 @@ This inventory is grounded in:
 - `hooks.json` and `bin/stop_hook.py`
 - `docs/MEMORY.md` and `docs/TROUBLES.md`
 - `docs/features/registry.jsonl`
+- `docs/sources/registry.jsonl`
 
 ## Implemented Techniques
 
@@ -50,6 +51,7 @@ This inventory is grounded in:
 | Autonomy Readiness surfaced before execution | Implemented | `skills/deep-init-project`, `skills/prd`, `skills/spec-to-ticket`, `tickets/templates/ticket.md`, `skills/review` | Forces missing inputs, permissions, compute, tools, QA risks, and human gates to be named before long-running or `$ralph` runs discover them late | useful only when tickets keep readiness concrete instead of decorative |
 | Spec-first before ticket execution | Implemented | `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps execution downstream of clarified specs | broad spec quality still determines downstream ticket quality |
 | Ticketization with proof/testability front-loaded | Implemented | `skills/spec-to-ticket`, `tickets/templates/ticket.md` | Converts intent into executable work with proof expectations early | ticket quality varies with planning rigor |
+| Board and compute orchestration doctrine | Implemented | `docs/specs/board-compute-orchestration.md`, `WORKFLOW.md`, `skills/codexter-invocation` | Keeps Codex, Codexter, Symphony, boards, compute targets, and ProofPackets in one ownership model so future adapter work does not drift | doctrine only; adapter and compute-selector implementation continue in follow-up tickets |
 | Feature-gap research before implementation planning | Implemented | `skills/gap-analysis`, `skills/impl-plan`, `tickets/templates/ticket.md` | Grounds missing or parity-driven feature work in comparable apps, codebases, and official docs so tickets say what a production-grade version actually needs | depends on the available research tools and disciplined use of real comparables instead of intuition |
 | External parity research before local scoping | Implemented | `skills/parity-research`, `skills/gap-analysis`, `skills/functional-ui` | Grounds "what do peers include?" questions in comparable products, official docs, standards, and open-source repos before the work collapses into repo-specific scope | depends on good source selection and on keeping parity targets proportional instead of importing every adjacent premium feature |
 | Best-of-worlds synthesis | Implemented | `skills/best-of-worlds`, `skills/advise`, `docs/specs/best-of-worlds-workflow.md` | Lets agents compare a provided set of projects/repos/blogs, extract transferable features, discover metrics, and make adopt/adapt/reject/defer calls before implementation | depends on source quality and on agents recording decisions instead of copying every attractive feature |
@@ -68,6 +70,7 @@ This inventory is grounded in:
 | Bounded same-session persistence via `$loop` | Implemented | `skills/loop`, `docs/specs/runtime-surface.md`, `README.md` | Keeps short deterministic work out of ticket orchestration while staying visible and local | v1 predicates are intentionally narrow and same-session only |
 | Single-ticket orchestration via `$impl` | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md`, `README.md` | Makes one ticket the execution unit and keeps orchestration visible | no durable multi-ticket dispatcher yet |
 | Ticket-scoped isolated checkout workflow | Implemented | `skills/pr-runtime`, `bin/ticket_runtime.py`, `docs/specs/runtime-surface.md` | Gives PR follow-up and concurrent writers one explicit isolated-checkout, runtime-launch, and QA-target workflow instead of ad hoc worktree usage | remains local-first and intentionally avoids becoming a full dispatcher or cloud runtime |
+| Codexter invocation contract | Implemented | `WORKFLOW.md`, `skills/codexter-invocation`, `bin/codexter_invocation.py`, `docs/specs/symphony-compatible-codexter-runner.md` | Gives normal Codex and future Symphony workers one shared request/result seam: envelope in, filesystem work item normalized, compute selected, existing skill route returned, proof packet out | filesystem adapter and local compute only; no daemon, polling, Linear adapter, or cloud execution |
 | Explicit worker-lane split | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Separates builder, reviewer, QA, and evidence-check responsibilities | actual staffing and reuse patterns are still evolving |
 | Ephemeral orchestrator, visible worker lanes | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Avoids a hidden forever-orchestrator and keeps runs legible | tmux/runtime surfaces are still prototype-weight |
 | Same-ticket re-entry via `$impl` + Stop hook | Partial | `skills/impl`, `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps working on one selected ticket until proof exists instead of stopping on partial progress | runtime/code migration still needs to finish removing older legacy-named residue |
@@ -148,6 +151,8 @@ When deciding what to tune next:
 
 - `harness-engineering-quickstart.md` for how to tune the harness
 - `harness-engineering-doctrine.md` for how to decide which harness surface should own a change
+- `board-compute-orchestration.md` for BoardAdapter, ComputeSelector, local
+  Codexter, Ralph, and future Symphony/shared-board ownership boundaries
 - `doc-governance.md` for structural versus narrative doc-audit policy
 - `review-gates.md` for the QA/reviewer/Stop-hook split
 - `spec-first-execution-loop.md` for the end-to-end execution model

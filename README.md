@@ -18,6 +18,7 @@ ticket, and execution workflow.
 - Repo-local operating map: [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
 - Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
 - Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
+- Board and compute orchestration: [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
 - Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
@@ -29,6 +30,7 @@ ticket, and execution workflow.
 - Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/best-of-worlds/SKILL.md)
 - Harness source scouting: [skills/harness-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/harness-scout/SKILL.md)
 - PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
+- Codexter invocation contract: [skills/codexter-invocation/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/README.md)
 - External CLI delegation: [skills/delegate-cli/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/README.md)
 - Frontend external CLI profile: [skills/delegate-frontend/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/README.md)
 - Frontend implementation orchestrator: [skills/frontend-craft/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/frontend-craft/SKILL.md)
@@ -78,6 +80,13 @@ Implemented now:
 - documenting and closeout through `close-ticket`
 - isolated PR follow-up and concurrent-writer checkout setup plus ticket-scoped
   runtime launch/teardown through `pr-runtime` plus `ticket-runtime`
+- local Codexter invocation through `WORKFLOW.md`,
+  `CodexterRunEnvelope`, filesystem `WorkItem`, `ComputeSelector`, and
+  `ProofPacket`, so normal Codex can route one ticket through existing skills
+  and future Symphony workers have the same request/result contract
+- board/compute orchestration doctrine that keeps Codex as the execution
+  engine, Codexter as the installed skill/proof layer, and Symphony as a future
+  background scheduler/runner rather than a replacement for local Codexter use
 - external CLI delegation through `delegate-cli`, with `delegate-frontend` as
   the first profile for Pi plus Kimi K2.6 dry-run/live handoffs
 - Stop-hook phase routing and current-turn relevance checks
@@ -161,6 +170,7 @@ flowchart LR
     end
 
     subgraph Dispatch["4. Execution Dispatch"]
+      invoke["codexter-invocation<br/>run envelope + proof"]:::execution
       ralph["$ralph<br/>serial board drain"]:::callout
       loop["$loop<br/>same-session bounded persistence"]:::execution
       impl["$impl<br/>one-ticket build loop"]:::callout
@@ -219,7 +229,9 @@ flowchart LR
     implplan --> diagram
     diagram --> tickets
 
-    tickets --> ralph
+    tickets --> invoke
+    invoke --> ralph
+    invoke --> impl
     ralph -->|planning ticket| implplan
     ralph -->|building ticket| impl
     ralph -->|documenting ticket| close
