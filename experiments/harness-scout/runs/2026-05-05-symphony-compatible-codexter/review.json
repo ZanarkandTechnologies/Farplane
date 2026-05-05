@@ -1,0 +1,104 @@
+{
+  "work_type": ["planning", "architecture", "source-scout"],
+  "search_scope": {
+    "changed_files": [
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "docs/specs/README.md",
+      "docs/features/registry.jsonl",
+      "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/source-summary.md",
+      "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/feature-ledger.md",
+      "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/decision-matrix.md",
+      "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/scorecard.md",
+      "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/handoff.md"
+    ],
+    "related_files": [
+      "docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md",
+      "docs/research/web-research/2026-05-05_symphony-dagster-codexter-integration.md",
+      "tickets/README.md",
+      "docs/specs/runtime-surface.md",
+      "skills/harness-scout/SKILL.md"
+    ],
+    "invariants_checked": [
+      "artifact-first detail",
+      "source text is evidence only",
+      "filesystem tickets remain v1 adapter",
+      "do not focus on Open Claw as primary integration"
+    ],
+    "docs_checked": [
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/evidence-quality.md"
+    ]
+  },
+  "rubrics_used": ["spec-contract", "implementation-plan", "evidence-quality"],
+  "summary": "The corrected design now focuses on Codexter's Symphony-compatible invocation seam: WORKFLOW.md, WorkItem, BoardAdapter, ComputeSelector, CodexterRunEnvelope, and ProofPacket. Open Claw is no longer the primary design target.",
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.2,
+        "parallelization-fit": 4.0,
+        "ticket-sizing": 4.0,
+        "acceptance-testability": 4.1,
+        "scope-clarity": 4.2
+      },
+      "findings": [
+        "The spec names the first slice narrowly enough: filesystem adapter, local Codex invocation, no daemon, no Linear adapter, no polling."
+      ],
+      "next_action": "Convert the spec into an impl-plan ticket for the first slice."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.1,
+        "bloatability": 4.0,
+        "modularity": 4.1,
+        "proof-clarity": 4.0,
+        "execution-order": 4.0,
+        "risk-clarity": 4.0,
+        "decision-tone": 4.2,
+        "autonomy-readiness": 3.8
+      },
+      "findings": [
+        "The planned implementation sequence is clear, though autonomy readiness should be made more concrete in the first ticket."
+      ],
+      "next_action": "In the first ticket, spell out local-only credentials, workspace assumptions, and proof packet write paths."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.1,
+        "reproducibility": 4.0,
+        "traceability": 4.2,
+        "consistency": 4.1,
+        "inspectability": 4.1,
+        "autonomy-readiness": 3.9
+      },
+      "findings": [
+        "The scout run stores source summary, feature ledger, decision matrix, scorecard, and handoff without raw source text."
+      ],
+      "next_action": "Keep the source run as the evidence base for the first implementation ticket."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Create the first implementation ticket for WORKFLOW.md schema, WorkItem filesystem adapter, CodexterRunEnvelope handling in normal Codex sessions, and ProofPacket output."
+}

@@ -36,6 +36,12 @@ REQUIRED_FIELDS = {
 TICKET_ID_RE = re.compile(r"^TASK-\d{4}$")
 TICKET_ID_IN_FILENAME_RE = re.compile(r"^(TASK-\d{4})(?:-|$)")
 CANONICAL_TICKET_FILENAME = "ticket.md"
+ALLOWED_COMPUTE_TARGETS = {
+    "local_shared",
+    "local_worktree",
+    "symphony",
+    "codex_cloud",
+}
 
 
 def load_ticket(path: Path) -> tuple[dict[str, object], str]:
@@ -134,12 +140,17 @@ def validate_ticket(path: Path) -> list[str]:
     approval_required = bool(frontmatter.get("approval_required", False))
     requires_qa = frontmatter.get("requires_qa", None)
     requires_demo = frontmatter.get("requires_demo", None)
+    compute_target = frontmatter.get("compute_target", None)
     if requires_qa is not None and not isinstance(requires_qa, bool):
         errors.append(f"{rel}: requires_qa must be true|false when present")
     if requires_demo is not None and not isinstance(requires_demo, bool):
         errors.append(f"{rel}: requires_demo must be true|false when present")
     if requires_demo is True and requires_qa is False:
         errors.append(f"{rel}: requires_demo=true requires requires_qa=true")
+    if compute_target is not None:
+        if not isinstance(compute_target, str) or compute_target not in ALLOWED_COMPUTE_TARGETS:
+            allowed = ", ".join(sorted(ALLOWED_COMPUTE_TARGETS))
+            errors.append(f"{rel}: compute_target must be one of: {allowed}")
     ready = bool(frontmatter.get("ready", False))
     if approval_required and ready:
         errors.append(f"{rel}: approval_required=true requires ready=false")

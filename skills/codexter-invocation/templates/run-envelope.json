@@ -1,0 +1,11 @@
+{
+  "workflowPath": "WORKFLOW.md",
+  "workItemId": "TASK-0107",
+  "workItemPath": null,
+  "computeTarget": "local_shared",
+  "phase": "planning",
+  "mode": "local_codex",
+  "requestedBy": "local-operator",
+  "requestedAt": "2026-05-05T00:00:00Z",
+  "proofPacketPath": ".harness/results/task-0107-plan.proof.json"
+}

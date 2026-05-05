@@ -1,0 +1,116 @@
+{
+  "run_id": "task-0081-building-20260504T211055Z",
+  "status": "blocked",
+  "envelope": {
+    "workflowPath": "WORKFLOW.md",
+    "workItemId": "TASK-0081",
+    "workItemPath": null,
+    "computeTarget": null,
+    "phase": "building",
+    "mode": "local_codex",
+    "requestedBy": "local-operator",
+    "requestedAt": "2026-05-04T21:10:55.554569Z",
+    "proofPacketPath": ".harness/results/task-0081-build.proof.json"
+  },
+  "workflow": {
+    "path": "/Users/kenjipcx/coding-harness/Codexter/WORKFLOW.md",
+    "name": "codexter-invocation",
+    "version": 1,
+    "prompt_template": "# Codexter Invocation Workflow\n\nUse this file as the repo-local invocation policy for Codexter-equipped Codex.\nDo not duplicate detailed skill contracts here. A run should load one\n`CodexterRunEnvelope`, normalize one work item, select allowed compute, route to\nthe existing phase skill, and write the requested `ProofPacket`.\n\nCodexter is normal Codex with this repository's installed skills, hooks,\ntemplates, and proof conventions. This workflow is not a daemon and not a\nstandalone `codexter run` CLI.",
+    "board_adapter": "filesystem",
+    "board_source": "tickets/",
+    "active_phases": [
+      "planning",
+      "building",
+      "documenting"
+    ],
+    "terminal_statuses": [
+      "done",
+      "failed"
+    ],
+    "compute_default": "local_shared",
+    "compute_allowed": [
+      "local_shared",
+      "local_worktree"
+    ],
+    "ticket_override_field": "compute_target",
+    "routing": {
+      "planning": "impl-plan",
+      "building": "impl",
+      "qa": "qa",
+      "review": "review",
+      "documenting": "close-ticket"
+    },
+    "quality": {
+      "requires_ticket_evidence": true,
+      "requires_review": true,
+      "requires_qa_from_ticket": true,
+      "writes_proof_packet": true
+    }
+  },
+  "work_item": {
+    "source": "filesystem",
+    "id": "TASK-0081",
+    "identifier": "TASK-0081",
+    "title": "add selective branch runtime scaling",
+    "description": "# TASK-0081: add selective branch runtime scaling\n\n## Summary\nExtend the current tmux-based runtime into a selective branch-runtime model\nwhere each ticket can choose the lightest execution environment that still gives\nQA an isolated frontend/backend target, while preserving a clean boundary for\nfuture cloud lanes.\n\n## Scope\n- In:\n  - branch-first execution with explicit runtime modes per ticket\n  - selective worktree use when parallel live branches or overlap require it\n  - per-ticket QA environment rules for frontend/backend availability\n  - a clearer split between session orchestration, branch ownership, and runtime\n    allocation\n  - a cloud-ready interface boundary without implementing full cloud runners\n- Out:\n  - production cloud orchestration\n  - opaque hidden worker farms\n  - mandatory worktrees for every ticket\n  - mandatory per-ticket full Docker stacks\n\n## User Story\n- `Actor:` operator pushing Codexter past one local ticket lane\n- `Need:` safer parallelism and unattended QA without forcing worktree churn for\n  ordinary local development\n- `Outcome:` Codexter can scale locally with selective isolation before any\n  cloud jump\n\n## User Pain / JTBD\n- `Current pain:` tmux lanes exist, but the runtime does not yet decide when a\n  ticket should stay lightweight versus when it should spin up a more isolated\n  QA target\n- `Why now:` the checklist calls out tmux orchestration, worktrees, and more\n  compute as open DevX gaps\n\n## Non-Goals\n- `Do not solve:` a cloud control plane in the first slice\n- `Do not solve:` fully autonomous per-ticket remote VMs as the default path\n\n## High-Fidelity Example\n- `Example flow/artifact:` a small UI-only ticket stays on a shared branch\n  runtime with shared infra, while a DB-changing ticket launches a branch-local\n  compose environment with its own app ports and isolated data surface; both\n  publish a ticket-scoped QA target that `qa-tester` can open without guessing\n\n## What Good Looks Like\n- `Quality bar:` local execution stays low-friction by default, but tickets that\n  need isolated QA can publish a reproducible frontend/backend target before\n  cloud complexity is introduced\n\n## Proof Target\n- `Reviewer-visible proof:` the runtime can choose among lightweight and\n  isolated local modes, ticket ownership remains visible, QA can discover the\n  right target from runtime state, and the lane contract stays clear\n\n## Plan\n\n### Human\n\n#### Decision\n- `Req:` increase compute without making the runtime opaque or overbuilt\n- `Best:` make branch-first execution the default, let each ticket choose a\n  runtime mode, and keep worktrees plus full compose isolation as selective\n  tools rather than mandatory defaults\n- `Why:` most local work does not need worktree overhead, but unattended QA\n  still needs a stable frontend/backend target; selective runtime choice solves\n  both problems without committing to cloud workers yet\n- `Tradeoff accepted:` cloud execution stays deferred\n- `Not chosen:` jumping straight to remote workers\n\n#### Diagram\n- `Required:` yes\n- `Legend:` keep | change | add | remove\n```mermaid\nflowchart LR\n  A[keep: tmux lane visibility] --> B[add: branch runtime registry]\n  B --> C[add: per-ticket runtime mode]\n  C --> D[change: QA target discovery]\n  D --> E[keep: future cloud-ready lane boundary]\n```\n- `Tier 2:` not needed\n\n#### Signature Sketch\n- `runtime / launch_lane(ticket): session`\n- `runtime / resolve_ticket_runtime(ticket): shared|branch-runtime|branch-compose`\n- `runtime / ensure_ticket_target(ticket): target`\n- `runtime / lane_contract(): local|remote-ready`\n\n#### B -> A\n- `Before:` parallelism depends mostly on tmux visibility and shared workspace\n- `After:` local lanes can stay lightweight by default, but tickets that need\n  stronger QA isolation can publish their own frontend/backend target through\n  one runtime contract\n- `Outcome:` more compute with less conflict risk and less routine worktree\n  overhead\n\n#### Proof\n- `P1:` ticket runtime mode is visible and deterministic\n- `P2:` QA can discover the correct frontend/backend target from runtime state\n- `P3:` the lane contract leaves room for future remote execution\n- `Risk:` runtime complexity grows too quickly\n- `Rollback:` keep `shared` mode as the simplest path and make stronger\n  isolation opt-in\n\n#### Ask\n- `Ready: no`\n- `Next:` approve the selective branch-runtime strategy\n\n### Agent\n\n#### Delta\n- `Touch:` runtime helpers, tmux helpers, docs, and ticket/runtime ownership\n  surfaces\n- `Keep:` visible local lanes and ticket-centric control\n- `Change:` add runtime mode selection, QA target discovery, and selective\n  isolation rules\n- `Delete/Avoid:` no hidden worker farm\n\n#### Execution Plan\n```mermaid\nflowchart LR\n  A[define runtime mode contract] --> B[add ticket target registry]\n  B --> C[wire local runtime selection]\n  C --> D[document QA target discovery]\n  D --> E[document future cloud seam]\n```\n```pseudo\ndefine the lane contract for selective execution\nadd per-ticket runtime mode and target assignment rules\nwire the local runtime to launch the lightest sufficient environment\nlet QA resolve the ticket target from runtime state instead of guessing ports\ndocument the future remote seam without implementing it\n```\n\n#### Risk / Rollback\n- `Primary risk:` runtime mode selection becomes hand-wavy or inconsistent\n- `Containment:` make the ticket and runtime contract say when `shared`,\n  `branch-runtime`, `branch-compose`, and optional `worktree` are allowed\n- `Rollback:` keep the old shared-workspace path available during rollout and\n  let stronger isolation stay opt-in\n\n#### Plan Review\n- `Refs:` `docs/specs/runtime-surface.md`,\n  `docs/specs/orchestrator-subagent-loop.md`, `skills/impl/scripts/tmux_helper.py`,\n  `README.md`\n- `Checks:` visible ownership, local-first compute, QA target discovery, clear\n  cloud boundary\n- `Fixes:` closes the checklist gaps around tmux orchestration, selective local\n  isolation, and more compute\n\n#### Options Appendix\n- `Option 1:` selective branch-runtime scaling\n- `Pros:` lowest-friction default with enough isolation for unattended QA\n- `Cons:` requires a clearer runtime contract than today\n- `Why not chosen:` recommended\n- `Option 2:` worktree-first local runtime scaling\n- `Pros:` stronger branch isolation for all parallel work\n- `Cons:` more overhead than the current local workflow earns\n- `Why not chosen:` premature\n- `Option 3:` cloud runners first\n- `Pros:` strongest long-term scale ceiling\n- `Cons:` much higher trust and infrastructure cost\n- `Why not chosen:` too weak\n\n#### Delegation\n- `Need:` Not needed\n- `Why:` planning ticket only\n- `Artifact:` n/a\n\n#### Ticket Move\n- `Now:` `status: review`, `phase: planning`\n- `On approval:` move to `building`\n- `Follow-ups:` cloud-lane implementation could follow later if still needed\n- `Blocked in building?:` yes, waiting for approval\n\n## Acceptance Criteria\n- [ ] AC-1: each ticket can declare or derive a local runtime mode from a small\n  bounded set such as `shared`, `branch-runtime`, or `branch-compose`\n- [ ] AC-2: ticket and runtime ownership remain visible without forcing\n  worktrees for every ticket\n- [ ] AC-3: QA can discover the correct ticket-scoped frontend/backend target\n  from runtime state instead of guessing ports\n- [ ] AC-4: worktree support remains optional and is used only when overlap,\n  parallel live branches, or risky isolation needs justify it\n- [ ] AC-5: the runtime contract exposes a clean future remote seam\n\n## Working Notes\n- Branch-first runtime selection is the near-term compute lever; worktrees and\n  compose isolation should stay selective, and cloud should stay behind a later\n  seam.\n\n## Implementation Notes\n- Touched areas: runtime helpers, tmux helpers, docs\n- Reused patterns: current visible lane model\n- Guardrails: local-first, explicit ownership, optional rollout, QA target\n  discovery from runtime state\n\n## Evidence\n- [ ] Tests\n- [ ] Typecheck\n- [ ] Lint\n- [ ] QA / manual verification\n\n## Review Packet\n- Scores use the anchored `1.0`-to-`5.0` rubric scale.\n- `work_type:` `[]`\n- `search_scope:` `{changed_files: [], related_files: [\"docs/specs/runtime-surface.md\", \"docs/specs/orchestrator-subagent-loop.md\", \"skills/impl/scripts/tmux_helper.py\", \"README.md\"], invariants_checked: [\"MEM-0005\", \"MEM-0016\", \"MEM-0017\", \"MEM-0018\"], docs_checked: []}`\n- `reviewed_at:` `not run`\n- `rubrics_used:` `[]`\n- `overall_score:`\n- `overall_threshold:`\n- `overall_verdict:` `revise`\n- `rerun_required:` `true`\n- `evidence_quality:` `fail`\n- `integration_readiness:` `fail`\n- `traceability:` `pass`\n- `freshness:` `pass`\n- `hard_gate_failures:` `[\"evidence-quality\", \"integration-readiness\"]`\n- `finding_log:` `[]`\n- `blocking_findings:` `[]`\n- `next_action:` `approve or refine the selective branch-runtime strategy`\n\n## Refs\n- `README.md`\n- `docs/specs/runtime-surface.md`\n- `docs/specs/orchestrator-subagent-loop.md`\n- `skills/impl/scripts/tmux_helper.py`\n\n## Blockers\n- approval required for runtime-scaling expansion\n\n## Handoff\n- Current state: planning ticket seeded from the roadmap audit\n- Resume from: define ticket runtime mode rules, QA target semantics, and when\n  optional worktrees are justified\n\n## Writeback\n- Update runtime docs and helpers if this lands.",
+    "state": "review",
+    "phase": "planning",
+    "status": "review",
+    "priority": "medium",
+    "labels": [],
+    "blockedBy": [],
+    "dependsOn": [
+      "TASK-0086",
+      "TASK-0087",
+      "TASK-0088"
+    ],
+    "ready": false,
+    "approvalRequired": true,
+    "requiresQa": false,
+    "requiresDemo": false,
+    "computeTarget": null,
+    "localTicketPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081/ticket.md",
+    "artifactsPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081/artifacts",
+    "url": null,
+    "metadata": {
+      "ticket_id": "TASK-0081",
+      "title": "add selective branch runtime scaling",
+      "phase": "planning",
+      "status": "review",
+      "owner": "codex",
+      "claimed_by": "",
+      "priority": "medium",
+      "depends_on": [
+        "TASK-0086",
+        "TASK-0087",
+        "TASK-0088"
+      ],
+      "blocked_by": [],
+      "ready": false,
+      "approval_required": true,
+      "created_at": "2026-04-14T00:10:00Z",
+      "updated_at": "2026-04-25T10:35:00Z",
+      "next_action": "approve or refine the selective branch-runtime strategy",
+      "last_verification": "2026-04-25 10:38 +0100 ticket metadata OK; planning text reviewed for selective runtime policy alignment"
+    }
+  },
+  "compute": {
+    "target": "local_shared",
+    "reason": "ticket requires approval before non-planning execution",
+    "allowed": false,
+    "blockers": [
+      "ticket requires approval before non-planning execution"
+    ],
+    "runtimeRecordPath": null
+  },
+  "route": {
+    "phase": "building",
+    "skillName": "impl",
+    "ticketPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081/ticket.md",
+    "handoffPrompt": "Use `$impl` for TASK-0081: add selective branch runtime scaling. Ticket: /Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081/ticket.md. Keep ticket evidence updated and write the requested ProofPacket.",
+    "requiresApprovalBeforeBuild": true
+  },
+  "proof_packet_path": "/Users/kenjipcx/coding-harness/Codexter/.harness/results/task-0081-build.proof.json",
+  "generated_at": "2026-05-04T21:10:55.555643Z"
+}

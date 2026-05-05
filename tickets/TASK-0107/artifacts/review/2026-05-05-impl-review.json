@@ -1,0 +1,163 @@
+{
+  "work_type": ["implementation", "integration-contract", "tooling", "docs"],
+  "search_scope": {
+    "changed_files": [
+      "WORKFLOW.md",
+      "bin/codexter_invocation.py",
+      "bin/test_codexter_invocation.py",
+      "tickets/scripts/check_ticket_metadata.py",
+      "bin/test_ticket_metadata.py",
+      "tickets/templates/ticket.md",
+      "tickets/README.md",
+      "skills/codexter-invocation/AGENTS.md",
+      "skills/codexter-invocation/README.md",
+      "skills/codexter-invocation/SKILL.md",
+      "skills/codexter-invocation/templates/run-envelope.json",
+      "README.md",
+      "ARCHITECTURE.md",
+      "bin/README.md",
+      "docs/specs/harness-techniques.md",
+      "docs/features/registry.jsonl",
+      "docs/HISTORY.md",
+      "docs/MEMORY.md",
+      "AGENTS.md",
+      "tickets/TASK-0107/ticket.md",
+      "tickets/TASK-0107/artifacts/qa/prepare-planning.json",
+      "tickets/TASK-0107/artifacts/qa/prepare-building-blocked.json",
+      "tickets/TASK-0107/artifacts/qa/prepare-symphony-blocked.json",
+      "tickets/TASK-0107/artifacts/qa/sample-proof-packet.json"
+    ],
+    "related_files": [
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "docs/specs/runtime-surface.md",
+      "docs/specs/harness-techniques.md",
+      "bin/ticket_runtime.py",
+      "bin/delegate_cli_agent.py",
+      "bin/test_ticket_runtime.py",
+      "bin/test_delegate_cli_agent.py",
+      "skills/impl/SKILL.md",
+      "skills/impl/todos.md",
+      "skills/review/SKILL.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/desloppify.md",
+      "skills/review/references/code-quality.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md"
+    ],
+    "invariants_checked": [
+      "MEM-0048 artifact-first proof",
+      "MEM-0061 whole-ticket execution",
+      "MEM-0062 detailed action-oriented ticket plans",
+      "MEM-0073 external sources as research inputs",
+      "MEM-0074 parallel autonomy deferred",
+      "MEM-0077 Codexter invocation is normal Codex plus installed skills"
+    ],
+    "docs_checked": [
+      "WORKFLOW.md",
+      "skills/codexter-invocation/SKILL.md",
+      "skills/codexter-invocation/README.md",
+      "tickets/README.md",
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "README.md",
+      "ARCHITECTURE.md",
+      "docs/specs/harness-techniques.md",
+      "docs/features/registry.jsonl"
+    ],
+    "excluded_dirty_files_observed": [
+      "hooks.json",
+      "skills/frontend-craft/SKILL.md",
+      "skills/frontend-craft/references/qa.md",
+      "skills/review/SKILL.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/ui-quality.md",
+      "skills/web-design-guidelines/SKILL.md"
+    ]
+  },
+  "rubrics_used": ["code-quality", "integration-readiness", "evidence-quality"],
+  "summary": "The implementation lands the requested normal-Codex invocation seam without turning Codexter into a standalone runner: WORKFLOW.md defines policy, the helper normalizes one filesystem ticket and validates compute/route/proof shape, the skill package tells Codex how to use the route, and proof artifacts exercise ready, approval-blocked, future-compute-blocked, and proof-packet paths.",
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity-reusability": 4.1,
+        "bloatability": 4.0,
+        "readability": 4.1,
+        "boundary-clarity": 4.3,
+        "error-handling": 4.1,
+        "maintainability": 4.0
+      },
+      "findings": [
+        "The helper is intentionally small, pure Python, and diagnostic-only; it validates contracts, returns explicit blockers, writes proof JSON, and does not launch Codex or own orchestration.",
+        "The constrained frontmatter parser is a deliberate v1 tradeoff that is covered for the policy shapes used here and fails loudly on unsupported structures."
+      ],
+      "next_action": "Keep future board/cloud adapter logic out of this helper unless a later ticket introduces a real adapter boundary."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.2,
+        "contract-correctness": 4.2,
+        "dependency-readiness": 4.1,
+        "coupling-risk": 4.1,
+        "merge-readiness": 4.2
+      },
+      "findings": [
+        "The ticket metadata validator, ticket docs, skill package, root workflow file, feature registry, README, ARCHITECTURE, HISTORY, MEMORY, and AGENTS surfaces now agree on the same boundary.",
+        "Unsupported compute targets are visible and blocked, including the future Symphony target, so cloud/background execution does not look accidentally available."
+      ],
+      "next_action": "Advance this ticket to closeout; create separate follow-ups for any real Symphony/Linear/Notion adapter or parallel dispatcher."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.3,
+        "reproducibility": 4.3,
+        "traceability": 4.2,
+        "consistency": 4.2,
+        "inspectability": 4.3,
+        "autonomy-readiness": 4.2
+      },
+      "findings": [
+        "Unit tests cover workflow parsing, planning route, approval-gated build blocking, future compute blocking, proof writing, proof path containment, and ticket metadata validation.",
+        "Attached dry-run JSON artifacts prove the allowed planning route, approval-blocked build route, future Symphony-compute blocker, and parseable proof-packet shape."
+      ],
+      "next_action": "Keep the attached artifacts linked from the ticket so future Symphony work can reuse the same request/result examples."
+    }
+  ],
+  "blocking_findings": [],
+  "verified_commands": [
+    "python3 -m unittest bin/test_codexter_invocation.py bin/test_ticket_metadata.py",
+    "python3 -m unittest discover -s bin -p 'test_*.py'",
+    "python3 -m py_compile bin/codexter_invocation.py bin/test_codexter_invocation.py tickets/scripts/check_ticket_metadata.py bin/test_ticket_metadata.py",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "python3 bin/check_harness_invariants.py",
+    "python3 bin/check_doc_parity.py",
+    "python3 -m json.tool tickets/TASK-0107/artifacts/qa/prepare-planning.json >/dev/null",
+    "python3 -m json.tool tickets/TASK-0107/artifacts/qa/prepare-building-blocked.json >/dev/null",
+    "python3 -m json.tool tickets/TASK-0107/artifacts/qa/prepare-symphony-blocked.json >/dev/null",
+    "python3 -m json.tool tickets/TASK-0107/artifacts/qa/sample-proof-packet.json >/dev/null",
+    "python3 -m json.tool .harness/results/task-0107-sample.proof.json >/dev/null",
+    "feature registry contract validation",
+    "git diff --check"
+  ],
+  "next_action": "Run close-ticket/archive flow for TASK-0107 when ready; future remote board, polling, and cloud compute work should be separate tickets."
+}

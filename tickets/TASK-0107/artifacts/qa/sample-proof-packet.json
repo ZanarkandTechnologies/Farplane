@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "runId": "task-0107-planning-20260504T211055Z",
+  "workItem": {
+    "source": "filesystem",
+    "id": "TASK-0107",
+    "identifier": "TASK-0107",
+    "title": "add Codexter invocation contract",
+    "path": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0107/ticket.md",
+    "url": null
+  },
+  "compute": {
+    "target": "local_shared",
+    "reason": "allowed local compute target",
+    "allowed": true,
+    "blockers": [],
+    "runtimeRecordPath": null
+  },
+  "phases": {
+    "planning": {
+      "status": "failed",
+      "skill": "impl-plan",
+      "completedAt": "2026-05-04T21:10:55.561533Z"
+    }
+  },
+  "artifacts": [
+    "tickets/TASK-0107/artifacts/qa/prepare-planning.json"
+  ],
+  "commands": [
+    "python3 bin/codexter_invocation.py prepare --ticket TASK-0107 --phase planning"
+  ],
+  "verdict": "failed",
+  "nextAction": "demonstrate failed proof packet shape",
+  "completedAt": "2026-05-04T21:10:55.561535Z"
+}

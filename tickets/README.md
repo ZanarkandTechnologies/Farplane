@@ -57,6 +57,8 @@ status: review
 owner: codex
 claimed_by: agent-03  # optional active session claim alias
 priority: medium
+# optional compute override: local_shared, local_worktree, symphony, or codex_cloud
+# compute_target: local_shared
 depends_on: []
 blocked_by: []
 ready: false
@@ -76,6 +78,10 @@ last_verification: none
 - `status`: `todo`, `review`, `building`, `blocked`, `done`, `failed`
 - `owner`: broad work owner, not a live session id
 - `claimed_by`: optional human-facing active claim alias for the current live session, such as `agent-03`
+- `compute_target`: optional ticket-level compute override. Supported values
+  are `local_shared`, `local_worktree`, `symphony`, and `codex_cloud`; future
+  targets may be recorded but remain blocked unless the active workflow and
+  adapter support them.
 - `depends_on`: structural prerequisites
 - `blocked_by`: concrete ticket-ID blockers only
 - `ready`: whether `next_action` can be executed now

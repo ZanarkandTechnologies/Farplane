@@ -28,6 +28,9 @@ orchestration story.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `delegate_cli_agent.py` - external CLI delegation helper for profile setup,
   dry-run command rendering, execution logs, and ticket evidence copyback
+- `codexter_invocation.py` - contract helper for `WORKFLOW.md`,
+  `CodexterRunEnvelope`, filesystem `WorkItem`, compute selection, skill
+  routing, and `ProofPacket` validation; it does not launch Codex
 - `notify.py` - local notification helper
 - `stop_hook.py` - thin stop-hook/runtime shim
 - `ticket_runtime.py` / `ticket-runtime` - local helper for ticket runtime
@@ -103,6 +106,9 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket <ticket> --dry-run --json`
   Use to render the Pi/Kimi frontend delegation prompt, command, runtime logs,
   and durable ticket artifacts without spending tokens or editing files
+- `python3 bin/codexter_invocation.py prepare --ticket <ticket> --phase planning --proof .harness/results/<ticket>.proof.json`
+  Use to validate a local Codexter invocation envelope and inspect the selected
+  skill route without launching Codex
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
 
