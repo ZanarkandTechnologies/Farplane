@@ -22,6 +22,11 @@ Use only when the page narrative earns it. Verify:
 - mobile fallback exists,
 - reduced-motion path works.
 
+For premium cinematic scroll pages, select an effect stack from
+`effect-stacks.json`. The initial `cinematic-frame-sequence` stack covers
+generated or rendered hero video, extracted frame sequences, GSAP scroll
+pinning/scrub, HTML overlays, debug HUD, fallbacks, and proof checks.
+
 ## Avoid
 
 - Decorative blobs or generic gradient fields as the primary visual.

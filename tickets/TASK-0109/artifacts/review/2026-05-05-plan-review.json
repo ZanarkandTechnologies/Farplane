@@ -1,0 +1,82 @@
+{
+  "ticket_id": "TASK-0109",
+  "reviewed_at": "2026-05-05T07:18:00Z",
+  "work_type": ["planning", "skills", "frontend"],
+  "search_scope": {
+    "changed_files": [
+      "tickets/TASK-0109/ticket.md"
+    ],
+    "local_context": [
+      "skills/parity-research/SKILL.md",
+      "skills/gap-analysis/SKILL.md",
+      "skills/impl-plan/SKILL.md",
+      "skills/landing-page/SKILL.md",
+      "skills/landing-page/references/cinematic-scroll-site-guideline.md",
+      "skills/frontend-craft/references/workflows.md",
+      "skills/frontend-craft/references/routing.md",
+      "skills/visual-design/SKILL.md",
+      "skills/skill-creator/SKILL.md",
+      "docs/MEMORY.md",
+      "docs/TROUBLES.md"
+    ],
+    "external_context": [
+      "https://ui.shadcn.com/docs/registry/registry-item-json",
+      "https://storybook.js.org/docs/9/writing-docs/mdx",
+      "https://www.patternfly.org/patterns/about/",
+      "https://tailwindcss.com/plus/ui-blocks/marketing",
+      "https://tailwindcss.com/plus/ui-blocks/documentation/using-react",
+      "https://gsap.com/docs/v3/Plugins/ScrollTrigger/",
+      "https://docs.spline.design/",
+      "https://terminal-industries.com/",
+      "ZanarkandTechnologies/Nomous-Agency-Landing-Page"
+    ]
+  },
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "evidence-quality",
+    "integration-readiness"
+  ],
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "rubric": "spec-contract",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "feedback": "The plan anchors the user request to a clear capability and keeps the public entrypoint stable while creating modular reference cards."
+    },
+    {
+      "rubric": "implementation-plan",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "feedback": "The plan gives concrete touched files, reference topology, execution steps, type sketches, and a compatibility strategy for the existing cinematic guideline."
+    },
+    {
+      "rubric": "evidence-quality",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "feedback": "The parity sources are primary or repo-grounded enough for a planning ticket; implementation proof is correctly deferred to validation commands."
+    },
+    {
+      "rubric": "integration-readiness",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "feedback": "The plan preserves existing frontend skill ownership and identifies the key risk of over-fragmented references."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Review and approve TASK-0109, then implement the recipe/profile/effect-stack topology in one docs-only build pass."
+}

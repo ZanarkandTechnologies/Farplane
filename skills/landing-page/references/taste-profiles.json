@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "taste-profiles",
+  "records_key": "profiles",
+  "profiles": [
+    {
+      "id": "terminal-palantir",
+      "title": "Terminal / Palantir Mission-Control",
+      "register": "Enterprise mission-control, operationally serious, cinematic but inspectable.",
+      "scene_sentence": "A senior operator is standing in a dim industrial command room at dusk, watching a physical operation resolve into a precise AI control layer.",
+      "use_when": [
+        "The buyer needs trust, precision, and operational seriousness.",
+        "The product lives in logistics, defense, infrastructure, manufacturing, security, AI operations, or industrial automation.",
+        "The landing page needs to feel premium and high-stakes without becoming fantasy sci-fi."
+      ],
+      "avoid_when": [
+        "The brand needs warmth, friendliness, consumer play, or soft creator energy.",
+        "The product has no concrete operational proof or serious workflow to show.",
+        "The page would become illegible if it used dark cinematic density."
+      ],
+      "palette": {
+        "base": [
+          "black",
+          "charcoal",
+          "deep green",
+          "desaturated slate"
+        ],
+        "accent": [
+          "restrained neon lime",
+          "signal green",
+          "warm industrial amber used sparingly"
+        ],
+        "background": [
+          "near-black command surfaces",
+          "muted photographic world imagery",
+          "faint grid or map layers"
+        ],
+        "avoid": [
+          "purple-blue SaaS gradients",
+          "soft beige editorial wash",
+          "playful candy accents",
+          "generic glassmorphism"
+        ]
+      },
+      "typography": {
+        "voice": "Large clean grotesk for claims, tight technical labels for overlays, numeric markers for sections.",
+        "rules": [
+          "Use big type for category-level claims only.",
+          "Use compact labels for HUD, proof, and operational state.",
+          "Keep letter spacing neutral; avoid trendy negative tracking.",
+          "Keep product copy in HTML, not baked into generated media."
+        ]
+      },
+      "density": "High signal, medium-to-high information density, low decoration.",
+      "materials": [
+        "industrial photography",
+        "pre-rendered cinematic video",
+        "grid overlays",
+        "HUD markers",
+        "map/model layers",
+        "clipped panels and technical notches"
+      ],
+      "motion_attitude": [
+        "slow confident camera movement",
+        "scroll-scrub transformations",
+        "precise pinned reveals",
+        "minimal bouncy easing",
+        "stateful overlays that feel like instrumentation"
+      ],
+      "dos": [
+        "Make the first viewport feel like a real operation.",
+        "Use overlays as evidence of system intelligence.",
+        "Let proof sections breathe after dense cinematic scenes.",
+        "Keep CTA visible and serious."
+      ],
+      "donts": [
+        "Do not use decorative blobs or random particle fields as the main visual.",
+        "Do not over-stack Spline, WebGL, frame sequences, and shader effects in the same beat.",
+        "Do not hide the product category until late scroll.",
+        "Do not let cinematic darkness reduce text contrast or mobile readability."
+      ],
+      "pairs_with_recipe_ids": [
+        "industrial-mission-control"
+      ],
+      "pairs_with_effect_stack_ids": [
+        "cinematic-frame-sequence"
+      ],
+      "reference_examples": [
+        {
+          "label": "Terminal Industries",
+          "url": "https://terminal-industries.com/",
+          "notes": "Dark industrial command register, neon CTA, grid/HUD overlays, and proof-forward enterprise story."
+        }
+      ]
+    }
+  ]
+}

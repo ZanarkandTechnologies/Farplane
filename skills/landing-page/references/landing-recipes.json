@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "landing-recipes",
+  "records_key": "recipes",
+  "recipes": [
+    {
+      "id": "industrial-mission-control",
+      "title": "Industrial Mission-Control",
+      "summary": "A premium enterprise landing-page formula for industrial, logistics, infrastructure, defense, operations, and AI-control products where one physical world becomes an intelligent command layer across scroll.",
+      "use_when": [
+        "The page sells a serious operational system to enterprise buyers.",
+        "The product domain has physical-world stakes such as yards, fleets, facilities, factories, cities, energy, security, logistics, or infrastructure.",
+        "The user asks for Terminal Industries, Palantir, command center, mission control, cinematic industrial, or premium operational SaaS energy.",
+        "The page needs a hero scroll animation that carries the narrative instead of a static hero."
+      ],
+      "avoid_when": [
+        "The target is a repeated-use app screen, settings page, CRUD workflow, or dashboard.",
+        "The product is playful, consumer-social, creator-led, or intentionally soft and friendly.",
+        "The site has no credible world, object, workflow, or proof surface to carry the cinematic treatment."
+      ],
+      "reference_examples": [
+        {
+          "label": "Terminal Industries",
+          "url": "https://terminal-industries.com/",
+          "why_it_matters": "Uses a scroll-carried logistics world, pre-rendered media, frame sequences, mission-control copy, and proof-heavy enterprise landing structure."
+        },
+        {
+          "label": "Nomous Agency Landing Page",
+          "url": "github:ZanarkandTechnologies/Nomous-Agency-Landing-Page",
+          "why_it_matters": "Private prototype with sticky scroll phases, video scrubbing, generated art layers, readiness checks, and debug-minded cinematic implementation patterns."
+        }
+      ],
+      "page_formula": {
+        "top": [
+          "Open with a full-viewport real world, object, or operation signal rather than a generic software mockup.",
+          "Show nav and primary CTA immediately; the cinematic page should still convert.",
+          "Name the category or literal offer in the first viewport or first scroll beat.",
+          "Let one carrier object or world dominate: yard, fleet, terminal, facility, bridge, map, city, machine, command center, model, or network."
+        ],
+        "middle": [
+          "Move from raw physical world to rupture, manual chaos, or hidden inefficiency.",
+          "Use the scroll transition to reveal the command layer, model, operating system, map, or AI mission state.",
+          "Show three concrete missions or jobs the system performs; each should map to an inspectable visual state.",
+          "Use technical labels, numbered markers, grids, overlays, and state changes as product evidence rather than decoration."
+        ],
+        "proof": [
+          "Introduce logos, operator quotes, throughput metrics, deployments, case studies, or before/after evidence before the final CTA.",
+          "Keep proof visually calmer than the hero so claims are inspectable.",
+          "Prefer concrete operational outcomes over generic innovation language."
+        ],
+        "cta": [
+          "Return to a stable final command state, product category, or transformed world.",
+          "Repeat one clear CTA with an enterprise buyer verb such as schedule, talk, see, evaluate, or deploy.",
+          "Avoid ending on only atmosphere; the final screen should make the next action obvious."
+        ]
+      },
+      "carrier_options": [
+        "physical operation becomes command grid",
+        "vehicle/fleet becomes AI route layer",
+        "facility becomes digital twin",
+        "manual workflow becomes mission queue",
+        "industrial object becomes blueprint/model",
+        "map becomes live operating system"
+      ],
+      "asset_plan": {
+        "required": [
+          "desktop hero video or frame sequence",
+          "mobile hero video or frame sequence",
+          "poster frame",
+          "reduced-motion still",
+          "code-native UI/HUD overlays",
+          "proof logos or metrics"
+        ],
+        "recommended": [
+          "3-6 second support loops for feature sections",
+          "generated fallback stills for sections without real product media",
+          "frame manifest for scroll-scrub sequences",
+          "debug HUD for progress, phase, frame, and readiness"
+        ],
+        "keep_out_of_generated_video": [
+          "readable product copy",
+          "logos",
+          "CTA text",
+          "UI labels that need responsive layout"
+        ]
+      },
+      "compatible_taste_profile_ids": [
+        "terminal-palantir"
+      ],
+      "compatible_effect_stack_ids": [
+        "cinematic-frame-sequence"
+      ],
+      "qa_expectations": [
+        "First viewport clearly signals product category or physical domain.",
+        "Desktop and mobile checkpoints show distinct story phases.",
+        "All video, poster, frame, and generated asset URLs return 200.",
+        "Reduced-motion mode renders a strong static version.",
+        "Text is HTML-rendered, responsive, and does not overlap at mobile widths.",
+        "Review includes source-level frontend guidelines and taste scoring when code changes."
+      ],
+      "output_brief_fields": [
+        "offer",
+        "audience",
+        "carrier_object_or_world",
+        "scroll_narrative",
+        "asset_plan",
+        "taste_profile_id",
+        "effect_stack_id",
+        "proof_plan",
+        "qa_plan"
+      ]
+    }
+  ]
+}

@@ -47,6 +47,15 @@ redesign, `visual-design` owns look/taste/visual systems, and `landing-page`
 owns one-page marketing or scrolltelling surfaces. Keep `frontend-design` as an
 app-UI implementation reference. The old cinematic landing skill package was
 removed; route those asks to `landing-page`. See `MEM-0072`.
+For cinematic, Terminal-style, GSAP-scroll, generated-video, or frame-sequence
+landing pages, route through the landing-page JSON registries:
+`landing-recipes.json`, `taste-profiles.json`, and `effect-stacks.json`. Keep
+`cinematic-scroll-site-guideline.md` as a compatibility pointer only. See
+`MEM-0079`.
+For UI source reviews, run `web-design-guidelines` through the
+`review` skill's `frontend-guidelines` lane and record that score beside
+`ui-quality` so taste judgment and source-level interface fundamentals remain
+comparable. See `MEM-0076`.
 
 ## Project Structure
 

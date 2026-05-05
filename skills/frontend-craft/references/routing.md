@@ -17,7 +17,7 @@ Use this when deciding which frontend skill should lead a request.
 - Broken component: `functional-ui` -> `visual-design` -> implementation.
 - App screen: `functional-ui` if unsettled -> `visual-design` -> `frontend-design` references.
 - Dashboard/tool: `functional-ui` -> restrained `visual-design` -> dense proof states.
-- Landing page: `landing-page` -> `visual-design` -> motion/assets/QA references.
+- Landing page: `landing-page` -> JSON recipe/taste/effect route when useful -> `visual-design` -> motion/assets/QA references.
 - Visual polish: `visual-design` -> implementation.
 - Animation only: `motion-routing.md`, and official GreenSock skills or docs when GSAP is chosen.
 

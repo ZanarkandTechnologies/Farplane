@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "effect-stacks",
+  "records_key": "stacks",
+  "stacks": [
+    {
+      "id": "cinematic-frame-sequence",
+      "title": "Cinematic Frame Sequence",
+      "summary": "A generated or rendered hero video is converted into a scroll-scrubbed frame sequence, then layered with GSAP pinned timelines and code-native UI overlays.",
+      "use_when": [
+        "The hero needs exact art-directed scroll states.",
+        "The main visual is a transformation that video generation, offline rendering, or pre-rendered frames can control better than live WebGL.",
+        "The page needs a Terminal-style cinematic sequence where one object or world carries the story."
+      ],
+      "avoid_when": [
+        "The visual needs true user-controlled 3D inspection.",
+        "The animation is simple enough for CSS or Motion.",
+        "The project cannot afford mobile frame assets, posters, reduced-motion fallbacks, and load checks."
+      ],
+      "tools": [
+        {
+          "name": "ffmpeg",
+          "purpose": "Extract scroll frames, posters, and optimized support video."
+        },
+        {
+          "name": "GSAP ScrollTrigger",
+          "purpose": "Pin sections, scrub timelines, coordinate overlays, and expose scroll progress."
+        },
+        {
+          "name": "generated video model",
+          "purpose": "Create the hero transformation or support loops when real media does not exist."
+        },
+        {
+          "name": "HTML/CSS overlays",
+          "purpose": "Keep labels, CTAs, HUDs, proof, and responsive text accessible."
+        }
+      ],
+      "asset_inputs": [
+        "hero source video",
+        "desktop frame sequence",
+        "mobile frame sequence",
+        "poster frame",
+        "reduced-motion still",
+        "frame manifest",
+        "support loop videos",
+        "code-native overlay copy"
+      ],
+      "implementation_shape": {
+        "preferred_files": [
+          "narrative.ts",
+          "assets.ts or generated frame manifest",
+          "CinematicScrollPage.tsx",
+          "FrameSequence.tsx",
+          "ScrollDebugHud.tsx"
+        ],
+        "sequence": [
+          "Load manifest and poster first.",
+          "Preload enough frames for the first scroll segment.",
+          "Map scroll progress to phase and frame index.",
+          "Use GSAP ScrollTrigger for pinning, scrub, and overlay timelines when the project uses GSAP.",
+          "Render copy, CTA, and HUD overlays in HTML.",
+          "Pause, reduce, or replace motion when reduced-motion is enabled."
+        ],
+        "ffmpeg_commands": [
+          "ffmpeg -i hero.mp4 -vf \"fps=30,scale=1920:-2:flags=lanczos\" -q:v 75 public/frames/hero/desktop/webp/frame_%04d.webp",
+          "ffmpeg -i hero.mp4 -vf \"fps=24,scale=1080:-2:flags=lanczos\" -q:v 80 public/frames/hero/mobile/webp/frame_%04d.webp",
+          "ffmpeg -ss 00:00:00 -i hero.mp4 -frames:v 1 public/frames/hero/poster.webp",
+          "ffmpeg -i input.mp4 -an -vf \"scale=1920:-2\" -c:v libx264 -crf 23 -preset slow -movflags +faststart public/video/support.mp4"
+        ]
+      },
+      "video_prompt_shape": [
+        "[domain world/object], [camera motion], [transformation over time], [material and lighting], [enterprise or editorial tone], [composition constraints], no readable text, no logos, clean loop or scroll-scrub friendly motion, high detail, stable geometry"
+      ],
+      "debug_hooks": [
+        "scroll progress",
+        "current phase",
+        "current frame or media time",
+        "loaded frame count",
+        "media readyState",
+        "FPS or frame budget warning",
+        "viewport breakpoint",
+        "reduced-motion state",
+        "?debugScroll=1",
+        "?phase=system",
+        "?frame=120"
+      ],
+      "fallbacks": [
+        "poster frame before frames load",
+        "static reduced-motion version",
+        "mobile-specific frame sequence",
+        "HTML text overlays that still render without motion",
+        "stable final CTA section outside the heavy pinned sequence"
+      ],
+      "qa_checks": [
+        "Desktop and mobile screenshots at narrative checkpoints.",
+        "Frame/canvas surfaces are nonblank.",
+        "All frame, poster, and video URLs return 200.",
+        "Reduced-motion path renders without scroll-scrub dependency.",
+        "Text does not overlap at mobile widths.",
+        "Scroll checkpoints map to intended phase and frame."
+      ],
+      "gotchas": [
+        "Do not bake readable text or logos into generated video.",
+        "Do not extract only one frame per second for production-smooth scrub unless the design intentionally wants a stepped storyboard.",
+        "Do not use live WebGL when a pre-rendered frame sequence gives better art direction and easier debugging.",
+        "Do not ship without a poster, mobile path, and reduced-motion fallback."
+      ],
+      "pairs_with_recipe_ids": [
+        "industrial-mission-control"
+      ],
+      "pairs_with_taste_profile_ids": [
+        "terminal-palantir"
+      ],
+      "reference_examples": [
+        {
+          "label": "Terminal Industries",
+          "url": "https://terminal-industries.com/",
+          "notes": "Observed pre-rendered media and frame-sequence-heavy scroll hero."
+        },
+        {
+          "label": "Nomous Agency Landing Page",
+          "url": "github:ZanarkandTechnologies/Nomous-Agency-Landing-Page",
+          "notes": "Private sticky-scroll prototype with phase constants, RAF scrubbing, and video readiness handling."
+        }
+      ]
+    }
+  ]
+}

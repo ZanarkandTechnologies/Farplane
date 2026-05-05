@@ -25,12 +25,13 @@ Shape one-page frontend experiences that persuade, orient, or create memory. Thi
 
 1. **Define the offer.** Name the product/person/place/object/category and the literal value proposition.
 2. **Choose the story shape.** Problem -> shift -> proof -> action, or a stronger domain-specific arc when available.
-3. **Map sections.** First viewport, proof, features, comparison, social proof, pricing/contact, final CTA. Keep only what the offer earns.
-4. **Create visual scenes.** Decide which sections need real media, generated assets, product screenshots, video, WebGL, or code-native visuals.
-5. **Set landing visual rules.** Use `visual-design` for register, scene sentence, typography, color strategy, density, and anti-slop constraints.
-6. **Plan motion.** Choose CSS/Motion/GSAP/WebGL with `frontend-craft/references/motion-routing.md`; use official GreenSock skills or docs for GSAP code.
-7. **Plan proof.** Define mobile/desktop first-viewport checks, scroll checkpoints, asset-load checks, and reduced-motion checks.
-8. **Hand off to `frontend-craft`.** Provide sections, assets, motion, and QA expectations.
+3. **Select registry records when useful.** For repeatable high-taste pages, choose one recipe from `references/landing-recipes.json`, one taste profile from `references/taste-profiles.json`, and one effect stack from `references/effect-stacks.json`; use `references/registry-format.md` for field meanings.
+4. **Map sections.** First viewport, proof, features, comparison, social proof, pricing/contact, final CTA. Keep only what the offer earns.
+5. **Create visual scenes.** Decide which sections need real media, generated assets, product screenshots, video, WebGL, or code-native visuals.
+6. **Set landing visual rules.** Use `visual-design` for register, scene sentence, typography, color strategy, density, and anti-slop constraints, then refine with the chosen landing taste profile.
+7. **Plan motion.** Choose CSS/Motion/GSAP/WebGL with `frontend-craft/references/motion-routing.md`; for cinematic scroll sites, use the selected effect-stack record and official GreenSock skills or docs for GSAP code.
+8. **Plan proof.** Define mobile/desktop first-viewport checks, scroll checkpoints, asset-load checks, and reduced-motion checks.
+9. **Hand off to `frontend-craft`.** Provide sections, selected registry IDs, assets, motion, and QA expectations.
 
 ## Decision Branches
 
@@ -42,18 +43,34 @@ Shape one-page frontend experiences that persuade, orient, or create memory. Thi
 | Cinematic scrolltelling | story beats, pinned viewport, scene layers, scroll checkpoints |
 | Simple launch page | sharp offer, strong proof, fast CTA, minimal sections |
 
+## Registry Route
+
+For landing pages with reusable formulas or inspiration references:
+
+1. Open `references/landing-recipes.json` and select a recipe ID.
+2. Open `references/taste-profiles.json` and select a compatible taste profile ID.
+3. Open `references/effect-stacks.json` and select a compatible effect stack ID.
+4. If the request intentionally mixes incompatible records, state the reason in the landing brief.
+5. Keep `references/cinematic-scroll-site-guideline.md` as a compatibility pointer; do not treat it as the source of truth when JSON records apply.
+
 ## Top Gotchas
 
 - Do not make a marketing landing page when the user asked for a usable app/tool.
 - Do not hide the product/place/object behind tiny nav text or vague mood imagery.
 - Do not use a split text/media hero when a full-bleed image or interactive scene should carry the page.
 - Do not make static AI-art pages with no relationship to the offer.
+- Do not add a new recipe, taste profile, or effect stack without a stable `id`, routing criteria, examples, compatibility, and QA expectations.
 - Do not keep stale local GSAP examples as API truth; route to official GreenSock skills or docs.
 
 ## Reference Map
 
 - `references/scrolltelling.md` - section/story and scroll narrative structure.
 - `references/motion-and-media.md` - media, generated assets, GSAP/WebGL routing.
+- `references/landing-recipes.json` - JSON registry of page formulas and section structures.
+- `references/taste-profiles.json` - JSON registry of landing-page visual registers.
+- `references/effect-stacks.json` - JSON registry of implementation stacks, assets, debug hooks, and QA.
+- `references/registry-format.md` - JSON field contract, routing rules, and authoring checklist.
+- `references/cinematic-scroll-site-guideline.md` - compatibility pointer for older Terminal-style cinematic-scroll references.
 - `references/qa.md` - landing-page proof checks.
 - `references/architecture.md` - landing-page ownership and handoff model.
 - `references/workflows.md` - standard landing and cinematic scrolltelling paths.
@@ -65,6 +82,7 @@ Return a landing brief with:
 
 - `Offer`
 - `Audience`
+- `Recipe route` with selected recipe, taste-profile, and effect-stack IDs when used
 - `Story arc`
 - `Section map`
 - `Visual scenes/assets`

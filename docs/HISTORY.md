@@ -139,3 +139,6 @@
 2026-05-04 19:04 +0800 | FEAT | add a structured feature registry plus `harness-scout` source-ingestion workflow for deduping external harness ideas, decision matrices, and manual scorecards
 2026-05-04 23:11 +0800 | DOCS | run `harness-scout` against the self-evolving agents video as a duplicate source pass, add a compact technique dedupe table, and seed follow-up tickets for gated skill review plus hook-reminder benchmarking
 2026-05-05 02:02 +0800 | FEAT | add delegate-cli external CLI delegation with a Pi/Kimi delegate-frontend profile, deterministic dry-run helper, templates, docs, and ticket evidence handoff
+2026-05-05 04:57 +0800 | FEAT | integrate web-design-guidelines as a source-fresh frontend review metric beside ui-quality and frontend visual QA
+2026-05-05 05:28 +0800 | FEAT | add an asset-first cinematic scroll landing guideline based on Terminal Industries and the Nomous agency prototype
+2026-05-05 15:33 +0800 | FEAT | add JSON landing-page registries for recipes, taste profiles, and effect stacks with the first industrial mission-control cinematic route

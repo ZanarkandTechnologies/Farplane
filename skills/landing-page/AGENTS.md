@@ -10,6 +10,7 @@
 ## Boundaries
 
 - `landing-page` owns one-page story, sections, visual scenes, media, and scrolltelling plans.
+- JSON registries under `references/` own repeatable landing recipes, taste profiles, and effect stacks.
 - `visual-design` owns visual system decisions.
 - `frontend-craft` owns implementation orchestration.
 - Official GreenSock skills or docs own GSAP implementation details.

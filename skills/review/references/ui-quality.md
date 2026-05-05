@@ -4,6 +4,11 @@ Use when reviewing UI, interaction, layout, routing, or other visible product be
 
 Threshold: `4.0`
 
+For UI source review, pair this with
+[`frontend-guidelines.md`](frontend-guidelines.md). `ui-quality` judges product
+intent, taste, cohesion, and visible behavior; `frontend-guidelines` records the
+source-fresh Web Interface Guidelines audit score.
+
 ## Family Score Guide
 
 - `1`: the interface is broken, generic in damaging ways, or misses the product
@@ -111,3 +116,7 @@ Attach this rubric in the linked review artifact when used:
 - `dimension_scores`
 - `findings`
 - `next_action`
+
+When `frontend-guidelines` also runs, include both scores in the review artifact
+so later evaluation can compare taste/intent judgment against the external
+guideline metric.
