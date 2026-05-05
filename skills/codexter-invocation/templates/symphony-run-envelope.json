@@ -1,7 +1,7 @@
 {
   "workflowPath": "WORKFLOW.md",
   "workItemId": null,
-  "workItemPath": "tickets/TASK-0112/ticket.md",
+  "workItemPath": "tickets/archive/TASK-0112/ticket.md",
   "computeTarget": "local_shared",
   "phase": "planning",
   "mode": "symphony_worker",

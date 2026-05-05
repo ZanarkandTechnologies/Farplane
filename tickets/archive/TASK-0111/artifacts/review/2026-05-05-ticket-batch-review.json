@@ -1,0 +1,111 @@
+{
+  "work_type": ["ticket-planning", "roadmap-capture", "spec-contract"],
+  "search_scope": {
+    "changed_files": [
+      "tickets/TASK-0110/ticket.md",
+      "tickets/TASK-0111/ticket.md",
+      "tickets/TASK-0112/ticket.md",
+      "tickets/TASK-0113/ticket.md",
+      "tickets/TASK-0114/ticket.md",
+      "tickets/TASK-0115/ticket.md",
+      "tickets/TASK-0116/ticket.md"
+    ],
+    "related_files": [
+      "tickets/templates/ticket.md",
+      "skills/spec-to-ticket/SKILL.md",
+      "skills/spec-to-ticket/todos.md",
+      "skills/harness-scout/SKILL.md",
+      "docs/features/README.md",
+      "docs/features/registry.jsonl",
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/decision-matrix.md",
+      "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/handoff.md"
+    ],
+    "invariants_checked": [
+      "MEM-0074 parallel autonomy deferred until leases/worktrees/merge/batch QA",
+      "MEM-0077 Codexter invocation remains normal Codex plus installed skills"
+    ],
+    "docs_checked": [
+      "skills/spec-to-ticket/SKILL.md",
+      "tickets/templates/ticket.md",
+      "skills/harness-scout/SKILL.md"
+    ]
+  },
+  "rubrics_used": ["spec-contract", "implementation-plan", "evidence-quality"],
+  "summary": "The new ticket set preserves the post-Symphony roadmap as planning-review work rather than accidental ready queue work. The split is coherent: source registry, board/compute respec, Symphony shim, BoardAdapter, compute selector, parallel Ralph design, and Symphony-style spec template each have separate proof surfaces and dependencies.",
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.4,
+        "ticket-sizing": 4.2,
+        "scope-clarity": 4.3,
+        "acceptance-testability": 4.2,
+        "dependency-fit": 4.2
+      },
+      "findings": [
+        "Each ticket maps to one future capability or design boundary from the Symphony discussion.",
+        "Dependencies keep implementation tickets behind the board/compute spec and avoid making parallel Ralph ready before leases and compute selection exist."
+      ],
+      "next_action": "Keep these tickets in review until the operator chooses which roadmap branch to approve."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.2,
+        "modularity": 4.2,
+        "proof-clarity": 4.0,
+        "execution-order": 4.1,
+        "risk-clarity": 4.1,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [
+        "The tickets include file maps, typed sketches, flow examples, acceptance criteria, verification commands, and autonomy readiness notes.",
+        "The split avoids layer tickets and instead follows durable ownership boundaries: source provenance, system spec, external shim, adapter, compute policy, parallel design, and spec discipline."
+      ],
+      "next_action": "Run impl-plan on the selected ticket before building."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.1,
+        "reproducibility": 4.1,
+        "traceability": 4.2,
+        "consistency": 4.1,
+        "inspectability": 4.1
+      },
+      "findings": [
+        "Ticket metadata validation passed across the expanded board.",
+        "A direct scan confirmed the new tickets are planning/review, ready=false, approval_required=true, and do not contain placeholder TASK-XXXX markers or completed checkboxes."
+      ],
+      "next_action": "Use metadata validation plus per-ticket review artifacts when any ticket moves from review to building."
+    }
+  ],
+  "blocking_findings": [],
+  "verified_commands": [
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "python3 - <<'PY' ... print TASK-011* metadata summary ... PY",
+    "rg -n \"TODO|TASK-XXXX|session_id|\\[x\\]\" tickets/TASK-0110 tickets/TASK-0111 tickets/TASK-0112 tickets/TASK-0113 tickets/TASK-0114 tickets/TASK-0115 tickets/TASK-0116",
+    "git diff --check -- tickets/TASK-0110/ticket.md tickets/TASK-0111/ticket.md tickets/TASK-0112/ticket.md tickets/TASK-0113/ticket.md tickets/TASK-0114/ticket.md tickets/TASK-0115/ticket.md tickets/TASK-0116/ticket.md"
+  ],
+  "next_action": "Pick one roadmap branch to approve next: source registry for provenance, board/compute spec for architecture, or spec template for reusable writing discipline."
+}

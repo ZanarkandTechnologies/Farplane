@@ -4,7 +4,7 @@ title: respec board and compute orchestration
 phase: complete
 status: done
 owner: codex
-claimed_by: codex
+claimed_by:
 priority: high
 depends_on:
   - TASK-0107
@@ -14,9 +14,9 @@ approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-05T07:27:16Z
-updated_at: 2026-05-05T16:48:00+08:00
-next_action: committed board/compute orchestration spec slice; use as dependency for TASK-0112 through TASK-0116
-last_verification: source registry validator, feature registry validator, doc parity, harness invariants, and review passed on 2026-05-05
+updated_at: 2026-05-05T19:15:00Z
+next_action: archived by TASK-0118 closeout; future work should use new active tickets
+last_verification: 2026-05-05T19:15:00Z archived by TASK-0118 after ticket train reconciliation; prior ticket evidence and review artifacts preserved under tickets/archive/
 ---
 
 # TASK-0111: respec board and compute orchestration
@@ -92,7 +92,7 @@ on in discussion so future agents do not have to reconstruct it from chat.
 - `Typed flow example:`
   1. User says "run TASK-0110 locally."
   2. Local Codex constructs a `CodexterRunEnvelope`.
-  3. Filesystem `BoardAdapter` reads `tickets/TASK-0110/ticket.md`.
+  3. Filesystem `BoardAdapter` reads `tickets/archive/TASK-0110/ticket.md`.
   4. `ComputeSelector` chooses `local_shared` because no override exists.
   5. Phase route points to `impl-plan` because the ticket is in planning.
   6. Codex runs the existing skill and writes ticket evidence plus proof.
@@ -222,8 +222,8 @@ flowchart LR
 
 ## Evidence
 - `Artifacts:`
-  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
-  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-impl-review.json)
+  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
+  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0111/artifacts/review/2026-05-05-impl-review.json)
 - `Commands:`
   - `python3 docs/sources/validate_sources.py`
     - `source registry contract OK (7 records)`

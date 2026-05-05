@@ -4,7 +4,7 @@ title: design parallel Ralph leases and merge policy
 phase: complete
 status: done
 owner: codex
-claimed_by: codex
+claimed_by:
 priority: medium
 depends_on:
   - TASK-0111
@@ -12,14 +12,14 @@ depends_on:
   - TASK-0114
   - TASK-0081
 blocked_by: []
-ready: true
+ready: false
 approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-05T07:27:16Z
-updated_at: 2026-05-05T08:25:02Z
-next_action: completed and committed; future work should start with the lease registry follow-up in the design map
-last_verification: 2026-05-05T08:25:02Z passed design review, source/feature registry checks, ticket metadata, doc parity, and harness invariants
+updated_at: 2026-05-05T19:15:00Z
+next_action: archived by TASK-0118 closeout; future work should use new active tickets
+last_verification: 2026-05-05T19:15:00Z archived by TASK-0118 after ticket train reconciliation; prior ticket evidence and review artifacts preserved under tickets/archive/
 ---
 
 # TASK-0115: design parallel Ralph leases and merge policy
@@ -71,7 +71,7 @@ pick multiple ready tickets without making the repo chaotic.
   - `skills/ralph/scripts/select_next_ticket.py`
   - `skills/pr-runtime/SKILL.md`
   - `bin/ticket_runtime.py`
-  - `tickets/TASK-0081/ticket.md`
+  - `tickets/archive/TASK-0081/ticket.md`
   - Symphony spec scheduling/retry/concurrency sections.
 - `Signature delta:`
   - `LeaseRecord`: `ticket_id`, `holder`, `compute_target`, `checkout`,
@@ -208,9 +208,9 @@ flowchart LR
 
 ## Evidence
 - `Artifacts:`
-  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
+  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
   - [parallel-ralph.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/references/parallel-ralph.md)
-  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0115/artifacts/review/2026-05-05-impl-review.json)
+  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0115/artifacts/review/2026-05-05-impl-review.json)
 - `Commands:`
   - `python3 docs/sources/validate_sources.py`
   - `python3 - <<'PY' ... feature registry status-aware validation ... PY`

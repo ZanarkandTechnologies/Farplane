@@ -145,7 +145,7 @@ class CodexterInvocationTests(unittest.TestCase):
             root = Path(tmp)
             write(root / "WORKFLOW.md", WORKFLOW_TEXT)
             write(
-                root / "tickets" / "TASK-0112" / "ticket.md",
+                root / "tickets" / "archive" / "TASK-0112" / "ticket.md",
                 TICKET_TEXT.replace("TASK-1234", "TASK-0112"),
             )
             template = (

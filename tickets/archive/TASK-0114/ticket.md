@@ -4,20 +4,20 @@ title: implement compute selector v2
 phase: complete
 status: done
 owner: codex
-claimed_by: codex
+claimed_by:
 priority: high
 depends_on:
   - TASK-0111
   - TASK-0113
 blocked_by: []
-ready: true
+ready: false
 approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-05T07:27:16Z
-updated_at: 2026-05-05T08:15:45Z
-next_action: completed and committed; use TASK-0112 for Symphony shim examples and TASK-0115 for parallel Ralph design
-last_verification: 2026-05-05T08:15:45Z passed compute/invocation/board focused tests, full bin unittest suite, JSON prepare artifacts, source/feature registry checks, ticket metadata, doc parity, and harness invariants
+updated_at: 2026-05-05T19:15:00Z
+next_action: archived by TASK-0118 closeout; future work should use new active tickets
+last_verification: 2026-05-05T19:15:00Z archived by TASK-0118 after ticket train reconciliation; prior ticket evidence and review artifacts preserved under tickets/archive/
 ---
 
 # TASK-0114: implement compute selector v2
@@ -97,7 +97,7 @@ Ralph, or future external runner can inspect.
   3. Workflow allows `local_worktree`.
   4. Selector checks ticket status and blockers.
   5. Selector returns `allowed=true`, `target=local_worktree`, and
-     `runtime_record_path=.harness/state/tickets/TASK-XXXX.runtime.json`.
+     `runtime_record_path=.harness/state/tickets/archive/TASK-XXXX.runtime.json`.
   6. If no runtime exists, the decision includes `required_setup:
      pr-runtime up` rather than silently falling back to shared checkout.
 - `Execution steps:`
@@ -212,23 +212,23 @@ flowchart LR
 - `bin/codexter_invocation.py`
 - `skills/pr-runtime/SKILL.md`
 - `bin/ticket_runtime.py`
-- `tickets/TASK-0081/ticket.md`
+- `tickets/archive/TASK-0081/ticket.md`
 
 ## Evidence
 - `Artifacts:`
-  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
-  - [allowed-local-shared.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/artifacts/compute/allowed-local-shared.json)
-  - [deferred-local-worktree.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/artifacts/compute/deferred-local-worktree.json)
-  - [blocked-symphony.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/artifacts/compute/blocked-symphony.json)
-  - [blocked-codex-cloud.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/artifacts/compute/blocked-codex-cloud.json)
-  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0114/artifacts/review/2026-05-05-impl-review.json)
+  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
+  - [allowed-local-shared.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0114/artifacts/compute/allowed-local-shared.json)
+  - [deferred-local-worktree.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0114/artifacts/compute/deferred-local-worktree.json)
+  - [blocked-symphony.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0114/artifacts/compute/blocked-symphony.json)
+  - [blocked-codex-cloud.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0114/artifacts/compute/blocked-codex-cloud.json)
+  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0114/artifacts/review/2026-05-05-impl-review.json)
 - `Commands:`
   - `python3 -m unittest bin/test_codexter_compute.py bin/test_codexter_invocation.py bin/test_codexter_boards.py`
   - `python3 -m py_compile bin/codexter_compute.py bin/test_codexter_compute.py bin/codexter_invocation.py`
-  - `python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --proof tickets/TASK-0114/artifacts/compute/local-shared.proof.json`
-  - `python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute local_worktree --proof tickets/TASK-0114/artifacts/compute/local-worktree.proof.json`
-  - `python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute symphony --proof tickets/TASK-0114/artifacts/compute/symphony.proof.json`
-  - `python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute codex_cloud --proof tickets/TASK-0114/artifacts/compute/codex-cloud.proof.json`
+  - `python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --proof tickets/archive/TASK-0114/artifacts/compute/local-shared.proof.json`
+  - `python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute local_worktree --proof tickets/archive/TASK-0114/artifacts/compute/local-worktree.proof.json`
+  - `python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute symphony --proof tickets/archive/TASK-0114/artifacts/compute/symphony.proof.json`
+  - `python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute codex_cloud --proof tickets/archive/TASK-0114/artifacts/compute/codex-cloud.proof.json`
   - `python3 docs/sources/validate_sources.py`
   - `python3 - <<'PY' ... feature registry status-aware validation ... PY`
   - `python3 tickets/scripts/check_ticket_metadata.py`

@@ -44,7 +44,8 @@ Each line in `registry.jsonl` is one JSON object:
 - `id`: stable `FEAT-####` identifier; never reuse an ID for a different
   technique.
 - `name`: short, unique technique name.
-- `status`: `implemented`, `partial`, `proposed`, `deferred`, or `retired`.
+- `status`: `implemented`, `partial`, `proposed`, `designed`, `deferred`, or
+  `retired`.
 - `category`: broad grouping such as `planning`, `proof`, `memory`,
   `source-ingestion`, or `improvement-loop`.
 - `surfaces`: repo paths that own the live behavior.
@@ -100,88 +101,8 @@ Each line in `registry.jsonl` is one JSON object:
 Run this before claiming registry edits are safe:
 
 ```bash
-python3 - <<'PY'
-import json
-import re
-from pathlib import Path
-
-root = Path(".")
-registry = Path("docs/features/registry.jsonl")
-required = {
-    "id",
-    "name",
-    "status",
-    "category",
-    "surfaces",
-    "source_refs",
-    "external_refs",
-    "evidence_refs",
-    "known_limits",
-    "metrics",
-    "last_verified",
-}
-allowed_statuses = {"implemented", "partial", "proposed", "deferred", "retired"}
-id_re = re.compile(r"^FEAT-\d{4}$")
-date_re = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-ids = set()
-errors = []
-
-def is_url(value):
-    return value.startswith(("http://", "https://"))
-
-def local_path(value):
-    return value.split("#", 1)[0]
-
-def require_string_list(record, field, line_no):
-    value = record.get(field)
-    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
-        errors.append(f"line {line_no}: {field} must be a list of strings")
-        return []
-    return value
-
-for line_no, line in enumerate(registry.read_text().splitlines(), 1):
-    if not line.strip():
-        continue
-    try:
-        record = json.loads(line)
-    except json.JSONDecodeError as exc:
-        errors.append(f"line {line_no}: invalid JSON: {exc}")
-        continue
-    missing = required - record.keys()
-    extra = record.keys() - required
-    if missing:
-        errors.append(f"line {line_no}: missing fields: {sorted(missing)}")
-    if extra:
-        errors.append(f"line {line_no}: unknown fields: {sorted(extra)}")
-    feature_id = record.get("id")
-    if not isinstance(feature_id, str) or not id_re.match(feature_id):
-        errors.append(f"line {line_no}: id must match FEAT-####")
-        feature_id = f"line-{line_no}"
-    if feature_id in ids:
-        errors.append(f"line {line_no}: duplicate id {feature_id}")
-    ids.add(feature_id)
-    if record.get("status") not in allowed_statuses:
-        errors.append(f"{feature_id}: invalid status {record.get('status')!r}")
-    for field in ("name", "category", "known_limits", "last_verified"):
-        if not isinstance(record.get(field), str) or not record[field].strip():
-            errors.append(f"{feature_id}: {field} must be a non-empty string")
-    if isinstance(record.get("last_verified"), str) and not date_re.match(record["last_verified"]):
-        errors.append(f"{feature_id}: last_verified must use YYYY-MM-DD")
-    for field in ("surfaces", "source_refs", "external_refs", "evidence_refs", "metrics"):
-        require_string_list(record, field, line_no)
-    if record.get("status") == "implemented" and not record.get("surfaces"):
-        errors.append(f"{feature_id}: implemented records need at least one surface")
-    if record.get("status") == "implemented" and not record.get("evidence_refs"):
-        errors.append(f"{feature_id}: implemented records need evidence refs")
-    for field in ("surfaces", "source_refs", "evidence_refs"):
-        for ref in record.get(field, []):
-            if is_url(ref):
-                continue
-            path = local_path(ref)
-            if path and not (root / path).exists():
-                errors.append(f"{feature_id}: {field} local ref does not exist: {ref}")
-if errors:
-    raise SystemExit("\n".join(errors))
-print(f"feature registry contract OK ({len(ids)} records)")
-PY
+python3 docs/features/validate_features.py
 ```
+
+The validator checks JSONL shape, ID uniqueness, allowed enum values, local
+surface/evidence existence, `SRC-*` source references, and date formats.

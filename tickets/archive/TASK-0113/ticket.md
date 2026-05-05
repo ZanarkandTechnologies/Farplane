@@ -4,19 +4,19 @@ title: define BoardAdapter v1
 phase: complete
 status: done
 owner: codex
-claimed_by: codex
+claimed_by:
 priority: high
 depends_on:
   - TASK-0111
 blocked_by: []
-ready: true
+ready: false
 approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-05T07:27:16Z
-updated_at: 2026-05-05T08:08:47Z
-next_action: completed and committed; use TASK-0114 for compute selector v2
-last_verification: 2026-05-05T08:08:47Z passed focused adapter/invocation tests, full bin unittest suite, source/feature registry checks, ticket metadata, doc parity, and harness invariants
+updated_at: 2026-05-05T19:15:00Z
+next_action: archived by TASK-0118 closeout; future work should use new active tickets
+last_verification: 2026-05-05T19:15:00Z archived by TASK-0118 after ticket train reconciliation; prior ticket evidence and review artifacts preserved under tickets/archive/
 ---
 
 # TASK-0113: define BoardAdapter v1
@@ -31,7 +31,7 @@ Codexter invocation helper.
 ## Scope
 - In:
   - A documented `BoardAdapter` interface and normalized `WorkItem` contract.
-  - A filesystem adapter for `tickets/TASK-*/ticket.md`.
+  - A filesystem adapter for `tickets/archive/TASK-*/ticket.md`.
   - Read operations needed by local invocation and Ralph-like selection.
   - Evidence/writeback hooks where safe, such as appending artifact links or
     updating `next_action`, only if they reuse existing ticket metadata rules.
@@ -90,7 +90,7 @@ Codexter invocation helper.
   2. Adapter registry resolves `board.adapter: filesystem`.
   3. `FileTicketAdapter.read_work_item("TASK-0110")` reads the ticket.
   4. It returns a `WorkItem` with `ready=false`, `approval_required=true`,
-     `depends_on=[]`, and `artifacts_path=tickets/TASK-0110/artifacts`.
+     `depends_on=[]`, and `artifacts_path=tickets/archive/TASK-0110/artifacts`.
   5. Compute selector blocks build but allows planning route.
 - `Execution steps:`
   1. Confirm `TASK-0111` spec names the BoardAdapter contract.
@@ -144,7 +144,7 @@ flowchart LR
   classDef future fill:#f5f3ff,stroke:#8b5cf6,color:#111827,stroke-dasharray: 5 3
 
   Caller["Invocation / Ralph"]:::contract --> Adapter["BoardAdapter"]:::contract
-  Adapter --> File["FileTicketAdapter<br/>tickets/TASK-*"]:::fs
+  Adapter --> File["FileTicketAdapter<br/>tickets/archive/TASK-*"]:::fs
   Adapter -. later .-> Linear["LinearAdapter"]:::future
   Adapter -. later .-> Notion["NotionAdapter"]:::future
   File --> WorkItem["WorkItem"]:::contract
@@ -204,8 +204,8 @@ flowchart LR
 
 ## Evidence
 - `Artifacts:`
-  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
-  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0113/artifacts/review/2026-05-05-impl-review.json)
+  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
+  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0113/artifacts/review/2026-05-05-impl-review.json)
 - `Commands:`
   - `python3 -m unittest bin/test_codexter_boards.py bin/test_codexter_invocation.py`
   - `python3 -m py_compile bin/codexter_boards.py bin/test_codexter_boards.py bin/codexter_invocation.py`

@@ -4,7 +4,7 @@ title: add Symphony-style spec template and conformance matrix
 phase: complete
 status: done
 owner: codex
-claimed_by: codex
+claimed_by:
 priority: medium
 depends_on: []
 blocked_by: []
@@ -13,9 +13,9 @@ approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-05T07:27:16Z
-updated_at: 2026-05-05T17:08:00+08:00
-next_action: committed spec-authoring contract slice; apply selectively to complex runtime/service specs
-last_verification: source registry validator, feature registry validator, doc parity, harness invariants, and review passed on 2026-05-05
+updated_at: 2026-05-05T19:15:00Z
+next_action: archived by TASK-0118 closeout; future work should use new active tickets
+last_verification: 2026-05-05T19:15:00Z archived by TASK-0118 after ticket train reconciliation; prior ticket evidence and review artifacts preserved under tickets/archive/
 ---
 
 # TASK-0116: add Symphony-style spec template and conformance matrix
@@ -200,8 +200,8 @@ flowchart LR
 
 ## Evidence
 - `Artifacts:`
-  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
-  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0116/artifacts/review/2026-05-05-impl-review.json)
+  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
+  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0116/artifacts/review/2026-05-05-impl-review.json)
 - `Commands:`
   - `python3 docs/sources/validate_sources.py`
     - `source registry contract OK (7 records)`

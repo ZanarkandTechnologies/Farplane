@@ -1,0 +1,183 @@
+{
+  "work_type": ["ticket-closeout", "docs", "registry"],
+  "ticket_id": "TASK-0118",
+  "reviewed_at": "2026-05-05T19:20:00Z",
+  "review_type": "impl",
+  "search_scope": {
+    "changed_files": [
+      "tickets/archive/TASK-0107/ticket.md",
+      "tickets/archive/TASK-0110/ticket.md",
+      "tickets/archive/TASK-0111/ticket.md",
+      "tickets/archive/TASK-0112/ticket.md",
+      "tickets/archive/TASK-0113/ticket.md",
+      "tickets/archive/TASK-0114/ticket.md",
+      "tickets/archive/TASK-0115/ticket.md",
+      "tickets/archive/TASK-0116/ticket.md",
+      "tickets/archive/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json",
+      "tickets/archive/TASK-0118/ticket.md",
+      "docs/features/registry.jsonl",
+      "docs/features/README.md",
+      "docs/features/validate_features.py",
+      "skills/codexter-invocation/templates/symphony-run-envelope.json",
+      "bin/test_codexter_invocation.py",
+      "blockers.md"
+    ],
+    "related_files": [
+      "docs/sources/registry.jsonl",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/user-intent-satisfaction.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "invariants_checked": ["MEM-0058", "MEM-0071", "MEM-0074", "MEM-0077"],
+    "docs_checked": [
+      "docs/features/README.md",
+      "docs/sources/README.md",
+      "tickets/archive/TASK-0118/ticket.md"
+    ]
+  },
+  "rubrics_used": [
+    "user-intent-satisfaction",
+    "evidence-quality",
+    "integration-readiness"
+  ],
+  "summary": "The Symphony/Codexter ticket train is cleanly archived, durable refs point at archive paths, and validation now has a reusable feature-registry script instead of a stale one-off snippet.",
+  "overall_score": 4.3,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "user_story_groups": [
+    {
+      "group": "operator returning after context loss",
+      "story": "As the operator, I need the board to show which Symphony/Codexter work is actually done without rereading chat.",
+      "result": "pass",
+      "evidence": "TASK-0107 and TASK-0110 through TASK-0116 now live under tickets/archive/ with phase=complete, status=done, ready=false, and no claimed_by value."
+    },
+    {
+      "group": "future Ralph or board selector",
+      "story": "As a future selector, I need completed tickets not to look ready, claimed, or active.",
+      "result": "pass",
+      "evidence": "Ticket metadata validation passed with 15 active ticket files checked after TASK-0118 was archived, and the archived train is no longer in the active ticket list."
+    },
+    {
+      "group": "maintainer reviewing evidence links",
+      "story": "As a maintainer, I need registry and template refs to survive the archive move.",
+      "result": "pass",
+      "evidence": "docs/features/registry.jsonl and the Symphony envelope template now point to archive paths; stale active-path grep returned no matches in docs, README, ARCHITECTURE, or skills."
+    },
+    {
+      "group": "future Symphony integrator",
+      "story": "As a future Symphony caller, I need the sample envelope and its test fixture to keep resolving after closeout.",
+      "result": "pass",
+      "evidence": "bin/test_codexter_invocation.py now creates the template fixture at tickets/archive/TASK-0112/ticket.md and the focused invocation tests pass."
+    }
+  ],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": "high",
+      "rubric": "evidence-quality",
+      "summary": "docs/HISTORY.md was not included in the closeout commit because it already contains unrelated dirty entries in the same append-only area.",
+      "file_refs": ["docs/HISTORY.md", "tickets/archive/TASK-0118/ticket.md"],
+      "evidence": [
+        "The ticket required avoiding unrelated dirty work.",
+        "The closeout event is preserved in TASK-0118 evidence and the commit instead of staging unrelated HISTORY lines."
+      ],
+      "next_action": "When the unrelated history work is reconciled, append a chronologically correct closeout history entry if the operator still wants one."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "user-intent-satisfaction",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "ask-fidelity": 4.5,
+        "outcome-completeness": 4.3,
+        "worth-it-feel": 4.4,
+        "impressiveness": 4.0,
+        "evidence-confidence": 4.3
+      },
+      "findings": [],
+      "next_action": "Start the next board/compute feature from the now-clean active board."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.2,
+        "reproducibility": 4.4,
+        "traceability": 4.1,
+        "consistency": 4.1,
+        "inspectability": 4.4,
+        "autonomy-readiness": 4.0
+      },
+      "findings": ["docs/HISTORY.md caveat is documented and non-blocking."],
+      "next_action": "Keep the validation command list in the ticket evidence."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.3,
+        "contract-correctness": 4.4,
+        "dependency-readiness": 4.3,
+        "coupling-risk": 4.2,
+        "merge-readiness": 4.3
+      },
+      "findings": [],
+      "next_action": "Stage the closeout slice path-scoped and keep unrelated dirty frontend/video/delegate files out of the commit."
+    }
+  ],
+  "commands": [
+    {
+      "command": "python3 tickets/scripts/check_ticket_metadata.py",
+      "result": "ticket metadata OK (15 ticket files checked)"
+    },
+    {
+      "command": "python3 docs/features/validate_features.py",
+      "result": "feature registry contract OK (20 records)"
+    },
+    {
+      "command": "python3 docs/sources/validate_sources.py",
+      "result": "source registry contract OK (7 records)"
+    },
+    {
+      "command": "python3 bin/check_doc_parity.py",
+      "result": "structural doc parity OK (6 files checked, 29 rules)"
+    },
+    {
+      "command": "python3 bin/check_harness_invariants.py",
+      "result": "harness invariants OK (5 files checked, 15 agents, 13 rules)"
+    },
+    {
+      "command": "python3 -m unittest discover -s bin -p 'test_*.py'",
+      "result": "Ran 142 tests in 2.044s: OK"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "rg -n \"tickets/TASK-0107|tickets/TASK-0110|tickets/TASK-0111|tickets/TASK-0112|tickets/TASK-0113|tickets/TASK-0114|tickets/TASK-0115|tickets/TASK-0116\" docs README.md ARCHITECTURE.md skills --glob '!tickets/archive/**' --glob '!**/__pycache__/**'",
+      "result": "no matches"
+    },
+    {
+      "command": "rg --no-ignore -n \"tickets/TASK-0107|tickets/TASK-0110|tickets/TASK-0111|tickets/TASK-0112|tickets/TASK-0113|tickets/TASK-0114|tickets/TASK-0115|tickets/TASK-0116\" tickets/archive/TASK-0107 tickets/archive/TASK-0110 tickets/archive/TASK-0111 tickets/archive/TASK-0112 tickets/archive/TASK-0113 tickets/archive/TASK-0114 tickets/archive/TASK-0115 tickets/archive/TASK-0116 -g 'ticket.md'",
+      "result": "no matches"
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Commit the closeout slice."
+}

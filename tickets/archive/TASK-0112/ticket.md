@@ -4,20 +4,20 @@ title: add Symphony integration shim
 phase: complete
 status: done
 owner: codex
-claimed_by: codex
+claimed_by:
 priority: medium
 depends_on:
   - TASK-0107
   - TASK-0111
 blocked_by: []
-ready: true
+ready: false
 approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-05T07:27:16Z
-updated_at: 2026-05-05T08:20:51Z
-next_action: completed and committed; use future adapter tickets for any real Symphony runner/client implementation
-last_verification: 2026-05-05T08:20:51Z passed Symphony envelope template smoke, invocation tests, full bin unittest suite, JSON validation, source/feature registry checks, ticket metadata, doc parity, and harness invariants
+updated_at: 2026-05-05T19:15:00Z
+next_action: archived by TASK-0118 closeout; future work should use new active tickets
+last_verification: 2026-05-05T19:15:00Z archived by TASK-0118 after ticket train reconciliation; prior ticket evidence and review artifacts preserved under tickets/archive/
 ---
 
 # TASK-0112: add Symphony integration shim
@@ -69,8 +69,8 @@ launches normal Codex with Codexter installed, and what Codexter returns through
   - `WORKFLOW.md`
   - `bin/codexter_invocation.py`
   - `skills/codexter-invocation/SKILL.md`
-  - `tickets/TASK-0107/artifacts/qa/prepare-planning.json`
-  - `tickets/TASK-0107/artifacts/qa/sample-proof-packet.json`
+  - `tickets/archive/TASK-0107/artifacts/qa/prepare-planning.json`
+  - `tickets/archive/TASK-0107/artifacts/qa/sample-proof-packet.json`
   - Symphony Service Specification draft v1 from the research memo.
 - `Signature delta:`
   - `templates/symphony-run-envelope.json`
@@ -194,13 +194,13 @@ flowchart LR
 - `docs/specs/symphony-compatible-codexter-runner.md`
 - `skills/codexter-invocation/SKILL.md`
 - `bin/codexter_invocation.py`
-- `tickets/TASK-0107/ticket.md`
+- `tickets/archive/TASK-0107/ticket.md`
 
 ## Evidence
 - `Artifacts:`
-  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
-  - [symphony-template-prepare.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0112/artifacts/smoke/symphony-template-prepare.json)
-  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0112/artifacts/review/2026-05-05-impl-review.json)
+  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)
+  - [symphony-template-prepare.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0112/artifacts/smoke/symphony-template-prepare.json)
+  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0112/artifacts/review/2026-05-05-impl-review.json)
 - `Commands:`
   - `python3 -m unittest bin/test_codexter_invocation.py`
   - `python3 -m json.tool skills/codexter-invocation/templates/symphony-run-envelope.json`

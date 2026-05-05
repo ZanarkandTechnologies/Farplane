@@ -1,21 +1,21 @@
 ---
 ticket_id: TASK-0107
 title: add Codexter invocation contract
-phase: documenting
-status: building
+phase: complete
+status: done
 owner: codex
 claimed_by:
 priority: high
 depends_on: []
 blocked_by: []
-ready: true
+ready: false
 approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-04T18:42:44Z
-updated_at: 2026-05-04T21:11:24Z
-next_action: run close-ticket to archive TASK-0107 after final closeout
-last_verification: 2026-05-05 05:11 +0800 full bin unit discovery, targeted invocation tests, metadata, invariants, doc parity, registry validation, JSON proof checks, diff check, and impl review pass
+updated_at: 2026-05-05T19:15:00Z
+next_action: archived by TASK-0118 closeout; future work should use new active tickets
+last_verification: 2026-05-05T19:15:00Z archived by TASK-0118 after ticket train reconciliation; prior ticket evidence and review artifacts preserved under tickets/archive/
 ---
 
 # TASK-0107: add Codexter invocation contract
@@ -33,7 +33,7 @@ run can write a portable `ProofPacket` that Symphony can parse later.
   - Root `WORKFLOW.md` v1 with YAML front matter and prompt body.
   - `CodexterRunEnvelope`, `WorkItem`, `ComputeDecision`, `SkillRoute`, and
     `ProofPacket` data contracts.
-  - Filesystem ticket adapter for `tickets/TASK-*/ticket.md`.
+  - Filesystem ticket adapter for `tickets/archive/TASK-*/ticket.md`.
   - Compute selector for `local_shared` and `local_worktree`, with blocked
     decisions for unsupported future targets.
   - Optional `compute_target` ticket frontmatter validation and docs.
@@ -130,7 +130,7 @@ run can write a portable `ProofPacket` that Symphony can parse later.
   2. `loadWorkflow` returns filesystem board policy, allowed compute
      `["local_shared", "local_worktree"]`, and routing
      `planning -> impl-plan`.
-  3. `loadWorkItem` reads `tickets/TASK-0107/ticket.md` and returns
+  3. `loadWorkItem` reads `tickets/archive/TASK-0107/ticket.md` and returns
      `ready=false`, `approvalRequired=true`, `status=review`,
      `computeTarget=null`.
   4. `selectCompute` chooses `local_shared` from envelope/workflow defaults and
@@ -238,7 +238,7 @@ flowchart LR
   Ask["Normal Codex ask<br/>run TASK-0107"]:::keep
   Envelope["CodexterRunEnvelope<br/>parseRunEnvelope(input): envelope"]:::add
   Workflow["WORKFLOW.md<br/>loadWorkflow(path): policy"]:::add
-  Ticket["tickets/TASK-*/ticket.md<br/>loadWorkItem(selector): WorkItem"]:::keep
+  Ticket["tickets/archive/TASK-*/ticket.md<br/>loadWorkItem(selector): WorkItem"]:::keep
   Compute["ComputeSelector<br/>selectCompute(item, policy): decision"]:::gate
   Route["SkillRoute<br/>routePhase(item, policy): skill"]:::add
   Skills["Existing skills<br/>impl-plan / impl / qa / review"]:::keep
@@ -329,12 +329,12 @@ flowchart LR
 
 ## Evidence
 - `Artifacts:`
-  - [planning-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0107/artifacts/review/2026-05-05-impl-plan-review.json)
-  - [prepare-planning.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0107/artifacts/qa/prepare-planning.json)
-  - [prepare-building-blocked.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0107/artifacts/qa/prepare-building-blocked.json)
-  - [prepare-symphony-blocked.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0107/artifacts/qa/prepare-symphony-blocked.json)
-  - [sample-proof-packet.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0107/artifacts/qa/sample-proof-packet.json)
-  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0107/artifacts/review/2026-05-05-impl-review.json)
+  - [planning-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0107/artifacts/review/2026-05-05-impl-plan-review.json)
+  - [prepare-planning.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0107/artifacts/qa/prepare-planning.json)
+  - [prepare-building-blocked.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0107/artifacts/qa/prepare-building-blocked.json)
+  - [prepare-symphony-blocked.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0107/artifacts/qa/prepare-symphony-blocked.json)
+  - [sample-proof-packet.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0107/artifacts/qa/sample-proof-packet.json)
+  - [impl-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0107/artifacts/review/2026-05-05-impl-review.json)
 - `Commands:`
   - `python3 -m unittest bin/test_codexter_invocation.py bin/test_ticket_metadata.py`
   - `python3 -m unittest discover -s bin -p 'test_*.py'`
@@ -346,14 +346,14 @@ flowchart LR
   - `python3 bin/codexter_invocation.py prepare --ticket TASK-0081 --phase building --proof .harness/results/task-0081-build.proof.json`
   - `python3 bin/codexter_invocation.py prepare --ticket TASK-0107 --phase planning --compute symphony --proof .harness/results/task-0107-symphony.proof.json`
   - `python3 bin/codexter_invocation.py write-proof --ticket TASK-0107 --phase planning --proof .harness/results/task-0107-sample.proof.json --verdict failed --next-action 'demonstrate failed proof packet shape' --phase-status failed`
-  - `python3 -m json.tool tickets/TASK-0107/artifacts/qa/prepare-planning.json >/dev/null`
-  - `python3 -m json.tool tickets/TASK-0107/artifacts/qa/prepare-building-blocked.json >/dev/null`
-  - `python3 -m json.tool tickets/TASK-0107/artifacts/qa/prepare-symphony-blocked.json >/dev/null`
-  - `python3 -m json.tool tickets/TASK-0107/artifacts/qa/sample-proof-packet.json >/dev/null`
+  - `python3 -m json.tool tickets/archive/TASK-0107/artifacts/qa/prepare-planning.json >/dev/null`
+  - `python3 -m json.tool tickets/archive/TASK-0107/artifacts/qa/prepare-building-blocked.json >/dev/null`
+  - `python3 -m json.tool tickets/archive/TASK-0107/artifacts/qa/prepare-symphony-blocked.json >/dev/null`
+  - `python3 -m json.tool tickets/archive/TASK-0107/artifacts/qa/sample-proof-packet.json >/dev/null`
   - `python3 -m json.tool .harness/results/task-0107-sample.proof.json >/dev/null`
   - `feature registry contract validation`
-  - `python3 -m json.tool tickets/TASK-0107/artifacts/review/2026-05-05-impl-review.json >/dev/null`
-  - `python3 -m json.tool tickets/TASK-0107/artifacts/review/2026-05-05-impl-plan-review.json >/dev/null`
+  - `python3 -m json.tool tickets/archive/TASK-0107/artifacts/review/2026-05-05-impl-review.json >/dev/null`
+  - `python3 -m json.tool tickets/archive/TASK-0107/artifacts/review/2026-05-05-impl-plan-review.json >/dev/null`
   - `git diff --check`
 - `Result summary:` Implementation review passed. The invocation contract is
   now documented, tested, and wired as a normal-Codex skill plus diagnostic
