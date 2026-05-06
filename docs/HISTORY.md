@@ -145,5 +145,8 @@
 2026-05-06 03:25 +0800 | FEAT | add merged-root video-generation and separate remotion-render skills backed by inference.sh references and frontend asset routing
 2026-05-06 04:05 +0800 | FEAT | add merged-root image-generation skill backed by inference.sh image references and best-current model routing
 2026-05-07 01:05 +0800 | FEAT | harden inference.sh image and video skills with async job guidance, saved-result examples, upstream-reference guards, Foley discovery, media pipeline routing, and an official Remotion authoring skill
+2026-05-07 01:30 +0800 | FEAT | promote inference.sh video guides into domain entry skills and move multi-asset media pipeline orchestration under frontend-craft
 2026-05-07 01:33 +0800 | DOCS | reframe Codexter as an explicit ticket invocation layer and park premature branch-runtime scaling work
+2026-05-07 01:45 +0800 | FEAT | remove standalone video-prompting skill and move prompting guidance into each video artifact domain skill
+2026-05-07 02:00 +0800 | FEAT | factor shared video artifact production workflow into a linked domain-production reference
 2026-05-07 02:12 +0800 | DOCS | add capped Codexter V2 milestone and archive completed or premature ticket-board entries

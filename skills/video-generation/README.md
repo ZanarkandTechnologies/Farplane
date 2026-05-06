@@ -4,23 +4,34 @@ Category-level skill for generating, editing, assembling, and QA-ing project-bou
 
 ## Purpose
 
-Keep video generation as one first-load skill with the upstream umbrella model map in `SKILL.md` and provider-specific detail in references. This avoids copying inference.sh's endpoint-per-skill tree into active context.
+Keep video generation as the model/app execution skill with the upstream umbrella model map in `SKILL.md` and provider-specific detail in references. Domain video guides are separate public skills.
 
 ## Entry Point
 
 - `SKILL.md`: trigger rules, upstream umbrella model map, routing, spend gates, output contract, and frontend handoff.
 - `todos.md`: ordered routing checklist for choosing the right reference.
 - `references/tools/`: upstream inference.sh tool `SKILL.md` files copied as reference material.
-- `references/guides/`: upstream inference.sh guide `SKILL.md` files copied as reference material.
+- `references/domain-production.md`: shared routing, artifact saving, async, and upstream-safety workflow for domain video skills.
+- `references/long-running-jobs.md`: async `--no-wait`, task ID, polling, timer, and delegation guidance.
+- `references/reference-overrides.md`: local overrides for stale upstream commands and app IDs.
 - `references/frontend-asset-qa.md`: Codexter handoff rules for web use.
 
 Use `SKILL.md` for routing. Use `todos.md` to select only the relevant branch:
 
 - `references/tools/infsh-cli.md`: `belt` CLI usage.
 - `references/tools/*.md`: provider/app instructions.
-- `references/guides/*.md`: use-case instructions.
 
-Remotion/code-rendered video lives in `skills/remotion-render/`.
+Use separate domain skills for artifact-level work:
+
+- `ai-marketing-videos`
+- `explainer-video-guide`
+- `storyboard-creation`
+- `talking-head-production`
+- `video-ad-specs`
+
+Prompting guidance lives inside each artifact skill as `references/prompting.md`, not as a standalone generic public skill.
+
+Remotion code authoring lives in `skills/remotion/`. Inference.sh MP4 rendering for Remotion lives in `skills/remotion-render/`.
 
 ## Minimal Example
 
