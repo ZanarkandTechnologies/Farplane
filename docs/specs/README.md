@@ -14,6 +14,9 @@ Current design docs:
 - `board-compute-orchestration.md` - board adapter, explicit ticket
   invocation, compute selection, local Codexter, Ralph, and future
   Symphony/shared-board ownership contract
+- `codexter-v2-milestone.md` - capped Symphony-inspired milestone for the
+  remaining invocation-trigger, adapter-conformance, and external-compute
+  recipe tickets, with explicit deferrals so Codexter does not become a daemon
 - `agent-testability-surfaces.md` - post-system-design doctrine for control accelerators, state probes, coordination views, and proof surfaces
 - `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy

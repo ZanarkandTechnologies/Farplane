@@ -23,6 +23,7 @@ ticket, and execution workflow.
 - Repo-local operating map: [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
 - Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
 - Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
+- Codexter V2 capstone: [codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
 - Board, compute, and ticket invocation: [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
 - Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
@@ -290,30 +291,34 @@ The yellow callout boxes are the main handoff skills/operators: `deep-init-proje
 
 ## Roadmap
 
-Now:
+Current capstone:
 
-- [TASK-0086: tighten planning around touched files, signature deltas, and oversized-file decisions](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0086/ticket.md)
-- [TASK-0087: enforce QA routing and evidence packs before completion](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0087/ticket.md)
-- [TASK-0088: make reset and resume handoffs concise and compaction-safe](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0088/ticket.md)
-- [TASK-0089: make execution routing default to answer, plan, or act](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0089/ticket.md)
-- [TASK-0102: add autonomy readiness and serial ralph dispatcher](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0102/ticket.md)
+- [Codexter V2 milestone](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
 
-Next:
+Finish this Symphony-inspired pass with three small tickets:
 
-- [TASK-0081: add a worktree-backed multi-session runtime with a cloud-ready boundary](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081/ticket.md)
+- [TASK-0121: define explicit Codexter invocation triggers](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/ticket.md)
+- [TASK-0123: add board adapter conformance scaffolding](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0123/ticket.md)
+- [TASK-0122: add external compute handoff recipes](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0122/ticket.md)
 
-Later:
+Do not expand this into a background-agent platform right now:
 
-- [TASK-0082: add transparency and ablation evals for autonomy changes](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0082/ticket.md)
+- [TASK-0081](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0081/ticket.md)
+  is archived as premature runtime-scaling work.
+- Parallel Ralph, hosted telemetry, Linear/Notion adapters, and cloud runners
+  stay deferred until real project pressure proves they are worth the cost.
 
 The roadmap above reflects the current audit:
 
-- the intake, per-ticket planning, review, Stop-hook gating, and closeout stack
-  are already live
-- the main missing product leap is not more mode sprawl; it is making plans,
-  proof, and handoffs legible enough that the runtime can be trusted
-- bigger runtime scale still matters, but only after the contract-first tickets
-  make file ownership, evidence quality, and resume behavior harder to fake
+- the intake, per-ticket planning, review, Stop-hook gating, closeout,
+  filesystem BoardAdapter, ComputeSelector, invocation envelope, proof packet,
+  and serial `$ralph` selector are already live
+- the only remaining near-term architecture work is to make invocation
+  triggers, adapter conformance, and external compute handoffs explicit enough
+  that future integrations do not drift
+- after `TASK-0121`, `TASK-0122`, and `TASK-0123`, stop investing in this
+  architecture track and return to real project work unless a concrete project
+  ticket exposes a new gap
 
 ## Setup
 

@@ -430,69 +430,38 @@ Required before unattended or remote execution:
 - proof packet path is writable,
 - remote runner can access the workspace or receives a prepared workspace.
 
-## What To Implement
+## Implementation Status And Cap
 
-### Ticket 1: `WORKFLOW.md` and schema
+Implemented foundation:
 
-- Add example `WORKFLOW.md`.
-- Add parser/validator.
-- Keep unknown extension keys ignored.
-- Validate board adapter, compute targets, and routing keys.
+- `WORKFLOW.md` exists as the repo-local invocation policy.
+- Filesystem tickets normalize into `WorkItem` through `FileTicketAdapter`.
+- Compute admission is handled by `ComputeSelector`.
+- Local Codex can prepare one `CodexterRunEnvelope` and write a `ProofPacket`.
+- Symphony examples exist as a shim, not as a Codexter-owned daemon.
+- Ralph selection now reads through BoardAdapter and ComputeSelector while
+  remaining serial.
 
-### Ticket 2: `WorkItem` and filesystem adapter
+Remaining V2 tickets:
 
-- Normalize `tickets/TASK-*/ticket.md` into `WorkItem`.
-- Preserve current ticket metadata invariants.
-- Add `compute_target` as an optional ticket field only after validator support
-  exists.
+| Ticket | Why now | Stop line |
+| --- | --- | --- |
+| `TASK-0121` | lock explicit invocation trigger vocabulary before any adapter or handoff work repeats the same ambiguity | no listener, webhook, or daemon |
+| `TASK-0123` | give future board adapters a tiny conformance scaffold before Linear/Notion/GitHub work starts | no real external board client |
+| `TASK-0122` | document practical Codex Cloud and Symphony handoffs without rebuilding background agents | no cloud wrapper, no auto-apply |
 
-### Ticket 3: Codexter run envelope in local Codex
+Deferred:
 
-- Define the prompt/file envelope shape a local Codex session will honor.
-- Accept ticket path/id and optional compute override through the envelope.
-- Load workflow and work item.
-- Select compute.
-- Route to existing phase skill.
-- Write run state and proof packet.
+- Parallel Ralph, leases, worktree pools, merge queues, and batch QA.
+- Hosted dashboards and telemetry.
+- First-class Linear/Notion/GitHub adapters.
+- A Symphony replacement or scheduler inside Codexter.
 
-### Ticket 4: `ProofPacket` and evidence writeback
+## Acceptance Criteria for V2 Close
 
-- Define schema.
-- Emit result JSON for pass/revise/block/fail.
-- Link proof path from ticket `Evidence`.
-
-### Ticket 5: Symphony integration shim
-
-- Accept file-based `CodexterRunEnvelope`.
-- Ensure the same envelope works in a per-ticket workspace launched by
-  Symphony's normal Codex runner.
-- Document exactly what Symphony must provide and what Codexter returns.
-- Current artifact: `skills/codexter-invocation/references/symphony.md` and
-  `templates/symphony-run-envelope.json`.
-
-### Ticket 6: Parallel/remote follow-up
-
-- Claim/lease registry.
-- Local worktree pool.
-- Queue-level `ralph` over `BoardAdapter`.
-- Linear adapter.
-- Optional Symphony runner backend.
-
-## Acceptance Criteria for the First Slice
-
-- A human can ask a normal Codex session with Codexter installed to run one
-  filesystem ticket.
-- The run uses `WORKFLOW.md`.
-- The run normalizes the ticket into `WorkItem`.
-- The run chooses compute using `ComputeSelector`.
-- The run routes to existing Codexter skills instead of duplicating them.
-- The run writes a machine-readable `ProofPacket`.
-- The same `CodexterRunEnvelope` / `ProofPacket` shape is documented for future
-  Symphony invocation.
-
-## Open Questions
-
-- Should `compute_target` live in ticket frontmatter v1, or should v1 keep it
-  in `WORKFLOW.md`/prompt override only until validator changes land?
-- Should proof packets be linked from every run, or only non-trivial build/QA
-  runs?
+- Explicit invocation triggers are documented.
+- Board adapter conformance expectations are documented.
+- External compute handoff recipes are documented.
+- The README and architecture map point to the capped V2 milestone.
+- No active roadmap claims Codexter should rebuild Symphony, own polling, or
+  auto-run draft tickets.

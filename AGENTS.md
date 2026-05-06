@@ -66,6 +66,12 @@ Ticket existence, `ready: true`, status movement, and `compute_target` changes
 are not run triggers; only explicit invocation should start Codexter work. See
 `MEM-0077` and `MEM-0081`.
 
+Codexter V2 is capped at explicit invocation triggers, board adapter
+conformance scaffolding, and external compute handoff recipes. Do not expand
+the Symphony-inspired work into a Codexter-owned daemon, hosted control plane,
+parallel runner, cloud wrapper, or external board adapter without a fresh
+project-ticket need. See `MEM-0082`.
+
 ## Project Structure
 
 - `README.md`: current product shape, setup, and canonical entry points

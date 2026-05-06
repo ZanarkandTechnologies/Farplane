@@ -1,0 +1,134 @@
+{
+  "work_type": ["skills", "docs", "routing"],
+  "ticket_id": "TASK-0101",
+  "reviewed_at": "2026-05-03T15:12:12Z",
+  "reviewer_mode": "visible_review_lane",
+  "search_scope": {
+    "changed_files": [
+      "AGENTS.md",
+      "README.md",
+      "docs/HISTORY.md",
+      "docs/MEMORY.md",
+      "docs/specs/harness-techniques.md",
+      "skills/frontend-craft/SKILL.md",
+      "skills/frontend-craft/references/*.md",
+      "skills/functional-ui/SKILL.md",
+      "skills/functional-ui/references/*.md",
+      "skills/visual-design/SKILL.md",
+      "skills/visual-design/references/*.md",
+      "skills/landing-page/SKILL.md",
+      "skills/landing-page/references/*.md",
+      "skills/frontend-design/SKILL.md",
+      "skills/frontend-design/references/architecture.md",
+      "skills/frontend-design/references/workflows.md",
+      "skills/frontend-design/references/gotchas.md",
+      "skills/cinematic-landing/SKILL.md",
+      "skills/cinematic-landing/references/architecture.md",
+      "skills/cinematic-landing/references/workflows.md",
+      "skills/cinematic-landing/references/gotchas.md",
+      "skills/deep-ui-design/*",
+      "skills/demo-realism/*",
+      "skills/visual-qa/SKILL.md",
+      "skills/visual-qa/references/workflows.md",
+      "skills/testing/references/index.md",
+      "tickets/TASK-0101/ticket.md"
+    ],
+    "related_files": [
+      "skills/skill-creator/SKILL.md",
+      "skills/skill-creator/scripts/quick_validate.py",
+      "skills/review/SKILL.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/desloppify.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/user-intent-satisfaction.md",
+      "skills/review/references/debloatability.md"
+    ],
+    "invariants_checked": ["MEM-0012", "MEM-0044", "MEM-0072"],
+    "manual_searches": [
+      "rg -n \"frontend-review|official GSAP skills|cinematic-landing.*owns|frontend-design.*visual execution|frontend-design handles visual\" skills README.md AGENTS.md docs -g '*.md'",
+      "rg -n \"frontend-craft|functional-ui|visual-design|landing-page|frontend-design|cinematic-landing\" skills/deep-ui-design skills/demo-realism skills/visual-qa skills/testing/references/index.md docs/MEMORY.md docs/HISTORY.md docs/specs/harness-techniques.md -g '*.md'"
+    ]
+  },
+  "rubrics_used": [
+    "user-intent-satisfaction",
+    "integration-readiness",
+    "evidence-quality",
+    "debloatability"
+  ],
+  "summary": "The implemented wrapper-plus-granular topology matches the user request: frontend-craft is the main implementation orchestrator, functional-ui remains standalone and required for unsettled UX, visual-design owns visual taste, landing-page owns one-page/scrolltelling work, frontend-design is narrowed to app UI implementation references, and cinematic-landing is retained as compatibility.",
+  "overall_score": 4.25,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": {
+    "user-intent-satisfaction": {
+      "score": 4.5,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "ask-fidelity": 4.7,
+        "outcome-completeness": 4.4,
+        "worth-it-feel": 4.4,
+        "impressiveness": 4.2,
+        "evidence-confidence": 4.3
+      },
+      "findings": [],
+      "next_action": "No user-intent rework required."
+    },
+    "integration-readiness": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.2,
+        "contract-correctness": 4.3,
+        "dependency-readiness": 4.1,
+        "coupling-risk": 4.1,
+        "merge-readiness": 4.1
+      },
+      "findings": [],
+      "next_action": "Ready to advance; leave unrelated pre-existing autoresearch worktree changes out of this ticket."
+    },
+    "evidence-quality": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.1,
+        "reproducibility": 4.2,
+        "traceability": 4.1,
+        "consistency": 4.1,
+        "inspectability": 4.0
+      },
+      "findings": [],
+      "next_action": "Ticket evidence should link this review artifact and list validator outputs."
+    },
+    "debloatability": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead-surface-removal": 3.8,
+        "compatibility-cleanup": 4.2,
+        "duplication-reduction": 4.0,
+        "clarity-improvement": 4.3,
+        "deletion-safety": 4.0
+      },
+      "findings": [],
+      "next_action": "Keep cinematic-landing as compatibility until hidden prompt callers no longer reference it."
+    }
+  },
+  "blocking_findings": [],
+  "caveats": [
+    "The working tree contains unrelated pre-existing autoresearch and hooks changes outside this ticket scope.",
+    "No visual QA was required because this task changed skill/docs surfaces, not a rendered frontend."
+  ],
+  "next_action": "Update TASK-0101 evidence and mark the ticket done."
+}

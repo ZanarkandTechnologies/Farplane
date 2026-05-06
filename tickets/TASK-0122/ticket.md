@@ -28,6 +28,17 @@ orchestrator. The recipes should tell an operator or future adapter how to pass
 ticket context, invoke normal Codex with Codexter installed, and bring back a
 diff plus ProofPacket for review.
 
+## V2 Importance
+- `Why now:` this gives a practical answer for "run this ticket on the cloud"
+  without building a cloud orchestrator. Codexter should package context and
+  proof expectations; Codex Cloud or Symphony should own execution.
+- `Why not later:` external compute is the most tempting place to overbuild.
+  A recipe-first boundary now lets the operator use existing tools manually and
+  keeps future automation from inventing new prompts.
+- `Stop line:` document recipes and templates only. Do not submit cloud tasks,
+  wrap `codex cloud`, launch Symphony, poll runs, auto-apply diffs, or merge
+  remote output.
+
 ## Scope
 - In:
   - Add a Codex Cloud handoff reference using `codex cloud exec`, `status`,
@@ -160,13 +171,14 @@ diff plus ProofPacket for review.
 - [Codexter invocation skill](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/SKILL.md)
 - [Compute selector](/Users/kenjipcx/coding-harness/Codexter/bin/codexter_compute.py)
 - [Symphony-compatible runner spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/symphony-compatible-codexter-runner.md)
+- [Codexter V2 milestone](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
 
 ## Evidence
 - `Artifacts:`
-  - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
+  - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
 - `Commands:`
   - `python3 tickets/scripts/check_ticket_metadata.py`
-  - `git diff --check -- tickets/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
+  - `git diff --check -- tickets/archive/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
   - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
 - `Result summary:`
   - Planning ticket created and approval-gated; depends on explicit invocation triggers in `TASK-0121`.

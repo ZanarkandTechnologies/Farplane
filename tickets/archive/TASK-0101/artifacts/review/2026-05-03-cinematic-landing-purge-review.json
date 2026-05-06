@@ -1,0 +1,116 @@
+{
+  "work_type": ["skills", "docs", "cleanup"],
+  "ticket_id": "TASK-0101",
+  "reviewed_at": "2026-05-03T15:31:07Z",
+  "reviewer_mode": "visible_review_lane",
+  "search_scope": {
+    "changed_files": [
+      "AGENTS.md",
+      "agents/frontend-designer.toml",
+      "agents/qa-tester.toml",
+      "docs/HISTORY.md",
+      "docs/MEMORY.md",
+      "docs/specs/harness-techniques.md",
+      "skills/cinematic-landing/**",
+      "skills/testing/references/index.md",
+      "skills/visual-qa/SKILL.md",
+      "skills/visual-qa/references/workflows.md",
+      "skills/landing-page/references/gotchas.md"
+    ],
+    "related_files": [
+      "skills/frontend-craft/SKILL.md",
+      "skills/functional-ui/SKILL.md",
+      "skills/visual-design/SKILL.md",
+      "skills/landing-page/SKILL.md",
+      "skills/frontend-design/SKILL.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "manual_searches": [
+      "rg -n \"cinematic-landing|Cinematic Landing\" . -g '*.md' -g '*.toml' -g '*.json' -g '!tickets/**' -g '!docs/HISTORY.md' -g '!docs/MEMORY.md'",
+      "find skills/cinematic-landing -maxdepth 3 -type f -print"
+    ],
+    "invariants_checked": ["MEM-0072"]
+  },
+  "rubrics_used": [
+    "user-intent-satisfaction",
+    "integration-readiness",
+    "evidence-quality",
+    "debloatability"
+  ],
+  "summary": "The old cinematic landing compatibility package has been removed from active skill surfaces. Live agent prompts, testing references, visual QA references, harness inventory, AGENTS guidance, and memory now route animation-heavy landing work through landing-page instead.",
+  "overall_score": 4.3,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": {
+    "user-intent-satisfaction": {
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "ask-fidelity": 4.6,
+        "outcome-completeness": 4.4,
+        "worth-it-feel": 4.3,
+        "impressiveness": 4.0,
+        "evidence-confidence": 4.3
+      },
+      "findings": [],
+      "next_action": "No user-intent rework required."
+    },
+    "integration-readiness": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.1,
+        "contract-correctness": 4.3,
+        "dependency-readiness": 4.2,
+        "coupling-risk": 4.2,
+        "merge-readiness": 4.1
+      },
+      "findings": [],
+      "next_action": "Ready to advance; current landing and QA routes resolve to landing-page."
+    },
+    "evidence-quality": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.1,
+        "reproducibility": 4.2,
+        "traceability": 4.1,
+        "consistency": 4.1,
+        "inspectability": 4.0
+      },
+      "findings": [],
+      "next_action": "Keep the purge commands and review artifact linked from ticket evidence."
+    },
+    "debloatability": {
+      "score": 4.5,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead-surface-removal": 4.8,
+        "compatibility-cleanup": 4.5,
+        "duplication-reduction": 4.4,
+        "clarity-improvement": 4.3,
+        "deletion-safety": 4.3
+      },
+      "findings": [],
+      "next_action": "No further cleanup required for the old cinematic landing skill package."
+    }
+  },
+  "blocking_findings": [],
+  "caveats": [
+    "Historical and memory records still mention the removed package to preserve the cleanup trail.",
+    "The working tree still contains unrelated pre-existing autoresearch/hooks changes outside this cleanup scope."
+  ],
+  "next_action": "Completion response can report the purge."
+}

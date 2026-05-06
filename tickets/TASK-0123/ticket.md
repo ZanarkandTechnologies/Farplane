@@ -27,6 +27,17 @@ custom board adapters without implementing those adapters now. The goal is to
 make every future adapter prove it can normalize one work item, preserve
 readiness/invocation semantics, and write evidence traceably.
 
+## V2 Importance
+- `Why now:` this keeps the adapter seam real without implementing Linear,
+  Notion, GitHub, or webhook code. Future adapters can be tested against one
+  small contract instead of rediscovering the filesystem assumptions.
+- `Why not later:` adapter work is where accidental daemon behavior can creep
+  back in. A conformance scaffold now protects the rule that adapters store and
+  normalize work, but do not decide when agents start.
+- `Stop line:` add checklist/fixtures and maybe one filesystem conformance
+  test only. Do not add external clients, credentials, polling, webhooks, or
+  writeback implementation.
+
 ## Scope
 - In:
   - Add a board-adapter conformance reference or fixture suite.
@@ -151,13 +162,14 @@ readiness/invocation semantics, and write evidence traceably.
 - [BoardAdapter helper](/Users/kenjipcx/coding-harness/Codexter/bin/codexter_boards.py)
 - [board-compute orchestration](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
 - [tickets README](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
+- [Codexter V2 milestone](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
 
 ## Evidence
 - `Artifacts:`
-  - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
+  - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
 - `Commands:`
   - `python3 tickets/scripts/check_ticket_metadata.py`
-  - `git diff --check -- tickets/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
+  - `git diff --check -- tickets/archive/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
   - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
 - `Result summary:`
   - Planning ticket created and approval-gated; depends on the terminology reset in `TASK-0120`.

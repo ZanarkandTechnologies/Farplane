@@ -442,19 +442,24 @@ Future runner observability:
 
 | Ticket | Purpose | Depends on | Expected output |
 | --- | --- | --- | --- |
-| `TASK-0112` | Add Symphony integration shim | `TASK-0107`, `TASK-0111` | example `WORKFLOW.md`/prompt/envelope showing Symphony-to-Codexter handoff |
-| `TASK-0113` | Define BoardAdapter v1 | `TASK-0111` | filesystem adapter interface and tests |
-| `TASK-0114` | Implement compute selector v2 | `TASK-0111`, `TASK-0113` | admission policy, blocker reasons, runtime hints, fixtures |
-| `TASK-0115` | Design parallel Ralph leases and merge policy | `TASK-0111`, `TASK-0113`, `TASK-0114`, `TASK-0081` | design-only lease/worktree/merge/batch-QA spec |
-| `TASK-0116` | Add Symphony-style spec template and conformance matrix | none | reusable spec authoring contract |
+| `TASK-0121` | Define explicit invocation triggers | `TASK-0120` | local chat, `$ralph`, comment convention, Codex Cloud, and Symphony trigger vocabulary |
+| `TASK-0123` | Add board adapter conformance scaffolding | `TASK-0120` | checklist/fixtures that prove adapters normalize work and preserve invocation semantics |
+| `TASK-0122` | Add external compute handoff recipes | `TASK-0121` | Codex Cloud and Symphony handoff recipes with diff/evidence/ProofPacket expectations |
+
+Completed foundation tickets are archived: `TASK-0112`, `TASK-0113`,
+`TASK-0114`, `TASK-0115`, `TASK-0116`, `TASK-0119`, and `TASK-0120`.
+`TASK-0081` is archived as premature runtime-scaling work.
 
 ## 14. Implementation Checklist
 
 - Keep `bin/codexter_invocation.py` diagnostic and artifact-oriented.
-- Add `BoardAdapter` as an interface before adding external board clients.
-- Add `ComputeSelector` tests before allowing non-local targets.
-- Add Symphony examples only as shims, not as a local daemon.
-- Add parallel Ralph only after the lease/worktree/merge design is approved.
+- Keep `BoardAdapter` and `ComputeSelector` as admission and normalization
+  surfaces; do not turn them into launchers.
+- Add external board clients only after their conformance scaffolding exists.
+- Add Symphony and Codex Cloud examples only as handoff recipes, not as local
+  daemons.
+- Add parallel Ralph only after a fresh ticket proves leases, worktrees, merge
+  policy, stale recovery, and batch QA are worth the cost.
 - Review each implementation against the user story groups:
   - solo local operator,
   - future Symphony integration builder,

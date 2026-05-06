@@ -27,6 +27,17 @@ this ticket." The goal is to support local chat, ticket comments, Codex Cloud
 payloads, and future Symphony payloads without introducing a polling daemon or
 auto-running draft tickets.
 
+## V2 Importance
+- `Why now:` this is the semantic lock for the whole V2 capstone. Without a
+  named trigger vocabulary, future board adapters and cloud handoffs can
+  accidentally treat `ready: true`, ticket creation, or status movement as a
+  run request.
+- `Why not later:` `TASK-0122` and `TASK-0123` both need this boundary. The
+  handoff recipe has to say what started the run, and adapter conformance has
+  to prove adapters preserve invocation semantics.
+- `Stop line:` document trigger shapes and examples only. Do not build a
+  listener, webhook handler, polling loop, or comment watcher.
+
 ## Scope
 - In:
   - Define `InvocationTrigger` vocabulary for local chat, ticket comment,
@@ -161,13 +172,14 @@ auto-running draft tickets.
 - [Codexter invocation skill](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/SKILL.md)
 - [Symphony-compatible runner spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/symphony-compatible-codexter-runner.md)
 - [WORKFLOW.md](/Users/kenjipcx/coding-harness/Codexter/WORKFLOW.md)
+- [Codexter V2 milestone](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
 
 ## Evidence
 - `Artifacts:`
-  - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
+  - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
 - `Commands:`
   - `python3 tickets/scripts/check_ticket_metadata.py`
-  - `git diff --check -- tickets/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
+  - `git diff --check -- tickets/archive/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
   - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
 - `Result summary:`
   - Planning ticket created and approval-gated; depends on the terminology reset in `TASK-0120`.

@@ -150,6 +150,9 @@ Legend:
 
 - [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
   Purpose: index of canonical behavior and execution specs
+- [docs/specs/codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
+  Purpose: capped Symphony-inspired follow-through: explicit invocation
+  triggers, adapter conformance, external compute recipes, and clear deferrals
 - [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
 - [docs/specs/board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)

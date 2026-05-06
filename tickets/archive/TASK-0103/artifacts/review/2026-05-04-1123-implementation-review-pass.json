@@ -1,0 +1,26 @@
+{
+  "ticket_id": "TASK-0103",
+  "reviewed_at": "2026-05-04T11:23:15Z",
+  "reviewer_agent": "019df2b0-34da-7392-bdb1-05007b2811e1",
+  "work_type": ["docs", "skills", "workflow"],
+  "rubrics_used": [
+    "integration-readiness",
+    "evidence-quality",
+    "debloatability"
+  ],
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gates": [],
+  "blocking_findings": [],
+  "prior_blockers_checked": {
+    "fixture_provenance_source_anchors": "resolved",
+    "registry_id_allocation_last_verified_rules": "resolved",
+    "ticket_evidence_links": "resolved",
+    "harness_scout_reference_discoverability": "resolved"
+  },
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "remaining_next_action": "optional cleanup only: future registry passes should replace broad seeded proof refs with more artifact-specific evidence where available"
+}

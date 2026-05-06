@@ -1,0 +1,104 @@
+{
+  "work_type": [
+    "planning",
+    "runtime",
+    "skills"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "tickets/TASK-0099/ticket.md"
+    ],
+    "related_files": [
+      "tickets/templates/ticket.md",
+      "docs/specs/harness-engineering-doctrine.md",
+      "docs/specs/runtime-surface.md",
+      "tickets/TASK-0081/ticket.md",
+      "AGENTS.md"
+    ],
+    "invariants_checked": [
+      "MEM-0020",
+      "MEM-0022",
+      "MEM-0031",
+      "MEM-0044",
+      "MEM-0050"
+    ],
+    "docs_checked": [
+      "skills/impl-plan/references/review.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md"
+    ]
+  },
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan"
+  ],
+  "summary": "The ticket is a coherent first slice for shipping a repo-owned `pr-runtime` workflow. The primary surface and secondary surfaces are explicit, the runtime record shape is concrete, and the proof path is believable. The main caution is to keep the helper minimal so the slice does not expand into a generic runtime manager.",
+  "overall_score": 4.3,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": "medium",
+      "rubric": "implementation-plan",
+      "summary": "The plan names a helper-backed runtime registry clearly, but the execution slice could still bloat if implementation starts adding general-purpose orchestration instead of staying on the narrow PR/ticket checkout workflow.",
+      "file_refs": [
+        "tickets/TASK-0099/ticket.md"
+      ],
+      "evidence": [
+        "The ticket intentionally touches both a new skill package and a new helper surface.",
+        "The risk section calls out overbuilding into a full runtime manager, which is the right constraint to preserve during implementation."
+      ],
+      "next_action": "Keep the first implementation limited to skill packaging, runtime-record persistence, and declared target publication; defer broader compose and dispatcher behavior."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.5,
+        "parallelization-fit": 4.0,
+        "slice-sizing": 4.0,
+        "acceptance-testability": 4.5,
+        "scope-clarity": 4.5
+      },
+      "findings": [
+        "The ticket defines one coherent first slice: ship a discoverable skill plus the smallest helper needed to persist runtime records and publish QA targets.",
+        "Scope and non-goals are explicit enough to keep cloud runners, broad dispatch, and mandatory full Docker isolation out of this slice."
+      ],
+      "next_action": "Approve the ticket if the operator agrees that the helper stays minimal and local-first."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.5,
+        "bloatability": 4.0,
+        "modularity": 4.0,
+        "proof-clarity": 4.0,
+        "execution-order": 4.0,
+        "risk-clarity": 4.5
+      },
+      "findings": [
+        "The plan is file-map-first, names the callable seams and runtime JSON shapes, and makes the primary versus secondary placement surfaces explicit.",
+        "Verification is concrete enough for approval, with helper persistence and QA-target consumption named as the key proof points.",
+        "The only meaningful caveat is to resist expanding the helper into a generic runtime manager before the narrow workflow proves useful."
+      ],
+      "next_action": "Implement the skill package and helper as a narrow workflow surface, then stop and reassess before adding heavier runtime orchestration."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Approve or refine the `pr-runtime` skill-first slice, then implement it without widening into full runtime orchestration."
+}

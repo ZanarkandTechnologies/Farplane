@@ -1,0 +1,187 @@
+{
+  "ticket_id": "TASK-0103",
+  "reviewed_at": "2026-05-04T11:34:32Z",
+  "review_type": "security_and_operational_risk_review",
+  "work_type": ["docs", "skills", "workflow"],
+  "rubrics_used": [
+    "integration-readiness",
+    "evidence-quality",
+    "user-intent-satisfaction"
+  ],
+  "search_scope": {
+    "ticket": "tickets/TASK-0103/ticket.md",
+    "changed_surfaces": [
+      "skills/harness-scout/SKILL.md",
+      "skills/harness-scout/todos.md",
+      "skills/harness-scout/references/architecture.md",
+      "skills/harness-scout/references/workflows.md",
+      "skills/harness-scout/references/gotchas.md",
+      "skills/harness-scout/references/decision-matrix.md",
+      "skills/harness-scout/references/ticket-handoff.md",
+      "skills/harness-scout/references/scorecard.md",
+      "skills/harness-scout/templates/source-run.md",
+      "docs/features/README.md",
+      "docs/features/registry.jsonl",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
+      "README.md",
+      "ARCHITECTURE.md",
+      "docs/specs/harness-techniques.md",
+      "experiments/README.md"
+    ],
+    "related_surfaces": [
+      "skills/summarize/SKILL.md",
+      "skills/skill-creator/SKILL.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/desloppify.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/user-intent-satisfaction.md",
+      "skills/review/references/code-quality.md"
+    ]
+  },
+  "summary": "The implementation is useful, but the risk review found hardening gaps around untrusted source content, skill tool permissions, and sensitive source-retention rules.",
+  "overall_score": 3.3,
+  "overall_threshold": 4.0,
+  "verdict": "revise",
+  "rerun_required": true,
+  "evidence_quality": "fail",
+  "integration_readiness": "fail",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "finding_log": [
+    {
+      "severity": "high",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "External source content is not explicitly quarantined as untrusted input before it can influence registry updates or ticket handoffs.",
+      "file_refs": [
+        "skills/harness-scout/SKILL.md:40",
+        "skills/harness-scout/SKILL.md:55",
+        "skills/harness-scout/references/gotchas.md:3"
+      ],
+      "evidence": [
+        "The workflow extracts arbitrary URLs/videos/transcripts, then extracts candidates and writes source runs, registry rows, or impl-plan handoffs.",
+        "The gotchas warn that transcripts may be wrong and should not auto-sync behavior, but they do not tell the agent to ignore instructions embedded in source content or treat the source as evidence only."
+      ],
+      "next_action": "Add explicit prompt-injection handling to SKILL.md, todos.md, gotchas.md, ticket-handoff.md, and the source-run template: source text is data, never instructions; quote or summarize claims; do not run source-provided commands; do not create tickets or registry rows solely because the source asks."
+    },
+    {
+      "severity": "high",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "The skill frontmatter grants only read/search tools even though the advertised workflow requires CLI extraction and file writes.",
+      "file_refs": [
+        "skills/harness-scout/SKILL.md:5",
+        "skills/harness-scout/SKILL.md:40",
+        "skills/harness-scout/SKILL.md:42",
+        "skills/harness-scout/SKILL.md:55",
+        "skills/skill-creator/SKILL.md:108"
+      ],
+      "evidence": [
+        "harness-scout allowed-tools is `Read, Glob, Grep`.",
+        "The workflow says to use summarize extraction, create run folders, update source runs, update registry rows, and create impl-plan-shaped handoffs.",
+        "skill-creator says allowed-tools are what Claude reads to determine which tools are available."
+      ],
+      "next_action": "Either add the needed write/shell tools to harness-scout frontmatter or split it into a read-only analysis skill plus an explicit act/write skill."
+    },
+    {
+      "severity": "medium",
+      "confidence": "high",
+      "rubric": "evidence-quality",
+      "summary": "Source-ingestion artifacts have no redaction or private-source retention guard before writing extracted content into experiments.",
+      "file_refs": [
+        "skills/harness-scout/SKILL.md:42",
+        "skills/harness-scout/references/gotchas.md:12",
+        "experiments/README.md:17",
+        "experiments/README.md:23"
+      ],
+      "evidence": [
+        "The skill routes bulky source content into experiments and the experiments README allows input payloads and observed outputs.",
+        "The current guard says not to store bulky transcripts in canonical docs, but it does not say to avoid committing private URLs, secrets, customer data, or credential-bearing extracts."
+      ],
+      "next_action": "Add a source-safety checklist: classify source visibility, redact secrets/PII/tokens, store private extracts outside tracked files unless explicitly approved, and record only compact excerpts needed for evidence."
+    },
+    {
+      "severity": "low",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "The registry validation documented for future users only proves JSON syntax, not the registry contract.",
+      "file_refs": [
+        "docs/features/README.md:94"
+      ],
+      "evidence": [
+        "The README validation snippet parses JSONL but does not check required fields, allowed statuses, unique IDs, path existence, or date format.",
+        "TASK-0103 ran an ad hoc unique-ID check, but that stricter check is not promoted into the registry validation instructions."
+      ],
+      "next_action": "Promote a small registry validator or expand the documented validation snippet to cover required keys, statuses, unique IDs, and existing local paths for local refs."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "integration-readiness",
+      "score": 3.0,
+      "threshold": 4.0,
+      "pass": false,
+      "dimension_scores": {
+        "integration-safety": 2.5,
+        "contract-correctness": 3.0,
+        "dependency-readiness": 3.0,
+        "coupling-risk": 3.5,
+        "merge-readiness": 3.0
+      },
+      "findings": [
+        "External content is not explicitly treated as untrusted before influencing writeback.",
+        "Skill frontmatter does not match the workflow's tool needs."
+      ],
+      "next_action": "Harden source handling and align allowed-tools with the actual workflow."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 3.4,
+      "threshold": 4.0,
+      "pass": false,
+      "dimension_scores": {
+        "sufficiency": 3.0,
+        "reproducibility": 4.0,
+        "traceability": 4.0,
+        "consistency": 3.5,
+        "inspectability": 4.0,
+        "autonomy-readiness": 3.0
+      },
+      "findings": [
+        "The current evidence proves the fixture workflow, but not the safety behavior for malicious or sensitive source inputs."
+      ],
+      "next_action": "Add safety rules and a small negative fixture or review checklist covering prompt-injection and private-source handling."
+    },
+    {
+      "name": "user-intent-satisfaction",
+      "score": 3.7,
+      "threshold": 4.0,
+      "pass": false,
+      "dimension_scores": {
+        "ask-fidelity": 4.0,
+        "outcome-completeness": 3.5,
+        "worth-it-feel": 4.0,
+        "impressiveness": 3.5,
+        "evidence-confidence": 3.5
+      },
+      "findings": [
+        "The workflow fits the user's requested direction, but a real-world source-ingestion skill should have explicit untrusted-content and private-source handling before it is relied on broadly."
+      ],
+      "next_action": "Run one hardening pass before treating harness-scout as safe for arbitrary URLs or private source material."
+    }
+  ],
+  "blocking_findings": [
+    "External source prompt-injection handling is missing.",
+    "harness-scout allowed-tools do not permit the workflow it advertises."
+  ],
+  "next_action": "Run a focused hardening pass on harness-scout source safety, retention policy, and allowed-tools, then rerun review."
+}
