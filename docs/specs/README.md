@@ -7,6 +7,13 @@ Top-level companion docs:
 - [`ARCHITECTURE.md`](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) - top-level system map and canonical surface guide
 - [`README.md`](/Users/kenjipcx/coding-harness/Codexter/README.md) - product/setup story and public entrypoints
 
+Documentation ownership:
+
+- `README.md` is the public documentation router.
+- `ARCHITECTURE.md` owns the whole-system diagram and surface ownership map.
+- this file indexes canonical specs and the doc-gardening loop.
+- `tickets/README.md` owns ticket metadata, lifecycle, and invocation policy.
+
 Current design docs:
 
 - `autoresearch-skill-suite.md` - metric-driven autoresearch planning, execution, and skill self-improvement contract
@@ -65,5 +72,7 @@ Run this loop when the public harness story changes:
 3. Run `python3 bin/check_doc_parity.py`.
 4. Re-read `ARCHITECTURE.md`, `README.md`, `docs/specs/README.md`, `docs/specs/harness-techniques.md`, and `tickets/README.md` against the active ticket plus `docs/MEMORY.md` / `docs/HISTORY.md`.
 5. Use the `codex exec` narrative audit in `doc-governance.md` when the public story, implemented/proposed status, or canonical links changed.
-6. Patch only the canonical surfaces that drifted; do not spread the same claim across more docs unless the new surface is truly canonical.
+6. Patch only the canonical surfaces that drifted; keep README and
+   ARCHITECTURE synchronized when the whole-system map, shipped capability
+   list, or roadmap cap changes.
 7. Re-run `python3 tickets/scripts/check_ticket_metadata.py`, `python3 bin/check_harness_invariants.py`, and `python3 bin/check_doc_parity.py`.

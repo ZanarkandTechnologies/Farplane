@@ -1,0 +1,134 @@
+{
+  "work_type": [
+    "runtime",
+    "backend",
+    "tests",
+    "docs"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "bin/stop_hook.py",
+      "bin/test_stop_hook.py",
+      "bin/test_tmux_helper.py",
+      "docs/specs/review-gates.md",
+      "skills/review/SKILL.md",
+      "agents/completion-reviewer.toml",
+      "AGENTS.md",
+      "docs/MEMORY.md",
+      "docs/HISTORY.md"
+    ],
+    "related_files": [
+      "tickets/TASK-0087/ticket.md",
+      "docs/specs/orchestrator-subagent-loop.md",
+      "skills/impl/scripts/tmux_helper.py"
+    ],
+    "invariants_checked": [
+      "MEM-0049",
+      "MEM-0064",
+      "MEM-0067"
+    ],
+    "docs_checked": [
+      "docs/specs/review-gates.md",
+      "skills/review/SKILL.md",
+      "AGENTS.md",
+      "docs/MEMORY.md",
+      "docs/HISTORY.md",
+      "tickets/TASK-0087/ticket.md"
+    ]
+  },
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "summary": "The completion-password gate is mostly coherent and well-tested, but the password-only retry path still tells the live lane to rerun completion review and rewrite the receipt before the hook has checked whether a valid receipt already exists.",
+  "overall_score": 3.8,
+  "overall_threshold": 4.0,
+  "verdict": "revise",
+  "rerun_required": true,
+  "evidence_quality": "pass",
+  "integration_readiness": "fail",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [
+    "integration-readiness"
+  ],
+  "finding_log": [
+    {
+      "severity": "medium",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "The password-only retry path always instructs the lane to rerun completion review and rewrite the receipt, even when the receipt may already be present and only the final response forgot to echo `COMPLETION_PASSWORD`.",
+      "file_refs": [
+        "bin/stop_hook.py"
+      ],
+      "evidence": [
+        "The new `completion_review_password_gate` runs before any receipt lookup.",
+        "On failure it unconditionally rebuilds the generic completion-review request message, whose body says `Call the completion reviewer now ... then write ... completion-receipt.json`.",
+        "That means a lane that already has a valid linked receipt but omitted the password gets a misleading next step and may do redundant review work."
+      ],
+      "next_action": "Split the retry message path so password-only failures first check for an existing acceptable receipt and, when one exists, ask only for the missing `COMPLETION_PASSWORD: <nonce>` echo instead of forcing another reviewer pass."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity-reusability": 4.0,
+        "bloatability": 4.0,
+        "readability": 4.1,
+        "boundary-clarity": 4.0,
+        "error-handling": 3.9,
+        "maintainability": 4.0
+      },
+      "findings": [
+        "Password parsing and gating are localized to the completion-review path.",
+        "The remaining weakness is in the next-step instruction, not in the core nonce or receipt validation logic."
+      ],
+      "next_action": "Keep the current structure and patch only the password-only retry message branch."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 3.6,
+      "threshold": 4.0,
+      "pass": false,
+      "dimension_scores": {
+        "integration-safety": 3.7,
+        "contract-correctness": 3.5,
+        "dependency-readiness": 3.8,
+        "coupling-risk": 3.7,
+        "merge-readiness": 3.5
+      },
+      "findings": [
+        "The stop hook now issues the nonce only within an active ticket-backed `impl` loop, which is correct.",
+        "However, the recovery contract is still too blunt: a missing password and a missing receipt are treated as the same next step even though only one of those cases actually requires another reviewer run."
+      ],
+      "next_action": "Differentiate password-only recovery from receipt-missing recovery before calling this completion path fully pass-worthy."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.0,
+        "reproducibility": 4.2,
+        "traceability": 4.1,
+        "consistency": 4.1,
+        "inspectability": 4.1
+      },
+      "findings": [
+        "The stop-hook tests cover the request path, password-missing path, passing password-plus-receipt path, and the receipt validation matrix.",
+        "The ticket, docs, and memory entries consistently describe the password-plus-receipt contract."
+      ],
+      "next_action": "No additional proof needed for this finding; fix the retry messaging and rerun the same targeted suites."
+    }
+  ],
+  "blocking_findings": [
+    "Password-only completion-review failures still instruct an unnecessary reviewer rerun instead of a narrower `COMPLETION_PASSWORD` correction when the receipt already exists."
+  ],
+  "next_action": "Patch the password-only retry branch, rerun `python3 -m unittest bin.test_stop_hook bin.test_tmux_helper`, and re-review the ticket."
+}

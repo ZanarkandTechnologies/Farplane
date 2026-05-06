@@ -1,0 +1,95 @@
+{
+  "work_type": [
+    "planning"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "tickets/TASK-0087/ticket.md"
+    ],
+    "related_files": [
+      "bin/stop_hook.py",
+      "bin/test_stop_hook.py",
+      "skills/impl/scripts/tmux_helper.py",
+      "skills/review/SKILL.md",
+      "docs/specs/review-gates.md",
+      "docs/specs/orchestrator-subagent-loop.md",
+      "skills/impl/references/stop-hook-routing.md",
+      "agents/completion-reviewer.toml",
+      "tickets/archive/TASK-0038/ticket.md",
+      "tickets/archive/TASK-0065/ticket.md",
+      "tickets/archive/TASK-0090/ticket.md"
+    ],
+    "invariants_checked": [
+      "MEM-0007",
+      "MEM-0048",
+      "MEM-0049",
+      "MEM-0061",
+      "MEM-0062"
+    ],
+    "docs_checked": [
+      "skills/impl-plan/references/review.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "docs/specs/review-gates.md",
+      "docs/specs/orchestrator-subagent-loop.md"
+    ]
+  },
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan"
+  ],
+  "summary": "The plan keeps TASK-0087 as one coherent trust-boundary ticket, replaces the hidden completion-gate review with a visible nonce-backed receipt flow, and names the concrete file seams, data shapes, and proof path needed to build it safely.",
+  "overall_score": 4.4,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.5,
+        "parallelization-fit": 4.2,
+        "ticket-sizing": 4.4,
+        "acceptance-testability": 4.4,
+        "scope-clarity": 4.5
+      },
+      "findings": [
+        "The ticket stays one coherent build-and-proof loop instead of fake-splitting stop-hook mechanics from the receipt contract.",
+        "Acceptance criteria and verification make the nonce and receipt boundary observable rather than implied."
+      ],
+      "next_action": "Keep the implementation focused on the completion receipt contract and avoid broad hook-side orchestration redesign."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.4,
+        "bloatability": 4.2,
+        "modularity": 4.4,
+        "proof-clarity": 4.5,
+        "execution-order": 4.5,
+        "risk-clarity": 4.2,
+        "decision-tone": 4.5
+      },
+      "findings": [
+        "The plan names the real code seams and keeps the Stop hook deterministic instead of hand-waving about visible subagents inside Python.",
+        "The typed flow example and ordered execution steps make the nonce-backed receipt path implementable without inventing missing behavior."
+      ],
+      "next_action": "During build, preserve the mechanical-first ordering: request nonce, require visible receipt, then validate receipt before completion."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Approve TASK-0087 for build if the visible nonce-backed completion review receipt is the chosen direction."
+}

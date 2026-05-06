@@ -53,6 +53,31 @@ ticket, and execution workflow.
 - Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 - Project bootstrap: [skills/deep-init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/README.md)
 
+## Documentation Router
+
+Use this section as the shortest route to the right source of truth. Keep it in
+sync with [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
+whenever the public harness story changes.
+
+| Need | Start Here | Then Check |
+| --- | --- | --- |
+| Understand the whole repo | [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) | [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md) |
+| Decide where a harness change belongs | [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md) | [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md), nearest skill README |
+| Run or resume a ticket | [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) | active `tickets/TASK-*/ticket.md`, [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan/SKILL.md), [skills/impl/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl/SKILL.md) |
+| Close or archive finished work | [skills/close-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/close-ticket/SKILL.md) | [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/HISTORY.md), [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/MEMORY.md), affected module README |
+| Check proof quality | [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md) | [review-gates.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/review-gates.md), ticket evidence |
+| Work on Codexter V2 invocation or adapters | [codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md) | [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md), [symphony-compatible-codexter-runner.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/symphony-compatible-codexter-runner.md), [board-adapter-conformance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-adapter-conformance.md) |
+| Update docs after a public contract changes | [doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md) | this README, [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md), [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) |
+
+Documentation sync rule:
+
+- `README.md` routes readers.
+- `ARCHITECTURE.md` owns the top-level system diagram and ownership map.
+- `docs/specs/README.md` indexes canonical behavior specs.
+- `tickets/README.md` owns the ticket state-machine contract.
+- When one of these changes a public workflow claim, update the others in the
+  same pass and run `python3 bin/check_doc_parity.py`.
+
 ## Current State
 
 Implemented now:
@@ -83,6 +108,8 @@ Implemented now:
 - single-ticket execution through `$impl`
 - serial filesystem-ticket board draining through `$ralph`, which selects one
   eligible ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
+- delegated QA routing for live `$qa` followups plus visible nonce-backed
+  completion-review receipts
 - anchored `review` rubrics plus evidence-gated completion
 - `desloppify` for CLI-driven anti-slop cleanup, with default worker delegation
 - same-session bounded persistence through `$loop`
@@ -117,8 +144,8 @@ Partial today:
 
 Still missing:
 
-- tighter QA routing and standard evidence packs that stop weak proof from
-  counting as done
+- standard evidence packs that stop weak proof from counting as done across all
+  work types
 - compaction-safe reset and handoff discipline so long runs resume from the
   ticket instead of transcript drift
 - clearer answer/plan/act routing plus deterministic subagent selection for

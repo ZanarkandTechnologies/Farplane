@@ -6,6 +6,11 @@ Use this file as the top-level architecture guide after the repo-local
 [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md). It explains
 which surfaces exist, what each one owns, and where to go next.
 
+Documentation routing starts in
+[README.md](/Users/kenjipcx/coding-harness/Codexter/README.md). Keep this file
+and README in sync whenever the public workflow, shipped capability list, or
+whole-system diagram changes.
+
 ## Purpose
 
 Codexter is a harness repo for running long-form engineering work through visible
@@ -137,6 +142,30 @@ Legend:
 
 ## Canonical Surfaces
 
+### Documentation router
+
+The public docs are intentionally split by job:
+
+| Surface | Owns | Must Stay In Sync With |
+| --- | --- | --- |
+| [README.md](/Users/kenjipcx/coding-harness/Codexter/README.md) | reader routing, setup, current-state summary, roadmap cap | this file, `docs/specs/README.md` |
+| [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) | system diagram, surface ownership, read order, current limits | README, `docs/specs/harness-techniques.md` |
+| [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md) | canonical behavior-spec index and doc-gardening loop | README, this file |
+| [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) | ticket state machine, invocation policy, metadata contract | ticket template, board/compute specs |
+| [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/HISTORY.md) / [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/MEMORY.md) / [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Codexter/docs/TROUBLES.md) | durable timeline, invariants, and repeated misses | closeout tickets and nearest module docs |
+
+If a public harness claim changes, update the relevant row's surfaces in the
+same pass and run:
+
+```bash
+python3 bin/check_doc_parity.py
+python3 bin/check_harness_invariants.py
+python3 tickets/scripts/check_ticket_metadata.py
+```
+
+Do not shrink or remove the colored Mermaid maps in README or ARCHITECTURE
+during cleanup unless the replacement carries the same routing information.
+
 ### Entry surfaces
 
 - [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
@@ -261,6 +290,8 @@ When orienting on the repo:
 
 - The architecture map is intentionally current-state-first and should not become
   a second encyclopedia.
+- README is the documentation router; ARCHITECTURE is the ownership map. Update
+  both together when the public harness story changes.
 - Codexter has strong single-ticket orchestration and a guarded serial
   filesystem-ticket dispatcher, but not parallel N-agent dispatch with leases,
   worktrees, merge policy, stale-worker recovery, and batch QA yet.
