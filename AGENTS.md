@@ -27,6 +27,10 @@ blogs, and command families as research inputs rather than live dependencies;
 import ideas through reviewed `adopt`, `adapt`, `reject`, or `defer` decisions,
 usually via `best-of-worlds`. See `MEM-0073`.
 
+When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
+structured outputs, eval prompts, or agent instruction prompts, load
+`rules/prompt-engineering.md` as the shared prompt design reference.
+
 When the operator explicitly wants audit-then-fix recovery mode after a likely
 assistant miss, use the `repent` skill rather than inventing ad hoc recovery
 behavior.

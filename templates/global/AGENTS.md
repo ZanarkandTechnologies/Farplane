@@ -63,6 +63,12 @@ Use:
 - `close-ticket` when a built ticket only needs final writeback, checks, commit
   prep, and archive or publish closeout
 
+Reference:
+
+- For subagent prompts, delegated CLI prompts, AI-powered app behavior prompts,
+  structured outputs, and eval prompts, use the repo's shared
+  `rules/prompt-engineering.md` reference when it exists.
+
 Avoid:
 
 - neutral option-dumps that list possibilities but avoid naming the recommended path

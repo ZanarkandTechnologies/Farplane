@@ -3,6 +3,8 @@
 ## When to Use
 Use these patterns when building AI-powered chat systems with Convex Agents. Based on production code from Zanarkand.
 
+When authoring system prompts, tool instructions, structured outputs, eval prompts, or subagent prompts, also load `../../../rules/prompt-engineering.md`.
+
 ## Official Docs
 - [Agents Overview](https://docs.convex.dev/agents) - Full agent documentation
 - [Threads](https://docs.convex.dev/agents/threads) - Thread management
@@ -311,4 +313,3 @@ export type ChatUIMessage = UIMessage<
 | Streaming | Real-time response delivery |
 | Auto-titles | Generate titles from conversation |
 | Scratchpad | Agent working memory per thread |
-

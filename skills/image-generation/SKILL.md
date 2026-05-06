@@ -13,11 +13,13 @@ Use `todos.md` at the start of the pass. It is the ordered anti-forgetting check
 
 Use the built-in `imagegen` skill for normal Codex-native still image generation/editing. Use this skill when the user asks for inference.sh, `belt`, a named image model, CLI repeatability, upscaling, background removal, or a multi-step image pipeline.
 
+Use domain image/social guide skills for artifact problems: `product-photography`, `ai-social-media-content`, `linkedin-content`, `social-media-carousel`, and `twitter-thread-creation`. Use this skill for model/app selection and `belt` execution once the domain intent is known.
+
 Copied upstream references are read-only usage docs. Do not run `npx skills add ...` commands from their Related Skills sections unless the user explicitly asks to install upstream skills.
 
 ## Steps
 
-1. Classify the job: `text-to-image`, `image-edit`, `inpainting`, `multi-reference`, `text-rendering`, `style-lora`, `fast-cheap`, `product-mockup`, `background-removal`, `upscaling`, or `frontend-bound`.
+1. Classify the job: `text-to-image`, `image-edit`, `inpainting`, `multi-reference`, `text-rendering`, `style-lora`, `fast-cheap`, `product-mockup`, `product-photography`, `social-visual`, `carousel`, `background-removal`, `upscaling`, or `frontend-bound`.
 2. If the request is vague, use the best-current defaults below to pick the app family.
 3. Load the specific reference file only after a family is selected.
 4. Capability-gate the CLI path with `command -v belt`, `belt --help`, `belt app get <app>`, and `belt app sample <app>` before trusting any cached schema.
@@ -82,6 +84,12 @@ belt app list --category image
 - Background removal, transparent PNG, cutouts: `references/tools/background-removal.md`
 - Image upscaling or enhancement: `references/tools/image-upscaling.md`
 - Long-running jobs, batched tasks, timers, or delegated polling: `references/long-running-jobs.md`
+- Product photography, packshots, e-commerce images, or commercial product shots: use `product-photography`
+- Social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets: use `ai-social-media-content`
+- LinkedIn posts or professional social writing: use `linkedin-content`
+- Instagram/LinkedIn/X carousel or multi-slide post: use `social-media-carousel`
+- Twitter/X threads or posts: use `twitter-thread-creation`
+- Shared image/social artifact production workflow: `references/domain-production.md`
 
 ## Examples
 

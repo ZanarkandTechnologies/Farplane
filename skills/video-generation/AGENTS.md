@@ -8,6 +8,8 @@ Keep domain guide skills separate: `ai-marketing-videos`, `explainer-video-guide
 
 Do not create a standalone public `video-prompting-guide` skill. Prompting guidance should live inside the artifact/domain skill that owns the output.
 
+Keep the copied upstream video prompting guide at `references/prompting/video-prompting-guide.md`; load it from `video-generation` or artifact skills when video prompt quality needs shot/camera/lighting/model-specific guidance.
+
 Keep shared artifact production workflow in `references/domain-production.md` and link to it from domain skills instead of duplicating routing/save/async/upstream-safety rules.
 
 Treat copied upstream references as read-only usage docs. Do not run upstream `npx skills add ...` install commands from Related Skills sections unless the operator explicitly asks.

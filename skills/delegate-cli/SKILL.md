@@ -30,11 +30,12 @@ without letting that CLI become Codexter's source of truth.
    to check the executable, templates, skills, and environment.
 4. Run `python3 bin/delegate_cli_agent.py setup --profile <profile> --json`
    when the profile needs a managed skill/prompt bundle.
-5. Run `python3 bin/delegate_cli_agent.py run --profile <profile> --ticket <ticket> --dry-run --json`
+5. Load [prompt-engineering](../../rules/prompt-engineering.md) when the delegated prompt needs role, task, constraints, output format, examples, or structured-output discipline.
+6. Run `python3 bin/delegate_cli_agent.py run --profile <profile> --ticket <ticket> --dry-run --json`
    first to inspect the rendered command and prompt.
-6. Run without `--dry-run` only when the operator has allowed live CLI/model
+7. Run without `--dry-run` only when the operator has allowed live CLI/model
    execution and any credentials/spend are acceptable.
-7. Attach the generated handoff/logs/patch to ticket evidence and route the
+8. Attach the generated handoff/logs/patch to ticket evidence and route the
    result back through Codexter QA/review.
 
 ## Core Decision Branches
@@ -81,3 +82,4 @@ Return or write:
 - [architecture.md](references/architecture.md)
 - [workflows.md](references/workflows.md)
 - [gotchas.md](references/gotchas.md)
+- [prompt-engineering.md](../../rules/prompt-engineering.md)

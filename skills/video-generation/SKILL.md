@@ -13,6 +13,8 @@ Use `todos.md` at the start of the pass. It is the ordered anti-forgetting check
 
 Use domain video guide skills for artifact/product problems: `ai-marketing-videos`, `explainer-video-guide`, `storyboard-creation`, `talking-head-production`, and `video-ad-specs`. Prompting guidance belongs inside those artifact skills. Use this skill for model/app selection and `belt` execution once the domain intent is known.
 
+For video prompt quality when no narrower artifact prompt applies, load `references/prompting/video-prompting-guide.md` for shot type, camera movement, lighting, temporal motion, and model-specific phrasing.
+
 Do not use this skill for React/Remotion code authoring or code-to-video. Exit and use `remotion` for authoring, then `remotion-render` for inference.sh MP4 rendering.
 
 Copied upstream references are read-only usage docs. Do not run `npx skills add ...` commands from their Related Skills sections unless the user explicitly asks to install upstream skills.
@@ -107,7 +109,7 @@ belt app list --category video
 - Explainer, tutorial, or product demo sequence: use `explainer-video-guide`
 - Storyboard or shot list: use `storyboard-creation`
 - Social/video ad specs: use `video-ad-specs`
-- Prompt improvement: use the owning artifact skill's `references/prompting.md`; if no artifact domain is known, select the model family here and use its tool reference prompt tips
+- Prompt improvement: use the owning artifact skill's `references/prompting.md`; if no artifact domain is known, load `references/prompting/video-prompting-guide.md`
 - Shared artifact production workflow for domain video skills: `references/domain-production.md`
 - Long-running jobs, batched tasks, timers, or delegated polling: `references/long-running-jobs.md`
 - Copied-reference overrides and known stale app IDs: `references/reference-overrides.md`

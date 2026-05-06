@@ -7,7 +7,8 @@ Shared workflow for video artifact domain skills such as marketing videos, expla
 1. Read the active artifact skill first.
 2. Load that skill's `references/upstream.md` for domain structure and examples.
 3. Load that skill's `references/prompting.md` when writing or improving prompts.
-4. Use this shared workflow for routing, asset saving, async jobs, and upstream-reference safety.
+4. Load [video-prompting-guide.md](prompting/video-prompting-guide.md) when general shot, camera, lighting, temporal motion, or model-specific video prompt guidance is needed.
+5. Use this shared workflow for routing, asset saving, async jobs, and upstream-reference safety.
 
 ## Route By Need
 

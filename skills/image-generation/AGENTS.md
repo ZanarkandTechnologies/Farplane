@@ -10,4 +10,10 @@ Do not turn each upstream image model into a public active Codexter skill. Route
 
 Keep the built-in `imagegen` skill as the default for normal Codex-native bitmap generation/editing when inference.sh is not needed.
 
+Route artifact-level social/photo requests through `product-photography`, `ai-social-media-content`, `linkedin-content`, `social-media-carousel`, or `twitter-thread-creation` before choosing image models.
+
+Keep shared social/photo/image artifact routing in `references/domain-production.md` and link to it from domain skills instead of duplicating save/async/publish/upstream-safety rules.
+
+Never publish to social platforms unless the operator explicitly asks to publish.
+
 For long-running or batched media jobs, require saved `input.json`, `result.json`, task IDs, and `jobs.md` before continuing in parallel or handing polling to another lane permitted by the current harness policy.

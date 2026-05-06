@@ -14,6 +14,7 @@ Keep video generation as the model/app execution skill with the upstream umbrell
 - `references/domain-production.md`: shared routing, artifact saving, async, and upstream-safety workflow for domain video skills.
 - `references/long-running-jobs.md`: async `--no-wait`, task ID, polling, timer, and delegation guidance.
 - `references/reference-overrides.md`: local overrides for stale upstream commands and app IDs.
+- `references/prompting/video-prompting-guide.md`: copied upstream video prompting guide for shot, camera, lighting, pacing, and model-specific phrasing.
 - `references/frontend-asset-qa.md`: Codexter handoff rules for web use.
 
 Use `SKILL.md` for routing. Use `todos.md` to select only the relevant branch:
@@ -29,7 +30,7 @@ Use separate domain skills for artifact-level work:
 - `talking-head-production`
 - `video-ad-specs`
 
-Prompting guidance lives inside each artifact skill as `references/prompting.md`, not as a standalone generic public skill.
+Prompting guidance lives inside each artifact skill as `references/prompting.md`, with the upstream video prompting guide kept as `references/prompting/video-prompting-guide.md` for general video prompt quality. Do not create a standalone public `video-prompting-guide` skill.
 
 Remotion code authoring lives in `skills/remotion/`. Inference.sh MP4 rendering for Remotion lives in `skills/remotion-render/`.
 

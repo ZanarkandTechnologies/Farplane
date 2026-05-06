@@ -150,3 +150,4 @@
 2026-05-07 01:45 +0800 | FEAT | remove standalone video-prompting skill and move prompting guidance into each video artifact domain skill
 2026-05-07 02:00 +0800 | FEAT | factor shared video artifact production workflow into a linked domain-production reference
 2026-05-07 02:12 +0800 | DOCS | add capped Codexter V2 milestone and archive completed or premature ticket-board entries
+2026-05-07 02:47 +0800 | FEAT | add social, product-photo, and shared prompting references to the media skill topology

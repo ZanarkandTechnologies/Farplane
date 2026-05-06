@@ -4,9 +4,10 @@
 
 1. Run `doctor`.
 2. Run `setup`.
-3. Run `run --dry-run`.
-4. Inspect the rendered prompt and command.
-5. Run live only after human gates for credentials, spend, and filesystem
+3. Load `../../../rules/prompt-engineering.md` when the rendered prompt needs stronger role/task/constraint/output-format structure.
+4. Run `run --dry-run`.
+5. Inspect the rendered prompt and command.
+6. Run live only after human gates for credentials, spend, and filesystem
    writes are satisfied.
 
 Dry-run mode records the intended checkout path but does not create a Git

@@ -14,6 +14,7 @@ Domain entrypoint for marketing and campaign video production.
 1. Load the shared [domain video production workflow](../video-generation/references/domain-production.md).
 2. Load the [upstream marketing guide](references/upstream.md) for frameworks, templates, shot types, and platform patterns.
 3. Load [marketing video prompting](references/prompting.md) when writing or improving prompts for launch, product, testimonial, brand, or social promo clips.
-4. Decide the campaign job: launch, feature highlight, testimonial, before/after, brand story, UGC ad, or product demo.
+4. Load [general video prompting](../video-generation/references/prompting/video-prompting-guide.md) when shot, camera, lighting, temporal motion, or model-specific phrasing matters.
+5. Decide the campaign job: launch, feature highlight, testimonial, before/after, brand story, UGC ad, or product demo.
 
 Use the shared production workflow for image/video/Remotion/frontend routing, saved artifacts, async jobs, and upstream-reference safety.

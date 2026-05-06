@@ -8,6 +8,11 @@ Use this when a website, landing page, campaign, or product demo needs multiple 
 | --- | --- |
 | Ordinary bitmap asset or edit | `imagegen` |
 | Named inference.sh image model, batch images, upscaling, cutouts | `image-generation` |
+| Product photos, packshots, e-commerce image sets | `product-photography`, then `imagegen` or `image-generation` |
+| Cross-platform social campaign assets | `ai-social-media-content`, then image/video/carousel execution |
+| LinkedIn posts or professional social assets | `linkedin-content`, then `social-media-carousel` or image execution when visual |
+| Instagram/LinkedIn/X carousel assets | `social-media-carousel`, then image/code execution |
+| Twitter/X threads or media-supported posts | `twitter-thread-creation`, then image execution when visual |
 | Marketing/promo video domain plan | `ai-marketing-videos`, then `video-generation` for execution |
 | Explainer/product demo domain plan | `explainer-video-guide`, then `video-generation` or `remotion` for execution |
 | Storyboard/shot list | `storyboard-creation`, then `imagegen`, `image-generation`, or `video-generation` |
@@ -33,7 +38,7 @@ For each generated asset, write an asset row before generation:
 ## Efficient Batch Flow
 
 1. Plan all asset slots, fallbacks, and file paths first.
-2. Load the relevant domain skill before choosing models when the asset is a marketing video, explainer, storyboard, talking-head video, ad, or prompt-improvement task; each domain skill links to [domain-production](../../video-generation/references/domain-production.md) and its own `references/prompting.md`.
+2. Load the relevant domain skill before choosing models when the asset is product photography, social content, a carousel, a marketing video, explainer, storyboard, talking-head video, ad, or prompt-improvement task; image/social domain skills link to [image domain-production](../../image-generation/references/domain-production.md), and video domain skills link to [video domain-production](../../video-generation/references/domain-production.md).
 3. Generate still references/posters before image-to-video when they control style or identity.
 4. Start independent image/video jobs with `--no-wait` and record them in each bundle's `jobs.md`.
 5. Continue frontend structure, copy, layout, CSS, and Remotion authoring while jobs run.
