@@ -37,6 +37,7 @@ ticket, and execution workflow.
 - Functional UI redesign: [skills/functional-ui/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/functional-ui/SKILL.md)
 - Visual design direction: [skills/visual-design/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/visual-design/SKILL.md)
 - Landing page planning: [skills/landing-page/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/landing-page/SKILL.md)
+- Image generation assets: [skills/image-generation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/image-generation/SKILL.md)
 - Video generation assets: [skills/video-generation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/video-generation/SKILL.md)
 - Remotion render assets: [skills/remotion-render/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/remotion-render/SKILL.md)
 - Autoresearch planning: [skills/autoresearch-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-plan/SKILL.md)
@@ -181,7 +182,7 @@ flowchart LR
 
     subgraph Build["Build + Specialist Skills"]
       builders["frontend-craft<br/>frontend-design<br/>convex<br/>react-flow<br/>three-js<br/>data-viz"]:::execution
-      assetSkills["video-generation<br/>remotion-render<br/>imagegen"]:::execution
+      assetSkills["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::execution
       uiSkills["functional-ui<br/>visual-design<br/>landing-page<br/>vercel-react-best-practices"]:::execution
       externalCli["delegate-cli<br/>delegate-frontend<br/>external CLI profiles"]:::execution
       debug["runtime-debugging<br/>codebase-analysis<br/>bash-efficiency<br/>repent<br/>agent-browser"]:::execution

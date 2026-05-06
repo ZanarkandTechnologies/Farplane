@@ -1,7 +1,7 @@
 ---
 name: frontend-craft
 version: 1.0.0
-description: Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend surface and may need UX planning, visual design, landing-page treatment, motion, generated image/video assets, standards audit, or QA routing. Routes through functional-ui, visual-design, landing-page, frontend-design references, imagegen, video-generation, remotion-render, web-design-guidelines, and visual-qa as needed.
+description: Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend surface and may need UX planning, visual design, landing-page treatment, motion, generated image/video assets, standards audit, or QA routing. Routes through functional-ui, visual-design, landing-page, frontend-design references, imagegen, image-generation, video-generation, remotion-render, web-design-guidelines, and visual-qa as needed.
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -29,7 +29,7 @@ Build production frontends by routing the work through the right frontend brain 
 3. **Route special surfaces.** Use `landing-page` for one-page, marketing, launch, cinematic, scrolltelling, or hero-heavy surfaces before visual-design so the page recipe, taste profile, and effect stack can guide the look.
 4. **Run visual design.** Use `visual-design` to set register, scene sentence, typography, color strategy, layout rhythm, density, motion taste, and anti-slop constraints. For landing pages, refine this with the selected taste profile.
 5. **Choose implementation references.** Use `frontend-design` references for shadcn, AI Elements, registries, and app UI construction. Use `motion-routing.md` for CSS vs Motion vs GSAP vs WebGL decisions.
-6. **Plan assets and experiments.** Use `asset-generation.md` with `imagegen` for still bitmap assets, `video-generation` for model-native video, and `remotion-render` for deterministic React/Remotion MP4s. Use `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGL, WebGPU, or canvas text layout complexity.
+6. **Plan assets and experiments.** Use `asset-generation.md` with `imagegen` for ordinary Codex-native still bitmap assets, `image-generation` for inference.sh image model routing, `video-generation` for model-native video, and `remotion-render` for deterministic React/Remotion MP4s. Use `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGL, WebGPU, or canvas text layout complexity.
 7. **Audit source fundamentals.** Run `web-design-guidelines` on changed UI files for source-fresh accessibility, focus, forms, navigation, animation, and interface checks.
 8. **Implement and verify.** Build with repo patterns, run type/lint/tests, and route UI proof through `visual-qa` or the ticket's QA contract when the surface is user-visible.
 9. **Write the handoff.** Summarize the UX/visual decisions, changed files, proof commands, guideline audit result, and any skipped lanes with reasons.
@@ -44,6 +44,7 @@ Build production frontends by routing the work through the right frontend brain 
 | Visual polish only | `visual-design`, then implementation |
 | Complex scroll animation | `landing-page` if narrative; otherwise `motion-routing.md` and official GreenSock skills or docs |
 | Generated hero/image/texture/reference asset | `asset-generation.md` and `imagegen` |
+| Inference.sh image model, background removal, upscaling, or model comparison | `asset-generation.md` and `image-generation` |
 | Generated video, image-to-video, avatar/lipsync, foley, or video edit | `asset-generation.md` and `video-generation` |
 | Deterministic React/Remotion animation rendered to MP4 | `asset-generation.md` and `remotion-render` |
 | Canvas/WebGPU/futuristic rendering | `experimental-rendering.md`, progressive enhancement, and explicit fallback |
@@ -63,7 +64,7 @@ Build production frontends by routing the work through the right frontend brain 
 - `references/workflows.md` - common frontend orchestration paths.
 - `references/gotchas.md` - high-risk routing and proof failures.
 - `references/motion-routing.md` - CSS, Motion, GSAP, View Transitions, WebGL/WebGPU.
-- `references/asset-generation.md` - native `imagegen`, `video-generation`, `remotion-render`, project-bound assets, external-tool gates.
+- `references/asset-generation.md` - native `imagegen`, `image-generation`, `video-generation`, `remotion-render`, project-bound assets, external-tool gates.
 - `references/experimental-rendering.md` - HTML-in-Canvas, Pretext, WebGL/WebGPU, progressive enhancement.
 - `references/qa.md` - browser/visual proof expectations.
 - `references/upstream-sources.md` - pinned upstream repos and what to borrow from each.

@@ -24,6 +24,21 @@ Do not use this skill for React/Remotion code-to-video. Exit and use `remotion-r
 7. Save project assets, prompt/input JSON, result JSON, and notes inside the workspace.
 8. If the asset is used in a web surface, hand it to `frontend-craft` and keep browser playback/visual QA as separate proof.
 
+## Best Current Defaults
+
+These defaults come from the upstream inference.sh skill snapshot at `c5ad36c`. Always verify live availability and schema with `belt app get <app>` before a run.
+
+| Use Case | Default | Why |
+| --- | --- | --- |
+| Highest-quality general text-to-video | `google/veo-3-1` | Upstream names it the best-quality Veo path with frame interpolation |
+| Fast text-to-video with optional audio | `google/veo-3-1-fast` | Good first choice for quick Veo generations |
+| Fast/economical text-to-video or image-to-video | `pruna/p-video` | Fast, economical, audio support |
+| Text/reference/image video with synchronized audio | `falai/seedance-2-t2v` / `falai/seedance-2-r2v` / `falai/seedance-2-i2v` | Seedance branch is the audio-aware option |
+| Physical realism or natural-language video editing | `alibaba/happyhorse-1-0-t2v` / `alibaba/happyhorse-1-0-video-edit` | HappyHorse is the physical realism and edit branch |
+| Talking head/avatar with built-in TTS | `pruna/p-video-avatar` | Fast avatar branch with voices/languages |
+| Upscaling | `falai/topaz-video-upscaler` | Dedicated upscaling branch |
+| Foley/sound effects | `infsh/hunyuanvideo-foley` | Dedicated sound-effects branch |
+
 ## Model Map
 
 Browse live apps with:

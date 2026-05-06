@@ -16,6 +16,7 @@ Use this after frontend implementation.
 - Landing pages: capture first viewport plus important scroll checkpoints.
 - Animation-heavy pages: verify reduced-motion behavior and nonblank moving/canvas frames.
 - Generated assets: verify referenced paths load in the browser and are not left under `$CODEX_HOME`.
+- Generated image assets: verify workspace/public path loading, dimensions, responsive crop, file size, alpha/background expectations, and alt text when semantic.
 - Generated video assets: verify workspace/public path loading, poster/fallback, stable aspect ratio, autoplay constraints, muted/controls policy, captions or transcript when semantic, and reduced-motion behavior.
 - Forms/workflows: verify default, loading, empty, error, success, and max-content states.
 
