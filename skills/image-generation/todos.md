@@ -15,6 +15,7 @@ Use this as the ordered checklist whenever `image-generation` is active.
 - [ ] For Pruna P-Image, fast/economical generation, fast edits, or preset LoRA styles, load `references/tools/p-image.md`.
 - [ ] For transparent PNGs, cutouts, product photo cutouts, or background removal, load `references/tools/background-removal.md`.
 - [ ] For upscaling, restoration, enhancement, or higher resolution, load `references/tools/image-upscaling.md`.
+- [ ] For long-running or batched generations, load `references/long-running-jobs.md`; use `--no-wait`, task IDs, and `jobs.md` instead of terminal scrollback.
 - [ ] Check `command -v belt`, `belt --help`, `belt app get <app>`, and `belt app sample <app>` before relying on an app schema.
 - [ ] Confirm external compute/spend is acceptable before any `belt app run`.
 - [ ] Save final images, prompts, input JSON, result JSON, and notes inside the workspace, not only in a remote URL, temp path, or Codex home path.

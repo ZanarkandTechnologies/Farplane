@@ -13,6 +13,8 @@ Use `todos.md` at the start of the pass. It is the ordered anti-forgetting check
 
 Use the built-in `imagegen` skill for normal Codex-native still image generation/editing. Use this skill when the user asks for inference.sh, `belt`, a named image model, CLI repeatability, upscaling, background removal, or a multi-step image pipeline.
 
+Copied upstream references are read-only usage docs. Do not run `npx skills add ...` commands from their Related Skills sections unless the user explicitly asks to install upstream skills.
+
 ## Steps
 
 1. Classify the job: `text-to-image`, `image-edit`, `inpainting`, `multi-reference`, `text-rendering`, `style-lora`, `fast-cheap`, `product-mockup`, `background-removal`, `upscaling`, or `frontend-bound`.
@@ -21,7 +23,8 @@ Use the built-in `imagegen` skill for normal Codex-native still image generation
 4. Capability-gate the CLI path with `command -v belt`, `belt --help`, `belt app get <app>`, and `belt app sample <app>` before trusting any cached schema.
 5. Treat `belt app run` as external compute/spend. Do not run it until that cost is acceptable for this task.
 6. Save project assets, prompt/input JSON, result JSON, and notes inside the workspace.
-7. If the asset is used in a web surface, hand it to `frontend-craft` and verify loading, dimensions, alt text, responsive crops, and visual quality.
+7. For long-running or batched jobs, use the async workflow below instead of blocking the whole pass.
+8. If the asset is used in a web surface, hand it to `frontend-craft` and verify loading, dimensions, alt text, responsive crops, and visual quality.
 
 ## Best Current Defaults
 
@@ -78,25 +81,44 @@ belt app list --category image
 - Pruna P-Image fast/economical generation/editing: `references/tools/p-image.md`
 - Background removal, transparent PNG, cutouts: `references/tools/background-removal.md`
 - Image upscaling or enhancement: `references/tools/image-upscaling.md`
+- Long-running jobs, batched tasks, timers, or delegated polling: `references/long-running-jobs.md`
 
 ## Examples
 
 ```bash
+mkdir -p output/image-generation/sneaker-product
 belt app run openai/gpt-image-2 --input '{
   "prompt": "professional product photo of sneakers, studio lighting",
   "quality": "high"
-}'
+}' --save output/image-generation/sneaker-product/result.json
 
+mkdir -p output/image-generation/synth-editorial
 belt app run google/gemini-3-1-flash-image-preview --input '{
   "prompt": "photorealistic editorial image of a modular synthesizer on a desk"
-}'
+}' --save output/image-generation/synth-editorial/result.json
 
+mkdir -p output/image-generation/signal-lab-poster
 belt app run alibaba/qwen-image-2-pro --input '{
   "prompt": "A clean launch poster that says SIGNAL LAB in bold type"
-}'
+}' --save output/image-generation/signal-lab-poster/result.json
 
-belt app run falai/topaz-image-upscaler --input '{"image_url": "https://..."}'
+mkdir -p output/image-generation/upscale
+belt app run falai/topaz-image-upscaler \
+  --input '{"image_url": "https://..."}' \
+  --save output/image-generation/upscale/result.json
 ```
+
+## Async Workflow
+
+Use async runs when there are many independent images, slow upscales, or a frontend task can continue while assets render.
+
+1. Create one bundle folder per asset and save `input.json` before starting the run.
+2. Start independent jobs with `belt app run <app> --input <input.json> --no-wait --save <result.json>` when the CLI supports it.
+3. Record every task ID in `jobs.md` with the app ID, input path, result path, intended final filename, and next poll time.
+4. Poll with `belt task get <task-id>` and update `jobs.md`; do not rely on terminal scrollback as state.
+5. If the current thread should wake later, use a thread heartbeat/timer when available and include the task IDs and result paths in the prompt.
+6. Use a delegated QA or polling lane only when the current harness policy permits delegation and the batch is bounded/independent; make that lane write paths and task IDs back into the workspace before reporting done.
+7. Continue non-dependent work while jobs run, but do not wire final assets into a frontend until the files exist locally or the remote URL has been copied into the project asset plan.
 
 ## Output Contract
 

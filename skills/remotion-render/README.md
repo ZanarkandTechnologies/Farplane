@@ -4,14 +4,14 @@ Skill for rendering React/Remotion TSX components to video through inference.sh 
 
 ## Purpose
 
-Keep deterministic code-to-video rendering separate from model-native video generation.
+Keep deterministic code-to-video rendering separate from model-native video generation and Remotion authoring guidance.
 
 ## Entry Point
 
 - `SKILL.md`: trigger rules, capability/spend gates, render workflow, and output contract.
 - `references/remotion-render.md`: upstream inference.sh Remotion `SKILL.md` copied as reference material.
 
-Use this when the user wants code-driven motion graphics, data-driven video, animated UI sequences, or React animation exported as MP4. Use `video-generation` for model-native text/image/reference video.
+Use `skills/remotion/` for authoring and improving Remotion code. Use this when the user wants code-driven motion graphics, data-driven video, animated UI sequences, or React animation exported as MP4 through inference.sh. Use `video-generation` for model-native text/image/reference video.
 
 ## Minimal Example
 
