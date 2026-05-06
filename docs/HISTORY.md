@@ -155,3 +155,4 @@
 2026-05-07 03:14 +0800 | FEAT | land Codexter V2 explicit invocation triggers, board-adapter conformance, Codex Cloud and Symphony handoff recipes, and future-agent misread guardrails
 2026-05-07 03:15 +0800 | FEAT | add a manifest-driven Pi/Kimi frontend skill sync script and mount inference.sh image/video/remotion skills into the external frontend profile
 2026-05-07 04:17 +0800 | DOCS | archive the visible completion-review receipt ticket and add README/ARCHITECTURE documentation-router sync guidance
+2026-05-07 04:41 +0800 | CHORE | split Aikage hook heartbeats into start and stop notifications with shorter heartbeat timeouts

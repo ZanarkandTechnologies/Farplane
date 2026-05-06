@@ -12,8 +12,8 @@
           {
             "type": "command",
             "command": "python3 \"$HOME/.codex/hooks/aikage_ping.py\"",
-            "statusMessage": "Sending Aikage heartbeat",
-            "timeout": 30
+            "statusMessage": "Sending Aikage start heartbeat",
+            "timeout": 5
           }
         ]
       }
@@ -26,6 +26,12 @@
             "command": "python3 \"$HOME/.codex/bin/stop_hook.py\"",
             "statusMessage": "Evaluating Ralph stop hook",
             "timeout": 90
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/aikage_ping.py\"",
+            "statusMessage": "Sending Aikage stop heartbeat",
+            "timeout": 5
           }
         ]
       }
