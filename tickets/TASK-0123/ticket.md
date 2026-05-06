@@ -14,9 +14,9 @@ approval_required: true
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-06T17:18:41Z
-updated_at: 2026-05-06T17:18:41Z
-next_action: review the adapter conformance scaffolding plan
-last_verification: planned on 2026-05-06 to keep future board adapters easy to add
+updated_at: 2026-05-06T18:49:08Z
+next_action: approve the V2 batch implementation plan with TASK-0121 -> TASK-0123 -> TASK-0122
+last_verification: batch impl-plan and review passed on 2026-05-06; awaiting approval
 ---
 
 # TASK-0123: add board adapter conformance scaffolding
@@ -26,6 +26,14 @@ Add lightweight conformance scaffolding for future Linear, Notion, GitHub, or
 custom board adapters without implementing those adapters now. The goal is to
 make every future adapter prove it can normalize one work item, preserve
 readiness/invocation semantics, and write evidence traceably.
+
+## Batch Plan
+This ticket is planned as the middle step in the capped V2 batch: it turns the
+trigger vocabulary from `TASK-0121` into a future-adapter proof surface before
+`TASK-0122` documents external compute handoffs. The shared plan lives at
+[2026-05-06-v2-batch-impl-plan.md](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md)
+and the plan review passed at
+[2026-05-06-v2-batch-plan-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json).
 
 ## V2 Importance
 - `Why now:` this keeps the adapter seam real without implementing Linear,
@@ -166,13 +174,16 @@ readiness/invocation semantics, and write evidence traceably.
 
 ## Evidence
 - `Artifacts:`
+  - [V2 batch impl-plan](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md)
+  - [V2 batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json)
   - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
 - `Commands:`
+  - `python3 -m json.tool tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json`
   - `python3 tickets/scripts/check_ticket_metadata.py`
   - `git diff --check -- tickets/archive/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
   - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
 - `Result summary:`
-  - Planning ticket created and approval-gated; depends on the terminology reset in `TASK-0120`.
+  - Batch implementation plan created and reviewed; ticket remains approval-gated.
 
 ## Blockers
 - awaiting approval

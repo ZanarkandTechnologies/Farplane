@@ -14,9 +14,9 @@ approval_required: true
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-06T17:18:41Z
-updated_at: 2026-05-06T17:18:41Z
-next_action: review the explicit invocation-trigger contract
-last_verification: planned on 2026-05-06 after Codexter/Symphony scope reset
+updated_at: 2026-05-06T18:49:08Z
+next_action: approve the V2 batch implementation plan with TASK-0121 -> TASK-0123 -> TASK-0122
+last_verification: batch impl-plan and review passed on 2026-05-06; awaiting approval
 ---
 
 # TASK-0121: define explicit Codexter invocation triggers
@@ -26,6 +26,13 @@ Define the small set of explicit triggers that mean "Codexter should act on
 this ticket." The goal is to support local chat, ticket comments, Codex Cloud
 payloads, and future Symphony payloads without introducing a polling daemon or
 auto-running draft tickets.
+
+## Batch Plan
+This ticket is planned as the first step in the capped V2 batch with
+`TASK-0123` and `TASK-0122`. The shared plan lives at
+[2026-05-06-v2-batch-impl-plan.md](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md)
+and the plan review passed at
+[2026-05-06-v2-batch-plan-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json).
 
 ## V2 Importance
 - `Why now:` this is the semantic lock for the whole V2 capstone. Without a
@@ -176,13 +183,16 @@ auto-running draft tickets.
 
 ## Evidence
 - `Artifacts:`
+  - [V2 batch impl-plan](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md)
+  - [V2 batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json)
   - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
 - `Commands:`
+  - `python3 -m json.tool tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json`
   - `python3 tickets/scripts/check_ticket_metadata.py`
   - `git diff --check -- tickets/archive/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
   - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
 - `Result summary:`
-  - Planning ticket created and approval-gated; depends on the terminology reset in `TASK-0120`.
+  - Batch implementation plan created and reviewed; ticket remains approval-gated.
 
 ## Blockers
 - awaiting approval

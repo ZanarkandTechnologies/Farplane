@@ -1,0 +1,152 @@
+{
+  "work_type": ["planning", "docs", "integration-contract"],
+  "reviewed_at": "2026-05-06T18:49:08Z",
+  "ticket_ids": ["TASK-0121", "TASK-0123", "TASK-0122"],
+  "search_scope": {
+    "changed_files": [
+      "tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md"
+    ],
+    "related_files": [
+      "tickets/TASK-0121/ticket.md",
+      "tickets/TASK-0122/ticket.md",
+      "tickets/TASK-0123/ticket.md",
+      "docs/specs/codexter-v2-milestone.md",
+      "docs/specs/board-compute-orchestration.md",
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "docs/specs/README.md",
+      "tickets/README.md",
+      "WORKFLOW.md",
+      "bin/codexter_invocation.py",
+      "bin/codexter_boards.py",
+      "bin/codexter_compute.py",
+      "bin/test_codexter_invocation.py",
+      "bin/test_codexter_boards.py",
+      "bin/test_codexter_compute.py",
+      "skills/codexter-invocation/SKILL.md",
+      "skills/codexter-invocation/README.md",
+      "skills/codexter-invocation/references/symphony.md"
+    ],
+    "invariants_checked": ["MEM-0077", "MEM-0081", "MEM-0082"],
+    "docs_checked": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/desloppify.md",
+      "skills/impl-plan/references/review.md"
+    ]
+  },
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "evidence-quality",
+    "integration-readiness"
+  ],
+  "summary": "The batch plan is approval-ready: it keeps the three V2 tickets as one coherent contract refinement, names the implementation order, carries the key data shapes, and explicitly blocks daemon/cloud/adapter overreach.",
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": "high",
+      "rubric": "evidence-quality",
+      "summary": "The plan names `codex cloud --help` as a version check, but implementation evidence must record unavailable-command output if the local CLI does not expose that subcommand.",
+      "file_refs": [
+        "tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md"
+      ],
+      "evidence": [
+        "Verification explicitly lists `codex cloud --help` and says not to submit tasks.",
+        "The batch is recipe-only, so command availability is evidence for wording, not a runtime dependency."
+      ],
+      "next_action": "During implementation, capture either the help output summary or the unavailable-command result in ticket evidence."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.4,
+        "parallelization-fit": 4.2,
+        "ticket-sizing": 4.2,
+        "acceptance-testability": 4.2,
+        "scope-clarity": 4.5
+      },
+      "findings": [
+        "The three-ticket batch solves one coherent V2 problem: explicit invocation and external-runner compatibility without new scheduler ownership.",
+        "Non-goals are strong enough to prevent accidental daemon, listener, cloud wrapper, and external adapter work."
+      ],
+      "next_action": "Approve the batch as one implementation pass, preserving the order TASK-0121 -> TASK-0123 -> TASK-0122."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.1,
+        "bloatability": 4.3,
+        "modularity": 4.2,
+        "proof-clarity": 4.1,
+        "execution-order": 4.4,
+        "risk-clarity": 4.2,
+        "decision-tone": 4.3,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [
+        "The plan is file-map-first, names concrete seams, and gives a safe order that reduces wording drift across specs, conformance docs, and external recipes.",
+        "The strongest implementation guard is explicit: docs/tests/templates first, tiny Python seams only if they make conformance evidence real."
+      ],
+      "next_action": "Use the plan directly as the next build handoff after approval."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.0,
+        "reproducibility": 4.0,
+        "traceability": 4.1,
+        "consistency": 4.0,
+        "inspectability": 4.0,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [
+        "Planning evidence links the inspected specs, tickets, code seams, and review references.",
+        "Implementation evidence is still future work by design, and the plan lists the exact commands and artifacts required for the build pass."
+      ],
+      "next_action": "When implementing, attach test outputs and recipe validation evidence to the ticket artifacts rather than relying on narrative summaries."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.2,
+        "contract-correctness": 4.1,
+        "dependency-readiness": 4.0,
+        "coupling-risk": 4.2,
+        "merge-readiness": 4.0
+      },
+      "findings": [
+        "The plan respects the current code boundaries: `bin/codexter_invocation.py` remains diagnostic, `FileTicketAdapter` remains the only live adapter, and unsupported external compute stays blocked.",
+        "The main external dependency, Codex Cloud command vocabulary, is treated as documentation validation only and not a build-time side effect."
+      ],
+      "next_action": "Proceed to implementation after user approval; reject any build diff that adds polling, launchers, external clients, or auto-apply behavior."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Approve the V2 batch implementation and keep all three tickets gated until the next `$impl` pass moves them to building."
+}
