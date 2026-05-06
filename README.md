@@ -8,6 +8,11 @@ single-ticket engineering with explicit proof and Stop-hook judgment, with a
 guarded serial `$ralph` dispatcher for prepared filesystem ticket boards. It is
 not yet a parallel multi-agent dispatcher.
 
+Codexter is a ticket invocation layer inside normal Codex. Tickets store work
+context; explicit invocations express intent to run that work. Creating a
+ticket, marking it ready, moving a board card, or changing `compute_target`
+does not start an agent by itself.
+
 If a repo does not already have Codexter conventions such as `AGENTS.md`,
 `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and
 `tickets/`, start with `deep-init-project` before trying to use the full spec,
@@ -18,7 +23,7 @@ ticket, and execution workflow.
 - Repo-local operating map: [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
 - Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
 - Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
-- Board and compute orchestration: [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
+- Board, compute, and ticket invocation: [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
 - Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
@@ -85,11 +90,13 @@ Implemented now:
   runtime launch/teardown through `pr-runtime` plus `ticket-runtime`
 - local Codexter invocation through `WORKFLOW.md`,
   `CodexterRunEnvelope`, filesystem `WorkItem`, `ComputeSelector`, and
-  `ProofPacket`, so normal Codex can route one ticket through existing skills
-  and future Symphony workers have the same request/result contract
-- board/compute orchestration doctrine that keeps Codex as the execution
-  engine, Codexter as the installed skill/proof layer, and Symphony as a future
-  background scheduler/runner rather than a replacement for local Codexter use
+  `ProofPacket`, so an explicit local or external invocation can route one
+  ticket through existing skills and future Symphony workers have the same
+  request/result contract
+- board/compute invocation doctrine that keeps tickets as context, Codex as
+  the execution engine, Codexter as the installed skill/proof layer, and
+  Symphony as a future background scheduler/runner rather than a replacement
+  for local Codexter use
 - external CLI delegation through `delegate-cli`, with `delegate-frontend` as
   the first profile for Pi plus Kimi K2.6 dry-run/live handoffs
 - Stop-hook phase routing and current-turn relevance checks

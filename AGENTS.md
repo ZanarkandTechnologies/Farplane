@@ -57,6 +57,15 @@ For UI source reviews, run `web-design-guidelines` through the
 `ui-quality` so taste judgment and source-level interface fundamentals remain
 comparable. See `MEM-0076`.
 
+Codexter invocation is normal Codex plus installed Codexter skills, not a
+standalone CLI product. Keep `bin/codexter_invocation.py` diagnostic and
+artifact-oriented: it may validate `WORKFLOW.md`, normalize tickets, select
+compute, route to skills, and write proof packets, but must not launch Codex,
+poll boards, own retries, or take over Symphony's scheduler responsibilities.
+Ticket existence, `ready: true`, status movement, and `compute_target` changes
+are not run triggers; only explicit invocation should start Codexter work. See
+`MEM-0077` and `MEM-0081`.
+
 ## Project Structure
 
 - `README.md`: current product shape, setup, and canonical entry points

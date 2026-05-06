@@ -38,3 +38,8 @@ the existing phase skill, and write the requested `ProofPacket`.
 Codexter is normal Codex with this repository's installed skills, hooks,
 templates, and proof conventions. This workflow is not a daemon and not a
 standalone `codexter run` CLI.
+
+Ticket creation, `ready: true`, status movement, and `compute_target` changes
+are not run triggers. This workflow applies after a local operator, `$ralph`,
+Symphony, Codex Cloud, or another external runner explicitly invokes one work
+item.

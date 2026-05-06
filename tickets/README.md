@@ -46,6 +46,23 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 - deliberate reset/resume requires the ticket to carry a clear `next_action`,
   `last_verification`, blockers, and evidence references
 
+## Invocation Policy
+
+A ticket is a work card, not a trigger. Creating a ticket, setting
+`ready: true`, moving `status`, or adding `compute_target` does not start an
+agent by itself.
+
+Codexter work starts from an explicit invocation:
+
+- local operator request, such as asking Codex to run `TASK-0123`
+- operator-invoked `$ralph`, which serially selects one eligible ticket
+- a recognized board comment or shared-board action after an external runner
+  converts it into a `CodexterRunEnvelope`
+- a future Codex Cloud, Symphony, or other runner payload
+
+`ready` means the ticket is eligible once invoked. It does not mean Codexter
+should watch the board and begin work automatically.
+
 ## Canonical Frontmatter
 
 ```yaml
@@ -97,7 +114,8 @@ last_verification: none
 - `last_verification`: the one-line authoritative verification summary; keep
   detailed commands and artifacts in `Evidence`
 
-For `$ralph`, a ticket is selectable only when `ready: true`,
+For `$ralph`, the explicit invocation is the operator running `$ralph`. After
+that, a ticket is selectable only when `ready: true`,
 `approval_required: false`, `blocked_by: []`, `claimed_by:` is empty, and every
 dependency is complete, archived, or explicitly waived in the ticket body.
 

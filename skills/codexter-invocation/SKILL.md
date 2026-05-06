@@ -11,6 +11,13 @@ file, or a future external caller such as Symphony.
 Codexter is not a separate CLI. Codexter is normal Codex after this repository's
 skills, templates, hooks, and rules have been installed.
 
+A ticket existing in `tickets/`, a ticket becoming `ready: true`, or a board
+card moving state is context only. It is not a run trigger. Start this skill
+only after an explicit invocation, such as a local operator asking Codex to run
+one ticket, an operator-invoked `$ralph` pass, a recognized ticket comment that
+an external runner has converted into an envelope, or a Symphony/Codex Cloud
+payload.
+
 ## Workflow
 
 1. Read `WORKFLOW.md`.
@@ -47,6 +54,10 @@ skills, templates, hooks, and rules have been installed.
 The helper validates and writes artifacts. It does not launch Codex, poll a
 board, claim tickets, retry failed work, or manage remote workspaces. Symphony or
 another external runner may own those orchestration concerns later.
+
+Readiness gates and `compute_target` are admission inputs, not execution
+authority. If no explicit invocation exists, do not infer one from ticket
+metadata.
 
 `FileTicketAdapter` is read-first in v1. It rejects ticket paths outside the
 configured board source and returns a manual writeback result for evidence

@@ -1,17 +1,24 @@
-# Board And Compute Orchestration
+# Board, Compute, And Ticket Invocation
 
 Status: Draft v1
 
-Purpose: Define how Codexter should read coding work from local or shared board
-surfaces, decide where the work should run, route normal Codex through installed
-Codexter skills, and produce proof that local or future external runners can
-trust.
+Purpose: Define how Codexter should treat local or shared board items as work
+context, accept an explicit invocation to run one item, decide where the work
+should run, route normal Codex through installed Codexter skills, and produce
+proof that local or future external runners can trust.
 
 ## 1. Core Decision
 
 Codexter should be the work-contract, skill-routing, QA/review, and proof layer
 inside normal Codex. Symphony, Codex cloud, local worktrees, or future services
 may be compute substrates.
+
+Codexter is a ticket invocation layer, not a board daemon. A ticket existing,
+becoming ready, or moving state is not by itself permission to start an agent.
+Execution starts only when a human or external runner makes an explicit
+invocation, such as a local Codex request, an operator-invoked `$ralph` run, a
+recognized ticket comment, a Codex Cloud task payload, or a Symphony worker
+payload.
 
 The user's current priority is local, conversational execution:
 
@@ -50,6 +57,8 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 - No new daemon in this spec.
 - No Linear, Notion, GitHub, or cloud adapter implementation here.
 - No hidden board listener that auto-spawns agents when a ticket state changes.
+- No automatic execution from ticket creation, readiness, or status movement
+  alone.
 - No parallel Ralph implementation here.
 - No replacement for `impl-plan`, `impl`, `qa`, `review`, or `close-ticket`.
 - No standalone `codexter run` product claim. Codexter remains normal Codex
@@ -60,17 +69,17 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 | Layer | Owner | Responsibility | Does not own |
 | --- | --- | --- | --- |
 | Codex | OpenAI Codex runtime | Model session, tool use, file edits, subagents, app/worktree/cloud primitives | Codexter ticket semantics or proof policy |
-| Codexter | This repo installed into Codex | Skills, tickets, board contracts, compute policy, QA/review gates, ProofPacket | Long-running external scheduler mechanics |
+| Codexter | This repo installed into Codex | Skills, tickets, board contracts, invocation policy, compute admission, QA/review gates, ProofPacket | Long-running external scheduler mechanics |
 | Symphony | Future external runner | Polling, claims, retries, workspace/process lifecycle, daemon observability | Codexter skill internals or proof quality decisions |
-| Board systems | Filesystem now, Linear/Notion later | Store work item data and status/comment/evidence fields | Decide Codexter skill routing or quality gates |
+| Board systems | Filesystem now, Linear/Notion later | Store work item data and status/comment/evidence fields, including optional invocation comments for a runner to interpret | Decide that Codexter should run without an explicit invocation |
 
 ### Best-Of-Worlds Import
 
 | Source | Adopt | Adapt | Reject / defer |
 | --- | --- | --- | --- |
-| Symphony spec | Workspaces, claims, retry/reconcile vocabulary, `WORKFLOW.md` discipline, conformance matrix | Treat Symphony as a future caller through the envelope/proof contract | Do not copy the daemon for local mode now |
+| Symphony spec | Workspaces, claims, retry/reconcile vocabulary, `WORKFLOW.md` discipline, conformance matrix | Treat Symphony as a future caller through the envelope/proof contract | Do not copy the daemon or state-polling trigger model for local mode now |
 | Codex app primitives | Skills, subagents, worktrees, automations, cloud/local execution as trusted runtime primitives | Route compute targets to these primitives when available | Do not pretend Codexter is a separate execution engine |
-| Codexter current system | Tickets, skills, Stop-hook proof, review gates, Ralph serial dispatcher | Generalize ticket reading through `BoardAdapter` and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
+| Codexter current system | Tickets, skills, Stop-hook proof, review gates, Ralph serial dispatcher | Generalize ticket reading through `BoardAdapter`, explicit invocation, and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
 
 ### Advise Decision
 
@@ -81,12 +90,13 @@ Options:
 | Option | Pros | Cons |
 | --- | --- | --- |
 | Copy Symphony as Codexter daemon | Strong scheduler parity; one service could own polling and retries | High maintenance; duplicates a thing Symphony already specializes in; weakens local conversational fit |
-| Codexter as contract/quality layer with pluggable compute | Preserves current local use, integrates with Symphony later, keeps proof/review unique to Codexter | Requires crisp adapters and compute selection before cloud mode feels real |
+| Codexter as invocation/contract/quality layer with pluggable compute | Preserves current local use, integrates with Symphony later, keeps proof/review unique to Codexter | Requires crisp adapters, trigger semantics, and compute selection before cloud mode feels real |
 | Keep only local filesystem tickets | Lowest complexity and best current reliability | Delays Linear/Symphony integration and compute selection clarity |
 
-Recommendation: Codexter should be the contract/quality layer with pluggable
-compute. The accepted tradeoff is that Codexter must maintain clean interfaces,
-but avoids owning every background runtime primitive.
+Recommendation: Codexter should be the explicit invocation, contract, and
+quality layer with pluggable compute. The accepted tradeoff is that Codexter
+must maintain clean interfaces, but avoids owning every background runtime
+primitive.
 
 ## 5. Mode Map
 
@@ -99,9 +109,10 @@ flowchart LR
   classDef proof fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
   classDef future fill:#f5f3ff,stroke:#8b5cf6,color:#111827,stroke-dasharray: 5 3
 
-  User["Local user talks to Codex"]:::local --> Envelope["CodexterRunEnvelope"]:::policy
-  Ralph["Serial Ralph selects next ticket"]:::local --> Envelope
-  Symphony["Symphony worker later"]:::future --> Envelope
+  User["Local user asks Codex<br/>to run one ticket"]:::local --> Invoke["Explicit invocation<br/>intent to execute"]:::policy
+  Ralph["Operator invokes serial Ralph"]:::local --> Invoke
+  Symphony["Symphony worker later"]:::future --> Invoke
+  Invoke --> Envelope["CodexterRunEnvelope"]:::policy
   Envelope --> Adapter["BoardAdapter"]:::board
   Adapter --> Item["WorkItem"]:::policy
   Item --> Selector["ComputeSelector"]:::policy
@@ -116,15 +127,17 @@ mode for solo coding work.
 
 ### `local_ralph`
 
-Ralph serially selects one eligible filesystem ticket and hands it to
-`impl-plan`, `impl`, or `close-ticket`. Ralph remains serial until a later
-parallel lease/worktree/merge policy lands.
+Ralph serially selects one eligible filesystem ticket only after the operator
+invokes `$ralph`. It then hands the selected ticket to `impl-plan`, `impl`, or
+`close-ticket`. Ralph remains serial until a later parallel
+lease/worktree/merge policy lands.
 
 ### `shared_board_adapter`
 
 A future local Codex session reads a shared board such as Linear or Notion
 through the same adapter interface. The entry point is still conversational
-unless a runner explicitly owns polling or events.
+unless an external runner explicitly owns polling or events and converts a
+board signal into a `CodexterRunEnvelope`.
 
 ### `symphony_worker`
 
@@ -306,7 +319,8 @@ Core keys:
 
 Ticket-level `compute_target` may request a target, but it is not authority to
 execute. The selector still checks workflow policy, dependencies, blockers,
-approval gates, and implementation support.
+approval gates, implementation support, and the presence of an explicit
+invocation.
 
 ## 8. State Machines
 
@@ -314,7 +328,8 @@ approval gates, and implementation support.
 
 ```mermaid
 stateDiagram-v2
-  [*] --> EnvelopeReceived
+  [*] --> ExplicitInvocation
+  ExplicitInvocation --> EnvelopeReceived
   EnvelopeReceived --> WorkflowLoaded
   WorkflowLoaded --> WorkItemLoaded
   WorkItemLoaded --> ComputeSelected
@@ -329,11 +344,13 @@ stateDiagram-v2
 
 ### Local Ralph
 
-Ralph is a selector and handoff loop, not an executor replacement.
+Ralph is an operator-invoked selector and handoff loop, not an executor
+replacement and not a background queue runner.
 
 ```mermaid
 stateDiagram-v2
-  [*] --> ReadBoard
+  [*] --> RalphInvoked
+  RalphInvoked --> ReadBoard
   ReadBoard --> SelectTicket
   SelectTicket --> Stop: none eligible or human gate
   SelectTicket --> BuildEnvelope: eligible ticket
@@ -368,6 +385,7 @@ keep proof and ticket evidence valid no matter which runner initiated the run.
 | Missing `WORKFLOW.md` | block run | worker failure | proof packet when possible, otherwise clear error |
 | Invalid ticket/work item | block run | worker failure | error with selector and adapter details |
 | Approval required | stop before execution | release or defer claim | blocker in ticket/proof |
+| No explicit invocation | do not run | runner should not create envelope | no proof required unless a prepare attempt already started |
 | Unsupported compute target | block, do not fall back | runner may requeue or mark unsupported | blocker names target and required adapter |
 | Skill route missing | block | worker failure | route error and next action |
 | QA/review fails | verdict `revise` or `block` | Symphony observes non-pass proof | linked review/QA artifact |
@@ -395,6 +413,8 @@ Future runner observability:
 
 - Codexter helpers must not launch Codex, poll boards, own retry queues, or
   present Codexter as a standalone CLI.
+- Ticket creation, `ready: true`, status movement, and `compute_target` changes
+  are not run triggers by themselves.
 - External board adapters must not expose raw credentials to Codex prompts.
 - Compute selection must never silently downgrade from a requested remote/cloud
   target to local.
@@ -410,6 +430,7 @@ Future runner observability:
 | Workflow loading | `WORKFLOW.md` parses and exposes board, compute, routing, and quality policy | core | invocation helper tests |
 | Board adapter | filesystem tickets normalize into `WorkItem` | core | `TASK-0113` tests |
 | Compute selection | precedence is envelope, ticket, workflow, default | core | `TASK-0114` tests |
+| Explicit invocation | tickets and board states are context until local Codex, Ralph, Codex Cloud, Symphony, or another runner passes an invocation envelope | core | `TASK-0120` docs review |
 | Unsupported compute | `symphony` and `codex_cloud` block locally until adapters exist | core | prepare JSON fixtures |
 | Local conversational | one envelope routes to the expected skill and proof path | core | invocation prepare/write-proof tests |
 | Ralph | serial selector hands one eligible ticket to phase skill and stops on human gates | core | Ralph selector tests |

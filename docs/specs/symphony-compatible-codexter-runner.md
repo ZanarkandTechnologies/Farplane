@@ -15,8 +15,12 @@ Symphony can launch Codex in a workspace where Codexter has been installed, it
 can run Codexter.
 
 The target is not to copy Symphony's daemon. The target is to expose an
-installed Codexter invocation contract with stable inputs, compute selection,
-skill routing, and proof outputs.
+installed Codexter invocation contract with stable inputs, explicit trigger
+semantics, compute selection, skill routing, and proof outputs.
+
+Ticket storage and ticket readiness are not run triggers. A filesystem ticket,
+Linear issue, Notion card, or other board item becomes executable only when a
+human or external runner explicitly invokes Codexter for that item.
 
 ## Design Decision
 
@@ -52,6 +56,8 @@ Therefore the first implementation is:
 - Do not build the Linear adapter in the first slice.
 - Do not build Notion/Open Claw integration in this slice.
 - Do not make board status movement auto-spawn agents.
+- Do not make ticket creation, readiness, or compute-target edits start work by
+  themselves.
 - Do not replace `impl-plan`, `$impl`, QA, review, or Stop hook with one giant
   prompt.
 - Do not store raw app-server session ids in ticket frontmatter.
@@ -64,8 +70,10 @@ Therefore the first implementation is:
 - Symphony integration means "Symphony launches Codex with Codexter installed
   and passes the Codexter run envelope," not "Codexter becomes Symphony."
 - The local operator entry point remains conversational: "run this ticket."
-- Event-driven/polling dispatch is deferred until the invocation contract is
-  stable.
+- `$ralph` is also an explicit invocation: the operator starts a serial board
+  drain, then Ralph selects one eligible ticket at a time.
+- Event-driven/polling dispatch belongs to an external runner such as Symphony,
+  Codex Cloud, or a future adapter once it can produce a run envelope.
 
 ## Top-Level Flow
 
@@ -78,7 +86,7 @@ flowchart LR
   classDef quality fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
   classDef future fill:#f5f3ff,stroke:#8b5cf6,color:#111827,stroke-dasharray: 5 3
 
-  User["User / Symphony later<br/>asks Codex to run work item"]:::entry
+  User["User / external runner<br/>explicitly invokes one work item"]:::entry
   Workflow["WORKFLOW.md<br/>policy + routing"]:::contract
   Board["BoardAdapter<br/>filesystem v1"]:::adapter
   Item["WorkItem<br/>normalized ticket"]:::contract
@@ -259,6 +267,8 @@ Local:
 - The operator asks Codex to run a ticket, usually by naming a ticket path or
   ID and optional compute target.
 - Codexter skills and repo policy interpret that as a `CodexterRunEnvelope`.
+- Creating or editing the ticket is drafting work only. It does not imply a
+  run should begin.
 
 Future Symphony:
 
@@ -267,6 +277,8 @@ Future Symphony:
   Codexter install before the run.
 - The Symphony prompt includes or references a `CodexterRunEnvelope`.
 - Codex writes the requested `ProofPacket`.
+- Symphony owns the decision to claim/poll/retry. Codexter only receives the
+  already-made invocation.
 
 ### Internal signatures
 
@@ -315,8 +327,9 @@ quality:
 
 # Codexter Invocation Workflow
 
-Use this file as the invocation policy. Do not restate the skill contracts here.
-The selected ticket remains the task-local source of truth.
+Use this file as the invocation policy for an explicitly requested run. Do not
+restate the skill contracts here. The selected ticket remains the task-local
+source of truth, but ticket existence is not itself invocation.
 ```
 
 ## Storage and State
@@ -388,6 +401,8 @@ Future external caller:
 - Let Symphony own polling, retries, stall detection, and workspace cleanup.
 - Require Symphony to pass Codexter's run envelope.
 - Require Codexter to emit proof even on failure when possible.
+- Do not require Codexter to watch the remote board after the envelope has been
+  handed off.
 
 ## Parallelism
 

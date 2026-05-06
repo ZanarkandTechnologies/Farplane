@@ -153,9 +153,9 @@ Legend:
 - [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
 - [docs/specs/board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
-  Purpose: canonical ownership split for BoardAdapter, WorkItem,
-  ComputeSelector, local Codexter, serial Ralph, and future Symphony/shared
-  board compute modes
+  Purpose: canonical ownership split for BoardAdapter, WorkItem, explicit
+  ticket invocation, ComputeSelector, local Codexter, operator-invoked serial
+  Ralph, and future Symphony/shared board compute modes
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
@@ -181,7 +181,8 @@ Legend:
 ### Execution surfaces
 
 - [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
-  Purpose: ticket lifecycle, frontmatter contract, and durable progress policy
+  Purpose: ticket lifecycle, frontmatter contract, invocation policy, and
+  durable progress policy
 - [tickets/templates/ticket.md](/Users/kenjipcx/coding-harness/Codexter/tickets/templates/ticket.md)
   Purpose: canonical ticket shape for planning, artifact-first evidence, and optional `Agent Contract`, `Autonomy Readiness`, and `Evidence Checklist` sections for UI-bearing or unattended work
 - [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
@@ -213,8 +214,9 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
 - [skills/codexter-invocation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/SKILL.md)
   Purpose: normal-Codex invocation contract that loads `WORKFLOW.md`,
-  validates one `CodexterRunEnvelope`, selects local compute, routes to the
-  existing phase skill, and writes parseable proof without launching Codex
+  validates one explicit `CodexterRunEnvelope`, selects local compute, routes
+  to the existing phase skill, and writes parseable proof without launching
+  Codex or treating ticket existence as a trigger
 - [skills/delegate-cli/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/SKILL.md)
   Purpose: public external CLI delegation workflow for routing bounded builder
   work through profile/adapter contracts while Codexter keeps ticket, QA, and
