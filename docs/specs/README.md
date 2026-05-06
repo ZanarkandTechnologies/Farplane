@@ -11,12 +11,15 @@ Current design docs:
 
 - `autoresearch-skill-suite.md` - metric-driven autoresearch planning, execution, and skill self-improvement contract
 - `best-of-worlds-workflow.md` - multi-source synthesis workflow for extracting, scoring, and adapting the best transferable features
+- `board-adapter-conformance.md` - fixture/checklist contract future board
+  adapters must satisfy before Linear, Notion, GitHub, or custom boards become
+  live work-item sources
 - `board-compute-orchestration.md` - board adapter, explicit ticket
   invocation, compute selection, local Codexter, Ralph, and future
   Symphony/shared-board ownership contract
-- `codexter-v2-milestone.md` - capped Symphony-inspired milestone for the
-  remaining invocation-trigger, adapter-conformance, and external-compute
-  recipe tickets, with explicit deferrals so Codexter does not become a daemon
+- `codexter-v2-milestone.md` - completed capped Symphony-inspired milestone for
+  explicit invocation triggers, adapter conformance, and external-compute
+  recipes, with explicit deferrals so Codexter does not become a daemon
 - `agent-testability-surfaces.md` - post-system-design doctrine for control accelerators, state probes, coordination views, and proof surfaces
 - `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy

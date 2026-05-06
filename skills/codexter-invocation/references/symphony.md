@@ -8,6 +8,10 @@ where Codexter has already been installed, then giving Codex a
 loads the envelope, normalizes one work item, selects compute admission, routes
 to existing skills, and writes a machine-readable `ProofPacket`.
 
+The Symphony trigger is explicit: Symphony has already claimed a work item and
+chosen to run Codex. Codexter must not start a second scheduler, watch the
+board, or infer new runs from ticket status changes inside the worker.
+
 ## Minimal Worker Flow
 
 ```mermaid
@@ -30,8 +34,9 @@ flowchart LR
 5. The prompt asks Codex to use `codexter-invocation` with the request file.
 6. Codexter routes to the selected phase skill and writes the requested
    `ProofPacket`.
-7. Symphony reads the proof and decides whether to comment, transition, retry,
-   cancel, or hand off.
+7. Codexter leaves ticket evidence and review artifacts in the workspace.
+8. Symphony reads the diff/evidence/review/`ProofPacket` and decides whether to
+   comment, transition, retry, cancel, or hand off.
 
 ## Responsibility Split
 
@@ -47,6 +52,20 @@ flowchart LR
 | Ticket evidence | Codexter | Link artifacts in the ticket when filesystem ticket exists | Missing evidence lowers review/proof quality |
 | Proof packet | Codexter | Write JSON to `proofPacketPath` | Symphony treats missing proof as worker failure |
 | Tracker comments/state transitions | Symphony or agent tools | Codexter does not own tracker writeback in v1 | External caller decides comment/retry/handoff |
+
+## Return Contract
+
+A Symphony-run Codexter task is not done just because the Codex process exited.
+The worker should return or expose:
+
+- the workspace diff or changed-file summary,
+- ticket evidence links,
+- QA/review artifact paths when required,
+- the `ProofPacket` at `proofPacketPath`,
+- the next action or blocker when proof verdict is not `pass`.
+
+Symphony may decide how to post or transition tracker state, but Codexter's
+local review/proof decides whether the work is trustworthy.
 
 ## Envelope Notes
 
@@ -68,7 +87,8 @@ Use the codexter-invocation skill with this request file:
 .harness/requests/<ticket>.codexter-run.json
 
 After the selected phase skill finishes, write the requested ProofPacket. Do not
-poll the board or launch another scheduler from inside Codexter.
+poll the board, launch another scheduler, submit cloud work, or infer another
+run from board state inside Codexter.
 ```
 
 ## Smoke Command
@@ -85,3 +105,14 @@ The command should return JSON with:
 - `compute.target: "local_shared"`
 - `route.skillName` for the requested phase
 - `proof_packet_path` under `.harness/results/`
+
+## AI Misread Risks
+
+- Do not use `computeTarget: "symphony"` inside the Symphony worker envelope.
+  Use `mode: "symphony_worker"` with `computeTarget: "local_shared"` after
+  Symphony has already created the workspace.
+- Do not add a Codexter poller just because Symphony polls externally.
+- Do not treat missing proof as success. Missing proof is a worker failure or
+  manual recovery state.
+- Do not let Codexter mutate Linear/Notion/GitHub state unless a separate
+  explicit tool or adapter owns that write.

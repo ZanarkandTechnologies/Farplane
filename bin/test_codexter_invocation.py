@@ -171,6 +171,51 @@ class CodexterInvocationTests(unittest.TestCase):
                 str(expected_proof),
             )
 
+    def test_external_runner_envelope_prepares_without_side_effects(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write(root / "WORKFLOW.md", WORKFLOW_TEXT)
+            write(root / "tickets" / "TASK-1234" / "ticket.md", TICKET_TEXT)
+            envelope = codexter_invocation.parse_run_envelope(
+                json.dumps(
+                    {
+                        "workflowPath": "WORKFLOW.md",
+                        "workItemId": "TASK-1234",
+                        "phase": "planning",
+                        "mode": "external_runner",
+                        "requestedBy": "codex-cloud-task",
+                        "requestedAt": "2026-05-05T00:00:00Z",
+                        "proofPacketPath": ".harness/results/task-1234-cloud.proof.json",
+                    }
+                ),
+                root,
+            )
+
+            plan = codexter_invocation.prepare_invocation(envelope, root)
+
+            self.assertEqual(plan.status, "ready")
+            self.assertEqual(plan.envelope.mode, "external_runner")
+            self.assertEqual(plan.route.skill_name, "impl-plan")
+            self.assertFalse(Path(plan.proof_packet_path).exists())
+
+    def test_rejects_unknown_invocation_mode(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+
+            with self.assertRaises(codexter_invocation.InvocationError):
+                codexter_invocation.parse_run_envelope(
+                    json.dumps(
+                        {
+                            "workflowPath": "WORKFLOW.md",
+                            "workItemId": "TASK-1234",
+                            "phase": "planning",
+                            "mode": "polling_daemon",
+                            "proofPacketPath": ".harness/results/task-1234-proof.json",
+                        }
+                    ),
+                    root,
+                )
+
     def test_building_invocation_blocks_approval_gated_ticket(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

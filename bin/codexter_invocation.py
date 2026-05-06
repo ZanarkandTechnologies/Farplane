@@ -21,6 +21,7 @@ from codexter_boards import (
 from codexter_compute import ComputeDecision, select_compute
 
 PHASES = ("planning", "building", "qa", "review", "documenting")
+MODES = ("local_codex", "local_ralph", "symphony_worker", "external_runner")
 VERDICTS = ("pass", "revise", "block", "failed")
 # MEM-0077: this helper validates invocation contracts and proof artifacts only;
 # normal Codex plus installed skills remains the execution surface.
@@ -341,6 +342,8 @@ def parse_run_envelope(source: str | Path, root: Path | None = None) -> Codexter
     if phase not in PHASES:
         raise InvocationError(f"unknown phase: {phase}")
     mode = require_string(envelope_value(payload, "mode", "mode", "local_codex"), "mode")
+    if mode not in MODES:
+        raise InvocationError(f"unknown mode: {mode}")
     proof_packet_path = require_string(
         envelope_value(payload, "proofPacketPath", "proof_packet_path"),
         "proofPacketPath",
@@ -568,7 +571,7 @@ def build_parser() -> argparse.ArgumentParser:
         target.add_argument("--ticket-path", default=None)
         target.add_argument("--phase", choices=PHASES, default="planning")
         target.add_argument("--compute", choices=COMPUTE_TARGETS, default=None)
-        target.add_argument("--mode", default="local_codex")
+        target.add_argument("--mode", choices=MODES, default="local_codex")
         target.add_argument("--requested-by", default="local-operator")
         target.add_argument("--proof", default="")
 

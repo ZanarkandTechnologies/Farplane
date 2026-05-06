@@ -295,11 +295,12 @@ Current capstone:
 
 - [Codexter V2 milestone](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
 
-Finish this Symphony-inspired pass with three small tickets:
+The Symphony-inspired V2 pass is now capped at explicit invocation, adapter
+conformance, and external compute handoff documentation:
 
-- [TASK-0121: define explicit Codexter invocation triggers](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/ticket.md)
-- [TASK-0123: add board adapter conformance scaffolding](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0123/ticket.md)
-- [TASK-0122: add external compute handoff recipes](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0122/ticket.md)
+- [TASK-0121: define explicit Codexter invocation triggers](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/ticket.md)
+- [TASK-0123: add board adapter conformance scaffolding](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0123/ticket.md)
+- [TASK-0122: add external compute handoff recipes](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0122/ticket.md)
 
 Do not expand this into a background-agent platform right now:
 
@@ -313,12 +314,11 @@ The roadmap above reflects the current audit:
 - the intake, per-ticket planning, review, Stop-hook gating, closeout,
   filesystem BoardAdapter, ComputeSelector, invocation envelope, proof packet,
   and serial `$ralph` selector are already live
-- the only remaining near-term architecture work is to make invocation
-  triggers, adapter conformance, and external compute handoffs explicit enough
-  that future integrations do not drift
-- after `TASK-0121`, `TASK-0122`, and `TASK-0123`, stop investing in this
-  architecture track and return to real project work unless a concrete project
-  ticket exposes a new gap
+- invocation triggers, adapter conformance, and external compute handoffs are
+  explicit enough for future integrations to reuse without drifting into a
+  daemon
+- after this V2 capstone, stop investing in this architecture track and return
+  to real project work unless a concrete project ticket exposes a new gap
 
 ## Setup
 

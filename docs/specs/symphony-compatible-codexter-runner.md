@@ -50,6 +50,22 @@ Therefore the first implementation is:
 > A `CodexterRunEnvelope` that a local Codex session or a future Symphony
 > worker can pass to Codex, plus a `ProofPacket` path that the run must write.
 
+## Invocation Trigger Contract
+
+Codexter treats these as explicit invocation sources:
+
+| Trigger | Example | Mode |
+| --- | --- | --- |
+| local chat | "run `TASK-0123` locally" | `local_codex` |
+| operator-invoked Ralph | `$ralph` selects one eligible filesystem ticket | `local_ralph` |
+| ticket comment convention | `@codexter implement` after a caller converts it | `external_runner` |
+| Codex Cloud task | task prompt includes a `CodexterRunEnvelope` | `external_runner` |
+| Symphony worker | worker writes or embeds a `CodexterRunEnvelope` | `symphony_worker` |
+
+Do not treat board storage as an invocation source. Ticket creation,
+`ready: true`, status movement, and `compute_target` edits are context only.
+They are not triggers.
+
 ## Non-Goals
 
 - Do not build a long-running daemon in the first slice.
@@ -280,6 +296,17 @@ Future Symphony:
 - Symphony owns the decision to claim/poll/retry. Codexter only receives the
   already-made invocation.
 
+Codex Cloud:
+
+- The operator or a future adapter submits a Codex Cloud task with a prompt
+  based on `skills/codexter-invocation/templates/codex-cloud-task-prompt.md`.
+- The prompt includes the ticket reference and `CodexterRunEnvelope`.
+- Codex Cloud owns remote execution and task status.
+- Codexter-owned proof still comes back as diff, ticket evidence, review
+  artifact, and `ProofPacket`.
+- Local `computeTarget: "codex_cloud"` remains blocked until a real adapter is
+  configured.
+
 ### Internal signatures
 
 ```ts
@@ -380,6 +407,8 @@ The concrete v1 shim lives in:
 
 - `skills/codexter-invocation/templates/symphony-run-envelope.json`
 - `skills/codexter-invocation/references/symphony.md`
+- `skills/codexter-invocation/templates/codex-cloud-task-prompt.md`
+- `skills/codexter-invocation/references/codex-cloud.md`
 
 The template uses `mode: "symphony_worker"` and `computeTarget:
 "local_shared"`. This is intentional: once Symphony has launched a per-ticket
@@ -442,13 +471,13 @@ Implemented foundation:
 - Ralph selection now reads through BoardAdapter and ComputeSelector while
   remaining serial.
 
-Remaining V2 tickets:
+Implemented V2 capstone outputs:
 
-| Ticket | Why now | Stop line |
+| Ticket | Output | Stop line |
 | --- | --- | --- |
-| `TASK-0121` | lock explicit invocation trigger vocabulary before any adapter or handoff work repeats the same ambiguity | no listener, webhook, or daemon |
-| `TASK-0123` | give future board adapters a tiny conformance scaffold before Linear/Notion/GitHub work starts | no real external board client |
-| `TASK-0122` | document practical Codex Cloud and Symphony handoffs without rebuilding background agents | no cloud wrapper, no auto-apply |
+| `TASK-0121` | explicit trigger vocabulary, envelope-mode validation, and examples for local chat, Ralph, comments, Codex Cloud, and Symphony | no listener, webhook, or daemon |
+| `TASK-0123` | board adapter conformance scaffold plus filesystem conformance coverage | no real external board client |
+| `TASK-0122` | Codex Cloud and Symphony handoff recipes with diff/evidence/review/ProofPacket return expectations | no cloud wrapper, no auto-apply |
 
 Deferred:
 
@@ -465,3 +494,14 @@ Deferred:
 - The README and architecture map point to the capped V2 milestone.
 - No active roadmap claims Codexter should rebuild Symphony, own polling, or
   auto-run draft tickets.
+
+## Agent Misread Guardrails
+
+Future agents should stop and reread this spec when they are tempted to:
+
+- add a watcher, daemon, webhook handler, or polling loop inside Codexter;
+- make `ready: true` or a status move start work;
+- make `codexter_invocation.py` launch Codex or cloud tasks;
+- add a Linear/Notion/GitHub adapter without conformance fixtures;
+- silently fall back from `symphony` or `codex_cloud` to `local_shared`;
+- apply a Codex Cloud diff before local inspection, tests, and review.

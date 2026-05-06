@@ -103,7 +103,7 @@ Context already inspected for this plan:
 
 - `skills/impl-plan/SKILL.md`
 - `skills/impl-plan/references/review.md`
-- `tickets/TASK-0121/ticket.md`
+- `tickets/archive/TASK-0121/ticket.md`
 - `tickets/TASK-0122/ticket.md`
 - `tickets/TASK-0123/ticket.md`
 - `docs/specs/codexter-v2-milestone.md`
@@ -475,15 +475,15 @@ Evidence required:
 Artifacts:
 
 - This plan:
-  `tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md`
+  `tickets/archive/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md`
 - Plan review:
-  `tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json`
+  `tickets/archive/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json`
 
 Commands for planning pass:
 
 - `sed -n '1,260p' skills/impl-plan/SKILL.md`
 - `sed -n '1,240p' skills/impl-plan/references/review.md`
-- `sed -n '1,280p' tickets/TASK-0121/ticket.md`
+- `sed -n '1,280p' tickets/archive/TASK-0121/ticket.md`
 - `sed -n '1,280p' tickets/TASK-0122/ticket.md`
 - `sed -n '1,280p' tickets/TASK-0123/ticket.md`
 - `sed -n '1,260p' docs/specs/codexter-v2-milestone.md`

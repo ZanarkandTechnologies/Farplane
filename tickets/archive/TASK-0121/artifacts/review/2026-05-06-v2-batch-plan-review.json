@@ -4,10 +4,10 @@
   "ticket_ids": ["TASK-0121", "TASK-0123", "TASK-0122"],
   "search_scope": {
     "changed_files": [
-      "tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md"
+      "tickets/archive/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md"
     ],
     "related_files": [
-      "tickets/TASK-0121/ticket.md",
+      "tickets/archive/TASK-0121/ticket.md",
       "tickets/TASK-0122/ticket.md",
       "tickets/TASK-0123/ticket.md",
       "docs/specs/codexter-v2-milestone.md",
@@ -60,7 +60,7 @@
       "rubric": "evidence-quality",
       "summary": "The plan names `codex cloud --help` as a version check, but implementation evidence must record unavailable-command output if the local CLI does not expose that subcommand.",
       "file_refs": [
-        "tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md"
+        "tickets/archive/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md"
       ],
       "evidence": [
         "Verification explicitly lists `codex cloud --help` and says not to submit tasks.",

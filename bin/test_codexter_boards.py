@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from codexter_boards import BoardAdapterError, FileTicketAdapter, WorkItemSelector
+from codexter_boards import BoardAdapterError, FileTicketAdapter, WorkItem, WorkItemSelector
 
 
 TICKET_TEXT = """\
@@ -49,6 +49,21 @@ def write(path: Path, text: str) -> None:
     path.write_text(textwrap.dedent(text), encoding="utf-8")
 
 
+def assert_work_item_contract(test_case: unittest.TestCase, item: WorkItem) -> None:
+    test_case.assertEqual(item.source, "filesystem")
+    test_case.assertRegex(item.identifier, r"^TASK-\d{4}$")
+    test_case.assertTrue(item.title)
+    test_case.assertIsInstance(item.labels, tuple)
+    test_case.assertIsInstance(item.blocked_by, tuple)
+    test_case.assertIsInstance(item.depends_on, tuple)
+    test_case.assertIsInstance(item.ready, bool)
+    test_case.assertIsInstance(item.approval_required, bool)
+    test_case.assertIsInstance(item.requires_qa, bool)
+    test_case.assertIsInstance(item.requires_demo, bool)
+    test_case.assertTrue(item.local_ticket_path.endswith("/ticket.md"))
+    test_case.assertTrue(item.artifacts_path.endswith("/artifacts"))
+
+
 class FileTicketAdapterTests(unittest.TestCase):
     def test_read_work_item_by_ticket_id_normalizes_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -71,6 +86,26 @@ class FileTicketAdapterTests(unittest.TestCase):
             self.assertFalse(item.requires_demo)
             self.assertEqual(item.compute_target, "local_worktree")
             self.assertTrue(item.artifacts_path.endswith("tickets/TASK-1234/artifacts"))
+
+    def test_filesystem_adapter_satisfies_board_conformance_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write(root / "tickets" / "TASK-1234" / "ticket.md", TICKET_TEXT)
+            adapter = FileTicketAdapter(root)
+
+            item = adapter.read_work_item(WorkItemSelector(work_item_id="TASK-1234"))
+            writeback = adapter.write_evidence(
+                item,
+                "tickets/TASK-1234/artifacts/review.json",
+            )
+
+            assert_work_item_contract(self, item)
+            self.assertEqual(item.blocked_by, ("TASK-0002",))
+            self.assertEqual(item.depends_on, ("TASK-0001",))
+            self.assertEqual(item.compute_target, "local_worktree")
+            self.assertFalse(writeback.ok)
+            self.assertFalse(writeback.changed)
+            self.assertIn("manual", writeback.message)
 
     def test_read_work_item_by_path(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

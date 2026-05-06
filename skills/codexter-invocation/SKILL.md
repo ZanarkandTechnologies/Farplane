@@ -18,6 +18,22 @@ one ticket, an operator-invoked `$ralph` pass, a recognized ticket comment that
 an external runner has converted into an envelope, or a Symphony/Codex Cloud
 payload.
 
+## Trigger Vocabulary
+
+Use these trigger kinds when explaining or templating a run:
+
+| Kind | Example | Envelope mode |
+| --- | --- | --- |
+| `local_chat` | `run TASK-0123 locally` | `local_codex` |
+| `local_ralph` | operator invokes `$ralph` | `local_ralph` |
+| `ticket_comment` | `@codexter implement` after a caller recognizes it | `external_runner` |
+| `codex_cloud_task` | Codex Cloud task prompt includes the envelope | `external_runner` |
+| `symphony_worker` | Symphony writes the envelope in a worker workspace | `symphony_worker` |
+
+Never infer a trigger from ticket creation, `ready`, status movement, or
+`compute_target`. For shared boards, a comment/action is only a convention until
+an external caller converts it into a `CodexterRunEnvelope`.
+
 ## Workflow
 
 1. Read `WORKFLOW.md`.
@@ -75,6 +91,17 @@ with `computeTarget: "local_shared"` because Symphony has already chosen the
 workspace; `computeTarget: "symphony"` remains a future adapter target and
 blocks in local Codexter.
 
+For Codex Cloud-shaped requests, read
+`skills/codexter-invocation/references/codex-cloud.md` and use
+`skills/codexter-invocation/templates/codex-cloud-task-prompt.md` as the prompt
+template. The template is for manual or future-adapter submission through
+`codex cloud exec`; this skill must not submit the task, poll it, apply its
+diff, or hide review from the local ticket evidence.
+
+For future board adapters, read
+`docs/specs/board-adapter-conformance.md` before adding adapter code. The
+filesystem adapter is the only live adapter today.
+
 ## Local Example
 
 ```bash
@@ -100,3 +127,16 @@ python3 bin/codexter_invocation.py write-proof \
 
 Link proof artifacts from the ticket `Evidence` section. Keep detailed result
 state in JSON, not in transcript memory.
+
+## AI Misread Checks
+
+Before acting on an envelope, verify:
+
+- there is exactly one selected work item;
+- the trigger was explicit and did not come from board state alone;
+- unsupported external targets are reported as blockers, not silently run
+  locally;
+- comments are caller-side conventions unless an adapter has already produced
+  an envelope;
+- this helper is validating and writing artifacts only, not launching Codex or
+  cloud tasks.

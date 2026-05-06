@@ -96,6 +96,19 @@ class ComputeSelectorTests(unittest.TestCase):
             self.assertIn("future external adapter", decision.reason)
             self.assertIn("normal Codex with Codexter installed", decision.handoff)
 
+    def test_codex_cloud_target_blocks_with_external_handoff_hint(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            decision = self.decide(
+                envelope_target="codex_cloud",
+                workflow_allowed=("local_shared", "local_worktree", "codex_cloud"),
+                root=Path(tmp),
+            )
+
+            self.assertFalse(decision.allowed)
+            self.assertIn("unsupported_target", decision.blocker_codes)
+            self.assertIn("future external adapter", decision.reason)
+            self.assertIn("normal Codex with Codexter installed", decision.handoff)
+
     def test_build_phase_blocks_on_approval_blockers_and_dependencies(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             decision = self.decide(

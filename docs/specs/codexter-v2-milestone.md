@@ -1,6 +1,6 @@
 # Codexter V2 Milestone
 
-Status: Active capstone plan
+Status: Implemented capstone
 Date: 2026-05-07
 
 ## Purpose
@@ -11,9 +11,10 @@ shape: normal Codex plus Codexter skills can run one explicitly invoked ticket,
 prove what happened, and stay easy for Codex Cloud, Symphony, Linear, Notion, or
 another board caller to integrate later.
 
-The milestone should end after the remaining invocation and adapter-contract
-tickets land. Further background scheduling, parallel agents, hosted telemetry,
-and cloud orchestration should wait for real project pressure.
+The milestone ends at explicit invocation triggers, board adapter conformance,
+and external compute handoff recipes. Further background scheduling, parallel
+agents, hosted telemetry, and cloud orchestration should wait for real project
+pressure.
 
 ## Current Decision
 
@@ -59,7 +60,7 @@ flowchart LR
   Proof -. "external caller can inspect" .-> External
 ```
 
-## Remaining Tickets
+## Implemented Outputs
 
 ### `TASK-0121`: Define Explicit Codexter Invocation Triggers
 
@@ -82,6 +83,7 @@ Expected output:
 - `InvocationTrigger` reference.
 - Updated `CodexterRunEnvelope` examples.
 - Comment-trigger examples that remain conventions for callers, not a watcher.
+- Invocation helper validates known envelope modes.
 
 ### `TASK-0123`: Add Board Adapter Conformance Scaffolding
 
@@ -106,6 +108,7 @@ Expected output:
 - Required fields and normalization examples.
 - Evidence-writeback expectations.
 - No real Linear/Notion/GitHub client.
+- Filesystem adapter conformance test coverage.
 
 ### `TASK-0122`: Add External Compute Handoff Recipes
 
@@ -131,6 +134,7 @@ Expected output:
 - Symphony handoff recipe.
 - Expected result contract: diff, evidence, review, ProofPacket.
 - No Codex Cloud wrapper, no daemon, no auto-apply.
+- Local `codex cloud --help` command vocabulary captured for the recipe.
 
 ## Parked Or Deferred
 
@@ -148,10 +152,10 @@ Expected output:
 
 Codexter V2 is done when:
 
-- explicit invocation triggers are documented,
-- board adapter conformance is documented,
-- external compute handoff recipes exist,
-- README and architecture point to this capstone,
+- explicit invocation triggers are documented;
+- board adapter conformance is documented;
+- external compute handoff recipes exist;
+- README and architecture point to this capstone;
 - no active roadmap claims Codexter should rebuild Symphony or implement
   background agents now.
 

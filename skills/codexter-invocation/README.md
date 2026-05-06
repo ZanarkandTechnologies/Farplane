@@ -10,8 +10,12 @@ needs to route one work item through the existing Codexter skills.
   Symphony callers
 - `templates/symphony-run-envelope.json` - file-envelope fixture for a future
   Symphony worker that launches normal Codex with Codexter installed
+- `templates/codex-cloud-task-prompt.md` - prompt template for intentionally
+  submitting one ticket to Codex Cloud
 - `references/symphony.md` - responsibility split between Symphony and
   Codexter plus smoke command expectations
+- `references/codex-cloud.md` - manual Codex Cloud handoff flow and
+  review-before-apply guardrails
 - `bin/codexter_invocation.py` - helper that validates workflow, ticket,
   compute, routing, and proof shape
 
@@ -36,7 +40,17 @@ claims, retries, workspaces, Codex launch, and tracker writeback. Codexter owns
 the envelope, board normalization, compute admission, skill route, ticket
 evidence, and `ProofPacket`.
 
+## Codex Cloud Handoff
+
+Use `references/codex-cloud.md` when a human explicitly decides to send one
+ticket to Codex Cloud. Codex Cloud owns remote execution. Codexter owns the
+prompt contract, local review, ticket evidence, and `ProofPacket` expectation.
+
+Do not make Codexter submit, poll, or apply cloud tasks. Use `codex cloud diff`
+for review before `codex cloud apply`.
+
 ## How To Test
 
 - `python3 -m unittest bin/test_codexter_invocation.py`
+- `python3 -m unittest bin/test_codexter_compute.py`
 - `python3 -m py_compile bin/codexter_invocation.py`

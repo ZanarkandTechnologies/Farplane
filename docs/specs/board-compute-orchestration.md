@@ -147,6 +147,51 @@ inside the launched Codex workspace.
 
 ## 6. Domain Model
 
+### `InvocationTrigger`
+
+An `InvocationTrigger` is the human or runner intent that starts one Codexter
+run. It is not stored board state and it is not produced automatically by
+ticket creation, readiness, status movement, or `compute_target` edits.
+
+```ts
+type InvocationTrigger = {
+  kind:
+    | "local_chat"
+    | "local_ralph"
+    | "ticket_comment"
+    | "codex_cloud_task"
+    | "symphony_worker";
+  command: "plan" | "implement" | "qa" | "review" | "close";
+  workItemRef: {
+    id?: string;
+    path?: string;
+    url?: string;
+  };
+  actor: string;
+  source: "filesystem" | "linear" | "notion" | "github" | "external";
+  requestedAt: string;
+};
+```
+
+Trigger examples:
+
+| Kind | Example | Who converts it to an envelope |
+| --- | --- | --- |
+| `local_chat` | "Run `TASK-0123` locally" | the current Codex session |
+| `local_ralph` | operator invokes `$ralph` | Ralph serial selector |
+| `ticket_comment` | `@codexter implement` | future board adapter or external runner |
+| `codex_cloud_task` | Codex Cloud task prompt includes the ticket and envelope | operator or future cloud adapter |
+| `symphony_worker` | Symphony claims a work item and writes an envelope file | Symphony worker |
+
+Important boundary:
+
+- A `ticket_comment` is a convention for a caller to interpret. Codexter does
+  not watch Linear, Notion, GitHub, or filesystem comments in v1.
+- A `codex_cloud_task` means Codex Cloud owns the remote execution lifecycle.
+  Codexter only owns the contract inside the launched Codex task.
+- A `symphony_worker` means Symphony owns polling, claim, retry, workspace, and
+  Codex launch behavior. Codexter only receives the already-made invocation.
+
 ### `BoardAdapter`
 
 ```ts
@@ -166,6 +211,8 @@ Requirements:
 - The live filesystem implementation is `bin/codexter_boards.py`:
   `FileTicketAdapter` reads `tickets/TASK-*/ticket.md`, rejects selectors
   outside the configured board source, and returns a normalized `WorkItem`.
+- New adapters must satisfy
+  `docs/specs/board-adapter-conformance.md` before they are treated as live.
 - External adapters must normalize into the same `WorkItem` shape.
 - Adapter writes must be explicit and traceable; Codexter should not silently
   mutate external board state as a side effect of reading.
@@ -428,9 +475,9 @@ Future runner observability:
 | Area | Requirement | Profile | Proof |
 | --- | --- | --- | --- |
 | Workflow loading | `WORKFLOW.md` parses and exposes board, compute, routing, and quality policy | core | invocation helper tests |
-| Board adapter | filesystem tickets normalize into `WorkItem` | core | `TASK-0113` tests |
+| Board adapter | filesystem tickets normalize into `WorkItem` and satisfy the conformance scaffold | core | `TASK-0123` conformance doc plus board tests |
 | Compute selection | precedence is envelope, ticket, workflow, default | core | `TASK-0114` tests |
-| Explicit invocation | tickets and board states are context until local Codex, Ralph, Codex Cloud, Symphony, or another runner passes an invocation envelope | core | `TASK-0120` docs review |
+| Explicit invocation | tickets and board states are context until local Codex, Ralph, Codex Cloud, Symphony, or another runner passes an invocation envelope | core | `TASK-0121` trigger docs plus invocation tests |
 | Unsupported compute | `symphony` and `codex_cloud` block locally until adapters exist | core | prepare JSON fixtures |
 | Local conversational | one envelope routes to the expected skill and proof path | core | invocation prepare/write-proof tests |
 | Ralph | serial selector hands one eligible ticket to phase skill and stops on human gates | core | Ralph selector tests |
@@ -438,7 +485,7 @@ Future runner observability:
 | Parallel Ralph | leases, worktrees, merge policy, stale recovery, batch QA specified before implementation | extension | `skills/ralph/references/parallel-ralph.md` and `TASK-0115` design review |
 | Spec discipline | complex specs include domain model, state, config, failures, observability, and tests | governance | `TASK-0116` template |
 
-## 13. Follow-Up Ticket Map
+## 13. Completed V2 Ticket Map
 
 | Ticket | Purpose | Depends on | Expected output |
 | --- | --- | --- | --- |
@@ -470,8 +517,10 @@ Completed foundation tickets are archived: `TASK-0112`, `TASK-0113`,
 
 - `WORKFLOW.md`
 - `docs/specs/symphony-compatible-codexter-runner.md`
+- `docs/specs/board-adapter-conformance.md`
 - `skills/codexter-invocation/SKILL.md`
 - `skills/ralph/SKILL.md`
+- `skills/codexter-invocation/references/codex-cloud.md`
 - `docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md`
 - `docs/research/web-research/2026-05-05_symphony-dagster-codexter-integration.md`
 - `docs/sources/registry.jsonl`

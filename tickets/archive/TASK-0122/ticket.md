@@ -1,8 +1,8 @@
 ---
 ticket_id: TASK-0122
 title: add external compute handoff recipes
-phase: planning
-status: review
+phase: complete
+status: done
 owner: codex
 claimed_by:
 priority: medium
@@ -10,13 +10,13 @@ depends_on:
   - TASK-0121
 blocked_by: []
 ready: false
-approval_required: true
+approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-05-06T17:18:41Z
-updated_at: 2026-05-06T18:49:08Z
-next_action: approve the V2 batch implementation plan with TASK-0121 -> TASK-0123 -> TASK-0122
-last_verification: batch impl-plan and review passed on 2026-05-06; awaiting approval
+updated_at: 2026-05-06T19:14:47Z
+next_action: none; archived after V2 batch completion
+last_verification: focused tests, validators, Codex Cloud help check, grep guardrail scan, and review passed on 2026-05-06
 ---
 
 # TASK-0122: add external compute handoff recipes
@@ -32,9 +32,9 @@ diff plus ProofPacket for review.
 This ticket is planned as the final recipe step in the capped V2 batch after
 `TASK-0121` locks trigger vocabulary and `TASK-0123` locks adapter
 conformance. The shared plan lives at
-[2026-05-06-v2-batch-impl-plan.md](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md)
+[2026-05-06-v2-batch-impl-plan.md](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md)
 and the plan review passed at
-[2026-05-06-v2-batch-plan-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json).
+[2026-05-06-v2-batch-plan-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json).
 
 ## V2 Importance
 - `Why now:` this gives a practical answer for "run this ticket on the cloud"
@@ -144,13 +144,13 @@ and the plan review passed at
 - `Recommendation:` ship recipes now; defer adapters and automation.
 
 ## Acceptance Criteria
-- [ ] Codex Cloud handoff reference exists and uses current `codex cloud`
+- [x] Codex Cloud handoff reference exists and uses current `codex cloud`
   command vocabulary.
-- [ ] Symphony reference and Codex Cloud reference share the same
+- [x] Symphony reference and Codex Cloud reference share the same
   envelope/proof framing.
-- [ ] Recipes state that external compute is explicit and never triggered by
+- [x] Recipes state that external compute is explicit and never triggered by
   ticket creation alone.
-- [ ] Local selectors still block unsupported external targets until real
+- [x] Local selectors still block unsupported external targets until real
   adapters exist.
 
 ## Verification
@@ -183,16 +183,28 @@ and the plan review passed at
 
 ## Evidence
 - `Artifacts:`
-  - [V2 batch impl-plan](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md)
-  - [V2 batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json)
+  - [V2 batch impl-plan](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/artifacts/plan/2026-05-06-v2-batch-impl-plan.md)
+  - [V2 batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json)
+  - [V2 batch evidence](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/artifacts/qa/2026-05-06-v2-batch-evidence.md)
+  - [V2 batch implementation review](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/artifacts/review/2026-05-06-v2-batch-impl-review.json)
   - [next-batch plan review](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0120/artifacts/review/2026-05-06-next-batch-plan-review.json)
 - `Commands:`
-  - `python3 -m json.tool tickets/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json`
+  - `python3 -m unittest bin/test_codexter_invocation.py bin/test_codexter_boards.py bin/test_codexter_compute.py`
+  - `python3 -m py_compile bin/codexter_invocation.py bin/codexter_boards.py bin/codexter_compute.py`
+  - `python3 -m json.tool tickets/archive/TASK-0121/artifacts/review/2026-05-06-v2-batch-plan-review.json`
+  - `python3 -m json.tool tickets/archive/TASK-0121/artifacts/review/2026-05-06-v2-batch-impl-review.json`
   - `python3 tickets/scripts/check_ticket_metadata.py`
-  - `git diff --check -- tickets/archive/TASK-0120/ticket.md tickets/TASK-0121/ticket.md tickets/TASK-0122/ticket.md tickets/TASK-0123/ticket.md`
+  - `python3 bin/check_doc_parity.py`
+  - `python3 bin/check_harness_invariants.py`
+  - `codex cloud --help`
+  - `codex cloud exec --help`
+  - `codex cloud status --help`
+  - `codex cloud diff --help`
+  - `codex cloud apply --help`
+  - `rg -n "auto.*run|watch|webhook|poll|daemon|listener|cloud exec|cloud apply" docs skills/codexter-invocation WORKFLOW.md`
   - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
 - `Result summary:`
-  - Batch implementation plan created and reviewed; ticket remains approval-gated and still depends on `TASK-0121`.
+  - External compute handoff recipes landed without adding cloud wrappers or auto-apply behavior.
 
 ## Blockers
-- awaiting approval
+- none
