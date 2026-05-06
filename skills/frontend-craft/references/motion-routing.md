@@ -10,7 +10,7 @@ Use this to select the motion engine. Load official docs or external skills for 
 | Component enter/exit, layout transitions | Motion / Framer Motion if already in project |
 | Complex timelines, ScrollTrigger, pinning, scrub, motion paths | Official `greensock/gsap-skills` |
 | Shared-element transitions | View Transitions API with fallback |
-| Shader, particles, 3D, post-processing | Three.js / WebGL, or WebGPU only with fallback |
+| Shader, particles, 3D, post-processing | `three-js.md` for Three.js/WebGL/R3F, or WebGPU only with fallback |
 | Reduced-motion support | Always required |
 
 ## GSAP Source Of Truth

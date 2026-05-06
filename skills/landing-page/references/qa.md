@@ -18,6 +18,7 @@ Capture:
 - Assets load from workspace/project paths.
 - Reduced-motion mode is usable.
 - Canvas/WebGL scenes are nonblank and framed correctly.
+- Three.js scenes have visible lighting/materials, sane mobile framing, lazy-load/off-screen behavior, and a static fallback.
 
 ## Scroll Checkpoints
 

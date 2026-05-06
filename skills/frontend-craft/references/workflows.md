@@ -8,7 +8,8 @@
 4. Use `visual-design` unless an existing visual system fully settles the look; for landing pages, refine it with the selected taste profile.
 5. Use `frontend-design` references for app-UI implementation details.
 6. Use `imagegen` when a bitmap asset or visual probe is needed.
-7. Implement, verify, and route visual proof through `visual-qa` when UI changed.
+7. Use `three-js.md` when the surface earns a real-time 3D/WebGL/R3F scene.
+8. Implement, verify, and route visual proof through `visual-qa` when UI changed.
 
 ## Broken UI
 

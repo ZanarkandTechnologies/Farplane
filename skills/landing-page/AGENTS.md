@@ -14,6 +14,7 @@
 - `visual-design` owns visual system decisions.
 - `frontend-craft` owns implementation orchestration.
 - Official GreenSock skills or docs own GSAP implementation details.
+- [frontend-craft three-js.md](../frontend-craft/references/three-js.md) owns Three.js/WebGL/R3F implementation references for 3D landing assets.
 
 ## Checks
 

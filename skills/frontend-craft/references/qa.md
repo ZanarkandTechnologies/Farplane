@@ -18,6 +18,7 @@ Use this after frontend implementation.
 - Generated assets: verify referenced paths load in the browser and are not left under `$CODEX_HOME`.
 - Generated image assets: verify workspace/public path loading, dimensions, responsive crop, file size, alpha/background expectations, and alt text when semantic.
 - Generated video assets: verify workspace/public path loading, poster/fallback, stable aspect ratio, autoplay constraints, muted/controls policy, captions or transcript when semantic, and reduced-motion behavior.
+- Three.js/WebGL assets: verify nonblank canvas pixels, correct framing, lighting/material visibility, interaction controls, mobile performance, lazy-load/off-screen pause, and reduced-motion/static fallback.
 - Forms/workflows: verify default, loading, empty, error, success, and max-content states.
 
 ## Review Metric

@@ -27,7 +27,7 @@ Shape one-page frontend experiences that persuade, orient, or create memory. Thi
 2. **Choose the story shape.** Problem -> shift -> proof -> action, or a stronger domain-specific arc when available.
 3. **Select registry records when useful.** For repeatable high-taste pages, choose one recipe from `references/landing-recipes.json`, one taste profile from `references/taste-profiles.json`, and one effect stack from `references/effect-stacks.json`; use `references/registry-format.md` for field meanings.
 4. **Map sections.** First viewport, proof, features, comparison, social proof, pricing/contact, final CTA. Keep only what the offer earns.
-5. **Create visual scenes.** Decide which sections need real media, generated assets, product screenshots, video, WebGL, or code-native visuals.
+5. **Create visual scenes.** Decide which sections need real media, generated assets, product screenshots, video, Three.js/WebGL, or code-native visuals. Treat 3D as a first-class landing asset when it reveals the product, object, system, or place.
 6. **Set landing visual rules.** Use `visual-design` for register, scene sentence, typography, color strategy, density, and anti-slop constraints, then refine with the chosen landing taste profile.
 7. **Plan motion.** Choose CSS/Motion/GSAP/WebGL with `frontend-craft/references/motion-routing.md`; for cinematic scroll sites, use the selected effect-stack record and official GreenSock skills or docs for GSAP code.
 8. **Plan proof.** Define mobile/desktop first-viewport checks, scroll checkpoints, asset-load checks, and reduced-motion checks.
@@ -37,7 +37,7 @@ Shape one-page frontend experiences that persuade, orient, or create memory. Thi
 
 | Landing type | Lead with |
 | --- | --- |
-| Product/app homepage | actual product state, screenshot, workflow, or demo scene |
+| Product/app homepage | actual product state, screenshot, workflow, 3D product/system scene, or demo scene |
 | Brand/portfolio | identity, work, material, and editorial composition |
 | Venue/place/object | real first-viewport signal of the place/object, not generic atmosphere |
 | Cinematic scrolltelling | story beats, pinned viewport, scene layers, scroll checkpoints |
@@ -59,6 +59,7 @@ For landing pages with reusable formulas or inspiration references:
 - Do not hide the product/place/object behind tiny nav text or vague mood imagery.
 - Do not use a split text/media hero when a full-bleed image or interactive scene should carry the page.
 - Do not make static AI-art pages with no relationship to the offer.
+- Do not add a decorative 3D scene that could be replaced by a better still image; 3D must clarify the product, object, system, or story.
 - Do not add a new recipe, taste profile, or effect stack without a stable `id`, routing criteria, examples, compatibility, and QA expectations.
 - Do not keep stale local GSAP examples as API truth; route to official GreenSock skills or docs.
 
@@ -66,6 +67,7 @@ For landing pages with reusable formulas or inspiration references:
 
 - `references/scrolltelling.md` - section/story and scroll narrative structure.
 - `references/motion-and-media.md` - media, generated assets, GSAP/WebGL routing.
+- [frontend-craft three-js.md](../frontend-craft/references/three-js.md) - Three.js/WebGL/R3F reference route for product/object/system hero scenes and interactive 3D assets.
 - `references/landing-recipes.json` - JSON registry of page formulas and section structures.
 - `references/taste-profiles.json` - JSON registry of landing-page visual registers.
 - `references/effect-stacks.json` - JSON registry of implementation stacks, assets, debug hooks, and QA.

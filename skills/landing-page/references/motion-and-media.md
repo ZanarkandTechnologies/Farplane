@@ -11,7 +11,18 @@
 - CSS for simple state changes.
 - Motion/Framer Motion for React component transitions when already used in the project.
 - Official GSAP skills for complex timelines, ScrollTrigger, pinning, scrub, SplitText, Flip, or motion paths.
-- Three.js/WebGL for 3D or shader scenes that genuinely carry the experience.
+- [frontend-craft three-js.md](../../frontend-craft/references/three-js.md) for Three.js/WebGL/R3F scenes that genuinely carry the experience.
+
+## 3D Landing Assets
+
+Use 3D when it acts as the product/place/object signal: product configurators, spatial diagrams, industrial machinery, dashboards-as-worlds, architecture, maps, or interactive hero objects.
+
+Good landing-page 3D still needs:
+
+- a static poster or reduced-motion fallback,
+- mobile framing that keeps the subject legible,
+- lazy loading and off-screen pause,
+- browser proof that the canvas is nonblank, lit, and interactive when expected.
 
 ## Video Scrub
 
