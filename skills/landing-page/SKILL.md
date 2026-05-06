@@ -23,6 +23,8 @@ Shape one-page frontend experiences that persuade, orient, or create memory. Thi
 
 ## Core Workflow
 
+For cinematic, Terminal-style, premium industrial, asset-heavy, or generated-media pages, run the spec-first gate in `references/spec-first-cinematic-industrial.md` before implementation. If the user asks to build in the same turn, still separate the work into spec, assets, implementation, and visual-review phases so each builder pass has a bounded output.
+
 1. **Define the offer.** Name the product/person/place/object/category and the literal value proposition.
 2. **Choose the story shape.** Problem -> shift -> proof -> action, or a stronger domain-specific arc when available.
 3. **Select registry records when useful.** For repeatable high-taste pages, choose one recipe from `references/landing-recipes.json`, one taste profile from `references/taste-profiles.json`, and one effect stack from `references/effect-stacks.json`; use `references/registry-format.md` for field meanings.
@@ -62,6 +64,8 @@ For landing pages with reusable formulas or inspiration references:
 - Do not add a decorative 3D scene that could be replaced by a better still image; 3D must clarify the product, object, system, or story.
 - Do not add a new recipe, taste profile, or effect stack without a stable `id`, routing criteria, examples, compatibility, and QA expectations.
 - Do not keep stale local GSAP examples as API truth; route to official GreenSock skills or docs.
+- Do not ask one builder pass to plan, generate assets, implement, visually review, and repair a cinematic page. Split the pass or expect stalls and mismatched files.
+- Do not accept code-native SVG stand-ins as Terminal-quality media unless the brief marks them as a placeholder and includes a concrete generated-media or real-media upgrade path.
 
 ## Reference Map
 
@@ -71,6 +75,7 @@ For landing pages with reusable formulas or inspiration references:
 - `references/landing-recipes.json` - JSON registry of page formulas and section structures.
 - `references/taste-profiles.json` - JSON registry of landing-page visual registers.
 - `references/effect-stacks.json` - JSON registry of implementation stacks, assets, debug hooks, and QA.
+- `references/spec-first-cinematic-industrial.md` - Terminal-style spec-first gate, asset contract, external-builder phase split, and gold-reference comparison checklist.
 - `references/registry-format.md` - JSON field contract, routing rules, and authoring checklist.
 - `references/cinematic-scroll-site-guideline.md` - compatibility pointer for older Terminal-style cinematic-scroll references.
 - `references/qa.md` - landing-page proof checks.
@@ -91,3 +96,9 @@ Return a landing brief with:
 - `Motion plan`
 - `QA plan`
 - `Implementation handoff`
+
+For cinematic industrial pages, the output must also name the current phase:
+`spec`, `assets`, `implementation`, or `visual-review`. The `spec` phase must
+include a file map, generated/real asset manifest plan, desktop and mobile hero
+media plan, poster/reduced-motion fallback, scroll checkpoints, and the next
+phase prompts or task slices.

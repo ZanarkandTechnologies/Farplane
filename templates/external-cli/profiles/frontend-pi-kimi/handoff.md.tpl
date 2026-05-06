@@ -18,6 +18,10 @@ Run ID: {{run_id}}
 
 - pending live external CLI run
 
+## Self-Review / Visual QA
+
+- pending live external CLI run
+
 ## Risks / Followups
 
-- Codexter must still run QA, visual QA when UI changed, and review.
+- Codexter must audit the delegated self-review before final integration.

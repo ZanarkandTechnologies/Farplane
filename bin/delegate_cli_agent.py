@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import json
 import os
 import re
 import shutil
 import subprocess
+from contextlib import contextmanager
 from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,13 +18,31 @@ from typing import Sequence
 
 CHECKOUT_MODES = ("shared", "worktree")
 RUN_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
-DEFAULT_FRONTEND_SKILLS = (
+DEFAULT_FRONTEND_REQUIRED_SKILLS = (
     "frontend-craft",
     "functional-ui",
     "visual-design",
     "landing-page",
     "frontend-design",
+    "image-generation",
+    "video-generation",
+    "video-ad-specs",
+    "ai-marketing-videos",
+    "explainer-video-guide",
+    "storyboard-creation",
+    "talking-head-production",
+    "product-photography",
+    "remotion",
+    "remotion-render",
+    "data-viz",
+    "react-flow",
+    "vercel-react-best-practices",
+    "visual-qa",
+    "review",
+    "web-design-guidelines",
 )
+DEFAULT_FRONTEND_OPTIONAL_SKILLS: tuple[str, ...] = ()
+DEFAULT_FRONTEND_SKILLS = DEFAULT_FRONTEND_REQUIRED_SKILLS
 
 
 @dataclass(frozen=True)
@@ -43,6 +63,7 @@ class DelegateProfile:
     model: str
     thinking: str
     skill_names: tuple[str, ...]
+    optional_skill_names: tuple[str, ...]
     template_dir: Path
     allowed_tools: tuple[str, ...]
     default_checkout: str
@@ -56,10 +77,12 @@ class DelegateRun:
     checkout_mode: str
     checkout_path: Path
     runtime_dir: Path
+    session_dir: Path
     durable_artifact_dir: Path | None
     prompt_path: Path
     handoff_path: Path
     dry_run: bool
+    attachments: tuple[Path, ...]
     prompt: str
     ticket_context: str
 
@@ -76,6 +99,9 @@ class DelegateRunResult:
     prompt_path: str
     handoff_path: str
     runtime_dir: str
+    session_dir: str
+    session_files: list[str]
+    attachments: list[str]
     durable_artifact_dir: str | None
     status: str
 
@@ -129,6 +155,18 @@ def read_text(path: Path | None, fallback: str = "No ticket supplied.") -> str:
         return fallback
 
 
+def read_prompt_arg(prompt: str, prompt_file: str, root: Path | None = None) -> str:
+    if not prompt_file:
+        return prompt
+    resolved_root = root or project_root()
+    path = Path(prompt_file).expanduser()
+    if not path.is_absolute():
+        path = resolved_root / path
+    if not path.exists():
+        raise SystemExit(f"prompt file not found: {prompt_file}")
+    return path.read_text(encoding="utf-8")
+
+
 def render_template(path: Path, values: dict[str, str]) -> str:
     content = path.read_text(encoding="utf-8")
     for key, value in values.items():
@@ -150,9 +188,87 @@ def adapter_specs() -> dict[str, AdapterSpec]:
     }
 
 
-def missing_live_env(profile: DelegateProfile, env: dict[str, str] | None = None) -> list[str]:
+def dedupe_skill_names(names: Sequence[str], *, label: str) -> tuple[str, ...]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for raw_name in names:
+        if not isinstance(raw_name, str):
+            raise SystemExit(f"{label} contains a non-string skill name")
+        name = raw_name.strip()
+        if not name:
+            raise SystemExit(f"{label} contains an empty skill name")
+        if "/" in name or "\\" in name or name.startswith("."):
+            raise SystemExit(f"{label} contains an invalid skill name: {name}")
+        if name not in seen:
+            seen.add(name)
+            result.append(name)
+    return tuple(result)
+
+
+def load_skill_bundle(
+    profile: str,
+    root: Path | None = None,
+) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    resolved_root = root or project_root()
+    manifest_path = (
+        resolved_root
+        / "templates"
+        / "external-cli"
+        / "profiles"
+        / profile
+        / "skill-bundle.json"
+    )
+    if not manifest_path.exists():
+        return DEFAULT_FRONTEND_REQUIRED_SKILLS, DEFAULT_FRONTEND_OPTIONAL_SKILLS
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"invalid skill bundle manifest {manifest_path}: {exc}") from exc
+    if not isinstance(manifest, dict):
+        raise SystemExit(f"invalid skill bundle manifest {manifest_path}: expected object")
+    required = dedupe_skill_names(
+        manifest.get("required_skills", DEFAULT_FRONTEND_REQUIRED_SKILLS),
+        label=f"{manifest_path} required_skills",
+    )
+    optional = dedupe_skill_names(
+        manifest.get("optional_skills", ()),
+        label=f"{manifest_path} optional_skills",
+    )
+    overlap = set(required).intersection(optional)
+    if overlap:
+        raise SystemExit(
+            f"invalid skill bundle manifest {manifest_path}: duplicate required/optional skills: "
+            + ", ".join(sorted(overlap))
+        )
+    return required, optional
+
+
+def pi_auth_providers(home: Path | None = None) -> set[str]:
+    auth_path = (home or Path.home()) / ".pi" / "agent" / "auth.json"
+    try:
+        auth = json.loads(auth_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    if not isinstance(auth, dict):
+        return set()
+    return {key for key, value in auth.items() if isinstance(key, str) and value}
+
+
+def model_provider(profile: DelegateProfile) -> str:
+    return profile.model.split("/", 1)[0] if "/" in profile.model else ""
+
+
+def missing_live_env(
+    profile: DelegateProfile,
+    env: dict[str, str] | None = None,
+    auth_providers: set[str] | None = None,
+) -> list[str]:
     adapter = adapter_specs()[profile.adapter]
     source = os.environ if env is None else env
+    providers = pi_auth_providers() if env is None and auth_providers is None else (auth_providers or set())
+    provider = model_provider(profile)
+    if adapter.name == "pi" and provider and provider in providers:
+        return []
     return [name for name in adapter.env_requirements if not source.get(name)]
 
 
@@ -160,12 +276,14 @@ def load_profile(profile: str, root: Path | None = None) -> DelegateProfile:
     resolved_root = root or project_root()
     if profile != "frontend-pi-kimi":
         raise SystemExit(f"unknown delegate profile: {profile}")
+    required_skills, optional_skills = load_skill_bundle(profile, resolved_root)
     return DelegateProfile(
         name="frontend-pi-kimi",
         adapter="pi",
         model="openrouter/moonshotai/kimi-k2.6",
         thinking="high",
-        skill_names=DEFAULT_FRONTEND_SKILLS,
+        skill_names=required_skills,
+        optional_skill_names=optional_skills,
         template_dir=resolved_root / "templates" / "external-cli" / "profiles" / profile,
         allowed_tools=("read", "bash", "edit", "write", "grep", "find", "ls"),
         default_checkout="worktree",
@@ -184,16 +302,38 @@ def skill_source_path(name: str, root: Path | None = None) -> Path:
     return (root or project_root()) / "skills" / name
 
 
+@contextmanager
+def profile_write_lock(profile: DelegateProfile, root: Path | None = None):
+    target_root = profile_root(profile.name, root)
+    target_root.mkdir(parents=True, exist_ok=True)
+    lock_path = target_root / ".profile.lock"
+    with lock_path.open("w", encoding="utf-8") as lock_file:
+        fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+
+
+def available_skill_names(profile: DelegateProfile, root: Path | None = None) -> tuple[str, ...]:
+    resolved_root = root or project_root()
+    names = list(profile.skill_names)
+    for skill_name in profile.optional_skill_names:
+        if skill_source_path(skill_name, resolved_root).exists():
+            names.append(skill_name)
+    return tuple(names)
+
+
 def copied_skill_path(profile: DelegateProfile, skill_name: str, root: Path | None = None) -> Path:
     return profile_root(profile.name, root) / "skills" / skill_name
 
 
-def copy_skill_bundle(profile: DelegateProfile, root: Path | None = None) -> list[str]:
+def _copy_skill_bundle_unlocked(profile: DelegateProfile, root: Path | None = None) -> list[str]:
     resolved_root = root or project_root()
     copied: list[str] = []
     destination_root = profile_root(profile.name, resolved_root) / "skills"
     destination_root.mkdir(parents=True, exist_ok=True)
-    for skill_name in profile.skill_names:
+    for skill_name in available_skill_names(profile, resolved_root):
         source = skill_source_path(skill_name, resolved_root)
         destination = destination_root / skill_name
         if not source.exists():
@@ -209,8 +349,14 @@ def copy_skill_bundle(profile: DelegateProfile, root: Path | None = None) -> lis
     return copied
 
 
+def copy_skill_bundle(profile: DelegateProfile, root: Path | None = None) -> list[str]:
+    resolved_root = root or project_root()
+    with profile_write_lock(profile, resolved_root):
+        return _copy_skill_bundle_unlocked(profile, resolved_root)
+
+
 def settings_skill_paths(profile: DelegateProfile, root: Path | None = None) -> str:
-    paths = [copied_skill_path(profile, name, root) for name in profile.skill_names]
+    paths = [copied_skill_path(profile, name, root) for name in available_skill_names(profile, root)]
     return ",\n".join(f"    {json.dumps(str(path))}" for path in paths)
 
 
@@ -226,6 +372,18 @@ def write_profile_settings(profile: DelegateProfile, root: Path | None = None) -
     return target
 
 
+def sync_profile_skills(
+    profile: DelegateProfile,
+    root: Path | None = None,
+) -> tuple[list[str], Path, dict[str, object]]:
+    resolved_root = root or project_root()
+    with profile_write_lock(profile, resolved_root):
+        copied = _copy_skill_bundle_unlocked(profile, resolved_root)
+        settings = write_profile_settings(profile, resolved_root)
+        doctor = doctor_profile(profile, resolved_root)
+    return copied, settings, doctor
+
+
 def doctor_profile(profile: DelegateProfile, root: Path | None = None) -> dict[str, object]:
     resolved_root = root or project_root()
     adapter = adapter_specs()[profile.adapter]
@@ -237,10 +395,16 @@ def doctor_profile(profile: DelegateProfile, root: Path | None = None) -> dict[s
     skill_checks = {
         name: skill_source_path(name, resolved_root).exists() for name in profile.skill_names
     }
+    optional_skill_checks = {
+        name: skill_source_path(name, resolved_root).exists() for name in profile.optional_skill_names
+    }
     env_checks = {
         name: bool(os.environ.get(name)) for name in adapter.env_requirements
     }
-    env_ready = all(env_checks.values())
+    auth_providers = pi_auth_providers()
+    provider = model_provider(profile)
+    provider_auth_ready = adapter.name == "pi" and provider in auth_providers
+    env_ready = all(env_checks.values()) or provider_auth_ready
     ok = bool(executable_path) and all(template_checks.values()) and all(skill_checks.values())
     return {
         "profile": profile.name,
@@ -250,8 +414,18 @@ def doctor_profile(profile: DelegateProfile, root: Path | None = None) -> dict[s
         "install_hint": adapter.install_hint if not executable_path else "",
         "templates": template_checks,
         "skills": skill_checks,
+        "optional_skills": optional_skill_checks,
+        "skill_bundle": {
+            "required": list(profile.skill_names),
+            "optional": list(profile.optional_skill_names),
+            "available": list(available_skill_names(profile, resolved_root)),
+        },
         "env": env_checks,
         "env_required_for_live_run": list(adapter.env_requirements),
+        "pi_auth": {
+            "provider": provider,
+            "provider_auth_ready": provider_auth_ready,
+        },
         "live_ready": ok and env_ready,
     }
 
@@ -265,6 +439,7 @@ def build_run(
     run_id: str,
     dry_run: bool,
     artifact_dir: str,
+    attachments: Sequence[str] = (),
     root: Path | None = None,
 ) -> DelegateRun:
     resolved_root = root or project_root()
@@ -279,11 +454,21 @@ def build_run(
     if not runtime_dir.is_absolute():
         runtime_dir = resolved_root / runtime_dir
     runtime_dir.mkdir(parents=True, exist_ok=True)
+    session_dir = runtime_dir / "sessions"
+    session_dir.mkdir(parents=True, exist_ok=True)
     durable_dir = None
     if ticket_id:
         durable_dir = resolved_root / "tickets" / ticket_id / "artifacts" / "external-cli" / validated_run_id
         durable_dir.mkdir(parents=True, exist_ok=True)
     handoff_path = runtime_dir / "handoff.md"
+    resolved_attachments: list[Path] = []
+    for raw_attachment in attachments:
+        attachment = Path(raw_attachment).expanduser()
+        if not attachment.is_absolute():
+            attachment = resolved_root / attachment
+        if not attachment.exists():
+            raise SystemExit(f"attachment not found: {raw_attachment}")
+        resolved_attachments.append(attachment.resolve())
     checkout_path = prepare_checkout_path(
         checkout_mode=checkout_mode,
         runtime_dir=runtime_dir,
@@ -297,10 +482,12 @@ def build_run(
         checkout_mode=checkout_mode,
         checkout_path=checkout_path,
         runtime_dir=runtime_dir,
+        session_dir=session_dir,
         durable_artifact_dir=durable_dir,
         prompt_path=runtime_dir / "prompt.md",
         handoff_path=handoff_path,
         dry_run=dry_run,
+        attachments=tuple(resolved_attachments),
         prompt=prompt,
         ticket_context=read_text(resolved_ticket_path),
     )
@@ -332,7 +519,8 @@ def prepare_checkout_path(*, checkout_mode: str, runtime_dir: Path, root: Path, 
 
 def render_prompt(profile: DelegateProfile, run: DelegateRun, root: Path | None = None) -> Path:
     skill_lines = "\n".join(
-        f"- {name}: {copied_skill_path(profile, name, root)}" for name in profile.skill_names
+        f"- {name}: {copied_skill_path(profile, name, root)}"
+        for name in available_skill_names(profile, root)
     )
     values = {
         "append_system": read_text(profile.template_dir / "APPEND_SYSTEM.md", ""),
@@ -344,6 +532,7 @@ def render_prompt(profile: DelegateProfile, run: DelegateRun, root: Path | None 
         "prompt": run.prompt,
         "ticket_context": run.ticket_context,
         "skill_list": skill_lines,
+        "attachment_list": "\n".join(f"- {path}" for path in run.attachments) or "- none",
         "handoff_path": str(run.handoff_path),
     }
     rendered = render_template(profile.template_dir / "prompt.md.tpl", values)
@@ -356,21 +545,34 @@ def render_prompt(profile: DelegateProfile, run: DelegateRun, root: Path | None 
 def build_pi_command(profile: DelegateProfile, run: DelegateRun, root: Path | None = None) -> list[str]:
     command = [
         "pi",
+        "--session-dir",
+        str(run.session_dir),
         "--model",
         profile.model,
         "--thinking",
         profile.thinking,
     ]
-    for skill_name in profile.skill_names:
+    for skill_name in available_skill_names(profile, root):
         command.extend(["--skill", str(copied_skill_path(profile, skill_name, root))])
     command.extend(["-p", f"@{run.prompt_path}"])
+    for attachment in run.attachments:
+        command.append(f"@{attachment}")
     return command
 
 
 def copy_durable_artifacts(run: DelegateRun, command: Sequence[str]) -> None:
     if run.durable_artifact_dir is None:
         return
-    for name in ("prompt.md", "handoff.md", "stdout.log", "stderr.log", "exit_code.txt", "command.json"):
+    for name in (
+        "prompt.md",
+        "handoff.md",
+        "stdout.log",
+        "stderr.log",
+        "exit_code.txt",
+        "command.json",
+        "session_files.json",
+        "attachments.json",
+    ):
         source = run.runtime_dir / name
         if source.exists():
             shutil.copy2(source, run.durable_artifact_dir / name)
@@ -397,6 +599,16 @@ def collect_run_artifacts(
         json.dumps({"command": list(command)}, indent=2) + "\n",
         encoding="utf-8",
     )
+    session_files = sorted(str(path) for path in run.session_dir.rglob("*.jsonl"))
+    attachments = [str(path) for path in run.attachments]
+    (run.runtime_dir / "session_files.json").write_text(
+        json.dumps({"session_dir": str(run.session_dir), "session_files": session_files}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    (run.runtime_dir / "attachments.json").write_text(
+        json.dumps({"attachments": attachments}, indent=2) + "\n",
+        encoding="utf-8",
+    )
     copy_durable_artifacts(run, command)
     return DelegateRunResult(
         run_id=run.run_id,
@@ -409,6 +621,9 @@ def collect_run_artifacts(
         prompt_path=str(run.prompt_path),
         handoff_path=str(run.handoff_path),
         runtime_dir=str(run.runtime_dir),
+        session_dir=str(run.session_dir),
+        session_files=session_files,
+        attachments=attachments,
         durable_artifact_dir=str(run.durable_artifact_dir) if run.durable_artifact_dir else None,
         status="dry_run" if run.dry_run else ("success" if exit_code == 0 else "failed"),
     )
@@ -436,9 +651,7 @@ def command_doctor(args: argparse.Namespace) -> dict[str, object]:
 
 def command_setup(args: argparse.Namespace) -> dict[str, object]:
     profile = load_profile(args.profile)
-    copied = copy_skill_bundle(profile)
-    settings = write_profile_settings(profile)
-    doctor = doctor_profile(profile)
+    copied, settings, doctor = sync_profile_skills(profile)
     return {
         "summary": f"setup {profile.name}: copied {len(copied)} skills",
         "profile": profile.name,
@@ -454,38 +667,48 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
         profile = replace(profile, model=args.model)
     if args.thinking:
         profile = replace(profile, thinking=args.thinking)
-    copy_skill_bundle(profile)
-    write_profile_settings(profile)
-    run = build_run(
-        profile=profile,
-        ticket=args.ticket,
-        checkout_mode=args.checkout,
-        prompt=args.prompt,
-        run_id=args.run_id or now_run_id(profile.name),
-        dry_run=args.dry_run,
-        artifact_dir=args.artifact_dir,
-    )
-    render_prompt(profile, run)
-    command = build_pi_command(profile, run)
     completed = None
-    if not args.dry_run:
-        missing_env = missing_live_env(profile)
-        if missing_env:
-            raise SystemExit(
-                "missing environment for live run: "
-                + ", ".join(missing_env)
-                + "; use --dry-run until credentials/spend are approved"
-            )
-        env = os.environ.copy()
-        env.setdefault("PI_TELEMETRY", "0")
-        completed = subprocess.run(
-            command,
-            cwd=run.checkout_path,
-            text=True,
-            capture_output=True,
-            check=False,
-            env=env,
+    with profile_write_lock(profile):
+        _copy_skill_bundle_unlocked(profile)
+        write_profile_settings(profile)
+        run = build_run(
+            profile=profile,
+            ticket=args.ticket,
+            checkout_mode=args.checkout,
+            prompt=read_prompt_arg(args.prompt, args.prompt_file),
+            run_id=args.run_id or now_run_id(profile.name),
+            dry_run=args.dry_run,
+            artifact_dir=args.artifact_dir,
+            attachments=args.attach,
         )
+        render_prompt(profile, run)
+        command = build_pi_command(profile, run)
+        if not args.dry_run:
+            missing_env = missing_live_env(profile)
+            if missing_env:
+                raise SystemExit(
+                    "missing environment for live run: "
+                    + ", ".join(missing_env)
+                    + "; use --dry-run until credentials/spend are approved"
+                )
+            env = os.environ.copy()
+            env.setdefault("PI_TELEMETRY", "0")
+            timeout = args.timeout_seconds if args.timeout_seconds > 0 else None
+            try:
+                completed = subprocess.run(
+                    command,
+                    cwd=run.checkout_path,
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                    env=env,
+                    timeout=timeout,
+                )
+            except subprocess.TimeoutExpired as exc:
+                stdout = exc.stdout.decode("utf-8", errors="replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+                stderr = exc.stderr.decode("utf-8", errors="replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+                stderr = stderr + f"\nexternal CLI run timed out after {timeout} seconds\n"
+                completed = subprocess.CompletedProcess(command, 124, stdout, stderr)
     result = collect_run_artifacts(run, command, completed)
     payload = asdict(result)
     payload["summary"] = f"run {profile.name}: {result.status}"
@@ -508,8 +731,11 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--model", default="")
     run.add_argument("--thinking", default="")
     run.add_argument("--prompt", default="Implement the delegated task and write the requested handoff.")
+    run.add_argument("--prompt-file", default="")
     run.add_argument("--run-id", default="")
     run.add_argument("--artifact-dir", default="")
+    run.add_argument("--attach", action="append", default=[])
+    run.add_argument("--timeout-seconds", type=int, default=0)
     run.add_argument("--dry-run", action="store_true")
     run.add_argument("--json", action="store_true")
     return parser

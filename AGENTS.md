@@ -56,6 +56,15 @@ landing pages, route through the landing-page JSON registries:
 `landing-recipes.json`, `taste-profiles.json`, and `effect-stacks.json`. Keep
 `cinematic-scroll-site-guideline.md` as a compatibility pointer only. See
 `MEM-0079`.
+For Terminal-style, cinematic, generated-media, or premium industrial landing
+pages delegated to external CLIs, enforce the `landing-page` spec-first gate and
+split work into spec, assets, implementation, and visual-review phases. Treat
+timed-out partial runs as failed handoffs, not successful builder output. See
+`MEM-0080`.
+Pi/Kimi frontend delegation uses a manifest-driven skill bundle. Keep external
+frontend CLI profiles on repo-owned inference.sh media skills such as
+`image-generation`, `video-generation`, Remotion, and related frontend/media
+skills; do not mount Codex-native `imagegen` into Pi bundles. See `MEM-0083`.
 For UI source reviews, run `web-design-guidelines` through the
 `review` skill's `frontend-guidelines` lane and record that score beside
 `ui-quality` so taste judgment and source-level interface fundamentals remain

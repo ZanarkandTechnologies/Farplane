@@ -93,6 +93,8 @@
       "qa_expectations": [
         "First viewport clearly signals product category or physical domain.",
         "Desktop and mobile checkpoints show distinct story phases.",
+        "Scroll-scrub QA proves the main motion surface is tied to scroll progress, media time, frame index, or pinned timeline state.",
+        "The scrubbed section exposes `window.__scrollScrubDebug` and a `data-scroll-scrub-root` stage for browser QA.",
         "All video, poster, frame, and generated asset URLs return 200.",
         "Reduced-motion mode renders a strong static version.",
         "Text is HTML-rendered, responsive, and does not overlap at mobile widths.",

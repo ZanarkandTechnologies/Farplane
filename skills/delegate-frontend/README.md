@@ -7,6 +7,7 @@ The first profile is `frontend-pi-kimi`, which targets Pi with Kimi K2.6.
 ## Minimal Usage
 
 ```bash
+python3 bin/sync_frontend_pi_skills.py --json
 python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket tickets/TASK-0106/ticket.md --dry-run --json
 ```
 

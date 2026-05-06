@@ -80,6 +80,10 @@
         "FPS or frame budget warning",
         "viewport breakpoint",
         "reduced-motion state",
+        "window.__scrollScrubDebug.progress",
+        "window.__scrollScrubDebug.phase",
+        "window.__scrollScrubDebug.frame or window.__scrollScrubDebug.mediaTime",
+        "data-scroll-scrub-root on the scrubbed stage",
         "?debugScroll=1",
         "?phase=system",
         "?frame=120"
@@ -93,6 +97,8 @@
       ],
       "qa_checks": [
         "Desktop and mobile screenshots at narrative checkpoints.",
+        "skills/landing-page/scripts/scroll_scrub_qa.cjs returns PASS.",
+        "window.__scrollScrubDebug changes progress and frame/mediaTime across checkpoints.",
         "Frame/canvas surfaces are nonblank.",
         "All frame, poster, and video URLs return 200.",
         "Reduced-motion path renders without scroll-scrub dependency.",
