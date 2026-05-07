@@ -65,6 +65,9 @@ Pi/Kimi frontend delegation uses a manifest-driven skill bundle. Keep external
 frontend CLI profiles on repo-owned inference.sh media skills such as
 `image-generation`, `video-generation`, Remotion, and related frontend/media
 skills; do not mount Codex-native `imagegen` into Pi bundles. See `MEM-0083`.
+Pi/Kimi frontend profiles must also mount `agent-browser` so delegated builders
+can collect same-thread browser QA evidence such as snapshots, screenshots,
+console logs, and page errors before handoff. See `MEM-0096`.
 For Pi/Kimi implementation repair passes, require an early first-write
 checkpoint to the named file before broad rereads or critique. If the external
 run does not create the expected artifact promptly, record it as a failed

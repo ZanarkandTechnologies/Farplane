@@ -1,5 +1,5 @@
 {
-  "assertion_pass_rate": 0.9001490312965723,
+  "assertion_pass_rate": 0.9004457652303121,
   "candidate": "/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/self-improve/prompts/current.txt",
   "case_results": [
     {
@@ -1970,6 +1970,11 @@
           "passed": true
         },
         {
+          "message": "requires_agent_browser_qa is true",
+          "name": "compiled-repair-prompt:require_true:requires_agent_browser_qa",
+          "passed": true
+        },
+        {
           "message": "requires_mobile_phrase_separation is true",
           "name": "compiled-repair-prompt:require_true:requires_mobile_phrase_separation",
           "passed": true
@@ -3375,6 +3380,11 @@
           "passed": true
         },
         {
+          "message": "requires_agent_browser_qa is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_agent_browser_qa",
+          "passed": true
+        },
+        {
           "message": "requires_terminal_media_pipeline is true",
           "name": "compiled-sidecar-prompt:require_true:requires_terminal_media_pipeline",
           "passed": true
@@ -3701,7 +3711,7 @@
   "cases": 34,
   "expectation_passed_cases": 34,
   "pass_rate": 1.0,
-  "passed_assertions": 604,
-  "timestamp": "2026-05-07T10:22:37Z",
-  "total_assertions": 671
+  "passed_assertions": 606,
+  "timestamp": "2026-05-07T10:29:32Z",
+  "total_assertions": 673
 }

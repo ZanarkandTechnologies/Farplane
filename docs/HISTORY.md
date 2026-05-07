@@ -170,3 +170,4 @@
 2026-05-07 15:04 +0800 | FIX | make the Pi delegation adapter pass rendered prompt text to `-p` instead of attaching the prompt file, so live runs execute the delegated task and first-write probes become meaningful
 2026-05-07 15:58 +0800 | FEAT | add non-destructive Pi/Kimi repair prompt gates, sidecar repair guidance, and a Terminal-score control showing generated-media wiring can pass local desktop/mobile final readiness
 2026-05-07 18:05 +0800 | FEAT | add output-quality gates, compact phase-scoped Pi delegation, first-viewport hero-offer QA, and a passing Pi/Kimi sidecar repair scoring `99/100`
+2026-05-07 18:27 +0800 | FEAT | mount `agent-browser` into the Pi/Kimi frontend profile and require delegated runnable UI handoffs to capture same-thread browser QA evidence

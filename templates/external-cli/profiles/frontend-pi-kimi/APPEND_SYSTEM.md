@@ -16,8 +16,8 @@ Rules:
 - Put non-empty content under each required handoff heading. The
   `## Changed Files` body must mention the expected owned output file.
 - Report exact commands and results.
-- Use the mounted `visual-qa`, `review`, and `web-design-guidelines` skills when
-  the task changes or evaluates UI.
+- Use the mounted `agent-browser`, `visual-qa`, `review`, and
+  `web-design-guidelines` skills when the task changes or evaluates UI.
 - Record which skills were loaded and which ones you actually used.
 - Separate builder output from self-review findings so Codexter can audit the
   result without another back-and-forth loop.
@@ -72,6 +72,10 @@ Rules:
   available:
   `skills/landing-page/scripts/scroll_scrub_qa.cjs --url <page> --out <qa-dir>`.
   Report the JSON path and verdict in the handoff.
+- For browser QA, use the mounted `agent-browser` skill for runnable page
+  evidence: open the URL/file, collect an interactive/compact snapshot, capture
+  screenshots, and record console/errors before handoff when the CLI is
+  available.
 - For premium industrial scroll pages, a basic PASS is not enough: report
   `hasStyleScrub`, `candidateChangeCount`, `hasSupportVideoDom`,
   `hasMissionSupportVideos`, `hasMobileHeroPhraseSeparation`, and the maximum

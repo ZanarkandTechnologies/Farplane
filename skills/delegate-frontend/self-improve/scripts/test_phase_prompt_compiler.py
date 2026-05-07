@@ -165,6 +165,7 @@ class PhasePromptCompilerTests(unittest.TestCase):
         self.assertIn("window.__scrollScrubDebug", prompt)
         self.assertIn("hasInitialHeroOfferVisible", prompt)
         self.assertIn("hasTerminalMediaPipeline", prompt)
+        self.assertIn("agent-browser", prompt)
         self.assertIn("wrapper output quality gate", prompt)
         summary = phase_prompt_compiler.summarize_prompt(
             prompt=prompt,
@@ -178,6 +179,7 @@ class PhasePromptCompilerTests(unittest.TestCase):
         self.assertTrue(summary["forbids_large_impl_read_before_sidecar"])
         self.assertTrue(summary["requires_media_scrub"])
         self.assertTrue(summary["requires_initial_hero_offer"])
+        self.assertTrue(summary["requires_agent_browser_qa"])
         self.assertTrue(summary["requires_output_quality_gate"])
 
     def test_startup_probe_builds_delegate_cli_dry_run_command(self) -> None:
@@ -248,6 +250,7 @@ class PhasePromptCompilerTests(unittest.TestCase):
         self.assertIn("style scrub must change computed transform", prompt)
         self.assertIn("hasSupportVideoDom and hasMissionSupportVideos", prompt)
         self.assertIn("hasInitialHeroOfferVisible", prompt)
+        self.assertIn("agent-browser", prompt)
         self.assertIn("hasMobileHeroPhraseSeparation", prompt)
         summary = phase_prompt_compiler.summarize_prompt(
             prompt=prompt,
@@ -263,6 +266,7 @@ class PhasePromptCompilerTests(unittest.TestCase):
         self.assertTrue(summary["requires_style_scrub"])
         self.assertTrue(summary["requires_support_video_metric"])
         self.assertTrue(summary["requires_initial_hero_offer"])
+        self.assertTrue(summary["requires_agent_browser_qa"])
         self.assertTrue(summary["requires_mobile_phrase_separation"])
         self.assertTrue(summary["preserves_existing_surface"])
         self.assertTrue(summary["requires_non_destructive_first_write"])

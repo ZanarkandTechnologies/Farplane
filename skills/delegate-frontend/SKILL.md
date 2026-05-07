@@ -58,7 +58,9 @@ Codex lane.
    `python3 skills/delegate-frontend/self-improve/scripts/asset_manifest_lint.py <asset-manifest>`
    and do not start implementation unless it passes.
 10. Send any resulting UI changes back through Codexter QA, `visual-qa`, and
-    `review`.
+    `review`. For runnable delegated UI, require the Pi profile to use the
+    mounted `agent-browser` skill so page snapshots, screenshots, console logs,
+    and page errors are captured in the same thread as the builder handoff.
 
 ## Core Decision Branches
 
@@ -83,6 +85,10 @@ Codex lane.
   treating implementation as unblocked.
 - `implementation ready` -> call `delegate-cli --profile frontend-pi-kimi` with
   `--expect-output` for the files the phase owns.
+- `browser-runnable UI` -> use mounted `agent-browser` inside the delegated
+  thread for page-open, snapshot, screenshot, console, and error evidence before
+  handoff; use specialized scroll-scrub QA in addition for Terminal-style
+  pages.
 - `repair ready` -> compile a `repair` phase prompt with one owned output and
   explicit QA gates. The prompt must tell Pi not to read `scroll_scrub_qa.cjs`
   or broad references before patching, and must name the observable
@@ -158,6 +164,9 @@ whether Codexter should first produce a stronger UX/visual brief.
     overwrites an existing built page or large script with a tiny stub and then
     stalls, kill the run, restore from backup or session evidence, and retry
     with a sidecar-owned output or smaller patch boundary.
+18. Do not assume browser QA happened because the page renders locally. For
+    delegated UI work, the handoff should name the `agent-browser` or visual QA
+    artifacts that were actually captured.
 
 ## Outcome Contract
 

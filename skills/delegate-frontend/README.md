@@ -3,6 +3,9 @@
 Profile skill for routing frontend implementation through `delegate-cli`.
 
 The first profile is `frontend-pi-kimi`, which targets Pi with Kimi K2.6.
+The managed profile mounts frontend/media skills plus `agent-browser`,
+`visual-qa`, `review`, and `web-design-guidelines` so the delegated builder can
+capture runnable browser evidence in the same thread before handoff.
 
 ## Minimal Usage
 

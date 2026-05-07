@@ -73,6 +73,7 @@ class DelegateCliAgentTests(unittest.TestCase):
             self.assertIn("frontend-craft", profile.skill_names)
             self.assertIn("image-generation", profile.skill_names)
             self.assertIn("video-generation", profile.skill_names)
+            self.assertIn("agent-browser", profile.skill_names)
             self.assertIn("visual-qa", profile.skill_names)
             self.assertIn("review", profile.skill_names)
             self.assertIn("web-design-guidelines", profile.skill_names)
@@ -529,6 +530,7 @@ class DelegateCliAgentTests(unittest.TestCase):
             self.assertTrue(settings.exists())
             settings_text = settings.read_text(encoding="utf-8")
             self.assertIn("frontend-craft", settings_text)
+            self.assertIn("agent-browser", settings_text)
 
     def test_command_run_can_override_skill_bundle_for_one_phase(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
