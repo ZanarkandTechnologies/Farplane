@@ -84,6 +84,15 @@
           "UI labels that need responsive layout"
         ]
       },
+      "section_acceptance_checklist": [
+        "Hero: pinned scroll-scrub section with a generated/rendered video, frame sequence, marked hero object, or WebGL/Three.js scene as the main carrier; expose debug progress, phase, and frame/media time.",
+        "Hero overlays: readable headline, CTA, HUD labels, and proof chips are HTML/CSS overlays, not baked into video, canvas, or generated pixels.",
+        "Rupture: scroll checkpoint reveals the operational problem with visible change in the main media surface, not only text fade-up.",
+        "Command layer: scroll checkpoint reveals detection boxes, map grid, queue state, route layer, or digital-twin overlay tied to the carrier object.",
+        "Mission/proof sections: each mission has its own visual asset expectation such as support video, generated still, product capture, or data visualization plus a concrete buyer proof point.",
+        "Final CTA: stable transformed operating state, clear enterprise action, and reduced-motion still that preserves the same product/category signal.",
+        "QA: desktop and mobile scroll-scrub runs must report terminal final-readiness metrics, including distributed checkpoint deltas and mobile hero phrase separation when relevant."
+      ],
       "compatible_taste_profile_ids": [
         "terminal-palantir"
       ],
@@ -98,6 +107,8 @@
         "All video, poster, frame, and generated asset URLs return 200.",
         "Reduced-motion mode renders a strong static version.",
         "Text is HTML-rendered, responsive, and does not overlap at mobile widths.",
+        "Terminal final readiness uses `terminalVerdict: PASS`; a basic `verdict: PASS` is only mechanics proof.",
+        "`terminalFinalReady`, `hasTerminalMediaPipeline`, `hasDominantHeroMedia`, `hasDistributedScrubDeltas`, `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`, `strongCheckpointDeltaCount`, and `midScrollDeltaCount` are reported for final builds.",
         "Review includes source-level frontend guidelines and taste scoring when code changes."
       ],
       "output_brief_fields": [

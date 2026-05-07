@@ -27,6 +27,14 @@ often produces mismatched HTML/CSS/JS, missing assets, and no final review.
 - `Offer`, `Audience`, and `Carrier object / world`.
 - `Recipe route`: recipe, taste-profile, and effect-stack IDs.
 - Section map with first-viewport, proof, and final CTA.
+- Per-section expectations for:
+  - the visual asset or carrier object,
+  - the motion behavior and scroll checkpoint,
+  - the proof or conversion job the section performs,
+  - the rendering stack: GSAP, video scrub, frame sequence, WebGL/Three.js, or
+    HTML/CSS,
+  - the text-rendering policy, with readable copy in HTML overlays rather than
+    baked into video, canvas, or generated pixels.
 - Asset generation plan with:
   - desktop hero media or frame sequence,
   - mobile hero media or frame sequence,
@@ -38,6 +46,9 @@ often produces mismatched HTML/CSS/JS, missing assets, and no final review.
   - a rule that readable text, logos, CTAs, and product copy stay in HTML/CSS
     overlays, not generated pixels.
 - Motion plan with scroll checkpoints and reduced-motion behavior.
+- Top-section scroll-scrub plan that names the main asset carrier: generated
+  video scrub, frame sequence, marked canvas hero object, or Three.js/WebGL
+  scene. Static hero art is only a prototype path.
 - Scroll-scrub instrumentation contract:
   - mark the scrubbed stage with `data-scroll-scrub-root`,
   - expose `window.__scrollScrubDebug` with `progress`, `phase`, `frame` or
@@ -78,6 +89,12 @@ Pass only when the first viewport has all of these:
 - For Terminal/Terminus-level final builds, require generated/rendered media or
   frame/video assets in `assets/asset-manifest.json`. `code-native-canvas` is
   acceptable only for a mechanics prototype and should fail final visual parity.
+- For Terminal/Terminus-level final builds, require `terminalVerdict: PASS` from
+  `scroll_scrub_qa.cjs`, not only the basic `verdict: PASS`. The final score
+  must include `terminalFinalReady`, `hasTerminalMediaPipeline`,
+  `hasDominantHeroMedia`, `hasDistributedScrubDeltas`,
+  `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`,
+  `strongCheckpointDeltaCount`, and `midScrollDeltaCount`.
 - A timed-out run with partial files is a failure, even when the page appears to
   render. Record it and split the next prompt smaller.
 

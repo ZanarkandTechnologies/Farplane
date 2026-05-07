@@ -61,6 +61,17 @@
 - repair-v4-timeout-phase:handoff_present: 1
 - repair-v4-timeout-phase:first_write_status_in: 1
 - repair-v4-timeout-first-write:status_in: 1
+- current-browser-desktop:terminal_verdict:PASS: 1
+- current-browser-desktop:score_true:terminalFinalReady: 1
+- current-browser-desktop:score_true:hasMediaScrub: 1
+- current-browser-desktop:score_true:hasTerminalMediaPipeline: 1
+- current-browser-desktop:score_true:hasDominantHeroMedia: 1
+- current-browser-desktop:score_true:hasDistributedScrubDeltas: 1
+- current-browser-desktop:score_true:hasMissionSupportVideos: 1
+- current-browser-desktop:min_score:supportVideoCount: 1
+- current-browser-desktop:min_score:maxCheckpointChangedRatio: 1
+- current-browser-desktop:min_score:meaningfulCheckpointDeltaCount: 1
+- current-browser-desktop:min_score:midScrollDeltaCount: 1
 
 ## Next Hypothesis
 

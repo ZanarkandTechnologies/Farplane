@@ -1,5 +1,5 @@
 {
-  "assertion_pass_rate": 0.9018518518518519,
+  "assertion_pass_rate": 0.8850987432675045,
   "candidate": "/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/self-improve/prompts/current.txt",
   "case_results": [
     {
@@ -1963,6 +1963,16 @@
           "message": "requires_mobile_phrase_separation is true",
           "name": "compiled-repair-prompt:require_true:requires_mobile_phrase_separation",
           "passed": true
+        },
+        {
+          "message": "requires_terminal_final_ready is true",
+          "name": "compiled-repair-prompt:require_true:requires_terminal_final_ready",
+          "passed": true
+        },
+        {
+          "message": "requires_distributed_scrub_deltas is true",
+          "name": "compiled-repair-prompt:require_true:requires_distributed_scrub_deltas",
+          "passed": true
         }
       ],
       "expectation_passed": true,
@@ -2991,12 +3001,97 @@
       "gate_passed": true,
       "id": "implementation-repair-v4-mobile-polish-success-passes",
       "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_current_browser_basic_pass_terminal_final_gap",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "current-browser-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "current-browser-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict FAIL, expected PASS",
+          "name": "current-browser-desktop:terminal_verdict:PASS",
+          "passed": false
+        },
+        {
+          "message": "terminalFinalReady is not true",
+          "name": "current-browser-desktop:score_true:terminalFinalReady",
+          "passed": false
+        },
+        {
+          "message": "hasMediaScrub is not true",
+          "name": "current-browser-desktop:score_true:hasMediaScrub",
+          "passed": false
+        },
+        {
+          "message": "hasTerminalMediaPipeline is not true",
+          "name": "current-browser-desktop:score_true:hasTerminalMediaPipeline",
+          "passed": false
+        },
+        {
+          "message": "hasDominantHeroMedia is not true",
+          "name": "current-browser-desktop:score_true:hasDominantHeroMedia",
+          "passed": false
+        },
+        {
+          "message": "hasDistributedScrubDeltas is not true",
+          "name": "current-browser-desktop:score_true:hasDistributedScrubDeltas",
+          "passed": false
+        },
+        {
+          "message": "hasMissionSupportVideos is not true",
+          "name": "current-browser-desktop:score_true:hasMissionSupportVideos",
+          "passed": false
+        },
+        {
+          "message": "supportVideoCount=0.0 < 2",
+          "name": "current-browser-desktop:min_score:supportVideoCount",
+          "passed": false
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.05877 < 0.15",
+          "name": "current-browser-desktop:min_score:maxCheckpointChangedRatio",
+          "passed": false
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=1.0 < 2",
+          "name": "current-browser-desktop:min_score:meaningfulCheckpointDeltaCount",
+          "passed": false
+        },
+        {
+          "message": "midScrollDeltaCount=0.0 < 1",
+          "name": "current-browser-desktop:min_score:midScrollDeltaCount",
+          "passed": false
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "current-browser-basic-pass-terminal-final-rejected",
+      "rejected_by_gate": true
     }
   ],
-  "cases": 29,
-  "expectation_passed_cases": 29,
+  "cases": 30,
+  "expectation_passed_cases": 30,
   "pass_rate": 1.0,
-  "passed_assertions": 487,
-  "timestamp": "2026-05-07T02:42:28Z",
-  "total_assertions": 540
+  "passed_assertions": 493,
+  "timestamp": "2026-05-07T04:33:43Z",
+  "total_assertions": 557
 }

@@ -64,8 +64,14 @@ For scroll-scrub or Terminal-style landing pages, the handoff must also include:
 - checkpoint states at 0%, 25%, 50%, 75%, and 95% scroll,
 - scroll-scrub QA JSON/screenshot artifact paths plus the `verdict` and
   `hasRequiredDebugContract` score when the harness can run,
-- maximum checkpoint screenshot changed ratio so Codexter can reject tiny
-  non-cinematic scrub deltas.
+- `terminalVerdict` and `terminalFinalReady` for Terminal/Terminus-level final
+  builds; a basic `verdict: PASS` is only mechanics proof.
+- `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`,
+  `strongCheckpointDeltaCount`, and `midScrollDeltaCount` so Codexter can
+  reject tiny or one-transition-only scrub deltas.
+- `hasTerminalMediaPipeline`, `hasDominantHeroMedia`, and
+  `hasDistributedScrubDeltas` when the page is meant to prove final premium
+  industrial scroll quality.
 - `hasStyleScrub`, `candidateChangeCount`, `hasSupportVideoDom`, and
   `hasMissionSupportVideos` when the page is meant to prove a premium
   industrial computer-vision surface.

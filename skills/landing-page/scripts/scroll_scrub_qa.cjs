@@ -153,6 +153,20 @@ function hasRequiredDebugFields(debug) {
   );
 }
 
+function screenshotDeltaStats(diffs) {
+  const ratios = diffs.map((diff) => Number(diff.changedRatio || 0));
+  const maxCheckpointChangedRatio = ratios.length ? Math.max(...ratios) : 0;
+  const meaningfulCheckpointDeltaCount = ratios.filter((ratio) => ratio >= 0.04).length;
+  const strongCheckpointDeltaCount = ratios.filter((ratio) => ratio >= 0.15).length;
+  const midScrollDeltaCount = ratios.slice(1, -1).filter((ratio) => ratio >= 0.04).length;
+  return {
+    maxCheckpointChangedRatio: Number(maxCheckpointChangedRatio.toFixed(5)),
+    meaningfulCheckpointDeltaCount,
+    strongCheckpointDeltaCount,
+    midScrollDeltaCount,
+  };
+}
+
 async function diffScreenshots(files) {
   const diffs = [];
   for (let index = 1; index < files.length; index += 1) {
@@ -489,6 +503,7 @@ async function main() {
   }
 
   const screenshotDiffs = await diffScreenshots(screenshotFiles);
+  const deltaStats = screenshotDeltaStats(screenshotDiffs);
   const imageVisualGeometry = await collectImageGeometry(screenshotFiles[0]);
   const visualGeometry = {
     ...domVisualGeometry,
@@ -527,6 +542,15 @@ async function main() {
   const hasLargeScroll = maxScroll >= pageInfo.viewportHeight * 2;
   const hasRequiredDebugForScrubRoot = pageInfo.scrubRoots === 0 || hasRequiredDebugContract;
   const isReducedMotionRun = args.reducedMotion === "reduce";
+  const hasDominantHeroMedia =
+    visualGeometry.sampled_media_rects > 0 &&
+    visualGeometry.hero_object_fill_ratio >= 0.55 &&
+    visualGeometry.first_viewport_blank_ratio <= 0.18;
+  const hasDistributedScrubDeltas =
+    deltaStats.maxCheckpointChangedRatio >= 0.15 &&
+    deltaStats.meaningfulCheckpointDeltaCount >= 2 &&
+    (deltaStats.midScrollDeltaCount >= 1 || deltaStats.strongCheckpointDeltaCount >= 2);
+  const hasTerminalMediaPipeline = hasMediaScrub && hasSupportVideoDom && hasMissionSupportVideos;
   const likelyScrollScrub =
     hasLargeScroll &&
     hasRequiredDebugForScrubRoot &&
@@ -534,6 +558,15 @@ async function main() {
       hasMediaScrub ||
       (isReducedMotionRun && hasRequiredDebugContract && hasPinnedSurface) ||
       (pageInfo.scrubRoots === 0 && hasPinnedSurface && hasStyleScrub && (pageInfo.hasGsap || pageInfo.hasScrollTrigger)));
+  const terminalFinalReady =
+    likelyScrollScrub &&
+    hasRequiredDebugContract &&
+    hasPinnedSurface &&
+    hasStyleScrub &&
+    hasTerminalMediaPipeline &&
+    hasDominantHeroMedia &&
+    hasDistributedScrubDeltas &&
+    hasMobileHeroPhraseSeparation;
 
   const result = {
     url: targetUrl,
@@ -541,6 +574,7 @@ async function main() {
     viewport: { width: args.width, height: args.height },
     pageInfo,
     verdict: likelyScrollScrub ? "PASS" : "FAIL",
+    terminalVerdict: terminalFinalReady ? "PASS" : "FAIL",
     score: {
       hasLargeScroll,
       hasDebugInstrumentation,
@@ -551,6 +585,10 @@ async function main() {
       hasSupportVideoDom,
       hasMissionSupportVideos,
       hasMobileHeroPhraseSeparation,
+      hasDominantHeroMedia,
+      hasDistributedScrubDeltas,
+      hasTerminalMediaPipeline,
+      terminalFinalReady,
       hasPinnedSurface,
       hasGsapOrScrollTrigger: pageInfo.hasGsap || pageInfo.hasScrollTrigger,
       candidateChangeCount,
@@ -558,12 +596,21 @@ async function main() {
       missionSupportVideoCount: pageInfo.missionSupportVideoCount,
       debugProgressSpan: Number(debugProgressSpan.toFixed(3)),
       videoTimeSpan: Number(videoTimeSpan.toFixed(3)),
+      ...deltaStats,
     },
     checkpoints: samples,
     visualGeometry,
     screenshotFiles,
     screenshotDiffs,
     consoleMessages,
+    terminalFailureHints: terminalFinalReady
+      ? []
+      : [
+          "Terminal-level pages need generated/rendered media or a frame/video asset pipeline, not just code-native canvas or HUD overlays.",
+          "Require a dominant first-viewport media/object surface and low blank-band geometry.",
+          "Require distributed checkpoint screenshot deltas so scroll changes the main visual across the narrative, not only at one transition.",
+          "Require support-video or section media proof when the recipe calls for mission cards or feature sections.",
+        ],
     failureHints: likelyScrollScrub
       ? []
       : [
@@ -576,7 +623,7 @@ async function main() {
 
   const resultPath = path.join(outDir, "scroll-scrub-qa.json");
   fs.writeFileSync(resultPath, `${JSON.stringify(result, null, 2)}\n`, "utf-8");
-  console.log(JSON.stringify({ verdict: result.verdict, resultPath, score: result.score }, null, 2));
+  console.log(JSON.stringify({ verdict: result.verdict, terminalVerdict: result.terminalVerdict, resultPath, score: result.score }, null, 2));
   await browser.close();
 }
 

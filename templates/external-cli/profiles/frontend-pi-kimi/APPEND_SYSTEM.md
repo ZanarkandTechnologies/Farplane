@@ -77,6 +77,12 @@ Rules:
   `hasMissionSupportVideos`, `hasMobileHeroPhraseSeparation`, and the maximum
   checkpoint screenshot changed ratio so Codexter can distinguish mechanical
   scrub from Terminal-level UI.
+- For Terminal/Terminus-level final builds, a basic `verdict: PASS` is only a
+  mechanics proof. Final parity requires `terminalVerdict: PASS`,
+  `terminalFinalReady: true`, `hasTerminalMediaPipeline: true`,
+  `hasDominantHeroMedia: true`, and `hasDistributedScrubDeltas: true`; report
+  `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`,
+  `strongCheckpointDeltaCount`, and `midScrollDeltaCount` in the handoff.
 - Treat image/video generation as spend-sensitive external compute. Capability
   gate with the owning skill before live `belt` runs, record prompts and output
   paths, and wire only workspace/public assets into the frontend.

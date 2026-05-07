@@ -50,6 +50,8 @@ PHASE_DEFAULTS: dict[str, dict[str, object]] = {
             "expose window.__scrollScrubDebug with progress, phase, frame or mediaTime, active, ready, and reducedMotion",
             "mark the scrubbed stage with data-scroll-scrub-root",
             "wire generated/rendered media or frame assets from assets/asset-manifest.json",
+            "for Terminal/Terminus-level final builds, report terminalVerdict and terminalFinalReady; basic verdict PASS is only mechanics proof",
+            "report hasTerminalMediaPipeline, hasDominantHeroMedia, hasDistributedScrubDeltas, maxCheckpointChangedRatio, meaningfulCheckpointDeltaCount, strongCheckpointDeltaCount, and midScrollDeltaCount when scroll-scrub QA runs",
             "run syntax checks and scroll-scrub QA when runnable",
         ],
     },
@@ -65,6 +67,8 @@ PHASE_DEFAULTS: dict[str, dict[str, object]] = {
             "QA samples these selectors: [data-scroll-scrub-root], [data-scroll-scrub], [data-scroll-progress], [data-scroll-phase], canvas, video, .pin-spacer, .scroll-stage, .scrub-stage, .frame-sequence, .hero-media, .hero, .cinematic, .scene",
             "support video proof must use real video elements and should satisfy hasSupportVideoDom and hasMissionSupportVideos when mission support assets exist",
             "mobile typography proof should satisfy hasMobileHeroPhraseSeparation when the page has a multi-phrase hero title",
+            "Terminal/Terminus-level final repair proof should satisfy terminalFinalReady, hasTerminalMediaPipeline, hasDominantHeroMedia, and hasDistributedScrubDeltas; basic verdict PASS is only mechanics proof",
+            "report maxCheckpointChangedRatio, meaningfulCheckpointDeltaCount, strongCheckpointDeltaCount, and midScrollDeltaCount",
             "preserve window.__scrollScrubDebug with progress, phase, frame or mediaTime, active, ready, and reducedMotion",
             "run the named QA commands once after the patch; if they still fail, write the handoff with the failing scores instead of looping until timeout",
         ],
@@ -274,6 +278,8 @@ def summarize_prompt(
                 "requires_style_scrub": "style scrub must change computed transform" in lowered,
                 "requires_support_video_metric": "hasmissionsupportvideos" in lowered,
                 "requires_mobile_phrase_separation": "hasmobileherophraseseparation" in lowered,
+                "requires_terminal_final_ready": "terminalfinalready" in lowered,
+                "requires_distributed_scrub_deltas": "hasdistributedscrubdeltas" in lowered,
                 "preserves_existing_surface": "never replace a built page with a minimal dark text stub" in lowered,
             }
         )

@@ -20,6 +20,11 @@ Current delegate-frontend prompt program:
   recorded in `assets/asset-manifest.json`.
 - Terminal/Terminus QA must report maximum checkpoint screenshot changed ratio
   and reject tiny HUD-only deltas.
+- Terminal/Terminus final builds must report `terminalVerdict`,
+  `terminalFinalReady`, `hasTerminalMediaPipeline`, `hasDominantHeroMedia`,
+  `hasDistributedScrubDeltas`, `maxCheckpointChangedRatio`,
+  `meaningfulCheckpointDeltaCount`, `strongCheckpointDeltaCount`, and
+  `midScrollDeltaCount`; a basic `verdict: PASS` is only mechanics proof.
 - Mobile landing-page QA must report `hasMobileHeroPhraseSeparation` when a
   multi-phrase hero headline uses explicit line breaks, so CSS that hides
   `<br>` elements cannot glue phrases together.

@@ -46,6 +46,12 @@
         "code-native overlay copy"
       ],
       "implementation_shape": {
+        "rendering_policy": [
+          "Use GSAP ScrollTrigger for pinned timeline orchestration when available.",
+          "Use generated video, extracted frames, marked canvas hero objects, or Three.js/WebGL only for the visual carrier; keep readable text, CTAs, logos, and labels in HTML overlays.",
+          "If Three.js/WebGL is chosen, verify nonblank canvas pixels, visible lighting/materials, mobile framing, and a static fallback.",
+          "If a canvas frame sequence is chosen, mark the canvas or wrapper as the hero object and expose loaded frame count in the debug hook."
+        ],
         "preferred_files": [
           "narrative.ts",
           "assets.ts or generated frame manifest",
@@ -102,6 +108,8 @@
         "Desktop and mobile screenshots at narrative checkpoints.",
         "skills/landing-page/scripts/scroll_scrub_qa.cjs returns PASS.",
         "QA score includes hasRequiredDebugContract true when data-scroll-scrub-root is present.",
+        "Final Terminal-style QA reports terminalVerdict PASS and terminalFinalReady true.",
+        "Final Terminal-style QA reports hasTerminalMediaPipeline, hasDominantHeroMedia, hasDistributedScrubDeltas, maxCheckpointChangedRatio, meaningfulCheckpointDeltaCount, strongCheckpointDeltaCount, and midScrollDeltaCount.",
         "window.__scrollScrubDebug changes progress and frame/mediaTime across checkpoints.",
         "Frame/canvas surfaces are nonblank.",
         "All frame, poster, and video URLs return 200.",

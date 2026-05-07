@@ -77,6 +77,11 @@ with binary gates for first-write, strict scroll debug, fake-scroll rejection,
 checkpoint screenshot delta, and generated/rendered asset manifest quality.
 `code-native-canvas` with zero media assets is prototype evidence, not final
 visual parity. See `MEM-0085`.
+For Terminal/Terminus final landing-page QA, distinguish scroll mechanics from
+final readiness: `scroll_scrub_qa.cjs` may report `verdict: PASS` while
+`terminalVerdict: FAIL` if media pipeline, dominant hero media, distributed
+checkpoint deltas, support media, or relevant mobile phrase separation are
+missing. See `MEM-0089`.
 For Pi/Kimi frontend startup probes, require `first_write.json` pass, at least
 one session file, a regular probe output, and a non-placeholder handoff; session
 creation alone is not enough. Use the compiled startup probe with

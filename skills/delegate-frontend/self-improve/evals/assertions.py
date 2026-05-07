@@ -77,6 +77,16 @@ def evaluate_scroll_qa(case: dict[str, Any], output: dict[str, Any], results: li
                 f"verdict {actual}, expected {expected}",
             )
 
+        if "terminal_verdict" in spec:
+            expected = str(spec["terminal_verdict"])
+            actual = str(qa.get("terminalVerdict", "PASS" if score.get("terminalFinalReady") else "FAIL"))
+            add_result(
+                results,
+                f"{label}:terminal_verdict:{expected}",
+                actual == expected,
+                f"terminalVerdict {actual}, expected {expected}",
+            )
+
         for key in as_list(spec.get("require_score_true")):
             passed = bool(score.get(str(key)))
             add_result(

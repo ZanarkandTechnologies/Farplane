@@ -74,6 +74,25 @@ Acceptance signals:
   deltas to feel cinematic; tiny HUD-only changes do not count,
 - reduced-motion still renders a coherent page without scroll-scrub dependency.
 
+Terminal/Terminus final-readiness signals:
+
+- `terminalVerdict` is `PASS` and `score.terminalFinalReady` is `true`,
+- `hasTerminalMediaPipeline` is `true`: media time changes with scroll, support
+  videos exist, and mission/proof sections include support-video DOM,
+- `hasDominantHeroMedia` is `true`: the first viewport has a large real media,
+  frame, image, or marked hero-object surface with low blank-band geometry,
+- `hasDistributedScrubDeltas` is `true`: checkpoint screenshot changes are
+  large and distributed across the narrative, not only one HUD transition,
+- `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`,
+  `strongCheckpointDeltaCount`, and `midScrollDeltaCount` are reported in the
+  handoff,
+- mobile runs preserve `hasMobileHeroPhraseSeparation` for multi-phrase hero
+  headlines.
+
+Use the basic `verdict` only for mechanics prototypes. A Terminal-style final
+build can have `verdict: PASS` and still fail `terminalVerdict` when it lacks
+real media, distributed visual change, or section-level support media.
+
 Fail if the page only changes because normal sections scroll into view while
 the hero/stage itself has no debug, media, frame, pinned, or GSAP/ScrollTrigger
 signal.
