@@ -47,6 +47,10 @@ redesign, `visual-design` owns look/taste/visual systems, and `landing-page`
 owns one-page marketing or scrolltelling surfaces. Keep `frontend-design` as an
 app-UI implementation reference. The old cinematic landing skill package was
 removed; route those asks to `landing-page`. See `MEM-0072`.
+For premium, cinematic, Terminal-style, or externally delegated landing pages,
+`landing-page` must use a spec-first planner/executor split: approved
+`LANDING_SPEC` before build handoff, then section-quality and designer-judgment
+QA before premium claims. See `MEM-0076`.
 
 ## Project Structure
 

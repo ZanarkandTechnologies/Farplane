@@ -6,10 +6,12 @@
 - `README.md`
 - `AGENTS.md`
 - `references/*`
+- `scripts/*`
 
 ## Boundaries
 
 - `landing-page` owns one-page story, sections, visual scenes, media, and scrolltelling plans.
+- Use the planner/executor split: no approved `LANDING_SPEC.md`, no build handoff.
 - `visual-design` owns visual system decisions.
 - `frontend-craft` owns implementation orchestration.
 - Official GreenSock skills or docs own GSAP implementation details.
@@ -18,3 +20,4 @@
 
 - Keep first-load instructions enough to produce a landing brief without references.
 - Keep motion guidance as routing, not stale API snippets.
+- Keep section-quality and designer-judgment QA aligned with the planner gates.
