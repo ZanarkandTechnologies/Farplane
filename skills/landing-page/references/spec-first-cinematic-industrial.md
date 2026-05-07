@@ -13,6 +13,10 @@ often produces mismatched HTML/CSS/JS, missing assets, and no final review.
 
 ## Phase Contract
 
+Start from `../todos.md` for the full modern scroll-scrub recipe. This gate
+defines the phase boundary after the checklist has produced the reference
+matrix, user story, ASCII flow, nested `advise` decisions, and asset plan.
+
 1. `spec`: produce or update `SPEC.md`; do not build yet unless a spec already
    exists and the current prompt explicitly asks for a later phase.
 2. `assets`: generate or create only the assets named by the spec, then verify
@@ -26,6 +30,8 @@ often produces mismatched HTML/CSS/JS, missing assets, and no final review.
 
 - `Offer`, `Audience`, and `Carrier object / world`.
 - `Recipe route`: recipe, taste-profile, and effect-stack IDs.
+- Competitor/inspiration matrix and chosen primary reference.
+- User story and low-fidelity ASCII page flow.
 - Section map with first-viewport, proof, and final CTA.
 - Per-section expectations for:
   - the visual asset or carrier object,

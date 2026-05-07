@@ -24,6 +24,10 @@ Shape one-page frontend experiences that persuade, orient, or create memory. Thi
 ## Core Workflow
 
 For cinematic, Terminal-style, premium industrial, asset-heavy, or generated-media pages, run the spec-first gate in `references/spec-first-cinematic-industrial.md` before implementation. If the user asks to build in the same turn, still separate the work into spec, assets, implementation, and visual-review phases so each builder pass has a bounded output.
+For modern scroll-scrub or Terminal/Terminus-level work, also load `todos.md`
+and follow it as the active recipe: competitor/inspiration analysis, user story,
+ASCII page flow, nested `advise` section exploration, generated/rendered hero
+media planning, asset conversion, implementation, and QA.
 
 1. **Define the offer.** Name the product/person/place/object/category and the literal value proposition.
 2. **Choose the story shape.** Problem -> shift -> proof -> action, or a stronger domain-specific arc when available.
@@ -82,6 +86,7 @@ For landing pages with reusable formulas or inspiration references:
 - `references/architecture.md` - landing-page ownership and handoff model.
 - `references/workflows.md` - standard landing and cinematic scrolltelling paths.
 - `references/gotchas.md` - common landing-page mistakes.
+- `todos.md` - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
 
 ## Output Contract
 

@@ -31,6 +31,7 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
 | --- | --- | --- | --- | --- | --- |
 | 2026-05-05 | setup | Create skill-local memory | Baseline memory surface created | yes | Future runs should record durable lessons here. |
 | 2026-05-05 | terminal-warehouse | Split Terminal-style landing work into spec/assets/implementation/visual-review phases | Pi/Kimi could create a spec and partial files, but broad and repair prompts timed out; rendered output remained below Terminal quality | yes | Terminal-quality pages need a hard spec gate, generated-media contract, and smaller external-builder prompts. |
+| 2026-05-07 | scroll-scrub-todo-recipe | Add a loaded checklist that forces competitor analysis, user-story section planning, ASCII flow, nested `advise`, hero media generation, scroll-scrub conversion, and QA before implementation | Added `todos.md` and wired it into landing-page first-load and spec-first references | yes | The missing behavior was not only stricter QA; the skill needed an ordered pre-build recipe agents can follow without inference. |
 
 ## Accepted Learnings
 - Terminal Industries quality is not just palette/nav imitation; it depends on
@@ -42,6 +43,9 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
   repair a cinematic page should be replaced with phase-specific prompts.
 - Code-native SVGs can be useful placeholders, but a Terminal-quality claim
   needs real or generated hero media, frame/poster fallbacks, and visual QA.
+- Modern scroll-scrub landing work should start with competitor/reference
+  analysis, user-story section selection, an ASCII page flow, and nested
+  `advise` decisions per section before any asset generation or implementation.
 
 ## Rejected Ideas
 - None yet.

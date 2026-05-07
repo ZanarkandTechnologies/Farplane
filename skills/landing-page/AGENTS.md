@@ -3,6 +3,7 @@
 ## Scope
 
 - `SKILL.md`
+- `todos.md`
 - `README.md`
 - `AGENTS.md`
 - `references/*`
@@ -19,4 +20,6 @@
 ## Checks
 
 - Keep first-load instructions enough to produce a landing brief without references.
+- Keep `todos.md` as the ordered modern scroll-scrub recipe; avoid moving it into hidden parser state or duplicating all of it in `SKILL.md`.
+- For modern Terminal/Terminus-style landing work, treat `todos.md` as the mandatory pre-build recipe before implementation. See `MEM-0090`.
 - Keep motion guidance as routing, not stale API snippets.

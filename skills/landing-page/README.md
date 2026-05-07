@@ -7,18 +7,21 @@ Shape one-page, marketing, launch, portfolio, and cinematic frontend surfaces be
 ## Public API / Entrypoints
 
 - `SKILL.md`: landing-page workflow
+- `todos.md`: modern scroll-scrub landing recipe checklist
 - `references/*`: scrolltelling, JSON registries, motion/media, and QA guidance
 
 ## Minimal Example
 
 1. Define the offer and audience.
-2. Pick recipe, taste-profile, and effect-stack records when a reusable formula applies.
-3. Map sections and story beats.
-4. Plan assets and motion.
-5. Hand off to `frontend-craft`.
+2. For modern cinematic or Terminal-style work, load `todos.md`.
+3. Pick recipe, taste-profile, and effect-stack records when a reusable formula applies.
+4. Map sections, story beats, and the ASCII page flow.
+5. Plan assets and motion.
+6. Hand off to `frontend-craft`.
 
 ## How to Test
 
+- Confirm modern scroll-scrub requests load `todos.md` before implementation.
 - Confirm product app screens route away to `functional-ui`.
 - Confirm JSON registries parse with `python3 -m json.tool`.
 - Confirm cinematic/scroll requests do not duplicate GSAP API details.

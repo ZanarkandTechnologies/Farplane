@@ -165,3 +165,4 @@
 2026-05-07 07:43 +0800 | FEAT | capture a live Pi/Kimi compiled spec success as a positive delegate-frontend self-improve fixture before moving to asset phase work
 2026-05-07 10:32 +0800 | FEAT | capture seeded Pi/Kimi implementation and bounded mobile repair experiments, add mobile hero phrase-separation QA, and raise delegate-frontend self-improve replay coverage to 29 cases
 2026-05-07 12:35 +0800 | FEAT | split landing-page scroll QA into mechanics and Terminal-final readiness, add terminal verdict metrics, and sync the stricter recipe checklist into the Pi/Kimi frontend profile
+2026-05-07 14:19 +0800 | FEAT | add a landing-page todo recipe for modern scroll-scrub sites with competitor analysis, ASCII story planning, nested advise, generated hero media, frame conversion, and QA handoff
