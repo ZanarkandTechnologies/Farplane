@@ -1,5 +1,5 @@
 {
-  "assertion_pass_rate": 0.8926174496644296,
+  "assertion_pass_rate": 0.9001490312965723,
   "candidate": "/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/self-improve/prompts/current.txt",
   "case_results": [
     {
@@ -1965,6 +1965,11 @@
           "passed": true
         },
         {
+          "message": "requires_initial_hero_offer is true",
+          "name": "compiled-repair-prompt:require_true:requires_initial_hero_offer",
+          "passed": true
+        },
+        {
           "message": "requires_mobile_phrase_separation is true",
           "name": "compiled-repair-prompt:require_true:requires_mobile_phrase_separation",
           "passed": true
@@ -3291,12 +3296,412 @@
       "gate_passed": true,
       "id": "sidecar-media-control-terminal-final-passes",
       "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_phase_prompt_compiler_sidecar_implementation",
+          "passed": true
+        },
+        {
+          "message": "prompt summary present",
+          "name": "compiled-sidecar-prompt:prompt_summary_present",
+          "passed": true
+        },
+        {
+          "message": "phase=sidecar-implementation, expected sidecar-implementation",
+          "name": "compiled-sidecar-prompt:phase:sidecar-implementation",
+          "passed": true
+        },
+        {
+          "message": "owned_outputs=1 >= 1",
+          "name": "compiled-sidecar-prompt:min_owned_outputs",
+          "passed": true
+        },
+        {
+          "message": "contains_first_write is true",
+          "name": "compiled-sidecar-prompt:require_true:contains_first_write",
+          "passed": true
+        },
+        {
+          "message": "contains_selected_route is true",
+          "name": "compiled-sidecar-prompt:require_true:contains_selected_route",
+          "passed": true
+        },
+        {
+          "message": "contains_phase_boundary is true",
+          "name": "compiled-sidecar-prompt:require_true:contains_phase_boundary",
+          "passed": true
+        },
+        {
+          "message": "forbids_broad_reference_before_first_write is true",
+          "name": "compiled-sidecar-prompt:require_true:forbids_broad_reference_before_first_write",
+          "passed": true
+        },
+        {
+          "message": "requires_complete_sidecar_first_write is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_complete_sidecar_first_write",
+          "passed": true
+        },
+        {
+          "message": "forbids_large_impl_read_before_sidecar is true",
+          "name": "compiled-sidecar-prompt:require_true:forbids_large_impl_read_before_sidecar",
+          "passed": true
+        },
+        {
+          "message": "requires_iife_sidecar is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_iife_sidecar",
+          "passed": true
+        },
+        {
+          "message": "requires_media_scrub is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_media_scrub",
+          "passed": true
+        },
+        {
+          "message": "requires_debug_contract is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_debug_contract",
+          "passed": true
+        },
+        {
+          "message": "requires_initial_hero_offer is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_initial_hero_offer",
+          "passed": true
+        },
+        {
+          "message": "requires_terminal_media_pipeline is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_terminal_media_pipeline",
+          "passed": true
+        },
+        {
+          "message": "requires_support_video_metric is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_support_video_metric",
+          "passed": true
+        },
+        {
+          "message": "requires_output_quality_gate is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_output_quality_gate",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "compiled-sidecar-phase-prompt-bounded",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_pi_sidecar_v5_hidden_hero_offer",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "pi-sidecar-v5-desktop-offer-gate:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "pi-sidecar-v5-desktop-offer-gate:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict FAIL, expected PASS",
+          "name": "pi-sidecar-v5-desktop-offer-gate:terminal_verdict:PASS",
+          "passed": false
+        },
+        {
+          "message": "terminalFinalReady is not true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:terminalFinalReady",
+          "passed": false
+        },
+        {
+          "message": "hasInitialHeroOfferVisible is not true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasInitialHeroOfferVisible",
+          "passed": false
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=3.0 >= 2",
+          "name": "pi-sidecar-v5-desktop-offer-gate:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.59809 >= 0.15",
+          "name": "pi-sidecar-v5-desktop-offer-gate:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=4.0 >= 2",
+          "name": "pi-sidecar-v5-desktop-offer-gate:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=2.0 >= 1",
+          "name": "pi-sidecar-v5-desktop-offer-gate:min_score:midScrollDeltaCount",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "pi-sidecar-v5-hidden-hero-offer-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_pi_sidecar_v7_hero_offer_repair",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "pi-sidecar-v7-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "pi-sidecar-v7-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict PASS, expected PASS",
+          "name": "pi-sidecar-v7-desktop:terminal_verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalFinalReady is true",
+          "name": "pi-sidecar-v7-desktop:score_true:terminalFinalReady",
+          "passed": true
+        },
+        {
+          "message": "hasInitialHeroOfferVisible is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasInitialHeroOfferVisible",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=3.0 >= 2",
+          "name": "pi-sidecar-v7-desktop:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.60306 >= 0.15",
+          "name": "pi-sidecar-v7-desktop:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=4.0 >= 2",
+          "name": "pi-sidecar-v7-desktop:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=2.0 >= 1",
+          "name": "pi-sidecar-v7-desktop:min_score:midScrollDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "pi-sidecar-v7-mobile:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "pi-sidecar-v7-mobile:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict PASS, expected PASS",
+          "name": "pi-sidecar-v7-mobile:terminal_verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalFinalReady is true",
+          "name": "pi-sidecar-v7-mobile:score_true:terminalFinalReady",
+          "passed": true
+        },
+        {
+          "message": "hasInitialHeroOfferVisible is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasInitialHeroOfferVisible",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "hasMobileHeroPhraseSeparation is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasMobileHeroPhraseSeparation",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=3.0 >= 2",
+          "name": "pi-sidecar-v7-mobile:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.65982 >= 0.15",
+          "name": "pi-sidecar-v7-mobile:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=2.0 >= 2",
+          "name": "pi-sidecar-v7-mobile:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=1.0 >= 1",
+          "name": "pi-sidecar-v7-mobile:min_score:midScrollDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "terminal score present",
+          "name": "pi-sidecar-v7-terminal-score:terminal_score_present",
+          "passed": true
+        },
+        {
+          "message": "verdict pass, expected pass",
+          "name": "pi-sidecar-v7-terminal-score:verdict:pass",
+          "passed": true
+        },
+        {
+          "message": "percent_score=99 >= 99",
+          "name": "pi-sidecar-v7-terminal-score:min_percent_score",
+          "passed": true
+        },
+        {
+          "message": "hard_gates=0 <= 0",
+          "name": "pi-sidecar-v7-terminal-score:max_hard_gates",
+          "passed": true
+        },
+        {
+          "message": "strategy_and_spec=20 >= 20",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:strategy_and_spec",
+          "passed": true
+        },
+        {
+          "message": "asset_pipeline=20 >= 20",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:asset_pipeline",
+          "passed": true
+        },
+        {
+          "message": "scroll_scrub_mechanics=25 >= 25",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:scroll_scrub_mechanics",
+          "passed": true
+        },
+        {
+          "message": "visual_craft_proxy=15 >= 15",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:visual_craft_proxy",
+          "passed": true
+        },
+        {
+          "message": "mobile_and_reduced_motion=10 >= 10",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:mobile_and_reduced_motion",
+          "passed": true
+        },
+        {
+          "message": "delegation_process_evidence=9 >= 9",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:delegation_process_evidence",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "pi-sidecar-v7-hero-offer-repair-passes",
+      "rejected_by_gate": false
     }
   ],
-  "cases": 31,
-  "expectation_passed_cases": 31,
+  "cases": 34,
+  "expectation_passed_cases": 34,
   "pass_rate": 1.0,
-  "passed_assertions": 532,
-  "timestamp": "2026-05-07T08:07:56Z",
-  "total_assertions": 596
+  "passed_assertions": 604,
+  "timestamp": "2026-05-07T10:22:37Z",
+  "total_assertions": 671
 }

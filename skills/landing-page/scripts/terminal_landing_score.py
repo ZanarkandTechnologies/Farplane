@@ -22,6 +22,17 @@ PLACEHOLDER_HANDOFF_MARKERS = (
     "status: pending",
     "observed output: pending",
 )
+HANDOFF_COMPLETION_SECTION_PATTERNS = {
+    "changed_files": re.compile(
+        r"^(?:Changed Files|Changed\s*/\s*Produced Files|Produced Files)$",
+        re.I,
+    ),
+    "verification": re.compile(
+        r"^(?:Verification(?:\s+Commands\s*&\s*Results)?|Self-Review Findings|Output Contract Compliance)$",
+        re.I,
+    ),
+    "risks": re.compile(r"^(?:Risks(?:\s*/\s*Followups)?|Findings\s*/\s*Risks)$", re.I),
+}
 
 
 @dataclass
@@ -61,6 +72,25 @@ def load_json(path: Path | None) -> dict[str, Any]:
 def has_any(text: str, needles: list[str]) -> bool:
     lowered = text.lower()
     return any(needle.lower() in lowered for needle in needles)
+
+
+def markdown_sections(text: str) -> dict[str, str]:
+    matched: dict[str, list[str]] = {}
+    current_name = ""
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if line.startswith("#"):
+            title = line.lstrip("#").strip()
+            current_name = ""
+            for name, pattern in HANDOFF_COMPLETION_SECTION_PATTERNS.items():
+                if pattern.fullmatch(title):
+                    current_name = name
+                    matched.setdefault(name, [])
+                    break
+            continue
+        if current_name:
+            matched[current_name].append(raw_line)
+    return {name: "\n".join(lines).strip() for name, lines in matched.items()}
 
 
 def find_file(site_dir: Path, names: list[str]) -> Path | None:
@@ -214,12 +244,13 @@ def score_visual(desktop_qa: dict[str, Any], text: str) -> Dimension:
     has_early_signal = has_any(text, ["computer vision", "warehouse", "yard", "dock", "gate", "terminal", "ai"])
     has_enterprise_copy = has_any(text, ["enterprise", "operations", "safety", "sla", "accuracy", "audit", "workflow", "deployment"])
     checks = [
-        ("dominant hero media", bool(qscore.get("hasDominantHeroMedia")) or fill >= 0.35, 4),
-        ("low first viewport blank band", blank <= 0.25, 3),
+        ("dominant hero media", bool(qscore.get("hasDominantHeroMedia")) or fill >= 0.35, 3),
+        ("visible initial hero offer", bool(qscore.get("hasInitialHeroOfferVisible")), 3),
+        ("low first viewport blank band", blank <= 0.25, 2),
         ("product/category signal early", has_early_signal, 2),
         ("enterprise proof language", has_enterprise_copy, 2),
         ("support video or section media", int(qscore.get("supportVideoCount") or 0) >= 2 or bool(qscore.get("hasSupportVideoDom")), 2),
-        ("checkpoint visual delta is strong enough", float(qscore.get("maxCheckpointChangedRatio") or 0) >= 0.12, 2),
+        ("checkpoint visual delta is strong enough", float(qscore.get("maxCheckpointChangedRatio") or 0) >= 0.12, 1),
     ]
     score = sum(points for _, passed, points in checks if passed)
     findings = [name for name, passed, _ in checks if not passed]
@@ -249,10 +280,15 @@ def handoff_complete(text: str) -> bool:
     lowered = text.lower()
     if any(marker in lowered for marker in PLACEHOLDER_HANDOFF_MARKERS):
         return False
-    return all(
-        has_any(text, [heading])
-        for heading in ("Changed Files", "Verification", "Risks")
-    )
+    sections = markdown_sections(text)
+    return all(bool(sections.get(section)) for section in ("changed_files", "verification", "risks"))
+
+
+def output_quality_ok(first_write: dict[str, Any]) -> bool:
+    raw_quality = first_write.get("output_quality")
+    if not isinstance(raw_quality, dict):
+        return True
+    return str(raw_quality.get("status", "")).lower() in {"pass", "not_configured"}
 
 
 def score_delegation(run_dir_raw: str) -> Dimension:
@@ -262,14 +298,16 @@ def score_delegation(run_dir_raw: str) -> Dimension:
     first_write = load_json(run_dir / "first_write.json")
     session_files = load_json(run_dir / "session_files.json")
     handoff = read_text(run_dir / "handoff.md")
+    exit_code = read_text(run_dir / "exit_code.txt").strip()
     checks = [
         ("prompt captured", (run_dir / "prompt.md").exists(), 1),
         ("command captured", (run_dir / "command.json").exists(), 1),
         ("stdout/stderr logs captured", (run_dir / "stdout.log").exists() and (run_dir / "stderr.log").exists(), 1),
-        ("first-write passed", first_write.get("status") == "pass", 2),
+        ("first-write passed", first_write.get("status") == "pass", 1),
+        ("output quality passed or not configured", output_quality_ok(first_write), 1),
         ("session files captured", bool(session_files.get("session_files") if isinstance(session_files, dict) else session_files), 1),
         ("handoff complete", handoff_complete(handoff), 2),
-        ("run did not timeout", read_text(run_dir / "exit_code.txt").strip() not in {"124", "125"}, 1),
+        ("run exited cleanly", exit_code == "0", 1),
         ("handoff mentions skills or loaded skills", has_any(handoff, ["loaded skills", "landing-page", "frontend-craft", "visual-qa", "review"]), 1),
     ]
     score = sum(points for _, passed, points in checks if passed)

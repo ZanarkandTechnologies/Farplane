@@ -72,6 +72,9 @@
 - current-browser-desktop:min_score:maxCheckpointChangedRatio: 1
 - current-browser-desktop:min_score:meaningfulCheckpointDeltaCount: 1
 - current-browser-desktop:min_score:midScrollDeltaCount: 1
+- pi-sidecar-v5-desktop-offer-gate:terminal_verdict:PASS: 1
+- pi-sidecar-v5-desktop-offer-gate:score_true:terminalFinalReady: 1
+- pi-sidecar-v5-desktop-offer-gate:score_true:hasInitialHeroOfferVisible: 1
 
 ## Next Hypothesis
 

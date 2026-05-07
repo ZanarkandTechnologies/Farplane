@@ -91,7 +91,7 @@ class PhasePromptCompilerTests(unittest.TestCase):
             "record at least 4 generated/rendered frame, image, or video assets in .harness/delegate-frontend/asset-runs/live/assets/asset-manifest.json",
             prompt,
         )
-        self.assertIn("do not use `mkdir` as the first tool call", prompt)
+        self.assertIn("do not call `mkdir`, `ls`, `find`, `cat`, `sed`", prompt)
         self.assertNotIn("record at least 4 generated/rendered frame, image, or video assets in assets/asset-manifest.json", prompt)
 
     def test_asset_prompt_extracts_asset_relevant_brief_from_full_spec(self) -> None:
@@ -143,6 +143,42 @@ class PhasePromptCompilerTests(unittest.TestCase):
         self.assertIn("stub-only owned output is failed implementation", prompt)
         self.assertIn("finish the owned file before optional self-review", prompt)
         self.assertIn("complete runnable implementation", prompt)
+
+    def test_sidecar_prompt_requires_complete_first_write(self) -> None:
+        args = argparse.Namespace(
+            phase="sidecar-implementation",
+            brief="Write media-repair.js using known selectors and generated media paths.",
+            brief_file="",
+            owned_output=[".harness/site/media-repair.js"],
+            handoff_path="handoff.md",
+            recipe_id="cinematic-industrial-scroll",
+            taste_profile_id="terminal-mission-control",
+            effect_stack_id="video-frame-sequence-scroll-scrub",
+            acceptance=[],
+            output="",
+        )
+        prompt = phase_prompt_compiler.compile_prompt(args)
+        self.assertIn("complete runnable sidecar body", prompt)
+        self.assertIn("do not call `mkdir`, `ls`, `find`, `cat`, `sed`", prompt)
+        self.assertIn("If the first tool call only creates directories or inspects files", prompt)
+        self.assertIn("do not read large implementation files", prompt)
+        self.assertIn("window.__scrollScrubDebug", prompt)
+        self.assertIn("hasInitialHeroOfferVisible", prompt)
+        self.assertIn("hasTerminalMediaPipeline", prompt)
+        self.assertIn("wrapper output quality gate", prompt)
+        summary = phase_prompt_compiler.summarize_prompt(
+            prompt=prompt,
+            phase="sidecar-implementation",
+            owned_outputs=[".harness/site/media-repair.js"],
+            recipe_id="cinematic-industrial-scroll",
+            taste_profile_id="terminal-mission-control",
+            effect_stack_id="video-frame-sequence-scroll-scrub",
+        )
+        self.assertTrue(summary["requires_complete_sidecar_first_write"])
+        self.assertTrue(summary["forbids_large_impl_read_before_sidecar"])
+        self.assertTrue(summary["requires_media_scrub"])
+        self.assertTrue(summary["requires_initial_hero_offer"])
+        self.assertTrue(summary["requires_output_quality_gate"])
 
     def test_startup_probe_builds_delegate_cli_dry_run_command(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -211,6 +247,7 @@ class PhasePromptCompilerTests(unittest.TestCase):
         self.assertIn("never replace a built page with a minimal dark text stub", prompt)
         self.assertIn("style scrub must change computed transform", prompt)
         self.assertIn("hasSupportVideoDom and hasMissionSupportVideos", prompt)
+        self.assertIn("hasInitialHeroOfferVisible", prompt)
         self.assertIn("hasMobileHeroPhraseSeparation", prompt)
         summary = phase_prompt_compiler.summarize_prompt(
             prompt=prompt,
@@ -225,6 +262,7 @@ class PhasePromptCompilerTests(unittest.TestCase):
         self.assertTrue(summary["forbids_sibling_prototype_read"])
         self.assertTrue(summary["requires_style_scrub"])
         self.assertTrue(summary["requires_support_video_metric"])
+        self.assertTrue(summary["requires_initial_hero_offer"])
         self.assertTrue(summary["requires_mobile_phrase_separation"])
         self.assertTrue(summary["preserves_existing_surface"])
         self.assertTrue(summary["requires_non_destructive_first_write"])

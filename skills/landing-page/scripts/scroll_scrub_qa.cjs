@@ -393,17 +393,19 @@ async function main() {
   const domVisualGeometry = await collectVisualGeometry(page);
 
   const pageInfo = await page.evaluate(() => {
-    const videoSources = [...document.querySelectorAll("video")]
-      .flatMap((video) => [
+    const videoInfos = [...document.querySelectorAll("video")].map((video) => {
+      const sources = [
         video.currentSrc || "",
         video.getAttribute("src") || "",
         ...[...video.querySelectorAll("source")].map((source) => source.getAttribute("src") || ""),
-      ])
-      .filter(Boolean);
-    const missionSupportVideoCount = videoSources.filter((source) =>
-      /mission-(?:01|03)|manifest|safety/i.test(source),
+      ].filter(Boolean);
+      return { sources: [...new Set(sources)] };
+    });
+    const videoSources = videoInfos.flatMap((video) => video.sources);
+    const missionSupportVideoCount = videoInfos.filter((video) =>
+      video.sources.some((source) => /mission-(?:01|03)|manifest|safety/i.test(source)),
     ).length;
-    const heroTitle = document.querySelector(".hero-title, [data-hero-title], h1");
+    const heroTitle = document.querySelector(".hero__title, .hero-title, [data-hero-title], h1");
     const heroBreaks = heroTitle ? [...heroTitle.querySelectorAll("br")] : [];
     const heroTitleText = heroTitle ? String(heroTitle.textContent || "").trim() : "";
     const heroTitleGluedPhrases = /[a-z0-9][.!?][A-Z]/.test(heroTitleText);
@@ -411,6 +413,41 @@ async function main() {
       const style = getComputedStyle(br);
       return style.display !== "none" && style.visibility !== "hidden";
     }).length;
+
+    function visibleHeroCopyElement(element) {
+      if (!element) return false;
+      const style = getComputedStyle(element);
+      if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) <= 0.05) {
+        return false;
+      }
+      const rect = element.getBoundingClientRect();
+      const visibleWidth = Math.max(0, Math.min(window.innerWidth, rect.right) - Math.max(0, rect.left));
+      const visibleHeight = Math.max(0, Math.min(window.innerHeight, rect.bottom) - Math.max(0, rect.top));
+      const visibleArea = visibleWidth * visibleHeight;
+      const text = String(element.textContent || "").replace(/\s+/g, " ").trim();
+      return text.length >= 12 && visibleArea >= Math.min(2600, window.innerWidth * window.innerHeight * 0.01);
+    }
+
+    const heroOfferCandidates = [
+      ".hero__title",
+      ".hero__dek",
+      ".hero-title",
+      "[data-hero-title]",
+      "[data-hero-offer]",
+      "h1",
+    ];
+    const visibleHeroCopy = [...document.querySelectorAll(heroOfferCandidates.join(","))]
+      .filter(visibleHeroCopyElement)
+      .map((element) => String(element.textContent || "").replace(/\s+/g, " ").trim());
+    const visibleHeroCopyText = visibleHeroCopy.join(" ");
+    const titleVisible = visibleHeroCopyElement(heroTitle);
+    const initialHeroOffer = {
+      visible: (titleVisible && heroTitleText.length >= 12) || visibleHeroCopyText.length >= 32,
+      titleVisible,
+      textLength: visibleHeroCopyText.length,
+      candidateCount: visibleHeroCopy.length,
+      textSample: visibleHeroCopyText.slice(0, 180),
+    };
     return {
       title: document.title,
       scrollHeight: document.documentElement.scrollHeight,
@@ -424,7 +461,8 @@ async function main() {
       pinSpacers: document.querySelectorAll(".pin-spacer").length,
       scrubRoots: document.querySelectorAll("[data-scroll-scrub-root], [data-scroll-scrub], [data-scroll-progress]").length,
       videoSources,
-      supportVideoCount: videoSources.length,
+      videoElementCount: videoInfos.length,
+      supportVideoCount: videoInfos.length,
       missionSupportVideoCount,
       heroTitle: {
         text: heroTitleText,
@@ -432,6 +470,7 @@ async function main() {
         visibleBreakCount: heroVisibleBreakCount,
         gluedPhrases: heroTitleGluedPhrases,
       },
+      initialHeroOffer,
     };
   });
 
@@ -546,6 +585,7 @@ async function main() {
     visualGeometry.sampled_media_rects > 0 &&
     visualGeometry.hero_object_fill_ratio >= 0.55 &&
     visualGeometry.first_viewport_blank_ratio <= 0.18;
+  const hasInitialHeroOfferVisible = Boolean(pageInfo.initialHeroOffer && pageInfo.initialHeroOffer.visible);
   const hasDistributedScrubDeltas =
     deltaStats.maxCheckpointChangedRatio >= 0.15 &&
     deltaStats.meaningfulCheckpointDeltaCount >= 2 &&
@@ -565,6 +605,7 @@ async function main() {
     hasStyleScrub &&
     hasTerminalMediaPipeline &&
     hasDominantHeroMedia &&
+    hasInitialHeroOfferVisible &&
     hasDistributedScrubDeltas &&
     hasMobileHeroPhraseSeparation;
 
@@ -586,6 +627,7 @@ async function main() {
       hasMissionSupportVideos,
       hasMobileHeroPhraseSeparation,
       hasDominantHeroMedia,
+      hasInitialHeroOfferVisible,
       hasDistributedScrubDeltas,
       hasTerminalMediaPipeline,
       terminalFinalReady,
@@ -608,6 +650,7 @@ async function main() {
       : [
           "Terminal-level pages need generated/rendered media or a frame/video asset pipeline, not just code-native canvas or HUD overlays.",
           "Require a dominant first-viewport media/object surface and low blank-band geometry.",
+          "Require visible first-viewport offer copy so the visitor understands the product before scrolling.",
           "Require distributed checkpoint screenshot deltas so scroll changes the main visual across the narrative, not only at one transition.",
           "Require support-video or section media proof when the recipe calls for mission cards or feature sections.",
         ],

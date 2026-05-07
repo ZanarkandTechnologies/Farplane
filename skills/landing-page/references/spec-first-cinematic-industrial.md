@@ -97,8 +97,8 @@ Pass only when the first viewport has all of these:
   acceptable only for a mechanics prototype and should fail final visual parity.
 - For Terminal/Terminus-level final builds, require `terminalVerdict: PASS` from
   `scroll_scrub_qa.cjs`, not only the basic `verdict: PASS`. The final score
-  must include `terminalFinalReady`, `hasTerminalMediaPipeline`,
-  `hasDominantHeroMedia`, `hasDistributedScrubDeltas`,
+  must include `terminalFinalReady`, `hasInitialHeroOfferVisible`,
+  `hasTerminalMediaPipeline`, `hasDominantHeroMedia`, `hasDistributedScrubDeltas`,
   `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`,
   `strongCheckpointDeltaCount`, and `midScrollDeltaCount`.
 - A timed-out run with partial files is a failure, even when the page appears to

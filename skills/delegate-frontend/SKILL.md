@@ -50,7 +50,10 @@ Codex lane.
    timeout. For bounded spec, asset, or implementation phases that are expected
    to finish by writing the managed handoff, also pass
    `--complete-when-output-and-handoff` so the wrapper can stop cleanly once the
-   owned output and non-placeholder handoff exist.
+   owned output and non-placeholder handoff exist. For sidecar or repair phases
+   that can otherwise pass with a stub/no-op, add `--expect-output-min-bytes`
+   and repeat `--expect-output-contains` for required contract strings such as
+   `window.__scrollScrubDebug`, `mediaTime`, and any phase-specific marker.
    After an asset phase, run
    `python3 skills/delegate-frontend/self-improve/scripts/asset_manifest_lint.py <asset-manifest>`
    and do not start implementation unless it passes.
@@ -90,6 +93,13 @@ Codex lane.
   40KB+ generated JS file directly. The sidecar should use known selectors from
   the prompt, wire generated media from the manifest, and avoid reading the
   large implementation before first complete output.
+- `Terminal first viewport lacks visible offer copy` -> require
+  `hasInitialHeroOfferVisible` in QA and repair the owned sidecar/CSS so the
+  primary headline or offer is visible before scroll; dominant media alone is
+  not final readiness.
+- `micro-repair keeps missing first-write` -> shrink to a compact prompt with a
+  phase-scoped skill bundle and, when safe, give the external CLI an exact first
+  command that modifies only the owned file.
 - `phase prompt has a managed handoff` -> add
   `--complete-when-output-and-handoff` so complete phase runs do not burn the
   full timeout after the handoff is written.

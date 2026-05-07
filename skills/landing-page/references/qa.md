@@ -81,6 +81,8 @@ Terminal/Terminus final-readiness signals:
   videos exist, and mission/proof sections include support-video DOM,
 - `hasDominantHeroMedia` is `true`: the first viewport has a large real media,
   frame, image, or marked hero-object surface with low blank-band geometry,
+- `hasInitialHeroOfferVisible` is `true`: the primary hero headline or offer is
+  visible before the visitor scrolls, not revealed only after scrub starts,
 - `hasDistributedScrubDeltas` is `true`: checkpoint screenshot changes are
   large and distributed across the narrative, not only one HUD transition,
 - `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`,

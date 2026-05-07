@@ -53,8 +53,26 @@ PHASE_DEFAULTS: dict[str, dict[str, object]] = {
             "mark the scrubbed stage with data-scroll-scrub-root",
             "wire generated/rendered media or frame assets from assets/asset-manifest.json",
             "for Terminal/Terminus-level final builds, report terminalVerdict and terminalFinalReady; basic verdict PASS is only mechanics proof",
-            "report hasTerminalMediaPipeline, hasDominantHeroMedia, hasDistributedScrubDeltas, maxCheckpointChangedRatio, meaningfulCheckpointDeltaCount, strongCheckpointDeltaCount, and midScrollDeltaCount when scroll-scrub QA runs",
+            "report hasInitialHeroOfferVisible, hasTerminalMediaPipeline, hasDominantHeroMedia, hasDistributedScrubDeltas, maxCheckpointChangedRatio, meaningfulCheckpointDeltaCount, strongCheckpointDeltaCount, and midScrollDeltaCount when scroll-scrub QA runs",
             "run syntax checks and scroll-scrub QA when runnable",
+        ],
+    },
+    "sidecar-implementation": {
+        "objective": "write a complete standalone media sidecar that upgrades an existing landing page to Terminal-level generated-media scroll scrub",
+        "acceptance": [
+            "write the complete sidecar file as the first owned output; do not write a tiny stub and do not wait until after analysis to fill it in",
+            "do not read large implementation files, screenshots, skill bodies, or broad references before the complete sidecar exists",
+            "use the selectors, asset paths, and constraints supplied in the brief instead of rereading the whole generated page",
+            "wrap the sidecar in an IIFE so it can load after the existing page without requiring bundling",
+            "wire generated/rendered hero video or frame assets from assets/asset-manifest.json or the named asset paths",
+            "wire at least two support video elements when mission/support media paths exist",
+            "create or reuse a dominant hero media element and mark the scrubbed stage with data-scroll-scrub-root",
+            "drive mediaTime or frame state from scroll progress, not from autoplay alone",
+            "update transform, opacity, filter, or clip-path across at least four scroll checkpoints",
+            "expose window.__scrollScrubDebug with progress, phase, mediaTime or frame, active, ready, and reducedMotion",
+            "keep the initial hero headline or offer copy visible before scroll so hasInitialHeroOfferVisible is true",
+            "target terminalVerdict PASS by satisfying hasInitialHeroOfferVisible, hasTerminalMediaPipeline, hasDominantHeroMedia, hasDistributedScrubDeltas, hasMissionSupportVideos, and hasMobileHeroPhraseSeparation when applicable",
+            "write the handoff only after the sidecar is complete enough to pass the wrapper output quality gate",
         ],
     },
     "repair": {
@@ -70,8 +88,9 @@ PHASE_DEFAULTS: dict[str, dict[str, object]] = {
             "style scrub must change computed transform, opacity, filter, or clip-path on at least two elements matching the QA sampled selectors",
             "QA samples these selectors: [data-scroll-scrub-root], [data-scroll-scrub], [data-scroll-progress], [data-scroll-phase], canvas, video, .pin-spacer, .scroll-stage, .scrub-stage, .frame-sequence, .hero-media, .hero, .cinematic, .scene",
             "support video proof must use real video elements and should satisfy hasSupportVideoDom and hasMissionSupportVideos when mission support assets exist",
+            "initial hero offer proof should satisfy hasInitialHeroOfferVisible; do not delay the primary headline until after the first scroll",
             "mobile typography proof should satisfy hasMobileHeroPhraseSeparation when the page has a multi-phrase hero title",
-            "Terminal/Terminus-level final repair proof should satisfy terminalFinalReady, hasTerminalMediaPipeline, hasDominantHeroMedia, and hasDistributedScrubDeltas; basic verdict PASS is only mechanics proof",
+            "Terminal/Terminus-level final repair proof should satisfy terminalFinalReady, hasInitialHeroOfferVisible, hasTerminalMediaPipeline, hasDominantHeroMedia, and hasDistributedScrubDeltas; basic verdict PASS is only mechanics proof",
             "report maxCheckpointChangedRatio, meaningfulCheckpointDeltaCount, strongCheckpointDeltaCount, and midScrollDeltaCount",
             "preserve window.__scrollScrubDebug with progress, phase, frame or mediaTime, active, ready, and reducedMotion",
             "run the named QA commands once after the patch; if they still fail, write the handoff with the failing scores instead of looping until timeout",
@@ -174,7 +193,11 @@ def compile_prompt(args: argparse.Namespace) -> str:
         first_write_action = (
             "with a non-destructive marker or tiny targeted edit"
             if phase == "repair"
-            else "with a small valid stub"
+            else (
+                "with a complete runnable sidecar body"
+                if phase == "sidecar-implementation"
+                else "with a small valid stub"
+            )
         )
         first_write_section = [
             "## First-Write Contract",
@@ -183,11 +206,16 @@ def compile_prompt(args: argparse.Namespace) -> str:
                 f"{first_write_action} before reading skill bodies, broad references, "
                 "screenshots, or unrelated files."
             ),
-            "The wrapper pre-creates parent directories for owned outputs; do not use `mkdir` as the first tool call.",
+            "The wrapper pre-creates parent directories for owned outputs; do not call `mkdir`, `ls`, `find`, `cat`, `sed`, or any read/inspect command as the first tool call.",
+            f"The first tool call must write `{owned_outputs[0]}` itself. If the first tool call only creates directories or inspects files, the phase is failed.",
             "",
             "After the first-write proof exists, finish the owned artifact from the constraints in this prompt before optional reference reading.",
             "The first-write stub is only a proof marker. It is not acceptable final output; expand or replace it before writing the handoff.",
         ]
+        if phase == "sidecar-implementation":
+            first_write_section[-1] = (
+                "For this sidecar phase, the first-write target is stricter: the first owned-file write should already be a complete runnable sidecar, not a placeholder."
+            )
     else:
         first_write_section = [
             "## First-Write Contract",
@@ -287,11 +315,26 @@ def summarize_prompt(
                 "forbids_sibling_prototype_read": "do not read sibling prototype pages" in lowered,
                 "requires_style_scrub": "style scrub must change computed transform" in lowered,
                 "requires_support_video_metric": "hasmissionsupportvideos" in lowered,
+                "requires_initial_hero_offer": "hasinitialherooffervisible" in lowered,
                 "requires_mobile_phrase_separation": "hasmobileherophraseseparation" in lowered,
                 "requires_terminal_final_ready": "terminalfinalready" in lowered,
                 "requires_distributed_scrub_deltas": "hasdistributedscrubdeltas" in lowered,
                 "preserves_existing_surface": "never replace a built page with a minimal dark text stub" in lowered,
                 "requires_non_destructive_first_write": "first write must preserve existing content" in lowered,
+            }
+        )
+    if phase == "sidecar-implementation":
+        summary.update(
+            {
+                "requires_complete_sidecar_first_write": "first owned-file write should already be a complete runnable sidecar" in lowered,
+                "forbids_large_impl_read_before_sidecar": "do not read large implementation files" in lowered,
+                "requires_iife_sidecar": "wrap the sidecar in an iife" in lowered,
+                "requires_media_scrub": "drive mediatime or frame state from scroll progress" in lowered,
+                "requires_debug_contract": "window.__scrollscrubdebug" in lowered,
+                "requires_terminal_media_pipeline": "hasterminalmediapipeline" in lowered,
+                "requires_initial_hero_offer": "hasinitialherooffervisible" in lowered,
+                "requires_support_video_metric": "hasmissionsupportvideos" in lowered,
+                "requires_output_quality_gate": "wrapper output quality gate" in lowered,
             }
         )
     return summary

@@ -173,6 +173,85 @@ class DelegateCliAgentTests(unittest.TestCase):
             self.assertEqual(first_write["completion_reason"], "expected_output_and_handoff")
             self.assertIn("completed handoff", completed.stderr)
 
+    def test_output_quality_gate_rejects_stub_with_completed_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            expected = root / "media-repair.js"
+            handoff = runtime_dir / "handoff.md"
+            script = (
+                "from pathlib import Path\n"
+                "Path('media-repair.js').write_text('// stub\\n')\n"
+                f"Path({str(handoff)!r}).write_text("
+                "'## Changed Files\\n\\n- `media-repair.js`\\n\\n"
+                "## Verification\\n\\n- not run\\n\\n"
+                "## Risks / Followups\\n\\n- stub\\n', encoding='utf-8')\n"
+            )
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[sys.executable, "-c", script],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                first_write_timeout_seconds=2,
+                expected_outputs=[expected],
+                runtime_dir=runtime_dir,
+                handoff_path=handoff,
+                complete_when_output_and_handoff=True,
+                completion_grace_seconds=0,
+                output_quality_gate=delegate_cli_agent.OutputQualityGate(
+                    min_bytes=200,
+                    required_substrings=("window.__scrollScrubDebug", "mediaTime"),
+                ),
+            )
+            self.assertEqual(completed.returncode, 126)
+            self.assertEqual(first_write["status"], "pass")
+            self.assertEqual(first_write["output_quality"]["status"], "failed")
+            self.assertIn("output quality gate", completed.stderr)
+
+    def test_output_quality_gate_accepts_complete_sidecar(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            expected = root / "media-repair.js"
+            sidecar = (
+                "(function(){\\n"
+                "  const video = document.createElement('video');\\n"
+                "  window.__scrollScrubDebug = { progress: 0, mediaTime: 0, ready: true };\\n"
+                "  addEventListener('scroll', () => { window.__scrollScrubDebug.mediaTime = video.currentTime; });\\n"
+                "})();\\n"
+            )
+            completed, first_write = delegate_cli_agent.run_with_expected_output_check(
+                command=[
+                    sys.executable,
+                    "-c",
+                    f"from pathlib import Path; Path('media-repair.js').write_text({sidecar!r})",
+                ],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                expected_outputs=[expected],
+                output_quality_gate=delegate_cli_agent.OutputQualityGate(
+                    min_bytes=120,
+                    required_substrings=("window.__scrollScrubDebug", "mediaTime"),
+                ),
+            )
+            self.assertEqual(completed.returncode, 0)
+            self.assertEqual(first_write["status"], "pass")
+            self.assertEqual(first_write["output_quality"]["status"], "pass")
+
+    def test_output_quality_gate_fails_without_expected_outputs(self) -> None:
+        record = delegate_cli_agent.inspect_output_quality(
+            [],
+            delegate_cli_agent.OutputQualityGate(
+                min_bytes=1,
+                required_substrings=("window.__scrollScrubDebug",),
+            ),
+        )
+        self.assertEqual(record["status"], "failed")
+        self.assertEqual(record["failure_reason"], "no_expected_outputs")
+
     def test_handoff_completion_signal_rejects_placeholder_template(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             handoff = Path(tmp) / "handoff.md"
@@ -450,6 +529,51 @@ class DelegateCliAgentTests(unittest.TestCase):
             self.assertTrue(settings.exists())
             settings_text = settings.read_text(encoding="utf-8")
             self.assertIn("frontend-craft", settings_text)
+
+    def test_command_run_can_override_skill_bundle_for_one_phase(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_profile_templates(root)
+            write_skill_bundle_manifest(root, ["frontend-craft", "landing-page", "visual-qa"])
+            write_skill_sources(root)
+            original_project_root = delegate_cli_agent.project_root
+            try:
+                delegate_cli_agent.project_root = lambda: root
+                payload = delegate_cli_agent.command_run(
+                    Namespace(
+                        profile="frontend-pi-kimi",
+                        model="",
+                        thinking="",
+                        ticket="",
+                        checkout="shared",
+                        prompt="Write sidecar",
+                        prompt_file="",
+                        run_id="phase-skill-override",
+                        dry_run=True,
+                        artifact_dir="",
+                        attach=[],
+                        skill=["landing-page", "visual-qa"],
+                        compact_prompt=True,
+                        expect_output=[],
+                        first_write_timeout_seconds=120,
+                        complete_when_output_and_handoff=False,
+                        completion_grace_seconds=2.0,
+                        timeout_seconds=0,
+                    )
+                )
+            finally:
+                delegate_cli_agent.project_root = original_project_root
+
+            command = payload["command"]
+            mounted = [command[index + 1] for index, arg in enumerate(command) if arg == "--skill"]
+            self.assertEqual(len(mounted), 2)
+            self.assertTrue(all(Path(path).name in {"landing-page", "visual-qa"} for path in mounted))
+            prompt_path = Path(payload["prompt_path"])
+            prompt_text = prompt_path.read_text(encoding="utf-8")
+            self.assertIn("landing-page", prompt_text)
+            self.assertIn("visual-qa", prompt_text)
+            self.assertNotIn("frontend-craft", prompt_text)
+            self.assertNotIn("## Delegate System Rules", prompt_text)
 
     def test_dry_run_renders_prompt_command_and_durable_artifacts(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

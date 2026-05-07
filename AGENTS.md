@@ -82,6 +82,10 @@ final readiness: `scroll_scrub_qa.cjs` may report `verdict: PASS` while
 `terminalVerdict: FAIL` if media pipeline, dominant hero media, distributed
 checkpoint deltas, support media, or relevant mobile phrase separation are
 missing. See `MEM-0089`.
+For Terminal/Terminus final landing-page QA, require first-viewport offer
+visibility. Dominant generated media is not enough when the hero headline or
+offer copy is hidden until after the first scroll; track this through
+`hasInitialHeroOfferVisible`. See `MEM-0094`.
 For Pi/Kimi frontend startup probes, require `first_write.json` pass, at least
 one session file, a regular probe output, and a non-placeholder handoff; session
 creation alone is not enough. Use the compiled startup probe with
@@ -100,6 +104,10 @@ existing artifact. Use a non-destructive marker or tiny targeted edit, and for
 large generated media repairs prefer a loaded sidecar script or small CSS-owned
 output over asking the delegate to reread and rewrite the full implementation.
 See `MEM-0093`.
+For bounded Pi/Kimi micro-repairs, prefer compact prompts, a phase-scoped skill
+bundle, and explicit command-shaped first-write instructions after prose prompts
+fail to start or cross first-write. Pair these with output-quality gates so
+stubs and no-op edits cannot cleanly complete. See `MEM-0095`.
 For UI source reviews, run `web-design-guidelines` through the
 `review` skill's `frontend-guidelines` lane and record that score beside
 `ui-quality` so taste judgment and source-level interface fundamentals remain

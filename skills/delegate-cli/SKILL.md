@@ -33,6 +33,8 @@ without letting that CLI become Codexter's source of truth.
 5. Load [prompt-engineering](../../rules/prompt-engineering.md) when the delegated prompt needs role, task, constraints, output format, examples, or structured-output discipline.
 6. Run `python3 bin/delegate_cli_agent.py run --profile <profile> --ticket <ticket> --dry-run --json`
    first to inspect the rendered command and prompt.
+   For tightly bounded phase work, prefer `--compact-prompt` and repeat
+   `--skill <name>` to mount only the directly relevant skills.
 7. Run without `--dry-run` only when the operator has allowed live CLI/model
    execution and any credentials/spend are acceptable.
 8. Attach the generated handoff/logs/patch to ticket evidence and route the
@@ -69,6 +71,10 @@ Use `advise` when choosing:
    The launcher must pass rendered prompt text as the `-p` message and reserve
    `@...` for true attachments. Recorded command artifacts should redact the
    prompt argument and point reviewers to `prompt.md`.
+5. First-write proof only proves a file changed. For implementation sidecars,
+   add `--expect-output-min-bytes` and `--expect-output-contains` gates so a
+   tiny stub, no-op edit, or missing debug/media contract cannot cleanly
+   complete.
 
 ## Outcome Contract
 

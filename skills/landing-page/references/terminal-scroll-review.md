@@ -92,6 +92,7 @@ Judges whether the page feels like a serious premium industrial product, not a
 generic dark SaaS mockup.
 
 - physical-world operation dominates the first viewport
+- initial hero headline or offer copy is visible before the first scroll
 - product/category signal appears early
 - restrained enterprise nav and CTA
 - typography hierarchy and dense technical labels feel deliberate

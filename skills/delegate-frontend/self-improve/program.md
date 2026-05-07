@@ -62,7 +62,8 @@ make external Pi/Kimi frontend delegation reliably produce Terminal-style scroll
 | 2026-05-07 | review-blocker-fix-path-and-handoff | Fix review-found false positives in asset paths and handoff completion | Asset manifests now count/reject unsafe out-of-root refs; handoffs must have non-empty required section bodies; wrapper clean-completion requires the changed-files body to mention the expected output; unsafe-ref reject-control raises the suite to 22/22 with `assertion_pass_rate=0.897590` | yes | First-write and phase-completion proof must be hard to spoof: headings alone are not completion, and existing local files outside the asset package are not valid generated assets. |
 | 2026-05-07 | implementation-repair-loop | Run seeded implementation and bounded V4 repair experiments | Seeded V4 output passes scroll/media/style/support-video QA but timed out without managed handoff; first mobile repair failed the 60s first-write gate; retry with a 120s gate cleanly patched mobile typography and raised the suite to 29/29 with `assertion_pass_rate=0.901852` | yes | Treat seeded partial UI as useful artifact evidence but failed phase completion; use one-file micro-repairs with clean handoff completion for polish, and score mobile hero phrase separation mechanically. |
 | 2026-05-07 | terminal-score-domain-rubric | Add a landing-page Terminal score and run live Pi/Kimi against the warehouse CV target | Code-native implementation reached `61/100` after desktop/mobile QA, with basic scroll mechanics passing but Terminal media pipeline, dominant media, distributed deltas, and handoff still failing | yes | A domain score makes the gap legible: mechanics are not enough, and a timed-out delegate run stays blocked even when it writes useful files. |
-| 2026-05-07 | media-repair-sidecar-control | Compare Pi repair attempts with a local sidecar control pattern | Pi repair overwrote an existing 45KB file with a stub, then a sidecar attempt also stalled after first-write; a local sidecar control passed desktop/mobile `terminalVerdict: PASS`, local score `90/100`, and suite `skill_eval_pass_rate=1.000000` with `assertion_pass_rate=0.892617` | yes | Large generated JS repairs should be sidecar-owned or tiny CSS-owned, first-write on existing files must be non-destructive, and Pi must write the complete sidecar before optional inspection. |
+| 2026-05-07 | media-repair-sidecar-control | Compare Pi repair attempts with a local sidecar control pattern | Pi repair overwrote an existing 45KB file with a stub, then a sidecar attempt also stalled after first-write; a local sidecar control passed desktop/mobile `terminalVerdict: PASS`, reached a pre-offer-gate local score of `90/100`, and suite `skill_eval_pass_rate=1.000000` with `assertion_pass_rate=0.892617` | yes | Large generated JS repairs should be sidecar-owned or tiny CSS-owned, first-write on existing files must be non-destructive, and Pi must write the complete sidecar before optional inspection. |
+| 2026-05-07 | compact-sidecar-and-offer-repair | Add output-quality gates, compact/phase-scoped prompts, and a direct first-command repair loop | Full/slim sidecar runs failed to start, compact sidecar v5 produced a complete generated-media sidecar, stricter offer QA exposed hidden first-viewport headline at `88/100`, and direct Pi repair v7 restored desktop/mobile `terminalVerdict: PASS` with final score `99/100` | yes | The target is reachable with Pi/Kimi when prompts are phase-scoped, compact, output-gated, and command-shaped for micro-repairs; add first-viewport offer visibility to the durable gates. |
 
 ## Accepted Learnings
 - A Terminal/Terminus page is not final quality when `asset_strategy` is
@@ -146,6 +147,17 @@ make external Pi/Kimi frontend delegation reliably produce Terminal-style scroll
 - A local Terminal-ready sidecar control is useful as an optimization target,
   but it does not count as delegated Pi/Kimi success until the external run
   produces the sidecar plus a non-placeholder handoff.
+- Full-profile or even slim-profile prompts can fail before Pi creates a
+  session; compact wrappers and phase-scoped skill bundles are a live startup
+  reliability improvement, not just prompt neatness.
+- Output-quality gates should check size and required substrings before clean
+  completion. They prevented a no-op/hidden-headline run from being accepted as
+  final just because first-write or scroll mechanics passed.
+- For tiny repair phases, command-shaped first-write instructions can outperform
+  prose. The direct hero-copy repair succeeded where the broader prose repair
+  created no session.
+- Terminal final readiness needs `hasInitialHeroOfferVisible`; a dominant hero
+  asset with hidden headline copy is still below the production bar.
 
 ## Rejected Ideas
 - Prompt-only "make it cinematic" without binary QA; it allowed fake scroll and
@@ -169,3 +181,6 @@ make external Pi/Kimi frontend delegation reliably produce Terminal-style scroll
 - Promote the successful V4 mobile-polish pattern into future repair prompts:
   one owned CSS/component file, first-write proof, clean handoff completion,
   desktop/mobile scroll QA, and explicit mobile phrase-separation proof.
+- Add first-tool-call classification from Pi session logs so future results can
+  distinguish "eventually wrote the file" from "obeyed the first external tool
+  call contract".

@@ -417,6 +417,59 @@ def evaluate_compiled_prompt(case: dict[str, Any], output: dict[str, Any], resul
             )
 
 
+def evaluate_terminal_score(case: dict[str, Any], output: dict[str, Any], results: list[AssertionResult]) -> None:
+    for spec in as_list(case.get("terminal_score")):
+        label = str(spec.get("label", "terminal_score"))
+        summary = summary_from(spec, output)
+        add_result(results, f"{label}:terminal_score_present", bool(summary), "terminal score present" if summary else "terminal score missing")
+        if not summary:
+            continue
+        if "verdict" in spec:
+            expected = str(spec["verdict"])
+            actual = str(summary.get("verdict"))
+            add_result(
+                results,
+                f"{label}:verdict:{expected}",
+                actual == expected,
+                f"verdict {actual}, expected {expected}",
+            )
+        if "min_percent_score" in spec:
+            actual = numeric(summary.get("percent_score"), 0)
+            minimum = float(spec["min_percent_score"])
+            add_result(
+                results,
+                f"{label}:min_percent_score",
+                actual >= minimum,
+                f"percent_score={actual:g} >= {minimum:g}" if actual >= minimum else f"percent_score={actual:g} < {minimum:g}",
+            )
+        if "max_hard_gates" in spec:
+            gates = summary.get("hard_gates", [])
+            actual = len(gates) if isinstance(gates, list) else 999
+            maximum = int(spec["max_hard_gates"])
+            add_result(
+                results,
+                f"{label}:max_hard_gates",
+                actual <= maximum,
+                f"hard_gates={actual} <= {maximum}" if actual <= maximum else f"hard_gates={actual} > {maximum}",
+            )
+        required_dimensions = dict(spec.get("min_dimension_scores", {}))
+        if required_dimensions:
+            dimensions = {
+                str(item.get("name")): numeric(item.get("score"), 0)
+                for item in as_list(summary.get("dimensions"))
+                if isinstance(item, dict)
+            }
+            for name, minimum_raw in required_dimensions.items():
+                minimum = float(minimum_raw)
+                actual = dimensions.get(str(name), 0)
+                add_result(
+                    results,
+                    f"{label}:min_dimension_score:{name}",
+                    actual >= minimum,
+                    f"{name}={actual:g} >= {minimum:g}" if actual >= minimum else f"{name}={actual:g} < {minimum:g}",
+                )
+
+
 def evaluate_first_write(case: dict[str, Any], output: dict[str, Any], results: list[AssertionResult]) -> None:
     for spec in as_list(case.get("first_write")):
         label = str(spec.get("label", "first_write"))
@@ -492,6 +545,7 @@ def evaluate_case(case: dict[str, Any], output: dict[str, Any]) -> list[Assertio
     evaluate_visual_geometry(case, output, results)
     evaluate_startup(case, output, results)
     evaluate_compiled_prompt(case, output, results)
+    evaluate_terminal_score(case, output, results)
     evaluate_first_write(case, output, results)
     if not results:
         add_result(results, "has_eval_definition", False, "case has no assertions")

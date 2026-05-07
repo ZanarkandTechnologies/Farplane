@@ -37,7 +37,8 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
 | 2026-05-05 | terminal-warehouse | Split Terminal-style landing work into spec/assets/implementation/visual-review phases | Pi/Kimi could create a spec and partial files, but broad and repair prompts timed out; rendered output remained below Terminal quality | yes | Terminal-quality pages need a hard spec gate, generated-media contract, and smaller external-builder prompts. |
 | 2026-05-07 | scroll-scrub-todo-recipe | Add a loaded checklist that forces competitor analysis, user-story section planning, ASCII flow, nested `advise`, hero media generation, scroll-scrub conversion, and QA before implementation | Added `todos.md` and wired it into landing-page first-load and spec-first references | yes | The missing behavior was not only stricter QA; the skill needed an ordered pre-build recipe agents can follow without inference. |
 | 2026-05-07 | terminal-scroll-review-score | Add a domain review rubric and score runner so Terminal/Terminus self-improvement can chase an 80-point observable artifact target | Added `terminal-scroll-review.md` and `terminal_landing_score.py`; baseline scoring should drive the next prompt/profile repair | yes | Human taste still matters, but the loop needs a mechanical score that combines spec, assets, scroll, mobile, and delegation evidence. |
-| 2026-05-07 | warehouse-cv-score-loop | Run Pi/Kimi and a local sidecar control through the Terminal score | Pi/Kimi code-native output improved from `43` stub score to `61/100` after QA but failed Terminal gates; the local sidecar control wired generated videos and passed local content score at `90/100` | yes | The recipe target is reachable when generated hero/support media are wired as a sidecar, but delegation success requires Pi/Kimi to produce that sidecar plus a complete handoff. |
+| 2026-05-07 | warehouse-cv-score-loop | Run Pi/Kimi and a local sidecar control through the Terminal score | Pi/Kimi code-native output improved from `43` stub score to `61/100` after QA but failed Terminal gates; the local sidecar control wired generated videos and passed the pre-offer-gate content score at `90/100` | yes | The recipe target is reachable when generated hero/support media are wired as a sidecar, but delegation success requires Pi/Kimi to produce that sidecar plus a complete handoff. |
+| 2026-05-07 | initial-offer-gate | Add a first-viewport hero-offer visibility gate after a mechanically passing sidecar still felt weak at first paint | `scroll_scrub_qa.cjs` now reports `hasInitialHeroOfferVisible`; the hidden-headline Pi sidecar dropped to revise, and the direct Pi repair restored a `99/100` Terminal score | yes | Terminal-quality scroll pages must communicate the offer before scroll; dominant media without visible copy is a real failure, not just a taste nit. |
 
 ## Accepted Learnings
 - Terminal Industries quality is not just palette/nav imitation; it depends on
@@ -59,6 +60,9 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
   Terminal-ready mechanics artifact by wiring generated videos, mediaTime
   scrub, support videos, and large checkpoint deltas. Treat this as the target
   pattern for external builders, not as proof that Pi/Kimi produced it.
+- A hero can pass media and scroll mechanics while still failing first
+  impression. Require `hasInitialHeroOfferVisible` so the main headline or
+  offer is visible at first paint, before any scroll-scrub reveal.
 
 ## Rejected Ideas
 - None yet.

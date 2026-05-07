@@ -126,6 +126,16 @@ class DelegateRunResult:
     first_write_path: str | None
 
 
+@dataclass(frozen=True)
+class OutputQualityGate:
+    min_bytes: int = 0
+    required_substrings: tuple[str, ...] = ()
+
+    @property
+    def configured(self) -> bool:
+        return self.min_bytes > 0 or bool(self.required_substrings)
+
+
 def project_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
@@ -269,6 +279,79 @@ def changed_expected_output(
         ):
             return path
     return None
+
+
+def inspect_output_quality(
+    paths: Sequence[Path],
+    gate: OutputQualityGate,
+) -> dict[str, object]:
+    outputs: list[dict[str, object]] = []
+    if not gate.configured:
+        return {
+            "status": "not_configured",
+            "min_bytes": gate.min_bytes,
+            "required_substrings": list(gate.required_substrings),
+            "outputs": outputs,
+        }
+    if not paths:
+        return {
+            "status": "failed",
+            "min_bytes": gate.min_bytes,
+            "required_substrings": list(gate.required_substrings),
+            "outputs": outputs,
+            "failure_reason": "no_expected_outputs",
+        }
+    all_passed = True
+    for path in paths:
+        record: dict[str, object] = {
+            "path": str(path),
+            "exists": path.exists(),
+            "is_regular_file": path.is_file() and not path.is_symlink(),
+            "size": 0,
+            "missing_substrings": list(gate.required_substrings),
+            "passed": False,
+        }
+        if path.is_file() and not path.is_symlink():
+            size = path.stat().st_size
+            record["size"] = size
+            missing = list(gate.required_substrings)
+            if gate.required_substrings:
+                try:
+                    text = path.read_text(encoding="utf-8", errors="replace")
+                except OSError:
+                    text = ""
+                missing = [needle for needle in gate.required_substrings if needle not in text]
+            record["missing_substrings"] = missing
+            record["passed"] = size >= gate.min_bytes and not missing
+        all_passed = all_passed and bool(record["passed"])
+        outputs.append(record)
+    return {
+        "status": "pass" if all_passed else "failed",
+        "min_bytes": gate.min_bytes,
+        "required_substrings": list(gate.required_substrings),
+        "outputs": outputs,
+    }
+
+
+def output_quality_passes(paths: Sequence[Path], gate: OutputQualityGate) -> bool:
+    return inspect_output_quality(paths, gate)["status"] in {"not_configured", "pass"}
+
+
+def output_quality_failure_message(record: dict[str, object]) -> str:
+    outputs = record.get("outputs")
+    if not isinstance(outputs, list):
+        return "output quality gate failed"
+    findings: list[str] = []
+    for output in outputs:
+        if not isinstance(output, dict) or output.get("passed"):
+            continue
+        missing = output.get("missing_substrings")
+        missing_text = ", ".join(str(item) for item in missing) if isinstance(missing, list) else ""
+        findings.append(
+            f"{output.get('path')} size={output.get('size')} "
+            f"min_bytes={record.get('min_bytes')} missing=[{missing_text}]"
+        )
+    return "output quality gate failed: " + "; ".join(findings)
 
 
 def markdown_sections(text: str) -> dict[str, str]:
@@ -424,6 +507,7 @@ def finalize_first_write_record(
     expected_outputs: Sequence[Path],
     before: dict[str, dict[str, object]],
     completed: subprocess.CompletedProcess[str],
+    output_quality_gate: OutputQualityGate = OutputQualityGate(),
 ) -> subprocess.CompletedProcess[str]:
     return_code = completed.returncode
     stderr = completed.stderr
@@ -442,8 +526,16 @@ def finalize_first_write_record(
             first_write["status"] = "pass"
             first_write["observed_output"] = str(observed)
             first_write["observed_at"] = iso_now()
-    first_write["ended_at"] = iso_now()
     first_write["after"] = output_snapshot(expected_outputs)
+    if output_quality_gate.configured:
+        quality = inspect_output_quality(expected_outputs, output_quality_gate)
+        first_write["output_quality"] = quality
+        if quality["status"] != "pass":
+            stderr += "\nexternal CLI run failed expected output quality gate: "
+            stderr += output_quality_failure_message(quality) + "\n"
+            if return_code == 0:
+                return_code = 126
+    first_write["ended_at"] = iso_now()
     return subprocess.CompletedProcess(list(completed.args), return_code, completed.stdout, stderr)
 
 
@@ -454,6 +546,7 @@ def run_with_expected_output_check(
     env: dict[str, str],
     timeout_seconds: int | None,
     expected_outputs: Sequence[Path],
+    output_quality_gate: OutputQualityGate = OutputQualityGate(),
 ) -> tuple[subprocess.CompletedProcess[str], dict[str, object]]:
     before = output_snapshot(expected_outputs)
     first_write = first_write_record(
@@ -473,6 +566,7 @@ def run_with_expected_output_check(
         expected_outputs=expected_outputs,
         before=before,
         completed=completed,
+        output_quality_gate=output_quality_gate,
     )
     return completed, first_write
 
@@ -827,7 +921,13 @@ def prepare_checkout_path(*, checkout_mode: str, runtime_dir: Path, root: Path, 
     return checkout_path
 
 
-def render_prompt(profile: DelegateProfile, run: DelegateRun, root: Path | None = None) -> Path:
+def render_prompt(
+    profile: DelegateProfile,
+    run: DelegateRun,
+    root: Path | None = None,
+    *,
+    compact: bool = False,
+) -> Path:
     skill_lines = "\n".join(
         f"- {name}: {copied_skill_path(profile, name, root)}"
         for name in available_skill_names(profile, root)
@@ -845,7 +945,42 @@ def render_prompt(profile: DelegateProfile, run: DelegateRun, root: Path | None 
         "attachment_list": "\n".join(f"- {path}" for path in run.attachments) or "- none",
         "handoff_path": str(run.handoff_path),
     }
-    rendered = render_template(profile.template_dir / "prompt.md.tpl", values)
+    if compact:
+        rendered = "\n".join(
+            [
+                "# Delegated Frontend Compact Run",
+                "",
+                f"Profile: {profile.name}",
+                f"Adapter: {profile.adapter}",
+                f"Model: {profile.model}",
+                f"Run ID: {run.run_id}",
+                f"Ticket: {run.ticket_id or 'none'}",
+                "",
+                "## Task",
+                "",
+                run.prompt.strip(),
+                "",
+                "## Mounted Skills",
+                "",
+                "Use these mounted skills only when they are directly relevant:",
+                "",
+                skill_lines or "- none",
+                "",
+                "## Handoff",
+                "",
+                f"Write the final handoff to `{run.handoff_path}`.",
+                "Use exact headings `## Changed Files`, `## Verification`, and `## Risks / Followups` with non-empty bodies.",
+                "Mention the expected owned output inside `## Changed Files` when one is named.",
+                "",
+                "## Boundaries",
+                "",
+                "- Preserve unrelated changes.",
+                "- Do not push, deploy, publish, spend, or perform destructive actions.",
+                "- Do not claim final Codexter completion.",
+            ]
+        ).strip() + "\n"
+    else:
+        rendered = render_template(profile.template_dir / "prompt.md.tpl", values)
     run.prompt_path.write_text(rendered, encoding="utf-8")
     handoff = render_template(profile.template_dir / "handoff.md.tpl", values)
     run.handoff_path.write_text(handoff, encoding="utf-8")
@@ -899,6 +1034,7 @@ def run_with_first_write_gate(
     handoff_path: Path | None = None,
     complete_when_output_and_handoff: bool = False,
     completion_grace_seconds: float = 0,
+    output_quality_gate: OutputQualityGate = OutputQualityGate(),
 ) -> tuple[subprocess.CompletedProcess[str], dict[str, object]]:
     started_at = iso_now()
     before = output_snapshot(expected_outputs)
@@ -943,6 +1079,7 @@ def run_with_first_write_gate(
                 and first_write["status"] == "pass"
                 and handoff_path is not None
                 and handoff_has_completion_signal(handoff_path, expected_outputs)
+                and output_quality_passes(expected_outputs, output_quality_gate)
             ):
                 if completion_detected_at is None:
                     completion_detected_at = now
@@ -988,6 +1125,7 @@ def run_with_first_write_gate(
         expected_outputs=expected_outputs,
         before=before,
         completed=completed,
+        output_quality_gate=output_quality_gate,
     )
     return completed, first_write
 
@@ -1111,6 +1249,13 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
         profile = replace(profile, model=args.model)
     if args.thinking:
         profile = replace(profile, thinking=args.thinking)
+    selected_skills = tuple(getattr(args, "skill", []) or ())
+    if selected_skills:
+        profile = replace(
+            profile,
+            skill_names=dedupe_skill_names(selected_skills, label="--skill"),
+            optional_skill_names=(),
+        )
     completed = None
     first_write = None
     with profile_write_lock(profile):
@@ -1126,12 +1271,20 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
             artifact_dir=args.artifact_dir,
             attachments=args.attach,
         )
-        render_prompt(profile, run)
+        render_prompt(profile, run, compact=bool(getattr(args, "compact_prompt", False)))
         command = build_pi_command(profile, run)
         expected_outputs = resolve_expected_outputs(args.expect_output, run.checkout_path)
         first_write_timeout = args.first_write_timeout_seconds
+        output_quality_gate = OutputQualityGate(
+            min_bytes=max(0, int(getattr(args, "expect_output_min_bytes", 0) or 0)),
+            required_substrings=tuple(getattr(args, "expect_output_contains", []) or ()),
+        )
         if first_write_timeout < 0:
             raise SystemExit("--first-write-timeout-seconds must be 0 or greater")
+        if int(getattr(args, "expect_output_min_bytes", 0) or 0) < 0:
+            raise SystemExit("--expect-output-min-bytes must be 0 or greater")
+        if output_quality_gate.configured and not expected_outputs:
+            raise SystemExit("output quality gates require --expect-output")
         if args.completion_grace_seconds < 0:
             raise SystemExit("--completion-grace-seconds must be 0 or greater")
         if args.complete_when_output_and_handoff and not expected_outputs:
@@ -1146,6 +1299,12 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
                 "timeout_seconds": first_write_timeout,
                 "expected_outputs": [str(path) for path in expected_outputs],
             }
+            if output_quality_gate.configured:
+                first_write["output_quality"] = {
+                    "status": "dry_run",
+                    "min_bytes": output_quality_gate.min_bytes,
+                    "required_substrings": list(output_quality_gate.required_substrings),
+                }
         if not args.dry_run:
             ensure_expected_output_parents(expected_outputs)
             missing_env = missing_live_env(profile)
@@ -1170,6 +1329,7 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
                     handoff_path=run.handoff_path,
                     complete_when_output_and_handoff=args.complete_when_output_and_handoff,
                     completion_grace_seconds=args.completion_grace_seconds,
+                    output_quality_gate=output_quality_gate,
                 )
             elif expected_outputs:
                 completed, first_write = run_with_expected_output_check(
@@ -1178,6 +1338,7 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
                     env=env,
                     timeout_seconds=timeout,
                     expected_outputs=expected_outputs,
+                    output_quality_gate=output_quality_gate,
                 )
             else:
                 completed = run_command_capture(
@@ -1213,10 +1374,33 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--artifact-dir", default="")
     run.add_argument("--attach", action="append", default=[])
     run.add_argument(
+        "--skill",
+        action="append",
+        default=[],
+        help="Override the profile skill bundle for this run with one mounted skill name. Repeatable.",
+    )
+    run.add_argument(
+        "--compact-prompt",
+        action="store_true",
+        help="Use a compact Codexter wrapper around the supplied prompt for tightly bounded phase runs.",
+    )
+    run.add_argument(
         "--expect-output",
         action="append",
         default=[],
         help="Relative path, inside the checkout, that the external agent must create or modify early.",
+    )
+    run.add_argument(
+        "--expect-output-min-bytes",
+        type=int,
+        default=0,
+        help="Optional minimum byte size every expected output must reach before clean completion can pass.",
+    )
+    run.add_argument(
+        "--expect-output-contains",
+        action="append",
+        default=[],
+        help="Optional substring every expected output must contain before clean completion can pass.",
     )
     run.add_argument(
         "--first-write-timeout-seconds",
