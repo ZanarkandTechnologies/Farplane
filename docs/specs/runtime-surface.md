@@ -55,6 +55,24 @@ For bounded same-session `$loop`, the runtime contract is:
 - explicit same-session stop intent clears `loop_active`; Escape/cancel is not the canonical loop-stop contract
 - `skills/impl/scripts/tmux_helper.py` remains `$impl`-only in v1 and is not part of loop ownership
 
+For hook-backed skill-opportunity review, the runtime contract is:
+
+- `UserPromptSubmit` appends only control-session user turns to a bounded
+  rolling conversation window under `.harness/state/self-improve/windows/`
+- `Stop` appends the matching assistant response and trims the window to the
+  configured maximum, defaulting to 10 exchanges
+- every configured interval, defaulting to 10 captured user turns,
+  `stop_hook.py` may launch a detached read-only `codex exec` reviewer when
+  `CODEXTER_SKILL_OPPORTUNITY_REVIEW=1`
+- reviewer input and output live under
+  `.harness/state/self-improve/reviews/`
+- reviewer output is proposal-only: it may recommend skill creation, skill
+  updates, recipes, cheatsheets, formula capture, or speedups, but it must not
+  mutate shipped skills, docs, memory, tickets, install config, or the feature
+  registry directly
+- Stop-hook stdout remains reserved for the single hook JSON payload; reviewer
+  stdout and stderr are redirected to run-scoped files
+
 For serial `$ralph`, the runtime contract is:
 
 - ticket frontmatter and body remain the queue source of truth

@@ -6,6 +6,7 @@ import sys
 
 from runtime_telemetry import emit_hook_telemetry
 from user_turn import (
+    append_conversation_user_turn,
     capture_user_turn,
     explicit_run_state_selector,
     is_internal_user_prompt,
@@ -39,7 +40,7 @@ def main() -> int:
     if project_root is None:
         return 0
 
-    capture_user_turn(
+    captured = capture_user_turn(
         project_root=project_root,
         raw_text=prompt,
         turn_id=str(payload.get("turn_id") or "").strip() or None,
@@ -47,6 +48,13 @@ def main() -> int:
         session_id=str(payload.get("session_id") or "").strip() or None,
         explicit_run_state=explicit_run_state_selector(payload) or None,
     )
+    session_id = str(payload.get("session_id") or "").strip()
+    if captured is not None and session_id:
+        append_conversation_user_turn(
+            project_root=project_root,
+            session_id=session_id,
+            last_user_turn=captured,
+        )
     emit_hook_telemetry(
         event_type="user_prompt_submit",
         hook_event_name="UserPromptSubmit",

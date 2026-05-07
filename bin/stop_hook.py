@@ -37,6 +37,7 @@ from pathlib import Path
 from notify import announce_message
 from runtime_telemetry import emit_hook_telemetry
 from user_turn import (
+    append_conversation_assistant_response,
     build_runtime_claim,
     explicit_run_state_selector as resolve_explicit_run_state_selector,
     iter_active_ticket_files,
@@ -45,7 +46,9 @@ from user_turn import (
     load_runtime_claim as load_persisted_runtime_claim,
     persist_runtime_update as persist_selected_runtime_update,
     project_root_from_payload as resolve_project_root_from_payload,
+    mark_skill_opportunity_review_launched,
     resolve_ticket_path_by_id,
+    should_review_skill_opportunities,
     ticket_artifact_root,
     ticket_id_from_path,
     tickets_dir as user_turn_tickets_dir,
@@ -2087,6 +2090,228 @@ def role_command(base: Path, output_path: Path, role_config: dict[str, str]) -> 
     return command
 
 
+def skill_opportunity_review_enabled() -> bool:
+    return os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW", "").lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def skill_opportunity_review_dry_run() -> bool:
+    return os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW_DRY_RUN", "").lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def skill_opportunity_review_interval() -> int:
+    raw = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW_INTERVAL", "").strip()
+    if not raw:
+        return 10
+    try:
+        value = int(raw)
+    except ValueError:
+        return 10
+    return value if value > 0 else 10
+
+
+def safe_path_token(raw: str) -> str:
+    token = re.sub(r"[^A-Za-z0-9._-]+", "-", raw.strip())
+    return token.strip(".-") or "session"
+
+
+def skill_opportunity_review_root(project_root: Path) -> Path:
+    return project_root / ".harness" / "state" / "self-improve" / "reviews"
+
+
+def skill_opportunity_review_input(
+    *,
+    project_root: Path,
+    session_id: str,
+    window: dict[str, object],
+    trigger: dict[str, object],
+    payload: dict[str, object],
+) -> dict[str, object]:
+    skill_paths = sorted(str(path.relative_to(project_root)) for path in (project_root / "skills").glob("*/SKILL.md"))
+    recent_ticket_paths = sorted(
+        str(path.relative_to(project_root))
+        for path in (project_root / "tickets").glob("TASK-*/ticket.md")
+        if path.is_file()
+    )[-12:]
+    dedupe_refs = {
+        "skills": skill_paths,
+        "feature_registry": "docs/features/registry.jsonl",
+        "memory": "docs/MEMORY.md",
+        "troubles": "docs/TROUBLES.md",
+        "recent_tickets": recent_ticket_paths,
+    }
+    return {
+        "schema_version": 1,
+        "review_type": "skill_opportunity",
+        "project_root": str(project_root),
+        "session_id": session_id,
+        "created_at": now_iso(),
+        "trigger": trigger,
+        "window": window,
+        "dedupe_refs": dedupe_refs,
+        "payload_context": {
+            "hook_event_name": payload.get("hook_event_name"),
+            "cwd": payload.get("cwd") or payload.get("workdir") or payload.get("current_working_directory"),
+        },
+        "instructions": [
+            "Return JSON only.",
+            "Do not propose direct mutation of shipped skills from this hook.",
+            "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup.",
+            "Dedupe against existing skills, feature registry, memory, troubles, and recent tickets.",
+        ],
+    }
+
+
+def skill_opportunity_review_command(base: Path, report_path: Path, role_config: dict[str, str]) -> list[str]:
+    command = [
+        "codex",
+        "exec",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "-C",
+        str(base),
+        "--sandbox",
+        "read-only",
+        "--disable",
+        "codex_hooks",
+        "--color",
+        "never",
+        "-c",
+        "notify=[]",
+        "--output-last-message",
+        str(report_path),
+        "-",
+    ]
+    model = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW_MODEL", "").strip() or role_config.get("model", "")
+    if model:
+        command[2:2] = ["-m", model]
+    reasoning_effort = role_config.get("model_reasoning_effort", "")
+    if reasoning_effort:
+        command[2:2] = ["-c", f"model_reasoning_effort={json.dumps(reasoning_effort)}"]
+    command[2:2] = [
+        "-c",
+        f"developer_instructions={json.dumps(role_config['developer_instructions'])}",
+    ]
+    return command
+
+
+def maybe_launch_skill_opportunity_review(
+    *,
+    base: Path,
+    project_root: Path | None,
+    session_id: str | None,
+    window: dict[str, object],
+    payload: dict[str, object],
+) -> dict[str, object]:
+    if project_root is None:
+        return {"status": "skipped", "reason": "missing project root", "review_run_path": "", "pid": ""}
+    if not session_id:
+        return {"status": "skipped", "reason": "missing session id", "review_run_path": "", "pid": ""}
+
+    trigger = should_review_skill_opportunities(
+        window,
+        cadence=skill_opportunity_review_interval(),
+    )
+    if not bool(trigger.get("due")):
+        return {"status": "skipped", "reason": str(trigger.get("reason") or "not due"), "review_run_path": "", "pid": ""}
+    if not skill_opportunity_review_enabled():
+        return {"status": "skipped", "reason": "skill opportunity review disabled", "review_run_path": "", "pid": ""}
+
+    timestamp = now_iso().replace(":", "").replace("+", "p")
+    run_dir = skill_opportunity_review_root(project_root) / f"{timestamp}-{safe_path_token(session_id)}"
+    run_dir.mkdir(parents=True, exist_ok=True)
+    input_path = run_dir / "input.json"
+    report_path = run_dir / "report.json"
+    stdout_path = run_dir / "stdout.log"
+    stderr_path = run_dir / "stderr.log"
+    input_payload = skill_opportunity_review_input(
+        project_root=project_root,
+        session_id=session_id,
+        window=window,
+        trigger=trigger,
+        payload=payload,
+    )
+    input_path.write_text(json.dumps(input_payload, indent=2) + "\n", encoding="utf-8")
+
+    relative_run_path = str(run_dir.relative_to(project_root))
+    if skill_opportunity_review_dry_run():
+        report_path.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "reviewed_at": now_iso(),
+                    "status": "dry_run",
+                    "source_window": str(input_path.relative_to(project_root)),
+                    "decisions": [],
+                    "formula_mentions": [],
+                    "recipe_candidates": [],
+                    "unconventional_speedup": {
+                        "title": "dry run",
+                        "rationale": "review launch was intentionally not executed",
+                    },
+                    "dedupe_refs": input_payload["dedupe_refs"],
+                    "handoff_targets": [],
+                    "risks": [],
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        mark_skill_opportunity_review_launched(
+            project_root,
+            session_id,
+            review_run_path=relative_run_path,
+            current_window=window,
+        )
+        return {"status": "launched", "reason": "dry run", "review_run_path": relative_run_path, "pid": "dry-run"}
+
+    role_config = load_role_config(base, "skill-opportunity-reviewer")
+    if role_config is None:
+        return {"status": "failed", "reason": "missing skill-opportunity-reviewer role config", "review_run_path": relative_run_path, "pid": ""}
+
+    prompt = "Context:\n" + json.dumps(input_payload, ensure_ascii=True, indent=2) + "\n"
+    prompt_path = run_dir / "prompt.json"
+    prompt_path.write_text(prompt, encoding="utf-8")
+    stdin_handle = prompt_path.open("r", encoding="utf-8")
+    stdout_handle = stdout_path.open("w", encoding="utf-8")
+    stderr_handle = stderr_path.open("w", encoding="utf-8")
+    try:
+        proc = subprocess.Popen(
+            skill_opportunity_review_command(base, report_path, role_config),
+            stdin=stdin_handle,
+            stdout=stdout_handle,
+            stderr=stderr_handle,
+            cwd=base,
+            start_new_session=True,
+        )
+    except OSError as exc:
+        stdin_handle.close()
+        stdout_handle.close()
+        stderr_handle.close()
+        return {"status": "failed", "reason": str(exc), "review_run_path": relative_run_path, "pid": ""}
+    stdin_handle.close()
+    stdout_handle.close()
+    stderr_handle.close()
+
+    mark_skill_opportunity_review_launched(
+        project_root,
+        session_id,
+        review_run_path=relative_run_path,
+        current_window=window,
+    )
+    return {"status": "launched", "reason": "started detached reviewer", "review_run_path": relative_run_path, "pid": str(proc.pid)}
+
+
 def parse_role_output(output_path: Path) -> dict[str, object] | None:
     try:
         payload = json.loads(output_path.read_text(encoding="utf-8"))
@@ -2548,6 +2773,33 @@ def main() -> int:
         if project_root is not None
         else None
     )
+    if project_root is not None and resolved_session_id and isinstance(last_user_turn, dict) and last_user_turn:
+        conversation_window = append_conversation_assistant_response(
+            project_root,
+            resolved_session_id,
+            message,
+            captured_at=now_iso(),
+            source="stop_hook",
+        )
+        launch_result = maybe_launch_skill_opportunity_review(
+            base=base,
+            project_root=project_root,
+            session_id=resolved_session_id,
+            window=conversation_window,
+            payload=payload,
+        )
+        if launch_result.get("status") != "skipped":
+            append_hook_log(
+                base,
+                {
+                    "timestamp": now_iso(),
+                    "mode": "skill-opportunity-review",
+                    "status": launch_result.get("status"),
+                    "reason": launch_result.get("reason"),
+                    "review_run_path": launch_result.get("review_run_path"),
+                    "pid": launch_result.get("pid"),
+                },
+            )
     emit_hook_telemetry(
         event_type="stop_hook",
         hook_event_name="Stop",
