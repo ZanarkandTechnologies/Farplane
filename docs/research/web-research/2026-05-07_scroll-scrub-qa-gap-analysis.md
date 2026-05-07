@@ -141,6 +141,9 @@ separate asset-quality upgrade once the motion contract is reliable.
 - Updated Pi/Kimi profile instructions to reject IntersectionObserver-only
   output for scroll-scrub claims.
 - Added delegate CLI `--prompt-file` support for precise phase prompts.
+- Added delegate CLI `--expect-output` plus `first_write.json` so live
+  implementation/repair runs prove the external agent created or modified an
+  owned artifact before broad self-review.
 
 ## Next QA Loop
 

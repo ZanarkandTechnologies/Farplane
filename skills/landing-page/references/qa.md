@@ -46,6 +46,7 @@ Required page hooks:
 - `window.__scrollScrubDebug.phase` for the active narrative beat,
 - `window.__scrollScrubDebug.frame` or `mediaTime` for the current frame/media
   position,
+- `window.__scrollScrubDebug.active`,
 - `window.__scrollScrubDebug.ready`,
 - `window.__scrollScrubDebug.reducedMotion`.
 
@@ -63,10 +64,14 @@ skills/landing-page/scripts/scroll_scrub_qa.cjs \
 Acceptance signals:
 
 - `verdict` is `PASS`,
+- `hasRequiredDebugContract` is `true` for pages that expose a
+  `data-scroll-scrub-root` stage,
 - the page has large enough scroll range for the claimed choreography,
 - at least one of debug scrub, media scrub, or pinned style scrub passes,
 - checkpoint screenshots at `0`, `25`, `50`, `75`, and `95` percent map to
   distinct intended narrative states,
+- Terminal/Terminus-level visual parity has large enough checkpoint screenshot
+  deltas to feel cinematic; tiny HUD-only changes do not count,
 - reduced-motion still renders a coherent page without scroll-scrub dependency.
 
 Fail if the page only changes because normal sections scroll into view while

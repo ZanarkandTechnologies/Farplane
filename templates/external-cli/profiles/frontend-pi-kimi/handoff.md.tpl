@@ -18,6 +18,12 @@ Run ID: {{run_id}}
 
 - pending live external CLI run
 
+## First-Write Evidence
+
+- `first_write.json`: pending live external CLI run
+- status: pending
+- observed output: pending
+
 ## Self-Review / Visual QA
 
 - pending live external CLI run

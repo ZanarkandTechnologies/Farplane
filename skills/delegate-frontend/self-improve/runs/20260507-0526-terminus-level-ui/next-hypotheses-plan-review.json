@@ -1,0 +1,136 @@
+{
+  "work_type": ["planning", "self-improve", "frontend-delegation"],
+  "search_scope": {
+    "changed_or_target_files": [
+      "skills/delegate-frontend/self-improve/program.md",
+      "skills/delegate-frontend/self-improve/evals/test_cases.jsonl",
+      "skills/delegate-frontend/self-improve/evals/assertions.py",
+      "skills/delegate-frontend/self-improve/results/latest_run.json",
+      "skills/delegate-frontend/SKILL.md",
+      "skills/landing-page/self-improve/program.md",
+      "skills/landing-page/references/spec-first-cinematic-industrial.md",
+      "bin/delegate_cli_agent.py",
+      "templates/external-cli/profiles/frontend-pi-kimi/APPEND_SYSTEM.md"
+    ],
+    "docs_checked": [
+      "docs/prd.md",
+      "docs/MEMORY.md",
+      "docs/TROUBLES.md",
+      "docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "skills/impl-plan/references/review.md",
+      "skills/self-improve/references/skill-evals.md",
+      "skills/self-improve/references/skill-memory.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md"
+    ],
+    "invariants_checked": [
+      "MEM-0080",
+      "MEM-0083",
+      "MEM-0084",
+      "MEM-0085"
+    ]
+  },
+  "rubrics_used": ["spec-contract", "implementation-plan", "evidence-quality", "integration-readiness"],
+  "summary": "The plan is approval-ready for a next self-improve planning/build pass. It names concrete hypotheses, file seams, typed data, verification, and autonomy gates. It is not approval for unattended live media spend or adapter switching.",
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "scope-fit": 4.0,
+        "boundary-clarity": 4.2,
+        "testability": 4.1,
+        "whole-ticket-discipline": 4.0
+      },
+      "findings": [],
+      "next_action": "Create or select a ticket before execution so evidence can attach to the canonical ticket surface."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.0,
+        "bloatability": 4.0,
+        "modularity": 4.0,
+        "proof-clarity": 4.0,
+        "execution-order": 4.3,
+        "risk-clarity": 4.2,
+        "decision-tone": 4.2,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "Start with local replay gates H04-H07 before launching another live Pi/Kimi UI build."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.0,
+        "reproducibility": 4.0,
+        "traceability": 4.0,
+        "consistency": 4.0,
+        "inspectability": 4.0,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "When implemented, attach latest_run.json, scores.jsonl, failure_analysis.md, and any live first_write/handoff artifacts."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.0,
+        "contract-correctness": 4.1,
+        "dependency-readiness": 3.9,
+        "coupling-risk": 4.0,
+        "merge-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "Keep live spend, adapter switching, and committing/pushing behind explicit operator gates."
+    }
+  ],
+  "blocking_findings": [],
+  "autonomy_check": {
+    "autonomous_now": [
+      "add local replay fixtures",
+      "add assertions over captured summaries",
+      "run local evals and syntax/unit checks",
+      "update skill-local program memory"
+    ],
+    "human_gates": [
+      "live generated image/video spend",
+      "switching default adapter/model/provider",
+      "pushing or committing the current dirty tree",
+      "lowering the Terminal parity threshold"
+    ],
+    "stop_conditions": [
+      "live --expect-output run lacks first_write.json",
+      "first-write passes but phase completion is stub or missing",
+      "startup probe fails twice with no session file",
+      "asset manifest has zero generated/rendered assets for a final-quality claim",
+      "mobile or reduced-motion QA cannot be produced"
+    ]
+  },
+  "next_action": "Implement local replay gates for spec completion, asset manifest quality, visual geometry, and phase completion before more live Pi/Kimi page generation."
+}

@@ -156,3 +156,11 @@
 2026-05-07 03:15 +0800 | FEAT | add a manifest-driven Pi/Kimi frontend skill sync script and mount inference.sh image/video/remotion skills into the external frontend profile
 2026-05-07 04:17 +0800 | DOCS | archive the visible completion-review receipt ticket and add README/ARCHITECTURE documentation-router sync guidance
 2026-05-07 04:41 +0800 | CHORE | split Aikage hook heartbeats into start and stop notifications with shorter heartbeat timeouts
+2026-05-07 04:50 +0800 | FEAT | add Terminal-style scroll-scrub QA instrumentation, harden Pi/Kimi frontend delegation around first-write repair gates, and record Terminal parity evidence
+2026-05-07 05:38 +0800 | FEAT | add delegate-frontend self-improvement evals, Terminus visual-parity metrics, autoresearch memory, and live Pi/Kimi first-write experiments
+2026-05-07 06:51 +0800 | FEAT | add delegate-frontend phase prompt compiler, startup probe tooling, provenance-backed eval rows, and a passing low-thinking Pi/Kimi startup probe fixture
+2026-05-07 07:02 +0800 | FIX | correct delegate-frontend self-improve metric semantics so reject-control fixtures count as expected rejections and raw assertion ratio stays diagnostic
+2026-05-07 07:16 +0800 | FEAT | capture a live compiled Pi/Kimi spec run as a self-improve reject-control when first-write, spec, and handoff pass but the wrapper exits on timeout
+2026-05-07 07:35 +0800 | FEAT | add opt-in external CLI clean completion after expected output plus non-placeholder handoff for bounded delegate-frontend phase runs
+2026-05-07 07:43 +0800 | FEAT | capture a live Pi/Kimi compiled spec success as a positive delegate-frontend self-improve fixture before moving to asset phase work
+2026-05-07 10:32 +0800 | FEAT | capture seeded Pi/Kimi implementation and bounded mobile repair experiments, add mobile hero phrase-separation QA, and raise delegate-frontend self-improve replay coverage to 29 cases

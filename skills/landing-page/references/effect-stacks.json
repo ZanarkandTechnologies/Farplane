@@ -83,6 +83,9 @@
         "window.__scrollScrubDebug.progress",
         "window.__scrollScrubDebug.phase",
         "window.__scrollScrubDebug.frame or window.__scrollScrubDebug.mediaTime",
+        "window.__scrollScrubDebug.active",
+        "window.__scrollScrubDebug.ready",
+        "window.__scrollScrubDebug.reducedMotion",
         "data-scroll-scrub-root on the scrubbed stage",
         "?debugScroll=1",
         "?phase=system",
@@ -98,6 +101,7 @@
       "qa_checks": [
         "Desktop and mobile screenshots at narrative checkpoints.",
         "skills/landing-page/scripts/scroll_scrub_qa.cjs returns PASS.",
+        "QA score includes hasRequiredDebugContract true when data-scroll-scrub-root is present.",
         "window.__scrollScrubDebug changes progress and frame/mediaTime across checkpoints.",
         "Frame/canvas surfaces are nonblank.",
         "All frame, poster, and video URLs return 200.",

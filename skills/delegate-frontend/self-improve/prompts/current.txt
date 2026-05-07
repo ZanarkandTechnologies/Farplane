@@ -1,0 +1,31 @@
+Current delegate-frontend prompt program:
+
+- Route external frontend work through `delegate-cli` and profile
+  `frontend-pi-kimi`.
+- Use `--expect-output` for live implementation and repair phases so
+  `first_write.json` proves the agent created or modified an owned regular
+  file.
+- Use `--complete-when-output-and-handoff` for bounded phases where a changed
+  owned output plus completed managed handoff should end the external process
+  before the total timeout.
+- A first-write prompt must require the first tool call to create a valid stub
+  in the named file before reading references.
+- Directory or symlink creation alone is not enough.
+- After the first-write stub, do not chase broad references when the prompt
+  already supplies recipe, taste, effect-stack, asset, and QA requirements.
+- Preserve the leading `/` when reading or writing absolute paths.
+- For Terminal/Terminus-level final builds, `code-native-canvas`, SVG-only, or
+  card-grid hero art is only a prototype fallback.
+- Final visual parity requires generated/rendered media or frame/video assets
+  recorded in `assets/asset-manifest.json`.
+- Terminal/Terminus QA must report maximum checkpoint screenshot changed ratio
+  and reject tiny HUD-only deltas.
+- Mobile landing-page QA must report `hasMobileHeroPhraseSeparation` when a
+  multi-phrase hero headline uses explicit line breaks, so CSS that hides
+  `<br>` elements cannot glue phrases together.
+- Scroll-scrub implementations must expose `window.__scrollScrubDebug` with
+  `progress`, `phase`, `frame` or `mediaTime`, `active`, `ready`, and
+  `reducedMotion`, and mark the scrubbed stage with `data-scroll-scrub-root`.
+- Repair runs should be micro-patches with one owned output. If a short
+  first-write gate flakes, retry once with a longer gate before rejecting the
+  hypothesis; keep successful repairs tied to clean handoff completion.

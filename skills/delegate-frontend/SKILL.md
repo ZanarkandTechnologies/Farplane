@@ -28,13 +28,34 @@ Codex lane.
 5. For Terminal-style, cinematic, generated-media, or premium landing pages,
    delegate one phase at a time: `spec`, `assets`, `implementation`, then
    `visual-review`. Do not combine all phases in one live prompt.
-6. Run `python3 bin/sync_frontend_pi_skills.py --json` or
+   For self-improve or Terminus-level runs, compile the phase prompt with
+   `skills/delegate-frontend/self-improve/scripts/phase_prompt_compiler.py`
+   so the run has selected recipe/taste/effect IDs, owned outputs, first-write
+   wording, and phase-specific acceptance criteria before Pi starts.
+6. For implementation or repair phases, name the expected output file(s) and
+   require a first-write checkpoint before broad review. If the external run
+   reads for minutes without creating the requested file, kill it and record the
+   handoff as failed rather than widening the prompt.
+7. Run `python3 bin/sync_frontend_pi_skills.py --json` or
    `python3 bin/delegate_cli_agent.py setup --profile frontend-pi-kimi --json`
    so the managed Pi profile receives the curated frontend/media skill bundle.
-7. Run `doctor`, then `run --dry-run`.
-8. Run live only after credentials/spend/filesystem gates are satisfied.
-9. Send any resulting UI changes back through Codexter QA, `visual-qa`, and
-   `review`.
+8. Run `doctor`, then `run --dry-run`. Before another live Pi/Kimi spec or
+   implementation attempt, run the lightweight startup probe plan:
+   `python3 skills/delegate-frontend/self-improve/scripts/startup_probe.py --dry-run --json`.
+   Run it live only when model spend is intentionally allowed.
+9. Run live only after credentials/spend/filesystem gates are satisfied. For
+   implementation and repair phases, pass each owned file with
+   `--expect-output <relative/path>` so `first_write.json` records whether the
+   external agent created or modified an expected regular file before the
+   timeout. For bounded spec, asset, or implementation phases that are expected
+   to finish by writing the managed handoff, also pass
+   `--complete-when-output-and-handoff` so the wrapper can stop cleanly once the
+   owned output and non-placeholder handoff exist.
+   After an asset phase, run
+   `python3 skills/delegate-frontend/self-improve/scripts/asset_manifest_lint.py <asset-manifest>`
+   and do not start implementation unless it passes.
+10. Send any resulting UI changes back through Codexter QA, `visual-qa`, and
+    `review`.
 
 ## Core Decision Branches
 
@@ -46,7 +67,27 @@ Codex lane.
 - `asset-heavy frontend` -> rely on the mounted inference.sh skills
   `image-generation`, `video-generation`, `remotion`, and `remotion-render`;
   do not require Codex-native `imagegen` in the external Pi profile.
-- `implementation ready` -> call `delegate-cli --profile frontend-pi-kimi`.
+- `Terminal/Terminus-level final build` -> require generated/rendered media or
+  frame/video assets in `assets/asset-manifest.json`; treat `code-native-canvas`
+  as a prototype fallback unless the user explicitly asks for a no-asset mock.
+- `asset phase complete` -> lint `assets/asset-manifest.json`; if it lacks
+  four local generated/rendered assets, source prompts, mobile/reduced-motion
+  fallbacks, zero broken refs, and zero paths escaping the declared asset root,
+  stay in the asset phase.
+- `asset phase timed out after valid manifest` -> run a no-spend
+  asset-finalization phase against the existing manifest. Require first-write
+  readiness proof, canonical handoff headings, and the manifest linter before
+  treating implementation as unblocked.
+- `implementation ready` -> call `delegate-cli --profile frontend-pi-kimi` with
+  `--expect-output` for the files the phase owns.
+- `repair ready` -> compile a `repair` phase prompt with one owned output and
+  explicit QA gates. The prompt must tell Pi not to read `scroll_scrub_qa.cjs`
+  or broad references before patching, and must name the observable
+  `hasStyleScrub`, `candidateChangeCount`, `hasSupportVideoDom`, and
+  `hasMissionSupportVideos` scores when those are acceptance criteria.
+- `phase prompt has a managed handoff` -> add
+  `--complete-when-output-and-handoff` so complete phase runs do not burn the
+  full timeout after the handoff is written.
 
 ## Judgement Questions
 
@@ -64,6 +105,40 @@ whether Codexter should first produce a stronger UX/visual brief.
 5. Do not accept a timed-out partial external run as a successful handoff.
 6. Do not add Codex-native `imagegen` to the Pi profile bundle; Pi should use
    the repo-owned inference.sh asset skills for repeatable external CLI work.
+7. Do not let repair prompts start by rereading the whole page. Give the profile
+   one owned file, the required debug contract, and the exact QA command; broad
+   visual critique belongs after the first runnable artifact exists.
+8. Do not skip `first_write.json` when the work is a live implementation phase;
+   it is the machine-readable proof that the external CLI actually crossed from
+   planning into regular-file production.
+9. When a prompt includes a first-write requirement, say that the first external
+   tool call must create or modify the named file with a valid stub before
+   reading references. Directory creation and symlink creation are not enough.
+10. If the prompt supplies the selected recipe/taste/effect IDs and acceptance
+    criteria, tell the external profile to finish the owned artifact from those
+    constraints before optional reference reading. Reference-chasing after the
+    first write is a timeout risk.
+11. Use clean completion only for bounded phases with a managed handoff. Do not
+    use `--complete-when-output-and-handoff` for open-ended research, broad
+    review, or tasks where the external process must continue after writing an
+    initial handoff.
+12. Clean completion requires more than headings. The handoff must have
+    non-empty changed-files, verification, and risks/followups bodies, and
+    changed-files must mention the expected owned output.
+13. Asset manifests must not reference files outside the declared asset root.
+    Reject absolute out-of-root paths, `../` escapes, symlinks, remote URLs, and
+    existing unrelated local files.
+14. Repair runs that only make a first-write stub and then read broad files are
+    failed experiments. Convert the next attempt into a compiler-generated
+    `repair` phase prompt with a micro-patch boundary and explicit observable
+    QA scores.
+15. Repair runs that pass DOM metrics by replacing a built page with a tiny
+    dark text stub are failed experiments. Preserve the existing surface or
+    start a new implementation output path instead of destructive simplification.
+16. Mobile landing-page repair needs typography proof, not just scroll proof.
+    When a multi-phrase hero title uses explicit breaks, require
+    `hasMobileHeroPhraseSeparation` or an equivalent screenshot check so
+    hidden `<br>` rules do not glue the headline together.
 
 ## Outcome Contract
 
@@ -72,6 +147,7 @@ Return:
 - profile used: `frontend-pi-kimi`,
 - ticket or brief supplied,
 - dry-run/live status,
+- `first_write.json` status when live implementation was run,
 - handoff/log paths,
 - required QA and review follow-up.
 

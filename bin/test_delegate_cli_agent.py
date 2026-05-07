@@ -7,6 +7,7 @@ import tempfile
 import threading
 import time
 import unittest
+from argparse import Namespace
 from dataclasses import replace
 from pathlib import Path
 
@@ -101,6 +102,302 @@ class DelegateCliAgentTests(unittest.TestCase):
                 delegate_cli_agent.read_prompt_arg("ignored", "brief.md", root),
                 "phase: implementation\n",
             )
+
+    def test_resolve_expected_outputs_stays_inside_checkout(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.assertEqual(
+                delegate_cli_agent.resolve_expected_outputs(["out/app.js"], root),
+                [(root / "out" / "app.js").resolve(strict=False)],
+            )
+            with self.assertRaises(SystemExit):
+                delegate_cli_agent.resolve_expected_outputs(["../escape.js"], root)
+
+    def test_first_write_gate_passes_when_expected_file_is_created(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            expected = root / "out.js"
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[
+                    sys.executable,
+                    "-c",
+                    "from pathlib import Path; Path('out.js').write_text('ok')",
+                ],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                first_write_timeout_seconds=2,
+                expected_outputs=[expected],
+                runtime_dir=runtime_dir,
+            )
+            self.assertEqual(completed.returncode, 0)
+            self.assertEqual(first_write["status"], "pass")
+            self.assertEqual(first_write["observed_output"], str(expected))
+
+    def test_first_write_gate_can_stop_after_output_and_completed_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            expected = root / "SPEC.md"
+            handoff = runtime_dir / "handoff.md"
+            script = (
+                "from pathlib import Path\n"
+                "import time\n"
+                "Path('SPEC.md').write_text('# Spec\\n')\n"
+                f"Path({str(handoff)!r}).write_text("
+                "'## Changed Files\\n\\n- `SPEC.md`\\n\\n"
+                "## Verification\\n\\n- checked\\n\\n"
+                "## Risks / Followups\\n\\n- none\\n', encoding='utf-8')\n"
+                "time.sleep(10)\n"
+            )
+            started = time.monotonic()
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[sys.executable, "-c", script],
+                cwd=root,
+                env={},
+                timeout_seconds=20,
+                first_write_timeout_seconds=5,
+                expected_outputs=[expected],
+                runtime_dir=runtime_dir,
+                handoff_path=handoff,
+                complete_when_output_and_handoff=True,
+                completion_grace_seconds=0,
+            )
+            elapsed = time.monotonic() - started
+            self.assertLess(elapsed, 5)
+            self.assertEqual(completed.returncode, 0)
+            self.assertEqual(first_write["status"], "pass")
+            self.assertEqual(first_write["completion_reason"], "expected_output_and_handoff")
+            self.assertIn("completed handoff", completed.stderr)
+
+    def test_handoff_completion_signal_rejects_placeholder_template(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            handoff = Path(tmp) / "handoff.md"
+            handoff.write_text(
+                "## Changed Files\n\n- pending live external CLI run\n\n"
+                "## First-Write Evidence\n\n- status: pending\n",
+                encoding="utf-8",
+            )
+            self.assertFalse(delegate_cli_agent.handoff_has_completion_signal(handoff))
+            handoff.write_text(
+                "## Changed Files\n\n- `SPEC.md`\n\n"
+                "## Verification\n\n- checked\n\n"
+                "## Risks / Followups\n\n- none\n",
+                encoding="utf-8",
+            )
+            self.assertTrue(
+                delegate_cli_agent.handoff_has_completion_signal(handoff, [Path(tmp) / "SPEC.md"])
+            )
+
+    def test_handoff_completion_signal_accepts_live_asset_handoff_headings(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            handoff = Path(tmp) / "handoff.md"
+            handoff.write_text(
+                "## Changed / Produced Files\n\n"
+                "- `assets/asset-manifest.json`\n\n"
+                "## Self-Review Findings\n\n"
+                "- asset manifest lint passed\n\n"
+                "## Risks\n\n"
+                "- implementation phase still pending\n",
+                encoding="utf-8",
+            )
+            self.assertTrue(
+                delegate_cli_agent.handoff_has_completion_signal(
+                    handoff,
+                    [Path(tmp) / "assets" / "asset-manifest.json"],
+                )
+            )
+
+    def test_handoff_completion_signal_rejects_heading_only_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            handoff = Path(tmp) / "handoff.md"
+            handoff.write_text(
+                "## Changed Files\n\n"
+                "## Verification\n\n"
+                "## Risks / Followups\n\n",
+                encoding="utf-8",
+            )
+            self.assertFalse(
+                delegate_cli_agent.handoff_has_completion_signal(handoff, [Path(tmp) / "SPEC.md"])
+            )
+
+    def test_handoff_completion_signal_requires_expected_output_reference(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            handoff = Path(tmp) / "handoff.md"
+            handoff.write_text(
+                "## Changed Files\n\n- `OTHER.md`\n\n"
+                "## Verification\n\n- checked\n\n"
+                "## Risks / Followups\n\n- none\n",
+                encoding="utf-8",
+            )
+            self.assertFalse(
+                delegate_cli_agent.handoff_has_completion_signal(handoff, [Path(tmp) / "SPEC.md"])
+            )
+
+    def test_collect_run_appends_wrapper_first_write_evidence_to_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_profile_templates(root)
+            profile = delegate_cli_agent.load_profile("frontend-pi-kimi", root)
+            run = delegate_cli_agent.build_run(
+                profile=profile,
+                ticket="",
+                checkout_mode="shared",
+                prompt="Write SPEC.md",
+                run_id="append-first-write-evidence",
+                dry_run=False,
+                artifact_dir="",
+                root=root,
+            )
+            run.handoff_path.write_text(
+                "## Changed Files\n\n- `SPEC.md`\n\n"
+                "## Verification\n\n- checked\n\n"
+                "## Risks / Followups\n\n- none\n",
+                encoding="utf-8",
+            )
+            first_write = {
+                "status": "pass",
+                "expected_outputs": [str(root / "SPEC.md")],
+                "observed_output": str(root / "SPEC.md"),
+            }
+            delegate_cli_agent.collect_run_artifacts(
+                run,
+                ["pi"],
+                subprocess.CompletedProcess(["pi"], 0, "", ""),
+                first_write,
+            )
+            handoff = run.handoff_path.read_text(encoding="utf-8")
+            self.assertIn("## Wrapper First-Write Evidence", handoff)
+            self.assertIn("status: `pass`", handoff)
+
+    def test_first_write_gate_passes_when_expected_regular_file_is_modified(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            expected = root / "out.js"
+            expected.write_text("old", encoding="utf-8")
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[
+                    sys.executable,
+                    "-c",
+                    "from pathlib import Path; Path('out.js').write_text('new content')",
+                ],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                first_write_timeout_seconds=2,
+                expected_outputs=[expected],
+                runtime_dir=runtime_dir,
+            )
+            self.assertEqual(completed.returncode, 0)
+            self.assertEqual(first_write["status"], "pass")
+            self.assertEqual(first_write["observed_output"], str(expected))
+
+    def test_first_write_gate_fails_when_expected_regular_file_is_unchanged(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            expected = root / "out.js"
+            expected.write_text("old", encoding="utf-8")
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[sys.executable, "-c", "print('unchanged')"],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                first_write_timeout_seconds=2,
+                expected_outputs=[expected],
+                runtime_dir=runtime_dir,
+            )
+            self.assertEqual(completed.returncode, 125)
+            self.assertEqual(first_write["status"], "failed")
+            self.assertEqual(first_write["failure_reason"], "process_exited_without_first_write")
+
+    def test_first_write_gate_fails_when_expected_file_is_not_created(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[sys.executable, "-c", "import time; time.sleep(2)"],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                first_write_timeout_seconds=1,
+                expected_outputs=[root / "missing.js"],
+                runtime_dir=runtime_dir,
+            )
+            self.assertEqual(completed.returncode, 125)
+            self.assertEqual(first_write["status"], "failed")
+            self.assertIn("first-write gate", completed.stderr)
+
+    def test_first_write_gate_fails_zero_exit_without_expected_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[sys.executable, "-c", "print('no writes')"],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                first_write_timeout_seconds=2,
+                expected_outputs=[root / "missing.js"],
+                runtime_dir=runtime_dir,
+            )
+            self.assertEqual(completed.returncode, 125)
+            self.assertEqual(first_write["failure_reason"], "process_exited_without_first_write")
+            self.assertIn("expected regular output file", completed.stderr)
+
+    def test_first_write_gate_rejects_directory_expected_output(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[
+                    sys.executable,
+                    "-c",
+                    "from pathlib import Path; Path('out.js').mkdir()",
+                ],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                first_write_timeout_seconds=2,
+                expected_outputs=[root / "out.js"],
+                runtime_dir=runtime_dir,
+            )
+            self.assertEqual(completed.returncode, 125)
+            self.assertEqual(first_write["status"], "failed")
+            self.assertEqual(first_write["after"][str(root / "out.js")]["kind"], "directory")
+            self.assertIn("expected regular output file", completed.stderr)
+
+    def test_first_write_gate_rejects_symlink_expected_output(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runtime_dir = root / "runtime"
+            runtime_dir.mkdir()
+            completed, first_write = delegate_cli_agent.run_with_first_write_gate(
+                command=[
+                    sys.executable,
+                    "-c",
+                    "from pathlib import Path; Path('real.js').write_text('ok'); Path('out.js').symlink_to('real.js')",
+                ],
+                cwd=root,
+                env={},
+                timeout_seconds=5,
+                first_write_timeout_seconds=2,
+                expected_outputs=[root / "out.js"],
+                runtime_dir=runtime_dir,
+            )
+            self.assertEqual(completed.returncode, 125)
+            self.assertEqual(first_write["status"], "failed")
+            self.assertEqual(first_write["after"][str(root / "out.js")]["kind"], "symlink")
+            self.assertIn("expected regular output file", completed.stderr)
 
     def test_setup_copies_media_skills_without_codex_native_imagegen(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -340,6 +637,292 @@ class DelegateCliAgentTests(unittest.TestCase):
             self.assertEqual(result.exit_code, 124)
             self.assertEqual(result.status, "failed")
             self.assertIn("timed out", (run.runtime_dir / "stderr.log").read_text(encoding="utf-8"))
+
+    def test_command_run_emits_first_write_artifact_through_public_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_profile_templates(root)
+            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_sources(root)
+            original_project_root = delegate_cli_agent.project_root
+            original_missing_live_env = delegate_cli_agent.missing_live_env
+            original_build_pi_command = delegate_cli_agent.build_pi_command
+
+            def fake_command(
+                profile: delegate_cli_agent.DelegateProfile,
+                run: delegate_cli_agent.DelegateRun,
+                root_arg: Path | None = None,
+            ) -> list[str]:
+                return [
+                    sys.executable,
+                    "-c",
+                    "from pathlib import Path; Path('out.js').write_text('ok')",
+                ]
+
+            try:
+                delegate_cli_agent.project_root = lambda: root
+                delegate_cli_agent.missing_live_env = lambda profile: []
+                delegate_cli_agent.build_pi_command = fake_command
+                payload = delegate_cli_agent.command_run(
+                    Namespace(
+                        profile="frontend-pi-kimi",
+                        model="",
+                        thinking="",
+                        ticket="",
+                        checkout="shared",
+                        prompt="Write out.js",
+                        prompt_file="",
+                        run_id="public-first-write",
+                        dry_run=False,
+                        artifact_dir="",
+                        attach=[],
+                        expect_output=["out.js"],
+                        first_write_timeout_seconds=5,
+                        complete_when_output_and_handoff=False,
+                        completion_grace_seconds=2.0,
+                        timeout_seconds=10,
+                    )
+                )
+            finally:
+                delegate_cli_agent.project_root = original_project_root
+                delegate_cli_agent.missing_live_env = original_missing_live_env
+                delegate_cli_agent.build_pi_command = original_build_pi_command
+
+            self.assertEqual(payload["status"], "success")
+            first_write_path = Path(payload["first_write_path"])
+            self.assertTrue(first_write_path.exists())
+            first_write = json.loads(first_write_path.read_text(encoding="utf-8"))
+            self.assertEqual(first_write["status"], "pass")
+            self.assertEqual(Path(first_write["observed_output"]).name, "out.js")
+
+    def test_command_run_precreates_expected_output_parent_directories(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_profile_templates(root)
+            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_sources(root)
+            original_project_root = delegate_cli_agent.project_root
+            original_missing_live_env = delegate_cli_agent.missing_live_env
+            original_build_pi_command = delegate_cli_agent.build_pi_command
+
+            def fake_command(
+                profile: delegate_cli_agent.DelegateProfile,
+                run: delegate_cli_agent.DelegateRun,
+                root_arg: Path | None = None,
+            ) -> list[str]:
+                return [
+                    sys.executable,
+                    "-c",
+                    "from pathlib import Path; "
+                    "assert Path('nested/out').is_dir(); "
+                    "Path('nested/out/file.js').write_text('ok')",
+                ]
+
+            try:
+                delegate_cli_agent.project_root = lambda: root
+                delegate_cli_agent.missing_live_env = lambda profile: []
+                delegate_cli_agent.build_pi_command = fake_command
+                payload = delegate_cli_agent.command_run(
+                    Namespace(
+                        profile="frontend-pi-kimi",
+                        model="",
+                        thinking="",
+                        ticket="",
+                        checkout="shared",
+                        prompt="Write nested/out/file.js",
+                        prompt_file="",
+                        run_id="public-first-write-nested-parent",
+                        dry_run=False,
+                        artifact_dir="",
+                        attach=[],
+                        expect_output=["nested/out/file.js"],
+                        first_write_timeout_seconds=5,
+                        complete_when_output_and_handoff=False,
+                        completion_grace_seconds=2.0,
+                        timeout_seconds=10,
+                    )
+                )
+            finally:
+                delegate_cli_agent.project_root = original_project_root
+                delegate_cli_agent.missing_live_env = original_missing_live_env
+                delegate_cli_agent.build_pi_command = original_build_pi_command
+
+            self.assertEqual(payload["status"], "success")
+            first_write = json.loads(Path(payload["first_write_path"]).read_text(encoding="utf-8"))
+            self.assertEqual(first_write["status"], "pass")
+            self.assertEqual(Path(first_write["observed_output"]).name, "file.js")
+
+    def test_command_run_timeout_zero_still_emits_first_write_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_profile_templates(root)
+            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_sources(root)
+            original_project_root = delegate_cli_agent.project_root
+            original_missing_live_env = delegate_cli_agent.missing_live_env
+            original_build_pi_command = delegate_cli_agent.build_pi_command
+
+            def fake_command(
+                profile: delegate_cli_agent.DelegateProfile,
+                run: delegate_cli_agent.DelegateRun,
+                root_arg: Path | None = None,
+            ) -> list[str]:
+                return [
+                    sys.executable,
+                    "-c",
+                    "from pathlib import Path; Path('out.js').write_text('ok')",
+                ]
+
+            try:
+                delegate_cli_agent.project_root = lambda: root
+                delegate_cli_agent.missing_live_env = lambda profile: []
+                delegate_cli_agent.build_pi_command = fake_command
+                payload = delegate_cli_agent.command_run(
+                    Namespace(
+                        profile="frontend-pi-kimi",
+                        model="",
+                        thinking="",
+                        ticket="",
+                        checkout="shared",
+                        prompt="Write out.js",
+                        prompt_file="",
+                        run_id="public-first-write-timeout-zero",
+                        dry_run=False,
+                        artifact_dir="",
+                        attach=[],
+                        expect_output=["out.js"],
+                        first_write_timeout_seconds=0,
+                        complete_when_output_and_handoff=False,
+                        completion_grace_seconds=2.0,
+                        timeout_seconds=10,
+                    )
+                )
+            finally:
+                delegate_cli_agent.project_root = original_project_root
+                delegate_cli_agent.missing_live_env = original_missing_live_env
+                delegate_cli_agent.build_pi_command = original_build_pi_command
+
+            self.assertEqual(payload["status"], "success")
+            first_write_path = Path(payload["first_write_path"])
+            first_write = json.loads(first_write_path.read_text(encoding="utf-8"))
+            self.assertEqual(first_write["status"], "pass")
+            self.assertEqual(first_write["timeout_seconds"], 0)
+            self.assertEqual(Path(first_write["observed_output"]).name, "out.js")
+
+    def test_command_run_timeout_zero_fails_without_expected_regular_file_change(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_profile_templates(root)
+            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_sources(root)
+            (root / "out.js").write_text("old", encoding="utf-8")
+            original_project_root = delegate_cli_agent.project_root
+            original_missing_live_env = delegate_cli_agent.missing_live_env
+            original_build_pi_command = delegate_cli_agent.build_pi_command
+
+            def fake_command(
+                profile: delegate_cli_agent.DelegateProfile,
+                run: delegate_cli_agent.DelegateRun,
+                root_arg: Path | None = None,
+            ) -> list[str]:
+                return [sys.executable, "-c", "print('no write')"]
+
+            try:
+                delegate_cli_agent.project_root = lambda: root
+                delegate_cli_agent.missing_live_env = lambda profile: []
+                delegate_cli_agent.build_pi_command = fake_command
+                payload = delegate_cli_agent.command_run(
+                    Namespace(
+                        profile="frontend-pi-kimi",
+                        model="",
+                        thinking="",
+                        ticket="",
+                        checkout="shared",
+                        prompt="Write out.js",
+                        prompt_file="",
+                        run_id="public-first-write-timeout-zero-no-change",
+                        dry_run=False,
+                        artifact_dir="",
+                        attach=[],
+                        expect_output=["out.js"],
+                        first_write_timeout_seconds=0,
+                        complete_when_output_and_handoff=False,
+                        completion_grace_seconds=2.0,
+                        timeout_seconds=10,
+                    )
+                )
+            finally:
+                delegate_cli_agent.project_root = original_project_root
+                delegate_cli_agent.missing_live_env = original_missing_live_env
+                delegate_cli_agent.build_pi_command = original_build_pi_command
+
+            self.assertEqual(payload["status"], "failed")
+            first_write_path = Path(payload["first_write_path"])
+            first_write = json.loads(first_write_path.read_text(encoding="utf-8"))
+            self.assertEqual(first_write["status"], "failed")
+            self.assertEqual(first_write["failure_reason"], "process_exited_without_first_write")
+
+    def test_command_run_can_stop_after_output_and_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_profile_templates(root)
+            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_sources(root)
+            original_project_root = delegate_cli_agent.project_root
+            original_missing_live_env = delegate_cli_agent.missing_live_env
+            original_build_pi_command = delegate_cli_agent.build_pi_command
+
+            def fake_command(
+                profile: delegate_cli_agent.DelegateProfile,
+                run: delegate_cli_agent.DelegateRun,
+                root_arg: Path | None = None,
+            ) -> list[str]:
+                script = (
+                    "from pathlib import Path\n"
+                    "import time\n"
+                    "Path('SPEC.md').write_text('# Spec\\n')\n"
+                    f"Path({str(run.handoff_path)!r}).write_text("
+                    "'## Changed Files\\n\\n- `SPEC.md`\\n\\n"
+                    "## Verification\\n\\n- checked\\n\\n"
+                    "## Risks / Followups\\n\\n- none\\n', encoding='utf-8')\n"
+                    "time.sleep(10)\n"
+                )
+                return [sys.executable, "-c", script]
+
+            try:
+                delegate_cli_agent.project_root = lambda: root
+                delegate_cli_agent.missing_live_env = lambda profile: []
+                delegate_cli_agent.build_pi_command = fake_command
+                started = time.monotonic()
+                payload = delegate_cli_agent.command_run(
+                    Namespace(
+                        profile="frontend-pi-kimi",
+                        model="",
+                        thinking="",
+                        ticket="",
+                        checkout="shared",
+                        prompt="Write SPEC.md",
+                        prompt_file="",
+                        run_id="public-complete-on-handoff",
+                        dry_run=False,
+                        artifact_dir="",
+                        attach=[],
+                        expect_output=["SPEC.md"],
+                        first_write_timeout_seconds=5,
+                        complete_when_output_and_handoff=True,
+                        completion_grace_seconds=0,
+                        timeout_seconds=20,
+                    )
+                )
+            finally:
+                delegate_cli_agent.project_root = original_project_root
+                delegate_cli_agent.missing_live_env = original_missing_live_env
+                delegate_cli_agent.build_pi_command = original_build_pi_command
+
+            self.assertLess(time.monotonic() - started, 5)
+            self.assertEqual(payload["status"], "success")
+            first_write = json.loads(Path(payload["first_write_path"]).read_text(encoding="utf-8"))
+            self.assertEqual(first_write["completion_reason"], "expected_output_and_handoff")
 
     def test_run_attachments_are_validated_recorded_and_passed_to_pi(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

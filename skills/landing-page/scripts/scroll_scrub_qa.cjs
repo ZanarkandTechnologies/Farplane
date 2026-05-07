@@ -134,6 +134,25 @@ function debugFrame(debug) {
   return null;
 }
 
+function hasRequiredDebugFields(debug) {
+  if (!debug || typeof debug !== "object") return false;
+  const progress = numericDebugProgress(debug);
+  const hasFrameOrMedia =
+    Number.isFinite(Number(debug.frame)) ||
+    Number.isFinite(Number(debug.frameIndex)) ||
+    Number.isFinite(Number(debug.currentFrame)) ||
+    Number.isFinite(Number(debug.mediaTime));
+  return (
+    Number.isFinite(progress) &&
+    typeof debug.phase === "string" &&
+    debug.phase.length > 0 &&
+    hasFrameOrMedia &&
+    typeof debug.active === "boolean" &&
+    typeof debug.ready === "boolean" &&
+    typeof debug.reducedMotion === "boolean"
+  );
+}
+
 async function diffScreenshots(files) {
   const diffs = [];
   for (let index = 1; index < files.length; index += 1) {
@@ -167,6 +186,178 @@ async function diffScreenshots(files) {
   return diffs;
 }
 
+async function collectVisualGeometry(page) {
+  return page.evaluate(() => {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const viewportArea = Math.max(1, viewportWidth * viewportHeight);
+
+    function visibleRect(rect) {
+      const left = Math.max(0, rect.left);
+      const top = Math.max(0, rect.top);
+      const right = Math.min(viewportWidth, rect.right);
+      const bottom = Math.min(viewportHeight, rect.bottom);
+      if (right <= left || bottom <= top) return null;
+      return { left, top, right, bottom, width: right - left, height: bottom - top };
+    }
+
+    function rectArea(rect) {
+      return rect ? rect.width * rect.height : 0;
+    }
+
+    const mediaSelector = [
+      "[data-hero-object]",
+      "[data-scroll-scrub-root] video",
+      "[data-scroll-scrub-root] img",
+      "video",
+      "picture",
+      "img",
+      ".hero-media",
+      ".media",
+      ".visual",
+      ".scene",
+    ].join(",");
+    const textSelector = [
+      "header",
+      "nav",
+      "h1",
+      "h2",
+      "p",
+      "a",
+      "button",
+      "[role='navigation']",
+      "[data-scroll-scrub-root]",
+      ".hero",
+      ".hero-media",
+    ].join(",");
+
+    const mediaRects = [...document.querySelectorAll(mediaSelector)]
+      .map((element) => visibleRect(element.getBoundingClientRect()))
+      .filter(Boolean);
+    const heroObjectFillRatio = mediaRects.length
+      ? Math.max(...mediaRects.map((rect) => rectArea(rect) / viewportArea))
+      : 0;
+
+    const intervals = [...document.querySelectorAll(textSelector)]
+      .map((element) => {
+        const style = getComputedStyle(element);
+        if (style.visibility === "hidden" || style.display === "none" || Number(style.opacity) === 0) {
+          return null;
+        }
+        const rect = visibleRect(element.getBoundingClientRect());
+        if (!rect || rect.height < 4 || rect.width < 4) return null;
+        return [rect.top, rect.bottom];
+      })
+      .filter(Boolean)
+      .sort((a, b) => a[0] - b[0]);
+
+    let cursor = 0;
+    let largestGap = intervals.length ? Math.max(0, intervals[0][0]) : viewportHeight;
+    for (const [top, bottom] of intervals) {
+      largestGap = Math.max(largestGap, Math.max(0, top - cursor));
+      cursor = Math.max(cursor, bottom);
+    }
+    largestGap = Math.max(largestGap, Math.max(0, viewportHeight - cursor));
+
+    const navOverflow = [...document.querySelectorAll("header, nav, [role='navigation'], button, a")]
+      .some((element) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > viewportHeight) return false;
+        return rect.left < -2 || rect.right > viewportWidth + 2;
+      });
+    const hasMedia = mediaRects.length > 0;
+    const firstViewportBlankRatio = largestGap / Math.max(1, viewportHeight);
+    const mobileCropIntent =
+      viewportWidth > 768
+        ? "deliberate"
+        : !hasMedia
+          ? "missing"
+          : !navOverflow && heroObjectFillRatio >= 0.35 && firstViewportBlankRatio <= 0.28
+            ? "deliberate"
+            : "accidental";
+
+    return {
+      dom_hero_object_fill_ratio: Number(heroObjectFillRatio.toFixed(4)),
+      dom_first_viewport_blank_ratio: Number(firstViewportBlankRatio.toFixed(4)),
+      nav_overflow: navOverflow,
+      mobile_crop_intent: mobileCropIntent,
+      sampled_media_rects: mediaRects.length,
+    };
+  });
+}
+
+async function collectImageGeometry(screenshotPath) {
+  const { data, info } = await sharp(screenshotPath)
+    .resize({ width: 180, withoutEnlargement: true })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const width = info.width;
+  const height = info.height;
+  const cornerSamples = [
+    [0, 0],
+    [width - 1, 0],
+    [0, height - 1],
+    [width - 1, height - 1],
+  ];
+  const background = [0, 0, 0];
+  for (const [x, y] of cornerSamples) {
+    const index = (y * width + x) * 4;
+    background[0] += data[index];
+    background[1] += data[index + 1];
+    background[2] += data[index + 2];
+  }
+  background[0] /= cornerSamples.length;
+  background[1] /= cornerSamples.length;
+  background[2] /= cornerSamples.length;
+
+  const rowForeground = Array.from({ length: height }, () => 0);
+  let foregroundPixels = 0;
+  let minX = width;
+  let minY = height;
+  let maxX = -1;
+  let maxY = -1;
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const index = (y * width + x) * 4;
+      const alpha = data[index + 3];
+      const dr = data[index] - background[0];
+      const dg = data[index + 1] - background[1];
+      const db = data[index + 2] - background[2];
+      const distance = Math.sqrt(dr * dr + dg * dg + db * db);
+      if (alpha > 20 && distance > 42) {
+        foregroundPixels += 1;
+        rowForeground[y] += 1;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+      }
+    }
+  }
+
+  let largestSparseRun = 0;
+  let currentSparseRun = 0;
+  for (const count of rowForeground) {
+    if (count / Math.max(1, width) < 0.015) {
+      currentSparseRun += 1;
+      largestSparseRun = Math.max(largestSparseRun, currentSparseRun);
+    } else {
+      currentSparseRun = 0;
+    }
+  }
+
+  const boxArea =
+    maxX >= minX && maxY >= minY
+      ? ((maxX - minX + 1) * (maxY - minY + 1)) / Math.max(1, width * height)
+      : 0;
+  return {
+    image_foreground_fill_ratio: Number((foregroundPixels / Math.max(1, width * height)).toFixed(4)),
+    image_foreground_box_ratio: Number(boxArea.toFixed(4)),
+    image_blank_ratio: Number((largestSparseRun / Math.max(1, height)).toFixed(4)),
+  };
+}
+
 async function main() {
   const args = parseArgs(process.argv);
   const outDir = path.resolve(args.out);
@@ -185,18 +376,50 @@ async function main() {
   });
   await page.goto(targetUrl, { waitUntil: "networkidle", timeout: 60000 });
   await page.waitForTimeout(args.waitMs);
+  const domVisualGeometry = await collectVisualGeometry(page);
 
-  const pageInfo = await page.evaluate(() => ({
-    title: document.title,
-    scrollHeight: document.documentElement.scrollHeight,
-    viewportHeight: window.innerHeight,
-    viewportWidth: window.innerWidth,
-    hasGsap: Boolean(window.gsap),
-    hasScrollTrigger: Boolean(window.ScrollTrigger || (window.gsap && window.gsap.core)),
-    scriptSignals: [...document.scripts].map((script) => script.src || script.textContent.slice(0, 240)),
-    pinSpacers: document.querySelectorAll(".pin-spacer").length,
-    scrubRoots: document.querySelectorAll("[data-scroll-scrub-root], [data-scroll-scrub], [data-scroll-progress]").length,
-  }));
+  const pageInfo = await page.evaluate(() => {
+    const videoSources = [...document.querySelectorAll("video")]
+      .flatMap((video) => [
+        video.currentSrc || "",
+        video.getAttribute("src") || "",
+        ...[...video.querySelectorAll("source")].map((source) => source.getAttribute("src") || ""),
+      ])
+      .filter(Boolean);
+    const missionSupportVideoCount = videoSources.filter((source) =>
+      /mission-(?:01|03)|manifest|safety/i.test(source),
+    ).length;
+    const heroTitle = document.querySelector(".hero-title, [data-hero-title], h1");
+    const heroBreaks = heroTitle ? [...heroTitle.querySelectorAll("br")] : [];
+    const heroTitleText = heroTitle ? String(heroTitle.textContent || "").trim() : "";
+    const heroTitleGluedPhrases = /[a-z0-9][.!?][A-Z]/.test(heroTitleText);
+    const heroVisibleBreakCount = heroBreaks.filter((br) => {
+      const style = getComputedStyle(br);
+      return style.display !== "none" && style.visibility !== "hidden";
+    }).length;
+    return {
+      title: document.title,
+      scrollHeight: document.documentElement.scrollHeight,
+      viewportHeight: window.innerHeight,
+      viewportWidth: window.innerWidth,
+      hasGsap: Boolean(window.gsap),
+      hasScrollTrigger: Boolean(window.ScrollTrigger || (window.gsap && window.gsap.core)),
+      scriptSignals: [...document.scripts].map((script) =>
+        script.src || `[inline script ${script.textContent.length} chars]`,
+      ),
+      pinSpacers: document.querySelectorAll(".pin-spacer").length,
+      scrubRoots: document.querySelectorAll("[data-scroll-scrub-root], [data-scroll-scrub], [data-scroll-progress]").length,
+      videoSources,
+      supportVideoCount: videoSources.length,
+      missionSupportVideoCount,
+      heroTitle: {
+        text: heroTitleText,
+        breakCount: heroBreaks.length,
+        visibleBreakCount: heroVisibleBreakCount,
+        gluedPhrases: heroTitleGluedPhrases,
+      },
+    };
+  });
 
   const checkpoints = [0, 0.25, 0.5, 0.75, 0.95];
   const maxScroll = Math.max(0, pageInfo.scrollHeight - pageInfo.viewportHeight);
@@ -266,8 +489,20 @@ async function main() {
   }
 
   const screenshotDiffs = await diffScreenshots(screenshotFiles);
+  const imageVisualGeometry = await collectImageGeometry(screenshotFiles[0]);
+  const visualGeometry = {
+    ...domVisualGeometry,
+    ...imageVisualGeometry,
+    hero_object_fill_ratio: Number(
+      Math.max(domVisualGeometry.dom_hero_object_fill_ratio, imageVisualGeometry.image_foreground_box_ratio).toFixed(4),
+    ),
+    first_viewport_blank_ratio: Number(
+      Math.max(domVisualGeometry.dom_first_viewport_blank_ratio, imageVisualGeometry.image_blank_ratio).toFixed(4),
+    ),
+  };
   const debugValues = samples.map((sample) => numericDebugProgress(sample.debug)).filter((value) => value !== null);
   const debugFrames = samples.map((sample) => debugFrame(sample.debug)).filter((value) => value !== null);
+  const validDebugSamples = samples.filter((sample) => hasRequiredDebugFields(sample.debug));
   const debugProgressSpan =
     debugValues.length > 1 ? Math.max(...debugValues) - Math.min(...debugValues) : 0;
   const videoTimes = samples.flatMap((sample) => sample.videos.map((video) => video.currentTime));
@@ -278,14 +513,27 @@ async function main() {
     samples.some((sample) =>
       sample.candidates.some((candidate) => candidate.position === "sticky" || candidate.position === "fixed"),
     );
-  const hasDebugInstrumentation = debugValues.length >= 2 || new Set(debugFrames).size >= 2;
-  const hasDebugScrub = debugProgressSpan > 0.35 || new Set(debugFrames).size >= 3;
+  const hasRequiredDebugContract = validDebugSamples.length >= 2;
+  const hasDebugInstrumentation = hasRequiredDebugContract;
+  const hasDebugScrub = hasRequiredDebugContract && (debugProgressSpan > 0.35 || new Set(debugFrames).size >= 3);
   const hasMediaScrub = videoTimeSpan > 0.35;
   const hasStyleScrub = candidateChangeCount >= 2;
+  const hasSupportVideoDom = pageInfo.supportVideoCount > 0;
+  const hasMissionSupportVideos = pageInfo.missionSupportVideoCount >= 2;
+  const hasMobileHeroPhraseSeparation =
+    pageInfo.viewportWidth > 768 ||
+    !pageInfo.heroTitle.gluedPhrases ||
+    pageInfo.heroTitle.visibleBreakCount > 0;
   const hasLargeScroll = maxScroll >= pageInfo.viewportHeight * 2;
+  const hasRequiredDebugForScrubRoot = pageInfo.scrubRoots === 0 || hasRequiredDebugContract;
+  const isReducedMotionRun = args.reducedMotion === "reduce";
   const likelyScrollScrub =
     hasLargeScroll &&
-    (hasDebugScrub || hasMediaScrub || (hasPinnedSurface && hasStyleScrub && (pageInfo.hasGsap || pageInfo.hasScrollTrigger)));
+    hasRequiredDebugForScrubRoot &&
+    (hasDebugScrub ||
+      hasMediaScrub ||
+      (isReducedMotionRun && hasRequiredDebugContract && hasPinnedSurface) ||
+      (pageInfo.scrubRoots === 0 && hasPinnedSurface && hasStyleScrub && (pageInfo.hasGsap || pageInfo.hasScrollTrigger)));
 
   const result = {
     url: targetUrl,
@@ -296,23 +544,30 @@ async function main() {
     score: {
       hasLargeScroll,
       hasDebugInstrumentation,
+      hasRequiredDebugContract,
       hasDebugScrub,
       hasMediaScrub,
       hasStyleScrub,
+      hasSupportVideoDom,
+      hasMissionSupportVideos,
+      hasMobileHeroPhraseSeparation,
       hasPinnedSurface,
       hasGsapOrScrollTrigger: pageInfo.hasGsap || pageInfo.hasScrollTrigger,
       candidateChangeCount,
+      supportVideoCount: pageInfo.supportVideoCount,
+      missionSupportVideoCount: pageInfo.missionSupportVideoCount,
       debugProgressSpan: Number(debugProgressSpan.toFixed(3)),
       videoTimeSpan: Number(videoTimeSpan.toFixed(3)),
     },
     checkpoints: samples,
+    visualGeometry,
     screenshotFiles,
     screenshotDiffs,
     consoleMessages,
     failureHints: likelyScrollScrub
       ? []
       : [
-          "Expose window.__scrollScrubDebug with progress, phase, frame/mediaTime, active, and reducedMotion.",
+          "Expose window.__scrollScrubDebug with progress, phase, frame/mediaTime, active, ready, and reducedMotion.",
           "Mark the pinned/scrubbed section with data-scroll-scrub-root.",
           "Use GSAP ScrollTrigger or an explicit scroll-to-frame/media-time mapper for the hero scene.",
           "Verify checkpoint screenshots at 0, 25, 50, 75, and 95 percent show intended narrative phases.",

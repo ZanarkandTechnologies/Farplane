@@ -44,15 +44,33 @@ Write the final handoff here:
 
 Follow the handoff template. Include changed files, behavior built,
 verification commands/results, self-review results, visual-QA results, risks,
-and follow-ups.
+and follow-ups. When the run was launched with `--expect-output`, include the
+`first_write.json` status and path.
+
+Use these exact handoff section headings so Codexter can detect bounded phase
+completion before timeout: `## Changed Files`, `## Verification`, and
+`## Risks / Followups`. Put non-empty content under each heading, and mention
+the expected owned output file inside `## Changed Files`.
 
 For scroll-scrub or Terminal-style landing pages, the handoff must also include:
 
 - the selected recipe/taste/effect-stack IDs,
-- whether `window.__scrollScrubDebug` is present,
+- whether `window.__scrollScrubDebug` satisfies the full debug contract:
+  `progress`, `phase`, `frame` or `mediaTime`, `active`, `ready`, and
+  `reducedMotion`,
+- asset strategy, asset manifest path, generated/rendered media count, and
+  whether any `code-native-canvas` fallback is only a prototype path,
 - the scrubbed stage selector,
 - checkpoint states at 0%, 25%, 50%, 75%, and 95% scroll,
-- scroll-scrub QA JSON/screenshot artifact paths when the harness can run.
+- scroll-scrub QA JSON/screenshot artifact paths plus the `verdict` and
+  `hasRequiredDebugContract` score when the harness can run,
+- maximum checkpoint screenshot changed ratio so Codexter can reject tiny
+  non-cinematic scrub deltas.
+- `hasStyleScrub`, `candidateChangeCount`, `hasSupportVideoDom`, and
+  `hasMissionSupportVideos` when the page is meant to prove a premium
+  industrial computer-vision surface.
+- `hasMobileHeroPhraseSeparation` when the page has a multi-phrase hero
+  headline on mobile.
 
 ## Boundaries
 

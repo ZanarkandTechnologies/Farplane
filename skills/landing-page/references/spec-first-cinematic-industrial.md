@@ -67,11 +67,17 @@ Pass only when the first viewport has all of these:
 - Do not attach large gold screenshots to implementation passes after the spec
   has summarized them. Attach screenshots to visual-review passes.
 - Every builder prompt must name exactly one phase and the files it may touch.
+- External CLI implementation prompts should be run with `--expect-output` for
+  the owned files so `first_write.json` proves the builder produced an artifact
+  before self-review.
 - Ask builders to run concrete checks before handoff: `ls`, syntax checks, asset
   existence checks, and screenshots when a browser is available.
 - For scroll-scrub implementations, ask builders to run:
   `NODE_PATH=$CODEX_NODE_MODULES $CODEX_NODE skills/landing-page/scripts/scroll_scrub_qa.cjs --url <page> --out <qa-dir>`
   or the local equivalent with the bundled Codex Node runtime.
+- For Terminal/Terminus-level final builds, require generated/rendered media or
+  frame/video assets in `assets/asset-manifest.json`. `code-native-canvas` is
+  acceptable only for a mechanics prototype and should fail final visual parity.
 - A timed-out run with partial files is a failure, even when the page appears to
   render. Record it and split the next prompt smaller.
 

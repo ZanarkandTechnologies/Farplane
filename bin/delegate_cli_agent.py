@@ -7,7 +7,9 @@ import json
 import os
 import re
 import shutil
+import stat as stat_module
 import subprocess
+import time
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
@@ -18,6 +20,23 @@ from typing import Sequence
 
 CHECKOUT_MODES = ("shared", "worktree")
 RUN_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+PLACEHOLDER_HANDOFF_MARKERS = (
+    "pending live external cli run",
+    "- none reported yet",
+    "status: pending",
+    "observed output: pending",
+)
+HANDOFF_COMPLETION_SECTION_PATTERNS = {
+    "changed_files": re.compile(
+        r"^(?:Changed Files|Changed\s*/\s*Produced Files|Produced Files)$",
+        re.I,
+    ),
+    "verification": re.compile(
+        r"^(?:Verification(?:\s+Commands\s*&\s*Results)?|Self-Review Findings|Output Contract Compliance)$",
+        re.I,
+    ),
+    "risks": re.compile(r"^(?:Risks(?:\s*/\s*Followups)?|Findings\s*/\s*Risks)$", re.I),
+}
 DEFAULT_FRONTEND_REQUIRED_SKILLS = (
     "frontend-craft",
     "functional-ui",
@@ -104,6 +123,7 @@ class DelegateRunResult:
     attachments: list[str]
     durable_artifact_dir: str | None
     status: str
+    first_write_path: str | None
 
 
 def project_root() -> Path:
@@ -165,6 +185,296 @@ def read_prompt_arg(prompt: str, prompt_file: str, root: Path | None = None) -> 
     if not path.exists():
         raise SystemExit(f"prompt file not found: {prompt_file}")
     return path.read_text(encoding="utf-8")
+
+
+def is_relative_to_path(path: Path, parent: Path) -> bool:
+    try:
+        path.relative_to(parent)
+    except ValueError:
+        return False
+    return True
+
+
+def resolve_expected_outputs(raw_paths: Sequence[str], checkout_path: Path) -> list[Path]:
+    resolved_checkout = checkout_path.resolve(strict=False)
+    outputs: list[Path] = []
+    for raw_path in raw_paths:
+        value = raw_path.strip()
+        if not value:
+            raise SystemExit("empty --expect-output path")
+        path = Path(value).expanduser()
+        if not path.is_absolute():
+            path = resolved_checkout / path
+        resolved = path.resolve(strict=False)
+        if not is_relative_to_path(resolved, resolved_checkout):
+            raise SystemExit(
+                f"expected output must stay inside checkout {resolved_checkout}: {raw_path}"
+            )
+        outputs.append(resolved)
+    return outputs
+
+
+def ensure_expected_output_parents(expected_outputs: Sequence[Path]) -> None:
+    for output in expected_outputs:
+        output.parent.mkdir(parents=True, exist_ok=True)
+
+
+def output_snapshot(paths: Sequence[Path]) -> dict[str, dict[str, object]]:
+    snapshot: dict[str, dict[str, object]] = {}
+    for path in paths:
+        try:
+            path_stat = path.lstat()
+        except OSError:
+            snapshot[str(path)] = {
+                "exists": False,
+                "mtime_ns": None,
+                "size": None,
+                "kind": "missing",
+                "is_regular_file": False,
+            }
+            continue
+        mode = path_stat.st_mode
+        if stat_module.S_ISREG(mode):
+            kind = "regular_file"
+        elif stat_module.S_ISDIR(mode):
+            kind = "directory"
+        elif stat_module.S_ISLNK(mode):
+            kind = "symlink"
+        else:
+            kind = "other"
+        snapshot[str(path)] = {
+            "exists": True,
+            "mtime_ns": path_stat.st_mtime_ns,
+            "size": path_stat.st_size,
+            "kind": kind,
+            "is_regular_file": kind == "regular_file",
+        }
+    return snapshot
+
+
+def changed_expected_output(
+    paths: Sequence[Path],
+    before: dict[str, dict[str, object]],
+) -> Path | None:
+    for path in paths:
+        current = output_snapshot([path]).get(str(path), {})
+        if not current.get("exists") or not current.get("is_regular_file"):
+            continue
+        previous = before.get(str(path), {})
+        if (
+            not previous.get("exists")
+            or previous.get("kind") != current.get("kind")
+            or previous.get("mtime_ns") != current.get("mtime_ns")
+            or previous.get("size") != current.get("size")
+        ):
+            return path
+    return None
+
+
+def markdown_sections(text: str) -> dict[str, str]:
+    matched: dict[str, list[str]] = {}
+    current_name = ""
+    for line in text.splitlines():
+        heading = re.match(r"^#+\s+(.+?)\s*$", line.strip())
+        if heading:
+            current_name = ""
+            title = heading.group(1).strip()
+            for name, pattern in HANDOFF_COMPLETION_SECTION_PATTERNS.items():
+                if pattern.fullmatch(title):
+                    current_name = name
+                    matched.setdefault(name, [])
+                    break
+            continue
+        if current_name:
+            matched[current_name].append(line)
+    return {name: "\n".join(lines).strip() for name, lines in matched.items()}
+
+
+def handoff_body_mentions_expected_output(body: str, expected_outputs: Sequence[Path]) -> bool:
+    if not expected_outputs:
+        return True
+    body_text = body.replace("\\", "/")
+    for output in expected_outputs:
+        output_text = str(output).replace("\\", "/")
+        candidates = {output.name, output_text}
+        try:
+            candidates.add(output.as_posix())
+        except ValueError:
+            pass
+        if any(candidate and candidate in body_text for candidate in candidates):
+            return True
+    return False
+
+
+def handoff_has_completion_signal(
+    path: Path,
+    expected_outputs: Sequence[Path] = (),
+) -> bool:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return False
+    if not text.strip():
+        return False
+    lowered = text.lower()
+    if any(marker in lowered for marker in PLACEHOLDER_HANDOFF_MARKERS):
+        return False
+    sections = markdown_sections(text)
+    if not all(sections.get(name, "").strip() for name in HANDOFF_COMPLETION_SECTION_PATTERNS):
+        return False
+    return handoff_body_mentions_expected_output(
+        sections.get("changed_files", ""),
+        expected_outputs,
+    )
+
+
+def append_wrapper_first_write_evidence(
+    *,
+    handoff_path: Path,
+    first_write_path: Path,
+    first_write: dict[str, object],
+) -> None:
+    try:
+        text = handoff_path.read_text(encoding="utf-8")
+    except OSError:
+        return
+    if re.search(r"(?im)^##+\s+Wrapper First-Write Evidence\s*$", text):
+        return
+    lines = [
+        "",
+        "## Wrapper First-Write Evidence",
+        "",
+        f"- `first_write.json`: `{first_write_path}`",
+        f"- status: `{first_write.get('status', 'missing')}`",
+    ]
+    observed_output = str(first_write.get("observed_output") or "").strip()
+    if observed_output:
+        lines.append(f"- observed output: `{observed_output}`")
+    failure_reason = str(first_write.get("failure_reason") or "").strip()
+    if failure_reason:
+        lines.append(f"- failure reason: `{failure_reason}`")
+    handoff_path.write_text(text.rstrip() + "\n" + "\n".join(lines) + "\n", encoding="utf-8")
+
+
+def iso_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def timeout_completed_process(
+    command: Sequence[str],
+    exc: subprocess.TimeoutExpired,
+    timeout_seconds: int | None,
+) -> subprocess.CompletedProcess[str]:
+    stdout = (
+        exc.stdout.decode("utf-8", errors="replace")
+        if isinstance(exc.stdout, bytes)
+        else (exc.stdout or "")
+    )
+    stderr = (
+        exc.stderr.decode("utf-8", errors="replace")
+        if isinstance(exc.stderr, bytes)
+        else (exc.stderr or "")
+    )
+    stderr = stderr + f"\nexternal CLI run timed out after {timeout_seconds} seconds\n"
+    return subprocess.CompletedProcess(list(command), 124, stdout, stderr)
+
+
+def run_command_capture(
+    *,
+    command: Sequence[str],
+    cwd: Path,
+    env: dict[str, str],
+    timeout_seconds: int | None,
+) -> subprocess.CompletedProcess[str]:
+    try:
+        return subprocess.run(
+            list(command),
+            cwd=cwd,
+            text=True,
+            capture_output=True,
+            check=False,
+            env=env,
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired as exc:
+        return timeout_completed_process(command, exc, timeout_seconds)
+
+
+def first_write_record(
+    *,
+    started_at: str,
+    timeout_seconds: int,
+    expected_outputs: Sequence[Path],
+    before: dict[str, dict[str, object]],
+) -> dict[str, object]:
+    return {
+        "status": "waiting",
+        "started_at": started_at,
+        "ended_at": "",
+        "timeout_seconds": timeout_seconds,
+        "expected_outputs": [str(path) for path in expected_outputs],
+        "observed_output": "",
+        "before": before,
+    }
+
+
+def finalize_first_write_record(
+    *,
+    first_write: dict[str, object],
+    expected_outputs: Sequence[Path],
+    before: dict[str, dict[str, object]],
+    completed: subprocess.CompletedProcess[str],
+) -> subprocess.CompletedProcess[str]:
+    return_code = completed.returncode
+    stderr = completed.stderr
+    if first_write["status"] == "waiting":
+        observed = changed_expected_output(expected_outputs, before)
+        if observed is None:
+            first_write["status"] = "failed"
+            first_write["failure_reason"] = "process_exited_without_first_write"
+            stderr += (
+                "\nexternal CLI run exited without creating or modifying any "
+                "expected regular output file\n"
+            )
+            if return_code == 0:
+                return_code = 125
+        else:
+            first_write["status"] = "pass"
+            first_write["observed_output"] = str(observed)
+            first_write["observed_at"] = iso_now()
+    first_write["ended_at"] = iso_now()
+    first_write["after"] = output_snapshot(expected_outputs)
+    return subprocess.CompletedProcess(list(completed.args), return_code, completed.stdout, stderr)
+
+
+def run_with_expected_output_check(
+    *,
+    command: Sequence[str],
+    cwd: Path,
+    env: dict[str, str],
+    timeout_seconds: int | None,
+    expected_outputs: Sequence[Path],
+) -> tuple[subprocess.CompletedProcess[str], dict[str, object]]:
+    before = output_snapshot(expected_outputs)
+    first_write = first_write_record(
+        started_at=iso_now(),
+        timeout_seconds=0,
+        expected_outputs=expected_outputs,
+        before=before,
+    )
+    completed = run_command_capture(
+        command=command,
+        cwd=cwd,
+        env=env,
+        timeout_seconds=timeout_seconds,
+    )
+    completed = finalize_first_write_record(
+        first_write=first_write,
+        expected_outputs=expected_outputs,
+        before=before,
+        completed=completed,
+    )
+    return completed, first_write
 
 
 def render_template(path: Path, values: dict[str, str]) -> str:
@@ -560,6 +870,120 @@ def build_pi_command(profile: DelegateProfile, run: DelegateRun, root: Path | No
     return command
 
 
+def terminate_process(process: subprocess.Popen[object]) -> None:
+    process.terminate()
+    try:
+        process.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.wait(timeout=5)
+
+
+def run_with_first_write_gate(
+    *,
+    command: Sequence[str],
+    cwd: Path,
+    env: dict[str, str],
+    timeout_seconds: int | None,
+    first_write_timeout_seconds: int,
+    expected_outputs: Sequence[Path],
+    runtime_dir: Path,
+    handoff_path: Path | None = None,
+    complete_when_output_and_handoff: bool = False,
+    completion_grace_seconds: float = 0,
+) -> tuple[subprocess.CompletedProcess[str], dict[str, object]]:
+    started_at = iso_now()
+    before = output_snapshot(expected_outputs)
+    first_write = first_write_record(
+        started_at=started_at,
+        timeout_seconds=first_write_timeout_seconds,
+        expected_outputs=expected_outputs,
+        before=before,
+    )
+    stdout_live = runtime_dir / "stdout.live.log"
+    stderr_live = runtime_dir / "stderr.live.log"
+    global_deadline = time.monotonic() + timeout_seconds if timeout_seconds else None
+    first_write_deadline = time.monotonic() + first_write_timeout_seconds
+    forced_exit_code: int | None = None
+    forced_stderr = ""
+    completion_detected_at: float | None = None
+
+    with stdout_live.open("w", encoding="utf-8") as stdout_file, stderr_live.open(
+        "w", encoding="utf-8"
+    ) as stderr_file:
+        process = subprocess.Popen(
+            list(command),
+            cwd=cwd,
+            stdout=stdout_file,
+            stderr=stderr_file,
+            text=True,
+            env=env,
+        )
+        while True:
+            observed = changed_expected_output(expected_outputs, before)
+            if observed is not None and first_write["status"] == "waiting":
+                first_write["status"] = "pass"
+                first_write["observed_output"] = str(observed)
+                first_write["observed_at"] = iso_now()
+
+            if process.poll() is not None:
+                break
+
+            now = time.monotonic()
+            if (
+                complete_when_output_and_handoff
+                and first_write["status"] == "pass"
+                and handoff_path is not None
+                and handoff_has_completion_signal(handoff_path, expected_outputs)
+            ):
+                if completion_detected_at is None:
+                    completion_detected_at = now
+                    first_write["completion_observed_at"] = iso_now()
+                    first_write["completion_reason"] = "expected_output_and_handoff"
+                if now - completion_detected_at >= completion_grace_seconds:
+                    terminate_process(process)
+                    forced_exit_code = 0
+                    forced_stderr = (
+                        "\nexternal CLI run stopped after expected output and "
+                        "completed handoff were observed\n"
+                    )
+                    break
+            if first_write["status"] == "waiting" and now >= first_write_deadline:
+                terminate_process(process)
+                forced_exit_code = 125
+                forced_stderr = (
+                    f"\nexternal CLI run failed first-write gate after "
+                    f"{first_write_timeout_seconds} seconds; expected a regular file at one of: "
+                    + ", ".join(str(path) for path in expected_outputs)
+                    + "\n"
+                )
+                first_write["status"] = "failed"
+                first_write["failure_reason"] = "first_write_timeout"
+                break
+            if global_deadline is not None and now >= global_deadline:
+                terminate_process(process)
+                forced_exit_code = 124
+                forced_stderr = f"\nexternal CLI run timed out after {timeout_seconds} seconds\n"
+                if first_write["status"] == "waiting":
+                    first_write["status"] = "failed"
+                    first_write["failure_reason"] = "run_timeout_before_first_write"
+                break
+            time.sleep(0.2)
+
+        return_code = process.returncode if forced_exit_code is None else forced_exit_code
+
+    stdout = stdout_live.read_text(encoding="utf-8", errors="replace") if stdout_live.exists() else ""
+    stderr = stderr_live.read_text(encoding="utf-8", errors="replace") if stderr_live.exists() else ""
+    completed = subprocess.CompletedProcess(list(command), return_code, stdout, stderr + forced_stderr)
+    completed = finalize_first_write_record(
+        first_write=first_write,
+        expected_outputs=expected_outputs,
+        before=before,
+        completed=completed,
+    )
+    return completed, first_write
+
+
 def copy_durable_artifacts(run: DelegateRun, command: Sequence[str]) -> None:
     if run.durable_artifact_dir is None:
         return
@@ -572,6 +996,7 @@ def copy_durable_artifacts(run: DelegateRun, command: Sequence[str]) -> None:
         "command.json",
         "session_files.json",
         "attachments.json",
+        "first_write.json",
     ):
         source = run.runtime_dir / name
         if source.exists():
@@ -586,6 +1011,7 @@ def collect_run_artifacts(
     run: DelegateRun,
     command: Sequence[str],
     completed: subprocess.CompletedProcess[str] | None,
+    first_write: dict[str, object] | None = None,
 ) -> DelegateRunResult:
     stdout = "" if completed is None else completed.stdout
     stderr = "" if completed is None else completed.stderr
@@ -609,6 +1035,15 @@ def collect_run_artifacts(
         json.dumps({"attachments": attachments}, indent=2) + "\n",
         encoding="utf-8",
     )
+    first_write_path = None
+    if first_write is not None:
+        first_write_path = run.runtime_dir / "first_write.json"
+        first_write_path.write_text(json.dumps(first_write, indent=2) + "\n", encoding="utf-8")
+        append_wrapper_first_write_evidence(
+            handoff_path=run.handoff_path,
+            first_write_path=first_write_path,
+            first_write=first_write,
+        )
     copy_durable_artifacts(run, command)
     return DelegateRunResult(
         run_id=run.run_id,
@@ -626,6 +1061,7 @@ def collect_run_artifacts(
         attachments=attachments,
         durable_artifact_dir=str(run.durable_artifact_dir) if run.durable_artifact_dir else None,
         status="dry_run" if run.dry_run else ("success" if exit_code == 0 else "failed"),
+        first_write_path=str(first_write_path) if first_write_path else None,
     )
 
 
@@ -668,6 +1104,7 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
     if args.thinking:
         profile = replace(profile, thinking=args.thinking)
     completed = None
+    first_write = None
     with profile_write_lock(profile):
         _copy_skill_bundle_unlocked(profile)
         write_profile_settings(profile)
@@ -683,7 +1120,26 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
         )
         render_prompt(profile, run)
         command = build_pi_command(profile, run)
+        expected_outputs = resolve_expected_outputs(args.expect_output, run.checkout_path)
+        first_write_timeout = args.first_write_timeout_seconds
+        if first_write_timeout < 0:
+            raise SystemExit("--first-write-timeout-seconds must be 0 or greater")
+        if args.completion_grace_seconds < 0:
+            raise SystemExit("--completion-grace-seconds must be 0 or greater")
+        if args.complete_when_output_and_handoff and not expected_outputs:
+            raise SystemExit("--complete-when-output-and-handoff requires --expect-output")
+        if args.complete_when_output_and_handoff and first_write_timeout == 0:
+            raise SystemExit(
+                "--complete-when-output-and-handoff requires a positive first-write timeout"
+            )
+        if run.dry_run and expected_outputs:
+            first_write = {
+                "status": "dry_run",
+                "timeout_seconds": first_write_timeout,
+                "expected_outputs": [str(path) for path in expected_outputs],
+            }
         if not args.dry_run:
+            ensure_expected_output_parents(expected_outputs)
             missing_env = missing_live_env(profile)
             if missing_env:
                 raise SystemExit(
@@ -694,22 +1150,35 @@ def command_run(args: argparse.Namespace) -> dict[str, object]:
             env = os.environ.copy()
             env.setdefault("PI_TELEMETRY", "0")
             timeout = args.timeout_seconds if args.timeout_seconds > 0 else None
-            try:
-                completed = subprocess.run(
-                    command,
+            if expected_outputs and first_write_timeout > 0:
+                completed, first_write = run_with_first_write_gate(
+                    command=command,
                     cwd=run.checkout_path,
-                    text=True,
-                    capture_output=True,
-                    check=False,
                     env=env,
-                    timeout=timeout,
+                    timeout_seconds=timeout,
+                    first_write_timeout_seconds=first_write_timeout,
+                    expected_outputs=expected_outputs,
+                    runtime_dir=run.runtime_dir,
+                    handoff_path=run.handoff_path,
+                    complete_when_output_and_handoff=args.complete_when_output_and_handoff,
+                    completion_grace_seconds=args.completion_grace_seconds,
                 )
-            except subprocess.TimeoutExpired as exc:
-                stdout = exc.stdout.decode("utf-8", errors="replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
-                stderr = exc.stderr.decode("utf-8", errors="replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
-                stderr = stderr + f"\nexternal CLI run timed out after {timeout} seconds\n"
-                completed = subprocess.CompletedProcess(command, 124, stdout, stderr)
-    result = collect_run_artifacts(run, command, completed)
+            elif expected_outputs:
+                completed, first_write = run_with_expected_output_check(
+                    command=command,
+                    cwd=run.checkout_path,
+                    env=env,
+                    timeout_seconds=timeout,
+                    expected_outputs=expected_outputs,
+                )
+            else:
+                completed = run_command_capture(
+                    command=command,
+                    cwd=run.checkout_path,
+                    env=env,
+                    timeout_seconds=timeout,
+                )
+    result = collect_run_artifacts(run, command, completed, first_write)
     payload = asdict(result)
     payload["summary"] = f"run {profile.name}: {result.status}"
     return payload
@@ -735,6 +1204,37 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--run-id", default="")
     run.add_argument("--artifact-dir", default="")
     run.add_argument("--attach", action="append", default=[])
+    run.add_argument(
+        "--expect-output",
+        action="append",
+        default=[],
+        help="Relative path, inside the checkout, that the external agent must create or modify early.",
+    )
+    run.add_argument(
+        "--first-write-timeout-seconds",
+        type=int,
+        default=120,
+        help=(
+            "When --expect-output is supplied, fail the run if no expected regular "
+            "output file changes within this many seconds. Use 0 to wait until "
+            "process exit, then validate and record first_write.json."
+        ),
+    )
+    run.add_argument(
+        "--complete-when-output-and-handoff",
+        action="store_true",
+        help=(
+            "With --expect-output and a positive first-write timeout, stop the "
+            "external process successfully after an expected output changes and "
+            "the managed handoff no longer looks like the placeholder."
+        ),
+    )
+    run.add_argument(
+        "--completion-grace-seconds",
+        type=float,
+        default=2.0,
+        help="Seconds to wait after detecting expected output plus completed handoff before stopping the process.",
+    )
     run.add_argument("--timeout-seconds", type=int, default=0)
     run.add_argument("--dry-run", action="store_true")
     run.add_argument("--json", action="store_true")

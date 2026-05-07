@@ -65,6 +65,31 @@ Pi/Kimi frontend delegation uses a manifest-driven skill bundle. Keep external
 frontend CLI profiles on repo-owned inference.sh media skills such as
 `image-generation`, `video-generation`, Remotion, and related frontend/media
 skills; do not mount Codex-native `imagegen` into Pi bundles. See `MEM-0083`.
+For Pi/Kimi implementation repair passes, require an early first-write
+checkpoint to the named file before broad rereads or critique. If the external
+run does not create the expected artifact promptly, record it as a failed
+handoff and split or repair locally; live delegate runs should use
+`--expect-output` so `first_write.json` proves whether the agent crossed from
+planning into regular-file production. Do not count agent activity, directory
+creation, or symlink creation as frontend progress. See `MEM-0084`.
+For Terminal/Terminus-level frontend self-improvement, judge external output
+with binary gates for first-write, strict scroll debug, fake-scroll rejection,
+checkpoint screenshot delta, and generated/rendered asset manifest quality.
+`code-native-canvas` with zero media assets is prototype evidence, not final
+visual parity. See `MEM-0085`.
+For Pi/Kimi frontend startup probes, require `first_write.json` pass, at least
+one session file, a regular probe output, and a non-placeholder handoff; session
+creation alone is not enough. Use the compiled startup probe with
+`--thinking low` and a 90-second first-write gate before expensive compiled
+frontend phases. See `MEM-0086`.
+For self-improve evals with intentionally bad fixtures, score the headline
+metric against expected accept/reject outcomes, not raw assertion ratio. Keep
+raw assertion pass rate as a diagnostic so reject-control quality-gate failures
+do not look like regressions. See `MEM-0087`.
+For Terminal-style delegated landing pages, mobile hero phrase separation is a
+QA signal: when a multi-phrase hero title relies on explicit line breaks,
+require `hasMobileHeroPhraseSeparation` or equivalent visual proof before
+treating mobile polish as passing. See `MEM-0088`.
 For UI source reviews, run `web-design-guidelines` through the
 `review` skill's `frontend-guidelines` lane and record that score beside
 `ui-quality` so taste judgment and source-level interface fundamentals remain
