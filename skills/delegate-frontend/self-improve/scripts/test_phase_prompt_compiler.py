@@ -125,6 +125,25 @@ class PhasePromptCompilerTests(unittest.TestCase):
             self.assertIn("## Motion Plan", prompt)
             self.assertNotIn("## Long Section", prompt)
 
+    def test_implementation_prompt_rejects_stub_only_output(self) -> None:
+        args = argparse.Namespace(
+            phase="implementation",
+            brief="Build the app.js behavior from the approved spec.",
+            brief_file="",
+            owned_output=[".harness/site/app.js"],
+            handoff_path="handoff.md",
+            recipe_id="industrial-mission-control",
+            taste_profile_id="terminal-palantir",
+            effect_stack_id="cinematic-frame-sequence",
+            acceptance=[],
+            output="",
+        )
+        prompt = phase_prompt_compiler.compile_prompt(args)
+        self.assertIn("The first-write stub is only a proof marker", prompt)
+        self.assertIn("stub-only owned output is failed implementation", prompt)
+        self.assertIn("finish the owned file before optional self-review", prompt)
+        self.assertIn("complete runnable implementation", prompt)
+
     def test_startup_probe_builds_delegate_cli_dry_run_command(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             artifact_dir = Path(tmp)
@@ -183,7 +202,10 @@ class PhasePromptCompilerTests(unittest.TestCase):
         )
         prompt = phase_prompt_compiler.compile_prompt(args)
         self.assertIn(f"Your first external tool call must create or modify `{owned_output}`", prompt)
+        self.assertIn("with a non-destructive marker or tiny targeted edit", prompt)
         self.assertIn("make one bounded repair patch", prompt)
+        self.assertIn("first write must preserve existing content", prompt)
+        self.assertIn("destructive stub-only overwrite", prompt)
         self.assertIn("do not read scroll_scrub_qa.cjs", prompt)
         self.assertIn("do not read sibling prototype pages", prompt)
         self.assertIn("never replace a built page with a minimal dark text stub", prompt)
@@ -205,6 +227,7 @@ class PhasePromptCompilerTests(unittest.TestCase):
         self.assertTrue(summary["requires_support_video_metric"])
         self.assertTrue(summary["requires_mobile_phrase_separation"])
         self.assertTrue(summary["preserves_existing_surface"])
+        self.assertTrue(summary["requires_non_destructive_first_write"])
 
     def test_startup_probe_defaults_are_run_id_derived(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

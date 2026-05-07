@@ -95,6 +95,11 @@ For Terminal-style delegated landing pages, mobile hero phrase separation is a
 QA signal: when a multi-phrase hero title relies on explicit line breaks,
 require `hasMobileHeroPhraseSeparation` or equivalent visual proof before
 treating mobile polish as passing. See `MEM-0088`.
+For Pi/Kimi repair first-write on existing built frontend files, preserve the
+existing artifact. Use a non-destructive marker or tiny targeted edit, and for
+large generated media repairs prefer a loaded sidecar script or small CSS-owned
+output over asking the delegate to reread and rewrite the full implementation.
+See `MEM-0093`.
 For UI source reviews, run `web-design-guidelines` through the
 `review` skill's `frontend-guidelines` lane and record that score beside
 `ui-quality` so taste judgment and source-level interface fundamentals remain

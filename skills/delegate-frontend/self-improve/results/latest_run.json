@@ -1,5 +1,5 @@
 {
-  "assertion_pass_rate": 0.8850987432675045,
+  "assertion_pass_rate": 0.8926174496644296,
   "candidate": "/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/self-improve/prompts/current.txt",
   "case_results": [
     {
@@ -1950,6 +1950,11 @@
           "passed": true
         },
         {
+          "message": "requires_non_destructive_first_write is true",
+          "name": "compiled-repair-prompt:require_true:requires_non_destructive_first_write",
+          "passed": true
+        },
+        {
           "message": "requires_style_scrub is true",
           "name": "compiled-repair-prompt:require_true:requires_style_scrub",
           "passed": true
@@ -3086,12 +3091,212 @@
       "gate_passed": false,
       "id": "current-browser-basic-pass-terminal-final-rejected",
       "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_sidecar_media_control_terminal_final",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "sidecar-control-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "sidecar-control-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict PASS, expected PASS",
+          "name": "sidecar-control-desktop:terminal_verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalFinalReady is true",
+          "name": "sidecar-control-desktop:score_true:terminalFinalReady",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "sidecar-control-desktop:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "sidecar-control-desktop:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "sidecar-control-desktop:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "sidecar-control-desktop:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "sidecar-control-desktop:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=6.0 >= 2",
+          "name": "sidecar-control-desktop:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.41814 >= 0.15",
+          "name": "sidecar-control-desktop:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=4.0 >= 2",
+          "name": "sidecar-control-desktop:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=2.0 >= 1",
+          "name": "sidecar-control-desktop:min_score:midScrollDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "sidecar-control-mobile:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "sidecar-control-mobile:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict PASS, expected PASS",
+          "name": "sidecar-control-mobile:terminal_verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalFinalReady is true",
+          "name": "sidecar-control-mobile:score_true:terminalFinalReady",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "sidecar-control-mobile:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "sidecar-control-mobile:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "sidecar-control-mobile:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "sidecar-control-mobile:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "sidecar-control-mobile:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "hasMobileHeroPhraseSeparation is true",
+          "name": "sidecar-control-mobile:score_true:hasMobileHeroPhraseSeparation",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=6.0 >= 2",
+          "name": "sidecar-control-mobile:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.40244 >= 0.15",
+          "name": "sidecar-control-mobile:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=4.0 >= 2",
+          "name": "sidecar-control-mobile:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=2.0 >= 1",
+          "name": "sidecar-control-mobile:min_score:midScrollDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "manifest summary present",
+          "name": "sidecar-control-assets:manifest_summary_present",
+          "passed": true
+        },
+        {
+          "message": "asset_strategy=generated-frame-sequence accepted",
+          "name": "sidecar-control-assets:asset_strategy_not",
+          "passed": true
+        },
+        {
+          "message": "assets=10 >= 4",
+          "name": "sidecar-control-assets:min_assets",
+          "passed": true
+        },
+        {
+          "message": "generated_or_rendered_count=10 >= 4",
+          "name": "sidecar-control-assets:min_generated_or_rendered_count",
+          "passed": true
+        },
+        {
+          "message": "broken_refs=0 <= 0",
+          "name": "sidecar-control-assets:max_broken_refs",
+          "passed": true
+        },
+        {
+          "message": "unsafe_refs=0 <= 0",
+          "name": "sidecar-control-assets:max_unsafe_refs",
+          "passed": true
+        },
+        {
+          "message": "has_mobile_fallback is true",
+          "name": "sidecar-control-assets:require_true:has_mobile_fallback",
+          "passed": true
+        },
+        {
+          "message": "has_reduced_motion_fallback is true",
+          "name": "sidecar-control-assets:require_true:has_reduced_motion_fallback",
+          "passed": true
+        },
+        {
+          "message": "source_prompt_count=10 >= 10",
+          "name": "sidecar-control-assets:source_prompts_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "sidecar-media-control-terminal-final-passes",
+      "rejected_by_gate": false
     }
   ],
-  "cases": 30,
-  "expectation_passed_cases": 30,
+  "cases": 31,
+  "expectation_passed_cases": 31,
   "pass_rate": 1.0,
-  "passed_assertions": 493,
-  "timestamp": "2026-05-07T04:33:43Z",
-  "total_assertions": 557
+  "passed_assertions": 532,
+  "timestamp": "2026-05-07T08:07:56Z",
+  "total_assertions": 596
 }

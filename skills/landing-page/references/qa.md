@@ -96,3 +96,21 @@ real media, distributed visual change, or section-level support media.
 Fail if the page only changes because normal sections scroll into view while
 the hero/stage itself has no debug, media, frame, pinned, or GSAP/ScrollTrigger
 signal.
+
+## Terminal Review Score
+
+For self-improvement experiments and delegated frontend runs, score the full
+artifact with the domain review runner after scroll-scrub QA:
+
+```bash
+python3 skills/landing-page/scripts/terminal_landing_score.py \
+  --site-dir <site-dir> \
+  --desktop-qa <desktop-scroll-scrub-qa.json> \
+  --mobile-qa <mobile-scroll-scrub-qa.json> \
+  --delegate-run-dir <optional-external-cli-run-dir> \
+  --out <score.json>
+```
+
+Use `references/terminal-scroll-review.md` for the dimension definitions. A
+score of `80` or higher is the mechanical pass target for Terminal/Terminus
+self-improvement loops, pending human visual review against the gold reference.

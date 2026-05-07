@@ -85,6 +85,11 @@ Codex lane.
   or broad references before patching, and must name the observable
   `hasStyleScrub`, `candidateChangeCount`, `hasSupportVideoDom`, and
   `hasMissionSupportVideos` scores when those are acceptance criteria.
+- `large generated implementation needs media repair` -> prefer a small loaded
+  sidecar script or CSS patch as the owned output instead of asking Pi to edit a
+  40KB+ generated JS file directly. The sidecar should use known selectors from
+  the prompt, wire generated media from the manifest, and avoid reading the
+  large implementation before first complete output.
 - `phase prompt has a managed handoff` -> add
   `--complete-when-output-and-handoff` so complete phase runs do not burn the
   full timeout after the handoff is written.
@@ -139,6 +144,10 @@ whether Codexter should first produce a stronger UX/visual brief.
     When a multi-phrase hero title uses explicit breaks, require
     `hasMobileHeroPhraseSeparation` or an equivalent screenshot check so
     hidden `<br>` rules do not glue the headline together.
+17. Repair first-write on existing files must be non-destructive. If Pi
+    overwrites an existing built page or large script with a tiny stub and then
+    stalls, kill the run, restore from backup or session evidence, and retry
+    with a sidecar-owned output or smaller patch boundary.
 
 ## Outcome Contract
 

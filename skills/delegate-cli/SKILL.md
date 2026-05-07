@@ -65,6 +65,10 @@ Use `advise` when choosing:
 2. Do not track generated `.harness/external-cli/` runtime bundles or secrets.
 3. Do not ship a profile as active until the launcher can dry-run it and attach
    reproducible artifacts.
+4. For Pi, `@file` is an attachment syntax, not a prompt-file execution syntax.
+   The launcher must pass rendered prompt text as the `-p` message and reserve
+   `@...` for true attachments. Recorded command artifacts should redact the
+   prompt argument and point reviewers to `prompt.md`.
 
 ## Outcome Contract
 

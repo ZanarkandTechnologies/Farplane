@@ -11,6 +11,7 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
 
 ## Eval Metric
 - Primary: `skill_eval_pass_rate`
+- Artifact score: `terminal_landing_score_percent >= 80` for generated Terminal/Terminus pages
 - Direction: higher
 - Minimum meaningful delta: +0.10 pass rate on the smoke suite or one newly passing known-failure case.
 - Simplicity guard: keep SKILL.md compact; prefer references/evals over duplicating long visual rules in the trigger file.
@@ -21,6 +22,9 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
 - Gold-reference comparison against Terminal-style production quality
 - Mobile, reduced-motion, and scroll-checkpoint QA
 - Improvement hypotheses tied to observed failures
+- Terminal scroll review score across strategy/spec, asset pipeline,
+  scroll-scrub mechanics, visual craft proxy, mobile/reduced motion, and
+  delegation evidence
 
 ## Durable Evals
 - `evals/test_cases.jsonl`
@@ -32,6 +36,8 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
 | 2026-05-05 | setup | Create skill-local memory | Baseline memory surface created | yes | Future runs should record durable lessons here. |
 | 2026-05-05 | terminal-warehouse | Split Terminal-style landing work into spec/assets/implementation/visual-review phases | Pi/Kimi could create a spec and partial files, but broad and repair prompts timed out; rendered output remained below Terminal quality | yes | Terminal-quality pages need a hard spec gate, generated-media contract, and smaller external-builder prompts. |
 | 2026-05-07 | scroll-scrub-todo-recipe | Add a loaded checklist that forces competitor analysis, user-story section planning, ASCII flow, nested `advise`, hero media generation, scroll-scrub conversion, and QA before implementation | Added `todos.md` and wired it into landing-page first-load and spec-first references | yes | The missing behavior was not only stricter QA; the skill needed an ordered pre-build recipe agents can follow without inference. |
+| 2026-05-07 | terminal-scroll-review-score | Add a domain review rubric and score runner so Terminal/Terminus self-improvement can chase an 80-point observable artifact target | Added `terminal-scroll-review.md` and `terminal_landing_score.py`; baseline scoring should drive the next prompt/profile repair | yes | Human taste still matters, but the loop needs a mechanical score that combines spec, assets, scroll, mobile, and delegation evidence. |
+| 2026-05-07 | warehouse-cv-score-loop | Run Pi/Kimi and a local sidecar control through the Terminal score | Pi/Kimi code-native output improved from `43` stub score to `61/100` after QA but failed Terminal gates; the local sidecar control wired generated videos and passed local content score at `90/100` | yes | The recipe target is reachable when generated hero/support media are wired as a sidecar, but delegation success requires Pi/Kimi to produce that sidecar plus a complete handoff. |
 
 ## Accepted Learnings
 - Terminal Industries quality is not just palette/nav imitation; it depends on
@@ -46,6 +52,13 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
 - Modern scroll-scrub landing work should start with competitor/reference
   analysis, user-story section selection, an ASCII page flow, and nested
   `advise` decisions per section before any asset generation or implementation.
+- Terminal/Terminus self-improvement should report `terminal_landing_score.py`
+  results. A sub-80 score should name the weakest dimension as the next
+  hypothesis instead of broadly asking the builder to "make it better."
+- A media sidecar can convert an otherwise weak code-native prototype into a
+  Terminal-ready mechanics artifact by wiring generated videos, mediaTime
+  scrub, support videos, and large checkpoint deltas. Treat this as the target
+  pattern for external builders, not as proof that Pi/Kimi produced it.
 
 ## Rejected Ideas
 - None yet.

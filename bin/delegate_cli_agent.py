@@ -864,10 +864,18 @@ def build_pi_command(profile: DelegateProfile, run: DelegateRun, root: Path | No
     ]
     for skill_name in available_skill_names(profile, root):
         command.extend(["--skill", str(copied_skill_path(profile, skill_name, root))])
-    command.extend(["-p", f"@{run.prompt_path}"])
+    command.extend(["-p", run.prompt_path.read_text(encoding="utf-8")])
     for attachment in run.attachments:
         command.append(f"@{attachment}")
     return command
+
+
+def command_for_artifacts(command: Sequence[str]) -> list[str]:
+    recorded = list(command)
+    for index, arg in enumerate(recorded[:-1]):
+        if arg == "-p" and not recorded[index + 1].startswith("@"):
+            recorded[index + 1] = "<prompt text redacted; see prompt.md>"
+    return recorded
 
 
 def terminate_process(process: subprocess.Popen[object]) -> None:
@@ -1002,7 +1010,7 @@ def copy_durable_artifacts(run: DelegateRun, command: Sequence[str]) -> None:
         if source.exists():
             shutil.copy2(source, run.durable_artifact_dir / name)
     (run.durable_artifact_dir / "command.json").write_text(
-        json.dumps({"command": list(command)}, indent=2) + "\n",
+        json.dumps({"command": command_for_artifacts(command)}, indent=2) + "\n",
         encoding="utf-8",
     )
 
@@ -1022,7 +1030,7 @@ def collect_run_artifacts(
     (run.runtime_dir / "stderr.log").write_text(stderr, encoding="utf-8")
     (run.runtime_dir / "exit_code.txt").write_text(f"{exit_code}\n", encoding="utf-8")
     (run.runtime_dir / "command.json").write_text(
-        json.dumps({"command": list(command)}, indent=2) + "\n",
+        json.dumps({"command": command_for_artifacts(command)}, indent=2) + "\n",
         encoding="utf-8",
     )
     session_files = sorted(str(path) for path in run.session_dir.rglob("*.jsonl"))
@@ -1047,7 +1055,7 @@ def collect_run_artifacts(
     copy_durable_artifacts(run, command)
     return DelegateRunResult(
         run_id=run.run_id,
-        command=list(command),
+        command=command_for_artifacts(command),
         exit_code=exit_code,
         checkout_mode=run.checkout_mode,
         checkout_path=str(run.checkout_path),

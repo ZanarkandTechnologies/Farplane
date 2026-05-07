@@ -166,3 +166,6 @@
 2026-05-07 10:32 +0800 | FEAT | capture seeded Pi/Kimi implementation and bounded mobile repair experiments, add mobile hero phrase-separation QA, and raise delegate-frontend self-improve replay coverage to 29 cases
 2026-05-07 12:35 +0800 | FEAT | split landing-page scroll QA into mechanics and Terminal-final readiness, add terminal verdict metrics, and sync the stricter recipe checklist into the Pi/Kimi frontend profile
 2026-05-07 14:19 +0800 | FEAT | add a landing-page todo recipe for modern scroll-scrub sites with competitor analysis, ASCII story planning, nested advise, generated hero media, frame conversion, and QA handoff
+2026-05-07 15:04 +0800 | FEAT | add a Terminal scroll landing review rubric and score runner so self-improvement loops can target an 80-point observable artifact score
+2026-05-07 15:04 +0800 | FIX | make the Pi delegation adapter pass rendered prompt text to `-p` instead of attaching the prompt file, so live runs execute the delegated task and first-write probes become meaningful
+2026-05-07 15:58 +0800 | FEAT | add non-destructive Pi/Kimi repair prompt gates, sidecar repair guidance, and a Terminal-score control showing generated-media wiring can pass local desktop/mobile final readiness

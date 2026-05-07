@@ -23,7 +23,7 @@ def write_profile_templates(root: Path) -> None:
     profile_dir.mkdir(parents=True, exist_ok=True)
     (profile_dir / "APPEND_SYSTEM.md").write_text("system\n", encoding="utf-8")
     (profile_dir / "prompt.md.tpl").write_text(
-        "Profile {{profile_name}}\nTicket {{ticket_ref}}\n{{append_system}}\n{{skill_list}}\n{{ticket_context}}\n{{handoff_path}}\n",
+        "Profile {{profile_name}}\nTicket {{ticket_ref}}\n{{append_system}}\n{{prompt}}\n{{skill_list}}\n{{ticket_context}}\n{{handoff_path}}\n",
         encoding="utf-8",
     )
     (profile_dir / "handoff.md.tpl").write_text(
@@ -478,12 +478,19 @@ class DelegateCliAgentTests(unittest.TestCase):
             self.assertEqual(command[0], "pi")
             self.assertIn("--session-dir", command)
             self.assertIn("--model", command)
+            self.assertIn("-p", command)
+            prompt_arg = command[command.index("-p") + 1]
+            self.assertIn("Build the UI", prompt_arg)
+            self.assertNotEqual(prompt_arg, f"@{run.prompt_path}")
             self.assertTrue(run.prompt_path.exists())
             self.assertTrue((run.durable_artifact_dir / "prompt.md").exists())
             self.assertTrue((run.durable_artifact_dir / "stdout.log").exists())
             self.assertTrue((run.durable_artifact_dir / "session_files.json").exists())
             command_json = json.loads((run.durable_artifact_dir / "command.json").read_text(encoding="utf-8"))
             self.assertEqual(command_json["command"][0], "pi")
+            recorded_prompt = command_json["command"][command_json["command"].index("-p") + 1]
+            self.assertEqual(recorded_prompt, "<prompt text redacted; see prompt.md>")
+            self.assertEqual(result.command[result.command.index("-p") + 1], "<prompt text redacted; see prompt.md>")
             self.assertEqual(result.session_dir, str(run.session_dir))
 
     def test_doctor_reports_missing_executable_without_failing_templates(self) -> None:
@@ -948,6 +955,10 @@ class DelegateCliAgentTests(unittest.TestCase):
             result = delegate_cli_agent.collect_run_artifacts(run, command, None)
             resolved_attachment = str(attachment.resolve())
             self.assertIn(f"@{resolved_attachment}", command)
+            prompt_arg = command[command.index("-p") + 1]
+            self.assertIn("Review attached screenshot", prompt_arg)
+            self.assertNotIn(f"@{run.prompt_path}", command)
+            self.assertIn(f"@{resolved_attachment}", result.command)
             self.assertEqual(result.attachments, [resolved_attachment])
             self.assertTrue((run.runtime_dir / "attachments.json").exists())
 

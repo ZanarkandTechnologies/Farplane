@@ -80,6 +80,7 @@ For landing pages with reusable formulas or inspiration references:
 - `references/taste-profiles.json` - JSON registry of landing-page visual registers.
 - `references/effect-stacks.json` - JSON registry of implementation stacks, assets, debug hooks, and QA.
 - `references/spec-first-cinematic-industrial.md` - Terminal-style spec-first gate, asset contract, external-builder phase split, and gold-reference comparison checklist.
+- `references/terminal-scroll-review.md` - domain-specific review rubric and 80-point self-improvement score for Terminal/Terminus-style landing pages.
 - `references/registry-format.md` - JSON field contract, routing rules, and authoring checklist.
 - `references/cinematic-scroll-site-guideline.md` - compatibility pointer for older Terminal-style cinematic-scroll references.
 - `references/qa.md` - landing-page proof checks.
@@ -107,3 +108,8 @@ For cinematic industrial pages, the output must also name the current phase:
 include a file map, generated/real asset manifest plan, desktop and mobile hero
 media plan, poster/reduced-motion fallback, scroll checkpoints, and the next
 phase prompts or task slices.
+
+For Terminal/Terminus-style self-improvement runs, also include the
+`terminal-scroll-review` target: score with
+`scripts/terminal_landing_score.py`, treat `80` as the pass threshold, and use
+the lowest scoring dimension as the next repair hypothesis.

@@ -61,6 +61,8 @@ make external Pi/Kimi frontend delegation reliably produce Terminal-style scroll
 | 2026-05-07 | live-asset-finalization-success | Retry asset finalization without spending on media | Pi/Kimi wrote a readiness file as first-write, ran the manifest linter, used canonical handoff headings, and the wrapper observed `completion_reason=expected_output_and_handoff`; accepted fixture raises the suite to 21/21 with `assertion_pass_rate=0.892508` | yes | The asset package is now cleanly finalizable without another media-generation run; implementation can use the manifest only after this finalization evidence exists. |
 | 2026-05-07 | review-blocker-fix-path-and-handoff | Fix review-found false positives in asset paths and handoff completion | Asset manifests now count/reject unsafe out-of-root refs; handoffs must have non-empty required section bodies; wrapper clean-completion requires the changed-files body to mention the expected output; unsafe-ref reject-control raises the suite to 22/22 with `assertion_pass_rate=0.897590` | yes | First-write and phase-completion proof must be hard to spoof: headings alone are not completion, and existing local files outside the asset package are not valid generated assets. |
 | 2026-05-07 | implementation-repair-loop | Run seeded implementation and bounded V4 repair experiments | Seeded V4 output passes scroll/media/style/support-video QA but timed out without managed handoff; first mobile repair failed the 60s first-write gate; retry with a 120s gate cleanly patched mobile typography and raised the suite to 29/29 with `assertion_pass_rate=0.901852` | yes | Treat seeded partial UI as useful artifact evidence but failed phase completion; use one-file micro-repairs with clean handoff completion for polish, and score mobile hero phrase separation mechanically. |
+| 2026-05-07 | terminal-score-domain-rubric | Add a landing-page Terminal score and run live Pi/Kimi against the warehouse CV target | Code-native implementation reached `61/100` after desktop/mobile QA, with basic scroll mechanics passing but Terminal media pipeline, dominant media, distributed deltas, and handoff still failing | yes | A domain score makes the gap legible: mechanics are not enough, and a timed-out delegate run stays blocked even when it writes useful files. |
+| 2026-05-07 | media-repair-sidecar-control | Compare Pi repair attempts with a local sidecar control pattern | Pi repair overwrote an existing 45KB file with a stub, then a sidecar attempt also stalled after first-write; a local sidecar control passed desktop/mobile `terminalVerdict: PASS`, local score `90/100`, and suite `skill_eval_pass_rate=1.000000` with `assertion_pass_rate=0.892617` | yes | Large generated JS repairs should be sidecar-owned or tiny CSS-owned, first-write on existing files must be non-destructive, and Pi must write the complete sidecar before optional inspection. |
 
 ## Accepted Learnings
 - A Terminal/Terminus page is not final quality when `asset_strategy` is
@@ -134,6 +136,16 @@ make external Pi/Kimi frontend delegation reliably produce Terminal-style scroll
 - Pi/Kimi repair passes can work when reduced to one owned file and a clean
   handoff target, but a 60s first-write gate can flake. Retry once with a
   longer gate before rejecting the micro-patch hypothesis.
+- Repair first-write on an existing generated file must preserve the existing
+  content. A stub-only overwrite can destroy the current runnable page even
+  though `first_write.json` says `pass`.
+- When a generated implementation is large, prefer a small loaded sidecar
+  script or CSS patch as the delegated owned output. The sidecar can wire
+  generated media, debug fields, and style scrub without forcing Pi/Kimi to
+  reread or rewrite the whole generated page.
+- A local Terminal-ready sidecar control is useful as an optimization target,
+  but it does not count as delegated Pi/Kimi success until the external run
+  produces the sidecar plus a non-placeholder handoff.
 
 ## Rejected Ideas
 - Prompt-only "make it cinematic" without binary QA; it allowed fake scroll and
@@ -143,6 +155,12 @@ make external Pi/Kimi frontend delegation reliably produce Terminal-style scroll
 - Run the implementation phase from the approved spec plus the finalized asset
   manifest, then require scroll-scrub QA, visual geometry, visual QA, review,
   and web-design-guidelines evidence before any UI parity claim.
+- Teach the phase compiler or wrapper to reject stub-only first-write
+  completions earlier, especially when a pre-existing owned output shrinks to a
+  tiny file.
+- Add a sidecar implementation prompt mode for large generated UI repairs:
+  first write a complete standalone script, avoid large-file rereads, wire the
+  manifest media, and run terminal score.
 - Keep `asset_manifest_lint.py` as the hard gate before implementation consumes
   any generated media.
 - Keep the local visual-geometry gates strict enough to reject the current

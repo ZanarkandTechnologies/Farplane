@@ -22,4 +22,5 @@
 - Keep first-load instructions enough to produce a landing brief without references.
 - Keep `todos.md` as the ordered modern scroll-scrub recipe; avoid moving it into hidden parser state or duplicating all of it in `SKILL.md`.
 - For modern Terminal/Terminus-style landing work, treat `todos.md` as the mandatory pre-build recipe before implementation. See `MEM-0090`.
+- Keep `references/terminal-scroll-review.md` and `scripts/terminal_landing_score.py` aligned when changing Terminal/Terminus scoring dimensions.
 - Keep motion guidance as routing, not stale API snippets.

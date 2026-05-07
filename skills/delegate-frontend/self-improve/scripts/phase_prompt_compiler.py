@@ -47,6 +47,8 @@ PHASE_DEFAULTS: dict[str, dict[str, object]] = {
         "objective": "implement the bounded frontend files from the approved spec and asset manifest",
         "acceptance": [
             "use the supplied spec and asset manifest instead of rereading broad references",
+            "replace the first-write stub with a complete runnable implementation in the same run; a stub-only owned output is failed implementation",
+            "for single-file implementation phases, finish the owned file before optional self-review, broad reference reading, or critique",
             "expose window.__scrollScrubDebug with progress, phase, frame or mediaTime, active, ready, and reducedMotion",
             "mark the scrubbed stage with data-scroll-scrub-root",
             "wire generated/rendered media or frame assets from assets/asset-manifest.json",
@@ -58,6 +60,8 @@ PHASE_DEFAULTS: dict[str, dict[str, object]] = {
     "repair": {
         "objective": "make one bounded repair patch to an existing frontend artifact until the named mechanical QA gate passes",
         "acceptance": [
+            "when the owned target already exists, the first write must preserve existing content; append a repair marker or make a tiny targeted non-destructive edit instead of replacing the file with a stub",
+            "a destructive stub-only overwrite of an existing owned file is failed repair even when first-write evidence passes",
             "after the first-write stub, inspect only the owned target file plus explicitly named artifact files",
             "do not read scroll_scrub_qa.cjs, broad skill bodies, screenshots, or unrelated references before the repair patch is complete",
             "do not read sibling prototype pages or previous failed outputs unless the prompt names them as allowed reference files",
@@ -167,16 +171,22 @@ def compile_prompt(args: argparse.Namespace) -> str:
 
     handoff_path = args.handoff_path or "handoff.md"
     if owned_outputs:
+        first_write_action = (
+            "with a non-destructive marker or tiny targeted edit"
+            if phase == "repair"
+            else "with a small valid stub"
+        )
         first_write_section = [
             "## First-Write Contract",
             (
                 f"Your first external tool call must create or modify `{owned_outputs[0]}` "
-                "with a small valid stub before reading skill bodies, broad references, "
+                f"{first_write_action} before reading skill bodies, broad references, "
                 "screenshots, or unrelated files."
             ),
             "The wrapper pre-creates parent directories for owned outputs; do not use `mkdir` as the first tool call.",
             "",
             "After the first-write proof exists, finish the owned artifact from the constraints in this prompt before optional reference reading.",
+            "The first-write stub is only a proof marker. It is not acceptable final output; expand or replace it before writing the handoff.",
         ]
     else:
         first_write_section = [
@@ -281,6 +291,7 @@ def summarize_prompt(
                 "requires_terminal_final_ready": "terminalfinalready" in lowered,
                 "requires_distributed_scrub_deltas": "hasdistributedscrubdeltas" in lowered,
                 "preserves_existing_surface": "never replace a built page with a minimal dark text stub" in lowered,
+                "requires_non_destructive_first_write": "first write must preserve existing content" in lowered,
             }
         )
     return summary
