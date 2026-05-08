@@ -276,8 +276,8 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             with patch.dict(
                 os.environ,
                 {
-                    "CODEXTER_SKILL_OPPORTUNITY_REVIEW": "1",
-                    "CODEXTER_SKILL_OPPORTUNITY_REVIEW_DRY_RUN": "1",
+                    "CODEXTER_SKILL_OPPORTUNITY_APPLY": "1",
+                    "CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1",
                 },
                 clear=True,
             ):
@@ -314,7 +314,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 "pending_user_turn": {},
             }
 
-            with patch.dict(os.environ, {"CODEXTER_SKILL_OPPORTUNITY_REVIEW": "1"}, clear=True):
+            with patch.dict(os.environ, {"CODEXTER_SKILL_OPPORTUNITY_APPLY": "1"}, clear=True):
                 result = self.stop_hook.maybe_launch_skill_opportunity_review(
                     base=project_root,
                     project_root=project_root,
@@ -324,10 +324,10 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 )
 
         self.assertEqual(result["status"], "failed")
-        self.assertEqual(result["reason"], "missing skill-opportunity-reviewer role config")
+        self.assertEqual(result["reason"], "missing skill-opportunity-applier role config")
 
-    def test_skill_opportunity_review_command_is_read_only_and_disables_hooks(self) -> None:
-        cmd = self.stop_hook.skill_opportunity_review_command(
+    def test_skill_opportunity_apply_command_can_write_workspace_and_disables_hooks(self) -> None:
+        cmd = self.stop_hook.skill_opportunity_apply_command(
             Path("/tmp/codexter"),
             Path("/tmp/report.json"),
             {
@@ -338,7 +338,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         )
 
         self.assertIn("--sandbox", cmd)
-        self.assertIn("read-only", cmd)
+        self.assertIn("workspace-write", cmd)
         self.assertIn("--disable", cmd)
         self.assertIn("codex_hooks", cmd)
         self.assertIn("--output-last-message", cmd)

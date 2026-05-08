@@ -2091,21 +2091,35 @@ def role_command(base: Path, output_path: Path, role_config: dict[str, str]) -> 
 
 
 def skill_opportunity_review_enabled() -> bool:
-    return os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW", "").lower() in {
+    apply_enabled = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY", "").lower() in {
         "1",
         "true",
         "yes",
         "on",
     }
+    legacy_review_enabled = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW", "").lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    return apply_enabled or legacy_review_enabled
 
 
 def skill_opportunity_review_dry_run() -> bool:
-    return os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW_DRY_RUN", "").lower() in {
+    apply_dry_run = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN", "").lower() in {
         "1",
         "true",
         "yes",
         "on",
     }
+    legacy_review_dry_run = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW_DRY_RUN", "").lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    return apply_dry_run or legacy_review_dry_run
 
 
 def skill_opportunity_review_interval() -> int:
@@ -2125,7 +2139,7 @@ def safe_path_token(raw: str) -> str:
 
 
 def skill_opportunity_review_root(project_root: Path) -> Path:
-    return project_root / ".harness" / "state" / "self-improve" / "reviews"
+    return project_root / ".harness" / "state" / "self-improve" / "applications"
 
 
 def skill_opportunity_review_input(
@@ -2164,14 +2178,15 @@ def skill_opportunity_review_input(
         },
         "instructions": [
             "Return JSON only.",
-            "Do not propose direct mutation of shipped skills from this hook.",
+            "Automatically update or create skill files when the signal is clearly useful and low-risk.",
+            "Only write under skills/**; leave repo policy, docs, tickets, hooks, config, agents, bin, and .harness untouched.",
             "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup.",
             "Dedupe against existing skills, feature registry, memory, troubles, and recent tickets.",
         ],
     }
 
 
-def skill_opportunity_review_command(base: Path, report_path: Path, role_config: dict[str, str]) -> list[str]:
+def skill_opportunity_apply_command(base: Path, report_path: Path, role_config: dict[str, str]) -> list[str]:
     command = [
         "codex",
         "exec",
@@ -2180,7 +2195,7 @@ def skill_opportunity_review_command(base: Path, report_path: Path, role_config:
         "-C",
         str(base),
         "--sandbox",
-        "read-only",
+        "workspace-write",
         "--disable",
         "codex_hooks",
         "--color",
@@ -2256,7 +2271,7 @@ def maybe_launch_skill_opportunity_review(
                     "recipe_candidates": [],
                     "unconventional_speedup": {
                         "title": "dry run",
-                        "rationale": "review launch was intentionally not executed",
+                        "rationale": "skill application launch was intentionally not executed",
                     },
                     "dedupe_refs": input_payload["dedupe_refs"],
                     "handoff_targets": [],
@@ -2275,9 +2290,9 @@ def maybe_launch_skill_opportunity_review(
         )
         return {"status": "launched", "reason": "dry run", "review_run_path": relative_run_path, "pid": "dry-run"}
 
-    role_config = load_role_config(base, "skill-opportunity-reviewer")
+    role_config = load_role_config(base, "skill-opportunity-applier")
     if role_config is None:
-        return {"status": "failed", "reason": "missing skill-opportunity-reviewer role config", "review_run_path": relative_run_path, "pid": ""}
+        return {"status": "failed", "reason": "missing skill-opportunity-applier role config", "review_run_path": relative_run_path, "pid": ""}
 
     prompt = "Context:\n" + json.dumps(input_payload, ensure_ascii=True, indent=2) + "\n"
     prompt_path = run_dir / "prompt.json"
@@ -2287,7 +2302,7 @@ def maybe_launch_skill_opportunity_review(
     stderr_handle = stderr_path.open("w", encoding="utf-8")
     try:
         proc = subprocess.Popen(
-            skill_opportunity_review_command(base, report_path, role_config),
+            skill_opportunity_apply_command(base, report_path, role_config),
             stdin=stdin_handle,
             stdout=stdout_handle,
             stderr=stderr_handle,
@@ -2309,7 +2324,7 @@ def maybe_launch_skill_opportunity_review(
         review_run_path=relative_run_path,
         current_window=window,
     )
-    return {"status": "launched", "reason": "started detached reviewer", "review_run_path": relative_run_path, "pid": str(proc.pid)}
+    return {"status": "launched", "reason": "started detached skill applier", "review_run_path": relative_run_path, "pid": str(proc.pid)}
 
 
 def parse_role_output(output_path: Path) -> dict[str, object] | None:

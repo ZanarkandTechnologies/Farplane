@@ -23,12 +23,13 @@ CODEXTER_IMPL_HOOK = "1"
 # CODEXTER_TELEMETRY_API_URL = "https://your-backend.example.com/api/codex/activity"
 # CODEXTER_TELEMETRY_API_TOKEN = "replace-me"
 # CODEXTER_TELEMETRY_TIMEOUT_SECS = "2.0"
-# Optional hook-backed skill-opportunity reviewer. Captured windows stay local
-# under `.harness/state/self-improve/`; reviewer launches are off by default.
-# CODEXTER_SKILL_OPPORTUNITY_REVIEW = "1"
+# Optional hook-backed skill-opportunity applier. Captured windows stay local
+# under `.harness/state/self-improve/`; applier launches are off by default.
+# When enabled, the sidecar may update or create files under `skills/**`.
+# CODEXTER_SKILL_OPPORTUNITY_APPLY = "1"
 # CODEXTER_SKILL_OPPORTUNITY_REVIEW_INTERVAL = "10"
 # CODEXTER_SKILL_OPPORTUNITY_MAX_EXCHANGES = "10"
-# CODEXTER_SKILL_OPPORTUNITY_REVIEW_DRY_RUN = "1"
+# CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN = "1"
 # Optional explicit force-on for Codexter hook behavior. The Stop hook also
 # auto-activates from clear runtime context such as `.harness/`, `tickets/`,
 # `IMPL_RESULT`, or explicit ticket selectors.
@@ -110,9 +111,9 @@ config_file = "agents/qa-tester.toml"
 description = "Stop-hook reviewer for missing-result impl continuation checks."
 config_file = "agents/completion-reviewer.toml"
 
-[agents.skill-opportunity-reviewer]
-description = "Read-only hook sidecar that reviews recent conversation windows for skill, recipe, formula, and speedup opportunities."
-config_file = "agents/skill-opportunity-reviewer.toml"
+[agents.skill-opportunity-applier]
+description = "Hook sidecar that turns recent conversation windows into bounded skill updates or new skill packages."
+config_file = "agents/skill-opportunity-applier.toml"
 
 [notice]
 hide_rate_limit_model_nudge = true
