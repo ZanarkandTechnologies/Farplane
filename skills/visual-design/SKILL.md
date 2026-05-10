@@ -27,10 +27,11 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 1. **Confirm functional basis.** Identify the user, primary action, states, and interaction model. If missing, route to `functional-ui`.
 2. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.
 3. **Write a scene sentence.** Name who uses the surface, where, under what ambient light, and in what mood. Let that force dark/light, density, and contrast.
-4. **Choose taste dials.** Set visual density, design variance, motion intensity, color strategy, and type voice.
+4. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
 5. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary.
-6. **Reject AI tells.** Run the anti-slop check from `taste-dials.md` and `critique-audit.md`.
-7. **Hand off to implementation.** Produce concrete constraints that `frontend-craft` or `frontend-design` references can build.
+6. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
+7. **Reject AI tells.** Run the anti-slop check from `taste-dials.md` and `critique-audit.md`.
+8. **Hand off to implementation.** Produce concrete constraints that `frontend-craft` or `frontend-design` references can build.
 
 ## Decision Branches
 
@@ -49,11 +50,13 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 - Do not import new fonts, colors, or animation libraries without checking the project and the implementation owner.
 - Do not make every product UI cinematic. Repeated-use tools should feel efficient, calm, and inspectable.
 - Do not ignore mobile text fit, contrast, focus states, or reduced-motion needs.
+- Do not copy community taste-skill bans wholesale. Convert them into context-aware Codexter constraints.
 
 ## Reference Map
 
 - `references/brand-product-register.md` - product vs brand visual rules.
 - `references/taste-dials.md` - density, variance, motion, color, anti-slop.
+- `references/design-brief.md` - durable visual-system handoff shape.
 - `references/critique-audit.md` - review checklist and score shape.
 - `references/architecture.md` - input/output boundary with functional and implementation skills.
 - `references/workflows.md` - visual direction and polish paths.
@@ -65,7 +68,8 @@ Return a concise visual brief with:
 
 - `Register`
 - `Scene sentence`
-- `Taste dials`
+- `Taste dials` with 1-10 numeric values
 - `Visual system`
+- `Design brief path` when one was created or updated
 - `Anti-slop constraints`
 - `Implementation handoff`

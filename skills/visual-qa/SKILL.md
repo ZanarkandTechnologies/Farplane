@@ -135,6 +135,21 @@ For each interactive element (CTA, tabs, menus, inputs):
 - No horizontal overflow, hidden CTA, or scroll traps.
 - Sticky/fixed elements do not cover required controls.
 
+### D) Frontend preflight coverage
+
+- Small-phone width around 375px has no overlap, clipped text, hidden CTA, or
+  horizontal overflow.
+- Landscape or short-height viewport is checked when fixed bars, sidebars,
+  pinned sections, large heroes, or dense dashboards are present.
+- Increased text size, long labels, and realistic dynamic content do not break
+  button/card/input layout.
+- Reduced-motion behavior exists for animation-heavy surfaces.
+- Touch targets are at least 44px high/wide where practical, with visible focus
+  states for keyboard users.
+- Dark/light or theme variants keep readable contrast when tokens changed.
+- Imported shadcn or registry components are customized to the visual brief
+  instead of staying visibly default.
+
 ## Failure mode: underspecified QA
 
 Treat QA as incomplete and return `FAIL` when any of these are true:
@@ -188,6 +203,8 @@ Write the report to:
 - If ticket context or taste context is missing, treat QA as incomplete instead of inventing a target.
 - If declared evidence was not captured, treat the affected screen judgment as incomplete.
 - If the report does not identify the best user-facing evidence item, QA is incomplete.
+- If responsive, theme, or reduced-motion checks were relevant but skipped, the
+  report must say why.
 
 ## Token-efficiency rules
 

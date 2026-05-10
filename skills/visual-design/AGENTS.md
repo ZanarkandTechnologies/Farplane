@@ -18,3 +18,4 @@
 
 - Keep first-load instructions enough to produce a visual brief without references.
 - Keep community taste guidance distilled into Codexter rules instead of copy-pasted wholesale.
+- Substantial frontend work needs numeric taste dials and a durable design brief or ticket section before implementation handoff. See `MEM-0085`.

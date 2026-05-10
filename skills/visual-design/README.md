@@ -7,14 +7,15 @@ Define frontend look, taste, hierarchy, and visual-system direction once the fun
 ## Public API / Entrypoints
 
 - `SKILL.md`: main visual-design workflow
-- `references/*`: register, taste dials, and critique guidance
+- `references/*`: register, numeric taste dials, design brief, and critique guidance
 
 ## Minimal Example
 
 1. Confirm `functional-ui` has settled the workflow.
 2. Classify product vs brand register.
-3. Set scene sentence, taste dials, and visual system.
-4. Hand constraints to `frontend-craft`.
+3. Set scene sentence, numeric taste dials, and visual system.
+4. Create or update a durable design brief for substantial UI work.
+5. Hand constraints to `frontend-craft`.
 
 ## How to Test
 
