@@ -34,6 +34,18 @@ as long as they preserve the approved narrative and QA gates.
 Terminal-style industrial scrolltelling, Palantir-style density, and restrained
 enterprise operations copy.
 
+## Reference Research
+Terminal uses cinematic industrial assets and pinned scroll; peer enterprise
+sites use concrete product imagery, proof metrics, and governance-safe claims.
+
+## Best-of-worlds Decisions
+Adopt full-bleed asset-led hero, adapt operational proof ladders, reject generic
+gradient SaaS cards, and defer customer logo proof until supplied.
+
+## Unique Take
+Make the page feel like a live operational mission brief rather than a feature
+catalog or generic AI dashboard.
+
 ## Narrative Arc
 World with eyes -> operational blind spots -> command layer -> mission proof ->
 credible enterprise CTA.
@@ -54,6 +66,11 @@ Hero warehouse video -> problem pane -> platform topology -> missions -> proof -
 ## Asset Plan
 Hero video, mobile fallback, support mission videos, proof-safe metric copy, and
 reduced-motion stills.
+
+## Product Demo Plan
+Use a realistic product shot as the hero anchor, then show an assembly and
+disassembly sequence with exploded parts that reveal the camera module, edge
+compute core, mounting hardware, and key feature callouts.
 
 ## Motion Plan
 Scroll-scrub hero, section reveal, support video entrance, and reduced-motion
@@ -99,6 +116,17 @@ class LandingSpecLintTests(unittest.TestCase):
         result = landing_spec_lint.lint_spec(self.write_spec(VALID_SPEC + "\nTODO\n"))
         self.assertEqual(result["verdict"], "FAIL")
         self.assertTrue(any("placeholder remains" in finding for finding in result["findings"]))
+
+    def test_premium_product_spec_requires_product_demo_plan(self) -> None:
+        bad = VALID_SPEC.replace(
+            "\n## Product Demo Plan\nUse a realistic product shot as the hero anchor, then show an assembly and\n"
+            "disassembly sequence with exploded parts that reveal the camera module, edge\n"
+            "compute core, mounting hardware, and key feature callouts.\n",
+            "\n",
+        )
+        result = landing_spec_lint.lint_spec(self.write_spec(bad))
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIn("premium product specs require section: Product Demo Plan", result["findings"])
 
 
 if __name__ == "__main__":

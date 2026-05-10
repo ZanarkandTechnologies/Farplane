@@ -16,6 +16,9 @@ REQUIRED_SECTIONS = (
     "Non-goals",
     "Decision Boundaries",
     "Taste References",
+    "Reference Research",
+    "Best-of-worlds Decisions",
+    "Unique Take",
     "Narrative Arc",
     "Low-fi ASCII Flow",
     "Section Matrix",
@@ -49,6 +52,28 @@ QA_TERMS = (
     "reduced motion",
     "console",
     "runtime",
+)
+
+PRODUCT_DEMO_TERMS = (
+    "product",
+    "device",
+    "equipment",
+    "hardware",
+    "glasses",
+    "camera",
+    "robot",
+    "vehicle",
+    "machine",
+)
+
+PRODUCT_DEMO_PLAN_TERMS = (
+    "product shot",
+    "realistic",
+    "assembly",
+    "disassembly",
+    "exploded",
+    "parts",
+    "feature",
 )
 
 PLACEHOLDER_PATTERNS = (
@@ -100,6 +125,20 @@ def table_rows(body: str) -> list[list[str]]:
     return rows
 
 
+def is_premium_product_spec(meta: dict[str, str], text: str) -> bool:
+    quality = " ".join(
+        [
+            meta.get("quality_target", ""),
+            meta.get("landing_type", ""),
+            meta.get("page_type", ""),
+        ]
+    ).lower()
+    if not any(word in quality for word in ("premium", "terminal", "cinematic", "product")):
+        return False
+    lower_text = text.lower()
+    return any(term in lower_text for term in PRODUCT_DEMO_TERMS)
+
+
 def lint_spec(path: Path) -> dict[str, object]:
     text = path.read_text(encoding="utf-8")
     meta, body = strip_frontmatter(text)
@@ -116,6 +155,16 @@ def lint_spec(path: Path) -> dict[str, object]:
             findings.append(f"missing section: {heading}")
         elif len(content.replace("|", "").strip()) < 20:
             findings.append(f"section is too thin: {heading}")
+
+    if is_premium_product_spec(meta, text):
+        product_demo_plan = section_body(body, "Product Demo Plan")
+        if not product_demo_plan:
+            findings.append("premium product specs require section: Product Demo Plan")
+        else:
+            lower_plan = product_demo_plan.lower()
+            for term in PRODUCT_DEMO_PLAN_TERMS:
+                if term not in lower_plan:
+                    findings.append(f"Product Demo Plan missing term: {term}")
 
     matrix = section_body(body, "Section Matrix")
     rows = table_rows(matrix)

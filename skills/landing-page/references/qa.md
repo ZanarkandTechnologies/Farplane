@@ -16,8 +16,13 @@ Capture:
 - H1 and CTA fit on mobile.
 - Text does not overlap media or controls.
 - Assets load from workspace/project paths.
+- Premium/cinematic pages pass asset-evidence lint; a section-quality pass does
+  not prove generated or real media exists.
 - Reduced-motion mode is usable.
 - Canvas/WebGL scenes are nonblank and framed correctly.
+- Scroll-scrub/pinned sections prove the pinned panel stays in the viewport at
+  every checkpoint. Do not accept a test that only proves progress, labels, or
+  video time advanced.
 - Every main narrative section has the thing users came to see: a heading,
   enough section copy, and the expected visual carrier rendered inside the
   section pane, not merely somewhere else on the page.
@@ -38,6 +43,20 @@ For animation-heavy pages, use representative progress points:
 - 95-100%
 
 Add narrative-specific checkpoints when phases have named start/peak/end values.
+
+For pinned scroll sections, capture runtime fields for:
+
+- requested progress,
+- actual media time or frame source,
+- active named beat,
+- pinned panel viewport intersection,
+- primary visual viewport intersection,
+- screenshot/hash of the visual region.
+
+If the page uses CSS sticky, verify no ancestor uses `overflow: hidden` or
+`overflow-x: hidden` in a way that creates a scroll container and disables
+sticky behavior. Prefer `overflow-x: clip` when the only goal is horizontal
+clipping.
 
 ## Section Quality Gate
 
@@ -62,6 +81,22 @@ The section-quality gate checks:
 
 Use this gate to catch the failure where a page earns a high hero/scroll score
 but the lower sections still look empty, generic, or under-designed.
+
+## Asset Evidence Gate
+
+For premium, cinematic, Terminal-style, or generated-media pages, run:
+
+```bash
+python3 skills/landing-page/scripts/asset_evidence_lint.py <site-dir>
+```
+
+This gate checks `assets/asset-manifest.json` for at least one generated or real
+filesystem-backed primary media asset with provenance and fallback evidence.
+Canvas, SVG, WebGL, Three.js, and HTML/CSS visuals may support the page, but
+they fail this gate when they are the only assets.
+
+Use this gate to catch the failure where a page looks nonblank and scrolls, but
+no image/video asset was actually generated or collected.
 
 ## Designer Judgment Gate
 
