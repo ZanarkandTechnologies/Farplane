@@ -139,3 +139,12 @@
 2026-05-04 19:04 +0800 | FEAT | add a structured feature registry plus `harness-scout` source-ingestion workflow for deduping external harness ideas, decision matrices, and manual scorecards
 2026-05-04 23:11 +0800 | DOCS | run `harness-scout` against the self-evolving agents video as a duplicate source pass, add a compact technique dedupe table, and seed follow-up tickets for gated skill review plus hook-reminder benchmarking
 2026-05-07 19:04 +0800 | FEAT | convert landing-page guidance into a spec-first planner/executor workflow with section-quality QA, designer-judgment scoring, and a landing-spec linter
+2026-05-08 01:27 +0800 | FEAT | add a landing-page asset-evidence gate so premium generated-media pages fail when they contain only code-native support visuals
+2026-05-08 04:59 +0800 | FEAT | add landing-page reference research, best-of-worlds synthesis, and unique-take planning gates before premium executor handoff
+2026-05-08 05:43 +0800 | FEAT | add product-demo media planning gates so premium product landing pages require realistic product shots, assembly or exploded-view sequences, and meaningful product-state scrub
+2026-05-08 08:30 +0800 | FEAT | ban hand-authored SVG section graphics from premium landing pages and replace the XR page's lower-section diagrams with generated raster media
+2026-05-08 17:10 +0800 | FEAT | require longer staged hero scroll-scrub planning with synchronized effect layers and add a seekable WebGL-enhanced hero scrub to the XR page
+2026-05-08 17:33 +0800 | FEAT | add product-clarity and disassembly-score gates to premium landing-page recipes and apply a clearer engineering teardown media pass to the XR page
+2026-05-08 21:02 +0800 | FIX | strengthen landing-page scroll-scrub QA to assert pinned-scene visibility and fix the XR page sticky failure caused by horizontal overflow clipping
+2026-05-08 21:18 +0800 | FIX | make landing-page asset evidence reject `generated-video` claims backed only by Seedream/image stills plus local ffmpeg assembly
+2026-05-11 05:35 +0800 | FEAT | implement the frontend skill parity handoff with stack-facts preflight, current shadcn registry and theme guidance, numeric taste dials, design briefs, component state matrices, and stronger frontend QA gates

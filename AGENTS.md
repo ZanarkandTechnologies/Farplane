@@ -47,10 +47,48 @@ redesign, `visual-design` owns look/taste/visual systems, and `landing-page`
 owns one-page marketing or scrolltelling surfaces. Keep `frontend-design` as an
 app-UI implementation reference. The old cinematic landing skill package was
 removed; route those asks to `landing-page`. See `MEM-0072`.
+Frontend implementation skills must preserve that topology while requiring stack
+facts before build, current shadcn registry/theme discovery, numeric taste dials,
+durable design briefs for substantial UI, component state matrices for reusable
+UI, and responsive/reduced-motion/theme preflight proof. See `MEM-0085`.
 For premium, cinematic, Terminal-style, or externally delegated landing pages,
 `landing-page` must use a spec-first planner/executor split: approved
 `LANDING_SPEC` before build handoff, then section-quality and designer-judgment
 QA before premium claims. See `MEM-0076`.
+Premium, cinematic, Terminal-style, or generated-media landing pages also need
+generated or real filesystem-backed asset evidence before final quality claims;
+code-rendered canvas, WebGL, Three.js, procedural, and HTML/CSS visuals are
+support visuals unless the page is explicitly downgraded to prototype. See
+`MEM-0077` and `MEM-0080`.
+Premium landing-page planning must research competitor/comparable/inspiration
+references before story and asset planning, then route patterns through
+best-of-worlds adopt/adapt/reject/defer decisions and a brainstormed unique
+take before executor handoff. See `MEM-0078`.
+Premium product, device, hardware, equipment, or object-focused landing pages
+must plan realistic product shots/renders, in-context use, assembly/disassembly
+or exploded-view media, highlighted parts/features, and meaningful product-state
+scroll/video sequences. Generic infographics, abstract diagrams, dashboards, and
+label-only scrubs are support visuals only. See `MEM-0079`.
+Premium landing-page graphics must not be hand-authored SVG illustrations, SVG
+diagrams, or SVG overlay art. Use generated/real raster media, or real
+WebGL/Three.js when a procedural scene is warranted. See `MEM-0080`.
+Premium product landing pages must also keep the product visually inspectable:
+dark overlays, WebGL effects, video opacity, tiny crops, or inaccessible color
+choices cannot obscure the object, and teardown/exploded-view media needs a
+disassembly score with no baked readable text. See `MEM-0082`.
+Premium cinematic hero scroll-scrub must be a long authored sequence with
+named beats, progress ranges, synchronized GSAP/WebGL/Three.js/HTML effect
+layers, and QA evidence for media time, active beat, and effect-layer state.
+See `MEM-0081`.
+Premium scroll-scrub QA must also prove the pinned scene remains visible at
+each checkpoint. Media time, labels, or frame-source changes are not enough;
+assert pinned-panel and primary-visual viewport intersection, capture visual
+region screenshots or hashes, and prefer `overflow-x: clip` over
+`overflow-x: hidden` when CSS sticky is involved. See `MEM-0083`.
+Premium `generated-video` evidence must come from a real video-generation
+model/app or source video. Seedream/image-generator stills or generated frame
+sequences assembled with local `ffmpeg` are `frame-sequence`/prototype assets,
+not generated-video proof. See `MEM-0084`.
 
 ## Project Structure
 
