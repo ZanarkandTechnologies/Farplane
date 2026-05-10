@@ -2,6 +2,25 @@
 
 > **When to use**: First-time project setup or adding shadcn to an existing project.
 
+## Preflight
+
+Before installing anything, capture the project facts:
+
+```bash
+test -f package.json && cat package.json
+test -f components.json && cat components.json
+pnpm dlx shadcn@latest info
+```
+
+Record:
+
+- framework/router and TypeScript setup,
+- Tailwind major version and config style,
+- whether shadcn is already initialized,
+- aliases from `components.json`,
+- existing icon, motion, chart, form, and AI packages,
+- current theme/preset status.
+
 ## One-Time Setup
 
 ### 1. Initialize Shadcn MCP
@@ -14,6 +33,15 @@ pnpm dlx shadcn@latest mcp init --client claude
 
 This creates a `.mcp/` configuration that allows Claude to search and add components.
 
+Codex caveat: the shadcn CLI cannot automatically update
+`~/.codex/config.toml`. For Codex, add the server manually and restart Codex:
+
+```toml
+[mcp_servers.shadcn]
+command = "npx"
+args = ["shadcn@latest", "mcp"]
+```
+
 ### 2. Initialize Shadcn (if not already done)
 
 ```bash
@@ -22,7 +50,7 @@ pnpm dlx shadcn@latest init
 
 Choose your preferences:
 - **TypeScript**: Yes
-- **Style**: Default or New York
+- **Style**: New York
 - **Base color**: Neutral (customize later with tweakcn)
 - **CSS variables**: Yes
 - **Tailwind config**: `tailwind.config.ts`
@@ -58,7 +86,8 @@ After init, edit `components.json` to add registries:
   "registries": {
     "@8bitcn": "https://www.8bitcn.com/r/{name}.json",
     "@aceternity": "https://ui.aceternity.com/registry/{name}.json",
-    "@ai-elements": "https://registry.ai-sdk.dev/{name}.json",
+    "@ai-elements": "https://ai-sdk.dev/elements/api/registry/{name}.json",
+    "@assistant-ui": "https://r.assistant-ui.com/{name}.json",
     "@animate-ui": "https://animate-ui.com/r/{name}.json",
     "@elevenlabs-ui": "https://ui.elevenlabs.io/r/{name}.json",
     "@retroui": "https://retroui.dev/r/{name}.json"
@@ -66,9 +95,33 @@ After init, edit `components.json` to add registries:
 }
 ```
 
+For private registries, use environment-backed headers:
+
+```json
+{
+  "registries": {
+    "@private": {
+      "url": "https://registry.company.com/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REGISTRY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
 ---
 
 ## Adding Components
+
+Search and view before installing unfamiliar components:
+
+```bash
+pnpm dlx shadcn@latest search @shadcn -q "button"
+pnpm dlx shadcn@latest search @ai-elements -q "conversation"
+pnpm dlx shadcn@latest view button card dialog
+pnpm dlx shadcn@latest docs button
+```
 
 ### From shadcn/ui (core)
 
@@ -119,18 +172,48 @@ Once configured, the shadcn MCP allows Claude to:
 
 **Trigger**: When you ask for a component, Claude will use the MCP to search and suggest.
 
+When MCP is unavailable, use the CLI `search`, `view`, `docs`, and `add`
+commands directly.
+
 ---
 
 ## Finding New Registries
 
 If you need a registry not in your config:
 
-1. Visit [ui.shadcn.com/docs/directory](https://ui.shadcn.com/docs/directory)
-2. Find the registry you want
-3. Click the MCP button to get the registry pattern
-4. Add to `components.json`
+1. Check the registry index: `https://ui.shadcn.com/r/registries.json`
+2. Use `pnpm dlx shadcn@latest search @registry-name`
+3. Add a registry to `components.json` only when the CLI cannot discover it
+4. Use `@registry/component` namespace syntax to avoid conflicts
 
 **Pattern format**: `https://<domain>/r/{name}.json`
+
+Current useful registry categories:
+
+| Need | Registries to consider |
+| --- | --- |
+| AI chat and agents | `@ai-elements`, `@assistant-ui`, `@agents-ui`, `@tool-ui` |
+| Auth | `@auth0`, `@clerk` |
+| Billing | `@billingsdk` |
+| Forms/uploads | `@formcn`, `@better-upload` |
+| Charts/data | `@evilcharts` |
+| Motion and expressive UI | `@aceternity`, `@animate-ui`, `@cult-ui`, `@unlumen-ui` |
+| Retro/brutalist | `@8bitcn`, `@retroui`, `@boldkit` |
+
+## Presets and Theme Application
+
+Use `apply` when the project should absorb only a preset's theme or font layer:
+
+```bash
+pnpm dlx shadcn@latest apply <preset-or-url> --only theme
+pnpm dlx shadcn@latest apply <preset-or-url> --only font
+pnpm dlx shadcn@latest preset resolve --json
+pnpm dlx shadcn@latest preset decode <code> --json
+pnpm dlx shadcn@latest preset open <code>
+```
+
+Do not run broad preset application when the project already has an approved
+design system. Preserve local tokens unless the ticket explicitly changes them.
 
 ---
 
@@ -140,4 +223,5 @@ If you need a registry not in your config:
 2. **Registry not found?** Check the URL pattern matches exactly
 3. **Component conflicts?** Registries may have overlapping component names - use the prefix (`@registry/component`)
 4. **Style mismatch?** Some registries use "default" style, others "new-york" - may need manual adjustment
-
+5. **Tailwind mismatch?** Check Tailwind v3/v4 before using config syntax
+6. **Package mismatch?** Check `package.json` before importing icon, motion, chart, or form packages

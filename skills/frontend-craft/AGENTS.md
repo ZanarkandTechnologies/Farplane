@@ -20,3 +20,4 @@
 - The first-load workflow remains executable without loading references.
 - References enrich routing but do not hide mandatory steps.
 - Community skill learnings stay behind a Codexter-owned control layer.
+- Frontend implementation guidance must capture stack facts before adding packages or registry components. See `MEM-0085`.

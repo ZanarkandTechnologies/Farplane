@@ -7,17 +7,29 @@
 | Registry | Aesthetic | Best For |
 |----------|-----------|----------|
 | **@ai-elements** | Clean, functional | AI apps, chatbots, workflows |
+| **@assistant-ui** | Headless/chat primitives | AI chat with AI SDK, LangGraph, Mastra, custom adapters |
+| **@agents-ui** | Agent/audio/video workflows | LiveKit AI agent interfaces |
+| **@tool-ui** | Tool-call output UI | Rich assistant tool widgets |
+| **@auth0** | Enterprise auth | SSO, MFA, organizations |
+| **@clerk** | Auth and user management | Sign-in, user profile, org surfaces |
+| **@billingsdk** | SaaS billing | Pricing, subscriptions, invoices |
+| **@formcn** | Forms | Production forms |
+| **@better-upload** | Uploads | S3-compatible file uploads |
+| **@evilcharts** | Data visualization | shadcn + Recharts chart UI |
 | **@aceternity** | Glassmorphism, motion | Landing pages, hero sections |
 | **@animate-ui** | Smooth transitions | Interactive components |
+| **@cult-ui** | Animated composables | Tasteful Framer Motion components |
+| **@unlumen-ui** | Animation-focused | Design-heavy primitives |
 | **@8bitcn** | Pixel art, retro | Gaming, nostalgic themes |
 | **@retroui** | Neobrutalism | Bold, statement pieces |
+| **@boldkit** | Neobrutalism | Thick borders, blocks, shapes |
 | **@elevenlabs-ui** | Audio-focused | Voice AI, audio apps |
 
 ---
 
 ## @ai-elements (AI SDK)
 
-**URL**: `https://registry.ai-sdk.dev/{name}.json`  
+**URL**: `https://ai-sdk.dev/elements/api/registry/{name}.json`
 **Docs**: [ai-sdk.dev/elements](https://ai-sdk.dev/elements)
 
 Pre-built components for AI applications:
@@ -43,7 +55,7 @@ pnpm dlx shadcn@latest add @ai-elements/prompt-input @ai-elements/conversation @
 
 ## @aceternity
 
-**URL**: `https://ui.aceternity.com/registry/{name}.json`  
+**URL**: `https://ui.aceternity.com/registry/{name}.json`
 **Docs**: [ui.aceternity.com](https://ui.aceternity.com)
 
 High-impact visual effects:
@@ -66,9 +78,40 @@ pnpm dlx shadcn@latest add @aceternity/aurora-background @aceternity/spotlight @
 
 ---
 
+## AI and Agent Registries
+
+| Registry | Use Case |
+| --- | --- |
+| `@assistant-ui` | Chat primitives and adapters for AI SDK, LangGraph, Mastra, or custom backends |
+| `@agents-ui` | LiveKit AI agent interfaces |
+| `@tool-ui` | Rich rendering of AI tool calls and assistant output widgets |
+| `@ai-blocks` | Local/WebLLM-style AI blocks when serverless/local inference is the point |
+
+Use these when AI workflow UI needs more than static chat bubbles. Still route
+conversation states, tool progress, sources, retry, and failure recovery through
+`functional-ui` first.
+
+---
+
+## App-Domain Registries
+
+| Registry | Use Case |
+| --- | --- |
+| `@auth0` | Universal auth components, SSO, MFA, organizations |
+| `@clerk` | Auth and user-management components |
+| `@billingsdk` | Billing, subscriptions, invoices, pricing |
+| `@formcn` | Complex production forms |
+| `@better-upload` | Direct-to-storage file uploads |
+| `@evilcharts` | shadcn/Recharts chart UI |
+
+Use app-domain registries when they match a real product workflow. Do not add a
+full domain SDK just to avoid building one simple local component.
+
+---
+
 ## @animate-ui
 
-**URL**: `https://animate-ui.com/r/{name}.json`  
+**URL**: `https://animate-ui.com/r/{name}.json`
 **Docs**: [animate-ui.com](https://animate-ui.com)
 
 Animated versions of common components:
@@ -91,7 +134,7 @@ pnpm dlx shadcn@latest add @animate-ui/button @animate-ui/dialog @animate-ui/tab
 
 ## @8bitcn
 
-**URL**: `https://www.8bitcn.com/r/{name}.json`  
+**URL**: `https://www.8bitcn.com/r/{name}.json`
 **Docs**: [8bitcn.com](https://www.8bitcn.com)
 
 Pixel art / retro gaming aesthetic:
@@ -113,7 +156,7 @@ pnpm dlx shadcn@latest add @8bitcn/button @8bitcn/card @8bitcn/progress
 
 ## @retroui
 
-**URL**: `https://retroui.dev/r/{name}.json`  
+**URL**: `https://retroui.dev/r/{name}.json`
 **Docs**: [retroui.dev](https://retroui.dev)
 
 Neobrutalism / bold design:
@@ -135,7 +178,7 @@ pnpm dlx shadcn@latest add @retroui/button @retroui/card @retroui/alert
 
 ## @elevenlabs-ui
 
-**URL**: `https://ui.elevenlabs.io/r/{name}.json`  
+**URL**: `https://ui.elevenlabs.io/r/{name}.json`
 **Docs**: [ui.elevenlabs.io](https://ui.elevenlabs.io)
 
 Audio AI interface components:
@@ -164,6 +207,11 @@ pnpm dlx shadcn@latest add @elevenlabs-ui/audio-player @elevenlabs-ui/voice-sele
 | Retro/gaming theme | `@8bitcn` |
 | Bold, statement design | `@retroui` |
 | Voice/audio UI | `@elevenlabs-ui` |
+| Auth | `@auth0`, `@clerk` |
+| Billing | `@billingsdk` |
+| Forms/uploads | `@formcn`, `@better-upload` |
+| Charts | `@evilcharts` |
+| Agent/tool output | `@assistant-ui`, `@agents-ui`, `@tool-ui` |
 
 ---
 
@@ -191,10 +239,18 @@ import { Button } from "@/components/animate-ui/button"
 
 ## Finding More
 
-Full directory with 100+ registries: [ui.shadcn.com/docs/directory](https://ui.shadcn.com/docs/directory)
+Full current index: [ui.shadcn.com/r/registries.json](https://ui.shadcn.com/r/registries.json)
 
 To add a new registry:
-1. Find the registry URL pattern
-2. Add to `components.json` under `"registries"`
-3. Install components with `@registry-name/component`
+1. Search first: `pnpm dlx shadcn@latest search @registry-name`
+2. View before install: `pnpm dlx shadcn@latest view @registry-name/component`
+3. Add to `components.json` under `"registries"` only when needed
+4. Install components with `@registry-name/component`
 
+## Registry Guardrails
+
+- Check `package.json` before importing dependencies that registry components assume.
+- Keep registries namespaced to avoid component name conflicts.
+- Keep private registry credentials in environment variables.
+- Customize imported components to match the visual brief; default registry skin is not enough.
+- Prefer official docs or `shadcn docs <component>` when API details matter.

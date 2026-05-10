@@ -28,10 +28,11 @@ Build production frontends by routing the work through the right frontend brain 
 2. **Run functional shape when needed.** Use `functional-ui` when the workflow, IA, user story, states, or component behavior is unclear or broken. Skip only when a recent UX brief already settles those answers.
 3. **Run visual design.** Use `visual-design` to set register, scene sentence, typography, color strategy, layout rhythm, density, motion taste, and anti-slop constraints.
 4. **Route special surfaces.** Use `landing-page` for one-page, marketing, launch, cinematic, scrolltelling, or hero-heavy surfaces.
-5. **Choose implementation references.** Use `frontend-design` references for shadcn, AI Elements, registries, and app UI construction. Use `motion-routing.md` for CSS vs Motion vs GSAP vs WebGL decisions.
-6. **Plan assets and experiments.** Use `asset-generation.md` with the `imagegen` skill for generated bitmap assets. Use `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGL, WebGPU, or canvas text layout complexity.
-7. **Implement and verify.** Build with repo patterns, run type/lint/tests, and route UI proof through `visual-qa` or the ticket's QA contract when the surface is user-visible.
-8. **Write the handoff.** Summarize the UX/visual decisions, changed files, proof commands, and any skipped lanes with reasons.
+5. **Capture stack facts.** Before importing UI libraries or writing framework-specific code, inspect `package.json`, Tailwind config/CSS, `components.json`, app router structure, and existing component paths. Record framework/router, Tailwind major version, installed icon/motion/form/chart/AI packages, shadcn aliases, and theme/preset status.
+6. **Choose implementation references.** Use `frontend-design` references for shadcn, AI Elements, registries, theme/preset application, component-state matrices, and app UI construction. Use `motion-routing.md` for CSS vs Motion vs GSAP vs WebGL decisions.
+7. **Plan assets and experiments.** Use `asset-generation.md` with the `imagegen` skill for generated bitmap assets. Use `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGL, WebGPU, or canvas text layout complexity.
+8. **Implement and verify.** Build with repo patterns, run type/lint/tests, and route UI proof through `visual-qa` or the ticket's QA contract when the surface is user-visible.
+9. **Write the handoff.** Summarize the lanes used, stack facts, UX/visual decisions, changed files, proof commands, and any skipped lanes with reasons.
 
 ## Decision Branches
 
@@ -52,6 +53,9 @@ Build production frontends by routing the work through the right frontend brain 
 - Do not maintain local GSAP API truth. Use official `greensock/gsap-skills`; this skill only routes when GSAP is appropriate.
 - Do not assume inference.sh, Nano Banana, video tooling, or external model CLIs are installed. Capability-gate and use built-in `imagegen` first.
 - Do not use experimental rendering APIs without fallback, accessibility, and browser-support checks.
+- Do not import icon, motion, chart, form, AI, or registry packages before checking `package.json`.
+- Do not use Tailwind v4 syntax in a v3 project, or v3 config assumptions in a v4 project.
+- Do not turn an entire Next.js App Router page into a client component just to support one animated widget; isolate interactive/motion-heavy pieces in client leaf components.
 
 ## Reference Map
 
@@ -70,6 +74,7 @@ Build production frontends by routing the work through the right frontend brain 
 When this skill drives implementation, the final output must include:
 
 - The lanes used or skipped, with one-line reasons.
+- The stack facts captured before implementation.
 - The implementation files changed.
 - The validation commands and results.
 - Any generated asset paths and prompts when assets were created.

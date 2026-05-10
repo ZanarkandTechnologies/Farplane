@@ -21,6 +21,17 @@ Use this when deciding which frontend skill should lead a request.
 - Visual polish: `visual-design` -> implementation.
 - Animation only: `motion-routing.md`, and official GreenSock skills or docs when GSAP is chosen.
 
+## Required Stack Facts
+
+Before frontend implementation, capture:
+
+- framework/router and whether App Router/RSC is in play,
+- Tailwind major version and config/CSS entrypoints,
+- `components.json` existence, aliases, registries, and theme status,
+- installed icon, motion, form, chart, AI, and state packages,
+- existing component directories and design-system files,
+- registry/theme/preset commands planned, or why none are needed.
+
 ## Skip Rules
 
 - Skip `functional-ui` only when a current UX brief or explicit user instruction already fixes users, jobs, states, and interaction model.

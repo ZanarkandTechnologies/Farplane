@@ -15,7 +15,8 @@ Main frontend implementation orchestrator for Codexter.
 2. Use `functional-ui` when workflow or behavior is unsettled.
 3. Use `visual-design` for the look and taste brief.
 4. Use `landing-page` for marketing/scrolltelling pages.
-5. Build with the repo's implementation patterns and verify.
+5. Capture stack facts: packages, Tailwind, shadcn, registries, aliases, and theme status.
+6. Build with the repo's implementation patterns and verify.
 
 ## How to Test
 

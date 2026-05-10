@@ -12,6 +12,15 @@ pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/darkmatter.json
 
 This updates your `globals.css` with the theme's CSS variables.
 
+When the project already has shadcn presets or a generated theme URL, prefer
+applying only the intended layer:
+
+```bash
+pnpm dlx shadcn@latest apply <preset-or-url> --only theme
+pnpm dlx shadcn@latest apply <preset-or-url> --only font
+pnpm dlx shadcn@latest preset resolve --json
+```
+
 ---
 
 ## tweakcn: Theme Customization Tool
@@ -20,10 +29,11 @@ This updates your `globals.css` with the theme's CSS variables.
 
 ### Workflow
 
-1. Visit [tweakcn.com](https://tweakcn.com)
-2. Customize colors, radius, fonts
-3. Copy the generated CSS or use the install command
-4. Paste into `app/globals.css`
+1. Confirm the visual brief and numeric taste dials from `visual-design`.
+2. Visit [tweakcn.com](https://tweakcn.com) or inspect the existing preset.
+3. Customize colors, radius, fonts, and surface contrast.
+4. Apply only the theme/font layer that the project should change.
+5. Check dark and light mode contrast separately.
 
 ### Popular Themes
 
@@ -73,6 +83,22 @@ Shadcn themes use HSL CSS variables:
 
 ---
 
+## Token Layering
+
+For larger app UI work, keep theme values in three layers:
+
+1. Primitive tokens: raw colors, spacing, radius, shadows, durations.
+2. Semantic tokens: purpose aliases such as background, foreground, primary,
+   muted, destructive, surface, border, ring.
+3. Component tokens: component-specific roles such as button background,
+   input border, card padding, badge tone, dialog scrim.
+
+Use [design-tokens.md](design-tokens.md) when changing or creating a token
+system. Do not scatter raw hex values across components when the project uses
+CSS variables.
+
+---
+
 ## Custom Theme Recipe
 
 ### 1. Define Your Palette
@@ -84,14 +110,14 @@ Shadcn themes use HSL CSS variables:
     /* Custom brand colors */
     --brand: 262 83% 58%;      /* Purple accent */
     --brand-foreground: 0 0% 100%;
-    
+
     /* Override shadcn tokens */
     --primary: var(--brand);
     --primary-foreground: var(--brand-foreground);
-    
+
     /* Custom accent */
     --accent: 200 95% 50%;     /* Cyan */
-    
+
     /* Adjust radius */
     --radius: 0.75rem;         /* Rounder corners */
   }
@@ -104,14 +130,14 @@ Shadcn themes use HSL CSS variables:
 // app/layout.tsx
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 
-const display = Space_Grotesk({ 
-  subsets: ['latin'], 
-  variable: '--font-display' 
+const display = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display'
 });
 
-const mono = JetBrains_Mono({ 
-  subsets: ['latin'], 
-  variable: '--font-mono' 
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono'
 });
 
 export default function RootLayout({ children }) {
@@ -151,7 +177,7 @@ code, pre {
   --foreground: 24 9.8% 10%;
   --border: 20 5.9% 10%;
   --radius: 0rem;  /* Sharp corners */
-  
+
   /* Add shadow utility */
   --shadow-brutal: 4px 4px 0px var(--foreground);
 }
@@ -165,7 +191,7 @@ code, pre {
   --foreground: 60 9% 98%;
   --primary: 142 71% 45%;  /* Retro green */
   --radius: 0rem;
-  
+
   /* Pixel font */
   --font-display: 'Press Start 2P', monospace;
 }
@@ -234,10 +260,10 @@ import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  
+
   return (
-    <Button 
-      variant="ghost" 
+    <Button
+      variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
@@ -268,3 +294,5 @@ export function ThemeToggle() {
 4. **Add custom fonts**: Match the aesthetic direction
 5. **Test dark/light**: Ensure both modes look intentional
 
+For existing systems, reverse the order: inspect current tokens first, then
+apply the smallest theme/font patch that supports the visual brief.
