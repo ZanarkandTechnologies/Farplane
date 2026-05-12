@@ -1,0 +1,130 @@
+{
+  "run_id": "task-0112-planning-20260505T082010Z",
+  "status": "ready",
+  "envelope": {
+    "workflowPath": "WORKFLOW.md",
+    "workItemId": null,
+    "workItemPath": "tickets/TASK-0112/ticket.md",
+    "computeTarget": "local_shared",
+    "phase": "planning",
+    "mode": "symphony_worker",
+    "requestedBy": "symphony",
+    "requestedAt": "2026-05-05T00:00:00Z",
+    "proofPacketPath": ".harness/results/symphony-task-0112.proof.json"
+  },
+  "workflow": {
+    "path": "/Users/kenjipcx/coding-harness/Codexter/WORKFLOW.md",
+    "name": "codexter-invocation",
+    "version": 1,
+    "prompt_template": "# Codexter Invocation Workflow\n\nUse this file as the repo-local invocation policy for Codexter-equipped Codex.\nDo not duplicate detailed skill contracts here. A run should load one\n`CodexterRunEnvelope`, normalize one work item, select allowed compute, route to\nthe existing phase skill, and write the requested `ProofPacket`.\n\nCodexter is normal Codex with this repository's installed skills, hooks,\ntemplates, and proof conventions. This workflow is not a daemon and not a\nstandalone `codexter run` CLI.",
+    "board_adapter": "filesystem",
+    "board_source": "tickets/",
+    "active_phases": [
+      "planning",
+      "building",
+      "documenting"
+    ],
+    "terminal_statuses": [
+      "done",
+      "failed"
+    ],
+    "compute_default": "local_shared",
+    "compute_allowed": [
+      "local_shared",
+      "local_worktree"
+    ],
+    "ticket_override_field": "compute_target",
+    "routing": {
+      "planning": "impl-plan",
+      "building": "impl",
+      "qa": "qa",
+      "review": "review",
+      "documenting": "close-ticket"
+    },
+    "quality": {
+      "requires_ticket_evidence": true,
+      "requires_review": true,
+      "requires_qa_from_ticket": true,
+      "writes_proof_packet": true
+    }
+  },
+  "work_item": {
+    "source": "filesystem",
+    "id": "TASK-0112",
+    "identifier": "TASK-0112",
+    "title": "add Symphony integration shim",
+    "description": "# TASK-0112: add Symphony integration shim\n\n## Summary\nMake the handoff from Symphony to Codexter concrete without building a Symphony\nclone. The shim should document and test what Symphony must provide when it\nlaunches normal Codex with Codexter installed, and what Codexter returns through\n`ProofPacket`.\n\n## Scope\n- In:\n  - A Symphony integration reference under `skills/codexter-invocation/` or\n    `docs/specs/`.\n  - A file-based `CodexterRunEnvelope` example designed for Symphony workers.\n  - A smoke command proving the same envelope can be prepared locally from a\n    file path.\n  - Documentation of Symphony responsibilities: polling, claiming, retrying,\n    workspace setup, app-server lifecycle, tracker writeback, and remote logs.\n  - Documentation of Codexter responsibilities: route to existing skills, write\n    ticket evidence, write proof, honor compute admission, and preserve local\n    completion gates.\n- Out:\n  - No Elixir code.\n  - No Symphony app-server client.\n  - No Linear API integration.\n  - No remote worker launch.\n  - No retries, scheduler, or workspace cleanup inside Codexter.\n\n## Plan\n- `Change:` Add a thin integration contract and examples so a Symphony worker\n  can call Codexter-equipped Codex later.\n- `Why:` The first slice made Codexter invocable. This ticket makes the external\n  caller contract explicit enough that future Symphony work does not guess.\n- `Before -> After:`\n  - Before: `CodexterRunEnvelope` exists, but Symphony-specific expectations are\n    mostly prose in the system design.\n  - After: a Symphony-specific template and smoke proof show how a worker passes\n    the envelope and reads proof without Codexter taking over scheduling.\n- `Touch:`\n  - `skills/codexter-invocation/templates/symphony-run-envelope.json`\n  - `skills/codexter-invocation/references/symphony.md`\n  - `skills/codexter-invocation/README.md`\n  - `docs/specs/board-compute-orchestration.md`\n  - `docs/specs/symphony-compatible-codexter-runner.md`\n  - `bin/test_codexter_invocation.py`\n  - `docs/HISTORY.md`\n- `Inspect:`\n  - `WORKFLOW.md`\n  - `bin/codexter_invocation.py`\n  - `skills/codexter-invocation/SKILL.md`\n  - `tickets/TASK-0107/artifacts/qa/prepare-planning.json`\n  - `tickets/TASK-0107/artifacts/qa/sample-proof-packet.json`\n  - Symphony Service Specification draft v1 from the research memo.\n- `Signature delta:`\n  - `templates/symphony-run-envelope.json`\n  - `references/symphony.md / responsibilities table`\n  - `bin/test_codexter_invocation.py / file envelope smoke`\n- `Type Sketch:`\n  - `SymphonyEnvelope`: same as `CodexterRunEnvelope`, with\n    `mode: \"symphony_worker\"`, a workspace-local `workItemPath` or tracker\n    normalized `workItemId`, and a writable `.harness/results/*.proof.json`.\n  - `ResponsibilityRow`: `concern`, `owned_by`, `codexter_expectation`,\n    `failure_behavior`.\n- `Typed flow example:`\n  1. Symphony claims `LIN-123`.\n  2. Symphony prepares a workspace and installs Codexter.\n  3. Symphony writes `.harness/requests/lin-123.json`.\n  4. It launches Codex and asks it to use `codexter-invocation` with that file.\n  5. Codexter routes the work to `impl` or `impl-plan`.\n  6. Codexter writes `.harness/results/lin-123.proof.json`.\n  7. Symphony reads the proof and decides whether to comment, transition, retry,\n     or hand off.\n- `Execution steps:`\n  1. Add Symphony-specific envelope template.\n  2. Add reference doc with responsibility split and failure mapping.\n  3. Add a file-envelope test or smoke fixture proving the existing helper\n     accepts the Symphony-shaped envelope.\n  4. Update invocation skill README to point future external callers to the\n     Symphony reference.\n  5. Run invocation tests, metadata, docs checks, JSON validation, and review.\n- `Recommendation:` Keep this as docs plus smoke tests. Do not call Symphony or\n  depend on Symphony being installed.\n- `Options considered:`\n  - Pure prose note: too easy to drift.\n  - Template plus smoke test: recommended; enough contract to integrate later.\n  - Full adapter/client: premature and outside Codexter's local-first boundary.\n- `Blast radius:` invocation skill, helper tests, Symphony spec, future Linear\n  adapter work.\n- `Risks:`\n  - Accidentally implying Symphony is already supported. Containment: state\n    clearly that this is a shim/template, not a live backend.\n  - Drifting from real Symphony protocol. Containment: treat Symphony's own\n    Codex launch/app-server contract as source of truth.\n\n## Gap Analysis\n- `Current state:` `CodexterRunEnvelope` and `ProofPacket` work locally, but the\n  Symphony caller shape is not packaged as a reusable template.\n- `Production expectation:` External callers need example inputs, outputs,\n  ownership tables, failure semantics, and proof paths they can validate without\n  reading chat or internal tickets.\n- `Missing gaps:`\n  - No `mode: \"symphony_worker\"` example.\n  - No Symphony-specific responsibility table.\n  - No file-envelope smoke artifact for external callers.\n  - No explicit unsupported-runtime warning for real Symphony launch.\n- `Comparable implementations:` Symphony spec sections on workflow, workspace,\n  agent runner, retry/reconciliation, and observability.\n- `Recommendation:` Add the shim after `TASK-0111` pins the broader contract.\n\n## Diagram\n```mermaid\nflowchart LR\n  classDef sym fill:#f5f3ff,stroke:#8b5cf6,color:#111827\n  classDef codex fill:#dbeafe,stroke:#2563eb,color:#111827\n  classDef proof fill:#dcfce7,stroke:#15803d,color:#111827\n\n  Symphony[\"Symphony scheduler<br/>polls / claims / retries\"]:::sym\n  Workspace[\"Per-ticket workspace<br/>Codexter installed\"]:::sym\n  Envelope[\"CodexterRunEnvelope file\"]:::codex\n  Codex[\"Normal Codex<br/>codexter-invocation\"]:::codex\n  Proof[\"ProofPacket\"]:::proof\n\n  Symphony --> Workspace --> Envelope --> Codex --> Proof --> Symphony\n```\n\n## Acceptance Criteria\n- [ ] Symphony-specific envelope template exists and validates through the\n  current helper.\n- [ ] Reference doc says exactly what Symphony owns and what Codexter owns.\n- [ ] File-envelope smoke test or command proves local preparation works.\n- [ ] Docs make clear that no live Symphony backend is implemented yet.\n- [ ] Proof output shape is linked from the shim docs.\n\n## Verification\n- `Tests:`\n  - `python3 -m unittest bin/test_codexter_invocation.py`\n  - JSON validation of the Symphony envelope template.\n- `Manual checks:`\n  - Read the responsibility table and confirm polling/retries/workspace cleanup\n    are not assigned to Codexter.\n  - Confirm the template points proof under `.harness/results/`.\n- `Evidence required:`\n  - Smoke output artifact and review JSON.\n\n## Agent Contract\n- `Open:` no UI.\n- `Test hook:` invocation helper prepare command with the Symphony template.\n- `Stabilize:` use a fixture ticket, not live Linear/Symphony credentials.\n- `Inspect:` template JSON, reference doc, helper output.\n- `Key screens/states:` none.\n- `QA cookbook:` none needed.\n- `Taste refs:` none.\n- `Expected artifacts:` helper output JSON and review artifact.\n- `Delegate with:` this ticket and `skills/codexter-invocation/SKILL.md`.\n\n## Autonomy Readiness\n- `Human inputs/assets:` approval after `TASK-0111`.\n- `Credentials / external access:` none; do not call Linear/Symphony.\n- `Compute/runtime needs:` local Python only.\n- `Tooling gaps:` none for template/smoke. Real Symphony runner is explicitly\n  future.\n- `QA risks:` docs could overclaim support. Review must check wording.\n- `Human gates:` approval before implementation.\n- `Agent decision boundaries:` may add examples and tests; may not add a live\n  external backend.\n\n## Evidence Checklist\n- [ ] Symphony envelope JSON validates.\n- [ ] Helper prepare output linked.\n- [ ] Review JSON linked.\n\n## Refs\n- `docs/specs/symphony-compatible-codexter-runner.md`\n- `skills/codexter-invocation/SKILL.md`\n- `bin/codexter_invocation.py`\n- `tickets/TASK-0107/ticket.md`\n\n## Evidence\n- `Artifacts:`\n  - [future-ticket-batch-review.json](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0111/artifacts/review/2026-05-05-ticket-batch-review.json)\n- `Commands:`\n- `Result summary:`\n\n## Blockers\n- none",
+    "state": "review",
+    "phase": "planning",
+    "status": "review",
+    "priority": "medium",
+    "labels": [],
+    "blockedBy": [],
+    "dependsOn": [
+      "TASK-0107",
+      "TASK-0111"
+    ],
+    "ready": false,
+    "approvalRequired": true,
+    "requiresQa": false,
+    "requiresDemo": false,
+    "computeTarget": null,
+    "localTicketPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0112/ticket.md",
+    "artifactsPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0112/artifacts",
+    "url": null,
+    "metadata": {
+      "ticket_id": "TASK-0112",
+      "title": "add Symphony integration shim",
+      "phase": "planning",
+      "status": "review",
+      "owner": "unassigned",
+      "claimed_by": [],
+      "priority": "medium",
+      "depends_on": [
+        "TASK-0107",
+        "TASK-0111"
+      ],
+      "blocked_by": [],
+      "ready": false,
+      "approval_required": true,
+      "requires_qa": false,
+      "requires_demo": false,
+      "created_at": "2026-05-05T07:27:16Z",
+      "updated_at": "2026-05-05T07:27:16Z",
+      "next_action": "wait for board-compute orchestration spec, then plan the Symphony shim",
+      "last_verification": "none"
+    }
+  },
+  "compute": {
+    "target": "local_shared",
+    "reason": "allowed compute target",
+    "allowed": true,
+    "blockers": [],
+    "blockerCodes": [],
+    "runtimeRecordPath": null,
+    "runtimeHints": [
+      "runs in the current checkout; no runtime record required"
+    ],
+    "requiredSetup": [],
+    "handoff": "route to the selected Codexter phase skill in this workspace",
+    "capability": {
+      "target": "local_shared",
+      "implemented": true,
+      "isolation": "current checkout",
+      "requiresWorktree": false,
+      "requiresExternalRunner": false,
+      "requiresRuntimeRecord": false,
+      "setupHint": "normal Codex session in the current checkout",
+      "handoff": "route to the selected Codexter phase skill in this workspace"
+    }
+  },
+  "route": {
+    "phase": "planning",
+    "skillName": "impl-plan",
+    "ticketPath": "/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0112/ticket.md",
+    "handoffPrompt": "Use `$impl-plan` for TASK-0112: add Symphony integration shim. Ticket: /Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0112/ticket.md. Keep ticket evidence updated and write the requested ProofPacket.",
+    "requiresApprovalBeforeBuild": false
+  },
+  "proof_packet_path": "/Users/kenjipcx/coding-harness/Codexter/.harness/results/symphony-task-0112.proof.json",
+  "generated_at": "2026-05-05T08:20:10.270202Z"
+}

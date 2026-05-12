@@ -92,6 +92,7 @@ Default thresholds:
 - `code-quality`: `4.0`
 - `debloatability`: `4.0`
 - `ui-quality`: `4.0`
+- `frontend-guidelines`: `4.0`
 - `user-intent-satisfaction`: `4.0`
 - `evidence-quality`: `4.0`
 - `demo-quality`: `3.5`
@@ -127,6 +128,7 @@ Choose rubric families from the ticket context:
   - `evidence-quality` when claims depend on proof
 - UI work:
   - `ui-quality`
+  - `frontend-guidelines` via `web-design-guidelines` when source files are available
   - `user-intent-satisfaction` when the ticket clearly expresses the user-facing ask or success feel
   - `code-quality`
   - `evidence-quality`
@@ -200,6 +202,13 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - craft
   - functionality against strong examples
   - fidelity to intent
+
+### 4b. Frontend Guidelines Metric
+- File: `frontend-guidelines.md`
+- Focus:
+  - source-fresh Web Interface Guidelines audit
+  - accessibility, focus, forms, navigation, animation, content handling, and web-interface fundamentals
+  - comparable metric for aligning agent reviews with an external checklist
 
 ### 5. Debloatability
 - File: `debloatability.md`

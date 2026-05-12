@@ -20,6 +20,8 @@ last_verification: none
 
 # TASK-XXXX: title
 
+<!-- Optional frontmatter field when needed: compute_target: local_shared | local_worktree | symphony | codex_cloud -->
+
 ## Summary
 2-3 sentences on what changes, why it matters now, and the decisive path being
 recommended.

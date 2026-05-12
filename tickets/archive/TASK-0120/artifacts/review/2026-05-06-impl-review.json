@@ -1,0 +1,120 @@
+{
+  "ticket_id": "TASK-0120",
+  "reviewed_at": "2026-05-06T17:42:00Z",
+  "reviewer": "codex",
+  "work_type": ["docs", "runtime-contract", "cleanup"],
+  "search_scope": {
+    "changed_files": [
+      "AGENTS.md",
+      "ARCHITECTURE.md",
+      "README.md",
+      "WORKFLOW.md",
+      "docs/HISTORY.md",
+      "docs/MEMORY.md",
+      "docs/specs/README.md",
+      "docs/specs/board-compute-orchestration.md",
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "skills/codexter-invocation/SKILL.md",
+      "tickets/README.md",
+      "tickets/TASK-0081/ticket.md",
+      "tickets/TASK-0120/ticket.md"
+    ],
+    "related_files": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/debloatability.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "commands": [
+      "python3 tickets/scripts/check_ticket_metadata.py",
+      "python3 bin/check_doc_parity.py",
+      "python3 bin/check_harness_invariants.py",
+      "python3 skills/ralph/scripts/select_next_ticket.py --root . --json",
+      "git diff --check -- README.md ARCHITECTURE.md WORKFLOW.md AGENTS.md docs/HISTORY.md docs/MEMORY.md docs/specs/README.md docs/specs/board-compute-orchestration.md docs/specs/symphony-compatible-codexter-runner.md tickets/README.md skills/codexter-invocation/SKILL.md tickets/TASK-0081/ticket.md tickets/TASK-0120/ticket.md",
+      "rg -n \"board orchestrator|auto-run|polling daemon|ticket creation.*trigger|ticket existence.*trigger|ticket creation.*start|ready.*start|board/compute orchestration|Board and compute orchestration\" README.md ARCHITECTURE.md WORKFLOW.md docs/specs/README.md docs/specs/board-compute-orchestration.md docs/specs/symphony-compatible-codexter-runner.md tickets/README.md skills/codexter-invocation/SKILL.md AGENTS.md"
+    ],
+    "notes": [
+      "Ralph selector now skips TASK-0081 as blocked and TASK-0120 as claimed during the build pass.",
+      "Stale-language grep only returned the new negative guardrail wording, not stale auto-run claims."
+    ]
+  },
+  "rubrics_used": [
+    "spec-contract",
+    "evidence-quality",
+    "integration-readiness",
+    "debloatability"
+  ],
+  "rubric_sections": {
+    "spec-contract": {
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.5,
+        "parallelization-fit": 4.0,
+        "ticket-sizing": 4.2,
+        "acceptance-testability": 4.2,
+        "scope-clarity": 4.5
+      },
+      "findings": [],
+      "next_action": "pass"
+    },
+    "evidence-quality": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.2,
+        "reproducibility": 4.0,
+        "traceability": 4.2,
+        "consistency": 4.2,
+        "inspectability": 4.0,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "pass"
+    },
+    "integration-readiness": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.2,
+        "contract-correctness": 4.1,
+        "dependency-readiness": 4.0,
+        "coupling-risk": 4.0,
+        "merge-readiness": 3.9
+      },
+      "findings": [],
+      "next_action": "pass; stage only this ticket slice because unrelated dirty work exists in the worktree"
+    },
+    "debloatability": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead-surface-removal": 4.0,
+        "compatibility-cleanup": 4.0,
+        "duplication-reduction": 3.8,
+        "clarity-improvement": 4.4,
+        "deletion-safety": 4.0
+      },
+      "findings": [],
+      "next_action": "pass"
+    }
+  },
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "overall_verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "blocking_findings": [],
+  "next_action": "close TASK-0120 after ticket evidence is updated and the targeted slice is committed"
+}

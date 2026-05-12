@@ -1,0 +1,120 @@
+{
+  "work_type": [
+    "runtime",
+    "backend",
+    "tests",
+    "docs"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "bin/stop_hook.py",
+      "bin/test_stop_hook.py",
+      "bin/test_tmux_helper.py",
+      "docs/specs/review-gates.md",
+      "agents/completion-reviewer.toml",
+      "tickets/TASK-0087/ticket.md"
+    ],
+    "related_files": [
+      "skills/impl/scripts/tmux_helper.py",
+      "skills/review/SKILL.md",
+      "skills/impl/references/stop-hook-routing.md",
+      "docs/specs/orchestrator-subagent-loop.md",
+      "tickets/templates/ticket.md"
+    ],
+    "invariants_checked": [
+      "MEM-0048",
+      "MEM-0049",
+      "MEM-0064"
+    ],
+    "docs_checked": [
+      "docs/specs/review-gates.md",
+      "docs/specs/orchestrator-subagent-loop.md",
+      "skills/impl/references/stop-hook-routing.md",
+      "skills/review/SKILL.md",
+      "tickets/templates/ticket.md",
+      "tickets/TASK-0087/ticket.md"
+    ]
+  },
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "summary": "The stop hook now requests a visible nonce-backed completion-review receipt, validates that receipt against the exact requested artifact set, and links the runtime/docs/ticket contract to targeted proof.",
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": "medium",
+      "rubric": "code-quality",
+      "summary": "Retry continuation messaging still rebuilds required artifacts from current ticket links rather than the persisted exact requested set.",
+      "file_refs": [
+        "bin/stop_hook.py"
+      ],
+      "evidence": [
+        "Receipt enforcement uses persisted completion_review_required_artifacts, but the retry message path still reuses ticket linked_artifacts."
+      ],
+      "next_action": "Optional cleanup: align the retry message with persisted completion_review_required_artifacts for perfect contract parity."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity": 4.0,
+        "readability": 4.0,
+        "maintainability": 4.0
+      },
+      "findings": [
+        "The receipt gate and tests are localized and explicit.",
+        "One retry-message path still duplicates the required artifact contract instead of reusing the persisted set."
+      ],
+      "next_action": "Optional cleanup only."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "contract_alignment": 4.0,
+        "runtime_coherence": 4.3,
+        "failure_handling": 4.2
+      },
+      "findings": [
+        "The stop hook now persists the requested artifact set and validates reviewed_artifacts against that exact set.",
+        "Receipt request, fail, and pass transitions keep runtime state coherent."
+      ],
+      "next_action": "None required."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.1,
+        "traceability": 4.1,
+        "inspectability": 4.1
+      },
+      "findings": [
+        "Targeted proof covers passing, missing, nonce mismatch, stale, failing, substituted reviewed artifact, and request-state persistence paths.",
+        "The active ticket now reflects build-phase verification instead of stale planning-only state."
+      ],
+      "next_action": "Attach this fresh review artifact in the ticket evidence and move to normal documenting/closeout flow."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Continue the normal documenting or closeout flow; optional cleanup is limited to retry-message contract parity."
+}

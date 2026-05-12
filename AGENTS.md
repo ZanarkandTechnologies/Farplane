@@ -34,6 +34,10 @@ blogs, and command families as research inputs rather than live dependencies;
 import ideas through reviewed `adopt`, `adapt`, `reject`, or `defer` decisions,
 usually via `best-of-worlds`. See `MEM-0073`.
 
+When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
+structured outputs, eval prompts, or agent instruction prompts, load
+`rules/prompt-engineering.md` as the shared prompt design reference.
+
 When the operator explicitly wants audit-then-fix recovery mode after a likely
 assistant miss, use the `repent` skill rather than inventing ad hoc recovery
 behavior.
@@ -96,6 +100,85 @@ Premium `generated-video` evidence must come from a real video-generation
 model/app or source video. Seedream/image-generator stills or generated frame
 sequences assembled with local `ffmpeg` are `frame-sequence`/prototype assets,
 not generated-video proof. See `MEM-0084`.
+For cinematic, Terminal-style, GSAP-scroll, generated-video, or frame-sequence
+landing pages, route through the landing-page JSON registries:
+`landing-recipes.json`, `taste-profiles.json`, and `effect-stacks.json`. Keep
+`cinematic-scroll-site-guideline.md` as a compatibility pointer only. See
+`MEM-0079`.
+For Terminal-style, cinematic, generated-media, or premium industrial landing
+pages delegated to external CLIs, enforce the `landing-page` spec-first gate and
+split work into spec, assets, implementation, and visual-review phases. Treat
+timed-out partial runs as failed handoffs, not successful builder output. See
+`MEM-0080`.
+Pi/Kimi frontend delegation uses a manifest-driven skill bundle. Keep external
+frontend CLI profiles on repo-owned inference.sh media skills such as
+`image-generation`, `video-generation`, Remotion, and related frontend/media
+skills; do not mount Codex-native `imagegen` into Pi bundles. See `MEM-0083`.
+Pi/Kimi frontend profiles must also mount `agent-browser` so delegated builders
+can collect same-thread browser QA evidence such as snapshots, screenshots,
+console logs, and page errors before handoff. See `MEM-0096`.
+For Pi/Kimi implementation repair passes, require an early first-write
+checkpoint to the named file before broad rereads or critique. If the external
+run does not create the expected artifact promptly, record it as a failed
+handoff and split or repair locally; live delegate runs should use
+`--expect-output` so `first_write.json` proves whether the agent crossed from
+planning into regular-file production. Do not count agent activity, directory
+creation, or symlink creation as frontend progress. See `MEM-0084`.
+For Terminal/Terminus-level frontend self-improvement, judge external output
+with binary gates for first-write, strict scroll debug, fake-scroll rejection,
+checkpoint screenshot delta, and generated/rendered asset manifest quality.
+`code-native-canvas` with zero media assets is prototype evidence, not final
+visual parity. See `MEM-0085`.
+For Terminal/Terminus final landing-page QA, distinguish scroll mechanics from
+final readiness: `scroll_scrub_qa.cjs` may report `verdict: PASS` while
+`terminalVerdict: FAIL` if media pipeline, dominant hero media, distributed
+checkpoint deltas, support media, or relevant mobile phrase separation are
+missing. See `MEM-0089`.
+For Terminal/Terminus final landing-page QA, require first-viewport offer
+visibility. Dominant generated media is not enough when the hero headline or
+offer copy is hidden until after the first scroll; track this through
+`hasInitialHeroOfferVisible`. See `MEM-0094`.
+For Pi/Kimi frontend startup probes, require `first_write.json` pass, at least
+one session file, a regular probe output, and a non-placeholder handoff; session
+creation alone is not enough. Use the compiled startup probe with
+`--thinking low` and a 90-second first-write gate before expensive compiled
+frontend phases. See `MEM-0086`.
+For self-improve evals with intentionally bad fixtures, score the headline
+metric against expected accept/reject outcomes, not raw assertion ratio. Keep
+raw assertion pass rate as a diagnostic so reject-control quality-gate failures
+do not look like regressions. See `MEM-0087`.
+For Terminal-style delegated landing pages, mobile hero phrase separation is a
+QA signal: when a multi-phrase hero title relies on explicit line breaks,
+require `hasMobileHeroPhraseSeparation` or equivalent visual proof before
+treating mobile polish as passing. See `MEM-0088`.
+For Pi/Kimi repair first-write on existing built frontend files, preserve the
+existing artifact. Use a non-destructive marker or tiny targeted edit, and for
+large generated media repairs prefer a loaded sidecar script or small CSS-owned
+output over asking the delegate to reread and rewrite the full implementation.
+See `MEM-0093`.
+For bounded Pi/Kimi micro-repairs, prefer compact prompts, a phase-scoped skill
+bundle, and explicit command-shaped first-write instructions after prose prompts
+fail to start or cross first-write. Pair these with output-quality gates so
+stubs and no-op edits cannot cleanly complete. See `MEM-0095`.
+For UI source reviews, run `web-design-guidelines` through the
+`review` skill's `frontend-guidelines` lane and record that score beside
+`ui-quality` so taste judgment and source-level interface fundamentals remain
+comparable. See `MEM-0076`.
+
+Codexter invocation is normal Codex plus installed Codexter skills, not a
+standalone CLI product. Keep `bin/codexter_invocation.py` diagnostic and
+artifact-oriented: it may validate `WORKFLOW.md`, normalize tickets, select
+compute, route to skills, and write proof packets, but must not launch Codex,
+poll boards, own retries, or take over Symphony's scheduler responsibilities.
+Ticket existence, `ready: true`, status movement, and `compute_target` changes
+are not run triggers; only explicit invocation should start Codexter work. See
+`MEM-0077` and `MEM-0081`.
+
+Codexter V2 is capped at explicit invocation triggers, board adapter
+conformance scaffolding, and external compute handoff recipes. Do not expand
+the Symphony-inspired work into a Codexter-owned daemon, hosted control plane,
+parallel runner, cloud wrapper, or external board adapter without a fresh
+project-ticket need. See `MEM-0082`.
 
 ## Project Structure
 

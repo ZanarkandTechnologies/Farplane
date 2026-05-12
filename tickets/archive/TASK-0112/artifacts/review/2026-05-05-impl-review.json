@@ -1,0 +1,82 @@
+{
+  "ticket_id": "TASK-0112",
+  "reviewed_at": "2026-05-05T08:20:51Z",
+  "verdict": "pass",
+  "score": 4.4,
+  "review_skill": "review",
+  "rubrics": {
+    "spec_contract": 5,
+    "implementation_plan": 4,
+    "user_intent_satisfaction": 5,
+    "evidence_quality": 4,
+    "integration_readiness": 4,
+    "debloatability": 5
+  },
+  "user_story_groups": [
+    {
+      "group": "solo local Codexter operator",
+      "story": "As the main operator, I can keep running normal Codex locally while seeing exactly how a future Symphony worker would pass the same envelope contract.",
+      "result": "pass",
+      "evidence": [
+        "symphony-template-prepare.json returns status=ready through the same helper",
+        "reference docs state Codexter is not a separate CLI or scheduler"
+      ]
+    },
+    {
+      "group": "future Symphony integration builder",
+      "story": "As an integration builder, I know what Symphony must own and what Codexter must return without guessing from old chat context.",
+      "result": "pass",
+      "evidence": [
+        "references/symphony.md includes a responsibility split for polling, claims, workspaces, Codex launch, proof, and tracker writes",
+        "templates/symphony-run-envelope.json uses mode=symphony_worker"
+      ]
+    },
+    {
+      "group": "team/shared-board user",
+      "story": "As a team user later using Linear/Symphony, I can trust Codexter will not overclaim live Symphony support before the actual backend exists.",
+      "result": "pass",
+      "evidence": [
+        "reference states this is a shim/template, not a live Symphony backend",
+        "template uses computeTarget=local_shared because Symphony already chose the workspace"
+      ]
+    },
+    {
+      "group": "reviewer or maintainer",
+      "story": "As a maintainer, I can verify the template stays valid and the proof path remains machine-readable.",
+      "result": "pass",
+      "evidence": [
+        "bin/test_codexter_invocation.py covers preparing the Symphony envelope template from file",
+        "142 bin tests pass",
+        "template and smoke output are valid JSON"
+      ]
+    }
+  ],
+  "findings": [],
+  "risks": [
+    {
+      "risk": "The shim may be mistaken for a live Symphony backend.",
+      "severity": "medium",
+      "decision": "mitigated",
+      "reason": "The README, SKILL, and reference all say Symphony owns scheduler/runtime mechanics and this ticket ships only a template plus smoke proof."
+    },
+    {
+      "risk": "Real Symphony app-server details can drift.",
+      "severity": "medium",
+      "decision": "accept",
+      "reason": "The shim avoids protocol implementation and treats Symphony/Codex app-server launch as the external runner's source-of-truth responsibility."
+    }
+  ],
+  "commands": [
+    "python3 -m unittest bin/test_codexter_invocation.py",
+    "python3 -m json.tool skills/codexter-invocation/templates/symphony-run-envelope.json",
+    "python3 bin/codexter_invocation.py prepare --envelope skills/codexter-invocation/templates/symphony-run-envelope.json",
+    "python3 -m py_compile bin/codexter_invocation.py bin/test_codexter_invocation.py",
+    "python3 docs/sources/validate_sources.py",
+    "python3 - <<'PY' ... feature registry status-aware validation ... PY",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "python3 bin/check_doc_parity.py",
+    "python3 bin/check_harness_invariants.py",
+    "python3 -m unittest discover -s bin -p 'test_*.py'"
+  ],
+  "blockers": []
+}

@@ -1,0 +1,50 @@
+{
+  "ticket_id": "TASK-0118",
+  "reviewed_at": "2026-05-05T19:12:02Z",
+  "review_type": "impl-plan",
+  "verdict": "pass",
+  "score": 4.4,
+  "checks": {
+    "reference_coverage": "pass",
+    "scope_discipline": "pass",
+    "recommendation_quality": "pass",
+    "diagram_usefulness": "pass",
+    "signature_usefulness": "pass",
+    "type_flow_usefulness": "pass",
+    "proof_quality": "pass",
+    "risk_clarity": "pass",
+    "gap_grounding": "pass",
+    "architecture_boundary": "pass"
+  },
+  "user_story_groups": [
+    {
+      "group": "operator returning after context loss",
+      "story": "As the operator, I need the board to tell me which Symphony/Codexter work is actually done without rereading the whole transcript.",
+      "result": "pass",
+      "evidence": "Plan audits and archives the completed train and updates blockers.md."
+    },
+    {
+      "group": "future Ralph or board selector",
+      "story": "As a future selector, I need completed tickets not to look ready or claimed in the active board.",
+      "result": "pass",
+      "evidence": "Acceptance criteria require no ready=true or claimed_by=codex on completed/archived tickets."
+    },
+    {
+      "group": "maintainer reviewing links",
+      "story": "As a maintainer, I need evidence refs to survive archive moves.",
+      "result": "pass",
+      "evidence": "Plan includes grep, registry validation, and evidence_ref path repair."
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Archiving can break links if references are missed.",
+      "mitigation": "Path grep plus source/feature registry validation before commit."
+    },
+    {
+      "risk": "Existing unrelated dirty files could be swept into closeout.",
+      "mitigation": "Path-scoped staging and final diff review are explicit execution steps."
+    }
+  ],
+  "handoff": "Ready for approval. Implementation should use close-ticket style reconciliation and must not implement new Symphony/Ralph features."
+}

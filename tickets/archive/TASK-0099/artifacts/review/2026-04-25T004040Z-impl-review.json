@@ -1,0 +1,129 @@
+{
+  "work_type": [
+    "runtime",
+    "workflow"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "bin/ticket_runtime.py",
+      "bin/test_ticket_runtime.py",
+      "skills/pr-runtime/SKILL.md",
+      "skills/pr-runtime/README.md",
+      "skills/pr-runtime/AGENTS.md",
+      "bin/README.md",
+      "docs/specs/runtime-surface.md",
+      "docs/specs/harness-techniques.md",
+      "README.md",
+      "tickets/TASK-0099/ticket.md"
+    ],
+    "related_files": [
+      "docs/MEMORY.md",
+      "docs/HISTORY.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/code-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "invariants_checked": [
+      "MEM-0060"
+    ],
+    "docs_checked": [
+      "skills/review/SKILL.md",
+      "docs/specs/runtime-surface.md",
+      "README.md"
+    ]
+  },
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "summary": "The ticket-runtime helper now matches the reopened scope: it persists ticket-scoped runtime records, launches configured local runtime commands, tears them down, and gives QA a declared target surface backed by tests and a CLI smoke.",
+  "overall_score": 4.4,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "Compose mode is intentionally command-driven rather than container-introspective, so ongoing compose health still depends on the declared command contract instead of Docker-specific status probing.",
+      "file_refs": [
+        "bin/ticket_runtime.py:386",
+        "bin/ticket_runtime.py:637",
+        "docs/specs/runtime-surface.md:54"
+      ],
+      "evidence": [
+        "The helper records compose command metadata and requires an explicit down command, but it does not inspect external compose health after startup.",
+        "That matches the ticket scope, which kept the helper local-first and command-driven instead of turning it into a full runtime manager."
+      ],
+      "next_action": "If future tickets need live compose/container health inspection, add that as a separate follow-up rather than expanding this helper implicitly."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity-reusability": 4.2,
+        "bloatability": 4.4,
+        "readability": 4.2,
+        "boundary-clarity": 4.4,
+        "error-handling": 4.2,
+        "maintainability": 4.3
+      },
+      "findings": [
+        "The helper stayed narrow and command-driven while gaining real launch/stop behavior, explicit worktree preconditions, and persisted process metadata.",
+        "Tests cover the highest-risk flows directly: launched processes, compose command mode, QA target publication, and worktree guardrails."
+      ],
+      "next_action": "Keep future runtime expansion scoped to declared command contracts unless a later ticket explicitly widens the helper boundary."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.3,
+        "contract-correctness": 4.5,
+        "dependency-readiness": 4.3,
+        "coupling-risk": 4.4,
+        "merge-readiness": 4.5
+      },
+      "findings": [
+        "The reopened ticket contract is now met: `up` launches configured services or compose commands, `down` tears them down, and runtime records carry the process/command metadata needed for status and QA routing.",
+        "Worktree mode now fails fast when no isolated checkout exists instead of silently persisting a nonexistent path."
+      ],
+      "next_action": "Advance as complete for this ticket."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.5,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.4,
+        "reproducibility": 4.5,
+        "traceability": 4.5,
+        "consistency": 4.5,
+        "inspectability": 4.4
+      },
+      "findings": [
+        "The ticket links unit proof for `ensure`, `up`, `down`, compose mode, and worktree failure paths, plus a public CLI smoke through `up -> qa -> down`.",
+        "Docs, tests, and ticket claims now agree on the shipped behavior instead of overstating a metadata-only helper."
+      ],
+      "next_action": "No further evidence work is required for this ticket."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Mark TASK-0099 complete and archive or batch with the next closeout pass."
+}

@@ -129,16 +129,41 @@ builder until the spec passes the planning gates below.
    designer-judgment review, mobile, reduced-motion, browser console/error, and
    source review checks.
 6. Do not claim Terminal/premium parity while any hard gate fails.
+For cinematic, Terminal-style, premium industrial, asset-heavy, or generated-media pages, run the spec-first gate in `references/spec-first-cinematic-industrial.md` before implementation. If the user asks to build in the same turn, still separate the work into spec, assets, implementation, and visual-review phases so each builder pass has a bounded output.
+For modern scroll-scrub or Terminal/Terminus-level work, also load `todos.md`
+and follow it as the active recipe: competitor/inspiration analysis, user story,
+ASCII page flow, nested `advise` section exploration, generated/rendered hero
+media planning, asset conversion, implementation, and QA.
+
+1. **Define the offer.** Name the product/person/place/object/category and the literal value proposition.
+2. **Choose the story shape.** Problem -> shift -> proof -> action, or a stronger domain-specific arc when available.
+3. **Select registry records when useful.** For repeatable high-taste pages, choose one recipe from `references/landing-recipes.json`, one taste profile from `references/taste-profiles.json`, and one effect stack from `references/effect-stacks.json`; use `references/registry-format.md` for field meanings.
+4. **Map sections.** First viewport, proof, features, comparison, social proof, pricing/contact, final CTA. Keep only what the offer earns.
+5. **Create visual scenes.** Decide which sections need real media, generated assets, product screenshots, video, Three.js/WebGL, or code-native visuals. Treat 3D as a first-class landing asset when it reveals the product, object, system, or place.
+6. **Set landing visual rules.** Use `visual-design` for register, scene sentence, typography, color strategy, density, and anti-slop constraints, then refine with the chosen landing taste profile.
+7. **Plan motion.** Choose CSS/Motion/GSAP/WebGL with `frontend-craft/references/motion-routing.md`; for cinematic scroll sites, use the selected effect-stack record and official GreenSock skills or docs for GSAP code.
+8. **Plan proof.** Define mobile/desktop first-viewport checks, scroll checkpoints, asset-load checks, and reduced-motion checks.
+9. **Hand off to `frontend-craft`.** Provide sections, selected registry IDs, assets, motion, and QA expectations.
 
 ## Decision Branches
 
 | Landing type | Lead with |
 | --- | --- |
-| Product/app homepage | actual product state, screenshot, workflow, or demo scene |
+| Product/app homepage | actual product state, screenshot, workflow, 3D product/system scene, or demo scene |
 | Brand/portfolio | identity, work, material, and editorial composition |
 | Venue/place/object | real first-viewport signal of the place/object, not generic atmosphere |
 | Cinematic scrolltelling | story beats, pinned viewport, scene layers, scroll checkpoints |
 | Simple launch page | sharp offer, strong proof, fast CTA, minimal sections |
+
+## Registry Route
+
+For landing pages with reusable formulas or inspiration references:
+
+1. Open `references/landing-recipes.json` and select a recipe ID.
+2. Open `references/taste-profiles.json` and select a compatible taste profile ID.
+3. Open `references/effect-stacks.json` and select a compatible effect stack ID.
+4. If the request intentionally mixes incompatible records, state the reason in the landing brief.
+5. Keep `references/cinematic-scroll-site-guideline.md` as a compatibility pointer; do not treat it as the source of truth when JSON records apply.
 
 ## Top Gotchas
 
@@ -178,6 +203,11 @@ builder until the spec passes the planning gates below.
   such as `8K` inside the scene. Put resolution/quality in generation metadata
   or trailing style language only, and explicitly forbid readable text baked
   into pixels.
+- Do not add a decorative 3D scene that could be replaced by a better still image; 3D must clarify the product, object, system, or story.
+- Do not add a new recipe, taste profile, or effect stack without a stable `id`, routing criteria, examples, compatibility, and QA expectations.
+- Do not keep stale local GSAP examples as API truth; route to official GreenSock skills or docs.
+- Do not ask one builder pass to plan, generate assets, implement, visually review, and repair a cinematic page. Split the pass or expect stalls and mismatched files.
+- Do not accept code-native SVG stand-ins as Terminal-quality media unless the brief marks them as a placeholder and includes a concrete generated-media or real-media upgrade path.
 
 ## Reference Map
 
@@ -187,6 +217,14 @@ builder until the spec passes the planning gates below.
   exploded-view sequences, and anti-infographic requirements.
 - `references/research-synthesis.md` - competitor/inspiration research and
   best-of-worlds synthesis gate.
+- [frontend-craft three-js.md](../frontend-craft/references/three-js.md) - Three.js/WebGL/R3F reference route for product/object/system hero scenes and interactive 3D assets.
+- `references/landing-recipes.json` - JSON registry of page formulas and section structures.
+- `references/taste-profiles.json` - JSON registry of landing-page visual registers.
+- `references/effect-stacks.json` - JSON registry of implementation stacks, assets, debug hooks, and QA.
+- `references/spec-first-cinematic-industrial.md` - Terminal-style spec-first gate, asset contract, external-builder phase split, and gold-reference comparison checklist.
+- `references/terminal-scroll-review.md` - domain-specific review rubric and 80-point self-improvement score for Terminal/Terminus-style landing pages.
+- `references/registry-format.md` - JSON field contract, routing rules, and authoring checklist.
+- `references/cinematic-scroll-site-guideline.md` - compatibility pointer for older Terminal-style cinematic-scroll references.
 - `references/qa.md` - landing-page proof checks.
 - `references/architecture.md` - landing-page ownership and handoff model.
 - `references/workflows.md` - standard landing and cinematic scrolltelling paths.
@@ -194,6 +232,7 @@ builder until the spec passes the planning gates below.
 - `references/asset-evidence.md` - generated/real media proof gate.
 - `references/designer-judgment.md` - final 5% premium quality rubric.
 - `references/gotchas.md` - common landing-page mistakes.
+- `todos.md` - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
 
 ## Output Contract
 
@@ -204,6 +243,7 @@ Return a landing brief with:
 - `Reference research`
 - `Best-of-worlds decisions`
 - `Unique take`
+- `Recipe route` with selected recipe, taste-profile, and effect-stack IDs when used
 - `Story arc`
 - `Low-fi ASCII flow`
 - `Section map`
@@ -234,3 +274,13 @@ with:
 - `Motion Plan`
 - `QA Gates`
 - `assets/asset-manifest.json`
+For cinematic industrial pages, the output must also name the current phase:
+`spec`, `assets`, `implementation`, or `visual-review`. The `spec` phase must
+include a file map, generated/real asset manifest plan, desktop and mobile hero
+media plan, poster/reduced-motion fallback, scroll checkpoints, and the next
+phase prompts or task slices.
+
+For Terminal/Terminus-style self-improvement runs, also include the
+`terminal-scroll-review` target: score with
+`scripts/terminal_landing_score.py`, treat `80` as the pass threshold, and use
+the lowest scoring dimension as the next repair hypothesis.

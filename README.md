@@ -8,6 +8,11 @@ single-ticket engineering with explicit proof and Stop-hook judgment, with a
 guarded serial `$ralph` dispatcher for prepared filesystem ticket boards. It is
 not yet a parallel multi-agent dispatcher.
 
+Codexter is a ticket invocation layer inside normal Codex. Tickets store work
+context; explicit invocations express intent to run that work. Creating a
+ticket, marking it ready, moving a board card, or changing `compute_target`
+does not start an agent by itself.
+
 If a repo does not already have Codexter conventions such as `AGENTS.md`,
 `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and
 `tickets/`, start with `deep-init-project` before trying to use the full spec,
@@ -18,6 +23,8 @@ ticket, and execution workflow.
 - Repo-local operating map: [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
 - Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
 - Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
+- Codexter V2 capstone: [codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
+- Board, compute, and ticket invocation: [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
 - Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
 - Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
@@ -29,16 +36,47 @@ ticket, and execution workflow.
 - Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/best-of-worlds/SKILL.md)
 - Harness source scouting: [skills/harness-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/harness-scout/SKILL.md)
 - PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
+- Codexter invocation contract: [skills/codexter-invocation/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/README.md)
+- External CLI delegation: [skills/delegate-cli/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/README.md)
+- Frontend external CLI profile: [skills/delegate-frontend/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/README.md)
 - Frontend implementation orchestrator: [skills/frontend-craft/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/frontend-craft/SKILL.md)
 - Functional UI redesign: [skills/functional-ui/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/functional-ui/SKILL.md)
 - Visual design direction: [skills/visual-design/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/visual-design/SKILL.md)
 - Landing page planning: [skills/landing-page/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/landing-page/SKILL.md)
+- Image generation assets: [skills/image-generation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/image-generation/SKILL.md)
+- Video generation assets: [skills/video-generation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/video-generation/SKILL.md)
+- Remotion render assets: [skills/remotion-render/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/remotion-render/SKILL.md)
 - Autoresearch planning: [skills/autoresearch-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-plan/SKILL.md)
 - Autoresearch execution: [skills/autoresearch-exec/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-exec/SKILL.md)
 - Skill self-improvement: [skills/self-improve/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/self-improve/SKILL.md)
 - Serial board drain: [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/SKILL.md)
 - Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
 - Project bootstrap: [skills/deep-init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/README.md)
+
+## Documentation Router
+
+Use this section as the shortest route to the right source of truth. Keep it in
+sync with [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
+whenever the public harness story changes.
+
+| Need | Start Here | Then Check |
+| --- | --- | --- |
+| Understand the whole repo | [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) | [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md) |
+| Decide where a harness change belongs | [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md) | [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md), nearest skill README |
+| Run or resume a ticket | [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) | active `tickets/TASK-*/ticket.md`, [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan/SKILL.md), [skills/impl/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl/SKILL.md) |
+| Close or archive finished work | [skills/close-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/close-ticket/SKILL.md) | [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/HISTORY.md), [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/MEMORY.md), affected module README |
+| Check proof quality | [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md) | [review-gates.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/review-gates.md), ticket evidence |
+| Work on Codexter V2 invocation or adapters | [codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md) | [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md), [symphony-compatible-codexter-runner.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/symphony-compatible-codexter-runner.md), [board-adapter-conformance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-adapter-conformance.md) |
+| Update docs after a public contract changes | [doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md) | this README, [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md), [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) |
+
+Documentation sync rule:
+
+- `README.md` routes readers.
+- `ARCHITECTURE.md` owns the top-level system diagram and ownership map.
+- `docs/specs/README.md` indexes canonical behavior specs.
+- `tickets/README.md` owns the ticket state-machine contract.
+- When one of these changes a public workflow claim, update the others in the
+  same pass and run `python3 bin/check_doc_parity.py`.
 
 ## Current State
 
@@ -70,12 +108,25 @@ Implemented now:
 - single-ticket execution through `$impl`
 - serial filesystem-ticket board draining through `$ralph`, which selects one
   eligible ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
+- delegated QA routing for live `$qa` followups plus visible nonce-backed
+  completion-review receipts
 - anchored `review` rubrics plus evidence-gated completion
 - `desloppify` for CLI-driven anti-slop cleanup, with default worker delegation
 - same-session bounded persistence through `$loop`
 - documenting and closeout through `close-ticket`
 - isolated PR follow-up and concurrent-writer checkout setup plus ticket-scoped
   runtime launch/teardown through `pr-runtime` plus `ticket-runtime`
+- local Codexter invocation through `WORKFLOW.md`,
+  `CodexterRunEnvelope`, filesystem `WorkItem`, `ComputeSelector`, and
+  `ProofPacket`, so an explicit local or external invocation can route one
+  ticket through existing skills and future Symphony workers have the same
+  request/result contract
+- board/compute invocation doctrine that keeps tickets as context, Codex as
+  the execution engine, Codexter as the installed skill/proof layer, and
+  Symphony as a future background scheduler/runner rather than a replacement
+  for local Codexter use
+- external CLI delegation through `delegate-cli`, with `delegate-frontend` as
+  the first profile for Pi plus Kimi K2.6 dry-run/live handoffs
 - Stop-hook phase routing and current-turn relevance checks
 - optional `deep-init-project` scaffolding for `.githooks/`,
   `scripts/pre_commit_check.sh`, `scripts/pre_push_check.sh`, a starter `qa/`
@@ -93,8 +144,8 @@ Partial today:
 
 Still missing:
 
-- tighter QA routing and standard evidence packs that stop weak proof from
-  counting as done
+- standard evidence packs that stop weak proof from counting as done across all
+  work types
 - compaction-safe reset and handoff discipline so long runs resume from the
   ticket instead of transcript drift
 - clearer answer/plan/act routing plus deterministic subagent selection for
@@ -157,6 +208,7 @@ flowchart LR
     end
 
     subgraph Dispatch["4. Execution Dispatch"]
+      invoke["codexter-invocation<br/>run envelope + proof"]:::execution
       ralph["$ralph<br/>serial board drain"]:::callout
       loop["$loop<br/>same-session bounded persistence"]:::execution
       impl["$impl<br/>one-ticket build loop"]:::callout
@@ -165,12 +217,14 @@ flowchart LR
 
     subgraph Build["Build + Specialist Skills"]
       builders["frontend-craft<br/>frontend-design<br/>convex<br/>react-flow<br/>three-js<br/>data-viz"]:::execution
+      assetSkills["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::execution
       uiSkills["functional-ui<br/>visual-design<br/>landing-page<br/>vercel-react-best-practices"]:::execution
+      externalCli["delegate-cli<br/>delegate-frontend<br/>external CLI profiles"]:::execution
       debug["runtime-debugging<br/>codebase-analysis<br/>bash-efficiency<br/>repent<br/>agent-browser"]:::execution
     end
 
     subgraph Proof["5. Proof + Review Gates"]
-      qa["qa<br/>testing<br/>visual-qa<br/>web-design-guidelines"]:::quality
+      qa["qa-tester<br/>qa<br/>testing<br/>visual-qa<br/>web-design-guidelines"]:::quality
       review["review<br/>anchored rubric gate"]:::callout
       heavy["coderabbit-review<br/>desloppify"]:::quality
       stop["Stop hook<br/>continue, block, or complete"]:::quality
@@ -214,7 +268,9 @@ flowchart LR
     implplan --> diagram
     diagram --> tickets
 
-    tickets --> ralph
+    tickets --> invoke
+    invoke --> ralph
+    invoke --> impl
     ralph -->|planning ticket| implplan
     ralph -->|building ticket| impl
     ralph -->|documenting ticket| close
@@ -224,10 +280,14 @@ flowchart LR
     prRuntime -. isolated writer .-> impl
 
     impl --> builders
+    builders --> assetSkills
+    assetSkills -. qa-tester proof .-> qa
     impl --> uiSkills
+    impl --> externalCli
     impl --> debug
     builders --> qa
     uiSkills --> qa
+    externalCli --> qa
     debug --> qa
     impl --> qa
     qa --> review
@@ -258,30 +318,34 @@ The yellow callout boxes are the main handoff skills/operators: `deep-init-proje
 
 ## Roadmap
 
-Now:
+Current capstone:
 
-- [TASK-0086: tighten planning around touched files, signature deltas, and oversized-file decisions](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0086/ticket.md)
-- [TASK-0087: enforce QA routing and evidence packs before completion](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0087/ticket.md)
-- [TASK-0088: make reset and resume handoffs concise and compaction-safe](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0088/ticket.md)
-- [TASK-0089: make execution routing default to answer, plan, or act](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0089/ticket.md)
-- [TASK-0102: add autonomy readiness and serial ralph dispatcher](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0102/ticket.md)
+- [Codexter V2 milestone](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
 
-Next:
+The Symphony-inspired V2 pass is now capped at explicit invocation, adapter
+conformance, and external compute handoff documentation:
 
-- [TASK-0081: add a worktree-backed multi-session runtime with a cloud-ready boundary](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0081/ticket.md)
+- [TASK-0121: define explicit Codexter invocation triggers](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/ticket.md)
+- [TASK-0123: add board adapter conformance scaffolding](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0123/ticket.md)
+- [TASK-0122: add external compute handoff recipes](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0122/ticket.md)
 
-Later:
+Do not expand this into a background-agent platform right now:
 
-- [TASK-0082: add transparency and ablation evals for autonomy changes](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0082/ticket.md)
+- [TASK-0081](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0081/ticket.md)
+  is archived as premature runtime-scaling work.
+- Parallel Ralph, hosted telemetry, Linear/Notion adapters, and cloud runners
+  stay deferred until real project pressure proves they are worth the cost.
 
 The roadmap above reflects the current audit:
 
-- the intake, per-ticket planning, review, Stop-hook gating, and closeout stack
-  are already live
-- the main missing product leap is not more mode sprawl; it is making plans,
-  proof, and handoffs legible enough that the runtime can be trusted
-- bigger runtime scale still matters, but only after the contract-first tickets
-  make file ownership, evidence quality, and resume behavior harder to fake
+- the intake, per-ticket planning, review, Stop-hook gating, closeout,
+  filesystem BoardAdapter, ComputeSelector, invocation envelope, proof packet,
+  and serial `$ralph` selector are already live
+- invocation triggers, adapter conformance, and external compute handoffs are
+  explicit enough for future integrations to reuse without drifting into a
+  daemon
+- after this V2 capstone, stop investing in this architecture track and return
+  to real project work unless a concrete project ticket exposes a new gap
 
 ## Setup
 

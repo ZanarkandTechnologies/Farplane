@@ -10,3 +10,8 @@
   the phase needs them.
 - Do not allow external CLI runs to push, deploy, publish, spend unbounded
   credits, or mutate unrelated repo files.
+# Delegate Frontend Gotchas
+
+- Do not delegate vague visual taste.
+- Do not skip visual QA after an external frontend build.
+- Do not let Pi/Kimi become the final reviewer of its own UI.

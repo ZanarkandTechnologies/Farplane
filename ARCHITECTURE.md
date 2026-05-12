@@ -6,6 +6,11 @@ Use this file as the top-level architecture guide after the repo-local
 [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md). It explains
 which surfaces exist, what each one owns, and where to go next.
 
+Documentation routing starts in
+[README.md](/Users/kenjipcx/coding-harness/Codexter/README.md). Keep this file
+and README in sync whenever the public workflow, shipped capability list, or
+whole-system diagram changes.
+
 ## Purpose
 
 Codexter is a harness repo for running long-form engineering work through visible
@@ -56,7 +61,9 @@ flowchart LR
     research["documentation<br/>external-patterns<br/>harness-scout<br/>parity-research<br/>gap-analysis<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
-    execSkill["$impl<br/>$loop<br/>$ralph"]:::callout
+    execSkill["codexter-invocation<br/>$impl<br/>$loop<br/>$ralph"]:::callout
+    assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
+    externalCli["delegate-cli<br/>delegate-frontend"]:::skill
     closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
   end
 
@@ -104,9 +111,13 @@ flowchart LR
   planSkill --> tickets
 
   tickets --> execSkill
+  execSkill --> assetSkill
   execSkill --> agentsDir
   execSkill --> bin
   execSkill --> harness
+  execSkill --> externalCli
+  externalCli --> bin
+  externalCli --> harness
   execSkill --> qa
   hooks --> stop
   harness --> stop
@@ -131,6 +142,30 @@ Legend:
 
 ## Canonical Surfaces
 
+### Documentation router
+
+The public docs are intentionally split by job:
+
+| Surface | Owns | Must Stay In Sync With |
+| --- | --- | --- |
+| [README.md](/Users/kenjipcx/coding-harness/Codexter/README.md) | reader routing, setup, current-state summary, roadmap cap | this file, `docs/specs/README.md` |
+| [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) | system diagram, surface ownership, read order, current limits | README, `docs/specs/harness-techniques.md` |
+| [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md) | canonical behavior-spec index and doc-gardening loop | README, this file |
+| [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) | ticket state machine, invocation policy, metadata contract | ticket template, board/compute specs |
+| [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/HISTORY.md) / [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/MEMORY.md) / [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Codexter/docs/TROUBLES.md) | durable timeline, invariants, and repeated misses | closeout tickets and nearest module docs |
+
+If a public harness claim changes, update the relevant row's surfaces in the
+same pass and run:
+
+```bash
+python3 bin/check_doc_parity.py
+python3 bin/check_harness_invariants.py
+python3 tickets/scripts/check_ticket_metadata.py
+```
+
+Do not shrink or remove the colored Mermaid maps in README or ARCHITECTURE
+during cleanup unless the replacement carries the same routing information.
+
 ### Entry surfaces
 
 - [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
@@ -144,8 +179,16 @@ Legend:
 
 - [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
   Purpose: index of canonical behavior and execution specs
+- [docs/specs/codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
+  Purpose: completed capped Symphony-inspired follow-through: explicit
+  invocation triggers, adapter conformance, external compute recipes, and clear
+  deferrals
 - [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
+- [docs/specs/board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
+  Purpose: canonical ownership split for BoardAdapter, WorkItem, explicit
+  ticket invocation, ComputeSelector, local Codexter, operator-invoked serial
+  Ralph, and future Symphony/shared board compute modes
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
@@ -171,7 +214,8 @@ Legend:
 ### Execution surfaces
 
 - [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
-  Purpose: ticket lifecycle, frontmatter contract, and durable progress policy
+  Purpose: ticket lifecycle, frontmatter contract, invocation policy, and
+  durable progress policy
 - [tickets/templates/ticket.md](/Users/kenjipcx/coding-harness/Codexter/tickets/templates/ticket.md)
   Purpose: canonical ticket shape for planning, artifact-first evidence, and optional `Agent Contract`, `Autonomy Readiness`, and `Evidence Checklist` sections for UI-bearing or unattended work
 - [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
@@ -201,6 +245,18 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/SKILL.md)
   Purpose: public serial dispatcher that selects one eligible filesystem
   ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
+- [skills/codexter-invocation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/SKILL.md)
+  Purpose: normal-Codex invocation contract that loads `WORKFLOW.md`,
+  validates one explicit `CodexterRunEnvelope`, selects local compute, routes
+  to the existing phase skill, and writes parseable proof without launching
+  Codex or treating ticket existence as a trigger
+- [skills/delegate-cli/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/SKILL.md)
+  Purpose: public external CLI delegation workflow for routing bounded builder
+  work through profile/adapter contracts while Codexter keeps ticket, QA, and
+  review authority
+- [skills/delegate-frontend/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/SKILL.md)
+  Purpose: first external CLI profile surface, routing frontend implementation
+  and design-polish work through the Pi plus Kimi K2.6 profile
 - [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
   Purpose: hooks, validators, runtime helpers
 - [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)
@@ -234,6 +290,8 @@ When orienting on the repo:
 
 - The architecture map is intentionally current-state-first and should not become
   a second encyclopedia.
+- README is the documentation router; ARCHITECTURE is the ownership map. Update
+  both together when the public harness story changes.
 - Codexter has strong single-ticket orchestration and a guarded serial
   filesystem-ticket dispatcher, but not parallel N-agent dispatch with leases,
   worktrees, merge policy, stale-worker recovery, and batch QA yet.

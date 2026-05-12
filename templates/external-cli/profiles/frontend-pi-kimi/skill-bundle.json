@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Curated skill bundle mounted into the Pi/Kimi frontend profile. Keep this explicit so frontend/media delegation stays auditable.",
+  "required_skills": [
+    "frontend-craft",
+    "functional-ui",
+    "visual-design",
+    "landing-page",
+    "frontend-design",
+    "image-generation",
+    "video-generation",
+    "video-ad-specs",
+    "ai-marketing-videos",
+    "explainer-video-guide",
+    "storyboard-creation",
+    "talking-head-production",
+    "product-photography",
+    "remotion",
+    "remotion-render",
+    "data-viz",
+    "react-flow",
+    "vercel-react-best-practices",
+    "agent-browser",
+    "visual-qa",
+    "review",
+    "web-design-guidelines"
+  ],
+  "optional_skills": []
+}

@@ -1,0 +1,84 @@
+{
+  "ticket_id": "TASK-0114",
+  "reviewed_at": "2026-05-05T08:15:45Z",
+  "verdict": "pass",
+  "score": 4.2,
+  "review_skill": "review",
+  "rubrics": {
+    "spec_contract": 4,
+    "implementation_plan": 4,
+    "user_intent_satisfaction": 5,
+    "evidence_quality": 4,
+    "integration_readiness": 4,
+    "debloatability": 4
+  },
+  "user_story_groups": [
+    {
+      "group": "solo local Codexter operator",
+      "story": "As the main operator, I can ask normal Codex with Codexter installed to prepare a ticket and see exactly where it can run without accidentally triggering a runner.",
+      "result": "pass",
+      "evidence": [
+        "allowed-local-shared.json returns ready local_shared with no setup",
+        "deferred-local-worktree.json blocks with missing_worktree_runtime and a ticket_runtime setup hint"
+      ]
+    },
+    {
+      "group": "future Symphony integration builder",
+      "story": "As a Symphony integrator, I need Codexter to express unsupported external compute as a clean admission decision so Symphony can own scheduling and launching.",
+      "result": "pass",
+      "evidence": [
+        "blocked-symphony.json contains unsupported_target and keeps the handoff as external runner launches normal Codex with Codexter installed",
+        "codexter_compute.py does not poll, retry, or launch Codex"
+      ]
+    },
+    {
+      "group": "future cloud or worktree adapter author",
+      "story": "As an adapter author, I can see target capability, runtime hints, required setup, and blocker codes without reverse-engineering free-text reasons.",
+      "result": "pass",
+      "evidence": [
+        "ComputeDecision now exposes blockerCodes, runtimeHints, requiredSetup, handoff, and capability",
+        "test_codexter_compute.py covers precedence, worktree records, future targets, and dependency gates"
+      ]
+    },
+    {
+      "group": "reviewer or maintainer",
+      "story": "As a maintainer, I can verify that unsupported targets never silently fall back and that local_worktree does not create a worktree by surprise.",
+      "result": "pass",
+      "evidence": [
+        "141 bin tests pass",
+        "compute selector tests assert missing runtime blocks local_worktree",
+        "prepare artifacts show blocked future targets instead of fallback"
+      ]
+    }
+  ],
+  "findings": [],
+  "risks": [
+    {
+      "risk": "Dependency resolution is conservative in invocation prepare because the selector only knows explicit resolved dependency IDs when a caller supplies them.",
+      "severity": "medium",
+      "decision": "defer",
+      "reason": "This keeps v2 admission safe. Ralph or a future board adapter should pass resolved dependency context before build dispatch."
+    },
+    {
+      "risk": "local_worktree setup is only a hint and not automatically executed.",
+      "severity": "low",
+      "decision": "accept",
+      "reason": "The ticket explicitly forbids turning the selector into a runner; pr-runtime and ticket_runtime remain the setup surfaces."
+    }
+  ],
+  "commands": [
+    "python3 -m unittest bin/test_codexter_compute.py bin/test_codexter_invocation.py bin/test_codexter_boards.py",
+    "python3 -m py_compile bin/codexter_compute.py bin/test_codexter_compute.py bin/codexter_invocation.py",
+    "python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --proof tickets/TASK-0114/artifacts/compute/local-shared.proof.json",
+    "python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute local_worktree --proof tickets/TASK-0114/artifacts/compute/local-worktree.proof.json",
+    "python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute symphony --proof tickets/TASK-0114/artifacts/compute/symphony.proof.json",
+    "python3 bin/codexter_invocation.py prepare --ticket TASK-0114 --phase planning --compute codex_cloud --proof tickets/TASK-0114/artifacts/compute/codex-cloud.proof.json",
+    "python3 docs/sources/validate_sources.py",
+    "python3 - <<'PY' ... feature registry status-aware validation ... PY",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "python3 bin/check_doc_parity.py",
+    "python3 bin/check_harness_invariants.py",
+    "python3 -m unittest discover -s bin -p 'test_*.py'"
+  ],
+  "blockers": []
+}

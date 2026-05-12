@@ -46,6 +46,23 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 - deliberate reset/resume requires the ticket to carry a clear `next_action`,
   `last_verification`, blockers, and evidence references
 
+## Invocation Policy
+
+A ticket is a work card, not a trigger. Creating a ticket, setting
+`ready: true`, moving `status`, or adding `compute_target` does not start an
+agent by itself.
+
+Codexter work starts from an explicit invocation:
+
+- local operator request, such as asking Codex to run `TASK-0123`
+- operator-invoked `$ralph`, which serially selects one eligible ticket
+- a recognized board comment or shared-board action after an external runner
+  converts it into a `CodexterRunEnvelope`
+- a future Codex Cloud, Symphony, or other runner payload
+
+`ready` means the ticket is eligible once invoked. It does not mean Codexter
+should watch the board and begin work automatically.
+
 ## Canonical Frontmatter
 
 ```yaml
@@ -57,6 +74,8 @@ status: review
 owner: codex
 claimed_by: agent-03  # optional active session claim alias
 priority: medium
+# optional compute override: local_shared, local_worktree, symphony, or codex_cloud
+# compute_target: local_shared
 depends_on: []
 blocked_by: []
 ready: false
@@ -76,6 +95,15 @@ last_verification: none
 - `status`: `todo`, `review`, `building`, `blocked`, `done`, `failed`
 - `owner`: broad work owner, not a live session id
 - `claimed_by`: optional human-facing active claim alias for the current live session, such as `agent-03`
+- `compute_target`: optional ticket-level compute override. Supported values
+  are `local_shared`, `local_worktree`, `symphony`, and `codex_cloud`; future
+  targets may be recorded but remain blocked unless the active workflow and
+  adapter support them.
+  - `local_shared` runs in the current checkout.
+  - `local_worktree` requires a ticket runtime record under
+    `.harness/state/tickets/TASK-XXXX.runtime.json`.
+  - `symphony` and `codex_cloud` are future external-adapter targets and must
+    stay blocked in local Codexter until those adapters exist.
 - `depends_on`: structural prerequisites
 - `blocked_by`: concrete ticket-ID blockers only
 - `ready`: whether `next_action` can be executed now
@@ -86,9 +114,18 @@ last_verification: none
 - `last_verification`: the one-line authoritative verification summary; keep
   detailed commands and artifacts in `Evidence`
 
-For `$ralph`, a ticket is selectable only when `ready: true`,
+For `$ralph`, the explicit invocation is the operator running `$ralph`. After
+that, a ticket is selectable only when `ready: true`,
 `approval_required: false`, `blocked_by: []`, `claimed_by:` is empty, and every
 dependency is complete, archived, or explicitly waived in the ticket body.
+
+For Codexter invocation, `bin/codexter_boards.py` is the canonical v1
+BoardAdapter surface for reading filesystem tickets into normalized `WorkItem`
+JSON. It is intentionally read-first: evidence links still belong in the
+ticket `Evidence` section until a later ticket ships traceable writeback.
+Future board adapters must satisfy
+`docs/specs/board-adapter-conformance.md` before they become live ticket
+sources.
 
 ## Invariants
 

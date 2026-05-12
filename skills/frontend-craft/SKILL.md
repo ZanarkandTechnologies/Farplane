@@ -1,7 +1,7 @@
 ---
 name: frontend-craft
 version: 1.0.0
-description: Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend surface and may need UX planning, visual design, landing-page treatment, motion, assets, or QA routing. Routes through functional-ui, visual-design, landing-page, frontend-design references, imagegen, and visual-qa as needed.
+description: Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend surface and may need UX planning, visual design, landing-page treatment, motion, Three.js/WebGL, generated image/video assets, standards audit, or QA routing. Routes through functional-ui, visual-design, landing-page, frontend-design references, imagegen, image-generation, video-generation, remotion, remotion-render, web-design-guidelines, and visual-qa as needed.
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -13,7 +13,7 @@ Build production frontends by routing the work through the right frontend brain 
 
 - The user says to build or implement a frontend, page, component, app surface, dashboard, or tool UI.
 - The request includes both function and look, such as "make this UI good and implement it."
-- The target may need shadcn, AI Elements, animation, generated assets, visual QA, or one-page marketing treatment.
+- The target may need shadcn, AI Elements, animation, generated image/video assets, web-interface audit, visual QA, or one-page marketing treatment.
 
 ## Do Not Use When
 
@@ -33,6 +33,13 @@ Build production frontends by routing the work through the right frontend brain 
 7. **Plan assets and experiments.** Use `asset-generation.md` with the `imagegen` skill for generated bitmap assets. Use `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGL, WebGPU, or canvas text layout complexity.
 8. **Implement and verify.** Build with repo patterns, run type/lint/tests, and route UI proof through `visual-qa` or the ticket's QA contract when the surface is user-visible.
 9. **Write the handoff.** Summarize the lanes used, stack facts, UX/visual decisions, changed files, proof commands, and any skipped lanes with reasons.
+3. **Route special surfaces.** Use `landing-page` for one-page, marketing, launch, cinematic, scrolltelling, or hero-heavy surfaces before visual-design so the page recipe, taste profile, and effect stack can guide the look.
+4. **Run visual design.** Use `visual-design` to set register, scene sentence, typography, color strategy, layout rhythm, density, motion taste, and anti-slop constraints. For landing pages, refine this with the selected taste profile.
+5. **Choose implementation references.** Use `frontend-design` references for shadcn, AI Elements, registries, and app UI construction. Use `motion-routing.md` for CSS vs Motion vs GSAP vs WebGL decisions.
+6. **Plan assets and experiments.** Use `asset-generation.md` with `imagegen` for ordinary Codex-native still bitmap assets, `image-generation` for inference.sh image model routing, `video-generation` for model-native video, `remotion` for authoring Remotion code, and `remotion-render` for deterministic React/Remotion MP4s. Use `three-js.md` when the surface earns 3D/WebGL/R3F, and `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGPU, or canvas text layout complexity.
+7. **Audit source fundamentals.** Run `web-design-guidelines` on changed UI files for source-fresh accessibility, focus, forms, navigation, animation, and interface checks.
+8. **Implement and verify.** Build with repo patterns, run type/lint/tests, and route UI proof through `visual-qa` or the ticket's QA contract when the surface is user-visible.
+9. **Write the handoff.** Summarize the UX/visual decisions, changed files, proof commands, guideline audit result, and any skipped lanes with reasons.
 
 ## Decision Branches
 
@@ -40,11 +47,15 @@ Build production frontends by routing the work through the right frontend brain 
 | --- | --- |
 | "this UI sucks", "redesign this component", broken flow | `functional-ui` first, then `visual-design`, then implementation |
 | App, dashboard, AI workflow UI | `functional-ui` if unsettled, `visual-design`, `frontend-design` references |
-| Landing page, homepage, launch page, portfolio hero | `landing-page`, then `visual-design`, then motion/assets references |
+| Landing page, homepage, launch page, portfolio hero | `landing-page`, JSON recipe/taste/effect records when useful, then `visual-design`, then motion/assets references |
 | Visual polish only | `visual-design`, then implementation |
 | Complex scroll animation | `landing-page` if narrative; otherwise `motion-routing.md` and official GreenSock skills or docs |
 | Generated hero/image/texture/reference asset | `asset-generation.md` and `imagegen` |
-| Canvas/WebGPU/futuristic rendering | `experimental-rendering.md`, progressive enhancement, and explicit fallback |
+| Inference.sh image model, background removal, upscaling, or model comparison | `asset-generation.md` and `image-generation` |
+| Generated video, image-to-video, avatar/lipsync, foley, or video edit | `asset-generation.md` and `video-generation` |
+| Deterministic React/Remotion animation or video component | `asset-generation.md`, `remotion` for code, and `remotion-render` for inference.sh MP4 render |
+| Three.js, React Three Fiber, WebGL, shader, or 3D scene | `three-js.md`, progressive enhancement, and explicit fallback |
+| Canvas/WebGPU/futuristic rendering outside Three.js | `experimental-rendering.md`, progressive enhancement, and explicit fallback |
 
 ## Top Gotchas
 
@@ -56,6 +67,8 @@ Build production frontends by routing the work through the right frontend brain 
 - Do not import icon, motion, chart, form, AI, or registry packages before checking `package.json`.
 - Do not use Tailwind v4 syntax in a v3 project, or v3 config assumptions in a v4 project.
 - Do not turn an entire Next.js App Router page into a client component just to support one animated widget; isolate interactive/motion-heavy pieces in client leaf components.
+- Do not assume inference.sh, Nano Banana, video tooling, or external model CLIs are installed. Capability-gate through the owning asset skill before live external runs, and use built-in `imagegen` first for still images.
+- Do not use Three.js/WebGL or experimental rendering APIs without fallback, accessibility, mobile performance, and browser-support checks.
 
 ## Reference Map
 
@@ -64,7 +77,9 @@ Build production frontends by routing the work through the right frontend brain 
 - `references/workflows.md` - common frontend orchestration paths.
 - `references/gotchas.md` - high-risk routing and proof failures.
 - `references/motion-routing.md` - CSS, Motion, GSAP, View Transitions, WebGL/WebGPU.
-- `references/asset-generation.md` - native `imagegen`, project-bound assets, external-tool gates.
+- `references/asset-generation.md` - native `imagegen`, `image-generation`, `video-generation`, `remotion`, `remotion-render`, project-bound assets, external-tool gates.
+- `references/media-pipelines.md` - multi-asset website/campaign workflows spanning image, model-native video, Remotion, and frontend QA.
+- `references/three-js.md` - Three.js/WebGL/R3F routing with links to architecture, planning, workflows, gotchas, and testing refs.
 - `references/experimental-rendering.md` - HTML-in-Canvas, Pretext, WebGL/WebGPU, progressive enhancement.
 - `references/qa.md` - browser/visual proof expectations.
 - `references/upstream-sources.md` - pinned upstream repos and what to borrow from each.
@@ -77,5 +92,6 @@ When this skill drives implementation, the final output must include:
 - The stack facts captured before implementation.
 - The implementation files changed.
 - The validation commands and results.
+- The `web-design-guidelines` result or a concrete reason it was skipped.
 - Any generated asset paths and prompts when assets were created.
 - A clear handoff to `visual-qa` or ticket QA when UI changed.

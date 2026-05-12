@@ -62,6 +62,7 @@ Use this section by default before loading deep references.
 | Designing schemas/tables | `schema-patterns.md` |
 | Adding auth/users | `user-system.md` |
 | Building AI chat | `ai-chat.md` |
+| Authoring agent or LLM system prompts | `../../rules/prompt-engineering.md` |
 | Long-running tasks (>10 min) | `workflows.md` |
 | Tracking task execution | `execution-tracking.md` |
 | Adding integrations | `components.md` |

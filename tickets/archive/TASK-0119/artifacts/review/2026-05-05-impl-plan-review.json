@@ -1,0 +1,119 @@
+{
+  "ticket_id": "TASK-0119",
+  "reviewed_at": "2026-05-05T19:45:00Z",
+  "review_type": "impl-plan",
+  "work_type": ["planning", "ralph", "board-compute-integration"],
+  "rubrics_used": ["spec-contract", "implementation-plan", "evidence-quality"],
+  "summary": "The plan selects the next coherent Symphony/Codexter follow-up: align serial Ralph with BoardAdapter and ComputeSelector without implementing parallel dispatch or an external scheduler.",
+  "overall_score": 4.4,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "search_scope": {
+    "changed_files": [
+      "tickets/TASK-0119/ticket.md"
+    ],
+    "related_files": [
+      "docs/specs/board-compute-orchestration.md",
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "docs/specs/spec-authoring-contract.md",
+      "WORKFLOW.md",
+      "skills/ralph/SKILL.md",
+      "skills/ralph/references/parallel-ralph.md",
+      "skills/ralph/scripts/select_next_ticket.py",
+      "skills/ralph/scripts/test_select_next_ticket.py",
+      "bin/codexter_boards.py",
+      "bin/codexter_compute.py",
+      "bin/codexter_invocation.py",
+      "bin/test_codexter_boards.py",
+      "bin/test_codexter_compute.py",
+      "docs/MEMORY.md",
+      "docs/TROUBLES.md"
+    ],
+    "invariants_checked": [
+      "MEM-0050",
+      "MEM-0062",
+      "MEM-0074",
+      "MEM-0077"
+    ]
+  },
+  "user_story_groups": [
+    {
+      "group": "solo local operator",
+      "story": "As the operator, I want Ralph to keep draining one safe local ticket at a time without accidentally ignoring compute constraints.",
+      "result": "pass",
+      "evidence": "The plan preserves serial phase handoff and adds compute blockers before selection."
+    },
+    {
+      "group": "future Symphony integration builder",
+      "story": "As a future integrator, I need Ralph and invocation to share the same WorkItem and compute vocabulary.",
+      "result": "pass",
+      "evidence": "The plan routes active candidate loading through FileTicketAdapter and compute admission through select_compute()."
+    },
+    {
+      "group": "reviewer/maintainer",
+      "story": "As a reviewer, I need proof that old selector behavior still works while future targets block clearly.",
+      "result": "pass",
+      "evidence": "The plan requires fixture tests for current local_shared selection, archive dependency satisfaction, local_worktree setup hints, and unsupported future targets."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.5,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.6,
+        "parallelization-fit": 4.5,
+        "ticket-sizing": 4.4,
+        "acceptance-testability": 4.4,
+        "scope-clarity": 4.5
+      },
+      "findings": [],
+      "next_action": "Approve the ticket before implementation."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.4,
+        "bloatability": 4.3,
+        "modularity": 4.4,
+        "proof-clarity": 4.5,
+        "execution-order": 4.4,
+        "risk-clarity": 4.3,
+        "decision-tone": 4.4,
+        "autonomy-readiness": 4.5
+      },
+      "findings": [],
+      "next_action": "Build the whole ticket, not a smaller selector-only slice."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.2,
+        "reproducibility": 4.3,
+        "traceability": 4.2,
+        "consistency": 4.2,
+        "inspectability": 4.2,
+        "autonomy-readiness": 4.2
+      },
+      "findings": [],
+      "next_action": "Attach selector JSON and test output during implementation."
+    }
+  ],
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "blocking_findings": [],
+  "next_action": "Wait for user approval, then run $impl on TASK-0119."
+}

@@ -149,3 +149,36 @@
 2026-05-08 21:18 +0800 | FIX | make landing-page asset evidence reject `generated-video` claims backed only by Seedream/image stills plus local ffmpeg assembly
 2026-05-11 05:35 +0800 | FEAT | implement the frontend skill parity handoff with stack-facts preflight, current shadcn registry and theme guidance, numeric taste dials, design briefs, component state matrices, and stronger frontend QA gates
 2026-05-13 00:03 +0800 | GOVERNANCE | Added the ticket Proof Contract spine so material tickets can declare mechanical metrics, review rubric gates, and required evidence before implementation starts.
+2026-05-05 02:02 +0800 | FEAT | add delegate-cli external CLI delegation with a Pi/Kimi delegate-frontend profile, deterministic dry-run helper, templates, docs, and ticket evidence handoff
+2026-05-05 04:57 +0800 | FEAT | integrate web-design-guidelines as a source-fresh frontend review metric beside ui-quality and frontend visual QA
+2026-05-05 05:28 +0800 | FEAT | add an asset-first cinematic scroll landing guideline based on Terminal Industries and the Nomous agency prototype
+2026-05-05 15:33 +0800 | FEAT | add JSON landing-page registries for recipes, taste profiles, and effect stacks with the first industrial mission-control cinematic route
+2026-05-06 03:25 +0800 | FEAT | add merged-root video-generation and separate remotion-render skills backed by inference.sh references and frontend asset routing
+2026-05-06 04:05 +0800 | FEAT | add merged-root image-generation skill backed by inference.sh image references and best-current model routing
+2026-05-07 01:05 +0800 | FEAT | harden inference.sh image and video skills with async job guidance, saved-result examples, upstream-reference guards, Foley discovery, media pipeline routing, and an official Remotion authoring skill
+2026-05-07 01:30 +0800 | FEAT | promote inference.sh video guides into domain entry skills and move multi-asset media pipeline orchestration under frontend-craft
+2026-05-07 01:33 +0800 | DOCS | reframe Codexter as an explicit ticket invocation layer and park premature branch-runtime scaling work
+2026-05-07 01:45 +0800 | FEAT | remove standalone video-prompting skill and move prompting guidance into each video artifact domain skill
+2026-05-07 02:00 +0800 | FEAT | factor shared video artifact production workflow into a linked domain-production reference
+2026-05-07 02:12 +0800 | DOCS | add capped Codexter V2 milestone and archive completed or premature ticket-board entries
+2026-05-07 02:47 +0800 | FEAT | add social, product-photo, and shared prompting references to the media skill topology
+2026-05-07 03:08 +0800 | FEAT | demote Three.js from public skill to frontend-craft reference routing and link landing-page 3D asset guidance
+2026-05-07 03:14 +0800 | FEAT | land Codexter V2 explicit invocation triggers, board-adapter conformance, Codex Cloud and Symphony handoff recipes, and future-agent misread guardrails
+2026-05-07 03:15 +0800 | FEAT | add a manifest-driven Pi/Kimi frontend skill sync script and mount inference.sh image/video/remotion skills into the external frontend profile
+2026-05-07 04:17 +0800 | DOCS | archive the visible completion-review receipt ticket and add README/ARCHITECTURE documentation-router sync guidance
+2026-05-07 04:41 +0800 | CHORE | split Aikage hook heartbeats into start and stop notifications with shorter heartbeat timeouts
+2026-05-07 04:50 +0800 | FEAT | add Terminal-style scroll-scrub QA instrumentation, harden Pi/Kimi frontend delegation around first-write repair gates, and record Terminal parity evidence
+2026-05-07 05:38 +0800 | FEAT | add delegate-frontend self-improvement evals, Terminus visual-parity metrics, autoresearch memory, and live Pi/Kimi first-write experiments
+2026-05-07 06:51 +0800 | FEAT | add delegate-frontend phase prompt compiler, startup probe tooling, provenance-backed eval rows, and a passing low-thinking Pi/Kimi startup probe fixture
+2026-05-07 07:02 +0800 | FIX | correct delegate-frontend self-improve metric semantics so reject-control fixtures count as expected rejections and raw assertion ratio stays diagnostic
+2026-05-07 07:16 +0800 | FEAT | capture a live compiled Pi/Kimi spec run as a self-improve reject-control when first-write, spec, and handoff pass but the wrapper exits on timeout
+2026-05-07 07:35 +0800 | FEAT | add opt-in external CLI clean completion after expected output plus non-placeholder handoff for bounded delegate-frontend phase runs
+2026-05-07 07:43 +0800 | FEAT | capture a live Pi/Kimi compiled spec success as a positive delegate-frontend self-improve fixture before moving to asset phase work
+2026-05-07 10:32 +0800 | FEAT | capture seeded Pi/Kimi implementation and bounded mobile repair experiments, add mobile hero phrase-separation QA, and raise delegate-frontend self-improve replay coverage to 29 cases
+2026-05-07 12:35 +0800 | FEAT | split landing-page scroll QA into mechanics and Terminal-final readiness, add terminal verdict metrics, and sync the stricter recipe checklist into the Pi/Kimi frontend profile
+2026-05-07 14:19 +0800 | FEAT | add a landing-page todo recipe for modern scroll-scrub sites with competitor analysis, ASCII story planning, nested advise, generated hero media, frame conversion, and QA handoff
+2026-05-07 15:04 +0800 | FEAT | add a Terminal scroll landing review rubric and score runner so self-improvement loops can target an 80-point observable artifact score
+2026-05-07 15:04 +0800 | FIX | make the Pi delegation adapter pass rendered prompt text to `-p` instead of attaching the prompt file, so live runs execute the delegated task and first-write probes become meaningful
+2026-05-07 15:58 +0800 | FEAT | add non-destructive Pi/Kimi repair prompt gates, sidecar repair guidance, and a Terminal-score control showing generated-media wiring can pass local desktop/mobile final readiness
+2026-05-07 18:05 +0800 | FEAT | add output-quality gates, compact phase-scoped Pi delegation, first-viewport hero-offer QA, and a passing Pi/Kimi sidecar repair scoring `99/100`
+2026-05-07 18:27 +0800 | FEAT | mount `agent-browser` into the Pi/Kimi frontend profile and require delegated runnable UI handoffs to capture same-thread browser QA evidence

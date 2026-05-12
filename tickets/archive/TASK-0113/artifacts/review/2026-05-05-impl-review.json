@@ -1,0 +1,81 @@
+{
+  "ticket_id": "TASK-0113",
+  "reviewed_at": "2026-05-05T08:08:47Z",
+  "verdict": "pass",
+  "score": 4.3,
+  "review_skill": "review",
+  "rubrics": {
+    "spec_contract": 4,
+    "implementation_plan": 4,
+    "user_intent_satisfaction": 5,
+    "evidence_quality": 4,
+    "integration_readiness": 4,
+    "debloatability": 5
+  },
+  "user_story_groups": [
+    {
+      "group": "solo Codexter operator",
+      "story": "As a local Codexter user, I can keep using normal Codex plus installed skills while the helper reads my filesystem ticket through one named adapter.",
+      "result": "pass",
+      "evidence": [
+        "bin/codexter_invocation.py prepare --ticket TASK-0113 returned status=ready",
+        "bin/codexter_boards.py normalizes ticket fields into WorkItem"
+      ]
+    },
+    {
+      "group": "future Symphony integration builder",
+      "story": "As a future Symphony caller, I need a stable WorkItem boundary so Symphony can launch Codex and Codexter can route skills/proof inside the workspace.",
+      "result": "pass",
+      "evidence": [
+        "Codexter invocation remains diagnostic and does not launch Codex",
+        "BoardAdapter v1 is documented in docs/specs/board-compute-orchestration.md and skills/codexter-invocation/SKILL.md"
+      ]
+    },
+    {
+      "group": "future Linear or Notion adapter author",
+      "story": "As an adapter author, I can see the methods and normalized shape I must implement without importing Ralph-specific behavior.",
+      "result": "pass",
+      "evidence": [
+        "BoardAdapter Protocol exposes list_candidates, read_work_item, and write_evidence",
+        "FileTicketAdapter is the only live implementation and external adapters remain explicitly future work"
+      ]
+    },
+    {
+      "group": "reviewer or maintainer",
+      "story": "As a maintainer, I can verify path containment, source registry traceability, and no hidden board mutation.",
+      "result": "pass",
+      "evidence": [
+        "14 focused adapter/invocation tests pass",
+        "135 bin tests pass",
+        "write_evidence returns an explicit manual v1 result"
+      ]
+    }
+  ],
+  "findings": [],
+  "risks": [
+    {
+      "risk": "Ralph still has its own selector logic.",
+      "severity": "medium",
+      "decision": "defer",
+      "reason": "TASK-0113 intentionally avoids destabilizing Ralph. A later ticket can reuse BoardAdapter after compute selector v2 and lease policy are clearer."
+    },
+    {
+      "risk": "Filesystem evidence writeback is not automated.",
+      "severity": "low",
+      "decision": "accept",
+      "reason": "Manual evidence writeback matches current Codexter ticket practice and avoids silent mutation until a traceable WriteResult update contract exists."
+    }
+  ],
+  "commands": [
+    "python3 -m unittest bin/test_codexter_boards.py bin/test_codexter_invocation.py",
+    "python3 -m py_compile bin/codexter_boards.py bin/test_codexter_boards.py bin/codexter_invocation.py",
+    "python3 bin/codexter_invocation.py prepare --ticket TASK-0113 --phase planning --proof .harness/results/task-0113-plan.proof.json",
+    "python3 docs/sources/validate_sources.py",
+    "python3 - <<'PY' ... feature registry status-aware validation ... PY",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "python3 bin/check_doc_parity.py",
+    "python3 bin/check_harness_invariants.py",
+    "python3 -m unittest discover -s bin -p 'test_*.py'"
+  ],
+  "blockers": []
+}

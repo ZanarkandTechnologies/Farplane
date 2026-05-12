@@ -1,0 +1,191 @@
+{
+  "action": "start_impl",
+  "reason": "eligible for impl",
+  "recommended_skill": "impl",
+  "selected": {
+    "approval_required": false,
+    "archived": false,
+    "blocked_by": [],
+    "claimed_by": "",
+    "compute": {
+      "allowed": true,
+      "blockerCodes": [],
+      "blockers": [],
+      "capability": {
+        "handoff": "route to the selected Codexter phase skill in this workspace",
+        "implemented": true,
+        "isolation": "current checkout",
+        "requiresExternalRunner": false,
+        "requiresRuntimeRecord": false,
+        "requiresWorktree": false,
+        "setupHint": "normal Codex session in the current checkout",
+        "target": "local_shared"
+      },
+      "handoff": "route to the selected Codexter phase skill in this workspace",
+      "reason": "allowed compute target",
+      "requiredSetup": [],
+      "runtimeHints": [
+        "runs in the current checkout; no runtime record required"
+      ],
+      "runtimeRecordPath": null,
+      "target": "local_shared"
+    },
+    "dependency_waivers": [],
+    "depends_on": [],
+    "next_action": "recover the blocked subjective review path or continue promoted objective fixes after a clean post-exclude rescan",
+    "path": "tickets/TASK-0085/ticket.md",
+    "phase": "building",
+    "priority": "medium",
+    "ready": true,
+    "status": "building",
+    "ticket_id": "TASK-0085"
+  },
+  "selected_path": "tickets/TASK-0085/ticket.md",
+  "selected_ticket_id": "TASK-0085",
+  "skipped": [
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": false,
+      "reason": "terminal state phase=building status=blocked",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0073"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": true,
+      "reason": "approval required",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0081"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": true,
+      "reason": "approval required",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0082"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": true,
+      "reason": "approval required",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0088"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": false,
+      "reason": "terminal state phase=complete status=done",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0099"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": false,
+      "reason": "terminal state phase=complete status=done",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0101"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": false,
+      "reason": "terminal state phase=complete status=done",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0103"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": true,
+      "reason": "approval required",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0104"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": true,
+      "reason": "approval required",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0105"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": false,
+      "reason": "terminal state phase=complete status=done",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0106"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": false,
+      "reason": "terminal state phase=complete status=done",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0108"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": false,
+      "reason": "terminal state phase=complete status=done",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0109"
+    },
+    {
+      "action": "stop",
+      "blocker_codes": [],
+      "compute": null,
+      "eligible": false,
+      "needs_human": false,
+      "reason": "terminal state phase=complete status=done",
+      "recommended_skill": "",
+      "required_setup": [],
+      "ticket_id": "TASK-0117"
+    }
+  ],
+  "status": "selected"
+}

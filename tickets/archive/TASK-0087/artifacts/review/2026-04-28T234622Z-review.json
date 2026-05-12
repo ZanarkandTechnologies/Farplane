@@ -1,0 +1,112 @@
+{
+  "work_type": [
+    "runtime",
+    "backend",
+    "tests",
+    "docs"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "bin/stop_hook.py",
+      "bin/test_stop_hook.py",
+      "bin/test_tmux_helper.py",
+      "docs/specs/review-gates.md",
+      "skills/review/SKILL.md",
+      "agents/completion-reviewer.toml",
+      "AGENTS.md",
+      "docs/MEMORY.md",
+      "docs/HISTORY.md"
+    ],
+    "related_files": [
+      "skills/impl/scripts/tmux_helper.py",
+      "docs/specs/orchestrator-subagent-loop.md"
+    ],
+    "invariants_checked": [
+      "MEM-0049",
+      "MEM-0064",
+      "MEM-0067"
+    ],
+    "docs_checked": [
+      "docs/specs/review-gates.md",
+      "skills/review/SKILL.md",
+      "AGENTS.md",
+      "docs/MEMORY.md",
+      "docs/HISTORY.md"
+    ]
+  },
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "summary": "The stop-hook completion path now distinguishes password-only recovery from missing-review recovery, so a valid linked receipt no longer triggers an unnecessary reviewer rerun just to echo `COMPLETION_PASSWORD`.",
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity-reusability": 4.2,
+        "bloatability": 4.1,
+        "readability": 4.2,
+        "boundary-clarity": 4.2,
+        "error-handling": 4.1,
+        "maintainability": 4.2
+      },
+      "findings": [
+        "The new retry helper keeps the recovery contract narrow without changing the receipt gate.",
+        "Tests now cover both valid-receipt password retries and true rerun cases."
+      ],
+      "next_action": "None required."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.1,
+        "contract-correctness": 4.1,
+        "dependency-readiness": 4.1,
+        "coupling-risk": 4.0,
+        "merge-readiness": 4.1
+      },
+      "findings": [
+        "Password-only recovery no longer over-instructs the live lane when the linked receipt already passes.",
+        "The nonce remains scoped to active ticket-backed `impl` loops, and receipt validation still decides whether another reviewer pass is actually needed."
+      ],
+      "next_action": "None required."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.2,
+        "reproducibility": 4.2,
+        "traceability": 4.2,
+        "consistency": 4.2,
+        "inspectability": 4.2
+      },
+      "findings": [
+        "Verification covers 51 tests across the stop-hook and tmux-helper suites, ticket metadata validation, and diff hygiene.",
+        "The docs and policy surfaces still match the implemented password-plus-receipt contract."
+      ],
+      "next_action": "Proceed with normal closeout."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Close out the ticket or archive it on the next close-ticket pass."
+}

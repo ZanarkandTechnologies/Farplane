@@ -77,6 +77,35 @@ class CheckTicketMetadataTest(unittest.TestCase):
             self.assertTrue(errors)
             self.assertIn("session_id must not appear in frontmatter", "\n".join(errors))
 
+    def test_validator_accepts_optional_compute_target(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace(
+                    "priority: medium\n",
+                    "priority: medium\ncompute_target: local_worktree\n",
+                ),
+            )
+            errors = self.ticket_metadata.validate_ticket(path)
+            self.assertEqual(errors, [])
+
+    def test_validator_rejects_unknown_compute_target(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace(
+                    "priority: medium\n",
+                    "priority: medium\ncompute_target: hidden_cluster\n",
+                ),
+            )
+            errors = self.ticket_metadata.validate_ticket(path)
+            self.assertTrue(errors)
+            self.assertIn("compute_target must be one of", "\n".join(errors))
+
 
 if __name__ == "__main__":
     unittest.main()

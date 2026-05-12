@@ -63,6 +63,7 @@ Ensure an agent can execute the core path after only reading this file.
   - planning -> `spec-contract` + `implementation-plan`
   - code/backend/api -> `code-quality` + `integration-readiness` + `evidence-quality`
   - UI or user-facing workflow -> `user-intent-satisfaction` + the relevant quality/evidence families
+  - UI source review -> add `ui-quality` + `frontend-guidelines` and run `web-design-guidelines` on changed UI files when source is available
   - `$ralph` or unattended-run work -> include autonomy-readiness checks in
     `implementation-plan`, `integration-readiness`, and `evidence-quality`
   - cleanup/refactor/runtime/doc simplification -> add `debloatability`
@@ -85,6 +86,7 @@ Ensure an agent can execute the core path after only reading this file.
   - `references/implementation-plan.md`
   - `references/code-quality.md`
   - `references/ui-quality.md`
+  - `references/frontend-guidelines.md`
   - `references/user-intent-satisfaction.md`
   - `references/evidence-quality.md`
   - `references/demo-quality.md`
@@ -101,6 +103,11 @@ Ensure an agent can execute the core path after only reading this file.
 4. Determine which rubric families apply, starting from ticket-declared rubric gates.
 5. Open the reference file for each selected rubric family.
 6. For code, cleanup, integration, or evidence-heavy review, open
+2. Open `references/review-rubric-index.md`.
+3. Determine which rubric families apply.
+4. Open the reference file for each selected rubric family.
+   - for UI source review, also open `references/frontend-guidelines.md`
+5. For code, cleanup, integration, or evidence-heavy review, open
    `references/desloppify.md`.
 7. Read the changed code/evidence plus the smallest neighboring files, docs,
    constants, schemas, or invariants needed to test consistency.
@@ -169,6 +176,7 @@ password in its next final response:
   `Autonomy Readiness` is an integration/evidence risk, not a cosmetic docs
   nit.
 - select `user-intent-satisfaction` for user-facing completion review when the ticket clearly expresses the intended user ask.
+- select `frontend-guidelines` for UI source review and record whether `web-design-guidelines` passed, failed, or was skipped with a concrete reason.
 - `block` is reserved for materially unsafe, off-target, or contradictory work.
 - `revise` is the default when the work is directionally correct but not yet ready.
 - Do not emit a score without evidence from inspected code, artifacts, or the ticket.
@@ -290,6 +298,7 @@ Return:
 - [ ] `references/review-rubric-index.md` read before scoring
 - [ ] `references/desloppify.md` used when code, integration, cleanup, or evidence trust is in scope
 - [ ] matching family reference files used for anchored scoring
+- [ ] `references/frontend-guidelines.md` used when UI source files changed
 - [ ] Correct rubric family/families selected
 - [ ] Ticket-declared rubric gates and hard gates honored or explicitly challenged
 - [ ] Metric claims checked for traceability when the Proof Contract declares metrics

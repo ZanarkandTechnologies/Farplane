@@ -355,6 +355,14 @@ The `System Design Brief` should include:
 - Pressure-pass findings (which answer was revisited, and what changed)
 - Full or condensed transcript
 
+When the design is reusable across tickets or has runtime/service traits such
+as queues, schedulers, retries, adapters, external runners, workspaces,
+credentials, or observability, choose a `SpecDepth` from
+`docs/specs/spec-authoring-contract.md` and write the resulting spec with the
+matching depth. Use `service-runtime` for orchestration systems that need
+domain model, config, state machines, failure/recovery, observability, and a
+conformance matrix.
+
 ### Minimum acceptable `System Design Brief`
 
 Do not exit with only architecture prose. The minimum brief must contain reusable build rules:

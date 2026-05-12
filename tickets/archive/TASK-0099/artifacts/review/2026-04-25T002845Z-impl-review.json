@@ -1,0 +1,156 @@
+{
+  "work_type": [
+    "runtime",
+    "workflow"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "bin/ticket_runtime.py",
+      "bin/test_ticket_runtime.py",
+      "tickets/TASK-0099/ticket.md"
+    ],
+    "related_files": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/code-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "invariants_checked": [
+      "MEM-0060"
+    ],
+    "docs_checked": [
+      "skills/review/SKILL.md",
+      "skills/review/references/review-rubric-index.md"
+    ]
+  },
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "summary": "The runtime record groundwork is in place, but the reopened ticket is still not build-complete because `up` and `down` only mutate JSON state instead of launching and stopping the declared runtime.",
+  "overall_score": 2.4,
+  "overall_threshold": 4.0,
+  "verdict": "revise",
+  "rerun_required": true,
+  "evidence_quality": "fail",
+  "integration_readiness": "fail",
+  "traceability": "fail",
+  "freshness": "pass",
+  "hard_gate_failures": [
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "finding_log": [
+    {
+      "severity": "high",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "`up` still does not launch any declared frontend/backend/compose runtime, so the ticket's launcher contract and AC-2/AC-5 remain unimplemented.",
+      "file_refs": [
+        "bin/ticket_runtime.py:383",
+        "bin/ticket_runtime.py:397",
+        "tickets/TASK-0099/ticket.md:148"
+      ],
+      "evidence": [
+        "The `up` branch calls `ensure_runtime_record(...)`, then only sets `payload[\"status\"] = \"running\"` and rewrites the JSON record.",
+        "There are no command fields, subprocess launches, pid tracking, or compose invocations in the runtime helper despite the ticket requiring actual runtime launch/stop behavior."
+      ],
+      "next_action": "Implement command-backed launch for `shared`/`branch-runtime` and command-backed `compose up/down` handling, then persist process or compose metadata into the runtime record."
+    },
+    {
+      "severity": "high",
+      "confidence": "high",
+      "rubric": "evidence-quality",
+      "summary": "The attached tests only prove metadata writes, target derivation, and port release; they do not prove that runtime processes start, stay attributable, or stop cleanly.",
+      "file_refs": [
+        "bin/test_ticket_runtime.py:16",
+        "tickets/TASK-0099/ticket.md:161"
+      ],
+      "evidence": [
+        "The test suite covers `ensure_runtime_record`, `qa_payload`, and `down_runtime_record` port release, but there is no test that launches a command, records pid/process metadata, or verifies teardown.",
+        "The ticket verification section explicitly calls for targeted helper tests covering `up`, `down`, and runtime-record persistence for launched runtime behavior."
+      ],
+      "next_action": "Add tests that spawn a lightweight long-running command, assert persisted process metadata after `up`, and verify the process is terminated and ports/state are released after `down`."
+    },
+    {
+      "severity": "medium",
+      "confidence": "high",
+      "rubric": "code-quality",
+      "summary": "Worktree mode can record a checkout path that does not exist when `--create-worktree` is omitted, leaving the runtime record internally inconsistent for later launch steps.",
+      "file_refs": [
+        "bin/ticket_runtime.py:107",
+        "bin/ticket_runtime.py:110",
+        "bin/ticket_runtime.py:236"
+      ],
+      "evidence": [
+        "`ensure_worktree` returns the destination path even when it does not exist and `create` is false.",
+        "That path is then written into `checkout_path`, so later runtime startup would believe a worktree checkout exists when only a string was reserved."
+      ],
+      "next_action": "Fail fast when worktree mode is requested without an existing checkout, or create the worktree automatically before persisting `checkout_path`."
+    }
+  ],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 2.9,
+      "threshold": 4.0,
+      "pass": false,
+      "dimension_scores": {
+        "modularity-reusability": 3.2,
+        "bloatability": 3.7,
+        "readability": 3.5,
+        "boundary-clarity": 2.6,
+        "error-handling": 2.4,
+        "maintainability": 2.8
+      },
+      "findings": [
+        "The helper is still small and readable, but its worktree contract is leaky because `checkout_path` can point at a nonexistent checkout.",
+        "Failure handling is not yet aligned with the reopened launcher scope because runtime command absence and process state are not modeled explicitly."
+      ],
+      "next_action": "Tighten the worktree preconditions and add explicit runtime command/process structures before extending the launcher behavior."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 2.1,
+      "threshold": 4.0,
+      "pass": false,
+      "dimension_scores": {
+        "integration-safety": 2.0,
+        "contract-correctness": 2.0,
+        "dependency-readiness": 2.3,
+        "coupling-risk": 2.5,
+        "merge-readiness": 1.8
+      },
+      "findings": [
+        "The runtime launcher contract in the ticket is not met because `up`/`down` do not manage actual processes or compose commands.",
+        "Advancing this ticket now would overstate the shipped capability and leave QA without a trustworthy runtime surface."
+      ],
+      "next_action": "Implement real launch/stop behavior and record the resulting process metadata before treating the helper as merge-ready."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 2.2,
+      "threshold": 4.0,
+      "pass": false,
+      "dimension_scores": {
+        "sufficiency": 2.0,
+        "reproducibility": 2.8,
+        "traceability": 2.0,
+        "consistency": 2.1,
+        "inspectability": 2.9
+      },
+      "findings": [
+        "Current evidence supports the metadata-only slice, not the reopened launcher scope.",
+        "There is no attached proof that `up` starts runtime commands or that `down` terminates them safely."
+      ],
+      "next_action": "Collect process-launch and teardown proof that maps directly to AC-2 and AC-5, then rerun review."
+    }
+  ],
+  "blocking_findings": [
+    "`up`/`down` do not launch or stop any runtime despite the ticket now requiring real launcher behavior.",
+    "No test or artifact proves command-backed runtime startup and teardown."
+  ],
+  "next_action": "Complete the runtime launcher implementation in `bin/ticket_runtime.py`, add launch/teardown tests, update the ticket evidence, and rerun review."
+}

@@ -1,0 +1,127 @@
+{
+  "work_type": [
+    "docs",
+    "cleanup",
+    "ticket-closeout"
+  ],
+  "search_scope": {
+    "ticket": "tickets/archive/TASK-0087/ticket.md",
+    "changed_files": [
+      "README.md",
+      "ARCHITECTURE.md",
+      "docs/specs/README.md",
+      "docs/HISTORY.md",
+      "tickets/archive/TASK-0087/ticket.md"
+    ],
+    "neighboring_surfaces_checked": [
+      "AGENTS.md",
+      "tickets/README.md",
+      "docs/specs/harness-techniques.md",
+      "tickets/TASK-0085/ticket.md",
+      "tickets/TASK-0073/ticket.md"
+    ],
+    "commands_checked": [
+      "python3 tickets/scripts/check_ticket_metadata.py",
+      "python3 bin/check_doc_parity.py",
+      "python3 bin/check_harness_invariants.py",
+      "git diff --check -- README.md ARCHITECTURE.md docs/specs/README.md docs/HISTORY.md tickets/archive/TASK-0087 tickets/TASK-0087",
+      "python3 skills/ralph/scripts/select_next_ticket.py --root . --json"
+    ]
+  },
+  "rubrics_used": [
+    "debloatability",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": 0.86,
+      "rubric": "integration-readiness",
+      "summary": "The repo still has unrelated dirty work from other agents, so the closeout commit must stage only the documentation-router and TASK-0087 archive slice.",
+      "file_refs": [
+        "git status --short"
+      ],
+      "evidence": "Unrelated delegate/frontend/landing-page files remain dirty after this pass. They are outside the ticket closeout scope.",
+      "next_action": "Use explicit path staging and verify `git diff --cached --name-only` before committing."
+    },
+    {
+      "severity": "low",
+      "confidence": 0.82,
+      "rubric": "evidence-quality",
+      "summary": "TASK-0085 remains selected by Ralph and is not ready to close because one acceptance criterion and blockers are still open.",
+      "file_refs": [
+        "tickets/TASK-0085/ticket.md"
+      ],
+      "evidence": "The active selector still returns TASK-0085 and the ticket records unresolved desloppify subjective-review/exclude-persistence blockers.",
+      "next_action": "Leave TASK-0085 active unless the operator explicitly chooses to retire the desloppify cleanup pass."
+    }
+  ],
+  "rubric_sections": {
+    "debloatability": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead-surface-removal": 4.0,
+        "compatibility-cleanup": 4.0,
+        "duplication-reduction": 4.0,
+        "clarity-improvement": 4.4,
+        "deletion-safety": 4.0
+      },
+      "findings": [],
+      "next_action": "Keep future cleanup focused on genuinely stale tickets and docs rather than deleting approval-gated work."
+    },
+    "integration-readiness": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.2,
+        "contract-correctness": 4.2,
+        "dependency-readiness": 4.1,
+        "coupling-risk": 4.0,
+        "merge-readiness": 4.3
+      },
+      "findings": [
+        "Unrelated dirty work requires precise staging."
+      ],
+      "next_action": "Commit only the closeout/docs slice."
+    },
+    "evidence-quality": {
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.2,
+        "reproducibility": 4.3,
+        "traceability": 4.4,
+        "consistency": 4.2,
+        "inspectability": 4.3,
+        "autonomy-readiness": 4.2
+      },
+      "findings": [
+        "TASK-0085 should remain active because closeout proof is incomplete."
+      ],
+      "next_action": "Use the ticket board state as the source of truth for remaining work."
+    }
+  },
+  "blocking_findings": [],
+  "ai_agent_misunderstanding_risks": [
+    "A future agent may see the archived TASK-0087 and continue editing it as active work. The ticket now has phase `complete`, status `done`, ready `false`, and an archive path.",
+    "A future agent may close approval-gated planning tickets just to reduce the active board. Those tickets should remain visible until approved, explicitly retired, or superseded.",
+    "A future agent may delete or shrink the colored Mermaid maps during docs cleanup. README and ARCHITECTURE now state that those maps must be preserved unless replaced with an equally complete map.",
+    "A future agent may update README without ARCHITECTURE, or vice versa. The documentation-router sync rule now requires them to move together when public workflow claims change.",
+    "A future agent may claim the repo is fully clean because TASK-0087 is archived. TASK-0085 is still a real active cleanup ticket with blockers."
+  ],
+  "next_action": "Commit the documentation-router and TASK-0087 archive slice; leave TASK-0085 and approval-gated tickets active."
+}

@@ -1,0 +1,184 @@
+{
+  "work_type": ["spec", "architecture", "governance"],
+  "ticket_id": "TASK-0111",
+  "reviewed_at": "2026-05-05T16:48:00+08:00",
+  "reviewer": "codex-review-skill",
+  "user_story_groups": [
+    {
+      "group": "solo local Codexter user",
+      "story": "When I ask local Codex to run a ticket, the spec should explain that Codexter reads the ticket, selects compute, routes skills, and writes proof without depending on Symphony."
+    },
+    {
+      "group": "future Symphony integration builder",
+      "story": "When Symphony runs Codex in a Codexter-installed workspace, the spec should make clear that Symphony owns polling/retries/workspaces while Codexter owns skill routing, QA/review, and ProofPacket output."
+    },
+    {
+      "group": "team/shared-board user",
+      "story": "When work later moves to Linear or another shared board, the spec should define an adapter boundary rather than tying Codexter to filesystem tickets forever."
+    },
+    {
+      "group": "reviewer/maintainer",
+      "story": "When auditing future tickets, the spec should provide conformance checks and follow-up ticket boundaries so agents cannot quietly implement a daemon, cloud runner, or parallel Ralph early."
+    }
+  ],
+  "search_scope": {
+    "changed_files": [
+      "docs/specs/board-compute-orchestration.md",
+      "docs/specs/README.md",
+      "README.md",
+      "ARCHITECTURE.md",
+      "docs/specs/harness-techniques.md",
+      "docs/features/registry.jsonl",
+      "docs/sources/registry.jsonl",
+      "tickets/TASK-0111/ticket.md"
+    ],
+    "related_files": [
+      "docs/specs/symphony-compatible-codexter-runner.md",
+      "WORKFLOW.md",
+      "skills/codexter-invocation/SKILL.md",
+      "skills/ralph/SKILL.md",
+      "skills/ralph/scripts/select_next_ticket.py",
+      "docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md",
+      "docs/research/web-research/2026-05-05_symphony-dagster-codexter-integration.md"
+    ],
+    "rubric_refs": [
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/user-intent-satisfaction.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "invariants_checked": ["MEM-0074", "MEM-0077"]
+  },
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "user-intent-satisfaction",
+    "evidence-quality",
+    "integration-readiness"
+  ],
+  "summary": "The new spec is a strong canonical ownership contract for BoardAdapter, WorkItem, ComputeSelector, CodexterRunEnvelope, ProofPacket, local conversational mode, serial Ralph, and future Symphony/shared-board execution. It directly preserves the user's desired distinction: Codex is the execution engine, Codexter is the installed skill/proof layer, and Symphony is a future scheduler/runner that can launch normal Codex.",
+  "overall_score": 4.3,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "spec-contract",
+      "score": 4.5,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story_coherence": 4.7,
+        "parallelization_fit": 4.3,
+        "ticket_sizing": 4.4,
+        "acceptance_testability": 4.5,
+        "scope_clarity": 4.6
+      },
+      "findings": [
+        "The spec gives one coherent ownership model and prevents drift into building a local Symphony clone."
+      ],
+      "next_action": "Use this spec as the grounding document for TASK-0112 through TASK-0116."
+    },
+    {
+      "name": "implementation-plan",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human_readability": 4.2,
+        "bloatability": 4.0,
+        "modularity": 4.3,
+        "proof_clarity": 4.2,
+        "execution_order": 4.3,
+        "risk_clarity": 4.3,
+        "decision_tone": 4.4,
+        "autonomy_readiness": 4.0
+      },
+      "findings": [
+        "The follow-up ticket map names exactly where implementation should happen and keeps adapter/runtime work out of this spec ticket."
+      ],
+      "next_action": "Proceed to BoardAdapter and compute-selector tickets after this spec is committed."
+    },
+    {
+      "name": "user-intent-satisfaction",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "ask_fidelity": 4.7,
+        "outcome_completeness": 4.3,
+        "worth_it_feel": 4.3,
+        "impressiveness": 4.1,
+        "evidence_confidence": 4.5
+      },
+      "findings": [
+        "The spec repeats the exact intended integration path: Symphony launches normal Codex, the workspace has Codexter installed, the prompt/file includes an envelope, Codexter routes skills, and Codexter writes ProofPacket."
+      ],
+      "next_action": "Keep future tickets aligned to that sentence-level contract."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.0,
+        "reproducibility": 4.2,
+        "traceability": 4.3,
+        "consistency": 4.1,
+        "inspectability": 4.1,
+        "autonomy_readiness": 4.0
+      },
+      "findings": [
+        "Validation covers doc parity, harness invariants, source registry, feature registry, and ticket metadata; this is proportional for a docs/spec ticket."
+      ],
+      "next_action": "Link the command outputs from the ticket Evidence section."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration_safety": 4.2,
+        "contract_correctness": 4.5,
+        "dependency_readiness": 4.1,
+        "coupling_risk": 4.0,
+        "merge_readiness": 4.1
+      },
+      "findings": [
+        "The new spec is linked from README, ARCHITECTURE, specs index, harness techniques, source registry, and feature registry."
+      ],
+      "next_action": "Commit the spec slice and use it as dependency evidence for later tickets."
+    }
+  ],
+  "blocking_findings": [],
+  "commands": [
+    {
+      "command": "python3 docs/sources/validate_sources.py",
+      "result": "source registry contract OK (7 records)"
+    },
+    {
+      "command": "feature registry validation snippet from docs/features/README.md",
+      "result": "feature registry contract OK (15 records)"
+    },
+    {
+      "command": "python3 bin/check_doc_parity.py",
+      "result": "structural doc parity OK (6 files checked, 29 rules)"
+    },
+    {
+      "command": "python3 bin/check_harness_invariants.py",
+      "result": "harness invariants OK (5 files checked, 15 agents, 13 rules)"
+    }
+  ],
+  "next_action": "Close TASK-0111 and commit the board/compute orchestration spec slice."
+}

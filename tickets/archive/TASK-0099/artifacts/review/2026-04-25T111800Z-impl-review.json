@@ -1,0 +1,117 @@
+{
+  "work_type": [
+    "runtime",
+    "skills",
+    "docs"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "skills/pr-runtime/SKILL.md",
+      "skills/pr-runtime/README.md",
+      "skills/pr-runtime/AGENTS.md",
+      "bin/ticket_runtime.py",
+      "bin/ticket-runtime",
+      "bin/test_ticket_runtime.py",
+      "README.md",
+      "bin/README.md",
+      "docs/specs/runtime-surface.md",
+      "docs/specs/harness-techniques.md",
+      "templates/global/AGENTS.md",
+      "docs/HISTORY.md",
+      "docs/MEMORY.md",
+      "tickets/TASK-0099/ticket.md"
+    ],
+    "related_files": [
+      "docs/specs/harness-engineering-doctrine.md",
+      "tickets/TASK-0081/ticket.md",
+      "tickets/templates/ticket.md",
+      "bin/stop_hook.py"
+    ],
+    "invariants_checked": [
+      "MEM-0020",
+      "MEM-0022",
+      "MEM-0031",
+      "MEM-0044",
+      "MEM-0060"
+    ],
+    "docs_checked": [
+      "skills/review/references/code-quality.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/desloppify.md"
+    ]
+  },
+  "rubrics_used": [
+    "code-quality",
+    "evidence-quality",
+    "integration-readiness"
+  ],
+  "summary": "No blocking findings. The slice ships a discoverable `pr-runtime` skill, a narrow helper-backed runtime record surface, focused tests, and the doc updates needed to make the workflow real instead of chat-only.",
+  "overall_score": 4.4,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity": 4.5,
+        "bloatability": 4.5,
+        "readability": 4.0,
+        "boundaries": 4.5,
+        "maintainability": 4.0
+      },
+      "findings": [
+        "The helper stays narrow and local-first: runtime-record persistence, optional worktree creation, port reservation, and QA target lookup.",
+        "The workflow logic lives in the new skill package instead of being smeared into root policy or hook logic."
+      ],
+      "next_action": "Keep future follow-ups scoped to compose orchestration or broader dispatch separately rather than widening this helper opportunistically."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.5,
+        "reproducibility": 4.0,
+        "traceability": 4.5,
+        "consistency": 4.5,
+        "inspectability": 4.5
+      },
+      "findings": [
+        "The ticket links explicit verification commands, the helper tests pass, and a helper smoke path proves QA target publication and port release.",
+        "The review and implementation artifacts are ticket-scoped and easy to inspect."
+      ],
+      "next_action": "Use a future runtime-manager ticket if heavier compose or GitHub-driven PR resolution proof is needed."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "contract-fit": 4.5,
+        "neighbor-consistency": 4.5,
+        "operational-safety": 4.0,
+        "doc-alignment": 4.5
+      },
+      "findings": [
+        "README, runtime docs, inventory, memory, and the shipped global contract now all point at the same workflow and state placement.",
+        "The implementation respects existing runtime boundaries by keeping `.harness/state/tickets/*.runtime.json` runtime-only."
+      ],
+      "next_action": "Archive the ticket after any desired follow-up tickets for compose or GitHub PR auto-resolution are created."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Mark the ticket done and keep any broader runtime-manager expansion in follow-up tickets."
+}

@@ -1,0 +1,104 @@
+{
+  "work_type": [
+    "runtime",
+    "backend",
+    "tests",
+    "docs"
+  ],
+  "search_scope": {
+    "changed_files": [
+      "bin/stop_hook.py",
+      "bin/test_stop_hook.py",
+      "docs/specs/review-gates.md",
+      "skills/review/SKILL.md",
+      "AGENTS.md",
+      "docs/MEMORY.md",
+      "docs/HISTORY.md",
+      "tickets/TASK-0087/ticket.md"
+    ],
+    "related_files": [
+      "docs/specs/orchestrator-subagent-loop.md",
+      "skills/impl/scripts/tmux_helper.py",
+      "agents/completion-reviewer.toml"
+    ],
+    "invariants_checked": [
+      "MEM-0049",
+      "MEM-0064",
+      "MEM-0067"
+    ],
+    "docs_checked": [
+      "docs/specs/review-gates.md",
+      "skills/review/SKILL.md",
+      "AGENTS.md",
+      "tickets/TASK-0087/ticket.md"
+    ]
+  },
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "summary": "Stop hook now teaches the live lane about completion review only when a ticket-backed impl run actually reaches the final completion gate, then requires the next final response to echo the nonce as a one-time completion password alongside the linked receipt.",
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "code-quality",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity": 4.1,
+        "readability": 4.2,
+        "maintainability": 4.2
+      },
+      "findings": [
+        "Password parsing and gating are localized to the completion-review path.",
+        "Regression coverage now distinguishes request, missing-password, and pass-through-to-orchestrator cases."
+      ],
+      "next_action": "None required."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "contract_alignment": 4.3,
+        "runtime_coherence": 4.2,
+        "failure_handling": 4.2
+      },
+      "findings": [
+        "The nonce/password path only activates after ticket resolution and impl-loop activation, so non-ticket stops still pass through untouched.",
+        "Receipt validation still remains the real completion gate; password text alone cannot complete the ticket."
+      ],
+      "next_action": "None required."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.1,
+        "traceability": 4.1,
+        "inspectability": 4.2
+      },
+      "findings": [
+        "The ticket, memory, AGENTS, and review-gate docs all describe the same password-plus-receipt contract.",
+        "Verification covers syntax, targeted unit tests, metadata validation, and diff hygiene."
+      ],
+      "next_action": "Proceed with normal closeout."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Close the ticket in the normal documenting flow when ready."
+}

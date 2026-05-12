@@ -39,7 +39,7 @@ Guardrails:
 
 ## WebGL / WebGPU
 
-- Use Three.js for 3D scenes when possible.
+- Use [three-js.md](three-js.md) for Three.js, WebGL, and React Three Fiber scenes.
 - Use WebGPU only with WebGL or static fallback.
 - Lazy-initialize heavy contexts.
 - Pause off-screen rendering.

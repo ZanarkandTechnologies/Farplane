@@ -1,0 +1,120 @@
+{
+  "work_type": ["skills", "review", "frontend"],
+  "ticket_id": "TASK-0108",
+  "reviewed_at": "2026-05-04T20:57:57Z",
+  "reviewer_mode": "visible_review_lane",
+  "search_scope": {
+    "changed_files": [
+      "AGENTS.md",
+      "docs/HISTORY.md",
+      "docs/MEMORY.md",
+      "skills/frontend-craft/SKILL.md",
+      "skills/frontend-craft/references/qa.md",
+      "skills/review/SKILL.md",
+      "skills/review/references/frontend-guidelines.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/ui-quality.md",
+      "skills/web-design-guidelines/SKILL.md",
+      "skills/web-design-guidelines/references/architecture.md",
+      "skills/web-design-guidelines/references/workflows.md",
+      "skills/web-design-guidelines/references/gotchas.md"
+    ],
+    "related_files": [
+      "skills/review/references/desloppify.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/user-intent-satisfaction.md",
+      "skills/frontend-craft/references/qa.md",
+      "skills/web-design-guidelines/SKILL.md"
+    ],
+    "upstream_checked": [
+      "https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md"
+    ],
+    "invariants_checked": ["MEM-0072", "MEM-0076"]
+  },
+  "rubrics_used": [
+    "user-intent-satisfaction",
+    "integration-readiness",
+    "evidence-quality",
+    "debloatability"
+  ],
+  "summary": "The change cleanly integrates web-design-guidelines as a source-fresh frontend review metric without collapsing it into taste review or copying upstream rules into Codexter.",
+  "overall_score": 4.3,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": [
+    {
+      "name": "user-intent-satisfaction",
+      "score": 4.4,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "ask-fidelity": 4.6,
+        "outcome-completeness": 4.3,
+        "worth-it-feel": 4.3,
+        "impressiveness": 4.1,
+        "evidence-confidence": 4.2
+      },
+      "findings": [],
+      "next_action": "No user-intent rework required."
+    },
+    {
+      "name": "integration-readiness",
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.2,
+        "contract-correctness": 4.3,
+        "dependency-readiness": 4.1,
+        "coupling-risk": 4.2,
+        "merge-readiness": 4.1
+      },
+      "findings": [],
+      "next_action": "Ready to advance; no hook/runtime changes were introduced."
+    },
+    {
+      "name": "evidence-quality",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.1,
+        "reproducibility": 4.2,
+        "traceability": 4.1,
+        "consistency": 4.1,
+        "inspectability": 4.0
+      },
+      "findings": [],
+      "next_action": "Keep validator outputs and this review artifact linked from the ticket."
+    },
+    {
+      "name": "debloatability",
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "dead-surface-removal": 3.9,
+        "compatibility-cleanup": 4.0,
+        "duplication-reduction": 4.2,
+        "clarity-improvement": 4.4,
+        "deletion-safety": 4.0
+      },
+      "findings": [],
+      "next_action": "No cleanup required."
+    }
+  ],
+  "blocking_findings": [],
+  "caveats": [
+    "This is a review-surface change only; no rendered UI visual QA was required.",
+    "The worktree contains unrelated Symphony/registry dirty files outside this scope."
+  ],
+  "next_action": "Completion response can report the integration."
+}

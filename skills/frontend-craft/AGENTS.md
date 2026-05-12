@@ -14,6 +14,7 @@
 - `visual-design` owns taste, visual systems, typography, color, layout rhythm, density, and anti-slop.
 - `landing-page` owns one-page marketing, launch pages, story arcs, cinematic heroes, and scrolltelling.
 - `frontend-design` remains an implementation reference for app UI, shadcn, AI Elements, registries, and theming.
+- `references/three-js.md` owns Three.js/WebGL/R3F reference routing; do not keep a separate public `three-js` skill.
 
 ## Checks
 

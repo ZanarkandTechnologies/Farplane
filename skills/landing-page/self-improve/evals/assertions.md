@@ -35,3 +35,6 @@ Given a premium landing-page request:
 - approved specs include section matrix, asset plan, motion plan, QA gates, and
   executor handoff,
 - final claims require asset-evidence QA plus section-quality QA.
+# Skill Eval Assertions
+
+Add binary assertions before mutating the skill.

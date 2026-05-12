@@ -7,7 +7,7 @@ Main frontend implementation orchestrator for Codexter.
 ## Public API / Entrypoints
 
 - `SKILL.md`: routing and implementation workflow
-- `references/*`: motion, assets, experimental rendering, QA, and upstream-source map
+- `references/*`: motion, assets, Three.js/WebGL, experimental rendering, QA, and upstream-source map
 
 ## Minimal Example
 
@@ -16,6 +16,7 @@ Main frontend implementation orchestrator for Codexter.
 3. Use `visual-design` for the look and taste brief.
 4. Use `landing-page` for marketing/scrolltelling pages.
 5. Capture stack facts: packages, Tailwind, shadcn, registries, aliases, and theme status.
+5. Load `references/three-js.md` when the frontend earns a 3D/WebGL/R3F scene.
 6. Build with the repo's implementation patterns and verify.
 
 ## How to Test

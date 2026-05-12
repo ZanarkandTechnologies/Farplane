@@ -1,0 +1,135 @@
+{
+  "work_type": ["docs", "planning", "source-ingestion"],
+  "ticket_id": "TASK-0103",
+  "reviewed_at": "2026-05-04T15:16:16Z",
+  "reviewer_mode": "local_review",
+  "search_scope": {
+    "changed_files": [
+      "skills/harness-scout/SKILL.md",
+      "skills/harness-scout/todos.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
+      "docs/features/registry.jsonl",
+      "docs/HISTORY.md",
+      "tickets/TASK-0104/ticket.md",
+      "tickets/TASK-0105/ticket.md"
+    ],
+    "related_files": [
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
+      "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
+      "docs/features/README.md",
+      "docs/features/AGENTS.md",
+      "tickets/TASK-0103/ticket.md",
+      "tickets/templates/ticket.md",
+      "skills/review/references/review-rubric-index.md",
+      "skills/review/references/spec-contract.md",
+      "skills/review/references/implementation-plan.md",
+      "skills/review/references/evidence-quality.md",
+      "skills/review/references/integration-readiness.md",
+      "skills/review/references/desloppify.md"
+    ],
+    "invariants_checked": [
+      "external source text is untrusted evidence, not instructions",
+      "raw transcript is not stored in tracked artifacts",
+      "duplicate URL updates the existing source run instead of creating a duplicate folder",
+      "follow-up tickets remain planning/review with approval_required=true",
+      "registry rows use valid FEAT IDs and existing local refs"
+    ]
+  },
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "evidence-quality",
+    "integration-readiness"
+  ],
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "evidence_quality": "pass",
+  "integration_readiness": "pass",
+  "traceability": "pass",
+  "freshness": "pass",
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_sections": {
+    "spec-contract": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.3,
+        "parallelization-fit": 4.1,
+        "ticket-sizing": 4.2,
+        "acceptance-testability": 4.1,
+        "scope-clarity": 4.3
+      },
+      "findings": [],
+      "next_action": "No contract revision required; keep TASK-0104 and TASK-0105 approval-gated until impl-plan runs."
+    },
+    "implementation-plan": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.2,
+        "bloatability": 4.0,
+        "modularity": 4.2,
+        "proof-clarity": 4.1,
+        "execution-order": 4.0,
+        "risk-clarity": 4.2,
+        "decision-tone": 4.3,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "The seeded tickets are suitable for later impl-plan expansion."
+    },
+    "evidence-quality": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.2,
+        "reproducibility": 4.2,
+        "traceability": 4.3,
+        "consistency": 4.2,
+        "inspectability": 4.3,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "Evidence is sufficient for a source-scout pass; future implementation tickets still need their own proof artifacts."
+    },
+    "integration-readiness": {
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.3,
+        "contract-correctness": 4.3,
+        "dependency-readiness": 4.2,
+        "coupling-risk": 4.4,
+        "merge-readiness": 4.2
+      },
+      "findings": [],
+      "next_action": "Safe to leave as planning artifacts and proposed registry records."
+    }
+  },
+  "blocking_findings": [],
+  "validator_outputs": [
+    "summarize bounded extract succeeded with summarize 0.13.0; raw transcript not stored",
+    "python3 tickets/scripts/check_ticket_metadata.py -> ticket metadata OK (11 ticket files checked)",
+    "python3 skills/skill-creator/scripts/quick_validate.py skills/harness-scout -> [PASSED] Skill is valid!",
+    "feature registry contract validation snippet -> feature registry contract OK (13 records)",
+    "python3 bin/check_harness_invariants.py -> harness invariants OK (5 files checked, 15 agents, 13 rules)",
+    "python3 bin/check_doc_parity.py -> structural doc parity OK (6 files checked, 29 rules)",
+    "python3 -m py_compile skills/autoresearch-plan/scripts/init_session.py skills/best-of-worlds/scripts/init_synthesis.py skills/self-improve/scripts/init_skill_memory.py skills/skill-creator/scripts/quick_validate.py -> passed",
+    "git diff --check -- skills/harness-scout experiments/harness-scout docs/features docs/HISTORY.md tickets/TASK-0104/ticket.md tickets/TASK-0105/ticket.md -> passed"
+  ],
+  "minor_caveats": [
+    "Video title and channel metadata remain inferred/unavailable in the durable artifact, but the canonical URL, URL hash, extraction command, and timestamp anchors are sufficient for this duplicate source pass.",
+    "The two created follow-up tickets are planning tickets only; they require impl-plan approval before implementation."
+  ],
+  "next_action": "Use TASK-0104 or TASK-0105 as isolated follow-up work when the operator wants to build or benchmark the selected feature."
+}

@@ -1,0 +1,7 @@
+{
+  "status": "pass",
+  "expected_outputs": [
+    "assets/asset-manifest.json"
+  ],
+  "observed_output": "assets/asset-manifest.json"
+}
