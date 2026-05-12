@@ -18,6 +18,13 @@ The main surfaces are:
 
 Prefer improving review loops, ticket contracts, skill packaging, and evidence surfaces before inventing more hidden orchestration code.
 
+Ticketed work should use the ticket `Proof Contract` as the shared scoreboard
+for metrics, review rubric gates, and required evidence. Keep full rubric
+bodies in `skills/review/references/*` and full autoresearch session details in
+the owning autoresearch artifacts; tickets carry handles, thresholds, and
+artifact obligations. Use `Metrics: none mechanical` rather than inventing fake
+metrics for judgment-heavy work. See `MEM-0086`.
+
 Do not describe a workflow as a shipped public capability until the repo
 actually contains the discoverable `skills/<name>/` package and the canonical
 inventory/docs point to it. See `MEM-0044`.

@@ -11,6 +11,10 @@ If any answer is weak, tighten the tickets first.
 - Are dependencies explicit and ordered cleanly?
 - If a ticket uses a library, package, service, or tool, is that dependency named where relevant?
 - Do acceptance criteria explain the minimum necessary change clearly?
+- Does each material ticket include a `Proof Contract` that separates metrics,
+  review rubric gates, and required evidence?
+- If no honest metric exists, does the ticket say `Metrics: none mechanical`
+  instead of inventing a proxy?
 - For UI-bearing tickets, do `Agent Contract` and `Evidence checklist` make QA realistic?
 - Does each non-trivial ticket declare a usable `Test hook`, not just vague “verify manually” language?
 - If bootstrap testability defaults exist, did we actually carry them into the
@@ -48,6 +52,8 @@ If any answer is weak, tighten the tickets first.
 - a UI ticket says "verify in browser" without access/stabilization details
 - a non-trivial ticket needs deterministic setup but has no usable `Test hook`
 - acceptance criteria are generic, fluffy, or not observable
+- a material ticket omits the `Proof Contract`
+- a ticket invents subjective metrics instead of using rubric/evidence gates
 - important dependencies or packages are assumed but never named
 - delegated work is described only in prose without an exact ticket reference
 - a split claims to be necessary but no real hard trigger is named

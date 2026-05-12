@@ -133,6 +133,7 @@ Default sections:
 - `Plan`
 - `Acceptance Criteria`
 - `Verification`
+- `Proof Contract`
 - `Refs`
 - `Evidence`
 - `Blockers`
@@ -179,6 +180,22 @@ measurable terms.
 
 `Verification` should say how each criterion is measured: test passes, manual
 checks, and required evidence.
+
+`Proof Contract` should name the actual completion scoreboard for material
+work:
+
+1. metrics that can be measured mechanically, or `Metrics: none mechanical`
+   when no honest metric exists
+2. review rubric families, thresholds, and hard gates that the `review` skill
+   must use
+3. evidence artifacts required before completion can pass
+4. optional autoresearch session path when repeated metric experiments are
+   warranted
+
+Keep full rubric bodies in `skills/review/references/` and full autoresearch
+session files in the owning `autoresearch` artifacts. Tickets should carry the
+handles, thresholds, and artifact obligations, not duplicate the specialist
+contracts.
 
 For UI-bearing, browser-driven, canvas/game, or otherwise agentically hard
 tickets, add:

@@ -79,6 +79,22 @@ flowchart LR
 - `Manual checks:`
 - `Evidence required:`
 
+## Proof Contract
+
+- `Metrics:`
+  - `Primary metric:` numeric/boolean signal, or `none mechanical`
+  - `Direction:` higher | lower | pass/fail | none
+  - `Verify:`
+  - `Guard:`
+  - `Min acceptable result:`
+  - `Autoresearch warranted:` yes | no
+  - `Autoresearch session:`
+- `Review Rubrics:`
+  - required rubric families and thresholds
+  - hard gates
+- `Required Evidence:`
+  - artifacts or command outputs required before completion
+
 ## Refs
 
 - optional durable links only; this is the canonical place for linked docs

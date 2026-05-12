@@ -8,6 +8,8 @@ This area contains orchestration helpers used by `$impl`, especially the
 tmux-backed lane launcher and follow-up utilities.
 The ambition target is the whole selected ticket; repeated passes are for
 finishing that ticket, not for inventing a smaller internal ticket boundary.
+The ticket `Proof Contract` is the run scoreboard for metrics, review rubric
+gates, hard gates, and required evidence.
 
 ## Public Entrypoints
 
@@ -29,6 +31,10 @@ For build tickets, the default delegated lane set is:
 - `builder`
 - `reviewer`
 - `qa`
+
+When the ticket `Proof Contract` links an autoresearch session, `$impl` may run
+`autoresearch-exec` as a bounded subphase. Otherwise autoresearch stays out of
+ordinary build orchestration.
 
 ## Minimal Example
 

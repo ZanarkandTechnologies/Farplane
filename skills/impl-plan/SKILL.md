@@ -54,7 +54,8 @@ The highest-signal plan answers:
 - for incomplete feature work: what production-grade capability looks like and
   what the repo is still missing
 - blast radius: callers, systems, workflows, or edges that could break
-- how to verify it: tests, checks, and strongest evidence
+- how to verify it: tests, checks, strongest evidence, and the ticket-level
+  `Proof Contract` that names metrics, review rubric gates, and required artifacts
 
 If the plan leaves the builder inventing execution steps or the next concrete
 move, it is too thin.
@@ -94,17 +95,21 @@ Before finalizing the plan or handing off to execution:
 2. When an `Agent Testability Brief` exists, preserve its control accelerators,
    state probes, coordination views, and proof surfaces in the plan instead of
    inventing testability doctrine again.
-3. Preserve any `Autonomy Readiness` fields from the ticket, PRD, bootstrap
+3. Preserve or create a ticket-level `Proof Contract` for material tickets:
+   honest mechanical metrics when available, `Metrics: none mechanical` when
+   not, review rubric families and thresholds, hard gates, required evidence,
+   and optional autoresearch session path.
+4. Preserve any `Autonomy Readiness` fields from the ticket, PRD, bootstrap
    brief, system design, taste brief, or agent-testability brief; for `$ralph`
    or long-running execution, name missing inputs, permissions, compute, tools,
    QA risks, and human gates before handoff.
-4. Read enough nearby code to name real files, seams, signatures, and typed
+5. Read enough nearby code to name real files, seams, signatures, and typed
    data shapes instead of inventing them.
-5. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
+6. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
    older OMX-era pattern and not the active repo contract.
-6. If intent is still vague, use `deep-interview --quick`.
-7. If system shape is still vague, use `deep-system-design`.
-8. If the repo does not yet implement the target capability clearly enough to
+7. If intent is still vague, use `deep-interview --quick`.
+8. If system shape is still vague, use `deep-system-design`.
+9. If the repo does not yet implement the target capability clearly enough to
    scope the work, run `gap-analysis` before finalizing the ticket plan.
 
 Do not hand off to execution while the plan still depends on avoidable
@@ -135,10 +140,14 @@ unknowns.
 5. **Gap check when needed:** for missing or partial feature work, define the
    current state, production expectation, missing gaps, grounding references,
    and recommended now/later boundary.
-6. **Build one detailed plan:** use the canonical ticket sections and make the
+6. **Proof contract:** for material tickets, write or refine the ticket's
+   `Proof Contract` with metrics, rubric gates, and required evidence. Use
+   `Metrics: none mechanical` when a number would be dishonest; use
+   `autoresearch-plan` only when repeated metric experiments are warranted.
+7. **Build one detailed plan:** use the canonical ticket sections and make the
    `Plan` section explicit enough that the builder does not have to invent the
    sequence.
-7. **Review + handoff:** run the plan through the quality gate, fix weak spots
+8. **Review + handoff:** run the plan through the quality gate, fix weak spots
    before handoff, then end with a decisive readiness call and next move.
 
 ## Workflow (`--consensus` Mode)
@@ -191,6 +200,7 @@ Use the canonical ticket-body shape:
 - optional `Diagram`
 - `Acceptance Criteria`
 - `Verification`
+- `Proof Contract`
 - optional `Autonomy Readiness`
 - optional `Refs`
 - `Evidence`
@@ -236,6 +246,10 @@ Use the canonical ticket-body shape:
 - **Autonomy Readiness required:** tickets intended for `$ralph`, unattended
   long-running work, external-service work, hard-to-QA UI/motion/simulation, or
   deploy/spend/destructive boundaries.
+- **Proof Contract required:** material, review-sensitive, agentically hard, or
+  ticketed build work. Include mechanical metrics when useful, `Metrics: none
+  mechanical` when not, required review rubric families, thresholds, hard
+  gates, required evidence, and optional autoresearch session path.
 - **Text-only allowed:** trivial, single-bug, or narrowly localized fixes where
   the file, symbol, or error already anchors the work concretely.
 
@@ -252,14 +266,17 @@ Use the canonical ticket-body shape:
 6. Do not preallocate empty review output inside the input ticket.
 7. Do not make `Acceptance Criteria` and `Verification` say the same thing;
    criteria define done, verification defines measurement.
-8. Do not skip the option comparison for material choices.
-9. Do not guess at "production-ready" scope from intuition alone when
+8. Do not confuse metrics with rubrics: metrics are mechanical signals,
+   rubrics are review judgment frames. Put both in the `Proof Contract` when
+   they matter.
+9. Do not skip the option comparison for material choices.
+10. Do not guess at "production-ready" scope from intuition alone when
    comparable products, codebases, or official docs can ground it.
-10. Do not rewrite a coherent ticket into "part 1" or "first slice" just
+11. Do not rewrite a coherent ticket into "part 1" or "first slice" just
     because that feels safer than planning the full ticket.
-11. Do not use timid language like "maybe", "might", or "could" where the plan
+12. Do not use timid language like "maybe", "might", or "could" where the plan
     should be making a recommendation or naming an execution step.
-12. Do not hand off a `$ralph`-eligible ticket with vague autonomy-readiness
+13. Do not hand off a `$ralph`-eligible ticket with vague autonomy-readiness
     fields; name the blockers or keep the ticket gated.
 
 ## Efficiency Rules
@@ -309,6 +326,10 @@ Before returning the plan, run these checks against the drafted output:
 7. **Proof quality**
    - Are the checks concrete and observable?
    - Would a reviewer know exactly how to tell success from failure?
+   - Does the `Proof Contract` clearly separate mechanical metrics, review
+     rubric gates, and required evidence?
+   - If no metric exists, does it honestly say `Metrics: none mechanical`
+     instead of inventing a proxy?
 8. **Risk clarity**
    - Is the main risk named?
    - Is rollback or containment clear enough for the size of the change?

@@ -148,3 +148,4 @@
 2026-05-08 21:02 +0800 | FIX | strengthen landing-page scroll-scrub QA to assert pinned-scene visibility and fix the XR page sticky failure caused by horizontal overflow clipping
 2026-05-08 21:18 +0800 | FIX | make landing-page asset evidence reject `generated-video` claims backed only by Seedream/image stills plus local ffmpeg assembly
 2026-05-11 05:35 +0800 | FEAT | implement the frontend skill parity handoff with stack-facts preflight, current shadcn registry and theme guidance, numeric taste dials, design briefs, component state matrices, and stronger frontend QA gates
+2026-05-13 00:03 +0800 | GOVERNANCE | Added the ticket Proof Contract spine so material tickets can declare mechanical metrics, review rubric gates, and required evidence before implementation starts.

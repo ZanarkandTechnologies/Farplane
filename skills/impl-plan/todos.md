@@ -4,6 +4,7 @@
 - [ ] Decide whether the whole selected ticket can stay whole or whether a
   real boundary forces a split first.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the proof and execution plan.
+- [ ] Write or refine the ticket `Proof Contract`: metrics or `none mechanical`, review rubric gates, hard gates, required evidence, and optional autoresearch session path.
 - [ ] Compare 3 viable options and recommend one clearly.
 - [ ] Keep the output in the canonical ticket-body shape instead of inventing a `Human` / `Agent` split.
 - [ ] Make the `Plan` section carry callable seams in `Signature delta` and typed data seams in `Type Sketch`.
@@ -11,6 +12,7 @@
 - [ ] Add `Execution steps` whenever the build has more than one non-trivial step.
 - [ ] Use decisive action language in the recommendation and ordered steps.
 - [ ] Make proof concrete and observable rather than generic.
+- [ ] Keep metrics and rubrics distinct: metrics are mechanical signals; rubrics are review judgment frames.
 - [ ] If the change is high-risk or contentious, run the `--consensus` version of this skill.
 - [ ] Pitch the full-ticket plan to the user for approval and revise it before
   build starts.

@@ -35,7 +35,11 @@ experiments; use `autoresearch-exec`.
    numeric value or `METRIC name=value` line.
 6. **Write session files:** create `autoresearch.md`, `autoresearch.sh`,
    optional `autoresearch.checks.sh`, and initialize `autoresearch.jsonl`.
-7. **Hand off:** tell the user to run `autoresearch-exec` for bounded or
+7. **Ticket bridge:** when this session supports ticketed work, update the
+   ticket `Proof Contract` with metric name, direction, verify command, guard
+   command, minimum acceptable result when known, `Autoresearch warranted: yes`,
+   and the session path.
+8. **Hand off:** tell the user to run `autoresearch-exec` for bounded or
    unbounded execution.
 
 ## User Modes
@@ -104,6 +108,9 @@ Guard commands protect correctness and should not be optimized directly.
 - **Scope is broad:** narrow to the smallest file set that can move the metric.
 - **User wants execution now:** finish the validated session first, then hand
   off to `autoresearch-exec`.
+- **Ticketed work:** keep the ticket as the shared scoreboard. Do not copy the
+  full session contract into the ticket; link the session path from the ticket
+  `Proof Contract`.
 
 ## Top Gotchas
 

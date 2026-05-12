@@ -6,7 +6,9 @@ Rubric-driven verification for plans, code, UI, evidence, demos, and integration
 
 Turn review into a repeatable scoring pass with an explicit `1.0`-to-`5.0`
 contract, skeptic questions, and hard thresholds instead of generic questions
-or optimistic prose.
+or optimistic prose. The reviewer starts from the active ticket's `Proof
+Contract` when present, then loads the named rubric families and checks metric
+traceability against linked evidence.
 
 ## Public API or Entrypoints
 
@@ -31,6 +33,7 @@ or optimistic prose.
 ```text
 Use `review` on the active ticket.
 Read `todos.md` if using skill todos.
+Read the ticket Proof Contract for declared metrics, rubric gates, hard gates, and required evidence.
 Select `code-quality`, `integration-readiness`, and `evidence-quality`.
 Load `references/desloppify.md` because consistency and integration trust are in scope.
 Search the changed files plus the smallest neighboring constants/docs/interfaces needed to test drift.

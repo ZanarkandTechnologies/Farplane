@@ -40,6 +40,21 @@ Use this template to create ticket files directly under `tickets/`.
 - [ ] AC-1: [Specific, testable outcome]
 - [ ] AC-2: [Specific, testable outcome]
 
+### Proof Contract
+- Metrics:
+  - Primary metric:
+  - Direction: higher | lower | pass/fail | none
+  - Verify:
+  - Guard:
+  - Min acceptable result:
+  - Autoresearch warranted: yes | no
+  - Autoresearch session:
+- Review Rubrics:
+  - [rubric-family] >= [threshold]
+  - Hard gates:
+- Required Evidence:
+  - [artifact or command output]
+
 ### Agent Contract
 - Open:
 - Test hook:
@@ -110,6 +125,8 @@ If larger than L, split the ticket.
 - Each ticket file is independently implementable.
 - Dependencies are explicit (no cycles).
 - Acceptance criteria map to the spec.
+- Proof Contract separates mechanical metrics, review rubric gates, and required evidence.
+- Tickets use `Metrics: none mechanical` when a metric would be fake.
 - Assignee matches task type.
 - Control fields define when the ticket should move and what is blocking it.
 - UI-bearing tickets define how agents open, inspect, verify, and delegate from the ticket artifact.

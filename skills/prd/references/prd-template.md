@@ -44,6 +44,13 @@ When [context], I want to [action], so I can [outcome].
 ## Goals
 - [Measurable objective]
 
+## Metric Candidates
+- Primary candidate:
+- Direction: higher | lower | pass/fail | none
+- Verification idea:
+- Guard idea:
+- If no honest mechanical metric exists: `none mechanical` and why
+
 ## Non-Goals
 - [Explicitly out of scope]
 
@@ -96,6 +103,8 @@ When [context], I want to [action], so I can [outcome].
 - Non-goals clearly prevent scope creep.
 - Success definition is observable.
 - Scope aligns to one SLC slice.
+- Metric candidates are honest and mechanical when present; subjective or
+  judgment-heavy success is not forced into fake numbers.
 
 ## Example
 

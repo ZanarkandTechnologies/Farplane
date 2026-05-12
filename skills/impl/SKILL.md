@@ -30,6 +30,9 @@ Do not use it when:
   unless a blocker or explicit follow-up ticket makes narrower scope real.
 - An explicit ticket selector outranks ambient runtime state.
 - `$impl` reads the ticket plus linked specs/docs, launches the needed worker lanes, integrates their outputs, writes progress back to the ticket/progress surface, and exits.
+- `$impl` reads the ticket `Proof Contract` before execution. The contract
+  defines the metric targets, review rubric gates, hard gates, and required
+  evidence that the run must satisfy.
 - `$impl` is the public execution surface; `qa` and `demo` may run as internal subphases or explicit recovery surfaces.
 - Delegated lanes should expose a small shared contract: `worker_name`, `main_artifact_path`, and a short `grounding_summary`.
 - `$impl` does not require or create a permanent orchestrator pane.
@@ -42,7 +45,9 @@ For a selected build ticket, `$impl` should coordinate:
 1. builder lane for implementation and local validation
 2. reviewer lane for rubric-based review
 3. QA lane for evidence gathering
-4. evidence-check lane for validating the QA evidence
+4. optional `autoresearch-exec` lane when the ticket links an autoresearch
+   session in its `Proof Contract`
+5. evidence-check lane for validating the QA evidence
 
 Default enforced runtime set today:
 
@@ -100,6 +105,9 @@ Reference:
 ## Guardrails
 
 - Keep the ticket as the canonical progress surface.
+- Keep the ticket `Proof Contract` as the run scoreboard. Do not invent new
+  metrics, rubric gates, or evidence obligations in lane prompts when the
+  ticket already declares them; update the ticket if the contract is wrong.
 - Aim to land the whole selected ticket; do not voluntarily turn a coherent
   ticket into an arbitrary "first slice" just because partial progress is
   easier to claim.
@@ -108,4 +116,8 @@ Reference:
 - Keep the orchestrator ephemeral.
 - Keep one canonical public execution surface: `$impl`.
 - Reuse existing hook verdicts instead of adding a parallel control plane.
+- Run `autoresearch-exec` only when the ticket points to an existing
+  autoresearch session or the approved plan explicitly created one; ordinary
+  tickets should satisfy their Proof Contract through normal build, QA, and
+  review.
 - Leave board-wide dispatch, worktree orchestration, and binary/runtime cleanup to separate tickets.

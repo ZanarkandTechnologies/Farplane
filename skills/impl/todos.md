@@ -2,9 +2,11 @@
 
 - [ ] Read the selected ticket and linked docs before launching any lanes.
 - [ ] Confirm the ticket is actually ready for build orchestration rather than still needing planning.
+- [ ] Read the ticket `Proof Contract` and carry its metrics, rubric gates, hard gates, and required evidence into lane prompts.
 - [ ] Aim the run at whole-ticket completion; do not voluntarily shrink a
   coherent ticket into an internal "part 1".
 - [ ] Decide which lanes are needed for this ticket: builder, reviewer, QA, and evidence-check.
+- [ ] If the `Proof Contract` links an autoresearch session, run `autoresearch-exec` as a bounded execution subphase; otherwise keep autoresearch out of the run.
 - [ ] Make the delegated `worker_name`, `main_artifact_path`, and `grounding_summary` explicit before delegating.
 - [ ] Launch the visible lanes and keep their responsibilities distinct.
 - [ ] When review starts, use the [Review](../review/SKILL.md) skill instead of improvising a vague review pass.

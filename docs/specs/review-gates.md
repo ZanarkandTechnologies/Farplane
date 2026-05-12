@@ -8,12 +8,30 @@ Define the canonical review-gate model for the spec-first execution loop.
 
 The system uses three distinct layers:
 
-1. **QA** collects evidence
-2. **Reviewer** scores the work against a rubric
-3. **Stop hook** sanity-checks whether the evidence and review verdict justify
+1. **Ticket Proof Contract** declares metrics, rubric gates, and required evidence
+2. **QA** collects evidence
+3. **Reviewer** scores the work against the declared and inferred rubrics
+4. **Stop hook** sanity-checks whether the evidence and review verdict justify
    completion or continuation
 
 ## Roles
+
+### Ticket Proof Contract
+
+The ticket answers before build starts:
+
+- what mechanical metric, if any, should move or pass
+- which review rubric families and thresholds are required
+- which rubric families are hard gates
+- which evidence artifacts must exist before completion
+- whether an `autoresearch` session exists for repeated metric experiments
+
+The contract carries handles and thresholds, not full specialist bodies. Rubric
+details remain in `skills/review/references/*`; autoresearch session details
+remain in `autoresearch.md`, `autoresearch.sh`, and `autoresearch.jsonl`.
+
+When no honest metric exists, the contract should say `Metrics: none
+mechanical` rather than rewarding a fake proxy.
 
 ### QA
 
@@ -39,11 +57,14 @@ Reviewer answers:
 
 - does the implementation satisfy the work package?
 - is the evidence strong enough?
+- do ticket-declared metrics trace to real command output, artifacts, or
+  autoresearch logs?
 - what should be fixed before completion?
 - what neighboring repo surfaces were checked to rule out drift or hidden coupling?
 - if continuation is required, what is the single best immediate next same-ticket step?
 
-Reviewer produces the rubric score, evidence-gate judgment, and concrete next action.
+Reviewer produces the rubric score, metric-traceability judgment,
+evidence-gate judgment, and concrete next action.
 For user-facing work, reviewer rubric selection may also include a dedicated
 user-intent-satisfaction family so the system can judge "correct" separately
 from "actually satisfying for the intended user."
@@ -116,6 +137,7 @@ Reviewer output should use one normalized shape:
   "rerun_required": true,
   "evidence_quality": "pass|fail",
   "integration_readiness": "pass|fail",
+  "metric_traceability": "pass|fail|not_applicable",
   "traceability": "pass|fail",
   "freshness": "pass|fail",
   "qa_quality": "pass|fail",
@@ -207,6 +229,7 @@ Default:
 
 - `pass` only if every required dimension passes its threshold
 - `pass` only if every required rubric family passes its threshold
+- `pass` only if required ticket metrics are traceable to fresh evidence
 - `revise` if work is directionally correct but needs another pass
 - `block` if the work is materially off-target, underspecified, or unsafe
 - `evidence-quality` below threshold forces non-pass overall

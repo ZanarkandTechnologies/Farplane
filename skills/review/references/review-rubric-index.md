@@ -4,6 +4,7 @@ This is the primary rubric map for the `review` skill.
 
 Use it to:
 
+- read the ticket `Proof Contract` for declared rubric gates and metric claims
 - choose the right rubric families for the ticket
 - load the anti-slop search playbook when the review needs repo-grounded skepticism
 - locate the correct family reference files
@@ -106,6 +107,12 @@ Hard gates:
 ## Rubric Selection
 
 Choose rubric families from the ticket context:
+
+- ticket `Proof Contract`:
+  - start with declared rubric families, thresholds, and hard gates
+  - add any missing families required by the actual changed surface
+  - check declared metrics separately as traceability/evidence, not as a
+    replacement for rubric judgment
 
 - planning / contract review:
   - `spec-contract`

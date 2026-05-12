@@ -21,6 +21,11 @@ review loop. It did not have a reusable way to repeatedly improve code, docs,
 prompts, or skills against a mechanical metric while preserving run memory
 across compaction and fresh sessions.
 
+The ticket loop uses a `Proof Contract` as the bridge between measured
+optimization and review judgment. Tickets carry metric handles, rubric gates,
+and required evidence. `autoresearch` owns the metric experiment session only
+when the ticket contract says repeated measured improvement is warranted.
+
 The suite combines:
 
 - Karpathy's `program.md` idea: the human programs the research org through a
@@ -61,6 +66,8 @@ Owns setup:
 - dry-run Verify and prove a numeric metric exists
 - scaffold session artifacts
 - hand off to `autoresearch-exec`
+- when used from ticketed work, write or update the ticket `Proof Contract`
+  with the metric name, direction, verify command, guard command, and session path
 
 ### `autoresearch-exec`
 
@@ -115,6 +122,11 @@ METRIC <metric_name>=<number>
 
 `autoresearch.jsonl` starts with a config entry and appends one run entry for
 each baseline, keep, discard, crash, check failure, metric error, or no-op.
+
+For ticketed work, the ticket `Proof Contract` is the shared scoreboard:
+metrics point to autoresearch sessions, rubrics point to `review`, and evidence
+links prove both. The session files stay in the autoresearch artifact contract;
+the ticket stores only the metric handle, commands, threshold, and session path.
 
 ## Skill-Local Memory Contract
 

@@ -37,7 +37,10 @@ Rules:
 16. Use decisive action language. Do not hedge core execution steps or the recommendation with "maybe", "might", or "could".
 17. When diagrams are used, follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for compactness, delta coloring, inline signatures, and anti-bloat rules.
 18. If an `Agent Testability Brief` exists, preserve its proof/testability surfaces instead of re-deriving them ad hoc.
-19. If the plan still depends on invented entities, storage ownership, or runtime boundaries, stop and use `deep-system-design` first.
+19. For material tickets, write a `Proof Contract` that separates mechanical
+    metrics, review rubric gates, and required evidence. Use `Metrics: none
+    mechanical` rather than inventing fake metrics.
+20. If the plan still depends on invented entities, storage ownership, or runtime boundaries, stop and use `deep-system-design` first.
 
 Output shape:
 
@@ -61,6 +64,7 @@ Output shape:
 - optional `Diagram`
 - `Acceptance Criteria`
 - `Verification`
+- `Proof Contract`
 - optional `Refs`
 - `Evidence`
 - `Blockers`
@@ -91,6 +95,9 @@ Requirements:
 - `Typed flow example` should walk one representative payload or object through
   the main path using the named types from `Type Sketch`.
 - Proof must use concrete checks, not generic test categories.
+- `Proof Contract` must name the metric or `none mechanical`, review rubrics
+  and thresholds, hard gates, required evidence, and optional autoresearch
+  session path.
 - If the work is a trivial localized fix, `Type Sketch`, `Typed flow example`,
   and other deeper detail may be intentionally short or omitted.
 - `Options considered` must show 3 viable options for material choices, each

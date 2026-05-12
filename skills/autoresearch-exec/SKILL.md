@@ -52,19 +52,22 @@ Reference split:
    to risk unrelated user changes in the editable scope.
 2. **Resume state:** summarize baseline, best metric, last runs, open ideas, and
    the next run number from `autoresearch.jsonl`.
-3. **Baseline if needed:** run `./autoresearch.sh`, parse the primary metric,
+3. **Ticket bridge:** when the session is linked from a ticket `Proof Contract`,
+   keep run summaries and final metric evidence linkable from that ticket's
+   `Evidence` section.
+4. **Baseline if needed:** run `./autoresearch.sh`, parse the primary metric,
    run checks if configured, and log `baseline`.
-4. **Pick one hypothesis:** use `autoresearch.md`, JSONL ASI, ideas, and git log
+5. **Pick one hypothesis:** use `autoresearch.md`, JSONL ASI, ideas, and git log
    to avoid repeats.
-5. **Modify one logical thing:** only touch editable scope unless updating
+6. **Modify one logical thing:** only touch editable scope unless updating
    session memory.
-6. **Commit before verify:** stage only intended files and commit
+7. **Commit before verify:** stage only intended files and commit
    `experiment(<scope>): <description>`.
-7. **Verify and guard:** run `./autoresearch.sh`, parse `METRIC` output, then
+8. **Verify and guard:** run `./autoresearch.sh`, parse `METRIC` output, then
    run `./autoresearch.checks.sh` when present.
-8. **Decide:** keep if the metric improves in the configured direction and the
+9. **Decide:** keep if the metric improves in the configured direction and the
    guard passes; otherwise `git revert HEAD --no-edit` and log the reason.
-9. **Repeat:** continue until max iterations, plateau, hard failure, or user
+10. **Repeat:** continue until max iterations, plateau, hard failure, or user
    interruption.
 
 ## User Modes
@@ -96,6 +99,9 @@ python3 skills/autoresearch-exec/scripts/summarize_jsonl.py autoresearch.jsonl
 ## Core Decision Branches
 
 - **No session files:** stop execution and use `autoresearch-plan`.
+- **Ticket Proof Contract exists:** treat it as the scoreboard for expected
+  metric, direction, guard, and evidence link. If the session contradicts the
+  ticket, stop and reconcile the contract before continuing.
 - **Dirty tree:** continue only when dirty files are unrelated to editable scope;
   otherwise preserve user work and ask for a clean branch/stash decision.
 - **Metric parse fails twice:** stop; the Verify contract is broken.

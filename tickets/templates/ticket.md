@@ -75,6 +75,25 @@ flowchart LR
 - `Manual checks:` any direct checks that matter
 - `Evidence required:` strongest artifacts needed to show the work is done
 
+## Proof Contract
+<!-- Modular boundary: tickets carry proof handles and thresholds; review and autoresearch skills carry execution logic. -->
+- Required for material, agentically hard, ticketed build, or review-sensitive
+  work. For trivial or judgment-only changes, keep it compact and write
+  `Metrics: none mechanical` instead of inventing fake numbers.
+- `Metrics:`
+  - `Primary metric:` numeric or boolean result to track, or `none mechanical`
+  - `Direction:` `higher`, `lower`, `pass/fail`, or `none`
+  - `Verify:` command, fixture, script, manual check, or `none`
+  - `Guard:` correctness command or `none`
+  - `Min acceptable result:` threshold or `none`
+  - `Autoresearch warranted:` `yes` when repeated metric experiments should run, otherwise `no`
+  - `Autoresearch session:` path to `autoresearch.md` when present, otherwise `none`
+- `Review Rubrics:`
+  - required rubric families and thresholds, for example `evidence-quality >= 4.0`
+  - hard gates, especially `evidence-quality` and `integration-readiness` when relevant
+- `Required Evidence:`
+  - artifacts, command outputs, QA reports, review JSON, screenshots, traces, or logs needed before completion
+
 ## Agent Contract
 - Optional for non-UI work. Add when the ticket changes UI, canvas rendering,
   user-visible flows, browser interaction, or any flow that is hard for agents

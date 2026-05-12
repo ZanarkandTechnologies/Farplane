@@ -10,10 +10,10 @@ feedback about whether another pass is required.
 
 ## Purpose
 
-Use this skill to review one active ticket by selecting the right rubric
-families, inspecting the relevant code/evidence plus the smallest neighboring
-surfaces needed to test consistency, and producing a structured review result
-that the ticket links from `Evidence`.
+Use this skill to review one active ticket by reading its `Proof Contract`,
+selecting the right rubric families, inspecting the relevant code/evidence plus
+the smallest neighboring surfaces needed to test consistency, and producing a
+structured review result that the ticket links from `Evidence`.
 
 This skill uses the anchored `1.0`-to-`5.0` review contract:
 
@@ -46,16 +46,19 @@ Ensure an agent can execute the core path after only reading this file.
   - whenever the user asks for review
 - Workflow:
   1. read the active ticket
-  2. open the rubric index
-  3. choose the matching rubric families
-  4. load `references/desloppify.md` when code, integration, cleanup, or evidence trust is in scope
-  5. open each selected family file and use its skeptic questions
-  6. inspect the changed surface plus the minimum neighboring code/docs/invariants needed to test consistency
-  7. rank substantive findings by severity and confidence
-  8. score each family on the anchored `1.0`-to-`5.0` scale
-  9. explain the findings that prevented a lower or higher adjacent score
-  10. write the structured review result
-  11. return the scored verdict
+  2. read the ticket `Proof Contract` for declared metrics, rubric families,
+     thresholds, hard gates, required evidence, and optional autoresearch session
+  3. open the rubric index
+  4. choose the matching rubric families, starting from the ticket-declared gates
+  5. load `references/desloppify.md` when code, integration, cleanup, or evidence trust is in scope
+  6. open each selected family file and use its skeptic questions
+  7. inspect the changed surface plus the minimum neighboring code/docs/invariants needed to test consistency
+  8. check metric traceability: declared metric -> verify command/result -> evidence artifact
+  9. rank substantive findings by severity and confidence
+  10. score each family on the anchored `1.0`-to-`5.0` scale
+  11. explain the findings that prevented a lower or higher adjacent score
+  12. write the structured review result
+  13. return the scored verdict
 - Core decision branches:
   - planning -> `spec-contract` + `implementation-plan`
   - code/backend/api -> `code-quality` + `integration-readiness` + `evidence-quality`
@@ -64,7 +67,7 @@ Ensure an agent can execute the core path after only reading this file.
     `implementation-plan`, `integration-readiness`, and `evidence-quality`
   - cleanup/refactor/runtime/doc simplification -> add `debloatability`
 - Top 3 gotchas:
-  - do not review before reading the active ticket
+  - do not review before reading the active ticket and its `Proof Contract`
   - do not output only questions; return anchored scores, findings, and next actions
   - do not approve weak evidence or weak integration readiness
 - Outcome contract:
@@ -92,19 +95,24 @@ Ensure an agent can execute the core path after only reading this file.
 ## Review Flow
 
 1. Read the active ticket first.
-2. Open `references/review-rubric-index.md`.
-3. Determine which rubric families apply.
-4. Open the reference file for each selected rubric family.
-5. For code, cleanup, integration, or evidence-heavy review, open
+2. Read the ticket `Proof Contract`, including declared metrics, review rubric
+   gates, hard gates, required evidence, and optional autoresearch session.
+3. Open `references/review-rubric-index.md`.
+4. Determine which rubric families apply, starting from ticket-declared rubric gates.
+5. Open the reference file for each selected rubric family.
+6. For code, cleanup, integration, or evidence-heavy review, open
    `references/desloppify.md`.
-6. Read the changed code/evidence plus the smallest neighboring files, docs,
+7. Read the changed code/evidence plus the smallest neighboring files, docs,
    constants, schemas, or invariants needed to test consistency.
-7. Use the family skeptic questions and evidence cues to challenge the work.
-8. Rank substantive findings with severity, confidence, and concrete file refs.
-9. Score the work against the selected rubric dimensions using the anchored
+8. Use the family skeptic questions and evidence cues to challenge the work.
+9. Check metric claims separately from rubric scores. Metrics are mechanical
+   signals; rubrics are review judgment frames. A good number does not excuse
+   weak evidence or integration readiness.
+10. Rank substantive findings with severity, confidence, and concrete file refs.
+11. Score the work against the selected rubric dimensions using the anchored
    `1.0`-to-`5.0` scale.
-10. Write the review result and make sure the ticket links it from `Evidence`.
-11. Return:
+12. Write the review result and make sure the ticket links it from `Evidence`.
+13. Return:
    - work_type
    - search_scope
    - overall score
@@ -113,6 +121,7 @@ Ensure an agent can execute the core path after only reading this file.
    - rerun_required
    - evidence_quality
    - integration_readiness
+   - metric_traceability
    - traceability
    - freshness
    - hard-gate failures
@@ -146,8 +155,13 @@ password in its next final response:
 ## Scoring Rules
 
 - Overall verdict is `pass` only if every required rubric meets threshold.
+- Ticket-declared rubric gates in the `Proof Contract` are minimum review
+  obligations. The reviewer may add relevant families, but must not drop a
+  declared hard gate without recording why the ticket contract is wrong.
 - `evidence-quality` below threshold forces non-pass overall.
 - `integration-readiness` below threshold forces non-pass overall.
+- Missing, stale, unparseable, or untraceable ticket-declared metric evidence
+  forces non-pass when the metric is required for completion.
 - When the selected ticket already defines a coherent scope, treat artificial
   downscoping to a smaller internal "first slice" as a planning/execution
   failure unless the ticket or blockers made that narrower boundary explicit.
@@ -175,12 +189,14 @@ delegate(
   prompt="RUBRIC-DRIVEN REVIEW TASK
 
 Read the active ticket first.
-Open references/review-rubric-index.md first.
-Determine which rubric families apply.
+Read the ticket Proof Contract for metrics, rubric gates, hard gates, required evidence, and optional autoresearch session.
+Open references/review-rubric-index.md before scoring.
+Determine which rubric families apply, starting from ticket-declared gates.
 Open references/desloppify.md for code, cleanup, integration, and evidence-heavy review.
 Open the matching family reference files.
 Use the family skeptic questions, score guide, and evidence cues.
 Select the matching rubric families and score the work against them on the anchored 1.0-5.0 scale.
+Check metric traceability separately from rubric scores when the ticket declares metrics.
 
 Scope:
 - active ticket
@@ -226,6 +242,7 @@ Return:
   "rerun_required": true,
   "evidence_quality": "fail",
   "integration_readiness": "fail",
+  "metric_traceability": "not_applicable",
   "traceability": "fail",
   "freshness": "pass",
   "hard_gate_failures": ["evidence-quality", "integration-readiness"],
@@ -269,10 +286,13 @@ Return:
 ## Required Checklist
 
 - [ ] Active ticket read first
-- [ ] `references/review-rubric-index.md` read first
+- [ ] Ticket `Proof Contract` read before selecting rubrics
+- [ ] `references/review-rubric-index.md` read before scoring
 - [ ] `references/desloppify.md` used when code, integration, cleanup, or evidence trust is in scope
 - [ ] matching family reference files used for anchored scoring
 - [ ] Correct rubric family/families selected
+- [ ] Ticket-declared rubric gates and hard gates honored or explicitly challenged
+- [ ] Metric claims checked for traceability when the Proof Contract declares metrics
 - [ ] Ticket/spec compliance checked before code-quality nitpicks
 - [ ] Relevant code/evidence actually inspected
 - [ ] Neighboring surfaces searched when consistency or contract drift could exist
