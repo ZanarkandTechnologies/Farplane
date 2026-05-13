@@ -58,7 +58,7 @@ flowchart LR
   subgraph Skills["Skill Layer"]
     intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
     readiness["agent-testability-plan<br/>Autonomy Readiness"]:::callout
-    research["documentation<br/>external-patterns<br/>harness-scout<br/>parity-research<br/>gap-analysis<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
+    research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>parity-research<br/>gap-analysis<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     execSkill["codexter-invocation<br/>$impl<br/>$loop<br/>$ralph"]:::callout
@@ -195,6 +195,10 @@ during cleanup unless the replacement carries the same routing information.
 - [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
   Purpose: structured feature registry contract for dedupe, provenance, source
   references, evidence links, known limits, and benchmark metrics
+- [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/feed-scout/SKILL.md)
+  Purpose: tracked-profile monitoring recipe for discovering X, YouTube, and
+  blog content, deduping canonical URLs in a content/proposal ledger, and
+  routing eligible items to harness-scout and best-of-worlds
 - [docs/specs/doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md)
   Purpose: structural versus narrative doc-audit policy and the doc-gardening
   workflow

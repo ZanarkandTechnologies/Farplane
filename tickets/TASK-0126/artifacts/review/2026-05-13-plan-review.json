@@ -1,0 +1,110 @@
+{
+  "ticket_id": "TASK-0126",
+  "reviewed_at": "2026-05-13T03:18:51Z",
+  "work_type": "impl-plan",
+  "search_scope": [
+    "tickets/TASK-0126/ticket.md",
+    "skills/impl-plan/SKILL.md",
+    "skills/impl-plan/references/review.md",
+    "skills/impl-plan/references/template.md",
+    "tickets/templates/ticket.md",
+    "docs/prd.md",
+    "docs/sources/README.md",
+    "docs/features/README.md",
+    "docs/MEMORY.md",
+    "docs/TROUBLES.md",
+    "skills/harness-scout/SKILL.md",
+    "skills/harness-scout/references/architecture.md",
+    "skills/harness-scout/references/workflows.md",
+    "skills/apify/SKILL.md",
+    "skills/apify/references/twitter.md",
+    "skills/apify/references/youtube.md",
+    "skills/summarize/SKILL.md",
+    "skills/best-of-worlds/SKILL.md",
+    "skills/review/references/review-rubric-index.md",
+    "skills/review/references/spec-contract.md",
+    "skills/review/references/implementation-plan.md",
+    "skills/review/references/evidence-quality.md",
+    "skills/review/references/integration-readiness.md"
+  ],
+  "rubrics_used": {
+    "spec-contract": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "story-coherence": 4.3,
+        "parallelization-fit": 4.0,
+        "ticket-sizing": 4.2,
+        "acceptance-testability": 4.1,
+        "scope-clarity": 4.4
+      },
+      "findings": [],
+      "next_action": "Approve planning after operator review."
+    },
+    "implementation-plan": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.0,
+        "bloatability": 4.2,
+        "modularity": 4.4,
+        "proof-clarity": 4.1,
+        "execution-order": 4.2,
+        "risk-clarity": 4.1,
+        "decision-tone": 4.4,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "Use the ticket as the build plan for the feed-scout recipe skill."
+    },
+    "evidence-quality": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.0,
+        "reproducibility": 4.0,
+        "traceability": 4.1,
+        "consistency": 4.0,
+        "inspectability": 4.0,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "During implementation, replace planning evidence with validation command outputs and final review."
+    },
+    "integration-readiness": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.0,
+        "contract-correctness": 4.1,
+        "dependency-readiness": 4.0,
+        "coupling-risk": 4.0,
+        "merge-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "Keep live Notion database creation, automation activation, API spend, and automatic implementation-ticket creation behind explicit human gates."
+    }
+  },
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "blocking_findings": [],
+  "metric_traceability": {
+    "status": "planning-pass",
+    "commands_checked": [
+      "python3 tickets/scripts/check_ticket_metadata.py",
+      "git diff --check -- tickets/TASK-0126/ticket.md"
+    ],
+    "notes": "Implementation validation commands are specified in the ticket but cannot run until the feed-scout skill package exists."
+  },
+  "traceability": "The ticket maps the user-requested two-database source monitoring shape to concrete skill files, data shapes, flow diagrams, acceptance criteria, verification commands, and human gates.",
+  "freshness": "Reviewed immediately after ticket creation on 2026-05-13.",
+  "finding_log": [],
+  "next_action": "Operator approval can move TASK-0126 from planning review to build."
+}

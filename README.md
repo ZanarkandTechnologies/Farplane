@@ -35,6 +35,7 @@ ticket, and execution workflow.
 - Parity-comparison workflow: [skills/parity-research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/parity-research/README.md)
 - Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/best-of-worlds/SKILL.md)
 - Harness source scouting: [skills/harness-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/harness-scout/SKILL.md)
+- Feed source monitoring: [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/feed-scout/SKILL.md)
 - PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
 - Codexter invocation contract: [skills/codexter-invocation/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/README.md)
 - External CLI delegation: [skills/delegate-cli/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/README.md)
@@ -99,6 +100,10 @@ Implemented now:
 - structured feature records through `docs/features/registry.jsonl` and
   source-to-feature scouting through `harness-scout` for videos, blogs, repos,
   and transcripts that may contain harness improvements
+- tracked-profile source monitoring through `feed-scout`, which discovers new
+  content from curated X, YouTube, and blog profiles, dedupes canonical URLs in
+  a content/proposal ledger, then routes eligible items to `harness-scout` and
+  `best-of-worlds`
 - frontend implementation through `frontend-craft`, with `functional-ui` for
   UX/workflow and broken-UI redesign, `visual-design` for look/taste/visual
   systems, and `landing-page` for one-page marketing or scrolltelling surfaces
@@ -190,7 +195,7 @@ flowchart LR
     end
 
     subgraph Research["Research + Synthesis Sidecars"]
-      grounding["summarize<br/>harness-scout<br/>documentation<br/>external-patterns<br/>find-skills<br/>apify"]:::research
+      grounding["summarize<br/>feed-scout<br/>harness-scout<br/>documentation<br/>external-patterns<br/>find-skills<br/>apify"]:::research
       parity["parity-research<br/>gap-analysis<br/>best-of-worlds<br/>docs/features registry"]:::research
       improve["autoresearch-plan<br/>autoresearch-exec<br/>self-improve<br/>skill-creator"]:::research
     end

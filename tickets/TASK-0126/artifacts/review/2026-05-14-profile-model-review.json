@@ -1,0 +1,51 @@
+{
+  "ticket_id": "TASK-0126",
+  "reviewed_at": "2026-05-13T20:33:39Z",
+  "work_type": "impl-plan-correction",
+  "correction": "Replace generic sources/configure JSON with a user-facing tracked-profile model: profiles produce content items, content items are URL-deduped in the ingestion ledger, and eligible content items are scouted.",
+  "search_scope": [
+    "tickets/TASK-0126/ticket.md",
+    "skills/harness-scout/SKILL.md",
+    "skills/feed-scout planned surfaces",
+    "docs/sources/README.md",
+    "docs/features/README.md"
+  ],
+  "rubrics_used": {
+    "spec-contract": {
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "Proceed with the tracked-profile configuration model."
+    },
+    "implementation-plan": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "Build the feed-scout skill around configure/run/review/status modes."
+    },
+    "integration-readiness": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "Keep profile rows, content ledger rows, and durable SRC-* promotion as distinct concepts."
+    },
+    "evidence-quality": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "During implementation, prove the model with profile fixtures and repeated-URL dedupe tests."
+    }
+  },
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "blocking_findings": [],
+  "finding_log": [],
+  "next_action": "Use TASK-0126 as the corrected plan for feed-scout implementation."
+}

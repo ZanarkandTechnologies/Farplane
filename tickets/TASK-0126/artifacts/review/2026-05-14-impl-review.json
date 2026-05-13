@@ -1,0 +1,81 @@
+{
+  "ticket_id": "TASK-0126",
+  "reviewed_at": "2026-05-13T20:49:07Z",
+  "work_type": "implementation",
+  "search_scope": [
+    "skills/feed-scout/SKILL.md",
+    "skills/feed-scout/AGENTS.md",
+    "skills/feed-scout/README.md",
+    "skills/feed-scout/references/data-model.md",
+    "skills/feed-scout/references/workflow.md",
+    "skills/feed-scout/templates/config-intake.md",
+    "skills/feed-scout/templates/source-db.md",
+    "skills/feed-scout/templates/proposal-db.md",
+    "skills/feed-scout/templates/codex-automation-prompt.md",
+    "skills/feed-scout/scripts/dedupe_key.py",
+    "skills/feed-scout/scripts/validate_profiles.py",
+    "skills/feed-scout/scripts/normalize_items.py",
+    "skills/feed-scout/fixtures/example-profiles.jsonl",
+    "skills/feed-scout/fixtures/example-items.jsonl",
+    "README.md",
+    "ARCHITECTURE.md",
+    "docs/HISTORY.md",
+    "tickets/TASK-0126/ticket.md"
+  ],
+  "rubrics_used": {
+    "spec-contract": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "No spec repair required."
+    },
+    "implementation-plan": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "Implementation follows the ticket plan and keeps feed-scout separate from harness-scout."
+    },
+    "evidence-quality": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "Evidence is sufficient for a docs/script skill package; first live automation should collect external-fetch evidence separately."
+    },
+    "integration-readiness": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "Safe to commit as an explicit-run recipe with no daemon, live Notion creation, or API spending."
+    }
+  },
+  "overall_score": 4.15,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "blocking_findings": [],
+  "metric_traceability": {
+    "primary_metric": "pass/fail validation suite",
+    "status": "passed",
+    "commands": [
+      "python3 skills/skill-creator/scripts/quick_validate.py skills/feed-scout",
+      "python3 skills/feed-scout/scripts/validate_profiles.py skills/feed-scout/fixtures/example-profiles.jsonl",
+      "python3 skills/feed-scout/scripts/normalize_items.py skills/feed-scout/fixtures/example-items.jsonl --discovered-at 2026-05-14T00:00:00Z",
+      "python3 skills/feed-scout/scripts/dedupe_key.py 'https://www.youtube.com/watch?v=example&utm_source=test'",
+      "python3 docs/sources/validate_sources.py",
+      "python3 docs/features/validate_features.py",
+      "python3 tickets/scripts/check_ticket_metadata.py",
+      "python3 bin/check_doc_parity.py",
+      "python3 -m py_compile skills/feed-scout/scripts/*.py",
+      "git diff --check -- skills/feed-scout README.md ARCHITECTURE.md docs/HISTORY.md tickets/TASK-0126/ticket.md tickets/TASK-0126/artifacts/review/2026-05-14-profile-model-review.json"
+    ]
+  },
+  "traceability": "All acceptance criteria are represented in the feed-scout package, script fixtures, navigation updates, and ticket evidence.",
+  "freshness": "Reviewed after implementation and validation on 2026-05-14 local time.",
+  "finding_log": [],
+  "next_action": "Commit and push the scoped feed-scout work."
+}
