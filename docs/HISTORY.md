@@ -183,3 +183,4 @@
 2026-05-07 18:05 +0800 | FEAT | add output-quality gates, compact phase-scoped Pi delegation, first-viewport hero-offer QA, and a passing Pi/Kimi sidecar repair scoring `99/100`
 2026-05-07 18:27 +0800 | FEAT | mount `agent-browser` into the Pi/Kimi frontend profile and require delegated runnable UI handoffs to capture same-thread browser QA evidence
 2026-05-14 04:33 +0800 | FEAT | add feed-scout tracked-profile monitoring recipe with URL-keyed content ledger helpers and Notion proposal templates
+2026-05-15 05:53 +0800 | FEAT | reimplement skill hierarchy manually with Tier 1 reference grounding, Tier 2 plan/execute interfaces, method-addressed research, and coding-pipeline bindings

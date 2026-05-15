@@ -51,7 +51,11 @@ Use:
 - `advise` when the user needs options, tradeoff framing, or a strong recommendation and has not already supplied a clear take
 - `commit-message` for compact commit subject style
 - `desloppify` when the operator wants repo cleanup driven by the `desloppify` CLI or wants that cleanup delegated to one bounded worker
-- `parity-research` when the main question is what comparable products, standards, or open-source repos include for a capability before local scope is locked
+- `reference-grounding` when a recommendation, plan, execution step, or review claim needs compact evidence from local context, official docs, peers, repos, standards, or provided sources
+- `research:parity` when the main question is what comparable products, standards, or open-source repos include for a capability before local scope is locked
+- `research:gap` when a missing or partial feature needs current-state gaps and production expectations before planning
+- `plan` as the generic Tier 2 planning interface when a domain pipeline needs intent turned into executable shape
+- `execute` as the generic Tier 2 execution interface when a domain pipeline needs work, proof, writeback, and review shape
 - `repent` when the operator explicitly wants audit-then-fix recovery mode after the assistant likely missed something obvious
 - `impl-plan` for ticket planning shape
 - `prd` when reqs are unclear
@@ -88,12 +92,39 @@ Before edits:
 
 No blind edits.
 
+## Skill Hierarchy
+
+Treat skills as a dependency hierarchy, not a hidden router tree.
+
+- Tier 1 primitives are core thinking defaults: `advise` for deciding among
+  real options, `reference-grounding` for examples/docs/peers/repos before
+  claims, `review` for challenge before completion claims, and skill
+  `todos.md` loading as the anti-forgetting discipline.
+- Tier 2 skills are generic workflow interfaces: `brainstorm` explores
+  direction, `research:*` gathers grounded references without ideation,
+  `plan` turns intent into executable shape, and `execute` does the work and
+  proves it.
+- Tier 3 skills are application/domain pipelines that implement Tier 2
+  interfaces. In Codexter today, `spec-to-ticket`, `impl-plan`, `$impl`, and
+  `close-ticket` are coding-pipeline skills, not universal Tier 2 workflows.
+  Presentation, document, frontend, video, image, and data pipelines should bind
+  the same generic interfaces to their own domain-specific skills.
+- `skill:method` names are explicit method addresses inside one owning skill,
+  not a license to build nested routers. Prefer one method-addressed skill over
+  several same-level wrapper skills when the methods share one workflow surface.
+
 ## Skill Loading
 
 - when a relevant skill is in play, read `SKILL.md` first
 - if that skill has `todos.md`, load it near the start of the pass and use it
   as the ordered anti-forgetting checklist instead of treating it as optional
   extra reading
+- when a `todos.md` item links another skill or method as a required dependency,
+  import the relevant linked obligation into your active checklist and load only
+  the smallest needed part of that dependency
+- avoid recursive traversal through wrapper skills unless the current task
+  explicitly needs the deeper method; method addresses such as `research:gap`
+  should land in one owning skill surface
 - prefer the skill's existing todo list over inventing a fresh mini-workflow
   in chat unless the current task clearly needs a deviation
 

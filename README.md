@@ -32,7 +32,10 @@ ticket, and execution workflow.
 - QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
 - CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/desloppify/README.md)
-- Parity-comparison workflow: [skills/parity-research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/parity-research/README.md)
+- Reference grounding primitive: [skills/reference-grounding/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/reference-grounding/README.md)
+- Research workflow: [skills/research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/research/README.md)
+- Generic planning interface: [skills/plan/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/plan/README.md)
+- Generic execution interface: [skills/execute/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/execute/README.md)
 - Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/best-of-worlds/SKILL.md)
 - Harness source scouting: [skills/harness-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/harness-scout/SKILL.md)
 - Feed source monitoring: [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/feed-scout/SKILL.md)
@@ -90,11 +93,16 @@ Implemented now:
 - capability-first ticketization through `spec-to-ticket`
 - bootstrap testability defaults propagated into ticket `Agent Contract` and
   `qa/cookbook` seeds through `spec-to-ticket`
-- per-ticket planning through `impl-plan`
-- feature-gap research through `gap-analysis` when net-new or partial feature
-  scope depends on production-grade expectations
-- parity-comparison research through `parity-research` when the main question is
-  what other products, standards, or codebases consistently include
+- tiered skill dependency loading through the global prompt template and
+  `todos.md`, where Tier 1 covers advice, reference grounding, review, and
+  todo discipline; Tier 2 covers `brainstorm`, `research:*`, `plan`, and
+  `execute`; and Tier 3 application pipelines implement those interfaces
+- per-ticket coding planning through `impl-plan`, which implements the generic
+  `plan` interface for Codexter code tickets
+- method-addressed research through `research:gap` when net-new or partial
+  feature scope depends on production-grade expectations, and
+  `research:parity` when the main question is what other products, standards,
+  or codebases consistently include
 - best-of-worlds synthesis through `best-of-worlds` when the source set is
   known and the work is to extract, score, and adapt the strongest techniques
 - structured feature records through `docs/features/registry.jsonl` and
@@ -196,12 +204,13 @@ flowchart LR
 
     subgraph Research["Research + Synthesis Sidecars"]
       grounding["summarize<br/>feed-scout<br/>harness-scout<br/>documentation<br/>external-patterns<br/>find-skills<br/>apify"]:::research
-      parity["parity-research<br/>gap-analysis<br/>best-of-worlds<br/>docs/features registry"]:::research
+      parity["reference-grounding<br/>research:parity/gap/source-synthesis<br/>best-of-worlds<br/>docs/features registry"]:::research
       improve["autoresearch-plan<br/>autoresearch-exec<br/>self-improve<br/>skill-creator"]:::research
     end
 
     subgraph Package["2. Package Work"]
       readiness["Autonomy Readiness<br/>inputs, credentials, compute, tools,<br/>QA risk, human gates"]:::callout
+      tier2["Tier 2 interfaces<br/>plan + execute"]:::callout
       ticketize["spec-to-ticket<br/>capability-sized tickets"]:::callout
       tickets[(tickets/TASK-*/ticket.md<br/>Plan + Evidence + Blockers)]:::surface
       qaCookbook[(qa/cookbook/*<br/>shortcuts, seeds, probes)]:::surface
@@ -264,7 +273,8 @@ flowchart LR
     parity --> specs
     improve --> specs
 
-    readiness --> ticketize
+    readiness --> tier2
+    tier2 --> ticketize
     specs --> ticketize
     ticketize --> tickets
     ticketize --> qaCookbook

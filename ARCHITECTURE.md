@@ -56,9 +56,11 @@ flowchart LR
   end
 
   subgraph Skills["Skill Layer"]
+    primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>todos.md"]:::callout
+    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute"]:::callout
     intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
     readiness["agent-testability-plan<br/>Autonomy Readiness"]:::callout
-    research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>parity-research<br/>gap-analysis<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
+    research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     execSkill["codexter-invocation<br/>$impl<br/>$loop<br/>$ralph"]:::callout
@@ -98,6 +100,12 @@ flowchart LR
   architecture --> techniques
   techniques --> featureRegistry
   doctrine -. placement decisions .-> intake
+  globalAgents -. tiered skill contract .-> primitives
+  primitives -. base checks .-> interfaces
+  interfaces -. domain binding .-> intake
+  interfaces -. evidence workflow .-> research
+  interfaces -. coding plan .-> planSkill
+  interfaces -. coding execute .-> execSkill
 
   specs --> intake
   intake --> readiness
@@ -277,6 +285,12 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - Review scoring belongs in `skills/review/*`.
 - Runtime machinery belongs in `bin/`, `hooks.json`, and the runtime specs.
 - Reusable workflow detail belongs in `skills/*`.
+- Skill dependency hierarchy belongs in `templates/global/AGENTS.md` plus
+  skill `todos.md` Markdown links. Treat `advise`, `reference-grounding`,
+  `review`, and todo loading as Tier 1; `brainstorm`, `research:*`, `plan`, and
+  `execute` as Tier 2 interfaces; and concrete skills such as
+  `spec-to-ticket`, `impl-plan`, `$impl`, and `close-ticket` as Tier 3
+  Codexter coding-pipeline implementations.
 
 ## Read Order
 

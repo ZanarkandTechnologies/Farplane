@@ -34,6 +34,15 @@ blogs, and command families as research inputs rather than live dependencies;
 import ideas through reviewed `adopt`, `adapt`, `reject`, or `defer` decisions,
 usually via `best-of-worlds`. See `MEM-0073`.
 
+Keep skill dependencies tiered rather than hidden behind nested routers:
+Tier 1 primitives cover `advise`, `reference-grounding`, `review`, and
+`todos.md` loading; Tier 2 names generic workflow interfaces such as
+`brainstorm`, `research:*`, `plan`, and `execute`; Tier 3 application pipelines
+implement those interfaces for a domain. In Codexter today, `spec-to-ticket`,
+`impl-plan`, `$impl`, and `close-ticket` are coding-pipeline skills, not the
+generic Tier 2 interfaces themselves. Keep `skill:method` names as explicit
+addresses inside one owning skill surface. See `MEM-0098`.
+
 When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
 structured outputs, eval prompts, or agent instruction prompts, load
 `rules/prompt-engineering.md` as the shared prompt design reference.
@@ -42,15 +51,15 @@ When the operator explicitly wants audit-then-fix recovery mode after a likely
 assistant miss, use the `repent` skill rather than inventing ad hoc recovery
 behavior.
 
-When planning a missing or partially implemented feature depends on understanding
-what a production-grade version should include, use `gap-analysis` before
-locking the ticket plan so current-state gaps and external comparables are
-explicit instead of implied.
+When planning a missing or partially implemented feature depends on
+understanding what a production-grade version should include, use
+`research:gap` before locking the ticket plan so current-state gaps and
+external comparables are explicit instead of implied.
 
 When the main planning question is broader external parity such as what peer
 products, standards, or open-source repos consistently include for a
-capability, use `parity-research` first and then route the result into
-`gap-analysis`, `functional-ui`, or `impl-plan`.
+capability, use `research:parity` first and then route the result into
+`research:gap`, `functional-ui`, or `impl-plan`. See `MEM-0097`.
 
 For frontend work, use the Codexter frontend topology: `frontend-craft` is the
 implementation orchestrator, `functional-ui` owns UX/workflow and broken-UI
