@@ -8,6 +8,10 @@ description: "Phase-2 Codexter skill: convert one SLC slice from specs into raw 
 
 Use this as the second session in the Codexter workflow.
 
+`spec-to-ticket` is a Tier 3 Codexter coding-pipeline skill. It implements the
+generic [plan](../plan/SKILL.md) interface for turning code-oriented specs into
+proofable tickets.
+
 <!--
 This skill is where product intent becomes executable ticket truth.
 It should front-load testability and proof requirements so build and QA do not have to improvise later.

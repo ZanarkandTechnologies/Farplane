@@ -1,7 +1,11 @@
 # Todos
 
 - [ ] Read the selected ticket and linked docs before launching any lanes.
+- [ ] Use the generic [execute](../execute/SKILL.md) interface as the Tier 2
+  contract, but keep `$impl` coding-ticket specific.
 - [ ] Confirm the ticket is actually ready for build orchestration rather than still needing planning.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when execution
+  depends on official behavior, local invariants, examples, or peer norms.
 - [ ] Read the ticket `Proof Contract` and carry its metrics, rubric gates, hard gates, and required evidence into lane prompts.
 - [ ] Aim the run at whole-ticket completion; do not voluntarily shrink a
   coherent ticket into an internal "part 1".

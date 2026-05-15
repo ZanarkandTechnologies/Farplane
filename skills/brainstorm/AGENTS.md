@@ -11,6 +11,8 @@ lightweight option exploration and structured decomposition branches.
 
 - option exploration short and comparative
 - structured decomposition as a branch, not a second public skill
+- evidence links through `reference-grounding` or `research:*` instead of
+  source-free invention
 - recommendations explicit
 - handoff rules clear
 - framework routing lightweight
@@ -20,3 +22,4 @@ lightweight option exploration and structured decomposition branches.
 - split decomposition into a second public skill the user has to remember
 - bury the recommended next skill
 - pretend every intake problem needs the same lens
+- turn `brainstorm` into a hidden router for planning or execution

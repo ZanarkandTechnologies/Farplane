@@ -1,6 +1,11 @@
 # Todos
 
 - [ ] Read the chosen spec slice and confirm it is small enough for one planning pass.
+- [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,
+  but keep `spec-to-ticket` coding-ticket specific.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when ticket
+  scope depends on local baseline, examples, official behavior, peer norms, or
+  implementation patterns.
 - [ ] Start from the largest coherent self-contained feature ticket; do not split by schema/backend/UI layers just because those layers differ.
 - [ ] Keep CRUD and other narrow operator workflows in one ticket by default.
 - [ ] Split only when a hard trigger applies: shared platform reuse, migration/backfill/rollout risk, external dependency/provisioning, unresolved feasibility, or a real service/runtime boundary.

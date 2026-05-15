@@ -8,6 +8,10 @@ description: Parent closeout skill for one selected ticket. Use when implementat
 Use this skill when one ticket is functionally done and the remaining work is
 to close it cleanly instead of doing more implementation.
 
+`close-ticket` is a Tier 3 Codexter coding-pipeline closeout skill. It consumes
+the generic [execute](../execute/SKILL.md) interface's proof/writeback shape but
+keeps Codexter-specific ticket, docs, commit, and archive rules here.
+
 This is the canonical public closeout surface. `$docs-closeout` is a backward
 compatible alias, not the preferred live name.
 

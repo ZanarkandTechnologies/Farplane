@@ -10,6 +10,7 @@ user to switch to a second public intake skill.
 
 - `SKILL.md`: main brainstorm workflow
 - `AGENTS.md`: maintenance rules
+- `todos.md`: Tier 2 intake checklist
 - `references/palantir-customer-data-action.md`: customer/data/action decomposition lens
 - `references/mckinsey-issue-tree.md`: structured issue-tree lens
 
@@ -24,5 +25,7 @@ user to switch to a second public intake skill.
 ## How To Test
 
 - confirm the skill still compares options when divergence is needed
+- confirm example-dependent brainstorms ground options through
+  `reference-grounding` or `research:*`
 - confirm it can also handle structured customer/data/system decomposition inside the same public surface
 - confirm it ends with one recommended next skill or artifact

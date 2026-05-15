@@ -7,6 +7,10 @@ description: Build-phase orchestrator for one selected ticket. Runs ephemerally,
 
 `$impl` is the build-phase orchestration surface for Codexter.
 
+`$impl` is a Tier 3 Codexter coding-pipeline skill. It implements the generic
+[execute](../execute/SKILL.md) interface for code tickets; it is not the
+universal Tier 2 execution interface for every application domain.
+
 Use it when:
 
 - planning for a ticket is already complete

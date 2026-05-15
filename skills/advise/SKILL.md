@@ -32,11 +32,15 @@ Use this when the user is looking for judgment, not just a menu of possibilities
 
 1. Restate the decision briefly.
 2. Name the evaluation criteria that matter most for this case.
-3. Present exactly 3 viable options.
-4. For each option, give concrete pros and cons.
-5. Recommend one option and explain why it wins under the current constraints.
-6. Name the main tradeoff being accepted.
-7. Move straight into the recommended next step when execution is obvious.
+3. Use `reference-grounding` first when the best recommendation depends on
+   current facts, official behavior, peer norms, local baseline, or
+   implementation examples. Escalate to `research:*` when a full brief is
+   needed.
+4. Present exactly 3 viable options.
+5. For each option, give concrete pros and cons.
+6. Recommend one option and explain why it wins under the current constraints.
+7. Name the main tradeoff being accepted.
+8. Move straight into the recommended next step when execution is obvious.
 
 ## Output
 
@@ -54,5 +58,7 @@ Produce a compact decision note with:
 - do not present fake alternatives that are obviously invalid
 - do not exceed 3 options unless the user explicitly asks for more
 - do not end with "if you want I can ..."
+- do not turn source-set synthesis into advice; use `best-of-worlds` when the
+  job is to extract, score, and adapt ideas from known sources
 - if the choice is UI/UX-facing, hand off to `functional-ui`
 - if the choice is an implementation plan, embed this workflow inside `impl-plan`

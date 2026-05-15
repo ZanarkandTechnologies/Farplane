@@ -33,13 +33,18 @@ Use this when the user wants to explore possibilities before locking a product d
 ## Process
 
 - propose 2-4 distinct directions
+- use `reference-grounding` when useful options need examples, local baseline,
+  peer norms, or official behavior before comparison
+- use `research:parity`, `research:competitor`, or
+  `research:source-synthesis` when compact grounding is not enough
 - identify whether the problem still needs divergence or whether to switch into structured decomposition mode
 - compare them on:
   - user value
   - implementation risk
   - speed to first lovable slice
   - dependency cost
-- recommend one best next direction
+- use `advise` to recommend one best next direction when there are multiple
+  credible paths
 - when structure is needed, use one explicit lens inside `brainstorm`:
   - `palantir-customer-data-action` for user/data/action/write-back decomposition
   - `mckinsey-issue-tree` for driver / workstream / root-cause decomposition

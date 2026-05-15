@@ -3,7 +3,10 @@
 ## Purpose
 
 Provide the operator-facing contract for the canonical closeout control surface:
-`$close-ticket`.
+`$close-ticket`. This is a Tier 3 Codexter coding-pipeline closeout skill that
+uses the generic
+[`execute`](/Users/kenjipcx/coding-harness/Codexter/skills/execute/SKILL.md)
+interface's proof and writeback shape.
 
 ## Public API / Entrypoints
 

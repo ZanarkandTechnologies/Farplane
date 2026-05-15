@@ -2,6 +2,8 @@
 
 - [ ] Resolve exactly one active ticket and confirm the remaining work is
   genuinely closeout, not missing implementation.
+- [ ] Use the generic [execute](../execute/SKILL.md) interface's proof and
+  writeback shape, but keep `close-ticket` coding-ticket closeout specific.
 - [ ] Update the ticket writeback: evidence, linked docs, handoff, next action,
   and `last_verification`.
 - [ ] Update durable docs that changed in the final pass: `docs/HISTORY.md`,

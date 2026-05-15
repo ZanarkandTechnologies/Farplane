@@ -8,6 +8,7 @@ Guide agents to act like a reliable consultant when the user has not already cho
 
 - `SKILL.md`: main decision-framing contract
 - `AGENTS.md`: maintenance rules
+- `todos.md`: Tier 1 decision checklist
 
 ## Minimal Example
 
@@ -20,4 +21,6 @@ Guide agents to act like a reliable consultant when the user has not already cho
 
 - Confirm the output contains 3 options.
 - Confirm one option is explicitly recommended.
+- Confirm fact-dependent recommendations are grounded through
+  `reference-grounding` or `research:*`.
 - Confirm the answer does not end with "if you want I can ...".
