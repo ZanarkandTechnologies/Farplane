@@ -10,6 +10,10 @@ allowed-tools: Read, Glob, Grep
 Use this for per-ticket implementation planning after a bounded ticket already
 exists.
 
+`impl-plan` is a Tier 3 Codexter coding-pipeline skill. It implements the
+generic [plan](../plan/SKILL.md) interface for code tickets; it is not the
+universal Tier 2 planning interface for every application domain.
+
 `impl-plan` remains the one public planner:
 
 - default mode: detailed, action-oriented ticket planning
@@ -114,7 +118,10 @@ Before finalizing the plan or handing off to execution:
 7. If intent is still vague, use `deep-interview --quick`.
 8. If system shape is still vague, use `deep-system-design`.
 9. If the repo does not yet implement the target capability clearly enough to
-   scope the work, run `gap-analysis` before finalizing the ticket plan.
+   scope the work, run [research:gap](../research/SKILL.md#researchgap) before
+   finalizing the ticket plan. When the open question is what peer products,
+   standards, or repos include, run
+   [research:parity](../research/SKILL.md#researchparity) first.
 
 Do not hand off to execution while the plan still depends on avoidable
 unknowns.

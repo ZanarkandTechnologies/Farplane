@@ -52,8 +52,8 @@ deterministic.
 
 ## Boundaries
 
-- Use `parity-research` for broad category research.
+- Use `research:parity` for broad category research.
 - Use `best-of-worlds` for synthesis from known sources.
-- Use `gap-analysis` for local missing-scope analysis.
+- Use `research:gap` for local missing-scope analysis.
 - Use `impl-plan` after the synthesis becomes a concrete ticket plan.
 - Do not auto-sync external skill behavior into Codexter skills.

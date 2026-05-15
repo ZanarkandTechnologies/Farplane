@@ -1,6 +1,15 @@
 # Todos
 
 - [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, and nearby code.
+- [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,
+  but keep `impl-plan` coding-specific.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when expected
+  behavior depends on local baseline, official behavior, examples, or peer
+  norms.
+- [ ] Use [research:gap](../research/SKILL.md#researchgap) when missing or
+  partial code work needs current-state gap and production expectation.
+- [ ] Use [research:parity](../research/SKILL.md#researchparity) when external
+  peer norms need to be established before local scope.
 - [ ] Decide whether the whole selected ticket can stay whole or whether a
   real boundary forces a split first.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the proof and execution plan.
@@ -14,6 +23,7 @@
 - [ ] Make proof concrete and observable rather than generic.
 - [ ] Keep metrics and rubrics distinct: metrics are mechanical signals; rubrics are review judgment frames.
 - [ ] If the change is high-risk or contentious, run the `--consensus` version of this skill.
+- [ ] Run [review](../review/SKILL.md) before claiming the plan is ready.
 - [ ] Pitch the full-ticket plan to the user for approval and revise it before
   build starts.
 - [ ] Keep planning separate from implementation and leave the ticket in `review` until approval exists.

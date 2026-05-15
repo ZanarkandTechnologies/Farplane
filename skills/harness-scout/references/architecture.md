@@ -25,10 +25,12 @@ runtime.
   platform, API, or standard claims
 - [brainstorm](../../brainstorm/SKILL.md): explores alternate scout workflows
   when the operator asks for options
-- [parity-research](../../parity-research/SKILL.md): external convergence
-  checks
-- [gap-analysis](../../gap-analysis/SKILL.md): repo-specific missing-scope
-  checks
+- [reference-grounding](../../reference-grounding/SKILL.md): compact evidence
+  checks before scoring source claims
+- [research:parity](../../research/SKILL.md#researchparity): external
+  convergence checks
+- [research:gap](../../research/SKILL.md#researchgap): repo-specific
+  missing-scope checks
 - [best-of-worlds](../../best-of-worlds/SKILL.md): multi-source synthesis
 - [advise](../../advise/SKILL.md): judgement calls when evidence leaves a real
   decision

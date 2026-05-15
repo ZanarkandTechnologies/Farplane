@@ -5,6 +5,9 @@
 Guide agents to produce one clear per-ticket planning artifact, with a detailed
 action-oriented ticket-body plan shape, conditional diagrams when the file map
 alone is not enough, and optional consensus challenge for riskier work.
+This is the Tier 3 coding-pipeline implementation of the generic
+[`plan`](/Users/kenjipcx/coding-harness/Codexter/skills/plan/SKILL.md)
+interface.
 When an `Agent Testability Brief` exists, `impl-plan` should preserve that
 doctrine in the resulting proof and execution plan.
 

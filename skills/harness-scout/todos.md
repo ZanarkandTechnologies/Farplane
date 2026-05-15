@@ -22,10 +22,12 @@
 - [ ] Search `docs/features/registry.jsonl` before declaring anything new.
 - [ ] Search local docs, skills, memory, troubles, tickets, README, and
   ARCHITECTURE for matching behavior.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for compact
+  evidence checks before scoring source claims.
 - [ ] Route external convergence through
-  [parity-research](../parity-research/SKILL.md) when needed.
+  [research:parity](../research/SKILL.md#researchparity) when needed.
 - [ ] Route repo-specific missing scope through
-  [gap-analysis](../gap-analysis/SKILL.md) before ticketing.
+  [research:gap](../research/SKILL.md#researchgap) before ticketing.
 - [ ] Use [best-of-worlds](../best-of-worlds/SKILL.md) for multi-source
   synthesis.
 - [ ] Use [advise](../advise/SKILL.md) for material judgment calls that

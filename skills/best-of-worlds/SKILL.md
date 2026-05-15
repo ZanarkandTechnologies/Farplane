@@ -27,8 +27,12 @@ Use when the user asks to:
 - decide what to adopt, adapt, reject, or defer
 - find metrics or judgement questions before optimizing a workflow
 
-Use `parity-research` when the ask is only "what do peers include?" Use
-`gap-analysis` when the local missing scope is already the main question.
+Use [research:parity](../research/SKILL.md#researchparity) when the ask is
+only "what do peers include?" Use
+[research:gap](../research/SKILL.md#researchgap) when the local missing scope
+is already the main question. Use
+[research:source-synthesis](../research/SKILL.md#researchsource-synthesis) to
+normalize source facts before this skill when the source set is noisy.
 
 ## Workflow
 
@@ -49,7 +53,7 @@ Use `parity-research` when the ask is only "what do peers include?" Use
 7. **Synthesize:** produce the recommended best-of-worlds workflow, file layout,
    metric contract, and implementation steps.
 8. **Handoff:** route implementation to the right skill such as
-   `impl-plan`, `autoresearch-plan`, `self-improve`, `gap-analysis`, or
+   `impl-plan`, `autoresearch-plan`, `self-improve`, `research:gap`, or
    `functional-ui`.
 
 Load `references/feature-scoring.md` before scoring features and

@@ -21,10 +21,12 @@ so future dependency tooling can discover the composition graph:
   repo or implementation pattern that should be checked in real code
 - [documentation](../documentation/SKILL.md) when a candidate depends on
   official API, library, or platform behavior
-- [parity-research](../parity-research/SKILL.md) when the source makes a broad
-  "state of the art" claim
-- [gap-analysis](../gap-analysis/SKILL.md) when a useful source feature is
-  missing or partial locally
+- [reference-grounding](../reference-grounding/SKILL.md) for compact evidence
+  checks before scoring source claims
+- [research:parity](../research/SKILL.md#researchparity) when the source makes
+  a broad "state of the art" claim
+- [research:gap](../research/SKILL.md#researchgap) when a useful source feature
+  is missing or partial locally
 - [best-of-worlds](../best-of-worlds/SKILL.md) when several sources must be
   synthesized
 - [advise](../advise/SKILL.md) when a decision depends on judgment rather than
@@ -53,8 +55,9 @@ every skill on every run.
 | Local baseline search | [codebase-analysis](../codebase-analysis/SKILL.md) | Registry/docs search is not enough to decide whether Codexter already implements the behavior. |
 | Source implementation check | [external-patterns](../external-patterns/SKILL.md) | The source is a repo or makes a code-level implementation claim. |
 | Official behavior check | [documentation](../documentation/SKILL.md) | The candidate depends on current official docs, APIs, standards, or platform behavior. |
-| External convergence | [parity-research](../parity-research/SKILL.md) | The source claims a broad "state of the art" or peer-product norm. |
-| Local missing-scope check | [gap-analysis](../gap-analysis/SKILL.md) | A candidate is absent or partial locally and needs production-grade scope before ticketing. |
+| Reference grounding | [reference-grounding](../reference-grounding/SKILL.md) | A source claim needs compact evidence before scoring. |
+| External convergence | [research:parity](../research/SKILL.md#researchparity) | The source claims a broad "state of the art" or peer-product norm. |
+| Local missing-scope check | [research:gap](../research/SKILL.md#researchgap) | A candidate is absent or partial locally and needs production-grade scope before ticketing. |
 | Multi-source synthesis | [best-of-worlds](../best-of-worlds/SKILL.md) | Several sources mention similar features or competing implementations. |
 | Judgment call | [advise](../advise/SKILL.md) | Evidence leaves a real choice about value, risk, or timing. |
 | Benchmark planning | [autoresearch-plan](../autoresearch-plan/SKILL.md) | A manual scorecard is not enough and a metric-driven experiment is worth scoping. |
@@ -114,9 +117,11 @@ needed; use [summarize](../summarize/SKILL.md) directly.
    `skills/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and tickets. Use
    [codebase-analysis](../codebase-analysis/SKILL.md) when the local match
    depends on code or cross-file behavior.
-10. **Route research:** use [parity-research](../parity-research/SKILL.md) for
-   external convergence claims, [gap-analysis](../gap-analysis/SKILL.md) for
-   repo-specific missing scope, and
+10. **Route research:** use [reference-grounding](../reference-grounding/SKILL.md)
+   for compact evidence checks, [research:parity](../research/SKILL.md#researchparity)
+   for external convergence claims,
+   [research:gap](../research/SKILL.md#researchgap) for repo-specific missing
+   scope, and
    [best-of-worlds](../best-of-worlds/SKILL.md) for multi-source synthesis.
 11. **Score and decide:** label each candidate `already-dominating`,
    `source-dominates`, `hybrid`, `duplicate`, `weak-ignore`,
@@ -131,7 +136,7 @@ needed; use [summarize](../summarize/SKILL.md) directly.
 - **Feature already exists:** mark `already-dominating` or `duplicate`, cite the
   feature record and local surfaces, and do not open a ticket.
 - **Feature partially exists:** mark `hybrid` and run
-  [gap-analysis](../gap-analysis/SKILL.md) before proposing a ticket.
+  [research:gap](../research/SKILL.md#researchgap) before proposing a ticket.
 - **Feature is absent locally:** use a lighter missing-feature score focused on
   source credibility, Codexter fit, cost, risk, and benchmarkability before
   opening an [impl-plan](../impl-plan/SKILL.md) handoff.

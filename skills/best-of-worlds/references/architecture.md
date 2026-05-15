@@ -4,10 +4,12 @@
 
 It does not replace:
 
-- `parity-research`: use for broad category parity before a synthesis target is
-  known.
-- `gap-analysis`: use for repo-local current state versus production
-  expectation.
+- [research:parity](../../research/SKILL.md#researchparity): use for broad
+  category parity before a synthesis target is known.
+- [research:gap](../../research/SKILL.md#researchgap): use for repo-local
+  current state versus production expectation.
+- [research:source-synthesis](../../research/SKILL.md#researchsource-synthesis):
+  use for compact source normalization before a full best-of-worlds pass.
 - `advise`: use for judgement calls when the metric or adoption decision is not
   mechanical.
 - `impl-plan`: use after the best-of-worlds decision becomes a concrete ticket
