@@ -13,9 +13,8 @@
   to Tier 2 surfaces plus intentional peer Tier 3 handoffs only.
 - [ ] Keep external skill packages thin and move Codexter wrapper policy into
   local caller skills.
-- [ ] Use [batch-work](../batch-work/SKILL.md) when the operator wants several
-  low-risk skill updates handled in one bounded pass.
 - [ ] Regenerate and validate the registry with
-  `python3 bin/check_skills.py --write` after edits.
+  `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
+  edits.
 - [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
   ticket evidence.

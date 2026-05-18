@@ -49,16 +49,16 @@ Do not add `before`; reverse lookups should be derived by tooling.
 ## Commands
 
 ```bash
-python3 bin/check_skills.py --write
+python3 skills/skill-maintenance/scripts/check_skills.py --write
 python3 bin/sync_skill_registry.py --write
 python3 bin/sync_skill_registry.py --check
 python3 bin/check_skill_todo_tiers.py
 python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 ```
 
-Run `python3 bin/check_skills.py --write` after editing skill frontmatter,
-`SKILL.md` Markdown links, or `todos.md`. Use the lower-level commands when
-debugging one specific failure.
+Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
+editing skill frontmatter, `SKILL.md` Markdown links, or `todos.md`. Use the
+lower-level commands when debugging one specific failure.
 
 ## Todo Link Contract
 
@@ -95,3 +95,8 @@ Use `source` to decide where wrapper logic belongs:
 Use `skills/skill-maintenance/` for bulk tier, source, todo, registry, and
 consolidation work. Keep this module's docs as the registry contract; keep the
 step-by-step maintenance workflow in that skill.
+
+Use `skills/harness-advisor/` before skill maintenance when the question is
+broader than skills: it compares root policy, global templates, docs/specs,
+skills, subagents, hooks/scripts, ticket contracts, validators, and registry
+metadata before recommending the owning surface.

@@ -12,6 +12,10 @@ agent needs to answer:
 - what evidence proves it works?
 - what limits or metrics should future work consider?
 
+Use `skills/harness-advisor/` when the operator is asking where a proposed
+Codexter improvement should live. That skill checks this registry for existing
+features before recommending a primary surface.
+
 `docs/specs/harness-techniques.md` remains the skimmable human inventory.
 `docs/features/registry.jsonl` is the queryable feature record for technique
 dedupe, provenance, and benchmark history. `docs/sources/registry.jsonl` is the

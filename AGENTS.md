@@ -55,12 +55,13 @@ expanding the always-loaded prompt. Bulk skill edits should read project and
 registry docs first, keep Tier 2 todos linked to Tier 1 primitives, keep Tier 3
 todos linked to Tier 2 surfaces plus intentional peer Tier 3 handoffs, and
 leave external skills without local todos when wrapper logic belongs in callers.
-Run `python3 bin/check_skills.py --write` after skill metadata, Markdown links,
-or `todos.md` changes. See `MEM-0104`.
-Use `batch-work` only when the operator wants bounded bulk progress across
-similar low-risk targets with a shared validation command; keep fragile,
-ambiguous, destructive, or high-risk work on single-ticket passes. See
-`MEM-0105`.
+Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
+skill metadata, Markdown links, or `todos.md` changes. See `MEM-0104`.
+Use `harness-advisor` for Codexter improvement placement decisions before
+expanding root policy, global templates, skills, subagents, hooks/scripts,
+ticket contracts, docs/specs, validators, or registries. It reads the feature
+and skill registries plus the harness doctrine, then recommends the primary
+owning surface. See `MEM-0106`.
 
 When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
 structured outputs, eval prompts, or agent instruction prompts, load

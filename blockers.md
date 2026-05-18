@@ -1,10 +1,16 @@
 # Blockers
 
-Running blocker log for the current multi-ticket Symphony/Codexter implementation train.
+Generic blocker log for multi-ticket or `batch-work` passes.
 
-## Active Blockers
+## Active
 
 - none
+
+## Notes
+
+- Keep ticket-specific blockers in `tickets/TASK-*/ticket.md`.
+- Use this file for cross-ticket blockers that should not stop the rest of a
+  batch.
 
 ## Resolved / Avoided
 

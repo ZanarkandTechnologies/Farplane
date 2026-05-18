@@ -11,7 +11,14 @@ from collections import Counter
 from pathlib import Path
 
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+def find_repo_root(start: Path) -> Path:
+    for candidate in [start, *start.parents]:
+        if (candidate / "bin/sync_skill_registry.py").exists() and (candidate / "skills").exists():
+            return candidate
+    raise RuntimeError("could not find Codexter repo root")
+
+
+REPO_ROOT = find_repo_root(Path(__file__).resolve())
 
 
 def run(command: list[str]) -> None:
@@ -76,7 +83,7 @@ def main() -> int:
                 "py_compile",
                 "bin/sync_skill_registry.py",
                 "bin/check_skill_todo_tiers.py",
-                "bin/check_skills.py",
+                "skills/skill-maintenance/scripts/check_skills.py",
             ]
         )
     except subprocess.CalledProcessError as exc:

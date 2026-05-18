@@ -197,17 +197,17 @@ skill body or `todos.md`, where agents will actually read them.
 The current package inventory is generated instead of hand-maintained. Use:
 
 ```bash
-python3 bin/check_skills.py --write
+python3 skills/skill-maintenance/scripts/check_skills.py --write
 python3 bin/sync_skill_registry.py --write
 python3 bin/sync_skill_registry.py --check
 ```
 
 Current generated baseline:
 
-- `docs/skills/registry.jsonl`: 76 local skill package rows
-- Tier counts: `1 = 3`, `2 = 26`, `3 = 47`
-- `todos.md` coverage: `73 present`, `3 intentionally missing external`
-- Source counts: `local = 73`, `external = 3`
+- `docs/skills/registry.jsonl`: 77 local skill package rows
+- Tier counts: `1 = 3`, `2 = 27`, `3 = 47`
+- `todos.md` coverage: `74 present`, `3 intentionally missing external`
+- Source counts: `local = 74`, `external = 3`
 - External skills without local todos: `agent-browser`, `convex`, and
   `vercel-react-best-practices`
 - Method-addressed skill metadata exists where it is real, with `research`

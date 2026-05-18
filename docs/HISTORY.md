@@ -194,3 +194,4 @@
 2026-05-18 22:26 +0800 | FEAT | add skill source metadata and move browser QA wrapper logic into the QA skill
 2026-05-19 03:34 +0800 | FEAT | add bulk skill todos, external Convex pointer, and skill-maintenance workflow
 2026-05-19 04:06 +0800 | FEAT | add batch-work skill and one-command skill-system validation
+2026-05-19 04:26 +0800 | FEAT | add Tier 2 harness-advisor for Codexter improvement placement decisions

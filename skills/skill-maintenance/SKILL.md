@@ -51,7 +51,7 @@ source ownership, registry sync, link hygiene, or consolidation planning.
 6. Run the standard skill-system check:
 
 ```bash
-python3 bin/check_skills.py --write
+python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```
 
 This command regenerates the registry, verifies registry metadata, checks
@@ -64,9 +64,7 @@ python3 bin/sync_skill_registry.py --check
 python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 ```
 
-7. Use [batch-work](../batch-work/SKILL.md) when the operator wants several
-   low-risk skill updates handled in one bounded pass.
-8. Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
+7. Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
    ticket evidence after skill changes.
 
 ## Outcome Contract
@@ -76,4 +74,5 @@ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 - `docs/skills/registry.jsonl` is regenerated, not hand-edited.
 - External-source skills remain easy to refresh.
 - Consolidation candidates are ticketed or documented before hard migration.
-- `python3 bin/check_skills.py --write` passes before completion is claimed.
+- `python3 skills/skill-maintenance/scripts/check_skills.py --write` passes
+  before completion is claimed.

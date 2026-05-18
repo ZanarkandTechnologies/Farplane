@@ -17,8 +17,11 @@ Rules:
   command-shaped refresh metadata until a second source proves it is needed.
 - Use `skills/skill-maintenance/` for bulk skill tier/source/todo/registry
   upkeep instead of expanding global prompt rules.
-- Run `python3 bin/check_skills.py --write` after skill frontmatter, Markdown
-  links, or `todos.md` changes.
+- Use `skills/harness-advisor/` first when the operator is deciding where a
+  Codexter improvement belongs across root policy, global templates, docs/specs,
+  skills, subagents, hooks/scripts, ticket contracts, validators, or registries.
+- Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
+  skill frontmatter, Markdown links, or `todos.md` changes.
 - Tier 3 `todos.md` files must not direct-link Tier 1 primitives such as
   `advise`, `reference-grounding`, or `review`; link the relevant Tier 2 surface
   instead and let that surface carry Tier 1 obligations.
