@@ -2,6 +2,7 @@
 name: visual-qa
 version: 0.2.0
 description: "UI verification and visual debugging skill for agents. Enforces ticket-first, taste-aware screen comparison with Expected UI Spec -> Observed Snapshot Report -> Diff Report -> Fix Plan, plus geometry/layout assertions and evidence artifacts."
+tier: 2
 ---
 
 # Visual QA Skill

@@ -1,6 +1,7 @@
 ---
 name: coderabbit-review
 description: Use when you want a heavyweight external CodeRabbit CLI review pass on local changes or a PR-sized branch, usually before push or on a PR branch rather than inside the Stop-hook loop.
+tier: 2
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

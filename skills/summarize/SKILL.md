@@ -1,6 +1,7 @@
 ---
 name: summarize
 description: Summarize or extract text/transcripts from URLs, podcasts, and local files.
+tier: 2
 homepage: https://summarize.sh
 metadata:
   {

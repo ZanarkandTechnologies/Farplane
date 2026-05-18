@@ -2,6 +2,8 @@
 name: ai-marketing-videos
 version: 1.0.0
 description: Plan and produce AI marketing videos, promo clips, launch videos, product demos, brand videos, testimonials, commercial scenes, and paid ad creative. Use for marketing video, ad video, promo video, commercial, brand video, product video, product launch video, Facebook/YouTube/Instagram/TikTok ad creative, and campaign video workflows. Routes model-native generation through `video-generation`, still assets through `imagegen` or `image-generation`, and frontend integration through `frontend-craft`.
+tier: 3
+group: content-video
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

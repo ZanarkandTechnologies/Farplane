@@ -2,6 +2,8 @@
 name: video-generation
 version: 1.0.0
 description: Generate or edit AI video assets with inference.sh `belt` video apps, using the broad AI-video model map plus Codexter's workspace, spend-gate, and frontend QA rules. Covers Google Veo, Seedance 2.0, HappyHorse, Wan, Grok, P-Video, avatar/lipsync, image-to-video, video editing, foley discovery, upscaling, social media videos, marketing clips, explainer videos, product demos, and frontend-bound video assets. Route React/Remotion code authoring to `remotion` and inference.sh code-to-video renders to `remotion-render`.
+tier: 3
+group: content-video
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

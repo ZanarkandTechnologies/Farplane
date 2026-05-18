@@ -1,7 +1,9 @@
 ---
 name: research
 version: 0.1.0
-description: Tier 2 evidence workflow with method-addressed research passes: research:parity, research:gap, research:competitor, research:official-docs, research:code-patterns, and research:source-synthesis.
+description: Tier 2 evidence workflow with method-addressed research passes: research:parity, research:gap, research:competitor, research:official-docs, research:code-patterns, research:user-grounding, and research:source-synthesis.
+tier: 2
+methods: ["research:parity", "research:gap", "research:competitor", "research:official-docs", "research:code-patterns", "research:user-grounding", "research:source-synthesis"]
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -10,6 +12,9 @@ allowed-tools: Read, Glob, Grep
 Use this as the Tier 2 research workflow when the task needs grounded
 references without ideation. Pick one method explicitly and keep the output
 compact enough for `brainstorm`, `plan`, or a domain pipeline to consume.
+This is a method-addressed surface, not a sequential checklist: choose one
+primary method, add a supporting method only when the primary brief exposes a
+real gap, and stop when the downstream skill has enough evidence.
 
 This skill absorbs the former public `parity-research` and `gap-analysis`
 packages. Use method addresses instead of nested research routers.
@@ -21,6 +26,7 @@ Methods:
 - `research:competitor`
 - `research:official-docs`
 - `research:code-patterns`
+- `research:user-grounding`
 - `research:source-synthesis`
 
 ## First-Load Contract
@@ -131,6 +137,41 @@ actually implement a pattern, API, state flow, file layout, or test strategy.
 5. Return a `Pattern Brief` with examples, common implementation shape,
    compatibility caveats, and local recommendation.
 
+## research:user-grounding
+
+Use `research:user-grounding` when a product, UI, content, docs, onboarding,
+or workflow decision needs a grounded view of the people or roles affected
+before comparing options.
+
+This method is not fake persona writing. It derives or hypothesizes user
+lenses from the available context, labels confidence, and turns those lenses
+into decision criteria for `plan`, `advise`, `functional-ui`, `prd`, content
+planning, or another domain skill.
+
+### Workflow
+
+1. Name the artifact or workflow being shaped and the decision it needs to
+   inform.
+2. Extract known users, stakeholders, operators, or audiences from the request,
+   PRD, ticket, screenshots, analytics, support notes, existing product, or
+   comparable examples.
+3. Identify `2-4` user groups only when they change the product decision.
+4. For each group, state job-to-be-done, context, constraints, pain points,
+   success signals, and confidence level.
+5. Write concrete job stories or user stories that can judge the options.
+6. Name conflicts between groups and the decision criteria they imply.
+7. Return a `User Grounding Brief` with user groups, stories, decision
+   criteria, confidence notes, and the recommended next route.
+
+### Branches
+
+- If the main work is UI or workflow shape: hand off to `functional-ui`.
+- If the main work is requirements: hand off to `prd`.
+- If the main work is a content asset or campaign: hand off to the relevant
+  content or media skill.
+- If evidence is too thin, mark the user lens as a hypothesis instead of
+  inventing demographic detail.
+
 ## research:source-synthesis
 
 Use `research:source-synthesis` when several sources need to be summarized into
@@ -158,6 +199,8 @@ Use the method-specific title and keep these fields where they apply:
 - `Capability / target`
 - `Local baseline`
 - `Sources / comparable implementations`
+- `User groups / job stories`
+- `Decision criteria`
 - `Common surfaces / current expectation`
 - `Current state`
 - `Missing gaps / repo delta`

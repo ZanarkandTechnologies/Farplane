@@ -37,6 +37,9 @@ Current design docs:
 - `orchestrator-subagent-loop.md`
 - `runtime-surface.md`
 - `review-gates.md`
+- `skill-tier-rollout-plan.md` - planning draft for mapping local skills into
+  Tier 1 primitives, Tier 2 workflow interfaces/methods, and Tier 3 application
+  skills before a dedicated skill registry rollout
 - `spec-first-execution-loop.md`
 - `spec-authoring-contract.md` - PRD/spec/ticket layer split, spec depth
   decisions, service-runtime spec template, and conformance matrix format

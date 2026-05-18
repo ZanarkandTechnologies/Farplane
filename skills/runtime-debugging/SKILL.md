@@ -2,6 +2,7 @@
 name: runtime-debugging
 version: 0.1.0
 description: "Hypothesis-driven runtime debugging skill for reproducible bugs, flaky failures, regressions, and performance or memory issues where reading code alone is insufficient. Use when you need instrumentation, runtime evidence, root-cause analysis, and proof of the fix."
+tier: 2
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

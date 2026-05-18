@@ -1,9 +1,9 @@
 ---
 name: delegate-frontend
 version: 0.1.0
-description: Delegate bounded frontend planning, asset, implementation, or review phases to the configured Pi/Kimi frontend CLI profile while preserving Codexter ownership and auditability.
-allowed-tools: Bash, Read, Glob, Grep
 description: Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Codexter ticket, QA, visual review, and integration authority.
+tier: 3
+group: frontend
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

@@ -22,16 +22,16 @@
 - [ ] Search `docs/features/registry.jsonl` before declaring anything new.
 - [ ] Search local docs, skills, memory, troubles, tickets, README, and
   ARCHITECTURE for matching behavior.
-- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for compact
-  evidence checks before scoring source claims.
+- [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
+  for compact evidence checks before scoring source claims.
 - [ ] Route external convergence through
   [research:parity](../research/SKILL.md#researchparity) when needed.
 - [ ] Route repo-specific missing scope through
   [research:gap](../research/SKILL.md#researchgap) before ticketing.
 - [ ] Use [best-of-worlds](../best-of-worlds/SKILL.md) for multi-source
   synthesis.
-- [ ] Use [advise](../advise/SKILL.md) for material judgment calls that
-  evidence cannot settle.
+- [ ] Use the [plan](../plan/SKILL.md) interface for material judgment calls
+  that evidence cannot settle.
 - [ ] Score each candidate and choose `adopt`, `adapt`, `reject`, or `defer`.
 - [ ] Create an [impl-plan](../impl-plan/SKILL.md) handoff only for strong
   `adopt` or `adapt` items.

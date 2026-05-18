@@ -2,6 +2,7 @@
 name: testing
 version: 1.1.0
 description: "Testing index skill for selecting backpressure and domain guidance."
+tier: 2
 ---
 
 # Testing Index

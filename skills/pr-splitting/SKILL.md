@@ -1,6 +1,8 @@
 ---
 name: pr-splitting
 description: Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-first slices and falling back to layer-based buckets when feature seams are too entangled.
+tier: 3
+group: coding
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

@@ -2,6 +2,7 @@
 name: commit-message
 version: 0.1.0
 description: "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo style: type(scope): lower-case imperative summary."
+tier: 2
 allowed-tools: Read, Glob, Grep
 ---
 

@@ -2,6 +2,8 @@
 name: prd
 version: 1.0.0
 description: "Phase-1 Codexter skill for requirements gathering and PRD authoring."
+tier: 3
+group: coding
 ---
 
 # PRD Skill

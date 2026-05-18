@@ -37,11 +37,19 @@ usually via `best-of-worlds`. See `MEM-0073`.
 Keep skill dependencies tiered rather than hidden behind nested routers:
 Tier 1 primitives cover `advise`, `reference-grounding`, `review`, and
 `todos.md` loading; Tier 2 names generic workflow interfaces such as
-`brainstorm`, `research:*`, `plan`, and `execute`; Tier 3 application pipelines
-implement those interfaces for a domain. In Codexter today, `spec-to-ticket`,
-`impl-plan`, `$impl`, and `close-ticket` are coding-pipeline skills, not the
+`brainstorm`, `research:*`, `plan`, and `execute`; Tier 3 application skills
+implement those interfaces for a domain. Tier 3 `todos.md` files should usually
+link Tier 2 surfaces rather than direct Tier 1 primitives, because Tier 2
+carries the Tier 1 obligations. In Codexter today, `spec-to-ticket`,
+`impl-plan`, `$impl`, and `close-ticket` are coding workflow skills, not the
 generic Tier 2 interfaces themselves. Keep `skill:method` names as explicit
-addresses inside one owning skill surface. See `MEM-0098`.
+addresses inside one owning skill surface. The skill registry check enforces
+this by failing when Tier 3 `todos.md` direct-links Tier 1 primitives. See
+`MEM-0098` and `MEM-0100`.
+Create new Tier 1 primitives only when multiple Tier 2 interfaces need that
+move as a base dependency; otherwise keep common reusable work as a Tier 2
+interface or method. User research starts as `research:user-grounding`, not a
+Tier 1 primitive. See `MEM-0101`.
 
 When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
 structured outputs, eval prompts, or agent instruction prompts, load

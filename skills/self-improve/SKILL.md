@@ -1,6 +1,8 @@
 ---
 name: self-improve
 description: Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, or run binary assertion based skill optimization through the autoresearch artifact contract.
+tier: 3
+group: self-improvement
 ---
 
 # Self Improve

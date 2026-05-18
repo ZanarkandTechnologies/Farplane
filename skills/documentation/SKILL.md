@@ -1,6 +1,7 @@
 ---
 name: documentation
 description: Workflows for fetching and synthesizing official documentation using Ref tools. Use when you need official docs for a library or framework.
+tier: 2
 ---
 
 # Documentation Skill

@@ -1,6 +1,7 @@
 ---
 name: advise
 description: Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.
+tier: 1
 ---
 
 # Advise

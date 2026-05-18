@@ -2,6 +2,7 @@
 name: plan
 version: 0.1.0
 description: Tier 2 generic planning interface. Use when a workflow needs to turn intent into executable shape, proof, and handoff rules without importing a domain-specific planning skill as the universal pattern.
+tier: 2
 allowed-tools: Read, Glob, Grep
 ---
 

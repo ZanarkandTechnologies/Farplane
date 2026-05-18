@@ -1,6 +1,8 @@
 ---
 name: demo-realism
 description: Use when an MVP, prototype, or client demo feels fake and needs believable operational workflows, realistic demo data, and a presentation-worthiness rubric before design or implementation begins.
+tier: 3
+group: coding
 ---
 
 # Demo Realism

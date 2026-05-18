@@ -2,6 +2,8 @@
 name: convex
 version: 3.1.0
 description: "Convex reactive backend development. Decision tree for references + links to official docs."
+tier: 3
+group: backend
 ---
 
 # Convex Skill

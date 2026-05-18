@@ -183,4 +183,11 @@
 2026-05-07 18:05 +0800 | FEAT | add output-quality gates, compact phase-scoped Pi delegation, first-viewport hero-offer QA, and a passing Pi/Kimi sidecar repair scoring `99/100`
 2026-05-07 18:27 +0800 | FEAT | mount `agent-browser` into the Pi/Kimi frontend profile and require delegated runnable UI handoffs to capture same-thread browser QA evidence
 2026-05-14 04:33 +0800 | FEAT | add feed-scout tracked-profile monitoring recipe with URL-keyed content ledger helpers and Notion proposal templates
-2026-05-15 05:53 +0800 | FEAT | reimplement skill hierarchy manually with Tier 1 reference grounding, Tier 2 plan/execute interfaces, method-addressed research, and coding-pipeline bindings
+2026-05-15 05:53 +0800 | FEAT | reimplement skill hierarchy manually with Tier 1 reference grounding, Tier 2 plan/execute interfaces, method-addressed research, and coding workflow bindings
+2026-05-15 21:23 +0800 | FEAT | add a frontmatter-synced skill registry with Tier 3 groups, generated links, and a minimal skill metadata contract
+2026-05-15 21:57 +0800 | FEAT | complete Phase 1 content skill todo rollout with linked checklists for marketing, social, image, video, and Remotion skills
+2026-05-15 22:27 +0800 | FIX | harden the skill registry check so Tier 3 todos cannot direct-link Tier 1 primitives
+2026-05-15 22:32 +0800 | FEAT | add a skill todo tier checker for strict one-level-down dependency audits
+2026-05-16 12:30 +0800 | FEAT | add research:user-grounding and codify the Tier 1 promotion rule for reusable skills
+2026-05-17 08:45 +0800 | FIX | make research router todos conditional instead of implying every research method should run
+2026-05-17 08:48 +0800 | FEAT | add frontend proof-stack todos for browser proof, guideline audit, UX, visual design, frontend references, and frontend orchestration

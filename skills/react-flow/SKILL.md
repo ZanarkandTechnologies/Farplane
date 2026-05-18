@@ -1,6 +1,8 @@
 ---
 name: react-flow
 description: Index of best practices for building graph-based applications and node-based editors using React Flow.
+tier: 3
+group: frontend-data
 allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Edit, LS
 ---
 

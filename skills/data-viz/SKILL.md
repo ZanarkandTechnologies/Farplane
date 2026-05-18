@@ -1,6 +1,8 @@
 ---
 name: data-viz
 description: Index of best practices for building charts, dashboards, and knowledge graphs using D3.js and Recharts.
+tier: 3
+group: frontend-data
 allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Edit, LS
 ---
 

@@ -2,6 +2,8 @@
 name: pr-runtime
 version: 0.1.0
 description: "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer or declared QA target."
+tier: 3
+group: coding
 allowed-tools: Read, Glob, Grep
 ---
 

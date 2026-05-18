@@ -2,6 +2,8 @@
 name: talking-head-production
 version: 1.0.0
 description: Produce talking-head, avatar, lipsync, AI spokesperson, presenter, course, demo, and social video workflows. Covers portrait requirements, voiceover, scripts, avatar model selection, P-Video-Avatar, OmniHuman, Fabric, PixVerse, and lipsync production. Routes generation through `video-generation` and still portraits through `imagegen` or `image-generation`.
+tier: 3
+group: content-video
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

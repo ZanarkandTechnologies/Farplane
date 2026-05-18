@@ -1,6 +1,7 @@
 ---
 name: deep-system-design
 description: Socratic deep system-design interview with ambiguity gating before implementation planning. Use when user intent is clear but entities, signatures, storage, execution boundaries, queues, retries, and architecture choices are still under-specified.
+tier: 2
 argument-hint: "[--quick|--standard|--deep] [--customer-first|--data-first] <system, feature, service, or architecture idea>"
 allowed-tools: Read, Glob, Grep
 ---

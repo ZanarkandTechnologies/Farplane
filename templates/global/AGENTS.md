@@ -99,16 +99,22 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
 - Tier 1 primitives are core thinking defaults: `advise` for deciding among
   real options, `reference-grounding` for examples/docs/peers/repos before
   claims, `review` for challenge before completion claims, and skill
-  `todos.md` loading as the anti-forgetting discipline.
+  `todos.md` loading as the anti-forgetting discipline. Create a new Tier 1
+  primitive only when multiple Tier 2 interfaces need that move as a base
+  dependency.
 - Tier 2 skills are generic workflow interfaces: `brainstorm` explores
   direction, `research:*` gathers grounded references without ideation,
   `plan` turns intent into executable shape, and `execute` does the work and
-  proves it.
-- Tier 3 skills are application/domain pipelines that implement Tier 2
-  interfaces. In Codexter today, `spec-to-ticket`, `impl-plan`, `$impl`, and
-  `close-ticket` are coding-pipeline skills, not universal Tier 2 workflows.
-  Presentation, document, frontend, video, image, and data pipelines should bind
-  the same generic interfaces to their own domain-specific skills.
+  proves it. Common reusable work that is not a cross-Tier-2 primitive should
+  start as a Tier 2 method, such as `research:user-grounding` for user groups,
+  jobs, stories, contexts, friction, and success criteria.
+- Tier 3 skills are application/domain skills that implement Tier 2 interfaces.
+  Their `todos.md` files should usually link Tier 2 surfaces rather than direct
+  Tier 1 primitives, because Tier 2 carries the Tier 1 obligations. In
+  Codexter today, `spec-to-ticket`, `impl-plan`, `$impl`, and `close-ticket`
+  are coding workflow skills, not universal Tier 2 workflows. Presentation,
+  document, frontend, video, image, and data workflows should bind the same
+  generic interfaces to their own domain-specific skills.
 - `skill:method` names are explicit method addresses inside one owning skill,
   not a license to build nested routers. Prefer one method-addressed skill over
   several same-level wrapper skills when the methods share one workflow surface.
@@ -122,9 +128,16 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
 - when a `todos.md` item links another skill or method as a required dependency,
   import the relevant linked obligation into your active checklist and load only
   the smallest needed part of that dependency
+- keep the active checklist cumulative for the current step: include the
+  invoked skill's todos, imported dependency obligations, proof checks, and
+  review closeout items until they are done or explicitly blocked
 - avoid recursive traversal through wrapper skills unless the current task
   explicitly needs the deeper method; method addresses such as `research:gap`
   should land in one owning skill surface
+- for router-style skills with method addresses, do not run every listed method
+  sequentially; choose one primary method, add supporting methods only when a
+  concrete trigger appears, and stop when the downstream skill has enough
+  evidence or plan shape
 - prefer the skill's existing todo list over inventing a fresh mini-workflow
   in chat unless the current task clearly needs a deviation
 

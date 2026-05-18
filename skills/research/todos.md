@@ -1,35 +1,36 @@
 # Todos
 
-- [ ] Choose one method first:
+- [ ] Choose exactly one primary method first:
   [research:parity](SKILL.md#researchparity),
   [research:gap](SKILL.md#researchgap),
   [research:competitor](SKILL.md#researchcompetitor),
   [research:official-docs](SKILL.md#researchofficial-docs),
   [research:code-patterns](SKILL.md#researchcode-patterns), or
+  [research:user-grounding](SKILL.md#researchuser-grounding), or
   [research:source-synthesis](SKILL.md#researchsource-synthesis).
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) as the Tier 1
   evidence discipline: local baseline, primary sources, source confidence, and
   local impact.
 - [ ] Read the active ticket, local docs, specs, registry rows, or nearby code
   needed to state the local baseline.
-- [ ] Use [documentation](../documentation/SKILL.md) or
-  [research:official-docs](SKILL.md#researchofficial-docs) when correctness
-  depends on official API, platform, standard, or library behavior.
-- [ ] Use [external-patterns](../external-patterns/SKILL.md) or
-  [research:code-patterns](SKILL.md#researchcode-patterns) when real repository
-  implementation examples matter.
-- [ ] Use [research:parity](SKILL.md#researchparity) before local scope when the
-  question is what peer products, standards, or reference repos consistently
-  include.
-- [ ] Use [research:gap](SKILL.md#researchgap) before a domain planning skill
-  when a missing or partial feature needs current-state gap and production
-  expectation.
-- [ ] Use [research:source-synthesis](SKILL.md#researchsource-synthesis) to
-  normalize several sources, then [best-of-worlds](../best-of-worlds/SKILL.md)
-  when the job becomes adopt/adapt/reject/defer synthesis.
-- [ ] Use [advise](../advise/SKILL.md) when evidence leaves a real judgment call
-  about value, risk, timing, or scope.
-- [ ] Hand implementation-shaped work to the relevant domain planning skill,
-  such as [impl-plan](../impl-plan/SKILL.md) for coding.
+- [ ] Add a supporting method only when the primary method exposes a real gap:
+  - official/API uncertainty -> [research:official-docs](SKILL.md#researchofficial-docs)
+    or [documentation](../documentation/SKILL.md)
+  - real repo implementation pattern needed ->
+    [research:code-patterns](SKILL.md#researchcode-patterns) or
+    [external-patterns](../external-patterns/SKILL.md)
+  - peer/product norm missing -> [research:parity](SKILL.md#researchparity)
+  - current-state production gap needed -> [research:gap](SKILL.md#researchgap)
+  - user groups, jobs, stories, context, friction, or success signals needed ->
+    [research:user-grounding](SKILL.md#researchuser-grounding)
+  - several sources need normalization ->
+    [research:source-synthesis](SKILL.md#researchsource-synthesis)
+- [ ] Stop after the smallest method set that can produce the needed brief; do
+  not run every research method by default.
+- [ ] Route the brief to the next owner:
+  [advise](../advise/SKILL.md) for judgment calls,
+  [best-of-worlds](../best-of-worlds/SKILL.md) for adopt/adapt/reject/defer
+  synthesis, or the relevant domain planning skill such as
+  [impl-plan](../impl-plan/SKILL.md) for coding.
 - [ ] Run [review](../review/SKILL.md) after meaningful research-skill,
   registry, ticket-handoff, or public-doc changes.

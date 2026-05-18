@@ -1,6 +1,8 @@
 ---
 name: qa
 description: Run the QA phase for one selected ticket by collecting proof artifacts, reconciling acceptance criteria, and producing a structured QA result artifact for Stop-hook gating.
+tier: 3
+group: coding
 ---
 
 # QA

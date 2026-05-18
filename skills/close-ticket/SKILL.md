@@ -1,6 +1,8 @@
 ---
 name: close-ticket
 description: Parent closeout skill for one selected ticket. Use when implementation and review are done and the remaining work is durable docs writeback, final checks, commit prep, and optional push/publish.
+tier: 3
+group: coding
 ---
 
 # Close Ticket

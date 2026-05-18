@@ -2,6 +2,7 @@
 name: brainstorm
 version: 0.1.0
 description: "Early-stage option exploration before requirements commitment."
+tier: 2
 ---
 
 # Brainstorm

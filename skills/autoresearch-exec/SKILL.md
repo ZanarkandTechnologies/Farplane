@@ -1,6 +1,8 @@
 ---
 name: autoresearch-exec
 description: Use when an autoresearch session exists or the user asks to run, continue, resume, or execute metric-driven autoresearch experiments with keep/discard decisions based on autoresearch.md, autoresearch.sh, checks, and autoresearch.jsonl.
+tier: 3
+group: self-improvement
 ---
 
 # Autoresearch Exec

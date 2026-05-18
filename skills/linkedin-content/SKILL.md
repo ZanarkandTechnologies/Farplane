@@ -2,6 +2,8 @@
 name: linkedin-content
 version: 1.0.0
 description: Plan and write LinkedIn content, thought-leadership posts, B2B posts, professional carousels, hooks, comments, and personal-brand content. Use for LinkedIn posts, LinkedIn strategy, professional content, B2B content, founder posts, hiring posts, and LinkedIn carousel planning. Routes writing through domain guidance, carousels through `social-media-carousel`, visuals through `imagegen` or `image-generation`, and campaign bundles through `frontend-craft`.
+tier: 3
+group: content-social
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

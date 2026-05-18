@@ -2,6 +2,8 @@
 name: visual-design
 version: 1.0.0
 description: Use when the user wants a frontend to look better, feel more tasteful, define a visual system, improve typography/color/layout/motion taste, or apply anti-slop visual direction after the functional workflow is known. Complements functional-ui and feeds frontend-craft implementation.
+tier: 3
+group: frontend
 allowed-tools: Read, Grep, Glob
 ---
 
