@@ -81,133 +81,22 @@ products, standards, or open-source repos consistently include for a
 capability, use `research:parity` first and then route the result into
 `research:gap`, `functional-ui`, or `impl-plan`. See `MEM-0097`.
 
-For frontend work, use the Codexter frontend topology: `frontend-craft` is the
-implementation orchestrator, `functional-ui` owns UX/workflow and broken-UI
-redesign, `visual-design` owns look/taste/visual systems, and `landing-page`
-owns one-page marketing or scrolltelling surfaces. Keep `frontend-design` as an
-app-UI implementation reference. The old cinematic landing skill package was
-removed; route those asks to `landing-page`. See `MEM-0072`.
-Frontend implementation skills must preserve that topology while requiring stack
-facts before build, current shadcn registry/theme discovery, numeric taste dials,
-durable design briefs for substantial UI, component state matrices for reusable
-UI, and responsive/reduced-motion/theme preflight proof. See `MEM-0085`.
-For premium, cinematic, Terminal-style, or externally delegated landing pages,
-`landing-page` must use a spec-first planner/executor split: approved
-`LANDING_SPEC` before build handoff, then section-quality and designer-judgment
-QA before premium claims. See `MEM-0076`.
-Premium, cinematic, Terminal-style, or generated-media landing pages also need
-generated or real filesystem-backed asset evidence before final quality claims;
-code-rendered canvas, WebGL, Three.js, procedural, and HTML/CSS visuals are
-support visuals unless the page is explicitly downgraded to prototype. See
-`MEM-0077` and `MEM-0080`.
-Premium landing-page planning must research competitor/comparable/inspiration
-references before story and asset planning, then route patterns through
-best-of-worlds adopt/adapt/reject/defer decisions and a brainstormed unique
-take before executor handoff. See `MEM-0078`.
-Premium product, device, hardware, equipment, or object-focused landing pages
-must plan realistic product shots/renders, in-context use, assembly/disassembly
-or exploded-view media, highlighted parts/features, and meaningful product-state
-scroll/video sequences. Generic infographics, abstract diagrams, dashboards, and
-label-only scrubs are support visuals only. See `MEM-0079`.
-Premium landing-page graphics must not be hand-authored SVG illustrations, SVG
-diagrams, or SVG overlay art. Use generated/real raster media, or real
-WebGL/Three.js when a procedural scene is warranted. See `MEM-0080`.
-Premium product landing pages must also keep the product visually inspectable:
-dark overlays, WebGL effects, video opacity, tiny crops, or inaccessible color
-choices cannot obscure the object, and teardown/exploded-view media needs a
-disassembly score with no baked readable text. See `MEM-0082`.
-Premium cinematic hero scroll-scrub must be a long authored sequence with
-named beats, progress ranges, synchronized GSAP/WebGL/Three.js/HTML effect
-layers, and QA evidence for media time, active beat, and effect-layer state.
-See `MEM-0081`.
-Premium scroll-scrub QA must also prove the pinned scene remains visible at
-each checkpoint. Media time, labels, or frame-source changes are not enough;
-assert pinned-panel and primary-visual viewport intersection, capture visual
-region screenshots or hashes, and prefer `overflow-x: clip` over
-`overflow-x: hidden` when CSS sticky is involved. See `MEM-0083`.
-Premium `generated-video` evidence must come from a real video-generation
-model/app or source video. Seedream/image-generator stills or generated frame
-sequences assembled with local `ffmpeg` are `frame-sequence`/prototype assets,
-not generated-video proof. See `MEM-0084`.
-For cinematic, Terminal-style, GSAP-scroll, generated-video, or frame-sequence
-landing pages, route through the landing-page JSON registries:
-`landing-recipes.json`, `taste-profiles.json`, and `effect-stacks.json`. Keep
-`cinematic-scroll-site-guideline.md` as a compatibility pointer only. See
-`MEM-0079`.
-For Terminal-style, cinematic, generated-media, or premium industrial landing
-pages delegated to external CLIs, enforce the `landing-page` spec-first gate and
-split work into spec, assets, implementation, and visual-review phases. Treat
-timed-out partial runs as failed handoffs, not successful builder output. See
-`MEM-0080`.
-Pi/Kimi frontend delegation uses a manifest-driven skill bundle. Keep external
-frontend CLI profiles on repo-owned inference.sh media skills such as
-`image-generation`, `video-generation`, Remotion, and related frontend/media
-skills; do not mount Codex-native `imagegen` into Pi bundles. See `MEM-0083`.
-Pi/Kimi frontend profiles must also mount `agent-browser` so delegated builders
-can collect same-thread browser QA evidence such as snapshots, screenshots,
-console logs, and page errors before handoff. See `MEM-0096`.
-For Pi/Kimi implementation repair passes, require an early first-write
-checkpoint to the named file before broad rereads or critique. If the external
-run does not create the expected artifact promptly, record it as a failed
-handoff and split or repair locally; live delegate runs should use
-`--expect-output` so `first_write.json` proves whether the agent crossed from
-planning into regular-file production. Do not count agent activity, directory
-creation, or symlink creation as frontend progress. See `MEM-0084`.
-For Terminal/Terminus-level frontend self-improvement, judge external output
-with binary gates for first-write, strict scroll debug, fake-scroll rejection,
-checkpoint screenshot delta, and generated/rendered asset manifest quality.
-`code-native-canvas` with zero media assets is prototype evidence, not final
-visual parity. See `MEM-0085`.
-For Terminal/Terminus final landing-page QA, distinguish scroll mechanics from
-final readiness: `scroll_scrub_qa.cjs` may report `verdict: PASS` while
-`terminalVerdict: FAIL` if media pipeline, dominant hero media, distributed
-checkpoint deltas, support media, or relevant mobile phrase separation are
-missing. See `MEM-0089`.
-For Terminal/Terminus final landing-page QA, require first-viewport offer
-visibility. Dominant generated media is not enough when the hero headline or
-offer copy is hidden until after the first scroll; track this through
-`hasInitialHeroOfferVisible`. See `MEM-0094`.
-For Pi/Kimi frontend startup probes, require `first_write.json` pass, at least
-one session file, a regular probe output, and a non-placeholder handoff; session
-creation alone is not enough. Use the compiled startup probe with
-`--thinking low` and a 90-second first-write gate before expensive compiled
-frontend phases. See `MEM-0086`.
-For self-improve evals with intentionally bad fixtures, score the headline
-metric against expected accept/reject outcomes, not raw assertion ratio. Keep
-raw assertion pass rate as a diagnostic so reject-control quality-gate failures
-do not look like regressions. See `MEM-0087`.
-For Terminal-style delegated landing pages, mobile hero phrase separation is a
-QA signal: when a multi-phrase hero title relies on explicit line breaks,
-require `hasMobileHeroPhraseSeparation` or equivalent visual proof before
-treating mobile polish as passing. See `MEM-0088`.
-For Pi/Kimi repair first-write on existing built frontend files, preserve the
-existing artifact. Use a non-destructive marker or tiny targeted edit, and for
-large generated media repairs prefer a loaded sidecar script or small CSS-owned
-output over asking the delegate to reread and rewrite the full implementation.
-See `MEM-0093`.
-For bounded Pi/Kimi micro-repairs, prefer compact prompts, a phase-scoped skill
-bundle, and explicit command-shaped first-write instructions after prose prompts
-fail to start or cross first-write. Pair these with output-quality gates so
-stubs and no-op edits cannot cleanly complete. See `MEM-0095`.
-For UI source reviews, run `web-design-guidelines` through the
-`review` skill's `frontend-guidelines` lane and record that score beside
-`ui-quality` so taste judgment and source-level interface fundamentals remain
-comparable. See `MEM-0076`.
-
-Codexter invocation is normal Codex plus installed Codexter skills, not a
-standalone CLI product. Keep `bin/codexter_invocation.py` diagnostic and
-artifact-oriented: it may validate `WORKFLOW.md`, normalize tickets, select
-compute, route to skills, and write proof packets, but must not launch Codex,
-poll boards, own retries, or take over Symphony's scheduler responsibilities.
-Ticket existence, `ready: true`, status movement, and `compute_target` changes
-are not run triggers; only explicit invocation should start Codexter work. See
-`MEM-0077` and `MEM-0081`.
-
-Codexter V2 is capped at explicit invocation triggers, board adapter
-conformance scaffolding, and external compute handoff recipes. Do not expand
-the Symphony-inspired work into a Codexter-owned daemon, hosted control plane,
-parallel runner, cloud wrapper, or external board adapter without a fresh
-project-ticket need. See `MEM-0082`.
+For frontend, landing-page, media, and external frontend delegation work, use
+the owning skills instead of copying their detailed rules here:
+`frontend-craft`, `functional-ui`, `visual-design`, `landing-page`,
+`delegate-frontend`, `visual-qa`, `web-design-guidelines`, and `review`.
+Those skills own premium/Terminal landing gates, generated-media proof,
+Pi/Kimi first-write rules, browser evidence, and frontend guideline scoring.
+See `MEM-0072`, `MEM-0076` through `MEM-0085`, and `MEM-0088` through
+`MEM-0096`.
+For Codexter invocation, compute selection, board adapters, and future
+Symphony/Codex Cloud handoff work, use `codexter-invocation`,
+`pr-runtime`, `docs/specs/board-compute-orchestration.md`,
+`docs/specs/codexter-v2-milestone.md`, and
+`docs/specs/symphony-compatible-codexter-runner.md`. Keep Codexter as an
+explicit invocation and proof layer; do not expand it into a daemon, hosted
+control plane, scheduler, or hidden cloud wrapper without a new ticketed need.
+See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
 
 ## Project Structure
 
