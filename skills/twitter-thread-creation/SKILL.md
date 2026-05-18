@@ -4,6 +4,7 @@ version: 1.0.0
 description: Plan and write Twitter/X threads, tweet storms, hook tweets, X posts, reply chains, media-supported threads, and engagement-optimized social writing. Covers thread structure, character limits, hooks, summaries, CTAs, and media attachments. Routes visuals through `imagegen` or `image-generation`, social campaigns through `ai-social-media-content`, and frontend/campaign bundles through `frontend-craft`.
 tier: 3
 group: content-social
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

@@ -4,6 +4,7 @@ version: 1.5.0
 description: "Phase-2 Codexter skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work, and consume an Agent Testability Brief when present."
 tier: 3
 group: coding
+source: local
 ---
 
 # Spec-to-Ticket Skill

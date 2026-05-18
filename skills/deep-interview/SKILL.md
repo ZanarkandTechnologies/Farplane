@@ -2,6 +2,7 @@
 name: deep-interview
 description: Socratic deep interview with mathematical ambiguity gating before execution
 tier: 2
+source: local
 argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea or vague description>"
 ---
 

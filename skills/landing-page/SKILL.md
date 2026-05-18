@@ -4,6 +4,7 @@ version: 1.0.0
 description: Use for one-page marketing, launch, homepage, portfolio, hero-heavy, cinematic, or scrolltelling frontend surfaces. Shapes the offer, story arc, sections, assets, motion, and proof before frontend-craft implements.
 tier: 3
 group: frontend-content
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

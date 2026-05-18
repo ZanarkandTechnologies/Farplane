@@ -4,6 +4,7 @@ version: 1.0.0
 description: Plan and produce explainer videos, how-it-works videos, product demos, onboarding videos, tutorial videos, walkthroughs, scripts, scenes, narration, and multi-step video production pipelines. Routes model-native generation through `video-generation`, still assets through `imagegen` or `image-generation`, and deterministic assembly through `remotion` or `remotion-render`.
 tier: 3
 group: content-video
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

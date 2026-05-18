@@ -15,16 +15,15 @@ Best path:
 
 1. Keep this document as the human-readable rollout plan.
 2. Add only the manual package metadata fields to `skills/*/SKILL.md`
-   frontmatter: `tier`, Tier 3 `group`, optional `methods`, and optional
-   Tier 3 `common_chains`.
+   frontmatter: `tier`, `source`, Tier 3 `group`, optional `methods`,
+   optional `upstream_url`, and optional Tier 3 `common_chains`.
 3. Add a script such as `bin/sync_skill_registry.py` that reads skill
    frontmatter, validates tiered `todos.md` links, and writes a generated
    `docs/skills/registry.jsonl`.
 4. Generate flow or graph views from Tier 3 `group` plus `common_chains`; do
    not maintain a second hand-authored sequence registry.
-5. Add or upgrade `todos.md` files in batches, starting with the content
-   creation skills because they already share clear production flows but lack
-   anti-forgetting checklists.
+5. Add or upgrade `todos.md` files in batches, leaving upstream-owned external
+   skills without local todos when the wrapper logic belongs in a caller skill.
 6. Consolidate only after the registry exposes real duplicate surfaces; prefer
    one owning skill with `skill:method` addresses when several wrappers share
    the same workflow, proof contract, and references.
@@ -68,8 +67,8 @@ Split the source of truth by ownership:
 
 - `skills/*/SKILL.md` frontmatter owns package-local metadata:
   existing `name` and `description`, plus only the added fields that require
-  human judgment: `tier`, Tier 3 `group`, optional `methods`, and optional
-  Tier 3 `common_chains`.
+  human judgment: `tier`, `source`, Tier 3 `group`, optional `methods`,
+  optional `upstream_url`, and optional Tier 3 `common_chains`.
 - The sync script derives file-local facts:
   `path`, `has_todos`, `version`, `allowed_tools`, and Markdown skill links.
 - The sync script rejects Tier 3 `todos.md` files that direct-link Tier 1
@@ -89,6 +88,16 @@ directory and Markdown content or temporary planning judgments that should stay
 in this rollout document until they prove stable. `group` is the one deliberate
 Tier 3 classification field because it lets tooling generate application views
 without a separate sequence registry.
+
+Use `source: external` for skill packages that are upstream-owned and should be
+refreshable from an outside source, such as `agent-browser`. A Codexter wrapper
+that merely reads external docs can remain `source: local`. Codexter-specific
+wrapper logic belongs in local caller skills like `qa`, not in the external
+skill body.
+
+Use `upstream_url` when one canonical upstream file is enough to refresh or
+audit an external skill. Do not add an `update_command` field until more than
+one external skill needs command-shaped refresh logic.
 
 For Tier 3 skills, frontmatter may include `common_chains` as a local adjacency
 hint. Use it for common next skills only, not for full orchestration graphs:
@@ -130,10 +139,12 @@ Recommended generated package fields:
 - `name`: existing frontmatter.
 - `description`: existing frontmatter.
 - `tier`: added frontmatter, numeric `1`, `2`, or `3`.
+- `source`: added frontmatter, `local` or `external`.
 - `path`: generated from the directory.
 - `methods`: optional frontmatter only when the skill owns method addresses.
 - `group`: required frontmatter for Tier 3 skills only.
 - `common_chains`: optional frontmatter, Tier 3 only, one-directional.
+- `upstream_url`: optional frontmatter for upstream-owned skill packages.
 - `has_todos`: generated from the filesystem.
 - `version`: existing frontmatter when present.
 - `allowed_tools`: existing frontmatter when present.
@@ -186,23 +197,32 @@ skill body or `todos.md`, where agents will actually read them.
 The current package inventory is generated instead of hand-maintained. Use:
 
 ```bash
+python3 bin/check_skills.py --write
 python3 bin/sync_skill_registry.py --write
 python3 bin/sync_skill_registry.py --check
 ```
 
 Current generated baseline:
 
-- `docs/skills/registry.jsonl`: 74 local skill package rows
-- Tier counts: `1 = 3`, `2 = 25`, `3 = 46`
-- `todos.md` coverage: `23 present`, `51 missing`
-- Method-addressed skill metadata currently exists only where it is real:
-  `research` owns the first `methods` list
+- `docs/skills/registry.jsonl`: 76 local skill package rows
+- Tier counts: `1 = 3`, `2 = 26`, `3 = 47`
+- `todos.md` coverage: `73 present`, `3 intentionally missing external`
+- Source counts: `local = 73`, `external = 3`
+- External skills without local todos: `agent-browser`, `convex`, and
+  `vercel-react-best-practices`
+- Method-addressed skill metadata exists where it is real, with `research`
+  owning the main method list
 - Tier 3 application views should be generated from `group`,
   `common_chains`, and Markdown links
 
 This generated registry replaces the earlier hand-written package table. Use the
 rollout ticket for decisions and use the generated files for current-state
 truth.
+
+For future bulk skill-system upkeep, use `skill-maintenance` instead of putting
+all skill-maintenance rules into the always-loaded system prompt. It owns the
+periodic workflow for tier classification, source ownership, todo audits,
+registry sync, and consolidation planning.
 
 ## Application Flow Parallels
 

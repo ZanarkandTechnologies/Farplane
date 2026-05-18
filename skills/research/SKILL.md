@@ -3,6 +3,7 @@ name: research
 version: 0.1.0
 description: Tier 2 evidence workflow with method-addressed research passes: research:parity, research:gap, research:competitor, research:official-docs, research:code-patterns, research:user-grounding, and research:source-synthesis.
 tier: 2
+source: local
 methods: ["research:parity", "research:gap", "research:competitor", "research:official-docs", "research:code-patterns", "research:user-grounding", "research:source-synthesis"]
 allowed-tools: Read, Glob, Grep
 ---

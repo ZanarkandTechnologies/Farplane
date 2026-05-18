@@ -4,6 +4,7 @@ version: 1.0.0
 description: Plan and produce product photography, AI product photos, packshots, e-commerce images, Amazon listing images, Shopify product assets, commercial product hero shots, lifestyle product photos, detail shots, scale shots, mockups, and advertising photos. Routes normal still generation through `imagegen`, named inference.sh image models through `image-generation`, cutouts/upscales through image-generation tools, and frontend/product-page integration through `frontend-craft`.
 tier: 3
 group: content-image
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

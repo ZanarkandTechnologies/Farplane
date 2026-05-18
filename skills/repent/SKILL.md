@@ -2,6 +2,7 @@
 name: repent
 description: Operator-forced recovery mode for when the assistant missed something obvious, got defensive, or explained instead of acting. Use when the user explicitly says `repent` or otherwise clearly asks for audit-then-fix behavior on the current task after the default correction-recovery behavior was not enough.
 tier: 2
+source: local
 ---
 
 # Repent

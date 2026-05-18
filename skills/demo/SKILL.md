@@ -3,6 +3,7 @@ name: demo
 description: Run the demo phase for one selected ticket by turning passing QA artifacts into demo-ready outputs and producing a structured demo result artifact for Stop-hook gating.
 tier: 3
 group: coding
+source: local
 ---
 
 # Demo
@@ -24,6 +25,9 @@ Do not use it when:
 
 - Read the selected ticket plus linked docs/specs.
 - Reuse QA artifacts from `tickets/TASK-XXXX/artifacts/qa/`.
+- If QA evidence is missing, weak, or not presentation-ready, request a QA rerun
+  or use [agent-browser](../agent-browser/SKILL.md) only for a narrow missing
+  browser capture.
 - Write demo outputs under `tickets/TASK-XXXX/artifacts/demo/`.
 - Update the ticket `Evidence` section with demo artifact links.
 - Write `result.json` under the demo artifact root and finish with:

@@ -4,6 +4,7 @@ version: 1.0.0
 description: Plan and produce multi-slide carousel posts for Instagram, LinkedIn, Twitter/X, and Facebook. Covers carousel structure, hooks, slide hierarchy, platform dimensions, swipe psychology, educational carousels, and generated slide assets. Routes static slide assets through `imagegen` or `image-generation`, HTML-rendered slides through project code or inference.sh image tooling, and campaign bundles through `frontend-craft`.
 tier: 3
 group: content-social
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

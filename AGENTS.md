@@ -50,6 +50,17 @@ Create new Tier 1 primitives only when multiple Tier 2 interfaces need that
 move as a base dependency; otherwise keep common reusable work as a Tier 2
 interface or method. User research starts as `research:user-grounding`, not a
 Tier 1 primitive. See `MEM-0101`.
+Use `skill-maintenance` for periodic bulk skill-system upkeep instead of
+expanding the always-loaded prompt. Bulk skill edits should read project and
+registry docs first, keep Tier 2 todos linked to Tier 1 primitives, keep Tier 3
+todos linked to Tier 2 surfaces plus intentional peer Tier 3 handoffs, and
+leave external skills without local todos when wrapper logic belongs in callers.
+Run `python3 bin/check_skills.py --write` after skill metadata, Markdown links,
+or `todos.md` changes. See `MEM-0104`.
+Use `batch-work` only when the operator wants bounded bulk progress across
+similar low-risk targets with a shared validation command; keep fragile,
+ambiguous, destructive, or high-risk work on single-ticket passes. See
+`MEM-0105`.
 
 When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
 structured outputs, eval prompts, or agent instruction prompts, load

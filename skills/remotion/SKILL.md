@@ -3,6 +3,7 @@ name: remotion
 description: Author Remotion video code in React with official best-practice rules for compositions, timing, assets, captions, audio, transitions, Three.js, Tailwind, HTML-in-canvas, and media measurement. Use for Remotion code, React video components, deterministic motion graphics, captions, audio visualization, SFX, composition structure, and local render checks. Use `remotion-render` when the authored Remotion code should be rendered to MP4 through inference.sh.
 tier: 3
 group: content-video
+source: local
 metadata:
   tags: remotion, video, react, animation, composition
 ---

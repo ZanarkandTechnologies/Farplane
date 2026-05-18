@@ -4,6 +4,7 @@ version: 2.5.0
 description: "Unified per-ticket planning skill with a detailed file-map-first plan centered on ordered action, callable seams, typed data flow, blast radius, verification, and explicit gap analysis for missing or partial features."
 tier: 3
 group: coding
+source: local
 allowed-tools: Read, Glob, Grep
 ---
 

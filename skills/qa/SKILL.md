@@ -3,6 +3,7 @@ name: qa
 description: Run the QA phase for one selected ticket by collecting proof artifacts, reconciling acceptance criteria, and producing a structured QA result artifact for Stop-hook gating.
 tier: 3
 group: coding
+source: local
 ---
 
 # QA
@@ -24,6 +25,9 @@ Do not use it when:
 
 - Read the selected ticket plus linked docs/specs.
 - When `$qa` is entered from a live orchestration lane and delegation is available, keep the coordinating lane out of browser driving: spawn `qa-tester` to own browser/tool use, artifact capture, and ticket-scoped proof.
+- Use [agent-browser](../agent-browser/SKILL.md) as the general browser tool
+  surface when browser evidence is needed; Codexter-specific QA artifact
+  policy lives in this skill, not in `agent-browser`.
 - Gather ticket-scoped proof under `tickets/TASK-XXXX/artifacts/qa/`.
 - For UI or user-visible work, use `visual-qa` as a separate judgment pass.
 - Update the ticket `Evidence` section with the strongest artifact links.

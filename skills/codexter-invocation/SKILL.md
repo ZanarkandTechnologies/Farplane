@@ -3,6 +3,7 @@ name: codexter-invocation
 description: Interpret a CodexterRunEnvelope inside normal Codex, validate repo policy and one filesystem ticket, select local compute, route to existing Codexter skills, and write a ProofPacket.
 tier: 3
 group: harness
+source: local
 ---
 
 # Codexter Invocation

@@ -3,6 +3,7 @@ name: reference-grounding
 version: 0.1.0
 description: Tier 1 primitive for grounding recommendations, plans, and claims in local evidence, official docs, peer products, standards, maintained repos, or provided sources before stronger workflow skills consume them.
 tier: 1
+source: local
 allowed-tools: Read, Glob, Grep
 ---
 

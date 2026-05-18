@@ -2,6 +2,7 @@
 name: review
 description: Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-slop search playbook for code, UI, evidence, demos, and videos.
 tier: 1
+source: local
 ---
 
 # Review Skill

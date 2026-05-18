@@ -3,6 +3,7 @@ name: best-of-worlds
 version: 0.1.0
 description: Use when the user gives multiple projects, GitHub URLs, tools, blogs, repos, or implementations and wants the best features extracted, scored, adapted, and turned into a concrete workflow or implementation plan.
 tier: 2
+source: local
 allowed-tools: Read, Glob, Grep
 ---
 

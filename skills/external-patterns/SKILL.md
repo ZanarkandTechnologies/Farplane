@@ -2,6 +2,7 @@
 name: external-patterns
 description: Workflows for finding code patterns across GitHub and exploring specific repositories. Use when searching for how others implement features or deep diving into libraries.
 tier: 2
+source: local
 ---
 
 # External Patterns Skill

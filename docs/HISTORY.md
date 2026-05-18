@@ -191,3 +191,6 @@
 2026-05-16 12:30 +0800 | FEAT | add research:user-grounding and codify the Tier 1 promotion rule for reusable skills
 2026-05-17 08:45 +0800 | FIX | make research router todos conditional instead of implying every research method should run
 2026-05-17 08:48 +0800 | FEAT | add frontend proof-stack todos for browser proof, guideline audit, UX, visual design, frontend references, and frontend orchestration
+2026-05-18 22:26 +0800 | FEAT | add skill source metadata and move browser QA wrapper logic into the QA skill
+2026-05-19 03:34 +0800 | FEAT | add bulk skill todos, external Convex pointer, and skill-maintenance workflow
+2026-05-19 04:06 +0800 | FEAT | add batch-work skill and one-command skill-system validation

@@ -4,6 +4,7 @@ version: 0.1.0
 description: Use when the operator wants to monitor curated X accounts, YouTube channels, or blogs/RSS feeds, discover new content, dedupe ingested URLs, run harness-scout on eligible content items, synthesize repeated patterns with best-of-worlds, and write proposal tickets to Notion or a local review inbox.
 tier: 3
 group: harness
+source: local
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

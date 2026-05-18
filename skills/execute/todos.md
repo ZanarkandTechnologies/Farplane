@@ -1,8 +1,8 @@
 # Todos
 
 - [ ] Read the plan, scope, acceptance criteria, and proof contract.
-- [ ] Confirm execution is ready; use [plan](../plan/SKILL.md) or the domain
-  planning skill if scope or proof is still unclear.
+- [ ] Confirm execution is ready; if scope or proof is still unclear, stop and
+  return the gap to the caller or the domain planning skill.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when execution
   depends on official behavior, local invariants, or examples.
 - [ ] Do the scoped work using the owning domain skill or tool.

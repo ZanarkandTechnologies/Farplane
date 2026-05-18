@@ -3,6 +3,7 @@ name: autoresearch-plan
 description: Use when the user wants to set up an autoresearch run, optimize anything with a metric, design a mechanical improvement loop, or turn a fuzzy goal into Goal/Scope/Metric/Direction/Verify/Guard session artifacts before execution.
 tier: 3
 group: self-improvement
+source: local
 ---
 
 # Autoresearch Plan

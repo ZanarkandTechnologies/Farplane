@@ -4,6 +4,7 @@ version: 1.0.0
 description: Plan and produce AI-powered social media content across TikTok, Instagram, YouTube, Twitter/X, and campaign channels. Use for social media content, reels, shorts, UGC content, thumbnails, captions, hashtags, content calendars, social visuals, and multi-platform social asset workflows. Routes stills through `imagegen` or `image-generation`, video clips through `video-generation`, carousels through `social-media-carousel`, and frontend/campaign bundles through `frontend-craft`.
 tier: 3
 group: content-social
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

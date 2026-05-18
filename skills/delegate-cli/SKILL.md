@@ -4,6 +4,7 @@ version: 0.1.0
 description: Route bounded Codexter work to configured external coding-agent CLIs through explicit adapter/profile contracts, managed prompts, runtime logs, and ticket evidence handoff. Use when another local CLI/model/harness is stronger for a task but Codexter must keep ticket, QA, review, and integration authority.
 tier: 3
 group: harness
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

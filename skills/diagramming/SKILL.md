@@ -2,6 +2,7 @@
 name: diagramming
 description: Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams such as top-level delta maps, zoom-ins, numbered data-flow traces, or inline-signature component diagrams.
 tier: 2
+source: local
 ---
 
 # Diagramming

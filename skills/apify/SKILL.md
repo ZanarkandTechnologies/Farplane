@@ -3,6 +3,7 @@ name: apify
 version: 1.0.0
 description: "Hub skill for external data acquisition via Apify MCP. Use when scraping YouTube, Twitter, Instagram, TikTok, LinkedIn, or Google Places. Centralizes actor configurations, execution patterns, and data normalization workflows."
 tier: 2
+source: local
 allowed-tools: apify, web_search, documentation-searcher
 ---
 

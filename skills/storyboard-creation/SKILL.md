@@ -4,6 +4,7 @@ version: 1.0.0
 description: Create film, animation, ad, product, and video storyboards with shot vocabulary, panel planning, camera angles, continuity, visual scripts, animatics, and storyboard image generation. Routes panels through `imagegen` or `image-generation`, clips through `video-generation`, and web/campaign asset planning through `frontend-craft`.
 tier: 3
 group: content-video
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

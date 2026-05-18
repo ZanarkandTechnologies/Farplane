@@ -4,6 +4,7 @@ version: 0.1.0
 description: Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Codexter ticket, QA, visual review, and integration authority.
 tier: 3
 group: frontend
+source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

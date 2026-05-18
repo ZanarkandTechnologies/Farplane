@@ -4,6 +4,7 @@ version: 1.1.0
 description: App-UI implementation reference for shadcn, AI Elements, curated registries, theming, and component construction after functional-ui and visual-design have settled the workflow and look. For new frontend implementation, prefer frontend-craft as the public orchestrator.
 tier: 3
 group: frontend
+source: local
 allowed-tools: mcp__shadcn__*, Read, Write, Edit, LS
 ---
 

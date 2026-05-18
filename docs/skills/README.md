@@ -17,9 +17,12 @@ Keep frontmatter small.
 Manual fields:
 
 - `tier`: required, numeric `1`, `2`, or `3`
+- `source`: required, `local` for Codexter-owned skills or `external` for
+  upstream-backed skills that should stay syncable with an outside source
 - `group`: required for Tier 3 only
 - `methods`: optional list for method addresses owned by the skill
 - `common_chains`: optional Tier 3 one-way adjacency hints
+- `upstream_url`: optional for `source: external`
 
 Generated fields:
 
@@ -28,6 +31,8 @@ Generated fields:
 - `has_todos`
 - `version`
 - `allowed_tools`
+- `source`
+- `upstream_url`
 - `skill_links`
 
 Use `common_chains` only for local forward handoffs:
@@ -44,14 +49,16 @@ Do not add `before`; reverse lookups should be derived by tooling.
 ## Commands
 
 ```bash
+python3 bin/check_skills.py --write
 python3 bin/sync_skill_registry.py --write
 python3 bin/sync_skill_registry.py --check
 python3 bin/check_skill_todo_tiers.py
 python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 ```
 
-Run the check command after editing skill frontmatter, `SKILL.md` Markdown links,
-or `todos.md`.
+Run `python3 bin/check_skills.py --write` after editing skill frontmatter,
+`SKILL.md` Markdown links, or `todos.md`. Use the lower-level commands when
+debugging one specific failure.
 
 ## Todo Link Contract
 
@@ -68,3 +75,23 @@ Tiered loading is enforced at the checklist boundary:
 - `bin/check_skill_todo_tiers.py` audits every `todos.md` edge against strict
   one-level-down loading. Use `--allow-peer-tier3` while Tier 3 application
   handoffs such as content skill -> media execution skill remain intentional.
+
+## Source Ownership
+
+Use `source` to decide where wrapper logic belongs:
+
+- `source: local` means Codexter owns the skill package and may edit its body,
+  references, and todos directly.
+- `source: external` means the skill package itself is upstream-owned and should
+  be refreshable from that source. Keep local Codexter policy in the calling
+  skill or another local wrapper, so the external skill can be refreshed with
+  minimal merge friction.
+- External skills may intentionally omit local `todos.md` when their operational
+  wrapper belongs in a local caller skill. Track the upstream file with
+  `upstream_url` when one URL is enough.
+
+## Maintenance Skill
+
+Use `skills/skill-maintenance/` for bulk tier, source, todo, registry, and
+consolidation work. Keep this module's docs as the registry contract; keep the
+step-by-step maintenance workflow in that skill.

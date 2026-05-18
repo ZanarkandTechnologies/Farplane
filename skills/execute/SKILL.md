@@ -3,6 +3,7 @@ name: execute
 version: 0.1.0
 description: Tier 2 generic execution interface. Use when a workflow needs the common do-the-work, prove-it, write-back, and review loop without treating one application pipeline as universal.
 tier: 2
+source: local
 allowed-tools: Read, Glob, Grep
 ---
 

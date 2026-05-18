@@ -4,6 +4,7 @@ version: 0.1.0
 description: "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer or declared QA target."
 tier: 3
 group: coding
+source: local
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -73,6 +74,8 @@ When this skill is used, return:
 - Tickets remain the durable task surface; runtime records stay under
   `.harness/state/`.
 - Existing PR branch follow-up should default to isolated checkout.
+- Hand QA live frontend/backend targets through the runtime record so
+  [qa](../qa/SKILL.md) does not infer ports, processes, or worktrees from chat.
 - Keep the runtime helper local-first and minimal; do not expand this skill
   into generic dispatch or cloud orchestration.
 - Use the lightest sufficient runtime mode.

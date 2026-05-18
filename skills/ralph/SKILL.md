@@ -3,6 +3,7 @@ name: ralph
 description: Serial board-draining dispatcher for prepared Codexter ticket boards. Use after specs, tickets, and plans exist when the operator wants one safe filesystem ticket at a time selected and handed to impl-plan, impl, or close-ticket until no ready work, a human gate, blocker, failed handoff, or loop limit stops the run.
 tier: 3
 group: coding
+source: local
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

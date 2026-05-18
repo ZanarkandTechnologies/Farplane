@@ -16,6 +16,7 @@ SKILL_LINK_RE = re.compile(r"\]\((?:\.\./)?([^/\)\s]+)/SKILL\.md(?:#([^)]+))?\)"
 LOCAL_METHOD_RE = re.compile(r"\]\(SKILL\.md#([^)]+)\)")
 ALLOWED_COMMON_CHAIN_KEYS = {"after"}
 TIER1_PRIMITIVES = {"advise", "reference-grounding", "review"}
+ALLOWED_SOURCES = {"local", "external"}
 
 
 class RegistryError(Exception):
@@ -237,6 +238,10 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         tier = metadata.get("tier")
         if tier not in (1, 2, 3):
             raise RegistryError(f"{skill_path}: tier must be 1, 2, or 3")
+        source = metadata.get("source")
+        if source not in ALLOWED_SOURCES:
+            allowed = ", ".join(sorted(ALLOWED_SOURCES))
+            raise RegistryError(f"{skill_path}: source must be one of: {allowed}")
         group = metadata.get("group")
         if tier == 3 and not isinstance(group, str):
             raise RegistryError(f"{skill_path}: tier 3 skills must set group")
@@ -246,6 +251,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         row: dict[str, Any] = {
             "name": name,
             "tier": tier,
+            "source": source,
             "path": str(skill_path.relative_to(repo_root)),
             "description": metadata.get("description", ""),
             "has_todos": (skill_dir / "todos.md").exists(),
@@ -269,6 +275,10 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         allowed_tools = normalize_allowed_tools(metadata.get("allowed-tools"), skill_path)
         if allowed_tools:
             row["allowed_tools"] = allowed_tools
+
+        upstream_url = metadata.get("upstream_url")
+        if upstream_url not in (None, ""):
+            row["upstream_url"] = str(upstream_url)
 
         rows.append(row)
 

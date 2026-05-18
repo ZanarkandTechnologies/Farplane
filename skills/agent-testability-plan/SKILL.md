@@ -4,6 +4,7 @@ version: 0.1.0
 description: "Post-system-design planning skill that turns a System Design Brief into an Agent Testability Brief covering control accelerators, state probes, coordination views, tooling, and proof surfaces before ticketization or per-ticket build planning."
 tier: 3
 group: coding
+source: local
 argument-hint: "<system design brief, spec path, or active ticket>"
 allowed-tools: Read, Glob, Grep
 ---

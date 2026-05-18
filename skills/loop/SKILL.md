@@ -2,6 +2,7 @@
 name: loop
 description: Use when one bounded same-session task should auto-resume until explicit local completion checks pass or the operator explicitly stops it. Prefer it for short deterministic work, not ticketed multi-lane implementation.
 tier: 2
+source: local
 ---
 
 # Loop

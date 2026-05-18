@@ -10,11 +10,7 @@
 - [ ] Prefer primary sources and real implementations over commentary.
 - [ ] Write a compact grounding note with evidence, confidence, and local
   impact.
-- [ ] Escalate to [research:parity](../research/SKILL.md#researchparity),
-  [research:gap](../research/SKILL.md#researchgap),
-  [research:official-docs](../research/SKILL.md#researchofficial-docs),
-  [research:code-patterns](../research/SKILL.md#researchcode-patterns), or
-  [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-  when a compact grounding note is not enough.
-- [ ] Run [review](../review/SKILL.md) after meaningful
-  reference-grounding-skill, evidence-contract, or public-doc changes.
+- [ ] If compact grounding is not enough, surface the exact evidence gap to the
+  caller instead of launching a higher-tier research method from this primitive.
+- [ ] For changes to this skill, require a separate review pass before claiming
+  the update is ready.
