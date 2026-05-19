@@ -2,18 +2,18 @@ window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
       "common-chain": 13,
-      "markdown-ref": 246
+      "markdown-ref": 248
     },
-    "edges": 259,
-    "nodes": 70,
+    "edges": 261,
+    "nodes": 71,
     "sources": {
       "external": 3,
-      "local": 67
+      "local": 68
     },
     "tiers": {
       "1": 3,
       "2": 27,
-      "3": 40
+      "3": 41
     }
   },
   "edges": [
@@ -1545,6 +1545,20 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
+      "source": "skill-registry-ui",
+      "target": "execute",
+      "target_ref": "execute",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "skill-registry-ui",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
       "source": "social-content",
       "target": "execute",
       "target_ref": "execute",
@@ -1831,7 +1845,7 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-05-19T08:22:24+00:00",
+  "generated_at": "2026-05-19T10:42:17+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
@@ -2542,6 +2556,17 @@ window.SKILL_GRAPH = {
       "label": "skill-maintenance",
       "methods": [],
       "path": "skills/skill-maintenance/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "description": "Open, refresh, and validate the Codexter skill registry graph UI, including clickable skill nodes, rendered SKILL.md Markdown, frontmatter details, tier colors, and common-chain edges.",
+      "group": "skills",
+      "has_todos": true,
+      "id": "skill-registry-ui",
+      "label": "skill-registry-ui",
+      "methods": [],
+      "path": "skills/skill-registry-ui/SKILL.md",
       "source": "local",
       "tier": 3
     },

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate graph data for the Codexter skill registry."""
+"""Generate graph and document data for the Codexter skill registry."""
 
 from __future__ import annotations
 
@@ -93,15 +93,116 @@ def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def parse_frontmatter(markdown: str) -> tuple[dict[str, Any], str, str]:
+    if not markdown.startswith("---\n"):
+        return {}, "", markdown
+    end = markdown.find("\n---\n", 4)
+    if end == -1:
+        return {}, "", markdown
+    raw = markdown[4:end]
+    body = markdown[end + 5 :].lstrip("\n")
+    return parse_simple_yaml(raw), raw, body
+
+
+def parse_scalar(value: str) -> Any:
+    value = value.strip()
+    if not value:
+        return ""
+    if value in {"true", "false"}:
+        return value == "true"
+    if value.startswith("[") and value.endswith("]"):
+        try:
+            return json.loads(value.replace("'", '"'))
+        except json.JSONDecodeError:
+            inner = value[1:-1].strip()
+            return [part.strip().strip("\"'") for part in inner.split(",") if part.strip()]
+    if value.startswith(("\"", "'")) and value.endswith(("\"", "'")):
+        return value[1:-1]
+    try:
+        return int(value)
+    except ValueError:
+        return value
+
+
+def parse_simple_yaml(raw: str) -> dict[str, Any]:
+    parsed: dict[str, Any] = {}
+    current_map: str | None = None
+    current_list: str | None = None
+
+    for line in raw.splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if line.startswith("  ") and current_map:
+            key, _, value = line.strip().partition(":")
+            if key and value:
+                if not isinstance(parsed.get(current_map), dict):
+                    parsed[current_map] = {}
+                parsed.setdefault(current_map, {})[key] = parse_scalar(value)
+            continue
+        if line.startswith("  - ") and current_list:
+            if not isinstance(parsed.get(current_list), list):
+                parsed[current_list] = []
+            parsed.setdefault(current_list, []).append(parse_scalar(line.strip()[2:]))
+            continue
+
+        current_map = None
+        current_list = None
+        key, _, value = line.partition(":")
+        key = key.strip()
+        if not key:
+            continue
+        if value.strip():
+            parsed[key] = parse_scalar(value)
+        else:
+            current_map = key
+            current_list = key
+            parsed[key] = {}
+    return parsed
+
+
+def build_docs(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    docs: dict[str, Any] = {
+        "schema_version": "1.0.0",
+        "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "skills": {},
+    }
+    for row in rows:
+        path = Path(row.get("path", ""))
+        if not path.exists():
+            continue
+        markdown = path.read_text()
+        frontmatter, frontmatter_raw, body = parse_frontmatter(markdown)
+        docs["skills"][row["name"]] = {
+            "name": row["name"],
+            "path": str(path),
+            "frontmatter": frontmatter,
+            "frontmatter_raw": frontmatter_raw,
+            "body": body,
+        }
+    docs["counts"] = {"skills": len(docs["skills"])}
+    return docs
+
+
+def write_js(path: Path, global_name: str, value: dict[str, Any]) -> None:
+    path.write_text(
+        f"window.{global_name} = "
+        + json.dumps(value, indent=2, sort_keys=True)
+        + ";\n"
+    )
+
+
 def write_graph(graph: dict[str, Any], output_path: Path, js_path: Path | None) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(graph, indent=2, sort_keys=True) + "\n")
     if js_path is not None:
-        js_path.write_text(
-            "window.SKILL_GRAPH = "
-            + json.dumps(graph, indent=2, sort_keys=True)
-            + ";\n"
-        )
+        write_js(js_path, "SKILL_GRAPH", graph)
+
+
+def write_docs(docs: dict[str, Any], output_path: Path, js_path: Path | None) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(docs, indent=2, sort_keys=True) + "\n")
+    if js_path is not None:
+        write_js(js_path, "SKILL_DOCS", docs)
 
 
 def main() -> int:
@@ -109,14 +210,20 @@ def main() -> int:
     parser.add_argument("--registry", default="docs/skills/registry.jsonl")
     parser.add_argument("--out", default="docs/skills/graph/skill-graph.json")
     parser.add_argument("--js-out", default="docs/skills/graph/skill-graph.js")
+    parser.add_argument("--docs-out", default="docs/skills/graph/skill-docs.json")
+    parser.add_argument("--docs-js-out", default="docs/skills/graph/skill-docs.js")
     args = parser.parse_args()
 
-    graph = build_graph(load_registry(Path(args.registry)))
+    rows = load_registry(Path(args.registry))
+    graph = build_graph(rows)
+    docs = build_docs(rows)
     write_graph(graph, Path(args.out), Path(args.js_out) if args.js_out else None)
+    write_docs(docs, Path(args.docs_out), Path(args.docs_js_out) if args.docs_js_out else None)
     print(
         "wrote "
         f"{args.out} ({graph['counts']['nodes']} nodes, "
-        f"{graph['counts']['edges']} edges)"
+        f"{graph['counts']['edges']} edges) and "
+        f"{args.docs_out} ({docs['counts']['skills']} skill docs)"
     )
     return 0
 

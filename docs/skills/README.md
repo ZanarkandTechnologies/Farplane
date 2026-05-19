@@ -10,7 +10,9 @@ into a second place to maintain skill truth.
   Flow or graph views should be derived from Tier 3 `group` and `common_chains`
   fields instead of maintained as a second hand-authored registry.
 - `graph/` contains a generated local visualization of skill nodes,
-  Markdown-reference edges, and Tier 3 chain edges.
+  Markdown-reference edges, Tier 3 chain edges, and rendered skill documents.
+- `skills/skill-registry-ui/` is the operator skill for refreshing, opening,
+  and validating that graph UI.
 
 ## Frontmatter Contract
 
