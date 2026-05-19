@@ -16,7 +16,11 @@ Use `todos.md` at the start of the pass. It is the ordered anti-forgetting check
 
 Use the built-in `imagegen` skill for normal Codex-native still image generation/editing. Use this skill when the user asks for inference.sh, `belt`, a named image model, CLI repeatability, upscaling, background removal, or a multi-step image pipeline.
 
-Use domain image/social guide skills for artifact problems: `product-photography`, `ai-social-media-content`, `linkedin-content`, `social-media-carousel`, and `twitter-thread-creation`. Use this skill for model/app selection and `belt` execution once the domain intent is known.
+Use domain image/social guide skills for artifact problems: `product-photography`
+and `social-content` methods such as `social-content:cross-platform`,
+`social-content:linkedin`, `social-content:carousel`, and
+`social-content:twitter-thread`. Use this skill for model/app selection and
+`belt` execution once the domain intent is known.
 
 Copied upstream references are read-only usage docs. Do not run `npx skills add ...` commands from their Related Skills sections unless the user explicitly asks to install upstream skills.
 
@@ -88,10 +92,10 @@ belt app list --category image
 - Image upscaling or enhancement: `references/tools/image-upscaling.md`
 - Long-running jobs, batched tasks, timers, or delegated polling: `references/long-running-jobs.md`
 - Product photography, packshots, e-commerce images, or commercial product shots: use `product-photography`
-- Social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets: use `ai-social-media-content`
-- LinkedIn posts or professional social writing: use `linkedin-content`
-- Instagram/LinkedIn/X carousel or multi-slide post: use `social-media-carousel`
-- Twitter/X threads or posts: use `twitter-thread-creation`
+- Social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets: use `social-content:cross-platform`
+- LinkedIn posts or professional social writing: use `social-content:linkedin`
+- Instagram/LinkedIn/X carousel or multi-slide post: use `social-content:carousel`
+- Twitter/X threads or posts: use `social-content:twitter-thread`
 - Shared image/social artifact production workflow: `references/domain-production.md`
 
 ## Examples

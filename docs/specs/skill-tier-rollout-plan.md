@@ -202,16 +202,17 @@ python3 bin/sync_skill_registry.py --write
 python3 bin/sync_skill_registry.py --check
 ```
 
-Current generated baseline:
+Current generated baseline after the social-content hard migration:
 
-- `docs/skills/registry.jsonl`: 77 local skill package rows
-- Tier counts: `1 = 3`, `2 = 27`, `3 = 47`
+- `docs/skills/registry.jsonl`: 74 local skill package rows
+- Tier counts: `1 = 3`, `2 = 27`, `3 = 44`
 - `todos.md` coverage: `74 present`, `3 intentionally missing external`
-- Source counts: `local = 74`, `external = 3`
+- Source counts: `local = 71`, `external = 3`
 - External skills without local todos: `agent-browser`, `convex`, and
   `vercel-react-best-practices`
 - Method-addressed skill metadata exists where it is real, with `research`
-  owning the main method list
+  owning the main research method list and `social-content` owning the
+  social-content method list
 - Tier 3 application views should be generated from `group`,
   `common_chains`, and Markdown links
 
@@ -292,15 +293,12 @@ Add frontmatter metadata, generate a dedicated skill package registry, and add
 missing `todos.md` for the content creation cluster:
 
 - `ai-marketing-videos`
-- `ai-social-media-content`
 - `product-photography`
-- `social-media-carousel`
+- `social-content`
 - `explainer-video-guide`
 - `storyboard-creation`
 - `talking-head-production`
 - `video-ad-specs`
-- `linkedin-content`
-- `twitter-thread-creation`
 - `remotion`
 - `remotion-render`
 
@@ -338,13 +336,27 @@ Expected proof:
 ### Phase 3: Consolidation Decisions
 
 After the registry exposes dependencies, make hard migrations where the merge
-case is obvious:
+is clearly one owner with method addresses. The first validated migration is
+the social-content cluster:
+
+- `ai-social-media-content` -> `social-content:cross-platform`
+- `social-media-carousel` -> `social-content:carousel`
+- `linkedin-content` -> `social-content:linkedin`
+- `twitter-thread-creation` -> `social-content:twitter-thread`
+
+Keep copied upstream references under `skills/social-content/references/` so
+platform-specific examples are not lost. Keep media execution layers separate:
+`image-generation`, `video-generation`, `remotion`, and `remotion-render` are
+tool/proof surfaces, not social-content subtype wrappers.
+
+Next consolidation candidates:
 
 - Consider `video-production:marketing`, `video-production:explainer`,
   `video-production:storyboard`, `video-production:talking-head`, and
   `video-production:ad-spec`.
-- Consider `social-content:linkedin`, `social-content:twitter-thread`,
-  `social-content:carousel`, and `social-content:cross-platform`.
+- Treat `social-content:linkedin`, `social-content:twitter-thread`,
+  `social-content:carousel`, and `social-content:cross-platform` as the proven
+  method-address pattern.
 - Consider folding `documentation` into `research:official-docs` and
   `external-patterns` into `research:code-patterns` only if call sites become
   mostly method-addressed.
@@ -354,7 +366,8 @@ case is obvious:
 
 Expected proof:
 
-- `rg` finds no old skill references after a hard migration
+- `rg` finds no stale Markdown links to removed skill directories after a hard
+  migration
 - all updated dependencies point to the owning `skill:method` address
 - removed skill directories have no live references outside archive/research
 

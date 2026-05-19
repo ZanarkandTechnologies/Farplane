@@ -8,7 +8,9 @@ Use the existing `imagegen` skill first for ordinary still images. It is the Cod
 
 Use `image-generation` when the frontend needs inference.sh image models, model selection, background removal, image upscaling, repeatable CLI image pipelines, or a named image model such as GPT-Image-2, Nano Banana, Qwen, FLUX, or P-Image.
 
-Use `product-photography`, `ai-social-media-content`, `linkedin-content`, `social-media-carousel`, or `twitter-thread-creation` when the frontend asset is really a product-photo or social/campaign artifact rather than a generic image.
+Use `product-photography` or the appropriate `social-content:*` method when the
+frontend asset is really a product-photo or social/campaign artifact rather
+than a generic image.
 
 Use `video-generation` when the frontend needs model-native video, image-to-video, avatar/lipsync clips, video edits, foley, upscaling, or assembled marketing/explainer clips. Use `remotion` when the desired asset is deterministic React/Remotion code, then `remotion-render` when that code should become an MP4 through inference.sh.
 

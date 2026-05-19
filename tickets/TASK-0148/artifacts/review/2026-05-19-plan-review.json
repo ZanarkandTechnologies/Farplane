@@ -1,0 +1,60 @@
+{
+  "ticket_id": "TASK-0148",
+  "reviewed_at": "2026-05-19T13:35:00+08:00",
+  "work_type": "implementation_plan",
+  "search_scope": [
+    "tickets/TASK-0148/ticket.md",
+    "docs/specs/skill-tier-rollout-plan.md",
+    "docs/skills/README.md",
+    "docs/skills/registry.jsonl",
+    "skills/review/references/review-rubric-index.md",
+    "skills/review/references/implementation-plan.md",
+    "skills/review/references/evidence-quality.md",
+    "skills/review/references/integration-readiness.md"
+  ],
+  "rubrics_used": [
+    "implementation-plan",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "overall_score": 4.0,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "metric_traceability": {
+    "status": "planned",
+    "metric": "zero stale Markdown links to removed social-content sibling skill directories",
+    "verify": "rg -n \"\\]\\([^)]*(ai-social-media-content|social-media-carousel|linkedin-content|twitter-thread-creation)\" AGENTS.md docs skills tickets agents templates"
+  },
+  "rubric_feedback": {
+    "implementation-plan": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "notes": "Plan names the social-first migration, concrete touched files, ordered execution, type shapes, proof commands, and a second checkpoint for video."
+    },
+    "integration-readiness": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "notes": "Plan keeps execution layers and frontend topology out of scope, validates after the social cluster, and avoids soft aliases or hidden routers."
+    },
+    "evidence-quality": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "notes": "Proof contract separates the stale-link metric, validator guard commands, manual registry inspection, and required review artifact."
+    }
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "confidence": "high",
+      "file": "tickets/TASK-0148/ticket.md",
+      "finding": "Initial plan used non-existent rubric names; fixed to implementation-plan, integration-readiness, and evidence-quality before approval handoff."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Approve the social-content-first hard migration, then move TASK-0148 to building."
+}

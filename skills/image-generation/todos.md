@@ -4,10 +4,10 @@ Use this as the ordered checklist whenever `image-generation` is active.
 
 - [ ] Classify the request as text-to-image, image-edit, inpainting, multi-reference, text-rendering, style-LoRA, fast-cheap, product-mockup, product-photography, social-visual, carousel, background-removal, upscaling, or frontend-bound asset.
 - [ ] For product photography, packshots, e-commerce images, or commercial product shots, use `product-photography`.
-- [ ] For social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets, use `ai-social-media-content`.
-- [ ] For LinkedIn posts or professional social writing, use `linkedin-content`.
-- [ ] For Instagram/LinkedIn/X carousel or multi-slide post, use `social-media-carousel`.
-- [ ] For Twitter/X threads or posts, use `twitter-thread-creation`.
+- [ ] For social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets, use `social-content:cross-platform`.
+- [ ] For LinkedIn posts or professional social writing, use `social-content:linkedin`.
+- [ ] For Instagram/LinkedIn/X carousel or multi-slide post, use `social-content:carousel`.
+- [ ] For Twitter/X threads or posts, use `social-content:twitter-thread`.
 - [ ] For shared production routing from a domain skill, load `references/domain-production.md`.
 - [ ] If the user only needs normal Codex-native bitmap generation/editing and did not ask for inference.sh, `belt`, a named model, CLI repeatability, or a model comparison, use `imagegen` instead.
 - [ ] For CLI setup, app discovery, schemas, samples, or generic inference.sh help, load `references/tools/infsh-cli.md`.

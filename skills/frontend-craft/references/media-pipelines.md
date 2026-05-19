@@ -9,10 +9,10 @@ Use this when a website, landing page, campaign, or product demo needs multiple 
 | Ordinary bitmap asset or edit | `imagegen` |
 | Named inference.sh image model, batch images, upscaling, cutouts | `image-generation` |
 | Product photos, packshots, e-commerce image sets | `product-photography`, then `imagegen` or `image-generation` |
-| Cross-platform social campaign assets | `ai-social-media-content`, then image/video/carousel execution |
-| LinkedIn posts or professional social assets | `linkedin-content`, then `social-media-carousel` or image execution when visual |
-| Instagram/LinkedIn/X carousel assets | `social-media-carousel`, then image/code execution |
-| Twitter/X threads or media-supported posts | `twitter-thread-creation`, then image execution when visual |
+| Cross-platform social campaign assets | `social-content:cross-platform`, then image/video/carousel execution |
+| LinkedIn posts or professional social assets | `social-content:linkedin`, then `social-content:carousel` or image execution when visual |
+| Instagram/LinkedIn/X carousel assets | `social-content:carousel`, then image/code execution |
+| Twitter/X threads or media-supported posts | `social-content:twitter-thread`, then image execution when visual |
 | Marketing/promo video domain plan | `ai-marketing-videos`, then `video-generation` for execution |
 | Explainer/product demo domain plan | `explainer-video-guide`, then `video-generation` or `remotion` for execution |
 | Storyboard/shot list | `storyboard-creation`, then `imagegen`, `image-generation`, or `video-generation` |
