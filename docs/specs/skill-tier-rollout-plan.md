@@ -351,15 +351,17 @@ tool/proof surfaces, not social-content subtype wrappers.
 
 Next consolidation candidates:
 
-- Consider `video-production:marketing`, `video-production:explainer`,
+- Next ticket: `TASK-0151` should consider `video-production:marketing`, `video-production:explainer`,
   `video-production:storyboard`, `video-production:talking-head`, and
   `video-production:ad-spec`.
 - Treat `social-content:linkedin`, `social-content:twitter-thread`,
   `social-content:carousel`, and `social-content:cross-platform` as the proven
   method-address pattern.
-- Consider folding `documentation` into `research:official-docs` and
-  `external-patterns` into `research:code-patterns` only if call sites become
-  mostly method-addressed.
+- Keep `documentation` and `external-patterns` as separate Tier 2 skills for
+  now. They are reference-grounding-adjacent helper surfaces with distinct tool
+  and codebase-search behavior, not obvious Tier 3 sibling wrappers. Revisit
+  only if call sites become mostly `research:official-docs` or
+  `research:code-patterns`.
 - Keep `image-generation` and `video-generation` as shared execution layers.
   They are not generic Tier 2 interfaces because their model maps, spend gates,
   and asset bundles are domain-specific.
