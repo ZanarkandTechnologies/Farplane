@@ -14,7 +14,12 @@ Generate project-ready AI video assets with inference.sh CLI (`belt`) while keep
 
 Use `todos.md` at the start of the pass. It is the ordered anti-forgetting checklist for model choice, reference loading, spend gates, asset saving, and frontend proof.
 
-Use domain video guide skills for artifact/product problems: `ai-marketing-videos`, `explainer-video-guide`, `storyboard-creation`, `talking-head-production`, and `video-ad-specs`. Prompting guidance belongs inside those artifact skills. Use this skill for model/app selection and `belt` execution once the domain intent is known.
+Use `video-production` method addresses for artifact/product problems:
+`video-production:marketing`, `video-production:explainer`,
+`video-production:storyboard`, `video-production:talking-head`, and
+`video-production:ad-spec`. Prompting guidance belongs inside that domain
+workflow skill. Use this skill for model/app selection and `belt` execution
+once the domain intent is known.
 
 For video prompt quality when no narrower artifact prompt applies, load `references/prompting/video-prompting-guide.md` for shot type, camera movement, lighting, temporal motion, and model-specific phrasing.
 
@@ -105,14 +110,16 @@ belt app list --category video
 - Google Veo: `references/tools/google-veo.md`
 - Still image animation: `references/tools/image-to-video.md`
 - Pruna P-Video or WAN fast/economical generation: `references/tools/p-video.md`
-- Talking head, avatar, portrait animation, or lipsync: use `talking-head-production`; model details live in `references/tools/p-video-avatar.md` and `references/tools/ai-avatar-video.md`
+- Talking head, avatar, portrait animation, or lipsync: use `video-production:talking-head`; model details live in `references/tools/p-video-avatar.md` and `references/tools/ai-avatar-video.md`
 - HappyHorse or physical realism/editing: `references/tools/happyhorse.md`
 - Seedance, reference video, or audio-aware generation: `references/tools/seedance.md`
-- Marketing or promo video: use `ai-marketing-videos`
-- Explainer, tutorial, or product demo sequence: use `explainer-video-guide`
-- Storyboard or shot list: use `storyboard-creation`
-- Social/video ad specs: use `video-ad-specs`
-- Prompt improvement: use the owning artifact skill's `references/prompting.md`; if no artifact domain is known, load `references/prompting/video-prompting-guide.md`
+- Marketing or promo video: use `video-production:marketing`
+- Explainer, tutorial, or product demo sequence: use `video-production:explainer`
+- Storyboard or shot list: use `video-production:storyboard`
+- Social/video ad specs: use `video-production:ad-spec`
+- Prompt improvement: use the owning `video-production` method's prompting
+  reference; if no artifact domain is known, load
+  `references/prompting/video-prompting-guide.md`
 - Shared artifact production workflow for domain video skills: `references/domain-production.md`
 - Long-running jobs, batched tasks, timers, or delegated polling: `references/long-running-jobs.md`
 - Copied-reference overrides and known stale app IDs: `references/reference-overrides.md`

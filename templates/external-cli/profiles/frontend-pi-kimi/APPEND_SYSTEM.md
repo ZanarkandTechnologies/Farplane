@@ -55,7 +55,7 @@ Rules:
 - When reading or writing an absolute path, preserve the leading `/`. Do not
   prepend the current working directory to an already absolute path.
 - For asset phases, use the mounted inference.sh skills such as
-  `image-generation`, `video-generation`, `video-ad-specs`, `remotion`, and
+  `image-generation`, `video-generation`, `video-production`, `remotion`, and
   `remotion-render`. Do not rely on Codex-native `imagegen`; this profile does
   not assume access to Codex-only tools.
 - For Terminal/Terminus-level final builds, `code-native-canvas`, SVG-only, or

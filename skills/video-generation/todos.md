@@ -10,14 +10,14 @@ Use this as the ordered checklist whenever `video-generation` is active.
 - [ ] For Google Veo, load `references/tools/google-veo.md`.
 - [ ] For still image animation, load `references/tools/image-to-video.md`.
 - [ ] For Pruna/P-Video fast or economical generation, load `references/tools/p-video.md`.
-- [ ] For talking head, avatar, portrait animation, or lipsync, use `talking-head-production`; load `references/tools/p-video-avatar.md` or `references/tools/ai-avatar-video.md` only for model details.
+- [ ] For talking head, avatar, portrait animation, or lipsync, use `video-production:talking-head`; load `references/tools/p-video-avatar.md` or `references/tools/ai-avatar-video.md` only for model details.
 - [ ] For HappyHorse, physical realism, or video editing, load `references/tools/happyhorse.md`.
 - [ ] For Seedance, reference video, or audio-aware generation, load `references/tools/seedance.md`.
-- [ ] For marketing or promo videos, use `ai-marketing-videos`.
-- [ ] For explainer, tutorial, or product demo sequences, use `explainer-video-guide`.
-- [ ] For storyboard or shot-list work, use `storyboard-creation`.
-- [ ] For social/video ad specs, use `video-ad-specs`.
-- [ ] For prompt improvement, use the owning artifact skill's `references/prompting.md`; if no artifact domain is known, load `references/prompting/video-prompting-guide.md`.
+- [ ] For marketing or promo videos, use `video-production:marketing`.
+- [ ] For explainer, tutorial, or product demo sequences, use `video-production:explainer`.
+- [ ] For storyboard or shot-list work, use `video-production:storyboard`.
+- [ ] For social/video ad specs, use `video-production:ad-spec`.
+- [ ] For prompt improvement, use the owning `video-production` method's prompting reference; if no artifact domain is known, load `references/prompting/video-prompting-guide.md`.
 - [ ] For shared production routing from a domain skill, load `references/domain-production.md`.
 - [ ] For long-running or batched generations, load `references/long-running-jobs.md`; use `--no-wait`, task IDs, and `jobs.md` instead of terminal scrollback.
 - [ ] Before copying commands from upstream references, load `references/reference-overrides.md` and let it override stale app examples.

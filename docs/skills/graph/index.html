@@ -1,0 +1,609 @@
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mission Control - Skill Graph</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#c6c6cb",
+              outline: "#76777b",
+              "surface-variant": "#e1e3e4",
+              "surface-container": "#edeeef",
+              "surface-container-low": "#f3f4f5",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-high": "#e7e8e9",
+              "on-surface-variant": "#45474b",
+              primary: "#000000",
+              "primary-container": "#1a1c20",
+              "on-primary": "#ffffff",
+              secondary: "#bb0011",
+              "secondary-container": "#e22525",
+              "on-secondary-container": "#fffbff",
+              "on-background": "#191c1d",
+              "on-surface": "#191c1d",
+              surface: "#f8f9fa",
+              background: "#f8f9fa",
+              "inverse-surface": "#2e3132",
+              "inverse-on-surface": "#f0f1f2",
+              error: "#ba1a1a",
+              "accent-red": "#E11D48",
+              "accent-blue": "#2563EB",
+              "accent-amber": "#B45309"
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px"
+            },
+            fontFamily: {
+              "body-md": ["Geist", "sans-serif"],
+              "headline": ["IBM Plex Sans", "sans-serif"],
+              "data-mono": ["JetBrains Mono", "monospace"]
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+
+      .tactical-grid {
+        background-image:
+          linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+          linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+        background-position: center center;
+        background-size: 16px 16px;
+      }
+
+      .graph-link {
+        stroke: #76777b;
+        stroke-opacity: 0.38;
+        stroke-width: 1.5;
+      }
+
+      .graph-link.chain {
+        stroke: #b45309;
+        stroke-dasharray: 7 5;
+        stroke-opacity: 0.9;
+        stroke-width: 2;
+      }
+
+      .graph-link.method {
+        stroke: #2563eb;
+        stroke-opacity: 0.5;
+      }
+
+      .node-shell {
+        cursor: pointer;
+      }
+
+      .node-orbit {
+        fill: #f8f9fa;
+        stroke-width: 2;
+        transition: stroke-width 140ms ease, filter 140ms ease;
+      }
+
+      .node-shell:hover .node-orbit,
+      .node-shell.selected .node-orbit {
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.18));
+        stroke-width: 3.5;
+      }
+
+      .node-core {
+        pointer-events: none;
+      }
+
+      .node-label {
+        fill: #191c1d;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        font-weight: 700;
+        pointer-events: none;
+        text-anchor: middle;
+      }
+
+      .node-caption {
+        fill: #45474b;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 8px;
+        font-weight: 600;
+        pointer-events: none;
+        text-anchor: middle;
+      }
+    </style>
+  </head>
+  <body class="flex h-screen flex-col overflow-hidden bg-background font-body-md text-on-background">
+    <header class="z-10 flex h-12 shrink-0 items-center justify-between border-b border-outline-variant bg-surface px-4 md:px-8">
+      <div class="flex items-center gap-6">
+        <div class="font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">SKILL_GRAPH_OS</div>
+        <nav class="hidden gap-6 md:flex">
+          <button class="flex h-12 items-center border-b-2 border-secondary px-2 font-headline text-[16px] font-semibold text-secondary">Matrix</button>
+          <button class="flex h-12 items-center px-2 font-headline text-[16px] font-semibold text-outline transition-colors hover:bg-surface-container-low">Telemetry</button>
+          <button class="flex h-12 items-center px-2 font-headline text-[16px] font-semibold text-outline transition-colors hover:bg-surface-container-low">Nodes</button>
+          <button class="flex h-12 items-center px-2 font-headline text-[16px] font-semibold text-outline transition-colors hover:bg-surface-container-low">System</button>
+        </nav>
+      </div>
+
+      <div class="hidden items-center gap-4 border border-outline-variant bg-surface-container-low px-3 py-1 font-data-mono text-[12px] text-primary lg:flex">
+        <div class="flex items-center gap-2">
+          <span class="h-2 w-2 animate-pulse rounded-full bg-accent-blue"></span>
+          <span>LINK_STATUS: ACTIVE</span>
+        </div>
+        <span class="text-outline-variant">|</span>
+        <span id="top-node-count">NODES: --</span>
+        <span class="text-outline-variant">|</span>
+        <span id="top-edge-count">VECTORS: --</span>
+      </div>
+
+      <div class="flex items-center gap-3 text-primary">
+        <button class="rounded p-1 transition-colors hover:bg-surface-container-low" title="Fit graph">
+          <span class="material-symbols-outlined">filter_center_focus</span>
+        </button>
+        <button class="rounded p-1 transition-colors hover:bg-surface-container-low" title="Diagnostics">
+          <span class="material-symbols-outlined">settings_input_component</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+      <aside class="z-10 hidden h-full w-64 shrink-0 flex-col border-r border-outline-variant bg-surface-container-low py-4 md:flex">
+        <div class="mb-6 px-4">
+          <div class="mb-2 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center border border-primary bg-primary">
+              <span class="material-symbols-outlined text-on-primary">hub</span>
+            </div>
+            <div>
+              <div class="font-headline text-[18px] font-semibold text-primary">CONTROL_01</div>
+              <div class="font-data-mono text-[11px] font-bold tracking-[0.08em] text-outline">Skill Registry</div>
+            </div>
+          </div>
+        </div>
+
+        <nav class="flex-1 space-y-1 overflow-y-auto px-1">
+          <button class="flex w-full scale-95 items-center gap-3 bg-primary px-3 py-2 text-on-primary">
+            <span class="material-symbols-outlined">hub</span>
+            <span class="font-data-mono text-[12px] font-bold tracking-[0.08em]">Active Vectors</span>
+          </button>
+          <button class="group flex w-full scale-95 items-center gap-3 px-3 py-2 text-outline transition-all hover:bg-surface-variant">
+            <span class="material-symbols-outlined group-hover:text-primary">radar</span>
+            <span class="font-data-mono text-[12px] font-bold tracking-[0.08em] group-hover:text-primary">Core Assets</span>
+          </button>
+          <button class="group flex w-full scale-95 items-center gap-3 px-3 py-2 text-outline transition-all hover:bg-surface-variant">
+            <span class="material-symbols-outlined group-hover:text-primary">navigation</span>
+            <span class="font-data-mono text-[12px] font-bold tracking-[0.08em] group-hover:text-primary">Deployment</span>
+          </button>
+
+          <div class="mx-3 mb-4 mt-8 border-b border-outline-variant pb-2">
+            <span class="font-data-mono text-[12px] font-bold tracking-[0.08em] text-outline">VECTOR LEGEND</span>
+          </div>
+
+          <div class="space-y-3 px-3">
+            <label class="flex cursor-pointer items-center gap-3">
+              <input class="tier-filter form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" data-tier="1" type="checkbox" checked />
+              <span class="h-3 w-3 bg-accent-red"></span>
+              <span class="font-data-mono text-[13px] text-primary">Tier 1 [CORE]</span>
+            </label>
+            <label class="flex cursor-pointer items-center gap-3">
+              <input class="tier-filter form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" data-tier="2" type="checkbox" checked />
+              <span class="h-3 w-3 bg-accent-blue"></span>
+              <span class="font-data-mono text-[13px] text-primary">Tier 2 [FLOW]</span>
+            </label>
+            <label class="flex cursor-pointer items-center gap-3">
+              <input class="tier-filter form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" data-tier="3" type="checkbox" checked />
+              <span class="h-3 w-3 bg-outline"></span>
+              <span class="font-data-mono text-[13px] text-primary">Tier 3 [APP]</span>
+            </label>
+          </div>
+
+          <div class="mx-3 mb-4 mt-8 border-b border-outline-variant pb-2">
+            <span class="font-data-mono text-[12px] font-bold tracking-[0.08em] text-outline">FILTERS</span>
+          </div>
+
+          <div class="space-y-3 px-3">
+            <label class="block">
+              <span class="mb-1 block font-data-mono text-[11px] font-bold tracking-[0.08em] text-outline">GROUP</span>
+              <select id="group-filter" class="w-full rounded-none border-outline-variant bg-surface font-data-mono text-[12px] focus:border-primary focus:ring-primary">
+                <option value="">All groups</option>
+              </select>
+            </label>
+            <label class="flex cursor-pointer items-center gap-3">
+              <input id="external-filter" class="form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" type="checkbox" checked />
+              <span class="font-data-mono text-[13px] text-primary">Show external</span>
+            </label>
+            <label class="flex cursor-pointer items-center gap-3">
+              <input id="chain-filter" class="form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" type="checkbox" checked />
+              <span class="font-data-mono text-[13px] text-primary">Show chains</span>
+            </label>
+            <label class="flex cursor-pointer items-center gap-3">
+              <input id="ref-filter" class="form-checkbox h-4 w-4 rounded-none border-outline-variant bg-surface text-primary focus:ring-primary focus:ring-offset-0" type="checkbox" checked />
+              <span class="font-data-mono text-[13px] text-primary">Show refs</span>
+            </label>
+          </div>
+        </nav>
+
+        <div class="mt-auto border-t border-outline-variant px-4 pt-4">
+          <button id="fit-button" class="mb-4 flex w-full items-center justify-center gap-2 bg-accent-blue py-2 font-data-mono text-[12px] font-bold tracking-[0.08em] text-white transition-opacity hover:opacity-90">
+            <span class="material-symbols-outlined text-sm">bolt</span>
+            EXECUTE_SYNC
+          </button>
+          <div class="flex justify-between">
+            <span class="flex items-center gap-2 text-outline">
+              <span class="material-symbols-outlined text-[18px]">terminal</span>
+              <span class="font-data-mono text-[10px] font-bold tracking-[0.08em]">Diagnostics</span>
+            </span>
+            <span class="flex items-center gap-2 text-outline">
+              <span class="material-symbols-outlined text-[18px]">help_outline</span>
+              <span class="font-data-mono text-[10px] font-bold tracking-[0.08em]">Help</span>
+            </span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="tactical-grid relative flex-1 overflow-hidden bg-surface">
+        <div class="absolute left-1/2 top-4 z-20 w-[34rem] max-w-full -translate-x-1/2 px-4">
+          <div class="flex items-center border border-primary bg-primary px-4 py-2 text-surface-container shadow-[0_4px_0_rgba(0,0,0,0.1)]">
+            <span class="material-symbols-outlined mr-3 text-outline-variant">search</span>
+            <input id="command-search" class="w-full border-none bg-transparent font-data-mono text-[13px] text-surface outline-none placeholder:text-outline-variant focus:ring-0" placeholder="Locate Node / Filter Registry..." type="text" />
+            <div class="ml-3 flex items-center gap-1 font-data-mono text-[10px] font-bold tracking-[0.08em] text-outline-variant">
+              <span class="border border-surface-tint bg-inverse-surface px-1 py-0.5">CMD</span>
+              <span class="border border-surface-tint bg-inverse-surface px-1 py-0.5">K</span>
+            </div>
+          </div>
+        </div>
+
+        <svg id="skill-graph" class="absolute inset-0 h-full w-full"></svg>
+
+        <div class="absolute bottom-4 left-4 z-20 flex gap-2">
+          <button id="zoom-in" class="flex h-8 w-8 items-center justify-center border border-outline bg-surface transition-colors hover:border-primary" title="Zoom in">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+          </button>
+          <button id="zoom-out" class="flex h-8 w-8 items-center justify-center border border-outline bg-surface transition-colors hover:border-primary" title="Zoom out">
+            <span class="material-symbols-outlined text-[18px]">remove</span>
+          </button>
+          <button id="reheat" class="ml-2 flex h-8 w-8 items-center justify-center border border-outline bg-surface transition-colors hover:border-primary" title="Reheat force simulation">
+            <span class="material-symbols-outlined text-[18px]">device_hub</span>
+          </button>
+        </div>
+
+        <div class="absolute bottom-4 right-4 z-20 border border-outline-variant bg-surface/95 px-3 py-2 font-data-mono text-[11px] text-outline shadow-sm">
+          <span id="visible-status">VISIBLE: --</span>
+        </div>
+      </main>
+
+      <aside id="intel-panel" class="z-10 hidden h-full w-80 shrink-0 flex-col border-l border-outline-variant bg-surface shadow-[-4px_0_15px_rgba(0,0,0,0.03)] lg:flex">
+        <div class="flex h-12 items-center border-b border-primary bg-primary px-4 text-on-primary">
+          <span class="material-symbols-outlined mr-2 text-[18px]">memory</span>
+          <h2 class="font-data-mono text-[12px] font-bold tracking-[0.08em]">NODE_INTEL</h2>
+        </div>
+        <div id="node-detail" class="flex-1 overflow-y-auto p-4"></div>
+        <div class="border-t border-outline-variant bg-surface-container-low p-4">
+          <button id="focus-selected" class="flex w-full items-center justify-center gap-2 border-2 border-primary bg-transparent py-2 font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary transition-colors hover:bg-primary hover:text-surface">
+            <span class="material-symbols-outlined text-[16px]">tune</span>
+            FOCUS_NODE
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    <script src="skill-graph.js"></script>
+    <script>
+      const graph = window.SKILL_GRAPH;
+      const graphSvg = d3.select("#skill-graph");
+      const detail = document.querySelector("#node-detail");
+      const search = document.querySelector("#command-search");
+      const groupFilter = document.querySelector("#group-filter");
+      const externalFilter = document.querySelector("#external-filter");
+      const chainFilter = document.querySelector("#chain-filter");
+      const refFilter = document.querySelector("#ref-filter");
+      const visibleStatus = document.querySelector("#visible-status");
+      const selectedClass = "selected";
+      const tierColors = { 1: "#E11D48", 2: "#2563EB", 3: "#76777b" };
+      const tierLabels = { 1: "CORE", 2: "FLOW", 3: "APP" };
+      let selectedNode = null;
+      let simulation;
+      let linkSelection;
+      let nodeSelection;
+      let transform = d3.zoomIdentity;
+
+      const viewport = graphSvg.append("g").attr("class", "viewport");
+      const linkLayer = viewport.append("g").attr("class", "links");
+      const nodeLayer = viewport.append("g").attr("class", "nodes");
+      const zoom = d3.zoom().scaleExtent([0.25, 3.6]).on("zoom", (event) => {
+        transform = event.transform;
+        viewport.attr("transform", transform);
+      });
+      graphSvg.call(zoom);
+
+      function init() {
+        document.querySelector("#top-node-count").textContent = `NODES: ${graph.counts.nodes}`;
+        document.querySelector("#top-edge-count").textContent = `VECTORS: ${graph.counts.edges}`;
+        const groups = [...new Set(graph.nodes.map((node) => node.group).filter(Boolean))].sort();
+        for (const group of groups) {
+          const option = document.createElement("option");
+          option.value = group;
+          option.textContent = group;
+          groupFilter.appendChild(option);
+        }
+
+        for (const input of document.querySelectorAll(".tier-filter")) input.addEventListener("input", render);
+        for (const input of [search, groupFilter, externalFilter, chainFilter, refFilter]) input.addEventListener("input", render);
+        document.querySelector("#zoom-in").addEventListener("click", () => graphSvg.transition().call(zoom.scaleBy, 1.2));
+        document.querySelector("#zoom-out").addEventListener("click", () => graphSvg.transition().call(zoom.scaleBy, 0.82));
+        document.querySelector("#fit-button").addEventListener("click", fitGraph);
+        document.querySelector("#focus-selected").addEventListener("click", () => selectedNode && focusNode(selectedNode));
+        document.querySelector("#reheat").addEventListener("click", () => simulation.alpha(0.65).restart());
+        window.addEventListener("resize", render);
+        render();
+      }
+
+      function activeTiers() {
+        return new Set([...document.querySelectorAll(".tier-filter:checked")].map((input) => Number(input.dataset.tier)));
+      }
+
+      function filtered() {
+        const tiers = activeTiers();
+        const query = search.value.trim().toLowerCase();
+        const group = groupFilter.value;
+        const includeExternal = externalFilter.checked;
+        const nodes = graph.nodes
+          .filter((node) => tiers.has(Number(node.tier)))
+          .filter((node) => includeExternal || node.source !== "external")
+          .filter((node) => !group || node.group === group)
+          .filter((node) => {
+            if (!query) return true;
+            return [node.label, node.id, node.group, node.path, node.description, ...(node.methods || [])]
+              .join(" ")
+              .toLowerCase()
+              .includes(query);
+          })
+          .map((node) => ({ ...node }));
+        const nodeIds = new Set(nodes.map((node) => node.id));
+        const edges = graph.edges
+          .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
+          .filter((edge) => (edge.type === "common-chain" ? chainFilter.checked : refFilter.checked))
+          .map((edge) => ({ ...edge }));
+        return { nodes, edges };
+      }
+
+      function render() {
+        const width = graphSvg.node().clientWidth || 900;
+        const height = graphSvg.node().clientHeight || 700;
+        const { nodes, edges } = filtered();
+        const degree = new Map();
+        for (const edge of graph.edges) {
+          degree.set(edge.source, (degree.get(edge.source) || 0) + 1);
+          degree.set(edge.target, (degree.get(edge.target) || 0) + 1);
+        }
+        for (const node of nodes) {
+          node.radius = radiusFor(node, degree.get(node.id) || 0);
+          node.x = node.x ?? width / 2 + (Math.random() - 0.5) * 180;
+          node.y = node.y ?? height / 2 + (Math.random() - 0.5) * 120;
+        }
+
+        visibleStatus.textContent = `VISIBLE: ${nodes.length} NODES / ${edges.length} VECTORS`;
+        drawDetail(selectedNode && nodes.find((node) => node.id === selectedNode.id) ? selectedNode : nodes[0]);
+
+        linkSelection = linkLayer.selectAll("line").data(edges, (edge) => `${edge.source}->${edge.target}:${edge.type}:${edge.label}`);
+        linkSelection.exit().remove();
+        const enteredLinks = linkSelection
+          .enter()
+          .append("line")
+          .attr("class", (edge) => `graph-link ${edge.type === "common-chain" ? "chain" : ""} ${edge.label.includes("#") ? "method" : ""}`);
+        enteredLinks
+          .append("title")
+          .text((edge) => `${edge.source} -> ${edge.target_ref} [${edge.type}]`);
+        linkSelection = enteredLinks.merge(linkSelection);
+
+        nodeSelection = nodeLayer.selectAll("g").data(nodes, (node) => node.id);
+        nodeSelection.exit().remove();
+
+        const entered = nodeSelection
+          .enter()
+          .append("g")
+          .attr("class", "node-shell")
+          .call(drag())
+          .on("click", (_, node) => {
+            selectedNode = node;
+            drawDetail(node);
+            nodeLayer.selectAll("g").classed(selectedClass, (candidate) => candidate.id === node.id);
+          });
+
+        entered.append("circle").attr("class", "node-orbit");
+        entered.append("circle").attr("class", "node-core");
+        entered.append("text").attr("class", "node-label").attr("dy", "0.25em");
+        entered.append("text").attr("class", "node-caption").attr("dy", "2.5em");
+
+        nodeSelection = entered.merge(nodeSelection);
+        nodeSelection.classed("selected", (node) => selectedNode && selectedNode.id === node.id);
+        nodeSelection.select(".node-orbit")
+          .attr("r", (node) => node.radius)
+          .attr("stroke", (node) => tierColors[node.tier] || "#76777b");
+        nodeSelection.select(".node-core")
+          .attr("r", (node) => Math.max(5, node.radius * 0.36))
+          .attr("fill", (node) => node.source === "external" ? "#000000" : tierColors[node.tier] || "#76777b");
+        nodeSelection.select(".node-label")
+          .text((node) => shortLabel(node.id))
+          .attr("y", (node) => -node.radius - 8);
+        nodeSelection.select(".node-caption")
+          .text((node) => tierLabels[node.tier] || "SKILL")
+          .attr("y", (node) => node.radius + 4);
+
+        simulation?.stop();
+        simulation = d3.forceSimulation(nodes)
+          .force("link", d3.forceLink(edges).id((node) => node.id).distance((edge) => edge.type === "common-chain" ? 170 : 108).strength(0.18))
+          .force("charge", d3.forceManyBody().strength((node) => node.tier === 1 ? -560 : node.tier === 2 ? -360 : -260))
+          .force("center", d3.forceCenter(width / 2, height / 2))
+          .force("x", d3.forceX((node) => tierX(node, width)).strength(0.025))
+          .force("y", d3.forceY(height / 2).strength(0.035))
+          .force("collide", d3.forceCollide((node) => node.radius + 18))
+          .alpha(0.95)
+          .on("tick", ticked);
+      }
+
+      function ticked() {
+        linkSelection
+          .attr("x1", (edge) => edge.source.x)
+          .attr("y1", (edge) => edge.source.y)
+          .attr("x2", (edge) => edge.target.x)
+          .attr("y2", (edge) => edge.target.y);
+        nodeSelection.attr("transform", (node) => `translate(${node.x},${node.y})`);
+      }
+
+      function radiusFor(node, degree) {
+        const methodBonus = node.methods?.length ? 5 : 0;
+        const tierBase = node.tier === 1 ? 22 : node.tier === 2 ? 17 : 14;
+        return tierBase + methodBonus + Math.min(9, degree * 0.85);
+      }
+
+      function tierX(node, width) {
+        if (node.tier === 1) return width * 0.5;
+        if (node.tier === 2) return width * 0.38;
+        return width * 0.62;
+      }
+
+      function shortLabel(name) {
+        const parts = name.split("-");
+        if (parts.length === 1) return name.slice(0, 6).toUpperCase();
+        return parts.map((part) => part[0]).join("").slice(0, 6).toUpperCase();
+      }
+
+      function drag() {
+        return d3.drag()
+          .on("start", (event, node) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            node.fx = node.x;
+            node.fy = node.y;
+          })
+          .on("drag", (event, node) => {
+            node.fx = event.x;
+            node.fy = event.y;
+          })
+          .on("end", (event, node) => {
+            if (!event.active) simulation.alphaTarget(0);
+            node.fx = null;
+            node.fy = null;
+          });
+      }
+
+      function focusNode(node) {
+        const width = graphSvg.node().clientWidth || 900;
+        const height = graphSvg.node().clientHeight || 700;
+        const next = d3.zoomIdentity.translate(width / 2 - node.x * 1.45, height / 2 - node.y * 1.45).scale(1.45);
+        graphSvg.transition().duration(420).call(zoom.transform, next);
+      }
+
+      function fitGraph() {
+        graphSvg.transition().duration(420).call(zoom.transform, d3.zoomIdentity);
+        simulation?.alpha(0.4).restart();
+      }
+
+      function drawDetail(node) {
+        if (!node) {
+          detail.innerHTML = `<p class="font-data-mono text-[13px] text-outline">No node selected.</p>`;
+          return;
+        }
+        selectedNode = node;
+        const outgoing = graph.edges.filter((edge) => edge.source === node.id);
+        const incoming = graph.edges.filter((edge) => edge.target === node.id);
+        const methods = node.methods || [];
+        detail.innerHTML = `
+          <div class="mb-6">
+            <div class="mb-2 flex items-start justify-between gap-3">
+              <h3 class="font-headline text-[20px] font-semibold text-primary">${escapeHtml(node.id)}</h3>
+              <div class="flex items-center gap-1 bg-${node.tier === 1 ? "accent-red" : node.tier === 2 ? "accent-blue" : "outline"} px-2 py-1 text-white">
+                <span class="h-1.5 w-1.5 rounded-full bg-surface"></span>
+                <span class="font-data-mono text-[10px] font-bold tracking-[0.08em]">${tierLabels[node.tier] || "SKILL"}</span>
+              </div>
+            </div>
+            <div class="break-all font-data-mono text-[12px] text-outline">ID: ${escapeHtml(node.path)}</div>
+          </div>
+          <div class="mb-6 grid grid-cols-2 gap-px border border-outline-variant bg-outline-variant">
+            <div class="bg-surface p-3">
+              <div class="mb-1 font-data-mono text-[10px] font-bold tracking-[0.08em] text-outline">TIER</div>
+              <div class="font-headline text-[32px] font-bold text-primary">${node.tier}<span class="text-[16px] text-outline">/3</span></div>
+            </div>
+            <div class="bg-surface p-3">
+              <div class="mb-1 font-data-mono text-[10px] font-bold tracking-[0.08em] text-outline">LINKS</div>
+              <div class="font-headline text-[32px] font-bold text-primary">${outgoing.length + incoming.length}</div>
+            </div>
+          </div>
+          <div class="mb-6">
+            <h4 class="mb-2 border-b-2 border-primary pb-1 font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">PROPERTIES</h4>
+            <table class="w-full border-collapse text-left font-data-mono text-[12px]">
+              <tbody>
+                ${row("Group", node.group || "none")}
+                ${row("Source", node.source)}
+                ${row("Todos", node.has_todos ? "present" : "missing")}
+                ${row("Methods", String(methods.length))}
+              </tbody>
+            </table>
+          </div>
+          <div class="mb-6">
+            <h4 class="mb-2 border-b border-outline-variant pb-1 font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">SUMMARY</h4>
+            <p class="text-[13px] leading-5 text-on-surface-variant">${escapeHtml(node.description || "No description available.")}</p>
+          </div>
+          <div class="mb-6">
+            <h4 class="mb-2 border-b border-outline-variant pb-1 font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">METHODS</h4>
+            <div class="flex flex-wrap gap-2">${methods.map((method) => badge(method, "method")).join("") || badge("none", "muted")}</div>
+          </div>
+          <div>
+            <h4 class="mb-2 flex justify-between border-b border-outline-variant pb-1 font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">
+              <span>LINKED_VECTORS</span>
+              <span class="text-outline">${outgoing.length}</span>
+            </h4>
+            <ul class="space-y-2">
+              ${outgoing.slice(0, 12).map((edge) => linkedVector(edge)).join("") || `<li class="border border-outline-variant bg-surface-container-low p-2 font-data-mono text-[12px] text-outline">No outgoing links.</li>`}
+            </ul>
+          </div>
+        `;
+      }
+
+      function row(label, value) {
+        return `<tr class="border-b border-outline-variant hover:bg-surface-container-low"><td class="w-1/3 py-2 text-outline">${escapeHtml(label)}</td><td class="py-2 text-primary">${escapeHtml(value)}</td></tr>`;
+      }
+
+      function badge(value, kind) {
+        const cls = kind === "method" ? "border-accent-blue text-accent-blue" : "border-outline-variant text-outline";
+        return `<span class="border ${cls} bg-surface px-2 py-1 font-data-mono text-[11px]">${escapeHtml(value)}</span>`;
+      }
+
+      function linkedVector(edge) {
+        const icon = edge.type === "common-chain" ? "arrow_forward" : "sync_alt";
+        const color = edge.type === "common-chain" ? "text-accent-amber" : edge.label.includes("#") ? "text-accent-blue" : "text-outline";
+        return `
+          <li class="flex items-center justify-between border border-outline-variant bg-surface-container-low p-2 transition-colors hover:border-primary">
+            <div class="flex min-w-0 items-center gap-2">
+              <span class="material-symbols-outlined ${color} text-[16px]">${icon}</span>
+              <span class="truncate font-data-mono text-[12px] text-primary">${escapeHtml(edge.target_ref || edge.target)}</span>
+            </div>
+            <span class="font-data-mono text-[10px] font-bold tracking-[0.08em] text-outline">${edge.type === "common-chain" ? "CHAIN" : "REF"}</span>
+          </li>
+        `;
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (ch) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        })[ch]);
+      }
+
+      if (graph) init();
+    </script>
+  </body>
+</html>

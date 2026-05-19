@@ -5,6 +5,8 @@ description: Use when planning, diagnosing, or redesigning product UI and UX flo
 tier: 3
 group: frontend
 source: local
+common_chains:
+  after: ["visual-design"]
 ---
 
 # Functional UI

@@ -175,7 +175,7 @@ research-shaped and should live under `research` first.
 ### Tier 3 Groups And Chains
 
 Tier 3 skills are application skills. Some are full application entrypoints
-(`ai-marketing-videos`, `landing-page`, `impl-plan`), and some are application
+(`video-production`, `landing-page`, `impl-plan`), and some are application
 execution surfaces that other Tier 3 skills commonly call (`image-generation`,
 `video-generation`, `remotion-render`, `frontend-craft`). That is okay: Tier 3
 can have local routers or method surfaces when the domain needs them.
@@ -292,13 +292,9 @@ Use this template when adding `todos.md` to content creation skills:
 Add frontmatter metadata, generate a dedicated skill package registry, and add
 missing `todos.md` for the content creation cluster:
 
-- `ai-marketing-videos`
+- `video-production`
 - `product-photography`
 - `social-content`
-- `explainer-video-guide`
-- `storyboard-creation`
-- `talking-head-production`
-- `video-ad-specs`
 - `remotion`
 - `remotion-render`
 

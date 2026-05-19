@@ -4,6 +4,8 @@ description: Run the QA phase for one selected ticket by collecting proof artifa
 tier: 3
 group: coding
 source: local
+common_chains:
+  after: ["demo", "close-ticket"]
 ---
 
 # QA

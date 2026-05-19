@@ -4,7 +4,8 @@ This module is the model/app execution skill for inference.sh video. Keep the fi
 
 The files under `references/tools/` are copied upstream inference.sh tool `SKILL.md` files. Refresh them from the upstream source instead of rewriting them by hand.
 
-Keep domain guide skills separate: `ai-marketing-videos`, `explainer-video-guide`, `storyboard-creation`, `talking-head-production`, and `video-ad-specs`.
+Keep domain video workflow planning in `video-production` method addresses.
+This module remains the model/app execution skill.
 
 Do not create a standalone public `video-prompting-guide` skill. Prompting guidance should live inside the artifact/domain skill that owns the output.
 

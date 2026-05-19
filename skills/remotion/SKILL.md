@@ -4,6 +4,8 @@ description: Author Remotion video code in React with official best-practice rul
 tier: 3
 group: content-video
 source: local
+common_chains:
+  after: ["remotion-render"]
 metadata:
   tags: remotion, video, react, animation, composition
 ---

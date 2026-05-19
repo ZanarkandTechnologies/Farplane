@@ -5,6 +5,8 @@ description: "Phase-1 Codexter skill for requirements gathering and PRD authorin
 tier: 3
 group: coding
 source: local
+common_chains:
+  after: ["spec-to-ticket"]
 ---
 
 # PRD Skill

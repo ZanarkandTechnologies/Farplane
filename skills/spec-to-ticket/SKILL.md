@@ -5,6 +5,8 @@ description: "Phase-2 Codexter skill: convert one SLC slice from specs into raw 
 tier: 3
 group: coding
 source: local
+common_chains:
+  after: ["impl-plan"]
 ---
 
 # Spec-to-Ticket Skill

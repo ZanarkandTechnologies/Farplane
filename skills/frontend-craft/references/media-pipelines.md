@@ -13,11 +13,11 @@ Use this when a website, landing page, campaign, or product demo needs multiple 
 | LinkedIn posts or professional social assets | `social-content:linkedin`, then `social-content:carousel` or image execution when visual |
 | Instagram/LinkedIn/X carousel assets | `social-content:carousel`, then image/code execution |
 | Twitter/X threads or media-supported posts | `social-content:twitter-thread`, then image execution when visual |
-| Marketing/promo video domain plan | `ai-marketing-videos`, then `video-generation` for execution |
-| Explainer/product demo domain plan | `explainer-video-guide`, then `video-generation` or `remotion` for execution |
-| Storyboard/shot list | `storyboard-creation`, then `imagegen`, `image-generation`, or `video-generation` |
-| Talking head/avatar domain plan | `talking-head-production`, then `video-generation` for execution |
-| Platform ad specs/domain plan | `video-ad-specs`, then `video-generation` for execution |
+| Marketing/promo video domain plan | `video-production:marketing`, then `video-generation` for execution |
+| Explainer/product demo domain plan | `video-production:explainer`, then `video-generation` or `remotion` for execution |
+| Storyboard/shot list | `video-production:storyboard`, then `imagegen`, `image-generation`, or `video-generation` |
+| Talking head/avatar domain plan | `video-production:talking-head`, then `video-generation` for execution |
+| Platform ad specs/domain plan | `video-production:ad-spec`, then `video-generation` for execution |
 | Model-native video, image-to-video, avatar/lipsync, video edit | `video-generation` |
 | Remotion code authoring, timing, captions, SFX, composition rules | `remotion` |
 | Render Remotion TSX/code to MP4 through inference.sh | `remotion-render` |

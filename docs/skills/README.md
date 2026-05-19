@@ -9,6 +9,8 @@ into a second place to maintain skill truth.
   `skills/*/SKILL.md` frontmatter, file paths, `todos.md`, and Markdown links.
   Flow or graph views should be derived from Tier 3 `group` and `common_chains`
   fields instead of maintained as a second hand-authored registry.
+- `graph/` contains a generated local visualization of skill nodes,
+  Markdown-reference edges, and Tier 3 chain edges.
 
 ## Frontmatter Contract
 
@@ -54,6 +56,7 @@ python3 bin/sync_skill_registry.py --write
 python3 bin/sync_skill_registry.py --check
 python3 bin/check_skill_todo_tiers.py
 python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
+python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 ```
 
 Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after

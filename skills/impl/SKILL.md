@@ -4,6 +4,8 @@ description: Build-phase orchestrator for one selected ticket. Runs ephemerally,
 tier: 3
 group: coding
 source: local
+common_chains:
+  after: ["qa"]
 ---
 
 # Impl

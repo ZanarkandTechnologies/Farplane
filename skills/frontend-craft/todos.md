@@ -9,6 +9,10 @@
   or behavior are unclear or broken.
 - [ ] Use [visual-design](../visual-design/SKILL.md) when look, taste, visual
   system, density, or motion direction is open.
+- [ ] For substantial redesigns or taste-open surfaces, inspect the user's
+  references plus 2-4 comparable products or strong examples, then use
+  [best-of-worlds](../best-of-worlds/SKILL.md) to decide what to adopt, adapt,
+  reject, or defer before implementing.
 - [ ] Use [plan](../plan/SKILL.md) to choose lanes, scope cuts, proof surfaces,
   and accepted tradeoffs before implementation.
 - [ ] Capture stack facts before importing UI libraries or writing

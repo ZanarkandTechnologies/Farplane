@@ -4,6 +4,8 @@ description: Run the demo phase for one selected ticket by turning passing QA ar
 tier: 3
 group: coding
 source: local
+common_chains:
+  after: ["close-ticket"]
 ---
 
 # Demo

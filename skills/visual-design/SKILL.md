@@ -5,6 +5,8 @@ description: Use when the user wants a frontend to look better, feel more tastef
 tier: 3
 group: frontend
 source: local
+common_chains:
+  after: ["frontend-craft"]
 allowed-tools: Read, Grep, Glob
 ---
 

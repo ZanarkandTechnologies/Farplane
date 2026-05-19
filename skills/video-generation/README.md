@@ -4,7 +4,7 @@ Category-level skill for generating, editing, assembling, and QA-ing project-bou
 
 ## Purpose
 
-Keep video generation as the model/app execution skill with the upstream umbrella model map in `SKILL.md` and provider-specific detail in references. Domain video guides are separate public skills.
+Keep video generation as the model/app execution skill with the upstream umbrella model map in `SKILL.md` and provider-specific detail in references. Domain video workflows live in `video-production` method addresses.
 
 ## Entry Point
 
@@ -22,15 +22,18 @@ Use `SKILL.md` for routing. Use `todos.md` to select only the relevant branch:
 - `references/tools/infsh-cli.md`: `belt` CLI usage.
 - `references/tools/*.md`: provider/app instructions.
 
-Use separate domain skills for artifact-level work:
+Use `video-production` methods for artifact-level work:
 
-- `ai-marketing-videos`
-- `explainer-video-guide`
-- `storyboard-creation`
-- `talking-head-production`
-- `video-ad-specs`
+- `video-production:marketing`
+- `video-production:explainer`
+- `video-production:storyboard`
+- `video-production:talking-head`
+- `video-production:ad-spec`
 
-Prompting guidance lives inside each artifact skill as `references/prompting.md`, with the upstream video prompting guide kept as `references/prompting/video-prompting-guide.md` for general video prompt quality. Do not create a standalone public `video-prompting-guide` skill.
+Prompting guidance lives inside the matching `video-production` method
+reference, with the upstream video prompting guide kept as
+`references/prompting/video-prompting-guide.md` for general video prompt
+quality. Do not create a standalone public `video-prompting-guide` skill.
 
 Remotion code authoring lives in `skills/remotion/`. Inference.sh MP4 rendering for Remotion lives in `skills/remotion-render/`.
 

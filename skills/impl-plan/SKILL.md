@@ -5,6 +5,8 @@ description: "Unified per-ticket planning skill with a detailed file-map-first p
 tier: 3
 group: coding
 source: local
+common_chains:
+  after: ["impl"]
 allowed-tools: Read, Glob, Grep
 ---
 

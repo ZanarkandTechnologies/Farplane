@@ -5,6 +5,8 @@ description: Main frontend implementation orchestrator. Use when the user asks t
 tier: 3
 group: frontend
 source: local
+common_chains:
+  after: ["visual-qa"]
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -29,20 +31,18 @@ Build production frontends by routing the work through the right frontend brain 
 
 1. **Classify the surface.** Product app, workflow component, dashboard, AI interface, landing/marketing page, portfolio, game/tool, or experimental canvas/rendering surface.
 2. **Run functional shape when needed.** Use `functional-ui` when the workflow, IA, user story, states, or component behavior is unclear or broken. Skip only when a recent UX brief already settles those answers.
-3. **Run visual design.** Use `visual-design` to set register, scene sentence, typography, color strategy, layout rhythm, density, motion taste, and anti-slop constraints.
-4. **Route special surfaces.** Use `landing-page` for one-page, marketing, launch, cinematic, scrolltelling, or hero-heavy surfaces.
-5. **Capture stack facts.** Before importing UI libraries or writing framework-specific code, inspect `package.json`, Tailwind config/CSS, `components.json`, app router structure, and existing component paths. Record framework/router, Tailwind major version, installed icon/motion/form/chart/AI packages, shadcn aliases, and theme/preset status.
-6. **Choose implementation references.** Use `frontend-design` references for shadcn, AI Elements, registries, theme/preset application, component-state matrices, and app UI construction. Use `motion-routing.md` for CSS vs Motion vs GSAP vs WebGL decisions.
-7. **Plan assets and experiments.** Use `asset-generation.md` with the `imagegen` skill for generated bitmap assets. Use `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGL, WebGPU, or canvas text layout complexity.
-8. **Implement and verify.** Build with repo patterns, run type/lint/tests, and route UI proof through `visual-qa` or the ticket's QA contract when the surface is user-visible.
-9. **Write the handoff.** Summarize the lanes used, stack facts, UX/visual decisions, changed files, proof commands, and any skipped lanes with reasons.
-3. **Route special surfaces.** Use `landing-page` for one-page, marketing, launch, cinematic, scrolltelling, or hero-heavy surfaces before visual-design so the page recipe, taste profile, and effect stack can guide the look.
-4. **Run visual design.** Use `visual-design` to set register, scene sentence, typography, color strategy, layout rhythm, density, motion taste, and anti-slop constraints. For landing pages, refine this with the selected taste profile.
-5. **Choose implementation references.** Use `frontend-design` references for shadcn, AI Elements, registries, and app UI construction. Use `motion-routing.md` for CSS vs Motion vs GSAP vs WebGL decisions.
-6. **Plan assets and experiments.** Use `asset-generation.md` with `imagegen` for ordinary Codex-native still bitmap assets, `image-generation` for inference.sh image model routing, `video-generation` for model-native video, `remotion` for authoring Remotion code, and `remotion-render` for deterministic React/Remotion MP4s. Use `three-js.md` when the surface earns 3D/WebGL/R3F, and `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGPU, or canvas text layout complexity.
-7. **Audit source fundamentals.** Run `web-design-guidelines` on changed UI files for source-fresh accessibility, focus, forms, navigation, animation, and interface checks.
-8. **Implement and verify.** Build with repo patterns, run type/lint/tests, and route UI proof through `visual-qa` or the ticket's QA contract when the surface is user-visible.
-9. **Write the handoff.** Summarize the UX/visual decisions, changed files, proof commands, guideline audit result, and any skipped lanes with reasons.
+3. **Ground and synthesize visual direction.** For substantial redesigns or
+   taste-open surfaces, inspect the user's references plus 2-4 comparable
+   products or strong examples, then use `best-of-worlds` to decide what to
+   adopt, adapt, reject, or defer before implementing.
+4. **Route special surfaces.** Use `landing-page` for one-page, marketing, launch, cinematic, scrolltelling, or hero-heavy surfaces before visual-design so the page recipe, taste profile, and effect stack can guide the look.
+5. **Run visual design.** Use `visual-design` to set register, scene sentence, typography, color strategy, layout rhythm, density, motion taste, and anti-slop constraints. For landing pages, refine this with the selected taste profile.
+6. **Capture stack facts.** Before importing UI libraries or writing framework-specific code, inspect `package.json`, Tailwind config/CSS, `components.json`, app router structure, and existing component paths. Record framework/router, Tailwind major version, installed icon/motion/form/chart/AI packages, shadcn aliases, and theme/preset status.
+7. **Choose implementation references.** Use `frontend-design` references for shadcn, AI Elements, registries, and app UI construction. Use `motion-routing.md` for CSS vs Motion vs GSAP vs WebGL decisions.
+8. **Plan assets and experiments.** Use `asset-generation.md` with `imagegen` for ordinary Codex-native still bitmap assets, `image-generation` for inference.sh image model routing, `video-generation` for model-native video, `remotion` for authoring Remotion code, and `remotion-render` for deterministic React/Remotion MP4s. Use `three-js.md` when the surface earns 3D/WebGL/R3F, and `experimental-rendering.md` only when the effect clearly earns HTML-in-Canvas, Pretext, WebGPU, or canvas text layout complexity.
+9. **Audit source fundamentals.** Run `web-design-guidelines` on changed UI files for source-fresh accessibility, focus, forms, navigation, animation, and interface checks.
+10. **Implement and verify.** Build with repo patterns, run type/lint/tests, and route UI proof through `visual-qa` or the ticket's QA contract when the surface is user-visible.
+11. **Write the handoff.** Summarize the UX/visual decisions, changed files, proof commands, guideline audit result, and any skipped lanes with reasons.
 
 ## Decision Branches
 
@@ -63,6 +63,9 @@ Build production frontends by routing the work through the right frontend brain 
 ## Top Gotchas
 
 - Do not skip `functional-ui` when the UI problem is behavioral, not just visual. Broken IA with prettier cards is still broken.
+- Do not start substantial redesign from an internal palette or one-shot
+  layout. Use the user's references, comparable products, and `best-of-worlds`
+  synthesis before committing to a look.
 - Do not let `landing-page` rules leak into dense product tools. A settings page wants clarity and state feedback, not cinematic scrolltelling.
 - Do not maintain local GSAP API truth. Use official `greensock/gsap-skills`; this skill only routes when GSAP is appropriate.
 - Do not assume inference.sh, Nano Banana, video tooling, or external model CLIs are installed. Capability-gate and use built-in `imagegen` first.
