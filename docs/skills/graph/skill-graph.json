@@ -2,9 +2,9 @@
   "counts": {
     "edge_types": {
       "common-chain": 13,
-      "markdown-ref": 248
+      "markdown-ref": 249
     },
-    "edges": 261,
+    "edges": 262,
     "nodes": 71,
     "sources": {
       "external": 3,
@@ -951,6 +951,13 @@
     {
       "label": "markdown-ref",
       "source": "harness-scout",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "harness-scout",
       "target": "impl-plan",
       "target_ref": "impl-plan",
       "type": "markdown-ref"
@@ -1845,7 +1852,7 @@
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-05-19T10:42:17+00:00",
+  "generated_at": "2026-05-20T11:45:58+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",

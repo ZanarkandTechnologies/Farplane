@@ -196,3 +196,4 @@
 2026-05-19 04:06 +0800 | FEAT | add batch-work skill and one-command skill-system validation
 2026-05-19 04:26 +0800 | FEAT | add Tier 2 harness-advisor for Codexter improvement placement decisions
 2026-05-19 04:47 +0800 | DOCS | slim Codexter AGENTS.md by replacing frontend and invocation rule blocks with owner skill pointers
+2026-05-20 19:46 +0800 | DOCS | link harness-scout adopted-feature placement to harness-advisor and refresh generated skill registry graph metadata

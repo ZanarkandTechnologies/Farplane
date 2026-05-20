@@ -30,6 +30,8 @@ so future dependency tooling can discover the composition graph:
   a broad "state of the art" claim
 - [research:gap](../research/SKILL.md#researchgap) when a useful source feature
   is missing or partial locally
+- [harness-advisor](../harness-advisor/SKILL.md) when an adopted or adapted
+  candidate could live in several Codexter harness surfaces
 - [best-of-worlds](../best-of-worlds/SKILL.md) when several sources must be
   synthesized
 - [advise](../advise/SKILL.md) when a decision depends on judgment rather than
@@ -61,6 +63,7 @@ every skill on every run.
 | Reference grounding | [reference-grounding](../reference-grounding/SKILL.md) | A source claim needs compact evidence before scoring. |
 | External convergence | [research:parity](../research/SKILL.md#researchparity) | The source claims a broad "state of the art" or peer-product norm. |
 | Local missing-scope check | [research:gap](../research/SKILL.md#researchgap) | A candidate is absent or partial locally and needs production-grade scope before ticketing. |
+| Harness placement | [harness-advisor](../harness-advisor/SKILL.md) | A useful source feature could belong in AGENTS.md, global templates, docs/specs, skills, subagents, hooks/scripts, ticket contracts, validators, or registries. |
 | Multi-source synthesis | [best-of-worlds](../best-of-worlds/SKILL.md) | Several sources mention similar features or competing implementations. |
 | Judgment call | [advise](../advise/SKILL.md) | Evidence leaves a real choice about value, risk, or timing. |
 | Benchmark planning | [autoresearch-plan](../autoresearch-plan/SKILL.md) | A manual scorecard is not enough and a metric-driven experiment is worth scoping. |
@@ -129,7 +132,11 @@ needed; use [summarize](../summarize/SKILL.md) directly.
 11. **Score and decide:** label each candidate `already-dominating`,
    `source-dominates`, `hybrid`, `duplicate`, `weak-ignore`,
    `needs-benchmark`, `adopt`, `adapt`, `reject`, or `defer`.
-12. **Write back:** update the `SRC-*` record, update the source run, add or
+12. **Place adopted work:** use
+   [harness-advisor](../harness-advisor/SKILL.md) before ticketing when a
+   strong `adopt` or `adapt` item could reasonably fit more than one harness
+   surface.
+13. **Write back:** update the `SRC-*` record, update the source run, add or
    update feature-registry rows only for durable techniques, and create an
    [impl-plan](../impl-plan/SKILL.md)-shaped handoff only for strong `adopt`
    or `adapt` items.
@@ -142,7 +149,9 @@ needed; use [summarize](../summarize/SKILL.md) directly.
   [research:gap](../research/SKILL.md#researchgap) before proposing a ticket.
 - **Feature is absent locally:** use a lighter missing-feature score focused on
   source credibility, Codexter fit, cost, risk, and benchmarkability before
-  opening an [impl-plan](../impl-plan/SKILL.md) handoff.
+  routing placement through [harness-advisor](../harness-advisor/SKILL.md) when
+  the owning surface is not obvious, then opening an
+  [impl-plan](../impl-plan/SKILL.md) handoff.
 - **Feature competes with a local implementation:** pick one small task and
   compare `current-codexter`, `source-proposed`, and
   [best-of-worlds](../best-of-worlds/SKILL.md) before recommending replacement

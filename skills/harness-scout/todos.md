@@ -28,6 +28,8 @@
   [research:parity](../research/SKILL.md#researchparity) when needed.
 - [ ] Route repo-specific missing scope through
   [research:gap](../research/SKILL.md#researchgap) before ticketing.
+- [ ] Use [harness-advisor](../harness-advisor/SKILL.md) when an `adopt` or
+  `adapt` candidate could belong in more than one Codexter harness surface.
 - [ ] Use [best-of-worlds](../best-of-worlds/SKILL.md) for multi-source
   synthesis.
 - [ ] Use the [plan](../plan/SKILL.md) interface for material judgment calls
