@@ -1,6 +1,6 @@
 ---
 name: skill-maintenance
-description: Maintain Codexter skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the generated registry, and plan consolidation without bloating the global system prompt.
+description: "Maintain Codexter skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the generated registry, and plan consolidation without bloating the global system prompt."
 tier: 3
 group: skills
 source: local
