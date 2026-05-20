@@ -15,7 +15,7 @@ requires_demo: true
 created_at: 2026-05-19T15:40:00+08:00
 updated_at: 2026-05-19T14:59:00+08:00
 next_action: complete; open docs/skills/graph/index.html or serve the repo and visit /docs/skills/graph/
-last_verification: graph generator wrote 71 nodes, 261 edges, 13 common-chain edges, and 71 embedded skill docs; Playwright browser check clicked skill-registry-ui and rendered frontmatter, raw YAML, and SKILL.md Markdown with no console/page errors
+last_verification: file URL Playwright check at 1000px clicked a graph node and changed selection from advise to reference-grounding; detail panel was visible, Markdown/raw YAML rendered, inactive decorative buttons count was 0, and console/page errors were absent
 ---
 
 # TASK-0153: build local skill registry graph visualization
@@ -190,10 +190,12 @@ flowchart LR
   - `tickets/TASK-0153/artifacts/review/2026-05-19-plan-review.json`
   - `tickets/TASK-0153/artifacts/review/2026-05-19-batch-review.json`
   - `tickets/TASK-0153/artifacts/review/2026-05-19-clickable-docs-review.json`
+  - `tickets/TASK-0153/artifacts/review/2026-05-19-click-targets-review.json`
   - `tickets/TASK-0153/artifacts/skill-graph-browser.png`
   - `tickets/TASK-0153/artifacts/skill-graph-redesign.png`
   - `tickets/TASK-0153/artifacts/skill-graph-chains.png`
   - `tickets/TASK-0153/artifacts/skill-graph-clickable-docs.png`
+  - `tickets/TASK-0153/artifacts/skill-graph-click-targets.png`
 - `Commands:`
   - `python3 skills/skill-maintenance/scripts/generate_skill_graph.py`
   - `python3 -m py_compile skills/skill-maintenance/scripts/generate_skill_graph.py`
@@ -201,10 +203,11 @@ flowchart LR
   - Playwright browser check at `http://127.0.0.1:8765/docs/skills/graph/index.html`
 - `Result summary:` graph data generated with 71 nodes, 261 edges, 13
   common-chain edges, and 71 embedded skill docs after adding the
-  `skill-registry-ui` package. Browser proof rendered the Mission Control
-  shell, clicked the `skill-registry-ui` node, and showed parsed frontmatter,
-  raw YAML frontmatter, rendered `SKILL.md` Markdown, tier/source controls, and
-  node intel with no console or page errors.
+  `skill-registry-ui` package. Follow-up browser proof at `file://` and a
+  1000px-wide viewport clicked a graph node, changed selection from `advise` to
+  `reference-grounding`, kept the detail panel visible, rendered raw YAML plus
+  `SKILL.md` Markdown, and found no inactive decorative buttons or console/page
+  errors.
 
 ## Blockers
 - none

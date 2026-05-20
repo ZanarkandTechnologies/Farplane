@@ -1,0 +1,50 @@
+{
+  "ticket_id": "TASK-0153",
+  "reviewed_at": "2026-05-19T19:03:00+08:00",
+  "review_type": "ui_correction_review",
+  "work_type": "skill graph click target and dead button cleanup",
+  "search_scope": [
+    "docs/skills/graph/index.html",
+    "tickets/TASK-0153/ticket.md",
+    "tickets/TASK-0153/artifacts/skill-graph-click-targets.png"
+  ],
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "blocking_findings": [],
+  "findings": [],
+  "rubrics": {
+    "ui-quality": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "No blocking UI follow-up. Node click targets are visible through behavior proof and decorative inactive buttons were removed."
+    },
+    "evidence-quality": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "Evidence is sufficient for this correction: file URL browser proof clicked a node and verified the detail panel plus inactive button count."
+    },
+    "integration-readiness": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "findings": [],
+      "next_action": "Ready for handoff. Change is isolated to the static graph UI and ticket evidence."
+    }
+  },
+  "validated_commands": [
+    "Playwright file URL check at 1000px viewport",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "git diff --check"
+  ],
+  "evidence": [
+    "tickets/TASK-0153/artifacts/skill-graph-click-targets.png"
+  ],
+  "next_action": "Refresh docs/skills/graph/index.html in the in-app browser."
+}

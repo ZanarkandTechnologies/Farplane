@@ -89,6 +89,11 @@
         cursor: pointer;
       }
 
+      .node-hit {
+        fill: transparent;
+        pointer-events: all;
+      }
+
       .node-orbit {
         fill: #f8f9fa;
         stroke-width: 2;
@@ -183,12 +188,7 @@
     <header class="z-10 flex h-12 shrink-0 items-center justify-between border-b border-outline-variant bg-surface px-4 md:px-8">
       <div class="flex items-center gap-6">
         <div class="font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">SKILL_GRAPH_OS</div>
-        <nav class="hidden gap-6 md:flex">
-          <button class="flex h-12 items-center border-b-2 border-secondary px-2 font-headline text-[16px] font-semibold text-secondary">Matrix</button>
-          <button class="flex h-12 items-center px-2 font-headline text-[16px] font-semibold text-outline transition-colors hover:bg-surface-container-low">Telemetry</button>
-          <button class="flex h-12 items-center px-2 font-headline text-[16px] font-semibold text-outline transition-colors hover:bg-surface-container-low">Nodes</button>
-          <button class="flex h-12 items-center px-2 font-headline text-[16px] font-semibold text-outline transition-colors hover:bg-surface-container-low">System</button>
-        </nav>
+        <div class="hidden h-12 items-center border-b-2 border-secondary px-2 font-headline text-[16px] font-semibold text-secondary md:flex">Matrix</div>
       </div>
 
       <div class="hidden items-center gap-4 border border-outline-variant bg-surface-container-low px-3 py-1 font-data-mono text-[12px] text-primary lg:flex">
@@ -202,18 +202,11 @@
         <span id="top-edge-count">VECTORS: --</span>
       </div>
 
-      <div class="flex items-center gap-3 text-primary">
-        <button class="rounded p-1 transition-colors hover:bg-surface-container-low" title="Fit graph">
-          <span class="material-symbols-outlined">filter_center_focus</span>
-        </button>
-        <button class="rounded p-1 transition-colors hover:bg-surface-container-low" title="Diagnostics">
-          <span class="material-symbols-outlined">settings_input_component</span>
-        </button>
-      </div>
+      <div class="font-data-mono text-[11px] font-bold tracking-[0.08em] text-outline">CLICK NODE FOR SKILL DOC</div>
     </header>
 
     <div class="flex flex-1 overflow-hidden">
-      <aside class="z-10 hidden h-full w-64 shrink-0 flex-col border-r border-outline-variant bg-surface-container-low py-4 md:flex">
+      <aside class="z-10 hidden h-full w-64 shrink-0 flex-col border-r border-outline-variant bg-surface-container-low py-4 lg:flex">
         <div class="mb-6 px-4">
           <div class="mb-2 flex items-center gap-3">
             <div class="flex h-10 w-10 items-center justify-center border border-primary bg-primary">
@@ -227,18 +220,10 @@
         </div>
 
         <nav class="flex-1 space-y-1 overflow-y-auto px-1">
-          <button class="flex w-full scale-95 items-center gap-3 bg-primary px-3 py-2 text-on-primary">
+          <div class="flex w-full scale-95 items-center gap-3 bg-primary px-3 py-2 text-on-primary">
             <span class="material-symbols-outlined">hub</span>
             <span class="font-data-mono text-[12px] font-bold tracking-[0.08em]">Active Vectors</span>
-          </button>
-          <button class="group flex w-full scale-95 items-center gap-3 px-3 py-2 text-outline transition-all hover:bg-surface-variant">
-            <span class="material-symbols-outlined group-hover:text-primary">radar</span>
-            <span class="font-data-mono text-[12px] font-bold tracking-[0.08em] group-hover:text-primary">Core Assets</span>
-          </button>
-          <button class="group flex w-full scale-95 items-center gap-3 px-3 py-2 text-outline transition-all hover:bg-surface-variant">
-            <span class="material-symbols-outlined group-hover:text-primary">navigation</span>
-            <span class="font-data-mono text-[12px] font-bold tracking-[0.08em] group-hover:text-primary">Deployment</span>
-          </button>
+          </div>
 
           <div class="mx-3 mb-4 mt-8 border-b border-outline-variant pb-2">
             <span class="font-data-mono text-[12px] font-bold tracking-[0.08em] text-outline">VECTOR LEGEND</span>
@@ -289,20 +274,10 @@
         </nav>
 
         <div class="mt-auto border-t border-outline-variant px-4 pt-4">
-          <button id="fit-button" class="mb-4 flex w-full items-center justify-center gap-2 bg-accent-blue py-2 font-data-mono text-[12px] font-bold tracking-[0.08em] text-white transition-opacity hover:opacity-90">
-            <span class="material-symbols-outlined text-sm">bolt</span>
-            EXECUTE_SYNC
+          <button id="fit-button" class="flex w-full items-center justify-center gap-2 bg-accent-blue py-2 font-data-mono text-[12px] font-bold tracking-[0.08em] text-white transition-opacity hover:opacity-90">
+            <span class="material-symbols-outlined text-sm">filter_center_focus</span>
+            FIT_GRAPH
           </button>
-          <div class="flex justify-between">
-            <span class="flex items-center gap-2 text-outline">
-              <span class="material-symbols-outlined text-[18px]">terminal</span>
-              <span class="font-data-mono text-[10px] font-bold tracking-[0.08em]">Diagnostics</span>
-            </span>
-            <span class="flex items-center gap-2 text-outline">
-              <span class="material-symbols-outlined text-[18px]">help_outline</span>
-              <span class="font-data-mono text-[10px] font-bold tracking-[0.08em]">Help</span>
-            </span>
-          </div>
         </div>
       </aside>
 
@@ -311,10 +286,6 @@
           <div class="flex items-center border border-primary bg-primary px-4 py-2 text-surface-container shadow-[0_4px_0_rgba(0,0,0,0.1)]">
             <span class="material-symbols-outlined mr-3 text-outline-variant">search</span>
             <input id="command-search" class="w-full border-none bg-transparent font-data-mono text-[13px] text-surface outline-none placeholder:text-outline-variant focus:ring-0" placeholder="Locate Node / Filter Registry..." type="text" />
-            <div class="ml-3 flex items-center gap-1 font-data-mono text-[10px] font-bold tracking-[0.08em] text-outline-variant">
-              <span class="border border-surface-tint bg-inverse-surface px-1 py-0.5">CMD</span>
-              <span class="border border-surface-tint bg-inverse-surface px-1 py-0.5">K</span>
-            </div>
           </div>
         </div>
 
@@ -337,7 +308,7 @@
         </div>
       </main>
 
-      <aside id="intel-panel" class="z-10 hidden h-full w-[30rem] shrink-0 flex-col border-l border-outline-variant bg-surface shadow-[-4px_0_15px_rgba(0,0,0,0.03)] xl:flex">
+      <aside id="intel-panel" class="z-10 flex h-full w-96 shrink-0 flex-col border-l border-outline-variant bg-surface shadow-[-4px_0_15px_rgba(0,0,0,0.03)] lg:w-[30rem]">
         <div class="flex h-12 items-center border-b border-primary bg-primary px-4 text-on-primary">
           <span class="material-symbols-outlined mr-2 text-[18px]">memory</span>
           <h2 class="font-data-mono text-[12px] font-bold tracking-[0.08em]">NODE_INTEL</h2>
@@ -377,7 +348,10 @@
       const viewport = graphSvg.append("g").attr("class", "viewport");
       const linkLayer = viewport.append("g").attr("class", "links");
       const nodeLayer = viewport.append("g").attr("class", "nodes");
-      const zoom = d3.zoom().scaleExtent([0.25, 3.6]).on("zoom", (event) => {
+      const zoom = d3.zoom()
+        .filter((event) => !event.target.closest?.(".node-shell") && !event.button && !event.ctrlKey)
+        .scaleExtent([0.25, 3.6])
+        .on("zoom", (event) => {
         transform = event.transform;
         viewport.attr("transform", transform);
       });
@@ -470,13 +444,22 @@
           .enter()
           .append("g")
           .attr("class", "node-shell")
+          .attr("tabindex", "0")
+          .attr("role", "button")
+          .attr("aria-label", (node) => `Open ${node.id} skill details`)
           .call(drag())
-          .on("click", (_, node) => {
-            selectedNode = node;
-            drawDetail(node);
-            nodeLayer.selectAll("g").classed(selectedClass, (candidate) => candidate.id === node.id);
+          .on("click", (event, node) => {
+            event.stopPropagation();
+            selectSkill(node.id, { focus: false });
+          })
+          .on("keydown", (event, node) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              selectSkill(node.id, { focus: false });
+            }
           });
 
+        entered.append("circle").attr("class", "node-hit");
         entered.append("circle").attr("class", "node-orbit");
         entered.append("circle").attr("class", "node-core");
         entered.append("text").attr("class", "node-label").attr("dy", "0.25em");
@@ -484,9 +467,16 @@
 
         nodeSelection = entered.merge(nodeSelection);
         nodeSelection.classed("selected", (node) => selectedNode && selectedNode.id === node.id);
+        nodeSelection.selectAll("circle")
+          .on("click", (event, node) => {
+            event.stopPropagation();
+            selectSkill(node.id, { focus: false });
+          });
         nodeSelection.select(".node-orbit")
           .attr("r", (node) => node.radius)
           .attr("stroke", (node) => tierColors[node.tier] || "#76777b");
+        nodeSelection.select(".node-hit")
+          .attr("r", (node) => node.radius + 18);
         nodeSelection.select(".node-core")
           .attr("r", (node) => Math.max(5, node.radius * 0.36))
           .attr("fill", (node) => node.source === "external" ? "#000000" : tierColors[node.tier] || "#76777b");
@@ -659,13 +649,13 @@
         `;
       }
 
-      function selectSkill(skillId) {
+      function selectSkill(skillId, options = { focus: true }) {
         const node = graph.nodes.find((candidate) => candidate.id === skillId);
         if (!node) return;
         selectedNode = node;
         drawDetail(node);
         nodeLayer.selectAll("g").classed(selectedClass, (candidate) => candidate.id === node.id);
-        focusNode(node);
+        if (options.focus) focusNode(node);
       }
 
       function renderFrontmatter(frontmatter, raw) {
