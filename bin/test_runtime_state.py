@@ -23,8 +23,10 @@ from user_turn import (
     load_current_run,
     load_runtime_claim,
     normalize_user_turn,
+    recent_conversation_windows,
     session_state_path,
     should_review_skill_opportunities,
+    skill_opportunity_application_dir,
 )
 
 
@@ -464,7 +466,6 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_conversation_window_pairs_user_and_assistant_turns(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
             user_turn = normalize_user_turn(
                 "$impl-plan TASK-0104",
                 turn_id="turn-1",
@@ -480,6 +481,7 @@ class RuntimeClaimTests(unittest.TestCase):
                 captured_at="2026-05-08T00:00:01Z",
                 source="test-stop",
             )
+            self.assertTrue(skill_opportunity_application_dir(project_root).is_dir())
 
         self.assertEqual(window["turn_count"], 1)
         self.assertEqual(window["pending_user_turn"], {})
@@ -518,6 +520,29 @@ class RuntimeClaimTests(unittest.TestCase):
         trigger = should_review_skill_opportunities(window, cadence=10)
         self.assertTrue(trigger["due"])
         self.assertEqual(trigger["turn_count"], 12)
+
+    def test_recent_conversation_windows_prefers_current_then_recent_sessions(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            for index, session_id in enumerate(("sess-a", "sess-current", "sess-c")):
+                user_turn = normalize_user_turn(
+                    f"$impl-plan TASK-{index:04d}",
+                    turn_id=f"turn-{index}",
+                    source="test",
+                    captured_at=f"2026-05-08T00:00:0{index}Z",
+                )
+                append_conversation_user_turn(project_root, session_id, user_turn)
+                append_conversation_assistant_response(
+                    project_root,
+                    session_id,
+                    f"response {index}",
+                    captured_at=f"2026-05-08T00:01:0{index}Z",
+                    source="test-stop",
+                )
+
+            windows = recent_conversation_windows(project_root, current_session_id="sess-current", limit=2)
+
+        self.assertEqual([window["session_id"] for window in windows], ["sess-current", "sess-c"])
 
     def test_capture_user_turn_impl_plan_stays_control_but_does_not_activate_impl_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

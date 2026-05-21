@@ -201,3 +201,4 @@
 2026-05-21 01:15 +0800 | FIX | repair the installed notion-context skill after harness reinstall so missing Notion row-query tools degrade into fallback diagnostics and a repair ticket instead of a hard automation failure
 2026-05-21 01:30 +0800 | FEAT | add media-ingest and video-understanding support skills so harness-scout can turn skill-teaching videos into source todos, skill comparisons, and copied-skill handoffs
 2026-05-22 02:20 +0800 | FEAT | add algebraic Tier 3 pipeline guidance and pilot it across landing-page method selection plus frontend-craft composed scroll animation
+2026-05-22 02:31 +0800 | FEAT | route skill-opportunity sidecar runs to read-only Notion approval tasks with recent-window context

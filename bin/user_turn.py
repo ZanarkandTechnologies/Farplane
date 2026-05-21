@@ -121,6 +121,15 @@ def conversation_window_dir(project_root: Path) -> Path:
     return self_improvement_state_dir(project_root) / "windows"
 
 
+def skill_opportunity_application_dir(project_root: Path) -> Path:
+    return self_improvement_state_dir(project_root) / "applications"
+
+
+def ensure_self_improvement_state_setup(project_root: Path) -> None:
+    conversation_window_dir(project_root).mkdir(parents=True, exist_ok=True)
+    skill_opportunity_application_dir(project_root).mkdir(parents=True, exist_ok=True)
+
+
 def conversation_window_path(project_root: Path, session_id: str) -> Path:
     return conversation_window_dir(project_root) / session_state_filename(session_id)
 
@@ -154,6 +163,7 @@ def max_conversation_exchanges() -> int:
 
 def load_conversation_window(project_root: Path, session_id: str) -> dict[str, object]:
     normalized_session_id = normalize_session_id(session_id)
+    ensure_self_improvement_state_setup(project_root)
     payload = load_json_dict(conversation_window_path(project_root, normalized_session_id))
     if not payload:
         return {
@@ -196,6 +206,38 @@ def rolling_exchanges_from_window(window: Mapping[str, object]) -> list[dict[str
     if not isinstance(raw, list):
         return []
     return [dict(item) for item in raw if isinstance(item, Mapping)]
+
+
+def recent_conversation_windows(
+    project_root: Path,
+    *,
+    current_session_id: str,
+    limit: int = 5,
+) -> list[dict[str, object]]:
+    ensure_self_improvement_state_setup(project_root)
+    normalized_current = normalize_session_id(current_session_id)
+    windows: list[dict[str, object]] = []
+    for path in conversation_window_dir(project_root).glob("*.json"):
+        payload = load_json_dict(path)
+        if not payload:
+            continue
+        session_id = normalize_session_id(str(payload.get("session_id") or path.stem))
+        if not session_id:
+            continue
+        payload["session_id"] = session_id
+        payload.setdefault("updated_at", "")
+        payload.setdefault("rolling_exchanges", [])
+        payload.setdefault("pending_user_turn", {})
+        windows.append(payload)
+
+    windows.sort(
+        key=lambda item: (
+            normalize_session_id(str(item.get("session_id") or "")) == normalized_current,
+            str(item.get("updated_at") or ""),
+        ),
+        reverse=True,
+    )
+    return windows[: max(limit, 1)]
 
 
 def trim_conversation_window(window: dict[str, object], *, max_exchanges: int | None = None) -> dict[str, object]:

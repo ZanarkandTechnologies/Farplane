@@ -46,9 +46,11 @@ from user_turn import (
     load_runtime_claim as load_persisted_runtime_claim,
     persist_runtime_update as persist_selected_runtime_update,
     project_root_from_payload as resolve_project_root_from_payload,
+    recent_conversation_windows,
     mark_skill_opportunity_review_launched,
     resolve_ticket_path_by_id,
     should_review_skill_opportunities,
+    skill_opportunity_application_dir,
     ticket_artifact_root,
     ticket_id_from_path,
     tickets_dir as user_turn_tickets_dir,
@@ -2091,19 +2093,12 @@ def role_command(base: Path, output_path: Path, role_config: dict[str, str]) -> 
 
 
 def skill_opportunity_review_enabled() -> bool:
-    apply_enabled = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY", "").lower() in {
-        "1",
-        "true",
-        "yes",
-        "on",
-    }
-    legacy_review_enabled = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW", "").lower() in {
-        "1",
-        "true",
-        "yes",
-        "on",
-    }
-    return apply_enabled or legacy_review_enabled
+    disabled_values = {"0", "false", "no", "off", "disabled"}
+    apply_value = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY", "").strip().lower()
+    legacy_review_value = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW", "").strip().lower()
+    if apply_value in disabled_values or legacy_review_value in disabled_values:
+        return False
+    return True
 
 
 def skill_opportunity_review_dry_run() -> bool:
@@ -2133,13 +2128,24 @@ def skill_opportunity_review_interval() -> int:
     return value if value > 0 else 10
 
 
+def skill_opportunity_recent_window_limit() -> int:
+    raw = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_RECENT_SESSIONS", "").strip()
+    if not raw:
+        return 5
+    try:
+        value = int(raw)
+    except ValueError:
+        return 5
+    return value if value > 0 else 5
+
+
 def safe_path_token(raw: str) -> str:
     token = re.sub(r"[^A-Za-z0-9._-]+", "-", raw.strip())
     return token.strip(".-") or "session"
 
 
 def skill_opportunity_review_root(project_root: Path) -> Path:
-    return project_root / ".harness" / "state" / "self-improve" / "applications"
+    return skill_opportunity_application_dir(project_root)
 
 
 def skill_opportunity_review_input(
@@ -2162,7 +2168,15 @@ def skill_opportunity_review_input(
         "memory": "docs/MEMORY.md",
         "troubles": "docs/TROUBLES.md",
         "recent_tickets": recent_ticket_paths,
+        "notion_context": "/Users/kenjipcx/.codex/skills/notion-context/SKILL.md",
     }
+    recent_windows = recent_conversation_windows(
+        project_root,
+        current_session_id=session_id,
+        limit=skill_opportunity_recent_window_limit(),
+    )
+    if not any(str(item.get("session_id") or "") == session_id for item in recent_windows):
+        recent_windows.insert(0, dict(window))
     return {
         "schema_version": 1,
         "review_type": "skill_opportunity",
@@ -2171,16 +2185,27 @@ def skill_opportunity_review_input(
         "created_at": now_iso(),
         "trigger": trigger,
         "window": window,
+        "recent_windows": recent_windows,
         "dedupe_refs": dedupe_refs,
+        "notion_task_target": {
+            "data_source_url": os.environ.get(
+                "CODEXTER_SKILL_OPPORTUNITY_NOTION_TASKS_DATA_SOURCE",
+                "collection://43a439fd-74c5-4b43-9afb-950f047e5d4f",
+            ),
+            "tag": os.environ.get("CODEXTER_SKILL_OPPORTUNITY_NOTION_TAG", "agent self improvement"),
+            "default_status": os.environ.get("CODEXTER_SKILL_OPPORTUNITY_NOTION_STATUS", "Review"),
+        },
         "payload_context": {
             "hook_event_name": payload.get("hook_event_name"),
             "cwd": payload.get("cwd") or payload.get("workdir") or payload.get("current_working_directory"),
         },
         "instructions": [
             "Return JSON only.",
-            "Automatically update or create skill files when the signal is clearly useful and low-risk.",
-            "Only write under skills/**; leave repo policy, docs, tickets, hooks, config, agents, bin, and .harness untouched.",
-            "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup.",
+            "Create Notion approval tasks when the signal is clearly useful and specific enough.",
+            "Do not update or create skill files directly.",
+            "Do not write local files except the final JSON report emitted by the Codex CLI.",
+            "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup, but turn them into Notion task proposals.",
+            "Review the current window first, then use recent_windows for cross-session complaints and repeated pain.",
             "Dedupe against existing skills, feature registry, memory, troubles, and recent tickets.",
         ],
     }
@@ -2195,7 +2220,7 @@ def skill_opportunity_apply_command(base: Path, report_path: Path, role_config: 
         "-C",
         str(base),
         "--sandbox",
-        "workspace-write",
+        "read-only",
         "--disable",
         "codex_hooks",
         "--color",
@@ -2266,15 +2291,14 @@ def maybe_launch_skill_opportunity_review(
                     "reviewed_at": now_iso(),
                     "status": "dry_run",
                     "source_window": str(input_path.relative_to(project_root)),
+                    "notion_tasks": [],
                     "decisions": [],
                     "formula_mentions": [],
-                    "recipe_candidates": [],
                     "unconventional_speedup": {
                         "title": "dry run",
-                        "rationale": "skill application launch was intentionally not executed",
+                        "rationale": "Notion task creation launch was intentionally not executed",
                     },
                     "dedupe_refs": input_payload["dedupe_refs"],
-                    "handoff_targets": [],
                     "risks": [],
                 },
                 indent=2,
@@ -2324,7 +2348,7 @@ def maybe_launch_skill_opportunity_review(
         review_run_path=relative_run_path,
         current_window=window,
     )
-    return {"status": "launched", "reason": "started detached skill applier", "review_run_path": relative_run_path, "pid": str(proc.pid)}
+    return {"status": "launched", "reason": "started detached skill opportunity proposer", "review_run_path": relative_run_path, "pid": str(proc.pid)}
 
 
 def parse_role_output(output_path: Path) -> dict[str, object] | None:

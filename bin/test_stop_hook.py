@@ -243,12 +243,12 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stop_hook = load_stop_hook_module()
 
-    def test_maybe_launch_skill_opportunity_review_skips_when_disabled(self) -> None:
+    def test_maybe_launch_skill_opportunity_review_respects_explicit_disable(self) -> None:
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-") as td:
             project_root = Path(td)
             window = {"turn_count": 10, "last_review_turn_count": 0, "rolling_exchanges": []}
 
-            with patch.dict(os.environ, {}, clear=True):
+            with patch.dict(os.environ, {"CODEXTER_SKILL_OPPORTUNITY_APPLY": "0"}, clear=True):
                 result = self.stop_hook.maybe_launch_skill_opportunity_review(
                     base=project_root,
                     project_root=project_root,
@@ -276,7 +276,6 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             with patch.dict(
                 os.environ,
                 {
-                    "CODEXTER_SKILL_OPPORTUNITY_APPLY": "1",
                     "CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1",
                 },
                 clear=True,
@@ -291,6 +290,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
 
             run_path = project_root / str(result["review_run_path"])
             report = json.loads((run_path / "report.json").read_text(encoding="utf-8"))
+            input_payload = json.loads((run_path / "input.json").read_text(encoding="utf-8"))
             saved_window = json.loads(
                 (project_root / ".harness" / "state" / "self-improve" / "windows" / "sess-123.json").read_text(
                     encoding="utf-8"
@@ -300,6 +300,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(result["status"], "launched")
         self.assertEqual(result["pid"], "dry-run")
         self.assertEqual(report["status"], "dry_run")
+        self.assertEqual(input_payload["recent_windows"][0]["session_id"], "sess-123")
         self.assertEqual(saved_window["last_review_turn_count"], 10)
 
     def test_maybe_launch_skill_opportunity_review_reports_missing_role_config(self) -> None:
@@ -314,7 +315,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 "pending_user_turn": {},
             }
 
-            with patch.dict(os.environ, {"CODEXTER_SKILL_OPPORTUNITY_APPLY": "1"}, clear=True):
+            with patch.dict(os.environ, {}, clear=True):
                 result = self.stop_hook.maybe_launch_skill_opportunity_review(
                     base=project_root,
                     project_root=project_root,
@@ -326,7 +327,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(result["status"], "failed")
         self.assertEqual(result["reason"], "missing skill-opportunity-applier role config")
 
-    def test_skill_opportunity_apply_command_can_write_workspace_and_disables_hooks(self) -> None:
+    def test_skill_opportunity_apply_command_is_read_only_and_disables_hooks(self) -> None:
         cmd = self.stop_hook.skill_opportunity_apply_command(
             Path("/tmp/codexter"),
             Path("/tmp/report.json"),
@@ -338,7 +339,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         )
 
         self.assertIn("--sandbox", cmd)
-        self.assertIn("workspace-write", cmd)
+        self.assertIn("read-only", cmd)
         self.assertIn("--disable", cmd)
         self.assertIn("codex_hooks", cmd)
         self.assertIn("--output-last-message", cmd)

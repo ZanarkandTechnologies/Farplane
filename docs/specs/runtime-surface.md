@@ -55,22 +55,25 @@ For bounded same-session `$loop`, the runtime contract is:
 - explicit same-session stop intent clears `loop_active`; Escape/cancel is not the canonical loop-stop contract
 - `skills/impl/scripts/tmux_helper.py` remains `$impl`-only in v1 and is not part of loop ownership
 
-For hook-backed skill-opportunity application, the runtime contract is:
+For hook-backed skill-opportunity approval capture, the runtime contract is:
 
 - `UserPromptSubmit` appends only control-session user turns to a bounded
   rolling conversation window under `.harness/state/self-improve/windows/`
 - `Stop` appends the matching assistant response and trims the window to the
   configured maximum, defaulting to 10 exchanges
 - every configured interval, defaulting to 10 captured user turns,
-  `stop_hook.py` may launch a detached workspace-write `codex exec` applier when
-  `CODEXTER_SKILL_OPPORTUNITY_APPLY=1`
-- applier input and output live under
+  `stop_hook.py` launches a detached background `codex exec` proposer by
+  default; set `CODEXTER_SKILL_OPPORTUNITY_APPLY=0` to disable it
+- proposer input includes the current window plus recent session windows,
+  defaulting to 5 sessions, so repeated complaints and painful patterns can be
+  recognized across nearby conversations
+- proposer input and output live under
   `.harness/state/self-improve/applications/`
-- applier edits are bounded to `skills/**`: it may create or update skill
-  packages, recipes, cheatsheets, formula capture notes, or skill-local
-  self-improve scaffolding, but it must not mutate docs, memory, tickets,
-  install config, hooks, bin helpers, agents, or `.harness/`
-- Stop-hook stdout remains reserved for the single hook JSON payload; applier
+- proposer side effects are bounded to Notion Tasks: it creates approval tasks
+  tagged `agent self improvement` using the Notion-context Tasks data source
+- the proposer must not mutate local repo files, including skills, docs,
+  memory, tickets, install config, hooks, bin helpers, agents, or `.harness/`
+- Stop-hook stdout remains reserved for the single hook JSON payload; proposer
   stdout and stderr are redirected to run-scoped files
 
 For serial `$ralph`, the runtime contract is:
