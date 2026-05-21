@@ -25,6 +25,9 @@
   [video-generation](../video-generation/SKILL.md),
   [remotion](../remotion/SKILL.md), or
   [remotion-render](../remotion-render/SKILL.md).
+- [ ] For layered generated-media scroll/timed scenes, use
+  [composed-scroll-animation](./references/composed-scroll-animation.md) to
+  define layers, asset routes, timeline phases, debug hooks, and proof.
 - [ ] Use [web-design-guidelines](../web-design-guidelines/SKILL.md) for
   source-fresh UI fundamentals and [visual-qa](../visual-qa/SKILL.md) for
   user-visible visual proof.

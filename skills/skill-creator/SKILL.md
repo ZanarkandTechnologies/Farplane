@@ -42,6 +42,27 @@ The VALUE of a skill is the **integration workflow** and **architectural decisio
 | `skill-realtime-dashboard.md` | `skill-react-patterns.md` (Too generic) |
 | `skill-file-upload-processing.md` | `skill-python-basics.md` (Claude already knows this) |
 
+### Tier 3 Pipeline Model
+
+For complex Tier 3 domain skills, prefer a compact algebraic model plus
+filesystem-visible method records over long prose recipes. Use
+`references/tier3-pipeline-model.md` when a skill has planning/execution
+phases, component matrices, method selection, and per-component proof.
+
+```text
+Tier3Pipeline := Model + MethodRegistry + TodoRecipe + Templates + Proof
+
+Component := Job + Claim + Inputs + CandidateMethods + ChosenMethod + Output + Proof
+
+MethodSelection(component, methods, constraints) :=
+  candidates = filter(methods, component, constraints)
+  chosen = advise(top3(candidates))
+```
+
+Do not add `README.md` files to skill packages just to explain this model.
+`SKILL.md` remains the first-load entrypoint; put detailed notation in
+`references/model.md` or another targeted reference.
+
 ## Core Principles
 
 ### Concise is Key

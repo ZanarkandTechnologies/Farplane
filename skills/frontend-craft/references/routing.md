@@ -20,6 +20,8 @@ Use this when deciding which frontend skill should lead a request.
 - Landing page: `landing-page` -> JSON recipe/taste/effect route when useful -> `visual-design` -> motion/assets/QA references.
 - Visual polish: `visual-design` -> implementation.
 - Animation only: `motion-routing.md`, and official GreenSock skills or docs when GSAP is chosen.
+- Layered generated-media scroll/timed section:
+  `composed-scroll-animation.md` -> asset routes -> timeline/debug/proof.
 - 3D/WebGL frontend: `frontend-craft` -> `three-js.md` -> visual/browser proof.
 
 ## Required Stack Facts

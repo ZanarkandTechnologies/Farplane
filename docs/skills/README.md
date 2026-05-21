@@ -81,6 +81,20 @@ Tiered loading is enforced at the checklist boundary:
   one-level-down loading. Use `--allow-peer-tier3` while Tier 3 application
   handoffs such as content skill -> media execution skill remain intentional.
 
+## Tier 3 Pipeline Shape
+
+Complex Tier 3 skills may use a compact algebraic model when they decompose
+work into components and choose methods per component:
+
+```text
+Tier3Pipeline := Model + MethodRegistry + TodoRecipe + Templates + Proof
+```
+
+Keep the first-load workflow in `SKILL.md`. Put longer domain notation in
+targeted references such as `references/model.md`, method records in JSON or
+Markdown references, and output shapes in `templates/`. Do not add skill-local
+`README.md` files just to restate the model.
+
 ## Source Ownership
 
 Use `source` to decide where wrapper logic belongs:

@@ -15,6 +15,21 @@ This skill owns page story, section architecture, planning gates, visual scenes,
 media, motion intent, and landing-page QA. It does not own GSAP API details or
 app-dashboard workflow design.
 
+Compact model:
+
+```text
+LandingPage := Offer + Audience + StoryArc + SectionMatrix + AssetPlan + MotionPlan + ProofPlan
+
+Section := Job + Claim + Layout + AssetCarrier + MotionLever + ProofPayload + Fallback + QA
+
+MethodSelection(section, methods, constraints) :=
+  candidates = filter(methods, section, constraints)
+  chosen = advise(top3(candidates))
+```
+
+Use `references/model.md` for the algebra and section matrix rules. Keep
+`todos.md` short; detailed recipes live in references and method records.
+
 ## Use When
 
 - The user asks for a landing page, homepage, launch page, one-page site, portfolio page, product page, venue/person/object-focused page, hero page, or cinematic scroll experience.
@@ -215,6 +230,11 @@ For landing pages with reusable formulas or inspiration references:
 ## Reference Map
 
 - `references/scrolltelling.md` - section/story and scroll narrative structure.
+- `references/model.md` - algebraic landing-page model, section matrix, method
+  selection, and composed-scroll route.
+- `references/method-selection-smoke.md` - text fixture for choosing
+  `frontend-craft:composed-scroll-animation` only when section constraints
+  require it.
 - `references/motion-and-media.md` - media, generated assets, GSAP/WebGL routing.
 - `references/product-demo-media.md` - realistic product shots, assembly /
   exploded-view sequences, and anti-infographic requirements.

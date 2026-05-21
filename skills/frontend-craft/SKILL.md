@@ -53,6 +53,7 @@ Build production frontends by routing the work through the right frontend brain 
 | Landing page, homepage, launch page, portfolio hero | `landing-page`, JSON recipe/taste/effect records when useful, then `visual-design`, then motion/assets references |
 | Visual polish only | `visual-design`, then implementation |
 | Complex scroll animation | `landing-page` if narrative; otherwise `motion-routing.md` and official GreenSock skills or docs |
+| Layered generated-media scroll/timed scene | `composed-scroll-animation.md` when the section needs 6-12 layers, generated/cutout assets, HTML overlays, named phases, debug hooks, and source-frame/checkpoint proof |
 | Generated hero/image/texture/reference asset | `asset-generation.md` and `imagegen` |
 | Inference.sh image model, background removal, upscaling, or model comparison | `asset-generation.md` and `image-generation` |
 | Generated video, image-to-video, avatar/lipsync, foley, or video edit | `asset-generation.md` and `video-generation` |
@@ -85,6 +86,8 @@ Build production frontends by routing the work through the right frontend brain 
 - `references/motion-routing.md` - CSS, Motion, GSAP, View Transitions, WebGL/WebGPU.
 - `references/asset-generation.md` - native `imagegen`, `image-generation`, `video-generation`, `remotion`, `remotion-render`, project-bound assets, external-tool gates.
 - `references/media-pipelines.md` - multi-asset website/campaign workflows spanning image, model-native video, Remotion, and frontend QA.
+- `references/composed-scroll-animation.md` - method contract for layered
+  generated-media scenes with scroll or timed transitions.
 - `references/three-js.md` - Three.js/WebGL/R3F routing with links to architecture, planning, workflows, gotchas, and testing refs.
 - `references/experimental-rendering.md` - HTML-in-Canvas, Pretext, WebGL/WebGPU, progressive enhancement.
 - `references/qa.md` - browser/visual proof expectations.

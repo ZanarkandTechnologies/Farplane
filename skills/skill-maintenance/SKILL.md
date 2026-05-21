@@ -31,6 +31,10 @@ source ownership, registry sync, link hygiene, or consolidation planning.
   local Codexter policy belongs in local callers.
 - Router-style todos choose methods conditionally. They do not run every method
   in sequence.
+- Complex Tier 3 pipeline skills should expose their domain as
+  `Model + MethodRegistry + TodoRecipe + Templates + Proof` when that makes the
+  workflow easier to scan. Keep the algebra in `SKILL.md` or a targeted
+  `references/model.md`; do not add per-skill `README.md` files for this.
 
 ## Workflow
 
@@ -48,6 +52,9 @@ source ownership, registry sync, link hygiene, or consolidation planning.
    - project/docs context first
    - useful skill references second
    - proof/writeback last
+   - for complex Tier 3 pipelines, keep todos short and point to the model,
+     method registry, templates, and proof refs instead of duplicating the
+     whole recipe inline
 6. Run the standard skill-system check:
 
 ```bash
@@ -71,6 +78,8 @@ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 
 - Skill frontmatter remains minimal and valid.
 - `todos.md` files obey the tier loading invariant.
+- Complex Tier 3 skills keep any algebraic project/component/method model
+  concise, discoverable, and subordinate to the `SKILL.md` first-load contract.
 - `docs/skills/registry.jsonl` is regenerated, not hand-edited.
 - External-source skills remain easy to refresh.
 - Consolidation candidates are ticketed or documented before hard migration.

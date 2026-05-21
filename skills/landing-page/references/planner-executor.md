@@ -70,8 +70,19 @@ quality_target: terminal-level
 ## Low-fi ASCII Flow
 ## Section Matrix
 
-| Section | User job | Narrative claim | Visual carrier | Asset plan | Motion/effect | Proof/copy payload | QA assertion |
+| Section | Job | Claim | Layout | Asset carrier | Motion lever | Proof payload | QA |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+
+## Method Selection
+
+Use `references/model.md` to choose a complete direction for each major
+section. A direction is:
+
+`layout + asset carrier + motion lever + proof payload + fallback + QA`
+
+Do not advise isolated variables unless one variable is the real blocker. For
+layered generated-media sections, use `references/method-selection-smoke.md` to
+verify when `frontend-craft:composed-scroll-animation` is the correct handoff.
 
 ## Asset Plan
 ## Product Demo Plan
