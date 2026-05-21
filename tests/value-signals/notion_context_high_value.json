@@ -1,0 +1,13 @@
+{
+  "name": "notion_context_high_value",
+  "goal_ref": "autonomous-ticket-planner-and-builder",
+  "repeated_failure_count": 2,
+  "blocked_workflows": [
+    "autonomous ticket planning",
+    "weekly Notion task selection"
+  ],
+  "affected_skills": ["notion-context"],
+  "manual_intervention_cost": "high",
+  "confidence": "high",
+  "expected_action_policy": "auto_ticket"
+}

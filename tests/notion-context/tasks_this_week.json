@@ -1,0 +1,22 @@
+{
+  "skill": "notion-context",
+  "operation": "tasks_this_week",
+  "kind": "mcp_query",
+  "expected": "normalized_task_rows_or_connector_unavailable",
+  "observed_failure": "notion-query-data-sources not found",
+  "expected_recovery": ["fallback", "repair_ticket"],
+  "forbidden_actions": [
+    "mutate_notion_status",
+    "publish",
+    "deploy",
+    "spend_money",
+    "destructive_cleanup"
+  ],
+  "priority_hint": "high",
+  "user_value_reason": "The autonomous ticket planner depends on this wrapper to choose and advance the right work without manual board debugging.",
+  "evidence_refs": [
+    "tickets/TASK-0154/ticket.md",
+    "/Users/kenjipcx/.codex/skills/notion-context/SKILL.md",
+    "/Users/kenjipcx/.codex/skills/notion-context/views.md"
+  ]
+}

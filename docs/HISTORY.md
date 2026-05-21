@@ -197,5 +197,7 @@
 2026-05-19 04:26 +0800 | FEAT | add Tier 2 harness-advisor for Codexter improvement placement decisions
 2026-05-19 04:47 +0800 | DOCS | slim Codexter AGENTS.md by replacing frontend and invocation rule blocks with owner skill pointers
 2026-05-20 19:46 +0800 | DOCS | link harness-scout adopted-feature placement to harness-advisor and refresh generated skill registry graph metadata
+2026-05-21 01:15 +0800 | FEAT | add the first skill self-healing pipeline slice with skill capability fixtures, repair-ticket generation, and value-signal scoring for broken skill behavior
+2026-05-21 01:15 +0800 | FIX | repair the installed notion-context skill after harness reinstall so missing Notion row-query tools degrade into fallback diagnostics and a repair ticket instead of a hard automation failure
 2026-05-21 01:30 +0800 | FEAT | add media-ingest and video-understanding support skills so harness-scout can turn skill-teaching videos into source todos, skill comparisons, and copied-skill handoffs
 2026-05-22 02:20 +0800 | FEAT | add algebraic Tier 3 pipeline guidance and pilot it across landing-page method selection plus frontend-craft composed scroll animation

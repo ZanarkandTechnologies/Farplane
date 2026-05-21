@@ -1,0 +1,10 @@
+{
+  "name": "ambiguous_personal_priority",
+  "goal_ref": "personal planning",
+  "repeated_failure_count": 1,
+  "blocked_workflows": ["possible life-admin prioritization"],
+  "affected_skills": [],
+  "manual_intervention_cost": "medium",
+  "confidence": "low",
+  "expected_action_policy": "ask"
+}

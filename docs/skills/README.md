@@ -58,6 +58,7 @@ python3 bin/sync_skill_registry.py --write
 python3 bin/sync_skill_registry.py --check
 python3 bin/check_skill_todo_tiers.py
 python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
+python3 bin/check_skill_capabilities.py validate
 python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 ```
 
@@ -119,3 +120,31 @@ Use `skills/harness-advisor/` before skill maintenance when the question is
 broader than skills: it compares root policy, global templates, docs/specs,
 skills, subagents, hooks/scripts, ticket contracts, validators, and registry
 metadata before recommending the owning surface.
+
+## Skill Capability Tests
+
+High-value skills may publish small JSON sanity fixtures for operations that
+must keep working. Use these for external API, MCP, generated-registry, file
+contract, or local script behavior that callers rely on.
+
+Fixture locations:
+
+- repo-owned skills: `skills/<skill>/tests/*.json`
+- installed or external skills mirrored by this repo: `tests/<skill>/*.json`
+
+Keep fixtures small. They should name the operation, the expected behavior, any
+sanitized observed failure, the expected recovery decision, forbidden actions,
+and evidence refs. Do not store bulky API payloads, secrets, raw transcripts,
+or full expected result objects.
+
+Run:
+
+```bash
+python3 bin/check_skill_capabilities.py validate
+python3 bin/check_skill_capabilities.py list
+python3 bin/check_skill_capabilities.py score --skill notion-context --operation tasks_this_week
+```
+
+Capability fixtures are discovery and repair inputs. The generated skill
+registry may expose compact handles later, but it should not embed bulky
+expected results.

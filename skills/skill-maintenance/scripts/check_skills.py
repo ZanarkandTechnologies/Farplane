@@ -75,6 +75,7 @@ def main() -> int:
         if not args.strict_tier3:
             tier_command.append("--allow-peer-tier3")
         run(tier_command)
+        run(["python3", "bin/check_skill_capabilities.py", "validate"])
 
         run(
             [
@@ -83,6 +84,7 @@ def main() -> int:
                 "py_compile",
                 "bin/sync_skill_registry.py",
                 "bin/check_skill_todo_tiers.py",
+                "bin/check_skill_capabilities.py",
                 "skills/skill-maintenance/scripts/check_skills.py",
             ]
         )
