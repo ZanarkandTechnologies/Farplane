@@ -8,6 +8,10 @@
   and `last_verification`.
 - [ ] Update durable docs that changed in the final pass: `docs/HISTORY.md`,
   `docs/MEMORY.md`, `docs/TROUBLES.md`, README, or the nearest `AGENTS.md`.
+- [ ] Run the feature closeout consistency sweep for relevant surfaces:
+  `README.md`, `ARCHITECTURE.md`, `docs/specs/README.md`,
+  `docs/skills/README.md`, `docs/skills/registry.jsonl`,
+  `docs/features/registry.jsonl`, and nearest module `README.md`/`AGENTS.md`.
 - [ ] If the final proof or linked review artifact is stale, re-enter the
   [execute](../execute/SKILL.md) proof/review closeout shape before closing
   the ticket.

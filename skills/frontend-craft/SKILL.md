@@ -5,6 +5,8 @@ description: Main frontend implementation orchestrator. Use when the user asks t
 tier: 3
 group: frontend
 source: local
+methods:
+  - frontend-craft:composed-scroll-animation
 common_chains:
   after: ["visual-qa"]
 allowed-tools: Read, Grep, Glob, Bash

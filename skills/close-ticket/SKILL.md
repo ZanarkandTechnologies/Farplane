@@ -94,6 +94,17 @@ Update durable docs when the closeout pass changes durable repo truth:
 - `docs/TROUBLES.md`
 - nearest README or AGENTS surface when the user-visible contract changed
 
+Run a feature closeout consistency sweep before commit:
+
+- `README.md` and `ARCHITECTURE.md` when the top-level product or workflow map
+  changed
+- `docs/specs/README.md` when a spec is added, moved, renamed, or retired
+- `docs/skills/README.md` and `docs/skills/registry.jsonl` when skills,
+  skill metadata, method addresses, `todos.md`, or skill docs changed
+- `docs/features/registry.jsonl` when a shipped capability is added, renamed,
+  retired, or materially changes status
+- nearest module `README.md` or `AGENTS.md` when a local contract changed
+
 ## Checks
 
 Run the smallest truthful final checks for the touched surfaces.
