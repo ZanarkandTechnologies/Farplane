@@ -13,9 +13,9 @@ approval_required: false
 requires_qa: true
 requires_demo: false
 created_at: 2026-05-21T00:00:00+08:00
-updated_at: 2026-05-21T02:19:00+08:00
-next_action: human review / close-ticket writeback; TASK-0159 owns the frontend-specific copied-method follow-up
-last_verification: 2026-05-21 02:19 +0800 - skill registry, todo tiers, capability fixtures, ticket metadata, sanitized source-info JSON, and automation review passed
+updated_at: 2026-05-21T04:03:00+08:00
+next_action: human review / close-ticket writeback; no implementation continuation needed; TASK-0159 owns the frontend-specific copied-method follow-up
+last_verification: 2026-05-21 04:03 +0800 - Notion task-board fetch, local ticket selection, ticket metadata, skill registry, todo tiers, capability fixtures, source-info JSON, secret/raw-media grep, diff check, skill maintenance check, and automation board review passed
 ---
 
 # TASK-0158: add video-to-skill harness scout pipeline
@@ -250,6 +250,10 @@ flowchart LR
   `tickets/TASK-0158/artifacts/review/2026-05-21-checklist-refactor-review.md`
 - [x] Automation review and sanitization pass:
   `tickets/TASK-0158/artifacts/review/2026-05-21-0219-automation-review.md`
+- [x] Automation closeout review:
+  `tickets/TASK-0158/artifacts/review/2026-05-21-0302-automation-closeout-review.md`
+- [x] Automation board review:
+  `tickets/TASK-0158/artifacts/review/2026-05-21-0403-automation-board-review.md`
 
 ## Refs
 - `skills/harness-scout/SKILL.md`
@@ -267,6 +271,8 @@ flowchart LR
   - `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md`
   - `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/evidence/source-info.json`
   - `tickets/TASK-0158/artifacts/review/2026-05-21-0219-automation-review.md`
+  - `tickets/TASK-0158/artifacts/review/2026-05-21-0302-automation-closeout-review.md`
+  - `tickets/TASK-0158/artifacts/review/2026-05-21-0403-automation-board-review.md`
 - `Commands:`
   - `python3 tickets/scripts/check_ticket_metadata.py`
   - `python3 bin/sync_skill_registry.py --check`
@@ -274,6 +280,8 @@ flowchart LR
   - `python3 bin/check_skill_capabilities.py validate`
   - `python3 skills/skill-maintenance/scripts/check_skills.py --write`
   - `python3 -m json.tool experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/evidence/source-info.json`
+  - `rg -n "instagram\\.fkul|_nc_|http_headers|formats|comments|author_id|thumbnails|Bearer|PRIVATE KEY|api[_-]?key|cookie" experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video -S`
+  - `git diff --check`
 - `Result summary:`
   - media ingest and video understanding support skills added
   - `harness-scout` todos now require summarize-first extraction,

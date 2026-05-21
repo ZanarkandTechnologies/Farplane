@@ -4,16 +4,22 @@ Generic active todo surface for multi-ticket or `batch-work` passes.
 
 ## Active
 
-- [x] `TASK-0151`: consolidate video production skills into method addresses.
-- [x] `TASK-0152`: run final skill registry audit and regenerate registry after
-  `TASK-0151`.
-  - [x] Regenerate `docs/skills/registry.jsonl`.
-  - [x] Prove local skills all have `todos.md`.
-  - [x] Prove missing todos are only intentional external skills.
-  - [x] Prove tier todo checker passes.
-  - [x] Record row, source, tier, and todo counts in the ticket.
-- [x] `TASK-0153`: build local skill registry graph visualization after
-  `TASK-0152`.
+- [ ] `TASK-0159`: add Codexter local telemetry event ledger.
+- [ ] `TASK-0160`: instrument Codexter hooks and add telemetry status CLI.
+- [ ] `TASK-0161`: add Aikage Codexter event ingest.
+- [ ] `TASK-0162`: add Aikage Codexter telemetry dashboard panel.
+- [ ] `TASK-0163`: add Codexter skill usage and prune candidate report.
+
+## Completed Skill-Capability Batch
+
+- [x] `TASK-0155`: add skill capability checker.
+  - [x] Add `tests/notion-context/tasks_this_week.json`.
+  - [x] Add `bin/check_skill_capabilities.py`.
+  - [x] Add tests for fixture validation and scoring.
+  - [x] Document `tests/<skill>/` fixture paths.
+  - [x] Run ticket proof checks.
+- [x] `TASK-0156`: create skill failure repair tickets.
+- [x] `TASK-0157`: score missing high-value skill capabilities.
 
 ## Notes
 
