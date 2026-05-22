@@ -21,6 +21,22 @@ allowed-tools: Read, Grep, Glob, Bash
 Domain entrypoint for video planning, scripting, prompting, storyboard, ad-spec,
 and production workflows.
 
+Compact model:
+
+```text
+VideoProduction := Brief + Audience + ChannelPlan + SceneMatrix + MethodSet + AssetPlan + DeliveryPlan + ProofPlan
+
+Deliverable := Job + Channel + Duration + Format + SourceAssets + ScriptOrPanel + AssetRoutes + DeliverySpecs + QA
+
+MethodSelection(deliverable, methods, constraints) :=
+  candidates = filter(methods, deliverable, constraints)
+  chosen = advise(top3(candidates))
+```
+
+Use `references/model.md` for scene/deliverable matrix, method selection, and
+execution packet rules. Keep `todos.md` short; upstream references stay
+method-specific detail.
+
 Use method addresses to choose the smallest relevant workflow:
 
 - `video-production:marketing` for marketing videos, promo clips, launch
@@ -109,3 +125,9 @@ Use for platform-specific paid social and video ads. Define placement,
 dimensions, duration, safe zones, captions, hook, CTA, deliverables, and proof
 before producing creative. Use `video-production:marketing` as a supporting
 method only when broader campaign story and creative concepting are needed.
+
+## Reference Map
+
+- `references/model.md` - scene/deliverable matrix, method selection,
+  execution packet, and proof rules.
+- `references/method-selection-smoke.md` - smoke cases for method routing.
