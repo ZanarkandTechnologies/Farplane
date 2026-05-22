@@ -202,4 +202,8 @@
 2026-05-21 01:30 +0800 | FEAT | add media-ingest and video-understanding support skills so harness-scout can turn skill-teaching videos into source todos, skill comparisons, and copied-skill handoffs
 2026-05-22 02:20 +0800 | FEAT | add algebraic Tier 3 pipeline guidance and pilot it across landing-page method selection plus frontend-craft composed scroll animation
 2026-05-22 02:31 +0800 | FEAT | route skill-opportunity sidecar runs to read-only Notion approval tasks with recent-window context
+2026-05-22 02:34 +0800 | POLICY | harden skill self-healing boundaries so external or installed skill bodies are mirrored and ticketed, not directly edited, without explicit operator authorization
+2026-05-22 02:49 +0800 | DOCS | add a policy index and seed the case-based memory context graph design for connecting harness decisions, features, memories, tickets, sources, and repeated correction cases
+2026-05-22 03:00 +0800 | DOCS | audit documentation duplication and collapse the legacy Ralph runtime spec into a compatibility pointer to the canonical runtime-surface spec
+2026-05-22 03:01 +0800 | CLEANUP | delete the retired Ralph legacy spec bundle, remove old compatibility env aliases and flat-ticket lookup paths, and rewrite active guardrails in neutral current-system language
 2026-05-22 03:01 +0800 | DOCS | expose frontend-craft composed scroll animation as a registry method and add a close-ticket consistency sweep

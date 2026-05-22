@@ -79,6 +79,10 @@ Avoid:
 - repeating skill internals here
 - embedding multi-agent framework/runtime machinery here
 - committing live Codex state; track reusable harness config only (`agents/`, `skills/`, `rules/`, scripts, sanitized templates). See `MEM-0001`
+- directly editing external or installed skill bodies such as `~/.codex/skills/*`
+  during self-healing unless the operator explicitly asks for that specific
+  external-skill edit; prefer local wrappers, mirrored fixtures, registry rows,
+  and visible repair tickets. See `MEM-0107`
 
 ## Context First
 

@@ -106,6 +106,10 @@ Use `source` to decide where wrapper logic belongs:
   be refreshable from that source. Keep local Codexter policy in the calling
   skill or another local wrapper, so the external skill can be refreshed with
   minimal merge friction.
+- Agents must not directly edit external or installed skill bodies such as
+  `~/.codex/skills/*` during self-healing or maintenance unless the operator
+  explicitly requests that specific external-skill edit. Use local wrappers,
+  mirrored fixtures, registry metadata, or visible repair tickets instead.
 - External skills may intentionally omit local `todos.md` when their operational
   wrapper belongs in a local caller skill. Track the upstream file with
   `upstream_url` when one URL is enough.
@@ -131,6 +135,11 @@ Fixture locations:
 
 - repo-owned skills: `skills/<skill>/tests/*.json`
 - installed or external skills mirrored by this repo: `tests/<skill>/*.json`
+
+Fixtures for installed or external skills are mirrors and diagnostics, not
+authorization to patch the upstream or installed skill body. A failing fixture
+should create or update a visible repair ticket that targets a local wrapper,
+registry/test metadata, or an explicitly approved external-skill edit.
 
 Keep fixtures small. They should name the operation, the expected behavior, any
 sanitized observed failure, the expected recovery decision, forbidden actions,

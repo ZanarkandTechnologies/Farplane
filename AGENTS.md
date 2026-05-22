@@ -33,6 +33,12 @@ Codexter skills are stable local contracts. Treat external skills, repos,
 blogs, and command families as research inputs rather than live dependencies;
 import ideas through reviewed `adopt`, `adapt`, `reject`, or `defer` decisions,
 usually via `best-of-worlds`. See `MEM-0073`.
+Self-healing and capability tests may mirror installed or external skills under
+`tests/<skill>/`, create repair tickets, and patch local Codexter wrappers, but
+must not directly edit external or installed skill bodies such as
+`~/.codex/skills/*` unless the operator explicitly asks for that specific
+external-skill edit. Prefer a local wrapper, fixture, registry row, or visible
+repair ticket. See `MEM-0107`.
 
 Keep skill dependencies tiered rather than hidden behind nested routers:
 Tier 1 primitives cover `advise`, `reference-grounding`, `review`, and

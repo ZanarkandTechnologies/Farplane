@@ -31,6 +31,9 @@ Current design docs:
 - `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy
 - `context-and-handoff-policy.md`
+- `case-based-memory-context-graph.md` - seed design for a generated context
+  graph that connects decisions, features, sources, tickets, memories, and
+  repeated correction cases without replacing the existing ledgers
 - `codexter-aikage-telemetry-sync.md` - local-first Codexter telemetry event
   ledger, optional Aikage Convex sync, dashboard diagnostics, and skill usage
   reporting plan
@@ -52,15 +55,6 @@ Current design docs:
 - `symphony-compatible-codexter-runner.md` - invocation contract that lets a
   normal Codex session run Codexter locally now and lets Symphony invoke
   Codexter-equipped Codex later
-
-Legacy or transitional references:
-
-- `legacy/ralph-runtime-surface.md`
-- `legacy/ralph-orchestration-blueprint.md`
-- `legacy/ralph-v2-direction.md`
-- `legacy/ralph-flow-examples.md`
-- `legacy/ralph-run-state.schema.json`
-- `legacy/ralph-judge-verdict.schema.json`
 
 Use this folder for:
 

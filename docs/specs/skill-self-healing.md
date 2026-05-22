@@ -32,6 +32,8 @@ context that the existing ticket pipeline can fix the problem autonomously.
 - Record small sanity tests for high-value skills, especially external API/MCP
   wrappers.
 - Create a repair ticket automatically when the fix is local and non-destructive.
+- Do not directly edit installed or external skill bodies unless the operator
+  explicitly requests that specific external-skill edit.
 - Escalate only when permission, external mutation, billing, publishing,
   destructive cleanup, or ambiguous user-value judgment is required.
 - Support future value inference without letting the agent invent risky work.
@@ -159,7 +161,7 @@ type UserValueSignal = {
 | Lever | Use it for | Do not use it for |
 | --- | --- | --- |
 | `skills/<skill>/tests/` | repo-owned skill sanity fixtures | global policy or bulky outputs |
-| `tests/<skill>/` | installed/external skill sanity mirrors | canonical ownership for repo-owned skills |
+| `tests/<skill>/` | installed/external skill sanity mirrors | canonical ownership for repo-owned skills or permission to edit external skill bodies |
 | `docs/skills/registry.jsonl` | generated discovery handles | storing expected result payloads |
 | `bin/check_skill_capabilities.py` | deterministic validation and fixture scoring | broad judgment about user goals |
 | `skills/self-improve` | improving an existing skill from evidence | live repair execution without a ticket |
@@ -189,9 +191,12 @@ Add a short rule later, after the checker exists:
 
 > When an invoked skill fails or contradicts its advertised behavior, collect a
 > skill failure packet. If the repair is safe and local, create or update a
-> visible repair ticket and continue through the existing ticket pipeline. If
-> the failure requires external mutation, billing, publishing, destructive
-> cleanup, or ambiguous user-value judgment, escalate with a recommendation.
+> visible repair ticket and continue through the existing ticket pipeline,
+> targeting repo-owned wrappers, fixtures, registry rows, or docs. Do not edit
+> installed or external skill bodies unless the operator explicitly requests
+> that specific external-skill edit. If the failure requires external mutation,
+> billing, publishing, destructive cleanup, or ambiguous user-value judgment,
+> escalate with a recommendation.
 
 Do not put the full pipeline in root or global prompts.
 
