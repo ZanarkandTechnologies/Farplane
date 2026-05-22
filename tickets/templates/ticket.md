@@ -33,6 +33,9 @@ recommended.
 ## Plan
 - `Change:` what is changing
 - `Why:` why this ticket exists now
+- `First-principles basis:` objective, user/system need, assumptions, root
+  cause, constraints, first viable slice, proof/falsification, tradeoff
+  accepted, and non-goals when material
 - `Before -> After:`
 - `Touch:` files expected to change
 - `Inspect:` nearby files/docs checked to ground the plan

@@ -32,6 +32,17 @@ Prefer concise option-based questions when possible:
 ## Problem / Context
 [What pain exists and why it matters]
 
+## First-Principles Basis
+- Objective:
+- User or system need:
+- Root cause:
+- Key assumptions:
+- Constraints:
+- First viable slice:
+- Proof / falsification:
+- Tradeoff accepted:
+- Non-goals:
+
 ## Audience
 [Primary and secondary users]
 
@@ -116,6 +127,9 @@ When [context], I want to [action], so I can [outcome].
 - Non-goals clearly prevent scope creep.
 - Success definition is observable.
 - Scope aligns to one SLC slice.
+- First-principles basis states objective, need, assumptions, root cause,
+  constraints, first viable slice, proof/falsification, tradeoff, and
+  non-goals before requirements deepen.
 - Project profile, component matrix, explored options, selected directions,
   and prototype gates are present when `docs/bootstrap-brief.md` names a
   profile.

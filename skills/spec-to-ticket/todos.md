@@ -6,6 +6,11 @@
 - [ ] Use the relevant [research](../research/SKILL.md) method when ticket
   scope depends on local baseline, examples, official behavior, peer norms, or
   implementation patterns.
+- [ ] Carry the
+  [first-principles-planning](../../docs/specs/first-principles-planning.md)
+  basis into ticket boundaries: objective, need, assumptions, root cause,
+  constraints, first viable slice, proof/falsification, tradeoffs, and
+  non-goals.
 - [ ] Start from the largest coherent self-contained feature ticket; do not split by schema/backend/UI layers just because those layers differ.
 - [ ] Keep CRUD and other narrow operator workflows in one ticket by default.
 - [ ] Split only when a hard trigger applies: shared platform reuse, migration/backfill/rollout risk, external dependency/provisioning, unresolved feasibility, or a real service/runtime boundary.

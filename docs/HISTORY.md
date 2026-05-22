@@ -214,3 +214,4 @@
 2026-05-22 17:57 +0800 | DOCS | add project lifecycle reference and wire generated project AGENTS/PROJECT_RULES templates to lifecycle ownership
 2026-05-22 18:12 +0800 | DOCS | add harness-advisor placement axes for context budget, progressive disclosure, subagents, tools, hooks, docs, and registries
 2026-05-22 18:18 +0800 | DOCS | teach harness-advisor to consult the policy index for canonical ownership and drift-sensitive placement decisions
+2026-05-23 01:45 +0800 | DOCS | add first-principles planning contract across PRD, ticket slicing, implementation planning, generated project AGENTS, and ticket templates

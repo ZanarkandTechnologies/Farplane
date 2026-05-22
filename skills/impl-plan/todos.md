@@ -12,6 +12,11 @@
   partial code work needs current-state gap and production expectation.
 - [ ] Use [research:parity](../research/SKILL.md#researchparity) when external
   peer norms need to be established before local scope.
+- [ ] Preserve the
+  [first-principles-planning](../../docs/specs/first-principles-planning.md)
+  basis for material work: objective, need, assumptions, root cause,
+  constraints, first viable slice, proof/falsification, tradeoffs, and
+  non-goals.
 - [ ] Decide whether the whole selected ticket can stay whole or whether a
   real boundary forces a split first.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the proof and execution plan.

@@ -26,6 +26,9 @@
 
 ### PRD checklist (must be answerable)
 
+- **First-principles basis**: objective, need, root cause, assumptions,
+  constraints, first viable slice, proof/falsification, tradeoffs, and
+  non-goals.
 - **Audience**: Who is this for? Primary vs secondary users?
 - **JTBD / outcome**: What are they trying to accomplish?
 - **Scope**: What is in-scope for the next SLC slice?
@@ -41,24 +44,28 @@ Ask only what changes implementation decisions; default to 8-12 questions total:
 
 1. Who is the **primary user** and what is their context (team, workflow, device)?
 2. What is the **core JTBD** in one sentence? ("When ___, I want to ___, so I can ___.")
-3. What is the **first SLC slice** we should ship (small but valuable)?
-4. What are the **non-goals** for this slice (things we will not build yet)?
-5. What are the **inputs/outputs** (data shape, integrations, external services)?
-6. What are the **must-have flows** (happy path steps) and the top **2-3 edge cases**?
-7. What are the **failure modes** we must handle (auth, network, rate limits, payments, retries)?
-8. What are the **constraints** (privacy/security, latency, offline, accessibility, budgets)?
-9. What are the **success metrics** or acceptance tests (what will make you say "ship it")?
-10. What existing system constraints do we inherit (stack, hosting, auth, conventions)?
-11. What is the **rollout** expectation (internal only, beta, public; migration/backfill)?
-12. What are you most worried we'll get wrong?
-13. If a project profile exists, which component axes need divergent options
+3. What is the **root cause** or underlying constraint creating this need?
+4. What assumptions must be true for the chosen path to work?
+5. What is the **first SLC slice** we should ship (small but valuable)?
+6. What proof would validate or falsify the riskiest assumption?
+7. What are the **non-goals** for this slice (things we will not build yet)?
+8. What are the **inputs/outputs** (data shape, integrations, external services)?
+9. What are the **must-have flows** (happy path steps) and the top **2-3 edge cases**?
+10. What are the **failure modes** we must handle (auth, network, rate limits, payments, retries)?
+11. What are the **constraints** (privacy/security, latency, offline, accessibility, budgets)?
+12. What are the **success metrics** or acceptance tests (what will make you say "ship it")?
+13. What existing system constraints do we inherit (stack, hosting, auth, conventions)?
+14. What is the **rollout** expectation (internal only, beta, public; migration/backfill)?
+15. What are you most worried we'll get wrong?
+16. If a project profile exists, which component axes need divergent options
     before we choose a complete direction?
-14. What smallest PoC would prove the riskiest assumption before full
+17. What smallest PoC would prove the riskiest assumption before full
     production ticketing?
 
 ### Writing `docs/prd.md` (recommended structure)
 
 - **Problem / context**
+- **First-principles basis**
 - **Audience**
 - **JTBD**
 - **SLC slice (next release)**

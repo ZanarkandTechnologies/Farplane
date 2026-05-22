@@ -8,6 +8,10 @@
 - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
   [research:competitor](../research/SKILL.md#researchcompetitor) when product
   expectations, peer workflows, or market examples should shape the PRD.
+- [ ] Use
+  [first-principles-planning](../../docs/specs/first-principles-planning.md)
+  to reduce the request to objective, need, constraints, assumptions, root
+  cause, first viable slice, proof/falsification, tradeoffs, and non-goals.
 - [ ] Fill the PRD by section: audience, JTBD, user stories, constraints,
   non-goals, risks, first SLC slice, metric candidates, and autonomy readiness.
 - [ ] If `docs/bootstrap-brief.md` has a project profile, load

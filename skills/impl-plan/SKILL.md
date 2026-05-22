@@ -85,6 +85,8 @@ move, it is too thin.
 
 0a. Study `@docs/prd.md` for outcomes + constraints.
 0b. Study `@docs/specs/*` for spec truth, including any `Agent Testability Brief` when present.
+0b1. Study `@docs/specs/first-principles-planning.md` when the ticket is
+material, product-shaping, ambiguous, or missing/partial feature work.
 0b2. For complex runtime/service specs, use
 `@docs/specs/spec-authoring-contract.md` to distinguish PRD, system-spec, and
 ticket responsibilities; do not push system-spec state machines or conformance
@@ -108,6 +110,11 @@ Before finalizing the plan or handing off to execution:
 2. When an `Agent Testability Brief` exists, preserve its control accelerators,
    state probes, coordination views, and proof surfaces in the plan instead of
    inventing testability doctrine again.
+2a. Preserve the ticket's first-principles basis: objective, need,
+    assumptions, root cause, constraints, first viable slice,
+    proof/falsification, tradeoffs, and non-goals. If the basis is missing for
+    material work, tighten the ticket or route back to PRD/spec before
+    execution.
 3. Preserve or create a ticket-level `Proof Contract` for material tickets:
    honest mechanical metrics when available, `Metrics: none mechanical` when
    not, review rubric families and thresholds, hard gates, required evidence,
@@ -226,25 +233,28 @@ Use the canonical ticket-body shape:
 
 1. `Change`
 2. `Why`
-3. `Before -> After`
-4. `Touch`
-5. `Inspect`
-6. `Signature delta`
+3. `First-principles basis`
+   - objective, need, assumptions, root cause, constraints, first viable slice,
+     proof/falsification, tradeoff, and non-goals when material
+4. `Before -> After`
+5. `Touch`
+6. `Inspect`
+7. `Signature delta`
    - compact callable seams in the form `file / symbol(input): output`
-7. `Type Sketch`
+8. `Type Sketch`
    - compact struct/type shapes for the data crossing boundaries
    - only the fields that matter
    - never a full dump
-8. `Typed flow example`
+9. `Typed flow example`
    - one golden-path dry run showing a representative object or payload
      evolving through the main stages
-9. `Execution steps`
+10. `Execution steps`
    - ordered implementation steps using concrete verbs
-10. `Recommendation`
-11. `Options considered`
+11. `Recommendation`
+12. `Options considered`
     - only when the user did not already provide a take on a material choice
-12. `Blast radius`
-13. `Risks`
+13. `Blast radius`
+14. `Risks`
 
 ## Applicability Rule
 
@@ -273,26 +283,28 @@ Use the canonical ticket-body shape:
 
 1. Do not implement; this skill is plan-only.
 2. Do not duplicate the same idea across summary, plan, criteria, and evidence.
-3. Do not hide the key interfaces in prose when a short signature delta would
+3. Do not skip first-principles basis for material work; objective, root cause,
+   assumptions, first slice, proof, tradeoff, and non-goals should be visible.
+4. Do not hide the key interfaces in prose when a short signature delta would
    prove understanding faster.
-4. Do not show callable seams without the matching data seams when the change
+5. Do not show callable seams without the matching data seams when the change
    depends on typed payloads, structs, or objects crossing boundaries.
-5. Do not leave the builder inferring the execution sequence when the ticket is
+6. Do not leave the builder inferring the execution sequence when the ticket is
    material enough to need an explicit order of operations.
-6. Do not preallocate empty review output inside the input ticket.
-7. Do not make `Acceptance Criteria` and `Verification` say the same thing;
+7. Do not preallocate empty review output inside the input ticket.
+8. Do not make `Acceptance Criteria` and `Verification` say the same thing;
    criteria define done, verification defines measurement.
-8. Do not confuse metrics with rubrics: metrics are mechanical signals,
+9. Do not confuse metrics with rubrics: metrics are mechanical signals,
    rubrics are review judgment frames. Put both in the `Proof Contract` when
    they matter.
-9. Do not skip the option comparison for material choices.
-10. Do not guess at "production-ready" scope from intuition alone when
+10. Do not skip the option comparison for material choices.
+11. Do not guess at "production-ready" scope from intuition alone when
    comparable products, codebases, or official docs can ground it.
-11. Do not rewrite a coherent ticket into "part 1" or "first slice" just
+12. Do not rewrite a coherent ticket into "part 1" or "first slice" just
     because that feels safer than planning the full ticket.
-12. Do not use timid language like "maybe", "might", or "could" where the plan
+13. Do not use timid language like "maybe", "might", or "could" where the plan
     should be making a recommendation or naming an execution step.
-13. Do not hand off a `$ralph`-eligible ticket with vague autonomy-readiness
+14. Do not hand off a `$ralph`-eligible ticket with vague autonomy-readiness
     fields; name the blockers or keep the ticket gated.
 
 ## Efficiency Rules

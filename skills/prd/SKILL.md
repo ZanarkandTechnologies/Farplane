@@ -27,6 +27,9 @@ Use this as the first session in the Codexter workflow.
 
 - Ask 6-10 high-signal questions (audience, JTBD, slice, non-goals, constraints, risks).
 - Keep questions tied to implementation decisions.
+- Use `docs/specs/first-principles-planning.md` to reduce the request to
+  objective, user/system need, assumptions, root cause, constraints, first
+  viable slice, proof/falsification, tradeoffs, and non-goals.
 - Confirm the first SLC slice boundary.
 - If `docs/bootstrap-brief.md` names a project profile, use
   `deep-init-project/references/project-profiles.md` to drive PRD questions and

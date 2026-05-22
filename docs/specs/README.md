@@ -30,6 +30,9 @@ Current design docs:
 - `agent-testability-surfaces.md` - post-system-design doctrine for control accelerators, state probes, coordination views, and proof surfaces
 - `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy
+- `first-principles-planning.md` - planning/spec contract for objective, need,
+  assumptions, root cause, constraints, first viable slice, proof, tradeoffs,
+  non-goals, and reusable policy extraction
 - `context-and-handoff-policy.md`
 - `case-based-memory-context-graph.md` - seed design for a generated context
   graph that connects decisions, features, sources, tickets, memories, and

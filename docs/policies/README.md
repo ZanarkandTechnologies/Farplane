@@ -44,6 +44,14 @@ This folder answers:
   templates, skills, subagents, hooks, validators, registries, or ticket
   contracts.
 
+### First-Principles Planning
+
+- Canonical contract: [`docs/specs/first-principles-planning.md`](/Users/kenjipcx/coding-harness/Codexter/docs/specs/first-principles-planning.md)
+- Consuming workflows: [`skills/prd/SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/prd/SKILL.md), [`skills/spec-to-ticket/SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket/SKILL.md), [`skills/impl-plan/SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan/SKILL.md)
+- Drift check: PRDs, tickets, and implementation plans should preserve
+  objective, need, assumptions, root cause, constraints, first viable slice,
+  proof, tradeoffs, and non-goals before execution.
+
 ### Skill System
 
 - Skill registry contract: [`docs/skills/README.md`](/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md)

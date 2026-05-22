@@ -49,6 +49,12 @@ Work flows through:
 - Identify affected interfaces first.
 - No blind edits.
 
+## First-Principles Planning
+
+Before specs, tickets, or implementation plans, reduce the work to: objective,
+user/system need, constraints, assumptions, root cause, smallest valuable
+slice, proof/falsification, tradeoffs, and non-goals.
+
 ## Operating Modes
 
 - Discovery mode: use `brainstorm` for options and `deep-interview` for ambiguity-gated clarification before PRD/spec writing.
