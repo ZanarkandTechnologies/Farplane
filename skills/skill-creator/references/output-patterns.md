@@ -19,7 +19,7 @@ Each prompt should include:
 - mode constraints (plan-only vs build-only)
 - required updates/output artifacts
 
-Avoid legacy paths unless the project still uses them.
+Avoid retired paths unless the project still uses them.
 
 ## Template Pattern
 

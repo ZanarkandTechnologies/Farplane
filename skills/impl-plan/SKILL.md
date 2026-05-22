@@ -118,8 +118,8 @@ Before finalizing the plan or handing off to execution:
    QA risks, and human gates before handoff.
 5. Read enough nearby code to name real files, seams, signatures, and typed
    data shapes instead of inventing them.
-6. In Codexter itself, do **not** create `.omx/context/*` snapshots; that is an
-   older OMX-era pattern and not the active repo contract.
+6. In Codexter itself, do **not** create hidden sidecar context snapshots; the
+   active repo contract is tickets, linked docs, and mode state.
 7. If intent is still vague, use `deep-interview --quick`.
 8. If system shape is still vague, use `deep-system-design`.
 9. If the repo does not yet implement the target capability clearly enough to

@@ -44,7 +44,7 @@ RULES: tuple[HarnessRule, ...] = (
         relative_path="docs/specs/runtime-surface.md",
         required_substrings=(
             "Public docs should describe `.harness/` as the canonical live runtime root.",
-            "There is no separate public legacy execution surface anymore.",
+            "There is no separate public retired execution surface anymore.",
         ),
         forbidden_substrings=(
             ".ralph/",
@@ -52,8 +52,8 @@ RULES: tuple[HarnessRule, ...] = (
         ),
         remediation=(
             "keep runtime-surface docs on the live Codexter contract: "
-            "`.harness/` is canonical and legacy `.ralph/` / `.omx/` paths "
-            "belong only in historical surfaces"
+            "`.harness/` is canonical and retired runtime paths belong only "
+            "in historical surfaces"
         ),
     ),
     HarnessRule(
@@ -111,7 +111,7 @@ def validate_root(root: Path) -> list[str]:
         for snippet in rule.forbidden_substrings:
             if snippet in text:
                 errors.append(
-                    f"{rule.relative_path}: contains forbidden legacy text: {snippet!r} | "
+                    f"{rule.relative_path}: contains forbidden retired-path text: {snippet!r} | "
                     f"remediation: {rule.remediation}"
                 )
     errors.extend(validate_agent_roles(root))

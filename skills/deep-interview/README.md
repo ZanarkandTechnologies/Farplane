@@ -21,5 +21,5 @@ $deep-interview --bootstrap "clarify repo topology, stack, and push gates for a 
 
 ## How To Test
 
-- `rg -n '\.omx|\bomx\b' skills/deep-interview/SKILL.md`
+- `rg -n 'hidden sidecar' skills/deep-interview/SKILL.md`
 - re-read `skills/deep-interview/SKILL.md` against `tickets/README.md` and `docs/specs/context-and-handoff-policy.md`

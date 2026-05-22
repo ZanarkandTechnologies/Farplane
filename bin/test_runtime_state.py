@@ -417,10 +417,10 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(current["ticket_id"], "TASK-0042")
         self.assertEqual(current["run_state"], str(run_state.relative_to(project_root)))
 
-    def test_load_current_run_ignores_legacy_ralph_state(self) -> None:
+    def test_load_current_run_ignores_retired_runtime_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".legacy-runtime" / "state"
+            state_dir = project_root / ".retired-runtime" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
             (state_dir / "current-run.json").write_text(
                 json.dumps(

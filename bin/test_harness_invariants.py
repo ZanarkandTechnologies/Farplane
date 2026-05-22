@@ -30,7 +30,7 @@ The install-time global harness contract now lives at `templates/global/AGENTS.m
 RUNTIME_SURFACE_TEXT = """\
 # Runtime Surface
 
-There is no separate public legacy execution surface anymore.
+There is no separate public retired execution surface anymore.
 
 ## Documentation Rules
 
@@ -117,7 +117,7 @@ This file is generic instructions.
             self.assertIn("templates/global/AGENTS.md", result.stdout)
             self.assertIn("remediation", result.stdout)
 
-    def test_validator_fails_on_legacy_runtime_root(self) -> None:
+    def test_validator_fails_on_retired_runtime_root(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             self.build_repo(root)
@@ -127,7 +127,7 @@ This file is generic instructions.
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("contains forbidden legacy text", result.stdout)
+            self.assertIn("contains forbidden retired-path text", result.stdout)
             self.assertIn(".ralph/", result.stdout)
 
     def test_validator_fails_when_ticket_template_drops_claim_alias_boundary(self) -> None:

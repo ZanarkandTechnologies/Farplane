@@ -1,4 +1,4 @@
-# oh-my-codex agent: code-reviewer
+# Codexter agent: code-reviewer
 name = "code-reviewer"
 description = "Rubric-driven review specialist with anchored 1-to-5 scoring and repo-grounded anti-slop consistency checks"
 model = "gpt-5.4"

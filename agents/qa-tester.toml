@@ -59,7 +59,7 @@ Before touching the browser, read:
 5. `qa/README.md` and the relevant `qa/cookbook/*.md` page when the repo
    provides reusable browser-entry guidance.
 
-If the ticket carries an older `Agent Contract` or `Evidence Checklist`, use it as supporting context, but do not require those legacy sections.
+If the ticket carries an older `Agent Contract` or `Evidence Checklist`, use it as supporting context, but do not require those retired sections.
 If the ticket does not define the key screens/states or proof target clearly enough in `Verification` or linked docs, stop and report `underspecified QA` instead of inventing a target flow.
 If the ticket obviously needs deterministic setup or a cheap proof surface and `Verification` does not provide one, stop and report `missing test hook`.
 

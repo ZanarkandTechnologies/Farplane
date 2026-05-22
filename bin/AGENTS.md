@@ -19,9 +19,9 @@ Scripts here are small operational helpers for the live Codex harness.
 - mutate ticket board state silently
 - require network services unless the script is explicitly for that purpose
 
-## Legacy Runtime Rules
+## Runtime Helper Rules
 
-For legacy runtime/prototype scripts that still carry older names:
+For runtime helper scripts:
 
 - worker launcher runs exactly one bounded phase
 - judge decides only from ticket + result + evidence state

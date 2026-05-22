@@ -29,11 +29,11 @@ The primary control plane is not:
 - `ralph_worker.sh`
 - direct binary-first orchestration docs
 
-There is no separate public legacy execution surface anymore.
+There is no separate public retired execution surface anymore.
 Same-ticket repeats re-enter `$impl`.
 Serial board drains enter through `$ralph`, which selects one eligible active
 ticket and then hands that ticket to `impl-plan`, `$impl`, or `close-ticket`.
-It does not revive legacy binary-first orchestration.
+It does not revive retired binary-first orchestration.
 
 For same-ticket build looping, the runtime contract is:
 
@@ -139,8 +139,7 @@ Those records are runtime-only and may carry:
 - Any removed prototype binaries should remain only as historical references in
   archived tickets or older specs, not as live runtime files.
 - Do not present `ralph_orchestrate.py` as the preferred future entrypoint.
-- Do not present the legacy Ralph runtime directory or `docs/progress.md` as
-  live queue state.
+- Do not present retired runtime directories or `docs/progress.md` as live queue state.
 
 ## Immediate Cleanup Scope
 

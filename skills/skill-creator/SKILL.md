@@ -177,7 +177,8 @@ Copy/paste operational prompts that reduce session startup friction and enforce 
 - **Examples**: `prompts/plan.md`, `prompts/build.md`
 - **Use cases**: Multi-session flows (PRD -> plan -> build), role handoff prompts, review prompts
 - **Benefits**: Faster starts, fewer path mistakes, more consistent execution quality
-- **Guideline**: Keep all prompt paths aligned to current canonical structure (for example `docs/*`, not legacy `_ralph/*`)
+- **Guideline**: Keep all prompt paths aligned to current canonical structure
+  (for example `docs/*`, not retired `_ralph/*`)
 
 ##### Assets (`assets/`)
 
@@ -397,7 +398,7 @@ The packaging script will:
    - No dead links in `SKILL.md`
    - No orphan references never linked by `SKILL.md`
    - No empty guidance files
-   - No stale path patterns in examples/prompts (for example legacy `_ralph/` when `docs/` is canonical)
+   - No stale path patterns in examples/prompts (for example retired `_ralph/` when `docs/` is canonical)
    - Command snippets are syntactically runnable
 
 2. **Package** the skill if validation passes, creating a .skill file named after the skill (e.g., `my-skill.skill`) that includes all files and maintains the proper directory structure for distribution. The .skill file is a zip file with a .skill extension.

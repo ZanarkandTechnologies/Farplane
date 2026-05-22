@@ -85,7 +85,7 @@ If no flag is provided, use **Standard**.
    - Unknowns/open questions
    - Decision-boundary unknowns
    - Likely codebase touchpoints
-4. Persist the snapshot in mode state and, when a ticket already exists, mirror the key points into the ticket `Working Notes` instead of creating `.omx/context/*` files.
+4. Persist the snapshot in mode state and, when a ticket already exists, mirror the key points into the ticket `Working Notes` instead of creating hidden sidecar context folders.
 
 ## Phase 1: Initialize
 
@@ -234,7 +234,7 @@ When the clarified task is specifically about a research brief, or the skill is 
 - **Required interview focus:** mission clarity, evaluator readiness, keep policy, slug/session naming, and whether the draft is ready to launch now or should refine further
 - **Canonical artifact surface:** the active ticket when one exists, or a deliberate draft under `docs/research/` when the user explicitly wants a durable research brief
 - **Launch artifact bundle:** one current Codexter brief containing `Mission Draft`, `Evaluator Draft`, `Launch Readiness`, `Seed Inputs`, and `Confirmation Bridge`
-- **Launch artifact location:** keep it on the chosen live Codexter surface above; do not create `.omx/specs/*`
+- **Launch artifact location:** keep it on the chosen live Codexter surface above; do not create hidden sidecar spec folders
 - **Required artifact sections:**
   - `Mission Draft`
   - `Evaluator Draft`
@@ -353,7 +353,7 @@ Present execution options after artifact generation using explicit handoff contr
 - Use `request_user_input` / structured user-input tool for each interview round when available
 - If structured question tools are unavailable, use plain-text single-question rounds and keep the same stage order
 - Use `state_write` / `state_read` for resumable mode state
-- Reuse the active ticket, linked docs, and mode state as the live context surface; do not create `.omx/*` artifacts
+- Reuse the active ticket, linked docs, and mode state as the live context surface; do not create hidden sidecar artifacts
 - Save durable interview outputs on current Codexter surfaces such as the active ticket, or hand the brief to `prd` when `docs/prd.md` is the next owner
 </Tool_Usage>
 

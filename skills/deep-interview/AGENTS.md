@@ -16,6 +16,7 @@ vague ask before planning or execution.
 
 ## Do Not
 
-- recreate retired `.omx/*` artifacts
+- create hidden sidecar context artifacts outside the active ticket, docs, or
+  mode state
 - treat transcript memory as the canonical durable surface
 - implement directly from inside the interview mode

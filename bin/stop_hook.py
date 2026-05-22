@@ -87,19 +87,12 @@ COMPLETION_REVIEW_VERDICTS = {"pass", "revise", "block"}
 
 
 def env_enabled() -> bool:
-    legacy = os.environ.get("CODEXTER_ASSISTED_CONTINUATION", "").lower() in {
+    return os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
         "1",
         "true",
         "yes",
         "on",
     }
-    impl = os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
-        "1",
-        "true",
-        "yes",
-        "on",
-    }
-    return legacy or impl
 
 
 def has_project_runtime_context(project_root: Path | None) -> bool:
@@ -2039,16 +2032,6 @@ def summarize_impl_hook(ticket_id: str, decision: str, next_phase: str, reason: 
     return f"Impl review: {ticket_id} ({reason})"
 
 
-def summarize_legacy_hook(ticket_id: str, decision: str, reason: str) -> str:
-    if decision == "continue_same_ticket":
-        return f"Hook continue: {ticket_id} ({reason})"
-    if decision == "done":
-        return f"Hook done: {ticket_id} ({reason})"
-    if decision == "blocked":
-        return f"Hook blocked: {ticket_id} ({reason})"
-    return f"Hook stop: {ticket_id} ({reason})"
-
-
 def summarize_role_action(ticket_id: str, role: str, action: str, reason: str) -> str:
     return f"{role}: {ticket_id} -> {action} ({reason})"
 
@@ -2095,30 +2078,22 @@ def role_command(base: Path, output_path: Path, role_config: dict[str, str]) -> 
 def skill_opportunity_review_enabled() -> bool:
     disabled_values = {"0", "false", "no", "off", "disabled"}
     apply_value = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY", "").strip().lower()
-    legacy_review_value = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW", "").strip().lower()
-    if apply_value in disabled_values or legacy_review_value in disabled_values:
+    if apply_value in disabled_values:
         return False
     return True
 
 
 def skill_opportunity_review_dry_run() -> bool:
-    apply_dry_run = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN", "").lower() in {
+    return os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN", "").lower() in {
         "1",
         "true",
         "yes",
         "on",
     }
-    legacy_review_dry_run = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW_DRY_RUN", "").lower() in {
-        "1",
-        "true",
-        "yes",
-        "on",
-    }
-    return apply_dry_run or legacy_review_dry_run
 
 
 def skill_opportunity_review_interval() -> int:
-    raw = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW_INTERVAL", "").strip()
+    raw = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY_INTERVAL", "").strip()
     if not raw:
         return 10
     try:
@@ -2231,7 +2206,7 @@ def skill_opportunity_apply_command(base: Path, report_path: Path, role_config: 
         str(report_path),
         "-",
     ]
-    model = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_REVIEW_MODEL", "").strip() or role_config.get("model", "")
+    model = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY_MODEL", "").strip() or role_config.get("model", "")
     if model:
         command[2:2] = ["-m", model]
     reasoning_effort = role_config.get("model_reasoning_effort", "")

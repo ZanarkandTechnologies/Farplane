@@ -403,24 +403,11 @@ def canonical_archive_ticket_path(project_root: Path, ticket_id: str) -> Path:
     return tickets_dir(project_root) / "archive" / ticket_id / "ticket.md"
 
 
-def legacy_active_ticket_candidates(project_root: Path, ticket_id: str) -> list[Path]:
-    return sorted(
-        path for path in tickets_dir(project_root).glob(f"{ticket_id}*.md") if path.is_file()
-    )
-
-
-def legacy_archive_ticket_candidates(project_root: Path, ticket_id: str) -> list[Path]:
-    archive_dir = tickets_dir(project_root) / "archive"
-    return sorted(path for path in archive_dir.glob(f"{ticket_id}*.md") if path.is_file())
-
-
 def ticket_path_candidates(project_root: Path, ticket_id: str) -> list[Path]:
     candidates: list[Path] = []
     for path in (
         canonical_active_ticket_path(project_root, ticket_id),
-        *legacy_active_ticket_candidates(project_root, ticket_id),
         canonical_archive_ticket_path(project_root, ticket_id),
-        *legacy_archive_ticket_candidates(project_root, ticket_id),
     ):
         if path not in candidates:
             candidates.append(path)
@@ -457,12 +444,7 @@ def iter_active_ticket_files(project_root: Path) -> list[Path]:
         for path in ticket_root.glob("TASK-*/ticket.md")
         if path.is_file()
     )
-    legacy_tickets = sorted(
-        path
-        for path in ticket_root.glob("TASK-*.md")
-        if path.is_file()
-    )
-    return directory_tickets + legacy_tickets
+    return directory_tickets
 
 
 def ticket_artifact_root(project_root: Path, ticket_path: Path, ticket_id: str = "") -> Path:
@@ -1264,18 +1246,18 @@ def infer_session_origin_from_state(payload: Mapping[str, object] | None) -> tup
 
     control_surface = str(last_user_turn.get("control_surface") or "").strip().lower()
     if control_surface:
-        return "control", "legacy_last_user_turn", f"persisted last_user_turn invoked ${control_surface}"
+        return "control", "persisted_last_user_turn", f"persisted last_user_turn invoked ${control_surface}"
 
     raw_text = last_user_turn.get("raw_text")
     if isinstance(raw_text, str) and raw_text.strip():
         if is_internal_user_prompt(raw_text):
-            return "internal", "legacy_last_user_turn", "persisted raw_text matches internal prompt signature"
-        legacy_control_surface = extract_control_surface(raw_text)
-        if legacy_control_surface:
-            return "control", "legacy_last_user_turn", f"persisted raw_text invoked ${legacy_control_surface}"
+            return "internal", "persisted_last_user_turn", "persisted raw_text matches internal prompt signature"
+        persisted_control_surface = extract_control_surface(raw_text)
+        if persisted_control_surface:
+            return "control", "persisted_last_user_turn", f"persisted raw_text invoked ${persisted_control_surface}"
 
     if bool(last_user_turn.get("explicit_impl_requested")):
-        return "control", "legacy_last_user_turn", "persisted explicit impl request implies a control session"
+        return "control", "persisted_last_user_turn", "persisted explicit impl request implies a control session"
 
     return "", "", ""
 
