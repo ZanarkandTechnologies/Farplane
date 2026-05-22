@@ -13,9 +13,9 @@ approval_required: false
 requires_qa: true
 requires_demo: false
 created_at: 2026-05-21T00:00:00+08:00
-updated_at: 2026-05-21T04:03:00+08:00
-next_action: human review / close-ticket writeback; no implementation continuation needed; TASK-0159 owns the frontend-specific copied-method follow-up
-last_verification: 2026-05-21 04:03 +0800 - Notion task-board fetch, local ticket selection, ticket metadata, skill registry, todo tiers, capability fixtures, source-info JSON, secret/raw-media grep, diff check, skill maintenance check, and automation board review passed
+updated_at: 2026-05-22T02:59:00+08:00
+next_action: human review / close-ticket handoff; no implementation continuation needed; TASK-0159 owns the frontend-specific copied-method follow-up
+last_verification: 2026-05-22 02:59 +0800 - Notion connector unavailable in this session, local ticket selection, ticket metadata, skill registry, todo tiers, capability fixtures, source-info JSON, secret/raw-media grep, diff check, skill maintenance check, and automation closeout review passed
 ---
 
 # TASK-0158: add video-to-skill harness scout pipeline
@@ -254,6 +254,8 @@ flowchart LR
   `tickets/TASK-0158/artifacts/review/2026-05-21-0302-automation-closeout-review.md`
 - [x] Automation board review:
   `tickets/TASK-0158/artifacts/review/2026-05-21-0403-automation-board-review.md`
+- [x] Automation closeout review:
+  `tickets/TASK-0158/artifacts/review/2026-05-22-0259-automation-closeout-review.md`
 
 ## Refs
 - `skills/harness-scout/SKILL.md`
@@ -273,6 +275,7 @@ flowchart LR
   - `tickets/TASK-0158/artifacts/review/2026-05-21-0219-automation-review.md`
   - `tickets/TASK-0158/artifacts/review/2026-05-21-0302-automation-closeout-review.md`
   - `tickets/TASK-0158/artifacts/review/2026-05-21-0403-automation-board-review.md`
+  - `tickets/TASK-0158/artifacts/review/2026-05-22-0259-automation-closeout-review.md`
 - `Commands:`
   - `python3 tickets/scripts/check_ticket_metadata.py`
   - `python3 bin/sync_skill_registry.py --check`

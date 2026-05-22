@@ -2,17 +2,17 @@ window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
       "common-chain": 13,
-      "markdown-ref": 249
+      "markdown-ref": 260
     },
-    "edges": 262,
-    "nodes": 71,
+    "edges": 273,
+    "nodes": 73,
     "sources": {
       "external": 3,
-      "local": 68
+      "local": 70
     },
     "tiers": {
       "1": 3,
-      "2": 27,
+      "2": 29,
       "3": 41
     }
   },
@@ -965,6 +965,13 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "harness-scout",
+      "target": "media-ingest",
+      "target_ref": "media-ingest",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "harness-scout",
       "target": "plan",
       "target_ref": "plan",
       "type": "markdown-ref"
@@ -1016,6 +1023,13 @@ window.SKILL_GRAPH = {
       "source": "harness-scout",
       "target": "summarize",
       "target_ref": "summarize",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "harness-scout",
+      "target": "video-understanding",
+      "target_ref": "video-understanding",
       "type": "markdown-ref"
     },
     {
@@ -1083,6 +1097,20 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
+      "source": "landing-page",
+      "target": "execute",
+      "target_ref": "execute",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "landing-page",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
       "source": "loop",
       "target": "advise",
       "target_ref": "advise",
@@ -1100,6 +1128,27 @@ window.SKILL_GRAPH = {
       "source": "loop",
       "target": "review",
       "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "media-ingest",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "media-ingest",
+      "target": "summarize",
+      "target_ref": "summarize",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "media-ingest",
+      "target": "video-understanding",
+      "target_ref": "video-understanding",
       "type": "markdown-ref"
     },
     {
@@ -1769,6 +1818,34 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
+      "source": "video-understanding",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "video-understanding",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "video-understanding",
+      "target": "harness-scout",
+      "target_ref": "harness-scout",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "video-understanding",
+      "target": "media-ingest",
+      "target_ref": "media-ingest",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
       "source": "visual-design",
       "target": "best-of-worlds",
       "target_ref": "best-of-worlds",
@@ -1852,7 +1929,7 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-05-20T11:45:58+00:00",
+  "generated_at": "2026-05-22T04:31:50+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
@@ -2097,6 +2174,17 @@ window.SKILL_GRAPH = {
       "tier": 2
     },
     {
+      "description": "Use when a workflow needs to turn a URL, social post, audio file, video file, or local media path into a compact evidence bundle with source metadata, extraction commands, transcript status, representative frames, retention notes, and downstream handoff paths.",
+      "group": "",
+      "has_todos": true,
+      "id": "media-ingest",
+      "label": "media-ingest",
+      "methods": [],
+      "path": "skills/media-ingest/SKILL.md",
+      "source": "local",
+      "tier": 2
+    },
+    {
       "description": "Tier 2 generic planning interface. Use when a workflow needs to turn intent into executable shape, proof, and handoff rules without importing a domain-specific planning skill as the universal pattern.",
       "group": "",
       "has_todos": true,
@@ -2167,6 +2255,17 @@ window.SKILL_GRAPH = {
       "label": "testing",
       "methods": [],
       "path": "skills/testing/SKILL.md",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "description": "Use after media ingest when transcript evidence and representative frames need to be turned into a storyboard, visible workflow reconstruction, extracted source todos, skill-to-skill comparison, copied-skill candidate, and proof requirements.",
+      "group": "",
+      "has_todos": true,
+      "id": "video-understanding",
+      "label": "video-understanding",
+      "methods": [],
+      "path": "skills/video-understanding/SKILL.md",
       "source": "local",
       "tier": 2
     },
@@ -2352,7 +2451,9 @@ window.SKILL_GRAPH = {
       "has_todos": true,
       "id": "frontend-craft",
       "label": "frontend-craft",
-      "methods": [],
+      "methods": [
+        "frontend-craft:composed-scroll-animation"
+      ],
       "path": "skills/frontend-craft/SKILL.md",
       "source": "local",
       "tier": 3
