@@ -25,6 +25,8 @@ agent-efficient verification guidance.
 - `tickets/` state (`*.md`, `archive/`, `templates/`, optional `README.md`)
 - `Autonomy Readiness` defaults for permissions, compute, tools, testability,
   QA risk, and human gates
+- project profile defaults for coding apps, landing pages, video projects,
+  social campaigns, and product-photo shoots
 - optional `.githooks/` samples (`README.md`, `pre-commit`, `pre-push`) for
   local quality gates
 - optional `scripts/pre_commit_check.sh` and `scripts/pre_push_check.sh`
@@ -76,6 +78,8 @@ deep-interview --bootstrap "<repo idea or migration target>"
 Keep the clarified answers in `docs/bootstrap-brief.md`. That brief is the
 bootstrap source of truth for:
 
+- selected project profile, component set, advice axes, prototype gates, and
+  downstream pipeline handoff
 - project goal and audience
 - recommended topology (`single app` vs `monorepo` / `microservices`)
 - stack choices and defaults
@@ -171,16 +175,19 @@ repo.
     - QA/evidence run path
     - required services
     - expected local targets, ports, and env vars
-11. Fill the bootstrap brief's `Agent Experience / Testability` section so the
+11. Select or record the project profile from
+    `references/project-profiles.md`; preserve its component set, advice axes,
+    prototype gates, and downstream pipeline handoff in `docs/bootstrap-brief.md`.
+12. Fill the bootstrap brief's `Agent Experience / Testability` section so the
     repo has an early answer for how agents should reach, inspect, stabilize,
     and verify important app states.
-12. Fill the bootstrap brief's `Autonomy Readiness` section so future
+13. Fill the bootstrap brief's `Autonomy Readiness` section so future
     `spec-to-ticket`, `impl-plan`, and `$ralph` runs know what the agent may do
     without stopping and what must remain a human gate.
-13. If the idea is still open-ended, use `brainstorm`.
-14. If the first slice or bootstrap shape is still vague, use `deep-interview`.
-15. Use `prd` skill for requirements and PRD authoring (HITL loop).
-16. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+14. If the idea is still open-ended, use `brainstorm`.
+15. If the first slice or bootstrap shape is still vague, use `deep-interview`.
+16. Use `prd` skill for requirements and PRD authoring (HITL loop).
+17. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration
 
@@ -205,6 +212,8 @@ Migration guide:
 - `docs/` is the canonical project state for planning and execution.
 - `docs/bootstrap-brief.md` keeps bootstrap decisions on a visible project
   surface instead of burying them in chat.
+- project profiles keep project-type components and prototype gates visible
+  without turning `deep-init-project` into a full domain pipeline router.
 - `qa/` gives each repo one visible home for durable shortcuts, deep links,
   seeded states, and probes that make agent QA faster and less flaky.
 - `qa/` also gives the repo one reusable place to say how evidence capture
@@ -223,6 +232,9 @@ Migration guide:
 - bootstrap should ask explicitly how local git hooks relate to CI or deploy
   protection so generated repos do not confuse optional local gates with actual
   deployment checks
+- bootstrap should select a project profile early so `deep-interview`, `prd`,
+  and `spec-to-ticket` can ask along project-specific components and advice
+  axes before build planning begins
 - bootstrap should ask how agents move through the product efficiently and
   should leave behind visible QA surfaces instead of keeping those answers in chat
 - bootstrap should ask autonomy-readiness questions up front so long-running
@@ -248,6 +260,9 @@ The generated planning flow should follow these defaults:
 - Keep repeated failure feedback out of `docs/MEMORY.md`; log it in `docs/TROUBLES.md` first, then promote only durable lessons into `docs/MEMORY.md` or the relevant skill/contract.
 - First Convex cloud setup is interactive; stop and ask the human to run it.
 - Do not skip from a fuzzy idea directly to `prd`; use `brainstorm` or `deep-interview` first when the first slice is not obvious.
+- Do not put full domain pipelines in `deep-init-project`; use
+  `references/project-profiles.md` to seed planning, then hand off to the
+  owning Tier 3 domain skill.
 - Do not auto-enable the scaffolded git hooks; leave activation as an explicit
   `git config core.hooksPath .githooks` choice by the human.
 - Do not require `Makefile` targets when existing `package.json`, `pyproject`,
@@ -283,6 +298,9 @@ The generated planning flow should follow these defaults:
 - [AGENTS_TEMPLATE.md](references/AGENTS_TEMPLATE.md) - AGENTS template.
 - [ARCHITECTURE_TEMPLATE.md](references/ARCHITECTURE_TEMPLATE.md) - Architecture map template.
 - [BOOTSTRAP_BRIEF_TEMPLATE.md](references/BOOTSTRAP_BRIEF_TEMPLATE.md) - Bootstrap intake brief template.
+- [project-profiles.md](references/project-profiles.md) - Profile shapes for
+  coding apps, landing pages, video projects, social campaigns, and
+  product-photo shoots.
 - `references/qa/` - QA module templates scaffolded into new repos.
 - [SPECS_README_TEMPLATE.md](references/SPECS_README_TEMPLATE.md) - Specs index template.
 - [TASTE_TEMPLATE.md](references/TASTE_TEMPLATE.md) - Shared visual doctrine template.

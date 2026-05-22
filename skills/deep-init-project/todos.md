@@ -2,6 +2,9 @@
 
 - [ ] Read the bootstrap brief, `docs/prd.md`, active ticket, project root
   files, and existing `AGENTS.md`/README surfaces before scaffolding.
+- [ ] Select or preserve the project profile from
+  [project-profiles](./references/project-profiles.md), including components,
+  advice axes, prototype gates, and downstream pipeline handoff.
 - [ ] Use [plan](../plan/SKILL.md) to lock the project shape, first slice,
   quality gates, and durable docs before writing files.
 - [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs)

@@ -14,10 +14,29 @@ finalizing the scaffold.
 - What this scaffold should optimize for first:
 
 ## Recommended Shape
+- Project profile:
 - App type:
 - Topology recommendation:
 - Why this topology:
 - Non-goals for v1:
+
+## Profile Components
+- Component matrix:
+- Advice axes to explore:
+- Material choices that need `advise`:
+- Defaults that do not need exploration:
+
+## Prototype Gates
+- Highest-risk assumption:
+- Smallest PoC artifact:
+- Pass signal:
+- Prototype ticket before full build:
+
+## Pipeline Handoff
+- Recommended downstream skill:
+- Required handoff inputs:
+- Expected output packet:
+- Proof surfaces:
 
 ## Stack Decisions
 - Frontend:

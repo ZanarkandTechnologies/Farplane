@@ -4,6 +4,10 @@ Generic active todo surface for multi-ticket or `batch-work` passes.
 
 ## Active
 
+- [ ] `TASK-0170`: add profile-driven project planning.
+- [ ] `TASK-0167`: apply Tier 3 pipeline model to `social-content`.
+- [ ] `TASK-0168`: apply Tier 3 pipeline model to `video-production`.
+- [ ] `TASK-0169`: apply Tier 3 pipeline model to `product-photography`.
 - [ ] `TASK-0159`: add Codexter local telemetry event ledger.
 - [ ] `TASK-0160`: instrument Codexter hooks and add telemetry status CLI.
 - [ ] `TASK-0161`: add Aikage Codexter event ingest.
