@@ -10,6 +10,10 @@
   expectations, peer workflows, or market examples should shape the PRD.
 - [ ] Fill the PRD by section: audience, JTBD, user stories, constraints,
   non-goals, risks, first SLC slice, metric candidates, and autonomy readiness.
+- [ ] If `docs/bootstrap-brief.md` has a project profile, load
+  [project-profiles](../deep-init-project/references/project-profiles.md) and
+  include component matrix, advice axes explored, selected directions,
+  prototype gates, and pipeline handoff.
 - [ ] Keep metric candidates honest: mechanical when possible, `none
   mechanical` when the work is judgment-heavy.
 - [ ] Use the PRD references already owned by this skill:

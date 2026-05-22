@@ -41,6 +41,19 @@ When [context], I want to [action], so I can [outcome].
 ## SLC Slice (Next Release)
 [Smallest complete valuable slice]
 
+## Project Profile
+- Profile:
+- Component matrix:
+- Advice axes explored:
+- Selected complete directions:
+- Pipeline handoff:
+
+## Prototype / PoC Gates
+- Highest-risk assumption:
+- Prototype artifact:
+- Pass signal:
+- Ticket before full production build: yes | no
+
 ## Goals
 - [Measurable objective]
 
@@ -103,6 +116,9 @@ When [context], I want to [action], so I can [outcome].
 - Non-goals clearly prevent scope creep.
 - Success definition is observable.
 - Scope aligns to one SLC slice.
+- Project profile, component matrix, explored options, selected directions,
+  and prototype gates are present when `docs/bootstrap-brief.md` names a
+  profile.
 - Metric candidates are honest and mechanical when present; subjective or
   judgment-heavy success is not forced into fake numbers.
 

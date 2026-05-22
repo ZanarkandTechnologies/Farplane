@@ -45,6 +45,11 @@ If no flag is provided, use **Standard**.
   captures project goal, topology recommendation, stack choices, local quality
   gates, large-file policy, shared utility conventions, and explicit decision
   boundaries for `deep-init-project`.
+- **Project profiles:** when `docs/bootstrap-brief.md` names a project profile
+  or the user names a project type such as coding app, landing page, video
+  project, social campaign, or product-photo shoot, use
+  `deep-init-project/references/project-profiles.md` to ask along that
+  profile's components and advice axes.
 - **`--autoresearch`**: switch the interview into research-intake mode. In this mode, the interview should converge on a launch-ready research mission, keep the current requirements brief on live Codexter surfaces, and preserve the explicit `refine further` vs `launch` boundary for downstream handoff.
 </Mode_Flags>
 </Depth_Profiles>
@@ -263,6 +268,10 @@ and emit a scaffold-consumable artifact without skipping clarification.
   local git-hook activation policy, local-vs-CI/deploy gate split,
   large-file policy, shared utility convention, and what `deep-init-project`
   may decide without further confirmation
+- **Profile-specific focus:** select or confirm a `ProjectProfile`, then ask
+  material questions across its component set, advice axes, prototype gates,
+  and downstream pipeline handoff. Use `advise` for real tradeoff axes, such as
+  video hook/asset/sound/edit choices or landing hero/media/motion directions.
 - **Canonical artifact surface:** `docs/bootstrap-brief.md`
 - **Bootstrap artifact bundle:** one current Codexter brief containing
   `Summary`, `Intent`, `Recommended Shape`, `Stack Decisions`,

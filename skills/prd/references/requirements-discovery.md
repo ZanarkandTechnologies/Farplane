@@ -15,6 +15,7 @@
 ### Inputs
 
 - User request / context
+- `docs/bootstrap-brief.md` and its project profile when present
 - Existing `docs/specs/*` (if any)
 - Existing product constraints (if any)
 
@@ -50,6 +51,10 @@ Ask only what changes implementation decisions; default to 8-12 questions total:
 10. What existing system constraints do we inherit (stack, hosting, auth, conventions)?
 11. What is the **rollout** expectation (internal only, beta, public; migration/backfill)?
 12. What are you most worried we'll get wrong?
+13. If a project profile exists, which component axes need divergent options
+    before we choose a complete direction?
+14. What smallest PoC would prove the riskiest assumption before full
+    production ticketing?
 
 ### Writing `docs/prd.md` (recommended structure)
 
@@ -57,6 +62,8 @@ Ask only what changes implementation decisions; default to 8-12 questions total:
 - **Audience**
 - **JTBD**
 - **SLC slice (next release)**
+- **Project profile / component matrix / explored options** when present
+- **Prototype or PoC gates** when a risky assumption should be tested early
 - **Non-goals**
 - **Acceptance criteria (high level)**
 - **Constraints**

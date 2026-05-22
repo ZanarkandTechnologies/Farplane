@@ -5,6 +5,11 @@
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for local
   baseline facts instead of asking the user for discoverable project context.
 - [ ] Ask one question per round and target the weakest clarity dimension.
+- [ ] When a project profile exists in `docs/bootstrap-brief.md` or the user
+  names a project type, load
+  [project-profiles](../deep-init-project/references/project-profiles.md) and
+  ask along the profile's components, advice axes, prototype gates, and
+  pipeline handoff.
 - [ ] Track the required gates: intent, outcome, scope, constraints, success
   criteria, non-goals, decision boundaries, and one pressure pass.
 - [ ] Re-score ambiguity after each answer and keep interviewing until the

@@ -18,14 +18,23 @@ Use this as the first session in the Codexter workflow.
 1. Gather requirements through focused conversation.
 2. Produce a detailed PRD with JTBD, constraints, metric candidates, and
    `Autonomy Readiness`.
-3. Save/update `docs/prd.md`.
-4. Stop after PRD authoring. Do not create tickets here.
+3. When a project profile exists, capture component matrices, explored options,
+   selected complete directions, prototype gates, and pipeline handoffs.
+4. Save/update `docs/prd.md`.
+5. Stop after PRD authoring. Do not create tickets here.
 
 ## Process
 
 - Ask 6-10 high-signal questions (audience, JTBD, slice, non-goals, constraints, risks).
 - Keep questions tied to implementation decisions.
 - Confirm the first SLC slice boundary.
+- If `docs/bootstrap-brief.md` names a project profile, use
+  `deep-init-project/references/project-profiles.md` to drive PRD questions and
+  sections.
+- Explore options across the profile's material advice axes, then synthesize
+  complete directions before writing implementation-facing requirements.
+- Define the smallest prototype or PoC needed to prove the highest-risk
+  assumption before full production tickets.
 - Define mechanically meaningful product, workflow, quality, or operational
   metric candidates when they exist. If the work is judgment-heavy, say no
   honest mechanical metric exists instead of inventing one.
@@ -42,6 +51,8 @@ Use this as the first session in the Codexter workflow.
 - Downstream tickets should carry PRD metric candidates into their `Proof
   Contract` only when the metric is honest, mechanical, and useful for the
   selected slice.
+- Downstream specs/tickets should carry selected component directions and
+  prototype gates forward instead of re-running project discovery.
 
 ## Handoff
 
