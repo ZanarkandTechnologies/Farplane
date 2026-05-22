@@ -103,6 +103,15 @@ component sets, advice axes, prototype gates, and pipeline handoffs. Tier 3
 domain skills should consume selected directions and execution packets instead
 of rediscovering the whole project profile during implementation.
 
+Project lifecycle is currently a `deep-init-project` reference, not a public
+top-level skill. Use
+`skills/deep-init-project/references/project-lifecycle.md` for the shared
+`bootstrap -> interview -> PRD -> tickets -> plan -> implement -> proof/review -> close`
+shape. Generated project `AGENTS.md` should carry the compact lifecycle rule;
+`PROJECT_RULES.md` should carry technical standards, commands, runtime, and QA
+paths. Treat `plan` and `execute` as protocol surfaces, not base-class
+implementations with reusable domain logic.
+
 ## Source Ownership
 
 Use `source` to decide where wrapper logic belongs:

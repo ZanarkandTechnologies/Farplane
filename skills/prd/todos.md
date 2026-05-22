@@ -14,6 +14,10 @@
   [project-profiles](../deep-init-project/references/project-profiles.md) and
   include component matrix, advice axes explored, selected directions,
   prototype gates, and pipeline handoff.
+- [ ] Preserve the project lifecycle phase boundary from
+  [project-lifecycle](../deep-init-project/references/project-lifecycle.md):
+  PRD writes the project spec/brief and first SLC slice; it does not create
+  tickets or implement.
 - [ ] Keep metric candidates honest: mechanical when possible, `none
   mechanical` when the work is judgment-heavy.
 - [ ] Use the PRD references already owned by this skill:

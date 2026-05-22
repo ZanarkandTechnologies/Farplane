@@ -51,6 +51,11 @@ Load only what the request needs:
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` for existing skills
 - root `AGENTS.md` and `templates/global/AGENTS.md` when policy placement is a
   candidate
+- `skills/deep-init-project/references/AGENTS_TEMPLATE.md` when generated
+  project-agent behavior or project-local operating rules are a candidate
+- `skills/deep-init-project/references/PROJECT_RULES_TEMPLATE.md` when
+  generated project technical standards, commands, runtime, or QA paths are a
+  candidate
 - `agents/*.toml` when independent lane ownership is a candidate
 - hooks and scripts under `bin/` when deterministic boundary checks are a
   candidate
@@ -72,6 +77,9 @@ Load only what the request needs:
    the fix:
    - repo-local `AGENTS.md`
    - `templates/global/AGENTS.md`
+   - generated project templates such as
+     `skills/deep-init-project/references/AGENTS_TEMPLATE.md` and
+     `PROJECT_RULES_TEMPLATE.md`
    - `docs/specs/*`
    - `skills/*`
    - `agents/*.toml`

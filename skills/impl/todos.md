@@ -1,6 +1,8 @@
 # Todos
 
 - [ ] Read the selected ticket and linked docs before launching any lanes.
+- [ ] Treat this skill as `ExecuteTicket<CodingTicket>` plus proof integration
+  inside the [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
 - [ ] Use the generic [execute](../execute/SKILL.md) interface as the Tier 2
   contract, but keep `$impl` coding-ticket specific.
 - [ ] Confirm the ticket is actually ready for build orchestration rather than still needing planning.

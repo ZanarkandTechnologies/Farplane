@@ -22,6 +22,12 @@ This file defines the project-specific technical rules, tech stack, and conventi
 - **Testing**: [e.g., Use Vitest for unit tests]
 - **Documentation**: [e.g., Use JSDoc for all public exports]
 
+## 🤖 Agent Workflow
+- Agent lifecycle and ticket workflow rules live in `AGENTS.md`.
+- This file owns technical stack, commands, runtime, conventions, and QA paths.
+- Project profile, lifecycle route, prototype gates, and pipeline handoff live
+  in `docs/bootstrap-brief.md`.
+
 ## 🧩 Shared Utilities
 - **Preferred shared utility location**: [e.g., `src/utils/`, `packages/shared/`, domain-scoped `src/lib/`]
 - **Extract when**: [e.g., logic is reused across modules, would otherwise be copied, or is making feature files too large]

@@ -211,3 +211,4 @@
 2026-05-22 03:08 +0800 | DOCS | apply the Tier 3 pipeline model to social-content with artifact matrix and method-selection smoke cases
 2026-05-22 03:08 +0800 | DOCS | apply the Tier 3 pipeline model to video-production with deliverable matrix and method-selection smoke cases
 2026-05-22 03:08 +0800 | DOCS | apply the Tier 3 pipeline model to product-photography with registry-visible shot-family methods
+2026-05-22 17:57 +0800 | DOCS | add project lifecycle reference and wire generated project AGENTS/PROJECT_RULES templates to lifecycle ownership

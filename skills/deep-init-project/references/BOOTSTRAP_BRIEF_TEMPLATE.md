@@ -15,6 +15,7 @@ finalizing the scaffold.
 
 ## Recommended Shape
 - Project profile:
+- Lifecycle route:
 - App type:
 - Topology recommendation:
 - Why this topology:

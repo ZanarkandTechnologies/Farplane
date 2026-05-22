@@ -5,6 +5,9 @@
 - [ ] Select or preserve the project profile from
   [project-profiles](./references/project-profiles.md), including components,
   advice axes, prototype gates, and downstream pipeline handoff.
+- [ ] Load [project-lifecycle](./references/project-lifecycle.md) and record
+  the lifecycle route in `docs/bootstrap-brief.md` and generated project
+  `AGENTS.md`.
 - [ ] Use [plan](../plan/SKILL.md) to lock the project shape, first slice,
   quality gates, and durable docs before writing files.
 - [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs)

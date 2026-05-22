@@ -18,6 +18,9 @@
   load [project-profiles](../deep-init-project/references/project-profiles.md)
   and carry component matrix, selected directions, prototype gates, pipeline
   handoffs, and proof surfaces into ticket boundaries.
+- [ ] Map PRD/spec work into project lifecycle ticket loops from
+  [project-lifecycle](../deep-init-project/references/project-lifecycle.md):
+  planner owner, executor owner, proof owner, and closeout owner.
 - [ ] If a profile prototype gate names a real unresolved risk, create the
   PoC/proof ticket before full production tickets; do not make PoC tickets
   mechanically when the risk is already resolved.

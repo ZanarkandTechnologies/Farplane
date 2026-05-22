@@ -27,6 +27,20 @@ This file is loaded every loop. Keep it operational and project-specific.
 - Taste: `docs/TASTE.md`
 - Tickets: active `tickets/TASK-*/ticket.md`, completed `tickets/archive/TASK-*/ticket.md`
 
+## Project Lifecycle
+
+Work flows through:
+`bootstrap -> deep interview -> PRD -> ticket breakdown -> per-ticket plan -> implementation -> proof/review -> closeout`.
+
+- Use `docs/bootstrap-brief.md` for project profile, lifecycle route,
+  prototype gates, and pipeline handoff.
+- Use `docs/prd.md` for requirements, first SLC slice, constraints, and
+  autonomy readiness.
+- Use active `tickets/TASK-*/ticket.md` files as the work objects.
+- Plan each ticket before build; prove and review before closeout.
+- Technical commands, stack rules, runtime, and QA paths live in
+  `PROJECT_RULES.md`.
+
 ## Context First (Always)
 
 - Read relevant specs/PRD before proposing edits.

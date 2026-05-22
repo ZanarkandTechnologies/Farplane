@@ -1,6 +1,8 @@
 # Todos
 
 - [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, and nearby code.
+- [ ] Treat this skill as `PlanTicket<CodingTicket>` inside the
+  [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
 - [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,
   but keep `impl-plan` coding-specific.
 - [ ] Use the relevant [research](../research/SKILL.md) method when expected
