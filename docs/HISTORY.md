@@ -207,3 +207,7 @@
 2026-05-22 03:00 +0800 | DOCS | audit documentation duplication and collapse the legacy Ralph runtime spec into a compatibility pointer to the canonical runtime-surface spec
 2026-05-22 03:01 +0800 | CLEANUP | delete the retired Ralph legacy spec bundle, remove old compatibility env aliases and flat-ticket lookup paths, and rewrite active guardrails in neutral current-system language
 2026-05-22 03:01 +0800 | DOCS | expose frontend-craft composed scroll animation as a registry method and add a close-ticket consistency sweep
+2026-05-22 03:08 +0800 | FEAT | add profile-driven project planning across deep-init, deep-interview, PRD, and spec-to-ticket
+2026-05-22 03:08 +0800 | DOCS | apply the Tier 3 pipeline model to social-content with artifact matrix and method-selection smoke cases
+2026-05-22 03:08 +0800 | DOCS | apply the Tier 3 pipeline model to video-production with deliverable matrix and method-selection smoke cases
+2026-05-22 03:08 +0800 | DOCS | apply the Tier 3 pipeline model to product-photography with registry-visible shot-family methods

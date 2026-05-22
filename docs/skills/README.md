@@ -96,6 +96,13 @@ targeted references such as `references/model.md`, method records in JSON or
 Markdown references, and output shapes in `templates/`. Do not add skill-local
 `README.md` files just to restate the model.
 
+Project-type exploration belongs upstream of Tier 3 execution skills. Use
+`skills/deep-init-project/references/project-profiles.md` to seed
+`docs/bootstrap-brief.md`, `deep-interview`, `prd`, and `spec-to-ticket` with
+component sets, advice axes, prototype gates, and pipeline handoffs. Tier 3
+domain skills should consume selected directions and execution packets instead
+of rediscovering the whole project profile during implementation.
+
 ## Source Ownership
 
 Use `source` to decide where wrapper logic belongs:
