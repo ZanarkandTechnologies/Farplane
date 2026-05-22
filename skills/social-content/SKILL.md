@@ -17,6 +17,21 @@ allowed-tools: Read, Grep, Glob, Bash
 
 Domain entrypoint for social media content planning and asset production.
 
+Compact model:
+
+```text
+SocialContent := Brief + PlatformSet + ArtifactMatrix + MethodSet + AssetPlan + ProofPlan
+
+Artifact := Platform + Format + Audience + MessageJob + CopyPayload + AssetCarrier + PublishBoundary + QA
+
+MethodSelection(artifact, methods, constraints) :=
+  candidates = filter(methods, artifact, constraints)
+  chosen = advise(top3(candidates))
+```
+
+Use `references/model.md` for the artifact matrix and execution packet rules.
+Keep `todos.md` short; upstream references stay method-specific detail.
+
 Use method addresses to choose the smallest relevant workflow:
 
 - `social-content:cross-platform` for TikTok, Instagram, YouTube Shorts,
@@ -80,3 +95,9 @@ professional context, audience, point of view, and CTA before drafting.
 Use for X/Twitter-native hook tweets, single posts, threads, quote-post drafts,
 reply chains, and media-supported threads. Preserve standalone tweet logic,
 thread progression, character limits, and CTA before drafting.
+
+## Reference Map
+
+- `references/model.md` - artifact matrix, method selection, execution packet,
+  and proof rules.
+- `references/method-selection-smoke.md` - smoke cases for method routing.
