@@ -2,7 +2,7 @@
   "counts": {
     "skills": 73
   },
-  "generated_at": "2026-05-22T04:32:54+00:00",
+  "generated_at": "2026-05-22T04:33:28+00:00",
   "schema_version": "1.0.0",
   "skills": {
     "advise": {
@@ -682,17 +682,20 @@
       "path": "skills/prd/SKILL.md"
     },
     "product-photography": {
-      "body": "# Product Photography\n\nDomain entrypoint for product-photo planning and generated commercial imagery.\n\n## Steps\n\n1. Load the shared [image/social production workflow](../image-generation/references/domain-production.md).\n2. Load [upstream product photography](references/upstream-product-photography.md) for shot types, e-commerce requirements, angles, backgrounds, and marketplace constraints.\n3. Load [upstream AI product photography](references/upstream-ai-product-photography.md) for model examples, commercial styles, and generation workflows.\n4. Decide the shot set before generation: hero, packshot, lifestyle, scale, detail, in-use, variation, cutout, or upscale.\n5. Use `imagegen` for normal bitmap generation/editing, or `image-generation` when the user needs inference.sh models, background removal, upscaling, CLI repeatability, or named model control.\n\nUse the shared production workflow for prompt/input/result bundles, async batches, frontend/product-page QA, and upstream-reference safety.\n",
+      "body": "# Product Photography\n\nDomain entrypoint for product-photo planning and generated commercial imagery.\n\nCompact model:\n\n```text\nProductPhotography := ProductFacts + Channel + ShotMatrix + MethodSet + AssetRoute + ProofPlan\n\nShot := Job + Channel + AspectRatio + Background + SourceAsset + GenerationRoute + Output + QA\n\nMethodSelection(shot, methods, constraints) :=\n  candidates = filter(methods, shot, constraints)\n  chosen = advise(top3(candidates))\n```\n\nUse `references/model.md` for the shot matrix, method selection, execution\npacket, and proof rules.\n\n## Steps\n\n1. Load the shared [image/social production workflow](../image-generation/references/domain-production.md).\n2. Load [upstream product photography](references/upstream-product-photography.md) for shot types, e-commerce requirements, angles, backgrounds, and marketplace constraints.\n3. Load [upstream AI product photography](references/upstream-ai-product-photography.md) for model examples, commercial styles, and generation workflows.\n4. Decide the shot set before generation: hero, packshot, lifestyle, scale, detail, in-use, variation, cutout, or upscale.\n5. Use `imagegen` for normal bitmap generation/editing, or `image-generation` when the user needs inference.sh models, background removal, upscaling, CLI repeatability, or named model control.\n\nUse the shared production workflow for prompt/input/result bundles, async batches, frontend/product-page QA, and upstream-reference safety.\n\n## Method Notes\n\n- `product-photography:hero` for product-page, campaign, or ad hero images.\n- `product-photography:packshot` for clean catalog, SKU, white/background, or\n  product-only images.\n- `product-photography:lifestyle` for contextual, in-use, aspirational, or\n  environment shots.\n- `product-photography:detail` for close-up, feature, texture, scale, or\n  comparison shots.\n- `product-photography:marketplace` for Amazon, Shopify, or marketplace listing\n  sets and channel-specific proof.\n- `product-photography:cutout-upscale` for background removal, isolation,\n  transparent cutouts, cleanup, and upscaling.\n\n## Reference Map\n\n- `references/model.md` - shot matrix, method selection, execution packet, and\n  proof rules.\n- `references/method-selection-smoke.md` - smoke cases for method routing.\n",
       "frontmatter": {
         "allowed-tools": "Read, Grep, Glob, Bash",
         "description": "Plan and produce product photography, AI product photos, packshots, e-commerce images, Amazon listing images, Shopify product assets, commercial product hero shots, lifestyle product photos, detail shots, scale shots, mockups, and advertising photos. Routes normal still generation through `imagegen`, named inference.sh image models through `image-generation`, cutouts/upscales through image-generation tools, and frontend/product-page integration through `frontend-craft`.",
         "group": "content-image",
+        "methods": {
+          "- product-photography": "cutout-upscale"
+        },
         "name": "product-photography",
         "source": "local",
         "tier": 3,
         "version": "1.0.0"
       },
-      "frontmatter_raw": "name: product-photography\nversion: 1.0.0\ndescription: Plan and produce product photography, AI product photos, packshots, e-commerce images, Amazon listing images, Shopify product assets, commercial product hero shots, lifestyle product photos, detail shots, scale shots, mockups, and advertising photos. Routes normal still generation through `imagegen`, named inference.sh image models through `image-generation`, cutouts/upscales through image-generation tools, and frontend/product-page integration through `frontend-craft`.\ntier: 3\ngroup: content-image\nsource: local\nallowed-tools: Read, Grep, Glob, Bash",
+      "frontmatter_raw": "name: product-photography\nversion: 1.0.0\ndescription: Plan and produce product photography, AI product photos, packshots, e-commerce images, Amazon listing images, Shopify product assets, commercial product hero shots, lifestyle product photos, detail shots, scale shots, mockups, and advertising photos. Routes normal still generation through `imagegen`, named inference.sh image models through `image-generation`, cutouts/upscales through image-generation tools, and frontend/product-page integration through `frontend-craft`.\ntier: 3\ngroup: content-image\nsource: local\nmethods:\n  - product-photography:hero\n  - product-photography:packshot\n  - product-photography:lifestyle\n  - product-photography:detail\n  - product-photography:marketplace\n  - product-photography:cutout-upscale\nallowed-tools: Read, Grep, Glob, Bash",
       "name": "product-photography",
       "path": "skills/product-photography/SKILL.md"
     },

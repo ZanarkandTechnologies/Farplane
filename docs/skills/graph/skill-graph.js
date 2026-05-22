@@ -1929,7 +1929,7 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-05-22T04:32:54+00:00",
+  "generated_at": "2026-05-22T04:33:28+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
