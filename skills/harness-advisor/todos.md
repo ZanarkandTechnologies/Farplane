@@ -7,7 +7,14 @@
   feature before proposing a new feature.
 - [ ] Check `docs/skills/registry.jsonl` for an existing skill, method, source
   owner, or consolidation target before proposing a new skill.
+- [ ] Read `docs/policies/README.md` when the request touches policy,
+  canonical ownership, memory, specs, tickets, runtime, hooks, skills,
+  registries, or source/feature provenance.
 - [ ] Read `docs/specs/harness-engineering-doctrine.md` for placement rules.
+- [ ] For material or ambiguous placement decisions, read
+  [placement-axes](./references/placement-axes.md) and score context budget,
+  reuse frequency, ownership fit, determinism, evidence surface, duplication
+  risk, discoverability, and maintenance cost.
 - [ ] Compare only realistic levers: repo `AGENTS.md`, global template, docs/specs,
   skill, subagent, hook/script, ticket contract, validator, or registry metadata.
 - [ ] Use [advise](../advise/SKILL.md) to compare exactly 3 viable placement

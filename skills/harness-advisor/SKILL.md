@@ -21,9 +21,11 @@ hand the chosen work to a Tier 3 domain skill such as `skill-maintenance`,
 2. Ground the current state in the smallest relevant Codexter surfaces.
 3. Check whether the feature or skill already exists before proposing a new
    surface.
-4. Compare the plausible placement levers.
-5. Recommend one primary owner and any secondary sync points.
-6. Name the implementation ticket(s), validation, and writeback required.
+4. Score the placement axes: context budget, reuse, ownership, determinism,
+   evidence surface, duplication risk, discoverability, and maintenance cost.
+5. Compare the plausible placement levers.
+6. Recommend one primary owner and any secondary sync points.
+7. Name the implementation ticket(s), validation, and writeback required.
 
 ## Use When
 
@@ -46,6 +48,12 @@ hand the chosen work to a Tier 3 domain skill such as `skill-maintenance`,
 Load only what the request needs:
 
 - `docs/specs/harness-engineering-doctrine.md` for placement rules
+- `docs/policies/README.md` for the policy index and canonical owner map when
+  a request touches policy, memory, specs, tickets, runtime, hooks, skills, or
+  feature/source provenance
+- `references/placement-axes.md` for material or ambiguous placement decisions
+  where context budget, reuse, ownership, determinism, or duplication risk
+  needs explicit scoring
 - `docs/features/README.md` and `docs/features/registry.jsonl` for existing
   harness techniques
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` for existing skills
@@ -71,9 +79,16 @@ Load only what the request needs:
    [reference-grounding](../reference-grounding/SKILL.md) for compact local
    evidence. Use a focused `research:*` method only when local evidence is not
    enough.
+   Read `docs/policies/README.md` when the request could affect canonical
+   policy ownership or when the owning surface is ambiguous across docs,
+   memory, tickets, skills, hooks, registries, or templates.
 3. **Check registries.** Look for existing feature rows, skill rows, source
    ownership, and known limits before creating anything new.
-4. **Compare levers.** Consider only the surfaces that could realistically own
+4. **Score axes when needed.** For material or ambiguous decisions, use
+   `references/placement-axes.md` to decide whether the problem is best solved
+   by always-loaded policy, progressive skills, isolated subagents, durable
+   docs/files, tools/MCPs, hooks/scripts, validators, tickets, or registries.
+5. **Compare levers.** Consider only the surfaces that could realistically own
    the fix:
    - repo-local `AGENTS.md`
    - `templates/global/AGENTS.md`
@@ -87,11 +102,11 @@ Load only what the request needs:
    - ticket templates or ticket workflow docs
    - validators
    - feature or skill registry metadata
-5. **Advise.** Use [advise](../advise/SKILL.md) to compare exactly 3 viable
+6. **Advise.** Use [advise](../advise/SKILL.md) to compare exactly 3 viable
    placement options and recommend one.
-6. **Define handoff.** Name the Tier 3 skill or artifact that should implement
+7. **Define handoff.** Name the Tier 3 skill or artifact that should implement
    the chosen change.
-7. **Review.** Use [review](../review/SKILL.md) before treating a material
+8. **Review.** Use [review](../review/SKILL.md) before treating a material
    placement decision as ready.
 
 ## Output
@@ -101,6 +116,7 @@ Produce a compact placement decision:
 - `Decision`
 - `Current evidence`
 - `Existing feature/skill match`
+- `Axes` when material or ambiguous
 - `Options`
 - `Recommendation`
 - `Tradeoff accepted`
@@ -115,6 +131,9 @@ Produce a compact placement decision:
   and registries instead.
 - Do not default to root `AGENTS.md`; prefer the smallest surface that fixes
   the failure.
+- Treat always-loaded prompt context as expensive. Prefer skills, references,
+  docs, subagents, tools, hooks, or validators when the rule does not need to
+  be active every turn.
 - Do not create a new skill before checking the existing skill registry.
 - Do not create a new feature row before checking the feature registry.
 - Do not use a hook or validator for judgment-heavy work that is not

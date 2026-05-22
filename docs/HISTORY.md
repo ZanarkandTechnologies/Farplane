@@ -212,3 +212,5 @@
 2026-05-22 03:08 +0800 | DOCS | apply the Tier 3 pipeline model to video-production with deliverable matrix and method-selection smoke cases
 2026-05-22 03:08 +0800 | DOCS | apply the Tier 3 pipeline model to product-photography with registry-visible shot-family methods
 2026-05-22 17:57 +0800 | DOCS | add project lifecycle reference and wire generated project AGENTS/PROJECT_RULES templates to lifecycle ownership
+2026-05-22 18:12 +0800 | DOCS | add harness-advisor placement axes for context budget, progressive disclosure, subagents, tools, hooks, docs, and registries
+2026-05-22 18:18 +0800 | DOCS | teach harness-advisor to consult the policy index for canonical ownership and drift-sensitive placement decisions
