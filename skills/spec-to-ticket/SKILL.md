@@ -48,6 +48,12 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 16. Carry `Autonomy Readiness` from the PRD, bootstrap brief, system design,
     taste brief, or agent testability brief into any ticket expected to run
     unattended or under `$ralph`.
+16a. When the bootstrap brief or PRD carries a `ProjectProfile`, use its
+    component matrix, selected directions, prototype gates, pipeline handoffs,
+    and proof surfaces to shape ticket boundaries.
+16b. When a profile prototype gate names a real unresolved risk, create the
+    PoC/proof ticket before broader production tickets. Do not create prototype
+    tickets mechanically when the PRD already resolved the risk.
 17. When the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry so QA inherits the same fast-entry, stabilize, inspect, and proof surfaces as the ticket.
 18. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
 
@@ -57,6 +63,8 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 - optionally `docs/specs/*-agent-testability.md` or `docs/specs/agent-testability-surfaces.md`
 - optionally `docs/bootstrap-brief.md`
 - optionally `docs/prd.md` for slice intent
+- optionally `skills/deep-init-project/references/project-profiles.md` when a
+  bootstrap or PRD profile is present
 - optionally `docs/TASTE.md` for shared UI doctrine
 - optionally `qa/cookbook/*.md` when the repo already keeps reusable QA workflows
 - `tickets/templates/ticket.md`
@@ -150,7 +158,13 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
 3. If there is no richer testability brief yet, read `docs/bootstrap-brief.md`
    and reuse its `Agent Experience / Testability` defaults for the first
    UI-bearing or agentically hard slice.
+3a. If `docs/bootstrap-brief.md` or `docs/prd.md` names a project profile,
+    carry the component matrix, selected directions, prototype gates, and
+    pipeline handoffs into the ticket split.
 4. Start with the largest coherent self-contained feature ticket that would feel like one strong fullstack engineer or agent assignment.
+4a. If a profile prototype gate remains unresolved, make the first ticket a
+    tiny proof/PoC that removes the highest uncertainty and leaves a reusable
+    proof surface behind.
 5. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above and choose the boundary that removes the most future friction while preserving strong proof.
 6. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
 7. For each material ticket, add a compact `Proof Contract` that names

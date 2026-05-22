@@ -14,6 +14,13 @@
 - [ ] Make acceptance criteria, evidence needs, and control fields concrete in each ticket.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the ticket contract instead of re-deriving them.
 - [ ] If there is no richer testability brief yet but `docs/bootstrap-brief.md` has `Agent Experience / Testability`, use it as the fallback seed for the first UI-bearing or agentically hard ticket.
+- [ ] If `docs/bootstrap-brief.md` or `docs/prd.md` names a project profile,
+  load [project-profiles](../deep-init-project/references/project-profiles.md)
+  and carry component matrix, selected directions, prototype gates, pipeline
+  handoffs, and proof surfaces into ticket boundaries.
+- [ ] If a profile prototype gate names a real unresolved risk, create the
+  PoC/proof ticket before full production tickets; do not make PoC tickets
+  mechanically when the risk is already resolved.
 - [ ] If a ticket includes UI, define the `Agent Contract`, `Evidence checklist`, and testability shape up front.
 - [ ] If the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update the matching workflow entry.
 - [ ] If determinism or agent access looks weak, turn that into explicit instrumentation work now instead of hoping QA can improvise later.
