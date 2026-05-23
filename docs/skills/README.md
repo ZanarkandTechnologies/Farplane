@@ -159,8 +159,9 @@ registry/test metadata, or an explicitly approved external-skill edit.
 
 Keep fixtures small. They should name the operation, the expected behavior, any
 sanitized observed failure, the expected recovery decision, forbidden actions,
-and evidence refs. Do not store bulky API payloads, secrets, raw transcripts,
-or full expected result objects.
+fallback methods when a connector has multiple tool surfaces, and evidence
+refs. Do not store bulky API payloads, secrets, raw transcripts, or full
+expected result objects.
 
 Run:
 

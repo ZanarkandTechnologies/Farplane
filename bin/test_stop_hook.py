@@ -16,6 +16,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
 STOP_HOOK_PATH = ROOT / "bin" / "stop_hook.py"
+SELF_IMPROVE_PROBE_PATH = ROOT / "bin" / "self_improve_hook_probe.py"
 
 
 def load_stop_hook_module():
@@ -25,6 +26,18 @@ def load_stop_hook_module():
     spec = importlib.util.spec_from_file_location("codexter_stop_hook_test", STOP_HOOK_PATH)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"could not load stop hook module from {STOP_HOOK_PATH}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def load_self_improve_probe_module():
+    bin_dir = str(SELF_IMPROVE_PROBE_PATH.parent)
+    if bin_dir not in sys.path:
+        sys.path.insert(0, bin_dir)
+    spec = importlib.util.spec_from_file_location("codexter_self_improve_probe_test", SELF_IMPROVE_PROBE_PATH)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"could not load self-improve probe module from {SELF_IMPROVE_PROBE_PATH}")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -264,6 +277,13 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-") as td:
             project_root = Path(td)
             (project_root / ".harness" / "state").mkdir(parents=True)
+            (project_root / ".harness" / "state" / "notion-context").mkdir(parents=True)
+            (project_root / ".harness" / "state" / "notion-context" / "latest-status-context.md").write_text(
+                "# status\n",
+                encoding="utf-8",
+            )
+            cwd = project_root / "packages" / "app"
+            cwd.mkdir(parents=True)
             window = {
                 "schema_version": 1,
                 "session_id": "sess-123",
@@ -285,7 +305,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                     project_root=project_root,
                     session_id="sess-123",
                     window=window,
-                    payload={"hook_event_name": "Stop", "cwd": str(project_root)},
+                    payload={"hook_event_name": "Stop", "cwd": str(cwd)},
                 )
 
             run_path = project_root / str(result["review_run_path"])
@@ -301,7 +321,62 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(result["pid"], "dry-run")
         self.assertEqual(report["status"], "dry_run")
         self.assertEqual(input_payload["recent_windows"][0]["session_id"], "sess-123")
+        self.assertEqual(input_payload["workflow_refs"]["source_to_feature"], "skills/harness-scout/SKILL.md")
+        self.assertEqual(input_payload["workflow_refs"]["feature_options"], "skills/advise/SKILL.md")
+        self.assertEqual(input_payload["workflow_refs"]["placement"], "skills/harness-advisor/SKILL.md")
+        self.assertEqual(input_payload["workspace_context"]["current_project_name"], project_root.name)
+        self.assertEqual(input_payload["workspace_context"]["current_project_root"], str(project_root))
+        self.assertEqual(input_payload["workspace_context"]["hook_invocation_cwd"], str(cwd))
+        self.assertEqual(
+            input_payload["workspace_context"]["status_context_cache"],
+            str(project_root / ".harness" / "state" / "notion-context" / "latest-status-context.md"),
+        )
+        self.assertTrue(input_payload["workspace_context"]["status_context_cache_exists"])
+        self.assertEqual(input_payload["workspace_context"]["task_scope_default"], "harness_self_improvement")
         self.assertEqual(saved_window["last_review_turn_count"], 10)
+
+    def test_skill_opportunity_review_uses_codexter_refs_for_cross_project_dedupe(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="skill-opportunity-base-") as base_dir:
+            with tempfile.TemporaryDirectory(prefix="skill-opportunity-project-") as project_dir:
+                base = Path(base_dir)
+                project_root = Path(project_dir)
+                (base / "skills" / "harness-advisor").mkdir(parents=True)
+                (base / "skills" / "harness-advisor" / "SKILL.md").write_text("# Harness Advisor\n", encoding="utf-8")
+                (base / "tickets" / "TASK-0001").mkdir(parents=True)
+                (base / "tickets" / "TASK-0001" / "ticket.md").write_text("# TASK-0001\n", encoding="utf-8")
+                (project_root / ".harness" / "state" / "notion-context").mkdir(parents=True)
+                project_status_context = (
+                    project_root / ".harness" / "state" / "notion-context" / "latest-status-context.md"
+                )
+                project_status_context.write_text("# Project status\n", encoding="utf-8")
+                window = {
+                    "schema_version": 1,
+                    "session_id": "sess-123",
+                    "turn_count": 10,
+                    "last_review_turn_count": 0,
+                    "rolling_exchanges": [{"user_text": "project complaint", "assistant_text": "done"}],
+                    "pending_user_turn": {},
+                }
+
+                with patch.dict(os.environ, {"CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1"}, clear=True):
+                    result = self.stop_hook.maybe_launch_skill_opportunity_review(
+                        base=base,
+                        project_root=project_root,
+                        session_id="sess-123",
+                        window=window,
+                        payload={"hook_event_name": "Stop", "cwd": str(project_root)},
+                    )
+
+                input_payload = json.loads(
+                    (project_root / str(result["review_run_path"]) / "input.json").read_text(encoding="utf-8")
+                )
+
+        self.assertEqual(input_payload["dedupe_refs"]["skills"], ["skills/harness-advisor/SKILL.md"])
+        self.assertEqual(input_payload["dedupe_refs"]["recent_tickets"], ["tickets/TASK-0001/ticket.md"])
+        self.assertEqual(input_payload["workspace_context"]["current_project_root"], str(project_root))
+        self.assertEqual(input_payload["workspace_context"]["codexter_home"], str(base))
+        self.assertEqual(input_payload["workspace_context"]["status_context_cache"], str(project_status_context))
+        self.assertTrue(input_payload["workspace_context"]["status_context_cache_exists"])
 
     def test_maybe_launch_skill_opportunity_review_reports_missing_role_config(self) -> None:
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-") as td:
@@ -343,6 +418,106 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertIn("--disable", cmd)
         self.assertIn("codex_hooks", cmd)
         self.assertIn("--output-last-message", cmd)
+
+    def test_self_improve_hook_probe_simulate_dry_run_emits_report_path(self) -> None:
+        probe = load_self_improve_probe_module()
+        with tempfile.TemporaryDirectory(prefix="skill-opportunity-probe-") as td:
+            project_root = Path(td)
+            (project_root / ".harness" / "state").mkdir(parents=True)
+            (project_root / "tickets").mkdir(parents=True)
+            stdout_buffer = io.StringIO()
+
+            with redirect_stdout(stdout_buffer):
+                result = probe.main(
+                    [
+                        "--project-root",
+                        str(project_root),
+                        "--session-id",
+                        "probe-session",
+                        "simulate",
+                        "--turns",
+                        "10",
+                        "--dry-run",
+                    ]
+                )
+
+            payload = json.loads(stdout_buffer.getvalue())
+
+        self.assertEqual(result, 0)
+        self.assertEqual(payload["command"], "simulate")
+        self.assertEqual(payload["window_turn_count"], 10)
+        self.assertEqual(payload["launch_result"]["status"], "launched")
+        self.assertEqual(payload["launch_result"]["pid"], "dry-run")
+        self.assertTrue(payload["recent_application_runs"][0]["report_path"].endswith("report.json"))
+        self.assertFalse((project_root / ".harness" / "state" / "current-run.json").exists())
+        self.assertFalse((project_root / ".harness" / "state" / "sessions" / "probe-session.json").exists())
+
+    def test_self_improve_hook_probe_honors_custom_interval(self) -> None:
+        probe = load_self_improve_probe_module()
+        with tempfile.TemporaryDirectory(prefix="skill-opportunity-probe-") as td:
+            project_root = Path(td)
+            (project_root / ".harness" / "state").mkdir(parents=True)
+            (project_root / "tickets").mkdir(parents=True)
+            stdout_buffer = io.StringIO()
+
+            with redirect_stdout(stdout_buffer):
+                result = probe.main(
+                    [
+                        "--project-root",
+                        str(project_root),
+                        "--session-id",
+                        "probe-short",
+                        "--interval",
+                        "3",
+                        "simulate",
+                        "--turns",
+                        "3",
+                    ]
+                )
+
+            payload = json.loads(stdout_buffer.getvalue())
+
+        self.assertEqual(result, 0)
+        self.assertEqual(payload["trigger"]["cadence"], 3)
+        self.assertTrue(payload["trigger"]["due"])
+        self.assertEqual(payload["launch_result"]["status"], "launched")
+        self.assertEqual(payload["launch_result"]["pid"], "dry-run")
+
+    def test_self_improve_hook_probe_tolerates_literal_braces_in_templates(self) -> None:
+        probe = load_self_improve_probe_module()
+        with tempfile.TemporaryDirectory(prefix="skill-opportunity-probe-") as td:
+            project_root = Path(td)
+            (project_root / ".harness" / "state").mkdir(parents=True)
+            (project_root / "tickets").mkdir(parents=True)
+            stdout_buffer = io.StringIO()
+
+            with redirect_stdout(stdout_buffer):
+                result = probe.main(
+                    [
+                        "--project-root",
+                        str(project_root),
+                        "--session-id",
+                        "probe-braces",
+                        "--interval",
+                        "1",
+                        "simulate",
+                        "--turns",
+                        "1",
+                        "--prompt",
+                        'please $impl-plan TASK-0174 with {"problem": "literal braces"} {index}',
+                        "--response",
+                        'response with function x() { return { ok: true }; } {index}',
+                    ]
+                )
+
+            payload = json.loads(stdout_buffer.getvalue())
+            window_path = project_root / payload["window_path"]
+            window = json.loads(window_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(result, 0)
+        self.assertEqual(payload["launch_result"]["status"], "launched")
+        self.assertIn('{"problem": "literal braces"} 1', window["rolling_exchanges"][0]["user_text"])
+        self.assertIn("return { ok: true }; } 1", window["rolling_exchanges"][0]["assistant_text"])
 
 
 class StopHookReviewerPromptTests(unittest.TestCase):

@@ -29,6 +29,13 @@ def valid_fixture(**overrides: object) -> dict[str, object]:
             "spend_money",
             "destructive_cleanup",
         ],
+        "fallback_methods": [
+            "exact_view_query",
+            "api_data_source_query",
+            "mcp_data_source_query",
+            "search_fetch_diagnostics",
+            "local_filesystem_board",
+        ],
         "priority_hint": "high",
         "user_value_reason": "blocks autonomous ticket planning",
         "evidence_refs": ["tickets/TASK-0154/ticket.md"],
@@ -54,6 +61,22 @@ class SkillCapabilityTests(unittest.TestCase):
             raw = valid_fixture(expected_recovery=["do_anything"])
             with self.assertRaises(csc.CapabilityError):
                 csc.validate_capability(raw, path)
+
+    def test_invalid_fallback_method_fails_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "fixture.json"
+            raw = valid_fixture(fallback_methods=["ask_the_user_to_click_refresh"])
+            with self.assertRaises(csc.CapabilityError):
+                csc.validate_capability(raw, path)
+
+    def test_fallback_methods_need_safe_terminal_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "fixture.json"
+            raw = valid_fixture(fallback_methods=["exact_view_query", "api_data_source_query"])
+            fixture = csc.validate_capability(raw, path)
+            result = csc.score_capability(fixture)
+            self.assertFalse(result.passed)
+            self.assertIn("fallback_methods should end", result.errors[0])
 
     def test_failure_packet_contains_repair_marker(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

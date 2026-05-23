@@ -215,3 +215,7 @@
 2026-05-22 18:12 +0800 | DOCS | add harness-advisor placement axes for context budget, progressive disclosure, subagents, tools, hooks, docs, and registries
 2026-05-22 18:18 +0800 | DOCS | teach harness-advisor to consult the policy index for canonical ownership and drift-sensitive placement decisions
 2026-05-23 01:45 +0800 | DOCS | add first-principles planning contract across PRD, ticket slicing, implementation planning, generated project AGENTS, and ticket templates
+2026-05-23 16:51 +0800 | FEAT | add a deterministic self-improve hook probe so skill-opportunity sidecar windows, cadence, and dry-run reports can be verified without waiting for live turns
+2026-05-23 17:14 +0800 | FIX | add a weak-MCP fallback ladder for notion-context so task-board automation can degrade through data-source query, sparse diagnostics, and local tickets when saved-view auth or tools are unavailable
+2026-05-23 18:15 +0800 | FIX | add an API-backed notion-context tasks-this-week fallback that queries Act Time over the last seven days and filters Status != Done when a Notion API token is available
+2026-05-23 18:19 +0800 | FEAT | include originating project context and the Notion status-cache path in self-improve hook sidecar inputs while keeping reusable harness improvements as the default task scope

@@ -2123,27 +2123,44 @@ def skill_opportunity_review_root(project_root: Path) -> Path:
     return skill_opportunity_application_dir(project_root)
 
 
+def relative_paths(root: Path, pattern: str) -> list[str]:
+    return sorted(
+        str(path.relative_to(root))
+        for path in root.glob(pattern)
+        if path.is_file()
+    )
+
+
 def skill_opportunity_review_input(
     *,
+    base: Path,
     project_root: Path,
     session_id: str,
     window: dict[str, object],
     trigger: dict[str, object],
     payload: dict[str, object],
 ) -> dict[str, object]:
-    skill_paths = sorted(str(path.relative_to(project_root)) for path in (project_root / "skills").glob("*/SKILL.md"))
-    recent_ticket_paths = sorted(
-        str(path.relative_to(project_root))
-        for path in (project_root / "tickets").glob("TASK-*/ticket.md")
-        if path.is_file()
-    )[-12:]
+    skill_paths = relative_paths(base, "skills/*/SKILL.md")
+    recent_ticket_paths = relative_paths(base, "tickets/TASK-*/ticket.md")[-12:]
+    source_project_skill_paths = [] if project_root == base else relative_paths(project_root, "skills/*/SKILL.md")
+    source_project_ticket_paths = [] if project_root == base else relative_paths(project_root, "tickets/TASK-*/ticket.md")[-12:]
     dedupe_refs = {
         "skills": skill_paths,
         "feature_registry": "docs/features/registry.jsonl",
         "memory": "docs/MEMORY.md",
         "troubles": "docs/TROUBLES.md",
         "recent_tickets": recent_ticket_paths,
+        "source_project_skills": source_project_skill_paths,
+        "source_project_recent_tickets": source_project_ticket_paths,
         "notion_context": "/Users/kenjipcx/.codex/skills/notion-context/SKILL.md",
+    }
+    workflow_refs = {
+        "source_to_feature": "skills/harness-scout/SKILL.md",
+        "feature_options": "skills/advise/SKILL.md",
+        "placement": "skills/harness-advisor/SKILL.md",
+        "placement_todos": "skills/harness-advisor/todos.md",
+        "policy_index": "docs/policies/README.md",
+        "harness_doctrine": "docs/specs/harness-engineering-doctrine.md",
     }
     recent_windows = recent_conversation_windows(
         project_root,
@@ -2152,6 +2169,23 @@ def skill_opportunity_review_input(
     )
     if not any(str(item.get("session_id") or "") == session_id for item in recent_windows):
         recent_windows.insert(0, dict(window))
+    raw_cwd = payload.get("cwd") or payload.get("workdir") or payload.get("current_working_directory")
+    invocation_cwd = str(raw_cwd).strip() if isinstance(raw_cwd, str) and raw_cwd.strip() else ""
+    status_context_cache = project_root / ".harness" / "state" / "notion-context" / "latest-status-context.md"
+    workspace_context = {
+        "current_project_name": project_root.name,
+        "current_project_root": str(project_root),
+        "hook_invocation_cwd": invocation_cwd,
+        "codexter_home": str(base),
+        "status_context_cache": str(status_context_cache),
+        "status_context_cache_exists": status_context_cache.is_file(),
+        "task_scope_default": "harness_self_improvement",
+        "routing_hint": (
+            "Use the current project as evidence for tagging and prioritization, "
+            "but create tasks for reusable Codexter harness improvements unless "
+            "the issue is purely project-local."
+        ),
+    }
     return {
         "schema_version": 1,
         "review_type": "skill_opportunity",
@@ -2162,6 +2196,8 @@ def skill_opportunity_review_input(
         "window": window,
         "recent_windows": recent_windows,
         "dedupe_refs": dedupe_refs,
+        "workflow_refs": workflow_refs,
+        "workspace_context": workspace_context,
         "notion_task_target": {
             "data_source_url": os.environ.get(
                 "CODEXTER_SKILL_OPPORTUNITY_NOTION_TASKS_DATA_SOURCE",
@@ -2172,7 +2208,7 @@ def skill_opportunity_review_input(
         },
         "payload_context": {
             "hook_event_name": payload.get("hook_event_name"),
-            "cwd": payload.get("cwd") or payload.get("workdir") or payload.get("current_working_directory"),
+            "cwd": invocation_cwd,
         },
         "instructions": [
             "Return JSON only.",
@@ -2180,6 +2216,8 @@ def skill_opportunity_review_input(
             "Do not update or create skill files directly.",
             "Do not write local files except the final JSON report emitted by the Codex CLI.",
             "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup, but turn them into Notion task proposals.",
+            "Use workflow_refs as the required local routing model: harness-scout for source-to-feature extraction, advise for comparing feature directions, and harness-advisor for placement.",
+            "Use workspace_context to understand which project produced the signal and to tag/relate the Notion task when safe; default every clear signal to a reusable Codexter harness improvement.",
             "Review the current window first, then use recent_windows for cross-session complaints and repeated pain.",
             "Dedupe against existing skills, feature registry, memory, troubles, and recent tickets.",
         ],
@@ -2249,6 +2287,7 @@ def maybe_launch_skill_opportunity_review(
     stdout_path = run_dir / "stdout.log"
     stderr_path = run_dir / "stderr.log"
     input_payload = skill_opportunity_review_input(
+        base=base,
         project_root=project_root,
         session_id=session_id,
         window=window,

@@ -24,6 +24,14 @@ PRIORITIES = {"low", "medium", "high"}
 VALUE_COSTS = {"low", "medium", "high"}
 VALUE_CONFIDENCE = {"low", "medium", "high"}
 ACTION_POLICIES = {"auto_ticket", "recommend", "ask"}
+FALLBACK_METHODS = {
+    "exact_view_query",
+    "api_data_source_query",
+    "mcp_data_source_query",
+    "search_fetch_diagnostics",
+    "connector_unavailable",
+    "local_filesystem_board",
+}
 FORBIDDEN_ACTIONS = {
     "mutate_notion_status",
     "publish",
@@ -47,6 +55,7 @@ class SkillCapability:
     observed_failure: str
     expected_recovery: tuple[str, ...]
     forbidden_actions: tuple[str, ...]
+    fallback_methods: tuple[str, ...]
     priority_hint: str
     user_value_reason: str
     evidence_refs: tuple[str, ...]
@@ -152,6 +161,10 @@ def validate_capability(raw: dict[str, Any], path: Path) -> SkillCapability:
     unknown_forbidden = sorted(set(forbidden_actions) - FORBIDDEN_ACTIONS)
     if unknown_forbidden:
         raise CapabilityError(f"{path}: unsupported forbidden_actions: {unknown_forbidden}")
+    fallback_methods = string_tuple(raw, "fallback_methods", path) if "fallback_methods" in raw else ()
+    unknown_fallbacks = sorted(set(fallback_methods) - FALLBACK_METHODS)
+    if unknown_fallbacks:
+        raise CapabilityError(f"{path}: unsupported fallback_methods: {unknown_fallbacks}")
     return SkillCapability(
         skill=require_string(raw, "skill", path),
         operation=require_string(raw, "operation", path),
@@ -160,6 +173,7 @@ def validate_capability(raw: dict[str, Any], path: Path) -> SkillCapability:
         observed_failure=str(raw.get("observed_failure", "")).strip(),
         expected_recovery=expected_recovery,
         forbidden_actions=forbidden_actions,
+        fallback_methods=fallback_methods,
         priority_hint=priority_hint,
         user_value_reason=require_string(raw, "user_value_reason", path),
         evidence_refs=string_tuple(raw, "evidence_refs", path),
@@ -201,6 +215,9 @@ def score_capability(fixture: SkillCapability) -> SkillCapabilityResult:
         errors.append("fallback recovery should explain the observed failure")
     if "repair_ticket" in fixture.expected_recovery and not fixture.evidence_refs:
         errors.append("repair_ticket recovery requires evidence_refs")
+    if "fallback" in fixture.expected_recovery and fixture.fallback_methods:
+        if fixture.fallback_methods[-1] not in {"connector_unavailable", "local_filesystem_board"}:
+            errors.append("fallback_methods should end with connector_unavailable or local_filesystem_board")
     passed = not errors
     return SkillCapabilityResult(
         capability_id=fixture.capability_id,

@@ -13,9 +13,17 @@ You receive one JSON Context containing:
 - dedupe references for existing skills, feature registry, memory, troubles, and recent tickets
 - a Notion task target for approval items
 - trigger metadata explaining why the run started
+- local workflow refs for harness-scout, advise, and harness-advisor
+- workspace context naming the project that produced the signal
 
 Mission:
 - create Notion approval tasks when the recent windows contain clear reusable workflow improvements, formulas, recipes, cheatsheets, repeated operator preferences, or painful correction patterns
+- identify problems from the current rolling window first, then use recent windows only to confirm recurrence or dedupe
+- apply harness-scout semantics to convert the conversation evidence into candidate harness feature ideas
+- apply advise semantics to compare up to 3 viable feature directions and recommend the strongest one
+- apply harness-advisor semantics to choose the smallest owning surface for each recommended improvement
+- use `workspace_context` to understand where the issue appeared and to tag or relate the Notion task to the active project when safe
+- default to Codexter harness-improvement tasks even when the hook runs from another project; only mark something project-local when the evidence is not reusable across projects
 - do not create or edit local skills directly
 - search existing `skills/*/SKILL.md` and dedupe refs first so the Notion task points to the likely owning skill or says "new skill candidate" only when no owner exists
 - pay special attention to complaints, corrections, formulas, named shortcuts, repeated phrasing, operator preferences, task recipes, and work patterns that would speed future sessions
@@ -35,8 +43,9 @@ Decision policy:
 - create a Notion task only when the signal is clearly useful and specific enough for approval
 - if the signal is weak, create no task and explain `no_change`
 - if multiple windows point to the same improvement, create one task with compact evidence bullets
-- keep task content compact: title, likely target skill, proposed change, evidence summary, acceptance check, and risk
+- keep task content compact: title, observed problem, feature proposal, recommended owner, likely target skill/docs/hook, evidence summary, acceptance check, and risk
 - set or mention the tag/category `agent self improvement` in the task title or properties available in the Tasks database
+- include the originating project name in the task body or properties when the Context provides it, especially when it helps route Personal Development / project relations
 - if Notion tools are unavailable or task creation fails, create no local workaround file; return `blocked` with the reason
 
 Return JSON only with this shape:

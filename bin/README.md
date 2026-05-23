@@ -26,6 +26,9 @@ orchestration story.
 - `check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
 - `check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
+- `self_improve_hook_probe.py` - deterministic probe for the hook-backed
+  skill-opportunity sidecar; can seed rolling windows, force dry-run reviews,
+  and print the generated input/report paths without waiting for live cadence
 - `delegate_cli_agent.py` - external CLI delegation helper for profile setup,
   dry-run command rendering, execution logs, and ticket evidence copyback
 - `codexter_boards.py` - board adapter contract plus the filesystem
@@ -129,6 +132,15 @@ success quiet and make failure output the thing that stands out.
   mutating tickets, creating worktrees, or launching Codex
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
+- `python3 bin/self_improve_hook_probe.py simulate --session-id self-improve-probe --turns 10`
+  Use to prove the self-learning hook path writes a rolling window and dry-run
+  review report under `.harness/state/self-improve/`. Add `--live` only when
+  you intentionally want to spawn the real Codex sidecar. The generated input
+  includes `workspace_context` so the sidecar can see the originating project,
+  invocation cwd, and weekly Notion status cache path while still defaulting
+  clear findings to reusable Codexter harness-improvement tasks.
+- `python3 bin/self_improve_hook_probe.py status --session-id self-improve-probe`
+  Use to inspect the current rolling window, due state, and recent sidecar runs.
 
 Examples:
 
@@ -184,6 +196,13 @@ python3 bin/delegate_cli_agent.py run \
   --dry-run \
   --json
 
+python3 bin/self_improve_hook_probe.py simulate \
+  --session-id self-improve-probe \
+  --turns 10
+
+python3 bin/self_improve_hook_probe.py status \
+  --session-id self-improve-probe
+
 ```
 
 In the live interactive path, `$impl` is the orchestrator contract and
@@ -206,6 +225,7 @@ already advanced.
 - `python3 -m py_compile bin/stop_hook.py`
 - `python3 -m py_compile bin/ticket_runtime.py bin/test_ticket_runtime.py`
 - `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py`
+- `python3 -m py_compile bin/self_improve_hook_probe.py`
 - `python3 -m py_compile bin/check_harness_invariants.py bin/test_harness_invariants.py`
 - `python3 -m py_compile bin/check_doc_parity.py bin/test_doc_parity.py`
 - `python3 -m py_compile bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py`
