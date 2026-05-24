@@ -1,0 +1,94 @@
+{
+  "ticket_id": "TASK-0181",
+  "reviewed_at": "2026-05-25 02:33 +0800",
+  "work_type": "planning",
+  "search_scope": [
+    "tickets/TASK-0181/ticket.md",
+    "install.sh",
+    "bin/install_selected_skills.py",
+    "templates/global/AGENTS.md",
+    "docs/skills/README.md",
+    "docs/skills/AGENTS.md",
+    "skills/harness-advisor/SKILL.md",
+    "skills/harness-advisor/todos.md",
+    "skills/impl-plan/SKILL.md",
+    "skills/impl-plan/todos.md",
+    "skills/agent-behavior-test/SKILL.md",
+    "skills/review/references/review-rubric-index.md",
+    "skills/review/references/implementation-plan.md",
+    "skills/review/references/integration-readiness.md",
+    "skills/review/references/evidence-quality.md",
+    "docs/features/registry.jsonl",
+    "docs/MEMORY.md",
+    "docs/TROUBLES.md"
+  ],
+  "rubrics_used": [
+    "implementation-plan",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "overall_score": 4.1,
+  "overall_threshold": 4.0,
+  "verdict": "pass_for_planning_review",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "medium",
+      "confidence": "high",
+      "finding": "Implementation should not start in the shared worktree until the active TASK-0178 agent's install and registry edits settle, or the builder uses a separate worktree and performs conflict review. The ticket now names this as a blocker in the body while preserving valid frontmatter."
+    }
+  ],
+  "rubric_level_feedback": {
+    "implementation-plan": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "human-readability": 4.2,
+        "bloatability": 4.0,
+        "modularity": 4.1,
+        "proof-clarity": 4.3,
+        "execution-order": 4.2,
+        "risk-clarity": 4.3,
+        "decision-tone": 4.2,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "Approve or revise the rendered-install strategy before implementation."
+    },
+    "integration-readiness": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.0,
+        "contract-correctness": 4.0,
+        "dependency-readiness": 3.9,
+        "coupling-risk": 4.0,
+        "merge-readiness": 4.0
+      },
+      "findings": [
+        "Active concurrent edits in install and registry surfaces are the main readiness caveat; the ticket explicitly gates implementation coordination."
+      ],
+      "next_action": "Coordinate with TASK-0178 before editing overlapping installer and registry files."
+    },
+    "evidence-quality": {
+      "score": 4.0,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.0,
+        "reproducibility": 4.0,
+        "traceability": 4.1,
+        "consistency": 4.0,
+        "inspectability": 4.0,
+        "autonomy-readiness": 4.0
+      },
+      "findings": [],
+      "next_action": "During implementation, attach test outputs and the agent-behavior-test canary under TASK-0181 artifacts."
+    }
+  },
+  "blocking_findings": [],
+  "next_action": "Keep TASK-0181 in review until the operator approves the rendered-skill install design and the active TASK-0178 edits are coordinated."
+}

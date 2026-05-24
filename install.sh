@@ -2,11 +2,133 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TARGET_DIR="${1:-$HOME/.codex}"
+TARGET_DIR="$HOME/.codex"
+TARGET_DIR_SET=0
+SKILLS_ONLY=0
+SKILL_INSTALL_ARGS=()
+
+usage() {
+  cat <<'EOF'
+Usage:
+  bash install.sh [TARGET_DIR]
+  bash install.sh --skills-only --list-skills [--target TARGET_DIR]
+  bash install.sh --skills-only --search QUERY [--target TARGET_DIR]
+  bash install.sh --skills-only --skills skill-a,skill-b [--target TARGET_DIR]
+
+Full install links the Codexter harness, renders skills, and renders config.toml.
+Skills-only mode renders selected skills without rendering config.toml.
+
+Options:
+  --target DIR          Codex home target. Defaults to ~/.codex.
+  --skills-only         Use selected skill installer mode.
+  --list-skills         List available skills.
+  --search QUERY        Search skill names and descriptions.
+  --search-skills QUERY Alias for --search.
+  --skills NAMES        Comma-separated skill names to install.
+  --skill NAME          Skill name to install; can be repeated.
+  --prune-skills        Remove unselected symlinks managed by this repo.
+  --dry-run             Preview selected skill install changes.
+  --json                Print selected skill output as JSON.
+EOF
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    --target)
+      if [ "$#" -lt 2 ]; then
+        echo "--target requires a directory" >&2
+        exit 2
+      fi
+      TARGET_DIR="$2"
+      TARGET_DIR_SET=1
+      shift 2
+      ;;
+    --skills-only)
+      SKILLS_ONLY=1
+      shift
+      ;;
+    --list-skills)
+      SKILLS_ONLY=1
+      SKILL_INSTALL_ARGS+=("--list")
+      shift
+      ;;
+    --search|--search-skills)
+      if [ "$#" -lt 2 ]; then
+        echo "$1 requires a query" >&2
+        exit 2
+      fi
+      SKILLS_ONLY=1
+      SKILL_INSTALL_ARGS+=("--search" "$2")
+      shift 2
+      ;;
+    --skills)
+      if [ "$#" -lt 2 ]; then
+        echo "--skills requires a comma-separated list" >&2
+        exit 2
+      fi
+      SKILLS_ONLY=1
+      SKILL_INSTALL_ARGS+=("--skills" "$2")
+      shift 2
+      ;;
+    --skill)
+      if [ "$#" -lt 2 ]; then
+        echo "--skill requires a skill name" >&2
+        exit 2
+      fi
+      SKILLS_ONLY=1
+      SKILL_INSTALL_ARGS+=("--skill" "$2")
+      shift 2
+      ;;
+    --prune-skills)
+      SKILLS_ONLY=1
+      SKILL_INSTALL_ARGS+=("--prune")
+      shift
+      ;;
+    --dry-run|--json)
+      SKILLS_ONLY=1
+      SKILL_INSTALL_ARGS+=("$1")
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      if [ "$TARGET_DIR_SET" -eq 1 ]; then
+        echo "Only one target directory can be provided" >&2
+        exit 2
+      fi
+      TARGET_DIR="$1"
+      TARGET_DIR_SET=1
+      shift
+      ;;
+  esac
+done
+
 STAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_ROOT="${TARGET_DIR}/.install-backups/${STAMP}"
 LOCAL_ENV_FILE="${TARGET_DIR}/config.local.env"
 LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
+
+if [ "$SKILLS_ONLY" -eq 1 ]; then
+  if [ "${#SKILL_INSTALL_ARGS[@]}" -eq 0 ]; then
+    SKILL_INSTALL_ARGS+=("--list")
+  fi
+  python3 "$REPO_DIR/bin/install_selected_skills.py" \
+    --repo "$REPO_DIR" \
+    --target "$TARGET_DIR" \
+    "${SKILL_INSTALL_ARGS[@]}"
+  exit 0
+fi
 
 ensure_local_env() {
   if [ ! -e "$LOCAL_ENV_FILE" ]; then
@@ -140,13 +262,10 @@ for agent_file in "$REPO_DIR"/agents/*.toml; do
   link_path "$agent_file" "$TARGET_DIR/agents/$(basename "$agent_file")"
 done
 
-for skill_dir in "$REPO_DIR"/skills/*; do
-  if [ "$(basename "$skill_dir")" = ".system" ]; then
-    continue
-  fi
-
-  link_path "$skill_dir" "$TARGET_DIR/skills/$(basename "$skill_dir")"
-done
+python3 "$REPO_DIR/bin/install_selected_skills.py" \
+  --repo "$REPO_DIR" \
+  --target "$TARGET_DIR" \
+  --all
 
 for rule_file in "$REPO_DIR"/rules/*; do
   link_path "$rule_file" "$TARGET_DIR/rules/$(basename "$rule_file")"

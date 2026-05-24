@@ -63,6 +63,10 @@ todos linked to Tier 2 surfaces plus intentional peer Tier 3 handoffs, and
 leave external skills without local todos when wrapper logic belongs in callers.
 Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
 skill metadata, Markdown links, or `todos.md` changes. See `MEM-0104`.
+Installed Codexter skills are rendered artifacts: source packages keep
+`SKILL.md` and `todos.md` separate, while `install.sh` embeds the checklist into
+the installed `SKILL.md` for first-load reliability. Rerun install after source
+skill edits before judging live installed behavior.
 Use `harness-advisor` for Codexter improvement placement decisions before
 expanding root policy, global templates, skills, subagents, hooks/scripts,
 ticket contracts, docs/specs, validators, or registries. It reads the feature

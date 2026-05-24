@@ -1,0 +1,36 @@
+{
+  "target": "embedded-skill-checklist-install",
+  "persona": "fresh skill caller",
+  "checkpoints": [
+    {
+      "name": "read_installed_skill_md",
+      "status": "done",
+      "evidence": "read tickets/TASK-0181/artifacts/agent-behavior-test/rendered-target/skills/advise/SKILL.md"
+    },
+    {
+      "name": "embedded_marker_visible",
+      "status": "done",
+      "evidence": "marker observed"
+    },
+    {
+      "name": "embedded_heading_visible",
+      "status": "done",
+      "evidence": "heading observed"
+    },
+    {
+      "name": "embedded_checklist_count",
+      "status": "done",
+      "evidence": "9 checklist lines counted"
+    },
+    {
+      "name": "todos_file_not_needed_for_first_result",
+      "status": "done",
+      "evidence": "todos.md was avoided until after the embedded checklist result; it was not read"
+    }
+  ],
+  "artifacts": [
+    "tickets/TASK-0181/artifacts/agent-behavior-test/rendered-target/skills/advise/SKILL.md"
+  ],
+  "deviations": [],
+  "verdict": "pass"
+}

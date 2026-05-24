@@ -15,6 +15,10 @@ Rules:
 - External skills may intentionally omit `todos.md` when the local operational
   checklist belongs in a caller skill. Prefer `upstream_url` over inventing
   command-shaped refresh metadata until a second source proves it is needed.
+- Installed skill packages are rendered artifacts: source `SKILL.md` and
+  `todos.md` stay separate, but install embeds the checklist into the installed
+  `SKILL.md`. Update `bin/test_install_selected_skills.py` when changing this
+  contract.
 - Use `skills/skill-maintenance/` for bulk skill tier/source/todo/registry
   upkeep instead of expanding global prompt rules.
 - Use `skills/harness-advisor/` first when the operator is deciding where a

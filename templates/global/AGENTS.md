@@ -126,9 +126,16 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
 ## Skill Loading
 
 - when a relevant skill is in play, read `SKILL.md` first
+- when a skill is invoked, show a compact active checklist in commentary:
+  include the invoked skill's required todos plus any imported dependency,
+  proof, and review items that will govern the pass; keep it short but visible
 - if that skill has `todos.md`, load it near the start of the pass and use it
   as the ordered anti-forgetting checklist instead of treating it as optional
   extra reading
+- when an installed skill's `SKILL.md` contains an embedded generated checklist,
+  use that embedded checklist as the first-load todo source, then open
+  `todos.md` only when the source file is needed for maintenance, links, or
+  ambiguity resolution
 - when a `todos.md` item links another skill or method as a required dependency,
   import the relevant linked obligation into your active checklist and load only
   the smallest needed part of that dependency

@@ -1,0 +1,89 @@
+{
+  "ticket_id": "TASK-0181",
+  "reviewed_at": "2026-05-25 02:48 +0800",
+  "work_type": "implementation",
+  "search_scope": [
+    "bin/install_selected_skills.py",
+    "bin/test_install_selected_skills.py",
+    "install.sh",
+    "templates/global/AGENTS.md",
+    "AGENTS.md",
+    "docs/skills/README.md",
+    "docs/skills/AGENTS.md",
+    "docs/features/registry.jsonl",
+    "docs/HISTORY.md",
+    "docs/MEMORY.md",
+    "tickets/TASK-0181/ticket.md",
+    "tickets/TASK-0181/artifacts/agent-behavior-test/run/score.json"
+  ],
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "finding_log": [],
+  "rubric_level_feedback": {
+    "code-quality": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "modularity-reusability": 4.2,
+        "bloatability": 4.0,
+        "readability": 4.2,
+        "boundary-clarity": 4.2,
+        "error-handling": 4.1,
+        "maintainability": 4.2
+      },
+      "findings": [],
+      "next_action": "Ready to commit."
+    },
+    "integration-readiness": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "integration-safety": 4.1,
+        "contract-correctness": 4.2,
+        "dependency-readiness": 4.0,
+        "coupling-risk": 4.1,
+        "merge-readiness": 4.1
+      },
+      "findings": [],
+      "next_action": "Keep unrelated concurrent work out of this commit."
+    },
+    "evidence-quality": {
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "dimension_scores": {
+        "sufficiency": 4.3,
+        "reproducibility": 4.2,
+        "traceability": 4.4,
+        "consistency": 4.3,
+        "inspectability": 4.2,
+        "autonomy-readiness": 4.2
+      },
+      "findings": [],
+      "next_action": "Ticket evidence is sufficient for closeout."
+    }
+  },
+  "blocking_findings": [],
+  "commands_verified": [
+    "python3 -m py_compile bin/install_selected_skills.py bin/test_install_selected_skills.py",
+    "python3 bin/test_install_selected_skills.py",
+    "bash install.sh --skills-only --target <tmp>/codex --skills advise",
+    "bash install.sh --target <tmp>/codex",
+    "python3 skills/skill-maintenance/scripts/check_skills.py --write",
+    "python3 docs/features/validate_features.py",
+    "python3 tickets/scripts/check_ticket_metadata.py",
+    "git diff --check",
+    "python3 skills/agent-behavior-test/scripts/run_codex_exec_behavior_test.py --cwd . --prompt-file tickets/TASK-0181/artifacts/agent-behavior-test/prompt.md --out tickets/TASK-0181/artifacts/agent-behavior-test/run"
+  ],
+  "next_action": "Commit the staged TASK-0181 changes and push."
+}

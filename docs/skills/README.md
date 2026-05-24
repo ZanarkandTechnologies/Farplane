@@ -96,6 +96,24 @@ targeted references such as `references/model.md`, method records in JSON or
 Markdown references, and output shapes in `templates/`. Do not add skill-local
 `README.md` files just to restate the model.
 
+## Installed Skill Rendering
+
+Repo source packages keep `SKILL.md` and `todos.md` separate:
+
+- `SKILL.md` owns the workflow contract, trigger conditions, and references.
+- `todos.md` owns the ordered anti-forgetting checklist.
+
+`install.sh` and `bin/install_selected_skills.py` render installed skill
+packages instead of symlinking skill directories directly. When a source package
+has `todos.md`, the installed `SKILL.md` receives a generated
+`Embedded Skill Checklist` section wrapped in stable
+`CODEXTER_EMBEDDED_TODOS` markers, and the original `todos.md` is still copied
+alongside it for humans and tooling.
+
+This makes the checklist visible on first skill load while preserving clean
+source files. After editing a source skill or its checklist, rerun install
+before judging the behavior of `~/.codex/skills/<name>/SKILL.md`.
+
 Project-type exploration belongs upstream of Tier 3 execution skills. Use
 `skills/deep-init-project/references/project-profiles.md` to seed
 `docs/bootstrap-brief.md`, `deep-interview`, `prd`, and `spec-to-ticket` with
