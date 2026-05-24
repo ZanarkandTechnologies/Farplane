@@ -26,9 +26,7 @@ VALUE_CONFIDENCE = {"low", "medium", "high"}
 ACTION_POLICIES = {"auto_ticket", "recommend", "ask"}
 FALLBACK_METHODS = {
     "exact_view_query",
-    "api_data_source_query",
     "mcp_data_source_query",
-    "search_fetch_diagnostics",
     "connector_unavailable",
     "local_filesystem_board",
 }

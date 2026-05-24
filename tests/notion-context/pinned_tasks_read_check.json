@@ -1,0 +1,28 @@
+{
+  "skill": "notion-context",
+  "operation": "pinned_tasks_read_check",
+  "kind": "mcp_query",
+  "expected": "pinned_task_pages_read_before_task_ranking",
+  "observed_failure": "pinned task pages can contain operator context not visible in task row properties",
+  "expected_recovery": ["continue", "fallback", "repair_ticket"],
+  "forbidden_actions": [
+    "mutate_notion_status",
+    "publish",
+    "deploy",
+    "spend_money",
+    "destructive_cleanup"
+  ],
+  "fallback_methods": [
+    "exact_view_query",
+    "mcp_data_source_query",
+    "connector_unavailable",
+    "local_filesystem_board"
+  ],
+  "priority_hint": "high",
+  "user_value_reason": "Pinned task pages are weekly planning memory and must be read before autonomous task selection so stale row-only context does not drive the wrong work.",
+  "evidence_refs": [
+    "bin/notion_pinned_read_check.py",
+    "bin/test_notion_pinned_read_check.py",
+    "/Users/kenjipcx/.codex/skills/notion-context/SKILL.md"
+  ]
+}

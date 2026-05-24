@@ -31,9 +31,7 @@ def valid_fixture(**overrides: object) -> dict[str, object]:
         ],
         "fallback_methods": [
             "exact_view_query",
-            "api_data_source_query",
             "mcp_data_source_query",
-            "search_fetch_diagnostics",
             "local_filesystem_board",
         ],
         "priority_hint": "high",
@@ -72,7 +70,7 @@ class SkillCapabilityTests(unittest.TestCase):
     def test_fallback_methods_need_safe_terminal_path(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "fixture.json"
-            raw = valid_fixture(fallback_methods=["exact_view_query", "api_data_source_query"])
+            raw = valid_fixture(fallback_methods=["exact_view_query", "mcp_data_source_query"])
             fixture = csc.validate_capability(raw, path)
             result = csc.score_capability(fixture)
             self.assertFalse(result.passed)
