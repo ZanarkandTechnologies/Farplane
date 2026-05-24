@@ -24,10 +24,12 @@ The user's current priority is local, conversational execution:
 
 1. The user talks to Codex.
 2. Codex reads a board item, usually a filesystem ticket.
-3. Codexter policy selects where the work should run.
-4. Codex routes through existing skills such as `impl-plan`, `impl`, `qa`,
-   `review`, and `close-ticket`.
-5. Codexter writes ticket evidence and a machine-readable `ProofPacket`.
+3. `$work` classifies the work unit and chooses Goal policy, compute,
+   planning, proof, and route.
+4. Codexter policy selects where the accepted work should run.
+5. Codex routes through existing skills such as `impl-plan`, `impl`, `qa`,
+   `review`, `batch-work`, `$ralph`, and `close-ticket`.
+6. Codexter writes ticket evidence and a machine-readable `ProofPacket`.
 
 The future Symphony path is intentionally compatible with that same contract:
 
@@ -45,7 +47,8 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 - Keep local filesystem tickets as the first coding-ticket board.
 - Define a `BoardAdapter` contract that can later support Linear, Notion,
   GitHub, or other boards without changing Codexter's skill/proof layer.
-- Define a `ComputeSelector` that makes target choice explicit per ticket/run.
+- Define a `ComputeSelector` that makes target choice explicit per work unit
+  after Work Admission.
 - Preserve the boundary between Codex, Codexter, and Symphony.
 - Make local conversational execution, serial Ralph, and future Symphony-worker
   execution share the same `CodexterRunEnvelope` and `ProofPacket` contracts.
@@ -60,7 +63,8 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 - No automatic execution from ticket creation, readiness, or status movement
   alone.
 - No parallel Ralph implementation here.
-- No replacement for `impl-plan`, `impl`, `qa`, `review`, or `close-ticket`.
+- No replacement for `$work`, `impl-plan`, `impl`, `qa`, `review`, or
+  `close-ticket`.
 - No standalone `codexter run` product claim. Codexter remains normal Codex
   with installed skills, hooks, templates, and repo-owned rules.
 
@@ -79,7 +83,7 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 | --- | --- | --- | --- |
 | Symphony spec | Workspaces, claims, retry/reconcile vocabulary, `WORKFLOW.md` discipline, conformance matrix | Treat Symphony as a future caller through the envelope/proof contract | Do not copy the daemon or state-polling trigger model for local mode now |
 | Codex app primitives | Skills, subagents, worktrees, automations, cloud/local execution as trusted runtime primitives | Route compute targets to these primitives when available | Do not pretend Codexter is a separate execution engine |
-| Codexter current system | Tickets, skills, Stop-hook proof, review gates, Ralph serial dispatcher | Generalize ticket reading through `BoardAdapter`, explicit invocation, and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
+| Codexter current system | Tickets, skills, Work Admission, Stop-hook proof, review gates, Ralph board context | Generalize ticket reading through `BoardAdapter`, explicit invocation, and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
 
 ### Advise Decision
 
@@ -115,7 +119,8 @@ flowchart LR
   Invoke --> Envelope["CodexterRunEnvelope"]:::policy
   Envelope --> Adapter["BoardAdapter"]:::board
   Adapter --> Item["WorkItem"]:::policy
-  Item --> Selector["ComputeSelector"]:::policy
+  Item --> Work["$work<br/>ExecutionProfile"]:::policy
+  Work --> Selector["ComputeSelector"]:::policy
   Selector --> Codex["Normal Codex + Codexter skills"]:::compute
   Codex --> Proof["ProofPacket + ticket evidence"]:::proof
 ```
@@ -127,9 +132,10 @@ mode for solo coding work.
 
 ### `local_ralph`
 
-Ralph serially selects one eligible filesystem ticket only after the operator
-invokes `$ralph`. It then hands the selected ticket to `impl-plan`, `impl`, or
-`close-ticket`. Ralph remains serial until a later parallel
+Ralph selects one eligible filesystem ticket or a safe related tiny-ticket
+batch only after the operator invokes `$ralph`. It then hands the selected work
+unit to `$work`, which chooses `impl-plan`, `impl`, `close-ticket`, direct
+work, reslicing, or autoresearch. Ralph remains serial until a later parallel
 lease/worktree/merge policy lands.
 
 ### `shared_board_adapter`
@@ -391,7 +397,7 @@ stateDiagram-v2
 
 ### Local Ralph
 
-Ralph is an operator-invoked selector and handoff loop, not an executor
+Ralph is an operator-invoked selector and board-context loop, not an executor
 replacement and not a background queue runner.
 
 ```mermaid
@@ -400,9 +406,10 @@ stateDiagram-v2
   RalphInvoked --> ReadBoard
   ReadBoard --> SelectTicket
   SelectTicket --> Stop: none eligible or human gate
-  SelectTicket --> BuildEnvelope: eligible ticket
-  BuildEnvelope --> PhaseSkill
-  PhaseSkill --> RereadBoard
+  SelectTicket --> WorkAdmission: eligible ticket or batch
+  WorkAdmission --> BuildEnvelope
+  BuildEnvelope --> WorkOrPhaseSkill
+  WorkOrPhaseSkill --> RereadBoard
   RereadBoard --> SelectTicket
   Stop --> [*]
 ```
@@ -435,6 +442,7 @@ keep proof and ticket evidence valid no matter which runner initiated the run.
 | No explicit invocation | do not run | runner should not create envelope | no proof required unless a prepare attempt already started |
 | Unsupported compute target | block, do not fall back | runner may requeue or mark unsupported | blocker names target and required adapter |
 | Skill route missing | block | worker failure | route error and next action |
+| Work Admission cannot classify | block or reslice | worker records blocked proof | blocker names missing scope, proof, or decision |
 | QA/review fails | verdict `revise` or `block` | Symphony observes non-pass proof | linked review/QA artifact |
 | Runner crashes | local transcript/error | Symphony retry policy | stale/partial proof if available |
 | External board write fails | keep local proof, report write failure | retry or operator-visible error | evidence write failure included |
@@ -477,10 +485,11 @@ Future runner observability:
 | Workflow loading | `WORKFLOW.md` parses and exposes board, compute, routing, and quality policy | core | invocation helper tests |
 | Board adapter | filesystem tickets normalize into `WorkItem` and satisfy the conformance scaffold | core | `TASK-0123` conformance doc plus board tests |
 | Compute selection | precedence is envelope, ticket, workflow, default | core | `TASK-0114` tests |
+| Work Admission | request, ticket, batch, board unit, epic, or metric loop is classified before compute-heavy execution | core | `$work` skill contract plus skill registry checks |
 | Explicit invocation | tickets and board states are context until local Codex, Ralph, Codex Cloud, Symphony, or another runner passes an invocation envelope | core | `TASK-0121` trigger docs plus invocation tests |
 | Unsupported compute | `symphony` and `codex_cloud` block locally until adapters exist | core | prepare JSON fixtures |
 | Local conversational | one envelope routes to the expected skill and proof path | core | invocation prepare/write-proof tests |
-| Ralph | serial selector hands one eligible ticket to phase skill and stops on human gates | core | Ralph selector tests |
+| Ralph | serial selector hands one eligible ticket or safe batch to `$work` and stops on human gates | core | Ralph selector tests |
 | Symphony shim | example workflow/prompt shows Symphony launching normal Codex with Codexter installed | extension | `skills/codexter-invocation/templates/symphony-run-envelope.json` and `TASK-0112` smoke |
 | Parallel Ralph | leases, worktrees, merge policy, stale recovery, batch QA specified before implementation | extension | `skills/ralph/references/parallel-ralph.md` and `TASK-0115` design review |
 | Spec discipline | complex specs include domain model, state, config, failures, observability, and tests | governance | `TASK-0116` template |

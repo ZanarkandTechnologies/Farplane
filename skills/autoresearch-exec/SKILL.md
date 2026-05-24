@@ -21,7 +21,8 @@ Use when the user asks to:
 - summarize or finalize an existing autoresearch run
 
 Do not use for ticketed build work requiring QA/review lanes; use `$impl`.
-Do not use for short marker-based same-session retry loops; use `$loop`.
+Do not use for short one-off retries; use a normal prompt, explicit command, or
+native `/goal` when continuation needs evidence.
 
 ## Required Context
 

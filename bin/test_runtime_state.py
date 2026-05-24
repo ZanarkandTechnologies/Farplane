@@ -18,7 +18,6 @@ from user_turn import (
     conversation_window_path,
     current_run_state_path,
     has_explicit_impl_invocation,
-    has_explicit_loop_invocation,
     is_internal_user_prompt,
     load_current_run,
     load_runtime_claim,
@@ -38,12 +37,6 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertFalse(has_explicit_impl_invocation("$impl-plan TASK-0061"))
         self.assertFalse(has_explicit_impl_invocation("$impl-plan-extra TASK-0061"))
         self.assertFalse(has_explicit_impl_invocation("impl TASK-0061"))
-
-    def test_has_explicit_loop_invocation_requires_exact_loop_token(self) -> None:
-        self.assertTrue(has_explicit_loop_invocation("$loop"))
-        self.assertTrue(has_explicit_loop_invocation("please $loop this task"))
-        self.assertFalse(has_explicit_loop_invocation("$loop-extra"))
-        self.assertFalse(has_explicit_loop_invocation("loop this task"))
 
     def test_normalize_user_turn_detects_qa_and_demo_execution_phases(self) -> None:
         qa = normalize_user_turn(
@@ -115,34 +108,6 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(normalized["intent_mode"], "documenting")
         self.assertEqual(normalized["requested_outcome"], "docs_update")
 
-    def test_normalize_user_turn_parses_loop_contract(self) -> None:
-        normalized = normalize_user_turn(
-            "\n".join(
-                [
-                    "$loop fix auth",
-                    'done_when=[{"kind":"path_exists","path":".harness/tmp/auth-fixed.flag"}]',
-                    'completion_marker="AUTH FIXED"',
-                    'retry_message="keep going"',
-                ]
-            ),
-            turn_id="turn-loop",
-            source="test",
-            captured_at="2026-04-13T00:00:00Z",
-        )
-
-        self.assertEqual(normalized["control_surface"], "loop")
-        self.assertTrue(normalized["explicit_loop_requested"])
-        self.assertFalse(normalized["explicit_loop_stop_requested"])
-        self.assertEqual(normalized["intent_mode"], "building")
-        self.assertEqual(
-            normalized["loop_contract"],
-            {
-                "done_when": [{"kind": "path_exists", "path": ".harness/tmp/auth-fixed.flag"}],
-                "completion_marker": "AUTH FIXED",
-                "retry_message": "keep going",
-            },
-        )
-
     def test_normalize_user_turn_detects_ralph_control_surface_without_impl_loop(self) -> None:
         normalized = normalize_user_turn(
             "$ralph max_loops=5",
@@ -152,6 +117,20 @@ class RuntimeClaimTests(unittest.TestCase):
         )
 
         self.assertEqual(normalized["control_surface"], "ralph")
+        self.assertEqual(normalized["intent_mode"], "building")
+        self.assertEqual(normalized["requested_outcome"], "code_change")
+        self.assertEqual(normalized["requested_execution_phase"], "")
+        self.assertFalse(normalized["explicit_impl_requested"])
+
+    def test_normalize_user_turn_detects_work_control_surface_without_impl_loop(self) -> None:
+        normalized = normalize_user_turn(
+            "$work TASK-0178",
+            turn_id="turn-work",
+            source="test",
+            captured_at="2026-05-25T00:00:00Z",
+        )
+
+        self.assertEqual(normalized["control_surface"], "work")
         self.assertEqual(normalized["intent_mode"], "building")
         self.assertEqual(normalized["requested_outcome"], "code_change")
         self.assertEqual(normalized["requested_execution_phase"], "")
@@ -627,45 +606,6 @@ linked_docs: []
         self.assertEqual(current_run["claim"]["ticket_id"], "TASK-0016")
         self.assertEqual(current_run["claim"]["session_id"], "sess-seed")
 
-    def test_capture_user_turn_loop_seeds_session_owned_runtime(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-
-            captured = capture_user_turn(
-                project_root=project_root,
-                raw_text="\n".join(
-                    [
-                        "$loop fix auth",
-                        'done_when=[{"kind":"path_exists","path":".harness/tmp/auth-fixed.flag"}]',
-                        'completion_marker="AUTH FIXED"',
-                    ]
-                ),
-                turn_id="turn-loop-seed",
-                source="test",
-                session_id="sess-loop",
-            )
-
-            session_payload = json.loads(session_state_path(project_root, "sess-loop").read_text(encoding="utf-8"))
-            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
-
-        self.assertIsNotNone(captured)
-        assert captured is not None
-        self.assertEqual(captured["control_surface"], "loop")
-        self.assertTrue(session_payload["loop_active"])
-        self.assertEqual(session_payload["skill_name"], "loop")
-        self.assertEqual(session_payload["status"], "running")
-        self.assertEqual(
-            session_payload["loop_contract"],
-            {
-                "done_when": [{"kind": "path_exists", "path": ".harness/tmp/auth-fixed.flag"}],
-                "completion_marker": "AUTH FIXED",
-                "retry_message": "Continue the current loop until the loop contract is satisfied.",
-            },
-        )
-        self.assertNotIn("claim", current_run)
-
     def test_capture_user_turn_ralph_stays_control_without_activating_impl_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
@@ -690,82 +630,29 @@ linked_docs: []
         self.assertFalse(current_run["impl_loop_active"])
         self.assertNotIn("claim", current_run)
 
-    def test_capture_user_turn_loop_stop_request_preserves_active_loop_until_hook_clears_it(self) -> None:
+    def test_capture_user_turn_work_stays_control_without_activating_impl_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-
-            session_path = session_state_path(project_root, "sess-loop")
-            session_path.parent.mkdir(parents=True, exist_ok=True)
-            payload = {
-                "session_id": "sess-loop",
-                "session_origin": "control",
-                "skill_name": "loop",
-                "status": "running",
-                "loop_active": True,
-                "loop_contract": {
-                    "done_when": [{"kind": "completion_marker_seen", "text": "DONE"}],
-                    "retry_message": "keep looping",
-                },
-            }
-            session_path.write_text(json.dumps(payload), encoding="utf-8")
-            current_run_state_path(project_root).write_text(json.dumps(payload), encoding="utf-8")
+            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
 
             captured = capture_user_turn(
                 project_root=project_root,
-                raw_text="stop loop",
-                turn_id="turn-loop-stop",
+                raw_text="$work TASK-0178",
+                turn_id="turn-work-seed",
                 source="test",
-                session_id="sess-loop",
+                session_id="sess-work",
             )
 
-            session_payload = json.loads(session_path.read_text(encoding="utf-8"))
+            session_payload = json.loads(session_state_path(project_root, "sess-work").read_text(encoding="utf-8"))
+            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
 
         self.assertIsNotNone(captured)
         assert captured is not None
-        self.assertTrue(captured["explicit_loop_stop_requested"])
-        self.assertTrue(session_payload["loop_active"])
-        self.assertEqual(session_payload["skill_name"], "loop")
-
-    def test_capture_user_turn_loop_clears_impl_owned_runtime_fields(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-            payload = {
-                "ticket_id": "TASK-0042",
-                "current_ticket_id": "TASK-0042",
-                "ticket_path": str(project_root / "tickets" / "TASK-0042" / "ticket.md"),
-                "run_id": "run-task-0042-building-01",
-                "phase": "building",
-                "status": "running",
-                "skill_name": "impl",
-                "impl_loop_active": True,
-                "claim": {"ticket_id": "TASK-0042", "run_id": "run-task-0042-building-01"},
-                "session_id": "sess-loop",
-                "session_origin": "control",
-            }
-            session_path = session_state_path(project_root, "sess-loop")
-            session_path.parent.mkdir(parents=True, exist_ok=True)
-            session_path.write_text(json.dumps(payload), encoding="utf-8")
-            current_run_state_path(project_root).write_text(json.dumps(payload), encoding="utf-8")
-
-            capture_user_turn(
-                project_root=project_root,
-                raw_text='\n'.join(["$loop do task", 'done_when=[{"kind":"completion_marker_seen","text":"DONE"}]']),
-                turn_id="turn-loop-switch",
-                source="test",
-                session_id="sess-loop",
-            )
-
-            session_payload = json.loads(session_path.read_text(encoding="utf-8"))
-
-        self.assertEqual(session_payload["skill_name"], "loop")
-        self.assertTrue(session_payload["loop_active"])
-        self.assertNotIn("ticket_id", session_payload)
-        self.assertNotIn("run_id", session_payload)
-        self.assertNotIn("claim", session_payload)
+        self.assertEqual(captured["control_surface"], "work")
+        self.assertEqual(session_payload["session_origin"], "control")
+        self.assertFalse(session_payload["impl_loop_active"])
+        self.assertFalse(current_run["impl_loop_active"])
+        self.assertNotIn("claim", current_run)
 
     def test_capture_user_turn_ignores_non_control_session_without_existing_origin(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

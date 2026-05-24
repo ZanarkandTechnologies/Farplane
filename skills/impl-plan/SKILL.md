@@ -28,6 +28,11 @@ universal Tier 2 planning interface for every application domain.
 Discovery still belongs to `brainstorm`, `deep-interview`, `prd`, and
 `spec-to-ticket`. `impl-plan` is not the broad intake surface.
 
+`$work` may call `impl-plan` after Work Admission decides that a selected work
+unit is material enough to need file-map-first planning. Tiny direct work can
+bypass `impl-plan`; vague epics should route back to PRD, system design, or
+`spec-to-ticket` before this skill runs.
+
 <!-- MEM-0007 decision: planning output should be approval-first and compact: pitch, before->after, delta, core flow, proof, ask. -->
 <!-- MEM-0008 decision: root AGENTS should stay repo-only and terse; skill internals belong in skills, not repo contract text. -->
 <!-- MEM-0030 decision: material plans may use one top-level Mermaid delta map when flow or ownership is not obvious from files and signatures alone. -->
@@ -123,6 +128,8 @@ Before finalizing the plan or handing off to execution:
    brief, system design, taste brief, or agent-testability brief; for `$ralph`
    or long-running execution, name missing inputs, permissions, compute, tools,
    QA risks, and human gates before handoff.
+4a. Preserve any `Execution Profile Hints` from the ticket, but treat them as
+    advisory input for `$work`, not as proof that implementation should start.
 5. Read enough nearby code to name real files, seams, signatures, and typed
    data shapes instead of inventing them.
 6. In Codexter itself, do **not** create hidden sidecar context snapshots; the
@@ -147,6 +154,7 @@ unknowns.
 - request is large enough that the code shape, file touch points, or proof
   should be made explicit before implementation
 - execution surfaces redirect a vague implementation request into planning first
+- `$work` admits a material ticket and selects `planning: impl_plan`
 
 ## Workflow (Default Mode)
 

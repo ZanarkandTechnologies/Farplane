@@ -1,6 +1,6 @@
 ---
 name: ralph
-description: Serial board-draining dispatcher for prepared Codexter ticket boards. Use after specs, tickets, and plans exist when the operator wants one safe filesystem ticket at a time selected and handed to impl-plan, impl, or close-ticket until no ready work, a human gate, blocker, failed handoff, or loop limit stops the run.
+description: Goal-backed board-drain context provider for prepared Codexter ticket boards. Use after specs and tickets exist when the operator wants the board read, eligible work selected or grouped, and each selected work unit handed to $work until the native Goal stops on no ready work, blockers, or human gates.
 tier: 3
 group: coding
 source: local
@@ -9,24 +9,51 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Ralph
 
-`$ralph` is the conservative autonomous board-draining surface.
+`$ralph` is the board-drain context surface.
 
-It selects one eligible filesystem ticket, hands that ticket to the existing
-phase skill, waits for that phase to finish, rereads the board, and repeats.
-It is a dispatcher over `impl-plan`, `$impl`, and `close-ticket`; it is not a
-replacement executor and it does not launch parallel agents in v0.
+It reads a prepared ticket board, selects the next eligible work unit or a safe
+batch of related small work, and hands that unit to `$work`. Native Codex
+`/goal` owns the durable "keep draining until done or blocked" stopping
+condition. `$ralph` does not implement tickets itself, and it does not launch
+parallel agents in v0.
 
 ## Use When
 
 - specs and tickets already exist under `tickets/TASK-*/ticket.md`
-- the operator wants a prepared board drained without manually picking each
+- the operator wants a prepared board drained without manually picking every
   next ticket
+- the operator wants related tiny tickets grouped into a testable batch before
+  handing them to `$work`
 - tickets already carry enough `Autonomy Readiness`, proof, and blocker detail
   for unattended work to be safe
 
 Do not use this for vague requirements, new architecture discovery, Notion or
 Linear adapters, cloud runners, deploy/push/spend actions, or parallel
 multi-agent dispatch.
+
+## Relationship To Goal And Work
+
+Use native `/goal` for durability:
+
+```text
+/goal Drain this board until no eligible unblocked tickets remain. After each
+work unit or batch, reread the board. Stop only when every remaining ticket is
+complete, archived, or explicitly blocked with evidence.
+```
+
+Use `$ralph` for board context:
+
+- list eligible tickets
+- skip blocked, claimed, dependent, or approval-gated tickets
+- group safe related tiny tickets when that reduces local overhead
+- hand each selected work unit to `$work`
+- reread the board after each `$work` result
+
+Use `$work` for execution admission:
+
+- decide direct work vs `impl-plan` vs `$impl` vs reslice vs autoresearch
+- decide whether a Goal is needed for the work unit
+- decide proof, batch ledger, compute, and blocker policy
 
 ## Workflow
 
@@ -39,14 +66,31 @@ multi-agent dispatch.
    but never mutates tickets, launches Codex, or creates worktrees.
 3. Stop immediately when the selector reports no eligible ticket, a human gate,
    unresolved blockers, unresolved dependencies, or the configured loop limit.
-4. If the selected ticket is `phase: planning`, run `impl-plan` for that ticket.
-5. If the selected ticket is `phase: building`, run `$impl` for that ticket.
-6. If the selected ticket is `phase: documenting`, run `close-ticket` for that
-   ticket.
-7. After each phase, reread the board and repeat from selector, never from stale
-   transcript memory.
+4. Decide whether the next safe work unit is one ticket or a low-risk batch of
+   related tiny tickets. Batch only when tickets share module/workflow, runtime
+   setup, proof surface, and no conflicting write scope.
+5. Hand the selected work unit to `$work`.
+6. If `$work` returns completion, blocker, or revise evidence, write or preserve
+   that evidence in the ticket surface.
+7. After each work unit, reread the board and repeat from selector, never from
+   stale transcript memory.
 8. End with a compact result line:
    `RALPH_RESULT: status=<stopped|blocked|loop_limit|failed|complete> selected=<ticket|none> reason=<why>`.
+
+## Batch Testability
+
+Ralph may group tiny related tickets for solo local efficiency, but it must not
+turn proof into one blob.
+
+A Ralph-selected batch must leave a batch ledger:
+
+| Ticket | Change | Local proof | Result | Blocker |
+| --- | --- | --- | --- | --- |
+| TASK-0001 | short change | focused check | pass/block/fail | none or evidence |
+| Batch | combined regression | batch check | pass/block/fail | none or evidence |
+
+If the batch cannot produce per-ticket rows plus a batch regression row, select
+one ticket instead.
 
 ## Eligibility Policy
 
@@ -62,9 +106,9 @@ A ticket is eligible only when all are true:
 - the ticket's requested or default compute target is allowed by the repo
   `WORKFLOW.md` compute policy
 - `phase` maps to a supported handoff:
-  - `planning` -> `impl-plan`
-  - `building` -> `$impl`
-  - `documenting` -> `close-ticket`
+  - `planning` -> `$work` chooses `impl-plan` or reslice
+  - `building` -> `$work` chooses `$impl` or direct recovery
+  - `documenting` -> `$work` chooses `close-ticket`
 - `status` is not `blocked`, `done`, or `failed`
 
 When multiple tickets are eligible, continue already-building tickets first,
@@ -81,7 +125,7 @@ Stop instead of improvising when:
   compute resource, missing tool, or destructive/deploy/spend action is needed
 - the selector reports a compute blocker such as `missing_worktree_runtime`,
   `unsupported_target`, or `disallowed_by_workflow`
-- the selected phase skill fails or returns a revise/block result
+- `$work` or the selected downstream skill fails or returns a revise/block result
 - the loop reaches the operator-specified maximum iteration count
 - QA risk is too high for the available proof surfaces
 
@@ -105,8 +149,8 @@ readiness explicit instead of discovering it mid-run.
 
 Use three rings:
 
-1. Cheap per-ticket checks every time: typecheck, unit tests, narrow smoke
-   checks, selector output, and ticket evidence.
+1. Cheap per-ticket or per-row checks every time: typecheck, unit tests, narrow
+   smoke checks, selector output, and ticket evidence.
 2. Targeted heavy QA only for tickets with UI, data-risk, motion, async,
    multi-service, or hard-to-inspect behavior.
 3. Batch or release QA after a declared milestone, not after every trivial
@@ -126,13 +170,15 @@ Use `advise` before continuing when these choices are not mechanically clear:
 
 1. Do not revive `.ralph/`, `docs/progress.md`, `ralph_orchestrate.py`, or
    hidden queue state as live surfaces.
-2. Do not run multiple tickets in parallel from `$ralph` v0. Parallel dispatch
+2. Do not bypass `$work` and call `impl-plan`, `$impl`, or `close-ticket`
+   directly from Ralph except as a documented emergency fallback.
+3. Do not run multiple tickets in parallel from `$ralph` v0. Parallel dispatch
    needs worktrees, leases, merge policy, stale-worker handling, and batch QA.
    The design-only reference is `skills/ralph/references/parallel-ralph.md`;
    it is not an implementation permission by itself.
-3. Do not let selector output mutate tickets or launch agents directly. Policy
+4. Do not let selector output mutate tickets or launch agents directly. Policy
    belongs in this skill and ticket evidence; the helper stays read-only.
-4. Do not silently fall back from `local_worktree`, `symphony`, or
+5. Do not silently fall back from `local_worktree`, `symphony`, or
    `codex_cloud` to `local_shared`. Compute blockers are operator-visible
    stops until the right runtime or external adapter exists.
 
@@ -140,8 +186,9 @@ Use `advise` before continuing when these choices are not mechanically clear:
 
 When done, the run must leave:
 
-- each attempted ticket updated by its owning phase skill
+- each attempted ticket updated by `$work` or the downstream owning phase skill
 - selector and phase evidence linked from ticket `Evidence` when meaningful
+- per-ticket proof rows and a batch regression row when Ralph selected a batch
 - a final `RALPH_RESULT` line with status, selected ticket or `none`, and stop
   reason
 - follow-up tickets for discovered parallel dispatch, external board adapters,

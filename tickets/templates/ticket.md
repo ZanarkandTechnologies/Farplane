@@ -126,6 +126,23 @@ flowchart LR
 - `Human gates:`
 - `Agent decision boundaries:`
 
+## Execution Profile Hints
+- Optional for trivial/manual tickets. Add when `$work`, `$ralph`, `batch-work`,
+  remote kanban, Codex Cloud, Symphony, or another unattended runner may use
+  this ticket.
+- These hints are advisory context, not runtime authority. Explicit invocation
+  still starts work.
+- `Likely size:` `tiny` | `normal` | `large` | `epic`
+- `Goal recommendation:` `none` | `recommend` | `required`
+- `Compute hint:` `local_shared` | `local_worktree` | `codex_cloud` |
+  `symphony` | `none`
+- `Planning hint:` `none` | `light` | `impl_plan` | `reslice`
+- `Proof weight:` `smoke` | `tests` | `qa` | `visual_qa` | `review` |
+  `demo`
+- `Batchability:` `batchable` | `single-ticket` | `unknown`
+- `Batch reason:` shared module/workflow/setup/proof surface, or no-batch
+  reason
+
 ## Evidence Checklist
 - Optional for non-UI work. Keep it short and concrete for UI-bearing or
   agentically hard tickets.

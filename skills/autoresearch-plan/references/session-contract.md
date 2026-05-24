@@ -120,7 +120,7 @@ Descriptions say what changed. ASI says what was learned.
   rate.
 - Use `self-improve/references/skill-memory.md` for the optional target-skill
   `program.md` memory format.
-- Use `$loop` for short same-session deterministic persistence without git
-  experiment memory.
+- Use native `/goal` for evidence-based continuation without git experiment
+  memory.
 - Use `impl-plan` and `$impl` for ticketed work needing QA, review, and evidence
   lanes.

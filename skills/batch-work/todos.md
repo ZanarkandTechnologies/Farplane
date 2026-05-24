@@ -12,7 +12,11 @@
   ticket at the start.
 - [ ] Expand only the current ticket into concrete todos, including the ticket's
   own checklist and relevant skill todos.
+- [ ] Use `$work` admission policy to decide whether the next
+  item stays single-ticket or can safely join a related tiny-ticket group.
 - [ ] Implement the current ticket and run its proof checks.
+- [ ] For grouped tiny tickets, maintain one proof row per ticket plus one
+  batch-level regression row.
 - [ ] When stuck, use [advise](../advise/SKILL.md) to classify the blocker or
   recommend the next bounded move.
 - [ ] If still blocked, write the blocker to `blockers.md`, mark the ticket

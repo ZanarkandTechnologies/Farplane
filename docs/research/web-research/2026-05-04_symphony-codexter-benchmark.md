@@ -203,7 +203,7 @@ language-agnostic scheduler spec than the older OMX runtime.
 | Prompt workflow | One `WORKFLOW.md` with YAML config and strict prompt template over `issue` and `attempt` | Root AGENTS, skills, subagent prompts, ticket bodies, review rubrics, QA docs | Codexter ahead on quality prompts; Symphony ahead on one self-contained runtime prompt |
 | Strict templating | Unknown variables/filters fail rendering | No equivalent board-run prompt renderer; instructions are procedural Markdown | Symphony ahead |
 | Agent protocol | App-server subprocess contract, session/turn telemetry, max turns, continuation turns | Native app session plus local tools/subagents; no repo-owned app-server client | Symphony ahead if Codexter wants daemon mode |
-| Retry/backoff | Exponential retry queue and 1s continuation retry | Stop-hook same-ticket re-entry and `$loop`, but no generic retry queue | Symphony ahead for unattended scheduler |
+| Retry/backoff | Exponential retry queue and 1s continuation retry | Stop-hook same-ticket re-entry, but no generic retry queue | Symphony ahead for unattended scheduler |
 | Reconciliation | Running issue state refresh stops terminal/non-active runs | Ticket frontmatter and Stop hook route phases; no active external state poll | Symphony ahead for tracker-driven runs |
 | Observability | Structured logs, runtime snapshot, optional HTTP dashboard | Ticket evidence, artifacts, stop-hook logs, partial telemetry ticket | Codexter ahead on proof artifacts; Symphony ahead on live ops dashboard |
 | QA and review | Mostly delegated to workflow prompt and agent tooling | Explicit QA lane, visual QA, reviewer lane, review rubrics, completion receipts | Codexter far ahead |

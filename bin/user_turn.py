@@ -10,7 +10,7 @@ from typing import Mapping
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|qa|demo|loop|ralph|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
+    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|qa|demo|work|ralph|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
     re.IGNORECASE,
 )
 CONTROL_SURFACE_ALIASES = {
@@ -630,65 +630,6 @@ def extract_control_surface(raw_text: str) -> str:
     return CONTROL_SURFACE_ALIASES.get(matched, matched)
 
 
-def parse_inline_json(raw: str) -> object:
-    text = raw.strip()
-    if not text:
-        return None
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        return None
-
-
-def parse_inline_scalar(raw: str) -> str:
-    text = raw.strip()
-    if len(text) >= 2 and text[0] == text[-1] and text[0] in {'"', "'"}:
-        return text[1:-1]
-    return text
-
-
-def parse_loop_contract(raw_text: str) -> dict[str, object]:
-    done_when: list[dict[str, object]] = []
-    completion_marker = ""
-    retry_message = ""
-
-    for raw_line in raw_text.splitlines():
-        line = raw_line.strip()
-        if not line:
-            continue
-        if line.startswith("done_when=") or line.startswith("done_when:"):
-            _, value = re.split(r"[:=]", line, maxsplit=1)
-            parsed = parse_inline_json(value)
-            if isinstance(parsed, list):
-                normalized: list[dict[str, object]] = []
-                for item in parsed:
-                    if isinstance(item, dict):
-                        normalized.append(dict(item))
-                done_when = normalized
-        elif line.startswith("completion_marker=") or line.startswith("completion_marker:"):
-            _, value = re.split(r"[:=]", line, maxsplit=1)
-            completion_marker = parse_inline_scalar(value)
-        elif line.startswith("retry_message=") or line.startswith("retry_message:"):
-            _, value = re.split(r"[:=]", line, maxsplit=1)
-            retry_message = parse_inline_scalar(value)
-
-    contract: dict[str, object] = {
-        "done_when": done_when,
-        "retry_message": retry_message or "Continue the current loop until the loop contract is satisfied.",
-    }
-    if completion_marker:
-        contract["completion_marker"] = completion_marker
-    return contract
-
-
-def loop_contract_ready(contract: Mapping[str, object]) -> bool:
-    done_when = contract.get("done_when")
-    if isinstance(done_when, list) and done_when:
-        return True
-    completion_marker = contract.get("completion_marker")
-    return isinstance(completion_marker, str) and bool(completion_marker.strip())
-
-
 def _with_runtime_metadata(
     payload: dict[str, object],
     *,
@@ -977,60 +918,6 @@ def maybe_seed_impl_runtime(
     return seeded
 
 
-def maybe_seed_loop_runtime(
-    *,
-    current_run: Mapping[str, object] | None,
-    last_user_turn: Mapping[str, object],
-    session_id: str,
-) -> dict[str, object] | None:
-    seeded = dict(current_run) if isinstance(current_run, Mapping) else {}
-    skill_name = str(seeded.get("skill_name") or "").strip().lower()
-
-    if bool(last_user_turn.get("explicit_loop_stop_requested")):
-        return seeded if seeded else None
-
-    if not bool(last_user_turn.get("explicit_loop_requested")):
-        if skill_name == "loop":
-            return seeded
-        return seeded if has_runtime_ownership(seeded) else None
-
-    contract = last_user_turn.get("loop_contract")
-    if not isinstance(contract, Mapping) or not loop_contract_ready(contract):
-        return seeded if seeded else None
-
-    for key in (
-        "ticket_id",
-        "current_ticket_id",
-        "ticket_path",
-        "run_id",
-        "phase",
-        "next_phase",
-        "claim",
-        "run_state",
-        "impl_loop_active",
-        "execution_phase",
-        "requires_qa",
-        "requires_demo",
-        "phase_requirements",
-        "worker_name",
-        "main_artifact_path",
-        "tmux_session",
-        "tmux_window",
-        "tmux_pane",
-        "auto_continue",
-    ):
-        seeded.pop(key, None)
-    seeded["skill_name"] = "loop"
-    seeded["status"] = "running"
-    seeded["loop_active"] = True
-    seeded["loop_contract"] = dict(contract)
-    seeded["loop_last_checked_at"] = ""
-    seeded["loop_last_check_summary"] = "loop started"
-    if session_id:
-        seeded["session_id"] = session_id
-    return seeded
-
-
 def persist_runtime_update(
     project_root: Path,
     current_run: dict[str, object],
@@ -1084,10 +971,6 @@ def persist_runtime_update(
             "tmux_pane",
             "auto_continue",
             "impl_loop_active",
-            "loop_active",
-            "loop_contract",
-            "loop_last_checked_at",
-            "loop_last_check_summary",
             "session_origin",
             "session_origin_source",
             "session_origin_reason",
@@ -1127,10 +1010,6 @@ def initialize_session_state(
     previous_ticket_id = ""
     if isinstance(existing_session.get("current_ticket_id"), str):
         previous_ticket_id = str(existing_session.get("current_ticket_id") or "").strip()
-    current_skill_name = ""
-    if isinstance(current_run, Mapping) and isinstance(current_run.get("skill_name"), str):
-        current_skill_name = str(current_run.get("skill_name") or "").strip()
-
     ticket_id = ""
     ticket_path = ""
     run_id = ""
@@ -1199,8 +1078,6 @@ def initialize_session_state(
 
     if previous_ticket_id and ticket_id and previous_ticket_id != ticket_id:
         clear_ticket_claim_alias(project_root, previous_ticket_id, session_name)
-    if previous_ticket_id and not ticket_id and current_skill_name == "loop":
-        clear_ticket_claim_alias(project_root, previous_ticket_id, session_name)
     if ticket_id and isinstance(current_run, Mapping):
         set_ticket_claim_alias(project_root, current_run, session_name)
 
@@ -1214,20 +1091,6 @@ def extract_ticket_id(text: str) -> str | None:
 
 def has_explicit_impl_invocation(text: str) -> bool:
     return extract_control_surface(text) == "impl"
-
-
-def has_explicit_loop_invocation(text: str) -> bool:
-    return extract_control_surface(text) == "loop"
-
-
-def has_explicit_loop_stop_request(text: str) -> bool:
-    lowered = text.strip().lower()
-    if not lowered:
-        return False
-    return bool(
-        re.search(r"(?<!\S)(?:stop|cancel|exit)\s+loop(?=$|[\s.,:;!?()\[\]{}\"'`])", lowered)
-        or re.search(r"(?<!\S)\$loop\s+(?:stop|cancel|exit)(?=$|[\s.,:;!?()\[\]{}\"'`])", lowered)
-    )
 
 
 def infer_session_origin_from_state(payload: Mapping[str, object] | None) -> tuple[str, str, str]:
@@ -1334,7 +1197,7 @@ def classify_intent_mode(raw_text: str) -> str:
     if control_surface == "demo":
         return "building"
 
-    if control_surface == "loop":
+    if control_surface == "work":
         return "building"
 
     if control_surface == "ralph":
@@ -1515,9 +1378,6 @@ def normalize_user_turn(
     control_surface = extract_control_surface(raw_text)
     execution_phase = requested_execution_phase(control_surface)
     explicit_impl_requested = has_explicit_impl_invocation(raw_text)
-    explicit_loop_requested = has_explicit_loop_invocation(raw_text)
-    explicit_loop_stop_requested = has_explicit_loop_stop_request(raw_text)
-    loop_contract = parse_loop_contract(raw_text) if explicit_loop_requested and not explicit_loop_stop_requested else {}
     intent_mode = classify_intent_mode(raw_text)
     requested_outcome = classify_requested_outcome(raw_text, intent_mode)
     hard_constraints = classify_hard_constraints(raw_text, explicit_ticket_id)
@@ -1535,9 +1395,6 @@ def normalize_user_turn(
         "control_surface": control_surface,
         "requested_execution_phase": execution_phase,
         "explicit_impl_requested": explicit_impl_requested,
-        "explicit_loop_requested": explicit_loop_requested,
-        "explicit_loop_stop_requested": explicit_loop_stop_requested,
-        "loop_contract": loop_contract,
         "hard_constraints": hard_constraints,
         "summary": summary,
     }
@@ -1582,11 +1439,6 @@ def capture_user_turn(
         last_user_turn=last_user_turn,
         session_id=normalized_session_id,
     )
-    current_run = maybe_seed_loop_runtime(
-        current_run=current_run,
-        last_user_turn=last_user_turn,
-        session_id=normalized_session_id,
-    )
     execution_loop_requested = bool(last_user_turn.get("requested_execution_phase"))
     session_state = (
         initialize_session_state(
@@ -1626,22 +1478,13 @@ def capture_user_turn(
                 updates[key] = bool(current_run.get(key))
         if isinstance(current_run.get("phase_requirements"), Mapping):
             updates["phase_requirements"] = dict(current_run.get("phase_requirements") or {})
-        if isinstance(current_run.get("loop_active"), bool):
-            updates["loop_active"] = bool(current_run.get("loop_active"))
-        if isinstance(current_run.get("loop_contract"), Mapping):
-            updates["loop_contract"] = dict(current_run.get("loop_contract") or {})
-        if isinstance(current_run.get("loop_last_checked_at"), str):
-            updates["loop_last_checked_at"] = str(current_run.get("loop_last_checked_at") or "")
-        if isinstance(current_run.get("loop_last_check_summary"), str):
-            updates["loop_last_check_summary"] = str(current_run.get("loop_last_check_summary") or "")
         if session_state:
             session_name = session_state.get("session_name")
             current_ticket_id = session_state.get("current_ticket_id")
             if isinstance(session_name, str) and session_name.strip():
                 updates["session_name"] = session_name.strip()
             if (
-                str(current_run.get("skill_name") or "").strip() != "loop"
-                and isinstance(current_ticket_id, str)
+                isinstance(current_ticket_id, str)
                 and current_ticket_id.strip()
             ):
                 updates["current_ticket_id"] = current_ticket_id.strip()
@@ -1665,14 +1508,6 @@ def capture_user_turn(
                     payload[key] = bool(current_run.get(key))
             if isinstance(current_run.get("phase_requirements"), Mapping):
                 payload["phase_requirements"] = dict(current_run.get("phase_requirements") or {})
-            if isinstance(current_run.get("loop_active"), bool):
-                payload["loop_active"] = bool(current_run.get("loop_active"))
-            if isinstance(current_run.get("loop_contract"), Mapping):
-                payload["loop_contract"] = dict(current_run.get("loop_contract") or {})
-            if isinstance(current_run.get("loop_last_checked_at"), str):
-                payload["loop_last_checked_at"] = str(current_run.get("loop_last_checked_at") or "")
-            if isinstance(current_run.get("loop_last_check_summary"), str):
-                payload["loop_last_check_summary"] = str(current_run.get("loop_last_check_summary") or "")
         payload["updated_at"] = str(last_user_turn["captured_at"])
         payload["last_seen_at"] = str(last_user_turn["captured_at"])
         write_json(session_path, payload)

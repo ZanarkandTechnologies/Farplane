@@ -48,6 +48,10 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 16. Carry `Autonomy Readiness` from the PRD, bootstrap brief, system design,
     taste brief, or agent testability brief into any ticket expected to run
     unattended or under `$ralph`.
+16d. Add `Execution Profile Hints` for material, unattended, `$ralph`, or
+    batchable work. These hints are advisory context for `$work`, not runtime
+    authority. Include likely size, goal recommendation, compute hint,
+    proof weight, batchability, and why.
 16a. When the bootstrap brief or PRD carries a `ProjectProfile`, use its
     component matrix, selected directions, prototype gates, pipeline handoffs,
     and proof surfaces to shape ticket boundaries.
@@ -85,6 +89,7 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
   - required evidence/backpressure
   - `Proof Contract` with metric handles, review rubric gates, and required
     evidence obligations
+  - `Execution Profile Hints` for `$work` admission when useful
   - control fields for state movement
   - for UI-bearing tickets: `Agent Contract` + `Evidence checklist`
   - when the repo has `qa/cookbook/` and the slice is UI-bearing or
@@ -183,6 +188,9 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
 10. For each `$ralph`-ready or long-running ticket, add `Autonomy Readiness`
    with needed inputs/assets, credentials, compute, tools, QA risks, and human
    gates.
+10a. For each material or unattended ticket, add `Execution Profile Hints`:
+    likely size, Goal recommendation, compute hint, planning hint, proof
+    weight, batchability, and batch reason or no-batch reason.
 11. If the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry from the same `Open`, `Stabilize`, `Inspect`, and proof assumptions.
 12. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
 13. Write the finished raw tickets into `tickets/` using the ticket template.
@@ -230,6 +238,9 @@ Split when one of the explicit hard triggers makes the work stop being one coher
 4. Do not write vague visual criteria like "looks good"; encode the key screens, states, and expected proof artifacts.
 5. Do not mark tickets `$ralph`-ready when credentials, compute, external
    access, hard-to-QA surfaces, or human gates are still unnamed.
+5a. Do not treat `Execution Profile Hints` as permission to start work.
+    Tickets, cards, and `compute_target` remain context; explicit invocation
+    starts execution.
 6. Do not split a coherent feature into schema/backend/UI tickets just because those layers differ.
 7. Do not split a complex pipeline into one ticket per internal step when one grouped foundation or expansion ticket would be more executable.
 8. Do not let the first ticket be empty scaffolding; it should leave a reusable proof path behind.

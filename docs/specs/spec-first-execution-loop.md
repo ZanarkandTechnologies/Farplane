@@ -11,12 +11,14 @@ Define the current canonical execution model for Codexter:
 - post-system-design agent testability planning when the system will be hard for agents to reach, inspect, or coordinate
 - autonomy-readiness capture before long-running or board-draining execution
 - feature-sized work packages
+- Work Admission before planning/building
 - per-work-package `impl-plan`
 - per-work-package `$impl` orchestration
 - optional serial `$ralph` dispatch over ready filesystem tickets
 - worker lanes launched by `$impl` where appropriate
 - separate QA and review roles
-- Stop hook as the final continuation/completion gate
+- native Goal for semantic continuation and Stop hook for mechanical
+  active-ticket gates
 
 This spec replaces older ambiguity about whether the system is ticket-first,
 runtime-first, or fully black-box.
@@ -35,6 +37,9 @@ Use these terms precisely:
   done, and what is next
 - **Autonomy Readiness**: the explicit inputs, permissions, compute, tools, QA
   risks, and human gates an agent needs before running unattended
+- **Work Admission**: `$work` classification of one request, ticket, batch,
+  board-selected unit, epic, or metric loop into Goal, compute, planning,
+  proof, testability, and downstream skill choices
 
 Avoid using bare `lane` when you mean board state.
 
@@ -95,9 +100,40 @@ Each work package that may be run unattended or drained by `$ralph` should carry
 services, compute, tooling gaps, QA risks, human gates, and agent decision
 boundaries.
 
+Material or unattended work packages may also carry `Execution Profile Hints`.
+Those hints help `$work` decide size, Goal policy, compute, planning, proof,
+and batchability, but they do not start execution.
+
+### 3b. Work Admission
+
+`$work` runs before planning/building when the right execution mode is not
+obvious.
+
+It should classify the unit as:
+
+- tiny direct work
+- one normal ticket
+- ticket batch
+- board drain
+- epic that needs reslicing
+- metric loop
+
+It should then choose:
+
+- whether native Goal is unnecessary, recommended, or required
+- whether to use current checkout, local worktree, Codex Cloud, or Symphony
+- whether to bypass planning, use a light plan, run `impl-plan`, or reslice
+- whether proof is smoke, tests, QA, visual QA, review, demo, or a batch ledger
+- whether blockers should be handled by fallback, recorded, or returned to the
+  operator
+
+For ticket batches, `$work` requires one proof row per ticket plus one
+batch-level regression row before completion.
+
 ### 4. Planning
 
-`impl-plan` plans one selected work package.
+`impl-plan` plans one selected work package after `$work` or the operator
+decides material planning is warranted.
 
 It should:
 
@@ -108,6 +144,8 @@ It should:
 - define how the work will be proved
 
 It should **not** decompose the whole spec into many micro-tasks.
+It should not be forced onto tiny direct work, and it should not absorb vague
+epic discovery that belongs in PRD, system design, or `spec-to-ticket`.
 
 ### 5. Build Loop
 
@@ -136,20 +174,21 @@ Worker lanes may vary by ticket, but the public build-phase entrypoint is
 
 ### 5b. Optional Serial Board Drain
 
-`$ralph` may run after tickets are prepared.
+`$ralph` may run after tickets are prepared, ideally inside a native Goal that
+states the board-drain stopping condition.
 
 It should:
 
 - read active filesystem tickets
 - select one ready, unblocked, dependency-safe, unclaimed, approval-free ticket
-- hand planning tickets to `impl-plan`
-- hand building tickets to `$impl`
-- hand documenting tickets to `close-ticket`
-- reread the board after each phase
+  or a safe related tiny-ticket batch
+- hand the selected work unit to `$work`
+- preserve per-ticket proof rows plus a batch regression row for batches
+- reread the board after each work unit
 - stop on no ready work, human gates, blockers, failed handoff, or loop limit
 
-`$ralph` does not replace `$impl` and does not own parallel dispatch in the
-current system.
+`$ralph` does not replace `$work` or `$impl` and does not own parallel dispatch
+in the current system.
 
 ### 6. QA + Review
 
@@ -178,9 +217,13 @@ Review judges implementation quality:
 
 Review does not own screenshot gathering.
 
-### 7. Stop Hook
+### 7. Goal And Stop Hook
 
-The Stop hook is the final gate.
+Native Goal is the semantic continuation gate for Goal-backed work. It should
+carry the outcome, verification surface, iteration policy, and blocked stop
+condition.
+
+The Stop hook is the mechanical active-ticket gate.
 
 It should decide:
 
@@ -197,6 +240,7 @@ It should not become:
 - the main planner
 - the main reviewer
 - the main QA collector
+- the fuzzy autonomy checker for Goal-backed work
 
 ## Ticket / Work Package Contract
 
@@ -260,6 +304,13 @@ For `$ralph` board drains, use three QA rings:
 2. targeted heavy QA only for risky tickets
 3. batch or release QA after a declared milestone when multiple related tickets
    were drained
+
+For `$work` or `batch-work` ticket batches, use a batch ledger:
+
+| Ticket | Change | Local proof | Result | Blocker |
+| --- | --- | --- | --- | --- |
+| TASK-0001 | short change | focused check | pass/block/fail | none or evidence |
+| Batch | combined regression | batch check | pass/block/fail | none or evidence |
 
 ## Queue / Archive Policy
 

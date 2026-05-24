@@ -115,8 +115,9 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
 - Tier 3 skills are application/domain skills that implement Tier 2 interfaces.
   Their `todos.md` files should usually link Tier 2 surfaces rather than direct
   Tier 1 primitives, because Tier 2 carries the Tier 1 obligations. In
-  Codexter today, `spec-to-ticket`, `impl-plan`, `$impl`, and `close-ticket`
-  are coding workflow skills, not universal Tier 2 workflows. Presentation,
+  Codexter today, `spec-to-ticket`, `impl-plan`, `$work`, `$impl`, and
+  `close-ticket` are coding workflow skills, not universal Tier 2 workflows.
+  Presentation,
   document, frontend, video, image, and data workflows should bind the same
   generic interfaces to their own domain-specific skills.
 - `skill:method` names are explicit method addresses inside one owning skill,
@@ -249,7 +250,7 @@ Planning handoff rule:
 - escalate only for destructive, irreversible, or materially branching decisions
 - ticket-metadata v1 ends at visible tickets, docs, config foundations, and
   guarded public skill dispatch. `$ralph` v0 may drain ready filesystem tickets
-  serially through `impl-plan`, `$impl`, and `close-ticket`, but parallel
+  serially by handing selected work units to `$work`, but parallel
   autonomy-mode runtime work stays outside v1 unless a later ticket explicitly
   re-opens leases, worktrees, merge policy, and batch QA. See `MEM-0074`.
 - user complaints about the current output are correction requests by default; fix first and explain briefly only when useful

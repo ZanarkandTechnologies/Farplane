@@ -57,13 +57,13 @@ flowchart LR
 
   subgraph Skills["Skill Layer"]
     primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>todos.md"]:::callout
-    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute"]:::callout
+    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute<br/>goal-crafter"]:::callout
     intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
     readiness["agent-testability-plan<br/>Autonomy Readiness"]:::callout
     research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
-    execSkill["codexter-invocation<br/>$impl<br/>$loop<br/>$ralph"]:::callout
+    execSkill["codexter-invocation<br/>$work<br/>$impl<br/>$ralph<br/>batch-work"]:::callout
     assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
     externalCli["delegate-cli<br/>delegate-frontend"]:::skill
     closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
@@ -85,7 +85,7 @@ flowchart LR
   subgraph Proof["Proof + Review"]
     qa["qa-tester<br/>testing<br/>visual-qa<br/>agent-browser"]:::quality
     review["review<br/>completion-reviewer<br/>coderabbit-review<br/>desloppify"]:::callout
-    stop["Stop hook<br/>continue, phase advance, block, complete"]:::quality
+  stop["Stop hook<br/>mechanical gates"]:::quality
   end
 
   subgraph Scale["Explicit Future Boundary"]
@@ -255,8 +255,12 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - [docs/specs/runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md)
   Purpose: runtime state and operator-visible surfaces, with `.harness/` as the canonical live root
 - [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/SKILL.md)
-  Purpose: public serial dispatcher that selects one eligible filesystem
-  ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
+  Purpose: public board context surface that selects one eligible filesystem
+  ticket or safe tiny-ticket batch and hands the work unit to `$work`
+- [skills/work/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/work/SKILL.md)
+  Purpose: Work Admission surface that classifies one request, ticket, batch,
+  board-selected unit, epic, or metric loop before choosing Goal, compute,
+  planning, proof, and downstream skills
 - [skills/codexter-invocation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/SKILL.md)
   Purpose: normal-Codex invocation contract that loads `WORKFLOW.md`,
   validates one explicit `CodexterRunEnvelope`, selects local compute, routes
@@ -289,7 +293,7 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   skill `todos.md` Markdown links. Treat `advise`, `reference-grounding`,
   `review`, and todo loading as Tier 1; `brainstorm`, `research:*`, `plan`, and
   `execute` as Tier 2 interfaces; and concrete skills such as
-  `spec-to-ticket`, `impl-plan`, `$impl`, and `close-ticket` as Tier 3
+  `spec-to-ticket`, `impl-plan`, `$work`, `$impl`, and `close-ticket` as Tier 3
   Codexter coding-pipeline implementations.
 
 ## Read Order

@@ -18,10 +18,19 @@ The primary control plane is now:
 
 - `impl-plan` for ticket planning
 - `$impl` for build-phase orchestration
-- `$loop` for bounded same-session persistence without ticket orchestration
-- `$ralph` for serial board draining over prepared filesystem tickets
+- `$work` for Work Admission: classify one request, ticket, batch, board unit,
+  epic, or metric loop before choosing Goal, compute, planning, proof, and the
+  downstream skill
+- `batch-work` for explicit operator-supplied ticket ranges or lists, aligned
+  with `$work` proof policy
+- native `/goal` for thread-scoped evidence-based continuation when the finish
+  line, proof surface, constraints, iteration policy, and blocked stop
+  condition can be expressed as a Goal
+- `$ralph` for Goal-backed board context, eligible-ticket selection, and safe
+  batch grouping over prepared filesystem tickets
 - worker lanes and runtime helpers behind the canonical `$impl` surface
-- `stop_hook.py` for continuation/completion decisions
+- `stop_hook.py` for mechanical active-ticket artifact, phase, review, and
+  nonce gates
 
 The primary control plane is not:
 
@@ -32,8 +41,10 @@ The primary control plane is not:
 There is no separate public retired execution surface anymore.
 Same-ticket repeats re-enter `$impl`.
 Serial board drains enter through `$ralph`, which selects one eligible active
-ticket and then hands that ticket to `impl-plan`, `$impl`, or `close-ticket`.
-It does not revive retired binary-first orchestration.
+ticket or a safe related tiny-ticket batch and then hands that work unit to
+`$work`. `$work` chooses `impl-plan`, `$impl`, `close-ticket`, direct local
+work, reslicing, or autoresearch. Ralph does not revive retired binary-first
+orchestration.
 
 For same-ticket build looping, the runtime contract is:
 
@@ -46,14 +57,15 @@ For same-ticket build looping, the runtime contract is:
 - runtime `execution_phase` plus `phase_requirements` define whether the active build loop is in `impl`, `qa`, or `demo`
 - tmux `auto_continue` only says whether a visible follow-up lane may be spawned or reused; it is not the global activation gate
 
-For bounded same-session `$loop`, the runtime contract is:
+For native Goal preparation, use `goal-crafter` to turn fuzzy operator intent
+into a strong `/goal` command with outcome, verification surface, constraints,
+boundaries, iteration policy, and blocked stop condition. Goal mode should own
+evidence-based continuation.
 
-- `$loop` is session-owned, not ticket-owned
-- `bin/user_turn.py` seeds `skill_name: "loop"`, `loop_active`, and `loop_contract` into `.harness/state/current-run.json` plus the matching session state
-- `bin/stop_hook.py` branches early on active loop state before ticket resolution
-- v1 loop predicates are local and deterministic only: `completion_marker_seen`, `path_exists`, and `file_contains`
-- explicit same-session stop intent clears `loop_active`; Escape/cancel is not the canonical loop-stop contract
-- `skills/impl/scripts/tmux_helper.py` remains `$impl`-only in v1 and is not part of loop ownership
+For Work Admission, use `$work` to decide whether a unit is tiny direct work, a
+normal ticket, a Goal-backed ticket batch, a board drain, an epic that needs
+reslicing, or a metric loop. Ticket `compute_target` and readiness fields are
+context, not automatic run triggers.
 
 For hook-backed skill-opportunity approval capture, the runtime contract is:
 
@@ -86,7 +98,8 @@ For serial `$ralph`, the runtime contract is:
 - ticket frontmatter and body remain the queue source of truth
 - selector helpers are read-only and may not create claims, mutate tickets, or
   launch agents
-- each selected ticket is handed to the existing phase skill
+- each selected ticket or safe batch is handed to `$work`
+- batches require one proof row per ticket plus one batch-level regression row
 - `$ralph` stops on no ready ticket, human gate, blocker, failed handoff, or
   loop limit
 - parallel dispatch stays out of scope until worktrees, leases, merge policy,
@@ -117,7 +130,7 @@ Those records are runtime-only and may carry:
 | `notify.py` | `keep` | local utility with no orchestration overlap |
 | `ticket_runtime.py` | `keep` | narrow local helper for ticket runtime records, optional isolated checkout creation, local runtime launch/stop, port reservation, and QA target publication |
 | `tickets/scripts/check_ticket_metadata.py` | `keep` | canonical validator for the ticket surface and lives with the ticket system it validates |
-| `stop_hook.py` | `keep` | thin runtime shim that evaluates stop events, judges worker results, and handles re-entry decisions |
+| `stop_hook.py` | `keep` | thin runtime shim that evaluates active-ticket stop events, validates mechanical gates, and handles `$impl` re-entry decisions |
 | `skills/impl/scripts/tmux_helper.py` | `keep` | skill-local operator visibility and lane recovery helper, not the control plane; it also writes the active runtime claim used by stop-hook consumers |
 | `ralph_orchestrate.py` | `retired` | superseded by `$impl`; removed from `bin/` once no live surfaces depended on it |
 | `ralph_worker.sh` | `retired` | old phase-launch wrapper removed in favor of direct prompt/`codex exec` worker lanes |
@@ -126,6 +139,10 @@ Those records are runtime-only and may carry:
 ## Documentation Rules
 
 - Public docs should describe `$impl` as the build-phase orchestrator.
+- Public docs should describe `$work` as the Work Admission layer before
+  compute-heavy execution.
+- Public docs should describe `batch-work` as a standalone explicit range/list
+  skill that shares `$work` batch proof policy.
 - Public docs should describe `.harness/` as the canonical live runtime root.
 - `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
 - `ticket_runtime.py` may be documented as the narrow ticket-runtime shim for
@@ -134,12 +151,14 @@ Those records are runtime-only and may carry:
 - Public docs should describe `.harness/state/tickets/*.runtime.json` as
   runtime-only metadata, not as a durable replacement for ticket truth.
 - Public docs should describe same-ticket `$impl` continuation as requiring both the session-scoped loop gate and the matching runtime claim.
-- Public docs should describe `$loop` as session-owned state with explicit local predicates, not as a ticket/run-state or tmux-worker surface.
-- Public docs should describe `$ralph` as a serial filesystem-ticket
-  dispatcher over existing phase skills, not as a second executor or hidden
-  runtime plane.
+- Public docs should describe native `/goal` as the preferred surface for
+  evidence-based continuation and semantic stopping criteria.
+- Public docs should describe `$ralph` as a Goal-backed board context and
+  selector surface that hands work units to `$work`, not as a second executor
+  or hidden runtime plane.
+- Public docs should describe Stop hook as a mechanical protocol/artifact gate,
+  not the autonomy brain for Goal-backed work.
 - Public docs should describe tmux `auto_continue` as lane-follow-up plumbing, not as the source of truth for whether the `$impl` loop is active.
-- Public docs should describe explicit same-session stop intent, not Escape/cancel, as the supported v1 loop-stop control.
 - internal Stop-hook role instructions should live under `agents/`, not as giant string literals in Python helpers.
 - Any removed prototype binaries should remain only as historical references in
   archived tickets or older specs, not as live runtime files.
