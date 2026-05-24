@@ -1,0 +1,29 @@
+{
+  "name": "codexter-invocation",
+  "version": "0.1.0",
+  "description": "Interpret a CodexterRunEnvelope inside normal Codex, validate repo policy and one filesystem ticket, select local com...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codexter Invocation",
+    "shortDescription": "Interpret a CodexterRunEnvelope inside normal Codex, validate repo policy and one filesystem ticket, select local com...",
+    "longDescription": "Interpret a CodexterRunEnvelope inside normal Codex, validate repo policy and one filesystem ticket, select local compute, route to existing Codexter skills, and write a ProofPacket.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use codexter-invocation for this task."
+    ]
+  }
+}

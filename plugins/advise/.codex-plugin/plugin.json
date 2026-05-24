@@ -1,0 +1,29 @@
+{
+  "name": "advise",
+  "version": "0.1.0",
+  "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Prod...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "1"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Advise",
+    "shortDescription": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Prod...",
+    "longDescription": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use advise for this task."
+    ]
+  }
+}

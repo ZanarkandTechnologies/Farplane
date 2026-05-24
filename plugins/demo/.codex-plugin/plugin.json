@@ -1,0 +1,29 @@
+{
+  "name": "demo",
+  "version": "0.1.0",
+  "description": "Run the demo phase for one selected ticket by turning passing QA artifacts into demo-ready outputs and producing a st...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Demo",
+    "shortDescription": "Run the demo phase for one selected ticket by turning passing QA artifacts into demo-ready outputs and producing a st...",
+    "longDescription": "Run the demo phase for one selected ticket by turning passing QA artifacts into demo-ready outputs and producing a structured demo result artifact for Stop-hook gating.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use demo for this task."
+    ]
+  }
+}

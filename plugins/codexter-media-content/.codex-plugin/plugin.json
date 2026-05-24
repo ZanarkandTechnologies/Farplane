@@ -1,0 +1,30 @@
+{
+  "name": "codexter-media-content",
+  "version": "0.1.0",
+  "description": "Image, video, Remotion, social, product photography, and content production skills.",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "media",
+    "content",
+    "generation"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codexter Media and Content",
+    "shortDescription": "Image, video, Remotion, social, product photography, and content production skills.",
+    "longDescription": "Image, video, Remotion, social, product photography, and content production skills.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use codexter-media-content for this task."
+    ]
+  }
+}

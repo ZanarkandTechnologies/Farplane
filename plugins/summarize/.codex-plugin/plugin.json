@@ -1,0 +1,29 @@
+{
+  "name": "summarize",
+  "version": "0.1.0",
+  "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files.",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Summarize",
+    "shortDescription": "Summarize or extract text/transcripts from URLs, podcasts, and local files.",
+    "longDescription": "Summarize or extract text/transcripts from URLs, podcasts, and local files.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use summarize for this task."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "agent-behavior-test",
+  "version": "0.1.0",
+  "description": "Use when the operator wants an isolated agent or Codex exec run to test a skill, app feature, prompt, workflow, or re...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Behavior Test",
+    "shortDescription": "Use when the operator wants an isolated agent or Codex exec run to test a skill, app feature, prompt, workflow, or re...",
+    "longDescription": "Use when the operator wants an isolated agent or Codex exec run to test a skill, app feature, prompt, workflow, or recently built behavior while preserving visible behavior logs, command events, final output, and a scored evidence report.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use agent-behavior-test for this task."
+    ]
+  }
+}

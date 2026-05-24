@@ -1,0 +1,29 @@
+{
+  "name": "media-ingest",
+  "version": "0.1.0",
+  "description": "Use when a workflow needs to turn a URL, social post, audio file, video file, or local media path into a compact evid...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Media Ingest",
+    "shortDescription": "Use when a workflow needs to turn a URL, social post, audio file, video file, or local media path into a compact evid...",
+    "longDescription": "Use when a workflow needs to turn a URL, social post, audio file, video file, or local media path into a compact evidence bundle with source metadata, extraction commands, transcript status, representative frames, retention notes, and downstream handoff paths.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use media-ingest for this task."
+    ]
+  }
+}

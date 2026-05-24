@@ -1,0 +1,29 @@
+{
+  "name": "data-viz",
+  "version": "0.1.0",
+  "description": "Index of best practices for building charts, dashboards, and knowledge graphs using D3.js and Recharts.",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Data Viz",
+    "shortDescription": "Index of best practices for building charts, dashboards, and knowledge graphs using D3.js and Recharts.",
+    "longDescription": "Index of best practices for building charts, dashboards, and knowledge graphs using D3.js and Recharts.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use data-viz for this task."
+    ]
+  }
+}

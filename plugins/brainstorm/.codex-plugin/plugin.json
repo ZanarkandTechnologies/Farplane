@@ -1,0 +1,29 @@
+{
+  "name": "brainstorm",
+  "version": "0.1.0",
+  "description": "Early-stage option exploration before requirements commitment.",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Brainstorm",
+    "shortDescription": "Early-stage option exploration before requirements commitment.",
+    "longDescription": "Early-stage option exploration before requirements commitment.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use brainstorm for this task."
+    ]
+  }
+}

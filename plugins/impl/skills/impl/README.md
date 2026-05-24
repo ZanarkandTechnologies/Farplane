@@ -1,0 +1,60 @@
+# Impl Skill Support
+
+Support files for the `impl` skill live here.
+
+## Purpose
+
+This area contains orchestration helpers used by `$impl`, especially the
+tmux-backed lane launcher and follow-up utilities.
+`$impl` is the Tier 3 Codexter coding-pipeline implementation of the generic
+[`execute`](/Users/kenjipcx/coding-harness/Codexter/skills/execute/SKILL.md)
+interface.
+The ambition target is the whole selected ticket; repeated passes are for
+finishing that ticket, not for inventing a smaller internal ticket boundary.
+The ticket `Proof Contract` is the run scoreboard for metrics, review rubric
+gates, hard gates, and required evidence.
+
+## Public Entrypoints
+
+- `SKILL.md` - build-phase orchestration contract
+- `todos.md` - example natural-language todo template for orchestration and review/evidence phases
+- `scripts/tmux_helper.py` - launch, follow up, and inspect visible tmux lanes
+
+The first live delegated-worker contract is carried in runtime state:
+
+- `worker_name`
+- `main_artifact_path`
+- `grounding_summary`
+- `worker_started_at`
+- `last_checkpoint_at`
+- `checkpoint_summary`
+
+For build tickets, the default delegated lane set is:
+
+- `builder`
+- `reviewer`
+- `qa`
+
+When the ticket `Proof Contract` links an autoresearch session, `$impl` may run
+`autoresearch-exec` as a bounded subphase. Otherwise autoresearch stays out of
+ordinary build orchestration.
+
+## Minimal Example
+
+```bash
+python3 skills/impl/scripts/tmux_helper.py launch \
+  --ticket tickets/TASK-0026/ticket.md \
+  --phase building \
+  --worker-name builder \
+  --dry-run
+```
+
+## How To Test
+
+- `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
+- `python3 -m unittest bin/test_tmux_helper.py`
+- `sed -n '1,80p' skills/impl/todos.md`
+  and expect a plain `# Todos` checklist with natural-language orchestration steps
+- `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`
+- `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run`
+- `python3 skills/impl/scripts/tmux_helper.py status --run-state <run-state>`

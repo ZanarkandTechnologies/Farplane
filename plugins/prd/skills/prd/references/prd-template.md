@@ -1,0 +1,141 @@
+# PRD Template
+
+Use this template to create `docs/prd.md`.
+
+## Workflow
+
+1. Ask 3-8 clarifying questions (only where ambiguity affects implementation).
+2. Confirm scope and non-goals.
+3. Write PRD using the structure below.
+4. Stop after PRD; do not implement in this phase.
+
+## Clarifying Question Pattern
+
+Prefer concise option-based questions when possible:
+
+1. What is the primary user outcome?
+   A) ...
+   B) ...
+   C) ...
+
+2. Which scope do we ship first?
+   A) MVP
+   B) Expanded
+   C) Backend-only
+   D) UI-only
+
+## Required Structure
+
+```markdown
+# PRD: [Feature Name]
+
+## Problem / Context
+[What pain exists and why it matters]
+
+## First-Principles Basis
+- Objective:
+- User or system need:
+- Root cause:
+- Key assumptions:
+- Constraints:
+- First viable slice:
+- Proof / falsification:
+- Tradeoff accepted:
+- Non-goals:
+
+## Audience
+[Primary and secondary users]
+
+## JTBD
+When [context], I want to [action], so I can [outcome].
+
+## SLC Slice (Next Release)
+[Smallest complete valuable slice]
+
+## Project Profile
+- Profile:
+- Component matrix:
+- Advice axes explored:
+- Selected complete directions:
+- Pipeline handoff:
+
+## Prototype / PoC Gates
+- Highest-risk assumption:
+- Prototype artifact:
+- Pass signal:
+- Ticket before full production build: yes | no
+
+## Goals
+- [Measurable objective]
+
+## Metric Candidates
+- Primary candidate:
+- Direction: higher | lower | pass/fail | none
+- Verification idea:
+- Guard idea:
+- If no honest mechanical metric exists: `none mechanical` and why
+
+## Non-Goals
+- [Explicitly out of scope]
+
+## User Stories
+### US-001: [Title]
+**Description:** As a [user], I want [feature] so that [benefit].
+
+**Acceptance Criteria:**
+- [ ] Observable criterion
+- [ ] Error-path criterion
+- [ ] Typecheck passes
+- [ ] [UI stories only] Verify in browser using dev-browser skill
+
+## Functional Requirements
+- FR-1: ...
+- FR-2: ...
+
+## Constraints
+- Security/privacy:
+- Performance:
+- Platform:
+- Budget/time:
+
+## Autonomy Readiness
+- Human inputs/assets needed:
+- Credentials / external services:
+- Compute or runtime needs:
+- Tooling or testability gaps:
+- Hard-to-QA surfaces:
+- Human gates:
+  - Plan approval:
+  - QA approval:
+  - Deploy/publish:
+  - Spend/billing:
+  - Destructive/migration actions:
+- Agent decision boundaries:
+
+## Risks / Unknowns
+- [Top unknown that might change approach]
+
+## Backpressure / Evidence to Ship
+- Tests:
+- QA:
+- Perf checks:
+```
+
+## Quality Checklist
+
+- Acceptance criteria are verifiable, not vague.
+- Non-goals clearly prevent scope creep.
+- Success definition is observable.
+- Scope aligns to one SLC slice.
+- First-principles basis states objective, need, assumptions, root cause,
+  constraints, first viable slice, proof/falsification, tradeoff, and
+  non-goals before requirements deepen.
+- Project profile, component matrix, explored options, selected directions,
+  and prototype gates are present when `docs/bootstrap-brief.md` names a
+  profile.
+- Metric candidates are honest and mechanical when present; subjective or
+  judgment-heavy success is not forced into fake numbers.
+
+## Example
+
+Use the required structure above as the canonical PRD template.

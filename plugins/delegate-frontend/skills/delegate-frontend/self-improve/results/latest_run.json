@@ -1,0 +1,3717 @@
+{
+  "assertion_pass_rate": 0.9004457652303121,
+  "candidate": "/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/self-improve/prompts/current.txt",
+  "case_results": [
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:profile-contract-summary",
+          "passed": true
+        },
+        {
+          "message": "found candidate text",
+          "name": "candidate_must_contain:--expect-output",
+          "passed": true
+        },
+        {
+          "message": "found candidate text",
+          "name": "candidate_must_contain:--complete-when-output-and-handoff",
+          "passed": true
+        },
+        {
+          "message": "found candidate text",
+          "name": "candidate_must_contain:first_write.json",
+          "passed": true
+        },
+        {
+          "message": "found candidate text",
+          "name": "candidate_must_contain:first tool call",
+          "passed": true
+        },
+        {
+          "message": "found candidate text",
+          "name": "candidate_must_contain:do not chase broad references",
+          "passed": true
+        },
+        {
+          "message": "found candidate text",
+          "name": "candidate_must_contain:generated/rendered media",
+          "passed": true
+        },
+        {
+          "message": "found candidate text",
+          "name": "candidate_must_contain:code-native-canvas",
+          "passed": true
+        },
+        {
+          "message": "found candidate text",
+          "name": "candidate_must_contain:maximum checkpoint screenshot changed ratio",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "profile-contract-first-write-and-debug",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:failed_first_write",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "exp001:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=failed accepted",
+          "name": "exp001:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "exp001:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "live-first-write-exp-001-fails-before-write",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:first_write_pass_then_timeout",
+          "passed": true
+        },
+        {
+          "message": "forbidden text absent",
+          "name": "must_not_contain:dry_run",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "exp002:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "exp002:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "exp002:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "live-first-write-exp-002-writes-stub",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_terminal_gold",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "terminal-gold:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "terminal-gold:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "media or debug scrub present",
+          "name": "terminal-gold:media_or_debug_scrub",
+          "passed": true
+        },
+        {
+          "message": "max_changed_ratio=0.77475 >= 0.2",
+          "name": "terminal-gold:min_max_changed_ratio",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "terminal-gold-reference-passes-parity-scrub",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_fake_scroll_failure",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "warehouse-prior:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict FAIL, expected FAIL",
+          "name": "warehouse-prior:verdict:FAIL",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "prior-warehouse-fake-scroll-fails",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_mechanics_pass",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "warehouse-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "warehouse-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "warehouse-desktop:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "warehouse-desktop:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "warehouse-desktop:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "debugProgressSpan=1.0 >= 0.8",
+          "name": "warehouse-desktop:min_score:debugProgressSpan",
+          "passed": true
+        },
+        {
+          "message": "phase_count=5 >= 4",
+          "name": "warehouse-desktop:min_phase_count",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "warehouse-mobile:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "warehouse-mobile:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "warehouse-mobile:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "warehouse-mobile:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "warehouse-mobile:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "warehouse-reduced:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "warehouse-reduced:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "warehouse-reduced:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "warehouse-reduced:score_true:hasPinnedSurface",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "current-warehouse-mechanics-pass",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_visual_gap",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "warehouse-visual-delta:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "warehouse-visual-delta:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "warehouse-visual-delta:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "warehouse-visual-delta:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "max_changed_ratio=0.05877 < 0.15",
+          "name": "warehouse-visual-delta:min_max_changed_ratio",
+          "passed": false
+        },
+        {
+          "message": "manifest summary present",
+          "name": "warehouse-assets:manifest_summary_present",
+          "passed": true
+        },
+        {
+          "message": "asset_strategy=code-native-canvas is blocked",
+          "name": "warehouse-assets:asset_strategy_not",
+          "passed": false
+        },
+        {
+          "message": "assets=0 < 1",
+          "name": "warehouse-assets:min_assets",
+          "passed": false
+        },
+        {
+          "message": "unsafe_refs=0 <= 0",
+          "name": "warehouse-assets:max_unsafe_refs",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "current-warehouse-terminus-level-fails-until-assets",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_spec_stub_after_first_write",
+          "passed": true
+        },
+        {
+          "message": "spec summary present",
+          "name": "spec-stub:spec_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=stub not in ['complete']",
+          "name": "spec-stub:status_in",
+          "passed": false
+        },
+        {
+          "message": "offer missing",
+          "name": "spec-stub:nonempty:offer",
+          "passed": false
+        },
+        {
+          "message": "audience missing",
+          "name": "spec-stub:nonempty:audience",
+          "passed": false
+        },
+        {
+          "message": "carrier_world missing",
+          "name": "spec-stub:nonempty:carrier_world",
+          "passed": false
+        },
+        {
+          "message": "recipe_id missing",
+          "name": "spec-stub:nonempty:recipe_id",
+          "passed": false
+        },
+        {
+          "message": "taste_profile_id missing",
+          "name": "spec-stub:nonempty:taste_profile_id",
+          "passed": false
+        },
+        {
+          "message": "effect_stack_id missing",
+          "name": "spec-stub:nonempty:effect_stack_id",
+          "passed": false
+        },
+        {
+          "message": "qa_plan missing",
+          "name": "spec-stub:nonempty:qa_plan",
+          "passed": false
+        },
+        {
+          "message": "asset_prompts=0 < 4",
+          "name": "spec-stub:min_field:asset_prompts",
+          "passed": false
+        },
+        {
+          "message": "sections=0 < 5",
+          "name": "spec-stub:min_field:sections",
+          "passed": false
+        },
+        {
+          "message": "motion_checkpoints=0 < 5",
+          "name": "spec-stub:min_field:motion_checkpoints",
+          "passed": false
+        },
+        {
+          "message": "phase summary present",
+          "name": "spec-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=stub not in ['complete']",
+          "name": "spec-phase:status_in",
+          "passed": false
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "spec-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path missing",
+          "name": "spec-phase:handoff_present",
+          "passed": false
+        },
+        {
+          "message": "changed_files section present",
+          "name": "spec-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "spec-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section missing",
+          "name": "spec-phase:handoff_section:risks",
+          "passed": false
+        },
+        {
+          "message": "first_write_evidence section missing",
+          "name": "spec-phase:handoff_section:first_write_evidence",
+          "passed": false
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "spec-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "spec-stub-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "spec-stub-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "spec-stub-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "spec-stub-after-first-write-fails-completion",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_complete_spec_phase",
+          "passed": true
+        },
+        {
+          "message": "spec summary present",
+          "name": "complete-spec:spec_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "complete-spec:status_in",
+          "passed": true
+        },
+        {
+          "message": "offer present",
+          "name": "complete-spec:nonempty:offer",
+          "passed": true
+        },
+        {
+          "message": "audience present",
+          "name": "complete-spec:nonempty:audience",
+          "passed": true
+        },
+        {
+          "message": "carrier_world present",
+          "name": "complete-spec:nonempty:carrier_world",
+          "passed": true
+        },
+        {
+          "message": "recipe_id present",
+          "name": "complete-spec:nonempty:recipe_id",
+          "passed": true
+        },
+        {
+          "message": "taste_profile_id present",
+          "name": "complete-spec:nonempty:taste_profile_id",
+          "passed": true
+        },
+        {
+          "message": "effect_stack_id present",
+          "name": "complete-spec:nonempty:effect_stack_id",
+          "passed": true
+        },
+        {
+          "message": "qa_plan present",
+          "name": "complete-spec:nonempty:qa_plan",
+          "passed": true
+        },
+        {
+          "message": "asset_prompts=4 >= 4",
+          "name": "complete-spec:min_field:asset_prompts",
+          "passed": true
+        },
+        {
+          "message": "sections=6 >= 5",
+          "name": "complete-spec:min_field:sections",
+          "passed": true
+        },
+        {
+          "message": "motion_checkpoints=5 >= 5",
+          "name": "complete-spec:min_field:motion_checkpoints",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "complete-spec-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "complete-spec-phase:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "complete-spec-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "complete-spec-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "complete-spec-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "complete-spec-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "complete-spec-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "complete-spec-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "complete-spec-phase:first_write_status_in",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "complete-spec-producer-artifact-passes",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_asset_missing_media_phase",
+          "passed": true
+        },
+        {
+          "message": "manifest summary present",
+          "name": "asset-manifest-missing-media:manifest_summary_present",
+          "passed": true
+        },
+        {
+          "message": "asset_strategy=code-native-canvas is blocked",
+          "name": "asset-manifest-missing-media:asset_strategy_not",
+          "passed": false
+        },
+        {
+          "message": "assets=0 < 1",
+          "name": "asset-manifest-missing-media:min_assets",
+          "passed": false
+        },
+        {
+          "message": "generated_or_rendered_count=0 < 1",
+          "name": "asset-manifest-missing-media:min_generated_or_rendered_count",
+          "passed": false
+        },
+        {
+          "message": "broken_refs=0 <= 0",
+          "name": "asset-manifest-missing-media:max_broken_refs",
+          "passed": true
+        },
+        {
+          "message": "unsafe_refs=0 <= 0",
+          "name": "asset-manifest-missing-media:max_unsafe_refs",
+          "passed": true
+        },
+        {
+          "message": "has_mobile_fallback is not true",
+          "name": "asset-manifest-missing-media:require_true:has_mobile_fallback",
+          "passed": false
+        },
+        {
+          "message": "has_reduced_motion_fallback is not true",
+          "name": "asset-manifest-missing-media:require_true:has_reduced_motion_fallback",
+          "passed": false
+        },
+        {
+          "message": "source_prompt_count=0 < 0",
+          "name": "asset-manifest-missing-media:source_prompts_present",
+          "passed": false
+        },
+        {
+          "message": "phase summary present",
+          "name": "asset-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "asset-phase:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "asset-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "asset-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "asset-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "asset-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "asset-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "asset-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "asset-phase:first_write_status_in",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "asset-manifest-missing-generated-media-fails",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_generated_frame_sequence_asset_phase",
+          "passed": true
+        },
+        {
+          "message": "manifest summary present",
+          "name": "asset-manifest-generated-sequence:manifest_summary_present",
+          "passed": true
+        },
+        {
+          "message": "asset_strategy=generated-frame-sequence accepted",
+          "name": "asset-manifest-generated-sequence:asset_strategy_not",
+          "passed": true
+        },
+        {
+          "message": "assets=4 >= 4",
+          "name": "asset-manifest-generated-sequence:min_assets",
+          "passed": true
+        },
+        {
+          "message": "generated_or_rendered_count=4 >= 4",
+          "name": "asset-manifest-generated-sequence:min_generated_or_rendered_count",
+          "passed": true
+        },
+        {
+          "message": "broken_refs=0 <= 0",
+          "name": "asset-manifest-generated-sequence:max_broken_refs",
+          "passed": true
+        },
+        {
+          "message": "unsafe_refs=0 <= 0",
+          "name": "asset-manifest-generated-sequence:max_unsafe_refs",
+          "passed": true
+        },
+        {
+          "message": "has_mobile_fallback is true",
+          "name": "asset-manifest-generated-sequence:require_true:has_mobile_fallback",
+          "passed": true
+        },
+        {
+          "message": "has_reduced_motion_fallback is true",
+          "name": "asset-manifest-generated-sequence:require_true:has_reduced_motion_fallback",
+          "passed": true
+        },
+        {
+          "message": "source_prompt_count=4 >= 4",
+          "name": "asset-manifest-generated-sequence:source_prompts_present",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "asset-phase-complete:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "asset-phase-complete:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "asset-phase-complete:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "asset-phase-complete:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "asset-phase-complete:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "asset-phase-complete:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "asset-phase-complete:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "asset-phase-complete:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "asset-phase-complete:first_write_status_in",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "asset-manifest-generated-frame-sequence-passes",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_visual_geometry_bad",
+          "passed": true
+        },
+        {
+          "message": "geometry summary present",
+          "name": "warehouse-geometry-bad:geometry_summary_present",
+          "passed": true
+        },
+        {
+          "message": "hero_object_fill_ratio=0.22 < 0.55",
+          "name": "warehouse-geometry-bad:min_field:hero_object_fill_ratio",
+          "passed": false
+        },
+        {
+          "message": "first_viewport_blank_ratio=0.37 > 0.18",
+          "name": "warehouse-geometry-bad:max_field:first_viewport_blank_ratio",
+          "passed": false
+        },
+        {
+          "message": "nav_overflow is not false",
+          "name": "warehouse-geometry-bad:require_false:nav_overflow",
+          "passed": false
+        },
+        {
+          "message": "mobile_crop_intent=accidental not in ['deliberate']",
+          "name": "warehouse-geometry-bad:field_in:mobile_crop_intent",
+          "passed": false
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "visual-geometry-blank-nav-overflow-fails",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_visual_geometry_terminal_like",
+          "passed": true
+        },
+        {
+          "message": "geometry summary present",
+          "name": "terminal-like-geometry:geometry_summary_present",
+          "passed": true
+        },
+        {
+          "message": "hero_object_fill_ratio=0.68 >= 0.55",
+          "name": "terminal-like-geometry:min_field:hero_object_fill_ratio",
+          "passed": true
+        },
+        {
+          "message": "first_viewport_blank_ratio=0.08 <= 0.18",
+          "name": "terminal-like-geometry:max_field:first_viewport_blank_ratio",
+          "passed": true
+        },
+        {
+          "message": "nav_overflow is false",
+          "name": "terminal-like-geometry:require_false:nav_overflow",
+          "passed": true
+        },
+        {
+          "message": "mobile_crop_intent=deliberate accepted",
+          "name": "terminal-like-geometry:field_in:mobile_crop_intent",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "visual-geometry-terminal-like-passes",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_startup_no_session",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "pi-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=failed not in ['ready']",
+          "name": "pi-startup:status_in",
+          "passed": false
+        },
+        {
+          "message": "session_files=0 < 1",
+          "name": "pi-startup:min_session_files",
+          "passed": false
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "startup-no-session-fails",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_scroll_qa",
+          "passed": true
+        },
+        {
+          "message": "geometry summary present",
+          "name": "warehouse-produced-geometry:geometry_summary_present",
+          "passed": true
+        },
+        {
+          "message": "hero_object_fill_ratio=0.852 >= 0.55",
+          "name": "warehouse-produced-geometry:min_field:hero_object_fill_ratio",
+          "passed": true
+        },
+        {
+          "message": "first_viewport_blank_ratio=0.3083 > 0.18",
+          "name": "warehouse-produced-geometry:max_field:first_viewport_blank_ratio",
+          "passed": false
+        },
+        {
+          "message": "nav_overflow is false",
+          "name": "warehouse-produced-geometry:require_false:nav_overflow",
+          "passed": true
+        },
+        {
+          "message": "mobile_crop_intent=deliberate accepted",
+          "name": "warehouse-produced-geometry:field_in:mobile_crop_intent",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "current-warehouse-produced-geometry-fails",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_phase_prompt_compiler_spec",
+          "passed": true
+        },
+        {
+          "message": "prompt summary present",
+          "name": "compiled-spec-prompt:prompt_summary_present",
+          "passed": true
+        },
+        {
+          "message": "phase=spec, expected spec",
+          "name": "compiled-spec-prompt:phase:spec",
+          "passed": true
+        },
+        {
+          "message": "owned_outputs=1 >= 1",
+          "name": "compiled-spec-prompt:min_owned_outputs",
+          "passed": true
+        },
+        {
+          "message": "contains_first_write is true",
+          "name": "compiled-spec-prompt:require_true:contains_first_write",
+          "passed": true
+        },
+        {
+          "message": "contains_selected_route is true",
+          "name": "compiled-spec-prompt:require_true:contains_selected_route",
+          "passed": true
+        },
+        {
+          "message": "contains_phase_boundary is true",
+          "name": "compiled-spec-prompt:require_true:contains_phase_boundary",
+          "passed": true
+        },
+        {
+          "message": "forbids_broad_reference_before_first_write is true",
+          "name": "compiled-spec-prompt:require_true:forbids_broad_reference_before_first_write",
+          "passed": true
+        },
+        {
+          "message": "forbids_full_page_build is true",
+          "name": "compiled-spec-prompt:require_true:forbids_full_page_build",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "compiled-spec-phase-prompt-bounded",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_startup_probe_success",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "startup-probe-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "startup-probe-phase:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "startup-probe-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "startup-probe-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "startup-probe-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "startup-probe-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "startup-probe-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "startup-probe-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "startup-probe-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "startup-probe:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "startup-probe:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "startup-probe:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "startup-probe-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "startup-probe-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "startup-probe-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "startup-probe-success-passes",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_compiled_spec_live_timeout",
+          "passed": true
+        },
+        {
+          "message": "spec summary present",
+          "name": "compiled-spec-content:spec_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "compiled-spec-content:status_in",
+          "passed": true
+        },
+        {
+          "message": "offer present",
+          "name": "compiled-spec-content:nonempty:offer",
+          "passed": true
+        },
+        {
+          "message": "audience present",
+          "name": "compiled-spec-content:nonempty:audience",
+          "passed": true
+        },
+        {
+          "message": "carrier_world present",
+          "name": "compiled-spec-content:nonempty:carrier_world",
+          "passed": true
+        },
+        {
+          "message": "recipe_id present",
+          "name": "compiled-spec-content:nonempty:recipe_id",
+          "passed": true
+        },
+        {
+          "message": "taste_profile_id present",
+          "name": "compiled-spec-content:nonempty:taste_profile_id",
+          "passed": true
+        },
+        {
+          "message": "effect_stack_id present",
+          "name": "compiled-spec-content:nonempty:effect_stack_id",
+          "passed": true
+        },
+        {
+          "message": "qa_plan present",
+          "name": "compiled-spec-content:nonempty:qa_plan",
+          "passed": true
+        },
+        {
+          "message": "asset_prompts=4 >= 4",
+          "name": "compiled-spec-content:min_field:asset_prompts",
+          "passed": true
+        },
+        {
+          "message": "sections=7 >= 5",
+          "name": "compiled-spec-content:min_field:sections",
+          "passed": true
+        },
+        {
+          "message": "motion_checkpoints=11 >= 5",
+          "name": "compiled-spec-content:min_field:motion_checkpoints",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "compiled-spec-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=stub not in ['complete']",
+          "name": "compiled-spec-phase:status_in",
+          "passed": false
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "compiled-spec-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "compiled-spec-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "compiled-spec-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "compiled-spec-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "compiled-spec-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "compiled-spec-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "compiled-spec-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "compiled-spec-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "compiled-spec-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "compiled-spec-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "compiled-spec-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "compiled-spec-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "compiled-spec-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "compiled-spec-live-timeout-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_compiled_spec_live_success",
+          "passed": true
+        },
+        {
+          "message": "spec summary present",
+          "name": "compiled-spec-success-content:spec_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "compiled-spec-success-content:status_in",
+          "passed": true
+        },
+        {
+          "message": "offer present",
+          "name": "compiled-spec-success-content:nonempty:offer",
+          "passed": true
+        },
+        {
+          "message": "audience present",
+          "name": "compiled-spec-success-content:nonempty:audience",
+          "passed": true
+        },
+        {
+          "message": "carrier_world present",
+          "name": "compiled-spec-success-content:nonempty:carrier_world",
+          "passed": true
+        },
+        {
+          "message": "recipe_id present",
+          "name": "compiled-spec-success-content:nonempty:recipe_id",
+          "passed": true
+        },
+        {
+          "message": "taste_profile_id present",
+          "name": "compiled-spec-success-content:nonempty:taste_profile_id",
+          "passed": true
+        },
+        {
+          "message": "effect_stack_id present",
+          "name": "compiled-spec-success-content:nonempty:effect_stack_id",
+          "passed": true
+        },
+        {
+          "message": "qa_plan present",
+          "name": "compiled-spec-success-content:nonempty:qa_plan",
+          "passed": true
+        },
+        {
+          "message": "asset_prompts=5 >= 4",
+          "name": "compiled-spec-success-content:min_field:asset_prompts",
+          "passed": true
+        },
+        {
+          "message": "sections=8 >= 5",
+          "name": "compiled-spec-success-content:min_field:sections",
+          "passed": true
+        },
+        {
+          "message": "motion_checkpoints=15 >= 5",
+          "name": "compiled-spec-success-content:min_field:motion_checkpoints",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "compiled-spec-success-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "compiled-spec-success-phase:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "compiled-spec-success-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "compiled-spec-success-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "compiled-spec-success-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "compiled-spec-success-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "compiled-spec-success-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "compiled-spec-success-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "compiled-spec-success-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "compiled-spec-success-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "compiled-spec-success-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "compiled-spec-success-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "compiled-spec-success-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "compiled-spec-success-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "compiled-spec-success-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "compiled-spec-live-success-passes",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_compiled_assets_live_timeout",
+          "passed": true
+        },
+        {
+          "message": "manifest summary present",
+          "name": "compiled-assets-manifest:manifest_summary_present",
+          "passed": true
+        },
+        {
+          "message": "asset_strategy=generated-frame-sequence accepted",
+          "name": "compiled-assets-manifest:asset_strategy_not",
+          "passed": true
+        },
+        {
+          "message": "assets=10 >= 4",
+          "name": "compiled-assets-manifest:min_assets",
+          "passed": true
+        },
+        {
+          "message": "generated_or_rendered_count=10 >= 4",
+          "name": "compiled-assets-manifest:min_generated_or_rendered_count",
+          "passed": true
+        },
+        {
+          "message": "broken_refs=0 <= 0",
+          "name": "compiled-assets-manifest:max_broken_refs",
+          "passed": true
+        },
+        {
+          "message": "unsafe_refs=0 <= 0",
+          "name": "compiled-assets-manifest:max_unsafe_refs",
+          "passed": true
+        },
+        {
+          "message": "has_mobile_fallback is true",
+          "name": "compiled-assets-manifest:require_true:has_mobile_fallback",
+          "passed": true
+        },
+        {
+          "message": "has_reduced_motion_fallback is true",
+          "name": "compiled-assets-manifest:require_true:has_reduced_motion_fallback",
+          "passed": true
+        },
+        {
+          "message": "source_prompt_count=10 >= 10",
+          "name": "compiled-assets-manifest:source_prompts_present",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "compiled-assets-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=stub not in ['complete']",
+          "name": "compiled-assets-phase:status_in",
+          "passed": false
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "compiled-assets-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "compiled-assets-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "compiled-assets-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "compiled-assets-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "compiled-assets-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "compiled-assets-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "compiled-assets-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "compiled-assets-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "compiled-assets-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "compiled-assets-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "compiled-assets-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "compiled-assets-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "compiled-assets-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "compiled-assets-live-timeout-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_compiled_assets_finalize_live_success",
+          "passed": true
+        },
+        {
+          "message": "manifest summary present",
+          "name": "compiled-assets-finalize-manifest:manifest_summary_present",
+          "passed": true
+        },
+        {
+          "message": "asset_strategy=generated-frame-sequence accepted",
+          "name": "compiled-assets-finalize-manifest:asset_strategy_not",
+          "passed": true
+        },
+        {
+          "message": "assets=10 >= 4",
+          "name": "compiled-assets-finalize-manifest:min_assets",
+          "passed": true
+        },
+        {
+          "message": "generated_or_rendered_count=10 >= 4",
+          "name": "compiled-assets-finalize-manifest:min_generated_or_rendered_count",
+          "passed": true
+        },
+        {
+          "message": "broken_refs=0 <= 0",
+          "name": "compiled-assets-finalize-manifest:max_broken_refs",
+          "passed": true
+        },
+        {
+          "message": "unsafe_refs=0 <= 0",
+          "name": "compiled-assets-finalize-manifest:max_unsafe_refs",
+          "passed": true
+        },
+        {
+          "message": "has_mobile_fallback is true",
+          "name": "compiled-assets-finalize-manifest:require_true:has_mobile_fallback",
+          "passed": true
+        },
+        {
+          "message": "has_reduced_motion_fallback is true",
+          "name": "compiled-assets-finalize-manifest:require_true:has_reduced_motion_fallback",
+          "passed": true
+        },
+        {
+          "message": "source_prompt_count=10 >= 10",
+          "name": "compiled-assets-finalize-manifest:source_prompts_present",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "compiled-assets-finalize-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "compiled-assets-finalize-phase:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "compiled-assets-finalize-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "compiled-assets-finalize-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "compiled-assets-finalize-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "compiled-assets-finalize-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "compiled-assets-finalize-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "compiled-assets-finalize-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "compiled-assets-finalize-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "compiled-assets-finalize-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "compiled-assets-finalize-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "compiled-assets-finalize-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "compiled-assets-finalize-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "compiled-assets-finalize-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "compiled-assets-finalize-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "compiled-assets-finalize-live-success-passes",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_asset_unsafe_ref_phase",
+          "passed": true
+        },
+        {
+          "message": "manifest summary present",
+          "name": "asset-manifest-unsafe-ref:manifest_summary_present",
+          "passed": true
+        },
+        {
+          "message": "asset_strategy=generated-frame-sequence accepted",
+          "name": "asset-manifest-unsafe-ref:asset_strategy_not",
+          "passed": true
+        },
+        {
+          "message": "assets=1 >= 1",
+          "name": "asset-manifest-unsafe-ref:min_assets",
+          "passed": true
+        },
+        {
+          "message": "generated_or_rendered_count=1 >= 1",
+          "name": "asset-manifest-unsafe-ref:min_generated_or_rendered_count",
+          "passed": true
+        },
+        {
+          "message": "broken_refs=0 <= 0",
+          "name": "asset-manifest-unsafe-ref:max_broken_refs",
+          "passed": true
+        },
+        {
+          "message": "unsafe_refs=1 > 0",
+          "name": "asset-manifest-unsafe-ref:max_unsafe_refs",
+          "passed": false
+        },
+        {
+          "message": "has_mobile_fallback is true",
+          "name": "asset-manifest-unsafe-ref:require_true:has_mobile_fallback",
+          "passed": true
+        },
+        {
+          "message": "has_reduced_motion_fallback is true",
+          "name": "asset-manifest-unsafe-ref:require_true:has_reduced_motion_fallback",
+          "passed": true
+        },
+        {
+          "message": "source_prompt_count=1 >= 1",
+          "name": "asset-manifest-unsafe-ref:source_prompts_present",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "asset-unsafe-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "asset-unsafe-phase:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "asset-unsafe-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "asset-unsafe-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "asset-unsafe-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "asset-unsafe-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "asset-unsafe-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "asset-unsafe-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "asset-unsafe-phase:first_write_status_in",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "asset-manifest-unsafe-ref-fails",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_phase_prompt_compiler_repair",
+          "passed": true
+        },
+        {
+          "message": "prompt summary present",
+          "name": "compiled-repair-prompt:prompt_summary_present",
+          "passed": true
+        },
+        {
+          "message": "phase=repair, expected repair",
+          "name": "compiled-repair-prompt:phase:repair",
+          "passed": true
+        },
+        {
+          "message": "owned_outputs=1 >= 1",
+          "name": "compiled-repair-prompt:min_owned_outputs",
+          "passed": true
+        },
+        {
+          "message": "contains_first_write is true",
+          "name": "compiled-repair-prompt:require_true:contains_first_write",
+          "passed": true
+        },
+        {
+          "message": "contains_selected_route is true",
+          "name": "compiled-repair-prompt:require_true:contains_selected_route",
+          "passed": true
+        },
+        {
+          "message": "contains_phase_boundary is true",
+          "name": "compiled-repair-prompt:require_true:contains_phase_boundary",
+          "passed": true
+        },
+        {
+          "message": "forbids_broad_reference_before_first_write is true",
+          "name": "compiled-repair-prompt:require_true:forbids_broad_reference_before_first_write",
+          "passed": true
+        },
+        {
+          "message": "contains_repair_micro_patch is true",
+          "name": "compiled-repair-prompt:require_true:contains_repair_micro_patch",
+          "passed": true
+        },
+        {
+          "message": "forbids_qa_script_read is true",
+          "name": "compiled-repair-prompt:require_true:forbids_qa_script_read",
+          "passed": true
+        },
+        {
+          "message": "forbids_sibling_prototype_read is true",
+          "name": "compiled-repair-prompt:require_true:forbids_sibling_prototype_read",
+          "passed": true
+        },
+        {
+          "message": "preserves_existing_surface is true",
+          "name": "compiled-repair-prompt:require_true:preserves_existing_surface",
+          "passed": true
+        },
+        {
+          "message": "requires_non_destructive_first_write is true",
+          "name": "compiled-repair-prompt:require_true:requires_non_destructive_first_write",
+          "passed": true
+        },
+        {
+          "message": "requires_style_scrub is true",
+          "name": "compiled-repair-prompt:require_true:requires_style_scrub",
+          "passed": true
+        },
+        {
+          "message": "requires_support_video_metric is true",
+          "name": "compiled-repair-prompt:require_true:requires_support_video_metric",
+          "passed": true
+        },
+        {
+          "message": "requires_initial_hero_offer is true",
+          "name": "compiled-repair-prompt:require_true:requires_initial_hero_offer",
+          "passed": true
+        },
+        {
+          "message": "requires_agent_browser_qa is true",
+          "name": "compiled-repair-prompt:require_true:requires_agent_browser_qa",
+          "passed": true
+        },
+        {
+          "message": "requires_mobile_phrase_separation is true",
+          "name": "compiled-repair-prompt:require_true:requires_mobile_phrase_separation",
+          "passed": true
+        },
+        {
+          "message": "requires_terminal_final_ready is true",
+          "name": "compiled-repair-prompt:require_true:requires_terminal_final_ready",
+          "passed": true
+        },
+        {
+          "message": "requires_distributed_scrub_deltas is true",
+          "name": "compiled-repair-prompt:require_true:requires_distributed_scrub_deltas",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "compiled-repair-phase-prompt-bounded",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_implementation_repair_live_timeout",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "repair-timeout-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "repair-timeout-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "repair-timeout-desktop:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "repair-timeout-desktop:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "repair-timeout-desktop:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "hasStyleScrub is not true",
+          "name": "repair-timeout-desktop:score_true:hasStyleScrub",
+          "passed": false
+        },
+        {
+          "message": "hasMissionSupportVideos is not true",
+          "name": "repair-timeout-desktop:score_true:hasMissionSupportVideos",
+          "passed": false
+        },
+        {
+          "message": "supportVideoCount=0.0 < 2",
+          "name": "repair-timeout-desktop:min_score:supportVideoCount",
+          "passed": false
+        },
+        {
+          "message": "max_changed_ratio=0.19843 >= 0.15",
+          "name": "repair-timeout-desktop:min_max_changed_ratio",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "repair-timeout-mobile:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "repair-timeout-mobile:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "repair-timeout-mobile:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "repair-timeout-mobile:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "repair-timeout-mobile:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "hasStyleScrub is not true",
+          "name": "repair-timeout-mobile:score_true:hasStyleScrub",
+          "passed": false
+        },
+        {
+          "message": "hasMissionSupportVideos is not true",
+          "name": "repair-timeout-mobile:score_true:hasMissionSupportVideos",
+          "passed": false
+        },
+        {
+          "message": "supportVideoCount=0.0 < 2",
+          "name": "repair-timeout-mobile:min_score:supportVideoCount",
+          "passed": false
+        },
+        {
+          "message": "max_changed_ratio=0.43712 >= 0.15",
+          "name": "repair-timeout-mobile:min_max_changed_ratio",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "repair-timeout-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=stub not in ['complete']",
+          "name": "repair-timeout-phase:status_in",
+          "passed": false
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "repair-timeout-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path missing",
+          "name": "repair-timeout-phase:handoff_present",
+          "passed": false
+        },
+        {
+          "message": "changed_files section present",
+          "name": "repair-timeout-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "repair-timeout-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "repair-timeout-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "repair-timeout-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "repair-timeout-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "repair-timeout-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "repair-timeout-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "repair-timeout-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "repair-timeout-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "repair-timeout-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "repair-timeout-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "implementation-repair-live-timeout-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_implementation_repair_live3_metric_gaming",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "repair-live3-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "repair-live3-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "repair-live3-desktop:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "repair-live3-desktop:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "repair-live3-desktop:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "hasStyleScrub is true",
+          "name": "repair-live3-desktop:score_true:hasStyleScrub",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "repair-live3-desktop:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=4.0 >= 2",
+          "name": "repair-live3-desktop:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "candidateChangeCount=8.0 >= 2",
+          "name": "repair-live3-desktop:min_score:candidateChangeCount",
+          "passed": true
+        },
+        {
+          "message": "max_changed_ratio=0.01099 < 0.15",
+          "name": "repair-live3-desktop:min_max_changed_ratio",
+          "passed": false
+        },
+        {
+          "message": "QA summary present",
+          "name": "repair-live3-mobile:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "repair-live3-mobile:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "repair-live3-mobile:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "repair-live3-mobile:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "repair-live3-mobile:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "hasStyleScrub is true",
+          "name": "repair-live3-mobile:score_true:hasStyleScrub",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "repair-live3-mobile:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=4.0 >= 2",
+          "name": "repair-live3-mobile:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "candidateChangeCount=8.0 >= 2",
+          "name": "repair-live3-mobile:min_score:candidateChangeCount",
+          "passed": true
+        },
+        {
+          "message": "max_changed_ratio=0.01294 < 0.15",
+          "name": "repair-live3-mobile:min_max_changed_ratio",
+          "passed": false
+        },
+        {
+          "message": "phase summary present",
+          "name": "repair-live3-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "repair-live3-phase:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "repair-live3-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "repair-live3-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "repair-live3-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "repair-live3-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "repair-live3-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "repair-live3-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "repair-live3-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "geometry summary present",
+          "name": "repair-live3-geometry:geometry_summary_present",
+          "passed": true
+        },
+        {
+          "message": "hero_object_fill_ratio=0.9583 >= 0.55",
+          "name": "repair-live3-geometry:min_field:hero_object_fill_ratio",
+          "passed": true
+        },
+        {
+          "message": "first_viewport_blank_ratio=1 > 0.18",
+          "name": "repair-live3-geometry:max_field:first_viewport_blank_ratio",
+          "passed": false
+        },
+        {
+          "message": "nav_overflow is false",
+          "name": "repair-live3-geometry:require_false:nav_overflow",
+          "passed": true
+        },
+        {
+          "message": "mobile_crop_intent=deliberate accepted",
+          "name": "repair-live3-geometry:field_in:mobile_crop_intent",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "repair-live3-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "repair-live3-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "repair-live3-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "repair-live3-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "repair-live3-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "repair-live3-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "implementation-repair-live3-metric-gaming-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_implementation_live4_timeout",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "implementation-live4-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=stub not in ['complete']",
+          "name": "implementation-live4-phase:status_in",
+          "passed": false
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "implementation-live4-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path missing",
+          "name": "implementation-live4-phase:handoff_present",
+          "passed": false
+        },
+        {
+          "message": "changed_files section present",
+          "name": "implementation-live4-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "implementation-live4-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "implementation-live4-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "implementation-live4-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "implementation-live4-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "implementation-live4-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "implementation-live4-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "implementation-live4-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "implementation-live4-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "implementation-live4-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "implementation-live4-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "implementation-live4-timeout-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_implementation_v5_seeded_timeout",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "implementation-v5-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "implementation-v5-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "implementation-v5-desktop:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "implementation-v5-desktop:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "implementation-v5-desktop:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "hasStyleScrub is true",
+          "name": "implementation-v5-desktop:score_true:hasStyleScrub",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "implementation-v5-desktop:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "implementation-v5-desktop:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasGsapOrScrollTrigger is true",
+          "name": "implementation-v5-desktop:score_true:hasGsapOrScrollTrigger",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=6.0 >= 2",
+          "name": "implementation-v5-desktop:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "candidateChangeCount=11.0 >= 2",
+          "name": "implementation-v5-desktop:min_score:candidateChangeCount",
+          "passed": true
+        },
+        {
+          "message": "max_changed_ratio=0.77601 >= 0.15",
+          "name": "implementation-v5-desktop:min_max_changed_ratio",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "implementation-v5-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=stub not in ['complete']",
+          "name": "implementation-v5-phase:status_in",
+          "passed": false
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "implementation-v5-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path missing",
+          "name": "implementation-v5-phase:handoff_present",
+          "passed": false
+        },
+        {
+          "message": "changed_files section present",
+          "name": "implementation-v5-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "implementation-v5-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "implementation-v5-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "implementation-v5-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "implementation-v5-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "geometry summary present",
+          "name": "implementation-v5-geometry:geometry_summary_present",
+          "passed": true
+        },
+        {
+          "message": "hero_object_fill_ratio=1 >= 0.55",
+          "name": "implementation-v5-geometry:min_field:hero_object_fill_ratio",
+          "passed": true
+        },
+        {
+          "message": "first_viewport_blank_ratio=0.0083 <= 0.18",
+          "name": "implementation-v5-geometry:max_field:first_viewport_blank_ratio",
+          "passed": true
+        },
+        {
+          "message": "nav_overflow is false",
+          "name": "implementation-v5-geometry:require_false:nav_overflow",
+          "passed": true
+        },
+        {
+          "message": "mobile_crop_intent=deliberate accepted",
+          "name": "implementation-v5-geometry:field_in:mobile_crop_intent",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "implementation-v5-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "implementation-v5-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "implementation-v5-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "implementation-v5-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "implementation-v5-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "implementation-v5-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "implementation-v5-seeded-timeout-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_repair_v4_mobile_polish_firstwrite_timeout",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "repair-v4-timeout-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=failed not in ['complete']",
+          "name": "repair-v4-timeout-phase:status_in",
+          "passed": false
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "repair-v4-timeout-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path missing",
+          "name": "repair-v4-timeout-phase:handoff_present",
+          "passed": false
+        },
+        {
+          "message": "changed_files section present",
+          "name": "repair-v4-timeout-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "repair-v4-timeout-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "repair-v4-timeout-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "repair-v4-timeout-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=failed not in ['pass']",
+          "name": "repair-v4-timeout-phase:first_write_status_in",
+          "passed": false
+        },
+        {
+          "message": "startup summary present",
+          "name": "repair-v4-timeout-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "repair-v4-timeout-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "repair-v4-timeout-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "repair-v4-timeout-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=failed not in ['pass']",
+          "name": "repair-v4-timeout-first-write:status_in",
+          "passed": false
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "repair-v4-timeout-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "implementation-repair-v4-mobile-polish-firstwrite-timeout-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_artifact_summary_repair_v4_mobile_polish_success",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "repair-v4-success-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "repair-v4-success-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "repair-v4-success-desktop:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "repair-v4-success-desktop:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "repair-v4-success-desktop:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "hasStyleScrub is true",
+          "name": "repair-v4-success-desktop:score_true:hasStyleScrub",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "repair-v4-success-desktop:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "repair-v4-success-desktop:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasGsapOrScrollTrigger is true",
+          "name": "repair-v4-success-desktop:score_true:hasGsapOrScrollTrigger",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=6.0 >= 2",
+          "name": "repair-v4-success-desktop:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "candidateChangeCount=11.0 >= 2",
+          "name": "repair-v4-success-desktop:min_score:candidateChangeCount",
+          "passed": true
+        },
+        {
+          "message": "max_changed_ratio=0.77601 >= 0.15",
+          "name": "repair-v4-success-desktop:min_max_changed_ratio",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "repair-v4-success-mobile:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "repair-v4-success-mobile:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "hasRequiredDebugContract is true",
+          "name": "repair-v4-success-mobile:score_true:hasRequiredDebugContract",
+          "passed": true
+        },
+        {
+          "message": "hasDebugScrub is true",
+          "name": "repair-v4-success-mobile:score_true:hasDebugScrub",
+          "passed": true
+        },
+        {
+          "message": "hasPinnedSurface is true",
+          "name": "repair-v4-success-mobile:score_true:hasPinnedSurface",
+          "passed": true
+        },
+        {
+          "message": "hasStyleScrub is true",
+          "name": "repair-v4-success-mobile:score_true:hasStyleScrub",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "repair-v4-success-mobile:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "repair-v4-success-mobile:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasGsapOrScrollTrigger is true",
+          "name": "repair-v4-success-mobile:score_true:hasGsapOrScrollTrigger",
+          "passed": true
+        },
+        {
+          "message": "hasMobileHeroPhraseSeparation is true",
+          "name": "repair-v4-success-mobile:score_true:hasMobileHeroPhraseSeparation",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=6.0 >= 2",
+          "name": "repair-v4-success-mobile:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "candidateChangeCount=11.0 >= 2",
+          "name": "repair-v4-success-mobile:min_score:candidateChangeCount",
+          "passed": true
+        },
+        {
+          "message": "max_changed_ratio=0.80503 >= 0.15",
+          "name": "repair-v4-success-mobile:min_max_changed_ratio",
+          "passed": true
+        },
+        {
+          "message": "phase summary present",
+          "name": "repair-v4-success-phase:phase_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=complete accepted",
+          "name": "repair-v4-success-phase:status_in",
+          "passed": true
+        },
+        {
+          "message": "owned outputs recorded",
+          "name": "repair-v4-success-phase:owned_outputs_present",
+          "passed": true
+        },
+        {
+          "message": "handoff path present",
+          "name": "repair-v4-success-phase:handoff_present",
+          "passed": true
+        },
+        {
+          "message": "changed_files section present",
+          "name": "repair-v4-success-phase:handoff_section:changed_files",
+          "passed": true
+        },
+        {
+          "message": "verification section present",
+          "name": "repair-v4-success-phase:handoff_section:verification",
+          "passed": true
+        },
+        {
+          "message": "risks section present",
+          "name": "repair-v4-success-phase:handoff_section:risks",
+          "passed": true
+        },
+        {
+          "message": "first_write_evidence section present",
+          "name": "repair-v4-success-phase:handoff_section:first_write_evidence",
+          "passed": true
+        },
+        {
+          "message": "first_write_status=pass accepted",
+          "name": "repair-v4-success-phase:first_write_status_in",
+          "passed": true
+        },
+        {
+          "message": "geometry summary present",
+          "name": "repair-v4-success-geometry:geometry_summary_present",
+          "passed": true
+        },
+        {
+          "message": "hero_object_fill_ratio=1 >= 0.55",
+          "name": "repair-v4-success-geometry:min_field:hero_object_fill_ratio",
+          "passed": true
+        },
+        {
+          "message": "first_viewport_blank_ratio=0.0256 <= 0.18",
+          "name": "repair-v4-success-geometry:max_field:first_viewport_blank_ratio",
+          "passed": true
+        },
+        {
+          "message": "nav_overflow is false",
+          "name": "repair-v4-success-geometry:require_false:nav_overflow",
+          "passed": true
+        },
+        {
+          "message": "mobile_crop_intent=deliberate accepted",
+          "name": "repair-v4-success-geometry:field_in:mobile_crop_intent",
+          "passed": true
+        },
+        {
+          "message": "startup summary present",
+          "name": "repair-v4-success-startup:startup_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=ready accepted",
+          "name": "repair-v4-success-startup:status_in",
+          "passed": true
+        },
+        {
+          "message": "session_files=1 >= 1",
+          "name": "repair-v4-success-startup:min_session_files",
+          "passed": true
+        },
+        {
+          "message": "first_write summary present",
+          "name": "repair-v4-success-first-write:first_write_summary_present",
+          "passed": true
+        },
+        {
+          "message": "status=pass accepted",
+          "name": "repair-v4-success-first-write:status_in",
+          "passed": true
+        },
+        {
+          "message": "expected outputs recorded",
+          "name": "repair-v4-success-first-write:expected_outputs_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "implementation-repair-v4-mobile-polish-success-passes",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_current_browser_basic_pass_terminal_final_gap",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "current-browser-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "current-browser-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict FAIL, expected PASS",
+          "name": "current-browser-desktop:terminal_verdict:PASS",
+          "passed": false
+        },
+        {
+          "message": "terminalFinalReady is not true",
+          "name": "current-browser-desktop:score_true:terminalFinalReady",
+          "passed": false
+        },
+        {
+          "message": "hasMediaScrub is not true",
+          "name": "current-browser-desktop:score_true:hasMediaScrub",
+          "passed": false
+        },
+        {
+          "message": "hasTerminalMediaPipeline is not true",
+          "name": "current-browser-desktop:score_true:hasTerminalMediaPipeline",
+          "passed": false
+        },
+        {
+          "message": "hasDominantHeroMedia is not true",
+          "name": "current-browser-desktop:score_true:hasDominantHeroMedia",
+          "passed": false
+        },
+        {
+          "message": "hasDistributedScrubDeltas is not true",
+          "name": "current-browser-desktop:score_true:hasDistributedScrubDeltas",
+          "passed": false
+        },
+        {
+          "message": "hasMissionSupportVideos is not true",
+          "name": "current-browser-desktop:score_true:hasMissionSupportVideos",
+          "passed": false
+        },
+        {
+          "message": "supportVideoCount=0.0 < 2",
+          "name": "current-browser-desktop:min_score:supportVideoCount",
+          "passed": false
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.05877 < 0.15",
+          "name": "current-browser-desktop:min_score:maxCheckpointChangedRatio",
+          "passed": false
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=1.0 < 2",
+          "name": "current-browser-desktop:min_score:meaningfulCheckpointDeltaCount",
+          "passed": false
+        },
+        {
+          "message": "midScrollDeltaCount=0.0 < 1",
+          "name": "current-browser-desktop:min_score:midScrollDeltaCount",
+          "passed": false
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "current-browser-basic-pass-terminal-final-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_sidecar_media_control_terminal_final",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "sidecar-control-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "sidecar-control-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict PASS, expected PASS",
+          "name": "sidecar-control-desktop:terminal_verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalFinalReady is true",
+          "name": "sidecar-control-desktop:score_true:terminalFinalReady",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "sidecar-control-desktop:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "sidecar-control-desktop:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "sidecar-control-desktop:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "sidecar-control-desktop:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "sidecar-control-desktop:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=6.0 >= 2",
+          "name": "sidecar-control-desktop:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.41814 >= 0.15",
+          "name": "sidecar-control-desktop:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=4.0 >= 2",
+          "name": "sidecar-control-desktop:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=2.0 >= 1",
+          "name": "sidecar-control-desktop:min_score:midScrollDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "sidecar-control-mobile:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "sidecar-control-mobile:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict PASS, expected PASS",
+          "name": "sidecar-control-mobile:terminal_verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalFinalReady is true",
+          "name": "sidecar-control-mobile:score_true:terminalFinalReady",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "sidecar-control-mobile:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "sidecar-control-mobile:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "sidecar-control-mobile:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "sidecar-control-mobile:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "sidecar-control-mobile:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "hasMobileHeroPhraseSeparation is true",
+          "name": "sidecar-control-mobile:score_true:hasMobileHeroPhraseSeparation",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=6.0 >= 2",
+          "name": "sidecar-control-mobile:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.40244 >= 0.15",
+          "name": "sidecar-control-mobile:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=4.0 >= 2",
+          "name": "sidecar-control-mobile:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=2.0 >= 1",
+          "name": "sidecar-control-mobile:min_score:midScrollDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "manifest summary present",
+          "name": "sidecar-control-assets:manifest_summary_present",
+          "passed": true
+        },
+        {
+          "message": "asset_strategy=generated-frame-sequence accepted",
+          "name": "sidecar-control-assets:asset_strategy_not",
+          "passed": true
+        },
+        {
+          "message": "assets=10 >= 4",
+          "name": "sidecar-control-assets:min_assets",
+          "passed": true
+        },
+        {
+          "message": "generated_or_rendered_count=10 >= 4",
+          "name": "sidecar-control-assets:min_generated_or_rendered_count",
+          "passed": true
+        },
+        {
+          "message": "broken_refs=0 <= 0",
+          "name": "sidecar-control-assets:max_broken_refs",
+          "passed": true
+        },
+        {
+          "message": "unsafe_refs=0 <= 0",
+          "name": "sidecar-control-assets:max_unsafe_refs",
+          "passed": true
+        },
+        {
+          "message": "has_mobile_fallback is true",
+          "name": "sidecar-control-assets:require_true:has_mobile_fallback",
+          "passed": true
+        },
+        {
+          "message": "has_reduced_motion_fallback is true",
+          "name": "sidecar-control-assets:require_true:has_reduced_motion_fallback",
+          "passed": true
+        },
+        {
+          "message": "source_prompt_count=10 >= 10",
+          "name": "sidecar-control-assets:source_prompts_present",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "sidecar-media-control-terminal-final-passes",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:produced_from_phase_prompt_compiler_sidecar_implementation",
+          "passed": true
+        },
+        {
+          "message": "prompt summary present",
+          "name": "compiled-sidecar-prompt:prompt_summary_present",
+          "passed": true
+        },
+        {
+          "message": "phase=sidecar-implementation, expected sidecar-implementation",
+          "name": "compiled-sidecar-prompt:phase:sidecar-implementation",
+          "passed": true
+        },
+        {
+          "message": "owned_outputs=1 >= 1",
+          "name": "compiled-sidecar-prompt:min_owned_outputs",
+          "passed": true
+        },
+        {
+          "message": "contains_first_write is true",
+          "name": "compiled-sidecar-prompt:require_true:contains_first_write",
+          "passed": true
+        },
+        {
+          "message": "contains_selected_route is true",
+          "name": "compiled-sidecar-prompt:require_true:contains_selected_route",
+          "passed": true
+        },
+        {
+          "message": "contains_phase_boundary is true",
+          "name": "compiled-sidecar-prompt:require_true:contains_phase_boundary",
+          "passed": true
+        },
+        {
+          "message": "forbids_broad_reference_before_first_write is true",
+          "name": "compiled-sidecar-prompt:require_true:forbids_broad_reference_before_first_write",
+          "passed": true
+        },
+        {
+          "message": "requires_complete_sidecar_first_write is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_complete_sidecar_first_write",
+          "passed": true
+        },
+        {
+          "message": "forbids_large_impl_read_before_sidecar is true",
+          "name": "compiled-sidecar-prompt:require_true:forbids_large_impl_read_before_sidecar",
+          "passed": true
+        },
+        {
+          "message": "requires_iife_sidecar is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_iife_sidecar",
+          "passed": true
+        },
+        {
+          "message": "requires_media_scrub is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_media_scrub",
+          "passed": true
+        },
+        {
+          "message": "requires_debug_contract is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_debug_contract",
+          "passed": true
+        },
+        {
+          "message": "requires_initial_hero_offer is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_initial_hero_offer",
+          "passed": true
+        },
+        {
+          "message": "requires_agent_browser_qa is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_agent_browser_qa",
+          "passed": true
+        },
+        {
+          "message": "requires_terminal_media_pipeline is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_terminal_media_pipeline",
+          "passed": true
+        },
+        {
+          "message": "requires_support_video_metric is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_support_video_metric",
+          "passed": true
+        },
+        {
+          "message": "requires_output_quality_gate is true",
+          "name": "compiled-sidecar-prompt:require_true:requires_output_quality_gate",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "compiled-sidecar-phase-prompt-bounded",
+      "rejected_by_gate": false
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_pi_sidecar_v5_hidden_hero_offer",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "pi-sidecar-v5-desktop-offer-gate:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "pi-sidecar-v5-desktop-offer-gate:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict FAIL, expected PASS",
+          "name": "pi-sidecar-v5-desktop-offer-gate:terminal_verdict:PASS",
+          "passed": false
+        },
+        {
+          "message": "terminalFinalReady is not true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:terminalFinalReady",
+          "passed": false
+        },
+        {
+          "message": "hasInitialHeroOfferVisible is not true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasInitialHeroOfferVisible",
+          "passed": false
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "pi-sidecar-v5-desktop-offer-gate:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=3.0 >= 2",
+          "name": "pi-sidecar-v5-desktop-offer-gate:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.59809 >= 0.15",
+          "name": "pi-sidecar-v5-desktop-offer-gate:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=4.0 >= 2",
+          "name": "pi-sidecar-v5-desktop-offer-gate:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=2.0 >= 1",
+          "name": "pi-sidecar-v5-desktop-offer-gate:min_score:midScrollDeltaCount",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "reject",
+      "fixture_passed": true,
+      "gate_passed": false,
+      "id": "pi-sidecar-v5-hidden-hero-offer-rejected",
+      "rejected_by_gate": true
+    },
+    {
+      "assertions": [
+        {
+          "message": "candidate output row present",
+          "name": "candidate_output_present",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:captured_pi_sidecar_v7_hero_offer_repair",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "pi-sidecar-v7-desktop:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "pi-sidecar-v7-desktop:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict PASS, expected PASS",
+          "name": "pi-sidecar-v7-desktop:terminal_verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalFinalReady is true",
+          "name": "pi-sidecar-v7-desktop:score_true:terminalFinalReady",
+          "passed": true
+        },
+        {
+          "message": "hasInitialHeroOfferVisible is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasInitialHeroOfferVisible",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "pi-sidecar-v7-desktop:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=3.0 >= 2",
+          "name": "pi-sidecar-v7-desktop:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.60306 >= 0.15",
+          "name": "pi-sidecar-v7-desktop:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=4.0 >= 2",
+          "name": "pi-sidecar-v7-desktop:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=2.0 >= 1",
+          "name": "pi-sidecar-v7-desktop:min_score:midScrollDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "QA summary present",
+          "name": "pi-sidecar-v7-mobile:qa_summary_present",
+          "passed": true
+        },
+        {
+          "message": "verdict PASS, expected PASS",
+          "name": "pi-sidecar-v7-mobile:verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalVerdict PASS, expected PASS",
+          "name": "pi-sidecar-v7-mobile:terminal_verdict:PASS",
+          "passed": true
+        },
+        {
+          "message": "terminalFinalReady is true",
+          "name": "pi-sidecar-v7-mobile:score_true:terminalFinalReady",
+          "passed": true
+        },
+        {
+          "message": "hasInitialHeroOfferVisible is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasInitialHeroOfferVisible",
+          "passed": true
+        },
+        {
+          "message": "hasMediaScrub is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasMediaScrub",
+          "passed": true
+        },
+        {
+          "message": "hasTerminalMediaPipeline is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasTerminalMediaPipeline",
+          "passed": true
+        },
+        {
+          "message": "hasDominantHeroMedia is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasDominantHeroMedia",
+          "passed": true
+        },
+        {
+          "message": "hasDistributedScrubDeltas is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasDistributedScrubDeltas",
+          "passed": true
+        },
+        {
+          "message": "hasMissionSupportVideos is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasMissionSupportVideos",
+          "passed": true
+        },
+        {
+          "message": "hasMobileHeroPhraseSeparation is true",
+          "name": "pi-sidecar-v7-mobile:score_true:hasMobileHeroPhraseSeparation",
+          "passed": true
+        },
+        {
+          "message": "supportVideoCount=3.0 >= 2",
+          "name": "pi-sidecar-v7-mobile:min_score:supportVideoCount",
+          "passed": true
+        },
+        {
+          "message": "maxCheckpointChangedRatio=0.65982 >= 0.15",
+          "name": "pi-sidecar-v7-mobile:min_score:maxCheckpointChangedRatio",
+          "passed": true
+        },
+        {
+          "message": "meaningfulCheckpointDeltaCount=2.0 >= 2",
+          "name": "pi-sidecar-v7-mobile:min_score:meaningfulCheckpointDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "midScrollDeltaCount=1.0 >= 1",
+          "name": "pi-sidecar-v7-mobile:min_score:midScrollDeltaCount",
+          "passed": true
+        },
+        {
+          "message": "terminal score present",
+          "name": "pi-sidecar-v7-terminal-score:terminal_score_present",
+          "passed": true
+        },
+        {
+          "message": "verdict pass, expected pass",
+          "name": "pi-sidecar-v7-terminal-score:verdict:pass",
+          "passed": true
+        },
+        {
+          "message": "percent_score=99 >= 99",
+          "name": "pi-sidecar-v7-terminal-score:min_percent_score",
+          "passed": true
+        },
+        {
+          "message": "hard_gates=0 <= 0",
+          "name": "pi-sidecar-v7-terminal-score:max_hard_gates",
+          "passed": true
+        },
+        {
+          "message": "strategy_and_spec=20 >= 20",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:strategy_and_spec",
+          "passed": true
+        },
+        {
+          "message": "asset_pipeline=20 >= 20",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:asset_pipeline",
+          "passed": true
+        },
+        {
+          "message": "scroll_scrub_mechanics=25 >= 25",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:scroll_scrub_mechanics",
+          "passed": true
+        },
+        {
+          "message": "visual_craft_proxy=15 >= 15",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:visual_craft_proxy",
+          "passed": true
+        },
+        {
+          "message": "mobile_and_reduced_motion=10 >= 10",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:mobile_and_reduced_motion",
+          "passed": true
+        },
+        {
+          "message": "delegation_process_evidence=9 >= 9",
+          "name": "pi-sidecar-v7-terminal-score:min_dimension_score:delegation_process_evidence",
+          "passed": true
+        }
+      ],
+      "expectation_passed": true,
+      "expected_outcome": "accept",
+      "fixture_passed": true,
+      "gate_passed": true,
+      "id": "pi-sidecar-v7-hero-offer-repair-passes",
+      "rejected_by_gate": false
+    }
+  ],
+  "cases": 34,
+  "expectation_passed_cases": 34,
+  "pass_rate": 1.0,
+  "passed_assertions": 606,
+  "timestamp": "2026-05-07T10:29:32Z",
+  "total_assertions": 673
+}

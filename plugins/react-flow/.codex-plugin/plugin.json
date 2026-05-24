@@ -1,0 +1,29 @@
+{
+  "name": "react-flow",
+  "version": "0.1.0",
+  "description": "Index of best practices for building graph-based applications and node-based editors using React Flow.",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "React Flow",
+    "shortDescription": "Index of best practices for building graph-based applications and node-based editors using React Flow.",
+    "longDescription": "Index of best practices for building graph-based applications and node-based editors using React Flow.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use react-flow for this task."
+    ]
+  }
+}

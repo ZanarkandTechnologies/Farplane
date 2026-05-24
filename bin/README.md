@@ -37,6 +37,11 @@ orchestration story.
 - `codexter_compute.py` - compute admission policy for `local_shared`,
   `local_worktree`, `symphony`, and `codex_cloud`; it emits blockers and setup
   hints but never launches compute
+- `install_selected_skills.py` - dependency-free selected-skill installer for
+  listing, searching, dry-running, and symlinking only chosen skills into a
+  Codex home without rendering full harness config
+- `sync_skill_plugins.py` - deterministic generator for the repo plugin
+  marketplace and one self-contained Codex plugin package per skill
 - `codexter_invocation.py` - contract helper for `WORKFLOW.md`,
   `CodexterRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
@@ -118,6 +123,13 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket <ticket> --dry-run --json`
   Use to render the Pi/Kimi frontend delegation prompt, command, runtime logs,
   and durable ticket artifacts without spending tokens or editing files
+- `python3 bin/install_selected_skills.py --search frontend`
+  Use to discover shareable skills without rendering the full Codexter config.
+- `python3 bin/install_selected_skills.py --skills review,visual-qa --dry-run`
+  Use to preview selected skill symlinks into `~/.codex/skills`.
+- `python3 bin/sync_skill_plugins.py --check`
+  Use after changing `skills/*` to prove `.agents/plugins/marketplace.json`
+  and generated `plugins/*` packages are in sync.
 - `python3 -m unittest bin/test_codexter_boards.py`
   Use to prove the filesystem BoardAdapter path containment and ticket
   normalization contract before changing invocation or Ralph selection behavior

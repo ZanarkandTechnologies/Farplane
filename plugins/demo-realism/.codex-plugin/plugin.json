@@ -1,0 +1,29 @@
+{
+  "name": "demo-realism",
+  "version": "0.1.0",
+  "description": "Use when an MVP, prototype, or client demo feels fake and needs believable operational workflows, realistic demo data...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Demo Realism",
+    "shortDescription": "Use when an MVP, prototype, or client demo feels fake and needs believable operational workflows, realistic demo data...",
+    "longDescription": "Use when an MVP, prototype, or client demo feels fake and needs believable operational workflows, realistic demo data, and a presentation-worthiness rubric before design or implementation begins.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use demo-realism for this task."
+    ]
+  }
+}

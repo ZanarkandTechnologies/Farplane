@@ -1,0 +1,29 @@
+{
+  "name": "work",
+  "version": "0.1.0",
+  "description": "Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Work",
+    "shortDescription": "Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then...",
+    "longDescription": "Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then route to the right Codexter skill, native Goal, compute target, and proof policy before implementation starts.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use work for this task."
+    ]
+  }
+}

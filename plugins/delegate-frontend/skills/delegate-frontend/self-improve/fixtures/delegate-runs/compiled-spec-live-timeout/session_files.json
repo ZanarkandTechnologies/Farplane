@@ -1,0 +1,6 @@
+{
+  "session_dir": "sessions",
+  "session_files": [
+    "sessions/compiled-spec-live-timeout.jsonl"
+  ]
+}

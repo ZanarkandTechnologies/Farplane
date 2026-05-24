@@ -1,0 +1,30 @@
+{
+  "name": "codexter-research",
+  "version": "0.1.0",
+  "description": "Research, source ingestion, synthesis, scouting, and summarization skills.",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "research",
+    "sources",
+    "synthesis"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codexter Research",
+    "shortDescription": "Research, source ingestion, synthesis, scouting, and summarization skills.",
+    "longDescription": "Research, source ingestion, synthesis, scouting, and summarization skills.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use codexter-research for this task."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "deep-interview",
+  "version": "0.1.0",
+  "description": "Socratic deep interview with mathematical ambiguity gating before execution",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Deep Interview",
+    "shortDescription": "Socratic deep interview with mathematical ambiguity gating before execution",
+    "longDescription": "Socratic deep interview with mathematical ambiguity gating before execution",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use deep-interview for this task."
+    ]
+  }
+}

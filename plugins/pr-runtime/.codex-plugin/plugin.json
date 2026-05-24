@@ -1,0 +1,29 @@
+{
+  "name": "pr-runtime",
+  "version": "0.1.0",
+  "description": "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Pr Runtime",
+    "shortDescription": "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer...",
+    "longDescription": "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer or declared QA target.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use pr-runtime for this task."
+    ]
+  }
+}

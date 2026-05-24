@@ -1,0 +1,29 @@
+{
+  "name": "prd",
+  "version": "0.1.0",
+  "description": "Phase-1 Codexter skill for requirements gathering and PRD authoring.",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Prd",
+    "shortDescription": "Phase-1 Codexter skill for requirements gathering and PRD authoring.",
+    "longDescription": "Phase-1 Codexter skill for requirements gathering and PRD authoring.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use prd for this task."
+    ]
+  }
+}

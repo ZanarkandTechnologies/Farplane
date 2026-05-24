@@ -1,0 +1,29 @@
+{
+  "name": "review",
+  "version": "0.1.0",
+  "description": "Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-s...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "1"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Review",
+    "shortDescription": "Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-s...",
+    "longDescription": "Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-slop search playbook for code, UI, evidence, demos, and videos.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use review for this task."
+    ]
+  }
+}

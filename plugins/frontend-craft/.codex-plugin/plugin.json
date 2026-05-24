@@ -1,0 +1,29 @@
+{
+  "name": "frontend-craft",
+  "version": "0.1.0",
+  "description": "Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend su...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Frontend Craft",
+    "shortDescription": "Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend su...",
+    "longDescription": "Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend surface and may need UX planning, visual design, landing-page treatment, motion, Three.js/WebGL, generated image/video assets, standards audit, or QA routing. Routes through functional-ui, visual-design, landing-page, frontend-design references, imagegen, image-generation, video-generation, remotion, remotion-render, web-design-guidelines, and visual-qa as needed.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use frontend-craft for this task."
+    ]
+  }
+}

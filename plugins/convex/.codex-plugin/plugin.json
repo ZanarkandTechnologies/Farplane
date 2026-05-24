@@ -1,0 +1,29 @@
+{
+  "name": "convex",
+  "version": "0.1.0",
+  "description": "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this pack...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "external",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Convex",
+    "shortDescription": "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this pack...",
+    "longDescription": "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this package kept as a thin upstream pointer.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use convex for this task."
+    ]
+  }
+}

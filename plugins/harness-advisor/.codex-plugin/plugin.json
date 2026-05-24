@@ -1,0 +1,29 @@
+{
+  "name": "harness-advisor",
+  "version": "0.1.0",
+  "description": "Tier 2 Codexter harness placement advisor. Use when the user wants to make Codexter better at something and needs a g...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Harness Advisor",
+    "shortDescription": "Tier 2 Codexter harness placement advisor. Use when the user wants to make Codexter better at something and needs a g...",
+    "longDescription": "Tier 2 Codexter harness placement advisor. Use when the user wants to make Codexter better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, or registries.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use harness-advisor for this task."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "skill-maintenance",
+  "version": "0.1.0",
+  "description": "Maintain Codexter skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the gener...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Skill Maintenance",
+    "shortDescription": "Maintain Codexter skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the gener...",
+    "longDescription": "Maintain Codexter skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the generated registry, and plan consolidation without bloating the global system prompt.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use skill-maintenance for this task."
+    ]
+  }
+}

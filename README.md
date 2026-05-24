@@ -118,22 +118,29 @@ Implemented now:
 - metric-driven improvement sessions through `autoresearch-plan` and
   `autoresearch-exec`, with `self-improve` for binary-eval-based skill
   optimization on the same artifact contract
+- native Codex Goal preparation through `goal-crafter`, which turns fuzzy
+  continuation intent into a paste-ready `/goal` with proof, constraints,
+  iteration policy, and blocked-stop rules
+- Work Admission through `$work`, which classifies one request, ticket, ticket
+  batch, board-selected unit, epic, or metric loop before choosing Goal,
+  compute, planning, proof, and downstream skills
+- explicit local ticket ranges through `batch-work`, aligned with `$work`
+  batch-ledger proof policy
 - single-ticket execution through `$impl`
-- serial filesystem-ticket board draining through `$ralph`, which selects one
-  eligible ticket and hands it to `impl-plan`, `$impl`, or `close-ticket`
+- Goal-backed filesystem-ticket board context through `$ralph`, which selects
+  one eligible ticket or safe related tiny-ticket batch and hands it to `$work`
 - delegated QA routing for live `$qa` followups plus visible nonce-backed
   completion-review receipts
 - anchored `review` rubrics plus evidence-gated completion
 - `desloppify` for CLI-driven anti-slop cleanup, with default worker delegation
-- same-session bounded persistence through `$loop`
 - documenting and closeout through `close-ticket`
 - isolated PR follow-up and concurrent-writer checkout setup plus ticket-scoped
   runtime launch/teardown through `pr-runtime` plus `ticket-runtime`
 - local Codexter invocation through `WORKFLOW.md`,
   `CodexterRunEnvelope`, filesystem `WorkItem`, `ComputeSelector`, and
   `ProofPacket`, so an explicit local or external invocation can route one
-  ticket through existing skills and future Symphony workers have the same
-  request/result contract
+  work unit through `$work`, existing skills, and future Symphony workers with
+  the same request/result contract
 - board/compute invocation doctrine that keeps tickets as context, Codex as
   the execution engine, Codexter as the installed skill/proof layer, and
   Symphony as a future background scheduler/runner rather than a replacement
@@ -147,8 +154,9 @@ Implemented now:
 
 Partial today:
 
-- same-ticket auto-reentry is real, but the autonomous loop still centers on one
-  selected ticket at a time; `$ralph` drains serially rather than in parallel
+- same-ticket auto-reentry is real, and `$work` now chooses direct, planned,
+  batched, board-drain, reslice, or metric-loop routing; `$ralph` still drains
+  serially rather than in parallel
 - tmux-backed worker lanes exist, but the runtime is still prototype-weight
 - runtime observability doctrine is shipped, while hosted telemetry is still in
   progress in [TASK-0073](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0073/ticket.md)
@@ -222,9 +230,11 @@ flowchart LR
     end
 
     subgraph Dispatch["4. Execution Dispatch"]
+      goalCraft["goal-crafter<br/>native /goal preparation"]:::planning
       invoke["codexter-invocation<br/>run envelope + proof"]:::execution
-      ralph["$ralph<br/>serial board drain"]:::callout
-      loop["$loop<br/>same-session bounded persistence"]:::execution
+      work["$work<br/>Work Admission"]:::callout
+      batchWork["batch-work<br/>explicit ranges/lists"]:::execution
+      ralph["$ralph<br/>board context + drain"]:::callout
       impl["$impl<br/>one-ticket build loop"]:::callout
       prRuntime["pr-runtime<br/>isolated checkout + QA target"]:::runtime
     end
@@ -241,7 +251,7 @@ flowchart LR
       qa["qa-tester<br/>qa<br/>testing<br/>visual-qa<br/>web-design-guidelines"]:::quality
       review["review<br/>anchored rubric gate"]:::callout
       heavy["coderabbit-review<br/>desloppify"]:::quality
-      stop["Stop hook<br/>continue, block, or complete"]:::quality
+      stop["Stop hook<br/>mechanical gates"]:::quality
     end
 
     subgraph Close["6. Closeout + Publishing Prep"]
@@ -284,14 +294,18 @@ flowchart LR
     diagram --> tickets
 
     tickets --> invoke
+    readiness --> goalCraft
+    goalCraft -. native goal .-> invoke
+    invoke --> work
+    invoke --> batchWork
     invoke --> ralph
-    invoke --> impl
-    ralph -->|planning ticket| implplan
-    ralph -->|building ticket| impl
-    ralph -->|documenting ticket| close
-    tickets --> impl
+    ralph --> work
+    batchWork --> work
+    work -->|planning warranted| implplan
+    work -->|build accepted| impl
+    work -->|documenting| close
+    tickets --> work
     implplan --> impl
-    loop -. local task only .-> impl
     prRuntime -. isolated writer .-> impl
 
     impl --> builders
@@ -329,7 +343,8 @@ Legend:
 - `dashed purple` = future scale boundary, not current behavior
 
 The yellow callout boxes are the main handoff skills/operators: `deep-init-project`,
-`spec-to-ticket`, `impl-plan`, `$ralph`, `$impl`, `review`, and `close-ticket`.
+`spec-to-ticket`, `impl-plan`, `$work`, `$ralph`, `$impl`, `review`, and
+`close-ticket`.
 
 ## Roadmap
 
@@ -393,6 +408,54 @@ out of Git via:
   machine-local TOML you want appended verbatim
 
 The shipped global contract stays in `templates/global/AGENTS.md`.
+
+### Skill Plugins Marketplace
+
+For lightweight skill distribution, use the repo marketplace. Each Codexter
+skill is packaged as its own plugin under `plugins/<skill-name>/`, and the
+marketplace also includes curated bundle plugins for easier installs:
+
+```bash
+git clone <your-remote-url> ~/src/codexter
+cd ~/src/codexter
+codex plugin marketplace add ./
+codex
+/plugins
+```
+
+For a remote GitHub repo, add it directly:
+
+```bash
+codex plugin marketplace add owner/repo --ref main
+```
+
+Recommended bundle plugins:
+
+- `codexter-core` - core planning, research, execution, and review skills
+- `codexter-coding-workflow` - ticket, build, QA, review, and closeout skills
+- `codexter-frontend` - frontend, UI, visual design, landing page, and visual QA skills
+- `codexter-research` - source ingestion, scouting, synthesis, and summarization skills
+- `codexter-media-content` - image, video, Remotion, social, and product content skills
+- `codexter-harness-engineering` - harness, skill maintenance, delegation, and self-improvement skills
+
+Individual skill plugins are still available after the bundles in the same
+marketplace for users who want one precise skill.
+
+The marketplace lives at `.agents/plugins/marketplace.json`. Regenerate it and
+the per-skill plugin packages after changing `skills/*`:
+
+```bash
+python3 bin/sync_skill_plugins.py
+python3 bin/sync_skill_plugins.py --check
+```
+
+```bash
+bash install.sh --skills-only --search frontend
+bash install.sh --skills-only --skills frontend-craft,visual-qa
+```
+
+Official public plugin publishing is still coming soon, so the repo marketplace
+is the shareable path today.
 
 ## Canonical Surfaces
 

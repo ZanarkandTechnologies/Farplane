@@ -1,0 +1,29 @@
+{
+  "name": "research",
+  "version": "0.1.0",
+  "description": "Tier 2 evidence workflow with method-addressed research passes: research:parity, research:gap, research:competitor, r...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Research",
+    "shortDescription": "Tier 2 evidence workflow with method-addressed research passes: research:parity, research:gap, research:competitor, r...",
+    "longDescription": "Tier 2 evidence workflow with method-addressed research passes: research:parity, research:gap, research:competitor, research:official-docs, research:code-patterns, research:user-grounding, and research:source-synthesis.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use research for this task."
+    ]
+  }
+}

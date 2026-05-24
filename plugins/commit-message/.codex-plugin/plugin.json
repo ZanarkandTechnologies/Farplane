@@ -1,0 +1,29 @@
+{
+  "name": "commit-message",
+  "version": "0.1.0",
+  "description": "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Commit Message",
+    "shortDescription": "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo...",
+    "longDescription": "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo style: type(scope): lower-case imperative summary.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use commit-message for this task."
+    ]
+  }
+}

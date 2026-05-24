@@ -1,0 +1,29 @@
+{
+  "name": "pr-splitting",
+  "version": "0.1.0",
+  "description": "Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-firs...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Pr Splitting",
+    "shortDescription": "Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-firs...",
+    "longDescription": "Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-first slices and falling back to layer-based buckets when feature seams are too entangled.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use pr-splitting for this task."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "delegate-cli",
+  "version": "0.1.0",
+  "description": "Route bounded Codexter work to configured external coding-agent CLIs through explicit adapter/profile contracts, mana...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Delegate Cli",
+    "shortDescription": "Route bounded Codexter work to configured external coding-agent CLIs through explicit adapter/profile contracts, mana...",
+    "longDescription": "Route bounded Codexter work to configured external coding-agent CLIs through explicit adapter/profile contracts, managed prompts, runtime logs, and ticket evidence handoff. Use when another local CLI/model/harness is stronger for a task but Codexter must keep ticket, QA, review, and integration authority.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use delegate-cli for this task."
+    ]
+  }
+}

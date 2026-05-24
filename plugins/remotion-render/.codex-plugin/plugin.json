@@ -1,0 +1,29 @@
+{
+  "name": "remotion-render",
+  "version": "0.1.0",
+  "description": "Render React/Remotion component code into video through the inference.sh `belt` CLI when available. Use for code-to-v...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Remotion Render",
+    "shortDescription": "Render React/Remotion component code into video through the inference.sh `belt` CLI when available. Use for code-to-v...",
+    "longDescription": "Render React/Remotion component code into video through the inference.sh `belt` CLI when available. Use for code-to-video, TSX-to-MP4, programmatic motion graphics, data-driven videos, animated UI sequences, and deterministic React animation exports. Do not use for model-native text-to-video, image-to-video, avatar/lipsync, or video editing; use `video-generation` for those.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use remotion-render for this task."
+    ]
+  }
+}

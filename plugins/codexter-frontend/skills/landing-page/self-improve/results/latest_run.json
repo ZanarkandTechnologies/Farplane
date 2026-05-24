@@ -1,0 +1,220 @@
+{
+  "candidate": "/Users/kenjipcx/coding-harness/Codexter/skills/landing-page/self-improve/prompts/current.txt",
+  "case_results": [
+    {
+      "assertions": [
+        {
+          "message": "found required text",
+          "name": "must_contain:SPEC.md",
+          "passed": true
+        },
+        {
+          "message": "missing required text",
+          "name": "must_contain:Recipe route",
+          "passed": false
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:industrial-mission-control",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:terminal-palantir",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:cinematic-frame-sequence",
+          "passed": true
+        },
+        {
+          "message": "missing required text",
+          "name": "must_contain:Asset generation plan",
+          "passed": false
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:desktop hero",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:mobile hero",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:poster",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:reduced-motion",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:scroll checkpoints",
+          "passed": true
+        },
+        {
+          "message": "forbidden text present",
+          "name": "must_not_contain:generic SaaS",
+          "passed": false
+        },
+        {
+          "message": "forbidden text absent",
+          "name": "must_not_contain:purple gradient",
+          "passed": true
+        },
+        {
+          "message": "forbidden text absent",
+          "name": "must_not_contain:stock photo",
+          "passed": true
+        }
+      ],
+      "id": "terminal_spec_first"
+    },
+    {
+      "assertions": [
+        {
+          "message": "found required text",
+          "name": "must_contain:assets/asset-manifest.json",
+          "passed": true
+        },
+        {
+          "message": "missing required text",
+          "name": "must_contain:desktop frame sequence",
+          "passed": false
+        },
+        {
+          "message": "missing required text",
+          "name": "must_contain:mobile frame sequence",
+          "passed": false
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:poster frame",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:reduced-motion still",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:HTML/CSS overlays",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:keep readable text out of generated media",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:asset load checks",
+          "passed": true
+        }
+      ],
+      "id": "terminal_asset_contract"
+    },
+    {
+      "assertions": [
+        {
+          "message": "found required text",
+          "name": "must_contain:index.html",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:styles.css",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:app.js",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:SPEC.md",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:asset-manifest.json",
+          "passed": true
+        },
+        {
+          "message": "missing required text",
+          "name": "must_contain:visual QA",
+          "passed": false
+        },
+        {
+          "message": "missing required text",
+          "name": "must_contain:review verdict",
+          "passed": false
+        },
+        {
+          "message": "missing required text",
+          "name": "must_contain:mobile first viewport",
+          "passed": false
+        },
+        {
+          "message": "missing required text",
+          "name": "must_contain:reduced-motion",
+          "passed": false
+        }
+      ],
+      "id": "terminal_build_contract"
+    },
+    {
+      "assertions": [
+        {
+          "message": "found required text",
+          "name": "must_contain:gold reference",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:Terminal gap",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:first viewport",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:physical operation",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:cinematic asset",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:mobile",
+          "passed": true
+        },
+        {
+          "message": "found required text",
+          "name": "must_contain:skill improvement hypothesis",
+          "passed": true
+        }
+      ],
+      "id": "terminal_gap_review"
+    }
+  ],
+  "cases": 4,
+  "pass_rate": 0.7631578947368421,
+  "passed_assertions": 29,
+  "timestamp": "2026-05-05T08:50:15Z",
+  "total_assertions": 38
+}

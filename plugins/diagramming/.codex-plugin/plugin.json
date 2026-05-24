@@ -1,0 +1,29 @@
+{
+  "name": "diagramming",
+  "version": "0.1.0",
+  "description": "Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams su...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "2"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Diagramming",
+    "shortDescription": "Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams su...",
+    "longDescription": "Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams such as top-level delta maps, zoom-ins, numbered data-flow traces, or inline-signature component diagrams.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use diagramming for this task."
+    ]
+  }
+}
