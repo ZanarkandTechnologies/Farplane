@@ -69,6 +69,11 @@ For hook-backed skill-opportunity approval capture, the runtime contract is:
   recognized across nearby conversations
 - proposer input and output live under
   `.harness/state/self-improve/applications/`
+- Stop hook logs every self-improve sidecar readiness check as a named
+  `skill-opportunity-review` hooklet row in `.harness/logs/stop-hook.jsonl`,
+  including skipped checks that are not yet due. The row carries `status`,
+  `readiness`, `reason`, trigger counts, project root, session id, and artifact
+  handles.
 - proposer side effects are bounded to Notion Tasks: it creates approval tasks
   tagged `agent self improvement` using the Notion-context Tasks data source
 - the proposer must not mutate local repo files, including skills, docs,

@@ -220,5 +220,6 @@
 2026-05-23 18:15 +0800 | FIX | add an API-backed notion-context tasks-this-week fallback that queries Act Time over the last seven days and filters Status != Done when a Notion API token is available
 2026-05-23 18:19 +0800 | FEAT | include originating project context and the Notion status-cache path in self-improve hook sidecar inputs while keeping reusable harness improvements as the default task scope
 2026-05-24 00:35 +0800 | FIX | remove semantic search from notion-context task-board fallbacks so missing MCP row-query capability returns connector-unavailable or local ticket fallback instead of guessed task candidates
+2026-05-24 03:58 +0800 | FEAT | log self-improve sidecar readiness as a named Stop-hook hooklet result for skipped, launched, and failed checks
 2026-05-24 04:12 +0800 | FEAT | add a Notion pinned-task read-check preflight that incrementally reads pinned task pages by weekly cadence and update markers before task ranking
 2026-05-24 04:20 +0800 | FIX | remove public Notion API fallback from notion-context so task, project, goal, and pinned-task context stay MCP-only

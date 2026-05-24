@@ -138,7 +138,9 @@ success quiet and make failure output the thing that stands out.
   you intentionally want to spawn the real Codex sidecar. The generated input
   includes `workspace_context` so the sidecar can see the originating project,
   invocation cwd, and weekly Notion status cache path while still defaulting
-  clear findings to reusable Codexter harness-improvement tasks.
+  clear findings to reusable Codexter harness-improvement tasks. The `simulate`
+  and `force-review` outputs include `hooklet_result`, the same named result
+  shape logged to `.harness/logs/stop-hook.jsonl` by the live Stop hook.
 - `python3 bin/self_improve_hook_probe.py status --session-id self-improve-probe`
   Use to inspect the current rolling window, due state, and recent sidecar runs.
 

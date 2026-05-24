@@ -2123,6 +2123,53 @@ def skill_opportunity_review_root(project_root: Path) -> Path:
     return skill_opportunity_application_dir(project_root)
 
 
+def skill_opportunity_hooklet_result(
+    *,
+    status: str,
+    reason: str,
+    project_root: Path | None,
+    session_id: str | None,
+    trigger: dict[str, object] | None = None,
+    review_run_path: str = "",
+    pid: str = "",
+) -> dict[str, object]:
+    readiness = "ready" if bool((trigger or {}).get("due")) else "not_ready"
+    artifacts = {
+        "review_run_path": review_run_path,
+        "pid": pid,
+    }
+    return {
+        "name": "skill-opportunity-review",
+        "status": status,
+        "readiness": readiness,
+        "reason": reason,
+        "project_root": str(project_root) if project_root is not None else "",
+        "session_id": session_id or "",
+        "trigger": trigger or {},
+        "artifacts": artifacts,
+        "review_run_path": review_run_path,
+        "pid": pid,
+    }
+
+
+def log_hooklet_result(base: Path, hooklet: dict[str, object]) -> None:
+    append_hook_log(
+        base,
+        {
+            "timestamp": now_iso(),
+            "mode": "hooklet",
+            "hooklet": hooklet.get("name", ""),
+            "status": hooklet.get("status", ""),
+            "readiness": hooklet.get("readiness", ""),
+            "reason": hooklet.get("reason", ""),
+            "project_root": hooklet.get("project_root", ""),
+            "session_id": hooklet.get("session_id", ""),
+            "trigger": hooklet.get("trigger", {}),
+            "artifacts": hooklet.get("artifacts", {}),
+        },
+    )
+
+
 def relative_paths(root: Path, pattern: str) -> list[str]:
     return sorted(
         str(path.relative_to(root))
@@ -2266,18 +2313,40 @@ def maybe_launch_skill_opportunity_review(
     payload: dict[str, object],
 ) -> dict[str, object]:
     if project_root is None:
-        return {"status": "skipped", "reason": "missing project root", "review_run_path": "", "pid": ""}
+        return skill_opportunity_hooklet_result(
+            status="skipped",
+            reason="missing project root",
+            project_root=project_root,
+            session_id=session_id,
+        )
     if not session_id:
-        return {"status": "skipped", "reason": "missing session id", "review_run_path": "", "pid": ""}
+        return skill_opportunity_hooklet_result(
+            status="skipped",
+            reason="missing session id",
+            project_root=project_root,
+            session_id=session_id,
+        )
 
     trigger = should_review_skill_opportunities(
         window,
         cadence=skill_opportunity_review_interval(),
     )
     if not bool(trigger.get("due")):
-        return {"status": "skipped", "reason": str(trigger.get("reason") or "not due"), "review_run_path": "", "pid": ""}
+        return skill_opportunity_hooklet_result(
+            status="skipped",
+            reason=str(trigger.get("reason") or "not due"),
+            project_root=project_root,
+            session_id=session_id,
+            trigger=trigger,
+        )
     if not skill_opportunity_review_enabled():
-        return {"status": "skipped", "reason": "skill opportunity review disabled", "review_run_path": "", "pid": ""}
+        return skill_opportunity_hooklet_result(
+            status="skipped",
+            reason="skill opportunity review disabled",
+            project_root=project_root,
+            session_id=session_id,
+            trigger=trigger,
+        )
 
     timestamp = now_iso().replace(":", "").replace("+", "p")
     run_dir = skill_opportunity_review_root(project_root) / f"{timestamp}-{safe_path_token(session_id)}"
@@ -2326,11 +2395,26 @@ def maybe_launch_skill_opportunity_review(
             review_run_path=relative_run_path,
             current_window=window,
         )
-        return {"status": "launched", "reason": "dry run", "review_run_path": relative_run_path, "pid": "dry-run"}
+        return skill_opportunity_hooklet_result(
+            status="launched",
+            reason="dry run",
+            project_root=project_root,
+            session_id=session_id,
+            trigger=trigger,
+            review_run_path=relative_run_path,
+            pid="dry-run",
+        )
 
     role_config = load_role_config(base, "skill-opportunity-applier")
     if role_config is None:
-        return {"status": "failed", "reason": "missing skill-opportunity-applier role config", "review_run_path": relative_run_path, "pid": ""}
+        return skill_opportunity_hooklet_result(
+            status="failed",
+            reason="missing skill-opportunity-applier role config",
+            project_root=project_root,
+            session_id=session_id,
+            trigger=trigger,
+            review_run_path=relative_run_path,
+        )
 
     prompt = "Context:\n" + json.dumps(input_payload, ensure_ascii=True, indent=2) + "\n"
     prompt_path = run_dir / "prompt.json"
@@ -2351,7 +2435,14 @@ def maybe_launch_skill_opportunity_review(
         stdin_handle.close()
         stdout_handle.close()
         stderr_handle.close()
-        return {"status": "failed", "reason": str(exc), "review_run_path": relative_run_path, "pid": ""}
+        return skill_opportunity_hooklet_result(
+            status="failed",
+            reason=str(exc),
+            project_root=project_root,
+            session_id=session_id,
+            trigger=trigger,
+            review_run_path=relative_run_path,
+        )
     stdin_handle.close()
     stdout_handle.close()
     stderr_handle.close()
@@ -2362,7 +2453,15 @@ def maybe_launch_skill_opportunity_review(
         review_run_path=relative_run_path,
         current_window=window,
     )
-    return {"status": "launched", "reason": "started detached skill opportunity proposer", "review_run_path": relative_run_path, "pid": str(proc.pid)}
+    return skill_opportunity_hooklet_result(
+        status="launched",
+        reason="started detached skill opportunity proposer",
+        project_root=project_root,
+        session_id=session_id,
+        trigger=trigger,
+        review_run_path=relative_run_path,
+        pid=str(proc.pid),
+    )
 
 
 def parse_role_output(output_path: Path) -> dict[str, object] | None:
@@ -2841,6 +2940,7 @@ def main() -> int:
             window=conversation_window,
             payload=payload,
         )
+        log_hooklet_result(base, launch_result)
         if launch_result.get("status") != "skipped":
             append_hook_log(
                 base,

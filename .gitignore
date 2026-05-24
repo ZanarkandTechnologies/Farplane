@@ -61,6 +61,7 @@ tickets/**
 !tickets/README.md
 !tickets/scripts/
 !tickets/scripts/**
+tickets/scripts/__pycache__/
 !tickets/templates/
 !tickets/templates/**
 artifacts/

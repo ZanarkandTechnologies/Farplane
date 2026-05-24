@@ -272,6 +272,31 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
 
         self.assertEqual(result["status"], "skipped")
         self.assertEqual(result["reason"], "skill opportunity review disabled")
+        self.assertEqual(result["name"], "skill-opportunity-review")
+        self.assertEqual(result["readiness"], "ready")
+        self.assertTrue(result["trigger"]["due"])
+        self.assertEqual(result["artifacts"]["review_run_path"], "")
+
+    def test_maybe_launch_skill_opportunity_review_reports_not_ready_hooklet(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="skill-opportunity-") as td:
+            project_root = Path(td)
+            window = {"turn_count": 9, "last_review_turn_count": 0, "rolling_exchanges": []}
+
+            with patch.dict(os.environ, {}, clear=True):
+                result = self.stop_hook.maybe_launch_skill_opportunity_review(
+                    base=project_root,
+                    project_root=project_root,
+                    session_id="sess-123",
+                    window=window,
+                    payload={"hook_event_name": "Stop"},
+                )
+
+        self.assertEqual(result["name"], "skill-opportunity-review")
+        self.assertEqual(result["status"], "skipped")
+        self.assertEqual(result["readiness"], "not_ready")
+        self.assertFalse(result["trigger"]["due"])
+        self.assertIn("waiting for 10", result["reason"])
+        self.assertEqual(result["artifacts"], {"review_run_path": "", "pid": ""})
 
     def test_maybe_launch_skill_opportunity_review_dry_run_writes_report_and_marks_window(self) -> None:
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-") as td:
@@ -318,7 +343,11 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             )
 
         self.assertEqual(result["status"], "launched")
+        self.assertEqual(result["name"], "skill-opportunity-review")
+        self.assertEqual(result["readiness"], "ready")
         self.assertEqual(result["pid"], "dry-run")
+        self.assertEqual(result["artifacts"]["pid"], "dry-run")
+        self.assertEqual(result["artifacts"]["review_run_path"], result["review_run_path"])
         self.assertEqual(report["status"], "dry_run")
         self.assertEqual(input_payload["recent_windows"][0]["session_id"], "sess-123")
         self.assertEqual(input_payload["workflow_refs"]["source_to_feature"], "skills/harness-scout/SKILL.md")
@@ -400,7 +429,37 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 )
 
         self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["name"], "skill-opportunity-review")
+        self.assertEqual(result["readiness"], "ready")
         self.assertEqual(result["reason"], "missing skill-opportunity-applier role config")
+
+    def test_log_hooklet_result_writes_named_stop_hook_row(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="hooklet-log-") as td:
+            base = Path(td)
+            hooklet = self.stop_hook.skill_opportunity_hooklet_result(
+                status="skipped",
+                reason="9 captured user turns since last review; waiting for 10",
+                project_root=base,
+                session_id="sess-123",
+                trigger={
+                    "due": False,
+                    "turn_count": 9,
+                    "last_review_turn_count": 0,
+                    "cadence": 10,
+                    "reason": "9 captured user turns since last review; waiting for 10",
+                },
+            )
+            self.stop_hook.log_hooklet_result(base, hooklet)
+            rows = [
+                json.loads(line)
+                for line in (base / ".harness" / "logs" / "stop-hook.jsonl").read_text(encoding="utf-8").splitlines()
+            ]
+
+        self.assertEqual(rows[0]["mode"], "hooklet")
+        self.assertEqual(rows[0]["hooklet"], "skill-opportunity-review")
+        self.assertEqual(rows[0]["status"], "skipped")
+        self.assertEqual(rows[0]["readiness"], "not_ready")
+        self.assertEqual(rows[0]["trigger"]["turn_count"], 9)
 
     def test_skill_opportunity_apply_command_is_read_only_and_disables_hooks(self) -> None:
         cmd = self.stop_hook.skill_opportunity_apply_command(
@@ -447,6 +506,8 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(payload["command"], "simulate")
         self.assertEqual(payload["window_turn_count"], 10)
         self.assertEqual(payload["launch_result"]["status"], "launched")
+        self.assertEqual(payload["hooklet_result"]["name"], "skill-opportunity-review")
+        self.assertEqual(payload["hooklet_result"]["readiness"], "ready")
         self.assertEqual(payload["launch_result"]["pid"], "dry-run")
         self.assertTrue(payload["recent_application_runs"][0]["report_path"].endswith("report.json"))
         self.assertFalse((project_root / ".harness" / "state" / "current-run.json").exists())

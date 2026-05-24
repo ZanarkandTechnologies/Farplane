@@ -91,6 +91,7 @@ def force_review(args: argparse.Namespace) -> int:
             "dry_run": args.dry_run,
             "trigger": trigger,
             "launch_result": result,
+            "hooklet_result": result,
             "recent_application_runs": recent_application_runs(project_root, args.recent),
         }
     )
@@ -139,6 +140,7 @@ def simulate(args: argparse.Namespace) -> int:
             "rolling_exchange_count": len(window.get("rolling_exchanges", [])),
             "trigger": trigger,
             "launch_result": result,
+            "hooklet_result": result,
             "recent_application_runs": recent_application_runs(project_root, args.recent),
         }
     )
