@@ -225,4 +225,5 @@
 2026-05-24 04:20 +0800 | FIX | remove public Notion API fallback from notion-context so task, project, goal, and pinned-task context stay MCP-only
 2026-05-24 19:21 +0800 | FIX | switch Codex Notion MCP config from remote OAuth to local token-backed MCP and allow MCP-mediated API query fallback for unattended weekly context
 2026-05-24 22:03 +0800 | FIX | limit notion-context pinned-task read checks to the last 14 days of Act Time so old pinned planning pages do not flood weekly context
+2026-05-25 02:31 +0800 | FEAT | add the agent-behavior-test skill as a generalized isolated-agent behavior testing workflow for skills, app features, prompts, and workflows, with a Codex exec JSONL runner
 2026-05-25 03:05 +0800 | FEAT | render installed skill packages with embedded `todos.md` checklists so required skill steps are visible on first load
