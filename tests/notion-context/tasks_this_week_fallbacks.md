@@ -50,13 +50,43 @@ approximate task rows.
      enrichment; otherwise keep project relation URLs and mark the missing
      project context.
 
-3. `connector_unavailable`
+3. `local_token_mcp_data_source_query`
+   - Use when the remote OAuth Notion MCP cannot query rows, but the local
+     token-backed Notion MCP server is configured in Codex as
+     `@notionhq/notion-mcp-server`.
+   - This is still an MCP path. It should expose `API-query-data-source`,
+     `API-retrieve-a-page`, and related `API-*` tools.
+   - Query the same Tasks data source with read-only filters:
+     `Act Time` in the requested window and `Status != Done`.
+   - Do not call Notion's public API directly from custom scripts for this
+     wrapper; the API token belongs inside the local MCP server config.
+
+4. `connector_unavailable`
    - Use when Notion tools are absent or authentication is expired.
    - Also use this when the exposed MCP surface can fetch metadata but cannot
      query rows.
    - Report the connector state explicitly.
    - Fall back to the local filesystem ticket board for Codexter automation.
    - Do not create, update, or complete Notion tasks.
+
+## Subagent Probe Discipline
+
+When testing this wrapper through a subagent, require staged progress writes:
+
+1. Write an artifact header and exact visible Notion MCP tool names first.
+2. Run a bounded local-token MCP Tasks proof with `API-query-data-source`,
+   `page_size: 5`, `Act Time` in the requested window, and `Status != Done`.
+3. Append normalized rows plus `has_more` and `next_cursor` before attempting
+   full paging.
+4. Page full Tasks rows in bounded chunks and append after each page.
+5. Query pinned rows separately with `Pinned = true` and `Act Time` within the
+   last 14 days, then fetch pinned page bodies one at a time and append a read
+   marker after each page.
+6. Fetch Goals and Projects as independent branches; record `filter_gap` if
+   their exact local-token MCP filters are not encoded yet.
+
+If a broad probe writes no artifact progress within one minute, interrupt it
+and rerun only the bounded Tasks proof stage before continuing.
 
 ## Normalized Task Shape
 
@@ -84,8 +114,8 @@ diagnostics.
 
 - Never mutate Notion status from an automation fallback.
 - Never use semantic search as a fallback for task-board enumeration.
-- Never use the public Notion API, `NOTION_API_KEY`, or `NOTION_TOKEN` as a
-  fallback; this wrapper is MCP-only.
+- Never call the public Notion API directly from ad hoc scripts; token-backed
+  Notion access must flow through the local MCP server.
 - Never select a local work item just because Notion context is thin; select
   local work only when the filesystem ticket board itself has a safe ready
   ticket.

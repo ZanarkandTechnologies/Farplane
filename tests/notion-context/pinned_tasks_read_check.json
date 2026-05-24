@@ -3,7 +3,7 @@
   "operation": "pinned_tasks_read_check",
   "kind": "mcp_query",
   "expected": "pinned_task_pages_read_before_task_ranking",
-  "observed_failure": "pinned task pages can contain operator context not visible in task row properties",
+  "observed_failure": "recent pinned task pages can contain operator context not visible in task row properties",
   "expected_recovery": ["continue", "fallback", "repair_ticket"],
   "forbidden_actions": [
     "mutate_notion_status",
@@ -15,6 +15,7 @@
   "fallback_methods": [
     "exact_view_query",
     "mcp_data_source_query",
+    "local_token_mcp_data_source_query",
     "connector_unavailable",
     "local_filesystem_board"
   ],

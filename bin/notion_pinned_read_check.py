@@ -7,7 +7,7 @@ import argparse
 import json
 import sys
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +24,7 @@ class PinnedTask:
     url: str
     name: str
     last_edited_time: str | None
+    act_time: str | None
 
 
 def utc_now_iso() -> str:
@@ -72,6 +73,21 @@ def bool_value(raw: dict[str, Any], *keys: str) -> bool:
     return False
 
 
+def parse_date_prefix(value: str | None) -> date | None:
+    if not value or len(value) < 10:
+        return None
+    try:
+        return date.fromisoformat(value[:10])
+    except ValueError:
+        return None
+
+
+def in_recent_window(task_date: date | None, *, today: date, days: int) -> bool:
+    if task_date is None:
+        return True
+    return today - timedelta(days=days) <= task_date <= today
+
+
 def parse_tasks(raw: Any) -> list[PinnedTask]:
     rows = raw.get("rows") or raw.get("results") or raw.get("tasks") if isinstance(raw, dict) else raw
     if not isinstance(rows, list):
@@ -96,9 +112,25 @@ def parse_tasks(raw: Any) -> list[PinnedTask]:
                     "lastEdited",
                     "last_edit_time",
                 ),
+                act_time=string_value(
+                    row,
+                    "Act Time",
+                    "act_time",
+                    "actTime",
+                    "date:Act Time:start",
+                    "date:Act Time",
+                ),
             )
         )
     return tasks
+
+
+def recent_tasks(tasks: list[PinnedTask], *, today: date, days: int) -> list[PinnedTask]:
+    return [
+        task
+        for task in tasks
+        if in_recent_window(parse_date_prefix(task.act_time), today=today, days=days)
+    ]
 
 
 def normalized_state(raw: Any) -> dict[str, Any]:
@@ -176,6 +208,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--rows", required=True, help="JSON file containing pinned task rows from MCP")
     parser.add_argument("--state", default=str(DEFAULT_STATE_PATH), help="runtime state file")
     parser.add_argument("--today", type=date.fromisoformat, help="override current date for tests")
+    parser.add_argument(
+        "--recent-days",
+        type=int,
+        default=14,
+        help="only plan pinned rows whose Act Time is within this many days; rows missing Act Time are kept",
+    )
     parser.add_argument("--no-weekly-full-read", action="store_true")
     parser.add_argument("--read-url", action="append", default=[], help="record a page URL as read")
     parser.add_argument("--json", action="store_true", help="print JSON output")
@@ -187,9 +225,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     state_path = Path(args.state)
     try:
-        tasks = parse_tasks(read_json(Path(args.rows)))
+        all_tasks = parse_tasks(read_json(Path(args.rows)))
+        today = args.today or date.today()
+        tasks = recent_tasks(all_tasks, today=today, days=args.recent_days)
         state = normalized_state(read_json(state_path))
-        current_week = iso_week(args.today)
+        current_week = iso_week(today)
         if args.command == "plan":
             due, week_changed = due_tasks(
                 tasks,
@@ -200,6 +240,8 @@ def main(argv: list[str] | None = None) -> int:
             output = {
                 "state_path": str(state_path),
                 "current_week": current_week,
+                "recent_days": args.recent_days,
+                "input_pinned_count": len(all_tasks),
                 "pinned_count": len(tasks),
                 "due_count": len(due),
                 "weekly_full_read_due": week_changed,

@@ -27,6 +27,7 @@ ACTION_POLICIES = {"auto_ticket", "recommend", "ask"}
 FALLBACK_METHODS = {
     "exact_view_query",
     "mcp_data_source_query",
+    "local_token_mcp_data_source_query",
     "connector_unavailable",
     "local_filesystem_board",
 }

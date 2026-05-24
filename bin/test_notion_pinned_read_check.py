@@ -19,6 +19,7 @@ def pinned_row(
     url: str = "https://www.notion.so/task-a",
     name: str = "Pinned task",
     marker: str | None = "2026-05-24T01:00:00Z",
+    act_time: str | None = "2026-05-24",
 ) -> dict[str, object]:
     row: dict[str, object] = {
         "url": url,
@@ -27,6 +28,8 @@ def pinned_row(
     }
     if marker is not None:
         row["last_edited_time"] = marker
+    if act_time is not None:
+        row["Act Time"] = act_time
     return row
 
 
@@ -116,6 +119,20 @@ class PinnedReadCheckTests(unittest.TestCase):
                 restored["tasks"]["https://www.notion.so/task-a"]["last_read_at"],
                 "2026-05-24T01:23:00Z",
             )
+
+    def test_recent_tasks_keep_only_last_14_days(self) -> None:
+        tasks = read_check.parse_tasks(
+            [
+                pinned_row(url="https://www.notion.so/recent", act_time="2026-05-11"),
+                pinned_row(url="https://www.notion.so/old", act_time="2026-05-09"),
+                pinned_row(url="https://www.notion.so/missing", act_time=None),
+            ]
+        )
+        recent = read_check.recent_tasks(tasks, today=date(2026, 5, 24), days=14)
+        self.assertEqual(
+            [task.url for task in recent],
+            ["https://www.notion.so/recent", "https://www.notion.so/missing"],
+        )
 
 
 if __name__ == "__main__":

@@ -59,7 +59,7 @@ if env_path.exists():
         key, value = line.split("=", 1)
         env[key.strip()] = value.strip()
 
-required = ["CODEX_HOME", "REF_API_KEY"]
+required = ["CODEX_HOME", "REF_API_KEY", "NOTION_TOKEN"]
 missing = [key for key in required if not env.get(key) or env[key].startswith("YOUR_") or env[key].startswith("__")]
 if missing:
     raise SystemExit(
@@ -70,6 +70,7 @@ text = template_path.read_text()
 replacements = {
     "__CODEX_HOME__": env["CODEX_HOME"],
     "__REF_API_KEY__": env["REF_API_KEY"],
+    "__NOTION_TOKEN__": env["NOTION_TOKEN"],
 }
 for needle, value in replacements.items():
     text = text.replace(needle, value)

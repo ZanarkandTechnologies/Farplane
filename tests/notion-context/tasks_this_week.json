@@ -15,6 +15,7 @@
   "fallback_methods": [
     "exact_view_query",
     "mcp_data_source_query",
+    "local_token_mcp_data_source_query",
     "local_filesystem_board"
   ],
   "priority_hint": "high",

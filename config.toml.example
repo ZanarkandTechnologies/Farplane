@@ -64,7 +64,11 @@ url = "https://mcp.deepwiki.com/mcp"
 url = "https://mcp.grep.app"
 
 [mcp_servers.notion]
-url = "https://mcp.notion.com/mcp"
+command = "npx"
+args = ["-y", "@notionhq/notion-mcp-server"]
+
+[mcp_servers.notion.env]
+NOTION_TOKEN = "__NOTION_TOKEN__"
 
 [agents]
 max_threads = 6
