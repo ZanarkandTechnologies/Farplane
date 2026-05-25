@@ -2,7 +2,7 @@
 ticket_id: TASK-0181
 title: embed skill todos during install
 phase: building
-status: building
+status: review
 owner: codex
 claimed_by:
 priority: high
@@ -13,9 +13,9 @@ approval_required: false
 requires_qa: true
 requires_demo: false
 created_at: 2026-05-25T02:33:36+08:00
-updated_at: 2026-05-25T03:05:00+08:00
-next_action: run final validation and review, then commit and push TASK-0181
-last_verification: 2026-05-25 02:42 +0800 - installer tests, temp install smokes, metadata/features checks, and behavior canary passed
+updated_at: 2026-05-25T05:50:00+08:00
+next_action: operator review, then close-ticket or commit/push outside this no-publish automation
+last_verification: 2026-05-25 05:50 +0800 - installer tests, skill-maintenance, feature validation, ticket metadata, diff check, behavior canary, and final-validation review passed
 ---
 
 # TASK-0181: embed skill todos during install
@@ -299,23 +299,23 @@ flowchart LR
 ```
 
 ## Acceptance Criteria
-- [ ] Full install renders local skill packages instead of symlinking skill
+- [x] Full install renders local skill packages instead of symlinking skill
   directories directly.
-- [ ] Selected-skill install renders selected packages with identical checklist
+- [x] Selected-skill install renders selected packages with identical checklist
   embedding behavior.
-- [ ] Rendered `SKILL.md` contains stable generated markers and an embedded copy
+- [x] Rendered `SKILL.md` contains stable generated markers and an embedded copy
   of `todos.md` when source `todos.md` exists.
-- [ ] Source `skills/<name>/SKILL.md` files do not receive embedded todos.
-- [ ] Installed skill package still includes `todos.md` and all non-generated
+- [x] Source `skills/<name>/SKILL.md` files do not receive embedded todos.
+- [x] Installed skill package still includes `todos.md` and all non-generated
   skill support files.
-- [ ] Dry-run output previews rendered skill installs without creating target
+- [x] Dry-run output previews rendered skill installs without creating target
   files.
-- [ ] Backup/prune behavior remains covered by tests.
-- [ ] Global skill-loading instructions require a compact visible active
+- [x] Backup/prune behavior remains covered by tests.
+- [x] Global skill-loading instructions require a compact visible active
   checklist for invoked skills.
-- [ ] Docs explain that installed rendered skills must be refreshed by rerunning
+- [x] Docs explain that installed rendered skills must be refreshed by rerunning
   install after source skill edits.
-- [ ] One behavior-test canary shows a fresh agent can see/report a skill
+- [x] One behavior-test canary shows a fresh agent can see/report a skill
   checklist without relying on an extra `todos.md` file read.
 
 ## Verification
@@ -388,13 +388,13 @@ flowchart LR
   behavior proof; keep one coherent ticket to avoid partial packaging drift
 
 ## Evidence Checklist
-- [ ] Test output: `python3 bin/test_install_selected_skills.py`
-- [ ] Test output: `python3 skills/skill-maintenance/scripts/check_skills.py --write`
-- [ ] Test output: `python3 docs/features/validate_features.py`
-- [ ] Test output: `python3 tickets/scripts/check_ticket_metadata.py`
-- [ ] Artifact: temp install inspection with embedded `todos.md`
-- [ ] Artifact: behavior-test report
-- [ ] Artifact: review JSON or Markdown result
+- [x] Test output: `python3 bin/test_install_selected_skills.py`
+- [x] Test output: `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+- [x] Test output: `python3 docs/features/validate_features.py`
+- [x] Test output: `python3 tickets/scripts/check_ticket_metadata.py`
+- [x] Artifact: temp install inspection with embedded `todos.md`
+- [x] Artifact: behavior-test report
+- [x] Artifact: review JSON or Markdown result
 
 ## Refs
 - `templates/global/AGENTS.md`
@@ -409,6 +409,7 @@ flowchart LR
 - `Artifacts:`
   - `tickets/TASK-0181/artifacts/review/2026-05-25-planning-review.json`
   - `tickets/TASK-0181/artifacts/review/2026-05-25-impl-review.json`
+  - `tickets/TASK-0181/artifacts/review/2026-05-25-final-validation-review.json`
   - `tickets/TASK-0181/artifacts/agent-behavior-test/prompt.md`
   - `tickets/TASK-0181/artifacts/agent-behavior-test/rendered-target/skills/advise/SKILL.md`
   - `tickets/TASK-0181/artifacts/agent-behavior-test/run/score.json`
@@ -427,6 +428,20 @@ flowchart LR
     checked
   - `git diff --check` -> pass
   - `python3 skills/agent-behavior-test/scripts/run_codex_exec_behavior_test.py --cwd . --prompt-file tickets/TASK-0181/artifacts/agent-behavior-test/prompt.md --out tickets/TASK-0181/artifacts/agent-behavior-test/run` -> pass
+  - `2026-05-25 05:50 +0800` fresh validation rerun:
+    - `python3 bin/test_install_selected_skills.py` -> pass, 10 tests
+    - `python3 skills/skill-maintenance/scripts/check_skills.py --write` ->
+      pass, 75 skill rows, 72 local todos, 3 external missing todos
+    - `python3 docs/features/validate_features.py` -> pass, 33 records
+    - `python3 tickets/scripts/check_ticket_metadata.py` -> pass, 22 ticket
+      files checked
+    - `git diff --check` -> pass
+- `Runtime decision:`
+  - `Best:` shared checkout, shared runtime
+  - `Runtime record:` none
+  - `QA target:` none
+  - `Why:` single-writer local validation only; no PR branch or live
+    frontend/backend QA target required.
 - `Result summary:` rendered skill install is implemented for full and
   selected-skill installs. Source skills remain split, installed `SKILL.md`
   files embed `todos.md` with generated markers, support files still copy, and
@@ -434,7 +449,5 @@ flowchart LR
   without reading `todos.md`.
 
 ## Blockers
-- Another active implementation agent is currently touching `install.sh`,
-  skill registry outputs, global policy wording, and related skill docs for
-  TASK-0178. Merge this ticket after that pass settles, or implement in a
-  separate worktree with careful conflict review.
+- None for review. Publishing/commit/push is intentionally deferred because the
+  current autonomous automation run forbids publishing side effects.
