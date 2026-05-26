@@ -234,3 +234,4 @@
 2026-05-25 03:05 +0800 | FEAT | render installed skill packages with embedded `todos.md` checklists so required skill steps are visible on first load
 2026-05-25 03:20 +0800 | FEAT | add curated Codexter bundle plugins for core, coding workflow, frontend, research, media/content, and harness engineering installs
 2026-05-26 05:37 +0800 | FIX | require self-improvement sidecar reports to expose a five-hop Notion proof checklist for user capture, assistant capture, rolling window write, background launch, and task creation
+2026-05-26 16:18 +0800 | FEAT | add agent-qa-test as an adversarial agent QA prompt bundle while preserving `$test` as shorthand invocation
