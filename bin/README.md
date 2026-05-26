@@ -152,7 +152,11 @@ success quiet and make failure output the thing that stands out.
   invocation cwd, and weekly Notion status cache path while still defaulting
   clear findings to reusable Codexter harness-improvement tasks. The `simulate`
   and `force-review` outputs include `hooklet_result`, the same named result
-  shape logged to `.harness/logs/stop-hook.jsonl` by the live Stop hook.
+  shape logged to `.harness/logs/stop-hook.jsonl` by the live Stop hook. Sidecar
+  reports include a five-hop `proof_hops` checklist for `user_capture`,
+  `assistant_capture`, `rolling_window_write`, `background_codex_launch`, and
+  `notion_task_creation`; dry-run reports mark the live Notion hop as
+  `missing`.
 - `python3 bin/self_improve_hook_probe.py status --session-id self-improve-probe`
   Use to inspect the current rolling window, due state, and recent sidecar runs.
 

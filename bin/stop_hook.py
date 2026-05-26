@@ -1974,6 +1974,36 @@ def skill_opportunity_recent_window_limit() -> int:
     return value if value > 0 else 5
 
 
+def skill_opportunity_proof_hops(*, notion_task_creation: str, notion_evidence: str) -> list[dict[str, str]]:
+    return [
+        {
+            "name": "user_capture",
+            "status": "present",
+            "evidence": "rolling window contains captured user turns",
+        },
+        {
+            "name": "assistant_capture",
+            "status": "present",
+            "evidence": "rolling window contains captured assistant turns",
+        },
+        {
+            "name": "rolling_window_write",
+            "status": "present",
+            "evidence": "self-improve window state was written before review",
+        },
+        {
+            "name": "background_codex_launch",
+            "status": "present",
+            "evidence": "skill opportunity review run directory was created",
+        },
+        {
+            "name": "notion_task_creation",
+            "status": notion_task_creation,
+            "evidence": notion_evidence,
+        },
+    ]
+
+
 def safe_path_token(raw: str) -> str:
     token = re.sub(r"[^A-Za-z0-9._-]+", "-", raw.strip())
     return token.strip(".-") or "session"
@@ -2122,6 +2152,8 @@ def skill_opportunity_review_input(
             "Create Notion approval tasks when the signal is clearly useful and specific enough.",
             "Do not update or create skill files directly.",
             "Do not write local files except the final JSON report emitted by the Codex CLI.",
+            "Include proof_hops with exactly user_capture, assistant_capture, rolling_window_write, background_codex_launch, and notion_task_creation in that order.",
+            "For each proof_hop, set status to present or missing and include a short evidence string; dry-run or failed Notion writes must mark notion_task_creation as missing.",
             "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup, but turn them into Notion task proposals.",
             "Use workflow_refs as the required local routing model: harness-scout for source-to-feature extraction, advise for comparing feature directions, and harness-advisor for placement.",
             "Use workspace_context to understand which project produced the signal and to tag/relate the Notion task when safe; default every clear signal to a reusable Codexter harness improvement.",
@@ -2234,6 +2266,10 @@ def maybe_launch_skill_opportunity_review(
                     "reviewed_at": now_iso(),
                     "status": "dry_run",
                     "source_window": str(input_path.relative_to(project_root)),
+                    "proof_hops": skill_opportunity_proof_hops(
+                        notion_task_creation="missing",
+                        notion_evidence="dry-run mode did not create a live Notion task",
+                    ),
                     "notion_tasks": [],
                     "decisions": [],
                     "formula_mentions": [],

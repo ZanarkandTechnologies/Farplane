@@ -349,6 +349,24 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(result["artifacts"]["pid"], "dry-run")
         self.assertEqual(result["artifacts"]["review_run_path"], result["review_run_path"])
         self.assertEqual(report["status"], "dry_run")
+        self.assertEqual(
+            [hop["name"] for hop in report["proof_hops"]],
+            [
+                "user_capture",
+                "assistant_capture",
+                "rolling_window_write",
+                "background_codex_launch",
+                "notion_task_creation",
+            ],
+        )
+        self.assertTrue(all(hop["status"] in {"present", "missing"} for hop in report["proof_hops"]))
+        self.assertEqual(report["proof_hops"][-1]["status"], "missing")
+        self.assertIn("dry-run", report["proof_hops"][-1]["evidence"])
+        self.assertIn(
+            "Include proof_hops with exactly user_capture, assistant_capture, rolling_window_write, "
+            "background_codex_launch, and notion_task_creation in that order.",
+            input_payload["instructions"],
+        )
         self.assertEqual(input_payload["recent_windows"][0]["session_id"], "sess-123")
         self.assertEqual(input_payload["workflow_refs"]["source_to_feature"], "skills/harness-scout/SKILL.md")
         self.assertEqual(input_payload["workflow_refs"]["feature_options"], "skills/advise/SKILL.md")

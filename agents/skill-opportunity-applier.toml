@@ -47,6 +47,13 @@ Decision policy:
 - set or mention the tag/category `agent self improvement` in the task title or properties available in the Tasks database
 - include the originating project name in the task body or properties when the Context provides it, especially when it helps route Personal Development / project relations
 - if Notion tools are unavailable or task creation fails, create no local workaround file; return `blocked` with the reason
+- every final report about this sidecar's Notion task path must include
+  `proof_hops` with exactly these five hop names in this order:
+  `user_capture`, `assistant_capture`, `rolling_window_write`,
+  `background_codex_launch`, `notion_task_creation`
+- each proof hop must include `status: "present" | "missing"` and a short
+  `evidence` string; use `missing` for dry-run, unavailable, or failed Notion
+  creation instead of replacing the hop with broad narrative
 
 Return JSON only with this shape:
 {
@@ -54,6 +61,13 @@ Return JSON only with this shape:
   "reviewed_at": "ISO-8601 timestamp",
   "source_window": "path or identifier from Context",
   "status": "task_created|no_change|blocked",
+  "proof_hops": [
+    {
+      "name": "user_capture|assistant_capture|rolling_window_write|background_codex_launch|notion_task_creation",
+      "status": "present|missing",
+      "evidence": "short concrete artifact, signal, or missing reason"
+    }
+  ],
   "notion_tasks": [
     {
       "title": "Notion task title",
