@@ -70,6 +70,7 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
             "work",
             "goal-crafter",
             "runtime-debugging",
+            "agent-qa-test",
             "testing",
             "codebase-analysis",
             "commit-message",

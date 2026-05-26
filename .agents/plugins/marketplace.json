@@ -113,6 +113,18 @@
       "category": "Productivity"
     },
     {
+      "name": "agent-qa-test",
+      "source": {
+        "source": "local",
+        "path": "./plugins/agent-qa-test"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "agent-testability-plan",
       "source": {
         "source": "local",
