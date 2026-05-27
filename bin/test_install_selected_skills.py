@@ -95,6 +95,48 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             self.assertNotIn(installer.EMBEDDED_TODOS_BEGIN, skill_text)
             self.assertFalse((target / "skills" / "review" / "todos.md").exists())
 
+    def test_install_with_direct_checklist_skips_generated_embedding(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.", todos="- [ ] Legacy proof.")
+            skill_file = repo / "skills" / "review" / "SKILL.md"
+            skill_file.write_text(
+                skill_file.read_text(encoding="utf-8")
+                + "\n## Important Checklist\n\n- [ ] Direct proof.\n",
+                encoding="utf-8",
+            )
+
+            installer.install_skills(repo, target, ["review"], False, False)
+
+            skill_text = (target / "skills" / "review" / "SKILL.md").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("- [ ] Direct proof.", skill_text)
+            self.assertNotIn(installer.EMBEDDED_TODOS_BEGIN, skill_text)
+            self.assertNotIn("- [ ] Legacy proof.", skill_text)
+            self.assertTrue((target / "skills" / "review" / "todos.md").exists())
+
+    def test_mentioning_direct_checklist_heading_still_embeds_legacy_todos(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.", todos="- [ ] Legacy proof.")
+            skill_file = repo / "skills" / "review" / "SKILL.md"
+            skill_file.write_text(
+                skill_file.read_text(encoding="utf-8")
+                + "\nMention `## Important Checklist` in prose.\n",
+                encoding="utf-8",
+            )
+
+            installer.install_skills(repo, target, ["review"], False, False)
+
+            skill_text = (target / "skills" / "review" / "SKILL.md").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn(installer.EMBEDDED_TODOS_BEGIN, skill_text)
+            self.assertIn("- [ ] Legacy proof.", skill_text)
+
     def test_reinstall_skips_existing_matching_rendered_package(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"

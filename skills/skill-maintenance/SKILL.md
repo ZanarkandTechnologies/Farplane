@@ -23,6 +23,17 @@ source ownership, registry sync, link hygiene, or consolidation planning.
 
 ## Core Rules
 
+- `SKILL.md` is the first-load source of truth. Required checklist items belong
+  in a direct `## Important Checklist` section, not only in `todos.md`.
+- Keep logic in `SKILL.md` when it affects every invocation: trigger boundary,
+  required order, decision routing, escalation, stop conditions, hard gates,
+  output contract, and high-risk guardrails.
+- Use `references/*` for conditional branches, examples, templates, long rubric
+  detail, model maps, delegated prompts, and rare-path recipes.
+- If a reference must be read every time, promote the needed logic into
+  `SKILL.md`.
+- Treat `todos.md` as a legacy/transitional tooling input until registry and
+  tier checks fully read direct `SKILL.md` checklists.
 - Tier 1 primitives are base obligations for Tier 2.
 - Tier 2 surfaces may link Tier 1 primitives.
 - Tier 3 application skills may link Tier 2 surfaces and peer Tier 3 handoffs
@@ -48,13 +59,13 @@ source ownership, registry sync, link hygiene, or consolidation planning.
 4. Update `SKILL.md` frontmatter only for manual fields: `tier`, `source`,
    Tier 3 `group`, optional `methods`, optional `common_chains`, and optional
    `upstream_url`.
-5. Write `todos.md` as an anti-forgetting checklist:
+5. Put the anti-forgetting checklist directly in `SKILL.md` under
+   `## Important Checklist`:
    - project/docs context first
-   - useful skill references second
+   - required workflow and branch checks second
    - proof/writeback last
-   - for complex Tier 3 pipelines, keep todos short and point to the model,
-     method registry, templates, and proof refs instead of duplicating the
-     whole recipe inline
+   - keep optional detail in references with clear read conditions
+   - update `todos.md` only while legacy tooling still requires it
 6. Run the standard skill-system check:
 
 ```bash
@@ -77,7 +88,8 @@ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 ## Outcome Contract
 
 - Skill frontmatter remains minimal and valid.
-- `todos.md` files obey the tier loading invariant.
+- `SKILL.md` contains the required first-load checklist and high-signal logic.
+- Transitional `todos.md` files obey the tier loading invariant until removed.
 - Complex Tier 3 skills keep any algebraic project/component/method model
   concise, discoverable, and subordinate to the `SKILL.md` first-load contract.
 - `docs/skills/registry.jsonl` is regenerated, not hand-edited.

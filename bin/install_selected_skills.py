@@ -14,6 +14,7 @@ from typing import Sequence
 
 EMBEDDED_TODOS_BEGIN = "<!-- BEGIN CODEXTER_EMBEDDED_TODOS -->"
 EMBEDDED_TODOS_END = "<!-- END CODEXTER_EMBEDDED_TODOS -->"
+DIRECT_CHECKLIST_HEADINGS = ("## Important Checklist", "## Checklist")
 
 
 @dataclass(frozen=True)
@@ -127,6 +128,8 @@ def render_skill_markdown(
 ) -> str:
     """Return installed SKILL.md text with todos embedded for first-load context."""
     stripped = skill_md.rstrip()
+    if has_direct_checklist(stripped):
+        return stripped + "\n"
     if not todos_md or not todos_md.strip():
         return stripped + "\n"
 
@@ -144,6 +147,10 @@ def render_skill_markdown(
         + EMBEDDED_TODOS_END
         + "\n"
     )
+
+
+def has_direct_checklist(skill_md: str) -> bool:
+    return any(line.strip() in DIRECT_CHECKLIST_HEADINGS for line in skill_md.splitlines())
 
 
 def package_files(root: Path) -> dict[Path, Path]:
