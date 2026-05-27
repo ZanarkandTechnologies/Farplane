@@ -49,10 +49,12 @@ pnpm create convex@latest . -- -t nextjs-clerk
 
 - First `pnpm dlx convex@latest dev` cloud setup is interactive and must be run by a human.
 
-### Plain Next.js
+### Plain Next.js + shadcn UI baseline
 
 ```bash
 pnpm create next-app@latest . --ts --tailwind --eslint --app --src-dir
+pnpm dlx shadcn@latest init
+pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/darkmatter.json
 ```
 
 ### Convex in an existing project
@@ -84,9 +86,9 @@ bootstrap source of truth for:
 - recommended topology (`single app` vs `monorepo` / `microservices`)
 - stack choices and defaults
 - required local validators (`lint`, `typecheck`, `test`, optional `build`)
-- UI bootstrap defaults when the project has a frontend: shadcn/tweakcn theme
-  plan, whether to apply the default darkmatter theme, and how persistent
-  explanatory text should become tooltips or progressive disclosure
+- UI bootstrap defaults when the project has a frontend: default app UI to a
+  shadcn-capable stack, apply the tweakcn darkmatter theme, and make persistent
+  explanatory text become tooltips or progressive disclosure
 - optional heavy gates (`desloppify`, `CodeRabbit`)
 - preferred app-only run path for local development
 - preferred full QA or evidence-capture run path for agents
@@ -115,9 +117,10 @@ Required gate questions:
    both, or neither?
 3. Which local validators must run before push: `lint`, `typecheck`, `test`,
    optional `build`, or other project-specific checks?
-4. If the project has a frontend, should bootstrap initialize shadcn-quality UI
-   primitives and apply the default tweakcn darkmatter theme unless an existing
-   design system or explicit visual brief overrides it?
+4. If the project has a frontend app, confirm bootstrap will initialize a
+   shadcn-capable UI stack and apply the default tweakcn darkmatter theme. Skip
+   only for explicit user opt-out, no UI, an existing stronger design system, or
+   a static/throwaway artifact that is not becoming the app foundation.
 5. Should heavy local checks such as `desloppify` or `CodeRabbit` run in local
    hooks, manual workflows, CI, or not at all initially?
 6. What separate CI or deployment gate exists, and which checks belong there
@@ -181,9 +184,9 @@ repo.
     - QA/evidence run path
     - required services
     - expected local targets, ports, and env vars
-    - frontend UI initialization plan when the repo has UI: shadcn/tweakcn
-      status, default darkmatter command or skip reason, tooltip-over-explainer
-      rule, and visual QA evidence path
+    - frontend UI initialization plan when the repo has UI: shadcn-capable stack
+      setup, darkmatter command result, explicit exception when skipped,
+      tooltip-over-explainer rule, and visual QA evidence path
 11. Select or record the project profile from
     `references/project-profiles.md`; preserve its component set, advice axes,
     prototype gates, and downstream pipeline handoff in `docs/bootstrap-brief.md`.
@@ -265,6 +268,9 @@ The generated planning flow should follow these defaults:
 ## Gotchas
 
 - Do not hardcode stack specifics into `AGENTS.md`; put them in `PROJECT_RULES.md`.
+- Do not satisfy UI-bearing app bootstrap with plain HTML/CSS/JS unless the
+  user explicitly asked for a static/throwaway artifact or disabled shadcn.
+  Default app UI should initialize shadcn and apply darkmatter.
 - Keep progress notes out of `AGENTS.md`; put them in the active ticket file.
 - Keep repeated failure feedback out of `docs/MEMORY.md`; log it in `docs/TROUBLES.md` first, then promote only durable lessons into `docs/MEMORY.md` or the relevant skill/contract.
 - First Convex cloud setup is interactive; stop and ask the human to run it.

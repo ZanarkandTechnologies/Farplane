@@ -46,3 +46,7 @@ artifact defaults for new or migrated repos.
 - `MEM-0116`: UI-bearing project bootstrap should leave a visible shadcn/tweakcn
   theme plan, default darkmatter command or skip reason, tooltip-over-explainer
   rule, and visual QA evidence path in generated project artifacts.
+- `MEM-0118`: UI-bearing app bootstrap defaults to shadcn plus tweakcn
+  darkmatter. Plain HTML is only acceptable for explicit static/throwaway
+  artifacts or user opt-out, not because the agent decided shadcn was
+  unnecessary.
