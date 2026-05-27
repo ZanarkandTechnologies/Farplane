@@ -479,6 +479,80 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(rows[0]["readiness"], "not_ready")
         self.assertEqual(rows[0]["trigger"]["turn_count"], 9)
 
+    def test_stop_hook_launches_learning_review_without_persisted_runtime_turn(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="stop-hook-learning-main-") as td:
+            project_root = Path(td)
+            (project_root / ".harness" / "state" / "self-improve" / "windows").mkdir(parents=True)
+            (project_root / "tickets").mkdir(parents=True)
+            window_path = project_root / ".harness" / "state" / "self-improve" / "windows" / "sess-main.json"
+            window_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "session_id": "sess-main",
+                        "turn_count": 1,
+                        "last_review_turn_count": 0,
+                        "last_review_at": "",
+                        "last_review_run_path": "",
+                        "rolling_exchanges": [],
+                        "pending_user_turn": {
+                            "exchange_id": "sess-main-1",
+                            "user_turn_id": "turn-1",
+                            "user_captured_at": "2026-05-27T00:00:00Z",
+                            "user_text": "ordinary message without a control surface",
+                            "user_summary": "ordinary message without a control surface",
+                            "intent_mode": "unknown",
+                            "control_surface": "",
+                            "source": "user_prompt_submit_hook",
+                        },
+                        "updated_at": "2026-05-27T00:00:00Z",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            stdout_buffer = io.StringIO()
+            stdin_buffer = io.StringIO(
+                json.dumps(
+                    {
+                        "hook_event_name": "Stop",
+                        "session_id": "sess-main",
+                        "cwd": str(project_root),
+                        "last_assistant_message": "ordinary assistant response",
+                    }
+                )
+            )
+
+            with (
+                patch.object(sys, "argv", ["stop_hook.py"]),
+                patch.object(sys, "stdin", stdin_buffer),
+                redirect_stdout(stdout_buffer),
+                patch.dict(
+                    os.environ,
+                    {
+                        "CODEXTER_HOME": str(project_root),
+                        "CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1",
+                        "CODEXTER_SKILL_OPPORTUNITY_APPLY_INTERVAL": "1",
+                    },
+                    clear=True,
+                ),
+                patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
+                patch.object(self.stop_hook, "load_current_run", return_value=None),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value=None),
+                patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value=None),
+                patch.object(self.stop_hook, "resolve_ticket", return_value=None),
+            ):
+                result = self.stop_hook.main()
+
+            saved_window = json.loads(window_path.read_text(encoding="utf-8"))
+            reports = sorted((project_root / ".harness" / "state" / "self-improve" / "applications").glob("*/report.json"))
+
+        self.assertEqual(result, 0)
+        self.assertTrue(json.loads(stdout_buffer.getvalue())["continue"])
+        self.assertEqual(saved_window["last_review_turn_count"], 1)
+        self.assertEqual(saved_window["rolling_exchanges"][0]["assistant_text"], "ordinary assistant response")
+        self.assertEqual(len(reports), 1)
+
     def test_skill_opportunity_apply_command_is_read_only_and_disables_hooks(self) -> None:
         cmd = self.stop_hook.skill_opportunity_apply_command(
             Path("/tmp/codexter"),

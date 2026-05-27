@@ -2821,7 +2821,7 @@ def main() -> int:
         if project_root is not None
         else None
     )
-    if project_root is not None and resolved_session_id and isinstance(last_user_turn, dict) and last_user_turn:
+    if project_root is not None and resolved_session_id:
         conversation_window = append_conversation_assistant_response(
             project_root,
             resolved_session_id,
@@ -2837,6 +2837,45 @@ def main() -> int:
             payload=payload,
         )
         log_hooklet_result(base, launch_result)
+        emit_hook_telemetry(
+            event_type="learning_window_updated",
+            hook_event_name="Stop",
+            payload=payload,
+            project_root=project_root,
+            current_run=current_run,
+            runtime_claim=runtime_claim,
+            extra={
+                "source": "stop_hook.py",
+                "summary": "learning window updated",
+                "counts": {
+                    "turn_count": conversation_window.get("turn_count", 0),
+                    "rolling_exchange_count": len(conversation_window.get("rolling_exchanges", []))
+                    if isinstance(conversation_window.get("rolling_exchanges"), list)
+                    else 0,
+                },
+            },
+        )
+        trigger = launch_result.get("trigger") if isinstance(launch_result.get("trigger"), dict) else {}
+        emit_hook_telemetry(
+            event_type="learning_review_launched" if launch_result.get("status") == "launched" else "learning_review_skipped",
+            hook_event_name="Stop",
+            payload=payload,
+            project_root=project_root,
+            current_run=current_run,
+            runtime_claim=runtime_claim,
+            extra={
+                "source": "stop_hook.py",
+                "status": str(launch_result.get("status") or ""),
+                "summary": str(launch_result.get("reason") or ""),
+                "review_run_path": str(launch_result.get("review_run_path") or ""),
+                "readiness": str(launch_result.get("readiness") or ""),
+                "counts": {
+                    "turn_count": trigger.get("turn_count", 0),
+                    "last_review_turn_count": trigger.get("last_review_turn_count", 0),
+                    "cadence": trigger.get("cadence", 0),
+                },
+            },
+        )
         if launch_result.get("status") != "skipped":
             append_hook_log(
                 base,
@@ -2850,7 +2889,7 @@ def main() -> int:
                 },
             )
     emit_hook_telemetry(
-        event_type="stop_hook",
+        event_type="hook_result",
         hook_event_name="Stop",
         payload=payload,
         project_root=project_root,
