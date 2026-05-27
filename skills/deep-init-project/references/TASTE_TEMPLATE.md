@@ -21,6 +21,9 @@
 ## Component Bias
 
 - Prefer `shadcn`-quality primitives where they fit the stack
+- For shadcn-based projects, start from the default tweakcn darkmatter theme
+  unless the project already has a stronger design system or visual brief:
+  `pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/darkmatter.json`
 - Avoid default-looking controls and unstyled browser UI
 - Favor compact panels, sharp alignment, and disciplined spacing
 - Use restrained color and decoration; signal state with clarity, not noise

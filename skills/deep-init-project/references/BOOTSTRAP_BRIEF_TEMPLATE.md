@@ -46,6 +46,16 @@ finalizing the scaffold.
 - Runtime / package manager:
 - Deployment target:
 
+## Frontend UI Baseline
+- UI applies to this repo:
+- Component system:
+- shadcn/tweakcn status:
+- Default theme command:
+  `pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/darkmatter.json`
+- Theme applied or skip reason:
+- Tooltip-over-explainer rule accepted:
+- Initial visual QA evidence path:
+
 ## Runtime / QA Commands
 - Preferred app-only run path:
 - Preferred QA / evidence-capture run path:

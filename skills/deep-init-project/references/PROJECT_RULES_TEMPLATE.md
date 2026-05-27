@@ -28,6 +28,21 @@ This file defines the project-specific technical rules, tech stack, and conventi
 - Project profile, lifecycle route, prototype gates, and pipeline handoff live
   in `docs/bootstrap-brief.md`.
 
+## 🎨 Frontend UI Initialization
+- **UI applies to this repo**: [yes/no]
+- **Component system**: [e.g., shadcn/ui, existing design system, n/a]
+- **Theme baseline**: For shadcn-based UI, apply the default tweakcn darkmatter
+  theme before building unless an existing design system or explicit visual
+  brief overrides it:
+  `pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/darkmatter.json`
+- **Skip reason when not applied**: [existing design system / non-shadcn stack / explicit visual direction / no UI]
+- **Tooltip rule**: Persistent explanatory text in the app chrome should become
+  labels, tooltips, empty states, or progressive disclosure unless it is primary
+  user content.
+- **Visual QA expectation**: UI-bearing tickets must capture browser evidence
+  and run visual QA against `docs/TASTE.md`, including checks for default-looking
+  controls, text fit, responsive layout, and over-explaining copy.
+
 ## 🧩 Shared Utilities
 - **Preferred shared utility location**: [e.g., `src/utils/`, `packages/shared/`, domain-scoped `src/lib/`]
 - **Extract when**: [e.g., logic is reused across modules, would otherwise be copied, or is making feature files too large]

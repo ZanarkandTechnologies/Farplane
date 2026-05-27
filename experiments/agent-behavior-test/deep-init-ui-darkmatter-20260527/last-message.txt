@@ -1,0 +1,63 @@
+{
+  "target": "deep-init-project-ui-darkmatter",
+  "persona": "fresh skill caller",
+  "checkpoints": [
+    {
+      "name": "loaded_required_context",
+      "status": "done",
+      "evidence": "sed -n '1,260p' /Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/SKILL.md; sed -n '1,220p' /Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/references/project-profiles.md; sed -n '1,220p' /Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/references/project-lifecycle.md"
+    },
+    {
+      "name": "bootstrapped_project",
+      "status": "done",
+      "evidence": "bash /Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/scripts/bootstrap.sh /tmp/codexter-init-ui-probe"
+    },
+    {
+      "name": "created_calculator_ui",
+      "status": "done",
+      "evidence": "/tmp/codexter-init-ui-probe/index.html"
+    },
+    {
+      "name": "recorded_ui_baseline",
+      "status": "done",
+      "evidence": "/tmp/codexter-init-ui-probe/docs/bootstrap-brief.md:58 and /tmp/codexter-init-ui-probe/PROJECT_RULES.md:35"
+    },
+    {
+      "name": "theme_evidence_checked",
+      "status": "done",
+      "evidence": "rg -n \"darkmatter|Theme applied or skip reason|shadcn/tweakcn status|Skip reason|Initial visual QA evidence path\" /tmp/codexter-init-ui-probe/docs/bootstrap-brief.md /tmp/codexter-init-ui-probe/PROJECT_RULES.md /tmp/codexter-init-ui-probe/qa/cookbook/calculator-ui.md && curl -I http://127.0.0.1:4173/ && bash /tmp/codexter-init-ui-probe/scripts/pre_push_check.sh"
+    }
+  ],
+  "artifacts": [
+    "/tmp/codexter-init-ui-probe/index.html",
+    "/tmp/codexter-init-ui-probe/styles.css",
+    "/tmp/codexter-init-ui-probe/app.js",
+    "/tmp/codexter-init-ui-probe/package.json",
+    "/tmp/codexter-init-ui-probe/README.md",
+    "/tmp/codexter-init-ui-probe/AGENTS.md",
+    "/tmp/codexter-init-ui-probe/PROJECT_RULES.md",
+    "/tmp/codexter-init-ui-probe/ARCHITECTURE.md",
+    "/tmp/codexter-init-ui-probe/docs/bootstrap-brief.md",
+    "/tmp/codexter-init-ui-probe/docs/prd.md",
+    "/tmp/codexter-init-ui-probe/docs/TASTE.md",
+    "/tmp/codexter-init-ui-probe/docs/HISTORY.md",
+    "/tmp/codexter-init-ui-probe/docs/MEMORY.md",
+    "/tmp/codexter-init-ui-probe/qa/cookbook/calculator-ui.md",
+    "/tmp/codexter-init-ui-probe/artifacts/visual-qa/initial-calculator-ui.txt",
+    "/tmp/codexter-init-ui-probe/artifacts/review/final-review.md",
+    "/tmp/codexter-init-ui-probe/scripts/check-calculator.mjs",
+    "/tmp/codexter-init-ui-probe/scripts/pre_push_check.sh",
+    "/tmp/codexter-init-ui-probe/scripts/pre_commit_check.sh"
+  ],
+  "deviations": [
+    {
+      "expected": "The bootstrap surface described by the skill includes a canonical README alongside the other generated project surfaces.",
+      "observed": "bootstrap.sh scaffolded AGENTS, PROJECT_RULES, docs, qa, tickets, and hooks, but did not create README.md; I added /tmp/codexter-init-ui-probe/README.md manually during follow-through.",
+      "owner": "skill"
+    }
+  ],
+  "themeApplied": false,
+  "themeSkippedWithReason": true,
+  "themeSkipReason": "Skipped because this probe intentionally uses a plain HTML/CSS/JS stack and no shadcn setup exists yet, so the tweakcn darkmatter command has nowhere to land theme tokens.",
+  "verdict": "pass"
+}

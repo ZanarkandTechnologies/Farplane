@@ -84,6 +84,9 @@ bootstrap source of truth for:
 - recommended topology (`single app` vs `monorepo` / `microservices`)
 - stack choices and defaults
 - required local validators (`lint`, `typecheck`, `test`, optional `build`)
+- UI bootstrap defaults when the project has a frontend: shadcn/tweakcn theme
+  plan, whether to apply the default darkmatter theme, and how persistent
+  explanatory text should become tooltips or progressive disclosure
 - optional heavy gates (`desloppify`, `CodeRabbit`)
 - preferred app-only run path for local development
 - preferred full QA or evidence-capture run path for agents
@@ -112,14 +115,17 @@ Required gate questions:
    both, or neither?
 3. Which local validators must run before push: `lint`, `typecheck`, `test`,
    optional `build`, or other project-specific checks?
-4. Should heavy local checks such as `desloppify` or `CodeRabbit` run in local
+4. If the project has a frontend, should bootstrap initialize shadcn-quality UI
+   primitives and apply the default tweakcn darkmatter theme unless an existing
+   design system or explicit visual brief overrides it?
+5. Should heavy local checks such as `desloppify` or `CodeRabbit` run in local
    hooks, manual workflows, CI, or not at all initially?
-5. What separate CI or deployment gate exists, and which checks belong there
+6. What separate CI or deployment gate exists, and which checks belong there
    instead of local hooks?
-6. What should the scaffold leave manual versus auto-decided for the operator?
-7. What are the canonical app-only and QA/evidence run paths, which services do
+7. What should the scaffold leave manual versus auto-decided for the operator?
+8. What are the canonical app-only and QA/evidence run paths, which services do
    they require, and which ports or env vars must stay configurable?
-8. What must the agent ask for before attempting unattended work: credentials,
+9. What must the agent ask for before attempting unattended work: credentials,
    assets, external access, GPU/compute, missing tools, hard-to-QA surfaces, or
    human plan/QA/deploy/spend/destructive approvals?
 
@@ -175,6 +181,9 @@ repo.
     - QA/evidence run path
     - required services
     - expected local targets, ports, and env vars
+    - frontend UI initialization plan when the repo has UI: shadcn/tweakcn
+      status, default darkmatter command or skip reason, tooltip-over-explainer
+      rule, and visual QA evidence path
 11. Select or record the project profile from
     `references/project-profiles.md`; preserve its component set, advice axes,
     prototype gates, and downstream pipeline handoff in `docs/bootstrap-brief.md`.
