@@ -9,10 +9,46 @@ into a second place to maintain skill truth.
   `skills/*/SKILL.md` frontmatter, file paths, `todos.md`, and Markdown links.
   Flow or graph views should be derived from Tier 3 `group` and `common_chains`
   fields instead of maintained as a second hand-authored registry.
+- This README is the human selection guide. Use it to understand why neighboring
+  skills differ and which one should own a request before opening the generated
+  registry or individual `SKILL.md` files.
 - `graph/` contains a generated local visualization of skill nodes,
   Markdown-reference edges, Tier 3 chain edges, and rendered skill documents.
 - `skills/skill-registry-ui/` is the operator skill for refreshing, opening,
   and validating that graph UI.
+
+## Human Selection Guide
+
+Use this table when two skills look similar. It is intentionally prose-first;
+`registry.jsonl` remains the machine-readable inventory.
+
+| Need | Use | Why This One | Do Not Use When |
+| --- | --- | --- | --- |
+| Choose among real options and name a recommendation | `advise` | It frames 3 viable choices, pros/cons, one recommendation, and the accepted tradeoff. | The user already gave a direct execution request. |
+| Ground a claim in local files, docs, official references, or provided sources | `reference-grounding` | It supplies compact evidence before advice, planning, or review claims. | You need a full research brief or feature synthesis. |
+| Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
+| Turn intent into executable shape without owning a domain | `plan` | It is the generic planning interface for proof, boundaries, and handoff. | A domain skill such as `impl-plan`, `landing-page`, or `video-production` already owns the workflow. |
+| Do the work, prove it, write back, and review without owning a domain | `execute` | It is the generic execution interface behind domain-specific build flows. | A public domain execution skill such as `impl` or `frontend-craft` should own the pass. |
+| Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
+| Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include `agent-behavior-test`-style run capture. | You only need one cheap conformance probe and no adversarial proof loop. |
+| Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It scores the work against anchored rubric families and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
+| Decide where a Codexter harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
+| Maintain skill frontmatter, todos, registry metadata, or skill-system docs | `skill-maintenance` | It owns bulk skill upkeep, tier checks, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. |
+
+Agent testing stack:
+
+```text
+agent-qa-test orchestrates serious proof
+  -> tester lane gathers evidence
+  -> agent-behavior-test captures child-agent behavior when useful
+  -> evidence-review lane attacks proof strength
+  -> main agent fixes, reruns, or records a blocker
+  -> review/final proof-bundle check judges readiness
+```
+
+Use `agent-behavior-test` alone for cheap skill or prompt conformance probes.
+Use `agent-qa-test` for `$test`, "please test properly", app readiness, or any
+claim where the evidence itself needs a skeptical lane.
 
 ## Frontmatter Contract
 

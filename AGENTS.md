@@ -172,6 +172,11 @@ For harness-design research and external patterns:
   `MEM-0075`.
 - When summarizing implemented feature changes to the operator, prefer `Before` / `After` / `Example` bullets over one dense prose block. See `MEM-0051`.
 - Keep QA and completion proof artifact-first: link ticket-scoped evidence from `tickets/TASK-XXXX/artifacts/`, and for UI/user-visible work keep browser capture separate from final `visual-qa` judgment. See `MEM-0048`.
+- For adversarial agent testing, treat `agent-qa-test` as the public proof
+  orchestrator and `agent-behavior-test` as the instrumented child-run capture
+  primitive. Serious readiness claims should include tester evidence,
+  evidence-review critique, captured logs when useful, and a final proof-bundle
+  review. See `MEM-0115`.
 - In live `$impl` loops, treat `$qa` as a delegated lane: the coordinating lane should hand browser driving and proof capture to `qa-tester` instead of using `agent-browser` directly. See `MEM-0069`.
 - Outside tmux or lane-specific runtime flows, keep the same ownership split: native `qa-tester` delegation is the default way to run meaningful QA or browser proof, and the main agent should not personally use `agent-browser` when that QA ownership can be isolated. See `MEM-0070`.
 - Treat `$impl` as the public execution surface, with internal `execution_phase` progression through `impl`, `qa`, and `demo` when required. Stop-hook should advance those phases mechanically before final completion review. See `MEM-0049`.

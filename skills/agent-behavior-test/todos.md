@@ -4,6 +4,8 @@
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the
   owning skill, feature docs, ticket, existing tests, or prior artifacts before
   launching the child run.
+- [ ] Confirm this is a run-capture/conformance probe; use `agent-qa-test` as
+  the orchestrator when the operator wants adversarial proof or full readiness.
 - [ ] Choose CLI JSONL, native subagent, or both, and name why that runner fits
   the proof target.
 - [ ] Write the child prompt with visible checkpoints, forbidden shortcuts, and

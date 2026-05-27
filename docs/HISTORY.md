@@ -235,3 +235,5 @@
 2026-05-25 03:20 +0800 | FEAT | add curated Codexter bundle plugins for core, coding workflow, frontend, research, media/content, and harness engineering installs
 2026-05-26 05:37 +0800 | FIX | require self-improvement sidecar reports to expose a five-hop Notion proof checklist for user capture, assistant capture, rolling window write, background launch, and task creation
 2026-05-26 16:18 +0800 | FEAT | add agent-qa-test as an adversarial agent QA prompt bundle while preserving `$test` as shorthand invocation
+2026-05-27 13:21 +0800 | DOCS | clarify agent-qa-test as the adversarial proof orchestrator and agent-behavior-test as the instrumented child-run capture primitive
+2026-05-27 13:38 +0800 | DOCS | add a human skill selection guide beside the generated skill registry

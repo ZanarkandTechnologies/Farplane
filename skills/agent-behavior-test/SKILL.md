@@ -1,6 +1,6 @@
 ---
 name: agent-behavior-test
-description: Use when the operator wants an isolated agent or Codex exec run to test a skill, app feature, prompt, workflow, or recently built behavior while preserving visible behavior logs, command events, final output, and a scored evidence report.
+description: Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, prompt, workflow, or narrow feature path, with logs, command events, final output, artifacts, and a scored evidence report.
 tier: 2
 source: local
 allowed-tools: Read, Glob, Grep, Bash
@@ -9,7 +9,18 @@ allowed-tools: Read, Glob, Grep, Bash
 # Agent Behavior Test
 
 Use this skill when the task is to test behavior by launching a separate agent
-run as an end user, QA lane, skill caller, or workflow canary.
+run as an end user, QA lane, skill caller, or workflow canary, then preserving
+what that child run visibly did.
+
+This is the instrumented run-capture primitive. It answers: did the child agent
+load the right context, follow the skill or prompt contract, run the expected
+commands, create the required artifacts, and report a scored visible outcome?
+
+It is not the full adversarial QA loop. When the operator asks to "test this
+properly", app readiness is in question, or evidence needs a skeptical second
+lane plus fix/rerun reconciliation, use `agent-qa-test` as the public
+orchestrator and use this skill for the captured tester run when durable
+child-agent logs matter.
 
 This is broader than skill creation. It covers:
 
@@ -49,9 +60,10 @@ This is broader than skill creation. It covers:
 - **Skill behavior test**: require the child agent to load the skill, load
   `todos.md` when it exists, execute the requested task, and produce a todo
   ledger with evidence for each required step.
-- **App feature test**: require the child agent to act like a target user,
-  exercise the feature, capture logs or screenshots when available, and report
-  where the product confused or blocked it.
+- **Narrow feature behavior probe**: require the child agent to act like a
+  target user, exercise one feature path, capture logs or screenshots when
+  available, and report where the product confused or blocked it. Use
+  `agent-qa-test` for full feature readiness or adversarial proof.
 - **Prompt or workflow test**: require visible checkpoints for the intended
   workflow phases and compare the emitted ledger with the expected sequence.
 - **Regression canary**: run the same prompt against old and new behavior, then
@@ -88,6 +100,9 @@ A completed behavior test leaves a durable artifact folder with:
 - final visible output
 - scored behavior verdict
 - explicit gaps and follow-up owner
+
+That artifact folder can stand alone for skill/prompt conformance checks, or it
+can become tester-lane evidence inside an `agent-qa-test` pass.
 
 For CLI runs, start with
 [codex-exec-runner.md](references/codex-exec-runner.md). Use
