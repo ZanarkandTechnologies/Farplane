@@ -18,3 +18,7 @@ python3 skills/feed-scout/scripts/normalize_items.py skills/feed-scout/fixtures/
 python3 skills/feed-scout/scripts/dedupe_key.py "https://www.youtube.com/watch?v=example"
 ```
 
+For live Notion Tasks writeback, use
+[fixtures/notion-task-projection-cases.md](fixtures/notion-task-projection-cases.md)
+as the expected behavior reference. `Project` and `Areas` must be resolved
+before writing and verified by readback before claiming task writeback success.
