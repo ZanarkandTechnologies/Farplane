@@ -239,6 +239,7 @@
 2026-05-27 13:38 +0800 | DOCS | add a human skill selection guide beside the generated skill registry
 2026-05-27 16:57 +0800 | DOCS | add a frontend UI baseline to deep-init project templates with shadcn/tweakcn darkmatter defaults, tooltip-over-explainer guidance, and visual QA expectations
 2026-05-27 17:37 +0800 | FIX | tighten deep-init UI bootstrap so app projects default to shadcn plus tweakcn darkmatter instead of accepting plain HTML skip decisions
+2026-05-30 02:17 +0800 | FEAT | add eval-onboarding as an NDA-safe starter skill for synthetic eval task JSON, rubrics, run reports, and minimal harness layout
 2026-06-01 12:45 +0800 | FEAT | add private tool context docs and move Notion workspace handles out of reusable/tracked Codexter surfaces
 2026-06-01 12:52 +0800 | FEAT | add weekly-strategy-analysis as the owner for weekly Notion, meeting, Codex-thread drift, and opportunity planning automation
 2026-06-01 15:21 +0800 | FEAT | add `pr-review-watch` as an explicit PR review watcher workflow with project-local review memory, fixture-first verdict parsing, heartbeat prompt guidance, and terminal notification policy
