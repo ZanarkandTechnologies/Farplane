@@ -1,0 +1,47 @@
+{
+  "ticket_id": "TASK-0187",
+  "artifact_type": "qa",
+  "created_at": "2026-06-01 15:25 +0800",
+  "scope": "Fixture-first QA for the pr-review-watch helper, skill registry, feature registry, and ticket metadata.",
+  "commands": [
+    {
+      "command": "python3 bin/test_pr_review_watch.py",
+      "status": "pass",
+      "summary": "Ran 13 tests covering clean pass, failed checks, gh bucket fail checks, unresolved comments, pending checks, missing auth, no active PR, missing config, CLI JSON output, project config precedence, and invalid interval/boolean rejection."
+    },
+    {
+      "command": "python3 skills/skill-maintenance/scripts/check_skills.py --write",
+      "status": "pass",
+      "summary": "Skill checklist sections OK; registry OK with 79 skill rows; todo tier check OK; skill capability fixtures OK."
+    },
+    {
+      "command": "python3 docs/features/validate_features.py",
+      "status": "pass",
+      "summary": "Feature registry contract OK."
+    },
+    {
+      "command": "python3 tickets/scripts/check_ticket_metadata.py",
+      "status": "pass",
+      "summary": "Ticket metadata OK with 28 ticket files checked."
+    },
+    {
+      "command": "python3 bin/pr_review_watch.py classify --fixture skills/pr-review-watch/fixtures/gh-bucket-fail.json --config skills/pr-review-watch/fixtures/pipeline-config.md --json",
+      "status": "pass",
+      "summary": "Fixture classified as actionable with a gh bucket-style failing check converted into an ActionableReviewItem."
+    },
+    {
+      "command": "python3 -m py_compile bin/pr_review_watch.py bin/test_pr_review_watch.py",
+      "status": "pass",
+      "summary": "Helper and tests compile."
+    },
+    {
+      "command": "rg -n \"pr-review-watch|PR review watch|PR watcher|pull request.*watch\" AGENTS.md templates/global/AGENTS.md",
+      "status": "pass",
+      "summary": "No root or global AGENTS watcher policy was added; command exited 1 because it found no matches."
+    }
+  ],
+  "notes": [
+    "Live GitHub polling remains integration behavior and was not used for unit proof.",
+    "The required skill-maintenance generator also reflected a pre-existing untracked eval-onboarding skill in docs/skills/registry.jsonl."
+  ]
+}

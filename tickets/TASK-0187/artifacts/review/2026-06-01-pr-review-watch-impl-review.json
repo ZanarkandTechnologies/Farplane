@@ -1,0 +1,110 @@
+{
+  "work_type": "implementation review",
+  "ticket_id": "TASK-0187",
+  "created_at": "2026-06-01 15:27 +0800",
+  "search_scope": [
+    "tickets/TASK-0187/ticket.md",
+    "tickets/TASK-0187/artifacts/qa/2026-06-01-pr-review-watch-qa.json",
+    "bin/pr_review_watch.py",
+    "bin/test_pr_review_watch.py",
+    "skills/pr-review-watch/SKILL.md",
+    "skills/pr-review-watch/todos.md",
+    "skills/pr-review-watch/templates/pr-review-pipeline.md",
+    "skills/pr-review-watch/templates/codex-automation-prompt.md",
+    "skills/pr-review-watch/fixtures/*.json",
+    "docs/skills/README.md",
+    "docs/skills/registry.jsonl",
+    "docs/features/registry.jsonl",
+    "docs/HISTORY.md",
+    "AGENTS.md",
+    "templates/global/AGENTS.md"
+  ],
+  "rubrics_used": [
+    "code-quality",
+    "integration-readiness",
+    "evidence-quality",
+    "spec-contract"
+  ],
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "note",
+      "confidence": "high",
+      "rubric": "integration-readiness",
+      "summary": "The workflow lives in a new pr-review-watch skill and composes pr-runtime and coderabbit-review rather than expanding either narrower contract.",
+      "file_refs": [
+        "skills/pr-review-watch/SKILL.md",
+        "docs/skills/registry.jsonl"
+      ],
+      "evidence": "The skill links pr-runtime and coderabbit-review as secondary surfaces and the registry row exposes the new owner.",
+      "next_action": "None."
+    },
+    {
+      "severity": "note",
+      "confidence": "high",
+      "rubric": "code-quality",
+      "summary": "The helper keeps config parsing, fixture loading, live gh discovery, and verdict classification separated enough for deterministic unit proof.",
+      "file_refs": [
+        "bin/pr_review_watch.py",
+        "bin/test_pr_review_watch.py"
+      ],
+      "evidence": "The test suite covers pass, actionable, wait, blocked, config precedence, invalid numeric config, invalid boolean config, CLI JSON output, and gh bucket-style failures.",
+      "next_action": "None."
+    },
+    {
+      "severity": "note",
+      "confidence": "high",
+      "rubric": "evidence-quality",
+      "summary": "The proof is fixture-first and traceable to command output, which matches the ticket's stated avoidance of live GitHub unit tests.",
+      "file_refs": [
+        "tickets/TASK-0187/artifacts/qa/2026-06-01-pr-review-watch-qa.json",
+        "tickets/TASK-0187/ticket.md"
+      ],
+      "evidence": "Declared tests, registry validation, feature validation, ticket metadata, compile, fixture classify, and root/global negative-policy checks passed.",
+      "next_action": "None."
+    },
+    {
+      "severity": "note",
+      "confidence": "medium",
+      "rubric": "evidence-quality",
+      "summary": "The required skill-maintenance generator also reflected a pre-existing untracked eval-onboarding skill in docs/skills/registry.jsonl.",
+      "file_refs": [
+        "docs/skills/registry.jsonl"
+      ],
+      "evidence": "This is a dirty-tree side effect of running the required registry generator, not a pr-review-watch behavior dependency.",
+      "next_action": "Keep this visible in the handoff; do not treat it as part of TASK-0187's functional scope."
+    }
+  ],
+  "rubric_sections": {
+    "code-quality": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "notes": "The helper is small, typed with dataclasses, and has strict config parsing for common drift points. Live gh handling remains intentionally modest for v1."
+    },
+    "integration-readiness": {
+      "score": 4.2,
+      "threshold": 4.0,
+      "pass": true,
+      "notes": "Skill, helper, templates, registries, feature registry, and ticket evidence agree on explicit invocation and no hidden automation."
+    },
+    "evidence-quality": {
+      "score": 4.1,
+      "threshold": 4.0,
+      "pass": true,
+      "notes": "Fixture and validator evidence is traceable. Live GitHub behavior is not claimed beyond first-slice command construction and optional discovery."
+    },
+    "spec-contract": {
+      "score": 4.3,
+      "threshold": 4.0,
+      "pass": true,
+      "notes": "The implementation satisfies the ticket scope while preserving non-goals around daemons, automatic publish actions, and broad provider matrices."
+    }
+  },
+  "blocking_findings": [],
+  "next_action": "Move TASK-0187 to closeout/documenting; no implementation rerun required."
+}

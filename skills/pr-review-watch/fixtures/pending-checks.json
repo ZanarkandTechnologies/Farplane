@@ -1,0 +1,16 @@
+{
+  "repo": "/tmp/example",
+  "branch": "feature/pr-watch",
+  "pr_number": 42,
+  "head_sha": "abc123",
+  "check_runs": [
+    {"name": "test", "status": "in_progress", "conclusion": null}
+  ],
+  "reviews": [
+    {"author": "reviewer", "state": "APPROVED", "body": "Looks good"}
+  ],
+  "review_comments": [],
+  "provider_comments": [],
+  "errors": [],
+  "fetched_at": "2026-06-01T00:00:00Z"
+}

@@ -241,3 +241,4 @@
 2026-05-27 17:37 +0800 | FIX | tighten deep-init UI bootstrap so app projects default to shadcn plus tweakcn darkmatter instead of accepting plain HTML skip decisions
 2026-06-01 12:45 +0800 | FEAT | add private tool context docs and move Notion workspace handles out of reusable/tracked Codexter surfaces
 2026-06-01 12:52 +0800 | FEAT | add weekly-strategy-analysis as the owner for weekly Notion, meeting, Codex-thread drift, and opportunity planning automation
+2026-06-01 15:21 +0800 | FEAT | add `pr-review-watch` as an explicit PR review watcher workflow with project-local review memory, fixture-first verdict parsing, heartbeat prompt guidance, and terminal notification policy

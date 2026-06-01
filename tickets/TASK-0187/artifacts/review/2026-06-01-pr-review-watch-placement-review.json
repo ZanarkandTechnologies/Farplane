@@ -1,0 +1,62 @@
+{
+  "work_type": "harness placement plan",
+  "search_scope": [
+    "tickets/TASK-0187/ticket.md",
+    "skills/pr-runtime/SKILL.md",
+    "skills/coderabbit-review/SKILL.md",
+    "docs/features/registry.jsonl",
+    "docs/skills/registry.jsonl",
+    "docs/policies/README.md",
+    "docs/specs/harness-engineering-doctrine.md",
+    "skills/deep-init-project/references/PROJECT_RULES_TEMPLATE.md",
+    "templates/global/AGENTS.md"
+  ],
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "note",
+      "confidence": "high",
+      "finding": "The selected primary owner is a new pr-review-watch skill, which matches the repeated procedural workflow and avoids bloating root/global policy."
+    },
+    {
+      "severity": "note",
+      "confidence": "high",
+      "finding": "pr-runtime and coderabbit-review were correctly kept as secondary sync points because their current contracts are narrower than polling, automation, and notification orchestration."
+    },
+    {
+      "severity": "note",
+      "confidence": "medium",
+      "finding": "The plan intentionally defers live multi-provider integration and proves v1 through deterministic fixture parsing before using live GitHub state."
+    }
+  ],
+  "rubric_sections": {
+    "spec-contract": {
+      "score": 4.3,
+      "notes": "The ticket states the capability gap, owner, non-goals, accepted tradeoff, and guardrails against hidden automation."
+    },
+    "implementation-plan": {
+      "score": 4.2,
+      "notes": "The plan gives concrete files, signatures, data shapes, execution steps, and test commands without overcommitting to live provider behavior."
+    },
+    "integration-readiness": {
+      "score": 4.1,
+      "notes": "Secondary surfaces are identified. The main implementation risk is registry churn in an already dirty tree, which is visible in the ticket."
+    },
+    "evidence-quality": {
+      "score": 4.0,
+      "notes": "Planning evidence is grounded in local docs and validator output. Implementation evidence remains pending by design."
+    }
+  },
+  "blocking_findings": [],
+  "next_action": "Implement TASK-0187 after approval by adding the pr-review-watch skill, helper, templates, registry rows, tests, and review evidence."
+}
