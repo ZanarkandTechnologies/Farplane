@@ -21,8 +21,15 @@ Source: `SKILL.md`
 - [ ] Use [advise](../advise/SKILL.md) when multiple goal framings are viable.
 - [ ] Draft the goal with outcome, verification surface, constraints,
   boundaries, iteration policy, blocked stop condition, and optional budget.
+- [ ] When an existing ticket, plan, or Proof Contract exists, compile those
+  fields into `GoalPrepState` before asking questions.
+- [ ] Ask only missing execution-safety questions that materially affect the
+  goal contract; cap the ask at 3 questions and otherwise proceed from the
+  ticket evidence.
 - [ ] Ensure the blocked stop condition requires attempted paths, evidence,
   safe options, recommended next action, and the one missing user input.
+- [ ] Reject proxy-only completion evidence unless it satisfies the actual
+  objective; label proxy, partial, and blocked evidence separately.
 - [ ] Prefer native `/goal` for evidence-based continuation; use `$ralph` only
   for prepared filesystem tickets that should drain through board context.
 - [ ] Use `$work` in the Goal when Codexter must decide
@@ -54,6 +61,12 @@ when the problem is a fuzzy finish line, insufficient proof, batch
 testability, board-drain durability, or "figure it out" autonomy within one
 native Codex Goal.
 
+`goal-crafter` is not a deep interview surface. When a ticket, plan, or Proof
+Contract already exists, compile the known state first and ask only for missing
+execution-safety fields. Route broad product discovery, unclear system
+boundaries, or unknown user value to PRD, `deep-interview`, or
+`deep-system-design` before drafting a Goal.
+
 ## Workflow
 
 1. Restate the operator's desired outcome in one sentence.
@@ -70,7 +83,9 @@ native Codex Goal.
    progress.
 7. Draft one `/goal` command. Keep it compact enough to paste, but complete
    enough to audit.
-8. If the task is too vague to verify, propose exactly 3 viable goal framings,
+8. If a ticket, plan, or Proof Contract exists, compile a `GoalPrepState`
+   from it before asking questions.
+9. If the task is too vague to verify, propose exactly 3 viable goal framings,
    recommend one, and ask only for the missing detail that cannot be inferred.
 
 ## Goal Contract
@@ -85,6 +100,71 @@ A strong goal should include:
 - `Blocked stop condition`: when stopping is honest and what must be reported
 - `Budget`: optional turn/time/spend limit when relevant
 
+## Ticket-Backed Goal Prep
+
+Use this branch when the operator has already planned a ticket or provided a
+task body with metrics, acceptance criteria, proof commands, blockers, or
+handoff notes. The job is to preserve that work inside a durable native Goal,
+not to restart discovery.
+
+Compile this state from the ticket before asking anything:
+
+```text
+GoalPrepState {
+  objective: string
+  metric: string | "none mechanical"
+  validation: string[]
+  done: string[]
+  non_goals: string[]
+  constraints: string[]
+  current_state: string[]
+  next_action: string
+  proxy_rejects: string[]
+  blocked_stop: string
+  questions: string[]
+}
+```
+
+Field mapping:
+
+- `objective`: ticket title, summary, or plan-change sentence
+- `metric`: Proof Contract metric, optimization target, or
+  `Metrics: none mechanical`
+- `validation`: verification commands, QA artifacts, review gates, readbacks,
+  or claim inventories
+- `done`: acceptance criteria plus required proof/review evidence
+- `non_goals`: explicit out-of-scope notes and protected boundaries
+- `constraints`: repo rules, tool boundaries, spend/publish/deploy limits,
+  data/privacy limits, and style constraints
+- `current_state`: ticket status, blockers, prior evidence, and latest known
+  failure mode
+- `next_action`: the first executable action after Goal activation
+- `proxy_rejects`: evidence that is useful but not completion by itself
+- `blocked_stop`: attempted paths, gathered evidence, safe options,
+  recommended next action, and the single missing input
+- `questions`: only missing execution-safety questions, capped at 3
+
+Question policy:
+
+- Ask when the answer changes safety, scope, verification, spend, destructive
+  boundaries, or irreversible external side effects.
+- Do not ask for fields already present in the ticket body, Proof Contract,
+  linked plan, or operator message.
+- Do not ask broad interview questions just because the goal could be richer.
+- If more than 3 fields are missing, ask the 3 that affect execution safety
+  most and mark the rest as assumptions.
+
+Anti-proxy rule:
+
+Proxy evidence such as "a script ran", "a page was created", "a review file
+exists", or "a metric dashboard changed" is not completion unless it satisfies
+the objective. The Goal must label proxy evidence, partial success, blockers,
+and true completion separately.
+
+Quantified issue hunts should use the same contract with explicit count,
+severity threshold, reproduction evidence, fix or ticket requirement, and
+duplicate handling.
+
 ## Codexter Goal Templates
 
 ### One Ticket
@@ -96,6 +176,21 @@ owning Codexter skill. Stop only when the ticket is complete with required
 proof/review evidence, or when a blocker is recorded with attempted paths,
 evidence gathered, safe options considered, the recommended next action, and
 the single missing input.
+```
+
+### Ticket-Backed Goal Prep
+
+```text
+/goal Complete <ticket> using the existing Proof Contract as GoalPrepState:
+objective=<objective>; metric=<metric>; validation=<commands/artifacts>;
+done=<acceptance criteria plus proof/review>; non_goals=<scope out>;
+constraints=<repo/tool/safety boundaries>; current_state=<status/evidence>;
+next_action=<first executable action>; proxy_rejects=<evidence that is not
+completion>. Use `$work` for admission if execution shape is still uncertain.
+Ask at most 3 missing execution-safety questions only when the ticket lacks a
+field needed to proceed safely. Stop only when the actual objective is proven,
+or when a blocker is recorded with attempted paths, evidence, safe options, the
+recommended next action, and the single missing input.
 ```
 
 ### Ticket Batch
@@ -145,6 +240,19 @@ Return:
 Recommended /goal:
 <paste-ready goal>
 
+GoalPrepState:
+- objective:
+- metric:
+- validation:
+- done:
+- non_goals:
+- constraints:
+- current_state:
+- next_action:
+- proxy_rejects:
+- blocked_stop:
+- questions:
+
 Why this goal is strong:
 - outcome:
 - verification:
@@ -156,6 +264,10 @@ Why this goal is strong:
 Use notes:
 - <short notes, only when needed>
 ```
+
+Omit `GoalPrepState` only for tiny direct asks, non-ticketed Goals with no
+state to preserve, or cases where the operator requested a compact `/goal`
+only.
 
 When several framings are viable, use:
 
@@ -215,6 +327,9 @@ Deterministic local ask:
 - **Task needs work sizing first:** draft a goal that invokes `$work` so
   Codexter can choose direct work, `impl-plan`, `$impl`, `batch-work`,
   `$ralph`, reslicing, or autoresearch.
+- **Existing ticket has metrics or proof:** compile `GoalPrepState`, ask at
+  most 3 missing execution-safety questions, and preserve the ticket's proof
+  contract in the `/goal`.
 - **Ticket batch:** require per-ticket proof rows plus one batch regression row.
 - **Only a deterministic command or marker matters:** recommend a normal prompt
   or explicit command instead of a Goal.

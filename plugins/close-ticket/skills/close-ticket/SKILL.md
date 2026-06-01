@@ -100,7 +100,7 @@ Ensure an agent can execute the core path after only reading this file.
 
 ## Ordered Flow
 
-Use the checklist in [todos.md](./todos.md) as the parent closeout sequence.
+Use the Important Checklist above as the parent closeout sequence.
 
 Related skills:
 
@@ -134,7 +134,7 @@ Run a feature closeout consistency sweep before commit:
   changed
 - `docs/specs/README.md` when a spec is added, moved, renamed, or retired
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` when skills,
-  skill metadata, method addresses, `todos.md`, or skill docs changed
+  skill metadata, method addresses, direct checklists, or skill docs changed
 - `docs/features/registry.jsonl` when a shipped capability is added, renamed,
   retired, or materially changes status
 - nearest module `README.md` or `AGENTS.md` when a local contract changed

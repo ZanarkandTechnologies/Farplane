@@ -1,0 +1,29 @@
+{
+  "name": "weekly-strategy-analysis",
+  "version": "0.1.0",
+  "description": "Run Kenji's weekly strategy analysis by collecting Notion plans, done and not-done tasks, meeting notes, people signa...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Weekly Strategy Analysis",
+    "shortDescription": "Run Kenji's weekly strategy analysis by collecting Notion plans, done and not-done tasks, meeting notes, people signa...",
+    "longDescription": "Run Kenji's weekly strategy analysis by collecting Notion plans, done and not-done tasks, meeting notes, people signals, Codex thread history, and public opportunity signals into a local context bundle, then using bounded analysis lanes to produce priorities, depriorities, due dates, drift analysis, and a chat-ready weekly plan. Use for the weekly strategy automation, Plan Week retros, Codex drift reviews, and personal operating reviews that compare planned work against actual tasks, meetings, and agent threads.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use weekly-strategy-analysis for this task."
+    ]
+  }
+}

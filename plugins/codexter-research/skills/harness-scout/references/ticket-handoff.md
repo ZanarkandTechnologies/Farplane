@@ -2,8 +2,9 @@
 
 Create a handoff only for strong `adopt` or `adapt` decisions.
 
-The handoff should be compact enough to paste into an
-[impl-plan](../../impl-plan/SKILL.md) ticket:
+The handoff should be compact, but it must still be plan-shaped enough that a
+builder can execute without rewatching the source. Use the same top-level shape
+as an [impl-plan](../../impl-plan/SKILL.md) ticket:
 
 ```text
 Summary:
@@ -12,6 +13,7 @@ Gap Analysis:
 Plan:
 Acceptance Criteria:
 Verification:
+Proof Contract:
 Refs:
 Blockers:
 ```
@@ -28,6 +30,7 @@ Blockers:
 - `Now scope`: what the first ticket lands.
 - `Deferred scope`: what stays out.
 - `Proof`: concrete checks or scorecards.
+- `Execution steps`: ordered, concrete actions for the first viable slice.
 
 ## Guardrails
 

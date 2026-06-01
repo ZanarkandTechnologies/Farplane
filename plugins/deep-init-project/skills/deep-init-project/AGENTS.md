@@ -16,6 +16,9 @@ artifact defaults for new or migrated repos.
   `docs/bootstrap-brief.md` and scaffolded `qa/` surfaces
 - bootstrap-owned runtime and evidence-capture command guidance captured in
   `docs/bootstrap-brief.md`, `PROJECT_RULES.md`, and scaffolded `qa/` surfaces
+- bootstrap-owned frontend UI initialization guidance captured in
+  `docs/bootstrap-brief.md`, `PROJECT_RULES.md`, and `docs/TASTE.md` when the
+  generated or migrated repo has a UI surface
 - bootstrap-owned decisions about local hooks, optional heavy local gates, and
   separate CI/deploy protection captured in `docs/bootstrap-brief.md`
 - optional `.githooks/` plus repo-local `scripts/pre_*_check.sh`
@@ -40,3 +43,10 @@ artifact defaults for new or migrated repos.
   canonical app run path, one canonical QA/evidence run path, required local
   services, and the relevant port or environment-variable assumptions on
   visible repo-owned surfaces instead of relying on remembered shell commands.
+- `MEM-0116`: UI-bearing project bootstrap should leave a visible shadcn/tweakcn
+  theme plan, default darkmatter command or skip reason, tooltip-over-explainer
+  rule, and visual QA evidence path in generated project artifacts.
+- `MEM-0118`: UI-bearing app bootstrap defaults to shadcn plus tweakcn
+  darkmatter. Plain HTML is only acceptable for explicit static/throwaway
+  artifacts or user opt-out, not because the agent decided shadcn was
+  unnecessary.

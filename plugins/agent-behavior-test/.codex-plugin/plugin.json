@@ -1,7 +1,7 @@
 {
   "name": "agent-behavior-test",
   "version": "0.1.0",
-  "description": "Use when the operator wants an isolated agent or Codex exec run to test a skill, app feature, prompt, workflow, or re...",
+  "description": "Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, pro...",
   "author": {
     "name": "Codexter"
   },
@@ -15,8 +15,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Agent Behavior Test",
-    "shortDescription": "Use when the operator wants an isolated agent or Codex exec run to test a skill, app feature, prompt, workflow, or re...",
-    "longDescription": "Use when the operator wants an isolated agent or Codex exec run to test a skill, app feature, prompt, workflow, or recently built behavior while preserving visible behavior logs, command events, final output, and a scored evidence report.",
+    "shortDescription": "Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, pro...",
+    "longDescription": "Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, prompt, workflow, or narrow feature path, with logs, command events, final output, artifacts, and a scored evidence report.",
     "developerName": "Codexter",
     "category": "Productivity",
     "capabilities": [

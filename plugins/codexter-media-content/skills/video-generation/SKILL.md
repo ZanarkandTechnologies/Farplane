@@ -49,7 +49,7 @@ Use this as the ordered checklist whenever `video-generation` is active.
 
 Generate project-ready AI video assets with inference.sh CLI (`belt`) while keeping provider-specific details in references.
 
-Use `todos.md` at the start of the pass. It is the ordered anti-forgetting checklist for model choice, reference loading, spend gates, asset saving, and frontend proof.
+Use the `SKILL.md` Important Checklist at the start of the pass. It is the ordered anti-forgetting checklist for model choice, reference loading, spend gates, asset saving, and frontend proof.
 
 Use `video-production` method addresses for artifact/product problems:
 `video-production:marketing`, `video-production:explainer`,

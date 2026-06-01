@@ -9,6 +9,14 @@ allowed-tools: Read, Glob, Grep
 
 # Reference Grounding
 
+Use when a recommendation, plan, or claim needs enough evidence to stop
+guessing. This is the small evidence move, not a research router.
+
+## Job
+
+Name the claim that needs grounding, inspect the smallest trustworthy source
+set, and return a compact evidence note for the active workflow.
+
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
@@ -29,51 +37,24 @@ Source: `SKILL.md`
 - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
 <!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+## Source Choice
 
-Use this as a Tier 1 primitive when another skill needs evidence before it can
-make a recommendation, scope a plan, or claim a result.
+- Local repo question: inspect code, tickets, specs, docs, and nearby tests.
+- API/library behavior: prefer official docs or maintained repos.
+- Peer expectation: inspect comparable products or implementations.
+- Provided source: use the supplied material first.
 
-This is not a research router and not a replacement for `research:*`. It is the
-small grounding move: name what needs evidence, collect enough trustworthy
-references to avoid guessing, and hand the compact evidence to the active
-workflow.
+Escalate to `research:*` only when the answer needs multiple comparables, source
+synthesis, a formal parity/gap brief, or a durable research artifact.
 
-## Job
+## Stop Condition
 
-1. State the claim, decision, expectation, or comparison that needs grounding.
-2. Capture the local baseline when repo scope matters.
-3. Pick the smallest source class that can answer it:
-   - local code, tickets, specs, or docs
-   - official docs or standards
-   - maintained repos or code examples
-   - peer products or competitor workflows
-   - user-provided sources
-4. Prefer primary sources and real implementations over commentary.
-5. Return a compact grounding note with source confidence and local impact.
-
-## Use When
-
-- `advise` needs current facts or examples before recommending
-- `brainstorm` needs examples before option quality is trustworthy
-- `plan` or a domain planning skill needs credible expectations before scoping
-- `execute` or a domain execution skill needs official behavior or local
-  invariants before changing files
-- `review` needs to challenge a claim against evidence
-
-## Escalate To Research When
-
-- the question needs multiple comparables or a formal parity/gap brief
-- the source set itself needs synthesis
-- the answer is broader than one compact grounding note
-- the work should produce a durable research artifact
-
-Use `research:parity`, `research:gap`, `research:official-docs`,
-`research:code-patterns`, `research:competitor`, or `research:source-synthesis`
-for that broader Tier 2 research workflow.
+Stop when the evidence is strong enough to support, change, or block the active
+decision. Do not keep gathering sources for completeness.
 
 ## Output
 
-Produce a short `Grounding Note` with:
+Return a short `Grounding Note`:
 
 - `Question / claim`
 - `Local baseline`
@@ -85,9 +66,6 @@ Produce a short `Grounding Note` with:
 
 ## Guardrails
 
-- Do not turn every task into web research; ground only the claim that matters.
-- Do not use vague blog posts when official docs, standards, local code, or
-  maintained repos can answer the question.
-- Do not import peer features wholesale; hand broad parity questions to
-  `research:parity`.
+- Do not turn every task into research.
 - Do not claim evidence was checked unless it was actually read.
+- Do not import peer features wholesale; hand broad parity to `research:parity`.

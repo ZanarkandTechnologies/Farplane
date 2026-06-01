@@ -20,7 +20,13 @@
 
 ## Component Bias
 
-- Prefer `shadcn`-quality primitives where they fit the stack
+- Prefer `shadcn`-quality primitives for app UI by default
+- For UI-bearing app projects, start from the default tweakcn darkmatter theme
+  unless the user explicitly disables it or the project already has a stronger
+  design system:
+  `pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/darkmatter.json`
+- Do not use plain HTML/CSS/JS as the default app UI foundation; reserve it for
+  explicit static/throwaway artifacts.
 - Avoid default-looking controls and unstyled browser UI
 - Favor compact panels, sharp alignment, and disciplined spacing
 - Use restrained color and decoration; signal state with clarity, not noise

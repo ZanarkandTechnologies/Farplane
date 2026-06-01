@@ -1,0 +1,29 @@
+{
+  "name": "eval-onboarding",
+  "version": "0.1.0",
+  "description": "Guide newcomers through setting up a minimal, clean-room eval harness for coding agents, prompts, skills, or workflow...",
+  "author": {
+    "name": "Codexter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codexter",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Eval Onboarding",
+    "shortDescription": "Guide newcomers through setting up a minimal, clean-room eval harness for coding agents, prompts, skills, or workflow...",
+    "longDescription": "Guide newcomers through setting up a minimal, clean-room eval harness for coding agents, prompts, skills, or workflow changes. Use when the user asks for basic eval JSON tasks, synthetic fixtures, scorer shape, harness setup, or an example evaluation workflow without copying private or third-party systems.",
+    "developerName": "Codexter",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use eval-onboarding for this task."
+    ]
+  }
+}

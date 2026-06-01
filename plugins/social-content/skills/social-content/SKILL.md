@@ -76,7 +76,7 @@ MethodSelection(artifact, methods, constraints) :=
 ```
 
 Use `references/model.md` for the artifact matrix and execution packet rules.
-Keep `todos.md` short; upstream references stay method-specific detail.
+Keep the `SKILL.md` Important Checklist short; upstream references stay method-specific detail.
 
 Use method addresses to choose the smallest relevant workflow:
 

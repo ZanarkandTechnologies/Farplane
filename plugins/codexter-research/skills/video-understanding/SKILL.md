@@ -110,7 +110,7 @@ Use [advise](../advise/SKILL.md) when the answer is not mechanical:
 
 1. Do not collapse “what the video shows” and “what the agent should do” into
    one unchecked prompt.
-2. Do not create a new skill when existing skill todos can be augmented.
+2. Do not create a new skill when existing skill checklists can be augmented.
 3. Do not claim an accurate reimplementation without frame or screenshot proof.
 
 ## References

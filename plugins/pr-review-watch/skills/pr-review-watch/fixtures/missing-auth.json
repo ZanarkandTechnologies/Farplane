@@ -1,0 +1,18 @@
+{
+  "repo": "/tmp/example",
+  "branch": "feature/pr-watch",
+  "pr_number": 42,
+  "pr_url": "https://github.example/pull/42",
+  "head_sha": "abc123",
+  "check_runs": [],
+  "reviews": [],
+  "review_comments": [],
+  "provider_comments": [],
+  "errors": [
+    {
+      "kind": "auth",
+      "message": "GitHub CLI is not authenticated."
+    }
+  ],
+  "fetched_at": "2026-06-01T00:00:00Z"
+}

@@ -1,0 +1,13 @@
+{
+  "repo": "/tmp/example",
+  "branch": "feature/pr-watch",
+  "pr_number": null,
+  "pr_url": null,
+  "head_sha": null,
+  "check_runs": [],
+  "reviews": [],
+  "review_comments": [],
+  "provider_comments": [],
+  "errors": [],
+  "fetched_at": "2026-06-01T00:00:00Z"
+}
