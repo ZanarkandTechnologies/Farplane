@@ -252,3 +252,5 @@
 2026-06-01 20:57 +0800 | FEAT | add ticket-backed GoalPrepState guidance and require feed-scout Notion Tasks Project/Areas projection readback
 2026-06-02 01:22 +0800 | CLEANUP | prune redundant skill `todos.md` files after direct `SKILL.md` checklist migration and move checklist validation to `SKILL.md`
 2026-06-02 01:27 +0800 | FEAT | add `prototyping` as a Tier 1 sample-first primitive and wire it into planning, execution, research, batch work, skill maintenance, and review gates
+2026-06-02 02:37 +0800 | FEAT | add harness-native `eval` skill templates for future `.codex/evals` and `.claude/evals`, with simple string-reference task JSON and agent/judge CLI run artifacts
+2026-06-02 03:03 +0800 | FEAT | guide `eval` skill setup with one tagged `harness_tasks.json` covering skill, workflow, and system-prompt eval tasks

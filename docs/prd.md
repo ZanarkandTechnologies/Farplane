@@ -21,6 +21,9 @@ truth.
   registry health.
 - Tertiary: Aikage dashboard users who want project/machine/session level
   agent activity without reading local JSONL files.
+- Non-technical collaborators who need to review what the agent noticed,
+  understand the message context, and approve or ignore created learning
+  tickets without reading repo paths, logs, or hook terminology.
 
 ## JTBD
 
@@ -46,6 +49,9 @@ Codexter to work.
 - Aikage dashboard shows Codexter event health using the existing visual
   system: square panels, JetBrains Mono headings, bento layout, dark/light
   theme variables, compact diagnostics.
+- Aikage exposes an Agent Learning Inbox that turns self-improvement runs into
+  plain-language ticket cards with message context and approve/ignore/revisit
+  actions.
 - The operator can run one local status command to see hook health,
   skill-request counts, learning-review skips/launches, and cloud-sync status.
 
@@ -126,21 +132,54 @@ sync richer telemetry without a new auth system.
 - [ ] Queries can return dashboard-safe aggregate event counts without raw
       prompt contents.
 
-### US-004: Aikage Dashboard Integration
+### US-004: Aikage Agent Learning Inbox
 
-**Description:** As the operator, I want Codexter telemetry to appear in the
-Aikage dashboard using the existing bento visual language, so it feels like
-part of the same product rather than a bolted-on log table.
+**Description:** As the operator or a non-technical collaborator, I want
+Codexter's learning tickets to appear as a plain-language inbox in Aikage, so I
+can see what the agent noticed, which messages caused it, and what action to
+take next without reading raw logs.
 
 **Acceptance Criteria:**
 
-- [ ] Dashboard adds a Codexter telemetry panel using existing
+- [ ] Dashboard adds an Agent Learning Inbox using existing
       `BentoGrid`, `BentoItem`, `Panel`, `MetricTile`, and theme variables.
-- [ ] Panel shows event volume, hook health, top skills/control surfaces,
-      learning-loop status, and recent failed syncs or skipped reviews.
+- [ ] Inbox shows learning tickets, message context, status, confidence, and
+      the suggested next action in non-technical language.
+- [ ] Each ticket card can expand to show the message timeline that caused the
+      suggestion, with redacted excerpts or summaries rather than raw
+      transcripts.
+- [ ] Primary actions are human-readable: `Approve`, `Ignore`, `Needs review`,
+      `Open ticket`, and `View messages`.
 - [ ] Raw event detail is collapsed or paginated.
 - [ ] Existing agent-hours dashboard remains primary; telemetry is secondary
       diagnostics.
+- [ ] The learning hook area can answer, at a glance: did the 10-turn cadence
+      fire, what signal was found, which skill or surface was suggested, did
+      `harness-advisor` route it, and did the Notion/ticket proof hop complete.
+
+### US-006: Learning Hook Observability
+
+**Description:** As the operator, I want the self-improvement hook to expose
+its run lifecycle, inferred opportunity, suggested owner, and proof hops, so I
+can tell whether the agent is actually learning from repeated corrections.
+
+**Acceptance Criteria:**
+
+- [ ] Local telemetry records the learning review lifecycle: window updated,
+      cadence skipped, review launched, candidate extracted, advisor routed,
+      task proposed/created, and failure.
+- [ ] Each learning review run has a bounded run detail object with source
+      window, trigger counts, candidate summary, recommended owner, confidence,
+      risk, five-hop proof status, and artifact links.
+- [ ] Each learning review can include bounded message context: who said it,
+      when it happened, a short summary, and a redacted excerpt safe for a
+      product UI.
+- [ ] Aikage shows a recent learning-hook log with filter chips for all,
+      launched, skipped, no-signal, proposed, created, and failed.
+- [ ] The UI never shows raw prompt or transcript text by default; it shows
+      sanitized summaries and local artifact handles.
+- [ ] The no-signal state is explicit, so "no task created" is distinguishable
+      from "hook did not run" and "hook failed."
 
 ### US-005: Prune Candidate Report
 
@@ -165,6 +204,13 @@ duplicative, or worth turning into methods.
 - FR-3: Emit local events from user-turn capture, stop-hook completion,
   self-improvement review decisions, telemetry sync attempts, and validators
   where practical.
+- FR-3a: Self-improvement events must preserve run observability without raw
+  transcript sync: trigger counts, skip/launch reason, opportunity summary,
+  recommended owner, five-hop proof status, and artifact handles.
+- FR-3b: Learning-ticket payloads may include bounded message context for UI
+  review: role, timestamp, short summary, and a redacted excerpt. Full raw
+  prompts, full assistant responses, transcript paths, and secrets remain
+  excluded from Aikage sync by default.
 - FR-4: Keep cloud sync best-effort and non-blocking.
 - FR-5: Reuse existing `CODEXTER_TELEMETRY_API_URL`,
   `CODEXTER_TELEMETRY_API_TOKEN`, and timeout env vars unless a new endpoint

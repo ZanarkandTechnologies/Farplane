@@ -83,6 +83,11 @@ type CodexterEvent = {
     | "learning_window_updated"
     | "learning_review_skipped"
     | "learning_review_launched"
+    | "learning_candidate_extracted"
+    | "learning_advisor_routed"
+    | "learning_task_proposed"
+    | "learning_task_created"
+    | "learning_review_failed"
     | "telemetry_sync";
   timestamp: string;
   source: "capture_user_turn" | "stop_hook" | "validator" | "manual" | string;
@@ -116,6 +121,168 @@ Rules:
 - `summary` is short and sanitized.
 - No raw transcript, full prompt, assistant response, env var, token, or file
   body is included.
+
+## Learning Hook Observability Contract
+
+The self-improvement hook needs two related proof surfaces:
+
+1. a local operator/debug surface that can explain what happened without
+   opening raw `.harness` files;
+2. an Aikage dashboard surface that makes the hook visible without turning the
+   dashboard into a transcript viewer.
+
+### `LearningReviewRun`
+
+```ts
+type LearningReviewRun = {
+  runId: string;
+  sessionId?: string;
+  projectName?: string;
+  startedAt: string;
+  finishedAt?: string;
+  cadence: {
+    interval: number;
+    turnCount: number;
+    lastReviewTurnCount: number;
+    due: boolean;
+    reason: string;
+  };
+  status:
+    | "skipped"
+    | "launched"
+    | "no_signal"
+    | "task_proposed"
+    | "task_created"
+    | "failed";
+  candidate?: {
+    title: string;
+    summary: string;
+    targetSurface: string;
+    recommendedOwner: string;
+    confidence: "low" | "medium" | "high";
+    risk: string;
+  };
+  messages: Array<{
+    id: string;
+    role: "user" | "assistant" | "system";
+    occurredAt: string;
+    summary: string;
+    redactedExcerpt: string;
+  }>;
+  proofHops: Array<{
+    name:
+      | "user_capture"
+      | "assistant_capture"
+      | "rolling_window_write"
+      | "background_codex_launch"
+      | "notion_task_creation";
+    status: "present" | "missing";
+    evidence: string;
+  }>;
+  artifacts: {
+    inputPath?: string;
+    reportPath?: string;
+    stdoutPath?: string;
+    stderrPath?: string;
+    notionUrl?: string;
+    ticketPath?: string;
+  };
+};
+```
+
+### Aikage Agent Learning Inbox
+
+The dashboard should expose the learning hook as a plain-language inbox for the
+tickets the agent creates. The user should not need to know what a hook,
+sidecar, JSONL file, or harness-advisor route is to use it.
+
+```text
++--------------------------------------------------------------------------------+
+| AGENT LEARNING INBOX                                      2 new suggestions     |
++--------------------------------------------------------------------------------+
+| [Needs review] [Approved] [Ignored] [Failed]                    Search messages |
++--------------------------------------------------------------------------------+
+| STATUS       | SUGGESTION                          | FROM MESSAGES       | ACT |
+|--------------+-------------------------------------+---------------------+-----|
+| Needs review | Make hook proof easier to see       | 3 messages, today   | >   |
+| Approved     | Add five-hop Notion checklist       | 5 messages, May 25  | >   |
+| No change    | No reusable pattern found           | 10-turn check       | >   |
+| Failed       | Could not create review ticket      | report missing      | >   |
++--------------------------------------------------------------------------------+
+| selected: Make hook proof easier to see                                      |
++--------------------------------------------------------------------------------+
+| Why the agent suggested this                                                  |
+| "It's hard to see what's happening when the hook learns from turns."          |
+|                                                                              |
+| Suggested ticket                                                              |
+| Title: Show agent learning tickets and message history in Aikage              |
+| Action: Needs review                                                          |
+| Confidence: Medium                                                            |
+|                                                                              |
+| Messages                                                                      |
+| 15:12 User      "hard to see what's actually happening..."                    |
+| 15:18 Assistant "I found the current telemetry spec..."                       |
+| 15:34 User      "nicer UI for the tickets we create and log messages..."      |
+|                                                                              |
+| Proof                                                                         |
+| [OK] User message captured       [OK] Agent response captured                 |
+| [OK] Window saved                [OK] Learning review ran                     |
+| [OK] Ticket created or proposed                                             |
+|                                                                              |
+| [Approve] [Ignore] [Needs review] [Open ticket] [View full local log]         |
++--------------------------------------------------------------------------------+
+```
+
+Non-technical UX rules:
+
+- Prefer `Needs review`, `Approved`, `Ignored`, `No change`, and `Failed` over
+  hook lifecycle jargon.
+- Show message context as short redacted excerpts with speaker and time.
+- Put repo paths and artifact handles behind a `Technical details` disclosure.
+- Make the primary question obvious: "Should this become a real ticket?"
+- Use confidence and proof as trust aids, not as the main navigation.
+
+### Technical Run Log Structure
+
+The technical view can still expose the learning hook as a compact run log, not
+a raw event wall.
+
+- Summary metrics:
+  - `windows`: captured learning windows in the selected range
+  - `reviews due`: due cadence checks
+  - `launched`: background sidecars launched
+  - `suggestions`: candidate improvements proposed
+  - `created`: Notion tasks or local tickets created
+  - `failed`: failed launches, missing reports, or failed syncs
+- Filters:
+  - `all`
+  - `launched`
+  - `skipped`
+  - `no signal`
+  - `proposed`
+  - `created`
+  - `failed`
+- Row fields:
+  - time
+  - project/session label
+  - status
+  - trigger reason, such as `10/10 turns due` or `7/10 not due`
+  - candidate title or `no signal`
+  - recommended owner, such as `skills/self-improve` or
+    `agents/skill-opportunity-applier.toml`
+  - proof summary, such as `4/5 hops`
+  - artifact handle, such as `report.json` or Notion URL
+- Row expansion:
+  - linked ticket card fields
+  - message context summaries and redacted excerpts
+  - sanitized evidence bullets
+  - harness-advisor route result
+  - five proof hops with present/missing status
+  - risks and next action
+
+Default view: show the latest 5-10 learning runs with a warning when windows
+exist but application reports are missing. Detailed rows remain bounded and
+collapsed by default.
 
 ## Local Files
 
@@ -165,6 +332,11 @@ Add `bin/codexter_telemetry_status.py`:
 - Reads `.harness/state/self-improve/windows/` and
   `.harness/state/self-improve/applications/`.
 - Flags when windows exist but application reports are zero.
+- Prints the latest learning runs with cadence, launch/no-signal/failure
+  reason, candidate summary, recommended owner, and five-hop proof status when
+  present.
+- Includes bounded message context in JSON output when available, using
+  summaries and redacted excerpts instead of raw conversation text.
 - Supports JSON output for Aikage/debug tooling.
 
 Add `bin/codexter_skill_usage_report.py`:
@@ -230,6 +402,10 @@ Add safe aggregate fields to `getDashboard` or a separate query:
 - learning review launched/skipped counts
 - failed sync count
 - recent sanitized event rows
+- learning hook run summaries with cadence, status, candidate, recommended
+  owner, proof-hop count, and artifact handles
+- learning ticket cards with plain-language status, confidence, suggested
+  action, message context, and technical details handles
 
 Do not return raw prompt text or raw local paths in the default dashboard
 payload unless the existing Aikage privacy rules allow it.
@@ -245,12 +421,12 @@ Use existing Aikage style:
   `var(--color-accent)`, `var(--color-muted)`
 - JetBrains Mono display headings
 
-Suggested panel:
+Suggested dashboard surface:
 
-- Header: `CODEXTER TELEMETRY`
-- Metrics: `events`, `hook pass`, `top skill`, `learning reviews`
-- Body: top skills/control surfaces, hook health, self-improvement status,
-  recent sanitized rows
+- Header: `AGENT LEARNING INBOX`
+- Metrics: `new suggestions`, `approved`, `ignored`, `failed`
+- Body: learning ticket cards, message context, suggested action, proof
+  summary, and collapsed technical details
 - Diagnostics link: existing diagnostics dialog or a local expansion
 
 ## Security And Privacy
@@ -267,11 +443,9 @@ Suggested panel:
 
 ```mermaid
 flowchart TD
-  T159["TASK-0159<br/>Codexter local event ledger"] --> T160["TASK-0160<br/>hook instrumentation + diagnostics"]
-  T159 --> T161["TASK-0161<br/>Aikage Convex ingest"]
+  T160["TASK-0160<br/>local ledger + hook diagnostics"] --> T161["TASK-0161<br/>Aikage Convex ingest"]
   T161 --> T162["TASK-0162<br/>Aikage dashboard panel"]
   T160 --> T163["TASK-0163<br/>skill usage/prune report"]
-  T159 --> T163
 ```
 
 ## Acceptance Criteria

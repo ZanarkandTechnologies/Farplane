@@ -51,6 +51,8 @@ This folder answers:
 - Drift check: PRDs, tickets, and implementation plans should preserve
   objective, need, assumptions, root cause, constraints, first viable slice,
   proof, tradeoffs, and non-goals before execution.
+- Advisory use: [`skills/advise/SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/advise/SKILL.md)
+  uses the same basis before comparing options and recommending a path.
 
 ### Skill System
 
@@ -128,4 +130,4 @@ python3 skills/skill-maintenance/scripts/check_skills.py --write
 
 Use only the checks that match the changed surface. For example, a policy index
 wording change does not need skill registry regeneration unless skill metadata,
-skill links, or `todos.md` changed.
+skill links, or direct checklists changed.
