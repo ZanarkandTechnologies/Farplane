@@ -30,6 +30,7 @@ ticket, and execution workflow.
 - Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
 - Human skill selection guide: [docs/skills/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md)
 - Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
+- Private tool context guide: [docs/private-tool-context.md](/Users/kenjipcx/coding-harness/Codexter/docs/private-tool-context.md)
 - QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
 - Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
 - CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/desloppify/README.md)
@@ -69,6 +70,7 @@ whenever the public harness story changes.
 | Understand the whole repo | [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) | [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md) |
 | Decide where a harness change belongs | [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md) | [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md), nearest skill README |
 | Choose which skill to invoke | [docs/skills/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md) | generated [docs/skills/registry.jsonl](/Users/kenjipcx/coding-harness/Codexter/docs/skills/registry.jsonl), target `skills/*/SKILL.md` |
+| Store private tool handles | [docs/private-tool-context.md](/Users/kenjipcx/coding-harness/Codexter/docs/private-tool-context.md) | `~/.codex/private/TOOLS.md`, `~/.codex/private/docs/`, `templates/global/AGENTS.md` |
 | Run or resume a ticket | [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) | active `tickets/TASK-*/ticket.md`, [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan/SKILL.md), [skills/impl/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl/SKILL.md) |
 | Close or archive finished work | [skills/close-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/close-ticket/SKILL.md) | [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/HISTORY.md), [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/MEMORY.md), affected module README |
 | Check proof quality | [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md) | [review-gates.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/review-gates.md), ticket evidence |
@@ -114,6 +116,9 @@ Implemented now:
   content from curated X, YouTube, and blog profiles, dedupes canonical URLs in
   a content/proposal ledger, then routes eligible items to `harness-scout` and
   `best-of-worlds`
+- private tool context through `~/.codex/private/TOOLS.md` and
+  `~/.codex/private/docs/`, with tracked docs and skills using named handles or
+  placeholders instead of embedding personal workspace IDs
 - frontend implementation through `frontend-craft`, with `functional-ui` for
   UX/workflow and broken-UI redesign, `visual-design` for look/taste/visual
   systems, and `landing-page` for one-page marketing or scrolltelling surfaces

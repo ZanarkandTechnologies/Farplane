@@ -1,0 +1,69 @@
+{
+  "work_type": "implementation_plan",
+  "ticket": "tickets/TASK-0186/ticket.md",
+  "reviewed_at": "2026-06-01 12:40 +0800",
+  "search_scope": [
+    "tickets/TASK-0186/ticket.md",
+    "docs/specs/harness-engineering-doctrine.md",
+    "docs/specs/first-principles-planning.md",
+    "docs/MEMORY.md",
+    "docs/TROUBLES.md",
+    "templates/global/AGENTS.md",
+    "config.toml.example",
+    "bin/stop_hook.py",
+    "tests/notion-context/*",
+    "/Users/kenjipcx/.codex/skills/notion-context/*",
+    "/Users/kenjipcx/.codex/private/*"
+  ],
+  "rubrics_used": [
+    "spec-contract",
+    "implementation-plan",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "overall_score": 4.2,
+  "overall_threshold": 4.0,
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "finding_log": [
+    {
+      "severity": "info",
+      "confidence": "high",
+      "finding": "Plan keeps the work as one coherent privacy/config refactor rather than splitting private docs, installed skill cleanup, and tracked fixture sanitization into disconnected tickets.",
+      "evidence": "Plan names one data-owner split, one file map, focused tests, and a tracked-live-ID grep proof."
+    },
+    {
+      "severity": "info",
+      "confidence": "high",
+      "finding": "Plan preserves prior Notion safety invariants instead of treating the refactor as permission to add public API or semantic-search fallbacks.",
+      "evidence": "Scope and acceptance criteria explicitly keep MCP-only, pinned-read, forbidden-action, and connector-unavailable rules intact."
+    },
+    {
+      "severity": "minor",
+      "confidence": "medium",
+      "finding": "The build must be careful when redacting fixtures so capability checks still have enough concrete operation metadata to catch regressions.",
+      "evidence": "Risk is named and mitigated by preserving operation names, fallback methods, and forbidden-action assertions."
+    }
+  ],
+  "rubric_sections": {
+    "spec-contract": {
+      "score": 4.3,
+      "notes": "The first-principles basis, non-goals, safety constraints, and OpenClaw comparison are explicit and tied to the local harness doctrine."
+    },
+    "implementation-plan": {
+      "score": 4.2,
+      "notes": "File map, signature deltas, type sketch, typed flow example, and execution steps are concrete enough for a builder to execute without inventing the sequence."
+    },
+    "integration-readiness": {
+      "score": 4.0,
+      "notes": "The plan inspects installed skill files, tracked fixtures, global template, config example, stop-hook sidecar target, and prior Notion tickets. Residual risk is fixture abstraction after redaction."
+    },
+    "evidence-quality": {
+      "score": 4.2,
+      "notes": "Proof contract includes focused tests, metadata validation, diff check, and a hard grep proof for live handle removal."
+    }
+  },
+  "blocking_findings": [],
+  "next_action": "Operator review and approval; keep TASK-0186 in status review until approval before build edits."
+}

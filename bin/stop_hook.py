@@ -2123,6 +2123,8 @@ def skill_opportunity_review_input(
             "the issue is purely project-local."
         ),
     }
+    notion_tasks_data_source = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_NOTION_TASKS_DATA_SOURCE")
+    notion_tasks_configured = bool(notion_tasks_data_source and notion_tasks_data_source.strip())
     return {
         "schema_version": 1,
         "review_type": "skill_opportunity",
@@ -2136,10 +2138,8 @@ def skill_opportunity_review_input(
         "workflow_refs": workflow_refs,
         "workspace_context": workspace_context,
         "notion_task_target": {
-            "data_source_url": os.environ.get(
-                "CODEXTER_SKILL_OPPORTUNITY_NOTION_TASKS_DATA_SOURCE",
-                "collection://43a439fd-74c5-4b43-9afb-950f047e5d4f",
-            ),
+            "data_source_url": notion_tasks_data_source.strip() if notion_tasks_configured else None,
+            "configured": notion_tasks_configured,
             "tag": os.environ.get("CODEXTER_SKILL_OPPORTUNITY_NOTION_TAG", "agent self improvement"),
             "default_status": os.environ.get("CODEXTER_SKILL_OPPORTUNITY_NOTION_STATUS", "Review"),
         },
@@ -2154,6 +2154,7 @@ def skill_opportunity_review_input(
             "Do not write local files except the final JSON report emitted by the Codex CLI.",
             "Include proof_hops with exactly user_capture, assistant_capture, rolling_window_write, background_codex_launch, and notion_task_creation in that order.",
             "For each proof_hop, set status to present or missing and include a short evidence string; dry-run or failed Notion writes must mark notion_task_creation as missing.",
+            "If notion_task_target.configured is false, do not attempt Notion task creation; mark the notion_task_creation proof hop missing with evidence 'notion_task_target_unconfigured'.",
             "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup, but turn them into Notion task proposals.",
             "Use workflow_refs as the required local routing model: harness-scout for source-to-feature extraction, advise for comparing feature directions, and harness-advisor for placement.",
             "Use workspace_context to understand which project produced the signal and to tag/relate the Notion task when safe; default every clear signal to a reusable Codexter harness improvement.",

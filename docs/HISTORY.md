@@ -239,3 +239,4 @@
 2026-05-27 13:38 +0800 | DOCS | add a human skill selection guide beside the generated skill registry
 2026-05-27 16:57 +0800 | DOCS | add a frontend UI baseline to deep-init project templates with shadcn/tweakcn darkmatter defaults, tooltip-over-explainer guidance, and visual QA expectations
 2026-05-27 17:37 +0800 | FIX | tighten deep-init UI bootstrap so app projects default to shadcn plus tweakcn darkmatter instead of accepting plain HTML skip decisions
+2026-06-01 12:45 +0800 | FEAT | add private tool context docs and move Notion workspace handles out of reusable/tracked Codexter surfaces

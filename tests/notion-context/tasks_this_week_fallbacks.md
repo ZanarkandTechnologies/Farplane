@@ -13,9 +13,9 @@ approximate task rows.
 ## Canonical Inputs
 
 - Weekly Tasks view:
-  `https://app.notion.com/p/638d85a858b04d038d8b97be1a879a1f?v=2de4d8d5-ed56-42b1-9665-957507d26d52`
+  private handle `notion.tasks.this_week_view`
 - Weekly Tasks data source recovered by fetching the canonical URL:
-  `collection://43a439fd-74c5-4b43-9afb-950f047e5d4f`
+  private handle `notion.tasks.source`
 - Not-done Projects view:
   `view://35cd43a2-3942-81aa-95fd-000c1396f17d`
 
@@ -34,8 +34,8 @@ approximate task rows.
      query a data source, but cannot query a saved view.
    - Fetch the canonical weekly Tasks URL to recover the database/data-source
      identifier and schema.
-   - In the current Tasks database, the recovered source is
-     `collection://43a439fd-74c5-4b43-9afb-950f047e5d4f`.
+   - In the current Tasks database, the recovered source is private handle
+     `notion.tasks.source`.
    - Query the recovered data source with the closest available SQL/filter:
      keep `Status != Done` for active planning, include `Backlog`, `Not started`,
      `In Progress`, and `Review`, and prefer rows with `Act Time` in the current
