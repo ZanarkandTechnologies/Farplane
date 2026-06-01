@@ -13,8 +13,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read existing feed-scout config, profile rows, tracked entities,
   tracked harness resources, ledger/proposal artifacts, and the requested mode
   before doing any external discovery.

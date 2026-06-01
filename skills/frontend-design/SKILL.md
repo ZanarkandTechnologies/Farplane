@@ -13,8 +13,6 @@ allowed-tools: mcp__shadcn__*, Read, Write, Edit, LS
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Confirm the owning frontend path: use
   [frontend-craft](../frontend-craft/SKILL.md) for end-to-end builds,
   [functional-ui](../functional-ui/SKILL.md) for unsettled workflow, and

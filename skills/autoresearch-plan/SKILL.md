@@ -11,8 +11,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the target docs, scripts, tests, active ticket, and existing
   autoresearch artifacts before proposing a session.
 - [ ] Use [plan](../plan/SKILL.md) when the goal, scope, metric, direction,

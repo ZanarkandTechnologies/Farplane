@@ -15,8 +15,6 @@ common_chains:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the selected PR target, target repo, project review memory, and
   requested watch interval before polling anything.
 - [ ] Use [execute](../execute/SKILL.md) for proof/writeback shape and keep this

@@ -9,8 +9,6 @@ argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read available context before asking: active ticket, `docs/prd.md`,
   `docs/specs/`, project README/AGENTS, and relevant local files.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for local

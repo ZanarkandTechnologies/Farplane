@@ -10,8 +10,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the user's correction, active artifact, and recent work before
   apologizing or acting.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to verify

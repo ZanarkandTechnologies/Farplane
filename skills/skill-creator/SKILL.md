@@ -13,8 +13,6 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, 
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the requested capability, existing skills, registry, and nearby
   project docs before creating or updating a skill.
 - [ ] Use [plan](../plan/SKILL.md) when tier, ownership, package boundary, or

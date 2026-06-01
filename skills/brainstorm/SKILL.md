@@ -11,8 +11,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] State whether this pass is loose divergence or structured decomposition.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when options
   need examples, local baseline, peer norms, or official behavior before they

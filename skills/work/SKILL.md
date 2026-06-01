@@ -13,8 +13,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the operator request, ticket, batch, or board context.
 - [ ] Classify the work unit: direct request, single ticket, ticket batch,
   board drain, epic slice, or metric loop.

@@ -12,8 +12,6 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Edit, 
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the product/workflow goal, graph data source, active ticket, and
   existing UI conventions.
 - [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs)

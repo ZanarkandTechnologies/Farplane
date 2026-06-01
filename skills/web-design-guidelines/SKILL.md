@@ -11,8 +11,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Identify the UI source files, route, component, or diff being audited.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to keep the
   audit tied to the current source files and latest guideline source.

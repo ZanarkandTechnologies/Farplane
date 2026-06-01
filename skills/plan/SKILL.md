@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] State the intent, expected artifact, and domain pipeline.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when scope
   depends on local baseline, examples, official behavior, peer norms, or

@@ -18,8 +18,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 # Social Content Todos
 
 Use this checklist whenever `social-content` or one of its method addresses is
@@ -76,7 +74,7 @@ MethodSelection(artifact, methods, constraints) :=
 ```
 
 Use `references/model.md` for the artifact matrix and execution packet rules.
-Keep `todos.md` short; upstream references stay method-specific detail.
+Keep the `SKILL.md` Important Checklist short; upstream references stay method-specific detail.
 
 Use method addresses to choose the smallest relevant workflow:
 

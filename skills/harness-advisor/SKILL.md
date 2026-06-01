@@ -10,8 +10,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] State the Codexter improvement request as one concrete harness failure or capability gap.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the
   smallest relevant local evidence before recommending a surface.

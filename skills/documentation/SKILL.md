@@ -10,8 +10,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Identify the library, API, version, and exact behavior question before
   fetching docs.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to prefer

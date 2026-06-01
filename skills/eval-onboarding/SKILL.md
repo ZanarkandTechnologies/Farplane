@@ -14,8 +14,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Confirm the eval target, user-visible behavior, and smallest useful
   pass/fail claim.
 - [ ] Keep the fixture set clean-room: use invented tasks, synthetic repos, and
@@ -80,9 +78,12 @@ Create a minimal eval setup that answers:
      review.
 5. Copy and adapt the reference templates:
    - [task-template.json](references/task-template.json)
-   - [rubric-template.json](references/rubric-template.json)
+   - [judge-prompt-template.md](references/judge-prompt-template.md)
    - [run-report-template.json](references/run-report-template.json)
    - [harness-layout.md](references/harness-layout.md)
+   Or start from the runnable harness-native starter in [eval](../eval/SKILL.md):
+   - [first-harness-eval/tasks.json](examples/first-harness-eval/tasks.json)
+   - [eval run_evals.py](../eval/scripts/run_evals.py)
 6. Start with 3-5 synthetic tasks:
    - one obvious success path
    - one realistic ambiguity path
@@ -94,6 +95,39 @@ Create a minimal eval setup that answers:
    first scorer is manual.
 9. Record the result in the durable surface the repo uses: ticket evidence,
    `experiments/`, CI artifact, or the eval harness directory.
+
+## Starter Runner
+
+Use the `eval` skill runner when the first goal is to test the real harness
+path:
+
+```bash
+python3 skills/eval/scripts/run_evals.py init --harness codex --target-root .
+python3 .codex/evals/run_evals.py run \
+  --harness codex \
+  --label baseline
+```
+
+Supported flags:
+
+- `--tasks`: path to a JSON list of task objects.
+- `--label`: short label used in the generated job ID.
+- `--limit`: optional cap on how many tasks to run.
+- `--max-parallel-tasks`: optional concurrency cap for API/key friendliness.
+- `--agent-command-template` and `--judge-command-template`: optional custom
+  command wrappers for non-Codex/non-Claude harnesses or tests.
+
+Each run writes:
+
+- `<harness>/evals/runs/<job_id>/summary.json`: aggregate metrics and task rows.
+- `<harness>/evals/runs/<job_id>/tasks/<task_id>.json`: task, prompt, answer,
+  judge, and raw command detail.
+- `<harness>/evals/runs/index.json`: newest-first job index.
+
+Use `agent-behavior-test` only when the runner's CLI artifacts are not enough
+and a separate child-agent behavior capture is needed. Graduate to Promptfoo
+when the suite is stable enough to compare models, providers, prompts, or
+variants in a matrix.
 
 ## Decision Branches
 

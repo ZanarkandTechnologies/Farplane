@@ -13,8 +13,6 @@ common_chains:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the selected ticket, demo requirement, and latest QA artifacts before
   creating demo output.
 - [ ] Use [qa](../qa/SKILL.md) as the source of truth for evidence; do not

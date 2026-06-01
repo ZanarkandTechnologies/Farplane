@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Inspect staged changes first; if nothing is staged, inspect the intended
   diff boundary before writing a subject.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to identify

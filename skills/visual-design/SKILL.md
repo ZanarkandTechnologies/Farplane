@@ -15,8 +15,6 @@ allowed-tools: Read, Grep, Glob
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Confirm the functional basis: user, primary action, states, workflow, and
   existing UX decision. If missing, route to
   [functional-ui](../functional-ui/SKILL.md).

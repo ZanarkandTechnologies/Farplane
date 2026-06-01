@@ -13,8 +13,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the selected ticket, linked docs/specs, proof contract, and relevant
   local files before building the delegate prompt.
 - [ ] Use [plan](../plan/SKILL.md) when profile choice, checkout mode, live run

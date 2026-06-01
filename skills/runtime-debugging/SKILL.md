@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Capture the exact symptom, repro path, scope, and success criteria before proposing a fix.
 - [ ] Map the relevant codepath, side-effects, and current observability surface.
 - [ ] State a small set of falsifiable hypotheses and what evidence would separate them.

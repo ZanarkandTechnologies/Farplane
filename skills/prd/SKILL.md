@@ -14,8 +14,6 @@ common_chains:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the current project surfaces before asking: `docs/prd.md`, active
   ticket, `docs/specs/`, `docs/MEMORY.md`, and `docs/TROUBLES.md` when present.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)

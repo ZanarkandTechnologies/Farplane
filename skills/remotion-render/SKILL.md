@@ -13,8 +13,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 # Remotion Render Todos
 
 Use this as the ordered checklist whenever `remotion-render` is active.

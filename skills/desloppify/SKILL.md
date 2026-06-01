@@ -13,8 +13,6 @@ allowed-tools: Read, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 # Desloppify Todo Template
 
 - [ ] Decide the mode first: main-agent coordinator or delegated worker.

@@ -11,8 +11,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the active ticket, its declared screens/states, and its evidence checklist before judging the UI.
 - [ ] Read `docs/TASTE.md` when taste, density, or layout quality is in scope.
 - [ ] If the ticket is too vague to judge honestly, fail it as underspecified instead of reward-hacking a route completion.

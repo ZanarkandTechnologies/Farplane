@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Confirm the branch already works end to end before trying to split it.
 - [ ] Pick the real merge target as the base branch.
 - [ ] Try feature-first grouping before reaching for frontend/backend/infra buckets.

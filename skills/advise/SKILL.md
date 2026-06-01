@@ -14,17 +14,20 @@ Use when the user needs judgment, not a neutral menu.
 Turn an unclear choice into a compact recommendation:
 
 1. Name the real decision.
-2. Name the criteria that matter here.
-3. Compare exactly 3 viable options.
-4. Recommend one.
-5. State the accepted tradeoff and direct next step.
+2. Start from first principles: objective, user/system need, root cause,
+   constraints, assumptions, proof/falsification, tradeoffs, and non-goals.
+3. Name the criteria that matter here.
+4. Compare exactly 3 viable options.
+5. Recommend one.
+6. State the accepted tradeoff and direct next step.
 
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] State the real decision in one sentence.
+- [ ] Start from first principles before comparing options: objective,
+  user/system need, root cause, constraints, assumptions, proof/falsification,
+  tradeoffs, and non-goals.
 - [ ] Name the evaluation criteria that matter for this user, repo, or ticket.
 - [ ] Require supplied evidence when the recommendation depends on current
   facts, official behavior, peer norms, local baseline, or implementation
@@ -53,6 +56,8 @@ Use this shape when a visible decision note is useful:
 
 - Do not use this for direct execution requests with no meaningful choice.
 - Do not invent fake options.
+- Do not dump a full first-principles essay by default; use the basis to choose
+  better options and explain the recommendation compactly.
 - Do not end with "if you want I can ..."
 - Evidence gate: if the recommended option depends on facts not already in
   context, use `reference-grounding` or state the evidence gap before choosing.

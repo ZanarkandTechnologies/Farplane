@@ -10,8 +10,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Clarify the domain, task, and whether an installable skill is likely to
   help more than existing local skills.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to compare the

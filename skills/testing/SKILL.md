@@ -11,8 +11,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Classify the system under test and the risk being controlled.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect
   existing scripts, prior tests, framework conventions, and known failure modes.

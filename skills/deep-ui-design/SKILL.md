@@ -10,8 +10,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the current UI/product context first: active ticket, `docs/prd.md`,
   `docs/specs/`, screenshots if present, nearby UI code, and existing taste or
   design notes.

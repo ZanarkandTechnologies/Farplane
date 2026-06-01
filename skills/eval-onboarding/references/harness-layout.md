@@ -3,33 +3,32 @@
 Use this shape when a repo has no eval harness yet:
 
 ```text
-evals/
-├── tasks.json
-├── rubric.json
-├── run-report.example.json
-├── fixtures/
-│   ├── todo-cli/
-│   ├── notes-api/
-│   └── widget-dashboard/
-└── artifacts/
-    └── .gitkeep
+.codex/evals/
+├── README.md
+├── run_evals.py
+├── prompts/
+│   ├── agent.md
+│   └── judge.md
+├── tasks/
+│   └── harness_tasks.json
+└── runs/
 ```
 
 ## Smoke Command
 
-The first runner can be a tiny script or manual check. It only needs to prove
-that tasks load and that a run report can be produced.
+The first runner should use the real harness path and only one task.
 
 ```bash
-node evals/run.js --tasks evals/tasks.json --rubric evals/rubric.json --out evals/artifacts/latest-report.json
+python3 skills/eval/scripts/run_evals.py init --harness codex --target-root .
+python3 .codex/evals/run_evals.py run --harness codex --label baseline --limit 1
 ```
 
 If no runner exists yet, use this manual smoke checklist:
 
 ```text
 1. JSON parses without errors.
-2. Every task has id, prompt, success_criteria, required_evidence, and runner.
-3. Every required rubric dimension has anchors.
+2. Every task has id, title, query, reference_points, and optional tags/notes.
+3. Rubric rules live in the judge prompt, not in task JSON.
 4. The run report contains one result per executed task.
 5. The final verdict is pass, fail, or blocked.
 ```

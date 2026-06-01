@@ -14,8 +14,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the `System Design Brief` first and confirm architecture is already explicit enough.
 - [ ] Map the main agent friction across reachability, hidden-state visibility, coordination visibility, and proof difficulty.
 - [ ] Derive the smallest useful set of control accelerators, state probes, and coordination views.

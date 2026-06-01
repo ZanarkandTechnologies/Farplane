@@ -10,8 +10,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Parse the user-specified ticket range or explicit ticket list.
 - [ ] Read the relevant context surfaces:
   `tickets/README.md`, `docs/skills/README.md`,

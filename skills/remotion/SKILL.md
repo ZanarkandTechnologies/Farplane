@@ -15,8 +15,6 @@ metadata:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 # Remotion Todos
 
 Use this as the ordered checklist whenever `remotion` is active.

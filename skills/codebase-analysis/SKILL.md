@@ -10,8 +10,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] State the analysis mode: locate, explain, trace, or find comparable local
   patterns.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to separate

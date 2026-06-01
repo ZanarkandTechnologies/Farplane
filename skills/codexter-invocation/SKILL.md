@@ -11,8 +11,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the Codexter run envelope, active ticket, repo policy, and relevant
   project docs before selecting a path.
 - [ ] Use [plan](../plan/SKILL.md) when the envelope, ticket, compute target, or

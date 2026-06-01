@@ -11,8 +11,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read existing product context first: `docs/prd.md`, active ticket,
   `docs/specs/`, user stories, customer notes, and current demo data.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)

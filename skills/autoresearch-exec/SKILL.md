@@ -11,8 +11,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read `autoresearch.md`, `autoresearch.jsonl`, optional ideas/checks, git
   status, and the editable scope before changing anything.
 - [ ] Use [plan](../plan/SKILL.md) if the session contract, metric, guard, or

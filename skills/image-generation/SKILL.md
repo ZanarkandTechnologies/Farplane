@@ -13,8 +13,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 # Image Generation Todos
 
 Use this as the ordered checklist whenever `image-generation` is active.
@@ -48,7 +46,7 @@ Use this as the ordered checklist whenever `image-generation` is active.
 
 Generate project-ready AI image assets with inference.sh CLI (`belt`) while keeping provider-specific details in references.
 
-Use `todos.md` at the start of the pass. It is the ordered anti-forgetting checklist for model choice, reference loading, spend gates, asset saving, and frontend proof.
+Use the `SKILL.md` Important Checklist at the start of the pass. It is the ordered anti-forgetting checklist for model choice, reference loading, spend gates, asset saving, and frontend proof.
 
 Use the built-in `imagegen` skill for normal Codex-native still image generation/editing. Use this skill when the user asks for inference.sh, `belt`, a named image model, CLI repeatability, upscaling, background removal, or a multi-step image pipeline.
 

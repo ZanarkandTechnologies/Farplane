@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Identify the input worlds, source artifacts, and comparison target before
   scoring.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to preserve

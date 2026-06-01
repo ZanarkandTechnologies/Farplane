@@ -1,0 +1,96 @@
+[
+  {
+    "id": "tier1_advise_01",
+    "title": "Advise gives a real recommendation",
+    "query": "Use the advise skill shape. A user asks whether to put a recurring eval workflow in root AGENTS.md, a reusable skill, or a hook. Give a recommendation.",
+    "reference_points": [
+      "States the real decision in one sentence",
+      "Starts from first principles: objective, need, root cause, constraints, proof, tradeoffs, and non-goals",
+      "Names the evaluation criteria that matter for the repo or ticket",
+      "Compares exactly three realistic options with concrete pros and cons",
+      "Recommends one option clearly and names the accepted tradeoff",
+      "States the direct next step or owning next skill",
+      "Does not end with a vague offer to proceed"
+    ],
+    "tags": ["skill", "tier-1", "advise"],
+    "notes": "Layer: skill-specific. Expected result: mirrors the advise checklist in a compact recommendation."
+  },
+  {
+    "id": "tier1_reference_grounding_01",
+    "title": "Reference grounding checks local evidence",
+    "query": "Use the reference-grounding skill shape. A user asks whether this repo already has an eval skill. Answer with compact local evidence and local impact.",
+    "reference_points": [
+      "States the one claim or question being grounded",
+      "Captures the local baseline from repo files such as skills, docs, tickets, or registries",
+      "Chooses the smallest useful source set instead of broad research",
+      "Prefers primary local evidence over commentary",
+      "Writes a compact grounding note with evidence, confidence, and local impact",
+      "Surfaces the exact evidence gap if compact grounding is not enough"
+    ],
+    "tags": ["skill", "tier-1", "reference-grounding"],
+    "notes": "Layer: skill-specific. Expected result: a grounding note, not a generic answer."
+  },
+  {
+    "id": "tier1_prototyping_01",
+    "title": "Prototyping prevents premature scale",
+    "query": "Use the prototyping skill shape. A user wants to add evals for every skill in a large harness at once. Explain the smallest honest prototype first.",
+    "reference_points": [
+      "States the scale risk such as many skills, workflow breadth, automation, or file count",
+      "Names the hypothesis the prototype must prove or falsify",
+      "Picks the smallest representative slice using a 1 -> 10 -> 100 shape",
+      "Prefers a manual or non-scalable move first when it reveals the pattern faster",
+      "Defines evidence that promotes the work to the next scale",
+      "Defines evidence that forces revision, simplification, or stopping",
+      "Returns a Prototype Note with hypothesis, slice, evidence, promote criteria, revise criteria, and next scale step"
+    ],
+    "tags": ["skill", "tier-1", "prototyping"],
+    "notes": "Layer: skill-specific. Expected result: sample-first plan instead of broad eval generation."
+  },
+  {
+    "id": "tier1_review_01",
+    "title": "Review judges proof before pass",
+    "query": "Use the review skill shape. A ticket claims an eval runner is complete. Explain what review must inspect before passing it.",
+    "reference_points": [
+      "Reads the active ticket and proof contract before judging",
+      "Carries declared metrics, rubric gates, hard gates, and evidence obligations into the review",
+      "Chooses relevant rubric families such as code-quality, integration-readiness, and evidence-quality",
+      "Inspects changed surfaces plus neighboring docs, invariants, or interfaces",
+      "Flags missing or weak evidence as a revise or block condition",
+      "Returns scores, verdict, hard-gate failures if any, findings, and next action",
+      "Does not substitute prose confidence for QA or proof artifacts"
+    ],
+    "tags": ["skill", "tier-1", "review"],
+    "notes": "Layer: skill-specific. Expected result: skeptical review contract, not a summary."
+  },
+  {
+    "id": "workflow_landing_page_01",
+    "title": "Landing page workflow calls the right planning todos",
+    "query": "A user asks for a premium product landing page. Use the landing-page workflow shape and explain the planning sequence before implementation.",
+    "reference_points": [
+      "Identifies the product, category, buyer, and promised transformation in one sentence",
+      "Collects or asks for 3-5 competitor or inspiration references before choosing the page direction",
+      "Builds the LandingPage model with Offer, Audience, StoryArc, SectionMatrix, AssetPlan, MotionPlan, and ProofPlan",
+      "Drafts a low-fidelity ASCII page flow before generating assets or writing code",
+      "Creates a section matrix with job, claim, layout, asset carrier, motion lever, proof payload, fallback, and QA for each section",
+      "Plans real or generated raster media, product clarity, accessibility, and reduced-motion checks when premium visuals are in scope",
+      "Does not hand off to frontend-craft until the landing spec or equivalent section plan is approved"
+    ],
+    "tags": ["workflow", "landing-page", "frontend"],
+    "notes": "Layer: workflow. Expected result: multi-step skill workflow, not immediate implementation."
+  },
+  {
+    "id": "system_ticketing_01",
+    "title": "System prompt behavior creates visible tickets",
+    "query": "A user asks for a concrete Codexter harness change that should be tracked. Explain how the agent should use the ticketing system before and after implementation.",
+    "reference_points": [
+      "Creates or updates a visible ticket for new or changed Codexter work",
+      "Keeps frontmatter and body aligned with active work state",
+      "Records plan, acceptance criteria, verification, proof contract, evidence, and blockers in the ticket",
+      "Does not claim completion without tests, evidence, and review",
+      "Moves to documenting or done only after implementation and QA or proof pass",
+      "Keeps detailed working state in repo artifacts instead of chat-only memory"
+    ],
+    "tags": ["system-prompt", "ticketing", "codexter"],
+    "notes": "Layer: system prompt. Expected result: tests whether always-loaded repo rules lead to visible ticket behavior."
+  }
+]

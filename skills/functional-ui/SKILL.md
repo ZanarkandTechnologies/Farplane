@@ -14,8 +14,6 @@ common_chains:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] State the UI/workflow decision and the artifact being produced:
   diagnosis, UX plan, redesign recommendation, or implementation handoff.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)

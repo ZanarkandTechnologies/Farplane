@@ -13,8 +13,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 # Landing Page Todos
 
 Use this short checklist for landing-page work. Load the linked references only
@@ -90,8 +88,9 @@ MethodSelection(section, methods, constraints) :=
   chosen = advise(top3(candidates))
 ```
 
-Use `references/model.md` for the algebra and section matrix rules. Keep
-`todos.md` short; detailed recipes live in references and method records.
+Use `references/model.md` for the algebra and section matrix rules. Keep the
+Important Checklist short; detailed recipes live in references and method
+records.
 
 ## Use When
 
@@ -211,8 +210,8 @@ builder until the spec passes the planning gates below.
    source review checks.
 6. Do not claim Terminal/premium parity while any hard gate fails.
 For cinematic, Terminal-style, premium industrial, asset-heavy, or generated-media pages, run the spec-first gate in `references/spec-first-cinematic-industrial.md` before implementation. If the user asks to build in the same turn, still separate the work into spec, assets, implementation, and visual-review phases so each builder pass has a bounded output.
-For modern scroll-scrub or Terminal/Terminus-level work, also load `todos.md`
-and follow it as the active recipe: competitor/inspiration analysis, user story,
+For modern scroll-scrub or Terminal/Terminus-level work, follow the Important
+Checklist as the active recipe: competitor/inspiration analysis, user story,
 ASCII page flow, nested `advise` section exploration, generated/rendered hero
 media planning, asset conversion, implementation, and QA.
 
@@ -318,7 +317,7 @@ For landing pages with reusable formulas or inspiration references:
 - `references/asset-evidence.md` - generated/real media proof gate.
 - `references/designer-judgment.md` - final 5% premium quality rubric.
 - `references/gotchas.md` - common landing-page mistakes.
-- `todos.md` - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
+- `SKILL.md` Important Checklist - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
 
 ## Output Contract
 

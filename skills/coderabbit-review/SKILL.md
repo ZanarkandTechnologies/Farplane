@@ -11,8 +11,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Confirm `coderabbit --version` works in the repo.
 - [ ] Confirm auth status with `coderabbit auth status --agent` or
   `coderabbit auth status`.

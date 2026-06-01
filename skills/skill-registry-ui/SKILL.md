@@ -12,8 +12,6 @@ allowed-tools: Read, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Regenerate skill metadata and graph data with
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` and
   `python3 skills/skill-maintenance/scripts/generate_skill_graph.py`.

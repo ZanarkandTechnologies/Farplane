@@ -17,8 +17,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Classify the frontend surface: app screen, workflow component, dashboard,
   AI interface, landing page, portfolio, game/tool, media-heavy page, or
   experimental rendering surface.

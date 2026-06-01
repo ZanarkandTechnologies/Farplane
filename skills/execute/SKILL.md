@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the plan, scope, acceptance criteria, and proof contract.
 - [ ] Confirm execution is ready; if scope or proof is still unclear, stop and
   return the gap to the caller or the domain planning skill.

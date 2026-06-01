@@ -12,8 +12,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the bootstrap brief, `docs/prd.md`, active ticket, project root
   files, and existing `AGENTS.md`/README surfaces before scaffolding.
 - [ ] Select or preserve the project profile from

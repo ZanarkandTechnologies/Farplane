@@ -11,9 +11,7 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
-- [ ] Read the target skill package: `SKILL.md`, `todos.md`, references,
+- [ ] Read the target skill package: `SKILL.md`, direct checklist, references,
   scripts, and existing `self-improve/` memory.
 - [ ] Use [plan](../plan/SKILL.md) when the improvement target, eval boundary,
   or editable scope is unclear.
@@ -54,7 +52,7 @@ not skill-specific.
 
 ## Workflow
 
-1. **Read target skill:** inspect `SKILL.md`, any `todos.md`, references, and
+1. **Read target skill:** inspect `SKILL.md`, its direct checklist, references, and
    scripts. Do not edit yet.
 2. **Load skill memory:** read `self-improve/program.md` when present. If the
    user wants durable skill memory, create it before experiments.

@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read `tickets/README.md`, active tickets, `docs/MEMORY.md`, and `docs/TROUBLES.md`.
 - [ ] Run the read-only selector and inspect skipped-ticket reasons.
 - [ ] Stop on human gates, unresolved blockers, unresolved dependencies, claims, missing tools, or missing permissions.

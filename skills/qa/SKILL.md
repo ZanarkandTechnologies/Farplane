@@ -13,8 +13,6 @@ common_chains:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the selected ticket, Proof Contract, acceptance criteria, linked
   specs/docs, and any runtime target handoff.
 - [ ] Use the generic [execute](../execute/SKILL.md) proof/writeback shape, but

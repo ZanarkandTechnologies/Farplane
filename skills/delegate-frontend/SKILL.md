@@ -13,8 +13,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the frontend ticket, product/UX spec, visual/taste brief, target
   routes, expected files, and QA proof requirements.
 - [ ] Use [functional-ui](../functional-ui/SKILL.md) when workflow, IA, states,

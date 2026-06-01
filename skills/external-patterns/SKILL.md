@@ -10,8 +10,6 @@ source: local
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Define the exact code pattern, repo family, language, and freshness bar.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to preserve
   repository provenance and distinguish copied source facts from local

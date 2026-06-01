@@ -12,8 +12,6 @@ allowed-tools: apify, web_search, documentation-searcher
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Identify the platform, actor, live-run boundary, credential/spend status,
   and output needed before invoking Apify.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to confirm the

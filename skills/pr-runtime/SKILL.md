@@ -13,8 +13,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the selected ticket, branch/PR context, compute target, QA needs, and
   any existing `.harness/state/tickets/*.runtime.json` record.
 - [ ] Use [plan](../plan/SKILL.md) when checkout mode, runtime mode, or compute

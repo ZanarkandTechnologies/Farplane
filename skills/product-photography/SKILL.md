@@ -20,8 +20,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 # Product Photography Todos
 
 Use this checklist whenever `product-photography` is active.

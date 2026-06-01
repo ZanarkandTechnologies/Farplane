@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the media ingest bundle, transcript status, retention note, contact
   sheet, and selected frames.
 - [ ] Separate transcript-backed evidence, frame-backed evidence, source
@@ -110,7 +108,7 @@ Use [advise](../advise/SKILL.md) when the answer is not mechanical:
 
 1. Do not collapse “what the video shows” and “what the agent should do” into
    one unchecked prompt.
-2. Do not create a new skill when existing skill todos can be augmented.
+2. Do not create a new skill when existing skill checklists can be augmented.
 3. Do not claim an accurate reimplementation without frame or screenshot proof.
 
 ## References

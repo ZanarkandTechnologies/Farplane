@@ -14,8 +14,6 @@ common_chains:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the chosen spec slice and confirm it is small enough for one planning pass.
 - [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,
   but keep `spec-to-ticket` coding-ticket specific.

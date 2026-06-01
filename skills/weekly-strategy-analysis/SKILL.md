@@ -16,8 +16,6 @@ meeting notes, people signals, Codex threads, and opportunity research.
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Use a direct, high-agency planning stance: recommendation first,
       tradeoffs explicit, no passive status digest.
 - [ ] Load private tool context before fetching user-specific handles: start

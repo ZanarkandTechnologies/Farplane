@@ -26,8 +26,6 @@ plan that proof, and decide whether to scale, revise, or stop.
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] State the scale risk: data volume, users, workflow breadth, architecture,
   automation, polish, file count, research breadth, or operational complexity.
 - [ ] Name the hypothesis the prototype must prove or falsify.

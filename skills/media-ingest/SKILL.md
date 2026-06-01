@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Classify source type, platform, visibility, and whether authenticated
   access or a local export is required.
 - [ ] Run `summarize --extract-only` for URL or local-file text/transcript

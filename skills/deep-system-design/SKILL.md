@@ -10,8 +10,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read product and technical context first: active ticket, `docs/prd.md`,
   `docs/specs/`, nearby schemas/handlers/jobs/config, `docs/MEMORY.md`, and
   `docs/TROUBLES.md`.

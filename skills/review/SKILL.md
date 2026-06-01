@@ -19,8 +19,6 @@ anchored verdict: `pass`, `revise`, or `block`.
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the active ticket and the linked proof before judging anything.
 - [ ] Read the ticket `Proof Contract` and carry declared metrics, rubric gates, hard gates, and evidence obligations into the review.
 - [ ] Read the [review rubric index](./references/review-rubric-index.md) and choose the families that actually fit this ticket.

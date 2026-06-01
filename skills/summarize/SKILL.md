@@ -29,8 +29,6 @@ metadata:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Identify the source, requested output shape, and whether provenance or
   quotes matter.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to preserve

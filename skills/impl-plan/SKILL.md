@@ -15,8 +15,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, and nearby code.
 - [ ] Treat this skill as `PlanTicket<CodingTicket>` inside the
   [project-lifecycle](../deep-init-project/references/project-lifecycle.md).

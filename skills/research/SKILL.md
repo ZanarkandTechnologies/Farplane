@@ -13,8 +13,6 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Choose exactly one primary method first:
   [research:parity](SKILL.md#researchparity),
   [research:gap](SKILL.md#researchgap),

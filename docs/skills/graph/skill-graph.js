@@ -1,19 +1,19 @@
 window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
-      "common-chain": 13,
-      "markdown-ref": 265
+      "common-chain": 17,
+      "markdown-ref": 280
     },
-    "edges": 278,
-    "nodes": 75,
+    "edges": 297,
+    "nodes": 80,
     "sources": {
       "external": 3,
-      "local": 72
+      "local": 77
     },
     "tiers": {
-      "1": 3,
-      "2": 30,
-      "3": 42
+      "1": 4,
+      "2": 31,
+      "3": 45
     }
   },
   "edges": [
@@ -34,6 +34,27 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "agent-behavior-test",
+      "target": "review",
+      "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "agent-qa-test",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "agent-qa-test",
+      "target": "reference-grounding",
+      "target_ref": "reference-grounding",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "agent-qa-test",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
@@ -120,6 +141,13 @@ window.SKILL_GRAPH = {
       "source": "batch-work",
       "target": "advise",
       "target_ref": "advise",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "batch-work",
+      "target": "prototyping",
+      "target_ref": "prototyping",
       "type": "markdown-ref"
     },
     {
@@ -571,10 +599,45 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "common_chains.after",
+      "source": "eval-onboarding",
+      "target": "agent-qa-test",
+      "target_ref": "agent-qa-test",
+      "type": "common-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "eval-onboarding",
+      "target": "execute",
+      "target_ref": "execute",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "eval-onboarding",
+      "target": "testing",
+      "target_ref": "testing",
+      "type": "common-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "eval-onboarding",
+      "target": "testing",
+      "target_ref": "testing",
+      "type": "markdown-ref"
+    },
+    {
       "label": "markdown-ref",
       "source": "execute",
       "target": "plan",
       "target_ref": "plan",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "execute",
+      "target": "prototyping",
+      "target_ref": "prototyping",
       "type": "markdown-ref"
     },
     {
@@ -1175,6 +1238,13 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "plan",
+      "target": "prototyping",
+      "target_ref": "prototyping",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "plan",
       "target": "reference-grounding",
       "target_ref": "reference-grounding",
       "type": "markdown-ref"
@@ -1191,6 +1261,48 @@ window.SKILL_GRAPH = {
       "source": "plan",
       "target": "review",
       "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "pr-review-watch",
+      "target": "coderabbit-review",
+      "target_ref": "coderabbit-review",
+      "type": "common-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "pr-review-watch",
+      "target": "coderabbit-review",
+      "target_ref": "coderabbit-review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "pr-review-watch",
+      "target": "execute",
+      "target_ref": "execute",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "pr-review-watch",
+      "target": "plan",
+      "target_ref": "plan",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "pr-review-watch",
+      "target": "pr-runtime",
+      "target_ref": "pr-runtime",
+      "type": "common-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "pr-review-watch",
+      "target": "pr-runtime",
+      "target_ref": "pr-runtime",
       "type": "markdown-ref"
     },
     {
@@ -1289,6 +1401,13 @@ window.SKILL_GRAPH = {
       "source": "product-photography",
       "target": "research",
       "target_ref": "research#researchparity",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "prototyping",
+      "target": "advise",
+      "target_ref": "advise",
       "type": "markdown-ref"
     },
     {
@@ -1532,6 +1651,13 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "research",
+      "target": "prototyping",
+      "target_ref": "prototyping",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "research",
       "target": "reference-grounding",
       "target_ref": "reference-grounding",
       "type": "markdown-ref"
@@ -1611,6 +1737,13 @@ window.SKILL_GRAPH = {
       "source": "skill-maintenance",
       "target": "plan",
       "target_ref": "plan",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "skill-maintenance",
+      "target": "prototyping",
+      "target_ref": "prototyping",
       "type": "markdown-ref"
     },
     {
@@ -1964,12 +2097,13 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-05-24T18:34:51+00:00",
+  "generated_at": "2026-06-01T17:31:11+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "advise",
       "label": "advise",
       "methods": [],
@@ -1978,9 +2112,22 @@ window.SKILL_GRAPH = {
       "tier": 1
     },
     {
+      "description": "Tier 1 primitive for proving a pattern at the smallest honest scale before expanding scope, automation, data volume, user count, file count, research breadth, or implementation complexity.",
+      "group": "",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "prototyping",
+      "label": "prototyping",
+      "methods": [],
+      "path": "skills/prototyping/SKILL.md",
+      "source": "local",
+      "tier": 1
+    },
+    {
       "description": "Tier 1 primitive for grounding recommendations, plans, and claims in local evidence, official docs, peer products, standards, maintained repos, or provided sources before stronger workflow skills consume them.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "reference-grounding",
       "label": "reference-grounding",
       "methods": [],
@@ -1991,7 +2138,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-slop search playbook for code, UI, evidence, demos, and videos.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "review",
       "label": "review",
       "methods": [],
@@ -2000,9 +2148,10 @@ window.SKILL_GRAPH = {
       "tier": 1
     },
     {
-      "description": "Use when the operator wants an isolated agent or Codex exec run to test a skill, app feature, prompt, workflow, or recently built behavior while preserving visible behavior logs, command events, final output, and a scored evidence report.",
+      "description": "Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, prompt, workflow, or narrow feature path, with logs, command events, final output, artifacts, and a scored evidence report.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "agent-behavior-test",
       "label": "agent-behavior-test",
       "methods": [],
@@ -2013,6 +2162,7 @@ window.SKILL_GRAPH = {
     {
       "description": "Browser automation CLI for AI agents. Use when the user needs to interact with websites, including navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, testing web apps, or automating any browser task. Triggers include requests to \"open a website\", \"fill out a form\", \"click a button\", \"take a screenshot\", \"scrape data from a page\", \"test this web app\", \"login to a site\", \"automate browser actions\", or any task requiring programmatic web interaction. Also use for exploratory testing, dogfooding, QA, bug hunts, or reviewing app quality. Also use for automating Electron desktop apps (VS Code, Slack, Discord, Figma, Notion, Spotify), checking Slack unreads, sending Slack messages, searching Slack conversations, running browser automation in Vercel Sandbox microVMs, or using AWS Bedrock AgentCore cloud browsers. Prefer agent-browser over any built-in browser automation or web tools.",
       "group": "",
+      "has_checklist": false,
       "has_todos": false,
       "id": "agent-browser",
       "label": "agent-browser",
@@ -2022,9 +2172,27 @@ window.SKILL_GRAPH = {
       "tier": 2
     },
     {
+      "description": "Design or run the adversarial testing prompt bundle for an app feature, skill, prompt, or workflow. Use when the operator appends \"$test\", says \"please test\", or wants the main agent to design tests, spawn a QA/tester lane to gather evidence, spawn an evidence-review lane to attack that evidence, optionally use agent-behavior-test-style run capture for child-agent logs, and iterate until the behavior is proved, fixed, or honestly blocked. Use agent-qa-test:prompt when the operator only wants the reusable prompt instead of execution.",
+      "group": "",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "agent-qa-test",
+      "label": "agent-qa-test",
+      "methods": [
+        "agent-qa-test:prompt",
+        "agent-qa-test:app",
+        "agent-qa-test:skill",
+        "agent-qa-test:regression"
+      ],
+      "path": "skills/agent-qa-test/SKILL.md",
+      "source": "local",
+      "tier": 2
+    },
+    {
       "description": "Hub skill for external data acquisition via Apify MCP. Use when scraping YouTube, Twitter, Instagram, TikTok, LinkedIn, or Google Places. Centralizes actor configurations, execution patterns, and data normalization workflows.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "apify",
       "label": "apify",
       "methods": [],
@@ -2035,7 +2203,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Bash efficiency workflow skill for shell-heavy tasks. Use when handling multi-step filesystem/build/debug work and when command safety, speed, and reproducibility matter.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "bash-efficiency",
       "label": "bash-efficiency",
       "methods": [],
@@ -2046,7 +2215,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Execute a user-specified range or list of tickets in one unattended solo-local pass, using Work Admission and batch proof rows so each ticket stays testable while the batch shares setup and regression checks.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "batch-work",
       "label": "batch-work",
       "methods": [],
@@ -2057,7 +2227,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when the user gives multiple projects, GitHub URLs, tools, blogs, repos, or implementations and wants the best features extracted, scored, adapted, and turned into a concrete workflow or implementation plan.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "best-of-worlds",
       "label": "best-of-worlds",
       "methods": [],
@@ -2068,7 +2239,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Early-stage option exploration before requirements commitment.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "brainstorm",
       "label": "brainstorm",
       "methods": [],
@@ -2079,7 +2251,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Patterns for exploring local codebases - finding files, understanding implementations, and extracting reusable patterns. Use when exploring WHERE, HOW, or SHOW ME questions about local code.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "codebase-analysis",
       "label": "codebase-analysis",
       "methods": [],
@@ -2090,7 +2263,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when you want a heavyweight external CodeRabbit CLI review pass on local changes or a PR-sized branch, usually before push or on a PR branch rather than inside the Stop-hook loop.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "coderabbit-review",
       "label": "coderabbit-review",
       "methods": [],
@@ -2101,7 +2275,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo style: type(scope): lower-case imperative summary.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "commit-message",
       "label": "commit-message",
       "methods": [],
@@ -2112,7 +2287,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Socratic deep interview with mathematical ambiguity gating before execution",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "deep-interview",
       "label": "deep-interview",
       "methods": [],
@@ -2123,7 +2299,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Socratic deep system-design interview with ambiguity gating before implementation planning. Use when user intent is clear but entities, signatures, storage, execution boundaries, queues, retries, and architecture choices are still under-specified.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "deep-system-design",
       "label": "deep-system-design",
       "methods": [],
@@ -2134,7 +2311,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Socratic deep UI taste interview with ambiguity gating before visual implementation. Use when workflow is clear but the user's aesthetic direction, taste boundaries, and anti-generic preferences are still unclear.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "deep-ui-design",
       "label": "deep-ui-design",
       "methods": [],
@@ -2145,7 +2323,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams such as top-level delta maps, zoom-ins, numbered data-flow traces, or inline-signature component diagrams.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "diagramming",
       "label": "diagramming",
       "methods": [],
@@ -2156,7 +2335,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Workflows for fetching and synthesizing official documentation using Ref tools. Use when you need official docs for a library or framework.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "documentation",
       "label": "documentation",
       "methods": [],
@@ -2167,7 +2347,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Tier 2 generic execution interface. Use when a workflow needs the common do-the-work, prove-it, write-back, and review loop without treating one application pipeline as universal.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "execute",
       "label": "execute",
       "methods": [],
@@ -2178,7 +2359,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Workflows for finding code patterns across GitHub and exploring specific repositories. Use when searching for how others implement features or deep diving into libraries.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "external-patterns",
       "label": "external-patterns",
       "methods": [],
@@ -2189,7 +2371,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Helps users discover and install agent skills when they ask questions like \"how do I do X\", \"find a skill for X\", \"is there a skill that can...\", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "find-skills",
       "label": "find-skills",
       "methods": [],
@@ -2200,7 +2383,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Turn fuzzy operator intent into a strong Codex /goal command with an auditable outcome, verification surface, constraints, boundaries, iteration policy, and blocked stop condition. Use before activating Goal mode when the task should continue across turns but the completion contract is not yet crisp.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "goal-crafter",
       "label": "goal-crafter",
       "methods": [],
@@ -2211,7 +2395,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Tier 2 Codexter harness placement advisor. Use when the user wants to make Codexter better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, or registries.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "harness-advisor",
       "label": "harness-advisor",
       "methods": [],
@@ -2222,7 +2407,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when a workflow needs to turn a URL, social post, audio file, video file, or local media path into a compact evidence bundle with source metadata, extraction commands, transcript status, representative frames, retention notes, and downstream handoff paths.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "media-ingest",
       "label": "media-ingest",
       "methods": [],
@@ -2233,7 +2419,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Tier 2 generic planning interface. Use when a workflow needs to turn intent into executable shape, proof, and handoff rules without importing a domain-specific planning skill as the universal pattern.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "plan",
       "label": "plan",
       "methods": [],
@@ -2244,7 +2431,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Operator-forced recovery mode for when the assistant missed something obvious, got defensive, or explained instead of acting. Use when the user explicitly says `repent` or otherwise clearly asks for audit-then-fix behavior on the current task after the default correction-recovery behavior was not enough.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "repent",
       "label": "repent",
       "methods": [],
@@ -2255,7 +2443,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Tier 2 evidence workflow with method-addressed research passes: research:parity, research:gap, research:competitor, research:official-docs, research:code-patterns, research:user-grounding, and research:source-synthesis.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "research",
       "label": "research",
       "methods": [
@@ -2274,7 +2463,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Hypothesis-driven runtime debugging skill for reproducible bugs, flaky failures, regressions, and performance or memory issues where reading code alone is insufficient. Use when you need instrumentation, runtime evidence, root-cause analysis, and proof of the fix.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "runtime-debugging",
       "label": "runtime-debugging",
       "methods": [],
@@ -2285,7 +2475,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "summarize",
       "label": "summarize",
       "methods": [],
@@ -2296,7 +2487,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Testing index skill for selecting backpressure and domain guidance.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "testing",
       "label": "testing",
       "methods": [],
@@ -2307,7 +2499,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use after media ingest when transcript evidence and representative frames need to be turned into a storyboard, visible workflow reconstruction, extracted source todos, skill-to-skill comparison, copied-skill candidate, and proof requirements.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "video-understanding",
       "label": "video-understanding",
       "methods": [],
@@ -2318,7 +2511,8 @@ window.SKILL_GRAPH = {
     {
       "description": "UI verification and visual debugging skill for agents. Enforces ticket-first, taste-aware screen comparison with Expected UI Spec -> Observed Snapshot Report -> Diff Report -> Fix Plan, plus geometry/layout assertions and evidence artifacts.",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "visual-qa",
       "label": "visual-qa",
       "methods": [],
@@ -2329,7 +2523,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
       "group": "",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "web-design-guidelines",
       "label": "web-design-guidelines",
       "methods": [],
@@ -2340,7 +2535,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Post-system-design planning skill that turns a System Design Brief into an Agent Testability Brief covering control accelerators, state probes, coordination views, tooling, and proof surfaces before ticketization or per-ticket build planning.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "agent-testability-plan",
       "label": "agent-testability-plan",
       "methods": [],
@@ -2351,7 +2547,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when an autoresearch session exists or the user asks to run, continue, resume, or execute metric-driven autoresearch experiments with keep/discard decisions based on autoresearch.md, autoresearch.sh, checks, and autoresearch.jsonl.",
       "group": "self-improvement",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "autoresearch-exec",
       "label": "autoresearch-exec",
       "methods": [],
@@ -2362,7 +2559,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when the user wants to set up an autoresearch run, optimize anything with a metric, design a mechanical improvement loop, or turn a fuzzy goal into Goal/Scope/Metric/Direction/Verify/Guard session artifacts before execution.",
       "group": "self-improvement",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "autoresearch-plan",
       "label": "autoresearch-plan",
       "methods": [],
@@ -2373,7 +2571,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Parent closeout skill for one selected ticket. Use when implementation and review are done and the remaining work is durable docs writeback, final checks, commit prep, and optional push/publish.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "close-ticket",
       "label": "close-ticket",
       "methods": [],
@@ -2384,7 +2583,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Interpret a CodexterRunEnvelope inside normal Codex, validate repo policy and one filesystem ticket, select local compute, route to existing Codexter skills, and write a ProofPacket.",
       "group": "harness",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "codexter-invocation",
       "label": "codexter-invocation",
       "methods": [],
@@ -2395,6 +2595,7 @@ window.SKILL_GRAPH = {
     {
       "description": "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this package kept as a thin upstream pointer.",
       "group": "backend",
+      "has_checklist": false,
       "has_todos": false,
       "id": "convex",
       "label": "convex",
@@ -2406,7 +2607,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Index of best practices for building charts, dashboards, and knowledge graphs using D3.js and Recharts.",
       "group": "frontend-data",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "data-viz",
       "label": "data-viz",
       "methods": [],
@@ -2417,7 +2619,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Deep bootstrap workflow for new projects. Use a deep-interview-quality intake, then scaffold docs-first operating files, explicit local-vs-deploy quality-gate decisions, canonical runtime/QA command guidance, and reusable plan/build prompts.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "deep-init-project",
       "label": "deep-init-project",
       "methods": [],
@@ -2428,7 +2631,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Route bounded Codexter work to configured external coding-agent CLIs through explicit adapter/profile contracts, managed prompts, runtime logs, and ticket evidence handoff. Use when another local CLI/model/harness is stronger for a task but Codexter must keep ticket, QA, review, and integration authority.",
       "group": "harness",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "delegate-cli",
       "label": "delegate-cli",
       "methods": [],
@@ -2439,7 +2643,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Codexter ticket, QA, visual review, and integration authority.",
       "group": "frontend",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "delegate-frontend",
       "label": "delegate-frontend",
       "methods": [],
@@ -2450,7 +2655,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Run the demo phase for one selected ticket by turning passing QA artifacts into demo-ready outputs and producing a structured demo result artifact for Stop-hook gating.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "demo",
       "label": "demo",
       "methods": [],
@@ -2461,7 +2667,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when an MVP, prototype, or client demo feels fake and needs believable operational workflows, realistic demo data, and a presentation-worthiness rubric before design or implementation begins.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "demo-realism",
       "label": "demo-realism",
       "methods": [],
@@ -2472,7 +2679,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when the operator wants repo-quality cleanup driven by the `desloppify` CLI. This skill supports two modes: the main agent delegates one bounded worker for the scan/next/resolve loop, while a delegated worker runs the CLI directly without spawning again. If worker mode hits nested `desloppify review --run-batches --runner codex` work, it must stop and hand control back instead of nesting another Codex runner.",
       "group": "repo-health",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "desloppify",
       "label": "desloppify",
       "methods": [],
@@ -2481,9 +2689,22 @@ window.SKILL_GRAPH = {
       "tier": 3
     },
     {
+      "description": "Guide newcomers through setting up a minimal, clean-room eval harness for coding agents, prompts, skills, or workflow changes. Use when the user asks for basic eval JSON tasks, synthetic fixtures, scorer shape, harness setup, or an example evaluation workflow without copying private or third-party systems.",
+      "group": "harness",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "eval-onboarding",
+      "label": "eval-onboarding",
+      "methods": [],
+      "path": "skills/eval-onboarding/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
       "description": "Use when the operator wants to monitor curated X accounts, YouTube channels, or blogs/RSS feeds, discover new content, dedupe ingested URLs, run harness-scout on eligible content items, synthesize repeated patterns with best-of-worlds, and write proposal tickets to Notion or a local review inbox.",
       "group": "harness",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "feed-scout",
       "label": "feed-scout",
       "methods": [],
@@ -2494,7 +2715,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend surface and may need UX planning, visual design, landing-page treatment, motion, Three.js/WebGL, generated image/video assets, standards audit, or QA routing. Routes through functional-ui, visual-design, landing-page, frontend-design references, imagegen, image-generation, video-generation, remotion, remotion-render, web-design-guidelines, and visual-qa as needed.",
       "group": "frontend",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "frontend-craft",
       "label": "frontend-craft",
       "methods": [
@@ -2507,7 +2729,8 @@ window.SKILL_GRAPH = {
     {
       "description": "App-UI implementation reference for shadcn, AI Elements, curated registries, theming, and component construction after functional-ui and visual-design have settled the workflow and look. For new frontend implementation, prefer frontend-craft as the public orchestrator.",
       "group": "frontend",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "frontend-design",
       "label": "frontend-design",
       "methods": [],
@@ -2518,7 +2741,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when planning, diagnosing, or redesigning product UI and UX flows, especially \"this UI sucks\" broken-component requests. Grounds recommendations in user stories, current UI diagnosis, comparable/latest examples, states, and a clear implementation handoff before visual-design or frontend-craft builds.",
       "group": "frontend",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "functional-ui",
       "label": "functional-ui",
       "methods": [],
@@ -2529,7 +2753,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants Codexter to extract harness feature ideas, dedupe the source against the source registry, dedupe candidates against the local feature registry, compare Codexter versus the source, and produce adopt/adapt/reject/defer decisions with scorecards and ticket handoffs.",
       "group": "harness",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "harness-scout",
       "label": "harness-scout",
       "methods": [],
@@ -2540,7 +2765,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Codexter's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.",
       "group": "content-image",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "image-generation",
       "label": "image-generation",
       "methods": [],
@@ -2551,7 +2777,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Build-phase orchestrator for one selected ticket. Runs ephemerally, coordinates builder/reviewer/QA/evidence-check lanes, and hands results back to the Stop hook.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "impl",
       "label": "impl",
       "methods": [],
@@ -2562,7 +2789,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Unified per-ticket planning skill with a detailed file-map-first plan centered on ordered action, callable seams, typed data flow, blast radius, verification, and explicit gap analysis for missing or partial features.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "impl-plan",
       "label": "impl-plan",
       "methods": [],
@@ -2573,7 +2801,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use for one-page marketing, launch, homepage, portfolio, hero-heavy, cinematic, or scrolltelling frontend surfaces. Shapes the offer, story arc, sections, assets, motion, and proof before frontend-craft implements.",
       "group": "frontend-content",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "landing-page",
       "label": "landing-page",
       "methods": [],
@@ -2582,9 +2811,22 @@ window.SKILL_GRAPH = {
       "tier": 3
     },
     {
+      "description": "Watch an explicitly selected GitHub pull request until configured review agents and checks pass, using project-local review memory, bounded heartbeat polling, fix loops, and terminal Telegram notifications.",
+      "group": "coding",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "pr-review-watch",
+      "label": "pr-review-watch",
+      "methods": [],
+      "path": "skills/pr-review-watch/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
       "description": "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer or declared QA target.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "pr-runtime",
       "label": "pr-runtime",
       "methods": [],
@@ -2595,7 +2837,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-first slices and falling back to layer-based buckets when feature seams are too entangled.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "pr-splitting",
       "label": "pr-splitting",
       "methods": [],
@@ -2606,7 +2849,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Phase-1 Codexter skill for requirements gathering and PRD authoring.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "prd",
       "label": "prd",
       "methods": [],
@@ -2617,7 +2861,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Plan and produce product photography, AI product photos, packshots, e-commerce images, Amazon listing images, Shopify product assets, commercial product hero shots, lifestyle product photos, detail shots, scale shots, mockups, and advertising photos. Routes normal still generation through `imagegen`, named inference.sh image models through `image-generation`, cutouts/upscales through image-generation tools, and frontend/product-page integration through `frontend-craft`.",
       "group": "content-image",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "product-photography",
       "label": "product-photography",
       "methods": [
@@ -2635,7 +2880,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Run the QA phase for one selected ticket by collecting proof artifacts, reconciling acceptance criteria, and producing a structured QA result artifact for Stop-hook gating.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "qa",
       "label": "qa",
       "methods": [],
@@ -2646,7 +2892,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Goal-backed board-drain context provider for prepared Codexter ticket boards. Use after specs and tickets exist when the operator wants the board read, eligible work selected or grouped, and each selected work unit handed to $work until the native Goal stops on no ready work, blockers, or human gates.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "ralph",
       "label": "ralph",
       "methods": [],
@@ -2657,7 +2904,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Index of best practices for building graph-based applications and node-based editors using React Flow.",
       "group": "frontend-data",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "react-flow",
       "label": "react-flow",
       "methods": [],
@@ -2668,7 +2916,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Author Remotion video code in React with official best-practice rules for compositions, timing, assets, captions, audio, transitions, Three.js, Tailwind, HTML-in-canvas, and media measurement. Use for Remotion code, React video components, deterministic motion graphics, captions, audio visualization, SFX, composition structure, and local render checks. Use `remotion-render` when the authored Remotion code should be rendered to MP4 through inference.sh.",
       "group": "content-video",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "remotion",
       "label": "remotion",
       "methods": [],
@@ -2679,7 +2928,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Render React/Remotion component code into video through the inference.sh `belt` CLI when available. Use for code-to-video, TSX-to-MP4, programmatic motion graphics, data-driven videos, animated UI sequences, and deterministic React animation exports. Do not use for model-native text-to-video, image-to-video, avatar/lipsync, or video editing; use `video-generation` for those.",
       "group": "content-video",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "remotion-render",
       "label": "remotion-render",
       "methods": [],
@@ -2690,7 +2940,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, or run binary assertion based skill optimization through the autoresearch artifact contract.",
       "group": "self-improvement",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "self-improve",
       "label": "self-improve",
       "methods": [],
@@ -2701,7 +2952,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.",
       "group": "skills",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "skill-creator",
       "label": "skill-creator",
       "methods": [],
@@ -2712,7 +2964,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Maintain Codexter skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the generated registry, and plan consolidation without bloating the global system prompt.",
       "group": "skills",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "skill-maintenance",
       "label": "skill-maintenance",
       "methods": [],
@@ -2723,7 +2976,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Open, refresh, and validate the Codexter skill registry graph UI, including clickable skill nodes, rendered SKILL.md Markdown, frontmatter details, tier colors, and common-chain edges.",
       "group": "skills",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "skill-registry-ui",
       "label": "skill-registry-ui",
       "methods": [],
@@ -2734,7 +2988,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Plan and produce social media content through method-addressed workflows: social-content:cross-platform, social-content:carousel, social-content:linkedin, and social-content:twitter-thread. Use for social posts, captions, hooks, content calendars, carousel plans, LinkedIn posts, Twitter/X threads, UGC concepts, thumbnails, and cross-platform campaign bundles. Routes still visuals through `imagegen` or `image-generation`, video clips through `video-generation`, deterministic video through `remotion` or `remotion-render`, and campaign or web bundles through `frontend-craft`.",
       "group": "content-social",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "social-content",
       "label": "social-content",
       "methods": [
@@ -2750,7 +3005,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Phase-2 Codexter skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work, and consume an Agent Testability Brief when present.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "spec-to-ticket",
       "label": "spec-to-ticket",
       "methods": [],
@@ -2761,6 +3017,7 @@ window.SKILL_GRAPH = {
     {
       "description": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.",
       "group": "frontend",
+      "has_checklist": false,
       "has_todos": false,
       "id": "vercel-react-best-practices",
       "label": "vercel-react-best-practices",
@@ -2772,7 +3029,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Generate or edit AI video assets with inference.sh `belt` video apps, using the broad AI-video model map plus Codexter's workspace, spend-gate, and frontend QA rules. Covers Google Veo, Seedance 2.0, HappyHorse, Wan, Grok, P-Video, avatar/lipsync, image-to-video, video editing, foley discovery, upscaling, social media videos, marketing clips, explainer videos, product demos, and frontend-bound video assets. Route React/Remotion code authoring to `remotion` and inference.sh code-to-video renders to `remotion-render`.",
       "group": "content-video",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "video-generation",
       "label": "video-generation",
       "methods": [],
@@ -2783,7 +3041,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Plan and produce video workflows through method-addressed routes: video-production:marketing, video-production:explainer, video-production:storyboard, video-production:talking-head, and video-production:ad-spec. Use for marketing videos, promo clips, launch videos, explainer videos, product demos, storyboards, shot lists, talking-head/avatar/lipsync videos, and platform-specific video ad specs. Routes model-native generation through `video-generation`, still assets through `imagegen` or `image-generation`, deterministic assembly through `remotion` or `remotion-render`, and campaign/web integration through `frontend-craft`.",
       "group": "content-video",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "video-production",
       "label": "video-production",
       "methods": [
@@ -2800,7 +3059,8 @@ window.SKILL_GRAPH = {
     {
       "description": "Use when the user wants a frontend to look better, feel more tasteful, define a visual system, improve typography/color/layout/motion taste, or apply anti-slop visual direction after the functional workflow is known. Complements functional-ui and feeds frontend-craft implementation.",
       "group": "frontend",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "visual-design",
       "label": "visual-design",
       "methods": [],
@@ -2809,9 +3069,22 @@ window.SKILL_GRAPH = {
       "tier": 3
     },
     {
+      "description": "Run Kenji's weekly strategy analysis by collecting Notion plans, done and not-done tasks, meeting notes, people signals, Codex thread history, and public opportunity signals into a local context bundle, then using bounded analysis lanes to produce priorities, depriorities, due dates, drift analysis, and a chat-ready weekly plan. Use for the weekly strategy automation, Plan Week retros, Codex drift reviews, and personal operating reviews that compare planned work against actual tasks, meetings, and agent threads.",
+      "group": "personal-ops",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "weekly-strategy-analysis",
+      "label": "weekly-strategy-analysis",
+      "methods": [],
+      "path": "skills/weekly-strategy-analysis/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
       "description": "Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then route to the right Codexter skill, native Goal, compute target, and proof policy before implementation starts.",
       "group": "coding",
-      "has_todos": true,
+      "has_checklist": true,
+      "has_todos": false,
       "id": "work",
       "label": "work",
       "methods": [],

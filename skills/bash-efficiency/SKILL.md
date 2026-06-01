@@ -12,8 +12,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Identify the filesystem/build/debug goal and the safest working
   directory before running commands.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for local

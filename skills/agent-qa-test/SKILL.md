@@ -16,8 +16,6 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Identify the target behavior and whether the operator wants run mode or
   `agent-qa-test:prompt`.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the

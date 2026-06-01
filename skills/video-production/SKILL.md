@@ -21,8 +21,6 @@ allowed-tools: Read, Grep, Glob, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 # Video Production Todos
 
 Use this checklist whenever `video-production` or one of its method addresses
@@ -86,7 +84,7 @@ MethodSelection(deliverable, methods, constraints) :=
 ```
 
 Use `references/model.md` for scene/deliverable matrix, method selection, and
-execution packet rules. Keep `todos.md` short; upstream references stay
+execution packet rules. Keep the `SKILL.md` Important Checklist short; upstream references stay
 method-specific detail.
 
 Use method addresses to choose the smallest relevant workflow:

@@ -13,8 +13,6 @@ common_chains:
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
 - [ ] Read the selected ticket and linked docs before launching any lanes.
 - [ ] Treat this skill as `ExecuteTicket<CodingTicket>` plus proof integration
   inside the [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
