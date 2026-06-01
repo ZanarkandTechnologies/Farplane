@@ -630,6 +630,20 @@ def extract_control_surface(raw_text: str) -> str:
     return CONTROL_SURFACE_ALIASES.get(matched, matched)
 
 
+def extract_control_surfaces(raw_text: str) -> list[str]:
+    surfaces: list[str] = []
+    for match in CONTROL_SURFACE_PATTERN.finditer(raw_text):
+        matched = str(match.group("skill") or "").strip().lower()
+        normalized = CONTROL_SURFACE_ALIASES.get(matched, matched)
+        if normalized and normalized not in surfaces:
+            surfaces.append(normalized)
+    return surfaces
+
+
+def extract_skill_mentions(raw_text: str) -> list[str]:
+    return extract_control_surfaces(raw_text)
+
+
 def _with_runtime_metadata(
     payload: dict[str, object],
     *,

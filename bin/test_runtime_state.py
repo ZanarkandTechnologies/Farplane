@@ -17,6 +17,8 @@ from user_turn import (
     capture_user_turn,
     conversation_window_path,
     current_run_state_path,
+    extract_control_surfaces,
+    extract_skill_mentions,
     has_explicit_impl_invocation,
     is_internal_user_prompt,
     load_current_run,
@@ -135,6 +137,12 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(normalized["requested_outcome"], "code_change")
         self.assertEqual(normalized["requested_execution_phase"], "")
         self.assertFalse(normalized["explicit_impl_requested"])
+
+    def test_extract_control_surfaces_lists_unique_skill_mentions(self) -> None:
+        text = "First $impl-plan TASK-0160, then $qa and $docs-closeout. Please do not double count $qa."
+
+        self.assertEqual(extract_control_surfaces(text), ["impl-plan", "qa", "close-ticket"])
+        self.assertEqual(extract_skill_mentions(text), ["impl-plan", "qa", "close-ticket"])
 
     def test_build_runtime_claim_groups_active_ownership(self) -> None:
         claim = build_runtime_claim(
