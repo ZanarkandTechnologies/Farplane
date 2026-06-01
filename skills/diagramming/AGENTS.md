@@ -4,7 +4,7 @@
 
 - `SKILL.md`
 - `README.md`
-- `todos.md`
+- `SKILL.md` Important Checklist
 - `references/patterns.md`
 - `references/review.md`
 

@@ -5,7 +5,7 @@ Explicit PR watcher workflow for already-open GitHub pull requests.
 ## Entry Points
 
 - `SKILL.md`: operational workflow, guardrails, and outcome contract.
-- `todos.md`: first-load checklist source.
+- `SKILL.md` Important Checklist: first-load checklist source.
 - `templates/pr-review-pipeline.md`: project-local review memory template.
 - `templates/codex-automation-prompt.md`: visible heartbeat prompt template.
 - `fixtures/*.json`: deterministic PR state samples for the helper tests.

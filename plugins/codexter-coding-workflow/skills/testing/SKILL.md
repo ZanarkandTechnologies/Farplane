@@ -8,6 +8,26 @@ source: local
 
 # Testing Index
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Classify the system under test and the risk being controlled.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect
+  existing scripts, prior tests, framework conventions, and known failure modes.
+- [ ] Choose the cheapest meaningful backpressure: typecheck, lint, unit,
+  integration, browser, visual, eval, smoke, or manual proof.
+- [ ] Name what the selected test proves and what it does not prove.
+- [ ] Run or specify the command/artifact expected by the caller.
+- [ ] Capture logs, screenshots, traces, fixtures, or result files when proof
+  needs to survive handoff.
+- [ ] Use [advise](../advise/SKILL.md) when there are meaningful tradeoffs
+  between speed, confidence, flake risk, and coverage.
+- [ ] Use [review](../review/SKILL.md) before changing durable test strategy or
+  claiming high-risk work is validated.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 Use this skill as a lightweight router to testing guidance across domains.
 
 ## Core Pattern
@@ -31,4 +51,3 @@ Each domain skill may include `references/how-to-test.md`. This index should lis
 - [video-app.md](references/video-app.md) - Playback/encoding, bandwidth adaptation, quality.
 - [canvas-app.md](references/canvas-app.md) - Rendering correctness, perf, input events.
 - [multiplayer-2p-game.md](references/multiplayer-2p-game.md) - Sync, determinism, cheating, latency.
-

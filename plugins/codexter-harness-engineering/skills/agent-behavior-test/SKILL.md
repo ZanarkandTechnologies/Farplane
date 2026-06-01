@@ -8,6 +8,29 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Agent Behavior Test
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Define the exact behavior under test and the target persona or skill caller.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the
+  owning skill, feature docs, ticket, existing tests, or prior artifacts before
+  launching the child run.
+- [ ] Choose CLI JSONL, native subagent, or both, and name why that runner fits
+  the proof target.
+- [ ] Write the child prompt with visible checkpoints, forbidden shortcuts, and
+  the final report shape.
+- [ ] Save child-agent artifacts under the ticket, experiment, or declared run
+  directory.
+- [ ] Score only visible behavior: events, commands, file/artifact evidence,
+  checkpoint ledger, and final output.
+- [ ] Use [advise](../advise/SKILL.md) when runner choice, schema strictness, or
+  pass threshold has real tradeoffs.
+- [ ] Use [review](../review/SKILL.md) before treating a new behavior-test
+  fixture or repeated workflow as trustworthy.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 Use this skill when the task is to test behavior by launching a separate agent
 run as an end user, QA lane, skill caller, or workflow canary.
 

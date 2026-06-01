@@ -11,7 +11,7 @@ interface's proof and writeback shape.
 ## Public API / Entrypoints
 
 - `SKILL.md`: main close-ticket workflow and guardrails
-- `todos.md`: ordered parent-skill checklist
+- `SKILL.md` Important Checklist: ordered parent-skill checklist
 - `README.md`: module summary and test checklist
 - `AGENTS.md`: maintenance notes
 
@@ -28,7 +28,7 @@ interface's proof and writeback shape.
 
 - Confirm `SKILL.md` positions `close-ticket` as the canonical name and
   `docs-closeout` as alias-only.
-- Confirm `todos.md` stays a plain ordered checklist with Markdown links to
+- Confirm the `SKILL.md` Important Checklist stays a plain ordered checklist with Markdown links to
   related skills.
 - Confirm the workflow covers docs writeback, checks, commit prep, and optional
   push in that order.

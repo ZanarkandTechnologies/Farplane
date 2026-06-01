@@ -17,7 +17,10 @@ guessing. This is the small evidence move, not a research router.
 Name the claim that needs grounding, inspect the smallest trustworthy source
 set, and return a compact evidence note for the active workflow.
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
+
+Source: `SKILL.md`
 
 - [ ] State the one claim, decision, expectation, or comparison that needs
   grounding.
@@ -33,7 +36,7 @@ set, and return a compact evidence note for the active workflow.
   caller instead of launching a higher-tier research method from this primitive.
 - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
-
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
 ## Source Choice
 
 - Local repo question: inspect code, tickets, specs, docs, and nearby tests.

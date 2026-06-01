@@ -593,7 +593,8 @@
               <tbody>
                 ${row("Group", node.group || "none")}
                 ${row("Source", node.source)}
-                ${row("Todos", node.has_todos ? "present" : "missing")}
+                ${row("Checklist", node.has_checklist ? "present" : "missing")}
+                ${row("Todos file", node.has_todos ? "present" : "missing")}
                 ${row("Methods", String(methods.length))}
               </tbody>
             </table>

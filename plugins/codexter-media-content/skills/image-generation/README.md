@@ -9,12 +9,12 @@ Keep one active image-generation skill with the upstream umbrella model map in `
 ## Entry Point
 
 - `SKILL.md`: trigger rules, best-current defaults, model map, routing, spend gates, output contract, and frontend handoff.
-- `todos.md`: ordered routing checklist for choosing the right reference.
+- `SKILL.md` Important Checklist: ordered routing checklist for choosing the right reference.
 - `references/domain-production.md`: shared routing, artifact saving, async, social publish guard, and upstream-safety workflow for social/photo/image domain skills.
 - `references/tools/`: upstream inference.sh image tool `SKILL.md` files copied as reference material.
 - `references/long-running-jobs.md`: async `--no-wait`, task ID, polling, timer, and delegation guidance.
 
-Use `SKILL.md` for broad model choice. Use `todos.md` to select the relevant branch:
+Use `SKILL.md` for broad model choice and its Important Checklist to select the relevant branch:
 
 - `references/tools/infsh-cli.md`: `belt` CLI usage.
 - `references/tools/*.md`: provider/app instructions.

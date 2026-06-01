@@ -9,7 +9,7 @@ before push or on a PR-sized branch, not as a default Stop-hook behavior.
 
 - [`SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/SKILL.md):
   main workflow contract
-- [`todos.md`](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/todos.md):
+- `SKILL.md` Important Checklist:
   compact anti-forgetting checklist
 - [`references/stage-matrix.md`](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/references/stage-matrix.md):
   stage defaults and when to use each path

@@ -18,12 +18,12 @@ Best path:
    frontmatter: `tier`, `source`, Tier 3 `group`, optional `methods`,
    optional `upstream_url`, and optional Tier 3 `common_chains`.
 3. Add a script such as `bin/sync_skill_registry.py` that reads skill
-   frontmatter, validates tiered `todos.md` links, and writes a generated
+   frontmatter, validates tiered checklist links, and writes a generated
    `docs/skills/registry.jsonl`.
 4. Generate flow or graph views from Tier 3 `group` plus `common_chains`; do
    not maintain a second hand-authored sequence registry.
-5. Add or upgrade `todos.md` files in batches, leaving upstream-owned external
-   skills without local todos when the wrapper logic belongs in a caller skill.
+5. Put required every-invocation checklist items directly in `SKILL.md` and
+   prune redundant `todos.md` files once migration is complete.
 6. Consolidate only after the registry exposes real duplicate surfaces; prefer
    one owning skill with `skill:method` addresses when several wrappers share
    the same workflow, proof contract, and references.
@@ -33,7 +33,8 @@ Best path:
 Treat skills as a dependency hierarchy, not a hidden router tree.
 
 - **Tier 1 primitives** are core judgment and quality defaults:
-  `advise`, `reference-grounding`, `review`, and skill `todos.md` loading.
+  `advise`, `reference-grounding`, `review`, and skill first-load checklist
+  loading.
   Add a new Tier 1 primitive only when multiple Tier 2 interfaces need that
   move as a base dependency. If the behavior is common but primarily
   evidence-gathering, planning, execution, or review shaped, keep it as a Tier
@@ -52,7 +53,7 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
   second registry.
 - **`skill:method` names** should identify explicit methods inside one owning
   skill. They should not create nested router traversal.
-- **Router-style skills** should use conditional todo lists, not sequential
+- **Router-style skills** should use conditional checklists, not sequential
   "run every method" checklists. Pick one primary method first, add supporting
   methods only when a trigger appears, and stop when the next skill has enough
   evidence or plan shape.
@@ -70,17 +71,18 @@ Split the source of truth by ownership:
   human judgment: `tier`, `source`, Tier 3 `group`, optional `methods`,
   optional `upstream_url`, and optional Tier 3 `common_chains`.
 - The sync script derives file-local facts:
-  `path`, `has_todos`, `version`, `allowed_tools`, and Markdown skill links.
-- The sync script rejects Tier 3 `todos.md` files that direct-link Tier 1
+  `path`, `has_checklist`, legacy `has_todos`, `version`, `allowed_tools`, and
+  Markdown skill links.
+- The sync script rejects Tier 3 checklists that direct-link Tier 1
   primitives. Tier 3 checklists should link the relevant Tier 2 surface and let
   that surface carry Tier 1 obligations.
 - `docs/skills/registry.jsonl` is generated output. Do not hand-edit it.
 - Flow and graph views are generated from Tier 3 `group` and `common_chains`
   metadata. Do not maintain a separate hand-authored sequence registry.
 
-Keep `todos` as a derived field instead of a frontmatter field. The source of
-truth is whether `skills/<name>/todos.md` exists and whether future validators
-can resolve its Markdown links.
+Keep checklist coverage as a derived field instead of a frontmatter field. The
+source of truth is the marker-delimited `## Important Checklist` section inside
+`SKILL.md`; legacy `todos.md` files are migration inputs only.
 
 Do not add `role`, `depth_dependencies`, `consolidation`, or `notes` to
 frontmatter in the first registry pass. Those are either inferable from the
@@ -129,7 +131,8 @@ depth by other skills. Use numeric tiers only:
   "path": "skills/research/SKILL.md",
   "description": "Tier 2 evidence workflow with method-addressed research passes...",
   "methods": ["research:parity", "research:gap", "research:competitor"],
-  "has_todos": true,
+  "has_checklist": true,
+  "has_todos": false,
   "skill_links": ["advise", "reference-grounding", "review"]
 }
 ```
@@ -145,10 +148,13 @@ Recommended generated package fields:
 - `group`: required frontmatter for Tier 3 skills only.
 - `common_chains`: optional frontmatter, Tier 3 only, one-directional.
 - `upstream_url`: optional frontmatter for upstream-owned skill packages.
-- `has_todos`: generated from the filesystem.
+- `has_checklist`: generated from the direct checklist or temporary legacy todo
+  source.
+- `has_todos`: generated from the filesystem for migration visibility only.
 - `version`: existing frontmatter when present.
 - `allowed_tools`: existing frontmatter when present.
-- `skill_links`: generated from Markdown links in `SKILL.md` and `todos.md`.
+- `skill_links`: generated from Markdown links in `SKILL.md` and optional
+  legacy `todos.md`.
 
 This is intentionally small. Anything that can be calculated should be
 calculated. Higher-level flow views should be generated from `group`,
@@ -190,7 +196,7 @@ group: content-video
 Use `common_chains.after` only when a skill has a stable next handoff worth
 showing in generated views. Do not force every possible relationship into
 frontmatter. Loops, recipes, and execution semantics should remain in the owning
-skill body or `todos.md`, where agents will actually read them.
+skill body, where agents will actually read them.
 
 ## Current Package Inventory
 
@@ -202,14 +208,14 @@ python3 bin/sync_skill_registry.py --write
 python3 bin/sync_skill_registry.py --check
 ```
 
-Current generated baseline after the social-content hard migration:
+Current generated baseline should be read from the generated registry:
 
-- `docs/skills/registry.jsonl`: 74 local skill package rows
-- Tier counts: `1 = 3`, `2 = 27`, `3 = 44`
-- `todos.md` coverage: `74 present`, `3 intentionally missing external`
-- Source counts: `local = 71`, `external = 3`
-- External skills without local todos: `agent-browser`, `convex`, and
-  `vercel-react-best-practices`
+- `docs/skills/registry.jsonl`: generated package rows
+- Tier counts and source counts: generated from skill frontmatter
+- Checklist coverage: generated from direct `SKILL.md` checklists or temporary
+  legacy `todos.md` migration inputs
+- External skills without local checklists may include `agent-browser`,
+  `convex`, and `vercel-react-best-practices`
 - Method-addressed skill metadata exists where it is real, with `research`
   owning the main research method list and `social-content` owning the
   social-content method list
@@ -222,7 +228,7 @@ truth.
 
 For future bulk skill-system upkeep, use `skill-maintenance` instead of putting
 all skill-maintenance rules into the always-loaded system prompt. It owns the
-periodic workflow for tier classification, source ownership, todo audits,
+periodic workflow for tier classification, source ownership, checklist audits,
 registry sync, and consolidation planning.
 
 ## Application Flow Parallels
@@ -258,11 +264,12 @@ allow both without pretending every domain needs filesystem tickets.
 
 This makes content creation a good next proving ground for the tier model:
 content skills are domain-specific enough to need Tier 3 checklists, but similar
-enough that one or two shared todo templates can cover most of them.
+enough that one or two shared checklist templates can cover most of them.
 
-## Content Todo Template
+## Content Checklist Template
 
-Use this template when adding `todos.md` to content creation skills:
+Use this template when adding a direct `## Important Checklist` to content
+creation skills:
 
 - [ ] Classify the artifact: post, carousel, video, storyboard, product photo,
   landing page, deck, document, or campaign bundle.
@@ -287,10 +294,10 @@ Use this template when adding `todos.md` to content creation skills:
 
 ## Rollout Plan
 
-### Phase 1: Registry And First Content Todos
+### Phase 1: Registry And First Content Checklists
 
 Add frontmatter metadata, generate a dedicated skill package registry, and add
-missing `todos.md` for the content creation cluster:
+missing first-load checklists for the content creation cluster:
 
 - `video-production`
 - `product-photography`
@@ -303,12 +310,12 @@ Expected proof:
 - package inventory rows for every local skill
 - generated registry rows match skill frontmatter and local skill count
 - Tier 3 groups appear in generated registry rows
-- Markdown links in each new todo file resolve locally
+- Markdown links in each new checklist resolve locally
 - no content skill requires nested router traversal to know its first step
 
-### Phase 2: Frontend And Coding Support Todos
+### Phase 2: Frontend And Coding Support Checklists
 
-Add missing `todos.md` to frontend, backend, testing, and coding-support
+Add missing direct checklists to frontend, backend, testing, and coding-support
 skills that are called often but lack checklists:
 
 - `frontend-craft`
@@ -375,7 +382,7 @@ Do not load every Tier 1 primitive into every `SKILL.md` body. That creates
 prompt bloat and makes updates hard to keep consistent. The better pattern is:
 
 - global/system policy states the tier model once
-- Tier 1 and Tier 2 `todos.md` files import the primitive or method obligations
+- Tier 1 and Tier 2 checklists import the primitive or method obligations
   they own
 - Tier 3 skills link their Tier 2 interface or method surface, and the Tier 2
   surface carries the Tier 1 defaults

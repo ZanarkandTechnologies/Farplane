@@ -12,7 +12,7 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `todos.md`
+Source: `SKILL.md`
 
 - [ ] Read the operator ask and identify whether it needs a native `/goal`,
   normal prompt, ticket workflow, or `$ralph` board drain.

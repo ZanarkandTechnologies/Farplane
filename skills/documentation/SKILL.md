@@ -7,6 +7,27 @@ source: local
 
 # Documentation Skill
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Identify the library, API, version, and exact behavior question before
+  fetching docs.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to prefer
+  official or primary documentation and record source confidence.
+- [ ] Fetch only the relevant docs pages or sections.
+- [ ] Extract setup, API signatures, examples, limits, gotchas, and version
+  notes needed by the caller.
+- [ ] Preserve source URLs and retrieval date.
+- [ ] Do not add unofficial best practices unless the caller asked for broader
+  research.
+- [ ] Use [advise](../advise/SKILL.md) when official docs leave multiple valid
+  implementation choices.
+- [ ] Use [review](../review/SKILL.md) before writing durable docs or public
+  guidance based on the synthesis.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 > **Purpose**: Workflows for fetching and synthesizing official documentation using Ref tools.
 
 ## Tools Available
@@ -135,4 +156,3 @@ npm install package@version
 - Don't ignore warnings or caveats
 - Don't present incomplete examples
 - Don't add your own code - only use official examples
-

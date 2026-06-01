@@ -15,5 +15,5 @@ Own the visual-judgment contract for UI verification and visual debugging.
 ## Notes
 
 - Keep `SKILL.md` focused on judgment boundaries and report shape.
-- Keep `todos.md` as anti-forgetting scaffolding only; prefer plain natural-language checklist text with Markdown links over a custom mini-language or browser runbook. See `MEM-0028`.
+- Keep the `SKILL.md` Important Checklist as anti-forgetting scaffolding only; prefer plain natural-language checklist text with Markdown links over a custom mini-language or browser runbook. See `MEM-0028`.
 - If this module grows more helper surfaces, keep `README.md` current in the same change.

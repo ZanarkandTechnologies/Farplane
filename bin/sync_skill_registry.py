@@ -14,6 +14,15 @@ from typing import Any
 
 SKILL_LINK_RE = re.compile(r"\]\((?:\.\./)?([^/\)\s]+)/SKILL\.md(?:#([^)]+))?\)")
 LOCAL_METHOD_RE = re.compile(r"\]\(SKILL\.md#([^)]+)\)")
+CHECKLIST_BEGIN = "<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->"
+CHECKLIST_END = "<!-- END CODEXTER_IMPORTANT_CHECKLIST -->"
+CHECKLIST_RE = re.compile(
+    rf"^{re.escape(CHECKLIST_BEGIN)}\n"
+    r"## Important Checklist\n\n"
+    r"(?:Source: `[^\n]+`\n\n)?"
+    rf"(.*?)\n^{re.escape(CHECKLIST_END)}",
+    re.MULTILINE | re.DOTALL,
+)
 ALLOWED_COMMON_CHAIN_KEYS = {"after"}
 TIER1_PRIMITIVES = {"advise", "reference-grounding", "review"}
 ALLOWED_SOURCES = {"local", "external"}
@@ -145,6 +154,41 @@ def collect_skill_links_from_paths(paths: list[Path], skill_name: str) -> list[s
     return sorted(links)
 
 
+def collect_skill_links_from_text(text: str, skill_name: str) -> list[str]:
+    links: set[str] = set()
+    for match in SKILL_LINK_RE.finditer(text):
+        target, anchor = match.groups()
+        if target in {".", skill_name}:
+            continue
+        links.add(f"{target}#{anchor}" if anchor else target)
+    for match in LOCAL_METHOD_RE.finditer(text):
+        links.add(f"{skill_name}#{match.group(1)}")
+    return sorted(links)
+
+
+def extract_direct_checklist(skill_path: Path) -> str:
+    text = skill_path.read_text()
+    match = CHECKLIST_RE.search(text)
+    return match.group(1).strip() if match else ""
+
+
+def checklist_source_text(skill_dir: Path) -> str:
+    direct_checklist = extract_direct_checklist(skill_dir / "SKILL.md")
+    if direct_checklist:
+        return direct_checklist
+    todos_path = skill_dir / "todos.md"
+    if todos_path.exists():
+        text = todos_path.read_text().strip()
+        if text.startswith("# Todos\n"):
+            return text.split("\n", 1)[1].strip()
+        return text
+    return ""
+
+
+def collect_checklist_links(skill_dir: Path, skill_name: str) -> list[str]:
+    return collect_skill_links_from_text(checklist_source_text(skill_dir), skill_name)
+
+
 def collect_skill_links(skill_dir: Path, skill_name: str) -> list[str]:
     return collect_skill_links_from_paths(
         [skill_dir / "SKILL.md", skill_dir / "todos.md"],
@@ -205,21 +249,22 @@ def validate_common_chain_refs(rows: list[dict[str, Any]]) -> None:
 def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> None:
     tier_by_name = {row["name"]: row["tier"] for row in rows}
     for row in rows:
-        if row["tier"] != 3 or not row["has_todos"]:
+        if row["tier"] != 3 or not row["has_checklist"]:
             continue
 
-        todos_path = repo_root / "skills" / row["name"] / "todos.md"
-        todo_links = collect_skill_links_from_paths([todos_path], row["name"])
+        skill_dir = repo_root / "skills" / row["name"]
+        checklist_links = collect_checklist_links(skill_dir, row["name"])
         direct_tier1_links = [
             link
-            for link in todo_links
+            for link in checklist_links
             if tier_by_name.get(skill_ref_name(link)) == 1
             or skill_ref_name(link) in TIER1_PRIMITIVES
         ]
         if direct_tier1_links:
             refs = ", ".join(sorted(direct_tier1_links))
+            source_path = skill_dir / "SKILL.md"
             raise RegistryError(
-                f"{todos_path}: tier 3 todos must link tier 2 surfaces instead of "
+                f"{source_path}: tier 3 checklist must link tier 2 surfaces instead of "
                 f"direct tier 1 primitives: {refs}"
             )
 
@@ -248,13 +293,16 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if tier != 3 and group not in (None, ""):
             raise RegistryError(f"{skill_path}: group is only allowed on tier 3 skills")
 
+        has_todos = (skill_dir / "todos.md").exists()
+        has_checklist = bool(checklist_source_text(skill_dir))
         row: dict[str, Any] = {
             "name": name,
             "tier": tier,
             "source": source,
             "path": str(skill_path.relative_to(repo_root)),
             "description": metadata.get("description", ""),
-            "has_todos": (skill_dir / "todos.md").exists(),
+            "has_checklist": has_checklist,
+            "has_todos": has_todos,
             "skill_links": collect_skill_links(skill_dir, name),
         }
         if tier == 3:

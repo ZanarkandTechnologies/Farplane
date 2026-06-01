@@ -15,7 +15,7 @@ Keep shared artifact production workflow in `references/domain-production.md` an
 
 Treat copied upstream references as read-only usage docs. Do not run upstream `npx skills add ...` install commands from Related Skills sections unless the operator explicitly asks.
 
-Use `todos.md` as the anti-forgetting checklist for selecting references.
+Use the `SKILL.md` Important Checklist for selecting references.
 
 For long-running or batched media jobs, require saved `input.json`, `result.json`, task IDs, and `jobs.md` before continuing in parallel or handing polling to another lane permitted by the current harness policy.
 

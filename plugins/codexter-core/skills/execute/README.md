@@ -7,7 +7,7 @@ Define the Tier 2 execution interface that domain-specific skills implement.
 ## Public API / Entrypoints
 
 - `SKILL.md`: generic execution interface
-- `todos.md`: execution checklist
+- `SKILL.md` Important Checklist: execution checklist
 - `AGENTS.md`: maintenance rules
 
 ## Minimal Example

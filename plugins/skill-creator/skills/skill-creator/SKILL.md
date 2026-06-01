@@ -10,6 +10,35 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, 
 
 # Skill Creator
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Read the requested capability, existing skills, registry, and nearby
+  project docs before creating or updating a skill.
+- [ ] Use [plan](../plan/SKILL.md) when tier, ownership, package boundary, or
+  first-load contract is unclear.
+- [ ] Use [research:parity](../research/SKILL.md#researchparity) or
+  [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
+  when external skill examples should inform the design.
+- [ ] Define trigger conditions, job, direct `## Important Checklist`, decision
+  branches, gotchas or hard gates, judgment questions, and outcome contract in
+  `SKILL.md`.
+- [ ] Keep every-invocation logic in `SKILL.md`; use references only for
+  conditional branches, examples, templates, long rubric detail, model maps,
+  delegated prompts, and rare-path recipes.
+- [ ] Promote reference logic back into `SKILL.md` when it must be read every
+  time.
+- [ ] Add `tier`, `source`, Tier 3 `group`, optional `methods`, optional
+  `common_chains`, and optional `upstream_url` frontmatter as appropriate.
+- [ ] Put required first-load checklist items directly in `SKILL.md`; create a
+  legacy `todos.md` only as temporary migration input when explicitly needed.
+- [ ] Run the skill registry and tier validators after edits.
+- [ ] Use [execute](../execute/SKILL.md) for final proof/writeback after skill
+  files change.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 This skill provides guidance for creating effective skills.
 
 ## About Skills
@@ -98,14 +127,44 @@ through explicit `adopt`, `adapt`, `reject`, or `defer` decisions. See
 Every new skill must include this minimum contract directly in `SKILL.md`:
 
 1. **Trigger conditions**: Explicit user/task signals that should activate the skill.
-2. **5-8 step workflow**: End-to-end path with ordered steps.
-3. **Core decision branches**: Primary conditional paths (A vs B).
-4. **Top 3 gotchas**: High-risk failure modes and stop-and-ask points.
-5. **Judgement questions**: Material choices that should use `advise` when the
+2. **Job**: The smallest statement of what the skill does.
+3. **Important Checklist**: Required anti-forgetting steps under
+   `## Important Checklist`.
+4. **Core decision branches**: Primary conditional paths.
+5. **Top gotchas / hard gates**: High-risk failure modes, stop conditions, and
+   escalation points.
+6. **Judgement questions**: Material choices that should use `advise` when the
    answer is not mechanically determined.
-6. **Outcome contract**: Which files or outputs must exist/be updated when done.
+7. **Outcome contract**: Which files or outputs must exist or be updated.
 
 Rule of thumb: **If skipping all references would make the skill fail, `SKILL.md` is too thin.**
+
+### Main File vs References
+
+Put logic in `SKILL.md` when it affects every invocation:
+
+- trigger boundary
+- required order
+- checklist
+- decision routing
+- escalation and stop conditions
+- hard gates
+- output contract
+- high-risk guardrails
+
+Use `references/*` only for conditional content:
+
+- examples
+- templates
+- variant-specific details
+- long rubric or scoring detail
+- model maps
+- delegated prompts
+- rare-path recipes
+
+If a reference file must be read every time, promote the needed logic into
+`SKILL.md`. Templates can stay as files because the agent uses them as
+artifacts, not always-loaded reasoning.
 
 ### Anatomy of a Skill
 
@@ -134,13 +193,12 @@ Every SKILL.md consists of:
     - `description`: (required) clear and comprehensive explanation of what the skill does and when to trigger it.
     - `allowed-tools`: (required) A **comma-separated string** of tools this skill is allowed to use (e.g., `Read, Grep, Glob`).
 - **Body** (Markdown): Instructions and guidance for using the skill. Only loaded AFTER the skill triggers. A well-structured workflow skill should include:
-    - **Problem**: What specific problem does this skill solve?
-    - **Tech Stack**: What tools and technologies are used?
-    - **Complete Workflow**: Step-by-step implementation guide with code examples.
-    - **Architectural Decisions**: Why this approach was chosen.
-    - **Common Gotchas**: Mistakes to avoid and edge cases.
-    - **Testing Strategy**: How to validate the implementation.
-    - **When to Use**: Specific scenarios for triggering this skill.
+    - **Use when**: Specific scenarios for triggering this skill.
+    - **Job**: What specific problem this skill solves.
+    - **Important Checklist**: Required steps that affect every invocation.
+    - **Decision branches**: The main conditional paths.
+    - **Output / proof**: What must exist when done.
+    - **Guardrails**: Mistakes to avoid, hard gates, and stop conditions.
 
 #### Bundled Resources (optional)
 

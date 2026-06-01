@@ -5,7 +5,7 @@
 - `SKILL.md`
 - `README.md`
 - `AGENTS.md`
-- `todos.md`
+- `SKILL.md` Important Checklist
 
 ## Boundaries
 
@@ -29,7 +29,7 @@
   paths only unless the operator approves more.
 - Keep the first-load contract self-sufficient; references are optional, not
   required for basic execution.
-- If `todos.md` exists here, keep it as plain natural-language checklist text
+- Keep the `SKILL.md` Important Checklist as plain natural-language checklist text
   with Markdown links rather than custom parser syntax. See `MEM-0028`.
 
 ## Checks

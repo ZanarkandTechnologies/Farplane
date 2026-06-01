@@ -7,6 +7,28 @@ argument-hint: "[--quick|--standard|--deep] [--customer-first|--data-first] <sys
 allowed-tools: Read, Glob, Grep
 ---
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Read product and technical context first: active ticket, `docs/prd.md`,
+  `docs/specs/`, nearby schemas/handlers/jobs/config, `docs/MEMORY.md`, and
+  `docs/TROUBLES.md`.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to separate
+  observed local architecture from assumptions.
+- [ ] Choose and state the entry path: customer-first or data-first.
+- [ ] Decompose recursively until entities, ownership, runtime boundaries,
+  signatures, storage, triggers, retries, and failure modes are explicit.
+- [ ] Keep the readiness gates visible: non-goals, decision boundaries,
+  autonomy readiness, sync/async tradeoffs, and one pressure pass.
+- [ ] Use [advise](../advise/SKILL.md) when architecture options are genuinely
+  viable and the plan needs one recommended tradeoff.
+- [ ] Use [review](../review/SKILL.md) before treating the System Design Brief
+  as ready for `impl-plan`, `agent-testability-plan`, or `spec-to-ticket`.
+- [ ] Write the final brief into the active ticket or canonical spec surface.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 <Purpose>
 Deep System Design is an architecture-first Socratic clarification loop before implementation planning. It turns vague statements like "build an ingestion pipeline" or "design the backend for this app" into a reusable `System Design Brief` with explicit entities, storage choices, endpoint maps, function signatures, background jobs, parallelism, reliability policy, UX-speed decisions, devx tradeoffs, and coding-pattern constraints.
 </Purpose>

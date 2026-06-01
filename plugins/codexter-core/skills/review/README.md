@@ -13,7 +13,7 @@ traceability against linked evidence.
 ## Public API or Entrypoints
 
 - [`SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/SKILL.md): main review workflow
-- [`todos.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/todos.md): example natural-language todo template for review
+- `SKILL.md` Important Checklist: example natural-language todo template for review
 - [`references/review-rubric-index.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md): family selection map, shared score contract, and threshold policy
 - [`references/desloppify.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/desloppify.md): cross-cutting anti-slop search playbook for neighboring-surface consistency checks
 - [`references/spec-contract.md`](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/spec-contract.md)
@@ -32,7 +32,7 @@ traceability against linked evidence.
 
 ```text
 Use `review` on the active ticket.
-Read `todos.md` if using skill todos.
+Use the `SKILL.md` Important Checklist when invoking the skill.
 Read the ticket Proof Contract for declared metrics, rubric gates, hard gates, and required evidence.
 Select `code-quality`, `integration-readiness`, and `evidence-quality`.
 Load `references/desloppify.md` because consistency and integration trust are in scope.
@@ -47,7 +47,7 @@ Return a linked review artifact and clear `pass|revise|block` verdict grounded i
 ## How to Test
 
 - `git diff --check`
-- `sed -n '1,80p' skills/review/todos.md`
+- `sed -n '1,120p' skills/review/SKILL.md`
   and expect a plain `# Todos` checklist with natural-language review steps
 - `rg -n "desloppify|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md skills/review/references agents/code-reviewer.toml docs/specs/review-gates.md tickets/templates/ticket.md`
   and expect live matches in the updated review surfaces

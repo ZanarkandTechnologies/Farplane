@@ -14,7 +14,7 @@ Own the live rubric-driven review contract for Codexter.
 - For code, cleanup, integration, or evidence-heavy review, the live review surface must use the anti-slop search playbook, return a compact `search_scope`, and express substantive findings with severity/confidence and concrete file refs. See `MEM-0020`.
 - Review output must contain concrete findings and next actions, not just questions or vibes.
 - The canonical live references are this module's `SKILL.md` and `references/*`, not `skills/code-review/`.
-- If `todos.md` exists here, keep it as plain natural-language checklist text with Markdown links rather than a custom mini-language. See `MEM-0028`.
+- Keep the `SKILL.md` Important Checklist as plain natural-language checklist text with Markdown links rather than a custom mini-language. See `MEM-0028` and `MEM-0124`.
 
 ## Notes
 

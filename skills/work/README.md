@@ -13,7 +13,7 @@ those surfaces.
 ## Public API / Entrypoints
 
 - `SKILL.md`: operator-facing Work Admission contract
-- `todos.md`: anti-forgetting checklist for classification, proof, and routing
+- `SKILL.md` Important Checklist: anti-forgetting checklist for classification, proof, and routing
 
 ## Minimal Example
 

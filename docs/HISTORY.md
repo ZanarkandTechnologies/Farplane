@@ -244,3 +244,4 @@
 2026-06-01 12:52 +0800 | FEAT | add weekly-strategy-analysis as the owner for weekly Notion, meeting, Codex-thread drift, and opportunity planning automation
 2026-06-01 15:21 +0800 | FEAT | add `pr-review-watch` as an explicit PR review watcher workflow with project-local review memory, fixture-first verdict parsing, heartbeat prompt guidance, and terminal notification policy
 2026-06-01 20:57 +0800 | FEAT | add ticket-backed GoalPrepState guidance and require feed-scout Notion Tasks Project/Areas projection readback
+2026-06-02 01:22 +0800 | CLEANUP | prune redundant skill `todos.md` files after direct `SKILL.md` checklist migration and move checklist validation to `SKILL.md`

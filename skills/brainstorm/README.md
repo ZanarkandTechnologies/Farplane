@@ -10,7 +10,7 @@ user to switch to a second public intake skill.
 
 - `SKILL.md`: main brainstorm workflow
 - `AGENTS.md`: maintenance rules
-- `todos.md`: Tier 2 intake checklist
+- `SKILL.md` Important Checklist: Tier 2 intake checklist
 - `references/palantir-customer-data-action.md`: customer/data/action decomposition lens
 - `references/mckinsey-issue-tree.md`: structured issue-tree lens
 

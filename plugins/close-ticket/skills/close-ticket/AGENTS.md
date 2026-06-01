@@ -5,7 +5,7 @@
 - `SKILL.md`
 - `README.md`
 - `AGENTS.md`
-- `todos.md`
+- `SKILL.md` Important Checklist
 
 ## Boundaries
 
@@ -19,7 +19,7 @@
 
 - The parent flow should stay ordered: ticket writeback, durable docs, checks,
   commit prep, commit, optional push.
-- Related skills should be linked from `todos.md` instead of re-embedding their
+- Related skills should be linked from the `SKILL.md` Important Checklist instead of re-embedding their
   full contracts.
 - Closeout should return to build work when checks or review uncover a real
   same-ticket blocker.
@@ -27,7 +27,7 @@
 ## Checks
 
 - Trigger conditions, workflow, guardrails, writeback, and result contract exist.
-- `todos.md` is plain checklist text with Markdown links.
+- `SKILL.md` Important Checklist is plain checklist text with Markdown links.
 - The skill names commit and push as closeout steps without violating the repo's
   explicit-publish boundary.
 

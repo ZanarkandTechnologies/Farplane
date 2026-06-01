@@ -98,7 +98,7 @@ Implemented now:
 - bootstrap testability defaults propagated into ticket `Agent Contract` and
   `qa/cookbook` seeds through `spec-to-ticket`
 - tiered skill dependency loading through the global prompt template and
-  `todos.md`, where Tier 1 covers advice, reference grounding, review, and
+  direct `SKILL.md` checklists, where Tier 1 covers advice, reference grounding, review, and
   todo discipline; Tier 2 covers `brainstorm`, `research:*`, `plan`, and
   `execute`; and Tier 3 application pipelines implement those interfaces
 - per-ticket coding planning through `impl-plan`, which implements the generic

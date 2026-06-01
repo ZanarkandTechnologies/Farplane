@@ -20,7 +20,7 @@ deterministic Remotion code authoring, `remotion-render` for MP4 rendering, and
 ## Entry Point
 
 - `SKILL.md`: method selection, routing, references, and handoff boundaries.
-- `todos.md`: ordered conditional checklist.
+- `SKILL.md` Important Checklist: ordered conditional checklist.
 - `references/upstream-*.md`: copied upstream/domain guides by method.
 - `references/prompting-*.md`: copied method-specific prompting guidance.
 

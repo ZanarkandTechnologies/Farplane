@@ -8,18 +8,22 @@ Guide agents to act like a reliable consultant when the user has not already cho
 
 - `SKILL.md`: main decision-framing contract
 - `AGENTS.md`: maintenance rules
-- `todos.md`: Tier 1 decision checklist
+- `SKILL.md` Important Checklist: Tier 1 decision checklist
 
 ## Minimal Example
 
 1. State the decision.
-2. Compare 3 viable options with pros and cons.
-3. Recommend one option and the accepted tradeoff.
-4. State the next step directly.
+2. Name the first-principles basis: objective, need, root cause, constraints,
+   assumptions, proof, tradeoffs, and non-goals.
+3. Compare 3 viable options with pros and cons.
+4. Recommend one option and the accepted tradeoff.
+5. State the next step directly.
 
 ## How to Test
 
 - Confirm the output contains 3 options.
+- Confirm the options are grounded in first-principles basis rather than only
+  surface preference.
 - Confirm one option is explicitly recommended.
 - Confirm fact-dependent recommendations are grounded through
   `reference-grounding` or `research:*`.

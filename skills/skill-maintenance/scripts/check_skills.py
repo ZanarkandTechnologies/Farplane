@@ -36,10 +36,15 @@ def registry_summary() -> dict[str, object]:
         "rows": len(rows),
         "tiers": dict(sorted(Counter(row["tier"] for row in rows).items())),
         "sources": dict(sorted(Counter(row["source"] for row in rows).items())),
-        "todos": dict(
-            sorted(Counter("has" if row["has_todos"] else "missing" for row in rows).items())
+        "checklists": dict(
+            sorted(
+                Counter("has" if row.get("has_checklist") else "missing" for row in rows).items()
+            )
         ),
-        "missing_todos": [
+        "todos_files": dict(
+            sorted(Counter("has" if row.get("has_todos") else "missing" for row in rows).items())
+        ),
+        "missing_checklists": [
             {
                 "name": row["name"],
                 "tier": row["tier"],
@@ -47,7 +52,7 @@ def registry_summary() -> dict[str, object]:
                 "upstream_url": row.get("upstream_url"),
             }
             for row in rows
-            if not row["has_todos"]
+            if not row.get("has_checklist")
         ],
     }
 
@@ -67,6 +72,11 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
+        checklist_command = ["python3", "skills/skill-maintenance/scripts/sync_skill_checklists.py"]
+        if args.write:
+            checklist_command.append("--write")
+        run(checklist_command)
+
         if args.write:
             run(["python3", "bin/sync_skill_registry.py", "--write"])
         run(["python3", "bin/sync_skill_registry.py", "--check"])
@@ -86,6 +96,7 @@ def main() -> int:
                 "bin/check_skill_todo_tiers.py",
                 "bin/check_skill_capabilities.py",
                 "skills/skill-maintenance/scripts/check_skills.py",
+                "skills/skill-maintenance/scripts/sync_skill_checklists.py",
             ]
         )
     except subprocess.CalledProcessError as exc:

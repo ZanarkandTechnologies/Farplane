@@ -3,7 +3,7 @@
 ## Scope
 
 - `SKILL.md`
-- `todos.md`
+- `SKILL.md` Important Checklist
 - `README.md`
 - `AGENTS.md`
 - `references/*`
@@ -31,8 +31,10 @@
 ## Checks
 
 - Keep first-load instructions enough to produce a landing brief without references.
-- Keep `todos.md` as the ordered modern scroll-scrub recipe; avoid moving it into hidden parser state or duplicating all of it in `SKILL.md`.
-- For modern Terminal/Terminus-style landing work, treat `todos.md` as the mandatory pre-build recipe before implementation. See `MEM-0090`.
+- Keep the `SKILL.md` Important Checklist as the ordered modern scroll-scrub recipe; avoid moving it into hidden parser state or duplicating all of it in `SKILL.md`.
+- For modern Terminal/Terminus-style landing work, treat the `SKILL.md`
+  Important Checklist as the mandatory pre-build recipe before implementation.
+  See `MEM-0090` and `MEM-0124`.
 - Keep `references/terminal-scroll-review.md` and `scripts/terminal_landing_score.py` aligned when changing Terminal/Terminus scoring dimensions.
 - Keep motion guidance as routing, not stale API snippets.
 - Keep section-quality and designer-judgment QA aligned with the planner gates.

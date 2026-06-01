@@ -17,7 +17,7 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 ## Public API / Entrypoints
 
 - `SKILL.md`: main planning contract
-- `todos.md`: example natural-language todo template for detailed ticket planning
+- `SKILL.md` Important Checklist: example natural-language todo template for detailed ticket planning
 - `prompts/plan.md`: operator prompt
 - `references/template.md`: merged plan template
 - `references/examples.md`: good/bad examples
@@ -26,7 +26,7 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 ## Minimal Example
 
 1. Read `SKILL.md`.
-2. Read `todos.md` near the start when using this skill so the ordered
+2. Use the `SKILL.md` Important Checklist near the start so the ordered
    checklist stays loaded during the pass.
 3. Treat the selected ticket as the planning boundary by default, and split
    only if a real boundary justifies it.
@@ -48,7 +48,7 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 - Confirm a compact `Signature delta` appears when interfaces matter.
 - Confirm `Type Sketch` plus `Typed flow example` appear for material,
   stateful, or interface-heavy work.
-- Confirm `todos.md` reinforces planning behaviors as plain natural-language checklist text without becoming a second template.
+- Confirm the `SKILL.md` Important Checklist reinforces planning behaviors as plain natural-language checklist text without becoming a second template.
 - Confirm the recommendation appears near the top.
 - Confirm optional sections are required only when the applicability rule says
   they should be.

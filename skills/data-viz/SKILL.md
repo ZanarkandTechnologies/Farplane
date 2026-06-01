@@ -9,6 +9,30 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Edit, 
 
 # Data Visualization Skill
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Read the product goal, data shape, target screen, active ticket, and
+  existing chart/dashboard conventions.
+- [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs)
+  when D3, Recharts, or library API behavior matters.
+- [ ] Use [research:parity](../research/SKILL.md#researchparity) when chart
+  conventions or dashboard expectations should be grounded in comparable
+  products.
+- [ ] Choose the visualization job: comparison, trend, distribution, part-to-
+  whole, relationship, flow, map, or graph.
+- [ ] Choose Recharts for standard charts and D3 for custom math/layouts or
+  graph-like visuals.
+- [ ] Define data transform, empty/loading/error states, responsiveness,
+  accessibility, tooltip/legend behavior, and interaction rules.
+- [ ] Use [frontend-craft](../frontend-craft/SKILL.md) or
+  [frontend-design](../frontend-design/SKILL.md) for implementation handoff.
+- [ ] Use [visual-qa](../visual-qa/SKILL.md) when the visualization is
+  user-visible and must be visually proved.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 ## Purpose
 
 This skill serves as an index for building informative and interactive data visualizations, ranging from simple charts (Recharts) to complex custom graphics and knowledge graphs (D3.js).
@@ -36,4 +60,3 @@ This skill serves as an index for building informative and interactive data visu
 - [architecture.md](references/architecture.md) - Visualization hierarchy and tool selection.
 - [workflows.md](references/workflows.md) - D3 scale patterns and Recharts integration.
 - [gotchas.md](references/gotchas.md) - Performance and responsiveness pitfalls.
-

@@ -9,6 +9,27 @@ allowed-tools: Read, Glob, Grep
 
 # Best Of Worlds
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Identify the input worlds, source artifacts, and comparison target before
+  scoring.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to preserve
+  provenance and distinguish source facts from adaptation ideas.
+- [ ] Extract candidate features, patterns, constraints, and failure modes from
+  each world.
+- [ ] Score candidates against the current project goal instead of copying a
+  source wholesale.
+- [ ] Produce adopt, adapt, reject, and defer decisions.
+- [ ] Name the synthesized recommendation and the tradeoff accepted.
+- [ ] Use [advise](../advise/SKILL.md) when several synthesized paths remain
+  viable after scoring.
+- [ ] Use [review](../review/SKILL.md) before promoting decisions into tickets,
+  docs, or skill changes.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 Build a best-of-all-worlds design from multiple source projects without turning
 research into a feature dump. This skill compares real implementations, extracts
 transferable features, discovers useful metrics when the target is fuzzy, and

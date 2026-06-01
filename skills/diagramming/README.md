@@ -8,7 +8,7 @@ Mermaid system-design diagrams.
 ## Public API / Entrypoints
 
 - `SKILL.md`: main diagramming contract
-- `todos.md`: compact anti-forgetting checklist
+- `SKILL.md` Important Checklist: compact anti-forgetting checklist
 - [`references/patterns.md`](/Users/kenjipcx/coding-harness/Codexter/skills/diagramming/references/patterns.md)
 - [`references/review.md`](/Users/kenjipcx/coding-harness/Codexter/skills/diagramming/references/review.md)
 - `AGENTS.md`: maintenance notes

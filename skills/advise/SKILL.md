@@ -19,7 +19,10 @@ Turn an unclear choice into a compact recommendation:
 4. Recommend one.
 5. State the accepted tradeoff and direct next step.
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
+
+Source: `SKILL.md`
 
 - [ ] State the real decision in one sentence.
 - [ ] Name the evaluation criteria that matter for this user, repo, or ticket.
@@ -35,7 +38,7 @@ Turn an unclear choice into a compact recommendation:
 - [ ] State the direct next step or owning next skill.
 - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
-
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
 ## Output
 
 Use this shape when a visible decision note is useful:

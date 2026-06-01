@@ -14,7 +14,7 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `todos.md`
+Source: `SKILL.md`
 
 - [ ] Confirm the eval target, user-visible behavior, and smallest useful
   pass/fail claim.

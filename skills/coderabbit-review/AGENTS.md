@@ -4,7 +4,7 @@
 
 - `SKILL.md`
 - `README.md`
-- `todos.md`
+- `SKILL.md` Important Checklist
 - `references/stage-matrix.md`
 - `references/hook-recipes.md`
 - `scripts/run_review.py`

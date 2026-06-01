@@ -16,7 +16,7 @@ separate same-level research wrapper skills.
 - `research:code-patterns`: maintained-repo implementation examples
 - `research:source-synthesis`: compact source normalization before
   `best-of-worlds`
-- `todos.md`: method and dependency checklist
+- `SKILL.md` Important Checklist: method and dependency checklist
 - `AGENTS.md`: maintenance rules
 
 ## Minimal Example
@@ -30,5 +30,5 @@ separate same-level research wrapper skills.
 ## How To Test
 
 - Confirm every method has an anchor in `SKILL.md`.
-- Confirm `todos.md` links Tier 1 primitives and method anchors.
+- Confirm the `SKILL.md` Important Checklist links Tier 1 primitives and method anchors.
 - Confirm old live `parity-research` and `gap-analysis` packages are absent.

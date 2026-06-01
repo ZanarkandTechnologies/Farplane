@@ -9,7 +9,7 @@ Keep video generation as the model/app execution skill with the upstream umbrell
 ## Entry Point
 
 - `SKILL.md`: trigger rules, upstream umbrella model map, routing, spend gates, output contract, and frontend handoff.
-- `todos.md`: ordered routing checklist for choosing the right reference.
+- `SKILL.md` Important Checklist: ordered routing checklist for choosing the right reference.
 - `references/tools/`: upstream inference.sh tool `SKILL.md` files copied as reference material.
 - `references/domain-production.md`: shared routing, artifact saving, async, and upstream-safety workflow for domain video skills.
 - `references/long-running-jobs.md`: async `--no-wait`, task ID, polling, timer, and delegation guidance.
@@ -17,7 +17,7 @@ Keep video generation as the model/app execution skill with the upstream umbrell
 - `references/prompting/video-prompting-guide.md`: copied upstream video prompting guide for shot, camera, lighting, pacing, and model-specific phrasing.
 - `references/frontend-asset-qa.md`: Codexter handoff rules for web use.
 
-Use `SKILL.md` for routing. Use `todos.md` to select only the relevant branch:
+Use `SKILL.md` for routing and its Important Checklist to select only the relevant branch:
 
 - `references/tools/infsh-cli.md`: `belt` CLI usage.
 - `references/tools/*.md`: provider/app instructions.
