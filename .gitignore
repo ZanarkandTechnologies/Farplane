@@ -57,6 +57,8 @@ htmlcov/
 
 # Generated experiment outputs
 experiments/latest-runs.json
+experiments/feed-scout/
+experiments/harness-scout/runs/
 
 # Local ticket working set
 tickets/**
