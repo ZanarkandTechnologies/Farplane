@@ -233,15 +233,22 @@
 2026-05-25 02:48 +0800 | FEAT | add a Codex repo plugin marketplace with one generated plugin per skill so users can install selected Codexter skills from the plugin browser
 2026-05-25 03:05 +0800 | FEAT | render installed skill packages with embedded `todos.md` checklists so required skill steps are visible on first load
 2026-05-25 03:20 +0800 | FEAT | add curated Codexter bundle plugins for core, coding workflow, frontend, research, media/content, and harness engineering installs
+2026-05-25 22:24 +0800 | DOCS | sharpen Codexter-Aikage telemetry planning around learning-hook observability, UI log structure, and five-hop proof status
 2026-05-26 05:37 +0800 | FIX | require self-improvement sidecar reports to expose a five-hop Notion proof checklist for user capture, assistant capture, rolling window write, background launch, and task creation
 2026-05-26 16:18 +0800 | FEAT | add agent-qa-test as an adversarial agent QA prompt bundle while preserving `$test` as shorthand invocation
+2026-05-26 15:34 +0800 | DOCS | reshape Aikage learning observability as a non-technical Agent Learning Inbox with ticket cards and message context
+2026-05-26 19:25 +0800 | FEAT | add Codexter learning telemetry events, a local status/post CLI, Aikage codexterEvents ingest, and a non-technical Agent Learning Inbox with message context
 2026-05-27 13:21 +0800 | DOCS | clarify agent-qa-test as the adversarial proof orchestrator and agent-behavior-test as the instrumented child-run capture primitive
 2026-05-27 13:38 +0800 | DOCS | add a human skill selection guide beside the generated skill registry
+2026-05-27 13:40 +0800 | FEAT | add entity-linked feed-scout harness resource tracking and scout OpenClaw agent-skills/autoreview for review-calibration techniques
 2026-05-27 16:57 +0800 | DOCS | add a frontend UI baseline to deep-init project templates with shadcn/tweakcn darkmatter defaults, tooltip-over-explainer guidance, and visual QA expectations
 2026-05-27 17:37 +0800 | FIX | tighten deep-init UI bootstrap so app projects default to shadcn plus tweakcn darkmatter instead of accepting plain HTML skip decisions
+2026-05-27 17:05 +0800 | FEAT | sync local skill todos into direct SKILL.md first-load checklists and enforce the shape in skill-maintenance checks
+2026-05-28 15:10 +0800 | DOCS | make `advise` start recommendations from first-principles basis before option comparison
 2026-05-30 02:17 +0800 | FEAT | add eval-onboarding as an NDA-safe starter skill for synthetic eval task JSON, rubrics, run reports, and minimal harness layout
 2026-06-01 12:45 +0800 | FEAT | add private tool context docs and move Notion workspace handles out of reusable/tracked Codexter surfaces
 2026-06-01 12:52 +0800 | FEAT | add weekly-strategy-analysis as the owner for weekly Notion, meeting, Codex-thread drift, and opportunity planning automation
 2026-06-01 15:21 +0800 | FEAT | add `pr-review-watch` as an explicit PR review watcher workflow with project-local review memory, fixture-first verdict parsing, heartbeat prompt guidance, and terminal notification policy
 2026-06-01 20:57 +0800 | FEAT | add ticket-backed GoalPrepState guidance and require feed-scout Notion Tasks Project/Areas projection readback
 2026-06-02 01:22 +0800 | CLEANUP | prune redundant skill `todos.md` files after direct `SKILL.md` checklist migration and move checklist validation to `SKILL.md`
+2026-06-02 01:27 +0800 | FEAT | add `prototyping` as a Tier 1 sample-first primitive and wire it into planning, execution, research, batch work, skill maintenance, and review gates

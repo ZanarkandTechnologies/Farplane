@@ -16,30 +16,26 @@ Read the active ticket and proof contract, choose the relevant rubric families,
 inspect the changed surface plus nearby consistency risks, and return an
 anchored verdict: `pass`, `revise`, or `block`.
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
+Source: `SKILL.md`
+
 - [ ] Read the active ticket and the linked proof before judging anything.
-- [ ] Read the ticket `Proof Contract` and carry declared metrics, rubric
-  gates, hard gates, and evidence obligations into the review.
-- [ ] Use the rubric routing in this file to choose the families that fit this
-  ticket; open the [review rubric index](./references/review-rubric-index.md)
-  only when scope, gates, or family choice is ambiguous.
-- [ ] If code, cleanup, integration, or evidence trust is in scope, read the
-  [desloppify guide](./references/desloppify.md) before scoring.
-- [ ] Inspect the changed surface and the minimum neighboring code, docs,
-  invariants, or interfaces needed to test consistency.
+- [ ] Read the ticket `Proof Contract` and carry declared metrics, rubric gates, hard gates, and evidence obligations into the review.
+- [ ] Read the [review rubric index](./references/review-rubric-index.md) and choose the families that actually fit this ticket.
+- [ ] If code, cleanup, integration, or evidence trust is in scope, read the [desloppify guide](./references/desloppify.md) before scoring.
+- [ ] Inspect the changed surface and the minimum neighboring code, docs, invariants, or interfaces needed to test consistency.
+- [ ] If the work scaled a repetitive pattern across many files, records,
+  skills, sources, users, or tickets, look for a representative
+  `prototyping` note or sample proof before trusting the scale claim.
 - [ ] If UI judgment is needed, require a visual QA artifact from the caller
   rather than faking visual review inside this primitive.
-- [ ] If the ticket claims screenshots, traces, logs, or QA artifacts, qualify
-  that evidence before passing review.
-- [ ] If the ticket declares metrics, verify the metric result is traceable to a
-  command, artifact, or autoresearch log before using it as evidence.
-- [ ] Rank substantive findings by severity and confidence instead of returning
-  generic questions.
-- [ ] Write the review result with scores, verdict, hard-gate failures if any,
-  and the concrete next action, then make sure the ticket links it from
-  `Evidence`.
-
+- [ ] If the ticket claims screenshots, traces, logs, or QA artifacts, qualify that evidence before passing review.
+- [ ] If the ticket declares metrics, verify the metric result is traceable to a command, artifact, or autoresearch log before using it as evidence.
+- [ ] Rank substantive findings by severity and confidence instead of returning generic questions.
+- [ ] Write the review result with scores, verdict, hard-gate failures if any, and the concrete next action, then make sure the ticket links it from `Evidence`.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
 ## Core Flow
 
 1. Read the active ticket first.
@@ -88,6 +84,8 @@ Weak `evidence-quality` or `integration-readiness` forces `revise` or `block`.
   `revise` or `block`.
 - A declared metric is not tied to a command, artifact, or log: `revise` or
   `block`.
+- A broad scale claim has no representative sample proof when one was needed:
+  `revise` or `block`.
 - UI judgment is requested without visual QA evidence: `revise` or `block`.
 - The work contradicts the ticket, spec, memory, or user request: `block`.
 

@@ -7,6 +7,40 @@ source: local
 
 # Batch Work
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Parse the user-specified ticket range or explicit ticket list.
+- [ ] Read the relevant context surfaces:
+  `tickets/README.md`, `docs/skills/README.md`,
+  `docs/skills/registry.jsonl`, `docs/features/README.md`,
+  `docs/features/registry.jsonl`, `docs/specs/README.md`,
+  `docs/MEMORY.md`, and `docs/TROUBLES.md`.
+- [ ] Use root `todos.md` for the batch todo list and root `blockers.md` for
+  blockers, creating either file only if missing.
+- [ ] Add the ticket ids as top-level todos in `todos.md`; do not expand every
+  ticket at the start.
+- [ ] Expand only the current ticket into concrete todos, including the ticket's
+  own checklist and relevant skill checklists.
+- [ ] Use `$work` admission policy to decide whether the next
+  item stays single-ticket or can safely join a related tiny-ticket group.
+- [ ] Use [prototyping](../prototyping/SKILL.md) before scaling a batch pattern
+  across the range; prove it on the current ticket or `1-3` representative
+  items first when edits/checks are broad or mechanical.
+- [ ] Implement the current ticket and run its proof checks.
+- [ ] For grouped tiny tickets, maintain one proof row per ticket plus one
+  batch-level regression row.
+- [ ] When stuck, use [advise](../advise/SKILL.md) to classify the blocker or
+  recommend the next bounded move.
+- [ ] If still blocked, write the blocker to `blockers.md`, mark the ticket
+  blocked in the batch todo file, and continue to the next ticket.
+- [ ] After the range is exhausted, run batch-level checks and
+  [review](../review/SKILL.md).
+- [ ] Present completed tickets, blocked tickets, proof, and next actions.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 Use this when the operator types `batch-work` or asks to process a range/list of
 tickets without stopping after every ticket.
 
@@ -23,12 +57,15 @@ completed together.
 3. Expand only the current ticket into the active todo list.
 4. Classify the current ticket or compatible tiny-ticket group using `$work`
    admission policy.
-5. Implement the current ticket or selected group using its owning skills and
+5. Prototype the batch pattern on the current ticket or `1-3` representative
+   items before expanding it across the range when the change is repetitive or
+   mechanical.
+6. Implement the current ticket or selected group using its owning skills and
    checks.
-6. If blocked, write the blocker to `blockers.md` and continue to the next
+7. If blocked, write the blocker to `blockers.md` and continue to the next
    ticket.
-7. Review the batch after the range is exhausted.
-8. Present per-ticket results, batch regression result, and blockers.
+8. Review the batch after the range is exhausted.
+9. Present per-ticket results, batch regression result, and blockers.
 
 ## Use When
 
@@ -76,20 +113,22 @@ completed together.
 5. For the current ticket only, replace that ticket line in `todos.md` with the
    ticket's concrete todo/checklist items. Do not expand the whole range at
    once.
-6. Load the ticket's relevant skill todos into the active checklist only for the
+6. Load the ticket's relevant skill checklists into the active checklist only for the
    current ticket.
-7. Implement the ticket and run its proof checks.
-8. If multiple tiny related tickets are safe to handle together, maintain a
+7. Use [prototyping](../prototyping/SKILL.md) when the batch intends to repeat a
+   transformation or proof pattern across many tickets, files, or records.
+8. Implement the ticket and run its proof checks.
+9. If multiple tiny related tickets are safe to handle together, maintain a
    batch ledger with one row per ticket and one batch-level regression row.
-9. If blocked:
+10. If blocked:
    - record ticket id, blocker, evidence, attempted actions, and recommended
      next action in `blockers.md`
    - mark that ticket blocked in the batch todo file
    - continue with the next ticket
-10. Use [advise](../advise/SKILL.md) when stuck on a ticket and a bounded
+11. Use [advise](../advise/SKILL.md) when stuck on a ticket and a bounded
    recommendation could unblock or classify the blocker.
-11. After the final ticket, run the batch-level checks and [review](../review/SKILL.md).
-12. Return a per-ticket summary: done, changed, proof, blocked, and follow-up.
+12. After the final ticket, run the batch-level checks and [review](../review/SKILL.md).
+13. Return a per-ticket summary: done, changed, proof, blocked, and follow-up.
 
 ## Batch Ledger
 
@@ -98,6 +137,7 @@ Every combined batch must leave a compact ledger:
 | Ticket | Change | Local proof | Result | Blocker |
 | --- | --- | --- | --- | --- |
 | TASK-0001 | short change | focused check | pass/block/fail | none or evidence |
+| Prototype | representative slice | sample proof | promote/revise/stop | none or evidence |
 | Batch | combined regression | batch check | pass/block/fail | none or evidence |
 
 If a bug appears during the batch, fix it before moving on when the cause is
@@ -126,6 +166,8 @@ one ticket at a time with blockers recorded for the unclear ticket.
 - **Ticket passes:** mark it done in `todos.md`, record the proof row, and continue.
 - **Related tiny ticket group passes:** record every ticket row plus the batch
   regression row, then continue.
+- **Prototype sample revises:** update the pattern before scaling it across the
+  batch, or stop batching if the failure mode is not attributable.
 - **Ticket blocks:** write `blockers.md`, use advice if useful, then continue.
 - **Ticket requires forbidden external side effect:** block it and continue.
 - **Batch-level validation fails:** record whether the failure belongs to a
@@ -139,6 +181,7 @@ Return or write:
 - root `todos.md`
 - root `blockers.md`
 - per-ticket changed files and proof
+- prototype note when the batch used a representative sample gate
 - per-ticket proof rows and batch regression row for grouped tickets
 - batch-level review result
 - final summary of completed tickets and blocked tickets

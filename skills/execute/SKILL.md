@@ -9,6 +9,28 @@ allowed-tools: Read, Glob, Grep
 
 # Execute
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Read the plan, scope, acceptance criteria, and proof contract.
+- [ ] Confirm execution is ready; if scope or proof is still unclear, stop and
+  return the gap to the caller or the domain planning skill.
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when execution
+  depends on official behavior, local invariants, or examples.
+- [ ] Use [prototyping](../prototyping/SKILL.md) before broad batch edits,
+  large data operations, many-file rewrites, or new automation when the pattern
+  has not been proven on a representative slice.
+- [ ] Do the scoped work using the owning domain skill or tool.
+- [ ] Run the planned proof or update the durable artifact if the proof is
+  wrong.
+- [ ] Write results, blockers, evidence, and handoff state back to the durable
+  artifact.
+- [ ] Use [review](../review/SKILL.md) before material completion claims.
+- [ ] End with a clear next state: done, revise, blocked, or closeout.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 Use this as the Tier 2 execution interface. It defines the common build/prove
 shape every application pipeline can bind to.
 
@@ -20,17 +42,21 @@ this interface.
 
 1. Read the plan, scope, acceptance criteria, and proof contract.
 2. Confirm the work is ready to execute rather than still needing planning.
-3. Do the scoped work using the owning domain skill or tool.
-4. Run the proof that was planned, or update the plan/ticket if proof is wrong.
-5. Write results, blockers, evidence, and handoff state back to the durable
+3. Prototype first when execution would otherwise touch broad scale before the
+   pattern is known.
+4. Do the scoped work using the owning domain skill or tool.
+5. Run the proof that was planned, or update the plan/ticket if proof is wrong.
+6. Write results, blockers, evidence, and handoff state back to the durable
    artifact.
-6. Run review before completion claims when the work is material.
-7. Stop, revise, or close based on proof and review.
+7. Run review before completion claims when the work is material.
+8. Stop, revise, or close based on proof and review.
 
 ## Tier Dependencies
 
 - Use [reference-grounding](../reference-grounding/SKILL.md) when execution
   depends on official behavior, local invariants, or examples.
+- Use [prototyping](../prototyping/SKILL.md) before scaling an unproven
+  pattern across files, records, users, or automation.
 - Use [review](../review/SKILL.md) before material completion claims.
 - Use [plan](../plan/SKILL.md) when the work is not ready to execute.
 
@@ -48,6 +74,7 @@ Produce an execution result with:
 
 - `Scope executed`
 - `Evidence`
+- `Prototype Note` when broad execution was gated by a sample
 - `Checks`
 - `Review status`
 - `Writeback`

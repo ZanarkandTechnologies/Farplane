@@ -43,6 +43,7 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
         "skills": (
             "advise",
             "reference-grounding",
+            "prototyping",
             "research",
             "plan",
             "execute",

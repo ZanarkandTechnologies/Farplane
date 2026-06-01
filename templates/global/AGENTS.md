@@ -84,6 +84,19 @@ Avoid:
   external-skill edit; prefer local wrappers, mirrored fixtures, registry rows,
   and visible repair tickets. See `MEM-0107`
 
+## Codexter Source Repo
+
+When improving Codexter itself, including when using `harness-advisor`, treat
+the git-backed source checkout as the canonical edit location:
+
+- `/Users/kenjipcx/coding-harness/Codexter`
+
+Do not patch the installed live Codex home directly for reusable harness
+changes. In particular, avoid editing `~/.codex/AGENTS.md` or
+`~/.codex/skills/*` as the source of truth. Make the change in the Codexter
+source repo, then reinstall or selectively install from that repo into the live
+Codex home. See `MEM-0121`.
+
 ## Context First
 
 Before edits:
@@ -115,8 +128,9 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
 
 - Tier 1 primitives are core thinking defaults: `advise` for deciding among
   real options, `reference-grounding` for examples/docs/peers/repos before
-  claims, `review` for challenge before completion claims, and skill
-  `todos.md` loading as the anti-forgetting discipline. Create a new Tier 1
+  claims, `prototyping` for proving `1 -> 10 -> 100` before broad scale,
+  `review` for challenge before completion claims, and skill first-load
+  checklist loading as the anti-forgetting discipline. Create a new Tier 1
   primitive only when multiple Tier 2 interfaces need that move as a base
   dependency.
 - Tier 2 skills are generic workflow interfaces: `brainstorm` explores
@@ -126,7 +140,7 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
   start as a Tier 2 method, such as `research:user-grounding` for user groups,
   jobs, stories, contexts, friction, and success criteria.
 - Tier 3 skills are application/domain skills that implement Tier 2 interfaces.
-  Their `todos.md` files should usually link Tier 2 surfaces rather than direct
+  Their first-load checklists should usually link Tier 2 surfaces rather than direct
   Tier 1 primitives, because Tier 2 carries the Tier 1 obligations. In
   Codexter today, `spec-to-ticket`, `impl-plan`, `$work`, `$impl`, and
   `close-ticket` are coding workflow skills, not universal Tier 2 workflows.
@@ -141,20 +155,19 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
 
 - when a relevant skill is in play, read `SKILL.md` first
 - when a skill is invoked, show a compact active checklist in commentary:
-  include the invoked skill's required todos plus any imported dependency,
+  include the invoked skill's required checklist items plus any imported dependency,
   proof, and review items that will govern the pass; keep it short but visible
 - when an installed skill's `SKILL.md` contains a direct `## Important
   Checklist` or embedded generated checklist, use that section as the
-  first-load todo source, then open `todos.md` only when the source file is
-  needed for maintenance, links, or ambiguity resolution
-- if a skill lacks a first-load checklist but has `todos.md`, load `todos.md`
-  near the start of the pass and use it as the ordered anti-forgetting
-  checklist instead of treating it as optional extra reading
-- when a `todos.md` item links another skill or method as a required dependency,
+  first-load checklist source.
+- if a skill still carries a legacy `todos.md`, use it only as migration input
+  or for maintenance/reconciliation; do not treat it as the normal first-load
+  source once `SKILL.md` has a direct checklist.
+- when a checklist item links another skill or method as a required dependency,
   import the relevant linked obligation into your active checklist and load only
   the smallest needed part of that dependency
 - keep the active checklist cumulative for the current step: include the
-  invoked skill's todos, imported dependency obligations, proof checks, and
+  invoked skill's checklist items, imported dependency obligations, proof checks, and
   review closeout items until they are done or explicitly blocked
 - avoid recursive traversal through wrapper skills unless the current task
   explicitly needs the deeper method; method addresses such as `research:gap`

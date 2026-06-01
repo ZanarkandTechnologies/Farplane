@@ -10,6 +10,49 @@ allowed-tools: Read, Glob, Grep
 
 # Research
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `SKILL.md`
+
+- [ ] Choose exactly one primary method first:
+  [research:parity](SKILL.md#researchparity),
+  [research:gap](SKILL.md#researchgap),
+  [research:competitor](SKILL.md#researchcompetitor),
+  [research:official-docs](SKILL.md#researchofficial-docs),
+  [research:code-patterns](SKILL.md#researchcode-patterns), or
+  [research:user-grounding](SKILL.md#researchuser-grounding), or
+  [research:source-synthesis](SKILL.md#researchsource-synthesis).
+- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) as the Tier 1
+  evidence discipline: local baseline, primary sources, source confidence, and
+  local impact.
+- [ ] Use [prototyping](../prototyping/SKILL.md) when the source set, skill set,
+  dataset, or comparison set is large enough that a representative sample
+  should shape the full pass first.
+- [ ] Read the active ticket, local docs, specs, registry rows, or nearby code
+  needed to state the local baseline.
+- [ ] Add a supporting method only when the primary method exposes a real gap:
+  - official/API uncertainty -> [research:official-docs](SKILL.md#researchofficial-docs)
+    or the documentation helper
+  - real repo implementation pattern needed ->
+    [research:code-patterns](SKILL.md#researchcode-patterns) or the external
+    patterns helper
+  - peer/product norm missing -> [research:parity](SKILL.md#researchparity)
+  - current-state production gap needed -> [research:gap](SKILL.md#researchgap)
+  - user groups, jobs, stories, context, friction, or success signals needed ->
+    [research:user-grounding](SKILL.md#researchuser-grounding)
+  - several sources need normalization ->
+    [research:source-synthesis](SKILL.md#researchsource-synthesis)
+- [ ] Stop after the smallest method set that can produce the needed brief; do
+  not run every research method by default.
+- [ ] Route the brief to the next owner:
+  [advise](../advise/SKILL.md) for judgment calls,
+  `best-of-worlds` for adopt/adapt/reject/defer synthesis, or the relevant
+  domain planning skill such as `impl-plan` for coding.
+- [ ] Run [review](../review/SKILL.md) after meaningful research-skill,
+  registry, ticket-handoff, or public-doc changes.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 Use this as the Tier 2 research workflow when the task needs grounded
 references without ideation. Pick one method explicitly and keep the output
 compact enough for `brainstorm`, `plan`, or a domain pipeline to consume.
@@ -36,8 +79,10 @@ Methods:
 2. Use [reference-grounding](../reference-grounding/SKILL.md) as the Tier 1
    evidence discipline: local baseline first when repo scope matters, primary
    sources over commentary, and explicit source confidence.
-3. Separate common must-haves from optional extras and outliers.
-4. End with one recommendation and the next skill or artifact that should use
+3. Use [prototyping](../prototyping/SKILL.md) when a large source set should be
+   sampled before expanding the research pass.
+4. Separate common must-haves from optional extras and outliers.
+5. End with one recommendation and the next skill or artifact that should use
    the brief.
 
 ## research:parity
