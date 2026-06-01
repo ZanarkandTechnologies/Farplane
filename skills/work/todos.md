@@ -18,6 +18,8 @@
 - [ ] Use `goal-crafter` or native `/goal` when the work is ambitious,
   long-running, batch-oriented, board-draining, metric-driven, or likely to
   need durable unblock behavior.
+- [ ] When a ticket already has metrics, acceptance criteria, proof commands,
+  or blockers and Goal is recommended, route through goal-crafter's
+  ticket-backed `GoalPrepState` branch instead of restarting discovery.
 - [ ] Record blockers with evidence instead of asking the operator when the
   ticket policy already gives a safe fallback.
-

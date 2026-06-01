@@ -10,6 +10,36 @@ allowed-tools: Read, Glob, Grep
 
 # Work
 
+<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+## Important Checklist
+
+Source: `todos.md`
+
+- [ ] Read the operator request, ticket, batch, or board context.
+- [ ] Classify the work unit: direct request, single ticket, ticket batch,
+  board drain, epic slice, or metric loop.
+- [ ] Check scope readiness: executable now, needs `impl-plan`, needs
+  reslicing, or needs a metric/research loop.
+- [ ] Choose the execution profile: ambition, Goal policy, compute target,
+  planning route, proof route, testability route, and blocker policy.
+- [ ] Use [plan](../plan/SKILL.md) or `impl-plan` only when material planning
+  is warranted.
+- [ ] Use [execute](../execute/SKILL.md), `$impl`, direct local work, or
+  `close-ticket` only after the work unit is executable.
+- [ ] For ticket batches, require one proof row per ticket plus one batch-level
+  regression row before completion.
+- [ ] For board drains, hand board selection and grouping to `$ralph`; do not
+  create hidden scheduler state here.
+- [ ] Use `goal-crafter` or native `/goal` when the work is ambitious,
+  long-running, batch-oriented, board-draining, metric-driven, or likely to
+  need durable unblock behavior.
+- [ ] When a ticket already has metrics, acceptance criteria, proof commands,
+  or blockers and Goal is recommended, route through goal-crafter's
+  ticket-backed `GoalPrepState` branch instead of restarting discovery.
+- [ ] Record blockers with evidence instead of asking the operator when the
+  ticket policy already gives a safe fallback.
+<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+
 `$work` is Codexter's Work Admission surface.
 
 Use it when the operator wants one prompt, ticket, ticket batch, board-selected
@@ -62,6 +92,7 @@ type ExecutionProfile = {
   unit: WorkUnit["kind"];
   ambition: "tiny" | "normal" | "large" | "epic";
   goal: "none" | "recommend" | "required";
+  goalPrep: "none" | "paste_ready" | "ticket_backed_state";
   compute: "local_shared" | "local_worktree" | "codex_cloud" | "symphony";
   planning: "none" | "light" | "impl_plan" | "reslice";
   proof: Array<"smoke" | "tests" | "qa" | "visual_qa" | "review" | "demo">;
@@ -82,6 +113,12 @@ Use native `/goal` when the work benefits from durable continuation:
 - a metric optimization loop
 - a long unblock or research loop
 - any work where stopping criteria must survive context drift
+
+Use goal-crafter's ticket-backed `GoalPrepState` branch when Goal is useful and
+the work unit already carries a ticket, plan, or Proof Contract with metrics,
+acceptance criteria, verification commands, blockers, or scope boundaries. In
+that case `$work` should preserve the existing work contract and ask only
+missing execution-safety questions, not broad product-discovery questions.
 
 Do not use Goal for:
 
@@ -147,7 +184,9 @@ execution still starts only from explicit invocation.
    - `epic_slice`: route to PRD, `spec-to-ticket`, or `deep-system-design`
    - `metric_loop`: route to autoresearch before implementation
 4. If Goal is recommended but not already active, use `goal-crafter` to produce
-   one paste-ready Goal for the current scope.
+   one paste-ready Goal for the current scope. Use `goalPrep=ticket_backed_state`
+   when the ticket already has metrics, acceptance criteria, proof commands,
+   blockers, or scope boundaries.
 5. Route to the owning skill and keep evidence in the ticket or batch surface.
 6. If blocked, record evidence, attempted paths, safe options, recommended
    next action, and the single missing input that would unlock progress.
@@ -182,6 +221,7 @@ Profile:
 unit=single_ticket
 ambition=normal
 goal=recommend only when long-running or ambiguous
+goalPrep=ticket_backed_state when the ticket has a Proof Contract or blockers
 planning=impl_plan when material
 proof=tests,qa,review
 ```
@@ -238,6 +278,8 @@ Return or write:
 
 - selected `ExecutionProfile`
 - chosen Goal policy and paste-ready Goal when needed
+- chosen goal prep mode: none, compact paste-ready Goal, or ticket-backed
+  `GoalPrepState`
 - chosen compute target and why
 - chosen route: direct, batch-work, Ralph, spec-to-ticket, impl-plan, `$impl`,
   autoresearch, or close-ticket
