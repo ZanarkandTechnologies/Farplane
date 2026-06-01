@@ -92,7 +92,6 @@ def render_section(checklist_text: str) -> str:
     return (
         f"{CHECKLIST_BEGIN}\n"
         f"{CHECKLIST_HEADING}\n\n"
-        "Source: `SKILL.md`\n\n"
         f"{checklist}\n"
         f"{CHECKLIST_END}\n"
     )
