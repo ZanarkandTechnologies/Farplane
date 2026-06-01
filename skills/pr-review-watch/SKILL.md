@@ -36,8 +36,9 @@ Source: `todos.md`
   project memory explicitly includes it as a review command or provider.
 - [ ] Reschedule through a visible Codex automation heartbeat; do not create a
   daemon, background queue, hidden loop, or always-on watcher.
-- [ ] Send pass, blocked, or timeout summaries through the `telegram-message`
-  skill when it is available and the project notification policy asks for it.
+- [ ] Send pass, blocked, or timeout summaries with the PR URL through the
+  `telegram-message` skill when it is available and the project notification
+  policy asks for it.
 - [ ] Do not merge, deploy, push, change billing/spend, or invent new provider
   commands unless the surrounding workflow explicitly authorizes that action.
 <!-- END CODEXTER_IMPORTANT_CHECKLIST -->
@@ -109,14 +110,16 @@ copyable project-local contract.
    ```
 
 5. Inspect the `WatchVerdict`:
-   - `pass`: run terminal notification and stop.
-   - `blocked`: write blocker details, notify when configured, and stop.
+   - `pass`: run terminal notification with the PR URL and stop.
+   - `blocked`: write blocker details, notify with the PR URL when configured,
+     and stop.
    - `wait`: create a visible Codex automation heartbeat with the next interval.
    - `actionable`: fix only the listed items, run configured checks, then
      reclassify.
 6. Use `coderabbit-review` only when the config names CodeRabbit as a review
    command/provider. Do not make it a universal PR gate.
-7. On timeout, summarize the last verdict and notify when configured.
+7. On timeout, summarize the last verdict and notify with the PR URL when
+   configured.
 
 ## Automation Heartbeat
 
@@ -132,6 +135,7 @@ The heartbeat prompt must include:
 - previous verdict JSON or artifact path
 - allowed fix/review commands
 - notification policy
+- PR URL from the normalized snapshot when available
 
 ## Outcome Contract
 
@@ -142,7 +146,8 @@ Return or write:
 - normalized snapshot or fixture path
 - `WatchVerdict` JSON
 - commands run for fixes and review
-- heartbeat scheduled, terminal notification sent, or explicit reason skipped
+- heartbeat scheduled, terminal notification sent with PR URL, or explicit
+  reason skipped
 - blocker details when blocked
 
 ## Guardrails

@@ -2,6 +2,7 @@
   "repo": "/tmp/example",
   "branch": "feature/pr-watch",
   "pr_number": null,
+  "pr_url": null,
   "head_sha": null,
   "check_runs": [],
   "reviews": [],

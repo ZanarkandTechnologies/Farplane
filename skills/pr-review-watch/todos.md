@@ -17,7 +17,8 @@
   project memory explicitly includes it as a review command or provider.
 - [ ] Reschedule through a visible Codex automation heartbeat; do not create a
   daemon, background queue, hidden loop, or always-on watcher.
-- [ ] Send pass, blocked, or timeout summaries through the `telegram-message`
-  skill when it is available and the project notification policy asks for it.
+- [ ] Send pass, blocked, or timeout summaries with the PR URL through the
+  `telegram-message` skill when it is available and the project notification
+  policy asks for it.
 - [ ] Do not merge, deploy, push, change billing/spend, or invent new provider
   commands unless the surrounding workflow explicitly authorizes that action.

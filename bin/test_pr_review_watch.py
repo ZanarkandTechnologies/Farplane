@@ -37,6 +37,10 @@ class PrReviewWatchTests(unittest.TestCase):
     def test_clean_pass_fixture(self) -> None:
         self.assertEqual(self.classify_fixture("clean-pass.json"), "pass")
 
+    def test_terminal_message_includes_pr_url(self) -> None:
+        verdict = classify(load_fixture(FIXTURES / "clean-pass.json"), self.config())
+        self.assertIn("https://github.example/pull/42", verdict.terminal_message or "")
+
     def test_failed_checks_are_actionable(self) -> None:
         self.assertEqual(self.classify_fixture("failed-checks.json"), "actionable")
 

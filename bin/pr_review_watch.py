@@ -39,6 +39,7 @@ class PullRequestWatchSnapshot:
     repo: str
     branch: str | None
     pr_number: int | None
+    pr_url: str | None
     head_sha: str | None
     check_runs: list[dict[str, object]]
     reviews: list[dict[str, object]]
@@ -289,7 +290,7 @@ def discover(repo_path: Path, pr: int | None = None) -> PullRequestWatchSnapshot
         "pr",
         "view",
         *(["--json"] if pr_selector is None else [pr_selector, "--json"]),
-        "number,headRefName,headRefOid,reviews,comments",
+        "number,url,headRefName,headRefOid,reviews,comments",
     ]
     raw_view, view_error = _run_json(view_command, repo_path)
     if view_error is not None:
@@ -298,6 +299,7 @@ def discover(repo_path: Path, pr: int | None = None) -> PullRequestWatchSnapshot
             repo=str(repo_path),
             branch=branch,
             pr_number=pr,
+            pr_url=None,
             head_sha=None,
             check_runs=[],
             reviews=[],
@@ -327,6 +329,7 @@ def discover(repo_path: Path, pr: int | None = None) -> PullRequestWatchSnapshot
         repo=str(repo_path),
         branch=str(raw_view.get("headRefName") or branch or ""),
         pr_number=pr_number,
+        pr_url=str(raw_view.get("url") or "") or None,
         head_sha=str(raw_view.get("headRefOid") or "") or None,
         check_runs=_normalize_check_runs(raw_checks),
         reviews=_normalize_reviews(raw_view.get("reviews")),
@@ -345,6 +348,7 @@ def load_fixture(path: Path) -> PullRequestWatchSnapshot:
         repo=str(data.get("repo") or ""),
         branch=data.get("branch") if isinstance(data.get("branch"), str) else None,
         pr_number=data.get("pr_number") if isinstance(data.get("pr_number"), int) else None,
+        pr_url=data.get("pr_url") if isinstance(data.get("pr_url"), str) else None,
         head_sha=data.get("head_sha") if isinstance(data.get("head_sha"), str) else None,
         check_runs=data.get("check_runs") if isinstance(data.get("check_runs"), list) else [],
         reviews=data.get("reviews") if isinstance(data.get("reviews"), list) else [],
@@ -396,7 +400,10 @@ def classify(snapshot: PullRequestWatchSnapshot, config: PrReviewPipelineConfig)
         return WatchVerdict(
             state="blocked",
             blocking_items=blocking_items,
-            terminal_message="PR review watch blocked by provider/config error.",
+            terminal_message=_terminal_message(
+                snapshot,
+                "PR review watch blocked by provider/config error.",
+            ),
         )
 
     if snapshot.pr_number is None:
@@ -458,8 +465,17 @@ def classify(snapshot: PullRequestWatchSnapshot, config: PrReviewPipelineConfig)
         )
     return WatchVerdict(
         state="pass",
-        terminal_message=f"PR #{snapshot.pr_number} passed configured review watch conditions.",
+        terminal_message=_terminal_message(
+            snapshot,
+            f"PR #{snapshot.pr_number} passed configured review watch conditions.",
+        ),
     )
+
+
+def _terminal_message(snapshot: PullRequestWatchSnapshot, message: str) -> str:
+    if snapshot.pr_url:
+        return f"{message} {snapshot.pr_url}"
+    return message
 
 
 def _json_default(value: object) -> object:
