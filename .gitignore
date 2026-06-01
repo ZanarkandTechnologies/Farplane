@@ -59,6 +59,14 @@ htmlcov/
 experiments/latest-runs.json
 experiments/feed-scout/
 experiments/harness-scout/runs/
+experiments/best-of-worlds/
+docs/research/
+exports/
+
+# Local/private feed-scout configuration
+skills/feed-scout/config/
+plugins/feed-scout/skills/feed-scout/config/
+plugins/codexter-research/skills/feed-scout/config/
 
 # Local ticket working set
 tickets/**
