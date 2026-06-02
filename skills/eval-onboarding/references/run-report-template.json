@@ -9,13 +9,15 @@
     ".codex/evals/tasks/harness_tasks.json"
   ],
   "task_count": 1,
-  "avg_score": 88.0,
   "pass_rate": 1.0,
+  "verdict_counts": {
+    "A": 1
+  },
   "tasks": [
     {
       "task_id": "skill_example_01",
       "title": "Skill does its main job",
-      "score": 88,
+      "verdict": "A",
       "pass": true,
       "reason": "The answer met the required reference points.",
       "detail_path": ".codex/evals/runs/20260101-000000-baseline/tasks/skill_example_01.json"

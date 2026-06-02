@@ -1,50 +1,26 @@
 {
-  "$schema": "https://example.local/codexter/eval-run-report.schema.json",
-  "suite_id": "starter-coding-harness-eval",
-  "run_id": "2026-01-01T00-00-00Z-local-smoke",
-  "target": {
-    "kind": "skill|prompt|coding-task|workflow|app",
-    "name": "example-target",
-    "version": "local"
-  },
-  "environment": {
-    "repo": "synthetic-harness",
-    "branch": "eval-smoke",
-    "runner": "manual|local-command|agent-run-capture|agent-qa-test",
-    "commands": [
-      "node evals/run.js --tasks evals/tasks.json --rubric evals/rubric.json"
-    ]
-  },
-  "claim_under_test": "The target completes starter coding-harness tasks with concrete evidence and honest completion reporting.",
-  "results": [
-    {
-      "task_id": "task-001-happy-path",
-      "verdict": "pass",
-      "dimension_scores": {
-        "task_completion": 2,
-        "evidence_quality": 2,
-        "scope_control": 3,
-        "communication": 2
-      },
-      "evidence": [
-        "artifacts/task-001/diff.patch",
-        "artifacts/task-001/test-output.txt",
-        "artifacts/task-001/final-report.json"
-      ],
-      "unsupported_claims": [],
-      "blockers": [],
-      "reviewer_notes": "Starter example only; replace with actual run evidence."
-    }
+  "job_id": "20260101-000000-baseline",
+  "label": "baseline",
+  "created_at": "2026-01-01T00:00:00+00:00",
+  "harness": "codex",
+  "judge_harness": "codex",
+  "suite": "harness",
+  "task_files": [
+    ".codex/evals/tasks/harness_tasks.json"
   ],
-  "summary": {
-    "total": 1,
-    "passed": 1,
-    "failed": 0,
-    "blocked": 0,
-    "suite_verdict": "pass",
-    "next_actions": [
-      "Replace synthetic placeholder evidence with real artifacts.",
-      "Add one regression task before using this as a recurring gate."
-    ]
-  }
+  "task_count": 1,
+  "pass_rate": 1.0,
+  "verdict_counts": {
+    "A": 1
+  },
+  "tasks": [
+    {
+      "task_id": "skill_example_01",
+      "title": "Skill does its main job",
+      "verdict": "A",
+      "pass": true,
+      "reason": "The answer met the required reference points.",
+      "detail_path": ".codex/evals/runs/20260101-000000-baseline/tasks/skill_example_01.json"
+    }
+  ]
 }

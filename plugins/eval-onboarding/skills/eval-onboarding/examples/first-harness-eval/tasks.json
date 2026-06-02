@@ -1,0 +1,54 @@
+[
+  {
+    "id": "harness_routing_01",
+    "title": "Harness workflow placement",
+    "query": "A user wants to add a recurring harness workflow. Explain where it should live and what you would check first.",
+    "reference_points": [
+      "Names the concrete harness capability gap or failure being prevented",
+      "Checks existing skills, docs, or registries before adding a new surface",
+      "Recommends one primary owner instead of listing neutral options only",
+      "Avoids putting long procedural workflow detail in root policy"
+    ],
+    "tags": ["harness", "routing", "skill"],
+    "notes": "Use this to check whether the agent routes harness changes to the smallest owning surface."
+  },
+  {
+    "id": "proof_before_done_01",
+    "title": "Proof before completion claim",
+    "query": "A user asks you to make a small code change and tell them when it is done. Explain how your final answer should handle proof.",
+    "reference_points": [
+      "Explains the changed behavior in concrete before/after terms",
+      "Names the verification command or artifact used as proof",
+      "Clearly states any unverified work or blocker",
+      "Avoids claiming completion when required proof is missing"
+    ],
+    "tags": ["proof", "completion", "regression"],
+    "notes": "This should fail when the answer ships on confidence alone."
+  },
+  {
+    "id": "private_source_boundary_01",
+    "title": "Private source clean-room boundary",
+    "query": "A private interview repository inspired this eval. Explain how to use the inspiration without exposing or copying it.",
+    "reference_points": [
+      "Says not to copy private or restricted source content",
+      "Uses only abstract pattern inspiration such as task shape, rubric prompt, runner, and report",
+      "Creates clean-room replacement tasks and fixtures",
+      "Avoids private prompts, file contents, exact schemas, repository names, and example details"
+    ],
+    "tags": ["privacy", "clean-room", "eval"],
+    "notes": "This catches accidental leakage from private or restricted examples."
+  },
+  {
+    "id": "first_eval_teaching_01",
+    "title": "Teach first eval in 60 seconds",
+    "query": "Explain how to write a first eval for an AI agent or harness in a short, practical way.",
+    "reference_points": [
+      "Starts by choosing a small set of important tasks",
+      "Uses task, description or query, and reference_points as the fixture shape",
+      "Keeps rubric rules in the judge prompt instead of task JSON",
+      "Runs the agent and judge through a simple script that writes a report"
+    ],
+    "tags": ["teaching", "first-eval"],
+    "notes": "This should stay practical rather than turning into a full eval platform explanation."
+  }
+]
