@@ -42,6 +42,10 @@ boundaries, or unknown user value to PRD, `deep-interview`, or
 - [ ] Identify the desired end state, specific evidence, constraints, allowed
   inputs/tools/boundaries, iteration policy, blocked report, and optional
   budget.
+- [ ] For skill-improvement goals, require the Goal to read the target skill's
+  `self-improve/program.md`, evals, latest results, failure analysis, prompt
+  candidates, and prior run notes when present; use those files as Goal
+  context rather than creating a separate loop runner.
 - [ ] When an existing ticket, plan, or Proof Contract exists, compile those
   fields into `GoalPrepState` before asking questions.
 - [ ] Ask only missing execution-safety questions that materially affect the
@@ -79,6 +83,12 @@ A strong goal should include:
   attempted paths, evidence, safe options, recommended next action, and the one
   missing input that would unlock progress
 - `Budget`: optional turn/time/spend limit when relevant
+
+For skill-improvement work, native Goal mode is the durable loop runner. Draft
+the Goal so it reads the target skill package plus any `self-improve/`
+context, optimizes toward `program.md`, uses `$self-improve` only for
+eval/memory/prompt scaffolding, and uses `$skill-maintenance` for accepted
+writeback into `SKILL.md`, references, or plugin/source copies.
 
 For ticket-backed work, use `GoalPrepState` as a field-gathering aid before
 emitting the single `/goal` template:
@@ -130,6 +140,25 @@ remain, <what Codex should report and what would unlock progress>.
 
 If several framings are genuinely viable, use `advise` first, then emit the
 recommended goal using this template.
+
+## Skill Improvement Template
+
+```text
+/goal Improve <target skill> as a native Goal-backed skill-improvement loop,
+verified by <eval command/artifact, metric, or human-reviewed artifact> while
+preserving <skill contract constraints>. Read the target skill package,
+including `SKILL.md`, references, scripts, and `self-improve/` context when
+present: `program.md`, evals, latest results, failure analysis, prompt
+candidates, and prior run notes. Optimize toward the metric, rubric, or human
+feedback schema defined in `program.md`; if no metric exists, first define the
+cheapest honest feedback surface before mutating the skill. Use Goal mode as
+the durable loop runner, `$self-improve` only for eval/memory scaffolding, and
+`$skill-maintenance` for accepted writeback. Between iterations, change one
+bounded part of the skill, verify it, record the lesson, and promote only
+durable accepted rules. If blocked or no valid paths remain, report attempted
+paths, evidence gathered, safe options considered, the recommended next action,
+and the one missing input.
+```
 
 ## Examples
 
