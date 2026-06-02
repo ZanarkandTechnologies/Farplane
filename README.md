@@ -425,10 +425,17 @@ marketplace also includes curated bundle plugins for easier installs:
 ```bash
 git clone <your-remote-url> ~/src/farplane
 cd ~/src/farplane
+python3 bin/sync_skill_plugins.py --list
+python3 bin/sync_skill_plugins.py --plugins farplane-core,farplane-frontend
 codex plugin marketplace add ./
 codex
 /plugins
 ```
+
+The marketplace only lists installable plugins; Codex does not install every
+listed plugin automatically. Use `--plugins` or repeated `--plugin` flags to
+publish only the bundles or individual skills you want to see in `/plugins`.
+Omit the selector to generate the full marketplace.
 
 For a remote GitHub repo, add it directly:
 
@@ -453,6 +460,7 @@ the per-skill plugin packages after changing `skills/*`:
 
 ```bash
 python3 bin/sync_skill_plugins.py
+python3 bin/sync_skill_plugins.py --plugins farplane-coding-workflow
 python3 bin/sync_skill_plugins.py --check
 ```
 

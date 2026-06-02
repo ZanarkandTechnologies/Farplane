@@ -23,7 +23,6 @@ MARKER = ".farplane-skill-plugin"
 MARKETPLACE_PATH = Path(".agents/plugins/marketplace.json")
 PLUGIN_ROOT = Path("plugins")
 PLUGIN_VERSION = "0.1.0"
-GROUP_PREFIX = "farplane-"
 
 
 @dataclass(frozen=True)
@@ -158,6 +157,8 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
     },
 )
 
+GROUP_PLUGIN_NAMES = frozenset(str(definition["name"]) for definition in GROUP_DEFINITIONS)
+
 
 @dataclass(frozen=True)
 class SyncResult:
@@ -238,6 +239,49 @@ def group_plugins(skills: Sequence[Skill]) -> list[SkillPlugin]:
     return plugins
 
 
+def build_plugins(skills: Sequence[Skill]) -> list[SkillPlugin]:
+    bundles = group_plugins(skills)
+    return [*bundles, *(single_skill_plugin(skill) for skill in skills)]
+
+
+def parse_plugin_names(raw: str | None, repeated: Sequence[str] | None) -> list[str]:
+    values: list[str] = []
+    if raw:
+        values.extend(raw.split(","))
+    if repeated:
+        for item in repeated:
+            values.extend(item.split(","))
+    return sorted(dict.fromkeys(value.strip() for value in values if value.strip()))
+
+
+def select_plugins(
+    plugins: Sequence[SkillPlugin],
+    selected_names: Sequence[str] | None,
+) -> list[SkillPlugin]:
+    if not selected_names:
+        return list(plugins)
+
+    by_name = {plugin.name: plugin for plugin in plugins}
+    missing = [name for name in selected_names if name not in by_name]
+    if missing:
+        known = ", ".join(sorted(by_name))
+        raise ValueError(
+            f"Unknown plugin(s): {', '.join(missing)}\nKnown plugins: {known}"
+        )
+    return [by_name[name] for name in selected_names]
+
+
+def plugin_listing(plugins: Sequence[SkillPlugin]) -> str:
+    bundles = [plugin for plugin in plugins if plugin.name in GROUP_PLUGIN_NAMES]
+    individuals = [plugin for plugin in plugins if plugin.name not in GROUP_PLUGIN_NAMES]
+    lines = ["Bundle plugins:"]
+    lines.extend(f"- {plugin.name}: {plugin.description}" for plugin in bundles)
+    lines.append("")
+    lines.append("Individual skill plugins:")
+    lines.extend(f"- {plugin.name}: {plugin.description}" for plugin in individuals)
+    return "\n".join(lines)
+
+
 def render_marketplace(plugins: Sequence[SkillPlugin]) -> dict[str, object]:
     return {
         "name": "farplane-skills",
@@ -288,11 +332,15 @@ def write_plugin(plugin: SkillPlugin, plugins_dir: Path) -> None:
         copy_skill(skill, plugin_root)
 
 
-def sync_skill_plugins(repo: Path, clean: bool = True) -> SyncResult:
+def sync_skill_plugins(
+    repo: Path,
+    clean: bool = True,
+    selected_names: Sequence[str] | None = None,
+) -> SyncResult:
     repo = repo.resolve()
     skills = discover_skills(repo / "skills")
-    bundles = group_plugins(skills)
-    all_plugins = [*bundles, *(single_skill_plugin(skill) for skill in skills)]
+    all_plugins = build_plugins(skills)
+    selected_plugins = select_plugins(all_plugins, selected_names)
     plugins_dir = repo / PLUGIN_ROOT
     marketplace_path = repo / MARKETPLACE_PATH
     expected_names = {plugin.name for plugin in all_plugins}
@@ -308,20 +356,20 @@ def sync_skill_plugins(repo: Path, clean: bool = True) -> SyncResult:
                 shutil.rmtree(child)
                 changed = True
 
-    for plugin in all_plugins:
+    for plugin in selected_plugins:
         if (plugins_dir / plugin.name).exists():
             changed = True
         write_plugin(plugin, plugins_dir)
         changed = True
 
     before = marketplace_path.read_text(encoding="utf-8") if marketplace_path.exists() else None
-    write_json(marketplace_path, render_marketplace(all_plugins))
+    write_json(marketplace_path, render_marketplace(selected_plugins))
     after = marketplace_path.read_text(encoding="utf-8")
     changed = changed or before != after
 
     return SyncResult(
-        plugin_count=len(all_plugins),
-        bundle_count=len(bundles),
+        plugin_count=len(selected_plugins),
+        bundle_count=sum(1 for plugin in selected_plugins if plugin.name in GROUP_PLUGIN_NAMES),
         skill_count=len(skills),
         marketplace_path=marketplace_path,
         changed=changed,
@@ -398,6 +446,20 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Do not remove stale generated plugin directories.",
     )
+    parser.add_argument(
+        "--list",
+        action="store_true",
+        help="List available bundle and individual skill plugins without writing files.",
+    )
+    parser.add_argument(
+        "--plugins",
+        help="Comma-separated plugin names to expose in the generated marketplace.",
+    )
+    parser.add_argument(
+        "--plugin",
+        action="append",
+        help="Plugin name to expose in the generated marketplace. May be repeated.",
+    )
     parser.add_argument("--json", action="store_true", help="Print JSON output.")
     return parser
 
@@ -405,7 +467,37 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     repo = args.repo.resolve()
+    selected_names = parse_plugin_names(args.plugins, args.plugin)
+
+    if args.list:
+        skills = discover_skills(repo / "skills")
+        plugins = build_plugins(skills)
+        if args.json:
+            print(
+                json.dumps(
+                    [
+                        {
+                            "name": plugin.name,
+                            "display_name": plugin.display_name,
+                            "description": plugin.description,
+                            "skills": [skill.name for skill in plugin.skills],
+                            "kind": "bundle"
+                            if plugin.name in GROUP_PLUGIN_NAMES
+                            else "individual",
+                        }
+                        for plugin in plugins
+                    ],
+                    indent=2,
+                )
+            )
+        else:
+            print(plugin_listing(plugins))
+        return 0
+
     if args.check:
+        if selected_names:
+            print("--check does not support selected marketplaces", file=sys.stderr)
+            return 2
         errors = check_in_sync(repo)
         if errors:
             for error in errors:
@@ -414,7 +506,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         print("skill plugins in sync")
         return 0
 
-    result = sync_skill_plugins(repo, clean=not args.no_clean)
+    try:
+        result = sync_skill_plugins(
+            repo,
+            clean=not args.no_clean,
+            selected_names=selected_names,
+        )
+    except ValueError as error:
+        print(error, file=sys.stderr)
+        return 2
     if args.json:
         print(
             json.dumps(
@@ -424,6 +524,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     "skill_count": result.skill_count,
                     "marketplace_path": str(result.marketplace_path),
                     "changed": result.changed,
+                    "selected_plugins": selected_names,
                 },
                 indent=2,
             )
@@ -431,7 +532,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     else:
         print(
             f"generated {result.plugin_count} plugins "
-            f"({result.bundle_count} bundles, {result.skill_count} individual skills)"
+            f"({result.bundle_count} bundles selected from {result.skill_count} skills)"
         )
         print(f"marketplace: {result.marketplace_path}")
     return 0

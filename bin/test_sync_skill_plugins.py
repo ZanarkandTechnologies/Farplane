@@ -112,6 +112,47 @@ class SyncSkillPluginsTests(unittest.TestCase):
                 },
             )
 
+    def test_sync_can_generate_selected_marketplace(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "review", "Run quality checks.")
+            write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+
+            result = syncer.sync_skill_plugins(
+                repo,
+                selected_names=["farplane-frontend", "review"],
+            )
+
+            self.assertEqual(result.plugin_count, 2)
+            marketplace = json.loads((repo / ".agents" / "plugins" / "marketplace.json").read_text())
+            self.assertEqual(
+                [plugin["name"] for plugin in marketplace["plugins"]],
+                ["farplane-frontend", "review"],
+            )
+            self.assertTrue((repo / "plugins" / "farplane-frontend").exists())
+            self.assertTrue((repo / "plugins" / "review").exists())
+            self.assertFalse((repo / "plugins" / "visual-qa").exists())
+
+    def test_sync_rejects_unknown_selected_plugin(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "review", "Run quality checks.")
+
+            with self.assertRaisesRegex(ValueError, "Unknown plugin"):
+                syncer.sync_skill_plugins(repo, selected_names=["missing"])
+
+    def test_listing_treats_farplane_named_skills_as_individual_plugins(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "farplane-invocation", "Invoke Farplane envelopes.")
+            plugins = syncer.build_plugins(syncer.discover_skills(repo / "skills"))
+
+            listing = syncer.plugin_listing(plugins)
+
+            bundle_section, individual_section = listing.split("Individual skill plugins:")
+            self.assertNotIn("- farplane-invocation:", bundle_section)
+            self.assertIn("- farplane-invocation:", individual_section)
+
     def test_check_detects_stale_generated_plugins(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
