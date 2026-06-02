@@ -27,6 +27,7 @@ tmp/
 .personality_migration
 .omx/
 .harness/
+.codex/evals/
 .ralph/
 .agents/*
 !.agents/plugins/
@@ -66,7 +67,7 @@ exports/
 # Local/private feed-scout configuration
 skills/feed-scout/config/
 plugins/feed-scout/skills/feed-scout/config/
-plugins/codexter-research/skills/feed-scout/config/
+plugins/farplane-research/skills/feed-scout/config/
 
 # Local ticket working set
 tickets/**
