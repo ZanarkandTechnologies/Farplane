@@ -1,0 +1,29 @@
+{
+  "name": "eval",
+  "version": "0.1.0",
+  "description": "Check, initialize, and run harness-native evals for Codex or Claude using simple JSON tasks, boolean/tier judge promp...",
+  "author": {
+    "name": "Farplane"
+  },
+  "license": "MIT",
+  "keywords": [
+    "farplane",
+    "skill",
+    "local",
+    "3"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Eval",
+    "shortDescription": "Check, initialize, and run harness-native evals for Codex or Claude using simple JSON tasks, boolean/tier judge promp...",
+    "longDescription": "Check, initialize, and run harness-native evals for Codex or Claude using simple JSON tasks, boolean/tier judge prompts, and local run artifacts under .codex/evals or .claude/evals.",
+    "developerName": "Farplane",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use eval for this task."
+    ]
+  }
+}
