@@ -8,10 +8,8 @@ source: local
 
 # Visual QA Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the active ticket, its declared screens/states, and its evidence checklist before judging the UI.
 - [ ] Read `docs/TASTE.md` when taste, density, or layout quality is in scope.
@@ -22,7 +20,7 @@ Source: `SKILL.md`
 - [ ] Include geometry and layout assertions, not just aesthetic commentary.
 - [ ] Identify the best user-facing evidence item for ticket writeback.
 - [ ] If the result needs a broader final verdict, hand the findings back through the [Review](../review/SKILL.md) skill.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 <!--
 Judgment-only layer.

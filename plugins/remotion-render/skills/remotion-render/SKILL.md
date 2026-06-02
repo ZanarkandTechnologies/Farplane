@@ -10,10 +10,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Remotion Render
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 # Remotion Render Todos
 
@@ -33,7 +31,7 @@ Use this as the ordered checklist whenever `remotion-render` is active.
 - [ ] If the rendered video is used in a frontend, hand off to [frontend-craft](../frontend-craft/SKILL.md) and [visual-qa](../visual-qa/SKILL.md) when layout or taste is affected.
 - [ ] Do not route model-native video requests through this skill; use [video-generation](../video-generation/SKILL.md) for those.
 - [ ] Follow the [execute](../execute/SKILL.md) proof and writeback loop before claiming render, artifact, or final video quality.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Render videos from React/Remotion component code.
 

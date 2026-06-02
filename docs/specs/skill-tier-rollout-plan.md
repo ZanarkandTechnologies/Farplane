@@ -92,8 +92,8 @@ Tier 3 classification field because it lets tooling generate application views
 without a separate sequence registry.
 
 Use `source: external` for skill packages that are upstream-owned and should be
-refreshable from an outside source, such as `agent-browser`. A Codexter wrapper
-that merely reads external docs can remain `source: local`. Codexter-specific
+refreshable from an outside source, such as `agent-browser`. A Farplane wrapper
+that merely reads external docs can remain `source: local`. Farplane-specific
 wrapper logic belongs in local caller skills like `qa`, not in the external
 skill body.
 
@@ -328,7 +328,7 @@ skills that are called often but lack checklists:
 - `demo`
 - `prd`
 - `pr-runtime`
-- `codexter-invocation`
+- `farplane-invocation`
 
 Expected proof:
 

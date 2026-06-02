@@ -35,13 +35,13 @@ def project_root_arg(raw: str) -> Path:
 
 def set_dry_run_env(enabled: bool) -> None:
     if enabled:
-        os.environ["CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN"] = "1"
+        os.environ["FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN"] = "1"
     else:
-        os.environ.pop("CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN", None)
+        os.environ.pop("FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN", None)
 
 
 def set_interval_env(interval: int) -> None:
-    os.environ["CODEXTER_SKILL_OPPORTUNITY_APPLY_INTERVAL"] = str(max(interval, 1))
+    os.environ["FARPLANE_SKILL_OPPORTUNITY_APPLY_INTERVAL"] = str(max(interval, 1))
 
 
 def expand_probe_template(template: str, index: int) -> str:
@@ -169,7 +169,7 @@ def status(args: argparse.Namespace) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Probe Codexter's hook-backed self-learning skill opportunity sidecar."
+        description="Probe Farplane's hook-backed self-learning skill opportunity sidecar."
     )
 
     def add_common_flags(target: argparse.ArgumentParser, *, after_subcommand: bool = False) -> None:

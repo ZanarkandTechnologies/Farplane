@@ -1,6 +1,6 @@
 # Delegate CLI
 
-Route bounded work to external coding-agent CLIs while Codexter keeps ticket,
+Route bounded work to external coding-agent CLIs while Farplane keeps ticket,
 artifact, QA, review, and integration authority.
 
 ## Minimal Usage

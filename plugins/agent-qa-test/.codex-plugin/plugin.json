@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Design or run the adversarial testing prompt bundle for an app feature, skill, prompt, or workflow. Use when the oper...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Agent Qa Test",
     "shortDescription": "Design or run the adversarial testing prompt bundle for an app feature, skill, prompt, or workflow. Use when the oper...",
     "longDescription": "Design or run the adversarial testing prompt bundle for an app feature, skill, prompt, or workflow. Use when the operator appends \"$test\", says \"please test\", or wants the main agent to design tests, spawn a QA/tester lane to gather evidence, spawn an evidence-review lane to attack that evidence, optionally use agent-behavior-test-style run capture for child-agent logs, and iterate until the behavior is proved, fixed, or honestly blocked. Use agent-qa-test:prompt when the operator only wants the reusable prompt instead of execution.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Validate the narrow structural parity contract for Codexter's canonical
+Validate the narrow structural parity contract for Farplane's canonical
 knowledge-base entrypoints.
 
 This validator is intentionally small. It exists to catch high-signal drift in

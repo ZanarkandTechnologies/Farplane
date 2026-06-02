@@ -121,7 +121,7 @@ This contract must remain available in production builds unless a future ticket 
 
 ## 10. Next Phase Prompt
 
-After Codexter approves this spec, proceed to:
+After Farplane approves this spec, proceed to:
 
 **Phase: `assets`**
 Generate or create the four asset items above (desktop frame sequence, mobile frame sequence, support loop, poster/reduced-motion still). Verify every referenced path returns 200. Write `assets/asset-manifest.json` with frame counts, dimensions, and source prompts. Produce a handoff before implementation.

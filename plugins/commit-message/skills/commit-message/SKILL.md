@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep
 
 # Commit Message
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Inspect staged changes first; if nothing is staged, inspect the intended
   diff boundary before writing a subject.
@@ -26,7 +24,7 @@ Source: `SKILL.md`
   commit boundaries.
 - [ ] Use [review](../review/SKILL.md) when preparing a release- or PR-critical
   commit message.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use when the user asks for a commit message, commit title, or to infer the repo's commit style from history.
 

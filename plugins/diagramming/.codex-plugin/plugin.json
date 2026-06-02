@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams su...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Diagramming",
     "shortDescription": "Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams su...",
     "longDescription": "Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams such as top-level delta maps, zoom-ins, numbered data-flow traces, or inline-signature component diagrams.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

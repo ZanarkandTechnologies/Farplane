@@ -9,7 +9,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # PR Splitting
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
 - [ ] Confirm the branch already works end to end before trying to split it.
@@ -20,7 +20,7 @@ allowed-tools: Read, Glob, Grep, Bash
 - [ ] Keep contract changes with their required consumers when backward compatibility is not real.
 - [ ] Keep generated files, lockfiles, tests, and docs with the bucket that honestly owns them.
 - [ ] Return exact file lists, size notes, blockers, and a refusal reason if a clean non-stacked split is not honest.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this after the code already works.
 

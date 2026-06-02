@@ -8,10 +8,8 @@ source: local
 
 # Autoresearch Plan
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the target docs, scripts, tests, active ticket, and existing
   autoresearch artifacts before proposing a session.
@@ -29,7 +27,7 @@ Source: `SKILL.md`
   work.
 - [ ] Hand off to [autoresearch-exec](../autoresearch-exec/SKILL.md) only after
   the session contract is valid.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Set up a metric-driven improvement session. This skill plans the loop and writes
 the session contract; `autoresearch-exec` runs the experiments.

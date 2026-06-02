@@ -17,5 +17,5 @@ Keep each page short and biased toward deterministic access.
   understandable
 - `Known gaps:` missing shortcuts or helpers that still need implementation
 
-Use [TEMPLATE.md](/Users/kenjipcx/coding-harness/Codexter/qa/cookbook/TEMPLATE.md)
+Use [TEMPLATE.md](/Users/kenjipcx/coding-harness/Farplane/qa/cookbook/TEMPLATE.md)
 when adding a new page.

@@ -7,7 +7,7 @@
 - `adapter` knows how to call one external CLI family.
 - `bin/delegate_cli_agent.py` owns deterministic setup, dry-run command
   rendering, prompt rendering, logs, and artifact copying.
-- Codexter owns the ticket, QA, review, and integration result.
+- Farplane owns the ticket, QA, review, and integration result.
 
 The first profile is `frontend-pi-kimi`. Future profiles should reuse the same
 launcher and artifact contract.

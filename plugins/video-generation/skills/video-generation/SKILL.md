@@ -1,7 +1,7 @@
 ---
 name: video-generation
 version: 1.0.0
-description: Generate or edit AI video assets with inference.sh `belt` video apps, using the broad AI-video model map plus Codexter's workspace, spend-gate, and frontend QA rules. Covers Google Veo, Seedance 2.0, HappyHorse, Wan, Grok, P-Video, avatar/lipsync, image-to-video, video editing, foley discovery, upscaling, social media videos, marketing clips, explainer videos, product demos, and frontend-bound video assets. Route React/Remotion code authoring to `remotion` and inference.sh code-to-video renders to `remotion-render`.
+description: Generate or edit AI video assets with inference.sh `belt` video apps, using the broad AI-video model map plus Farplane's workspace, spend-gate, and frontend QA rules. Covers Google Veo, Seedance 2.0, HappyHorse, Wan, Grok, P-Video, avatar/lipsync, image-to-video, video editing, foley discovery, upscaling, social media videos, marketing clips, explainer videos, product demos, and frontend-bound video assets. Route React/Remotion code authoring to `remotion` and inference.sh code-to-video renders to `remotion-render`.
 tier: 3
 group: content-video
 source: local
@@ -10,10 +10,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Video Generation
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 # Video Generation Todos
 
@@ -45,7 +43,7 @@ Use this as the ordered checklist whenever `video-generation` is active.
 - [ ] Confirm external compute/spend is acceptable before any `belt app run`.
 - [ ] Save final videos, prompts, input JSON, result JSON, and notes inside the workspace, not only in a remote URL, temp path, or Codex home path.
 - [ ] If the video is used on a web surface, route implementation/proof through `frontend-craft`, `references/frontend-asset-qa.md`, and `visual-qa` when layout or taste is affected.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Generate project-ready AI video assets with inference.sh CLI (`belt`) while keeping provider-specific details in references.
 

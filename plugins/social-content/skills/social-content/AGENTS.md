@@ -1,6 +1,6 @@
 # social-content
 
-Use this package as the single Codexter-owned social content workflow surface.
+Use this package as the single Farplane-owned social content workflow surface.
 Keep platform-specific behavior as method sections and references instead of
 reintroducing sibling public skill directories.
 

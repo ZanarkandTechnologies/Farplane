@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use for one-page marketing, launch, homepage, portfolio, hero-heavy, cinematic, or scrolltelling frontend surfaces. S...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Landing Page",
     "shortDescription": "Use for one-page marketing, launch, homepage, portfolio, hero-heavy, cinematic, or scrolltelling frontend surfaces. S...",
     "longDescription": "Use for one-page marketing, launch, homepage, portfolio, hero-heavy, cinematic, or scrolltelling frontend surfaces. Shapes the offer, story arc, sections, assets, motion, and proof before frontend-craft implements.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

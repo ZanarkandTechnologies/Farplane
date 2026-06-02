@@ -10,17 +10,15 @@ common_chains:
 
 # QA
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the selected ticket, Proof Contract, acceptance criteria, linked
   specs/docs, and any runtime target handoff.
 - [ ] Use the generic [execute](../execute/SKILL.md) proof/writeback shape, but
   keep `$qa` focused on ticket-scoped evidence collection.
 - [ ] If browser evidence is needed, use [agent-browser](../agent-browser/SKILL.md)
-  as the browser tool surface and keep Codexter-specific artifact rules here.
+  as the browser tool surface and keep Farplane-specific artifact rules here.
 - [ ] If a live app/API target is ambiguous, require a runtime record from
   [pr-runtime](../pr-runtime/SKILL.md) or record the blocker instead of guessing
   ports from chat.
@@ -39,7 +37,7 @@ Source: `SKILL.md`
 - [ ] Update the ticket Evidence section with the strongest QA artifacts.
 - [ ] If the proof is weak, confusing, or incomplete, return a revise/blocker
   verdict instead of claiming QA passed.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 `$qa` is the proof-gathering phase for a selected ticket.
 
@@ -59,7 +57,7 @@ Do not use it when:
 - Read the selected ticket plus linked docs/specs.
 - When `$qa` is entered from a live orchestration lane and delegation is available, keep the coordinating lane out of browser driving: spawn `qa-tester` to own browser/tool use, artifact capture, and ticket-scoped proof.
 - Use [agent-browser](../agent-browser/SKILL.md) as the general browser tool
-  surface when browser evidence is needed; Codexter-specific QA artifact
+  surface when browser evidence is needed; Farplane-specific QA artifact
   policy lives in this skill, not in `agent-browser`.
 - Gather ticket-scoped proof under `tickets/TASK-XXXX/artifacts/qa/`.
 - For UI or user-visible work, use `visual-qa` as a separate judgment pass.

@@ -10,8 +10,8 @@ from pathlib import Path
 
 
 CHECKLIST_HEADING = "## Important Checklist"
-CHECKLIST_BEGIN = "<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->"
-CHECKLIST_END = "<!-- END CODEXTER_IMPORTANT_CHECKLIST -->"
+CHECKLIST_BEGIN = "<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->"
+CHECKLIST_END = "<!-- END FARPLANE_IMPORTANT_CHECKLIST -->"
 SOURCE_RE = re.compile(r"^Source: `[^`\n]+`\n\n?", re.MULTILINE)
 MARKED_SECTION_RE = re.compile(
     rf"^{re.escape(CHECKLIST_BEGIN)}\n.*?^{re.escape(CHECKLIST_END)}\n?",
@@ -31,7 +31,7 @@ def find_repo_root(start: Path) -> Path:
     for candidate in [start, *start.parents]:
         if (candidate / "bin/sync_skill_registry.py").exists() and (candidate / "skills").exists():
             return candidate
-    raise ChecklistError("could not find Codexter repo root")
+    raise ChecklistError("could not find Farplane repo root")
 
 
 def parse_frontmatter(path: Path) -> dict[str, str]:
@@ -92,7 +92,6 @@ def render_section(checklist_text: str) -> str:
     return (
         f"{CHECKLIST_BEGIN}\n"
         f"{CHECKLIST_HEADING}\n\n"
-        "Source: `SKILL.md`\n\n"
         f"{checklist}\n"
         f"{CHECKLIST_END}\n"
     )
@@ -250,7 +249,7 @@ def main() -> int:
         "--repo",
         type=Path,
         default=find_repo_root(Path(__file__).resolve()),
-        help="Codexter repo root",
+        help="Farplane repo root",
     )
     args = parser.parse_args()
     return sync_repo(args.repo.resolve(), args.write)

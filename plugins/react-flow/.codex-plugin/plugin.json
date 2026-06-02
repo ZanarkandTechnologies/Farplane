@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Index of best practices for building graph-based applications and node-based editors using React Flow.",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "React Flow",
     "shortDescription": "Index of best practices for building graph-based applications and node-based editors using React Flow.",
     "longDescription": "Index of best practices for building graph-based applications and node-based editors using React Flow.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Tier 1 primitive for proving a pattern at the smallest honest scale before expanding scope, automation, data volume,...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "1"
@@ -17,7 +17,7 @@
     "displayName": "Prototyping",
     "shortDescription": "Tier 1 primitive for proving a pattern at the smallest honest scale before expanding scope, automation, data volume,...",
     "longDescription": "Tier 1 primitive for proving a pattern at the smallest honest scale before expanding scope, automation, data volume, user count, file count, research breadth, or implementation complexity.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

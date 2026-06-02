@@ -68,14 +68,14 @@ class SyncSkillPluginsTests(unittest.TestCase):
             result = syncer.sync_skill_plugins(repo)
 
             self.assertEqual(result.bundle_count, 2)
-            core = repo / "plugins" / "codexter-core"
-            frontend = repo / "plugins" / "codexter-frontend"
+            core = repo / "plugins" / "farplane-core"
+            frontend = repo / "plugins" / "farplane-frontend"
             self.assertTrue((core / "skills" / "review" / "SKILL.md").exists())
             self.assertTrue((core / "skills" / "plan" / "SKILL.md").exists())
             self.assertTrue((frontend / "skills" / "frontend-craft" / "SKILL.md").exists())
             manifest = json.loads((core / ".codex-plugin" / "plugin.json").read_text())
-            self.assertEqual(manifest["name"], "codexter-core")
-            self.assertEqual(manifest["interface"]["displayName"], "Codexter Core")
+            self.assertEqual(manifest["name"], "farplane-core")
+            self.assertEqual(manifest["interface"]["displayName"], "Farplane Core")
 
     def test_sync_generates_marketplace_entries(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -85,13 +85,13 @@ class SyncSkillPluginsTests(unittest.TestCase):
             syncer.sync_skill_plugins(repo)
 
             marketplace = json.loads((repo / ".agents" / "plugins" / "marketplace.json").read_text())
-            self.assertEqual(marketplace["name"], "codexter-skills")
-            self.assertEqual(marketplace["interface"]["displayName"], "Codexter Skills")
+            self.assertEqual(marketplace["name"], "farplane-skills")
+            self.assertEqual(marketplace["interface"]["displayName"], "Farplane Skills")
             self.assertEqual(
                 marketplace["plugins"][0],
                 {
-                    "name": "codexter-core",
-                    "source": {"source": "local", "path": "./plugins/codexter-core"},
+                    "name": "farplane-core",
+                    "source": {"source": "local", "path": "./plugins/farplane-core"},
                     "policy": {
                         "installation": "AVAILABLE",
                         "authentication": "ON_INSTALL",

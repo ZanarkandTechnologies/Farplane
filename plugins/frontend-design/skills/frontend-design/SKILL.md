@@ -10,10 +10,8 @@ allowed-tools: mcp__shadcn__*, Read, Write, Edit, LS
 
 # Frontend Design Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Confirm the owning frontend path: use
   [frontend-craft](../frontend-craft/SKILL.md) for end-to-end builds,
@@ -34,7 +32,7 @@ Source: `SKILL.md`
   guidance to [frontend-craft](../frontend-craft/SKILL.md).
 - [ ] Use [execute](../execute/SKILL.md) for proof/writeback shape before
   claiming implementation guidance is ready.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 > **Purpose**: Provide app-UI implementation guidance for shadcn components, AI Elements, registries, and theming. For new frontend implementation, use `frontend-craft`; for workflow redesign use `functional-ui`; for visual taste use `visual-design`; for one-page marketing or scrolltelling use `landing-page`.
 

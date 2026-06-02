@@ -19,7 +19,7 @@ instructions.
 
 ```text
 Feature:
-Codexter support:
+Farplane support:
 Source/project support:
 Local evidence:
 Source evidence:
@@ -31,16 +31,16 @@ Notes:
 
 ## Output Table
 
-| Feature | Codexter | Source A | Source B | Decision | Registry / ticket | Notes |
+| Feature | Farplane | Source A | Source B | Decision | Registry / ticket | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 
 ## Decision Rules
 
-- If Codexter is `implemented` and the source has no stronger proof, mark
+- If Farplane is `implemented` and the source has no stronger proof, mark
   `already-dominating` or `duplicate`.
-- If Codexter is `absent` and the feature has strong fit, score it as a
+- If Farplane is `absent` and the feature has strong fit, score it as a
   `missing-feature` candidate.
-- If both Codexter and a source support the feature, require a scorecard task
+- If both Farplane and a source support the feature, require a scorecard task
   before claiming one implementation is better.
 - If support is `unknown`, do not ticket it until a better source or transcript
   anchor exists.

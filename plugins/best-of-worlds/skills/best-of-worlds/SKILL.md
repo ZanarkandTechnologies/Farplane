@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep
 
 # Best Of Worlds
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Identify the input worlds, source artifacts, and comparison target before
   scoring.
@@ -28,14 +26,14 @@ Source: `SKILL.md`
   viable after scoring.
 - [ ] Use [review](../review/SKILL.md) before promoting decisions into tickets,
   docs, or skill changes.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Build a best-of-all-worlds design from multiple source projects without turning
 research into a feature dump. This skill compares real implementations, extracts
 transferable features, discovers useful metrics when the target is fuzzy, and
 returns adopt/adapt/reject decisions with an implementation handoff.
 
-Codexter skills are stable local contracts. External skills, repos, blogs, and
+Farplane skills are stable local contracts. External skills, repos, blogs, and
 command families are research inputs, not live dependencies. This skill is the
 normal import gate for outside ideas: decide `adopt`, `adapt`, `reject`, or
 `defer` before changing local skill behavior. See `MEM-0073`.
@@ -99,7 +97,7 @@ For bigger comparisons, scaffold a durable synthesis workspace:
 ```bash
 python3 skills/best-of-worlds/scripts/init_synthesis.py \
   --name autoresearch-skill-suite \
-  --target "Codexter skill self-improvement workflow" \
+  --target "Farplane skill self-improvement workflow" \
   --source https://github.com/karpathy/autoresearch \
   --source https://www.mindstudio.ai/blog/claude-code-autoresearch-self-improving-skills
 ```

@@ -17,7 +17,7 @@
 3. Mount frontend, media, QA, and review skills needed for the phase.
 4. Run Pi/Kimi with the prompt file.
 5. Read the handoff and decide keep, repair, or reject.
-6. Run Codexter-owned verification before any completion claim.
+6. Run Farplane-owned verification before any completion claim.
 
 ## Visual Review
 

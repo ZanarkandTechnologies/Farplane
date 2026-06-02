@@ -7,7 +7,7 @@ source: local
 
 # Batch Work
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
 - [ ] Parse the user-specified ticket range or explicit ticket list.
@@ -37,7 +37,7 @@ source: local
 - [ ] After the range is exhausted, run batch-level checks and
   [review](../review/SKILL.md).
 - [ ] Present completed tickets, blocked tickets, proof, and next actions.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when the operator types `batch-work` or asks to process a range/list of
 tickets without stopping after every ticket.

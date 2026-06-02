@@ -1,14 +1,14 @@
 {
-  "name": "codexter-skills",
+  "name": "farplane-skills",
   "interface": {
-    "displayName": "Codexter Skills"
+    "displayName": "Farplane Skills"
   },
   "plugins": [
     {
-      "name": "codexter-core",
+      "name": "farplane-core",
       "source": {
         "source": "local",
-        "path": "./plugins/codexter-core"
+        "path": "./plugins/farplane-core"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -17,10 +17,10 @@
       "category": "Productivity"
     },
     {
-      "name": "codexter-coding-workflow",
+      "name": "farplane-coding-workflow",
       "source": {
         "source": "local",
-        "path": "./plugins/codexter-coding-workflow"
+        "path": "./plugins/farplane-coding-workflow"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -29,10 +29,10 @@
       "category": "Productivity"
     },
     {
-      "name": "codexter-frontend",
+      "name": "farplane-frontend",
       "source": {
         "source": "local",
-        "path": "./plugins/codexter-frontend"
+        "path": "./plugins/farplane-frontend"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -41,10 +41,10 @@
       "category": "Productivity"
     },
     {
-      "name": "codexter-research",
+      "name": "farplane-research",
       "source": {
         "source": "local",
-        "path": "./plugins/codexter-research"
+        "path": "./plugins/farplane-research"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -53,10 +53,10 @@
       "category": "Productivity"
     },
     {
-      "name": "codexter-media-content",
+      "name": "farplane-media-content",
       "source": {
         "source": "local",
-        "path": "./plugins/codexter-media-content"
+        "path": "./plugins/farplane-media-content"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -65,10 +65,10 @@
       "category": "Productivity"
     },
     {
-      "name": "codexter-harness-engineering",
+      "name": "farplane-harness-engineering",
       "source": {
         "source": "local",
-        "path": "./plugins/codexter-harness-engineering"
+        "path": "./plugins/farplane-harness-engineering"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -257,18 +257,6 @@
       "category": "Productivity"
     },
     {
-      "name": "codexter-invocation",
-      "source": {
-        "source": "local",
-        "path": "./plugins/codexter-invocation"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
-    },
-    {
       "name": "commit-message",
       "source": {
         "source": "local",
@@ -437,6 +425,18 @@
       "category": "Productivity"
     },
     {
+      "name": "eval",
+      "source": {
+        "source": "local",
+        "path": "./plugins/eval"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "eval-onboarding",
       "source": {
         "source": "local",
@@ -465,6 +465,18 @@
       "source": {
         "source": "local",
         "path": "./plugins/external-patterns"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "farplane-invocation",
+      "source": {
+        "source": "local",
+        "path": "./plugins/farplane-invocation"
       },
       "policy": {
         "installation": "AVAILABLE",

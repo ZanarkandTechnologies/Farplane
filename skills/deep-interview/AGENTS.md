@@ -11,7 +11,7 @@ vague ask before planning or execution.
 
 - one-question-at-a-time clarification
 - ticket/docs-first grounding when a live ticket already exists
-- requirements summaries on current Codexter surfaces
+- requirements summaries on current Farplane surfaces
 - explicit non-goals and decision boundaries before handoff
 
 ## Do Not

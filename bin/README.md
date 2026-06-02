@@ -31,10 +31,10 @@ orchestration story.
   and print the generated input/report paths without waiting for live cadence
 - `delegate_cli_agent.py` - external CLI delegation helper for profile setup,
   dry-run command rendering, execution logs, and ticket evidence copyback
-- `codexter_boards.py` - board adapter contract plus the filesystem
+- `farplane_boards.py` - board adapter contract plus the filesystem
   `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a
   `WorkItem`
-- `codexter_compute.py` - compute admission policy for `local_shared`,
+- `farplane_compute.py` - compute admission policy for `local_shared`,
   `local_worktree`, `symphony`, and `codex_cloud`; it emits blockers and setup
   hints but never launches compute
 - `install_selected_skills.py` - dependency-free selected-skill installer for
@@ -42,8 +42,8 @@ orchestration story.
   Codex home without rendering full harness config
 - `sync_skill_plugins.py` - deterministic generator for the repo plugin
   marketplace and one self-contained Codex plugin package per skill
-- `codexter_invocation.py` - contract helper for `WORKFLOW.md`,
-  `CodexterRunEnvelope`, board-backed `WorkItem`, compute selection, skill
+- `farplane_invocation.py` - contract helper for `WORKFLOW.md`,
+  `FarplaneRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
 - `../skills/ralph/scripts/select_next_ticket.py` - serial Ralph selector that
   consumes `FileTicketAdapter` and `ComputeSelector` so board draining uses the
@@ -92,7 +92,7 @@ Runtime routing is session-first for parallel Codex usage:
 - `.harness/state/current-run.json` as the live current-run pointer / last-active selector
 - only `session_origin=control` sessions may persist canonical `last_user_turn` and advance the live current-run pointer
 
-See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md) for the canonical decision table.
+See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md) for the canonical decision table.
 
 ## Preferred Agent-Facing Command Surfaces
 
@@ -124,20 +124,20 @@ success quiet and make failure output the thing that stands out.
   Use to render the Pi/Kimi frontend delegation prompt, command, runtime logs,
   and durable ticket artifacts without spending tokens or editing files
 - `python3 bin/install_selected_skills.py --search frontend`
-  Use to discover shareable skills without rendering the full Codexter config.
+  Use to discover shareable skills without rendering the full Farplane config.
 - `python3 bin/install_selected_skills.py --skills review,visual-qa --dry-run`
   Use to preview selected skill symlinks into `~/.codex/skills`.
 - `python3 bin/sync_skill_plugins.py --check`
   Use after changing `skills/*` to prove `.agents/plugins/marketplace.json`
   and generated `plugins/*` packages are in sync.
-- `python3 -m unittest bin/test_codexter_boards.py`
+- `python3 -m unittest bin/test_farplane_boards.py`
   Use to prove the filesystem BoardAdapter path containment and ticket
   normalization contract before changing invocation or Ralph selection behavior
-- `python3 -m unittest bin/test_codexter_compute.py`
+- `python3 -m unittest bin/test_farplane_compute.py`
   Use to prove compute precedence, blockers, worktree runtime hints, and future
   target behavior without launching local or remote compute
-- `python3 bin/codexter_invocation.py prepare --ticket <ticket> --phase planning --proof .harness/results/<ticket>.proof.json`
-  Use to validate a local Codexter invocation envelope and inspect the selected
+- `python3 bin/farplane_invocation.py prepare --ticket <ticket> --phase planning --proof .harness/results/<ticket>.proof.json`
+  Use to validate a local Farplane invocation envelope and inspect the selected
   skill route without launching Codex
 - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
   Use to inspect the next serial Ralph handoff plus compute blockers without
@@ -150,7 +150,7 @@ success quiet and make failure output the thing that stands out.
   you intentionally want to spawn the real Codex sidecar. The generated input
   includes `workspace_context` so the sidecar can see the originating project,
   invocation cwd, and weekly Notion status cache path while still defaulting
-  clear findings to reusable Codexter harness-improvement tasks. The `simulate`
+  clear findings to reusable Farplane harness-improvement tasks. The `simulate`
   and `force-review` outputs include `hooklet_result`, the same named result
   shape logged to `.harness/logs/stop-hook.jsonl` by the live Stop hook. Sidecar
   reports include a five-hop `proof_hops` checklist for `user_capture`,

@@ -8,10 +8,8 @@ source: local
 
 # Self Improve
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the target skill package: `SKILL.md`, direct checklist, references,
   scripts, and existing `self-improve/` memory.
@@ -29,7 +27,7 @@ Source: `SKILL.md`
   native Goal.
 - [ ] Promote only durable lessons, evals, and accepted changes into the target
   skill package, normally through [skill-maintenance](../skill-maintenance/SKILL.md).
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Improve a target skill by giving native Goal mode the context it needs to run a
 measured loop. This skill owns skill-local memory, rubrics, binary evals,
@@ -220,7 +218,7 @@ installed copies.
    is the simpler durable loop.
 6. Do not optimize a skill that should be split into smaller skills first.
 7. Do not fill target skill packages with bulky raw logs; store durable
-   summaries, accepted evals, and reusable lessons.
+  summaries, accepted evals, and reusable lessons.
 
 ## Outcome Contract
 

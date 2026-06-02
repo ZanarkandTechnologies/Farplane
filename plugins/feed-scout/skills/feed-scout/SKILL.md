@@ -10,10 +10,8 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Feed Scout
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read existing feed-scout config, profile rows, tracked entities,
   tracked harness resources, ledger/proposal artifacts, and the requested mode
@@ -37,9 +35,9 @@ Source: `SKILL.md`
   `Areas` relations from explicit context or private Notion handles, then
   verify readback; if unresolved, mark `routing_missing` or use local-only
   output instead of claiming task writeback success.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Monitor tracked profiles without turning Codexter into a crawler platform.
+Monitor tracked profiles without turning Farplane into a crawler platform.
 
 `feed-scout` is the entrypoint recipe for:
 
@@ -56,7 +54,7 @@ Monitor tracked profiles without turning Codexter into a crawler platform.
   items point at the same harness pattern
 - writing proposal rows/pages to Notion or a local review inbox
 
-This skill composes existing Codexter skills. Keep these Markdown links so
+This skill composes existing Farplane skills. Keep these Markdown links so
 future dependency tooling can discover the graph:
 
 - [apify](../apify/SKILL.md) for X/social discovery when API credentials or
@@ -192,7 +190,7 @@ schemas.
 - **Live Notion Tasks writeback:** require resolved `Project` and `Areas`
   relations plus readback proof. If routing cannot be resolved, keep the output
   in the proposal ledger or local inbox with `routing_missing`.
-- **Several related items:** run `best-of-worlds` before proposing a Codexter
+- **Several related items:** run `best-of-worlds` before proposing a Farplane
   change.
 - **Duplicate or weak item:** update the ledger and do not create a proposal or
   `SRC-*` record.

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Build-phase orchestrator for one selected ticket. Runs ephemerally, coordinates builder/reviewer/QA/evidence-check la...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Impl",
     "shortDescription": "Build-phase orchestrator for one selected ticket. Runs ephemerally, coordinates builder/reviewer/QA/evidence-check la...",
     "longDescription": "Build-phase orchestrator for one selected ticket. Runs ephemerally, coordinates builder/reviewer/QA/evidence-check lanes, and hands results back to the Stop hook.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

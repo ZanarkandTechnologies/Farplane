@@ -1,7 +1,7 @@
 ---
 name: delegate-cli
 version: 0.1.0
-description: Route bounded Codexter work to configured external coding-agent CLIs through explicit adapter/profile contracts, managed prompts, runtime logs, and ticket evidence handoff. Use when another local CLI/model/harness is stronger for a task but Codexter must keep ticket, QA, review, and integration authority.
+description: Route bounded Farplane work to configured external coding-agent CLIs through explicit adapter/profile contracts, managed prompts, runtime logs, and ticket evidence handoff. Use when another local CLI/model/harness is stronger for a task but Farplane must keep ticket, QA, review, and integration authority.
 tier: 3
 group: harness
 source: local
@@ -10,10 +10,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Delegate CLI
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the selected ticket, linked docs/specs, proof contract, and relevant
   local files before building the delegate prompt.
@@ -30,17 +28,17 @@ Source: `SKILL.md`
   proof, and optional diff into the ticket evidence surface.
 - [ ] Hand the result back to [qa](../qa/SKILL.md), [demo](../demo/SKILL.md), or
   [impl](../impl/SKILL.md) instead of letting the delegate approve itself.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill to run an external coding-agent CLI as a bounded builder lane
-without letting that CLI become Codexter's source of truth.
+without letting that CLI become Farplane's source of truth.
 
 ## Trigger Conditions
 
 - A ticket or user ask says a different local CLI/model should own a bounded
   build pass.
 - The work needs profile-specific skills, prompts, or model defaults.
-- Codexter must capture logs, handoff notes, and optional diffs as ticket
+- Farplane must capture logs, handoff notes, and optional diffs as ticket
   evidence.
 - The external CLI should not push, deploy, publish, spend, or approve its own
   output.
@@ -63,7 +61,7 @@ without letting that CLI become Codexter's source of truth.
 7. Run without `--dry-run` only when the operator has allowed live CLI/model
    execution and any credentials/spend are acceptable.
 8. Attach the generated handoff/logs/patch to ticket evidence and route the
-   result back through Codexter QA/review.
+   result back through Farplane QA/review.
 
 ## Core Decision Branches
 
@@ -110,7 +108,7 @@ Return or write:
 - runtime artifact directory,
 - durable ticket artifact directory when a ticket was supplied,
 - handoff/log/diff paths,
-- next Codexter QA/review step.
+- next Farplane QA/review step.
 
 ## References
 

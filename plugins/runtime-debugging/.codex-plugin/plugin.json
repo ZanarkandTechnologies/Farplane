@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Hypothesis-driven runtime debugging skill for reproducible bugs, flaky failures, regressions, and performance or memo...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Runtime Debugging",
     "shortDescription": "Hypothesis-driven runtime debugging skill for reproducible bugs, flaky failures, regressions, and performance or memo...",
     "longDescription": "Hypothesis-driven runtime debugging skill for reproducible bugs, flaky failures, regressions, and performance or memory issues where reading code alone is insufficient. Use when you need instrumentation, runtime evidence, root-cause analysis, and proof of the fix.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

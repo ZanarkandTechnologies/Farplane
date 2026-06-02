@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -16,8 +16,8 @@
   "interface": {
     "displayName": "Image Generation",
     "shortDescription": "Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus...",
-    "longDescription": "Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Codexter's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.",
-    "developerName": "Codexter",
+    "longDescription": "Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Farplane's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

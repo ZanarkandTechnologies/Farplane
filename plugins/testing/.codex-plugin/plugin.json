@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Testing index skill for selecting backpressure and domain guidance.",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Testing",
     "shortDescription": "Testing index skill for selecting backpressure and domain guidance.",
     "longDescription": "Testing index skill for selecting backpressure and domain guidance.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

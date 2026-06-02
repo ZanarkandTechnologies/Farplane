@@ -13,10 +13,8 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Agent QA Test
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Identify the target behavior and whether the operator wants run mode or
   `agent-qa-test:prompt`.
@@ -38,7 +36,7 @@ Source: `SKILL.md`
   artifact location, or rerun-vs-fix policy has real tradeoffs.
 - [ ] Use [review](../review/SKILL.md) before treating a new reusable test
   template or repeated workflow as trustworthy.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 `agent-qa-test` is the chat-invoked surface for adversarial agent testing. Treat
 `$test` as a user shorthand that injects this whole testing contract into the

@@ -16,7 +16,7 @@ SUBPROCESS_TIMEOUT_SECONDS = 5
 
 
 README_TEXT = """\
-# Codexter
+# Farplane
 
 - Architecture map: [ARCHITECTURE.md](/abs/ARCHITECTURE.md)
 - Feature inventory: [harness-techniques.md](/abs/docs/specs/harness-techniques.md)
@@ -25,7 +25,7 @@ README_TEXT = """\
 """
 
 ARCHITECTURE_TEXT = """\
-# Codexter Architecture
+# Farplane Architecture
 
 ## Canonical Surfaces
 
@@ -151,7 +151,7 @@ class CheckDocParityTest(unittest.TestCase):
             write_file(
                 root / "README.md",
                 """\
-# Codexter
+# Farplane
 
 - Active queue: [tickets](/abs/tickets) is the live board; do not rely on hardcoded queue summaries here
 """,

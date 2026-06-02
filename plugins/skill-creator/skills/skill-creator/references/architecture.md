@@ -17,7 +17,7 @@ verbose, or low-frequency detail into references.
 
 ## Stable Local Contracts
 
-Codexter skills are stable local contracts. External skills, repos, blogs, and
+Farplane skills are stable local contracts. External skills, repos, blogs, and
 command families are research inputs, not live dependencies. Use
 `best-of-worlds` to review outside ideas, then import them as `adopt`, `adapt`,
 `reject`, or `defer` decisions instead of auto-syncing upstream behavior.

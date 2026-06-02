@@ -15,10 +15,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Social Content
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 # Social Content Todos
 
@@ -59,7 +57,7 @@ active.
 - [ ] Follow the [execute](../execute/SKILL.md) proof and writeback loop before
   claiming platform fit, campaign readiness, professional voice, slide
   hierarchy, thread quality, or final quality.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Domain entrypoint for social media content planning and asset production.
 

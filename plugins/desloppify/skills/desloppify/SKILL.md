@@ -10,10 +10,8 @@ allowed-tools: Read, Grep, Bash
 
 # Desloppify
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 # Desloppify Todo Template
 
@@ -39,7 +37,7 @@ Source: `SKILL.md`
       appears.
 - [ ] Rescan after meaningful batches and write the latest score, exclusions,
       and blocker state back to the visible task artifact.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when the operator explicitly asks to run `desloppify`, improve code
 quality with the `desloppify` CLI, or delegate a cleanup pass to a worker.

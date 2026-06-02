@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the Codexter skill registry from skill frontmatter."""
+"""Generate the Farplane skill registry from skill frontmatter."""
 
 from __future__ import annotations
 
@@ -14,8 +14,8 @@ from typing import Any
 
 SKILL_LINK_RE = re.compile(r"\]\((?:\.\./)?([^/\)\s]+)/SKILL\.md(?:#([^)]+))?\)")
 LOCAL_METHOD_RE = re.compile(r"\]\(SKILL\.md#([^)]+)\)")
-CHECKLIST_BEGIN = "<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->"
-CHECKLIST_END = "<!-- END CODEXTER_IMPORTANT_CHECKLIST -->"
+CHECKLIST_BEGIN = "<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->"
+CHECKLIST_END = "<!-- END FARPLANE_IMPORTANT_CHECKLIST -->"
 CHECKLIST_RE = re.compile(
     rf"^{re.escape(CHECKLIST_BEGIN)}\n"
     r"## Important Checklist\n\n"

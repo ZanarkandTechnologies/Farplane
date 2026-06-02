@@ -4,10 +4,10 @@ Date: 2026-04-24
 
 ## Goal
 
-Give Codexter one canonical way to decide where a harness change belongs before
+Give Farplane one canonical way to decide where a harness change belongs before
 editing the repo.
 
-This doctrine is Codexter-first. It is not a generic agent-harness manifesto.
+This doctrine is Farplane-first. It is not a generic agent-harness manifesto.
 Its job is to route a proposed change to the smallest owning surface:
 
 - root policy
@@ -101,7 +101,7 @@ The expected result is:
 
 Default interpretation:
 
-- repo-local `AGENTS.md` = Codexter-specific priorities, boundaries, and routing
+- repo-local `AGENTS.md` = Farplane-specific priorities, boundaries, and routing
 - `templates/global/AGENTS.md` = shipped cross-repo default operating contract
 - `skills/*` = repeatable workflow and procedural consistency
 - `agents/*.toml` = independent responsibility and context isolation

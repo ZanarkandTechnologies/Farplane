@@ -28,7 +28,7 @@ artifact defaults for new or migrated repos.
 
 - duplicate the `deep-interview` loop inside `deep-init-project`
 - auto-enable git hooks during bootstrap
-- make generated repos depend on Codexter-owned helper paths for push gates
+- make generated repos depend on Farplane-owned helper paths for push gates
 - turn utility-duplication heuristics into hard blockers in the default template
 
 ## Invariants

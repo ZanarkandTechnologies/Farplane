@@ -16,9 +16,9 @@ SUBPROCESS_TIMEOUT_SECONDS = 5
 
 
 ROOT_AGENTS_TEXT = """\
-# Codexter AGENTS.md
+# Farplane AGENTS.md
 
-This file is the project-local context for developing Codexter itself.
+This file is the project-local context for developing Farplane itself.
 
 The install-time global harness contract now lives at `templates/global/AGENTS.md` and is what `install.sh` links into the live Codex home as `~/.codex/AGENTS.md`.
 
@@ -107,7 +107,7 @@ developer_instructions = "review"
             write_file(
                 root / "AGENTS.md",
                 """\
-# Codexter AGENTS.md
+# Farplane AGENTS.md
 
 This file is generic instructions.
 """,

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, pro...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Agent Behavior Test",
     "shortDescription": "Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, pro...",
     "longDescription": "Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, prompt, workflow, or narrow feature path, with logs, command events, final output, artifacts, and a scored evidence report.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

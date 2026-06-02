@@ -8,9 +8,9 @@ batch QA are implemented and reviewed.
 
 ## User Story
 
-As the Codexter operator, I want to say "Ralph, run up to N ready tickets" and
+As the Farplane operator, I want to say "Ralph, run up to N ready tickets" and
 have each ticket run in an isolated, inspectable lane, without losing the
-current Codexter guarantees around tickets, review, QA, and proof.
+current Farplane guarantees around tickets, review, QA, and proof.
 
 As a future maintainer, I need every parallel claim, workspace, proof packet,
 merge, and release decision to be visible in files so a failed batch can be
@@ -99,7 +99,7 @@ keeps only tickets that satisfy all current serial Ralph gates:
 - `blocked_by: []`
 - empty `claimed_by`
 - dependencies resolved
-- phase routable to a Codexter skill
+- phase routable to a Farplane skill
 
 Parallel Ralph then adds parallel-only gates:
 
@@ -143,8 +143,8 @@ For each leased ticket:
 2. If it returns `missing_worktree_runtime`, run the existing `pr-runtime` /
    `ticket_runtime.py ensure` setup outside the selector.
 3. Record the checkout path in the lease.
-4. Launch normal Codex in that checkout with Codexter installed.
-5. Pass a `CodexterRunEnvelope` for the ticket and expected phase.
+4. Launch normal Codex in that checkout with Farplane installed.
+5. Pass a `FarplaneRunEnvelope` for the ticket and expected phase.
 
 Parallel Ralph still does not become a Codex launcher in v1. The future
 implementation may choose native Codex subagents, separate Codex CLI sessions,

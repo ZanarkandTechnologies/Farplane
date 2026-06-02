@@ -10,7 +10,7 @@ Source anchor:
 Source evidence:
 Source safety:
 Local matches:
-Codexter baseline:
+Farplane baseline:
 Scores:
 Decision:
 Reason:
@@ -21,9 +21,9 @@ Ticket action:
 
 Score each `1-5`.
 
-- `user-value`: does this improve Codexter's operator experience or output?
+- `user-value`: does this improve Farplane's operator experience or output?
 - `evidence-strength`: is the source concrete, credible, and recent enough?
-- `local-fit`: does it fit Codexter's ticket/docs/skills architecture?
+- `local-fit`: does it fit Farplane's ticket/docs/skills architecture?
 - `novelty`: is it meaningfully new versus existing registry records?
 - `implementation-cost`: lower cost scores higher.
 - `risk-control`: lower operational, security, or maintenance risk scores
@@ -32,14 +32,14 @@ Score each `1-5`.
 
 ## Decision Labels
 
-- `already-dominating`: Codexter already has an equal or stronger local version.
-- `source-dominates`: the source has a concrete capability Codexter lacks.
-- `hybrid`: Codexter has the base, and the source suggests a useful adaptation.
+- `already-dominating`: Farplane already has an equal or stronger local version.
+- `source-dominates`: the source has a concrete capability Farplane lacks.
+- `hybrid`: Farplane has the base, and the source suggests a useful adaptation.
 - `duplicate`: same local feature, no new evidence or metric.
 - `weak-ignore`: vague, low-value, high-risk, or source-specific bait.
 - `needs-benchmark`: plausible but not trustworthy without a scorecard.
 - `adopt`: add the source feature closely.
-- `adapt`: import the principle through Codexter conventions.
+- `adapt`: import the principle through Farplane conventions.
 - `reject`: do not pursue.
 - `defer`: useful but too large or blocked for the current slice.
 

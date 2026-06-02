@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate graph and document data for the Codexter skill registry."""
+"""Generate graph and document data for the Farplane skill registry."""
 
 from __future__ import annotations
 

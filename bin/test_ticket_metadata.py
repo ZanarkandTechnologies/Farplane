@@ -45,7 +45,7 @@ def write_file(path: Path, text: str) -> None:
 
 
 def load_ticket_metadata_module():
-    spec = importlib.util.spec_from_file_location("codexter_ticket_metadata_test", SCRIPT)
+    spec = importlib.util.spec_from_file_location("farplane_ticket_metadata_test", SCRIPT)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"could not load ticket metadata module from {SCRIPT}")
     module = importlib.util.module_from_spec(spec)

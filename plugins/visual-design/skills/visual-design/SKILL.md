@@ -12,10 +12,8 @@ allowed-tools: Read, Grep, Glob
 
 # Visual Design
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Confirm the functional basis: user, primary action, states, workflow, and
   existing UX decision. If missing, route to
@@ -39,7 +37,7 @@ Source: `SKILL.md`
   the full build path.
 - [ ] Use [execute](../execute/SKILL.md) for proof/writeback shape before
   claiming the visual direction is ready.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Own the look and taste of a frontend surface after its functional purpose is known. This skill is about visual judgment, not workflow design or component wiring.
 
@@ -84,7 +82,7 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 - Do not import new fonts, colors, or animation libraries without checking the project and the implementation owner.
 - Do not make every product UI cinematic. Repeated-use tools should feel efficient, calm, and inspectable.
 - Do not ignore mobile text fit, contrast, focus states, or reduced-motion needs.
-- Do not copy community taste-skill bans wholesale. Convert them into context-aware Codexter constraints.
+- Do not copy community taste-skill bans wholesale. Convert them into context-aware Farplane constraints.
 
 ## Reference Map
 

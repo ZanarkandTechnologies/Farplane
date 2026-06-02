@@ -12,10 +12,8 @@ metadata:
 
 # Remotion
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 # Remotion Todos
 
@@ -34,13 +32,13 @@ Use this as the ordered checklist whenever `remotion` is active.
 - [ ] Confirm external compute, spend, uploads, or API usage is explicitly acceptable before running render jobs outside local project commands.
 - [ ] If the video is embedded in a frontend, route integration and visual proof through [frontend-craft](../frontend-craft/SKILL.md) and [visual-qa](../visual-qa/SKILL.md) when layout or taste is affected.
 - [ ] Follow the [execute](../execute/SKILL.md) proof and writeback loop before claiming animation, composition, render-readiness, or final video quality.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Author deterministic video with Remotion and React. This skill contains the official Remotion best-practices skill plus Codexter routing notes.
+Author deterministic video with Remotion and React. This skill contains the official Remotion best-practices skill plus Farplane routing notes.
 
 The imported upstream source and refresh note live in `references/upstream-source.md`.
 
-## Codexter Routing
+## Farplane Routing
 
 - Use this skill for Remotion code authoring, timing, composition structure, media handling, captions, audio, transitions, and render sanity checks.
 - Use `imagegen` or `image-generation` for still assets that will be placed in Remotion `public/`.

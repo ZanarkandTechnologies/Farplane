@@ -41,9 +41,9 @@ def event_log_path(project_root: Path, timestamp: str) -> Path:
 
 
 def telemetry_config() -> tuple[str, str, float]:
-    url = os.environ.get("CODEXTER_TELEMETRY_API_URL", "").strip()
-    token = os.environ.get("CODEXTER_TELEMETRY_API_TOKEN", "").strip()
-    raw_timeout = os.environ.get("CODEXTER_TELEMETRY_TIMEOUT_SECS", "").strip()
+    url = os.environ.get("FARPLANE_TELEMETRY_API_URL", "").strip()
+    token = os.environ.get("FARPLANE_TELEMETRY_API_TOKEN", "").strip()
+    raw_timeout = os.environ.get("FARPLANE_TELEMETRY_TIMEOUT_SECS", "").strip()
     try:
         timeout = float(raw_timeout) if raw_timeout else 2.0
     except ValueError:
@@ -118,7 +118,7 @@ def write_local_event(project_root: Path, event: Mapping[str, object]) -> Path:
     return path
 
 
-def emit_codexter_event(project_root: Path, event: Mapping[str, object]) -> bool:
+def emit_farplane_event(project_root: Path, event: Mapping[str, object]) -> bool:
     write_local_event(project_root, event)
     url, token, timeout = telemetry_config()
     if not url:
@@ -204,7 +204,7 @@ def emit_hook_telemetry(
         counts=counts,
         metadata=metadata,
     )
-    return emit_codexter_event(project_root, event)
+    return emit_farplane_event(project_root, event)
 
 
 if __name__ == "__main__":

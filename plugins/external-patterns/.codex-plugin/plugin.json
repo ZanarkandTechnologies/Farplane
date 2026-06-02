@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Workflows for finding code patterns across GitHub and exploring specific repositories. Use when searching for how oth...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "External Patterns",
     "shortDescription": "Workflows for finding code patterns across GitHub and exploring specific repositories. Use when searching for how oth...",
     "longDescription": "Workflows for finding code patterns across GitHub and exploring specific repositories. Use when searching for how others implement features or deep diving into libraries.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

@@ -9,10 +9,8 @@ allowed-tools: apify, web_search, documentation-searcher
 
 # Apify Integration Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Identify the platform, actor, live-run boundary, credential/spend status,
   and output needed before invoking Apify.
@@ -28,7 +26,7 @@ Source: `SKILL.md`
   a material tradeoff.
 - [ ] Use [review](../review/SKILL.md) before changing durable actor configs or
   public scraping recipes.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 The centralized "Data Acquisition Layer" for all external scraping operations.
 

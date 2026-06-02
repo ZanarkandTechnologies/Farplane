@@ -977,7 +977,7 @@ def render_prompt(
                 "",
                 "- Preserve unrelated changes.",
                 "- Do not push, deploy, publish, spend, or perform destructive actions.",
-                "- Do not claim final Codexter completion.",
+                "- Do not claim final Farplane completion.",
             ]
         ).strip() + "\n"
     else:
@@ -1383,7 +1383,7 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument(
         "--compact-prompt",
         action="store_true",
-        help="Use a compact Codexter wrapper around the supplied prompt for tightly bounded phase runs.",
+        help="Use a compact Farplane wrapper around the supplied prompt for tightly bounded phase runs.",
     )
     run.add_argument(
         "--expect-output",

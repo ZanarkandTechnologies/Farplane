@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Post-system-design planning skill that turns a System Design Brief into an Agent Testability Brief covering control a...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Agent Testability Plan",
     "shortDescription": "Post-system-design planning skill that turns a System Design Brief into an Agent Testability Brief covering control a...",
     "longDescription": "Post-system-design planning skill that turns a System Design Brief into an Agent Testability Brief covering control accelerators, state probes, coordination views, tooling, and proof surfaces before ticketization or per-ticket build planning.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

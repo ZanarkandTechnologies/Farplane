@@ -9,8 +9,8 @@ Mermaid system-design diagrams.
 
 - `SKILL.md`: main diagramming contract
 - `SKILL.md` Important Checklist: compact anti-forgetting checklist
-- [`references/patterns.md`](/Users/kenjipcx/coding-harness/Codexter/skills/diagramming/references/patterns.md)
-- [`references/review.md`](/Users/kenjipcx/coding-harness/Codexter/skills/diagramming/references/review.md)
+- [`references/patterns.md`](/Users/kenjipcx/coding-harness/Farplane/skills/diagramming/references/patterns.md)
+- [`references/review.md`](/Users/kenjipcx/coding-harness/Farplane/skills/diagramming/references/review.md)
 - `AGENTS.md`: maintenance notes
 
 ## Minimal Example

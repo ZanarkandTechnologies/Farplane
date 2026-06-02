@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Unified per-ticket planning skill with a detailed file-map-first plan centered on ordered action, callable seams, typ...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Impl Plan",
     "shortDescription": "Unified per-ticket planning skill with a detailed file-map-first plan centered on ordered action, callable seams, typ...",
     "longDescription": "Unified per-ticket planning skill with a detailed file-map-first plan centered on ordered action, callable seams, typed data flow, blast radius, verification, and explicit gap analysis for missing or partial features.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

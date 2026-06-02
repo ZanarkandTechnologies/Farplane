@@ -7,10 +7,8 @@ source: local
 
 # Repent
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the user's correction, active artifact, and recent work before
   apologizing or acting.
@@ -23,7 +21,7 @@ Source: `SKILL.md`
   repeated or structural.
 - [ ] Use [review](../review/SKILL.md) before claiming the recovery is complete
   for repo-changing work.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 `repent` is an operator-visible recovery skill.
 

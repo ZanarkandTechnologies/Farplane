@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only selector for Codexter filesystem tickets."""
+"""Read-only selector for Farplane filesystem tickets."""
 
 from __future__ import annotations
 
@@ -16,9 +16,9 @@ BIN_DIR = PROJECT_ROOT / "bin"
 if str(BIN_DIR) not in sys.path:
     sys.path.insert(0, str(BIN_DIR))
 
-from codexter_boards import BoardAdapterError, FileTicketAdapter, WorkItem
-from codexter_compute import ComputeDecision, select_compute
-from codexter_invocation import InvocationError, WorkflowPolicy, load_workflow
+from farplane_boards import BoardAdapterError, FileTicketAdapter, WorkItem
+from farplane_compute import ComputeDecision, select_compute
+from farplane_invocation import InvocationError, WorkflowPolicy, load_workflow
 
 
 TICKET_ID_RE = re.compile(r"^TASK-\d{4}$")

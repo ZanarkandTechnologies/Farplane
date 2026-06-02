@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Prod...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "1"
@@ -17,7 +17,7 @@
     "displayName": "Advise",
     "shortDescription": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Prod...",
     "longDescription": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

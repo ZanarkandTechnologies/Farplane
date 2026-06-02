@@ -10,10 +10,8 @@ common_chains:
 
 # Demo
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the selected ticket, demo requirement, and latest QA artifacts before
   creating demo output.
@@ -33,7 +31,7 @@ Source: `SKILL.md`
 - [ ] Update the ticket Evidence section with demo artifact links.
 - [ ] If the demo is not presentation-ready, return a revise/blocker verdict
   instead of marking demo complete.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 `$demo` is the demo-packaging phase for a selected ticket.
 

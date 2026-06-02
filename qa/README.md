@@ -70,5 +70,5 @@ Playwright test, not a transcript of agentic clicking.
 - capturing evidence while a feature is in flux
 - debugging why a scripted test is failing
 
-See [cookbook/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/cookbook/README.md)
+See [cookbook/README.md](/Users/kenjipcx/coding-harness/Farplane/qa/cookbook/README.md)
 for the per-workflow template.

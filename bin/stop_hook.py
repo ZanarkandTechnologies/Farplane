@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-CODEXTER STOP HOOK
+FARPLANE STOP HOOK
 ==================
 Purpose
 
@@ -87,7 +87,7 @@ COMPLETION_REVIEW_VERDICTS = {"pass", "revise", "block"}
 
 
 def env_enabled() -> bool:
-    return os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
+    return os.environ.get("FARPLANE_IMPL_HOOK", "").lower() in {
         "1",
         "true",
         "yes",
@@ -104,7 +104,7 @@ def has_project_runtime_context(project_root: Path | None) -> bool:
 def has_explicit_ticket_selector() -> bool:
     return bool(
         os.environ.get("IMPL_TICKET", "").strip()
-        or os.environ.get("CODEXTER_ACTIVE_TICKET", "").strip()
+        or os.environ.get("FARPLANE_ACTIVE_TICKET", "").strip()
     )
 
 
@@ -114,7 +114,7 @@ def hook_enabled_for_context(
     impl_result: str | None,
 ) -> bool:
     # Keep the env flag as an explicit override, but auto-activate when the
-    # hook is clearly running inside a Codexter/impl context.
+    # hook is clearly running inside a Farplane/impl context.
     return (
         env_enabled()
         or current_run is not None
@@ -204,8 +204,8 @@ def read_payload() -> tuple[dict[str, object], str]:
     return (data if isinstance(data, dict) else {}), raw
 
 
-def codexter_home() -> Path:
-    configured = os.environ.get("CODEXTER_HOME", "").strip()
+def farplane_home() -> Path:
+    configured = os.environ.get("FARPLANE_HOME", "").strip()
     if configured:
         return Path(configured).expanduser().resolve()
 
@@ -268,7 +268,7 @@ def append_hook_log(base: Path, payload: dict[str, object]) -> None:
         with log_file.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(payload, ensure_ascii=True) + "\n")
     except OSError:
-        fallback = Path("/tmp/codexter-stop-hook.jsonl")
+        fallback = Path("/tmp/farplane-stop-hook.jsonl")
         try:
             with fallback.open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(payload, ensure_ascii=True) + "\n")
@@ -410,7 +410,7 @@ def emit_stop_passthrough(*, system_message: str | None = None) -> int:
 
 
 def classifier_timeout_secs() -> float:
-    raw_value = os.environ.get("CODEXTER_STOP_HOOK_TIMEOUT_SECS", "").strip()
+    raw_value = os.environ.get("FARPLANE_STOP_HOOK_TIMEOUT_SECS", "").strip()
     if not raw_value:
         return 30.0
 
@@ -687,7 +687,7 @@ def resolve_ticket(home: Path, project_root: Path | None, message: str) -> dict[
             if ticket_file.name.startswith(mentioned_ticket):
                 return load_ticket(ticket_file)
 
-    explicit_ticket = os.environ.get("CODEXTER_ACTIVE_TICKET", "").strip()
+    explicit_ticket = os.environ.get("FARPLANE_ACTIVE_TICKET", "").strip()
     if explicit_ticket:
         candidate = resolve_ticket_path_by_id(root, explicit_ticket)
         if candidate is not None and candidate in all_ticket_files:
@@ -1806,7 +1806,7 @@ def spawn_tmux_followup(
         cmd.extend(["--reason", reason])
     # Bounded smoke evals can ask the follow-up launcher to stay in dry-run mode
     # so we can validate the tmux handoff without spawning a live Codex worker.
-    if os.environ.get("CODEXTER_IMPL_TMUX_DRY_RUN", "").lower() in {"1", "true", "yes", "on"}:
+    if os.environ.get("FARPLANE_IMPL_TMUX_DRY_RUN", "").lower() in {"1", "true", "yes", "on"}:
         cmd.append("--dry-run")
     completed = subprocess.run(cmd, text=True, capture_output=True, check=False, cwd=base)
     if completed.returncode != 0:
@@ -1919,7 +1919,7 @@ def role_command(base: Path, output_path: Path, role_config: dict[str, str]) -> 
         "-",
     ]
 
-    model = os.environ.get("CODEXTER_STOP_HOOK_MODEL", "").strip() or role_config.get("model", "")
+    model = os.environ.get("FARPLANE_STOP_HOOK_MODEL", "").strip() or role_config.get("model", "")
     if model:
         command[2:2] = ["-m", model]
 
@@ -1937,14 +1937,14 @@ def role_command(base: Path, output_path: Path, role_config: dict[str, str]) -> 
 
 def skill_opportunity_review_enabled() -> bool:
     disabled_values = {"0", "false", "no", "off", "disabled"}
-    apply_value = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY", "").strip().lower()
+    apply_value = os.environ.get("FARPLANE_SKILL_OPPORTUNITY_APPLY", "").strip().lower()
     if apply_value in disabled_values:
         return False
     return True
 
 
 def skill_opportunity_review_dry_run() -> bool:
-    return os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN", "").lower() in {
+    return os.environ.get("FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN", "").lower() in {
         "1",
         "true",
         "yes",
@@ -1953,7 +1953,7 @@ def skill_opportunity_review_dry_run() -> bool:
 
 
 def skill_opportunity_review_interval() -> int:
-    raw = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY_INTERVAL", "").strip()
+    raw = os.environ.get("FARPLANE_SKILL_OPPORTUNITY_APPLY_INTERVAL", "").strip()
     if not raw:
         return 10
     try:
@@ -1964,7 +1964,7 @@ def skill_opportunity_review_interval() -> int:
 
 
 def skill_opportunity_recent_window_limit() -> int:
-    raw = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_RECENT_SESSIONS", "").strip()
+    raw = os.environ.get("FARPLANE_SKILL_OPPORTUNITY_RECENT_SESSIONS", "").strip()
     if not raw:
         return 5
     try:
@@ -2113,17 +2113,17 @@ def skill_opportunity_review_input(
         "current_project_name": project_root.name,
         "current_project_root": str(project_root),
         "hook_invocation_cwd": invocation_cwd,
-        "codexter_home": str(base),
+        "farplane_home": str(base),
         "status_context_cache": str(status_context_cache),
         "status_context_cache_exists": status_context_cache.is_file(),
         "task_scope_default": "harness_self_improvement",
         "routing_hint": (
             "Use the current project as evidence for tagging and prioritization, "
-            "but create tasks for reusable Codexter harness improvements unless "
+            "but create tasks for reusable Farplane harness improvements unless "
             "the issue is purely project-local."
         ),
     }
-    notion_tasks_data_source = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_NOTION_TASKS_DATA_SOURCE")
+    notion_tasks_data_source = os.environ.get("FARPLANE_SKILL_OPPORTUNITY_NOTION_TASKS_DATA_SOURCE")
     notion_tasks_configured = bool(notion_tasks_data_source and notion_tasks_data_source.strip())
     return {
         "schema_version": 1,
@@ -2140,8 +2140,8 @@ def skill_opportunity_review_input(
         "notion_task_target": {
             "data_source_url": notion_tasks_data_source.strip() if notion_tasks_configured else None,
             "configured": notion_tasks_configured,
-            "tag": os.environ.get("CODEXTER_SKILL_OPPORTUNITY_NOTION_TAG", "agent self improvement"),
-            "default_status": os.environ.get("CODEXTER_SKILL_OPPORTUNITY_NOTION_STATUS", "Review"),
+            "tag": os.environ.get("FARPLANE_SKILL_OPPORTUNITY_NOTION_TAG", "agent self improvement"),
+            "default_status": os.environ.get("FARPLANE_SKILL_OPPORTUNITY_NOTION_STATUS", "Review"),
         },
         "payload_context": {
             "hook_event_name": payload.get("hook_event_name"),
@@ -2157,7 +2157,7 @@ def skill_opportunity_review_input(
             "If notion_task_target.configured is false, do not attempt Notion task creation; mark the notion_task_creation proof hop missing with evidence 'notion_task_target_unconfigured'.",
             "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup, but turn them into Notion task proposals.",
             "Use workflow_refs as the required local routing model: harness-scout for source-to-feature extraction, advise for comparing feature directions, and harness-advisor for placement.",
-            "Use workspace_context to understand which project produced the signal and to tag/relate the Notion task when safe; default every clear signal to a reusable Codexter harness improvement.",
+            "Use workspace_context to understand which project produced the signal and to tag/relate the Notion task when safe; default every clear signal to a reusable Farplane harness improvement.",
             "Review the current window first, then use recent_windows for cross-session complaints and repeated pain.",
             "Dedupe against existing skills, feature registry, memory, troubles, and recent tickets.",
         ],
@@ -2184,7 +2184,7 @@ def skill_opportunity_apply_command(base: Path, report_path: Path, role_config: 
         str(report_path),
         "-",
     ]
-    model = os.environ.get("CODEXTER_SKILL_OPPORTUNITY_APPLY_MODEL", "").strip() or role_config.get("model", "")
+    model = os.environ.get("FARPLANE_SKILL_OPPORTUNITY_APPLY_MODEL", "").strip() or role_config.get("model", "")
     if model:
         command[2:2] = ["-m", model]
     reasoning_effort = role_config.get("model_reasoning_effort", "")
@@ -2501,7 +2501,7 @@ def run_role(base: Path, role_name: str, prompt: str) -> dict[str, object] | Non
         return None
 
     with tempfile.NamedTemporaryFile(
-        prefix="codexter-stop-hook-",
+        prefix="farplane-stop-hook-",
         suffix=".json",
         delete=False,
     ) as temp_output:
@@ -2718,7 +2718,7 @@ def run_orchestrator_decision(
 
 def main() -> int:
     payload, raw_payload = read_payload()
-    home = codexter_home()
+    home = farplane_home()
     project_root = project_root_from_payload(payload)
     base = runtime_root(home, project_root)
     hook_event_name = str(payload.get("hook_event_name") or "").strip()
@@ -2768,7 +2768,7 @@ def main() -> int:
     if not hook_enabled_for_context(project_root, current_run, impl_result):
         if hook_event_name == "Stop":
             return emit_stop_passthrough(
-                system_message="Stop hook: no Codexter runtime context; allowing stop."
+                system_message="Stop hook: no Farplane runtime context; allowing stop."
             )
         return 0
 
@@ -2919,7 +2919,7 @@ def main() -> int:
             system_message="Stop hook: no active ticket resolved; allowing stop."
         )
 
-    impl_mode_enabled = os.environ.get("CODEXTER_IMPL_HOOK", "").lower() in {
+    impl_mode_enabled = os.environ.get("FARPLANE_IMPL_HOOK", "").lower() in {
         "1",
         "true",
         "yes",
@@ -2934,7 +2934,7 @@ def main() -> int:
     )
     live_interactive_lane = (
         resolved_session_id is not None
-        and os.environ.get("CODEXTER_IMPL_TMUX_DRY_RUN", "").lower() not in {"1", "true", "yes", "on"}
+        and os.environ.get("FARPLANE_IMPL_TMUX_DRY_RUN", "").lower() not in {"1", "true", "yes", "on"}
     )
     if not impl_runtime_active:
         return emit_stop_passthrough(

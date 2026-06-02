@@ -7,7 +7,7 @@ two different Notion MCP surfaces are available at different times.
 
 Return normalized task rows for the canonical weekly Tasks view when possible.
 When exact enumeration is unavailable, report connector state and continue with
-a safe local fallback for Codexter automation. Do not use semantic search to
+a safe local fallback for Farplane automation. Do not use semantic search to
 approximate task rows.
 
 ## Canonical Inputs
@@ -66,7 +66,7 @@ approximate task rows.
    - Also use this when the exposed MCP surface can fetch metadata but cannot
      query rows.
    - Report the connector state explicitly.
-   - Fall back to the local filesystem ticket board for Codexter automation.
+   - Fall back to the local filesystem ticket board for Farplane automation.
    - Do not create, update, or complete Notion tasks.
 
 ## Subagent Probe Discipline

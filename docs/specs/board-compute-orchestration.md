@@ -2,18 +2,18 @@
 
 Status: Draft v1
 
-Purpose: Define how Codexter should treat local or shared board items as work
+Purpose: Define how Farplane should treat local or shared board items as work
 context, accept an explicit invocation to run one item, decide where the work
-should run, route normal Codex through installed Codexter skills, and produce
+should run, route normal Codex through installed Farplane skills, and produce
 proof that local or future external runners can trust.
 
 ## 1. Core Decision
 
-Codexter should be the work-contract, skill-routing, QA/review, and proof layer
+Farplane should be the work-contract, skill-routing, QA/review, and proof layer
 inside normal Codex. Symphony, Codex cloud, local worktrees, or future services
 may be compute substrates.
 
-Codexter is a ticket invocation layer, not a board daemon. A ticket existing,
+Farplane is a ticket invocation layer, not a board daemon. A ticket existing,
 becoming ready, or moving state is not by itself permission to start an agent.
 Execution starts only when a human or external runner makes an explicit
 invocation, such as a local Codex request, an operator-invoked `$ralph` run, a
@@ -26,32 +26,32 @@ The user's current priority is local, conversational execution:
 2. Codex reads a board item, usually a filesystem ticket.
 3. `$work` classifies the work unit and chooses Goal policy, compute,
    planning, proof, and route.
-4. Codexter policy selects where the accepted work should run.
+4. Farplane policy selects where the accepted work should run.
 5. Codex routes through existing skills such as `impl-plan`, `impl`, `qa`,
    `review`, `batch-work`, `$ralph`, and `close-ticket`.
-6. Codexter writes ticket evidence and a machine-readable `ProofPacket`.
+6. Farplane writes ticket evidence and a machine-readable `ProofPacket`.
 
 The future Symphony path is intentionally compatible with that same contract:
 
 1. Symphony launches normal Codex.
-2. The workspace has Codexter installed.
-3. The prompt or file includes a `CodexterRunEnvelope`.
-4. Codexter routes through existing skills.
-5. Codexter writes a machine-readable `ProofPacket`.
+2. The workspace has Farplane installed.
+3. The prompt or file includes a `FarplaneRunEnvelope`.
+4. Farplane routes through existing skills.
+5. Farplane writes a machine-readable `ProofPacket`.
 
-Symphony can own background service mechanics later. Codexter should not rebuild
+Symphony can own background service mechanics later. Farplane should not rebuild
 Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 
 ## 2. Goals
 
 - Keep local filesystem tickets as the first coding-ticket board.
 - Define a `BoardAdapter` contract that can later support Linear, Notion,
-  GitHub, or other boards without changing Codexter's skill/proof layer.
+  GitHub, or other boards without changing Farplane's skill/proof layer.
 - Define a `ComputeSelector` that makes target choice explicit per work unit
   after Work Admission.
-- Preserve the boundary between Codex, Codexter, and Symphony.
+- Preserve the boundary between Codex, Farplane, and Symphony.
 - Make local conversational execution, serial Ralph, and future Symphony-worker
-  execution share the same `CodexterRunEnvelope` and `ProofPacket` contracts.
+  execution share the same `FarplaneRunEnvelope` and `ProofPacket` contracts.
 - Keep PRD user-story oriented while system specs carry state, config, failure,
   observability, and conformance detail.
 
@@ -65,25 +65,25 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 - No parallel Ralph implementation here.
 - No replacement for `$work`, `impl-plan`, `impl`, `qa`, `review`, or
   `close-ticket`.
-- No standalone `codexter run` product claim. Codexter remains normal Codex
+- No standalone `farplane run` product claim. Farplane remains normal Codex
   with installed skills, hooks, templates, and repo-owned rules.
 
 ## 4. Ownership Model
 
 | Layer | Owner | Responsibility | Does not own |
 | --- | --- | --- | --- |
-| Codex | OpenAI Codex runtime | Model session, tool use, file edits, subagents, app/worktree/cloud primitives | Codexter ticket semantics or proof policy |
-| Codexter | This repo installed into Codex | Skills, tickets, board contracts, invocation policy, compute admission, QA/review gates, ProofPacket | Long-running external scheduler mechanics |
-| Symphony | Future external runner | Polling, claims, retries, workspace/process lifecycle, daemon observability | Codexter skill internals or proof quality decisions |
-| Board systems | Filesystem now, Linear/Notion later | Store work item data and status/comment/evidence fields, including optional invocation comments for a runner to interpret | Decide that Codexter should run without an explicit invocation |
+| Codex | OpenAI Codex runtime | Model session, tool use, file edits, subagents, app/worktree/cloud primitives | Farplane ticket semantics or proof policy |
+| Farplane | This repo installed into Codex | Skills, tickets, board contracts, invocation policy, compute admission, QA/review gates, ProofPacket | Long-running external scheduler mechanics |
+| Symphony | Future external runner | Polling, claims, retries, workspace/process lifecycle, daemon observability | Farplane skill internals or proof quality decisions |
+| Board systems | Filesystem now, Linear/Notion later | Store work item data and status/comment/evidence fields, including optional invocation comments for a runner to interpret | Decide that Farplane should run without an explicit invocation |
 
 ### Best-Of-Worlds Import
 
 | Source | Adopt | Adapt | Reject / defer |
 | --- | --- | --- | --- |
 | Symphony spec | Workspaces, claims, retry/reconcile vocabulary, `WORKFLOW.md` discipline, conformance matrix | Treat Symphony as a future caller through the envelope/proof contract | Do not copy the daemon or state-polling trigger model for local mode now |
-| Codex app primitives | Skills, subagents, worktrees, automations, cloud/local execution as trusted runtime primitives | Route compute targets to these primitives when available | Do not pretend Codexter is a separate execution engine |
-| Codexter current system | Tickets, skills, Work Admission, Stop-hook proof, review gates, Ralph board context | Generalize ticket reading through `BoardAdapter`, explicit invocation, and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
+| Codex app primitives | Skills, subagents, worktrees, automations, cloud/local execution as trusted runtime primitives | Route compute targets to these primitives when available | Do not pretend Farplane is a separate execution engine |
+| Farplane current system | Tickets, skills, Work Admission, Stop-hook proof, review gates, Ralph board context | Generalize ticket reading through `BoardAdapter`, explicit invocation, and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
 
 ### Advise Decision
 
@@ -93,12 +93,12 @@ Options:
 
 | Option | Pros | Cons |
 | --- | --- | --- |
-| Copy Symphony as Codexter daemon | Strong scheduler parity; one service could own polling and retries | High maintenance; duplicates a thing Symphony already specializes in; weakens local conversational fit |
-| Codexter as invocation/contract/quality layer with pluggable compute | Preserves current local use, integrates with Symphony later, keeps proof/review unique to Codexter | Requires crisp adapters, trigger semantics, and compute selection before cloud mode feels real |
+| Copy Symphony as Farplane daemon | Strong scheduler parity; one service could own polling and retries | High maintenance; duplicates a thing Symphony already specializes in; weakens local conversational fit |
+| Farplane as invocation/contract/quality layer with pluggable compute | Preserves current local use, integrates with Symphony later, keeps proof/review unique to Farplane | Requires crisp adapters, trigger semantics, and compute selection before cloud mode feels real |
 | Keep only local filesystem tickets | Lowest complexity and best current reliability | Delays Linear/Symphony integration and compute selection clarity |
 
-Recommendation: Codexter should be the explicit invocation, contract, and
-quality layer with pluggable compute. The accepted tradeoff is that Codexter
+Recommendation: Farplane should be the explicit invocation, contract, and
+quality layer with pluggable compute. The accepted tradeoff is that Farplane
 must maintain clean interfaces, but avoids owning every background runtime
 primitive.
 
@@ -116,12 +116,12 @@ flowchart LR
   User["Local user asks Codex<br/>to run one ticket"]:::local --> Invoke["Explicit invocation<br/>intent to execute"]:::policy
   Ralph["Operator invokes serial Ralph"]:::local --> Invoke
   Symphony["Symphony worker later"]:::future --> Invoke
-  Invoke --> Envelope["CodexterRunEnvelope"]:::policy
+  Invoke --> Envelope["FarplaneRunEnvelope"]:::policy
   Envelope --> Adapter["BoardAdapter"]:::board
   Adapter --> Item["WorkItem"]:::policy
   Item --> Work["$work<br/>ExecutionProfile"]:::policy
   Work --> Selector["ComputeSelector"]:::policy
-  Selector --> Codex["Normal Codex + Codexter skills"]:::compute
+  Selector --> Codex["Normal Codex + Farplane skills"]:::compute
   Codex --> Proof["ProofPacket + ticket evidence"]:::proof
 ```
 
@@ -143,19 +143,19 @@ lease/worktree/merge policy lands.
 A future local Codex session reads a shared board such as Linear or Notion
 through the same adapter interface. The entry point is still conversational
 unless an external runner explicitly owns polling or events and converts a
-board signal into a `CodexterRunEnvelope`.
+board signal into a `FarplaneRunEnvelope`.
 
 ### `symphony_worker`
 
 Symphony owns polling, claims, retries, workspace lifecycle, and Codex launch.
-Codexter owns the run envelope, skill routing, evidence, review, and proof
+Farplane owns the run envelope, skill routing, evidence, review, and proof
 inside the launched Codex workspace.
 
 ## 6. Domain Model
 
 ### `InvocationTrigger`
 
-An `InvocationTrigger` is the human or runner intent that starts one Codexter
+An `InvocationTrigger` is the human or runner intent that starts one Farplane
 run. It is not stored board state and it is not produced automatically by
 ticket creation, readiness, status movement, or `compute_target` edits.
 
@@ -185,18 +185,18 @@ Trigger examples:
 | --- | --- | --- |
 | `local_chat` | "Run `TASK-0123` locally" | the current Codex session |
 | `local_ralph` | operator invokes `$ralph` | Ralph serial selector |
-| `ticket_comment` | `@codexter implement` | future board adapter or external runner |
+| `ticket_comment` | `@farplane implement` | future board adapter or external runner |
 | `codex_cloud_task` | Codex Cloud task prompt includes the ticket and envelope | operator or future cloud adapter |
 | `symphony_worker` | Symphony claims a work item and writes an envelope file | Symphony worker |
 
 Important boundary:
 
-- A `ticket_comment` is a convention for a caller to interpret. Codexter does
+- A `ticket_comment` is a convention for a caller to interpret. Farplane does
   not watch Linear, Notion, GitHub, or filesystem comments in v1.
 - A `codex_cloud_task` means Codex Cloud owns the remote execution lifecycle.
-  Codexter only owns the contract inside the launched Codex task.
+  Farplane only owns the contract inside the launched Codex task.
 - A `symphony_worker` means Symphony owns polling, claim, retry, workspace, and
-  Codex launch behavior. Codexter only receives the already-made invocation.
+  Codex launch behavior. Farplane only receives the already-made invocation.
 
 ### `BoardAdapter`
 
@@ -214,13 +214,13 @@ type BoardAdapter = {
 Requirements:
 
 - `filesystem` is the only implemented adapter today.
-- The live filesystem implementation is `bin/codexter_boards.py`:
+- The live filesystem implementation is `bin/farplane_boards.py`:
   `FileTicketAdapter` reads `tickets/TASK-*/ticket.md`, rejects selectors
   outside the configured board source, and returns a normalized `WorkItem`.
 - New adapters must satisfy
   `docs/specs/board-adapter-conformance.md` before they are treated as live.
 - External adapters must normalize into the same `WorkItem` shape.
-- Adapter writes must be explicit and traceable; Codexter should not silently
+- Adapter writes must be explicit and traceable; Farplane should not silently
   mutate external board state as a side effect of reading.
 - BoardAdapter v1 keeps evidence writeback manual. Future writeback support must
   reuse ticket metadata rules and produce a traceable `WriteResult`.
@@ -299,7 +299,7 @@ Selector precedence:
 The selector must not silently fall back from an unsupported target to a
 different target. Unsupported compute returns `allowed: false` with blockers.
 
-The live selector is `bin/codexter_compute.py`. It is an admission policy, not a
+The live selector is `bin/farplane_compute.py`. It is an admission policy, not a
 runner:
 
 - `local_shared` is implemented and needs no runtime record.
@@ -308,15 +308,15 @@ runner:
   `missing_worktree_runtime` and a `bin/ticket_runtime.py ensure ...` setup
   hint.
 - `symphony` and `codex_cloud` always return `unsupported_target` until real
-  external adapters exist. They must still launch normal Codex with Codexter
-  installed and exchange a `CodexterRunEnvelope` plus `ProofPacket`.
+  external adapters exist. They must still launch normal Codex with Farplane
+  installed and exchange a `FarplaneRunEnvelope` plus `ProofPacket`.
 - Approval, blocked status, blocker tickets, and unresolved dependencies block
   non-planning phases.
 
-### `CodexterRunEnvelope`
+### `FarplaneRunEnvelope`
 
 ```ts
-type CodexterRunEnvelope = {
+type FarplaneRunEnvelope = {
   workflowPath: string;
   workItemId?: string;
   workItemPath?: string;
@@ -422,14 +422,14 @@ stateDiagram-v2
   SymphonyPollsBoard --> SymphonyClaimsIssue
   SymphonyClaimsIssue --> SymphonyCreatesWorkspace
   SymphonyCreatesWorkspace --> SymphonyLaunchesCodex
-  SymphonyLaunchesCodex --> CodexterEnvelopeReceived
-  CodexterEnvelopeReceived --> CodexterRoutesSkills
-  CodexterRoutesSkills --> CodexterWritesProof
-  CodexterWritesProof --> SymphonyObservesOutcome
+  SymphonyLaunchesCodex --> FarplaneEnvelopeReceived
+  FarplaneEnvelopeReceived --> FarplaneRoutesSkills
+  FarplaneRoutesSkills --> FarplaneWritesProof
+  FarplaneWritesProof --> SymphonyObservesOutcome
   SymphonyObservesOutcome --> [*]
 ```
 
-Symphony may retry, cancel, or reconcile runs around Codexter. Codexter should
+Symphony may retry, cancel, or reconcile runs around Farplane. Farplane should
 keep proof and ticket evidence valid no matter which runner initiated the run.
 
 ## 9. Failure Model
@@ -461,13 +461,13 @@ Future runner observability:
 
 - Symphony may add session IDs, logs, token totals, retry queues, rate limits,
   and workspace paths.
-- Codexter should not depend on a Symphony dashboard for correctness.
-- Codexter proof must remain inspectable from the repo artifacts.
+- Farplane should not depend on a Symphony dashboard for correctness.
+- Farplane proof must remain inspectable from the repo artifacts.
 
 ## 11. Safety Rules
 
-- Codexter helpers must not launch Codex, poll boards, own retry queues, or
-  present Codexter as a standalone CLI.
+- Farplane helpers must not launch Codex, poll boards, own retry queues, or
+  present Farplane as a standalone CLI.
 - Ticket creation, `ready: true`, status movement, and `compute_target` changes
   are not run triggers by themselves.
 - External board adapters must not expose raw credentials to Codex prompts.
@@ -490,7 +490,7 @@ Future runner observability:
 | Unsupported compute | `symphony` and `codex_cloud` block locally until adapters exist | core | prepare JSON fixtures |
 | Local conversational | one envelope routes to the expected skill and proof path | core | invocation prepare/write-proof tests |
 | Ralph | serial selector hands one eligible ticket or safe batch to `$work` and stops on human gates | core | Ralph selector tests |
-| Symphony shim | example workflow/prompt shows Symphony launching normal Codex with Codexter installed | extension | `skills/codexter-invocation/templates/symphony-run-envelope.json` and `TASK-0112` smoke |
+| Symphony shim | example workflow/prompt shows Symphony launching normal Codex with Farplane installed | extension | `skills/farplane-invocation/templates/symphony-run-envelope.json` and `TASK-0112` smoke |
 | Parallel Ralph | leases, worktrees, merge policy, stale recovery, batch QA specified before implementation | extension | `skills/ralph/references/parallel-ralph.md` and `TASK-0115` design review |
 | Spec discipline | complex specs include domain model, state, config, failures, observability, and tests | governance | `TASK-0116` template |
 
@@ -508,7 +508,7 @@ Completed foundation tickets are archived: `TASK-0112`, `TASK-0113`,
 
 ## 14. Implementation Checklist
 
-- Keep `bin/codexter_invocation.py` diagnostic and artifact-oriented.
+- Keep `bin/farplane_invocation.py` diagnostic and artifact-oriented.
 - Keep `BoardAdapter` and `ComputeSelector` as admission and normalization
   surfaces; do not turn them into launchers.
 - Add external board clients only after their conformance scaffolding exists.
@@ -525,11 +525,11 @@ Completed foundation tickets are archived: `TASK-0112`, `TASK-0113`,
 ## 15. References
 
 - `WORKFLOW.md`
-- `docs/specs/symphony-compatible-codexter-runner.md`
+- `docs/specs/symphony-compatible-farplane-runner.md`
 - `docs/specs/board-adapter-conformance.md`
-- `skills/codexter-invocation/SKILL.md`
+- `skills/farplane-invocation/SKILL.md`
 - `skills/ralph/SKILL.md`
-- `skills/codexter-invocation/references/codex-cloud.md`
-- `docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md`
-- `docs/research/web-research/2026-05-05_symphony-dagster-codexter-integration.md`
+- `skills/farplane-invocation/references/codex-cloud.md`
+- `docs/research/web-research/2026-05-04_symphony-farplane-benchmark.md`
+- `docs/research/web-research/2026-05-05_symphony-dagster-farplane-integration.md`
 - `docs/sources/registry.jsonl`

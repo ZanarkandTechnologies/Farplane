@@ -1,7 +1,7 @@
 # Feed Scout
 
 `feed-scout` monitors tracked profiles and turns newly discovered content into
-Codexter proposal candidates.
+Farplane proposal candidates.
 
 Start with [SKILL.md](SKILL.md). The important operator modes are:
 

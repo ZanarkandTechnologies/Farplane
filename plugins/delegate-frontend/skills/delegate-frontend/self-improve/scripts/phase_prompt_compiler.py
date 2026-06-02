@@ -252,7 +252,7 @@ def compile_prompt(args: argparse.Namespace) -> str:
         "## Phase Boundaries",
         "- Preserve unrelated changes.",
         "- Do not push, deploy, publish, or perform destructive actions.",
-        "- Do not claim final Codexter completion.",
+        "- Do not claim final Farplane completion.",
         "- Do not build outside this phase.",
         "- Do not spend on generated media unless this is an approved asset phase and the asset skill gates pass.",
         "",

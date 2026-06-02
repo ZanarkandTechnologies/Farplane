@@ -34,9 +34,9 @@ ls -la .harness/delegate-frontend/spec-runs/compiled-spec-live-1/
 Result: `SPEC.md` present, 0 build errors.
 
 ```bash
-python3 -m json.tool /Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/profiles/frontend-pi-kimi/skills/landing-page/references/landing-recipes.json >/dev/null
-python3 -m json.tool /Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/profiles/frontend-pi-kimi/skills/landing-page/references/taste-profiles.json >/dev/null
-python3 -m json.tool /Users/kenjipcx/coding-harness/Codexter/.harness/external-cli/profiles/frontend-pi-kimi/skills/landing-page/references/effect-stacks.json >/dev/null
+python3 -m json.tool /Users/kenjipcx/coding-harness/Farplane/.harness/external-cli/profiles/frontend-pi-kimi/skills/landing-page/references/landing-recipes.json >/dev/null
+python3 -m json.tool /Users/kenjipcx/coding-harness/Farplane/.harness/external-cli/profiles/frontend-pi-kimi/skills/landing-page/references/taste-profiles.json >/dev/null
+python3 -m json.tool /Users/kenjipcx/coding-harness/Farplane/.harness/external-cli/profiles/frontend-pi-kimi/skills/landing-page/references/effect-stacks.json >/dev/null
 ```
 Result: All JSON registry files valid.
 
@@ -118,4 +118,4 @@ Then `visual-review` with screenshots, scroll-scrub QA harness, and `review` / `
 
 ---
 
-*This is a delegated builder handoff. Codexter remains the final integrator and auditor. Do not treat this as final completion.*
+*This is a delegated builder handoff. Farplane remains the final integrator and auditor. Do not treat this as final completion.*

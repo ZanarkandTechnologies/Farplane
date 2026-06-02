@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-SKIP_ENV_VAR = "CODEXTER_SKIP_CODERABBIT"
+SKIP_ENV_VAR = "FARPLANE_SKIP_CODERABBIT"
 
 # MEM-0039: keep CodeRabbit as an explicit PR/pre-push gate, not a Stop-hook default.
 STAGE_DEFAULTS = {
@@ -25,7 +25,7 @@ STAGE_DEFAULTS = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run CodeRabbit with Codexter stage-aware defaults."
+        description="Run CodeRabbit with Farplane stage-aware defaults."
     )
     parser.add_argument(
         "--stage",

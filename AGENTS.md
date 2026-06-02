@@ -1,12 +1,17 @@
-# Codexter AGENTS.md
+# Farplane AGENTS.md
 
-This file is the project-local context for developing Codexter itself.
+This file is the project-local context for developing Farplane itself.
 
 The install-time global harness contract now lives at `templates/global/AGENTS.md` and is what `install.sh` links into the live Codex home as `~/.codex/AGENTS.md`.
 
 ## Repo Purpose
 
-Codexter is a harness repo for orchestrating Codexes through visible artifacts.
+Farplane is a harness repo for orchestrating Codexes through visible artifacts.
+Before public launch, Farplane is the canonical source identity: active docs,
+install templates, runtime env vars, Python helpers, conceptual envelopes,
+skill IDs, registries, and plugin packages should not retain previous-identity
+compatibility naming. Historical archives and external services can migrate
+separately. See `MEM-0126`.
 
 The main surfaces are:
 
@@ -29,12 +34,12 @@ Do not describe a workflow as a shipped public capability until the repo
 actually contains the discoverable `skills/<name>/` package and the canonical
 inventory/docs point to it. See `MEM-0044`.
 
-Codexter skills are stable local contracts. Treat external skills, repos,
+Farplane skills are stable local contracts. Treat external skills, repos,
 blogs, and command families as research inputs rather than live dependencies;
 import ideas through reviewed `adopt`, `adapt`, `reject`, or `defer` decisions,
 usually via `best-of-worlds`. See `MEM-0073`.
 Self-healing and capability tests may mirror installed or external skills under
-`tests/<skill>/`, create repair tickets, and patch local Codexter wrappers, but
+`tests/<skill>/`, create repair tickets, and patch local Farplane wrappers, but
 must not directly edit external or installed skill bodies such as
 `~/.codex/skills/*` unless the operator explicitly asks for that specific
 external-skill edit. Prefer a local wrapper, fixture, registry row, or visible
@@ -46,7 +51,7 @@ Tier 1 primitives cover `advise`, `reference-grounding`, `prototyping`,
 workflow interfaces such as `brainstorm`, `research:*`, `plan`, and
 `execute`; Tier 3 application skills implement those interfaces for a domain.
 Tier 3 checklists should usually link Tier 2 surfaces rather than direct Tier
-1 primitives, because Tier 2 carries the Tier 1 obligations. In Codexter
+1 primitives, because Tier 2 carries the Tier 1 obligations. In Farplane
 today, `spec-to-ticket`, `impl-plan`, `$impl`, and `close-ticket` are coding
 workflow skills, not the generic Tier 2 interfaces themselves. Keep
 `skill:method` names as explicit addresses inside one owning skill surface.
@@ -64,7 +69,7 @@ handoffs, and leave external skills without local checklists when wrapper logic
 belongs in callers. Run
 `python3 skills/skill-maintenance/scripts/check_skills.py --write` after skill
 metadata, Markdown links, or checklist changes. See `MEM-0104`.
-Local Codexter skills keep required checklist items directly in `SKILL.md`
+Local Farplane skills keep required checklist items directly in `SKILL.md`
 under a marker-delimited `## Important Checklist` section. Redundant
 `todos.md` files should be pruned once their content matches the direct
 checklist, and future divergent duplicates must be reconciled manually. External
@@ -72,7 +77,7 @@ skills may omit local first-load checklists when wrapper logic belongs in
 callers. Run
 `check_skills.py --write` and reinstall after source skill edits before judging
 live installed behavior. See `MEM-0117` and `MEM-0124`.
-Use `harness-advisor` for Codexter improvement placement decisions before
+Use `harness-advisor` for Farplane improvement placement decisions before
 expanding root policy, global templates, skills, subagents, hooks/scripts,
 ticket contracts, docs/specs, validators, or registries. It reads the feature
 and skill registries plus the harness doctrine, then recommends the primary
@@ -104,11 +109,11 @@ Those skills own premium/Terminal landing gates, generated-media proof,
 Pi/Kimi first-write rules, browser evidence, and frontend guideline scoring.
 See `MEM-0072`, `MEM-0076` through `MEM-0085`, and `MEM-0088` through
 `MEM-0096`.
-For Codexter invocation, compute selection, board adapters, and future
-Symphony/Codex Cloud handoff work, use `codexter-invocation`,
+For Farplane invocation, compute selection, board adapters, and future
+Symphony/Codex Cloud handoff work, use `farplane-invocation`,
 `pr-runtime`, `docs/specs/board-compute-orchestration.md`,
-`docs/specs/codexter-v2-milestone.md`, and
-`docs/specs/symphony-compatible-codexter-runner.md`. Keep Codexter as an
+`docs/specs/farplane-v2-milestone.md`, and
+`docs/specs/symphony-compatible-farplane-runner.md`. Keep Farplane as an
 explicit invocation and proof layer; do not expand it into a daemon, hosted
 control plane, scheduler, or hidden cloud wrapper without a new ticketed need.
 See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
@@ -159,8 +164,8 @@ For install and bootstrap work:
 For harness-design research and external patterns:
 
 - `docs/research/web-research/2026-04-02_anthropic-harness-comparison.md`
-- `docs/research/web-research/2026-04-02_codexter-change-proposal.md`
-- `docs/research/web-research/2026-04-02_codexter-vs-omx-gap-analysis.md`
+- `docs/research/web-research/2026-04-02_farplane-change-proposal.md`
+- `docs/research/web-research/2026-04-02_farplane-vs-omx-gap-analysis.md`
 
 ## Local Operating Rules
 
@@ -192,7 +197,7 @@ For harness-design research and external patterns:
   surface. It selects ready filesystem tickets or safe related tiny-ticket
   batches and hands work units to `$work`; parallel dispatch, leases, merge
   policy, and batch-QA orchestration remain future work. See `MEM-0074`.
-- Final Stop-hook completion in Codexter should remain mechanical and visible: after impl/qa/demo gates pass, request one linked nonce-backed completion-review receipt from the visible reviewer lane instead of hiding the final judgment in a background review pass. Only active ticket-backed `impl` loops should receive that nonce, and the next final response must echo it as `COMPLETION_PASSWORD: <nonce>` alongside the matching receipt. See `MEM-0064`, `MEM-0067`.
+- Final Stop-hook completion in Farplane should remain mechanical and visible: after impl/qa/demo gates pass, request one linked nonce-backed completion-review receipt from the visible reviewer lane instead of hiding the final judgment in a background review pass. Only active ticket-backed `impl` loops should receive that nonce, and the next final response must echo it as `COMPLETION_PASSWORD: <nonce>` alongside the matching receipt. See `MEM-0064`, `MEM-0067`.
 - Material review should run through the native `reviewer` subagent when
   available. Pass the active ticket or task artifact path, changed files,
   evidence artifacts, review focus, caller-declared rubric families, required
@@ -206,19 +211,19 @@ For harness-design research and external patterns:
   boundary, safety issue, or explicit follow-up ticket makes narrower scope
   real. See `MEM-0061`.
 - Auto-run `review` at the end of `impl-plan` and at the end of `impl` when
-  working inside Codexter, using the `reviewer` lane for material review when
+  working inside Farplane, using the `reviewer` lane for material review when
   native subagents are available. See `MEM-0127` and `MEM-0129`.
-- Keep live repo-owned skills and docs Codexter-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
+- Keep live repo-owned skills and docs Farplane-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
 - Prefer `.harness/` for live runtime state.
 - Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.
-- For Codexter harness brainstorming, explicitly compare repo-local `AGENTS.md`, `templates/global/AGENTS.md`, `skills/*`, `agents/*.toml`, and hooks / `bin/*`, then explain why the chosen surface should change now and why the others should not be the primary change surface.
+- For Farplane harness brainstorming, explicitly compare repo-local `AGENTS.md`, `templates/global/AGENTS.md`, `skills/*`, `agents/*.toml`, and hooks / `bin/*`, then explain why the chosen surface should change now and why the others should not be the primary change surface.
 - For harness-surface placement decisions, use `docs/specs/harness-engineering-doctrine.md` before expanding root policy, subagents, hooks, or validators.
 - When changing harness behavior, prefer the smallest lever that fixes the real failure:
   - review loop and proof requirements first
   - ticket/task-shaping contracts next
   - skills and subagent boundaries after that
   - root prompt rewrites last
-- Do not treat Codexter like an app repo with one central runtime to extend by default. Most work here is about better orchestration surfaces, not more orchestration code.
+- Do not treat Farplane like an app repo with one central runtime to extend by default. Most work here is about better orchestration surfaces, not more orchestration code.
 - For early checklist experiments, prefer plain checkbox lists with Markdown
   links to related skills before inventing parser syntax or persisted workflow
   state.

@@ -8,10 +8,8 @@ source: local
 
 # Brainstorm
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] State whether this pass is loose divergence or structured decomposition.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when options
@@ -30,7 +28,7 @@ Source: `SKILL.md`
 - [ ] Do not create tickets or implement code from this skill.
 - [ ] Run [review](../review/SKILL.md) after meaningful brainstorm-skill,
   intake-contract, or public-doc changes.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when the user wants to explore possibilities before locking a product direction, including cases where the same public intake surface should shift from lightweight option exploration into more structured decomposition.
 

@@ -15,7 +15,7 @@ Keep video generation as the model/app execution skill with the upstream umbrell
 - `references/long-running-jobs.md`: async `--no-wait`, task ID, polling, timer, and delegation guidance.
 - `references/reference-overrides.md`: local overrides for stale upstream commands and app IDs.
 - `references/prompting/video-prompting-guide.md`: copied upstream video prompting guide for shot, camera, lighting, pacing, and model-specific phrasing.
-- `references/frontend-asset-qa.md`: Codexter handoff rules for web use.
+- `references/frontend-asset-qa.md`: Farplane handoff rules for web use.
 
 Use `SKILL.md` for routing and its Important Checklist to select only the relevant branch:
 

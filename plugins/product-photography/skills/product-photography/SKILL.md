@@ -17,10 +17,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Product Photography
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 # Product Photography Todos
 
@@ -60,7 +58,7 @@ Use this checklist whenever `product-photography` is active.
   explicitly asks for that action.
 - [ ] Follow the [execute](../execute/SKILL.md) proof and writeback loop before
   claiming commercial, marketplace, or product-clarity quality.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Domain entrypoint for product-photo planning and generated commercial imagery.
 

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "UI verification and visual debugging skill for agents. Enforces ticket-first, taste-aware screen comparison with Expe...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Visual Qa",
     "shortDescription": "UI verification and visual debugging skill for agents. Enforces ticket-first, taste-aware screen comparison with Expe...",
     "longDescription": "UI verification and visual debugging skill for agents. Enforces ticket-first, taste-aware screen comparison with Expected UI Spec -> Observed Snapshot Report -> Diff Report -> Fix Plan, plus geometry/layout assertions and evidence artifacts.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

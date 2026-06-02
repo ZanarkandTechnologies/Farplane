@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Runtime Debugging Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Capture the exact symptom, repro path, scope, and success criteria before proposing a fix.
 - [ ] Map the relevant codepath, side-effects, and current observability surface.
@@ -24,7 +22,7 @@ Source: `SKILL.md`
 - [ ] Apply the smallest fix that matches the observed root cause.
 - [ ] Re-run the repro and report exact proof that the fix worked.
 - [ ] Note whether another skill such as `testing` or `visual-qa` should take over next.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this for reproducible bugs where static reading is not enough.
 

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Workflows for fetching and synthesizing official documentation using Ref tools. Use when you need official docs for a...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Documentation",
     "shortDescription": "Workflows for fetching and synthesizing official documentation using Ref tools. Use when you need official docs for a...",
     "longDescription": "Workflows for fetching and synthesizing official documentation using Ref tools. Use when you need official docs for a library or framework.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

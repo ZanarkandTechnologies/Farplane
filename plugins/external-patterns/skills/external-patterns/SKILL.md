@@ -7,10 +7,8 @@ source: local
 
 # External Patterns Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Define the exact code pattern, repo family, language, and freshness bar.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to preserve
@@ -26,7 +24,7 @@ Source: `SKILL.md`
 - [ ] Use [advise](../advise/SKILL.md) when several repo patterns are viable.
 - [ ] Use [review](../review/SKILL.md) before promoting an external pattern
   into a plan, ticket, or skill.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 > **Purpose**: Workflows for finding code patterns across GitHub and exploring specific repositories.
 

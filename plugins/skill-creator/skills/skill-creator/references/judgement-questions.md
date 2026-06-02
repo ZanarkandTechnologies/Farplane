@@ -18,7 +18,7 @@ Add 3-7 judgement questions when a skill regularly needs choices about:
 For external skill or repo imports, the default judgement question is:
 
 - Should this external idea be adopted, adapted, rejected, or deferred for the
-  stable local Codexter contract?
+  stable local Farplane contract?
 
 ## Good Questions
 

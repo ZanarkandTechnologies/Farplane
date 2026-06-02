@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Commit Message",
     "shortDescription": "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo...",
     "longDescription": "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo style: type(scope): lower-case imperative summary.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

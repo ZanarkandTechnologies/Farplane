@@ -1,13 +1,13 @@
 {
   "name": "harness-scout",
   "version": "0.1.0",
-  "description": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants C...",
+  "description": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants F...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -15,9 +15,9 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Harness Scout",
-    "shortDescription": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants C...",
-    "longDescription": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants Codexter to extract harness feature ideas, dedupe the source against the source registry, dedupe candidates against the local feature registry, compare Codexter versus the source, and produce adopt/adapt/reject/defer decisions with scorecards and ticket handoffs.",
-    "developerName": "Codexter",
+    "shortDescription": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants F...",
+    "longDescription": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants Farplane to extract harness feature ideas, dedupe the source against the source registry, dedupe candidates against the local feature registry, compare Farplane versus the source, and produce adopt/adapt/reject/defer decisions with scorecards and ticket handoffs.",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

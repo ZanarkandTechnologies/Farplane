@@ -4,20 +4,20 @@
 
 - URL: `https://terminal-industries.com/`
 - Desktop screenshot:
-  `/Users/kenjipcx/coding-harness/Codexter/.harness/gold-terminal-industries/desktop.png`
+  `/Users/kenjipcx/coding-harness/Farplane/.harness/gold-terminal-industries/desktop.png`
 - Mobile screenshot:
-  `/Users/kenjipcx/coding-harness/Codexter/.harness/gold-terminal-industries/mobile.png`
+  `/Users/kenjipcx/coding-harness/Farplane/.harness/gold-terminal-industries/mobile.png`
 
 ## Generated Output
 
 - Site directory:
-  `/Users/kenjipcx/coding-harness/Codexter/.harness/warehouse-cv-terminal-style`
+  `/Users/kenjipcx/coding-harness/Farplane/.harness/warehouse-cv-terminal-style`
 - Desktop screenshot:
-  `/Users/kenjipcx/coding-harness/Codexter/.harness/warehouse-cv-terminal-style/desktop.png`
+  `/Users/kenjipcx/coding-harness/Farplane/.harness/warehouse-cv-terminal-style/desktop.png`
 - Mobile screenshot:
-  `/Users/kenjipcx/coding-harness/Codexter/.harness/warehouse-cv-terminal-style/mobile.png`
+  `/Users/kenjipcx/coding-harness/Farplane/.harness/warehouse-cv-terminal-style/mobile.png`
 - Full-page screenshot:
-  `/Users/kenjipcx/coding-harness/Codexter/.harness/warehouse-cv-terminal-style/fullpage.png`
+  `/Users/kenjipcx/coding-harness/Farplane/.harness/warehouse-cv-terminal-style/fullpage.png`
 
 ## What Loaded Correctly
 
@@ -42,7 +42,7 @@
 - Terminal's restraint makes the physical operation the hero. The generated
   page copies the palette and nav, but the media lacks the same production
   weight.
-- Pi/Kimi did not complete self-review or visual QA in any run; Codexter had to
+- Pi/Kimi did not complete self-review or visual QA in any run; Farplane had to
   capture screenshots and compare manually.
 
 ## Skill Improvement Hypothesis

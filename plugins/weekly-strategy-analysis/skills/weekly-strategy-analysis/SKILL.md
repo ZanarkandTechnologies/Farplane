@@ -13,10 +13,8 @@ Use this skill for Kenji's weekly strategy automation and any manual weekly
 review that needs to reconcile planned goals with actual Notion tasks,
 meeting notes, people signals, Codex threads, and opportunity research.
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Use a direct, high-agency planning stance: recommendation first,
       tradeoffs explicit, no passive status digest.
@@ -74,7 +72,7 @@ Source: `SKILL.md`
 - [ ] Do not count automation/system maintenance as strategic progress unless
       it directly supported a live project or goal.
 - [ ] Refresh the compact Notion status cache at
-      `/Users/kenjipcx/coding-harness/Codexter/.harness/state/notion-context/latest-status-context.md`.
+      `/Users/kenjipcx/coding-harness/Farplane/.harness/state/notion-context/latest-status-context.md`.
 - [ ] If Notion status refresh fails, preserve the previous cache and write a
       clear error note when possible.
 - [ ] Write the bounded local context bundle before deep synthesis.
@@ -145,7 +143,7 @@ Source: `SKILL.md`
 - [ ] Mention the local context bundle path used for evidence.
 - [ ] Name every source gap explicitly instead of fabricating missing tasks,
       meetings, calls, thread outcomes, or opportunities.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Job
 
@@ -270,7 +268,7 @@ database contents, or large unrelated logs.
 Refresh the compact local status cache inside this weekly run:
 
 ```text
-/Users/kenjipcx/coding-harness/Codexter/.harness/state/notion-context/latest-status-context.md
+/Users/kenjipcx/coding-harness/Farplane/.harness/state/notion-context/latest-status-context.md
 ```
 
 Include generated timestamp, source queries/pages used, current project/goal

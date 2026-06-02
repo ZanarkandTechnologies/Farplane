@@ -8,10 +8,8 @@ source: local
 
 # Autoresearch Exec
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read `autoresearch.md`, `autoresearch.jsonl`, optional ideas/checks, git
   status, and the editable scope before changing anything.
@@ -27,7 +25,7 @@ Source: `SKILL.md`
 - [ ] Update JSONL/session memory with wins, dead ends, and blockers.
 - [ ] Use [self-improve](../self-improve/SKILL.md) when the target is a skill
   and durable skill eval memory is involved.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Run the metric-driven experiment loop prepared by `autoresearch-plan`.
 

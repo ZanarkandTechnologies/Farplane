@@ -12,7 +12,7 @@ sharpens a system architecture before `agent-testability-plan`, `impl-plan`,
 
 - one-question-at-a-time architecture clarification
 - explicit ambiguity scoring and readiness gates
-- reusable `System Design Brief` outputs on visible Codexter surfaces
+- reusable `System Design Brief` outputs on visible Farplane surfaces
 - strong emphasis on entities, signatures, ownership, execution boundaries, and reliability policy
 - explicit separation from UI workflow and visual taste planning
 - a clear handoff boundary into `agent-testability-plan` when the next missing

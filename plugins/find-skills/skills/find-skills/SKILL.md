@@ -7,10 +7,8 @@ source: local
 
 # Find Skills
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Clarify the domain, task, and whether an installable skill is likely to
   help more than existing local skills.
@@ -24,8 +22,8 @@ Source: `SKILL.md`
 - [ ] Do not install, update, or run external code unless the user explicitly
   asks and the environment policy allows it.
 - [ ] Use [review](../review/SKILL.md) before adding a discovered skill to
-  Codexter-owned docs or registry guidance.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+  Farplane-owned docs or registry guidance.
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 This skill helps you discover and install skills from the open agent skills ecosystem.
 

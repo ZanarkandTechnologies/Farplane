@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Watch an explicitly selected GitHub pull request until configured review agents and checks pass, using project-local...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Pr Review Watch",
     "shortDescription": "Watch an explicitly selected GitHub pull request until configured review agents and checks pass, using project-local...",
     "longDescription": "Watch an explicitly selected GitHub pull request until configured review agents and checks pass, using project-local review memory, bounded heartbeat polling, fix loops, and terminal Telegram notifications.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

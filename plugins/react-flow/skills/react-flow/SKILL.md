@@ -9,10 +9,8 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Edit, 
 
 # React Flow Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the product/workflow goal, graph data source, active ticket, and
   existing UI conventions.
@@ -30,7 +28,7 @@ Source: `SKILL.md`
   [frontend-design](../frontend-design/SKILL.md) for implementation handoff.
 - [ ] Use [visual-qa](../visual-qa/SKILL.md) for browser-level proof of graph
   rendering and interaction.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Purpose
 

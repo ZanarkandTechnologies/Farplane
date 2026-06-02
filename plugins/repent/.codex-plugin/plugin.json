@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Operator-forced recovery mode for when the assistant missed something obvious, got defensive, or explained instead of...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Repent",
     "shortDescription": "Operator-forced recovery mode for when the assistant missed something obvious, got defensive, or explained instead of...",
     "longDescription": "Operator-forced recovery mode for when the assistant missed something obvious, got defensive, or explained instead of acting. Use when the user explicitly says `repent` or otherwise clearly asks for audit-then-fix behavior on the current task after the default correction-recovery behavior was not enough.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

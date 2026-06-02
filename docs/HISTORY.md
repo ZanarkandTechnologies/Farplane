@@ -21,7 +21,7 @@
 2026-04-06 06:38 +0100 | CHORE | expand README into the full staged Ralph model across spec, ticketization, per-ticket planning, dispatch, and build/proof/review loops
 2026-04-07 00:00 +0100 | CHORE | add a canonical spec-first execution-loop spec and begin queue cleanup around the newer work-package model
 2026-04-07 00:00 +0100 | CHORE | archive completed and superseded tickets so the active queue only contains the current review-gates, execution-loop, and handoff-policy work
-2026-04-06 06:38 +0100 | FEAT | pull the latest OMX base and add the first Codexter-to-OMX bridge exporter for ready Markdown tickets
+2026-04-06 06:38 +0100 | FEAT | pull the latest OMX base and add the first Farplane-to-OMX bridge exporter for ready Markdown tickets
 2026-04-07 04:27 +0100 | CHORE | add a canonical harness-engineering quickstart so agents can tune AGENTS, hooks, subagents, skills, MCP/tooling, and review loops from one practical guide
 2026-04-07 20:37 +0100 | CHORE | add a canonical harness-techniques inventory and README pointer so implemented versus proposed harness techniques are documented from repo truth
 2026-04-08 01:48 +0100 | CHORE | fold OpenAI harness-engineering findings into the canonical techniques inventory, adding repo-legibility, progressive-disclosure, and mechanical-invariant deltas
@@ -36,7 +36,7 @@
 2026-04-08 19:01 +0100 | CHORE | audit README against recent review and stop-hook commits, point feature inventory at harness-techniques, and remove the stale hardcoded empty-queue claim
 2026-04-08 19:06 +0100 | FEAT | add a narrow canonical-doc parity validator plus test coverage, document the doc-gardening loop, and make README/spec/ticket surface drift mechanically checkable
 2026-04-09 03:22 +0100 | FEAT | collapse `ralplan` and `tech-impl-plan` into `impl-plan`, update the ticket template to support richer planning artifacts, and switch live planning/runtime references to the new single planner surface
-2026-04-09 03:53 +0100 | CHORE | split the shipped global AGENTS contract into `templates/global/AGENTS.md`, rewrite root `AGENTS.md` as Codexter-local context, and point `install.sh` plus `README.md` at the new boundary
+2026-04-09 03:53 +0100 | CHORE | split the shipped global AGENTS contract into `templates/global/AGENTS.md`, rewrite root `AGENTS.md` as Farplane-local context, and point `install.sh` plus `README.md` at the new boundary
 2026-04-09 04:10 +0100 | FEAT | switch runtime lane routing to explicit-run-state then hook-session-id precedence, add per-session state files, and cover concurrent-session prompt capture with regression tests
 2026-04-09 04:48 +0100 | CHORE | deepen the live review contract into explicit 1-to-5 score bands, add skeptic questions and evidence cues across all review families, and sync the reviewer prompt plus review-gates spec
 2026-04-09 05:18 +0100 | FEAT | add the first explicit delegated-worker runtime contract with `worker_name`, `main_artifact_path`, and Stop-hook-captured `grounding_summary`, and document the new claim fields across impl/runtime surfaces
@@ -75,7 +75,7 @@
 2026-04-13 20:33 +0100 | FEAT | add a `coderabbit-review` skill plus an opt-in stage-aware runner and sample git hooks for explicit pre-push or PR CodeRabbit CLI review outside the Stop-hook loop
 2026-04-13 20:41 +0100 | FEAT | make `init-project` scaffold optional `.githooks/` samples for CodeRabbit pre-commit/pre-push workflows while keeping hook activation manual and preferring pre-push
 2026-04-13 20:54 +0100 | FEAT | make `init-project` scaffold repo-local pre-commit and pre-push validator scripts, route the pre-push hook through local checks first, and chain CodeRabbit only as an explicit optional follow-up
-2026-04-13 20:58 +0100 | FIX | decouple `init-project`'s scaffolded CodeRabbit pre-push path from Codexter-owned helpers and invoke the standalone `coderabbit` CLI directly after local validators
+2026-04-13 20:58 +0100 | FIX | decouple `init-project`'s scaffolded CodeRabbit pre-push path from Farplane-owned helpers and invoke the standalone `coderabbit` CLI directly after local validators
 2026-04-13 19:43 +0100 | FEAT | make `spec-to-ticket` capability-first by default, keep coherent greenfield fullstack features bundled as one ticket, encode explicit split triggers, and align the module review/todo/invariant surfaces with the new sizing rule
 2026-04-13 21:41 +0100 | FIX | add the missing `skills/loop` package, promote `$loop` into the live skill inventory, and align the control-skill docs with the shipped runtime contract
 2026-04-13 22:49 +0100 | CHORE | restore the README top-level diagram as a color-coded super stack map that overlays the main flow, durable surfaces, and the major skill groups in one picture
@@ -93,8 +93,8 @@
 2026-04-24 20:10 +0100 | FEAT | render `config.toml` on every install from a sanitized template plus local env/TOML overlays instead of seed-once local drift
 2026-04-24 19:18 +0100 | FIX | align the harness-engineering doctrine equations with the existing quickstart model and add the doctrine to the architecture entry surfaces
 2026-04-24 19:31 +0100 | FEAT | require harness brainstorming to compare `AGENTS.md`, skills, subagents, and hooks explicitly and explain why the chosen surface wins over the others
-2026-04-24 19:40 +0100 | FIX | move harness-surface comparison guidance out of the shared `brainstorm` skill and into Codexter's local `AGENTS.md`
-2026-04-24 19:52 +0100 | FEAT | require a fresh `review` pass before substantive user-facing answers about changed Codexter repo state, exempting only interim progress updates
+2026-04-24 19:40 +0100 | FIX | move harness-surface comparison guidance out of the shared `brainstorm` skill and into Farplane's local `AGENTS.md`
+2026-04-24 19:52 +0100 | FEAT | require a fresh `review` pass before substantive user-facing answers about changed Farplane repo state, exempting only interim progress updates
 2026-04-24 21:15 +0100 | FEAT | cut QA and completion gating over to ticket artifact roots, require delegated builder/reviewer/qa lanes in build prompts, and replace legacy `Review Packet` parsing with artifact-linked Stop-hook evidence checks
 2026-04-24 22:05 +0100 | FEAT | add an explicit `$impl` execution-phase contract with `requires_qa`, `requires_demo`, `execution_phase`, public `$qa`/`$demo` recovery surfaces, and Stop-hook phase progression from impl to qa to demo before final completion review
 2026-04-24 20:01 +0100 | FIX | move the fresh-review-before-final-answer rule into `templates/global/AGENTS.md` and treat repo-local plus global `AGENTS.md` as separate harness-placement candidates
@@ -127,7 +127,7 @@
 2026-04-30 02:35 +0800 | FIX | update the managed Codex config template to register `completion-reviewer` instead of the removed `reviewer` role so fresh installs and re-renders stop pointing at a missing agent file
 2026-04-30 14:20 +0800 | FIX | make live `$qa` followups prefer a delegated QA lane and explicitly forbid the coordinating lane from using `agent-browser` directly when `qa-tester` delegation is available
 2026-04-30 15:05 +0800 | FIX | make the shipped and repo-local agent contracts state that native `qa-tester` delegation is the default QA path and that tmux lanes are only optional visibility plumbing
-2026-04-30 15:40 +0800 | CHORE | bump all tracked and installed subagent role model defaults to `gpt-5.4` so no live Codexter agent remains on `gpt-4.1` or `gpt-5.3`
+2026-04-30 15:40 +0800 | CHORE | bump all tracked and installed subagent role model defaults to `gpt-5.4` so no live Farplane agent remains on `gpt-4.1` or `gpt-5.3`
 2026-05-02 03:31 +0800 | CHORE | narrow `docs/HISTORY.md` into a milestone and project-event ledger so routine code deltas stay in git and durable rules stay in `docs/MEMORY.md`
 2026-05-03 19:25 +0800 | FEAT | add the autoresearch skill suite with plan, execution, and skill self-improvement workflows grounded in durable session artifacts and mechanical metrics
 2026-05-03 22:58 +0800 | FEAT | add the frontend skill topology with frontend-craft orchestration, functional-ui redesign, visual-design taste direction, landing-page planning, and cinematic-landing compatibility routing
@@ -157,13 +157,13 @@
 2026-05-06 04:05 +0800 | FEAT | add merged-root image-generation skill backed by inference.sh image references and best-current model routing
 2026-05-07 01:05 +0800 | FEAT | harden inference.sh image and video skills with async job guidance, saved-result examples, upstream-reference guards, Foley discovery, media pipeline routing, and an official Remotion authoring skill
 2026-05-07 01:30 +0800 | FEAT | promote inference.sh video guides into domain entry skills and move multi-asset media pipeline orchestration under frontend-craft
-2026-05-07 01:33 +0800 | DOCS | reframe Codexter as an explicit ticket invocation layer and park premature branch-runtime scaling work
+2026-05-07 01:33 +0800 | DOCS | reframe Farplane as an explicit ticket invocation layer and park premature branch-runtime scaling work
 2026-05-07 01:45 +0800 | FEAT | remove standalone video-prompting skill and move prompting guidance into each video artifact domain skill
 2026-05-07 02:00 +0800 | FEAT | factor shared video artifact production workflow into a linked domain-production reference
-2026-05-07 02:12 +0800 | DOCS | add capped Codexter V2 milestone and archive completed or premature ticket-board entries
+2026-05-07 02:12 +0800 | DOCS | add capped Farplane V2 milestone and archive completed or premature ticket-board entries
 2026-05-07 02:47 +0800 | FEAT | add social, product-photo, and shared prompting references to the media skill topology
 2026-05-07 03:08 +0800 | FEAT | demote Three.js from public skill to frontend-craft reference routing and link landing-page 3D asset guidance
-2026-05-07 03:14 +0800 | FEAT | land Codexter V2 explicit invocation triggers, board-adapter conformance, Codex Cloud and Symphony handoff recipes, and future-agent misread guardrails
+2026-05-07 03:14 +0800 | FEAT | land Farplane V2 explicit invocation triggers, board-adapter conformance, Codex Cloud and Symphony handoff recipes, and future-agent misread guardrails
 2026-05-07 03:15 +0800 | FEAT | add a manifest-driven Pi/Kimi frontend skill sync script and mount inference.sh image/video/remotion skills into the external frontend profile
 2026-05-07 04:17 +0800 | DOCS | archive the visible completion-review receipt ticket and add README/ARCHITECTURE documentation-router sync guidance
 2026-05-07 04:41 +0800 | CHORE | split Aikage hook heartbeats into start and stop notifications with shorter heartbeat timeouts
@@ -194,8 +194,8 @@
 2026-05-18 22:26 +0800 | FEAT | add skill source metadata and move browser QA wrapper logic into the QA skill
 2026-05-19 03:34 +0800 | FEAT | add bulk skill todos, external Convex pointer, and skill-maintenance workflow
 2026-05-19 04:06 +0800 | FEAT | add batch-work skill and one-command skill-system validation
-2026-05-19 04:26 +0800 | FEAT | add Tier 2 harness-advisor for Codexter improvement placement decisions
-2026-05-19 04:47 +0800 | DOCS | slim Codexter AGENTS.md by replacing frontend and invocation rule blocks with owner skill pointers
+2026-05-19 04:26 +0800 | FEAT | add Tier 2 harness-advisor for Farplane improvement placement decisions
+2026-05-19 04:47 +0800 | DOCS | slim Farplane AGENTS.md by replacing frontend and invocation rule blocks with owner skill pointers
 2026-05-20 19:46 +0800 | DOCS | link harness-scout adopted-feature placement to harness-advisor and refresh generated skill registry graph metadata
 2026-05-21 01:15 +0800 | FEAT | add the first skill self-healing pipeline slice with skill capability fixtures, repair-ticket generation, and value-signal scoring for broken skill behavior
 2026-05-21 01:15 +0800 | FIX | repair the installed notion-context skill after harness reinstall so missing Notion row-query tools degrade into fallback diagnostics and a repair ticket instead of a hard automation failure
@@ -227,17 +227,17 @@
 2026-05-24 22:03 +0800 | FIX | limit notion-context pinned-task read checks to the last 14 days of Act Time so old pinned planning pages do not flood weekly context
 2026-05-24 22:43 +0800 | FEAT | add goal-crafter for native Codex /goal preparation
 2026-05-24 22:57 +0800 | CLEANUP | purge the retired short-task command control surface and keep native /goal plus $ralph as the continuation and board-drain paths
-2026-05-25 02:22 +0800 | FEAT | add a selected-skill installer so users can search and install chosen Codexter skills without the full harness config path
+2026-05-25 02:22 +0800 | FEAT | add a selected-skill installer so users can search and install chosen Farplane skills without the full harness config path
 2026-05-25 02:31 +0800 | FEAT | add the agent-behavior-test skill as a generalized isolated-agent behavior testing workflow for skills, app features, prompts, and workflows, with a Codex exec JSONL runner
 2026-05-25 02:33 +0800 | FEAT | add goal-backed Work Admission with `$work`, batch testability rows, and Ralph-to-work board routing
-2026-05-25 02:48 +0800 | FEAT | add a Codex repo plugin marketplace with one generated plugin per skill so users can install selected Codexter skills from the plugin browser
+2026-05-25 02:48 +0800 | FEAT | add a Codex repo plugin marketplace with one generated plugin per skill so users can install selected Farplane skills from the plugin browser
 2026-05-25 03:05 +0800 | FEAT | render installed skill packages with embedded `todos.md` checklists so required skill steps are visible on first load
-2026-05-25 03:20 +0800 | FEAT | add curated Codexter bundle plugins for core, coding workflow, frontend, research, media/content, and harness engineering installs
-2026-05-25 22:24 +0800 | DOCS | sharpen Codexter-Aikage telemetry planning around learning-hook observability, UI log structure, and five-hop proof status
+2026-05-25 03:20 +0800 | FEAT | add curated Farplane bundle plugins for core, coding workflow, frontend, research, media/content, and harness engineering installs
+2026-05-25 22:24 +0800 | DOCS | sharpen Farplane-Aikage telemetry planning around learning-hook observability, UI log structure, and five-hop proof status
 2026-05-26 05:37 +0800 | FIX | require self-improvement sidecar reports to expose a five-hop Notion proof checklist for user capture, assistant capture, rolling window write, background launch, and task creation
 2026-05-26 16:18 +0800 | FEAT | add agent-qa-test as an adversarial agent QA prompt bundle while preserving `$test` as shorthand invocation
 2026-05-26 15:34 +0800 | DOCS | reshape Aikage learning observability as a non-technical Agent Learning Inbox with ticket cards and message context
-2026-05-26 19:25 +0800 | FEAT | add Codexter learning telemetry events, a local status/post CLI, Aikage codexterEvents ingest, and a non-technical Agent Learning Inbox with message context
+2026-05-26 19:25 +0800 | FEAT | add Farplane learning telemetry events, a local status/post CLI, Aikage farplaneEvents ingest, and a non-technical Agent Learning Inbox with message context
 2026-05-27 13:21 +0800 | DOCS | clarify agent-qa-test as the adversarial proof orchestrator and agent-behavior-test as the instrumented child-run capture primitive
 2026-05-27 13:38 +0800 | DOCS | add a human skill selection guide beside the generated skill registry
 2026-05-27 13:40 +0800 | FEAT | add entity-linked feed-scout harness resource tracking and scout OpenClaw agent-skills/autoreview for review-calibration techniques
@@ -246,7 +246,7 @@
 2026-05-27 17:05 +0800 | FEAT | sync local skill todos into direct SKILL.md first-load checklists and enforce the shape in skill-maintenance checks
 2026-05-28 15:10 +0800 | DOCS | make `advise` start recommendations from first-principles basis before option comparison
 2026-05-30 02:17 +0800 | FEAT | add eval-onboarding as an NDA-safe starter skill for synthetic eval task JSON, rubrics, run reports, and minimal harness layout
-2026-06-01 12:45 +0800 | FEAT | add private tool context docs and move Notion workspace handles out of reusable/tracked Codexter surfaces
+2026-06-01 12:45 +0800 | FEAT | add private tool context docs and move Notion workspace handles out of reusable/tracked Farplane surfaces
 2026-06-01 12:52 +0800 | FEAT | add weekly-strategy-analysis as the owner for weekly Notion, meeting, Codex-thread drift, and opportunity planning automation
 2026-06-01 15:21 +0800 | FEAT | add `pr-review-watch` as an explicit PR review watcher workflow with project-local review memory, fixture-first verdict parsing, heartbeat prompt guidance, and terminal notification policy
 2026-06-01 20:57 +0800 | FEAT | add ticket-backed GoalPrepState guidance and require feed-scout Notion Tasks Project/Areas projection readback
@@ -254,6 +254,15 @@
 2026-06-02 01:27 +0800 | FEAT | add `prototyping` as a Tier 1 sample-first primitive and wire it into planning, execution, research, batch work, skill maintenance, and review gates
 2026-06-02 02:37 +0800 | FEAT | add harness-native `eval` skill templates for future `.codex/evals` and `.claude/evals`, with simple string-reference task JSON and agent/judge CLI run artifacts
 2026-06-02 03:03 +0800 | FEAT | guide `eval` skill setup with one tagged `harness_tasks.json` covering skill, workflow, and system-prompt eval tasks
+2026-06-02 04:05 +0800 | FEAT | make `eval` run-first with setup detection, tier/boolean judge verdicts, minimal agent prompts, and best-practice onboarding references
+2026-06-02 04:16 +0800 | CLEANUP | trim `eval` first-load checklist to setup detection, add-or-run branching, and result summarization while moving onboarding detail to references
+2026-06-02 04:21 +0800 | FEAT | add skill-creation repeatability eval and repeatability judge rubric dimension to catch verbose duplicated skill contracts
+2026-06-02 04:31 +0800 | FEAT | add repeatability review gate to `skill-creator` so new skills must prove concise first-load contracts and file-only rerunability
+2026-06-02 04:33 +0800 | FEAT | add shared skill best practices for checklist shape, reference placement, duplication control, and repeatability to `skill-creator` and `skill-maintenance`
+2026-06-02 04:46 +0800 | FEAT | convert eval judge output from pass-partial-fail labels to A-D rubric tiers across groundedness, completeness, usefulness, repeatability, and length balance
+2026-06-02 04:50 +0800 | FIX | make eval pass gating A-only so B remains a near-miss diagnostic rather than a passing result
+2026-06-02 04:55 +0800 | MIGRATION | hard-switch the pre-launch harness source identity to Farplane across docs, runtime env names, Python helpers, conceptual envelopes, skill IDs, generated registries, and plugin packages
+2026-06-02 11:17 +0800 | MIGRATION | verify local Farplane reinstall into Codex home and quarantine stale repo-owned previous-identity helper and skill symlinks in install backup
 2026-06-02 12:14 +0800 | MIGRATION | hard-migrate the independent review lane from code-reviewer to generic reviewer and make material review pass task pointers through the reviewer subagent
 2026-06-02 12:46 +0800 | FIX | separate reviewer actor instructions from the review skill contract and migrate review output from numeric scores to TAS verdicts
 2026-06-02 13:09 +0800 | FIX | move review rubric routing ownership to caller skills and ticket proof contracts, add reviewer handoff template fields, and back prompt, eval, and skill review families with TAS rubric files

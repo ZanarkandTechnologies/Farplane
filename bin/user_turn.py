@@ -158,7 +158,7 @@ def configured_positive_int(raw: str | None, default: int, *, minimum: int = 1) 
 
 
 def max_conversation_exchanges() -> int:
-    return configured_positive_int(os.environ.get("CODEXTER_SKILL_OPPORTUNITY_MAX_EXCHANGES"), 10)
+    return configured_positive_int(os.environ.get("FARPLANE_SKILL_OPPORTUNITY_MAX_EXCHANGES"), 10)
 
 
 def load_conversation_window(project_root: Path, session_id: str) -> dict[str, object]:

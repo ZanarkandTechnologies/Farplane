@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare s...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -16,8 +16,8 @@
   "interface": {
     "displayName": "Self Improve",
     "shortDescription": "Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare s...",
-    "longDescription": "Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, or run binary assertion based skill optimization through the autoresearch artifact contract.",
-    "developerName": "Codexter",
+    "longDescription": "Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, create skill-local memory, or provide eval/prompt context for native Goal-backed skill improvement.",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

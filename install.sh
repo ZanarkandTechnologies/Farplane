@@ -15,7 +15,7 @@ Usage:
   bash install.sh --skills-only --search QUERY [--target TARGET_DIR]
   bash install.sh --skills-only --skills skill-a,skill-b [--target TARGET_DIR]
 
-Full install links the Codexter harness, renders skills, and renders config.toml.
+Full install links the Farplane harness, renders skills, and renders config.toml.
 Skills-only mode renders selected skills without rendering config.toml.
 
 Options:
@@ -275,5 +275,5 @@ render_config
 
 echo "Done."
 echo "Next: keep secrets in $LOCAL_ENV_FILE and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
-echo "Hooks config is linked when hooks.json exists; hook env vars remain available as explicit overrides but normal Codexter runtime context should auto-activate the Stop hook."
+echo "Hooks config is linked when hooks.json exists; hook env vars remain available as explicit overrides but normal Farplane runtime context should auto-activate the Stop hook."
 echo "Backups (when needed) are stored under $BACKUP_ROOT"

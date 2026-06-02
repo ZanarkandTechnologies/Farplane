@@ -1,6 +1,6 @@
 # Skill Graph
 
-Generated visual inspection surface for Codexter skills.
+Generated visual inspection surface for Farplane skills.
 
 ## Files
 

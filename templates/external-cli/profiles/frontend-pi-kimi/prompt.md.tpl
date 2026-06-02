@@ -47,7 +47,7 @@ verification commands/results, self-review results, visual-QA results, risks,
 and follow-ups. When the run was launched with `--expect-output`, include the
 `first_write.json` status and path.
 
-Use these exact handoff section headings so Codexter can detect bounded phase
+Use these exact handoff section headings so Farplane can detect bounded phase
 completion before timeout: `## Changed Files`, `## Verification`, and
 `## Risks / Followups`. Put non-empty content under each heading, and mention
 the expected owned output file inside `## Changed Files`.
@@ -69,7 +69,7 @@ For scroll-scrub or Terminal-style landing pages, the handoff must also include:
 - `terminalVerdict` and `terminalFinalReady` for Terminal/Terminus-level final
   builds; a basic `verdict: PASS` is only mechanics proof.
 - `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`,
-  `strongCheckpointDeltaCount`, and `midScrollDeltaCount` so Codexter can
+  `strongCheckpointDeltaCount`, and `midScrollDeltaCount` so Farplane can
   reject tiny or one-transition-only scrub deltas.
 - `hasTerminalMediaPipeline`, `hasDominantHeroMedia`, and
   `hasDistributedScrubDeltas` when the page is meant to prove final premium
@@ -82,8 +82,8 @@ For scroll-scrub or Terminal-style landing pages, the handoff must also include:
 
 ## Boundaries
 
-- Codexter remains final integrator and may audit your self-review.
+- Farplane remains final integrator and may audit your self-review.
 - Preserve unrelated changes.
 - Do not push, deploy, publish, or perform destructive actions.
-- Do not claim final Codexter completion. Produce a builder plus self-review
+- Do not claim final Farplane completion. Produce a builder plus self-review
   handoff.

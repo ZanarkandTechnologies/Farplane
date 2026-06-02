@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently fro...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -16,8 +16,8 @@
   "interface": {
     "displayName": "Delegate Frontend",
     "shortDescription": "Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently fro...",
-    "longDescription": "Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Codexter ticket, QA, visual review, and integration authority.",
-    "developerName": "Codexter",
+    "longDescription": "Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Farplane ticket, QA, visual review, and integration authority.",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

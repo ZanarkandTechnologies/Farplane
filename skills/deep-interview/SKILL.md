@@ -6,7 +6,7 @@ source: local
 argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea or vague description>"
 ---
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
 - [ ] Read available context before asking: active ticket, `docs/prd.md`,
@@ -29,7 +29,7 @@ argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea
   summary as execution-ready.
 - [ ] Write the crystallized summary into the active ticket or the next
   canonical artifact owner; do not create hidden sidecar state.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 <Purpose>
 Deep Interview is an intent-first Socratic clarification loop before planning or implementation. It turns vague ideas into execution-ready specifications by asking targeted questions about why the user wants a change, how far it should go, what should stay out of scope, and what the agent may decide without confirmation.
@@ -59,8 +59,8 @@ Execution quality is usually bottlenecked by intent clarity, not just missing im
 - **Quick (`--quick`)**: fast pre-PRD pass; target threshold `<= 0.30`; max rounds 5
 - **Standard (`--standard`, default)**: full requirement interview; target threshold `<= 0.20`; max rounds 12
 - **Deep (`--deep`)**: high-rigor exploration; target threshold `<= 0.15`; max rounds 20
-- **Autoresearch (`--autoresearch`)**: same interview rigor as Standard, but specialized for research-brief launch readiness and a Codexter-native handoff through the active ticket or a deliberate `docs/research/` draft when the user explicitly wants durable research artifacts
-- **Bootstrap (`--bootstrap`)**: same interview rigor as Standard, but specialized for project bootstrap readiness and a Codexter-native handoff through `docs/bootstrap-brief.md` for `deep-init-project`
+- **Autoresearch (`--autoresearch`)**: same interview rigor as Standard, but specialized for research-brief launch readiness and a Farplane-native handoff through the active ticket or a deliberate `docs/research/` draft when the user explicitly wants durable research artifacts
+- **Bootstrap (`--bootstrap`)**: same interview rigor as Standard, but specialized for project bootstrap readiness and a Farplane-native handoff through `docs/bootstrap-brief.md` for `deep-init-project`
 
 If no flag is provided, use **Standard**.
 
@@ -75,7 +75,7 @@ If no flag is provided, use **Standard**.
   project, social campaign, or product-photo shoot, use
   `deep-init-project/references/project-profiles.md` to ask along that
   profile's components and advice axes.
-- **`--autoresearch`**: switch the interview into research-intake mode. In this mode, the interview should converge on a launch-ready research mission, keep the current requirements brief on live Codexter surfaces, and preserve the explicit `refine further` vs `launch` boundary for downstream handoff.
+- **`--autoresearch`**: switch the interview into research-intake mode. In this mode, the interview should converge on a launch-ready research mission, keep the current requirements brief on live Farplane surfaces, and preserve the explicit `refine further` vs `launch` boundary for downstream handoff.
 </Mode_Flags>
 </Depth_Profiles>
 
@@ -237,7 +237,7 @@ When threshold is met (or user exits with warning / hard cap):
    - otherwise the current response as a compact `Deep-Interview Summary`
 2. Write execution-ready spec to:
    - the active ticket when one already exists
-   - otherwise the current response handoff plus the next canonical Codexter artifact owner selected for handoff, such as `prd` for `docs/prd.md`
+   - otherwise the current response handoff plus the next canonical Farplane artifact owner selected for handoff, such as `prd` for `docs/prd.md`
 
 Spec should include:
 - Metadata (profile, rounds, final ambiguity, threshold, context type)
@@ -263,8 +263,8 @@ When the clarified task is specifically about a research brief, or the skill is 
 - **Accepted seed inputs:** `topic`, `evaluator`, `keep-policy`, `slug`, existing mission draft text, and prior evaluator examples/templates
 - **Required interview focus:** mission clarity, evaluator readiness, keep policy, slug/session naming, and whether the draft is ready to launch now or should refine further
 - **Canonical artifact surface:** the active ticket when one exists, or a deliberate draft under `docs/research/` when the user explicitly wants a durable research brief
-- **Launch artifact bundle:** one current Codexter brief containing `Mission Draft`, `Evaluator Draft`, `Launch Readiness`, `Seed Inputs`, and `Confirmation Bridge`
-- **Launch artifact location:** keep it on the chosen live Codexter surface above; do not create hidden sidecar spec folders
+- **Launch artifact bundle:** one current Farplane brief containing `Mission Draft`, `Evaluator Draft`, `Launch Readiness`, `Seed Inputs`, and `Confirmation Bridge`
+- **Launch artifact location:** keep it on the chosen live Farplane surface above; do not create hidden sidecar spec folders
 - **Required artifact sections:**
   - `Mission Draft`
   - `Evaluator Draft`
@@ -298,7 +298,7 @@ and emit a scaffold-consumable artifact without skipping clarification.
   and downstream pipeline handoff. Use `advise` for real tradeoff axes, such as
   video hook/asset/sound/edit choices or landing hero/media/motion directions.
 - **Canonical artifact surface:** `docs/bootstrap-brief.md`
-- **Bootstrap artifact bundle:** one current Codexter brief containing
+- **Bootstrap artifact bundle:** one current Farplane brief containing
   `Summary`, `Intent`, `Recommended Shape`, `Stack Decisions`,
   `Validation and Hooks`, `File-Size Policy`, `Shared Utility Policy`,
   `Decision Boundaries`, and `Defaults Chosen`
@@ -336,7 +336,7 @@ Present execution options after artifact generation using explicit handoff contr
 - **Invocation:** `$impl-plan --consensus <ticket-or-brief>`
 - **Consumer Behavior:** Treat the deep-interview spec as the requirements source of truth. Do not repeat the interview by default; refine architecture/feasibility around the clarified intent and boundaries instead.
 - **Skipped / Already-Satisfied Stages:** Requirements discovery, ambiguity clarification, and early intent-boundary elicitation
-- **Expected Output:** an updated ticket plan or other approved Codexter planning artifact that preserves the clarified requirements
+- **Expected Output:** an updated ticket plan or other approved Farplane planning artifact that preserves the clarified requirements
 - **Best When:** Requirements are clear enough to stop interviewing, but architectural validation / consensus planning is still desirable
 - **Next Recommended Step:** Use the approved planning artifacts with `$autopilot`, `$impl`, or `$team` depending on the desired execution style
 
@@ -388,7 +388,7 @@ Present execution options after artifact generation using explicit handoff contr
 - If structured question tools are unavailable, use plain-text single-question rounds and keep the same stage order
 - Use `state_write` / `state_read` for resumable mode state
 - Reuse the active ticket, linked docs, and mode state as the live context surface; do not create hidden sidecar artifacts
-- Save durable interview outputs on current Codexter surfaces such as the active ticket, or hand the brief to `prd` when `docs/prd.md` is the next owner
+- Save durable interview outputs on current Farplane surfaces such as the active ticket, or hand the brief to `prd` when `docs/prd.md` is the next owner
 </Tool_Usage>
 
 <Escalation_And_Stop_Conditions>
@@ -407,7 +407,7 @@ Present execution options after artifact generation using explicit handoff contr
 - [ ] At least one persistent follow-up / pressure pass deepened a prior answer
 - [ ] Challenge modes triggered at thresholds (when applicable)
 - [ ] Interview summary written to the active ticket or the current response handoff
-- [ ] Requirements brief written to the active ticket or the selected Codexter handoff artifact
+- [ ] Requirements brief written to the active ticket or the selected Farplane handoff artifact
 - [ ] Brownfield questions use evidence-backed confirmation when applicable
 - [ ] Handoff options provided (`$deep-init-project`, `$impl-plan`, `$autopilot`, `$impl`, `$team`)
 - [ ] No direct implementation performed in this mode
@@ -417,7 +417,7 @@ Present execution options after artifact generation using explicit handoff contr
 ## Suggested Config (optional)
 
 ```toml
-[codexter.deepInterview]
+[farplane.deepInterview]
 defaultProfile = "standard"
 quickThreshold = 0.30
 standardThreshold = 0.20

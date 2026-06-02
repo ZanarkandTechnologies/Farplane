@@ -23,10 +23,8 @@ supports it.
 Define the smallest honest prototype that can expose the real pattern, run or
 plan that proof, and decide whether to scale, revise, or stop.
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] State the scale risk: data volume, users, workflow breadth, architecture,
   automation, polish, file count, research breadth, or operational complexity.
@@ -41,7 +39,7 @@ Source: `SKILL.md`
 - [ ] Label prototype-only shortcuts so they do not masquerade as production
   readiness.
 - [ ] Return a `Prototype Note` to the active workflow before broadening scope.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Core Flow
 

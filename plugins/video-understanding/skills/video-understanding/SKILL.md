@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Video Understanding
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the media ingest bundle, transcript status, retention note, contact
   sheet, and selected frames.
@@ -28,7 +26,7 @@ Source: `SKILL.md`
   supporting skills, acceptance criteria, and proof requirements.
 - [ ] State confidence limits clearly when transcript, frames, or external links
   are missing.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Turn an ingested video bundle into a grounded reconstruction of what the video
 teaches or demonstrates.
@@ -46,7 +44,7 @@ Use this skill when:
 - a video shows someone explaining a workflow, skill, prompt, UI, app, coding
   process, design process, or generated artifact
 - `harness-scout` needs source todos before comparing the source against
-  existing Codexter skills
+  existing Farplane skills
 - the operator wants to copy a skill from a video with frame-grounded evidence
 
 Do not use this skill when the source is text-only or the caller only needs a
@@ -64,7 +62,7 @@ plain summary.
 4. **Extract source todos:** write the operational checklist the creator appears
    to be teaching. Keep claims, inferred actions, and visibly proven steps
    separate.
-5. **Compare to local skills:** map each source todo to existing Codexter
+5. **Compare to local skills:** map each source todo to existing Farplane
    skills/todos as `covered`, `augment`, `missing`, `reject`, or `defer`.
 6. **Name the copied-skill candidate:** describe the reusable capability, likely
    owner skill, supporting skills, evidence anchors, and proof requirements.
@@ -79,7 +77,7 @@ A complete pass produces a `VideoReconstructionBrief`:
 - transcript status and confidence limits
 - storyboard table with frame/timestamp anchors
 - source todos extracted from the video
-- source-todo-to-Codexter-skill comparison
+- source-todo-to-Farplane-skill comparison
 - copied-skill candidate with likely owner and supporting skills
 - acceptance criteria and proof requirements for reimplementation
 - gaps that require more transcript, frames, external links, or user input

@@ -2,9 +2,9 @@
 
 ## Purpose
 
-`$work` is the Work Admission surface for Codexter. It decides how a prompt,
+`$work` is the Work Admission surface for Farplane. It decides how a prompt,
 ticket, ticket batch, board-selected unit, epic, or metric loop should use the
-existing Codexter system before compute is spent.
+existing Farplane system before compute is spent.
 
 It does not replace `impl-plan`, `$impl`, `batch-work`, `$ralph`, or native
 Codex `/goal`. It classifies the work unit and chooses the right combination of

@@ -39,7 +39,7 @@ unfiltered bundle of source features.
 
 ## Stable Skill Import Rule
 
-For Codexter skills, external implementations are research inputs, not live
+For Farplane skills, external implementations are research inputs, not live
 dependencies. Do not auto-sync external skill behavior and do not copy upstream
 command families wholesale. Import only the reviewed ideas that earn an
 `adopt`, `adapt`, `reject`, or `defer` decision. See `MEM-0073`.

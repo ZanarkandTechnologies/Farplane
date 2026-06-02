@@ -1,7 +1,7 @@
 # PR Review Pipeline
 
 Copy this file to `docs/pr-review-pipeline.md` in a project that wants explicit
-Codexter PR review watching.
+Farplane PR review watching.
 
 The watcher requires this fenced JSON block. Keep commands project-local and
 safe to run repeatedly.

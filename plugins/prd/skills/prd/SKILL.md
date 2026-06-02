@@ -1,7 +1,7 @@
 ---
 name: prd
 version: 1.0.0
-description: "Phase-1 Codexter skill for requirements gathering and PRD authoring."
+description: "Phase-1 Farplane skill for requirements gathering and PRD authoring."
 tier: 3
 group: coding
 source: local
@@ -11,10 +11,8 @@ common_chains:
 
 # PRD Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the current project surfaces before asking: `docs/prd.md`, active
   ticket, `docs/specs/`, `docs/MEMORY.md`, and `docs/TROUBLES.md` when present.
@@ -47,9 +45,9 @@ Source: `SKILL.md`
   boundaries are viable and the tradeoff needs to be explicit.
 - [ ] Stop after PRD authoring and hand off to
   [spec-to-ticket](../spec-to-ticket/SKILL.md) only after the PRD is accepted.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use this as the first session in the Codexter workflow.
+Use this as the first session in the Farplane workflow.
 
 ## Job
 

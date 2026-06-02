@@ -53,7 +53,7 @@ linked_docs: []
 )
 PY
 
-CODEXTER_RALPH_HOOK=1 \
+FARPLANE_RALPH_HOOK=1 \
 RALPH_TICKET=/tmp/TASK-9998-hook-missing.md \
 python3 bin/stop_hook.py <<'EOF'
 {
@@ -139,7 +139,7 @@ Interpretation:
 7. Project-local hook logs now exist at:
 
 ```text
-Codexter/.ralph/logs/stop-hook.jsonl
+Farplane/.ralph/logs/stop-hook.jsonl
 ```
 
 and contain replay-driven verdicts such as:

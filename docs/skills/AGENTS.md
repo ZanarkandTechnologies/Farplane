@@ -1,6 +1,6 @@
 # Skills Registry Module
 
-This folder owns generated and hand-authored registry surfaces for Codexter
+This folder owns generated and hand-authored registry surfaces for Farplane
 skills.
 
 Rules:
@@ -10,7 +10,7 @@ Rules:
 - Package-local metadata lives in `skills/*/SKILL.md` frontmatter. Keep it
   minimal: `tier`, `source`, Tier 3 `group`, optional `methods`, optional
   `upstream_url`, and optional one-way Tier 3 `common_chains`.
-- For `source: external` skills, keep Codexter-specific wrapper policy in the
+- For `source: external` skills, keep Farplane-specific wrapper policy in the
   local caller skill instead of editing upstream-owned command/reference bodies.
 - External skills may intentionally omit direct checklists when the local operational
   checklist belongs in a caller skill. Prefer `upstream_url` over inventing
@@ -22,7 +22,7 @@ Rules:
 - Use `skills/skill-maintenance/` for bulk skill tier/source/todo/registry
   upkeep instead of expanding global prompt rules.
 - Use `skills/harness-advisor/` first when the operator is deciding where a
-  Codexter improvement belongs across root policy, global templates, docs/specs,
+  Farplane improvement belongs across root policy, global templates, docs/specs,
   skills, subagents, hooks/scripts, ticket contracts, validators, or registries.
 - Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
   skill frontmatter, Markdown links, or checklist changes.

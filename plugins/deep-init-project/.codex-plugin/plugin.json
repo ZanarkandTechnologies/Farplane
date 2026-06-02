@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Deep bootstrap workflow for new projects. Use a deep-interview-quality intake, then scaffold docs-first operating fil...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Deep Init Project",
     "shortDescription": "Deep bootstrap workflow for new projects. Use a deep-interview-quality intake, then scaffold docs-first operating fil...",
     "longDescription": "Deep bootstrap workflow for new projects. Use a deep-interview-quality intake, then scaffold docs-first operating files, explicit local-vs-deploy quality-gate decisions, canonical runtime/QA command guidance, and reusable plan/build prompts.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

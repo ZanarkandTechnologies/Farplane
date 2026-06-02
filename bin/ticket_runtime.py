@@ -18,10 +18,10 @@ CHECKOUT_MODES = ("shared", "worktree")
 RUNTIME_MODES = ("shared", "branch-runtime", "branch-compose")
 RESERVATION_KINDS = ("frontend", "backend", "db")
 COMMAND_ENV_DEFAULTS = {
-    "frontend_cmd": "CODEXTER_RUNTIME_FRONTEND_CMD",
-    "backend_cmd": "CODEXTER_RUNTIME_BACKEND_CMD",
-    "compose_up_cmd": "CODEXTER_RUNTIME_COMPOSE_UP_CMD",
-    "compose_down_cmd": "CODEXTER_RUNTIME_COMPOSE_DOWN_CMD",
+    "frontend_cmd": "FARPLANE_RUNTIME_FRONTEND_CMD",
+    "backend_cmd": "FARPLANE_RUNTIME_BACKEND_CMD",
+    "compose_up_cmd": "FARPLANE_RUNTIME_COMPOSE_UP_CMD",
+    "compose_down_cmd": "FARPLANE_RUNTIME_COMPOSE_DOWN_CMD",
 }
 PROCESS_KINDS = ("frontend", "backend", "compose")
 LIVE_PROCESSES: dict[int, subprocess.Popen[bytes]] = {}
@@ -62,7 +62,7 @@ def qa_artifacts_path(ticket_id: str, root: Path | None = None) -> str:
 
 def worktree_root(root: Path | None = None) -> Path:
     resolved_root = root or project_root()
-    override = str(os.environ.get("CODEXTER_WORKTREE_ROOT") or "").strip()
+    override = str(os.environ.get("FARPLANE_WORKTREE_ROOT") or "").strip()
     if override:
         return Path(override).expanduser().resolve()
     return resolved_root.parent / f".{resolved_root.name}-worktrees"
@@ -164,9 +164,9 @@ def save_ports_state(payload: dict[str, dict[str, str]], root: Path | None = Non
 
 def port_base(kind: str) -> int:
     mapping = {
-        "frontend": int(os.environ.get("CODEXTER_FRONTEND_PORT_BASE", "3100")),
-        "backend": int(os.environ.get("CODEXTER_BACKEND_PORT_BASE", "4100")),
-        "db": int(os.environ.get("CODEXTER_DB_PORT_BASE", "5400")),
+        "frontend": int(os.environ.get("FARPLANE_FRONTEND_PORT_BASE", "3100")),
+        "backend": int(os.environ.get("FARPLANE_BACKEND_PORT_BASE", "4100")),
+        "db": int(os.environ.get("FARPLANE_DB_PORT_BASE", "5400")),
     }
     return mapping[kind]
 
@@ -735,13 +735,13 @@ def up_runtime_record(
             compose_up = raw.strip() if isinstance(raw, str) else ""
             if not compose_up:
                 raise SystemExit(
-                    "branch-compose mode requires --compose-up-cmd or CODEXTER_RUNTIME_COMPOSE_UP_CMD"
+                    "branch-compose mode requires --compose-up-cmd or FARPLANE_RUNTIME_COMPOSE_UP_CMD"
                 )
             down_raw = commands.get("compose_down_cmd")
             compose_down = down_raw.strip() if isinstance(down_raw, str) else ""
             if not compose_down:
                 raise SystemExit(
-                    "branch-compose mode requires --compose-down-cmd or CODEXTER_RUNTIME_COMPOSE_DOWN_CMD"
+                    "branch-compose mode requires --compose-down-cmd or FARPLANE_RUNTIME_COMPOSE_DOWN_CMD"
                 )
             compose_meta = run_compose_command(
                 ticket_id=str(record["ticket_id"]),

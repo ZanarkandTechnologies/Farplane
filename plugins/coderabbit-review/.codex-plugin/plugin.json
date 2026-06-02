@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when you want a heavyweight external CodeRabbit CLI review pass on local changes or a PR-sized branch, usually be...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Coderabbit Review",
     "shortDescription": "Use when you want a heavyweight external CodeRabbit CLI review pass on local changes or a PR-sized branch, usually be...",
     "longDescription": "Use when you want a heavyweight external CodeRabbit CLI review pass on local changes or a PR-sized branch, usually before push or on a PR branch rather than inside the Stop-hook loop.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

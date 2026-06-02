@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when the user wants a frontend to look better, feel more tasteful, define a visual system, improve typography/col...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Visual Design",
     "shortDescription": "Use when the user wants a frontend to look better, feel more tasteful, define a visual system, improve typography/col...",
     "longDescription": "Use when the user wants a frontend to look better, feel more tasteful, define a visual system, improve typography/color/layout/motion taste, or apply anti-slop visual direction after the functional workflow is known. Complements functional-ui and feeds frontend-craft implementation.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

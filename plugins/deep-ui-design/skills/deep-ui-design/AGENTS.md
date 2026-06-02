@@ -13,7 +13,7 @@ planning.
 - one-question-at-a-time taste extraction
 - explicit ambiguity scoring and readiness gates
 - strong separation from workflow/IA planning
-- reusable `Taste Brief` outputs on live Codexter surfaces
+- reusable `Taste Brief` outputs on live Farplane surfaces
 - anti-slop and anti-reference rules before handoff
 
 ## Do Not

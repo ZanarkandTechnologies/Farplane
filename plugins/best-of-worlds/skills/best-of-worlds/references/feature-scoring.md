@@ -39,7 +39,7 @@ Score each dimension 1-5:
 
 For external skill implementations, never score "auto-sync upstream" as
 `adopt`. The highest-confidence decision is still a local contract change that
-preserves Codexter conventions.
+preserves Farplane conventions.
 
 ## Required Output
 

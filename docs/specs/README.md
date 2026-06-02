@@ -4,8 +4,8 @@ Canonical harness and product specs live here once ideas move past exploration.
 
 Top-level companion docs:
 
-- [`ARCHITECTURE.md`](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) - top-level system map and canonical surface guide
-- [`README.md`](/Users/kenjipcx/coding-harness/Codexter/README.md) - product/setup story and public entrypoints
+- [`ARCHITECTURE.md`](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md) - top-level system map and canonical surface guide
+- [`README.md`](/Users/kenjipcx/coding-harness/Farplane/README.md) - product/setup story and public entrypoints
 
 Documentation ownership:
 
@@ -22,11 +22,11 @@ Current design docs:
   adapters must satisfy before Linear, Notion, GitHub, or custom boards become
   live work-item sources
 - `board-compute-orchestration.md` - board adapter, explicit ticket
-  invocation, compute selection, local Codexter, Ralph, and future
+  invocation, compute selection, local Farplane, Ralph, and future
   Symphony/shared-board ownership contract
-- `codexter-v2-milestone.md` - completed capped Symphony-inspired milestone for
+- `farplane-v2-milestone.md` - completed capped Symphony-inspired milestone for
   explicit invocation triggers, adapter conformance, and external-compute
-  recipes, with explicit deferrals so Codexter does not become a daemon
+  recipes, with explicit deferrals so Farplane does not become a daemon
 - `agent-testability-surfaces.md` - post-system-design doctrine for control accelerators, state probes, coordination views, and proof surfaces
 - `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy
@@ -37,7 +37,7 @@ Current design docs:
 - `case-based-memory-context-graph.md` - seed design for a generated context
   graph that connects decisions, features, sources, tickets, memories, and
   repeated correction cases without replacing the existing ledgers
-- `codexter-aikage-telemetry-sync.md` - local-first Codexter telemetry event
+- `farplane-aikage-telemetry-sync.md` - local-first Farplane telemetry event
   ledger, optional Aikage Convex sync, dashboard diagnostics, and skill usage
   reporting plan
 - `harness-engineering-doctrine.md` - routing doctrine for where harness changes belong before editing the repo
@@ -55,9 +55,9 @@ Current design docs:
 - `spec-first-execution-loop.md`
 - `spec-authoring-contract.md` - PRD/spec/ticket layer split, spec depth
   decisions, service-runtime spec template, and conformance matrix format
-- `symphony-compatible-codexter-runner.md` - invocation contract that lets a
-  normal Codex session run Codexter locally now and lets Symphony invoke
-  Codexter-equipped Codex later
+- `symphony-compatible-farplane-runner.md` - invocation contract that lets a
+  normal Codex session run Farplane locally now and lets Symphony invoke
+  Farplane-equipped Codex later
 
 Use this folder for:
 

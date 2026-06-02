@@ -14,10 +14,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Frontend Craft
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Classify the frontend surface: app screen, workflow component, dashboard,
   AI interface, landing page, portfolio, game/tool, media-heavy page, or
@@ -54,7 +52,7 @@ Source: `SKILL.md`
   screenshots, snapshots, console/page errors, and route proof.
 - [ ] Use [execute](../execute/SKILL.md) for final proof, writeback, and
   handoff before claiming the frontend work is complete.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Build production frontends by routing the work through the right frontend brain instead of mixing UX, visual taste, landing-page storytelling, assets, animation, and QA into one blob.
 

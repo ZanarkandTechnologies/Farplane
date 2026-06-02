@@ -13,7 +13,7 @@ chmod +x .git/hooks/pre-push
 ```
 
 The sample hook calls the repo-local runner in `pre-push` mode. Set
-`CODEXTER_SKIP_CODERABBIT=1` to bypass one push intentionally.
+`FARPLANE_SKIP_CODERABBIT=1` to bypass one push intentionally.
 
 ## Pre-commit
 

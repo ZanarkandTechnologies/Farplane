@@ -8,10 +8,8 @@ source: local
 
 # Close Ticket
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Resolve exactly one active ticket and confirm the remaining work is
   genuinely closeout, not missing implementation.
@@ -40,14 +38,14 @@ Source: `SKILL.md`
 - [ ] Push only when the user or workflow explicitly calls for publishing.
 - [ ] Leave the ticket clearly archive-ready, committed, blocked, or still in
   documenting with one concrete next action.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill when one ticket is functionally done and the remaining work is
 to close it cleanly instead of doing more implementation.
 
-`close-ticket` is a Tier 3 Codexter coding-pipeline closeout skill. It consumes
+`close-ticket` is a Tier 3 Farplane coding-pipeline closeout skill. It consumes
 the generic [execute](../execute/SKILL.md) interface's proof/writeback shape but
-keeps Codexter-specific ticket, docs, commit, and archive rules here.
+keeps Farplane-specific ticket, docs, commit, and archive rules here.
 
 This is the canonical public closeout surface. `$docs-closeout` is a backward
 compatible alias, not the preferred live name.

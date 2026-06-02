@@ -7,10 +7,8 @@ source: local
 
 # Codebase Analysis Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] State the analysis mode: locate, explain, trace, or find comparable local
   patterns.
@@ -25,7 +23,7 @@ Source: `SKILL.md`
   legitimate implementation paths.
 - [ ] Use [review](../review/SKILL.md) before the analysis becomes a durable
   plan, ticket, or doc update.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 > **Purpose**: Patterns and workflows for exploring local codebases - finding files, understanding implementations, and extracting reusable patterns.
 

@@ -1,6 +1,6 @@
 # Source Registry Instructions
 
-This folder owns Codexter's structured source provenance registry.
+This folder owns Farplane's structured source provenance registry.
 
 Use `registry.jsonl` for stable `SRC-####` source IDs, canonical source keys,
 local artifact links, feature links, dedupe decisions, and verification dates.

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when the user wants to set up an autoresearch run, optimize anything with a metric, design a mechanical improveme...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Autoresearch Plan",
     "shortDescription": "Use when the user wants to set up an autoresearch run, optimize anything with a metric, design a mechanical improveme...",
     "longDescription": "Use when the user wants to set up an autoresearch run, optimize anything with a metric, design a mechanical improvement loop, or turn a fuzzy goal into Goal/Scope/Metric/Direction/Verify/Guard session artifacts before execution.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

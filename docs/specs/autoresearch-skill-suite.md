@@ -4,7 +4,7 @@ Date: 2026-05-03
 
 ## Goal
 
-Add a Codexter-native measured-improvement workflow split into three skills:
+Add a Farplane-native measured-improvement workflow split into three skills:
 
 - `autoresearch-plan`
 - `autoresearch-exec`
@@ -16,7 +16,7 @@ binary eval pass rate as the metric.
 
 ## Product Context
 
-Codexter already has a strong spec -> ticket -> plan -> implementation ->
+Farplane already has a strong spec -> ticket -> plan -> implementation ->
 review loop. It did not have a reusable way to repeatedly improve code, docs,
 prompts, or skills against a mechanical metric while preserving run memory
 across compaction and fresh sessions.
@@ -38,7 +38,7 @@ The suite combines:
 
 ## JTBD
 
-When an operator has a target and a metric, they want Codexter to set up and run
+When an operator has a target and a metric, they want Farplane to set up and run
 an autonomous improvement loop so measured gains can accumulate without manual
 supervision of every experiment.
 
@@ -171,7 +171,7 @@ self-improve/results/failure_analysis.md
 
 - `Change:` add a reusable measured-improvement workflow split into planning,
   execution, and skill self-improvement.
-- `Why:` Codexter needs an artifact-backed loop for "given a metric, keep
+- `Why:` Farplane needs an artifact-backed loop for "given a metric, keep
   improving."
 - `Before -> After:` before, improvement loops were ad hoc; after, each run has
   a session spec, metric runner, JSONL memory, guard checks, and resumable loop.

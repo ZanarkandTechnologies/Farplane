@@ -2,7 +2,7 @@
 
 Status: Draft v1
 
-Purpose: Define when Codexter should use a PRD, a system spec, or a ticket plan,
+Purpose: Define when Farplane should use a PRD, a system spec, or a ticket plan,
 and provide a reusable Symphony-style section template plus conformance matrix
 for complex runtime/service work.
 

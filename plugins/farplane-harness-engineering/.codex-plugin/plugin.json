@@ -1,0 +1,30 @@
+{
+  "name": "farplane-harness-engineering",
+  "version": "0.1.0",
+  "description": "Harness improvement, skill maintenance, delegation, invocation, and self-improvement skills.",
+  "author": {
+    "name": "Farplane"
+  },
+  "license": "MIT",
+  "keywords": [
+    "farplane",
+    "skill",
+    "harness",
+    "skills",
+    "maintenance"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Farplane Harness Engineering",
+    "shortDescription": "Harness improvement, skill maintenance, delegation, invocation, and self-improvement skills.",
+    "longDescription": "Harness improvement, skill maintenance, delegation, invocation, and self-improvement skills.",
+    "developerName": "Farplane",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use farplane-harness-engineering for this task."
+    ]
+  }
+}

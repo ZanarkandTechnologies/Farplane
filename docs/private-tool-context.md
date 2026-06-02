@@ -1,6 +1,6 @@
 # Private Tool Context
 
-Codexter keeps reusable harness behavior in the repo and personal environment
+Farplane keeps reusable harness behavior in the repo and personal environment
 facts outside the repo. This lets skills and templates stay shareable while
 local agents can still find the handles they need to operate in Kenji's
 workspace.

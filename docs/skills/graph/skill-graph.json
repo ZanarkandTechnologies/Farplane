@@ -2,18 +2,18 @@
   "counts": {
     "edge_types": {
       "common-chain": 17,
-      "markdown-ref": 280
+      "markdown-ref": 281
     },
-    "edges": 297,
-    "nodes": 80,
+    "edges": 298,
+    "nodes": 81,
     "sources": {
       "external": 3,
-      "local": 77
+      "local": 78
     },
     "tiers": {
       "1": 4,
       "2": 31,
-      "3": 45
+      "3": 46
     }
   },
   "edges": [
@@ -267,20 +267,6 @@
       "source": "codebase-analysis",
       "target": "review",
       "target_ref": "review",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "codexter-invocation",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "codexter-invocation",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -608,6 +594,13 @@
     {
       "label": "markdown-ref",
       "source": "eval-onboarding",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "eval-onboarding",
       "target": "execute",
       "target_ref": "execute",
       "type": "markdown-ref"
@@ -673,6 +666,20 @@
       "source": "external-patterns",
       "target": "review",
       "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "farplane-invocation",
+      "target": "execute",
+      "target_ref": "execute",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "farplane-invocation",
+      "target": "plan",
+      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -1672,13 +1679,6 @@
     {
       "label": "markdown-ref",
       "source": "self-improve",
-      "target": "autoresearch-exec",
-      "target_ref": "autoresearch-exec",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "self-improve",
       "target": "autoresearch-plan",
       "target_ref": "autoresearch-plan",
       "type": "markdown-ref"
@@ -1695,6 +1695,13 @@
       "source": "self-improve",
       "target": "research",
       "target_ref": "research#researchsource-synthesis",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "self-improve",
+      "target": "skill-maintenance",
+      "target_ref": "skill-maintenance",
       "type": "markdown-ref"
     },
     {
@@ -2097,7 +2104,7 @@
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-01T17:31:11+00:00",
+  "generated_at": "2026-06-02T05:21:47+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
@@ -2136,7 +2143,7 @@
       "tier": 1
     },
     {
-      "description": "Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-slop search playbook for code, UI, evidence, demos, and videos.",
+      "description": "Reusable TAS review rubric contract for judging whether provided task context, artifacts, and evidence are pass-ready, need revision, blocked, or invalid to review.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,
@@ -2393,7 +2400,7 @@
       "tier": 2
     },
     {
-      "description": "Tier 2 Codexter harness placement advisor. Use when the user wants to make Codexter better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, or registries.",
+      "description": "Tier 2 Farplane harness placement advisor. Use when the user wants to make Farplane better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, or registries.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,
@@ -2581,18 +2588,6 @@
       "tier": 3
     },
     {
-      "description": "Interpret a CodexterRunEnvelope inside normal Codex, validate repo policy and one filesystem ticket, select local compute, route to existing Codexter skills, and write a ProofPacket.",
-      "group": "harness",
-      "has_checklist": true,
-      "has_todos": false,
-      "id": "codexter-invocation",
-      "label": "codexter-invocation",
-      "methods": [],
-      "path": "skills/codexter-invocation/SKILL.md",
-      "source": "local",
-      "tier": 3
-    },
-    {
       "description": "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this package kept as a thin upstream pointer.",
       "group": "backend",
       "has_checklist": false,
@@ -2629,7 +2624,7 @@
       "tier": 3
     },
     {
-      "description": "Route bounded Codexter work to configured external coding-agent CLIs through explicit adapter/profile contracts, managed prompts, runtime logs, and ticket evidence handoff. Use when another local CLI/model/harness is stronger for a task but Codexter must keep ticket, QA, review, and integration authority.",
+      "description": "Route bounded Farplane work to configured external coding-agent CLIs through explicit adapter/profile contracts, managed prompts, runtime logs, and ticket evidence handoff. Use when another local CLI/model/harness is stronger for a task but Farplane must keep ticket, QA, review, and integration authority.",
       "group": "harness",
       "has_checklist": true,
       "has_todos": false,
@@ -2641,7 +2636,7 @@
       "tier": 3
     },
     {
-      "description": "Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Codexter ticket, QA, visual review, and integration authority.",
+      "description": "Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Farplane ticket, QA, visual review, and integration authority.",
       "group": "frontend",
       "has_checklist": true,
       "has_todos": false,
@@ -2689,7 +2684,19 @@
       "tier": 3
     },
     {
-      "description": "Guide newcomers through setting up a minimal, clean-room eval harness for coding agents, prompts, skills, or workflow changes. Use when the user asks for basic eval JSON tasks, synthetic fixtures, scorer shape, harness setup, or an example evaluation workflow without copying private or third-party systems.",
+      "description": "Check, initialize, and run harness-native evals for Codex or Claude using simple JSON tasks, boolean/tier judge prompts, and local run artifacts under .codex/evals or .claude/evals.",
+      "group": "harness",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "eval",
+      "label": "eval",
+      "methods": [],
+      "path": "skills/eval/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "description": "Guide newcomers through setting up a minimal, clean-room eval harness for coding agents, prompts, skills, or workflow changes. Use when the user asks for basic eval JSON tasks, synthetic fixtures, judge shape, harness setup, or an example evaluation workflow without copying private or third-party systems.",
       "group": "harness",
       "has_checklist": true,
       "has_todos": false,
@@ -2697,6 +2704,18 @@
       "label": "eval-onboarding",
       "methods": [],
       "path": "skills/eval-onboarding/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "description": "Interpret a FarplaneRunEnvelope inside normal Codex, validate repo policy and one filesystem ticket, select local compute, route to existing Farplane skills, and write a ProofPacket.",
+      "group": "harness",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "farplane-invocation",
+      "label": "farplane-invocation",
+      "methods": [],
+      "path": "skills/farplane-invocation/SKILL.md",
       "source": "local",
       "tier": 3
     },
@@ -2751,7 +2770,7 @@
       "tier": 3
     },
     {
-      "description": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants Codexter to extract harness feature ideas, dedupe the source against the source registry, dedupe candidates against the local feature registry, compare Codexter versus the source, and produce adopt/adapt/reject/defer decisions with scorecards and ticket handoffs.",
+      "description": "Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants Farplane to extract harness feature ideas, dedupe the source against the source registry, dedupe candidates against the local feature registry, compare Farplane versus the source, and produce adopt/adapt/reject/defer decisions with scorecards and ticket handoffs.",
       "group": "harness",
       "has_checklist": true,
       "has_todos": false,
@@ -2763,7 +2782,7 @@
       "tier": 3
     },
     {
-      "description": "Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Codexter's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.",
+      "description": "Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Farplane's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.",
       "group": "content-image",
       "has_checklist": true,
       "has_todos": false,
@@ -2847,7 +2866,7 @@
       "tier": 3
     },
     {
-      "description": "Phase-1 Codexter skill for requirements gathering and PRD authoring.",
+      "description": "Phase-1 Farplane skill for requirements gathering and PRD authoring.",
       "group": "coding",
       "has_checklist": true,
       "has_todos": false,
@@ -2890,7 +2909,7 @@
       "tier": 3
     },
     {
-      "description": "Goal-backed board-drain context provider for prepared Codexter ticket boards. Use after specs and tickets exist when the operator wants the board read, eligible work selected or grouped, and each selected work unit handed to $work until the native Goal stops on no ready work, blockers, or human gates.",
+      "description": "Goal-backed board-drain context provider for prepared Farplane ticket boards. Use after specs and tickets exist when the operator wants the board read, eligible work selected or grouped, and each selected work unit handed to $work until the native Goal stops on no ready work, blockers, or human gates.",
       "group": "coding",
       "has_checklist": true,
       "has_todos": false,
@@ -2938,7 +2957,7 @@
       "tier": 3
     },
     {
-      "description": "Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, or run binary assertion based skill optimization through the autoresearch artifact contract.",
+      "description": "Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, create skill-local memory, or provide eval/prompt context for native Goal-backed skill improvement.",
       "group": "self-improvement",
       "has_checklist": true,
       "has_todos": false,
@@ -2962,7 +2981,7 @@
       "tier": 3
     },
     {
-      "description": "Maintain Codexter skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the generated registry, and plan consolidation without bloating the global system prompt.",
+      "description": "Maintain Farplane skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the generated registry, and plan consolidation without bloating the global system prompt.",
       "group": "skills",
       "has_checklist": true,
       "has_todos": false,
@@ -2974,7 +2993,7 @@
       "tier": 3
     },
     {
-      "description": "Open, refresh, and validate the Codexter skill registry graph UI, including clickable skill nodes, rendered SKILL.md Markdown, frontmatter details, tier colors, and common-chain edges.",
+      "description": "Open, refresh, and validate the Farplane skill registry graph UI, including clickable skill nodes, rendered SKILL.md Markdown, frontmatter details, tier colors, and common-chain edges.",
       "group": "skills",
       "has_checklist": true,
       "has_todos": false,
@@ -3003,7 +3022,7 @@
       "tier": 3
     },
     {
-      "description": "Phase-2 Codexter skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work, and consume an Agent Testability Brief when present.",
+      "description": "Phase-2 Farplane skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work, and consume an Agent Testability Brief when present.",
       "group": "coding",
       "has_checklist": true,
       "has_todos": false,
@@ -3027,7 +3046,7 @@
       "tier": 3
     },
     {
-      "description": "Generate or edit AI video assets with inference.sh `belt` video apps, using the broad AI-video model map plus Codexter's workspace, spend-gate, and frontend QA rules. Covers Google Veo, Seedance 2.0, HappyHorse, Wan, Grok, P-Video, avatar/lipsync, image-to-video, video editing, foley discovery, upscaling, social media videos, marketing clips, explainer videos, product demos, and frontend-bound video assets. Route React/Remotion code authoring to `remotion` and inference.sh code-to-video renders to `remotion-render`.",
+      "description": "Generate or edit AI video assets with inference.sh `belt` video apps, using the broad AI-video model map plus Farplane's workspace, spend-gate, and frontend QA rules. Covers Google Veo, Seedance 2.0, HappyHorse, Wan, Grok, P-Video, avatar/lipsync, image-to-video, video editing, foley discovery, upscaling, social media videos, marketing clips, explainer videos, product demos, and frontend-bound video assets. Route React/Remotion code authoring to `remotion` and inference.sh code-to-video renders to `remotion-render`.",
       "group": "content-video",
       "has_checklist": true,
       "has_todos": false,
@@ -3081,7 +3100,7 @@
       "tier": 3
     },
     {
-      "description": "Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then route to the right Codexter skill, native Goal, compute target, and proof policy before implementation starts.",
+      "description": "Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then route to the right Farplane skill, native Goal, compute target, and proof policy before implementation starts.",
       "group": "coding",
       "has_checklist": true,
       "has_todos": false,

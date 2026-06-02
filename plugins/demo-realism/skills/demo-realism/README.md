@@ -8,11 +8,11 @@ ladder, realistic demo data, and a presentation-worthiness rubric.
 
 ## Public API / Entrypoints
 
-- [`SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/demo-realism/SKILL.md)
-- [`references/architecture.md`](/Users/kenjipcx/coding-harness/Codexter/skills/demo-realism/references/architecture.md)
-- [`references/workflows.md`](/Users/kenjipcx/coding-harness/Codexter/skills/demo-realism/references/workflows.md)
-- [`references/gotchas.md`](/Users/kenjipcx/coding-harness/Codexter/skills/demo-realism/references/gotchas.md)
-- [`references/rubric.md`](/Users/kenjipcx/coding-harness/Codexter/skills/demo-realism/references/rubric.md)
+- [`SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills/demo-realism/SKILL.md)
+- [`references/architecture.md`](/Users/kenjipcx/coding-harness/Farplane/skills/demo-realism/references/architecture.md)
+- [`references/workflows.md`](/Users/kenjipcx/coding-harness/Farplane/skills/demo-realism/references/workflows.md)
+- [`references/gotchas.md`](/Users/kenjipcx/coding-harness/Farplane/skills/demo-realism/references/gotchas.md)
+- [`references/rubric.md`](/Users/kenjipcx/coding-harness/Farplane/skills/demo-realism/references/rubric.md)
 
 ## Minimal Example
 
@@ -29,7 +29,7 @@ presentable to a real client.
 
 ## How To Test
 
-- Read [`SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/demo-realism/SKILL.md) and confirm the first-load workflow is executable without references.
+- Read [`SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills/demo-realism/SKILL.md) and confirm the first-load workflow is executable without references.
 - Run:
 
 ```bash

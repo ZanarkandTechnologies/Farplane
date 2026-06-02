@@ -11,10 +11,8 @@ common_chains:
 
 # Functional UI
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] State the UI/workflow decision and the artifact being produced:
   diagnosis, UX plan, redesign recommendation, or implementation handoff.
@@ -35,7 +33,7 @@ Source: `SKILL.md`
   is ready to build.
 - [ ] Use [execute](../execute/SKILL.md) for proof/writeback shape before
   claiming the functional UI plan is ready.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this before visual implementation when the question is how the product should work, why a current UI feels wrong, or how a component/flow should be redesigned from proven examples.
 

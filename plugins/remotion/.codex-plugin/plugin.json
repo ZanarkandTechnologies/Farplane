@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Author Remotion video code in React with official best-practice rules for compositions, timing, assets, captions, aud...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Remotion",
     "shortDescription": "Author Remotion video code in React with official best-practice rules for compositions, timing, assets, captions, aud...",
     "longDescription": "Author Remotion video code in React with official best-practice rules for compositions, timing, assets, captions, audio, transitions, Three.js, Tailwind, HTML-in-canvas, and media measurement. Use for Remotion code, React video components, deterministic motion graphics, captions, audio visualization, SFX, composition structure, and local render checks. Use `remotion-render` when the authored Remotion code should be rendered to MP4 through inference.sh.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

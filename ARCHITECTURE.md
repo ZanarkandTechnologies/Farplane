@@ -1,19 +1,19 @@
-# Codexter Architecture
+# Farplane Architecture
 
-Current-state system map for Codexter.
+Current-state system map for Farplane.
 
 Use this file as the top-level architecture guide after the repo-local
-[AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md). It explains
+[AGENTS.md](/Users/kenjipcx/coding-harness/Farplane/AGENTS.md). It explains
 which surfaces exist, what each one owns, and where to go next.
 
 Documentation routing starts in
-[README.md](/Users/kenjipcx/coding-harness/Codexter/README.md). Keep this file
+[README.md](/Users/kenjipcx/coding-harness/Farplane/README.md). Keep this file
 and README in sync whenever the public workflow, shipped capability list, or
 whole-system diagram changes.
 
 ## Purpose
 
-Codexter is a harness repo for running long-form engineering work through visible
+Farplane is a harness repo for running long-form engineering work through visible
 artifacts instead of hidden runtime state or transcript memory alone.
 
 The repo is organized around five concerns:
@@ -63,7 +63,7 @@ flowchart LR
     research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
-    execSkill["codexter-invocation<br/>$work<br/>$impl<br/>$ralph<br/>batch-work"]:::callout
+    execSkill["farplane-invocation<br/>$work<br/>$impl<br/>$ralph<br/>batch-work"]:::callout
     assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
     externalCli["delegate-cli<br/>delegate-frontend"]:::skill
     closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
@@ -156,11 +156,11 @@ The public docs are intentionally split by job:
 
 | Surface | Owns | Must Stay In Sync With |
 | --- | --- | --- |
-| [README.md](/Users/kenjipcx/coding-harness/Codexter/README.md) | reader routing, setup, current-state summary, roadmap cap | this file, `docs/specs/README.md` |
-| [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) | system diagram, surface ownership, read order, current limits | README, `docs/specs/harness-techniques.md` |
-| [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md) | canonical behavior-spec index and doc-gardening loop | README, this file |
-| [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) | ticket state machine, invocation policy, metadata contract | ticket template, board/compute specs |
-| [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/HISTORY.md) / [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/MEMORY.md) / [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Codexter/docs/TROUBLES.md) | durable timeline, invariants, and repeated misses | closeout tickets and nearest module docs |
+| [README.md](/Users/kenjipcx/coding-harness/Farplane/README.md) | reader routing, setup, current-state summary, roadmap cap | this file, `docs/specs/README.md` |
+| [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md) | system diagram, surface ownership, read order, current limits | README, `docs/specs/harness-techniques.md` |
+| [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md) | canonical behavior-spec index and doc-gardening loop | README, this file |
+| [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md) | ticket state machine, invocation policy, metadata contract | ticket template, board/compute specs |
+| [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/HISTORY.md) / [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md) / [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md) | durable timeline, invariants, and repeated misses | closeout tickets and nearest module docs |
 
 If a public harness claim changes, update the relevant row's surfaces in the
 same pass and run:
@@ -176,106 +176,106 @@ during cleanup unless the replacement carries the same routing information.
 
 ### Entry surfaces
 
-- [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
+- [AGENTS.md](/Users/kenjipcx/coding-harness/Farplane/AGENTS.md)
   Purpose: project-local operating map, read-first paths, local rules
-- [README.md](/Users/kenjipcx/coding-harness/Codexter/README.md)
+- [README.md](/Users/kenjipcx/coding-harness/Farplane/README.md)
   Purpose: product story, setup, and major public entrypoints
-- [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
+- [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md)
   Purpose: system map, ownership boundaries, and where each concern lives
 
 ### Knowledge surfaces
 
-- [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
+- [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md)
   Purpose: index of canonical behavior and execution specs
-- [docs/specs/codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
+- [docs/specs/farplane-v2-milestone.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/farplane-v2-milestone.md)
   Purpose: completed capped Symphony-inspired follow-through: explicit
   invocation triggers, adapter conformance, external compute recipes, and clear
   deferrals
-- [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
+- [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
-- [docs/specs/board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
+- [docs/specs/board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/board-compute-orchestration.md)
   Purpose: canonical ownership split for BoardAdapter, WorkItem, explicit
-  ticket invocation, ComputeSelector, local Codexter, operator-invoked serial
+  ticket invocation, ComputeSelector, local Farplane, operator-invoked serial
   Ralph, and future Symphony/shared board compute modes
-- [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
+- [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
-- [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
+- [docs/features/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/features/README.md)
   Purpose: structured feature registry contract for dedupe, provenance, source
   references, evidence links, known limits, and benchmark metrics
-- [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/feed-scout/SKILL.md)
+- [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/feed-scout/SKILL.md)
   Purpose: tracked-profile monitoring recipe for discovering X, YouTube, and
   blog content, deduping canonical URLs in a content/proposal ledger, and
   routing eligible items to harness-scout and best-of-worlds
-- [docs/specs/doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md)
+- [docs/specs/doc-governance.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/doc-governance.md)
   Purpose: structural versus narrative doc-audit policy and the doc-gardening
   workflow
-- [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/HISTORY.md)
+- [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/HISTORY.md)
   Purpose: append-only change log
-- [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/MEMORY.md)
+- [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md)
   Purpose: curated durable invariants and constraints
-- [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Codexter/docs/TROUBLES.md)
+- [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md)
   Purpose: repeated misses, user corrections, and prevention ideas
-- [docs/TASTE.md](/Users/kenjipcx/coding-harness/Codexter/docs/TASTE.md)
+- [docs/TASTE.md](/Users/kenjipcx/coding-harness/Farplane/docs/TASTE.md)
   Purpose: shared visual doctrine when a repo has UI work
-- [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
+- [qa/README.md](/Users/kenjipcx/coding-harness/Farplane/qa/README.md)
   Purpose: repo-owned QA/browser-test entry guidance and cookbook policy
-- [qa/cookbook](/Users/kenjipcx/coding-harness/Codexter/qa/cookbook)
+- [qa/cookbook](/Users/kenjipcx/coding-harness/Farplane/qa/cookbook)
   Purpose: reusable shortcuts, deep links, seeds, probes, and workflow runbooks for agent-efficient QA
 
 ### Execution surfaces
 
-- [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
+- [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md)
   Purpose: ticket lifecycle, frontmatter contract, invocation policy, and
   durable progress policy
-- [tickets/templates/ticket.md](/Users/kenjipcx/coding-harness/Codexter/tickets/templates/ticket.md)
+- [tickets/templates/ticket.md](/Users/kenjipcx/coding-harness/Farplane/tickets/templates/ticket.md)
   Purpose: canonical ticket shape for planning, artifact-first evidence, and optional `Agent Contract`, `Autonomy Readiness`, and `Evidence Checklist` sections for UI-bearing or unattended work
-- [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
+- [tickets](/Users/kenjipcx/coding-harness/Farplane/tickets)
   Purpose: active ticket board
-- [tickets/archive](/Users/kenjipcx/coding-harness/Codexter/tickets/archive)
+- [tickets/archive](/Users/kenjipcx/coding-harness/Farplane/tickets/archive)
   Purpose: completed or retired work history
 
 ### Review and proof surfaces
 
-- [docs/specs/review-gates.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/review-gates.md)
+- [docs/specs/review-gates.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/review-gates.md)
   Purpose: QA -> reviewer -> Stop-hook quality gate split
-- [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
+- [skills/review/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/review/README.md)
   Purpose: public entrypoint to the review system
-- [skills/review/references/review-rubric-index.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/references/review-rubric-index.md)
+- [skills/review/references/review-rubric-index.md](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/review-rubric-index.md)
   Purpose: canonical scoring map, thresholds, and rubric family selection
 
 The review scoring model is canonical in `skills/review/*`, not in this file.
 
 ### Runtime and orchestration surfaces
 
-- [docs/specs/spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
+- [docs/specs/spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/spec-first-execution-loop.md)
   Purpose: end-to-end execution model
-- [docs/specs/orchestrator-subagent-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/orchestrator-subagent-loop.md)
+- [docs/specs/orchestrator-subagent-loop.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/orchestrator-subagent-loop.md)
   Purpose: lane roles and orchestration boundaries
-- [docs/specs/runtime-surface.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md)
+- [docs/specs/runtime-surface.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md)
   Purpose: runtime state and operator-visible surfaces, with `.harness/` as the canonical live root
-- [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/SKILL.md)
+- [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/ralph/SKILL.md)
   Purpose: public board context surface that selects one eligible filesystem
   ticket or safe tiny-ticket batch and hands the work unit to `$work`
-- [skills/work/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/work/SKILL.md)
+- [skills/work/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/work/SKILL.md)
   Purpose: Work Admission surface that classifies one request, ticket, batch,
   board-selected unit, epic, or metric loop before choosing Goal, compute,
   planning, proof, and downstream skills
-- [skills/codexter-invocation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/SKILL.md)
+- [skills/farplane-invocation/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/farplane-invocation/SKILL.md)
   Purpose: normal-Codex invocation contract that loads `WORKFLOW.md`,
-  validates one explicit `CodexterRunEnvelope`, selects local compute, routes
+  validates one explicit `FarplaneRunEnvelope`, selects local compute, routes
   to the existing phase skill, and writes parseable proof without launching
   Codex or treating ticket existence as a trigger
-- [skills/delegate-cli/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/SKILL.md)
+- [skills/delegate-cli/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/delegate-cli/SKILL.md)
   Purpose: public external CLI delegation workflow for routing bounded builder
-  work through profile/adapter contracts while Codexter keeps ticket, QA, and
+  work through profile/adapter contracts while Farplane keeps ticket, QA, and
   review authority
-- [skills/delegate-frontend/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/SKILL.md)
+- [skills/delegate-frontend/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/delegate-frontend/SKILL.md)
   Purpose: first external CLI profile surface, routing frontend implementation
   and design-polish work through the Pi plus Kimi K2.6 profile
-- [bin](/Users/kenjipcx/coding-harness/Codexter/bin)
+- [bin](/Users/kenjipcx/coding-harness/Farplane/bin)
   Purpose: hooks, validators, runtime helpers
-- [experiments](/Users/kenjipcx/coding-harness/Codexter/experiments)
+- [experiments](/Users/kenjipcx/coding-harness/Farplane/experiments)
   Purpose: smoke runs, source-ingestion fixtures, eval outputs, and proof
   artifacts
 
@@ -294,18 +294,18 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   `review`, and todo loading as Tier 1; `brainstorm`, `research:*`, `plan`, and
   `execute` as Tier 2 interfaces; and concrete skills such as
   `spec-to-ticket`, `impl-plan`, `$work`, `$impl`, and `close-ticket` as Tier 3
-  Codexter coding-pipeline implementations.
+  Farplane coding-pipeline implementations.
 
 ## Read Order
 
 When orienting on the repo:
 
-1. Read [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md).
-2. Read [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md).
-3. Read [README.md](/Users/kenjipcx/coding-harness/Codexter/README.md) for product/setup context.
-4. Read [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md).
-5. Read [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md) when the task changes the harness itself.
-6. Read the active ticket and [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md).
+1. Read [AGENTS.md](/Users/kenjipcx/coding-harness/Farplane/AGENTS.md).
+2. Read [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md).
+3. Read [README.md](/Users/kenjipcx/coding-harness/Farplane/README.md) for product/setup context.
+4. Read [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md).
+5. Read [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-engineering-doctrine.md) when the task changes the harness itself.
+6. Read the active ticket and [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md).
 7. Follow links into the specific spec, skill, or runtime surface you actually need.
 
 ## Current Limits
@@ -314,7 +314,7 @@ When orienting on the repo:
   a second encyclopedia.
 - README is the documentation router; ARCHITECTURE is the ownership map. Update
   both together when the public harness story changes.
-- Codexter has strong single-ticket orchestration and a guarded serial
+- Farplane has strong single-ticket orchestration and a guarded serial
   filesystem-ticket dispatcher, but not parallel N-agent dispatch with leases,
   worktrees, merge policy, stale-worker recovery, and batch QA yet.
 - Doc governance is hybrid by design: structural entrypoint checks are

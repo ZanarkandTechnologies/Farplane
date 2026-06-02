@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "App-UI implementation reference for shadcn, AI Elements, curated registries, theming, and component construction afte...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Frontend Design",
     "shortDescription": "App-UI implementation reference for shadcn, AI Elements, curated registries, theming, and component construction afte...",
     "longDescription": "App-UI implementation reference for shadcn, AI Elements, curated registries, theming, and component construction after functional-ui and visual-design have settled the workflow and look. For new frontend implementation, prefer frontend-craft as the public orchestrator.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

@@ -7,15 +7,15 @@ before push or on a PR-sized branch, not as a default Stop-hook behavior.
 
 ## Public API / Entrypoints
 
-- [`SKILL.md`](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/SKILL.md):
+- [`SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills/coderabbit-review/SKILL.md):
   main workflow contract
 - `SKILL.md` Important Checklist:
   compact anti-forgetting checklist
-- [`references/stage-matrix.md`](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/references/stage-matrix.md):
+- [`references/stage-matrix.md`](/Users/kenjipcx/coding-harness/Farplane/skills/coderabbit-review/references/stage-matrix.md):
   stage defaults and when to use each path
-- [`references/hook-recipes.md`](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/references/hook-recipes.md):
+- [`references/hook-recipes.md`](/Users/kenjipcx/coding-harness/Farplane/skills/coderabbit-review/references/hook-recipes.md):
   opt-in git hook recipes
-- [`scripts/run_review.py`](/Users/kenjipcx/coding-harness/Codexter/skills/coderabbit-review/scripts/run_review.py):
+- [`scripts/run_review.py`](/Users/kenjipcx/coding-harness/Farplane/skills/coderabbit-review/scripts/run_review.py):
   repo-local helper for `pre-commit`, `pre-push`, and `pr`
 
 ## Minimal Example

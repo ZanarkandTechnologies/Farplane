@@ -33,10 +33,10 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Do the work, prove it, write back, and review without owning a domain | `execute` | It is the generic execution interface behind domain-specific build flows. | A public domain execution skill such as `impl` or `frontend-craft` should own the pass. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing `pr-runtime` and `coderabbit-review`. | You only need an isolated checkout (`pr-runtime`) or one explicit heavy CodeRabbit pass (`coderabbit-review`). |
 | Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
-| Scaffold and run harness-native evals | `eval` | It creates `.codex/evals` or `.claude/evals`, guides users through one tagged harness task file, runs the target harness CLI for agent and judge prompts, and writes run artifacts. | You only need a teaching-oriented explanation of what an eval is; use `eval-onboarding`. |
+| Check, scaffold, and run harness-native evals | `eval` | It checks for `.codex/evals` or `.claude/evals`, initializes missing files, runs one tagged harness task file through the target harness CLI, and judges with boolean/tier verdicts. | You only need a teaching-oriented explanation of what an eval is; use `eval-onboarding`. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include `agent-behavior-test`-style run capture. | You only need one cheap conformance probe and no adversarial proof loop. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It scores the work against anchored rubric families and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
-| Decide where a Codexter harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
+| Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
 | Maintain skill frontmatter, checklists, registry metadata, or skill-system docs | `skill-maintenance` | It owns bulk skill upkeep, tier checks, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. |
 
 Agent testing stack:
@@ -61,7 +61,7 @@ Keep frontmatter small.
 Manual fields:
 
 - `tier`: required, numeric `1`, `2`, or `3`
-- `source`: required, `local` for Codexter-owned skills or `external` for
+- `source`: required, `local` for Farplane-owned skills or `external` for
   upstream-backed skills that should stay syncable with an outside source
 - `group`: required for Tier 3 only
 - `methods`: optional list for method addresses owned by the skill
@@ -152,7 +152,7 @@ Repo source packages keep first-load checklist truth in `SKILL.md`:
 packages instead of symlinking skill directories directly. When a source package
 has not yet been migrated to a direct checklist, the installed `SKILL.md`
 receives a generated `Embedded Skill Checklist` section wrapped in stable
-`CODEXTER_EMBEDDED_TODOS` markers. Migrated source skills keep the direct
+`FARPLANE_EMBEDDED_TODOS` markers. Migrated source skills keep the direct
 checklist unchanged during install.
 
 This makes the checklist visible on first skill load while avoiding a second
@@ -179,10 +179,10 @@ implementations with reusable domain logic.
 
 Use `source` to decide where wrapper logic belongs:
 
-- `source: local` means Codexter owns the skill package and may edit its body,
+- `source: local` means Farplane owns the skill package and may edit its body,
   references, and direct checklist directly.
 - `source: external` means the skill package itself is upstream-owned and should
-  be refreshable from that source. Keep local Codexter policy in the calling
+  be refreshable from that source. Keep local Farplane policy in the calling
   skill or another local wrapper, so the external skill can be refreshed with
   minimal merge friction.
 - Agents must not directly edit external or installed skill bodies such as

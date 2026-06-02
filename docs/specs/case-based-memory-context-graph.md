@@ -2,7 +2,7 @@
 
 Status: seed design
 
-Purpose: give Codexter a way to reason over prior decisions, shipped features,
+Purpose: give Farplane a way to reason over prior decisions, shipped features,
 operator corrections, source inspirations, tickets, and durable memories as
 connected cases instead of scattered logs.
 
@@ -13,7 +13,7 @@ skill registries.
 
 ## Problem
 
-Codexter is accumulating many local policies, skills, features, and corrective
+Farplane is accumulating many local policies, skills, features, and corrective
 lessons. The individual ledgers are useful, but agents need a fast way to ask:
 
 - have we made a similar decision before?

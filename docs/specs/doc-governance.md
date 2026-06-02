@@ -1,6 +1,6 @@
 # Doc Governance
 
-Use this file to keep Codexter's knowledge base trustworthy without turning the
+Use this file to keep Farplane's knowledge base trustworthy without turning the
 repo into a markdown-lint maze.
 
 ## Goal
@@ -8,7 +8,7 @@ repo into a markdown-lint maze.
 Treat docs as the system of record while keeping checks proportional to the kind
 of truth each surface carries.
 
-Codexter uses two kinds of documentation checks:
+Farplane uses two kinds of documentation checks:
 
 - structural checks for canonical entrypoints and machine-relevant contracts
 - narrative audits for richer docs whose wording can change while the truth
@@ -18,12 +18,12 @@ Codexter uses two kinds of documentation checks:
 
 These surfaces define the live repo story and should stay mutually coherent:
 
-- [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
-- [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
-- [README.md](/Users/kenjipcx/coding-harness/Codexter/README.md)
-- [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
-- [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
-- [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
+- [AGENTS.md](/Users/kenjipcx/coding-harness/Farplane/AGENTS.md)
+- [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md)
+- [README.md](/Users/kenjipcx/coding-harness/Farplane/README.md)
+- [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md)
+- [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
+- [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md)
 
 ## Structural Checks
 

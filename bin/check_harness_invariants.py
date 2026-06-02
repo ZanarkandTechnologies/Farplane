@@ -30,7 +30,7 @@ RULES: tuple[HarnessRule, ...] = (
     HarnessRule(
         relative_path="AGENTS.md",
         required_substrings=(
-            "project-local context for developing Codexter itself.",
+            "project-local context for developing Farplane itself.",
             "templates/global/AGENTS.md",
             "Prefer `.harness/` for live runtime state.",
         ),
@@ -51,7 +51,7 @@ RULES: tuple[HarnessRule, ...] = (
             ".omx/",
         ),
         remediation=(
-            "keep runtime-surface docs on the live Codexter contract: "
+            "keep runtime-surface docs on the live Farplane contract: "
             "`.harness/` is canonical and retired runtime paths belong only "
             "in historical surfaces"
         ),

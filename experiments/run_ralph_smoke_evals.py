@@ -34,7 +34,7 @@ def load_stop_hook_module():
     bin_dir = str(STOP_HOOK_PATH.parent)
     if bin_dir not in sys.path:
         sys.path.insert(0, bin_dir)
-    spec = importlib.util.spec_from_file_location("codexter_stop_hook_eval", STOP_HOOK_PATH)
+    spec = importlib.util.spec_from_file_location("farplane_stop_hook_eval", STOP_HOOK_PATH)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"could not load stop hook module from {STOP_HOOK_PATH}")
     module = importlib.util.module_from_spec(spec)
@@ -318,7 +318,7 @@ def main() -> int:
             capture_hook = subprocess.run(
                 ["python3", str(CAPTURE_USER_TURN_PATH)],
                 cwd=ROOT,
-                env={**os.environ, "CODEXTER_HOME": str(Path.home() / ".codex")},
+                env={**os.environ, "FARPLANE_HOME": str(Path.home() / ".codex")},
                 input=capture_payload,
                 text=True,
                 capture_output=True,
@@ -349,8 +349,8 @@ def main() -> int:
                 cwd=ROOT,
                 env={
                     **os.environ,
-                    "CODEXTER_RALPH_HOOK": "1",
-                    "CODEXTER_HOME": str(Path.home() / ".codex"),
+                    "FARPLANE_RALPH_HOOK": "1",
+                    "FARPLANE_HOME": str(Path.home() / ".codex"),
                     "RALPH_TICKET": str(hook_missing_ticket),
                 },
                 input=payload_input,
@@ -386,7 +386,7 @@ def main() -> int:
             subprocess.run(
                 ["python3", str(CAPTURE_USER_TURN_PATH)],
                 cwd=ROOT,
-                env={**os.environ, "CODEXTER_HOME": str(Path.home() / ".codex")},
+                env={**os.environ, "FARPLANE_HOME": str(Path.home() / ".codex")},
                 input=planning_capture_payload,
                 text=True,
                 capture_output=True,
@@ -404,8 +404,8 @@ def main() -> int:
                 cwd=ROOT,
                 env={
                     **os.environ,
-                    "CODEXTER_RALPH_HOOK": "1",
-                    "CODEXTER_HOME": str(Path.home() / ".codex"),
+                    "FARPLANE_RALPH_HOOK": "1",
+                    "FARPLANE_HOME": str(Path.home() / ".codex"),
                     "RALPH_TICKET": str(hook_planning_ticket),
                 },
                 input=planning_mismatch_payload,
@@ -441,7 +441,7 @@ def main() -> int:
             subprocess.run(
                 ["python3", str(CAPTURE_USER_TURN_PATH)],
                 cwd=ROOT,
-                env={**os.environ, "CODEXTER_HOME": str(Path.home() / ".codex")},
+                env={**os.environ, "FARPLANE_HOME": str(Path.home() / ".codex")},
                 input=mismatch_capture_payload,
                 text=True,
                 capture_output=True,
@@ -459,8 +459,8 @@ def main() -> int:
                 cwd=ROOT,
                 env={
                     **os.environ,
-                    "CODEXTER_RALPH_HOOK": "1",
-                    "CODEXTER_HOME": str(Path.home() / ".codex"),
+                    "FARPLANE_RALPH_HOOK": "1",
+                    "FARPLANE_HOME": str(Path.home() / ".codex"),
                     "RALPH_TICKET": str(hook_missing_ticket),
                 },
                 input=hard_mismatch_payload,
@@ -501,8 +501,8 @@ def main() -> int:
                 cwd=ROOT,
                 env={
                     **os.environ,
-                    "CODEXTER_RALPH_HOOK": "1",
-                    "CODEXTER_HOME": str(Path.home() / ".codex"),
+                    "FARPLANE_RALPH_HOOK": "1",
+                    "FARPLANE_HOME": str(Path.home() / ".codex"),
                     "RALPH_TICKET": str(hook_planning_ticket),
                 },
                 input=planning_payload,
@@ -550,8 +550,8 @@ def main() -> int:
                 cwd=ROOT,
                 env={
                     **os.environ,
-                    "CODEXTER_RALPH_HOOK": "1",
-                    "CODEXTER_HOME": str(Path.home() / ".codex"),
+                    "FARPLANE_RALPH_HOOK": "1",
+                    "FARPLANE_HOME": str(Path.home() / ".codex"),
                 },
                 input=state_payload,
                 text=True,
@@ -580,8 +580,8 @@ def main() -> int:
                 cwd=ROOT,
                 env={
                     **os.environ,
-                    "CODEXTER_RALPH_HOOK": "1",
-                    "CODEXTER_HOME": str(Path.home() / ".codex"),
+                    "FARPLANE_RALPH_HOOK": "1",
+                    "FARPLANE_HOME": str(Path.home() / ".codex"),
                     "RALPH_TICKET": str(hook_complete_ticket),
                 },
                 input=prose_payload,
@@ -739,7 +739,7 @@ def main() -> int:
             results.append({"name": "judge_docs_complete", "ok": docs_complete.returncode == 0, "stdout": docs_complete.stdout.strip(), "stderr": docs_complete.stderr.strip()})
 
             # 12. stop hook: auto-continue spawns a visible tmux follow-up lane
-            session_name = f"codexter-smoke-{os.getpid()}-{time.time_ns()}"
+            session_name = f"farplane-smoke-{os.getpid()}-{time.time_ns()}"
             tmux_session = run(["tmux", "new-session", "-d", "-s", session_name], cwd=ROOT)
             if tmux_session.returncode != 0:
                 raise RuntimeError(tmux_session.stderr.strip() or tmux_session.stdout.strip() or "failed to create tmux session")
@@ -776,9 +776,9 @@ def main() -> int:
                     cwd=ROOT,
                     env={
                         **os.environ,
-                        "CODEXTER_RALPH_HOOK": "1",
-                        "CODEXTER_RALPH_TMUX_DRY_RUN": "1",
-                        "CODEXTER_HOME": str(Path.home() / ".codex"),
+                        "FARPLANE_RALPH_HOOK": "1",
+                        "FARPLANE_RALPH_TMUX_DRY_RUN": "1",
+                        "FARPLANE_HOME": str(Path.home() / ".codex"),
                         "RALPH_TICKET": str(hook_missing_ticket),
                     },
                     input=followup_payload,

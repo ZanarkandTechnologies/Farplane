@@ -34,7 +34,7 @@
 ## Benchmark Scorecard
 
 1. Pick one small task.
-2. Compare `current-codexter`, `source-proposed`, and
+2. Compare `current-farplane`, `source-proposed`, and
    [best-of-worlds](../../best-of-worlds/SKILL.md).
 3. Score each `1-10` across completion, evidence, trust, resume quality,
    overhead, and maintainability.

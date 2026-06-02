@@ -1,7 +1,7 @@
 ---
 name: image-generation
 version: 1.0.0
-description: Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Codexter's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.
+description: Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Farplane's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.
 tier: 3
 group: content-image
 source: local
@@ -10,10 +10,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Image Generation
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 # Image Generation Todos
 
@@ -44,7 +42,7 @@ Use this as the ordered checklist whenever `image-generation` is active.
 - [ ] Never publish to social platforms unless the user explicitly asks to publish.
 - [ ] Save final images, prompts, input JSON, result JSON, and notes inside the workspace, not only in a remote URL, temp path, or Codex home path.
 - [ ] If the image is used on a web surface, route implementation/proof through `frontend-craft` and verify path loading, responsive crop, dimensions, alt text, and visual quality.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Generate project-ready AI image assets with inference.sh CLI (`belt`) while keeping provider-specific details in references.
 

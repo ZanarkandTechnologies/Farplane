@@ -1,6 +1,6 @@
 ---
 name: work
-description: Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then route to the right Codexter skill, native Goal, compute target, and proof policy before implementation starts.
+description: Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then route to the right Farplane skill, native Goal, compute target, and proof policy before implementation starts.
 tier: 3
 group: coding
 source: local
@@ -10,10 +10,8 @@ allowed-tools: Read, Glob, Grep
 
 # Work
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the operator request, ticket, batch, or board context.
 - [ ] Classify the work unit: direct request, single ticket, ticket batch,
@@ -38,9 +36,9 @@ Source: `SKILL.md`
   ticket-backed `GoalPrepState` branch instead of restarting discovery.
 - [ ] Record blockers with evidence instead of asking the operator when the
   ticket policy already gives a safe fallback.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-`$work` is Codexter's Work Admission surface.
+`$work` is Farplane's Work Admission surface.
 
 Use it when the operator wants one prompt, ticket, ticket batch, board-selected
 unit, epic, or metric loop handled intelligently, but the system first needs to

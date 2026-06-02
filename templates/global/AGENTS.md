@@ -84,16 +84,16 @@ Avoid:
   external-skill edit; prefer local wrappers, mirrored fixtures, registry rows,
   and visible repair tickets. See `MEM-0107`
 
-## Codexter Source Repo
+## Farplane Source Repo
 
-When improving Codexter itself, including when using `harness-advisor`, treat
+When improving Farplane itself, including when using `harness-advisor`, treat
 the git-backed source checkout as the canonical edit location:
 
-- `/Users/kenjipcx/coding-harness/Codexter`
+- `/Users/kenjipcx/coding-harness/Farplane`
 
 Do not patch the installed live Codex home directly for reusable harness
 changes. In particular, avoid editing `~/.codex/AGENTS.md` or
-`~/.codex/skills/*` as the source of truth. Make the change in the Codexter
+`~/.codex/skills/*` as the source of truth. Make the change in the Farplane
 source repo, then reinstall or selectively install from that repo into the live
 Codex home. See `MEM-0121`.
 
@@ -105,7 +105,7 @@ Before edits:
 - search for existing patterns
 - inspect affected files and interfaces
 - bootstrap from active tickets, `docs/prd.md`, `docs/specs/*`, `docs/MEMORY.md`, and `docs/TROUBLES.md`
-- if the repo does not already have Codexter conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `tickets/`, start with `deep-init-project` before applying the full spec or ticket workflow
+- if the repo does not already have Farplane conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `tickets/`, start with `deep-init-project` before applying the full spec or ticket workflow
 
 No blind edits.
 
@@ -142,7 +142,7 @@ Treat skills as a dependency hierarchy, not a hidden router tree.
 - Tier 3 skills are application/domain skills that implement Tier 2 interfaces.
   Their first-load checklists should usually link Tier 2 surfaces rather than direct
   Tier 1 primitives, because Tier 2 carries the Tier 1 obligations. In
-  Codexter today, `spec-to-ticket`, `impl-plan`, `$work`, `$impl`, and
+  Farplane today, `spec-to-ticket`, `impl-plan`, `$work`, `$impl`, and
   `close-ticket` are coding workflow skills, not universal Tier 2 workflows.
   Presentation,
   document, frontend, video, image, and data workflows should bind the same

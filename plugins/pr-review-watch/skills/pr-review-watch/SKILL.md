@@ -12,10 +12,8 @@ common_chains:
 
 # PR Review Watch
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the selected PR target, target repo, project review memory, and
   requested watch interval before polling anything.
@@ -41,14 +39,14 @@ Source: `SKILL.md`
   policy asks for it.
 - [ ] Do not merge, deploy, push, change billing/spend, or invent new provider
   commands unless the surrounding workflow explicitly authorizes that action.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use this skill when the operator asks Codexter to watch an already-open pull
+Use this skill when the operator asks Farplane to watch an already-open pull
 request and keep responding to asynchronous review comments or status checks.
 The workflow is explicit and bounded: one selected PR, one project-local review
 contract, one heartbeat at a time.
 
-This skill composes existing Codexter surfaces:
+This skill composes existing Farplane surfaces:
 
 - [pr-runtime](../pr-runtime/SKILL.md) decides whether the PR branch needs an
   isolated checkout or runtime record.

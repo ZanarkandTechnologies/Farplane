@@ -1,6 +1,6 @@
 ---
 workflow:
-  name: codexter-invocation
+  name: farplane-invocation
   version: 1
 
 board:
@@ -28,16 +28,16 @@ quality:
   writes_proof_packet: true
 ---
 
-# Codexter Invocation Workflow
+# Farplane Invocation Workflow
 
-Use this file as the repo-local invocation policy for Codexter-equipped Codex.
+Use this file as the repo-local invocation policy for Farplane-equipped Codex.
 Do not duplicate detailed skill contracts here. A run should load one
-`CodexterRunEnvelope`, normalize one work item, select allowed compute, route to
+`FarplaneRunEnvelope`, normalize one work item, select allowed compute, route to
 the existing phase skill, and write the requested `ProofPacket`.
 
-Codexter is normal Codex with this repository's installed skills, hooks,
+Farplane is normal Codex with this repository's installed skills, hooks,
 templates, and proof conventions. This workflow is not a daemon and not a
-standalone `codexter run` CLI.
+standalone `farplane run` CLI.
 
 Ticket creation, `ready: true`, status movement, and `compute_target` changes
 are not run triggers. This workflow applies after a local operator, `$ralph`,

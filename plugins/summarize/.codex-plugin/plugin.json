@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files.",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Summarize",
     "shortDescription": "Summarize or extract text/transcripts from URLs, podcasts, and local files.",
     "longDescription": "Summarize or extract text/transcripts from URLs, podcasts, and local files.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

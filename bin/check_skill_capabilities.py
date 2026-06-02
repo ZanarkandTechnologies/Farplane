@@ -115,7 +115,7 @@ def repo_root(start: Path) -> Path:
     for candidate in [start.resolve(), *start.resolve().parents]:
         if (candidate / "docs/skills/README.md").exists() and (candidate / "tickets").exists():
             return candidate
-    raise CapabilityError("could not find Codexter repo root")
+    raise CapabilityError("could not find Farplane repo root")
 
 
 REPO_ROOT = repo_root(Path(__file__).resolve())

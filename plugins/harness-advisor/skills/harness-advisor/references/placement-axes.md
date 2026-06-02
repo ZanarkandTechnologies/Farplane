@@ -1,6 +1,6 @@
 # Harness Placement Axes
 
-Use this reference when deciding where a Codexter improvement belongs. The goal
+Use this reference when deciding where a Farplane improvement belongs. The goal
 is to optimize harness performance by minimizing always-loaded context,
 maximizing progressive disclosure, preserving durable state in files, and using
 programmatic checks only where they are deterministic.
@@ -70,8 +70,8 @@ final class HookOrValidator implements HarnessSurface {
 | Surface | Optimizes for | Use when | Avoid when |
 | --- | --- | --- | --- |
 | Root `AGENTS.md` | always-on routing, durable repo invariants | every loop needs the rule | procedure, examples, or bulky doctrine |
-| `templates/global/AGENTS.md` | shipped cross-repo defaults | all installed repos need the default | the rule is Codexter-local |
-| Generated project `AGENTS_TEMPLATE.md` | project-local always-loaded workflow | new repos should inherit the operating rule | the detail belongs to this Codexter repo only |
+| `templates/global/AGENTS.md` | shipped cross-repo defaults | all installed repos need the default | the rule is Farplane-local |
+| Generated project `AGENTS_TEMPLATE.md` | project-local always-loaded workflow | new repos should inherit the operating rule | the detail belongs to this Farplane repo only |
 | `PROJECT_RULES_TEMPLATE.md` | project technical standards | stack, commands, runtime, QA paths, conventions | agent workflow or lifecycle doctrine |
 | Skill | progressive procedure | repeated workflow, called multiple times, domain method | one-off docs or role isolation problem |
 | Skill reference | progressive detail | reusable model, algebra, examples, templates, long guidance | agents need the rule every turn |

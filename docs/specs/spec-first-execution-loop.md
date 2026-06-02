@@ -4,7 +4,7 @@ Date: 2026-04-07
 
 ## Goal
 
-Define the current canonical execution model for Codexter:
+Define the current canonical execution model for Farplane:
 
 - user-guided discovery up front
 - spec-first planning
@@ -330,7 +330,7 @@ Archive is a visibility/history surface, not a hot runtime surface.
 
 The current product bet is:
 
-- keep Codexter’s planning/spec/review surfaces
+- keep Farplane’s planning/spec/review surfaces
 - keep the queue readable
 - improve longer runs and stronger review before adding more runtime machinery
 

@@ -1,19 +1,19 @@
 # Feature Registry
 
-Codexter's feature registry is the structured system of record for harness
+Farplane's feature registry is the structured system of record for harness
 techniques.
 
 Use it when a source, video, blog, repo, or ticket proposes a feature and the
 agent needs to answer:
 
-- does Codexter already have this?
+- does Farplane already have this?
 - where does it live?
 - what source or ticket introduced it?
 - what evidence proves it works?
 - what limits or metrics should future work consider?
 
 Use `skills/harness-advisor/` when the operator is asking where a proposed
-Codexter improvement should live. That skill checks this registry for existing
+Farplane improvement should live. That skill checks this registry for existing
 features before recommending a primary surface.
 
 `docs/specs/harness-techniques.md` remains the skimmable human inventory.

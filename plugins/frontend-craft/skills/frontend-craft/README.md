@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Main frontend implementation orchestrator for Codexter.
+Main frontend implementation orchestrator for Farplane.
 
 ## Public API / Entrypoints
 

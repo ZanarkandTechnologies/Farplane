@@ -360,7 +360,7 @@ Keep a harness change only if the eval meaningfully improved:
 - convergence speed
 - operator trust
 
-## Codexter-Specific Defaults
+## Farplane-Specific Defaults
 
 For this repo, assume these defaults unless evidence says otherwise:
 
@@ -395,7 +395,7 @@ This quickstart is aligned with:
 - Cursor, "Scaling long-running autonomous coding":
   flat self-coordination with locks did not scale well; clearer
   planner-versus-worker role separation worked better for long-running work
-- existing Codexter specs:
+- existing Farplane specs:
   `review-gates.md`, `spec-first-execution-loop.md`, and
   `orchestrator-subagent-loop.md`
 

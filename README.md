@@ -1,81 +1,81 @@
-# Codexter
+# Farplane
 
 Ticket-first autonomous Codex harness.
 
-Codexter turns fuzzy product asks into visible specs, tickets, execution rounds,
+Farplane turns fuzzy product asks into visible specs, tickets, execution rounds,
 evidence-backed review, and closeout. The harness is strongest today at
 single-ticket engineering with explicit proof and Stop-hook judgment, with a
 guarded serial `$ralph` dispatcher for prepared filesystem ticket boards. It is
 not yet a parallel multi-agent dispatcher.
 
-Codexter is a ticket invocation layer inside normal Codex. Tickets store work
+Farplane is a ticket invocation layer inside normal Codex. Tickets store work
 context; explicit invocations express intent to run that work. Creating a
 ticket, marking it ready, moving a board card, or changing `compute_target`
 does not start an agent by itself.
 
-If a repo does not already have Codexter conventions such as `AGENTS.md`,
+If a repo does not already have Farplane conventions such as `AGENTS.md`,
 `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and
 `tickets/`, start with `deep-init-project` before trying to use the full spec,
 ticket, and execution workflow.
 
 ## Start Here
 
-- Repo-local operating map: [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md)
-- Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
-- Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md)
-- Codexter V2 capstone: [codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
-- Board, compute, and ticket invocation: [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md)
-- Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
-- Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
-- Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
-- Human skill selection guide: [docs/skills/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md)
-- Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
-- Private tool context guide: [docs/private-tool-context.md](/Users/kenjipcx/coding-harness/Codexter/docs/private-tool-context.md)
-- QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
-- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
-- CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/desloppify/README.md)
-- Reference grounding primitive: [skills/reference-grounding/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/reference-grounding/README.md)
-- Research workflow: [skills/research/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/research/README.md)
-- Generic planning interface: [skills/plan/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/plan/README.md)
-- Generic execution interface: [skills/execute/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/execute/README.md)
-- Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/best-of-worlds/SKILL.md)
-- Harness source scouting: [skills/harness-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/harness-scout/SKILL.md)
-- Feed source monitoring: [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/feed-scout/SKILL.md)
-- PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
-- Codexter invocation contract: [skills/codexter-invocation/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/codexter-invocation/README.md)
-- External CLI delegation: [skills/delegate-cli/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-cli/README.md)
-- Frontend external CLI profile: [skills/delegate-frontend/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/delegate-frontend/README.md)
-- Frontend implementation orchestrator: [skills/frontend-craft/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/frontend-craft/SKILL.md)
-- Functional UI redesign: [skills/functional-ui/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/functional-ui/SKILL.md)
-- Visual design direction: [skills/visual-design/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/visual-design/SKILL.md)
-- Landing page planning: [skills/landing-page/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/landing-page/SKILL.md)
-- Image generation assets: [skills/image-generation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/image-generation/SKILL.md)
-- Video generation assets: [skills/video-generation/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/video-generation/SKILL.md)
-- Remotion render assets: [skills/remotion-render/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/remotion-render/SKILL.md)
-- Autoresearch planning: [skills/autoresearch-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-plan/SKILL.md)
-- Autoresearch execution: [skills/autoresearch-exec/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/autoresearch-exec/SKILL.md)
-- Skill self-improvement: [skills/self-improve/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/self-improve/SKILL.md)
-- Serial board drain: [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/ralph/SKILL.md)
-- Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
-- Project bootstrap: [skills/deep-init-project/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/README.md)
+- Repo-local operating map: [AGENTS.md](/Users/kenjipcx/coding-harness/Farplane/AGENTS.md)
+- Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md)
+- Specs index: [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md)
+- Farplane V2 capstone: [farplane-v2-milestone.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/farplane-v2-milestone.md)
+- Board, compute, and ticket invocation: [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/board-compute-orchestration.md)
+- Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-engineering-doctrine.md)
+- Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
+- Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/features/README.md)
+- Human skill selection guide: [docs/skills/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/skills/README.md)
+- Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md)
+- Private tool context guide: [docs/private-tool-context.md](/Users/kenjipcx/coding-harness/Farplane/docs/private-tool-context.md)
+- QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Farplane/qa/README.md)
+- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/review/README.md)
+- CLI cleanup workflow: [skills/desloppify/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/desloppify/README.md)
+- Reference grounding primitive: [skills/reference-grounding/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/reference-grounding/README.md)
+- Research workflow: [skills/research/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/research/README.md)
+- Generic planning interface: [skills/plan/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/plan/README.md)
+- Generic execution interface: [skills/execute/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/execute/README.md)
+- Best-of-worlds synthesis: [skills/best-of-worlds/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/best-of-worlds/SKILL.md)
+- Harness source scouting: [skills/harness-scout/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/harness-scout/SKILL.md)
+- Feed source monitoring: [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/feed-scout/SKILL.md)
+- PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/pr-runtime/README.md)
+- Farplane invocation contract: [skills/farplane-invocation/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/farplane-invocation/README.md)
+- External CLI delegation: [skills/delegate-cli/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/delegate-cli/README.md)
+- Frontend external CLI profile: [skills/delegate-frontend/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/delegate-frontend/README.md)
+- Frontend implementation orchestrator: [skills/frontend-craft/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/frontend-craft/SKILL.md)
+- Functional UI redesign: [skills/functional-ui/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/functional-ui/SKILL.md)
+- Visual design direction: [skills/visual-design/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/visual-design/SKILL.md)
+- Landing page planning: [skills/landing-page/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/landing-page/SKILL.md)
+- Image generation assets: [skills/image-generation/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/image-generation/SKILL.md)
+- Video generation assets: [skills/video-generation/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/video-generation/SKILL.md)
+- Remotion render assets: [skills/remotion-render/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/remotion-render/SKILL.md)
+- Autoresearch planning: [skills/autoresearch-plan/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/autoresearch-plan/SKILL.md)
+- Autoresearch execution: [skills/autoresearch-exec/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/autoresearch-exec/SKILL.md)
+- Skill self-improvement: [skills/self-improve/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/self-improve/SKILL.md)
+- Serial board drain: [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/ralph/SKILL.md)
+- Active queue: [tickets](/Users/kenjipcx/coding-harness/Farplane/tickets)
+- Project bootstrap: [skills/deep-init-project/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/deep-init-project/README.md)
 
 ## Documentation Router
 
 Use this section as the shortest route to the right source of truth. Keep it in
-sync with [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
+sync with [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md)
 whenever the public harness story changes.
 
 | Need | Start Here | Then Check |
 | --- | --- | --- |
-| Understand the whole repo | [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md) | [AGENTS.md](/Users/kenjipcx/coding-harness/Codexter/AGENTS.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md) |
-| Decide where a harness change belongs | [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md) | [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md), nearest skill README |
-| Choose which skill to invoke | [docs/skills/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md) | generated [docs/skills/registry.jsonl](/Users/kenjipcx/coding-harness/Codexter/docs/skills/registry.jsonl), target `skills/*/SKILL.md` |
-| Store private tool handles | [docs/private-tool-context.md](/Users/kenjipcx/coding-harness/Codexter/docs/private-tool-context.md) | `~/.codex/private/TOOLS.md`, `~/.codex/private/docs/`, `templates/global/AGENTS.md` |
-| Run or resume a ticket | [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) | active `tickets/TASK-*/ticket.md`, [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan/SKILL.md), [skills/impl/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl/SKILL.md) |
-| Close or archive finished work | [skills/close-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/close-ticket/SKILL.md) | [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/HISTORY.md), [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Codexter/docs/MEMORY.md), affected module README |
-| Check proof quality | [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md) | [review-gates.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/review-gates.md), ticket evidence |
-| Work on Codexter V2 invocation or adapters | [codexter-v2-milestone.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md) | [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-compute-orchestration.md), [symphony-compatible-codexter-runner.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/symphony-compatible-codexter-runner.md), [board-adapter-conformance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/board-adapter-conformance.md) |
-| Update docs after a public contract changes | [doc-governance.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/doc-governance.md) | this README, [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/README.md), [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md) |
+| Understand the whole repo | [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md) | [AGENTS.md](/Users/kenjipcx/coding-harness/Farplane/AGENTS.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md) |
+| Decide where a harness change belongs | [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-engineering-doctrine.md) | [harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md), nearest skill README |
+| Choose which skill to invoke | [docs/skills/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/skills/README.md) | generated [docs/skills/registry.jsonl](/Users/kenjipcx/coding-harness/Farplane/docs/skills/registry.jsonl), target `skills/*/SKILL.md` |
+| Store private tool handles | [docs/private-tool-context.md](/Users/kenjipcx/coding-harness/Farplane/docs/private-tool-context.md) | `~/.codex/private/TOOLS.md`, `~/.codex/private/docs/`, `templates/global/AGENTS.md` |
+| Run or resume a ticket | [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md) | active `tickets/TASK-*/ticket.md`, [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/impl-plan/SKILL.md), [skills/impl/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/impl/SKILL.md) |
+| Close or archive finished work | [skills/close-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/close-ticket/SKILL.md) | [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/HISTORY.md), [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md), affected module README |
+| Check proof quality | [skills/review/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/review/README.md) | [review-gates.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/review-gates.md), ticket evidence |
+| Work on Farplane V2 invocation or adapters | [farplane-v2-milestone.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/farplane-v2-milestone.md) | [board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/board-compute-orchestration.md), [symphony-compatible-farplane-runner.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/symphony-compatible-farplane-runner.md), [board-adapter-conformance.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/board-adapter-conformance.md) |
+| Update docs after a public contract changes | [doc-governance.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/doc-governance.md) | this README, [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md), [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md), [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md) |
 
 Documentation sync rule:
 
@@ -102,7 +102,7 @@ Implemented now:
   todo discipline; Tier 2 covers `brainstorm`, `research:*`, `plan`, and
   `execute`; and Tier 3 application pipelines implement those interfaces
 - per-ticket coding planning through `impl-plan`, which implements the generic
-  `plan` interface for Codexter code tickets
+  `plan` interface for Farplane code tickets
 - method-addressed research through `research:gap` when net-new or partial
   feature scope depends on production-grade expectations, and
   `research:parity` when the main question is what other products, standards,
@@ -143,15 +143,15 @@ Implemented now:
 - documenting and closeout through `close-ticket`
 - isolated PR follow-up and concurrent-writer checkout setup plus ticket-scoped
   runtime launch/teardown through `pr-runtime` plus `ticket-runtime`
-- local Codexter invocation through `WORKFLOW.md`,
-  `CodexterRunEnvelope`, filesystem `WorkItem`, `ComputeSelector`, and
+- local Farplane invocation through `WORKFLOW.md`,
+  `FarplaneRunEnvelope`, filesystem `WorkItem`, `ComputeSelector`, and
   `ProofPacket`, so an explicit local or external invocation can route one
   work unit through `$work`, existing skills, and future Symphony workers with
   the same request/result contract
 - board/compute invocation doctrine that keeps tickets as context, Codex as
-  the execution engine, Codexter as the installed skill/proof layer, and
+  the execution engine, Farplane as the installed skill/proof layer, and
   Symphony as a future background scheduler/runner rather than a replacement
-  for local Codexter use
+  for local Farplane use
 - external CLI delegation through `delegate-cli`, with `delegate-frontend` as
   the first profile for Pi plus Kimi K2.6 dry-run/live handoffs
 - Stop-hook phase routing and current-turn relevance checks
@@ -166,7 +166,7 @@ Partial today:
   serially rather than in parallel
 - tmux-backed worker lanes exist, but the runtime is still prototype-weight
 - runtime observability doctrine is shipped, while hosted telemetry is still in
-  progress in [TASK-0073](/Users/kenjipcx/coding-harness/Codexter/tickets/TASK-0073/ticket.md)
+  progress in [TASK-0073](/Users/kenjipcx/coding-harness/Farplane/tickets/TASK-0073/ticket.md)
 - anti-slop review exists in `review`, but there is not yet a separate
   human-grade report/video proof pack
 
@@ -238,7 +238,7 @@ flowchart LR
 
     subgraph Dispatch["4. Execution Dispatch"]
       goalCraft["goal-crafter<br/>native /goal preparation"]:::planning
-      invoke["codexter-invocation<br/>run envelope + proof"]:::execution
+      invoke["farplane-invocation<br/>run envelope + proof"]:::execution
       work["$work<br/>Work Admission"]:::callout
       batchWork["batch-work<br/>explicit ranges/lists"]:::execution
       ralph["$ralph<br/>board context + drain"]:::callout
@@ -357,18 +357,18 @@ The yellow callout boxes are the main handoff skills/operators: `deep-init-proje
 
 Current capstone:
 
-- [Codexter V2 milestone](/Users/kenjipcx/coding-harness/Codexter/docs/specs/codexter-v2-milestone.md)
+- [Farplane V2 milestone](/Users/kenjipcx/coding-harness/Farplane/docs/specs/farplane-v2-milestone.md)
 
 The Symphony-inspired V2 pass is now capped at explicit invocation, adapter
 conformance, and external compute handoff documentation:
 
-- [TASK-0121: define explicit Codexter invocation triggers](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0121/ticket.md)
-- [TASK-0123: add board adapter conformance scaffolding](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0123/ticket.md)
-- [TASK-0122: add external compute handoff recipes](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0122/ticket.md)
+- [TASK-0121: define explicit Farplane invocation triggers](/Users/kenjipcx/coding-harness/Farplane/tickets/archive/TASK-0121/ticket.md)
+- [TASK-0123: add board adapter conformance scaffolding](/Users/kenjipcx/coding-harness/Farplane/tickets/archive/TASK-0123/ticket.md)
+- [TASK-0122: add external compute handoff recipes](/Users/kenjipcx/coding-harness/Farplane/tickets/archive/TASK-0122/ticket.md)
 
 Do not expand this into a background-agent platform right now:
 
-- [TASK-0081](/Users/kenjipcx/coding-harness/Codexter/tickets/archive/TASK-0081/ticket.md)
+- [TASK-0081](/Users/kenjipcx/coding-harness/Farplane/tickets/archive/TASK-0081/ticket.md)
   is archived as premature runtime-scaling work.
 - Parallel Ralph, hosted telemetry, Linear/Notion adapters, and cloud runners
   stay deferred until real project pressure proves they are worth the cost.
@@ -400,8 +400,8 @@ cp ~/.codex/config.local.env.example ~/.codex/config.local.env
 Keep the repo elsewhere and link it into `~/.codex`:
 
 ```bash
-git clone <your-remote-url> ~/src/codexter
-cd ~/src/codexter
+git clone <your-remote-url> ~/src/farplane
+cd ~/src/farplane
 bash install.sh
 ```
 
@@ -418,13 +418,13 @@ The shipped global contract stays in `templates/global/AGENTS.md`.
 
 ### Skill Plugins Marketplace
 
-For lightweight skill distribution, use the repo marketplace. Each Codexter
+For lightweight skill distribution, use the repo marketplace. Each Farplane
 skill is packaged as its own plugin under `plugins/<skill-name>/`, and the
 marketplace also includes curated bundle plugins for easier installs:
 
 ```bash
-git clone <your-remote-url> ~/src/codexter
-cd ~/src/codexter
+git clone <your-remote-url> ~/src/farplane
+cd ~/src/farplane
 codex plugin marketplace add ./
 codex
 /plugins
@@ -438,12 +438,12 @@ codex plugin marketplace add owner/repo --ref main
 
 Recommended bundle plugins:
 
-- `codexter-core` - core planning, research, execution, and review skills
-- `codexter-coding-workflow` - ticket, build, QA, review, and closeout skills
-- `codexter-frontend` - frontend, UI, visual design, landing page, and visual QA skills
-- `codexter-research` - source ingestion, scouting, synthesis, and summarization skills
-- `codexter-media-content` - image, video, Remotion, social, and product content skills
-- `codexter-harness-engineering` - harness, skill maintenance, delegation, and self-improvement skills
+- `farplane-core` - core planning, research, execution, and review skills
+- `farplane-coding-workflow` - ticket, build, QA, review, and closeout skills
+- `farplane-frontend` - frontend, UI, visual design, landing page, and visual QA skills
+- `farplane-research` - source ingestion, scouting, synthesis, and summarization skills
+- `farplane-media-content` - image, video, Remotion, social, and product content skills
+- `farplane-harness-engineering` - harness, skill maintenance, delegation, and self-improvement skills
 
 Individual skill plugins are still available after the bundles in the same
 marketplace for users who want one precise skill.
@@ -466,22 +466,22 @@ is the shareable path today.
 
 ## Canonical Surfaces
 
-- Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Codexter/ARCHITECTURE.md)
-- Specs: [docs/specs](/Users/kenjipcx/coding-harness/Codexter/docs/specs)
-- Bootstrap brief: [skills/deep-init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md)
-- Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
-- Current execution model: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/spec-first-execution-loop.md)
-- Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-techniques.md)
-- Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Codexter/docs/features/README.md)
-- Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Codexter/tickets/README.md)
-- QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Codexter/qa/README.md)
-- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/review/README.md)
-- PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Codexter/skills/pr-runtime/README.md)
-- Active queue: [tickets](/Users/kenjipcx/coding-harness/Codexter/tickets)
+- Architecture map: [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md)
+- Specs: [docs/specs](/Users/kenjipcx/coding-harness/Farplane/docs/specs)
+- Bootstrap brief: [skills/deep-init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md](/Users/kenjipcx/coding-harness/Farplane/skills/deep-init-project/references/BOOTSTRAP_BRIEF_TEMPLATE.md)
+- Harness-tuning doctrine: [harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-engineering-doctrine.md)
+- Current execution model: [spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/spec-first-execution-loop.md)
+- Feature inventory: [harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
+- Structured feature registry: [docs/features/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/features/README.md)
+- Ticket contract: [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md)
+- QA cookbook surface: [qa/README.md](/Users/kenjipcx/coding-harness/Farplane/qa/README.md)
+- Review scoring: [skills/review/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/review/README.md)
+- PR follow-up runtime workflow: [skills/pr-runtime/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/pr-runtime/README.md)
+- Active queue: [tickets](/Users/kenjipcx/coding-harness/Farplane/tickets)
 
 ## Current Limitation
 
-Codexter already has the pieces for a strong spec -> ticket -> plan -> build ->
+Farplane already has the pieces for a strong spec -> ticket -> plan -> build ->
 review loop plus a guarded serial `$ralph` board drain. What it does not yet
 have is the parallel operator-trustworthy layer that makes file-level intent,
 evidence quality, resume state, claims, leases, merges, and batch QA

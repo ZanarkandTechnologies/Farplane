@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Bash Efficiency Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Identify the filesystem/build/debug goal and the safest working
   directory before running commands.
@@ -29,7 +27,7 @@ Source: `SKILL.md`
   tradeoff.
 - [ ] Use [review](../review/SKILL.md) before treating command-heavy repo
   changes as complete.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill when:
 

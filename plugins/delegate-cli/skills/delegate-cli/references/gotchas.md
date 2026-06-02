@@ -1,6 +1,6 @@
 # Delegate CLI Gotchas
 
-- A successful external CLI exit code is not Codexter completion.
+- A successful external CLI exit code is not Farplane completion.
 - Do not document future adapters as shipped profiles.
 - Do not store API keys in profile templates or generated prompt files.
 - Do not run live paid models when `--dry-run` proves enough for the ticket.

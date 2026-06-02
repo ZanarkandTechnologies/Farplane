@@ -30,4 +30,4 @@ Run ID: {{run_id}}
 
 ## Risks / Followups
 
-- Codexter must audit the delegated self-review before final integration.
+- Farplane must audit the delegated self-review before final integration.

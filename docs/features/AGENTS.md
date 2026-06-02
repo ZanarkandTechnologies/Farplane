@@ -1,6 +1,6 @@
 # Feature Registry Instructions
 
-This folder owns Codexter's structured feature system of record.
+This folder owns Farplane's structured feature system of record.
 
 Use `registry.jsonl` for stable feature IDs, local surfaces, source refs,
 evidence refs, known limits, metrics, and verification dates. Use `README.md`

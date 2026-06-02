@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Hub skill for external data acquisition via Apify MCP. Use when scraping YouTube, Twitter, Instagram, TikTok, LinkedI...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Apify",
     "shortDescription": "Hub skill for external data acquisition via Apify MCP. Use when scraping YouTube, Twitter, Instagram, TikTok, LinkedI...",
     "longDescription": "Hub skill for external data acquisition via Apify MCP. Use when scraping YouTube, Twitter, Instagram, TikTok, LinkedIn, or Google Places. Centralizes actor configurations, execution patterns, and data normalization workflows.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

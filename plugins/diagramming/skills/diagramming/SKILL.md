@@ -7,10 +7,8 @@ source: local
 
 # Diagramming
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the active request, ticket, or spec and identify the exact approval question.
 - [ ] Draw one top-level delta map before considering any second diagram.
@@ -19,7 +17,7 @@ Source: `SKILL.md`
 - [ ] Add a legend; do not rely on color alone.
 - [ ] Cut any node label that turns into a paragraph.
 - [ ] Stop at one or two diagrams unless the user explicitly asks for more depth.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when the missing thing is not more prose, but a compact visual system
 story.
@@ -97,7 +95,7 @@ If the diagram pack still needs long prose to make sense, it is not ready.
 1. Read the active ticket/spec/request and identify the exact approval question.
 2. Choose the lightest useful pattern from
    [`references/patterns.md`](references/patterns.md).
-3. In Codexter, align the output with
+3. In Farplane, align the output with
    [`docs/specs/diagram-first-conventions.md`](../../docs/specs/diagram-first-conventions.md)
    when that file exists.
 4. Draw the top-level map:
@@ -143,5 +141,5 @@ If the diagram pack still needs long prose to make sense, it is not ready.
 
 - Pattern library: [`references/patterns.md`](references/patterns.md)
 - Review checklist: [`references/review.md`](references/review.md)
-- Codexter canonical convention:
+- Farplane canonical convention:
   [`docs/specs/diagram-first-conventions.md`](../../docs/specs/diagram-first-conventions.md)

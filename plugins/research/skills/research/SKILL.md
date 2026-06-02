@@ -10,10 +10,8 @@ allowed-tools: Read, Glob, Grep
 
 # Research
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Choose exactly one primary method first:
   [research:parity](SKILL.md#researchparity),
@@ -51,7 +49,7 @@ Source: `SKILL.md`
   domain planning skill such as `impl-plan` for coding.
 - [ ] Run [review](../review/SKILL.md) after meaningful research-skill,
   registry, ticket-handoff, or public-doc changes.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this as the Tier 2 research workflow when the task needs grounded
 references without ideation. Pick one method explicitly and keep the output
@@ -115,7 +113,7 @@ before local scope or priority is locked.
 
 Use `research:gap` before implementation planning when the hard question is
 "what does a credible production version of this missing or partial feature
-need, and what is Codexter currently missing?"
+need, and what is Farplane currently missing?"
 
 ### Workflow
 
@@ -141,7 +139,7 @@ need, and what is Codexter currently missing?"
 ## research:competitor
 
 Use `research:competitor` when named products, tools, or workflows need to be
-compared against Codexter or against each other.
+compared against Farplane or against each other.
 
 ### Workflow
 
@@ -260,5 +258,5 @@ Use the method-specific title and keep these fields where they apply:
   implementation evidence.
 - Do not import every adjacent feature from a larger product into one ticket.
 - Do not stop at a research dump; recommend a boundary or next route.
-- Keep production expectations proportional to Codexter and the ticket size.
+- Keep production expectations proportional to Farplane and the ticket size.
 - Do not pretend a specific MCP, connector, or external tool exists.

@@ -17,7 +17,7 @@ def load_tmux_helper_module():
     bin_dir = str((ROOT / "bin").resolve())
     if bin_dir not in sys.path:
         sys.path.insert(0, bin_dir)
-    spec = importlib.util.spec_from_file_location("codexter_tmux_helper_test", TMUX_HELPER_PATH)
+    spec = importlib.util.spec_from_file_location("farplane_tmux_helper_test", TMUX_HELPER_PATH)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"could not load tmux helper module from {TMUX_HELPER_PATH}")
     module = importlib.util.module_from_spec(spec)

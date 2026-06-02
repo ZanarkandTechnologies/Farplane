@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Search and install selected Codexter skills into a Codex home."""
+"""Search and install selected Farplane skills into a Codex home."""
 
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from pathlib import Path
 from typing import Sequence
 
 
-EMBEDDED_TODOS_BEGIN = "<!-- BEGIN CODEXTER_EMBEDDED_TODOS -->"
-EMBEDDED_TODOS_END = "<!-- END CODEXTER_EMBEDDED_TODOS -->"
+EMBEDDED_TODOS_BEGIN = "<!-- BEGIN FARPLANE_EMBEDDED_TODOS -->"
+EMBEDDED_TODOS_END = "<!-- END FARPLANE_EMBEDDED_TODOS -->"
 DIRECT_CHECKLIST_HEADINGS = ("## Important Checklist", "## Checklist")
 
 
@@ -308,13 +308,13 @@ def render_table(skills: Sequence[Skill]) -> str:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Search and install selected Codexter skills."
+        description="Search and install selected Farplane skills."
     )
     parser.add_argument(
         "--repo",
         type=Path,
         default=Path(__file__).resolve().parent.parent,
-        help="Codexter repo root. Defaults to this script's repo.",
+        help="Farplane repo root. Defaults to this script's repo.",
     )
     parser.add_argument(
         "--target",

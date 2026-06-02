@@ -1,8 +1,8 @@
 # Architecture
 
-`delegate-frontend` is a Codexter orchestration skill, not a frontend framework.
+`delegate-frontend` is a Farplane orchestration skill, not a frontend framework.
 
-- Codexter remains the owner of tickets, final QA, and completion claims.
+- Farplane remains the owner of tickets, final QA, and completion claims.
 - Pi/Kimi owns one bounded external-CLI phase at a time.
 - `.harness/external-cli/profiles/frontend-pi-kimi` contains the mounted
   frontend, media, QA, and review skills.

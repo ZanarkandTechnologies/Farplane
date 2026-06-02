@@ -11,7 +11,7 @@ upstream_url: https://github.com/get-convex/agent-skills/blob/main/skills/convex
 # Convex Skill
 
 Use this as a thin pointer to the official Convex agent skill and project-local
-Convex AI files. Codexter should not maintain a parallel Convex playbook here.
+Convex AI files. Farplane should not maintain a parallel Convex playbook here.
 
 ## Start Here
 
@@ -31,7 +31,7 @@ npx convex ai-files install
 ## Boundaries
 
 - Do not copy official Convex rules into this skill body.
-- Do not add Codexter wrapper policy here; put local workflow policy in the
+- Do not add Farplane wrapper policy here; put local workflow policy in the
   caller skill or project docs.
 - If a task needs current Convex API details, use the project's installed
   Convex AI files or official Convex docs through the normal research/docs path.

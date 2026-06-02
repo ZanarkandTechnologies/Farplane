@@ -10,7 +10,7 @@ teach a reusable skill.
 3. If video evidence exists, run video understanding over transcript status,
    selected frames, and contact sheet evidence.
 4. Extract the source's operational todos.
-5. Compare each source todo against existing Codexter skills and skill checklists.
+5. Compare each source todo against existing Farplane skills and skill checklists.
 6. Route the copied-skill candidate to the likely owner skill, using
    `harness-advisor` only when ownership is ambiguous.
 
@@ -18,12 +18,12 @@ teach a reusable skill.
 
 Use these labels in the source-todo comparison:
 
-- `covered`: Codexter already has the step in an existing skill/todo.
+- `covered`: Farplane already has the step in an existing skill/todo.
 - `augment`: an existing skill is the right owner but needs a new method,
   checklist, reference, or proof requirement.
 - `missing`: no good owner exists yet.
 - `reject`: the source step is unsafe, too vague, not useful, or conflicts with
-  Codexter doctrine.
+  Farplane doctrine.
 - `defer`: useful but not needed for the current ticket or evidence is too weak.
 
 ## Output Shape

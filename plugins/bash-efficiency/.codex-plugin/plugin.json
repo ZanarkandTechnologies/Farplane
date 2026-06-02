@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Bash efficiency workflow skill for shell-heavy tasks. Use when handling multi-step filesystem/build/debug work and wh...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Bash Efficiency",
     "shortDescription": "Bash efficiency workflow skill for shell-heavy tasks. Use when handling multi-step filesystem/build/debug work and wh...",
     "longDescription": "Bash efficiency workflow skill for shell-heavy tasks. Use when handling multi-step filesystem/build/debug work and when command safety, speed, and reproducibility matter.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

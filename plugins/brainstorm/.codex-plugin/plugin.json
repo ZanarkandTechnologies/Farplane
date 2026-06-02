@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Early-stage option exploration before requirements commitment.",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Brainstorm",
     "shortDescription": "Early-stage option exploration before requirements commitment.",
     "longDescription": "Early-stage option exploration before requirements commitment.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

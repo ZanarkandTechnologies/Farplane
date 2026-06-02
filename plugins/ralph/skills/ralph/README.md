@@ -5,7 +5,7 @@
 This package contains the public `$ralph` dispatcher contract and a small
 read-only selector helper for filesystem ticket boards. The selector now uses
 the canonical `FileTicketAdapter` and `ComputeSelector` contracts so Ralph's
-serial queue choice matches Codexter invocation policy.
+serial queue choice matches Farplane invocation policy.
 
 `$ralph` selects one eligible ticket or a safe related tiny-ticket batch and
 hands the resulting work unit to `$work`. `$work` then decides whether to call

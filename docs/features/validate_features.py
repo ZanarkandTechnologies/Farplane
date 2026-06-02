@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Codexter's feature registry."""
+"""Validate Farplane's feature registry."""
 
 from __future__ import annotations
 

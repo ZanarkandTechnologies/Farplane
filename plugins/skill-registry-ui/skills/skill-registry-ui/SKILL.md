@@ -1,6 +1,6 @@
 ---
 name: skill-registry-ui
-description: Open, refresh, and validate the Codexter skill registry graph UI, including clickable skill nodes, rendered SKILL.md Markdown, frontmatter details, tier colors, and common-chain edges.
+description: Open, refresh, and validate the Farplane skill registry graph UI, including clickable skill nodes, rendered SKILL.md Markdown, frontmatter details, tier colors, and common-chain edges.
 tier: 3
 group: skills
 source: local
@@ -9,10 +9,8 @@ allowed-tools: Read, Bash
 
 # Skill Registry UI
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Regenerate skill metadata and graph data with
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` and
@@ -27,10 +25,10 @@ Source: `SKILL.md`
   screenshot-level proof.
 - [ ] Use [execute](../execute/SKILL.md) for final proof, writeback, and
   handoff.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when the operator asks to view, inspect, demo, or debug the local
-Codexter skill graph UI.
+Farplane skill graph UI.
 
 ## Workflow
 

@@ -9,10 +9,8 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Edit, 
 
 # Data Visualization Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the product goal, data shape, target screen, active ticket, and
   existing chart/dashboard conventions.
@@ -31,7 +29,7 @@ Source: `SKILL.md`
   [frontend-design](../frontend-design/SKILL.md) for implementation handoff.
 - [ ] Use [visual-qa](../visual-qa/SKILL.md) when the visualization is
   user-visible and must be visually proved.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Purpose
 

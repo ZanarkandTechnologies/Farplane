@@ -3,7 +3,7 @@
 ## Purpose
 
 Delegate bounded frontend phases to the configured Pi/Kimi frontend profile while
-keeping Codexter responsible for final integration, QA, and claims.
+keeping Farplane responsible for final integration, QA, and claims.
 
 ## Public API / Entrypoints
 

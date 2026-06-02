@@ -1,6 +1,6 @@
 # Prompt Engineering Guide
 
-Codexter shared reference for writing prompts for agents, delegated CLIs, AI app behavior, structured outputs, eval prompts, and other LLM-driven workflows.
+Farplane shared reference for writing prompts for agents, delegated CLIs, AI app behavior, structured outputs, eval prompts, and other LLM-driven workflows.
 
 This is not a public skill and not an image-generation reference. Load it when a task requires prompt design for another agent/model/app, then adapt the relevant sections. Treat upstream `belt app run ...` examples below as illustrative only; do not run inference.sh commands unless the user explicitly asks for live external compute.
 

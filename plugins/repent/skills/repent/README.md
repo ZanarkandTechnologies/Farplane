@@ -7,7 +7,7 @@ an obvious requirement and needs to switch into audit-then-fix behavior.
 
 ## Entrypoint
 
-- [SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/repent/SKILL.md)
+- [SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/repent/SKILL.md)
 
 ## Minimal Example
 
@@ -17,5 +17,5 @@ an obvious requirement and needs to switch into audit-then-fix behavior.
 
 ## How To Test
 
-- review the fixtures in [fixtures.md](/Users/kenjipcx/coding-harness/Codexter/skills/repent/references/fixtures.md)
+- review the fixtures in [fixtures.md](/Users/kenjipcx/coding-harness/Farplane/skills/repent/references/fixtures.md)
 - run the skill validator against `skills/repent/`

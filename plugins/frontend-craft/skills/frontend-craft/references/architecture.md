@@ -12,4 +12,4 @@ It routes implementation through granular skills:
 - `three-js.md` for Three.js, WebGL, and React Three Fiber references when a frontend earns real-time 3D.
 - `visual-qa` and `review` for proof.
 
-Community-maintained sources are reference inputs behind this topology, not replacements for Codexter-owned routing.
+Community-maintained sources are reference inputs behind this topology, not replacements for Farplane-owned routing.

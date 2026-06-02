@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Socratic deep UI taste interview with ambiguity gating before visual implementation. Use when workflow is clear but t...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Deep Ui Design",
     "shortDescription": "Socratic deep UI taste interview with ambiguity gating before visual implementation. Use when workflow is clear but t...",
     "longDescription": "Socratic deep UI taste interview with ambiguity gating before visual implementation. Use when workflow is clear but the user's aesthetic direction, taste boundaries, and anti-generic preferences are still unclear.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

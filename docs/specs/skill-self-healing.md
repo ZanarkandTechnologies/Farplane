@@ -2,7 +2,7 @@
 
 Status: Draft v1
 
-Purpose: define how Codexter should notice when an invoked skill fails to
+Purpose: define how Farplane should notice when an invoked skill fails to
 behave as expected, collect enough evidence to repair it, and hand that repair
 to the existing ticket pipeline instead of asking the user to debug the harness.
 

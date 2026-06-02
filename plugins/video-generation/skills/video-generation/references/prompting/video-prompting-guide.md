@@ -1,6 +1,6 @@
 # Video Prompting Guide
 
-Codexter reference for improving AI video generation prompts. Load this from `video-generation` or video artifact skills when shot type, camera movement, lighting, temporal motion, model-specific phrasing, or negative prompting materially affects the output.
+Farplane reference for improving AI video generation prompts. Load this from `video-generation` or video artifact skills when shot type, camera movement, lighting, temporal motion, model-specific phrasing, or negative prompting materially affects the output.
 
 This is not a public skill. Treat upstream `belt app run ...` examples below as illustrative only; the active `video-generation` skill controls app availability checks, spend gates, async handling, saved artifacts, and stale-reference overrides.
 

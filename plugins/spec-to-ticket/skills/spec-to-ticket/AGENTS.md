@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Own the planning-only slice-to-ticket conversion contract for Codexter.
+Own the planning-only slice-to-ticket conversion contract for Farplane.
 
 ## Invariants
 

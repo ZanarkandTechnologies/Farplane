@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "external",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Vercel React Best Practices",
     "shortDescription": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing...",
     "longDescription": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

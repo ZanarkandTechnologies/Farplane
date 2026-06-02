@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Codexter's source provenance registry."""
+"""Validate Farplane's source provenance registry."""
 
 from __future__ import annotations
 

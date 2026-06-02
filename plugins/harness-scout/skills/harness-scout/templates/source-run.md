@@ -32,7 +32,7 @@ Short source summary. Do not paste the full transcript here.
 | --- | --- | --- | --- | --- |
 
 ## Scorecard
-Use when comparing current Codexter, source-proposed, and best-of-worlds
+Use when comparing current Farplane, source-proposed, and best-of-worlds
 variants.
 
 ## Handoff

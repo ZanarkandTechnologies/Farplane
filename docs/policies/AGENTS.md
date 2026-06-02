@@ -1,6 +1,6 @@
 # Policy Docs
 
-This folder is a navigation and consistency layer for Codexter policy.
+This folder is a navigation and consistency layer for Farplane policy.
 
 Do not move canonical policy ownership here by default. Durable rules still
 belong in `docs/MEMORY.md`, active agent routing belongs in `AGENTS.md` and

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Open and validate the local Codexter skill graph viewer.
+Open and validate the local Farplane skill graph viewer.
 
 ## Entrypoints
 

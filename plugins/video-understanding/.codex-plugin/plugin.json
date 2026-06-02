@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use after media ingest when transcript evidence and representative frames need to be turned into a storyboard, visibl...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Video Understanding",
     "shortDescription": "Use after media ingest when transcript evidence and representative frames need to be turned into a storyboard, visibl...",
     "longDescription": "Use after media ingest when transcript evidence and representative frames need to be turned into a storyboard, visible workflow reconstruction, extracted source todos, skill-to-skill comparison, copied-skill candidate, and proof requirements.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

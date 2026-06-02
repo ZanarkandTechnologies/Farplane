@@ -1,4 +1,4 @@
-# Codexter agent: orchestrator
+# Farplane agent: orchestrator
 name = "orchestrator"
 description = "Stop-hook orchestrator for ticket handoff, continuation, and next-ticket routing"
 model = "gpt-5.4"

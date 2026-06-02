@@ -1,6 +1,6 @@
 # Upstream Sources
 
-Pinned local evaluation snapshots from `/tmp/codexter-skill-research`:
+Pinned local evaluation snapshots from `/tmp/farplane-skill-research`:
 
 | Source | Commit | What to borrow |
 | --- | --- | --- |
@@ -10,9 +10,9 @@ Pinned local evaluation snapshots from `/tmp/codexter-skill-research`:
 | `WICG/html-in-canvas` | `0fb3c19c8f8e55bd679a4b29889caf570b53342b` | experimental HTML snapshots into canvas/WebGL/WebGPU |
 | `chenglou/pretext` | `bb224e08d08995cbad2c773ae22e0a00cb9616b1` | multiline text measurement and manual text layout |
 
-## Codexter Control Layer
+## Farplane Control Layer
 
-Keep community-maintained material behind Codexter skills instead of replacing the local topology wholesale. The local wrapper decides:
+Keep community-maintained material behind Farplane skills instead of replacing the local topology wholesale. The local wrapper decides:
 
 - which skill is the public entrypoint,
 - when external references are loaded,

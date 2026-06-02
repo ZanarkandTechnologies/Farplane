@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-firs...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Pr Splitting",
     "shortDescription": "Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-firs...",
     "longDescription": "Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-first slices and falling back to layer-based buckets when feature seams are too entangled.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

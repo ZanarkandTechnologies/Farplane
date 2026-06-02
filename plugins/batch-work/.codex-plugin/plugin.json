@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Execute a user-specified range or list of tickets in one unattended solo-local pass, using Work Admission and batch p...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Batch Work",
     "shortDescription": "Execute a user-specified range or list of tickets in one unattended solo-local pass, using Work Admission and batch p...",
     "longDescription": "Execute a user-specified range or list of tickets in one unattended solo-local pass, using Work Admission and batch proof rows so each ticket stays testable while the batch shares setup and regression checks.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

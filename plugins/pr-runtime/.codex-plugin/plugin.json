@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Pr Runtime",
     "shortDescription": "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer...",
     "longDescription": "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer or declared QA target.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

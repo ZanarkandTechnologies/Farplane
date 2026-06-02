@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the standard Codexter skill-system checks."""
+"""Run the standard Farplane skill-system checks."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ def find_repo_root(start: Path) -> Path:
     for candidate in [start, *start.parents]:
         if (candidate / "bin/sync_skill_registry.py").exists() and (candidate / "skills").exists():
             return candidate
-    raise RuntimeError("could not find Codexter repo root")
+    raise RuntimeError("could not find Farplane repo root")
 
 
 REPO_ROOT = find_repo_root(Path(__file__).resolve())

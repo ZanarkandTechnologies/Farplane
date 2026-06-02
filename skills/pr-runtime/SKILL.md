@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep
 
 # PR Runtime
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
 - [ ] Read the selected ticket, branch/PR context, compute target, QA needs, and
@@ -30,7 +30,7 @@ allowed-tools: Read, Glob, Grep
   transient targets into tracked docs.
 - [ ] Record the selected checkout mode, runtime mode, runtime record path, QA
   target, and reason in the owning ticket or handoff.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use when the task is modifying an existing PR branch, when multiple live
 writers would otherwise share one filesystem, or when QA needs a declared

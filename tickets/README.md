@@ -52,15 +52,15 @@ A ticket is a work card, not a trigger. Creating a ticket, setting
 `ready: true`, moving `status`, or adding `compute_target` does not start an
 agent by itself.
 
-Codexter work starts from an explicit invocation:
+Farplane work starts from an explicit invocation:
 
 - local operator request, such as asking Codex to run `TASK-0123`
 - operator-invoked `$ralph`, which serially selects one eligible ticket
 - a recognized board comment or shared-board action after an external runner
-  converts it into a `CodexterRunEnvelope`
+  converts it into a `FarplaneRunEnvelope`
 - a future Codex Cloud, Symphony, or other runner payload
 
-`ready` means the ticket is eligible once invoked. It does not mean Codexter
+`ready` means the ticket is eligible once invoked. It does not mean Farplane
 should watch the board and begin work automatically.
 
 ## Canonical Frontmatter
@@ -103,7 +103,7 @@ last_verification: none
   - `local_worktree` requires a ticket runtime record under
     `.harness/state/tickets/TASK-XXXX.runtime.json`.
   - `symphony` and `codex_cloud` are future external-adapter targets and must
-    stay blocked in local Codexter until those adapters exist.
+    stay blocked in local Farplane until those adapters exist.
 - `depends_on`: structural prerequisites
 - `blocked_by`: concrete ticket-ID blockers only
 - `ready`: whether `next_action` can be executed now
@@ -119,7 +119,7 @@ that, a ticket is selectable only when `ready: true`,
 `approval_required: false`, `blocked_by: []`, `claimed_by:` is empty, and every
 dependency is complete, archived, or explicitly waived in the ticket body.
 
-For Codexter invocation, `bin/codexter_boards.py` is the canonical v1
+For Farplane invocation, `bin/farplane_boards.py` is the canonical v1
 BoardAdapter surface for reading filesystem tickets into normalized `WorkItem`
 JSON. It is intentionally read-first: evidence links still belong in the
 ticket `Evidence` section until a later ticket ships traceable writeback.
@@ -298,5 +298,5 @@ empty review-output fields in the template or repeating the artifact path under
 
 Canonical policy references:
 
-- [context-and-handoff-policy.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/context-and-handoff-policy.md)
-- [runtime-surface spec](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md)
+- [context-and-handoff-policy.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/context-and-handoff-policy.md)
+- [runtime-surface spec](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md)

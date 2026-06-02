@@ -5,7 +5,7 @@ Date: 2026-04-07
 ## Goal
 
 Define the visible progress-surface, reset/resume handoff, documenting, and
-archive rules for the spec-first Codexter loop.
+archive rules for the spec-first Farplane loop.
 
 The intent is simple:
 

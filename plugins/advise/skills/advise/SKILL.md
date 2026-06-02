@@ -21,10 +21,8 @@ Turn an unclear choice into a compact recommendation:
 5. Recommend one.
 6. State the accepted tradeoff and direct next step.
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] State the real decision in one sentence.
 - [ ] Start from first principles before comparing options: objective,
@@ -43,7 +41,7 @@ Source: `SKILL.md`
 - [ ] State the direct next step or owning next skill.
 - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 ## Output
 
 Use this shape when a visible decision note is useful:

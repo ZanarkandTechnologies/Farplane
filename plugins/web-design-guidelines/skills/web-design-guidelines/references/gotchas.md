@@ -1,6 +1,6 @@
 # Gotchas
 
-- Do not cache or copy the upstream rule list into Codexter skills.
+- Do not cache or copy the upstream rule list into Farplane skills.
 - Do not treat a clean guideline audit as proof of tasteful or useful UI.
 - Do not treat visual QA screenshots as a substitute for source-level
   accessibility, focus, form, navigation, or performance checks.

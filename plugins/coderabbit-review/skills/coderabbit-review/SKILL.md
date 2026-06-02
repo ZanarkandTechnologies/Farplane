@@ -8,10 +8,8 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # CodeRabbit Review
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Confirm `coderabbit --version` works in the repo.
 - [ ] Confirm auth status with `coderabbit auth status --agent` or
@@ -24,7 +22,7 @@ Source: `SKILL.md`
 - [ ] Summarize Critical, Warning, and Info findings.
 - [ ] Decide whether to fix now, rerun, or defer explicitly.
 - [ ] Do not treat this as a Stop-hook default.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this for the heavier external review pass.
 

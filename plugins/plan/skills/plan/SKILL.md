@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep
 
 # Plan
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] State the intent, expected artifact, and domain pipeline.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when scope
@@ -29,13 +27,13 @@ Source: `SKILL.md`
 - [ ] Define proof before execution starts.
 - [ ] Hand off to the domain execution skill with only the context it needs.
 - [ ] Use [review](../review/SKILL.md) before claiming a material plan is ready.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this as the Tier 2 planning interface. It defines the common shape every
 application pipeline can bind to: coding, frontend, presentations, documents,
 video, image, data, or future domains.
 
-This is an interface skill, not the Codexter coding planner. For code work,
+This is an interface skill, not the Farplane coding planner. For code work,
 `spec-to-ticket` and `impl-plan` are Tier 3 coding-pipeline skills that
 implement this interface.
 

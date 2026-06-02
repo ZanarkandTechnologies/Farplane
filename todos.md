@@ -4,11 +4,11 @@ Generic active todo surface for multi-ticket or `batch-work` passes.
 
 ## Active
 
-- [ ] `TASK-0159`: add Codexter local telemetry event ledger.
-- [ ] `TASK-0160`: instrument Codexter hooks and add telemetry status CLI.
-- [ ] `TASK-0161`: add Aikage Codexter event ingest.
-- [ ] `TASK-0162`: add Aikage Codexter telemetry dashboard panel.
-- [ ] `TASK-0163`: add Codexter skill usage and prune candidate report.
+- [ ] `TASK-0159`: add Farplane local telemetry event ledger.
+- [ ] `TASK-0160`: instrument Farplane hooks and add telemetry status CLI.
+- [ ] `TASK-0161`: add Aikage Farplane event ingest.
+- [ ] `TASK-0162`: add Aikage Farplane telemetry dashboard panel.
+- [ ] `TASK-0163`: add Farplane skill usage and prune candidate report.
 
 ## Notes
 

@@ -23,7 +23,7 @@ def load_stop_hook_module():
     bin_dir = str(STOP_HOOK_PATH.parent)
     if bin_dir not in sys.path:
         sys.path.insert(0, bin_dir)
-    spec = importlib.util.spec_from_file_location("codexter_stop_hook_test", STOP_HOOK_PATH)
+    spec = importlib.util.spec_from_file_location("farplane_stop_hook_test", STOP_HOOK_PATH)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"could not load stop hook module from {STOP_HOOK_PATH}")
     module = importlib.util.module_from_spec(spec)
@@ -35,7 +35,7 @@ def load_self_improve_probe_module():
     bin_dir = str(SELF_IMPROVE_PROBE_PATH.parent)
     if bin_dir not in sys.path:
         sys.path.insert(0, bin_dir)
-    spec = importlib.util.spec_from_file_location("codexter_self_improve_probe_test", SELF_IMPROVE_PROBE_PATH)
+    spec = importlib.util.spec_from_file_location("farplane_self_improve_probe_test", SELF_IMPROVE_PROBE_PATH)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"could not load self-improve probe module from {SELF_IMPROVE_PROBE_PATH}")
     module = importlib.util.module_from_spec(spec)
@@ -90,7 +90,7 @@ class StopHookRoleConfigTests(unittest.TestCase):
 
     def test_role_command_injects_model_and_instructions(self) -> None:
         cmd = self.stop_hook.role_command(
-            Path("/tmp/codexter"),
+            Path("/tmp/farplane"),
             Path("/tmp/out.json"),
             {
                 "developer_instructions": "Line one\nLine two",
@@ -207,7 +207,7 @@ class StopHookMainOutputTests(unittest.TestCase):
 
         self.assertEqual(result, 0)
         self.assertTrue(payload["continue"])
-        self.assertIn("no Codexter runtime context", payload["systemMessage"])
+        self.assertIn("no Farplane runtime context", payload["systemMessage"])
         self.assertEqual(stderr_output, "")
 
     def test_main_emits_continue_json_when_ticket_is_unresolved(self) -> None:
@@ -261,7 +261,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             project_root = Path(td)
             window = {"turn_count": 10, "last_review_turn_count": 0, "rolling_exchanges": []}
 
-            with patch.dict(os.environ, {"CODEXTER_SKILL_OPPORTUNITY_APPLY": "0"}, clear=True):
+            with patch.dict(os.environ, {"FARPLANE_SKILL_OPPORTUNITY_APPLY": "0"}, clear=True):
                 result = self.stop_hook.maybe_launch_skill_opportunity_review(
                     base=project_root,
                     project_root=project_root,
@@ -321,7 +321,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             with patch.dict(
                 os.environ,
                 {
-                    "CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1",
+                    "FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1",
                 },
                 clear=True,
             ):
@@ -382,7 +382,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(input_payload["workspace_context"]["task_scope_default"], "harness_self_improvement")
         self.assertEqual(saved_window["last_review_turn_count"], 10)
 
-    def test_skill_opportunity_review_uses_codexter_refs_for_cross_project_dedupe(self) -> None:
+    def test_skill_opportunity_review_uses_farplane_refs_for_cross_project_dedupe(self) -> None:
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-base-") as base_dir:
             with tempfile.TemporaryDirectory(prefix="skill-opportunity-project-") as project_dir:
                 base = Path(base_dir)
@@ -405,7 +405,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                     "pending_user_turn": {},
                 }
 
-                with patch.dict(os.environ, {"CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1"}, clear=True):
+                with patch.dict(os.environ, {"FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1"}, clear=True):
                     result = self.stop_hook.maybe_launch_skill_opportunity_review(
                         base=base,
                         project_root=project_root,
@@ -421,7 +421,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(input_payload["dedupe_refs"]["skills"], ["skills/harness-advisor/SKILL.md"])
         self.assertEqual(input_payload["dedupe_refs"]["recent_tickets"], ["tickets/TASK-0001/ticket.md"])
         self.assertEqual(input_payload["workspace_context"]["current_project_root"], str(project_root))
-        self.assertEqual(input_payload["workspace_context"]["codexter_home"], str(base))
+        self.assertEqual(input_payload["workspace_context"]["farplane_home"], str(base))
         self.assertEqual(input_payload["workspace_context"]["status_context_cache"], str(project_status_context))
         self.assertTrue(input_payload["workspace_context"]["status_context_cache_exists"])
 
@@ -530,9 +530,9 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 patch.dict(
                     os.environ,
                     {
-                        "CODEXTER_HOME": str(project_root),
-                        "CODEXTER_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1",
-                        "CODEXTER_SKILL_OPPORTUNITY_APPLY_INTERVAL": "1",
+                        "FARPLANE_HOME": str(project_root),
+                        "FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN": "1",
+                        "FARPLANE_SKILL_OPPORTUNITY_APPLY_INTERVAL": "1",
                     },
                     clear=True,
                 ),
@@ -555,7 +555,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
 
     def test_skill_opportunity_apply_command_is_read_only_and_disables_hooks(self) -> None:
         cmd = self.stop_hook.skill_opportunity_apply_command(
-            Path("/tmp/codexter"),
+            Path("/tmp/farplane"),
             Path("/tmp/report.json"),
             {
                 "developer_instructions": "Return JSON only.",

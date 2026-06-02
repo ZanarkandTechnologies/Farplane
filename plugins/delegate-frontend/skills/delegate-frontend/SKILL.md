@@ -1,7 +1,7 @@
 ---
 name: delegate-frontend
 version: 0.1.0
-description: Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Codexter ticket, QA, visual review, and integration authority.
+description: Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Farplane ticket, QA, visual review, and integration authority.
 tier: 3
 group: frontend
 source: local
@@ -10,10 +10,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Delegate Frontend
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the frontend ticket, product/UX spec, visual/taste brief, target
   routes, expected files, and QA proof requirements.
@@ -32,7 +30,7 @@ Source: `SKILL.md`
   choices are material.
 - [ ] Hand results to [visual-qa](../visual-qa/SKILL.md), [qa](../qa/SKILL.md),
   or [demo](../demo/SKILL.md) before claiming readiness.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when frontend work should be handed to the external Pi/Kimi frontend
 agent instead of being implemented directly in the Codex lane.
@@ -40,7 +38,7 @@ agent instead of being implemented directly in the Codex lane.
 ## Job
 
 Run a bounded external-CLI phase with the mounted frontend skills, collect the
-handoff, and let Codexter integrate or reject the result.
+handoff, and let Farplane integrate or reject the result.
 
 ## Default Profile
 
@@ -142,19 +140,19 @@ Add other mounted skills only when the phase needs them.
   sequence, not generated video. The handoff and manifest must record
   `skillsActuallyUsed` including `video-generation` plus `videoModel`,
   `videoProvider`, `sourceVideo`, or equivalent video provenance; otherwise
-  Codexter must reject the handoff or downgrade the result to prototype.
+  Farplane must reject the handoff or downgrade the result to prototype.
 - Require the handoff to list changed files, skills loaded, skills actually
   used, commands/results, risks, and next recommendation.
 - Require implementation and repair handoffs to report stack facts observed,
   package or registry commands run, theme/preset changes, reusable component
   state coverage, and QA evidence for responsive, reduced-motion, focus,
   contrast, and overflow checks when UI changed.
-- Codexter owns final verification and integration. Pi/Kimi does not claim final
+- Farplane owns final verification and integration. Pi/Kimi does not claim final
   completion.
 
 ## Outcome Contract
 
-After a delegate run, Codexter should have:
+After a delegate run, Farplane should have:
 
 - `prompt.md`
 - `command.json`
@@ -213,7 +211,7 @@ Codex lane.
    After an asset phase, run
    `python3 skills/delegate-frontend/self-improve/scripts/asset_manifest_lint.py <asset-manifest>`
    and do not start implementation unless it passes.
-10. Send any resulting UI changes back through Codexter QA, `visual-qa`, and
+10. Send any resulting UI changes back through Farplane QA, `visual-qa`, and
     `review`. For runnable delegated UI, require the Pi profile to use the
     mounted `agent-browser` skill so page snapshots, screenshots, console logs,
     and page errors are captured in the same thread as the builder handoff.
@@ -269,7 +267,7 @@ Codex lane.
 ## Judgement Questions
 
 Use `advise` when deciding whether the UI work is ready for external build, or
-whether Codexter should first produce a stronger UX/visual brief.
+whether Farplane should first produce a stronger UX/visual brief.
 
 ## Top Gotchas
 

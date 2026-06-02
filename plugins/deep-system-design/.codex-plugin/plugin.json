@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Socratic deep system-design interview with ambiguity gating before implementation planning. Use when user intent is c...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "2"
@@ -17,7 +17,7 @@
     "displayName": "Deep System Design",
     "shortDescription": "Socratic deep system-design interview with ambiguity gating before implementation planning. Use when user intent is c...",
     "longDescription": "Socratic deep system-design interview with ambiguity gating before implementation planning. Use when user intent is clear but entities, signatures, storage, execution boundaries, queues, retries, and architecture choices are still under-specified.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

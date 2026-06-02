@@ -113,7 +113,7 @@ Valid statuses:
 
 Descriptions say what changed. ASI says what was learned.
 
-## Boundaries With Existing Codexter Skills
+## Boundaries With Existing Farplane Skills
 
 - Use `autoresearch-plan` and `autoresearch-exec` for local metric loops.
 - Use `self-improve` when the target is a skill and the metric is an eval pass

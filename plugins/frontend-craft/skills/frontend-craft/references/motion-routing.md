@@ -15,7 +15,7 @@ Use this to select the motion engine. Load official docs or external skills for 
 
 ## GSAP Source Of Truth
 
-Do not copy GSAP API details into Codexter references. Use installed official GreenSock skills when available, or fetch official GSAP docs when they are not installed:
+Do not copy GSAP API details into Farplane references. Use installed official GreenSock skills when available, or fetch official GSAP docs when they are not installed:
 
 - `gsap-react` for React/Next cleanup, `useGSAP`, scoping, SSR safety.
 - `gsap-scrolltrigger` for pinning, scrub, refresh, container animation.

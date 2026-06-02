@@ -11,10 +11,8 @@ allowed-tools: Read, Glob, Grep
 
 # Agent Testability Plan
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the `System Design Brief` first and confirm architecture is already explicit enough.
 - [ ] Map the main agent friction across reachability, hidden-state visibility, coordination visibility, and proof difficulty.
@@ -25,7 +23,7 @@ Source: `SKILL.md`
 - [ ] Add consumer guidance for `spec-to-ticket`, `impl-plan`, and QA/debugging surfaces.
 - [ ] Tighten the result against [references/review.md](./references/review.md) before handoff.
 - [ ] Stop after planning and do not implement the resulting utilities here.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this after `deep-system-design` and before `spec-to-ticket` or
 `impl-plan`.
@@ -243,7 +241,7 @@ Keep the brief compact and directly reusable.
 ## References
 
 - [references/review.md](references/review.md)
-- [docs/specs/agent-testability-surfaces.md](/Users/kenjipcx/coding-harness/Codexter/docs/specs/agent-testability-surfaces.md)
-- [skills/deep-system-design/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/deep-system-design/SKILL.md)
-- [skills/spec-to-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/spec-to-ticket/SKILL.md)
-- [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Codexter/skills/impl-plan/SKILL.md)
+- [docs/specs/agent-testability-surfaces.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/agent-testability-surfaces.md)
+- [skills/deep-system-design/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/deep-system-design/SKILL.md)
+- [skills/spec-to-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/spec-to-ticket/SKILL.md)
+- [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/impl-plan/SKILL.md)

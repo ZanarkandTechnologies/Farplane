@@ -9,10 +9,8 @@ source: local
 
 # Deep Init Project Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the bootstrap brief, `docs/prd.md`, active ticket, project root
   files, and existing `AGENTS.md`/README surfaces before scaffolding.
@@ -34,7 +32,7 @@ Source: `SKILL.md`
   destructive setup.
 - [ ] Use [execute](../execute/SKILL.md) for proof, writeback, and handoff after
   scaffold changes.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 One-time setup for new projects. This skill should not feel like a shallow
 scaffold dump. Start with a deep-interview-quality bootstrap intake, capture a
@@ -325,7 +323,7 @@ The generated planning flow should follow these defaults:
   heuristics advisory unless the project explicitly tightens them.
 - If the repo wants CodeRabbit in `pre-push`, call the standalone `coderabbit`
   CLI directly from the hook. Do not make the initialized project depend on a
-  Codexter-owned global helper path.
+  Farplane-owned global helper path.
 - Put the project's shared utility convention in `PROJECT_RULES.md` and keep
   `AGENTS.md` limited to the operational reminder to reuse/extract helpers.
 

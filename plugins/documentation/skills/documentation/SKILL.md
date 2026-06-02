@@ -7,10 +7,8 @@ source: local
 
 # Documentation Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Identify the library, API, version, and exact behavior question before
   fetching docs.
@@ -26,7 +24,7 @@ Source: `SKILL.md`
   implementation choices.
 - [ ] Use [review](../review/SKILL.md) before writing durable docs or public
   guidance based on the synthesis.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 > **Purpose**: Workflows for fetching and synthesizing official documentation using Ref tools.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate one Codex plugin package per Codexter skill."""
+"""Generate one Codex plugin package per Farplane skill."""
 
 from __future__ import annotations
 
@@ -19,11 +19,11 @@ if str(BIN_DIR) not in sys.path:
 from install_selected_skills import Skill, discover_skills
 
 
-MARKER = ".codexter-skill-plugin"
+MARKER = ".farplane-skill-plugin"
 MARKETPLACE_PATH = Path(".agents/plugins/marketplace.json")
 PLUGIN_ROOT = Path("plugins")
 PLUGIN_VERSION = "0.1.0"
-GROUP_PREFIX = "codexter-"
+GROUP_PREFIX = "farplane-"
 
 
 @dataclass(frozen=True)
@@ -37,8 +37,8 @@ class SkillPlugin:
 
 GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
     {
-        "name": "codexter-core",
-        "display_name": "Codexter Core",
+        "name": "farplane-core",
+        "display_name": "Farplane Core",
         "description": "Core reasoning, planning, execution, and review skills.",
         "skills": (
             "advise",
@@ -55,8 +55,8 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
         "keywords": ("core", "planning", "review"),
     },
     {
-        "name": "codexter-coding-workflow",
-        "display_name": "Codexter Coding Workflow",
+        "name": "farplane-coding-workflow",
+        "display_name": "Farplane Coding Workflow",
         "description": "Ticket, implementation, QA, review, and closeout workflow skills.",
         "skills": (
             "deep-init-project",
@@ -79,8 +79,8 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
         "keywords": ("coding", "tickets", "qa"),
     },
     {
-        "name": "codexter-frontend",
-        "display_name": "Codexter Frontend",
+        "name": "farplane-frontend",
+        "display_name": "Farplane Frontend",
         "description": "Frontend, product UI, visual design, landing page, and visual QA skills.",
         "skills": (
             "frontend-craft",
@@ -99,8 +99,8 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
         "keywords": ("frontend", "ui", "design"),
     },
     {
-        "name": "codexter-research",
-        "display_name": "Codexter Research",
+        "name": "farplane-research",
+        "display_name": "Farplane Research",
         "description": "Research, source ingestion, synthesis, scouting, and summarization skills.",
         "skills": (
             "research",
@@ -118,8 +118,8 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
         "keywords": ("research", "sources", "synthesis"),
     },
     {
-        "name": "codexter-media-content",
-        "display_name": "Codexter Media and Content",
+        "name": "farplane-media-content",
+        "display_name": "Farplane Media and Content",
         "description": "Image, video, Remotion, social, product photography, and content production skills.",
         "skills": (
             "image-generation",
@@ -134,8 +134,8 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
         "keywords": ("media", "content", "generation"),
     },
     {
-        "name": "codexter-harness-engineering",
-        "display_name": "Codexter Harness Engineering",
+        "name": "farplane-harness-engineering",
+        "display_name": "Farplane Harness Engineering",
         "description": "Harness improvement, skill maintenance, delegation, invocation, and self-improvement skills.",
         "skills": (
             "harness-advisor",
@@ -144,7 +144,7 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
             "skill-registry-ui",
             "agent-behavior-test",
             "agent-testability-plan",
-            "codexter-invocation",
+            "farplane-invocation",
             "delegate-cli",
             "autoresearch-plan",
             "autoresearch-exec",
@@ -190,15 +190,15 @@ def render_manifest(plugin: SkillPlugin) -> dict[str, object]:
         "name": plugin.name,
         "version": PLUGIN_VERSION,
         "description": short_description,
-        "author": {"name": "Codexter"},
+        "author": {"name": "Farplane"},
         "license": "MIT",
-        "keywords": ["codexter", "skill", *plugin.keywords],
+        "keywords": ["farplane", "skill", *plugin.keywords],
         "skills": "./skills/",
         "interface": {
             "displayName": plugin.display_name,
             "shortDescription": short_description,
             "longDescription": plugin.description,
-            "developerName": "Codexter",
+            "developerName": "Farplane",
             "category": "Productivity",
             "capabilities": ["Skills"],
             "defaultPrompt": [truncate(f"Use {plugin.name} for this task.", 128)],
@@ -240,8 +240,8 @@ def group_plugins(skills: Sequence[Skill]) -> list[SkillPlugin]:
 
 def render_marketplace(plugins: Sequence[SkillPlugin]) -> dict[str, object]:
     return {
-        "name": "codexter-skills",
-        "interface": {"displayName": "Codexter Skills"},
+        "name": "farplane-skills",
+        "interface": {"displayName": "Farplane Skills"},
         "plugins": [
             {
                 "name": plugin.name,
@@ -361,7 +361,7 @@ class TemporarySync:
     def __enter__(self) -> Path:
         import tempfile
 
-        self.tmp_root = Path(tempfile.mkdtemp(prefix="codexter-skill-plugins-"))
+        self.tmp_root = Path(tempfile.mkdtemp(prefix="farplane-skill-plugins-"))
         shutil.copytree(
             self.repo / "skills",
             self.tmp_root / "skills",
@@ -380,13 +380,13 @@ class TemporarySync:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Generate Codex plugin packages for every Codexter skill."
+        description="Generate Codex plugin packages for every Farplane skill."
     )
     parser.add_argument(
         "--repo",
         type=Path,
         default=Path(__file__).resolve().parent.parent,
-        help="Codexter repo root. Defaults to this script's repo.",
+        help="Farplane repo root. Defaults to this script's repo.",
     )
     parser.add_argument(
         "--check",

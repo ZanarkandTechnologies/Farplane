@@ -1,6 +1,6 @@
 ---
 name: ralph
-description: Goal-backed board-drain context provider for prepared Codexter ticket boards. Use after specs and tickets exist when the operator wants the board read, eligible work selected or grouped, and each selected work unit handed to $work until the native Goal stops on no ready work, blockers, or human gates.
+description: Goal-backed board-drain context provider for prepared Farplane ticket boards. Use after specs and tickets exist when the operator wants the board read, eligible work selected or grouped, and each selected work unit handed to $work until the native Goal stops on no ready work, blockers, or human gates.
 tier: 3
 group: coding
 source: local
@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Ralph
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read `tickets/README.md`, active tickets, `docs/MEMORY.md`, and `docs/TROUBLES.md`.
 - [ ] Run the read-only selector and inspect skipped-ticket reasons.
@@ -24,7 +22,7 @@ Source: `SKILL.md`
 - [ ] After each work unit, reread the board before selecting again.
 - [ ] Apply the three-ring QA policy before deciding whether to continue the board drain.
 - [ ] End with `RALPH_RESULT: status=... selected=... reason=...`.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 `$ralph` is the board-drain context surface.
 

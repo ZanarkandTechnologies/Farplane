@@ -1,13 +1,13 @@
-# PRD: Codexter Aikage Telemetry Sync
+# PRD: Farplane Aikage Telemetry Sync
 
 ## Problem / Context
 
-Codexter now has generated skill registries, tier checks, graph views, runtime
+Farplane now has generated skill registries, tier checks, graph views, runtime
 hooks, and a skill-opportunity learning loop, but the operator cannot easily
 see whether those surfaces are actually being used. The current hook telemetry
-path can POST a small lifecycle payload when `CODEXTER_TELEMETRY_API_URL` is
+path can POST a small lifecycle payload when `FARPLANE_TELEMETRY_API_URL` is
 set, and Aikage already stores agent activity pings in Convex, but there is no
-local-first Codexter event ledger, no skill usage diagnostics, and no Aikage
+local-first Farplane event ledger, no skill usage diagnostics, and no Aikage
 view for hook health, skill routing, or self-improvement outcomes.
 
 This creates a trust gap: unused skills cannot be pruned confidently, learning
@@ -16,8 +16,8 @@ truth.
 
 ## Audience
 
-- Primary: the Codexter operator managing skills, hooks, tickets, and Aikage.
-- Secondary: future agents maintaining Codexter runtime hooks and skill
+- Primary: the Farplane operator managing skills, hooks, tickets, and Aikage.
+- Secondary: future agents maintaining Farplane runtime hooks and skill
   registry health.
 - Tertiary: Aikage dashboard users who want project/machine/session level
   agent activity without reading local JSONL files.
@@ -27,26 +27,26 @@ truth.
 
 ## JTBD
 
-When Codexter runs turns, hooks, skills, tickets, validators, and learning
+When Farplane runs turns, hooks, skills, tickets, validators, and learning
 loops, I want a local-first event ledger that can optionally sync to Aikage, so
 I can see what actually happened, debug missing feedback, and decide which
 skills or hooks deserve maintenance.
 
 ## SLC Slice (Next Release)
 
-Ship a local-first Codexter telemetry event ledger plus optional Aikage Convex
+Ship a local-first Farplane telemetry event ledger plus optional Aikage Convex
 sync and a compact Aikage dashboard panel. The first slice tracks lifecycle,
 skill request/routing, hook result, ticket transition, validator, and
 self-improvement events. It must not require Aikage to be available for
-Codexter to work.
+Farplane to work.
 
 ## Goals
 
-- Codexter writes deterministic local JSONL events under `.harness/events/`.
+- Farplane writes deterministic local JSONL events under `.harness/events/`.
 - Existing hook telemetry calls reuse the local event writer before attempting
   network sync.
-- Aikage accepts a richer `codexter_event` ingest shape through Convex HTTP.
-- Aikage dashboard shows Codexter event health using the existing visual
+- Aikage accepts a richer `farplane_event` ingest shape through Convex HTTP.
+- Aikage dashboard shows Farplane event health using the existing visual
   system: square panels, JetBrains Mono headings, bento layout, dark/light
   theme variables, compact diagnostics.
 - Aikage exposes an Agent Learning Inbox that turns self-improvement runs into
@@ -74,8 +74,8 @@ Secondary candidates:
 
 ## Non-Goals
 
-- Do not build a background Codexter daemon.
-- Do not make Aikage required for local Codexter operation.
+- Do not build a background Farplane daemon.
+- Do not make Aikage required for local Farplane operation.
 - Do not sync raw transcripts, secrets, full prompts, raw assistant outputs, or
   repo file contents to Aikage.
 - Do not infer "skill actually loaded" when only prompt/request routing is
@@ -89,7 +89,7 @@ Secondary candidates:
 
 ### US-001: Local Event Ledger
 
-**Description:** As the operator, I want Codexter hooks to write local event
+**Description:** As the operator, I want Farplane hooks to write local event
 JSONL before any cloud sync, so local proof exists even when Aikage is offline.
 
 **Acceptance Criteria:**
@@ -110,22 +110,22 @@ status, so I can see whether the harness is alive.
 
 **Acceptance Criteria:**
 
-- [ ] A CLI such as `bin/codexter_telemetry_status.py` reads local event JSONL.
+- [ ] A CLI such as `bin/farplane_telemetry_status.py` reads local event JSONL.
 - [ ] The CLI prints counts by event type, skill, hook, ticket, project, and
       sync result.
 - [ ] The CLI reports self-improvement window counts and application report
       counts.
 - [ ] The CLI flags zero learning application runs when windows exist.
 
-### US-003: Aikage Codexter Event Ingest
+### US-003: Aikage Farplane Event Ingest
 
-**Description:** As the operator, I want Aikage to accept Codexter event
+**Description:** As the operator, I want Aikage to accept Farplane event
 envelopes through its existing private ingest key model, so local agents can
 sync richer telemetry without a new auth system.
 
 **Acceptance Criteria:**
 
-- [ ] Aikage Convex schema stores Codexter events separately from existing
+- [ ] Aikage Convex schema stores Farplane events separately from existing
       activity pings.
 - [ ] HTTP ingest accepts a bounded event payload with the existing key lookup.
 - [ ] Sensitive fields are bounded, truncated, or omitted.
@@ -135,7 +135,7 @@ sync richer telemetry without a new auth system.
 ### US-004: Aikage Agent Learning Inbox
 
 **Description:** As the operator or a non-technical collaborator, I want
-Codexter's learning tickets to appear as a plain-language inbox in Aikage, so I
+Farplane's learning tickets to appear as a plain-language inbox in Aikage, so I
 can see what the agent noticed, which messages caused it, and what action to
 take next without reading raw logs.
 
@@ -197,7 +197,7 @@ duplicative, or worth turning into methods.
 
 ## Functional Requirements
 
-- FR-1: Define a versioned `CodexterEvent` envelope with required fields:
+- FR-1: Define a versioned `FarplaneEvent` envelope with required fields:
   `schema_version`, `event_id`, `event_type`, `timestamp`, `source`,
   `project_root`, `session_id`, and optional ticket/skill/hook/sync fields.
 - FR-2: Store local events under `.harness/events/YYYY-MM-DD.jsonl`.
@@ -212,10 +212,10 @@ duplicative, or worth turning into methods.
   prompts, full assistant responses, transcript paths, and secrets remain
   excluded from Aikage sync by default.
 - FR-4: Keep cloud sync best-effort and non-blocking.
-- FR-5: Reuse existing `CODEXTER_TELEMETRY_API_URL`,
-  `CODEXTER_TELEMETRY_API_TOKEN`, and timeout env vars unless a new endpoint
+- FR-5: Reuse existing `FARPLANE_TELEMETRY_API_URL`,
+  `FARPLANE_TELEMETRY_API_TOKEN`, and timeout env vars unless a new endpoint
   path is required.
-- FR-6: Add Aikage Convex table and HTTP route for Codexter event ingest.
+- FR-6: Add Aikage Convex table and HTTP route for Farplane event ingest.
 - FR-7: Add Aikage dashboard-safe aggregate query fields.
 - FR-8: Add dashboard UI consistent with Aikage current design system.
 - FR-9: Add local status/prune-report commands.
@@ -226,7 +226,7 @@ duplicative, or worth turning into methods.
   responses, secrets, env vars, local config, or repo file contents.
 - Performance: hook writes must be fast and must not block turn completion on
   network calls.
-- Platform: Codexter side must remain Python standard-library first. Aikage
+- Platform: Farplane side must remain Python standard-library first. Aikage
   side uses Convex, React, Vite, TypeScript, Tailwind, and existing shadcn
   primitives.
 - Budget/time: first implementation should be a small set of proofable tickets,
@@ -239,9 +239,9 @@ duplicative, or worth turning into methods.
   - Aikage ingest key for live smoke, if live cloud sync is tested.
 - Credentials / external services:
   - Convex dev/prod deployment configured for Aikage.
-  - Optional `CODEXTER_TELEMETRY_API_URL` and token.
+  - Optional `FARPLANE_TELEMETRY_API_URL` and token.
 - Compute or runtime needs:
-  - Local Python tests in Codexter.
+  - Local Python tests in Farplane.
   - Aikage `pnpm lint`, `pnpm exec tsc -b`, `pnpm build`, and Convex tests or
     local dev smoke where available.
 - Tooling or testability gaps:
@@ -269,19 +269,19 @@ duplicative, or worth turning into methods.
 - Codex hook payloads may not expose reliable skill-load events. The first
   version must track observable requested/routed events rather than claiming
   true runtime skill usage.
-- Existing unrelated dirty Codexter files are present; implementation must
+- Existing unrelated dirty Farplane files are present; implementation must
   stage only this feature's files.
 - Convex schema changes may need generated types refreshed in Aikage.
 
 ## Backpressure / Evidence to Ship
 
 - Tests:
-  - Codexter Python telemetry unit tests.
-  - Codexter hook fixture tests.
+  - Farplane Python telemetry unit tests.
+  - Farplane hook fixture tests.
   - Aikage TypeScript/lint/build.
 - QA:
   - Local CLI summary output.
-  - Aikage dashboard screenshot with Codexter telemetry panel.
+  - Aikage dashboard screenshot with Farplane telemetry panel.
 - Perf checks:
   - Hook telemetry emits local event and returns without network configured.
   - Network timeout remains bounded.

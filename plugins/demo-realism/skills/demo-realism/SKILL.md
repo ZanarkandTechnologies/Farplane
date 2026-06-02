@@ -8,10 +8,8 @@ source: local
 
 # Demo Realism
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read existing product context first: `docs/prd.md`, active ticket,
   `docs/specs/`, user stories, customer notes, and current demo data.
@@ -33,7 +31,7 @@ Source: `SKILL.md`
   [visual-design](../visual-design/SKILL.md),
   [frontend-craft](../frontend-craft/SKILL.md), or
   [impl-plan](../impl-plan/SKILL.md) when realism is strong enough.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this before design/build when the missing problem is not "what screens exist"
 but "what would make this feel believable to a client in an operational business

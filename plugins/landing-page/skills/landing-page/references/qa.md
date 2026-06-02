@@ -115,7 +115,7 @@ Real-life analogs this gate intentionally borrows from:
 - guideline-weighted benchmark review for severity,
 - accessibility/performance checks as hard hygiene gates.
 
-For Codexter QA, the metric is not meant to replace real user analytics. It is
+For Farplane QA, the metric is not meant to replace real user analytics. It is
 the same-session proxy that prevents agents from calling a page "premium"
 before a skeptical designer would agree.
 ## Scroll-Scrub Instrumentation

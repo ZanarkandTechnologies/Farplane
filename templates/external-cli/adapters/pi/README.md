@@ -21,7 +21,7 @@ PI_TELEMETRY=0 pi --model openrouter/moonshotai/kimi-k2.6 --thinking high --skil
 ```
 
 `@file` attaches a file to Pi; it does not make the file contents the
-instruction message. The Codexter launcher must pass the rendered prompt text as
+instruction message. The Farplane launcher must pass the rendered prompt text as
 the `-p` message and reserve `@...` only for attachments.
 
 Use dry-run mode before live execution. Live model execution may require

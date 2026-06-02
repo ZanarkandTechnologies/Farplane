@@ -1,4 +1,4 @@
-# Codexter agent: explore
+# Farplane agent: explore
 name = "explore"
 description = "Fast codebase search and file/symbol mapping"
 model = "gpt-5.4"

@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Media Ingest
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Classify source type, platform, visibility, and whether authenticated
   access or a local export is required.
@@ -36,7 +34,7 @@ Source: `SKILL.md`
   recommendation.
 - [ ] For video sources that need interpretation, hand the bundle to the video
   understanding workflow.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Turn media inputs into a small, auditable evidence bundle before another skill
 tries to understand or rebuild what the media shows.

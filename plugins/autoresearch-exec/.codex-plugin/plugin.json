@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Use when an autoresearch session exists or the user asks to run, continue, resume, or execute metric-driven autoresea...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Autoresearch Exec",
     "shortDescription": "Use when an autoresearch session exists or the user asks to run, continue, resume, or execute metric-driven autoresea...",
     "longDescription": "Use when an autoresearch session exists or the user asks to run, continue, resume, or execute metric-driven autoresearch experiments with keep/discard decisions based on autoresearch.md, autoresearch.sh, checks, and autoresearch.jsonl.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

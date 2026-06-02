@@ -8,7 +8,7 @@ Add a reusable workflow for comparing multiple projects, repos, blogs, or
 implementations and turning the best transferable features into a concrete local
 design.
 
-Codexter skills are stable local contracts. External skills, repos, blogs, and
+Farplane skills are stable local contracts. External skills, repos, blogs, and
 command families are research inputs, not live dependencies. This workflow is
 the import gate for reviewed `adopt`, `adapt`, `reject`, or `defer` decisions.
 See `MEM-0073`.
@@ -56,4 +56,4 @@ deterministic.
 - Use `best-of-worlds` for synthesis from known sources.
 - Use `research:gap` for local missing-scope analysis.
 - Use `impl-plan` after the synthesis becomes a concrete ticket plan.
-- Do not auto-sync external skill behavior into Codexter skills.
+- Do not auto-sync external skill behavior into Farplane skills.

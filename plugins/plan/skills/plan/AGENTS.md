@@ -10,7 +10,7 @@
 ## Boundaries
 
 - Keep this as a Tier 2 interface, not a domain router.
-- Do not move Codexter-specific ticket or code planning details here.
+- Do not move Farplane-specific ticket or code planning details here.
 - Domain skills should reference this interface from their `SKILL.md` Important Checklist when they
   implement generic planning.
 

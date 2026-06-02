@@ -8,10 +8,8 @@ source: local
 
 # Testing Index
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Classify the system under test and the risk being controlled.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect
@@ -26,7 +24,7 @@ Source: `SKILL.md`
   between speed, confidence, flake risk, and coverage.
 - [ ] Use [review](../review/SKILL.md) before changing durable test strategy or
   claiming high-risk work is validated.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill as a lightweight router to testing guidance across domains.
 

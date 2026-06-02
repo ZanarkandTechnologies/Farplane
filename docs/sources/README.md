@@ -1,6 +1,6 @@
 # Source Registry
 
-Codexter's source registry is the structured system of record for external and
+Farplane's source registry is the structured system of record for external and
 operator-provided materials that inspire harness changes.
 
 Use it when a blog, spec, video, repo, paper, official doc, or private
@@ -31,14 +31,14 @@ Each line in `registry.jsonl` is one JSON object:
   "visibility": "private",
   "captured_at": "2026-05-05",
   "local_artifacts": [
-    "experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/source-summary.md"
+    "experiments/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md"
   ],
   "feature_refs": ["FEAT-0014"],
   "decision": "adapt",
   "duplicate_of": null,
   "status": "active",
   "last_verified": "2026-05-05",
-  "notes": "Use as scheduler/runtime inspiration; Codexter stays normal Codex plus skills."
+  "notes": "Use as scheduler/runtime inspiration; Farplane stays normal Codex plus skills."
 }
 ```
 

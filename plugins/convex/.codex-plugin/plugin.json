@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this pack...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "external",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Convex",
     "shortDescription": "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this pack...",
     "longDescription": "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this package kept as a thin upstream pointer.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

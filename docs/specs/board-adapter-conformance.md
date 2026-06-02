@@ -3,16 +3,16 @@
 Status: Draft v1
 
 Purpose: Define the smallest proof a filesystem, Linear, Notion, GitHub, or
-custom board adapter must provide before Codexter treats it as a real work-item
+custom board adapter must provide before Farplane treats it as a real work-item
 source.
 
 ## Core Rule
 
-Board adapters store and normalize work. They do not decide that Codexter should
+Board adapters store and normalize work. They do not decide that Farplane should
 start work.
 
 Execution starts only after an explicit invocation produces a
-`CodexterRunEnvelope`. The adapter then reads one selected item, returns a
+`FarplaneRunEnvelope`. The adapter then reads one selected item, returns a
 normalized `WorkItem`, and writes evidence only through explicit, traceable
 writeback behavior.
 
@@ -42,10 +42,10 @@ type BoardAdapter = {
 
 The live Python v1 surface is intentionally smaller:
 
-- `bin/codexter_boards.py / FileTicketAdapter.list_candidates(...)`
-- `bin/codexter_boards.py / FileTicketAdapter.read_work_item(...)`
-- `bin/codexter_boards.py / FileTicketAdapter.write_evidence(...)`
-- `bin/codexter_boards.py / normalize_ticket(...)`
+- `bin/farplane_boards.py / FileTicketAdapter.list_candidates(...)`
+- `bin/farplane_boards.py / FileTicketAdapter.read_work_item(...)`
+- `bin/farplane_boards.py / FileTicketAdapter.write_evidence(...)`
+- `bin/farplane_boards.py / normalize_ticket(...)`
 
 Future adapters may use different transport code, but they must return the same
 normalized shape and preserve the same invocation boundary.
@@ -128,7 +128,7 @@ The filesystem adapter is the reference implementation today:
 
 - Source: `tickets/TASK-*/ticket.md`
 - Adapter: `FileTicketAdapter`
-- Conformance test: `bin/test_codexter_boards.py`
+- Conformance test: `bin/test_farplane_boards.py`
 - Evidence writeback: manual in v1
 
 Expected filesystem behavior:
@@ -156,14 +156,14 @@ Before making a new adapter discoverable:
 - [ ] Document credential handling and keep tokens out of prompts, fixtures,
   logs, and ticket metadata.
 - [ ] Document which explicit trigger source creates the
-  `CodexterRunEnvelope`.
+  `FarplaneRunEnvelope`.
 
 ## AI Misread Risks
 
 Agents implementing adapters are likely to misunderstand these points:
 
 - A board item becoming `ready` is not an invocation.
-- A ticket comment such as `@codexter implement` is not handled by Codexter
+- A ticket comment such as `@farplane implement` is not handled by Farplane
   unless an external caller converts it into an envelope.
 - `writeEvidence` is not permission to edit arbitrary ticket fields.
 - `transitionState` is optional and must not become hidden orchestration.
@@ -179,9 +179,9 @@ When in doubt, keep the adapter read-only and return a manual writeback result.
 Current core checks:
 
 ```bash
-python3 -m unittest bin/test_codexter_boards.py
-python3 -m unittest bin/test_codexter_invocation.py
-python3 -m unittest bin/test_codexter_compute.py
+python3 -m unittest bin/test_farplane_boards.py
+python3 -m unittest bin/test_farplane_invocation.py
+python3 -m unittest bin/test_farplane_compute.py
 ```
 
 Future adapter checks should add adapter-specific tests beside the adapter and

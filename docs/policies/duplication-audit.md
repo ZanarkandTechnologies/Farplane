@@ -21,7 +21,7 @@ One true duplicate was found:
 
 | Duplicate | Canonical owner | Action |
 | --- | --- | --- |
-| `docs/specs/legacy/ralph-runtime-surface.md` duplicated most of `docs/specs/runtime-surface.md` and carried stale Ralph wording | [`docs/specs/runtime-surface.md`](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md) | Deleted with the rest of the retired legacy Ralph spec bundle |
+| `docs/specs/legacy/ralph-runtime-surface.md` duplicated most of `docs/specs/runtime-surface.md` and carried stale Ralph wording | [`docs/specs/runtime-surface.md`](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md) | Deleted with the rest of the retired legacy Ralph spec bundle |
 
 No other Markdown pair crossed the high-similarity threshold in this pass.
 

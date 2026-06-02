@@ -1,7 +1,7 @@
 # Skill-Local Self-Improve Memory
 
 Use skill-local memory when experiments teach reusable lessons about a target
-skill. This is the Codexter version of Karpathy's `program.md` pattern: the
+skill. This is the Farplane version of Karpathy's `program.md` pattern: the
 target skill carries a small durable program for future self-improvement runs.
 
 ## When To Store Inside The Skill

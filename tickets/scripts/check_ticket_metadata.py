@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Validate the Codexter ticket metadata contract.
+Validate the Farplane ticket metadata contract.
 
 This validator is intentionally small. It exists to catch trust-breaking drift
 in ticket metadata, not to become a second orchestration system.

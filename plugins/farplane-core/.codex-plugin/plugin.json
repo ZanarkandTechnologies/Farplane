@@ -1,0 +1,30 @@
+{
+  "name": "farplane-core",
+  "version": "0.1.0",
+  "description": "Core reasoning, planning, execution, and review skills.",
+  "author": {
+    "name": "Farplane"
+  },
+  "license": "MIT",
+  "keywords": [
+    "farplane",
+    "skill",
+    "core",
+    "planning",
+    "review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Farplane Core",
+    "shortDescription": "Core reasoning, planning, execution, and review skills.",
+    "longDescription": "Core reasoning, planning, execution, and review skills.",
+    "developerName": "Farplane",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use farplane-core for this task."
+    ]
+  }
+}

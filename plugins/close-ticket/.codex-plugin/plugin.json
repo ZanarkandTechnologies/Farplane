@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Parent closeout skill for one selected ticket. Use when implementation and review are done and the remaining work is...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "3"
@@ -17,7 +17,7 @@
     "displayName": "Close Ticket",
     "shortDescription": "Parent closeout skill for one selected ticket. Use when implementation and review are done and the remaining work is...",
     "longDescription": "Parent closeout skill for one selected ticket. Use when implementation and review are done and the remaining work is durable docs writeback, final checks, commit prep, and optional push/publish.",
-    "developerName": "Codexter",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"

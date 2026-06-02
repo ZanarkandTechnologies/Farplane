@@ -10,10 +10,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Landing Page
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 # Landing Page Todos
 
@@ -71,7 +69,7 @@ when the request earns that depth.
   the selected method requires it.
 - [ ] Record desktop/mobile screenshots, asset manifest/provenance, method
   selection notes, and final gap analysis.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Shape one-page frontend experiences that persuade, orient, or create memory.
 This skill owns page story, section architecture, planning gates, visual scenes,

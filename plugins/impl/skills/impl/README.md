@@ -6,8 +6,8 @@ Support files for the `impl` skill live here.
 
 This area contains orchestration helpers used by `$impl`, especially the
 tmux-backed lane launcher and follow-up utilities.
-`$impl` is the Tier 3 Codexter coding-pipeline implementation of the generic
-[`execute`](/Users/kenjipcx/coding-harness/Codexter/skills/execute/SKILL.md)
+`$impl` is the Tier 3 Farplane coding-pipeline implementation of the generic
+[`execute`](/Users/kenjipcx/coding-harness/Farplane/skills/execute/SKILL.md)
 interface.
 The ambition target is the whole selected ticket; repeated passes are for
 finishing that ticket, not for inventing a smaller internal ticket boundary.

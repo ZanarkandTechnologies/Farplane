@@ -70,8 +70,8 @@ Review window: <start> to <end> Asia/Kuala_Lumpur
 
 ## Source Gaps
 
-- 
+-
 
 ## Raw Evidence Pointers
 
-- 
+-

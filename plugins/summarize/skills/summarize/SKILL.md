@@ -26,10 +26,8 @@ metadata:
 
 # Summarize
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Identify the source, requested output shape, and whether provenance or
   quotes matter.
@@ -44,7 +42,7 @@ Source: `SKILL.md`
   implication from the summary.
 - [ ] Use [review](../review/SKILL.md) before promoting a summary into durable
   docs, tickets, or decisions.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Fast CLI to summarize URLs, local files, and YouTube links.
 
