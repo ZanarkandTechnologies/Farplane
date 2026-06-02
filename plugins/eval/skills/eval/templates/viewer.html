@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Eval Viewer</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --background: oklch(0.1797 0.0043 308.1928);
+        --foreground: oklch(0.8109 0 0);
+        --card: oklch(0.1822 0 0);
+        --card-foreground: oklch(0.8109 0 0);
+        --popover: oklch(0.1797 0.0043 308.1928);
+        --popover-foreground: oklch(0.8109 0 0);
+        --primary: oklch(0.7214 0.1337 49.9802);
+        --primary-foreground: oklch(0.1797 0.0043 308.1928);
+        --secondary: oklch(0.5940 0.0443 196.0233);
+        --secondary-foreground: oklch(0.1797 0.0043 308.1928);
+        --muted: oklch(0.2520 0 0);
+        --muted-foreground: oklch(0.6268 0 0);
+        --accent: oklch(0.3211 0 0);
+        --accent-foreground: oklch(0.8109 0 0);
+        --destructive: oklch(0.5940 0.0443 196.0233);
+        --destructive-foreground: oklch(0.1797 0.0043 308.1928);
+        --border: oklch(0.2520 0 0);
+        --input: oklch(0.2520 0 0);
+        --ring: oklch(0.7214 0.1337 49.9802);
+        --chart-1: oklch(0.5940 0.0443 196.0233);
+        --chart-2: oklch(0.7214 0.1337 49.9802);
+        --chart-3: oklch(0.8721 0.0864 68.5474);
+        --chart-4: oklch(0.6268 0 0);
+        --chart-5: oklch(0.6830 0 0);
+        --radius: 0.75rem;
+        --font-sans: Geist Mono, ui-monospace, monospace;
+        --font-mono: JetBrains Mono, monospace;
+        --tracking-normal: 0rem;
+        --shadow-sm: 0px 1px 4px 0px hsl(0 0% 0% / 0.05), 0px 1px 2px -1px hsl(0 0% 0% / 0.05);
+        --shadow-md: 0px 1px 4px 0px hsl(0 0% 0% / 0.05), 0px 2px 4px -1px hsl(0 0% 0% / 0.05);
+        --shadow-lg: 0px 1px 4px 0px hsl(0 0% 0% / 0.05), 0px 4px 6px -1px hsl(0 0% 0% / 0.05);
+        --shadow-xl: 0px 1px 4px 0px hsl(0 0% 0% / 0.05), 0px 8px 10px -1px hsl(0 0% 0% / 0.05);
+        --success: var(--chart-2);
+        --warning: var(--primary);
+        --danger: var(--destructive);
+        --info: var(--secondary);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--background);
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        letter-spacing: var(--tracking-normal);
+      }
+
+      body {
+        padding: 32px;
+      }
+
+      .shell {
+        max-width: 1480px;
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+      }
+
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-md);
+      }
+
+      .hero {
+        padding: 28px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: var(--muted-foreground);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .hero-copy {
+        display: grid;
+        gap: 8px;
+      }
+
+      .hero-copy h1 {
+        font-size: 36px;
+        line-height: 1.04;
+        font-weight: 700;
+      }
+
+      .hero-copy p {
+        max-width: 800px;
+        color: var(--muted-foreground);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .control-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .control-card {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: calc(var(--radius) - 2px);
+        background: var(--card);
+      }
+
+      .control-card h2 {
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .control-card p {
+        color: var(--muted-foreground);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .control-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .button,
+      .file-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid var(--border);
+        border-radius: calc(var(--radius) - 4px);
+        background: var(--accent);
+        color: var(--accent-foreground);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          border-color 140ms ease,
+          transform 140ms ease,
+          background 140ms ease,
+          box-shadow 140ms ease;
+      }
+
+      .button:hover,
+      .file-button:hover {
+        border-color: var(--ring);
+        background: var(--muted);
+        transform: translateY(-1px);
+      }
+
+      .button:focus-visible,
+      .file-button:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 34%, transparent);
+      }
+
+      .button.primary {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--primary-foreground);
+      }
+
+      .button.ghost {
+        background: transparent;
+      }
+
+      input[type="file"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .status-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 28px;
+        padding: 0 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--muted);
+        color: var(--muted-foreground);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .pill strong {
+        color: var(--foreground);
+      }
+
+      .main-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(380px, 1.1fr);
+        gap: 20px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 16px;
+      }
+
+      .section {
+        padding: 18px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .section-heading h2 {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .section-heading p {
+        color: var(--muted-foreground);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+      }
+
+      .stat-card {
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: calc(var(--radius) - 2px);
+        background: var(--card);
+        display: grid;
+        gap: 8px;
+        min-height: 108px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: var(--muted-foreground);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .stat-value {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .stat-subtle {
+        font-size: 12px;
+        color: var(--muted-foreground);
+        word-break: break-word;
+      }
+
+      .verdict-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .verdict-chip {
+        min-width: 92px;
+        padding: 12px 14px;
+        border-radius: calc(var(--radius) - 2px);
+        border: 1px solid var(--border);
+        background: var(--card);
+        display: grid;
+        gap: 4px;
+      }
+
+      .verdict-chip strong {
+        font-size: 18px;
+      }
+
+      .verdict-chip span {
+        font-size: 12px;
+        color: var(--muted-foreground);
+      }
+
+      .filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .select,
+      .search {
+        height: 40px;
+        padding: 0 12px;
+        border-radius: calc(var(--radius) - 4px);
+        border: 1px solid var(--border);
+        background: var(--input);
+        color: var(--foreground);
+        font-size: 13px;
+      }
+
+      .search {
+        flex: 1 1 220px;
+      }
+
+      .task-list {
+        display: grid;
+        gap: 12px;
+        max-height: 900px;
+        overflow: auto;
+        padding-right: 2px;
+      }
+
+      .task-card {
+        width: 100%;
+        text-align: left;
+        padding: 16px;
+        border-radius: calc(var(--radius) - 2px);
+        border: 1px solid var(--border);
+        background: var(--card);
+        display: grid;
+        gap: 12px;
+        cursor: pointer;
+        transition:
+          transform 140ms ease,
+          border-color 140ms ease,
+          background 140ms ease,
+          box-shadow 140ms ease;
+      }
+
+      .task-card:hover {
+        transform: translateY(-1px);
+        border-color: var(--ring);
+        background: var(--accent);
+      }
+
+      .task-card.active {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 1px color-mix(in oklch, var(--primary) 38%, transparent);
+        background: var(--accent);
+      }
+
+      .task-topline {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .task-card h3 {
+        font-size: 15px;
+        line-height: 1.4;
+        font-weight: 600;
+      }
+
+      .task-meta,
+      .detail-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 0 8px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--muted);
+        color: var(--muted-foreground);
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .reason {
+        color: var(--muted-foreground);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .detail-shell {
+        display: grid;
+        gap: 16px;
+      }
+
+      .detail-empty {
+        min-height: 420px;
+        display: grid;
+        place-items: center;
+        color: var(--muted-foreground);
+        padding: 24px;
+        text-align: center;
+        line-height: 1.6;
+      }
+
+      .detail-card {
+        padding: 18px;
+        border-radius: calc(var(--radius) - 2px);
+        border: 1px solid var(--border);
+        background: var(--card);
+        display: grid;
+        gap: 14px;
+      }
+
+      .detail-card h3 {
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .detail-card p,
+      .detail-card li,
+      .detail-card pre {
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .detail-card ul {
+        margin: 0;
+        padding-left: 18px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .detail-card pre {
+        margin: 0;
+        padding: 14px;
+        border-radius: calc(var(--radius) - 4px);
+        border: 1px solid var(--border);
+        background: var(--popover);
+        color: var(--foreground);
+        overflow: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-family:
+          "SFMono-Regular",
+          ui-monospace,
+          "Cascadia Code",
+          "Source Code Pro",
+          Menlo,
+          Consolas,
+          monospace;
+      }
+
+      .rubric-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .rubric-card {
+        border: 1px solid var(--border);
+        border-radius: calc(var(--radius) - 4px);
+        background: var(--muted);
+        padding: 12px;
+        display: grid;
+        gap: 6px;
+      }
+
+      .rubric-card span {
+        font-size: 12px;
+        color: var(--muted-foreground);
+        text-transform: capitalize;
+      }
+
+      .rubric-card strong {
+        font-size: 18px;
+      }
+
+      .reference-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .reference-row {
+        border: 1px solid var(--border);
+        border-radius: calc(var(--radius) - 4px);
+        background: var(--muted);
+        padding: 12px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .reference-row header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .reference-row strong {
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .reference-row p {
+        color: var(--muted-foreground);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 58px;
+        min-height: 26px;
+        padding: 0 8px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .badge.verdict-a,
+      .badge.pass-true {
+        background: color-mix(in oklch, var(--chart-2) 18%, transparent);
+        border-color: color-mix(in oklch, var(--chart-2) 45%, transparent);
+        color: var(--chart-2);
+      }
+
+      .badge.verdict-b {
+        background: color-mix(in oklch, var(--primary) 18%, transparent);
+        border-color: color-mix(in oklch, var(--primary) 45%, transparent);
+        color: var(--primary);
+      }
+
+      .badge.verdict-c {
+        background: color-mix(in oklch, var(--secondary) 18%, transparent);
+        border-color: color-mix(in oklch, var(--secondary) 45%, transparent);
+        color: var(--secondary);
+      }
+
+      .badge.verdict-d,
+      .badge.pass-false {
+        background: color-mix(in oklch, var(--destructive) 18%, transparent);
+        border-color: color-mix(in oklch, var(--destructive) 45%, transparent);
+        color: var(--destructive);
+      }
+
+      .footer-note {
+        color: var(--muted-foreground);
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      a.inline-link {
+        color: var(--primary);
+      }
+
+      @media (max-width: 1120px) {
+        body {
+          padding: 20px;
+        }
+
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 14px;
+        }
+
+        .hero {
+          padding: 18px;
+        }
+
+        .hero-copy h1 {
+          font-size: 28px;
+        }
+
+        .section,
+        .detail-card,
+        .control-card {
+          padding: 14px;
+        }
+
+        .task-topline,
+        .section-heading,
+        .reference-row header {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="panel hero">
+        <p class="eyebrow">Harness-native evals</p>
+        <div class="hero-copy">
+          <h1>Inspect `summary.json` and task details without a build step.</h1>
+          <p>
+            This viewer reads the local eval artifacts written by `run_evals.py`.
+            It works two ways: load the latest run from `./runs` when served from
+            `.codex/evals` or `.claude/evals`, or open the file directly and pick
+            `summary.json` plus task detail JSON files from your machine.
+          </p>
+        </div>
+
+        <div class="control-grid">
+          <section class="control-card">
+            <div>
+              <h2>Quick load</h2>
+              <p>Best when you are serving the eval folder locally and want the newest run automatically.</p>
+            </div>
+            <div class="control-actions">
+              <button class="button primary" id="load-latest" type="button">Load latest from ./runs</button>
+              <button class="button ghost" id="reset-state" type="button">Reset</button>
+            </div>
+            <div class="status-row">
+              <span class="pill" id="autoload-status"><strong>Status</strong> idle</span>
+            </div>
+          </section>
+
+          <section class="control-card">
+            <div>
+              <h2>Manual summary</h2>
+              <p>Works from a plain file open. Pick one `summary.json` from a run folder.</p>
+            </div>
+            <div class="control-actions">
+              <label class="file-button" for="summary-file">Choose summary.json</label>
+              <input id="summary-file" type="file" accept=".json,application/json" />
+            </div>
+            <div class="status-row">
+              <span class="pill" id="summary-status"><strong>Summary</strong> none loaded</span>
+            </div>
+          </section>
+
+          <section class="control-card">
+            <div>
+              <h2>Task details</h2>
+              <p>Optional, but recommended. Pick the JSON files inside `runs/&lt;job_id&gt;/tasks/` to unlock the rubric and reference-point breakdowns.</p>
+            </div>
+            <div class="control-actions">
+              <label class="file-button" for="detail-files">Choose task JSON files</label>
+              <input id="detail-files" type="file" accept=".json,application/json" multiple />
+              <label class="file-button" for="detail-directory">Choose tasks folder</label>
+              <input id="detail-directory" type="file" webkitdirectory directory multiple />
+            </div>
+            <div class="status-row">
+              <span class="pill" id="detail-status"><strong>Details</strong> none loaded</span>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <div class="main-grid">
+        <div class="stack">
+          <section class="panel section">
+            <div class="section-heading">
+              <div>
+                <h2>Run summary</h2>
+                <p>High-level run metadata and outcome distribution.</p>
+              </div>
+            </div>
+            <div class="stats-grid" id="stats-grid">
+              <div class="stat-card">
+                <span class="stat-label">No run loaded</span>
+                <span class="stat-value">--</span>
+                <span class="stat-subtle">Load a summary file or use the quick loader above.</span>
+              </div>
+            </div>
+            <div class="verdict-grid" id="verdict-grid"></div>
+          </section>
+
+          <section class="panel section">
+            <div class="section-heading">
+              <div>
+                <h2>Tasks</h2>
+                <p>Scan the run quickly, then select a task for the full judge breakdown.</p>
+              </div>
+            </div>
+            <div class="filters">
+              <input class="search" id="task-search" type="search" placeholder="Search by title, id, or reason" />
+              <select class="select" id="verdict-filter">
+                <option value="all">All verdicts</option>
+                <option value="A">A only</option>
+                <option value="B">B only</option>
+                <option value="C">C only</option>
+                <option value="D">D only</option>
+                <option value="pass">Pass only</option>
+                <option value="fail">Fail only</option>
+              </select>
+            </div>
+            <div class="task-list" id="task-list"></div>
+          </section>
+        </div>
+
+        <section class="panel section">
+          <div class="section-heading">
+            <div>
+              <h2>Task detail</h2>
+              <p>Reference points, rubric grades, and task-level notes appear here.</p>
+            </div>
+          </div>
+          <div class="detail-shell" id="detail-panel">
+            <div class="detail-empty">
+              Select a task after loading eval data. The detail pane will show the task prompt, judge verdict, rubric tiers, and each reference-point check.
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const state = {
+        summary: null,
+        summarySource: "",
+        detailsByTaskId: new Map(),
+        selectedTaskId: "",
+      };
+
+      const statsGrid = document.getElementById("stats-grid");
+      const verdictGrid = document.getElementById("verdict-grid");
+      const taskList = document.getElementById("task-list");
+      const detailPanel = document.getElementById("detail-panel");
+      const searchInput = document.getElementById("task-search");
+      const verdictFilter = document.getElementById("verdict-filter");
+      const summaryStatus = document.getElementById("summary-status");
+      const detailStatus = document.getElementById("detail-status");
+      const autoloadStatus = document.getElementById("autoload-status");
+
+      document.getElementById("load-latest").addEventListener("click", loadLatestRun);
+      document.getElementById("reset-state").addEventListener("click", resetState);
+      document.getElementById("summary-file").addEventListener("change", handleSummaryFileInput);
+      document.getElementById("detail-files").addEventListener("change", handleDetailFileInput);
+      document.getElementById("detail-directory").addEventListener("change", handleDetailFileInput);
+      searchInput.addEventListener("input", renderTaskList);
+      verdictFilter.addEventListener("change", renderTaskList);
+
+      function resetState() {
+        state.summary = null;
+        state.summarySource = "";
+        state.detailsByTaskId = new Map();
+        state.selectedTaskId = "";
+        summaryStatus.innerHTML = "<strong>Summary</strong> none loaded";
+        detailStatus.innerHTML = "<strong>Details</strong> none loaded";
+        autoloadStatus.innerHTML = "<strong>Status</strong> idle";
+        render();
+      }
+
+      async function loadLatestRun() {
+        try {
+          autoloadStatus.innerHTML = "<strong>Status</strong> loading runs index";
+          const indexResponse = await fetch("./runs/index.json", { cache: "no-store" });
+          if (!indexResponse.ok) {
+            throw new Error("Could not fetch ./runs/index.json. Serve the eval folder locally, or use manual file pickers.");
+          }
+          const runs = await indexResponse.json();
+          if (!Array.isArray(runs) || runs.length === 0) {
+            throw new Error("No runs found in ./runs/index.json.");
+          }
+          const latest = runs[0];
+          if (!latest.job_id) {
+            throw new Error("Latest run is missing a job_id.");
+          }
+          const summaryUrl = `./runs/${latest.job_id}/summary.json`;
+          await loadSummaryFromUrl(summaryUrl);
+          autoloadStatus.innerHTML = `<strong>Status</strong> loaded ${escapeHtml(latest.job_id)}`;
+        } catch (error) {
+          autoloadStatus.innerHTML = `<strong>Status</strong> ${escapeHtml(error.message)}`;
+        }
+      }
+
+      async function loadSummaryFromUrl(summaryUrl) {
+        const response = await fetch(summaryUrl, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`Could not fetch ${summaryUrl}`);
+        }
+        const summary = await response.json();
+        applySummary(summary, summaryUrl);
+        summaryStatus.innerHTML = `<strong>Summary</strong> ${escapeHtml(summary.job_id || "loaded")}`;
+        await tryLoadTaskDetailsFromSummaryUrl(summaryUrl, summary);
+      }
+
+      async function tryLoadTaskDetailsFromSummaryUrl(summaryUrl, summary) {
+        const base = new URL("./tasks/", new URL(summaryUrl, window.location.href));
+        const detailEntries = [];
+        for (const row of summary.tasks || []) {
+          if (!row || !row.task_id) continue;
+          const detailUrl = new URL(`${row.task_id}.json`, base).toString();
+          detailEntries.push(fetch(detailUrl, { cache: "no-store" }).then(async (response) => {
+            if (!response.ok) {
+              throw new Error(row.task_id);
+            }
+            return response.json();
+          }));
+        }
+        const settled = await Promise.allSettled(detailEntries);
+        let loadedCount = 0;
+        const nextMap = new Map();
+        for (const result of settled) {
+          if (result.status === "fulfilled" && result.value && result.value.task && result.value.task.id) {
+            nextMap.set(result.value.task.id, result.value);
+            loadedCount += 1;
+          }
+        }
+        if (loadedCount > 0) {
+          state.detailsByTaskId = nextMap;
+          detailStatus.innerHTML = `<strong>Details</strong> auto-loaded ${loadedCount} task file${loadedCount === 1 ? "" : "s"}`;
+          render();
+        } else {
+          detailStatus.innerHTML = "<strong>Details</strong> auto-load unavailable, use the picker";
+        }
+      }
+
+      async function handleSummaryFileInput(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        try {
+          const summary = JSON.parse(await file.text());
+          applySummary(summary, file.name);
+          summaryStatus.innerHTML = `<strong>Summary</strong> ${escapeHtml(file.name)}`;
+        } catch (error) {
+          summaryStatus.innerHTML = `<strong>Summary</strong> ${escapeHtml(error.message)}`;
+        } finally {
+          event.target.value = "";
+        }
+      }
+
+      async function handleDetailFileInput(event) {
+        const files = Array.from(event.target.files || []);
+        if (files.length === 0) return;
+        const nextMap = new Map(state.detailsByTaskId);
+        let loadedCount = 0;
+        for (const file of files) {
+          if (!file.name.endsWith(".json")) continue;
+          try {
+            const detail = JSON.parse(await file.text());
+            if (detail && detail.task && detail.task.id) {
+              nextMap.set(detail.task.id, detail);
+              loadedCount += 1;
+            }
+          } catch (error) {
+            console.warn("Skipping invalid detail file", file.name, error);
+          }
+        }
+        state.detailsByTaskId = nextMap;
+        detailStatus.innerHTML = `<strong>Details</strong> loaded ${loadedCount} task file${loadedCount === 1 ? "" : "s"}`;
+        render();
+        event.target.value = "";
+      }
+
+      function applySummary(summary, source) {
+        state.summary = summary;
+        state.summarySource = source;
+        state.selectedTaskId = summary.tasks && summary.tasks[0] ? summary.tasks[0].task_id : "";
+        render();
+      }
+
+      function render() {
+        renderSummary();
+        renderTaskList();
+        renderDetail();
+      }
+
+      function renderSummary() {
+        if (!state.summary) {
+          statsGrid.innerHTML = `
+            <div class="stat-card">
+              <span class="stat-label">No run loaded</span>
+              <span class="stat-value">--</span>
+              <span class="stat-subtle">Load a summary file or use the quick loader above.</span>
+            </div>
+          `;
+          verdictGrid.innerHTML = "";
+          return;
+        }
+
+        const summary = state.summary;
+        const cards = [
+          { label: "Job", value: summary.label || "--", subtle: summary.job_id || "" },
+          { label: "Harness", value: summary.harness || "--", subtle: `Judge: ${summary.judge_harness || "--"}` },
+          { label: "Suite", value: summary.suite || "--", subtle: sourceLabel(summary.task_files) },
+          { label: "Tasks", value: numberValue(summary.task_count), subtle: `${countDetailsLoaded()} details loaded` },
+          { label: "Pass rate", value: percent(summary.pass_rate), subtle: formatDate(summary.created_at) },
+        ];
+
+        statsGrid.innerHTML = cards
+          .map((card) => `
+            <div class="stat-card">
+              <span class="stat-label">${escapeHtml(card.label)}</span>
+              <span class="stat-value">${escapeHtml(card.value)}</span>
+              <span class="stat-subtle">${escapeHtml(card.subtle)}</span>
+            </div>
+          `)
+          .join("");
+
+        const verdictCounts = summary.verdict_counts || {};
+        const order = ["A", "B", "C", "D"];
+        verdictGrid.innerHTML = order
+          .filter((verdict) => verdict in verdictCounts)
+          .map((verdict) => `
+            <div class="verdict-chip">
+              <strong>${escapeHtml(verdict)}</strong>
+              <span>${escapeHtml(String(verdictCounts[verdict]))} task${verdictCounts[verdict] === 1 ? "" : "s"}</span>
+            </div>
+          `)
+          .join("");
+      }
+
+      function renderTaskList() {
+        if (!state.summary || !Array.isArray(state.summary.tasks) || state.summary.tasks.length === 0) {
+          taskList.innerHTML = `
+            <div class="detail-empty" style="min-height: 220px;">
+              No tasks yet. Load a run summary to inspect the task rows.
+            </div>
+          `;
+          return;
+        }
+
+        const query = searchInput.value.trim().toLowerCase();
+        const verdictMode = verdictFilter.value;
+        const filtered = state.summary.tasks.filter((taskRow) => matchesFilters(taskRow, query, verdictMode));
+        if (filtered.length === 0) {
+          taskList.innerHTML = `
+            <div class="detail-empty" style="min-height: 220px;">
+              No tasks match the current filter.
+            </div>
+          `;
+          return;
+        }
+
+        taskList.innerHTML = filtered.map(renderTaskCard).join("");
+        for (const button of taskList.querySelectorAll("[data-task-id]")) {
+          button.addEventListener("click", () => {
+            state.selectedTaskId = button.dataset.taskId || "";
+            renderTaskList();
+            renderDetail();
+          });
+        }
+      }
+
+      function renderTaskCard(taskRow) {
+        const detail = state.detailsByTaskId.get(taskRow.task_id);
+        const tags = detail && Array.isArray(detail.task.tags) ? detail.task.tags : [];
+        const isActive = state.selectedTaskId === taskRow.task_id;
+        const passClass = taskRow.pass ? "pass-true" : "pass-false";
+        return `
+          <button class="task-card ${isActive ? "active" : ""}" type="button" data-task-id="${escapeHtml(taskRow.task_id)}">
+            <div class="task-topline">
+              <div>
+                <h3>${escapeHtml(taskRow.title || taskRow.task_id)}</h3>
+              </div>
+              <span class="badge verdict-${escapeHtml(String(taskRow.verdict).toLowerCase())}">${escapeHtml(taskRow.verdict || "--")}</span>
+            </div>
+            <div class="task-meta">
+              <span class="badge ${passClass}">${taskRow.pass ? "pass" : "needs work"}</span>
+              <span class="tag">${escapeHtml(taskRow.task_id)}</span>
+              ${tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}
+              ${detail ? '<span class="tag">detail loaded</span>' : '<span class="tag">summary only</span>'}
+            </div>
+            <p class="reason">${escapeHtml(taskRow.reason || "No reason provided.")}</p>
+          </button>
+        `;
+      }
+
+      function renderDetail() {
+        const taskRow = getSelectedTaskRow();
+        if (!taskRow) {
+          detailPanel.innerHTML = `
+            <div class="detail-empty">
+              Select a task after loading eval data. The detail pane will show the task prompt, judge verdict, rubric tiers, and each reference-point check.
+            </div>
+          `;
+          return;
+        }
+
+        const detail = state.detailsByTaskId.get(taskRow.task_id);
+        if (!detail) {
+          detailPanel.innerHTML = `
+            <div class="detail-card">
+              <div class="task-topline">
+                <div>
+                  <h3>${escapeHtml(taskRow.title || taskRow.task_id)}</h3>
+                  <p class="reason">Task detail file not loaded yet. Pick the JSON files inside the run’s <code>tasks/</code> folder to unlock the full rubric breakdown.</p>
+                </div>
+                <span class="badge verdict-${escapeHtml(String(taskRow.verdict).toLowerCase())}">${escapeHtml(taskRow.verdict || "--")}</span>
+              </div>
+              <div class="detail-meta">
+                <span class="tag">${escapeHtml(taskRow.task_id)}</span>
+                <span class="tag">${taskRow.pass ? "pass" : "needs work"}</span>
+              </div>
+              <pre>${escapeHtml(JSON.stringify(taskRow, null, 2))}</pre>
+            </div>
+          `;
+          return;
+        }
+
+        const task = detail.task || {};
+        const judge = detail.judge || {};
+        const rubric = judge.rubric || {};
+        const referenceResults = Array.isArray(judge.reference_point_results) ? judge.reference_point_results : [];
+        const taskTags = Array.isArray(task.tags) ? task.tags : [];
+
+        detailPanel.innerHTML = `
+          <div class="detail-card">
+            <div class="task-topline">
+              <div>
+                <h3>${escapeHtml(task.title || taskRow.title || taskRow.task_id)}</h3>
+                <p class="reason">${escapeHtml(judge.reason || taskRow.reason || "")}</p>
+              </div>
+              <span class="badge verdict-${escapeHtml(String(judge.verdict || taskRow.verdict || "d").toLowerCase())}">${escapeHtml(judge.verdict || taskRow.verdict || "--")}</span>
+            </div>
+            <div class="detail-meta">
+              <span class="badge ${judge.pass ? "pass-true" : "pass-false"}">${judge.pass ? "pass" : "needs work"}</span>
+              <span class="tag">${escapeHtml(task.id || taskRow.task_id)}</span>
+              ${(taskTags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}
+              <span class="tag">${escapeHtml(`agent ${detail.run_config && detail.run_config.harness ? detail.run_config.harness : "--"}`)}</span>
+              <span class="tag">${escapeHtml(`judge ${detail.run_config && detail.run_config.judge_harness ? detail.run_config.judge_harness : "--"}`)}</span>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <h3>Task prompt</h3>
+            <p>${escapeHtml(task.query || "No query recorded.")}</p>
+            ${task.notes ? `<p class="reason">${escapeHtml(task.notes)}</p>` : ""}
+          </div>
+
+          <div class="detail-card">
+            <h3>Reference points</h3>
+            <ul>
+              ${Array.isArray(task.reference_points) && task.reference_points.length
+                ? task.reference_points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")
+                : "<li>No reference points recorded.</li>"}
+            </ul>
+          </div>
+
+          <div class="detail-card">
+            <h3>Rubric</h3>
+            <div class="rubric-grid">
+              ${Object.keys(rubric).length
+                ? Object.entries(rubric).map(([key, value]) => `
+                    <div class="rubric-card">
+                      <span>${escapeHtml(formatKey(key))}</span>
+                      <strong>${escapeHtml(String(value))}</strong>
+                    </div>
+                  `).join("")
+                : '<p class="reason">No rubric data recorded.</p>'}
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <h3>Reference-point checks</h3>
+            <div class="reference-list">
+              ${referenceResults.length
+                ? referenceResults.map((result) => `
+                    <article class="reference-row">
+                      <header>
+                        <strong>${escapeHtml(result.reference_point || "Reference point")}</strong>
+                        <span class="badge ${result.met ? "pass-true" : "pass-false"}">${result.met ? "met" : "missed"}</span>
+                      </header>
+                      <p>${escapeHtml(result.reason || "No explanation provided.")}</p>
+                    </article>
+                  `).join("")
+                : '<p class="reason">No per-point breakdown recorded.</p>'}
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <h3>Artifact paths</h3>
+            <ul>
+              <li><strong>Summary source:</strong> ${escapeHtml(state.summarySource || "manual load")}</li>
+              <li><strong>Agent answer path:</strong> ${escapeHtml(detail.agent && detail.agent.answer_path ? detail.agent.answer_path : "not recorded")}</li>
+              <li><strong>Detail file:</strong> ${escapeHtml(taskRow.detail_path || "not recorded")}</li>
+            </ul>
+            <p class="footer-note">
+              Tip: for the quick loader, run <code>python3 -m http.server</code> inside your eval folder and then open this file through the local server.
+            </p>
+          </div>
+        `;
+      }
+
+      function matchesFilters(taskRow, query, verdictMode) {
+        const detail = state.detailsByTaskId.get(taskRow.task_id);
+        const blob = [
+          taskRow.task_id,
+          taskRow.title,
+          taskRow.reason,
+          detail && detail.task ? detail.task.query : "",
+          detail && detail.task && Array.isArray(detail.task.tags) ? detail.task.tags.join(" ") : "",
+        ].join(" ").toLowerCase();
+        const queryMatch = !query || blob.includes(query);
+        const verdictMatch =
+          verdictMode === "all" ||
+          (verdictMode === "pass" && taskRow.pass) ||
+          (verdictMode === "fail" && !taskRow.pass) ||
+          taskRow.verdict === verdictMode;
+        return queryMatch && verdictMatch;
+      }
+
+      function getSelectedTaskRow() {
+        if (!state.summary || !Array.isArray(state.summary.tasks)) return null;
+        const current = state.summary.tasks.find((row) => row.task_id === state.selectedTaskId);
+        return current || state.summary.tasks[0] || null;
+      }
+
+      function countDetailsLoaded() {
+        return state.detailsByTaskId.size;
+      }
+
+      function percent(value) {
+        if (typeof value !== "number" || Number.isNaN(value)) return "--";
+        return `${Math.round(value * 100)}%`;
+      }
+
+      function numberValue(value) {
+        return typeof value === "number" ? String(value) : "--";
+      }
+
+      function sourceLabel(taskFiles) {
+        if (!Array.isArray(taskFiles) || taskFiles.length === 0) return "No task file recorded";
+        if (taskFiles.length === 1) return taskFiles[0];
+        return `${taskFiles.length} task files`;
+      }
+
+      function formatDate(value) {
+        if (!value) return "Unknown date";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return String(value);
+        return date.toLocaleString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+        });
+      }
+
+      function formatKey(value) {
+        return String(value).replace(/_/g, " ");
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+    </script>
+  </body>
+</html>
