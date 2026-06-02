@@ -58,6 +58,8 @@ htmlcov/
 
 # Generated experiment outputs
 experiments/latest-runs.json
+experiments/agent-behavior-test/
+experiments/maintenance/
 experiments/feed-scout/
 experiments/harness-scout/runs/
 experiments/best-of-worlds/
