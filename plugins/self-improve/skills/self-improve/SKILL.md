@@ -1,6 +1,6 @@
 ---
 name: self-improve
-description: Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, or run binary assertion based skill optimization through the autoresearch artifact contract.
+description: Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, create skill-local memory, or provide eval/prompt context for native Goal-backed skill improvement.
 tier: 3
 group: self-improvement
 source: local
@@ -22,17 +22,29 @@ Source: `SKILL.md`
 - [ ] Define the quality rubric and convert it into binary assertions before
   optimizing.
 - [ ] Establish a baseline score before mutating the target skill.
-- [ ] Use [autoresearch-plan](../autoresearch-plan/SKILL.md) to create the
-  metric loop when repeated experiments are warranted.
-- [ ] Use [autoresearch-exec](../autoresearch-exec/SKILL.md) to run bounded
-  experiments after the session exists.
+- [ ] For durable iterative work, prefer native Goal mode as the loop runner;
+  use this skill as the eval, prompt-profile, and skill-memory context surface.
+- [ ] Use [autoresearch-plan](../autoresearch-plan/SKILL.md) only when the
+  operator explicitly wants filesystem autoresearch artifacts in addition to a
+  native Goal.
 - [ ] Promote only durable lessons, evals, and accepted changes into the target
-  skill package.
+  skill package, normally through [skill-maintenance](../skill-maintenance/SKILL.md).
 <!-- END CODEXTER_IMPORTANT_CHECKLIST -->
 
-Improve a target skill with binary evals and the shared autoresearch session
-contract. This is a special case of autoresearch where the editable artifact is
-a skill and the metric is eval pass rate.
+Improve a target skill by giving native Goal mode the context it needs to run a
+measured loop. This skill owns skill-local memory, rubrics, binary evals,
+prompt/profile variants, baseline results, failure analysis, and reusable
+lessons. It does not need to own the durable loop when a native `/goal` can do
+that directly.
+
+Current mental model:
+
+```text
+Goal mode = durable loop runner
+goal-crafter = writes the Goal contract
+self-improve/ = target skill memory, evals, prompt candidates, and results
+skill-maintenance = accepted writeback into SKILL.md/references/source copies
+```
 
 ## Trigger Conditions
 
@@ -48,9 +60,12 @@ Use when the user asks to:
 - preserve skill experiment memory inside the target skill package
 - optimize `SKILL.md`, references, prompts, or bundled scripts with measured
   behavior
+- prepare context files that a native Goal should read while optimizing a skill
 
-Use `autoresearch-plan` first when the user wants a generic metric loop that is
-not skill-specific.
+Use `goal-crafter` first when the user wants a durable native Goal. Use
+`autoresearch-plan` only when the user explicitly wants filesystem
+autoresearch artifacts, separate experiment scripts, or a metric loop outside
+native Goal mode.
 
 ## Workflow
 
@@ -64,13 +79,18 @@ not skill-specific.
 5. **Build binary evals:** convert rubric dimensions into `pass/fail`
    assertions over realistic prompts and expected artifacts.
 6. **Baseline:** run the eval suite against the current skill and record pass
-   rate.
-7. **Create autoresearch session:** use the shared artifacts with metric
-   `skill_eval_pass_rate` and direction `higher`.
-8. **Iterate:** change one part of the skill at a time, rerun evals, keep only
-   improvements that do not break skill validation.
-9. **Debrief:** summarize before/after behavior in rubric terms, update
-   `program.md` with reusable lessons, and preserve evals only when durable.
+   rate when deterministic evals exist. For subjective artifacts, record the
+   current human-review rubric and latest feedback instead.
+7. **Prepare Goal context:** make sure `program.md`, evals, latest results, and
+   failure analysis tell Goal mode what to optimize, how to verify, and what
+   not to regress.
+8. **Iterate through native Goal mode:** change one bounded part of the skill
+   at a time, rerun evals or present the review artifact, keep only
+   improvements that do not break skill validation, and record the lesson.
+9. **Debrief and write back:** summarize before/after behavior in rubric
+   terms, update `program.md` with reusable lessons, preserve evals only when
+   durable, and use `skill-maintenance` for accepted edits to
+   `SKILL.md`/references/source copies.
 
 Load `references/skill-evals.md` before designing eval cases. Load
 `references/skill-memory.md` before writing skill-local memory.
@@ -83,9 +103,33 @@ Reference split:
 - `references/skill-evals.md` for case/assertion design
 - `references/skill-memory.md` for target-skill `program.md` and run history
 
+## Goal Mode Integration
+
+A native Goal improving a skill should dynamically read these target-skill
+files when they exist:
+
+```text
+<target-skill>/SKILL.md
+<target-skill>/references/*
+<target-skill>/scripts/*
+<target-skill>/self-improve/program.md
+<target-skill>/self-improve/evals/*
+<target-skill>/self-improve/results/latest_run.json
+<target-skill>/self-improve/results/failure_analysis.md
+<target-skill>/self-improve/prompts/current.txt
+<target-skill>/self-improve/prompts/candidates/*
+<target-skill>/self-improve/runs/*/notes.md
+```
+
+`program.md` should define the optimization target: desired behavior, rubric,
+metric or human feedback schema, known failure modes, constraints, accepted
+lessons, and promotion rules. When `program.md` is missing or stale, update it
+before asking Goal mode to optimize.
+
 ## Artifact Layout
 
-Use an experiment directory by default for scratch or early eval work:
+Use an experiment directory for scratch or early eval work when native Goal
+context files are not yet durable enough:
 
 ```text
 experiments/self-improve/<skill-name>/<date-slug>/
@@ -143,7 +187,10 @@ self-improve/results/failure_analysis.md
 
 Only promote evals and run summaries into the target skill package after they
 prove reusable. Keep raw scratch logs in `experiments/` when they are bulky,
-secret-bearing, one-off, or too noisy for durable skill memory.
+secret-bearing, one-off, or too noisy for durable skill memory. For accepted
+changes to first-load instructions, use `skill-maintenance` so mandatory logic
+lands in the source `SKILL.md` rather than being buried in references or
+installed copies.
 
 ## Core Decision Branches
 
@@ -159,6 +206,8 @@ secret-bearing, one-off, or too noisy for durable skill memory.
 - **Eval pass rate improves but skill becomes bloated:** use a simplicity guard,
   usually line count or duplicated-rule count.
 - **Eval suite is too narrow:** add cases before trusting the optimization.
+- **Native Goal can carry the loop:** keep this skill focused on context,
+  memory, evals, and evidence; do not create parallel loop machinery.
 
 ## Top Gotchas
 
@@ -167,8 +216,10 @@ secret-bearing, one-off, or too noisy for durable skill memory.
 3. Do not mutate the user's target skill until baseline evals exist.
 4. Do not promote experimental evals into the skill package until they catch at
    least one real failure mode.
-5. Do not optimize a skill that should be split into smaller skills first.
-6. Do not fill target skill packages with bulky raw logs; store durable
+5. Do not treat old autoresearch artifacts as mandatory when native Goal mode
+   is the simpler durable loop.
+6. Do not optimize a skill that should be split into smaller skills first.
+7. Do not fill target skill packages with bulky raw logs; store durable
    summaries, accepted evals, and reusable lessons.
 
 ## Outcome Contract
@@ -178,7 +229,8 @@ A self-improvement pass should leave:
 - eval cases and assertions for the target skill
 - deterministic eval runner/results when the prompt profile is used
 - baseline score and changed-score logs
-- an autoresearch session pointing to the eval runner
+- Goal-readable context in `program.md`, latest results, failure analysis, and
+  prompt/eval files
 - updated `self-improve/program.md` when the user wants durable skill memory
 - a concise before/after debrief
 - only measured, reversible target skill edits

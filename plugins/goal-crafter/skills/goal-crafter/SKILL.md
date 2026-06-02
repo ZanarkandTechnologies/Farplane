@@ -21,6 +21,10 @@ Source: `SKILL.md`
 - [ ] Use [advise](../advise/SKILL.md) when multiple goal framings are viable.
 - [ ] Draft the goal with outcome, verification surface, constraints,
   boundaries, iteration policy, blocked stop condition, and optional budget.
+- [ ] For skill-improvement goals, require the Goal to read the target skill's
+  `self-improve/program.md`, evals, latest results, failure analysis, prompt
+  candidates, and prior run notes when present; use those files as Goal
+  context rather than creating a separate loop runner.
 - [ ] When an existing ticket, plan, or Proof Contract exists, compile those
   fields into `GoalPrepState` before asking questions.
 - [ ] Ask only missing execution-safety questions that materially affect the
@@ -99,6 +103,12 @@ A strong goal should include:
 - `Iteration policy`: how Codex chooses the next useful action
 - `Blocked stop condition`: when stopping is honest and what must be reported
 - `Budget`: optional turn/time/spend limit when relevant
+
+For skill-improvement work, native Goal mode is the durable loop runner. Draft
+the Goal so it reads the target skill package plus any `self-improve/`
+context, optimizes toward `program.md`, uses `$self-improve` only for
+eval/memory/prompt scaffolding, and uses `$skill-maintenance` for accepted
+writeback into `SKILL.md`, references, or plugin/source copies.
 
 ## Ticket-Backed Goal Prep
 
@@ -222,6 +232,25 @@ met, the budget is exhausted with the best attempt recorded, or a blocker is
 recorded with evidence and the recommended next action.
 ```
 
+### Skill Improvement
+
+```text
+/goal Improve <target skill> as a native Goal-backed skill-improvement loop,
+verified by <eval command/artifact, metric, or human-reviewed artifact> while
+preserving <skill contract constraints>. Read the target skill package,
+including `SKILL.md`, references, scripts, and `self-improve/` context when
+present: `program.md`, evals, latest results, failure analysis, prompt
+candidates, and prior run notes. Optimize toward the metric, rubric, or human
+feedback schema defined in `program.md`; if no metric exists, first define the
+cheapest honest feedback surface before mutating the skill. Use Goal mode as
+the durable loop runner, `$self-improve` only for eval/memory scaffolding, and
+`$skill-maintenance` for accepted writeback. Between iterations, change one
+bounded part of the skill, verify it, record the lesson, and promote only
+durable accepted rules. Stop only when the improvement is verified and written
+back, or when blocked with attempted paths, evidence gathered, safe options
+considered, the recommended next action, and the one missing input.
+```
+
 ### Figure-It-Out Unblock
 
 ```text
@@ -327,6 +356,9 @@ Deterministic local ask:
 - **Task needs work sizing first:** draft a goal that invokes `$work` so
   Codexter can choose direct work, `impl-plan`, `$impl`, `batch-work`,
   `$ralph`, reslicing, or autoresearch.
+- **Skill improvement:** prefer a native Goal that reads the target skill's
+  `self-improve/` context and uses `$self-improve` for eval/memory scaffolding,
+  not as the loop runner.
 - **Existing ticket has metrics or proof:** compile `GoalPrepState`, ask at
   most 3 missing execution-safety questions, and preserve the ticket's proof
   contract in the `/goal`.
