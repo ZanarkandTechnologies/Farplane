@@ -10,10 +10,8 @@ common_chains:
 
 # Impl
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the selected ticket and linked docs before launching any lanes.
 - [ ] Treat this skill as `ExecuteTicket<CodingTicket>` plus proof integration
@@ -31,15 +29,16 @@ Source: `SKILL.md`
 - [ ] Make the delegated `worker_name`, `main_artifact_path`, and `grounding_summary` explicit before delegating.
 - [ ] Launch the visible lanes and keep their responsibilities distinct.
 - [ ] When review starts, use the [execute](../execute/SKILL.md) proof/review
-  shape instead of improvising a vague review pass.
+  shape and pass the ticket's reviewer handoff instead of improvising rubric
+  routing inside the reviewer lane.
 - [ ] When UI evidence needs judgment, use the [Visual QA](../visual-qa/SKILL.md) skill.
 - [ ] Integrate lane outputs back into the ticket and keep completion claims in the orchestrator, not the workers.
 - [ ] If the verdict says repeat the same ticket, re-enter the same `$impl` flow instead of silently jumping to another ticket.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-`$impl` is the build-phase orchestration surface for Codexter.
+`$impl` is the build-phase orchestration surface for Farplane.
 
-`$impl` is a Tier 3 Codexter coding-pipeline skill. It implements the generic
+`$impl` is a Tier 3 Farplane coding-pipeline skill. It implements the generic
 [execute](../execute/SKILL.md) interface for code tickets; it is not the
 universal Tier 2 execution interface for every application domain.
 

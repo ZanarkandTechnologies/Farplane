@@ -10,11 +10,14 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, 
 
 # Skill Creator
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
 - [ ] Read the requested capability, existing skills, registry, and nearby
   project docs before creating or updating a skill.
+- [ ] Apply `docs/skills/best-practices.md` for checklist shape, reference
+  placement, actor-prompt versus skill-contract boundaries, duplication
+  control, and repeatability.
 - [ ] Use [plan](../plan/SKILL.md) when tier, ownership, package boundary, or
   first-load contract is unclear.
 - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
@@ -23,6 +26,9 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, 
 - [ ] Define trigger conditions, job, direct `## Important Checklist`, decision
   branches, gotchas or hard gates, judgment questions, and outcome contract in
   `SKILL.md`.
+- [ ] Keep actor identity, delegation routing, tool-use policy, and artifact
+  writeback in the owning agent prompt or caller skill, not in a reusable skill
+  contract.
 - [ ] Keep every-invocation logic in `SKILL.md`; use references only for
   conditional branches, examples, templates, long rubric detail, model maps,
   delegated prompts, and rare-path recipes.
@@ -33,9 +39,14 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, 
 - [ ] Put required first-load checklist items directly in `SKILL.md`; create a
   legacy `todos.md` only as temporary migration input when explicitly needed.
 - [ ] Run the skill registry and tier validators after edits.
+- [ ] Before completion, call the native `reviewer` subagent when available
+  with a reviewer handoff using `skill-contract`, `integration-readiness`, and
+  `evidence-quality` families; require `TAS-A` on repeatability, no duplicated
+  first-load logic, actor-prompt versus skill-contract boundaries, and explicit
+  proof commands.
 - [ ] Use [execute](../execute/SKILL.md) for final proof/writeback after skill
   files change.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 This skill provides guidance for creating effective skills.
 
@@ -116,7 +127,7 @@ Think of Claude as exploring a path: a narrow bridge with cliffs needs specific 
 
 If an agent only reads `SKILL.md` once and skips all references, it should still execute correctly.
 
-Codexter skills are stable local contracts. External skills, repos, blogs, and
+Farplane skills are stable local contracts. External skills, repos, blogs, and
 command families are research inputs, not live dependencies. Do not create thin
 wrappers that auto-sync upstream behavior; use `best-of-worlds` to import ideas
 through explicit `adopt`, `adapt`, `reject`, or `defer` decisions. See
@@ -163,6 +174,23 @@ Use `references/*` only for conditional content:
 If a reference file must be read every time, promote the needed logic into
 `SKILL.md`. Templates can stay as files because the agent uses them as
 artifacts, not always-loaded reasoning.
+
+### Repeatability Review Gate
+
+Before calling a new or updated skill ready, review it with the same skepticism
+as implementation work. Use `docs/skills/best-practices.md` as the standard.
+The minimum pass bar:
+
+- Another agent can use the skill from repo files alone without hidden chat
+  context.
+- The first-load checklist is short, operational, and branch-aware.
+- Onboarding, examples, long rationale, and rare-path detail live in references
+  instead of bloating the main checklist.
+- The same instruction is not copied across `SKILL.md`, references, templates,
+  and README-style docs unless each surface has a distinct job.
+- Required scripts, commands, artifact paths, and validation steps are explicit.
+- The review result names `repeatability` as a checked dimension, alongside
+  integration and evidence readiness.
 
 ### Anatomy of a Skill
 

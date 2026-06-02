@@ -2,17 +2,17 @@
 
 Use when reviewing an implementation plan, technical approach, or execution sequence before code is written.
 
-Threshold: `4.0`
+Required TAS: `TAS-A`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: a reviewer cannot trust the plan to produce the intended change safely
-- `2`: the direction is partly visible, but sequencing, proof, or boundaries
+- `TAS-C`: a reviewer cannot trust the plan to produce the intended change safely
+- `TAS-B`: the direction is partly visible, but sequencing, proof, or boundaries
   are still too thin to hand off with confidence
-- `3`: understandable and workable, but still ordinary, inference-heavy, or
+- `TAS-B`: understandable and workable, but still ordinary, inference-heavy, or
   carrying avoidable plan risk
-- `4`: strong, pragmatic, and approval-ready with only minor caveats
-- `5`: unusually clear, economical, and resistant to skeptical review
+- `TAS-A`: strong, pragmatic, and approval-ready with only minor caveats
+- `TAS-A`: unusually clear, economical, and resistant to skeptical review
 
 ## Dimensions
 
@@ -123,17 +123,17 @@ Ask:
 
 ## Example Judgments
 
-- `2.0` example:
+- `TAS-B` example:
   the plan names touched files and a rough intention, but proof is "run tests"
   with no concrete checks, rollback is missing, and sequencing still assumes the
   implementer will figure out the risky parts.
-- `3.0` example:
+- `TAS-B` example:
   the plan has a believable delta and execution order, but edge-case proof,
   ownership boundaries, or risk mitigation still require some inference.
-- `4.0` example:
+- `TAS-A` example:
   the plan makes `Before -> After`, touched areas, proof points, and rollback
   easy to scan, and a reviewer can approve it without major caveats.
-- `5.0` example:
+- `TAS-A` example:
   the plan is as clear as a strong internal design note while still staying
   lean; it explains the tradeoff, the order, and the proof path so well that
   very little interpretive judgment is left for the implementer.
@@ -142,9 +142,9 @@ Ask:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

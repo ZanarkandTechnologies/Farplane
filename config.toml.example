@@ -84,9 +84,9 @@ config_file = "agents/asset-generator.toml"
 description = "Specialist shell operator for filesystem/build/debug command workflows. Use proactively for multi-step terminal tasks that need efficient command selection, safety checks, verification, and rollback notes."
 config_file = "agents/bash-operator.toml"
 
-[agents.code-reviewer]
-description = "Comprehensive code review specialist that analyzes code for quality, error handling, type design, and simplification opportunities. Use proactively after completing features or before creating PRs."
-config_file = "agents/code-reviewer.toml"
+[agents.reviewer]
+description = "Independent rubric reviewer for ticketed plans, implementations, evidence bundles, skills, prompts, docs, evals, and completion receipts. Use proactively before material completion claims."
+config_file = "agents/reviewer.toml"
 
 [agents.orchestrator]
 description = "Stop-hook orchestrator for ticket handoff, continuation, and next-ticket routing."

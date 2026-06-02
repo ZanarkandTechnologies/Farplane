@@ -12,10 +12,8 @@ allowed-tools: Read, Glob, Grep
 
 # Impl Plan
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, and nearby code.
 - [ ] Treat this skill as `PlanTicket<CodingTicket>` inside the
@@ -37,7 +35,10 @@ Source: `SKILL.md`
 - [ ] Decide whether the whole selected ticket can stay whole or whether a
   real boundary forces a split first.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the proof and execution plan.
-- [ ] Write or refine the ticket `Proof Contract`: metrics or `none mechanical`, review rubric gates, hard gates, required evidence, and optional autoresearch session path.
+- [ ] Write or refine the ticket `Proof Contract`: metrics or `none mechanical`,
+  caller-declared review rubric families, required TAS gates, hard gates,
+  reviewer handoff fields, required evidence, and optional autoresearch session
+  path.
 - [ ] Compare 3 viable options and recommend one clearly.
 - [ ] Keep the output in the canonical ticket-body shape instead of inventing a `Human` / `Agent` split.
 - [ ] Make the `Plan` section carry callable seams in `Signature delta` and typed data seams in `Type Sketch`.
@@ -52,12 +53,12 @@ Source: `SKILL.md`
 - [ ] Pitch the full-ticket plan to the user for approval and revise it before
   build starts.
 - [ ] Keep planning separate from implementation and leave the ticket in `review` until approval exists.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this for per-ticket implementation planning after a bounded ticket already
 exists.
 
-`impl-plan` is a Tier 3 Codexter coding-pipeline skill. It implements the
+`impl-plan` is a Tier 3 Farplane coding-pipeline skill. It implements the
 generic [plan](../plan/SKILL.md) interface for code tickets; it is not the
 universal Tier 2 planning interface for every application domain.
 
@@ -111,7 +112,8 @@ The highest-signal plan answers:
   what the repo is still missing
 - blast radius: callers, systems, workflows, or edges that could break
 - how to verify it: tests, checks, strongest evidence, and the ticket-level
-  `Proof Contract` that names metrics, review rubric gates, and required artifacts
+  `Proof Contract` that names metrics, review rubric gates, reviewer handoff,
+  and required artifacts
 
 If the plan leaves the builder inventing execution steps or the next concrete
 move, it is too thin.
@@ -164,8 +166,9 @@ Before finalizing the plan or handing off to execution:
     execution.
 3. Preserve or create a ticket-level `Proof Contract` for material tickets:
    honest mechanical metrics when available, `Metrics: none mechanical` when
-   not, review rubric families and thresholds, hard gates, required evidence,
-   and optional autoresearch session path.
+   not, caller-declared review rubric families, required TAS gates, hard gates,
+   reviewer handoff fields, required evidence, and optional autoresearch
+   session path.
 4. Preserve any `Autonomy Readiness` fields from the ticket, PRD, bootstrap
    brief, system design, taste brief, or agent-testability brief; for `$ralph`
    or long-running execution, name missing inputs, permissions, compute, tools,
@@ -174,7 +177,7 @@ Before finalizing the plan or handing off to execution:
     advisory input for `$work`, not as proof that implementation should start.
 5. Read enough nearby code to name real files, seams, signatures, and typed
    data shapes instead of inventing them.
-6. In Codexter itself, do **not** create hidden sidecar context snapshots; the
+6. In Farplane itself, do **not** create hidden sidecar context snapshots; the
    active repo contract is tickets, linked docs, and mode state.
 7. If intent is still vague, use `deep-interview --quick`.
 8. If system shape is still vague, use `deep-system-design`.
@@ -214,9 +217,10 @@ unknowns.
    current state, production expectation, missing gaps, grounding references,
    and recommended now/later boundary.
 6. **Proof contract:** for material tickets, write or refine the ticket's
-   `Proof Contract` with metrics, rubric gates, and required evidence. Use
-   `Metrics: none mechanical` when a number would be dishonest; use
-   `autoresearch-plan` only when repeated metric experiments are warranted.
+   `Proof Contract` with metrics, caller-declared rubric families, required
+   TAS gates, reviewer handoff fields, and required evidence. Use `Metrics:
+   none mechanical` when a number would be dishonest; use `autoresearch-plan`
+   only when repeated metric experiments are warranted.
 7. **Build one detailed plan:** use the canonical ticket sections and make the
    `Plan` section explicit enough that the builder does not have to invent the
    sequence.
@@ -324,8 +328,9 @@ Use the canonical ticket-body shape:
   deploy/spend/destructive boundaries.
 - **Proof Contract required:** material, review-sensitive, agentically hard, or
   ticketed build work. Include mechanical metrics when useful, `Metrics: none
-  mechanical` when not, required review rubric families, thresholds, hard
-  gates, required evidence, and optional autoresearch session path.
+  mechanical` when not, caller-declared review rubric families, required TAS
+  gates, hard gates, reviewer handoff fields, required evidence, and optional
+  autoresearch session path.
 - **Text-only allowed:** trivial, single-bug, or narrowly localized fixes where
   the file, symbol, or error already anchors the work concretely.
 
@@ -405,7 +410,7 @@ Before returning the plan, run these checks against the drafted output:
    - Are the checks concrete and observable?
    - Would a reviewer know exactly how to tell success from failure?
    - Does the `Proof Contract` clearly separate mechanical metrics, review
-     rubric gates, and required evidence?
+     rubric gates, reviewer handoff, and required evidence?
    - If no metric exists, does it honestly say `Metrics: none mechanical`
      instead of inventing a proxy?
 8. **Risk clarity**

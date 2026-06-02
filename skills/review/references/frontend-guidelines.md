@@ -5,7 +5,7 @@ ticket that claims accessibility, interaction, responsive, form, animation, or
 web-interface quality.
 
 This is a bridge between the source-fresh `web-design-guidelines` skill and the
-anchored `review` score contract. It is not a replacement for `ui-quality` or
+TAS `review` contract. It is not a replacement for `ui-quality` or
 `visual-qa`.
 
 ## Source Of Truth
@@ -35,24 +35,24 @@ source, backend/API code, or docs-only work.
    summary.
 2. Run `web-design-guidelines <file-or-pattern>` on that set.
 3. Save or paste the guideline findings into the review evidence when useful.
-4. Convert the result into a `frontend-guidelines` score using the scale below.
-5. Attach the score beside `ui-quality`, not inside it.
+4. Convert the result into a `frontend-guidelines` TAS using the scale below.
+5. Attach the TAS beside `ui-quality`, not inside it.
 6. Use serious guideline failures as evidence for `ui-quality`,
    `evidence-quality`, or `integration-readiness` when they affect trust.
 
-## Score Guide
+## TAS Guide
 
-- `1.0`: no guideline audit was run for UI code, or the findings show severe
+- `TAS-C`: no guideline audit was run for UI code, or the findings show severe
   accessibility/interaction failures that make the UI unsafe to ship
-- `2.0`: audit ran, but multiple important findings remain across core controls,
+- `TAS-B`: audit ran, but multiple important findings remain across core controls,
   forms, navigation, focus, or animation
-- `3.0`: audit ran and the UI is directionally acceptable, but unresolved
+- `TAS-B`: audit ran and the UI is directionally acceptable, but unresolved
   findings still need a follow-up pass before strong confidence
-- `4.0`: audit ran and only minor or well-justified findings remain
-- `5.0`: audit ran cleanly, or remaining notes are explicitly non-applicable
+- `TAS-A`: audit ran and only minor or well-justified findings remain
+- `TAS-A`: audit ran cleanly, or remaining notes are explicitly non-applicable
   with convincing evidence
 
-Default threshold: `4.0`.
+Default required TAS: `TAS-A`.
 
 ## Artifact Shape
 
@@ -61,8 +61,8 @@ Add this object to the structured review result when the lane runs:
 ```json
 {
   "name": "frontend-guidelines",
-  "score": 4.0,
-  "threshold": 4.0,
+  "tas": "TAS-A",
+  "required_tas": "TAS-A",
   "pass": true,
   "source": "web-design-guidelines",
   "files_checked": ["src/app/page.tsx"],
@@ -86,8 +86,8 @@ If the lane is skipped, include:
 
 When comparing agent reviews, record both:
 
-- the agent's normal `ui-quality` score
-- this `frontend-guidelines` score
+- the agent's normal `ui-quality` TAS
+- this `frontend-guidelines` TAS
 
 Large disagreement is useful signal:
 

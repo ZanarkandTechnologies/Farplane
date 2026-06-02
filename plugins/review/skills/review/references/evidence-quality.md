@@ -2,18 +2,18 @@
 
 Use when reviewing collected proof: tests, logs, screenshots, traces, QA notes, repro steps, or any evidence packet.
 
-Threshold: `4.0`
+Required TAS: `TAS-A`
 Hard gate: required for any overall `pass`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: the artifacts do not credibly prove the claimed behavior
-- `2`: some proof exists, but key claims still rely on inference, missing
+- `TAS-C`: the artifacts do not credibly prove the claimed behavior
+- `TAS-B`: some proof exists, but key claims still rely on inference, missing
   coverage, or contradictory artifacts
-- `3`: the main claim is supported, but important proof is still thin, partial,
+- `TAS-B`: the main claim is supported, but important proof is still thin, partial,
   or awkward to audit
-- `4`: strong, traceable, and pass-worthy evidence with only minor gaps
-- `5`: unusually persuasive, easy to audit, and hard to game
+- `TAS-A`: strong, traceable, and pass-worthy evidence with only minor gaps
+- `TAS-A`: unusually persuasive, easy to audit, and hard to game
 
 ## Dimensions
 
@@ -110,16 +110,16 @@ When using the anti-slop playbook, search for:
 
 ## Example Judgments
 
-- `2.0` example:
+- `TAS-B` example:
   one screenshot proves the happy path, but the ticket also claims empty-state,
   error-path, and regression behavior that are not backed by any artifact.
-- `3.0` example:
+- `TAS-B` example:
   the main command output and one or two screenshots are present, but mapping
   from ticket claims to artifacts is still loose and a reviewer has to infer too much.
-- `4.0` example:
+- `TAS-A` example:
   each important claim points to a concrete test, log, screenshot, or repro
   step, and a skeptical reviewer can verify the packet quickly with only minor gaps.
-- `5.0` example:
+- `TAS-A` example:
   the packet is traceable, replayable, well-organized, and persuasive enough
   that very little reviewer interpretation is required.
 
@@ -127,9 +127,9 @@ When using the anti-slop playbook, search for:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

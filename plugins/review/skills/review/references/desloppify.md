@@ -3,8 +3,8 @@
 Use this cross-cutting reference when review needs to behave like a skeptical,
 repository-grounded anti-slop pass rather than a changed-file skim.
 
-This is not a separate public review skill and not a separate scored rubric
-family. It is the search-and-challenge playbook that sits on top of the scored
+This is not a separate public review skill and not a separate TAS rubric
+family. It is the search-and-challenge playbook that sits on top of the TAS
 families, especially `code-quality`, `integration-readiness`,
 `evidence-quality`, and `debloatability`.
 
@@ -48,7 +48,7 @@ Prioritize these over style commentary:
 
 ## Core Questions
 
-Ask these before scoring:
+Ask these before TAS assignment:
 
 - Which neighboring surface is most likely to disagree with this change?
 - What claim sounds true in the summary but is not actually proven?

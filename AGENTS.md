@@ -19,9 +19,9 @@ The main surfaces are:
 Prefer improving review loops, ticket contracts, skill packaging, and evidence surfaces before inventing more hidden orchestration code.
 
 Ticketed work should use the ticket `Proof Contract` as the shared scoreboard
-for metrics, review rubric gates, and required evidence. Keep full rubric
+for metrics, review TAS gates, and required evidence. Keep full rubric
 bodies in `skills/review/references/*` and full autoresearch session details in
-the owning autoresearch artifacts; tickets carry handles, thresholds, and
+the owning autoresearch artifacts; tickets carry handles, TAS gates, and
 artifact obligations. Use `Metrics: none mechanical` rather than inventing fake
 metrics for judgment-heavy work. See `MEM-0086`.
 
@@ -193,13 +193,21 @@ For harness-design research and external patterns:
   batches and hands work units to `$work`; parallel dispatch, leases, merge
   policy, and batch-QA orchestration remain future work. See `MEM-0074`.
 - Final Stop-hook completion in Codexter should remain mechanical and visible: after impl/qa/demo gates pass, request one linked nonce-backed completion-review receipt from the visible reviewer lane instead of hiding the final judgment in a background review pass. Only active ticket-backed `impl` loops should receive that nonce, and the next final response must echo it as `COMPLETION_PASSWORD: <nonce>` alongside the matching receipt. See `MEM-0064`, `MEM-0067`.
+- Material review should run through the native `reviewer` subagent when
+  available. Pass the active ticket or task artifact path, changed files,
+  evidence artifacts, review focus, caller-declared rubric families, required
+  TAS gates, hard gates, and expected output path; the reviewer validates that
+  routing and runs the `review` skill contract. Coordinating lanes should not
+  self-approve material work. See `MEM-0127` and `MEM-0129`.
 - Once specs are already decomposed into modular tickets, treat the selected
   ticket as the default planning, build, and review unit. `impl-plan` should
   plan the whole ticket, `$impl` should try to land the whole ticket, and
   `review` should judge the whole ticket unless a real blocker, proof
   boundary, safety issue, or explicit follow-up ticket makes narrower scope
   real. See `MEM-0061`.
-- Auto-run `review` at the end of `impl-plan` and at the end of `impl` when working inside Codexter.
+- Auto-run `review` at the end of `impl-plan` and at the end of `impl` when
+  working inside Codexter, using the `reviewer` lane for material review when
+  native subagents are available. See `MEM-0127` and `MEM-0129`.
 - Keep live repo-owned skills and docs Codexter-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
 - Prefer `.harness/` for live runtime state.
 - Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.

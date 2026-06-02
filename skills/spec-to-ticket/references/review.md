@@ -12,7 +12,8 @@ If any answer is weak, tighten the tickets first.
 - If a ticket uses a library, package, service, or tool, is that dependency named where relevant?
 - Do acceptance criteria explain the minimum necessary change clearly?
 - Does each material ticket include a `Proof Contract` that separates metrics,
-  review rubric gates, and required evidence?
+  caller-declared rubric families, required TAS gates, reviewer handoff fields,
+  and required evidence?
 - If no honest metric exists, does the ticket say `Metrics: none mechanical`
   instead of inventing a proxy?
 - For UI-bearing tickets, do `Agent Contract` and `Evidence checklist` make QA realistic?

@@ -1,7 +1,7 @@
 ---
 name: spec-to-ticket
 version: 1.5.0
-description: "Phase-2 Codexter skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work, and consume an Agent Testability Brief when present."
+description: "Phase-2 Farplane skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work, and consume an Agent Testability Brief when present."
 tier: 3
 group: coding
 source: local
@@ -11,10 +11,8 @@ common_chains:
 
 # Spec-to-Ticket Skill
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the chosen spec slice and confirm it is small enough for one planning pass.
 - [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,
@@ -51,11 +49,11 @@ Source: `SKILL.md`
 - [ ] Write the raw tickets into `tickets/` with the correct state fields.
 - [ ] Tighten the result against the [review guide](./references/review.md) before handoff.
 - [ ] Stop after ticket creation and do not implement the slice here.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use this as the second session in the Codexter workflow.
+Use this as the second session in the Farplane workflow.
 
-`spec-to-ticket` is a Tier 3 Codexter coding-pipeline skill. It implements the
+`spec-to-ticket` is a Tier 3 Farplane coding-pipeline skill. It implements the
 generic [plan](../plan/SKILL.md) interface for turning code-oriented specs into
 proofable tickets.
 
@@ -129,7 +127,8 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
   - dependencies
   - assignee
   - required evidence/backpressure
-  - `Proof Contract` with metric handles, review rubric gates, and required
+  - `Proof Contract` with metric handles, caller-declared rubric families,
+    required TAS gates, reviewer handoff fields, hard gates, and required
     evidence obligations
   - `Execution Profile Hints` for `$work` admission when useful
   - control fields for state movement
@@ -223,8 +222,9 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
 5. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above and choose the boundary that removes the most future friction while preserving strong proof.
 6. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
 7. For each material ticket, add a compact `Proof Contract` that names
-   mechanical metrics or `none mechanical`, required review rubric families,
-   thresholds, hard gates, and required evidence artifacts.
+   mechanical metrics or `none mechanical`, caller-declared rubric families,
+   required TAS gates, reviewer handoff fields, hard gates, and required
+   evidence artifacts.
 8. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
 9. For each UI-bearing or agentically hard ticket, add a compact `Agent Contract` block plus `Evidence checklist`, carrying forward the brief or bootstrap surfaces when relevant.
 10. For each `$ralph`-ready or long-running ticket, add `Autonomy Readiness`

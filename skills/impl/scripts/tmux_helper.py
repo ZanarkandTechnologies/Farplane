@@ -117,7 +117,7 @@ def parse_iso_timestamp(raw: object) -> datetime | None:
 
 
 def stale_budget_secs() -> int:
-    raw = str(os.environ.get("CODEXTER_WORKER_STALE_BUDGET_SECS", "")).strip()
+    raw = str(os.environ.get("FARPLANE_WORKER_STALE_BUDGET_SECS", "")).strip()
     if not raw:
         return 60
     try:
@@ -228,8 +228,9 @@ def lane_directive(phase: str, worker_name: str, execution_phase: str = "") -> s
         )
     if worker_name == "reviewer":
         return (
-            "You are the independent reviewer lane. Run the `review` skill against the active ticket, "
-            "use linked evidence artifacts, and return a skeptical verdict grounded in the current repo state. "
+            "You are the independent reviewer lane. Run the `review` skill against the active ticket path, "
+            "start from the ticket `Proof Contract` reviewer handoff, use its caller-declared rubric families, "
+            "required TAS gates, hard gates, linked evidence artifacts, and changed-file context, and return a skeptical verdict grounded in the current repo state. "
             "If Stop hook requests visible completion review with a nonce, write "
             "`tickets/TASK-XXXX/artifacts/review/<timestamp>-completion-receipt.json`, link it from the ticket `Evidence` section, "
             "and finish with `IMPL_RESULT: status=done next=building reason=completion review receipt written`.\n"
@@ -415,11 +416,11 @@ def lane_shell_command(
         )
 
     exports = [
-        f"export CODEXTER_ACTIVE_TICKET={shlex.quote(str(ticket))}",
+        f"export FARPLANE_ACTIVE_TICKET={shlex.quote(str(ticket))}",
         f"export IMPL_RUN_STATE={shlex.quote(str(run_state))}",
     ]
     if executor_target:
-        exports.append(f"export CODEXTER_EXECUTOR_TARGET={shlex.quote(executor_target)}")
+        exports.append(f"export FARPLANE_EXECUTOR_TARGET={shlex.quote(executor_target)}")
     args = [
         "codex",
         "--no-alt-screen",

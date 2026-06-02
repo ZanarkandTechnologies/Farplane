@@ -1,18 +1,16 @@
 ---
 name: harness-advisor
-description: Tier 2 Codexter harness placement advisor. Use when the user wants to make Codexter better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, or registries.
+description: Tier 2 Farplane harness placement advisor. Use when the user wants to make Farplane better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, or registries.
 tier: 2
 source: local
 ---
 
 # Harness Advisor
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
 
-Source: `SKILL.md`
-
-- [ ] State the Codexter improvement request as one concrete harness failure or capability gap.
+- [ ] State the Farplane improvement request as one concrete harness failure or capability gap.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the
   smallest relevant local evidence before recommending a surface.
 - [ ] Check `docs/features/registry.jsonl` for an existing or partial harness
@@ -29,6 +27,12 @@ Source: `SKILL.md`
   risk, discoverability, and maintenance cost.
 - [ ] Compare only realistic levers: repo `AGENTS.md`, global template, docs/specs,
   skill, subagent, hook/script, ticket contract, validator, or registry metadata.
+- [ ] When the decision touches skills and subagents, separate actor-prompt
+  ownership from reusable skill-contract ownership before recommending a
+  surface.
+- [ ] When recommending material review changes, place rubric routing in the
+  calling skill or ticket `Proof Contract`, reviewer execution in
+  `agents/reviewer.toml`, and TAS/family definitions in `skills/review`.
 - [ ] Use [advise](../advise/SKILL.md) to compare exactly 3 viable placement
   options and recommend one.
 - [ ] Name one primary owner and any secondary sync points.
@@ -36,20 +40,20 @@ Source: `SKILL.md`
   instead of doing hidden stateful work in chat.
 - [ ] Use [review](../review/SKILL.md) before treating a material placement
   decision as ready.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use this when the operator asks how to improve Codexter itself and the right
+Use this when the operator asks how to improve Farplane itself and the right
 surface is not obvious.
 
 This is a Tier 2 workflow surface. It may call Tier 1 primitives directly, then
 hand the chosen work to a Tier 3 domain skill such as `skill-maintenance`,
-`impl-plan`, `$impl`, `qa`, `demo`, or another Codexter application skill.
+`impl-plan`, `$impl`, `qa`, `demo`, or another Farplane application skill.
 
 ## Job
 
 1. Translate the improvement request into one concrete harness failure or
    capability gap.
-2. Ground the current state in the smallest relevant Codexter surfaces.
+2. Ground the current state in the smallest relevant Farplane surfaces.
 3. Check whether the feature or skill already exists before proposing a new
    surface.
 4. Score the placement axes: context budget, reuse, ownership, determinism,
@@ -60,7 +64,7 @@ hand the chosen work to a Tier 3 domain skill such as `skill-maintenance`,
 
 ## Use When
 
-- the user says "make Codexter better at X"
+- the user says "make Farplane better at X"
 - the user asks where a harness rule, workflow, validator, skill, hook,
   subagent, ticket contract, registry field, or prompt policy should live
 - a proposed improvement could fit several surfaces
@@ -70,7 +74,7 @@ hand the chosen work to a Tier 3 domain skill such as `skill-maintenance`,
 ## Do Not Use When
 
 - the target surface is already chosen and the user only wants implementation
-- the work is normal product/application code rather than Codexter harness work
+- the work is normal product/application code rather than Farplane harness work
 - the question is only skill metadata/todos/registry maintenance; use
   [skill-maintenance](../skill-maintenance/SKILL.md)
 

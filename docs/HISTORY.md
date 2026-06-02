@@ -254,3 +254,6 @@
 2026-06-02 01:27 +0800 | FEAT | add `prototyping` as a Tier 1 sample-first primitive and wire it into planning, execution, research, batch work, skill maintenance, and review gates
 2026-06-02 02:37 +0800 | FEAT | add harness-native `eval` skill templates for future `.codex/evals` and `.claude/evals`, with simple string-reference task JSON and agent/judge CLI run artifacts
 2026-06-02 03:03 +0800 | FEAT | guide `eval` skill setup with one tagged `harness_tasks.json` covering skill, workflow, and system-prompt eval tasks
+2026-06-02 12:14 +0800 | MIGRATION | hard-migrate the independent review lane from code-reviewer to generic reviewer and make material review pass task pointers through the reviewer subagent
+2026-06-02 12:46 +0800 | FIX | separate reviewer actor instructions from the review skill contract and migrate review output from numeric scores to TAS verdicts
+2026-06-02 13:09 +0800 | FIX | move review rubric routing ownership to caller skills and ticket proof contracts, add reviewer handoff template fields, and back prompt, eval, and skill review families with TAS rubric files

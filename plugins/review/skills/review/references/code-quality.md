@@ -2,17 +2,17 @@
 
 Use when reviewing code changes. This is the main code rubric; API/backend/type concerns live as explicit sub-lenses inside it rather than separate live skill trees.
 
-Threshold: `4.0`
+Required TAS: `TAS-A`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: the change is unsafe, tangled, misleading, or obviously not ready to land
-- `2`: some useful implementation exists, but trust is low because defects,
+- `TAS-C`: the change is unsafe, tangled, misleading, or obviously not ready to land
+- `TAS-B`: some useful implementation exists, but trust is low because defects,
   boundary leaks, or maintainability problems are still material
-- `3`: workable and directionally correct, but ordinary enough that a focused
+- `TAS-B`: workable and directionally correct, but ordinary enough that a focused
   cleanup or hardening pass is still warranted
-- `4`: strong, maintainable, and pass-worthy with only minor caveats
-- `5`: unusually clean, economical, and robust within scope
+- `TAS-A`: strong, maintainable, and pass-worthy with only minor caveats
+- `TAS-A`: unusually clean, economical, and robust within scope
 
 ## Dimensions
 
@@ -115,16 +115,16 @@ When using the anti-slop playbook, search for:
 
 ## Example Judgments
 
-- `2.0` example:
+- `TAS-B` example:
   the bug is mostly fixed, but the patch duplicates logic in a second location,
   leaves one failure path silent, and quietly increases coupling across modules.
-- `3.0` example:
+- `TAS-B` example:
   the code works and the structure is mostly sane, but some awkward branching,
   weak naming, or lightly handled errors still make a cleanup pass worthwhile.
-- `4.0` example:
+- `TAS-A` example:
   the change is localized, reuses the right local pattern, handles failures
   explicitly, and leaves only minor readability or polish concerns.
-- `5.0` example:
+- `TAS-A` example:
   the code solves the ticket and also improves the surrounding module shape by
   removing dead weight, clarifying ownership, or making future changes obviously easier.
 
@@ -132,9 +132,9 @@ When using the anti-slop playbook, search for:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

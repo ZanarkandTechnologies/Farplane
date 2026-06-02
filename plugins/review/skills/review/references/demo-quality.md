@@ -4,15 +4,15 @@ Use when reviewing a live demo script, narrated walkthrough, or interactive demo
 
 Threshold: `3.5`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: the demo misrepresents the product or is too staged to trust
-- `2`: the demo shows something real, but still feels selective, under-proven,
+- `TAS-C`: the demo misrepresents the product or is too staged to trust
+- `TAS-B`: the demo shows something real, but still feels selective, under-proven,
   or confusing enough that confidence remains low
-- `3`: believable and directionally useful, but still incomplete as reviewer
+- `TAS-B`: believable and directionally useful, but still incomplete as reviewer
   evidence
-- `4`: strong, trustworthy, and useful for review with only minor caveats
-- `5`: unusually faithful, realistic, and verification-friendly
+- `TAS-A`: strong, trustworthy, and useful for review with only minor caveats
+- `TAS-A`: unusually faithful, realistic, and verification-friendly
 
 ## Dimensions
 
@@ -82,9 +82,9 @@ Ask:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

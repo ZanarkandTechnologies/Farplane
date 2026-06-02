@@ -37,7 +37,7 @@ Done only if relevant items pass:
 - durable rules promoted to `docs/MEMORY.md`
 - repeated failures or user correction patterns logged in `docs/TROUBLES.md` when applicable
 - new invariants logged and referenced
-- review loop done; auto-run `review` at the end of `impl-plan` and at the end of `impl`, run it after other meaningful planning/build/doc passes when warranted, and always run it before any completion claim; `visual-qa` only if UI changed
+- review loop done; auto-run `review` at the end of `impl-plan` and at the end of `impl`, run it after other meaningful planning/build/doc passes when warranted, and always run it before any completion claim; for material review, delegate to the native `reviewer` subagent with the active ticket/task pointer, changed files, evidence artifacts, review focus, caller-declared rubric families, required TAS gates, hard gates, and expected output path when available; `visual-qa` only if UI changed
 - build/documenting completion claims require both checklist proof and a fresh
   review result attached through the ticket evidence/artifact surface
 - changes pushed to GitHub when the workflow calls for publishing
@@ -381,7 +381,7 @@ Required:
   subagents are available, prefer spawning `qa-tester` as the default QA lane
   instead of having the main agent drive browser/tool QA itself
 - broad cross-module exploration -> `explore`
-- auto-run at the end of `impl-plan` and `impl`, at other meaningful planning/build/doc checkpoints when warranted, and before a completion claim -> `review`
+- auto-run at the end of `impl-plan` and `impl`, at other meaningful planning/build/doc checkpoints when warranted, and before a completion claim -> `review`; for material review, route through the native `reviewer` subagent when available, passing caller-declared rubric families and TAS gates from the calling skill or ticket Proof Contract
 
 Avoid:
 

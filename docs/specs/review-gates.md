@@ -8,9 +8,10 @@ Define the canonical review-gate model for the spec-first execution loop.
 
 The system uses three distinct layers:
 
-1. **Ticket Proof Contract** declares metrics, rubric gates, and required evidence
+1. **Ticket Proof Contract** declares metrics, reviewer handoff, rubric gates,
+   and required evidence
 2. **QA** collects evidence
-3. **Reviewer** scores the work against the declared and inferred rubrics
+3. **Reviewer** judges the work against the declared and inferred rubrics
 4. **Stop hook** sanity-checks whether the evidence and review verdict justify
    completion or continuation
 
@@ -21,14 +22,20 @@ The system uses three distinct layers:
 The ticket answers before build starts:
 
 - what mechanical metric, if any, should move or pass
-- which review rubric families and thresholds are required
+- which review rubric families and TAS gates are required
 - which rubric families are hard gates
+- which reviewer handoff fields should be passed to the `reviewer` lane:
+  task path, review focus, changed files, evidence, rubric families,
+  required TAS gates, hard gates, and expected output path
 - which evidence artifacts must exist before completion
 - whether an `autoresearch` session exists for repeated metric experiments
 
-The contract carries handles and thresholds, not full specialist bodies. Rubric
-details remain in `skills/review/references/*`; autoresearch session details
-remain in `autoresearch.md`, `autoresearch.sh`, and `autoresearch.jsonl`.
+The calling skill or ticket owns rubric routing. The contract carries handles,
+reviewer handoff fields, and TAS gates, not full specialist bodies. Rubric
+details remain in `skills/review/references/*`; the reusable handoff template
+lives in `skills/review/references/reviewer-handoff.md`; autoresearch session
+details remain in `autoresearch.md`, `autoresearch.sh`, and
+`autoresearch.jsonl`.
 
 When no honest metric exists, the contract should say `Metrics: none
 mechanical` rather than rewarding a fake proxy.
@@ -63,13 +70,19 @@ Reviewer answers:
 - what neighboring repo surfaces were checked to rule out drift or hidden coupling?
 - if continuation is required, what is the single best immediate next same-ticket step?
 
-Reviewer produces the rubric score, metric-traceability judgment,
+Reviewer is the generic independent review lane, not a code-only specialist.
+The coordinating lane should pass a durable task pointer, changed files,
+evidence artifacts, review focus, caller-declared rubric families, required TAS
+gates, hard gates, and expected output path. The reviewer then executes the
+live `review` skill contract, validates the declared routing against the
+changed surface, adds any obvious missing hard-gate family with explanation,
+and produces TAS rubric judgments, metric-traceability judgment,
 evidence-gate judgment, and concrete next action.
 For user-facing work, reviewer rubric selection may also include a dedicated
 user-intent-satisfaction family so the system can judge "correct" separately
 from "actually satisfying for the intended user."
 For Stop-hook completion paths, reviewer should ground that judgment through the
-live `$review` skill contract in a visible reviewer lane, write a linked
+live `$review` skill contract in the visible `reviewer` lane, write a linked
 completion-review receipt when final completion is being judged, and make one
 narrow same-ticket next-step recommendation when continuation is required.
 
@@ -131,9 +144,8 @@ Reviewer output should use one normalized shape:
   },
   "rubrics_used": ["ui-quality", "code-quality", "evidence-quality"],
   "summary": "short verdict summary",
-  "overall_score": 3.9,
-  "overall_threshold": 4.0,
-  "verdict": "pass|revise|block",
+  "overall_tas": "TAS-A|TAS-B|TAS-C|TAS-D",
+  "verdict": "pass|revise|block|invalid",
   "rerun_required": true,
   "evidence_quality": "pass|fail",
   "integration_readiness": "pass|fail",
@@ -167,13 +179,12 @@ Reviewer output should use one normalized shape:
   "rubric_sections": [
     {
       "name": "evidence-quality",
-      "score": 3.2,
-      "threshold": 4.0,
+      "tas": "TAS-B",
       "pass": false,
-      "dimension_scores": {
-        "sufficiency": 3.0,
-        "traceability": 3.0,
-        "inspectability": 3.5
+      "dimension_tas": {
+        "sufficiency": "TAS-B",
+        "traceability": "TAS-B",
+        "inspectability": "TAS-A"
       },
       "findings": [
         "Main flow evidence exists, but the packet does not prove the edge-state claims."
@@ -196,28 +207,31 @@ review artifact that the completion receipt points at; Stop hook should validate
 the linked receipt plus artifact freshness, not require a second hidden copy of
 these fields from an internal role response.
 
-## Anchored Review Scale
+## TAS Review Contract
 
-All review families use the same anchored `1.0`-to-`5.0` scale:
+All review families use the same TAS contract:
 
-- `1.0`: failing, unsafe, contradictory, or largely absent
-- `2.0`: partially relevant, but still weak enough that key claims depend on
-  reviewer inference, thin proof, or unresolved defects
-- `3.0`: acceptable and directionally correct, but still ordinary or caveated
-- `4.0`: strong, trustworthy, and pass-worthy with only minor caveats
-- `5.0`: exemplary, persuasive, and hard to improve materially within scope
+- `TAS-A`: pass. Requirements and required evidence are satisfied with only
+  minor or no caveats.
+- `TAS-B`: revise. Directionally correct, but one or more meaningful issues,
+  missing evidence points, or caveats remain before pass.
+- `TAS-C`: block. Wrong scope, unsafe, contradictory, materially unreliable, or
+  missing core proof.
+- `TAS-D`: invalid review. The provided context or evidence is insufficient to
+  judge honestly.
 
 Calibration rules:
 
-- use `2.0` when there is some real work, but not enough trust to treat the
-  result as close to review-ready
-- use `4.0` only when a skeptical reviewer would defend the work as pass-worthy
-  without major caveats
-- reserve `5.0` for clearly above-bar work with positive evidence, not just
-  lack of obvious defects
+- use `TAS-A` only when a skeptical reviewer would defend the work as
+  pass-worthy without major caveats
+- use `TAS-B` for near-miss work that needs a focused repair pass
+- use `TAS-C` for material trust failures, unsafe work, wrong-scope work, or
+  missing core proof
+- use `TAS-D` when review context is insufficient, not when the work is merely
+  low quality
 
 Detailed family references should add skeptic questions, evidence cues, and
-family-specific score guidance so adjacent bands are easier to separate.
+family-specific TAS guidance so verdicts are easier to separate.
 
 Detailed family anchors live in the per-family review references under:
 
@@ -227,28 +241,29 @@ Detailed family anchors live in the per-family review references under:
 
 Default:
 
-- `pass` only if every required dimension passes its threshold
-- `pass` only if every required rubric family passes its threshold
+- `pass` only if every required dimension is `TAS-A`
+- `pass` only if every required rubric family is `TAS-A`
 - `pass` only if required ticket metrics are traceable to fresh evidence
 - `revise` if work is directionally correct but needs another pass
 - `block` if the work is materially off-target, underspecified, or unsafe
-- `evidence-quality` below threshold forces non-pass overall
-- `integration-readiness` below threshold forces non-pass overall
-- `qa_quality` below threshold forces non-pass overall on completion paths that required QA
-- `demo_quality` below threshold forces non-pass overall on completion paths that required demo
-- `stakeholder_readiness` below threshold forces non-pass overall on user-facing completion paths
-- `user_intent_impression` below threshold forces non-pass overall on completion paths
+- `evidence-quality` below `TAS-A` forces non-pass overall
+- `integration-readiness` below `TAS-A` forces non-pass overall
+- `qa_quality = fail` forces non-pass overall on completion paths that required QA
+- `demo_quality = fail` forces non-pass overall on completion paths that required demo
+- `stakeholder_readiness = fail` forces non-pass overall on user-facing completion paths
+- `user_intent_impression = fail` forces non-pass overall on completion paths
 - `obvious_next_step_exists = true` forces non-pass overall on completion paths
 - `user_would_expect_more = true` forces non-pass overall on completion paths
 
 ## Reviewer Search Discipline
 
-For code, cleanup, integration, and evidence-heavy review, the reviewer should
-not stop at the changed file when neighboring repo surfaces likely encode the
-same rule. The expected path is:
+For code, cleanup, integration, skill, prompt, eval, and evidence-heavy review,
+the reviewer should not stop at the changed file when neighboring repo surfaces
+likely encode the same rule. The expected path is:
 
 1. changed files and ticket claims
-2. directly related interfaces, types, constants, or config
+2. directly related interfaces, types, constants, prompts, templates,
+   references, or config
 3. canonical docs or memory entries for the same invariant
 4. nearby tests or evidence artifacts that should prove the claim
 
@@ -290,7 +305,7 @@ Every active feature work package should define:
 
 - which review rubrics apply
 - what QA must collect
-- what pass threshold matters
+- what TAS gate matters
 
 For build/documenting completion paths, a fresh review result plus a traceable
 evidence pack are required completion-gate artifacts. Missing, malformed, weak,

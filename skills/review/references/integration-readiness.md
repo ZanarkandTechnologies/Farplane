@@ -2,18 +2,18 @@
 
 Use when deciding whether work is actually safe to advance, merge, or hand off.
 
-Threshold: `4.0`
+Required TAS: `TAS-A`
 Hard gate: required for any overall `pass`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: advancing this work would be obviously unsafe or incoherent
-- `2`: the change might work, but trust is still too low because dependencies,
+- `TAS-C`: advancing this work would be obviously unsafe or incoherent
+- `TAS-B`: the change might work, but trust is still too low because dependencies,
   contracts, or blast radius remain materially unresolved
-- `3`: close to ready and directionally sound, but still carrying visible
+- `TAS-B`: close to ready and directionally sound, but still carrying visible
   readiness caveats
-- `4`: strong, safe enough to advance, and pass-worthy with only minor caveats
-- `5`: unusually well-contained, low-risk, and easy to hand off or merge
+- `TAS-A`: strong, safe enough to advance, and pass-worthy with only minor caveats
+- `TAS-A`: unusually well-contained, low-risk, and easy to hand off or merge
 
 ## Dimensions
 
@@ -92,17 +92,17 @@ When using the anti-slop playbook, search for:
 
 ## Example Judgments
 
-- `2.0` example:
+- `TAS-B` example:
   the feature appears to work locally, but it depends on an undocumented schema
   assumption, a manual coordination step, or a neighboring surface that has not
   actually been verified.
-- `3.0` example:
+- `TAS-B` example:
   the change is probably safe, but one dependency, rollout caveat, or hidden
   coupling concern still makes "one more pass first" the safer call.
-- `4.0` example:
+- `TAS-A` example:
   dependencies are explicit, contracts look correct, blast radius is understood,
   and a reviewer could defend advancing the change with only minor caveats.
-- `5.0` example:
+- `TAS-A` example:
   the work is unusually well-contained, easy to merge or hand off, and leaves
   very little uncertainty about safety or neighboring impact.
 
@@ -110,9 +110,9 @@ When using the anti-slop playbook, search for:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

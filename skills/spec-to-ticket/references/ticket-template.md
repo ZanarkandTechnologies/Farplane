@@ -50,8 +50,15 @@ Use this template to create ticket files directly under `tickets/`.
   - Autoresearch warranted: yes | no
   - Autoresearch session:
 - Review Rubrics:
-  - [rubric-family] >= [threshold]
-  - Hard gates:
+  - rubric_families: [caller-declared families]
+  - required_tas: evidence-quality: TAS-A
+  - hard_gates:
+- Reviewer Handoff:
+  - task_path:
+  - review_focus:
+  - changed_files:
+  - evidence:
+  - expected_output:
 - Required Evidence:
   - [artifact or command output]
 
@@ -125,7 +132,8 @@ If larger than L, split the ticket.
 - Each ticket file is independently implementable.
 - Dependencies are explicit (no cycles).
 - Acceptance criteria map to the spec.
-- Proof Contract separates mechanical metrics, review rubric gates, and required evidence.
+- Proof Contract separates mechanical metrics, caller-declared rubric families,
+  required TAS gates, reviewer handoff fields, and required evidence.
 - Tickets use `Metrics: none mechanical` when a metric would be fake.
 - Assignee matches task type.
 - Control fields define when the ticket should move and what is blocking it.

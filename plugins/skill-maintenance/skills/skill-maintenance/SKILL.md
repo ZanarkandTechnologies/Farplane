@@ -1,6 +1,6 @@
 ---
 name: skill-maintenance
-description: "Maintain Codexter skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the generated registry, and plan consolidation without bloating the global system prompt."
+description: "Maintain Farplane skill packages in bulk: classify tiers, add or audit todos, manage source ownership, sync the generated registry, and plan consolidation without bloating the global system prompt."
 tier: 3
 group: skills
 source: local
@@ -8,14 +8,15 @@ source: local
 
 # Skill Maintenance
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read `docs/specs/skill-tier-rollout-plan.md`,
   `docs/skills/README.md`, `docs/skills/registry.jsonl`, active tickets, and
   the target skill files before editing.
+- [ ] Apply `docs/skills/best-practices.md` for checklist shape, reference
+  placement, actor-prompt versus skill-contract boundaries, duplication
+  control, and repeatability.
 - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
   when upstream/external skill examples should inform local updates.
 - [ ] Use [plan](../plan/SKILL.md) when tier, source, group, method ownership,
@@ -30,18 +31,26 @@ Source: `SKILL.md`
 - [ ] Keep every-invocation logic in `SKILL.md`; move only conditional
   branches, examples, templates, long rubric detail, model maps, delegated
   prompts, and rare-path recipes into references.
+- [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
+  and artifact writeback out of reusable skills unless the skill is explicitly
+  an orchestration skill.
 - [ ] Promote reference logic back into `SKILL.md` when it must be read every
   time.
 - [ ] Keep Tier 2 todos linked to Tier 1 primitives; keep Tier 3 todos linked
   to Tier 2 surfaces plus intentional peer Tier 3 handoffs only.
-- [ ] Keep external skill packages thin and move Codexter wrapper policy into
+- [ ] Keep external skill packages thin and move Farplane wrapper policy into
   local caller skills.
 - [ ] Regenerate and validate the registry with
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
   edits.
+- [ ] For material skill-system changes, delegate final review to the native
+  `reviewer` subagent with a reviewer handoff: active ticket/task pointer,
+  changed files, proof artifacts, `skill-contract`, `integration-readiness`,
+  and `evidence-quality` families, required TAS gates, hard gates, and expected
+  output path.
 - [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
   ticket evidence.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when working on the skill system itself: tier metadata, direct
 checklists, legacy `todos.md` cleanup, source ownership, registry sync, link
@@ -60,6 +69,8 @@ hygiene, or consolidation planning.
 
 ## Core Rules
 
+- Follow `docs/skills/best-practices.md` for first-load checklist shape,
+  reference placement, repeatability, and review gates.
 - `SKILL.md` is the first-load source of truth. Required checklist items belong
   in a direct marker-delimited `## Important Checklist` section.
 - Keep logic in `SKILL.md` when it affects every invocation: trigger boundary,
@@ -77,7 +88,7 @@ hygiene, or consolidation planning.
 - Tier 3 application skills may link Tier 2 surfaces and peer Tier 3 handoffs
   when the domain flow requires them.
 - External skills should carry `source: external` and usually `upstream_url`;
-  local Codexter policy belongs in local callers.
+  local Farplane policy belongs in local callers.
 - Router-style todos choose methods conditionally. They do not run every method
   in sequence.
 - Complex Tier 3 pipeline skills should expose their domain as

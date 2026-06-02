@@ -8,69 +8,62 @@ Use it to:
 - choose the right rubric families for the ticket
 - load the anti-slop search playbook when the review needs repo-grounded skepticism
 - locate the correct family reference files
-- score each family consistently
+- assign TAS to each family consistently
 - write one structured review result and link it from the ticket `Evidence` section
 
-## Shared Score Contract
+## Shared TAS Contract
 
-Score each family and dimension from `1.0` to `5.0`.
-
-- `1.0`: failing, unsafe, contradictory, or largely absent
-- `2.0`: partially relevant, but still weak enough that key claims depend on
-  reviewer inference, thin proof, or unresolved defects
-- `3.0`: acceptable and directionally correct, but ordinary, caveated, or still
-  missing some confidence-building detail
-- `4.0`: strong, trustworthy, and pass-worthy with only minor caveats
-- `5.0`: exemplary, persuasive, and hard to improve materially within scope
+- `TAS-A`: pass. Requirements and required evidence are satisfied with only
+  minor or no caveats.
+- `TAS-B`: revise. Directionally correct, but one or more meaningful issues,
+  missing evidence points, or caveats remain before pass.
+- `TAS-C`: block. Wrong scope, unsafe, contradictory, materially unreliable, or
+  missing core proof.
+- `TAS-D`: invalid review. The provided context or evidence is insufficient to
+  judge honestly.
 
 Calibration rules:
 
-- start at `3.0` only if the work is genuinely workable and directionally right
-- move down to `2.0` when the work has some substance but the reviewer still
-  would not trust it without a focused follow-up pass
-- move up to `4.0` only when the reviewer would defend a pass to a skeptical
-  human without needing major caveats
-- reserve `5.0` for clearly above-bar work with visible positive evidence, not
-  merely absence of defects
+- `TAS-A` requires the reviewer to be able to defend pass to a skeptical human
+  without major caveats.
+- `TAS-B` is a near miss, not a pass.
+- `TAS-C` is for material trust failures, wrong-scope work, unsafe work, or
+  missing core proof.
+- `TAS-D` is for invalid review state, not low-quality work.
 
-Each family has its own reference file. Read the selected family files before scoring.
+Each family has its own reference file. Read the selected family files before
+assigning TAS.
 
 Also load `desloppify.md` whenever code, cleanup, integration, or evidence
-trust is in scope. It is a cross-cutting search playbook, not a scored family.
+trust is in scope. It is a cross-cutting search playbook, not a TAS family.
 
 ## Calibration Examples
 
-Use examples like these to separate adjacent bands:
+Use examples like these to separate TAS outcomes:
 
-- `2.0` vs `3.0`:
-  `2.0` = the work has substance, but a skeptical reviewer still cannot trust
-  it without a focused repair pass.
+- `TAS-B`:
+  the work has substance, but a skeptical reviewer still cannot trust it
+  without a focused repair pass.
   Example: the main feature works in one happy-path screenshot, but edge-state
   claims remain unproven and the write-up overstates confidence.
-  `3.0` = the work is believable and directionally correct, but still thin or
-  ordinary enough that another pass is warranted.
+- `TAS-A`:
+  every important claim maps to an artifact, the touched surfaces are coherent,
+  and remaining issues are polish-level rather than trust-level.
   Example: the main path is covered and the delta is coherent, but evidence for
-  failure states or neighboring integrations remains incomplete.
-- `3.0` vs `4.0`:
-  `3.0` = the reviewer still needs to attach visible caveats to justify trust.
-  `4.0` = the reviewer would defend a pass to a skeptical human with only minor
-  caveats.
-  Example: every important claim maps to an artifact, the touched surfaces are
-  coherent, and the remaining issues are polish-level rather than trust-level.
-- `4.0` vs `5.0`:
-  `4.0` = strong and ready.
-  `5.0` = unusually strong, with visible positive evidence that the work is not
-  just acceptable but difficult to improve materially within scope.
-  Example: the implementation or evidence packet not only satisfies the ticket,
-  but also improves surrounding clarity, removes dead weight, or makes skeptical
-  review unusually easy.
+  failure states or neighboring integrations is complete enough for the claim.
+- `TAS-C`:
+  the work is materially off-scope, unsafe, contradictory, or missing core
+  proof.
+- `TAS-D`:
+  the review cannot be run because the task context, changed artifacts, or
+  evidence were not supplied.
 
 ## Family Template
 
 Every family reference should provide:
 
 - what the family is judging
-- a family-level `1/2/3/4/5` score guide
+- a family-level TAS guide
 - dimensions
 - skeptic questions for each dimension
 - evidence cues
@@ -78,39 +71,43 @@ Every family reference should provide:
 
 For each rubric family, return:
 
-- `score`
-- `threshold`
+- `tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`
 
-Default thresholds:
+Default required family verdicts:
 
-- `spec-contract`: `4.0`
-- `implementation-plan`: `4.0`
-- `code-quality`: `4.0`
-- `debloatability`: `4.0`
-- `ui-quality`: `4.0`
-- `frontend-guidelines`: `4.0`
-- `user-intent-satisfaction`: `4.0`
-- `evidence-quality`: `4.0`
-- `demo-quality`: `3.5`
-- `video-quality`: `3.5`
-- `integration-readiness`: `4.0`
+- `spec-contract`: `TAS-A`
+- `implementation-plan`: `TAS-A`
+- `code-quality`: `TAS-A`
+- `debloatability`: `TAS-A`, or `TAS-B` when cleanup is advisory and no hard
+  gate depends on it
+- `ui-quality`: `TAS-A`
+- `frontend-guidelines`: `TAS-A`
+- `user-intent-satisfaction`: `TAS-A`
+- `evidence-quality`: `TAS-A`
+- `demo-quality`: `TAS-A` when demo is required, otherwise diagnostic
+- `video-quality`: `TAS-A` when video proof is required, otherwise diagnostic
+- `integration-readiness`: `TAS-A`
+- `skill-contract`: `TAS-A` when skill files or skill-system behavior changed
+- `prompt-quality`: `TAS-A` when subagent, delegated CLI, eval, structured
+  output, or AI-app prompts changed
+- `eval-quality`: `TAS-A` when eval tasks, judges, fixtures, or runners changed
 
 Hard gates:
 
-- `evidence-quality` below threshold cannot pass overall review
-- `integration-readiness` below threshold cannot pass overall review
-- `ui-quality` cannot pass if `functionality` is failing
+- `evidence-quality` below `TAS-A` cannot pass overall review
+- `integration-readiness` below `TAS-A` cannot pass overall review
+- `ui-quality` cannot pass if `functionality` is below `TAS-A`
 
 ## Rubric Selection
 
 Choose rubric families from the ticket context:
 
 - ticket `Proof Contract`:
-  - start with declared rubric families, thresholds, and hard gates
+  - start with declared rubric families, TAS gates, and hard gates
   - add any missing families required by the actual changed surface
   - check declared metrics separately as traceability/evidence, not as a
     replacement for rubric judgment
@@ -140,6 +137,18 @@ Choose rubric families from the ticket context:
   - `evidence-quality`
   - optional `demo-quality`
   - optional `video-quality`
+- skill or skill-system review:
+  - `skill-contract`
+  - `integration-readiness`
+  - `evidence-quality`
+- prompt review:
+  - `prompt-quality`
+  - `evidence-quality`
+  - `integration-readiness`
+- eval review:
+  - `eval-quality`
+  - `evidence-quality`
+  - `integration-readiness`
 
 If the reviewer wants to make stronger "worth it", willingness-to-pay, or competitive-market claims, the ticket/spec must already carry explicit user, alternative, and price-point evidence. Otherwise keep the judgment at the `user-intent-satisfaction` level and call the stronger market question underspecified.
 
@@ -264,6 +273,36 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - whether the result would actually satisfy or impress the user
   - evidence confidence for any stronger value claims
 
+### 11. Skill Contract
+- File: `skill-contract.md`
+- Focus:
+  - trigger accuracy
+  - first-load checklist quality
+  - repeatability from files alone
+  - actor-prompt versus skill-contract boundaries
+  - duplication control
+  - proof and registry readiness
+
+### 12. Prompt Quality
+- File: `prompt-quality.md`
+- Focus:
+  - task clarity
+  - durable context and pointer handling
+  - role and boundary fit
+  - output contract
+  - hallucination and overreach control
+  - evidence and tool-use expectations
+
+### 13. Eval Quality
+- File: `eval-quality.md`
+- Focus:
+  - task/reference-point clarity
+  - judge rubric fit
+  - fixture realism
+  - harness-native execution
+  - artifact traceability
+  - failure usefulness
+
 ## Review Result
 
 Write the final review as a linked artifact and surface it from the ticket `Evidence` section.
@@ -274,8 +313,7 @@ Required fields:
 - `search_scope`
 - `reviewed_at`
 - `rubrics_used`
-- `overall_score`
-- `overall_threshold`
+- `overall_tas`
 - `overall_verdict`
 - `rerun_required`
 - `evidence_quality`
@@ -289,10 +327,9 @@ Required fields:
 
 Then include one block per rubric family used:
 
-- `score`
-- `threshold`
+- `tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`
 
@@ -302,10 +339,11 @@ Always ask:
 
 - What would make a skeptical human reviewer reject this?
 - What claim is not actually proven?
-- Which dimension is keeping this score out of the next higher band?
-- What specific weakness makes this a `2` instead of a `3`, or a `4` instead of a `5`?
+- Which dimension is keeping this out of `TAS-A`?
+- What specific weakness makes this `TAS-B` instead of `TAS-A`, or `TAS-C`
+  instead of `TAS-B`?
 - What hard gate is failing?
-- What is the lowest-scoring family and why?
-- What concrete next pass would raise the score above threshold?
+- What is the weakest family and why?
+- What concrete next pass would move the result to `TAS-A`?
 - Which neighboring surface did I check to rule out or confirm drift?
 - Is this finding severe enough and proven enough to deserve a blocking slot?

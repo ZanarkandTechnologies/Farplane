@@ -3,19 +3,19 @@
 Use when reviewing whether a user-facing artifact actually satisfies the user
 ask, not merely whether it is technically correct.
 
-Threshold: `4.0`
+Required TAS: `TAS-A`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: the result clearly misses the user ask, solves the wrong problem, or is
+- `TAS-C`: the result clearly misses the user ask, solves the wrong problem, or is
   so underpowered that it would feel like a failure to the intended user
-- `2`: some useful work exists, but the result still undershoots the ask badly
+- `TAS-B`: some useful work exists, but the result still undershoots the ask badly
   enough that a user would feel the main promise was not met
-- `3`: directionally satisfies the ask, but still feels ordinary, incomplete,
+- `TAS-B`: directionally satisfies the ask, but still feels ordinary, incomplete,
   or weaker than the ticket/user framing implied
-- `4`: clearly satisfies the ask and feels worth the user’s effort, with only
+- `TAS-A`: clearly satisfies the ask and feels worth the user’s effort, with only
   minor caveats
-- `5`: strongly satisfies or impresses the user ask and is hard to improve
+- `TAS-A`: strongly satisfies or impresses the user ask and is hard to improve
   materially within scope
 
 ## Dimensions
@@ -104,22 +104,22 @@ ticket/spec already contains:
 - explicit alternatives or substitutes
 - explicit price-point or willingness-to-pay evidence
 
-Without that evidence, score `evidence-confidence` lower and keep the judgment
+Without that evidence, TAS `evidence-confidence` lower and keep the judgment
 at the user-ask level instead of bluffing market truth.
 
 ## Example Judgments
 
-- `2.0` example:
+- `TAS-B` example:
   the change technically works, but the user asked for a high-leverage workflow
   improvement and the result is only a small cleanup that does not noticeably
   change the user experience.
-- `3.0` example:
+- `TAS-B` example:
   the result addresses the stated ask and would help somewhat, but it still
   feels ordinary or incomplete relative to the user-facing promise.
-- `4.0` example:
+- `TAS-A` example:
   the result clearly delivers the requested outcome and feels worth shipping to
   the intended user, with only minor caveats in polish or edge scope.
-- `5.0` example:
+- `TAS-A` example:
   the result not only fulfills the ask but feels especially strong, satisfying,
   or high-leverage within the ticket’s scope and evidence.
 
@@ -127,9 +127,9 @@ at the user-ask level instead of bluffing market truth.
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

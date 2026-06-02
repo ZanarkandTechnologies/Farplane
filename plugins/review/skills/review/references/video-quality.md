@@ -4,14 +4,14 @@ Use when reviewing recorded verification videos, loom-style walkthroughs, or sto
 
 Threshold: `3.5`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: the video is too unclear, incomplete, or misleading to support review
-- `2`: some useful footage exists, but legibility, coverage, or faithfulness is
+- `TAS-C`: the video is too unclear, incomplete, or misleading to support review
+- `TAS-B`: some useful footage exists, but legibility, coverage, or faithfulness is
   still weak enough that trust remains low
-- `3`: review-useful in the main path, but still ordinary, selective, or rough
-- `4`: strong and verification-friendly with only minor caveats
-- `5`: unusually clear, faithful, and efficient for skeptical review
+- `TAS-B`: review-useful in the main path, but still ordinary, selective, or rough
+- `TAS-A`: strong and verification-friendly with only minor caveats
+- `TAS-A`: unusually clear, faithful, and efficient for skeptical review
 
 ## Dimensions
 
@@ -82,9 +82,9 @@ Ask:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

@@ -81,7 +81,7 @@ flowchart LR
 - `Evidence required:` strongest artifacts needed to show the work is done
 
 ## Proof Contract
-<!-- Modular boundary: tickets carry proof handles and thresholds; review and autoresearch skills carry execution logic. -->
+<!-- Modular boundary: tickets carry proof handles and TAS gates; review and autoresearch skills carry execution logic. -->
 - Required for material, agentically hard, ticketed build, or review-sensitive
   work. For trivial or judgment-only changes, keep it compact and write
   `Metrics: none mechanical` instead of inventing fake numbers.
@@ -90,12 +90,28 @@ flowchart LR
   - `Direction:` `higher`, `lower`, `pass/fail`, or `none`
   - `Verify:` command, fixture, script, manual check, or `none`
   - `Guard:` correctness command or `none`
-  - `Min acceptable result:` threshold or `none`
+  - `Min acceptable result:` threshold, TAS gate, or `none`
   - `Autoresearch warranted:` `yes` when repeated metric experiments should run, otherwise `no`
   - `Autoresearch session:` path to `autoresearch.md` when present, otherwise `none`
 - `Review Rubrics:`
-  - required rubric families and thresholds, for example `evidence-quality >= 4.0`
-  - hard gates, especially `evidence-quality` and `integration-readiness` when relevant
+  - caller-declared rubric families and TAS gates, for example
+    `evidence-quality: TAS-A`
+  - hard gates, especially `evidence-quality` and `integration-readiness` when
+    relevant
+  - for material review, fill the reviewer handoff rather than leaving rubric
+    routing for the reviewer to infer
+- `Reviewer Handoff:`
+  - `task_path:` this ticket path
+  - `review_focus:` planning, implementation, skill-change, prompt-change,
+    eval-change, docs, evidence, demo, video, or completion
+  - `changed_files:` expected file or diff scope
+  - `evidence:` proof artifacts, command outputs, QA reports, screenshots,
+    traces, or logs
+  - `rubric_families:` caller-owned rubric routing; see
+    `skills/review/references/reviewer-handoff.md`
+  - `required_tas:` required family gates, especially hard gates
+  - `hard_gates:` task-specific constraints that force revise/block
+  - `expected_output:` review artifact path when durable proof is required
 - `Required Evidence:`
   - artifacts, command outputs, QA reports, review JSON, screenshots, traces, or logs needed before completion
 

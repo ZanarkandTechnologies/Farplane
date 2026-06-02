@@ -3,18 +3,18 @@
 Use when reviewing a spec, ticket contract, or ticket plan before
 implementation.
 
-Threshold: `4.0`
+Required TAS: `TAS-A`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: the contract solves the wrong problem, is incoherent as one unit of
+- `TAS-C`: the contract solves the wrong problem, is incoherent as one unit of
   work, or is unsafe to execute
-- `2`: the intended work is partly visible, but important scope, sequencing, or
+- `TAS-B`: the intended work is partly visible, but important scope, sequencing, or
   proof still depends on reviewer inference
-- `3`: workable and directionally right, but still ordinary or caveated enough
+- `TAS-B`: workable and directionally right, but still ordinary or caveated enough
   that a builder would need to infer some boundaries
-- `4`: strong, clear, and approval-ready with only minor ambiguity left
-- `5`: unusually crisp, testable, and resilient to skeptical review
+- `TAS-A`: strong, clear, and approval-ready with only minor ambiguity left
+- `TAS-A`: unusually crisp, testable, and resilient to skeptical review
 
 ## Dimensions
 
@@ -91,9 +91,9 @@ Ask:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

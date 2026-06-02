@@ -90,8 +90,11 @@ flowchart LR
   - `Autoresearch warranted:` yes | no
   - `Autoresearch session:`
 - `Review Rubrics:`
-  - required rubric families and thresholds
+  - caller-declared rubric families and required TAS gates
   - hard gates
+- `Reviewer Handoff:`
+  - task path, review focus, changed files, evidence, rubric families,
+    required TAS gates, hard gates, and expected output path
 - `Required Evidence:`
   - artifacts or command outputs required before completion
 

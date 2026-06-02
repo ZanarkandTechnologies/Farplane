@@ -9,10 +9,8 @@ allowed-tools: Read, Glob, Grep
 
 # Execute
 
-<!-- BEGIN CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Important Checklist
-
-Source: `SKILL.md`
 
 - [ ] Read the plan, scope, acceptance criteria, and proof contract.
 - [ ] Confirm execution is ready; if scope or proof is still unclear, stop and
@@ -27,14 +25,16 @@ Source: `SKILL.md`
   wrong.
 - [ ] Write results, blockers, evidence, and handoff state back to the durable
   artifact.
-- [ ] Use [review](../review/SKILL.md) before material completion claims.
+- [ ] Use [review](../review/SKILL.md) before material completion claims;
+  delegate to the native `reviewer` lane with a reviewer handoff from the
+  durable task pointer or proof contract when available.
 - [ ] End with a clear next state: done, revise, blocked, or closeout.
-<!-- END CODEXTER_IMPORTANT_CHECKLIST -->
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this as the Tier 2 execution interface. It defines the common build/prove
 shape every application pipeline can bind to.
 
-This is an interface skill, not the Codexter coding executor. For code work,
+This is an interface skill, not the Farplane coding executor. For code work,
 `$impl` and `close-ticket` are Tier 3 coding-pipeline skills that implement
 this interface.
 
@@ -48,7 +48,10 @@ this interface.
 5. Run the proof that was planned, or update the plan/ticket if proof is wrong.
 6. Write results, blockers, evidence, and handoff state back to the durable
    artifact.
-7. Run review before completion claims when the work is material.
+7. Run review before completion claims when the work is material, preferably by
+   delegating to the native `reviewer` lane with the durable task pointer,
+   changed files, evidence artifacts, review focus, caller-declared rubric
+   families, required TAS gates, hard gates, and expected output path.
 8. Stop, revise, or close based on proof and review.
 
 ## Tier Dependencies
@@ -57,7 +60,10 @@ this interface.
   depends on official behavior, local invariants, or examples.
 - Use [prototyping](../prototyping/SKILL.md) before scaling an unproven
   pattern across files, records, users, or automation.
-- Use [review](../review/SKILL.md) before material completion claims.
+- Use [review](../review/SKILL.md) before material completion claims; for
+  material work, route review through the native `reviewer` lane when available
+  instead of relying on coordinator self-review. The calling workflow owns the
+  rubric routing and passes it through the reviewer handoff.
 - Use [plan](../plan/SKILL.md) when the work is not ready to execute.
 
 ## Domain Bindings

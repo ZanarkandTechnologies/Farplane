@@ -1,6 +1,6 @@
 # Architecture
 
-`review` is the anchored scoring surface for tickets and completed work. It
+`review` is the TAS contract surface for tickets and completed work. It
 selects rubric families, inspects the smallest useful changed and neighboring
 surface, and writes a structured verdict.
 
@@ -13,4 +13,4 @@ Frontend review uses multiple lanes:
   scope.
 
 Keep those lanes separate so agent reviews can be compared instead of averaged
-into one vague UI score.
+into one vague UI TAS.

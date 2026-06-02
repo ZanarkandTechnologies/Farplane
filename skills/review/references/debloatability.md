@@ -2,17 +2,17 @@
 
 Use when reviewing cleanup, simplification, runtime reduction, or dead-surface removal work.
 
-Threshold: `4.0`
+Required TAS: `TAS-A`
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: the cleanup is unsafe, cosmetic, or leaves the main dead weight intact
-- `2`: some simplification happened, but meaningful drag, duplication, or risk
+- `TAS-C`: the cleanup is unsafe, cosmetic, or leaves the main dead weight intact
+- `TAS-B`: some simplification happened, but meaningful drag, duplication, or risk
   still remains
-- `3`: worthwhile cleanup, but still ordinary enough that important clutter or
+- `TAS-B`: worthwhile cleanup, but still ordinary enough that important clutter or
   uncertainty remains
-- `4`: strong simplification and pass-worthy cleanup with only minor caveats
-- `5`: unusually effective, safe, and clarity-improving reduction of dead weight
+- `TAS-A`: strong simplification and pass-worthy cleanup with only minor caveats
+- `TAS-A`: unusually effective, safe, and clarity-improving reduction of dead weight
 
 ## Dimensions
 
@@ -85,9 +85,9 @@ Ask:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`

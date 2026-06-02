@@ -2,23 +2,23 @@
 
 Use when reviewing UI, interaction, layout, routing, or other visible product behavior.
 
-Threshold: `4.0`
+Required TAS: `TAS-A`
 
 For UI source review, pair this with
 [`frontend-guidelines.md`](frontend-guidelines.md). `ui-quality` judges product
 intent, taste, cohesion, and visible behavior; `frontend-guidelines` records the
-source-fresh Web Interface Guidelines audit score.
+source-fresh Web Interface Guidelines audit TAS.
 
-## Family Score Guide
+## Family TAS Guide
 
-- `1`: the interface is broken, generic in damaging ways, or misses the product
+- `TAS-C`: the interface is broken, generic in damaging ways, or misses the product
   intent badly enough to fail review
-- `2`: some useful UI work exists, but the result still feels weak, under-baked,
+- `TAS-B`: some useful UI work exists, but the result still feels weak, under-baked,
   or too generic to trust as a strong product surface
-- `3`: functional and directionally aligned, but still ordinary, uneven, or
+- `TAS-B`: functional and directionally aligned, but still ordinary, uneven, or
   underpowered against the intended quality bar
-- `4`: strong, intentional, and pass-worthy with only minor rough edges
-- `5`: distinctive, polished, and hard to improve materially within the stated
+- `TAS-A`: strong, intentional, and pass-worthy with only minor rough edges
+- `TAS-A`: distinctive, polished, and hard to improve materially within the stated
   intent
 
 ## Dimensions
@@ -93,16 +93,16 @@ Ask:
 
 ## Example Judgments
 
-- `2.0` example:
+- `TAS-B` example:
   the screen technically works, but it still looks like stock components with
   default spacing and weak hierarchy, so the result feels under-baked and generic.
-- `3.0` example:
+- `TAS-B` example:
   the interface is usable and broadly aligned to the brief, but the visual
   direction is still ordinary and some states or interactions feel uneven.
-- `4.0` example:
+- `TAS-A` example:
   the UI has a clear aesthetic direction, strong hierarchy, and reliable task
   completion, with only minor rough edges in polish or responsiveness.
-- `5.0` example:
+- `TAS-A` example:
   the result feels authored rather than templated, compares well against strong
   references, and shows both taste and execution strength across states.
 
@@ -110,13 +110,13 @@ Ask:
 
 Attach this rubric in the linked review artifact when used:
 
-- `score`
-- `threshold`
+- `tas`
+- `required_tas`
 - `pass`
-- `dimension_scores`
+- `dimension_tas`
 - `findings`
 - `next_action`
 
-When `frontend-guidelines` also runs, include both scores in the review artifact
+When `frontend-guidelines` also runs, include both TAS verdicts in the review artifact
 so later evaluation can compare taste/intent judgment against the external
 guideline metric.

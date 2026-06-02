@@ -1,13 +1,13 @@
 {
   "name": "review",
   "version": "0.1.0",
-  "description": "Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-s...",
+  "description": "Reusable TAS review rubric contract for judging whether provided task context, artifacts, and evidence are pass-ready...",
   "author": {
-    "name": "Codexter"
+    "name": "Farplane"
   },
   "license": "MIT",
   "keywords": [
-    "codexter",
+    "farplane",
     "skill",
     "local",
     "1"
@@ -15,9 +15,9 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Review",
-    "shortDescription": "Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-s...",
-    "longDescription": "Run an anchored 1-to-5 rubric review against the active ticket, scoring the right review families and using an anti-slop search playbook for code, UI, evidence, demos, and videos.",
-    "developerName": "Codexter",
+    "shortDescription": "Reusable TAS review rubric contract for judging whether provided task context, artifacts, and evidence are pass-ready...",
+    "longDescription": "Reusable TAS review rubric contract for judging whether provided task context, artifacts, and evidence are pass-ready, need revision, blocked, or invalid to review.",
+    "developerName": "Farplane",
     "category": "Productivity",
     "capabilities": [
       "Skills"
