@@ -16,6 +16,9 @@ Documentation ownership:
 
 Current design docs:
 
+- `adaptive-backoff.md` - always-loaded operating contract and parameter
+  profiles for repeated polling, retries, long-running jobs, subagent waits,
+  and remote status checks without creating hidden daemons or queues
 - `autoresearch-skill-suite.md` - metric-driven autoresearch planning, execution, and skill self-improvement contract
 - `best-of-worlds-workflow.md` - multi-source synthesis workflow for extracting, scoring, and adapting the best transferable features
 - `board-adapter-conformance.md` - fixture/checklist contract future board

@@ -260,6 +260,13 @@ Planning handoff rule:
 - code = source of truth
 - no speculative abstractions
 - MVP first: 1 -> 10 -> 100
+- use adaptive backoff for repeated polling, retries, long-running jobs,
+  subagent waits, remote status checks, and asset generation. Honor service
+  hints such as `Retry-After` or provider ETA first; start with short checks
+  only when early feedback is useful; widen intervals up to a cap; reset when
+  observed progress changes; add jitter when multiple agents or jobs may poll
+  the same service. Backoff is a cadence policy, not permission to create a
+  hidden daemon, queue, or always-on watcher. See `MEM-0130`.
 - delegate only when bounded and materially useful
 - continue on obvious reversible next steps
 - use an isolated checkout or worktree when addressing an existing PR branch or

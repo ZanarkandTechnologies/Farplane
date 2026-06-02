@@ -265,6 +265,7 @@
 2026-06-02 11:17 +0800 | MIGRATION | verify local Farplane reinstall into Codex home and quarantine stale repo-owned previous-identity helper and skill symlinks in install backup
 2026-06-02 12:14 +0800 | MIGRATION | hard-migrate the independent review lane from code-reviewer to generic reviewer and make material review pass task pointers through the reviewer subagent
 2026-06-02 12:46 +0800 | FIX | separate reviewer actor instructions from the review skill contract and migrate review output from numeric scores to TAS verdicts
+2026-06-02 12:59 +0800 | FEAT | add adaptive backoff as the always-loaded cadence policy for repeated polling, retries, long-running jobs, subagent waits, and generated asset status checks
 2026-06-02 13:09 +0800 | FIX | move review rubric routing ownership to caller skills and ticket proof contracts, add reviewer handoff template fields, and back prompt, eval, and skill review families with TAS rubric files
 2026-06-02 14:20 +0800 | FEAT | add selected-plugin marketplace generation so users can list Farplane bundles and expose only chosen plugins before installing from Codex
 2026-06-03 14:20 +0800 | CHANGE | stop tracking generated Codex plugin packages and switch Farplane plugin distribution to on-demand local or personal marketplace generation

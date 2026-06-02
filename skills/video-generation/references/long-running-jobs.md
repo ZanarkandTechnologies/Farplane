@@ -25,7 +25,12 @@ Use this when video generation, image-to-video, avatar rendering, upscaling, or 
 
 - Do not depend on terminal scrollback for task IDs or result URLs.
 - If the CLI returns a task ID but not a local result, write the task ID into `jobs.md` immediately.
-- Poll at practical intervals: 1-3 minutes for images and short clips, 5-10 minutes for longer videos or upscales.
+- Use adaptive backoff from `docs/specs/adaptive-backoff.md`: start around
+  `30s` for images and short clips, around `2m` for longer videos or upscales,
+  widen unchanged pending checks up to a practical cap, and reset or shorten
+  the delay when a job shows progress.
+- Honor service-provided timing such as ETA, queue position, or next-check
+  hints before applying local defaults.
 - When a job finishes, update `result.json`, copy final media to the asset path, and note any failed or rejected jobs.
 - If a thread wakeup/timer tool is available and the user wants the thread to continue later, create a heartbeat that includes the task IDs, result paths, and next action.
 

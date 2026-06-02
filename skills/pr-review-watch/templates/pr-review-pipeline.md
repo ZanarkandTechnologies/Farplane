@@ -6,6 +6,11 @@ Farplane PR review watching.
 The watcher requires this fenced JSON block. Keep commands project-local and
 safe to run repeatedly.
 
+`poll_interval_minutes` is the fixed-cadence compatibility field. New projects
+should treat it as the maximum normal heartbeat interval and use adaptive
+backoff from `docs/specs/adaptive-backoff.md` when a watcher has repeated
+unchanged wait states.
+
 ```json
 {
   "pr_review_pipeline": {
@@ -35,6 +40,8 @@ safe to run repeatedly.
   commands.
 - The watcher may schedule one visible Codex heartbeat when the PR is still
   waiting on checks or reviewers.
+- The watcher should use adaptive backoff for repeated unchanged wait states
+  and honor provider timing hints before local defaults.
 - The watcher may send Telegram notifications for terminal states when the
   installed environment supports the `telegram-message` skill.
 - The watcher must not push, merge, deploy, change billing/spend, or invent new

@@ -25,6 +25,8 @@ common_chains:
   isolated checkout, or declared QA target is needed.
 - [ ] Load `docs/pr-review-pipeline.md` first, then `PROJECT_RULES.md`, and
   require an explicit `pr_review_pipeline` JSON block before live watching.
+- [ ] Use adaptive backoff from `docs/specs/adaptive-backoff.md` for repeated
+  wait states unless project memory declares a narrower PR-specific cadence.
 - [ ] Run `python3 bin/pr_review_watch.py classify --fixture <path> --json` for
   deterministic state checks, or live `gh` discovery only after the user
   explicitly asks to watch a PR.
@@ -124,6 +126,13 @@ copyable project-local contract.
 The watcher does not sleep in a hidden loop. When the verdict is `wait`, use the
 Codex app automation tool to schedule one follow-up with the prompt from
 [`templates/codex-automation-prompt.md`](templates/codex-automation-prompt.md).
+
+Use the `human_review` profile in
+[`docs/specs/adaptive-backoff.md`](../../docs/specs/adaptive-backoff.md) unless
+project memory declares a stricter interval. Honor provider or CI timing hints
+first, widen repeated unchanged pending checks up to the configured cap, and
+reset or shorten the next wait when checks, approvals, comments, or review
+states change.
 
 The heartbeat prompt must include:
 
