@@ -30,8 +30,7 @@ tmp/
 .codex/evals/
 .ralph/
 .agents/*
-!.agents/plugins/
-!.agents/plugins/marketplace.json
+plugins/
 .desloppify/
 skills/.system/
 bin/__pycache__/

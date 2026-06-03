@@ -1,7 +1,0 @@
-{
-  "asset_strategy": "code-native-canvas",
-  "assets": [],
-  "has_mobile_fallback": false,
-  "has_reduced_motion_fallback": false,
-  "notes": "This artifact intentionally represents a completed but unacceptable asset phase. The phase produced a manifest and handoff, but it did not produce generated or rendered media assets, source prompts, mobile fallbacks, reduced-motion fallbacks, or inspectable frame/video files. It should pass phase completion and fail asset quality gates."
-}

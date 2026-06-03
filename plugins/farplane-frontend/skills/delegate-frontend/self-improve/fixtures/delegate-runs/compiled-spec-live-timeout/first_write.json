@@ -1,8 +1,0 @@
-{
-  "status": "pass",
-  "timeout_seconds": 90,
-  "expected_outputs": [
-    "SPEC.md"
-  ],
-  "observed_output": "SPEC.md"
-}

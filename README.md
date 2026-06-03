@@ -70,8 +70,8 @@ flowchart LR
 - **Evolve-first.** Skills, workflows, and prompt behavior are meant to be
   benchmarked, revised, and re-tested as first-class harness surfaces.
 - **Structured skills.** Skills are not loose prompt snippets; they have
-  contracts, checklists, dependency shape, references, and installable plugin
-  packaging.
+  contracts, checklists, dependency shape, references, and on-demand plugin
+  packaging when users want Codex plugin installs.
 - **Opinionated hooks.** Hooks track user intent, stop weak completion claims,
   route review, and will grow into real-time benchmark and skill-health
   monitoring.
@@ -92,7 +92,6 @@ flowchart LR
 | `docs/features/` | Structured feature registry and feature metadata. |
 | `docs/specs/` | Canonical behavior specs and doc-gardening loop. |
 | `experiments/` | Smoke runs, eval artifacts, prototypes, and temporary proof. |
-| `plugins/` | Packaged skill/plugin bundles for installation. |
 | `qa/` | QA cookbook, browser proof paths, and reusable test-entry guidance. |
 | `rules/` | Shared policy fragments and prompt-engineering references. |
 | `skills/` | Farplane skill packages, references, scripts, and templates. |

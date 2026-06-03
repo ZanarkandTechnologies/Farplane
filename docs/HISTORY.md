@@ -267,3 +267,4 @@
 2026-06-02 12:46 +0800 | FIX | separate reviewer actor instructions from the review skill contract and migrate review output from numeric scores to TAS verdicts
 2026-06-02 13:09 +0800 | FIX | move review rubric routing ownership to caller skills and ticket proof contracts, add reviewer handoff template fields, and back prompt, eval, and skill review families with TAS rubric files
 2026-06-02 14:20 +0800 | FEAT | add selected-plugin marketplace generation so users can list Farplane bundles and expose only chosen plugins before installing from Codex
+2026-06-03 14:20 +0800 | CHANGE | stop tracking generated Codex plugin packages and switch Farplane plugin distribution to on-demand local or personal marketplace generation

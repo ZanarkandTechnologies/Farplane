@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import filecmp
 import json
 import shutil
 import sys
@@ -22,6 +21,9 @@ from install_selected_skills import Skill, discover_skills
 MARKER = ".farplane-skill-plugin"
 MARKETPLACE_PATH = Path(".agents/plugins/marketplace.json")
 PLUGIN_ROOT = Path("plugins")
+DEFAULT_OUTPUT_ROOT = Path(".harness/generated/skill-plugins")
+LOCAL_PLUGIN_ROOT = Path(".codex/plugins/farplane")
+PERSONAL_MARKETPLACE_PATH = Path(".agents/plugins/marketplace.json")
 PLUGIN_VERSION = "0.1.0"
 
 
@@ -166,6 +168,7 @@ class SyncResult:
     bundle_count: int
     skill_count: int
     marketplace_path: Path
+    plugins_dir: Path
     changed: bool
 
 
@@ -282,7 +285,10 @@ def plugin_listing(plugins: Sequence[SkillPlugin]) -> str:
     return "\n".join(lines)
 
 
-def render_marketplace(plugins: Sequence[SkillPlugin]) -> dict[str, object]:
+def render_marketplace(
+    plugins: Sequence[SkillPlugin],
+    source_base_path: str = "./plugins",
+) -> dict[str, object]:
     return {
         "name": "farplane-skills",
         "interface": {"displayName": "Farplane Skills"},
@@ -291,7 +297,7 @@ def render_marketplace(plugins: Sequence[SkillPlugin]) -> dict[str, object]:
                 "name": plugin.name,
                 "source": {
                     "source": "local",
-                    "path": f"./plugins/{plugin.name}",
+                    "path": f"{source_base_path.rstrip('/')}/{plugin.name}",
                 },
                 "policy": {
                     "installation": "AVAILABLE",
@@ -336,20 +342,37 @@ def sync_skill_plugins(
     repo: Path,
     clean: bool = True,
     selected_names: Sequence[str] | None = None,
+    output_root: Path | None = None,
+    plugins_dir: Path | None = None,
+    marketplace_path: Path | None = None,
+    source_base_path: str = "./plugins",
 ) -> SyncResult:
     repo = repo.resolve()
     skills = discover_skills(repo / "skills")
     all_plugins = build_plugins(skills)
     selected_plugins = select_plugins(all_plugins, selected_names)
-    plugins_dir = repo / PLUGIN_ROOT
-    marketplace_path = repo / MARKETPLACE_PATH
+    resolved_output_root = (
+        (repo / output_root).resolve()
+        if output_root is not None
+        else (repo / DEFAULT_OUTPUT_ROOT).resolve()
+    )
+    resolved_plugins_dir = (
+        plugins_dir.expanduser().resolve()
+        if plugins_dir is not None
+        else (resolved_output_root / PLUGIN_ROOT).resolve()
+    )
+    resolved_marketplace_path = (
+        marketplace_path.expanduser().resolve()
+        if marketplace_path is not None
+        else (resolved_output_root / MARKETPLACE_PATH).resolve()
+    )
     expected_names = {plugin.name for plugin in all_plugins}
     changed = False
 
-    plugins_dir.mkdir(parents=True, exist_ok=True)
+    resolved_plugins_dir.mkdir(parents=True, exist_ok=True)
 
     if clean:
-        for child in plugins_dir.iterdir():
+        for child in resolved_plugins_dir.iterdir():
             if not child.is_dir() or child.name in expected_names:
                 continue
             if (child / MARKER).exists():
@@ -357,47 +380,60 @@ def sync_skill_plugins(
                 changed = True
 
     for plugin in selected_plugins:
-        if (plugins_dir / plugin.name).exists():
+        if (resolved_plugins_dir / plugin.name).exists():
             changed = True
-        write_plugin(plugin, plugins_dir)
+        write_plugin(plugin, resolved_plugins_dir)
         changed = True
 
-    before = marketplace_path.read_text(encoding="utf-8") if marketplace_path.exists() else None
-    write_json(marketplace_path, render_marketplace(selected_plugins))
-    after = marketplace_path.read_text(encoding="utf-8")
+    before = (
+        resolved_marketplace_path.read_text(encoding="utf-8")
+        if resolved_marketplace_path.exists()
+        else None
+    )
+    write_json(
+        resolved_marketplace_path,
+        render_marketplace(selected_plugins, source_base_path=source_base_path),
+    )
+    after = resolved_marketplace_path.read_text(encoding="utf-8")
     changed = changed or before != after
 
     return SyncResult(
         plugin_count=len(selected_plugins),
         bundle_count=sum(1 for plugin in selected_plugins if plugin.name in GROUP_PLUGIN_NAMES),
         skill_count=len(skills),
-        marketplace_path=marketplace_path,
+        marketplace_path=resolved_marketplace_path,
+        plugins_dir=resolved_plugins_dir,
         changed=changed,
     )
 
 
-def directories_match(left: Path, right: Path) -> bool:
-    comparison = filecmp.dircmp(left, right)
-    if comparison.left_only or comparison.right_only or comparison.funny_files:
-        return False
-    for name in comparison.common_files:
-        if not filecmp.cmp(left / name, right / name, shallow=False):
-            return False
-    return all(
-        directories_match(left / name, right / name)
-        for name in comparison.common_dirs
+def sync_personal_skill_plugins(
+    repo: Path,
+    home: Path,
+    clean: bool = True,
+    selected_names: Sequence[str] | None = None,
+) -> SyncResult:
+    home = home.expanduser().resolve()
+    return sync_skill_plugins(
+        repo=repo,
+        clean=clean,
+        selected_names=selected_names,
+        plugins_dir=home / LOCAL_PLUGIN_ROOT,
+        marketplace_path=home / PERSONAL_MARKETPLACE_PATH,
+        source_base_path=f"./{LOCAL_PLUGIN_ROOT.as_posix()}",
     )
 
 
 def check_in_sync(repo: Path) -> list[str]:
     with TemporarySync(repo) as temp_repo:
-        sync_skill_plugins(temp_repo, clean=True)
+        result = sync_skill_plugins(temp_repo, clean=True)
         errors: list[str] = []
-        for relative in [PLUGIN_ROOT, MARKETPLACE_PATH.parent]:
-            left = repo / relative
-            right = temp_repo / relative
-            if not left.exists() or not right.exists() or not directories_match(left, right):
-                errors.append(f"{relative} is out of sync; run python3 bin/sync_skill_plugins.py")
+        if result.plugin_count == 0:
+            errors.append("no skill plugins generated")
+        if not result.marketplace_path.exists():
+            errors.append("generated marketplace is missing")
+        if not result.plugins_dir.exists():
+            errors.append("generated plugin directory is missing")
         return errors
 
 
@@ -415,10 +451,6 @@ class TemporarySync:
             self.tmp_root / "skills",
             ignore=ignore_generated_copy,
         )
-        if (self.repo / "plugins").exists():
-            shutil.copytree(self.repo / "plugins", self.tmp_root / "plugins")
-        if (self.repo / ".agents").exists():
-            shutil.copytree(self.repo / ".agents", self.tmp_root / ".agents")
         return self.tmp_root
 
     def __exit__(self, *_: object) -> None:
@@ -428,7 +460,7 @@ class TemporarySync:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Generate Codex plugin packages for every Farplane skill."
+        description="Generate Codex plugin packages for Farplane skills."
     )
     parser.add_argument(
         "--repo",
@@ -439,7 +471,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--check",
         action="store_true",
-        help="Fail if generated plugin packages or marketplace are out of sync.",
+        help="Generate plugins in a temp copy and fail if packaging is broken.",
     )
     parser.add_argument(
         "--no-clean",
@@ -450,6 +482,23 @@ def build_parser() -> argparse.ArgumentParser:
         "--list",
         action="store_true",
         help="List available bundle and individual skill plugins without writing files.",
+    )
+    parser.add_argument(
+        "--output-root",
+        type=Path,
+        default=DEFAULT_OUTPUT_ROOT,
+        help="Root for generated repo-local plugin output. Defaults to .harness/generated/skill-plugins.",
+    )
+    parser.add_argument(
+        "--install-local",
+        action="store_true",
+        help="Generate a personal Codex marketplace in ~/.agents and plugin copies in ~/.codex/plugins/farplane.",
+    )
+    parser.add_argument(
+        "--home",
+        type=Path,
+        default=Path.home(),
+        help="Home directory for --install-local. Primarily for tests.",
     )
     parser.add_argument(
         "--plugins",
@@ -503,15 +552,24 @@ def main(argv: Sequence[str] | None = None) -> int:
             for error in errors:
                 print(error, file=sys.stderr)
             return 1
-        print("skill plugins in sync")
+        print("skill plugin generation ok")
         return 0
 
     try:
-        result = sync_skill_plugins(
-            repo,
-            clean=not args.no_clean,
-            selected_names=selected_names,
-        )
+        if args.install_local:
+            result = sync_personal_skill_plugins(
+                repo,
+                home=args.home,
+                clean=not args.no_clean,
+                selected_names=selected_names,
+            )
+        else:
+            result = sync_skill_plugins(
+                repo,
+                clean=not args.no_clean,
+                selected_names=selected_names,
+                output_root=args.output_root,
+            )
     except ValueError as error:
         print(error, file=sys.stderr)
         return 2
@@ -523,6 +581,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     "bundle_count": result.bundle_count,
                     "skill_count": result.skill_count,
                     "marketplace_path": str(result.marketplace_path),
+                    "plugins_dir": str(result.plugins_dir),
                     "changed": result.changed,
                     "selected_plugins": selected_names,
                 },
@@ -534,7 +593,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             f"generated {result.plugin_count} plugins "
             f"({result.bundle_count} bundles selected from {result.skill_count} skills)"
         )
+        print(f"plugins: {result.plugins_dir}")
         print(f"marketplace: {result.marketplace_path}")
+        if args.install_local:
+            print("restart Codex, open /plugins, and choose the Farplane Skills marketplace.")
     return 0
 
 

@@ -46,14 +46,25 @@ class SyncSkillPluginsTests(unittest.TestCase):
             self.assertEqual(result.skill_count, 2)
             self.assertEqual(result.plugin_count, 4)
             manifest = json.loads(
-                (repo / "plugins" / "review" / ".codex-plugin" / "plugin.json").read_text()
+                (
+                    repo
+                    / ".harness/generated/skill-plugins/plugins/review/.codex-plugin/plugin.json"
+                ).read_text()
             )
             self.assertEqual(manifest["name"], "review")
             self.assertEqual(manifest["skills"], "./skills/")
             self.assertEqual(manifest["interface"]["capabilities"], ["Skills"])
-            self.assertTrue((repo / "plugins" / "review" / "skills" / "review" / "SKILL.md").exists())
             self.assertTrue(
-                (repo / "plugins" / "review" / "skills" / "review" / "references" / "notes.md").exists()
+                (
+                    repo
+                    / ".harness/generated/skill-plugins/plugins/review/skills/review/SKILL.md"
+                ).exists()
+            )
+            self.assertTrue(
+                (
+                    repo
+                    / ".harness/generated/skill-plugins/plugins/review/skills/review/references/notes.md"
+                ).exists()
             )
 
     def test_sync_generates_curated_bundle_plugins(self) -> None:
@@ -68,8 +79,8 @@ class SyncSkillPluginsTests(unittest.TestCase):
             result = syncer.sync_skill_plugins(repo)
 
             self.assertEqual(result.bundle_count, 2)
-            core = repo / "plugins" / "farplane-core"
-            frontend = repo / "plugins" / "farplane-frontend"
+            core = repo / ".harness/generated/skill-plugins/plugins/farplane-core"
+            frontend = repo / ".harness/generated/skill-plugins/plugins/farplane-frontend"
             self.assertTrue((core / "skills" / "review" / "SKILL.md").exists())
             self.assertTrue((core / "skills" / "plan" / "SKILL.md").exists())
             self.assertTrue((frontend / "skills" / "frontend-craft" / "SKILL.md").exists())
@@ -84,7 +95,12 @@ class SyncSkillPluginsTests(unittest.TestCase):
 
             syncer.sync_skill_plugins(repo)
 
-            marketplace = json.loads((repo / ".agents" / "plugins" / "marketplace.json").read_text())
+            marketplace = json.loads(
+                (
+                    repo
+                    / ".harness/generated/skill-plugins/.agents/plugins/marketplace.json"
+                ).read_text()
+            )
             self.assertEqual(marketplace["name"], "farplane-skills")
             self.assertEqual(marketplace["interface"]["displayName"], "Farplane Skills")
             self.assertEqual(
@@ -124,14 +140,26 @@ class SyncSkillPluginsTests(unittest.TestCase):
             )
 
             self.assertEqual(result.plugin_count, 2)
-            marketplace = json.loads((repo / ".agents" / "plugins" / "marketplace.json").read_text())
+            marketplace = json.loads(
+                (
+                    repo
+                    / ".harness/generated/skill-plugins/.agents/plugins/marketplace.json"
+                ).read_text()
+            )
             self.assertEqual(
                 [plugin["name"] for plugin in marketplace["plugins"]],
                 ["farplane-frontend", "review"],
             )
-            self.assertTrue((repo / "plugins" / "farplane-frontend").exists())
-            self.assertTrue((repo / "plugins" / "review").exists())
-            self.assertFalse((repo / "plugins" / "visual-qa").exists())
+            self.assertTrue(
+                (
+                    repo
+                    / ".harness/generated/skill-plugins/plugins/farplane-frontend"
+                ).exists()
+            )
+            self.assertTrue((repo / ".harness/generated/skill-plugins/plugins/review").exists())
+            self.assertFalse(
+                (repo / ".harness/generated/skill-plugins/plugins/visual-qa").exists()
+            )
 
     def test_sync_rejects_unknown_selected_plugin(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -153,17 +181,40 @@ class SyncSkillPluginsTests(unittest.TestCase):
             self.assertNotIn("- farplane-invocation:", bundle_section)
             self.assertIn("- farplane-invocation:", individual_section)
 
-    def test_check_detects_stale_generated_plugins(self) -> None:
+    def test_check_uses_fresh_generated_plugins(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             write_skill(repo, "review", "Run quality checks.")
             syncer.sync_skill_plugins(repo)
-            (repo / "plugins" / "review" / "skills" / "review" / "SKILL.md").write_text("stale\n")
+            (
+                repo
+                / ".harness/generated/skill-plugins/plugins/review/skills/review/SKILL.md"
+            ).write_text("stale\n")
 
             errors = syncer.check_in_sync(repo)
 
-            self.assertTrue(errors)
-            self.assertIn("plugins", errors[0])
+            self.assertFalse(errors)
+
+    def test_sync_can_install_personal_marketplace(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            repo = root / "repo"
+            home = root / "home"
+            write_skill(repo, "review", "Run quality checks.")
+
+            result = syncer.sync_personal_skill_plugins(repo, home=home)
+
+            self.assertEqual(result.plugin_count, 2)
+            self.assertTrue(
+                (home / ".codex/plugins/farplane/review/.codex-plugin/plugin.json").exists()
+            )
+            marketplace = json.loads(
+                (home / ".agents/plugins/marketplace.json").read_text()
+            )
+            self.assertEqual(
+                marketplace["plugins"][0]["source"]["path"],
+                "./.codex/plugins/farplane/farplane-core",
+            )
 
 
 if __name__ == "__main__":

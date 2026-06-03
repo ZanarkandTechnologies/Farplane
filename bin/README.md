@@ -40,8 +40,8 @@ orchestration story.
 - `install_selected_skills.py` - dependency-free selected-skill installer for
   listing, searching, dry-running, and symlinking only chosen skills into a
   Codex home without rendering full harness config
-- `sync_skill_plugins.py` - deterministic generator for the repo plugin
-  marketplace and one self-contained Codex plugin package per skill
+- `sync_skill_plugins.py` - deterministic generator for on-demand Codex plugin
+  packages and a local or personal marketplace from `skills/*`
 - `farplane_invocation.py` - contract helper for `WORKFLOW.md`,
   `FarplaneRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
@@ -128,8 +128,10 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/install_selected_skills.py --skills review,visual-qa --dry-run`
   Use to preview selected skill symlinks into `~/.codex/skills`.
 - `python3 bin/sync_skill_plugins.py --check`
-  Use after changing `skills/*` to prove `.agents/plugins/marketplace.json`
-  and generated `plugins/*` packages are in sync.
+  Use after changing `skills/*` to prove plugin packages can still be generated.
+- `python3 bin/sync_skill_plugins.py --install-local --plugins farplane-core`
+  Use to expose selected Farplane plugin bundles through your personal Codex
+  marketplace under `~/.agents/plugins`.
 - `python3 -m unittest bin/test_farplane_boards.py`
   Use to prove the filesystem BoardAdapter path containment and ticket
   normalization contract before changing invocation or Ralph selection behavior

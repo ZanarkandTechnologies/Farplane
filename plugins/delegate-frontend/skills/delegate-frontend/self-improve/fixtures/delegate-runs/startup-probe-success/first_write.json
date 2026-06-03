@@ -1,8 +1,0 @@
-{
-  "status": "pass",
-  "timeout_seconds": 90,
-  "expected_outputs": [
-    "PROBE.md"
-  ],
-  "observed_output": "PROBE.md"
-}
