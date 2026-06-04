@@ -77,6 +77,9 @@ flowchart LR
   monitoring.
 - **Test-case memory.** The harness can preserve disliked outputs, misses, and
   benchmark cases so failures become reusable improvement pressure.
+- **Human-marked hard cases.** `repent lesson` and `repent hardcase` turn fixed
+  agent failures into local lessons, Notion improvement proposals, or sanitized
+  hardcase artifacts for future eval and training-data review.
 - **Ticket-first autonomy as one mode.** Tickets remain the durable execution
   surface for coding work, but they are not the whole product.
 
@@ -117,3 +120,6 @@ control plane. It is not a hidden daemon, hosted scheduler, or parallel
 multi-agent dispatcher today. Background hooks for live skill-health benchmarks
 and saved disliked-case feedback loops are planned harness surfaces, not fully
 shipped behavior yet.
+
+Offline evals and human-marked failure capture are the shipped improvement
+primitives today. Broader live skill-health benchmarks remain future work.

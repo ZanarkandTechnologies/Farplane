@@ -124,6 +124,14 @@ config_file = "agents/completion-reviewer.toml"
 description = "Hook sidecar that turns recent conversation windows into Notion approval tasks for agent self-improvement."
 config_file = "agents/skill-opportunity-applier.toml"
 
+[agents.repent-scribe]
+description = "Post-fix repent lesson scribe that writes TROUBLES rows and optional Notion improvement proposals."
+config_file = "agents/repent-scribe.toml"
+
+[agents.hardcase-curator]
+description = "Sanitized hard-case curator for corrected repent episodes that may become eval or training-data samples."
+config_file = "agents/hardcase-curator.toml"
+
 [notice]
 hide_rate_limit_model_nudge = true
 hide_full_access_warning = true

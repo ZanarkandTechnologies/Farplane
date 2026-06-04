@@ -268,3 +268,4 @@
 2026-06-02 13:09 +0800 | FIX | move review rubric routing ownership to caller skills and ticket proof contracts, add reviewer handoff template fields, and back prompt, eval, and skill review families with TAS rubric files
 2026-06-02 14:20 +0800 | FEAT | add selected-plugin marketplace generation so users can list Farplane bundles and expose only chosen plugins before installing from Codex
 2026-06-03 14:20 +0800 | CHANGE | stop tracking generated Codex plugin packages and switch Farplane plugin distribution to on-demand local or personal marketplace generation
+2026-06-04 17:41 +0800 | FEAT | extend `repent` into a post-fix lesson and hardcase capture primitive with scribe and curator subagent contracts

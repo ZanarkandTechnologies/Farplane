@@ -43,3 +43,24 @@ Use these as deterministic checks when validating the skill.
   - do not auto-recover
   - identify the request as materially branching
   - ask the minimum question or stop for approval
+
+## 6. Post-Fix Lesson Capture
+
+- `User:` `repent lesson, the fix was that you should have updated the ticket before claiming done`
+- `Expected behavior:`
+  - verify the fix status and evidence path
+  - create a compact seed packet
+  - append a `docs/TROUBLES.md` row
+  - create a Notion proposal only if private Notion context and tools are available
+  - do not update `docs/MEMORY.md` from a single raw lesson
+
+## 7. Hardcase Capture
+
+- `User:` `repent hardcase, this is a good training sample now that it is fixed`
+- `Expected behavior:`
+  - verify the fixed outcome first
+  - create a sanitized `experiments/hardcases/YYYYMMDD-HHMM-*/case.md`
+    artifact
+  - include failure class, correction, correct behavior, evidence refs, future
+    eval idea, and privacy level
+  - do not include raw private transcript bulk or secrets

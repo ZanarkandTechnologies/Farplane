@@ -5,17 +5,23 @@ Rules for the `repent` recovery skill.
 ## Purpose
 
 `skills/repent/` owns the operator-facing recovery workflow for same-task
-misses, not general planning or broad task routing.
+misses and post-fix lesson or hardcase capture, not general planning, broad
+task routing, or self-improvement drains.
 
 ## Keep It
 
 - audit-first
 - fix-first when the complaint is real
+- capture-after-fix for lessons and hardcases
 - concise
 - same-scope
+- privacy-aware
 
 ## Do Not
 
 - apologize before checking whether the complaint is true
 - use this skill to force destructive or materially branching work through
 - turn false alarms into fake recovery theater
+- drain lessons into skill edits or memory promotion from this skill
+- create approved repo tickets from every correction
+- put raw private transcripts or secrets into Notion or hardcase artifacts
