@@ -79,6 +79,14 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 
 - Do not use visual polish to hide weak functionality.
 - Do not default to dark mode, purple-blue gradients, identical card grids, or generic SaaS hero metrics.
+- Do not create unnecessary columns for sequential workflows. Use one full-width
+  flow first; reserve columns for genuinely parallel comparison, inspector
+  layouts, file-tree + file-viewer workspaces, dashboards, or side-by-side
+  editor surfaces.
+- Do not stack generic bordered divs inside generic bordered divs. Avoid
+  "container soup": section wrappers should use whitespace, headings,
+  dividers, or bands; inner bordered cards are only for repeated items,
+  selectable options, interactive controls, or genuinely separate tools.
 - Do not import new fonts, colors, or animation libraries without checking the project and the implementation owner.
 - Do not make every product UI cinematic. Repeated-use tools should feel efficient, calm, and inspectable.
 - Do not ignore mobile text fit, contrast, focus states, or reduced-motion needs.

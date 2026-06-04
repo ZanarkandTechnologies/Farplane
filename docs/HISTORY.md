@@ -270,3 +270,4 @@
 2026-06-02 14:20 +0800 | FEAT | add selected-plugin marketplace generation so users can list Farplane bundles and expose only chosen plugins before installing from Codex
 2026-06-03 14:20 +0800 | CHANGE | stop tracking generated Codex plugin packages and switch Farplane plugin distribution to on-demand local or personal marketplace generation
 2026-06-04 17:41 +0800 | FEAT | extend `repent` into a post-fix lesson and hardcase capture primitive with scribe and curator subagent contracts
+2026-06-04 18:32 +0800 | FEAT | add frontend anti-slop heuristics for sequential layouts, nested containers, and dense list presentation across functional, visual, and implementation skills

@@ -19,6 +19,10 @@ Capture:
 - The UI exposes database structure instead of user intent.
 - Everything has equal visual and interaction weight.
 - Cards group decoration, not decisions.
+- Layout uses columns even though the user reads the flow sequentially.
+- Nested bordered containers compete with the actual content.
+- Lists are nested because the author is explaining structure instead of
+  designing a scannable surface.
 - Empty/error/loading states are absent or generic.
 - The primary action is below secondary controls.
 - The component solves a rare edge case before the common path.

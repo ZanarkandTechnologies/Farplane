@@ -116,6 +116,14 @@ Build production frontends by routing the work through the right frontend brain 
 - Do not import icon, motion, chart, form, AI, or registry packages before checking `package.json`.
 - Do not use Tailwind v4 syntax in a v3 project, or v3 config assumptions in a v4 project.
 - Do not turn an entire Next.js App Router page into a client component just to support one animated widget; isolate interactive/motion-heavy pieces in client leaf components.
+- Do not implement sequential product workflows as arbitrary two-column layouts.
+  Stack the steps unless the columns are the actual interaction model, such as
+  file tree + file viewer, inspector + canvas, editor + preview, or dashboard
+  comparison.
+- Before adding nested bordered wrappers, ask what each container does. If the
+  inner wrapper is not a repeated card, selectable option, modal, tool pane, or
+  true sub-surface, remove the extra border and use spacing, a heading, a
+  divider, or a band.
 - Do not assume inference.sh, Nano Banana, video tooling, or external model CLIs are installed. Capability-gate through the owning asset skill before live external runs, and use built-in `imagegen` first for still images.
 - Do not use Three.js/WebGL or experimental rendering APIs without fallback, accessibility, mobile performance, and browser-support checks.
 
