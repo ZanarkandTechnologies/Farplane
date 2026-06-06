@@ -3,6 +3,7 @@ name: advise
 description: Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.
 tier: 1
 source: local
+skill_template_version: "0.1.0"
 ---
 
 # Advise

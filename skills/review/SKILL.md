@@ -3,6 +3,7 @@ name: review
 description: Reusable TAS review rubric contract for judging whether provided task context, artifacts, and evidence are pass-ready, need revision, blocked, or invalid to review.
 tier: 1
 source: local
+skill_template_version: "0.1.0"
 ---
 
 # Review

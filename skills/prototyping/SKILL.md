@@ -4,6 +4,7 @@ version: 0.1.0
 description: Tier 1 primitive for proving a pattern at the smallest honest scale before expanding scope, automation, data volume, user count, file count, research breadth, or implementation complexity.
 tier: 1
 source: local
+skill_template_version: "0.1.0"
 allowed-tools: Read, Glob, Grep
 ---
 
