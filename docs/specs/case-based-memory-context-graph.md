@@ -8,8 +8,8 @@ connected cases instead of scattered logs.
 
 This is a navigation and consistency layer over existing records. It should not
 replace `docs/MEMORY.md`, `docs/HISTORY.md`, `docs/TROUBLES.md`,
-`docs/features/registry.jsonl`, `docs/sources/registry.jsonl`, tickets, or
-skill registries.
+`docs/LESSONS.md`, `docs/features/registry.jsonl`,
+`docs/sources/registry.jsonl`, tickets, or skill registries.
 
 ## Problem
 
@@ -33,7 +33,9 @@ Use existing artifacts as source nodes:
 
 - `MEM-*`: durable invariant nodes from `docs/MEMORY.md`
 - `HISTORY` events: timeline nodes from `docs/HISTORY.md`
-- `TROUBLES` rows: correction/miss case nodes from `docs/TROUBLES.md`
+- `TROUBLES` rows: raw correction, blocker, and miss case nodes from
+  `docs/TROUBLES.md`
+- `LESSONS` rows: distilled prevention-rule case nodes from `docs/LESSONS.md`
 - `FEAT-*`: harness feature nodes from `docs/features/registry.jsonl`
 - `SRC-*`: source provenance nodes from `docs/sources/registry.jsonl`
 - `TASK-*`: ticket nodes from `tickets/**/ticket.md`
@@ -44,7 +46,7 @@ Then generate derived edges:
 
 - `introduced_by`: feature -> ticket/history/source
 - `constrained_by`: feature/skill/spec -> memory
-- `corrected_by`: memory/policy -> trouble case
+- `corrected_by`: memory/policy -> trouble or lesson case
 - `implemented_in`: feature -> surfaces
 - `proved_by`: feature/ticket -> evidence refs
 - `routes_to`: skill/spec/policy -> owning workflow
@@ -59,7 +61,7 @@ Then generate derived edges:
   "trigger": "Notion-context repair directly patched an installed skill",
   "decision": "Mirror, ticket, or wrap external skills unless the operator explicitly approves direct edit",
   "nodes": ["MEM-0107", "FEAT-0024", "docs/specs/skill-self-healing.md"],
-  "evidence": ["docs/TROUBLES.md", "tickets/TASK-0164/ticket.md"],
+  "evidence": ["docs/TROUBLES.md", "docs/LESSONS.md", "tickets/TASK-0164/ticket.md"],
   "reuse_when": ["skill self-healing", "external skill maintenance"],
   "avoid_when": ["operator explicitly requests a specific external skill edit"]
 }
@@ -71,11 +73,11 @@ objects for consistency checks, not a fourth place to maintain raw truth.
 ## First Useful Checks
 
 1. `policy_consistency`: given a proposed policy edit, retrieve related
-   `MEM-*`, `FEAT-*`, trouble cases, and owner specs before editing.
+   `MEM-*`, `FEAT-*`, trouble cases, lesson cases, and owner specs before editing.
 2. `feature_duplicate_check`: given a proposed feature, retrieve matching
    feature rows and prior source decisions.
 3. `correction_pattern_check`: given a user complaint, retrieve similar trouble
-   rows and any promoted memories.
+   rows, distilled lessons, and any promoted memories.
 4. `skill_boundary_check`: given a skill maintenance task, retrieve source
    ownership rules and external-boundary cases.
 

@@ -32,7 +32,7 @@ Allowed writes:
 - the configured final report path, when one is provided
 
 Forbidden actions:
-- do not edit code, skills, prompts, tickets, `docs/TROUBLES.md`, or
+- do not edit code, skills, prompts, tickets, `docs/LESSONS.md`, or
   `docs/MEMORY.md`
 - do not create Notion tasks
 - do not include secrets, credentials, private raw transcripts, or unrelated

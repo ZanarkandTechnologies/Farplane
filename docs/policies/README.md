@@ -17,7 +17,8 @@ This folder answers:
 | Active repo routing | [`AGENTS.md`](/Users/kenjipcx/coding-harness/Farplane/AGENTS.md) | Find the current Farplane-local rule quickly |
 | Installed global behavior | [`templates/global/AGENTS.md`](/Users/kenjipcx/coding-harness/Farplane/templates/global/AGENTS.md) | Check what `install.sh` ships into `~/.codex/AGENTS.md` |
 | Durable invariants | [`docs/MEMORY.md`](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md) | Find the `MEM-####` reason behind a rule |
-| Repeated misses | [`docs/TROUBLES.md`](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md) | See why a rule may need promotion |
+| Repeated misses | [`docs/TROUBLES.md`](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md) | See raw pain points that may need promotion |
+| Distilled lessons | [`docs/LESSONS.md`](/Users/kenjipcx/coding-harness/Farplane/docs/LESSONS.md) | See reusable prompt, skill, eval, and policy improvements |
 | System contracts | [`docs/specs/`](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md) | Read the detailed model or contract |
 | Skill workflows | [`docs/skills/README.md`](/Users/kenjipcx/coding-harness/Farplane/docs/skills/README.md) and [`skills/*/SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills) | Locate executable workflow policy |
 | Feature provenance | [`docs/features/registry.jsonl`](/Users/kenjipcx/coding-harness/Farplane/docs/features/registry.jsonl) | Dedupe new harness ideas against existing features |
@@ -100,10 +101,10 @@ library.
 ### Context Graph And Case Memory
 
 - Seed spec: [`docs/specs/case-based-memory-context-graph.md`](/Users/kenjipcx/coding-harness/Farplane/docs/specs/case-based-memory-context-graph.md)
-- Existing ledgers: [`docs/MEMORY.md`](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md), [`docs/HISTORY.md`](/Users/kenjipcx/coding-harness/Farplane/docs/HISTORY.md), [`docs/TROUBLES.md`](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md), [`docs/features/registry.jsonl`](/Users/kenjipcx/coding-harness/Farplane/docs/features/registry.jsonl)
+- Existing ledgers: [`docs/MEMORY.md`](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md), [`docs/HISTORY.md`](/Users/kenjipcx/coding-harness/Farplane/docs/HISTORY.md), [`docs/TROUBLES.md`](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md), [`docs/LESSONS.md`](/Users/kenjipcx/coding-harness/Farplane/docs/LESSONS.md), [`docs/features/registry.jsonl`](/Users/kenjipcx/coding-harness/Farplane/docs/features/registry.jsonl)
 - Feature row: `FEAT-0026`
 - First target: connect decisions, features, tickets, sources, memories, and
-  troubles without replacing the existing ledgers.
+  troubles or lessons without replacing the existing ledgers.
 
 ## Minimal Example
 

@@ -14,7 +14,7 @@ Use this template when handing a post-fix lesson to `repent-scribe`.
   "codex_thread_refs": [],
   "relevant_excerpt": "",
   "privacy_level": "local_only",
-  "recommended_destination": "troubles|notion_proposal"
+  "recommended_destination": "lessons|notion_proposal"
 }
 ```
 

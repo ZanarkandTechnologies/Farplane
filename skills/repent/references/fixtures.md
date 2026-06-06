@@ -50,7 +50,7 @@ Use these as deterministic checks when validating the skill.
 - `Expected behavior:`
   - verify the fix status and evidence path
   - create a compact seed packet
-  - append a `docs/TROUBLES.md` row
+  - append a `docs/LESSONS.md` row
   - create a Notion proposal only if private Notion context and tools are available
   - do not update `docs/MEMORY.md` from a single raw lesson
 

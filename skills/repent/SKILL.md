@@ -31,7 +31,7 @@ source: local
   `~/.codex/archived_sessions/rollout-*.jsonl` instead of pasting raw
   transcript bulk.
 - [ ] 6a. For `lesson`, delegate or apply the `repent-scribe` contract to append
-  `docs/TROUBLES.md` and create a Notion improvement proposal when private
+  `docs/LESSONS.md` and create a Notion improvement proposal when private
   Notion context and tools are available.
 - [ ] 6b. For `hardcase`, delegate or apply the `hardcase-curator` contract to
   create a sanitized artifact under `experiments/hardcases/`.
@@ -55,7 +55,7 @@ skills, evals, tickets, or models.
 ## Modes
 
 - `repent` or `repent lesson`: default mode. Recover from the correction when
-  needed, then record a concise lesson in `docs/TROUBLES.md` and optionally
+  needed, then record a concise lesson in `docs/LESSONS.md` and optionally
   create a Notion improvement proposal for triage.
 - `repent hardcase`: after the problem is fixed, create a sanitized hard-case
   artifact under `experiments/hardcases/` for future evals, skill improvement,
@@ -110,7 +110,7 @@ whole conversation from scratch:
   ],
   "relevant_excerpt": "short bounded chat excerpt or empty string",
   "privacy_level": "local_only|redacted_shareable|training_candidate",
-  "recommended_destination": "troubles|notion_proposal|hardcase_artifact"
+  "recommended_destination": "lessons|notion_proposal|hardcase_artifact"
 }
 ```
 
@@ -133,7 +133,7 @@ Start from `session_index.jsonl` when the thread id, cwd, title, or update time
 is enough to narrow the search. Read rollout files only after the seed packet
 or index gives a plausible match. Keep short excerpts and raw evidence pointers;
 do not paste system/developer instructions, encrypted reasoning, secrets, auth
-tokens, private raw transcripts, or unrelated messages into `docs/TROUBLES.md`,
+tokens, private raw transcripts, or unrelated messages into `docs/LESSONS.md`,
 Notion, or hardcase artifacts.
 
 ## Response Contract
@@ -148,7 +148,7 @@ Notion, or hardcase artifacts.
 
 For completed capture, report only the durable outputs:
 
-- `Lesson:` `docs/TROUBLES.md` entry and optional Notion proposal title/URL
+- `Lesson:` `docs/LESSONS.md` entry and optional Notion proposal title/URL
 - `Hardcase:` artifact path and privacy level
 - `Skipped:` unavailable Notion tools, ambiguous target, or false alarm reason
 
@@ -170,21 +170,21 @@ Stop and ask instead when:
 
 ## Lesson Destination
 
-Append `repent lesson` entries to `docs/TROUBLES.md` using the existing format:
+Append `repent lesson` entries to `docs/LESSONS.md` using the existing format:
 
 ```text
-YYYY-MM-DD HH:mm Z | area,tags | request | miss | correction | prevention
+YYYY-MM-DD HH:mm Z | area,tags | source | lesson | owner | next_prompt_or_skill_change
 ```
 
-Use `docs/TROUBLES.md` for raw correction evidence. Promote to
-`docs/MEMORY.md` only when the pattern is repeated or clearly structural under
-the repo memory rules.
+Use `docs/TROUBLES.md` for raw correction evidence and `docs/LESSONS.md` for
+distilled post-fix prevention rules. Promote to `docs/MEMORY.md` only when the
+pattern is repeated or clearly structural under the repo memory rules.
 
 When a live Notion proposal is useful, load private Notion handles from
 `~/.codex/private/TOOLS.md` and `~/.codex/private/docs/`, then create a compact
 proposal task through available Notion tools. The task must be framed as a
 proposal for human triage, not an approved repo ticket. If Notion context or
-tools are unavailable, keep the local `docs/TROUBLES.md` entry and report the
+tools are unavailable, keep the local `docs/LESSONS.md` entry and report the
 Notion blocker.
 
 ## Hardcase Destination

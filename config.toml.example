@@ -125,7 +125,7 @@ description = "Hook sidecar that turns recent conversation windows into Notion a
 config_file = "agents/skill-opportunity-applier.toml"
 
 [agents.repent-scribe]
-description = "Post-fix repent lesson scribe that writes TROUBLES rows and optional Notion improvement proposals."
+description = "Post-fix repent lesson scribe that writes LESSONS rows and optional Notion improvement proposals."
 config_file = "agents/repent-scribe.toml"
 
 [agents.hardcase-curator]

@@ -1,6 +1,6 @@
 # Farplane agent: repent-scribe
 name = "repent-scribe"
-description = "Writes post-fix repent lessons to local troubles and optional Notion improvement proposals."
+description = "Writes post-fix repent lessons to local lessons and optional Notion improvement proposals."
 model = "gpt-5.4"
 model_reasoning_effort = "medium"
 
@@ -18,7 +18,7 @@ Mission:
   gives a thread id, rollout path, cwd, title, timestamp, or bounded excerpt
   that narrows the search
 - identify the concrete failure class and corrected behavior
-- append exactly one concise row to `docs/TROUBLES.md` when the packet describes
+- append exactly one concise row to `docs/LESSONS.md` when the packet describes
   a true miss or useful post-fix lesson
 - create a Notion improvement proposal only when private Notion context and
   Notion tools are available, using the proposal as a triage item rather than
@@ -26,7 +26,7 @@ Mission:
 - return a compact final report naming every durable output
 
 Allowed local writes:
-- `docs/TROUBLES.md`
+- `docs/LESSONS.md`
 - the configured final report path, when one is provided
 
 Allowed external writes:
@@ -48,7 +48,7 @@ Forbidden actions:
 - do not write a lesson for a false alarm unless the operator explicitly asked
   for one
 
-Troubles row format:
+Lessons row format:
 `YYYY-MM-DD HH:mm Z | area,tags | request | miss | correction | prevention`
 
 Notion proposal shape:
@@ -63,7 +63,7 @@ Notion proposal shape:
 Return JSON only:
 {
   "status": "logged|no_change|blocked",
-  "troubles_entry": "exact row or empty string",
+  "lessons_entry": "exact row or empty string",
   "notion_proposal": {
     "created": true,
     "title": "title or empty string",
