@@ -19,22 +19,22 @@ Use when the user needs judgment, not a neutral menu.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] State the real decision in one sentence.
-2. [ ] Start from first principles before comparing options: objective,
+- [ ] 1. State the real decision in one sentence.
+- [ ] 2. Start from first principles before comparing options: objective,
   user/system need, root cause, constraints, assumptions, proof/falsification,
   tradeoffs, and non-goals.
-3. [ ] Name the evaluation criteria that matter for this user, repo, or ticket.
-4. [ ] Require supplied evidence when the recommendation depends on current
+- [ ] 3. Name the evaluation criteria that matter for this user, repo, or ticket.
+- [ ] 4. Require supplied evidence when the recommendation depends on current
   facts, official behavior, peer norms, local baseline, or implementation
   examples.
-5. [ ] Surface an evidence gap instead of launching a higher-tier research pass
+- [ ] 5. Surface an evidence gap instead of launching a higher-tier research pass
   from this Tier 1 primitive.
-6. [ ] Compare exactly 3 viable options with concrete pros and cons.
-7. [ ] Recommend one option clearly and name the tradeoff being accepted.
-8. [ ] State whether the recommendation is fully grounded or needs a
+- [ ] 6. Compare exactly 3 viable options with concrete pros and cons.
+- [ ] 7. Recommend one option clearly and name the tradeoff being accepted.
+- [ ] 8. State whether the recommendation is fully grounded or needs a
   higher-tier source synthesis step.
-9. [ ] State the direct next step or owning next skill.
-10. [ ] Review before completion.
+- [ ] 9. State the direct next step or owning next skill.
+- [ ] 10. Review before completion.
   - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

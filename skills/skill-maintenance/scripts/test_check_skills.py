@@ -45,11 +45,11 @@ Use this for tests.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] Read context.
-2. [ ] Choose the branch.
-   1. [ ] Default branch.
-   2. [ ] Repair branch.
-3. [ ] Review before completion.
+- [ ] 1. Read context.
+- [ ] 2. Choose the branch.
+   - [ ] 1. Default branch.
+   - [ ] 2. Repair branch.
+- [ ] 3. Review before completion.
    - [ ] Repeatability from files alone.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -103,12 +103,23 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
             repo = Path(tmp)
             check_skills.REPO_ROOT = repo
             write_registry(repo, "example")
-            write_skill(repo, "example", VALID_SKILL.replace("1. [ ] Read context.", "- [ ] Read context."))
+            write_skill(repo, "example", VALID_SKILL.replace("- [ ] 1. Read context.", "- [ ] Read context."))
 
             errors = check_skills.template_structure_errors("0.1.0")
 
             self.assertTrue(any("top-level plain todo" in error for error in errors))
             self.assertFalse(any("numbered task items" in error for error in errors))
+
+    def test_template_structure_rejects_legacy_ordered_checkbox_todos(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            check_skills.REPO_ROOT = repo
+            write_registry(repo, "example")
+            write_skill(repo, "example", VALID_SKILL.replace("- [ ] 1. Read context.", "1. [ ] Read context."))
+
+            errors = check_skills.template_structure_errors("0.1.0")
+
+            self.assertTrue(any("legacy ordered checkbox" in error for error in errors))
 
     def test_template_structure_rejects_unordered_prose_bullets_in_todos(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -119,7 +130,7 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
                 repo,
                 "example",
                 VALID_SKILL.replace(
-                    "   1. [ ] Default branch.",
+                    "   - [ ] 1. Default branch.",
                     "   - Default branch.",
                 ),
             )
@@ -137,8 +148,8 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
                 repo,
                 "example",
                 VALID_SKILL.replace(
-                    "1. [ ] Read context.",
-                    "1. [ ] Use plan when choices are not mechanical.",
+                    "- [ ] 1. Read context.",
+                    "- [ ] 1. Use plan when choices are not mechanical.",
                 ),
             )
 
@@ -176,9 +187,9 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
             write_skill(
                 repo,
                 "example",
-                VALID_SKILL.replace("1. [ ] Read context.", "[TODO: describe the work]")
-                .replace("2. [ ] Choose the branch.", "[TODO: choose branch]")
-                .replace("3. [ ] Review before completion.", "[TODO: review]"),
+                VALID_SKILL.replace("- [ ] 1. Read context.", "[TODO: describe the work]")
+                .replace("- [ ] 2. Choose the branch.", "[TODO: choose branch]")
+                .replace("- [ ] 3. Review before completion.", "[TODO: review]"),
             )
 
             errors = check_skills.template_structure_errors("0.1.0")

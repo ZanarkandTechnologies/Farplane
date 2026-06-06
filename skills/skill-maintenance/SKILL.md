@@ -19,26 +19,26 @@ make skill-system work repeatable instead of hiding rollout state in chat.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] Load the current skill-system baseline before editing.
+- [ ] 1. Load the current skill-system baseline before editing.
    - [ ] Read `docs/skills/README.md`, `docs/skills/best-practices.md`,
      `docs/skills/registry.jsonl`, active tickets, and the target skill files.
-2. [ ] Classify the maintenance operation for each target skill.
-   1. [ ] Template onboarding or version audit.
-   2. [ ] Todo-list or reference cleanup.
-   3. [ ] Tier, source, group, method, or common-chain metadata update.
-   4. [ ] Consolidation, split, or external-source ownership change.
-3. [ ] Route non-mechanical choices before editing.
+- [ ] 2. Classify the maintenance operation for each target skill.
+   - [ ] 1. Template onboarding or version audit.
+   - [ ] 2. Todo-list or reference cleanup.
+   - [ ] 3. Tier, source, group, method, or common-chain metadata update.
+   - [ ] 4. Consolidation, split, or external-source ownership change.
+- [ ] 3. Route non-mechanical choices before editing.
    - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
      when upstream or external skill examples should change the local contract.
    - [ ] Use [plan](../plan/SKILL.md) when tier, source, group, method ownership,
      or consolidation choices have real tradeoffs.
-4. [ ] Record the edit boundary for each target skill.
+- [ ] 4. Record the edit boundary for each target skill.
    - [ ] Identify source ownership, related skills, first-load dependencies,
      proof surfaces, and files that may change.
-5. [ ] Prototype broad rewrites on a representative sample before scaling.
+- [ ] 5. Prototype broad rewrites on a representative sample before scaling.
    - [ ] Include a mix of Tier 1, Tier 2, and complex Tier 3 packages when the
      migration will affect many skills.
-6. [ ] Edit each target `SKILL.md` so first-load work is executable.
+- [ ] 6. Edit each target `SKILL.md` so first-load work is executable.
    - [ ] Put required actions in the marker-delimited `## Todo List`.
    - [ ] Keep every-invocation rules in `SKILL.md`.
    - [ ] Move conditional branches, examples, templates, long rubric detail,
@@ -46,13 +46,19 @@ make skill-system work repeatable instead of hiding rollout state in chat.
    - [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
      and artifact writeback out of reusable skills unless the skill is explicitly
      an orchestration skill.
-7. [ ] Verify template structure before marking a skill onboarded.
+- [ ] 7. Verify template structure before marking a skill onboarded.
    - [ ] Check the actual `SKILL.md` headings and todo shape against the current
      template before setting or keeping `skill_template_version`.
    - [ ] Prune redundant `todos.md` once direct todo-list content matches.
-8. [ ] Validate the skill system with `python3 scripts/check_skills.py --write`
+- [ ] 8. Validate the skill system with `python3 scripts/check_skills.py --write`
    from this skill package.
-9. [ ] Review readiness before completion.
+- [ ] 9. Reinstall touched local skills and inspect the live copy before judging
+   Codex behavior.
+   - [ ] Use `bash ../../install.sh --skills-only --skills <names> --target ~/.codex`
+     from this skill package when the user is checking installed behavior.
+   - [ ] Re-read `~/.codex/skills/<name>/SKILL.md` for at least one touched skill
+     before claiming the visible checklist changed.
+- [ ] 10. Review readiness before completion.
    - [ ] For material skill-system changes, delegate final review to the native
      `reviewer` subagent with a reviewer handoff.
    - [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and

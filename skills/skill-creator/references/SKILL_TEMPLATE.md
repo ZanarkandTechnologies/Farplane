@@ -15,8 +15,9 @@ allowed-tools: {tools}
 [TODO: Only context needed every time this skill loads: tier/system placement,
 source-of-truth docs, ownership constraints, and assumptions.]
 
-[TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` and
-use a specific contract section only when it adds non-duplicated durable shape.]
+[TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` as
+visible task labels like `- [ ] 1. ...`, and use a specific contract section
+only when it adds non-duplicated durable shape.]
 
 [TODO: Paths in this skill are relative to this skill package. Use
 `scripts/foo.py` and `references/foo.md` for nearby files.]
@@ -24,15 +25,15 @@ use a specific contract section only when it adds non-duplicated durable shape.]
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] Read required context and current artifacts.
-2. [ ] Choose the branch.
-   1. [ ] Default branch.
-   2. [ ] Update/repair branch.
-   3. [ ] Review branch.
-3. [ ] Execute the workflow for the selected branch.
-4. [ ] Produce or update the required artifact.
-5. [ ] Verify with the named proof command or evidence surface.
-6. [ ] Review against the gotchas before completion.
+- [ ] 1. Read required context and current artifacts.
+- [ ] 2. Choose the branch.
+   - [ ] 1. Default branch.
+   - [ ] 2. Update/repair branch.
+   - [ ] 3. Review branch.
+- [ ] 3. Execute the workflow for the selected branch.
+- [ ] 4. Produce or update the required artifact.
+- [ ] 5. Verify with the named proof command or evidence surface.
+- [ ] 6. Review against the gotchas before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
    - [ ] Explicit proof command or blocker.

@@ -23,25 +23,25 @@ duplication control, repeatability, and review gates.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] Read the request, related skills, registry row, nearby project docs,
+- [ ] 1. Read the request, related skills, registry row, nearby project docs,
    [docs/skills/README.md](../../docs/skills/README.md), and
    [docs/skills/best-practices.md](../../docs/skills/best-practices.md).
-2. [ ] Decide the owning surface and write the decision into the edit.
-   1. [ ] Create a new skill only when the capability has a stable trigger and
+- [ ] 2. Decide the owning surface and write the decision into the edit.
+   - [ ] 1. Create a new skill only when the capability has a stable trigger and
      reusable workflow.
-   2. [ ] Update an existing skill when the request is a branch, method,
+   - [ ] 2. Update an existing skill when the request is a branch, method,
      todo-list fix, reference, script, or prompt inside an existing contract.
-   3. [ ] Hand unclear ownership to [plan](../plan/SKILL.md).
-3. [ ] Ground the skill design before drafting when external examples or peer
+   - [ ] 3. Hand unclear ownership to [plan](../plan/SKILL.md).
+- [ ] 3. Ground the skill design before drafting when external examples or peer
    skills could change the contract.
    - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
      [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
      when source comparison is required.
-4. [ ] Draft or revise `SKILL.md` so the first-load path is executable without
+- [ ] 4. Draft or revise `SKILL.md` so the first-load path is executable without
    hidden chat context.
    - [ ] Include trigger boundary, context, ordered `## Todo List`, branches,
      hard gates, proof command, and output contract.
-5. [ ] Move non-first-load material to the right supporting surface.
+- [ ] 5. Move non-first-load material to the right supporting surface.
    - [ ] Keep every-invocation rules in `SKILL.md`.
    - [ ] Move conditional branches, examples, templates, long rubrics, model
      maps, delegated prompts, and rare-path recipes into references.
@@ -49,9 +49,9 @@ duplication control, repeatability, and review gates.
      writeback in the owning agent prompt or caller skill.
    - [ ] Promote reference logic back into `SKILL.md` when it must be read every
      time; delete or merge empty, thin, or duplicated reference files.
-6. [ ] Run `python3 ../skill-maintenance/scripts/check_skills.py --write`
+- [ ] 6. Run `python3 ../skill-maintenance/scripts/check_skills.py --write`
    and fix any reported skill-system drift.
-7. [ ] Review the finished skill contract before completion.
+- [ ] 7. Review the finished skill contract before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
    - [ ] Actor-prompt versus skill-contract boundaries are clean.
@@ -70,11 +70,11 @@ Minimal `SKILL.md` shape:
 TODO: add the marker-delimited `## Todo List` section from
 `references/SKILL_TEMPLATE.md`.
 
-1. [ ] ...
-2. [ ] Choose the branch.
-   1. [ ] Default branch.
-   2. [ ] Repair branch.
-3. [ ] Review before completion.
+- [ ] 1. ...
+- [ ] 2. Choose the branch.
+   - [ ] 1. Default branch.
+   - [ ] 2. Repair branch.
+- [ ] 3. Review before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
 

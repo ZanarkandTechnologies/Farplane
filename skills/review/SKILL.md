@@ -31,17 +31,17 @@ checks, hard-gate failures, findings, and one concrete next action.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] Confirm the task context, changed artifacts, and evidence being reviewed
+- [ ] 1. Confirm the task context, changed artifacts, and evidence being reviewed
   are available.
-2. [ ] Start from caller-declared rubric families and TAS gates; add only an
+- [ ] 2. Start from caller-declared rubric families and TAS gates; add only an
   obvious missing hard-gate family with explanation.
-3. [ ] Load only the selected family references and apply their required,
+- [ ] 3. Load only the selected family references and apply their required,
   blocker, and evidence checklist modules.
-4. [ ] Apply one TAS verdict per selected family plus the overall verdict; do
+- [ ] 4. Apply one TAS verdict per selected family plus the overall verdict; do
   not use numeric scores or per-dimension TAS.
-5. [ ] Return failed checks, findings, blocking issues, and one concrete next
+- [ ] 5. Return failed checks, findings, blocking issues, and one concrete next
   action.
-6. [ ] Review that the verdict is supported by inspected evidence, not general
+- [ ] 6. Review that the verdict is supported by inspected evidence, not general
   confidence.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 ## Core Flow

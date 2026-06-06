@@ -22,19 +22,19 @@ guessing. This is the small evidence move, not a research router.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] State the one claim, decision, expectation, or comparison that needs
+- [ ] 1. State the one claim, decision, expectation, or comparison that needs
   grounding.
-2. [ ] Capture the local baseline from nearby code, tickets, specs, docs, or
+- [ ] 2. Capture the local baseline from nearby code, tickets, specs, docs, or
   provided sources when repo scope matters.
-3. [ ] Choose the smallest useful source class: local evidence, official docs,
+- [ ] 3. Choose the smallest useful source class: local evidence, official docs,
   standards, maintained repos, peer products, competitors, or user-provided
   sources.
-4. [ ] Prefer primary sources and real implementations over commentary.
-5. [ ] Write a compact grounding note with evidence, confidence, and local
+- [ ] 4. Prefer primary sources and real implementations over commentary.
+- [ ] 5. Write a compact grounding note with evidence, confidence, and local
   impact.
-6. [ ] If compact grounding is not enough, surface the exact evidence gap to the
+- [ ] 6. If compact grounding is not enough, surface the exact evidence gap to the
   caller instead of launching a higher-tier research method from this primitive.
-7. [ ] Review before completion.
+- [ ] 7. Review before completion.
   - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

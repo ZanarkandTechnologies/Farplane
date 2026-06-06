@@ -28,20 +28,20 @@ supports it.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] State the scale risk: data volume, users, workflow breadth, architecture,
+- [ ] 1. State the scale risk: data volume, users, workflow breadth, architecture,
   automation, polish, file count, research breadth, or operational complexity.
-2. [ ] Name the hypothesis the prototype must prove or falsify.
-3. [ ] Pick the smallest representative slice, usually `1 -> 10 -> 100`.
-4. [ ] Include real examples, real edge cases, real users, real files, or real
+- [ ] 2. Name the hypothesis the prototype must prove or falsify.
+- [ ] 3. Pick the smallest representative slice, usually `1 -> 10 -> 100`.
+- [ ] 4. Include real examples, real edge cases, real users, real files, or real
   records where possible.
-5. [ ] Prefer the manual or non-scalable path first when it reveals the pattern
+- [ ] 5. Prefer the manual or non-scalable path first when it reveals the pattern
   faster than automation.
-6. [ ] Define the evidence that promotes the work to the next scale.
-7. [ ] Define the evidence that forces revision, simplification, or stopping.
-8. [ ] Label prototype-only shortcuts so they do not masquerade as production
+- [ ] 6. Define the evidence that promotes the work to the next scale.
+- [ ] 7. Define the evidence that forces revision, simplification, or stopping.
+- [ ] 8. Label prototype-only shortcuts so they do not masquerade as production
   readiness.
-9. [ ] Return a `Prototype Note` to the active workflow before broadening scope.
-10. [ ] Review that the slice is representative before scale.
+- [ ] 9. Return a `Prototype Note` to the active workflow before broadening scope.
+- [ ] 10. Review that the slice is representative before scale.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Core Flow

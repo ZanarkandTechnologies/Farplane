@@ -22,9 +22,10 @@ def find_repo_root(start: Path) -> Path:
 REPO_ROOT = find_repo_root(Path(__file__).resolve())
 REQUIRED_TEMPLATE_HEADINGS = ("Context", "Todo List", "Templates", "Gotchas", "Reference Map", "Output")
 HEADING_RE = re.compile(r"^## (?P<heading>.+?)\s*$")
-TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^\d+\. \[ \] ")
-TOP_LEVEL_PLAIN_TODO_RE = re.compile(r"^- \[ \] ")
-TIP_LIKE_TOP_LEVEL_TODO_RE = re.compile(r"^\d+\. \[ \] (?:Use .+ when\b|Keep\b|Do not\b|Avoid\b)")
+TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^- \[ \] \d+\. ")
+LEGACY_NUMBERED_TODO_RE = re.compile(r"^\s*\d+\. \[ \] ")
+TOP_LEVEL_PLAIN_TODO_RE = re.compile(r"^- \[ \] (?!\d+\. )")
+TIP_LIKE_TOP_LEVEL_TODO_RE = re.compile(r"^- \[ \] \d+\. (?:Use .+ when\b|Keep\b|Do not\b|Avoid\b)")
 UNORDERED_PROSE_TODO_RE = re.compile(r"^\s+- (?!\[ \])")
 
 
@@ -175,8 +176,14 @@ def template_structure_errors(current_version: str) -> list[str]:
         if todo_body is None:
             continue
         if not any(TOP_LEVEL_NUMBERED_TODO_RE.match(line) for line in todo_body.splitlines()):
-            errors.append(f"{row['name']}: ## Todo List needs numbered task items like `1. [ ] ...`")
+            errors.append(f"{row['name']}: ## Todo List needs visible numbered task items like `- [ ] 1. ...`")
         for line_number, line in enumerate(todo_body.splitlines(), start=1):
+            if LEGACY_NUMBERED_TODO_RE.match(line):
+                errors.append(
+                    f"{row['name']}: legacy ordered checkbox in ## Todo List line {line_number}; "
+                    "use `- [ ] 1. ...` so rich Markdown views keep the number visible"
+                )
+                break
             if TIP_LIKE_TOP_LEVEL_TODO_RE.match(line):
                 errors.append(
                     f"{row['name']}: tip-like top-level todo in ## Todo List line {line_number}; "
@@ -186,13 +193,13 @@ def template_structure_errors(current_version: str) -> list[str]:
             if TOP_LEVEL_PLAIN_TODO_RE.match(line):
                 errors.append(
                     f"{row['name']}: top-level plain todo in ## Todo List line {line_number}; "
-                    "use numbered todos for main work and indent plain todos under a numbered item"
+                    "use visible numbered todos for main work and indent plain todos under a numbered item"
                 )
                 break
             if UNORDERED_PROSE_TODO_RE.match(line):
                 errors.append(
                     f"{row['name']}: unordered prose bullet in ## Todo List line {line_number}; "
-                    "use numbered branch todos or embedded `- [ ]` checks"
+                    "use visible numbered branch todos or embedded `- [ ]` checks"
                 )
                 break
 
