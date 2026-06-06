@@ -20,8 +20,9 @@ make skill-system work repeatable instead of hiding rollout state in chat.
 ## Todo List
 
 - [ ] 1. Load the current skill-system baseline before editing.
-   - [ ] Read `docs/skills/README.md`, `docs/skills/best-practices.md`,
-     `docs/skills/registry.jsonl`, active tickets, and the target skill files.
+   - [ ] Read `docs/skills/system.md`, `docs/skills/README.md`,
+     `docs/skills/best-practices.md`, `docs/skills/registry.jsonl`, active
+     tickets, and the target skill files.
 - [ ] 2. Classify the maintenance operation for each target skill.
    - [ ] 1. Template onboarding or version audit.
    - [ ] 2. Todo-list or reference cleanup.
@@ -71,6 +72,9 @@ hygiene, or consolidation planning.
 
 ## Core Rules
 
+- Follow `docs/skills/system.md` for the tier model, source ownership,
+  frontmatter contract, template versioning, feature tracking, and todo-link
+  rules.
 - Follow `docs/skills/best-practices.md` for first-load todo-list shape,
   reference placement, repeatability, and review gates.
 - `SKILL.md` is the first-load source of truth. Required todo items belong in a
@@ -85,10 +89,6 @@ hygiene, or consolidation planning.
 - Treat `todos.md` as a legacy/transitional input only. Delete it once it
   matches the direct `SKILL.md` todo list; reconcile divergent duplicates
   manually.
-- Tier 1 primitives are base obligations for Tier 2.
-- Tier 2 surfaces may link Tier 1 primitives.
-- Tier 3 application skills may link Tier 2 surfaces and peer Tier 3 handoffs
-  when the domain flow requires them.
 - External skills should carry `source: external` and usually `upstream_url`;
   local Farplane policy belongs in local callers.
 - Router-style todos choose methods conditionally. They do not run every method
@@ -100,8 +100,9 @@ hygiene, or consolidation planning.
 
 ## Workflow
 
-1. Read `docs/skills/README.md`, `docs/skills/best-practices.md`,
-   `docs/skills/registry.jsonl`, and the target skill files.
+1. Read `docs/skills/system.md`, `docs/skills/README.md`,
+   `docs/skills/best-practices.md`, `docs/skills/registry.jsonl`, and the
+   target skill files.
 2. Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
    when comparing external skill examples or upstream instructions.
 3. Use [plan](../plan/SKILL.md) when tier/source/consolidation choices have
@@ -181,8 +182,11 @@ baseline when onboarding a skill to `skill_template_version: "0.1.0"`.
 
 ## Reference Map
 
-- [docs/skills/README.md](../../docs/skills/README.md) - frontmatter,
-  generated registry, link hierarchy, and maintenance commands.
+- [docs/skills/system.md](../../docs/skills/system.md) - tier model, source
+  ownership, frontmatter contract, template versioning, feature tracking, and
+  todo-link rules.
+- [docs/skills/README.md](../../docs/skills/README.md) - human skill selection
+  guide, generated registry surface, and maintenance commands.
 - [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
   first-load shape, reference placement, repeatability, and review gates.
 - [../skill-creator/references/SKILL_TEMPLATE.md](../skill-creator/references/SKILL_TEMPLATE.md)

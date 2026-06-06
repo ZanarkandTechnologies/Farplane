@@ -14,9 +14,10 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, 
 ## Context
 
 Skill creation is part of the Farplane skill system. Read
-[docs/skills/README.md](../../docs/skills/README.md) for tier definitions,
-source ownership, registry fields, and todo-link rules before changing a
-skill's shape. Use [docs/skills/best-practices.md](../../docs/skills/best-practices.md)
+[docs/skills/system.md](../../docs/skills/system.md) for the tier model,
+source ownership, frontmatter contract, template versioning, feature tracking,
+and todo-link rules before changing a skill's shape. Use
+[docs/skills/best-practices.md](../../docs/skills/best-practices.md)
 for first-load todo shape, reference placement, actor-prompt boundaries,
 duplication control, repeatability, and review gates.
 
@@ -24,6 +25,7 @@ duplication control, repeatability, and review gates.
 ## Todo List
 
 - [ ] 1. Read the request, related skills, registry row, nearby project docs,
+   [docs/skills/system.md](../../docs/skills/system.md),
    [docs/skills/README.md](../../docs/skills/README.md), and
    [docs/skills/best-practices.md](../../docs/skills/best-practices.md).
 - [ ] 2. Decide the owning surface and write the decision into the edit.
@@ -103,8 +105,11 @@ starter file.
 
 ## Reference Map
 
-- [docs/skills/README.md](../../docs/skills/README.md) - tier definitions,
-  source ownership, registry fields, and todo-link rules.
+- [docs/skills/system.md](../../docs/skills/system.md) - tier model, source
+  ownership, frontmatter contract, template versioning, feature tracking, and
+  todo-link rules.
+- [docs/skills/README.md](../../docs/skills/README.md) - human skill selection
+  guide, generated registry surface, and maintenance commands.
 - [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
   first-load todo shape, reference placement, actor-prompt boundaries,
   duplication control, repeatability, and review gates.
