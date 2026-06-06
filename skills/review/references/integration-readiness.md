@@ -113,6 +113,7 @@ Attach this rubric in the linked review artifact when used:
 - `tas`
 - `required_tas`
 - `pass`
-- `dimension_tas`
+- `checks`
+- `failed_checks`
 - `findings`
 - `next_action`

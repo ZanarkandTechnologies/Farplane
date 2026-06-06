@@ -8,82 +8,47 @@ Hard gate: required for any overall `pass`
 ## Family TAS Guide
 
 - `TAS-C`: the artifacts do not credibly prove the claimed behavior
-- `TAS-B`: some proof exists, but key claims still rely on inference, missing
-  coverage, or contradictory artifacts
-- `TAS-B`: the main claim is supported, but important proof is still thin, partial,
-  or awkward to audit
+- `TAS-B`: some proof exists, but one or more required evidence checks fail in a
+  repairable way
 - `TAS-A`: strong, traceable, and pass-worthy evidence with only minor gaps
 - `TAS-A`: unusually persuasive, easy to audit, and hard to game
 
-## Dimensions
+## Checklist Modules
 
-- `sufficiency`
-- `reproducibility`
-- `traceability`
-- `consistency`
-- `inspectability`
-- `autonomy-readiness`
+### Required Checks
 
-### `sufficiency`
+- [ ] `main-claim-proven`: The artifacts prove the main behavior or claim under
+  review, not only adjacent work.
+- [ ] `important-edge-claims-proven`: Important edge, failure, regression, or
+  state claims made by the task are backed by artifacts.
+- [ ] `replayable`: Commands, setup, inputs, outputs, and observations are
+  tied together tightly enough that another reviewer could replay or audit the
+  result without guessing.
+- [ ] `claim-artifact-map`: Each important ticket claim or acceptance criterion
+  points to a concrete artifact.
+- [ ] `summary-matches-proof`: Written conclusions do not exceed or contradict
+  logs, screenshots, tests, or QA notes.
+- [ ] `auditable-organization`: The packet is organized enough for a skeptical
+  reviewer to verify the result quickly.
 
-Inspect: whether the artifacts prove the main behavior plus the ticket's
-important edge claims.
+### Blocker Checks
 
-Ask:
+- [ ] `missing-core-proof`: Core behavior is claimed but no credible artifact
+  proves it.
+- [ ] `contradictory-artifacts`: Artifacts contradict the review summary or one
+  another in a way that changes the verdict.
+- [ ] `stale-evidence`: Evidence predates the current changed files, ticket
+  state, or relevant rerun.
+- [ ] `claim-inflation`: The summary claims broader behavior than the attached
+  evidence can support.
 
-- What important claim is still unproven?
-- Are the artifacts covering only the happy path while stronger claims are being made?
+### Autonomy Evidence Checks
 
-### `reproducibility`
-
-Inspect: commands, setup, inputs, outputs, and whether another reviewer could
-recreate the evidence.
-
-Ask:
-
-- Could I replay what happened without guessing missing setup?
-- Are the commands and observations tied together tightly enough to trust?
-
-### `traceability`
-
-Inspect: mapping from ticket claims or acceptance criteria to specific artifacts.
-
-Ask:
-
-- Can each important claim point to a concrete artifact?
-- Where does the review still rely on narrative glue instead of direct mapping?
-
-### `consistency`
-
-Inspect: whether screenshots, logs, tests, and written conclusions agree.
-
-Ask:
-
-- Do any artifacts contradict the summary?
-- Is the written claim stronger than the proof actually attached?
-- Does a nearby doc, ticket note, or test output reveal claim inflation or stale proof?
-
-### `inspectability`
-
-Inspect: organization, readability, and how quickly a skeptical reviewer can
-audit the packet.
-
-Ask:
-
-- Can a skeptical reviewer verify the result quickly?
-- Is the packet organized for audit, or dumped in a way that hides weak spots?
-
-### `autonomy-readiness`
-
-Inspect: whether evidence for autonomous or `$ralph` work proves that blockers
-and human gates were identified before execution.
-
-Ask:
-
-- Does the evidence show the required commands, tools, credentials/permission
-  assumptions, QA surfaces, and stop reason?
-- If heavy QA was deferred to batch/release QA, is that deferral explicit and
-  proportional to the ticket risk?
+- [ ] `autonomy-inputs-visible`: Evidence for autonomous or `$ralph` work shows
+  commands, tools, credentials/permission assumptions, QA surfaces, and stop
+  reason.
+- [ ] `qa-deferral-explicit`: Any deferred heavy QA is explicit and
+  proportional to ticket risk.
 
 ## Evidence and Finding Cues
 
@@ -130,6 +95,7 @@ Attach this rubric in the linked review artifact when used:
 - `tas`
 - `required_tas`
 - `pass`
-- `dimension_tas`
+- `checks`
+- `failed_checks`
 - `findings`
 - `next_action`

@@ -18,20 +18,22 @@ or reviewer actor supplies the task context and owns artifact writeback.
 ## Contract
 
 Apply the selected review families to provided task context, changed artifacts,
-and evidence. Return a TAS verdict with findings, hard-gate failures, and one
-concrete next action.
+and evidence. Each selected family returns one TAS verdict from modular binary
+checks, hard-gate failures, findings, and one concrete next action.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Confirm the task context, changed artifacts, and evidence being reviewed
   are available.
 - [ ] Start from caller-declared rubric families and TAS gates; add only an
   obvious missing hard-gate family with explanation.
-- [ ] Inspect the artifact and the minimum neighboring context needed to judge
-  consistency, proof strength, and integration risk.
-- [ ] Apply TAS verdicts and hard gates; do not use numeric scores.
-- [ ] Return findings, blocking issues, and one concrete next action.
+- [ ] Load only the selected family references and apply their required,
+  blocker, and evidence checklist modules.
+- [ ] Apply one TAS verdict per selected family plus the overall verdict; do
+  not use numeric scores or per-dimension TAS.
+- [ ] Return failed checks, findings, blocking issues, and one concrete next
+  action.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 ## Core Flow
 
@@ -41,14 +43,15 @@ concrete next action.
    handoff.
 3. Validate the declared families against the actual changed surface and add an
    obvious missing hard-gate family only when needed.
-4. Open `references/review-rubric-index.md` only when family choice is not
-   obvious from the handoff and this file.
-5. Open selected family references only when their detailed skeptic questions
-   are needed for a TAS decision.
+4. Open `references/review-rubric-index.md` only when family choice or modular
+   checklist shape is not obvious from the handoff and this file.
+5. Open selected family references and apply only the checklist modules needed
+   for the review claim.
 6. Inspect changed files, evidence, and the smallest neighboring surfaces that
    could falsify the claim.
-7. Assign TAS per selected family and overall.
-8. Return severity-ranked findings and one concrete next action.
+7. Assign one TAS per selected family from binary checks, then derive the
+   overall verdict from required TAS gates and hard gates.
+8. Return failed checks, severity-ranked findings, and one concrete next action.
 
 ## Rubric Family Catalog
 
@@ -86,12 +89,12 @@ Reviewer sanity check:
 
 ## TAS Verdicts
 
-- `TAS-A`: pass. Requirements and required evidence are satisfied with only
-  minor or no caveats.
-- `TAS-B`: revise. Directionally correct, but one or more meaningful issues,
-  missing evidence points, or caveats remain before pass.
-- `TAS-C`: block. Wrong scope, unsafe, contradictory, materially unreliable, or
-  missing core proof.
+- `TAS-A`: pass. Required checks pass, blocker checks do not fail, and evidence
+  supports the claim with only minor caveats.
+- `TAS-B`: revise. Directionally correct, but one or more repairable required
+  checks fail or evidence remains too thin for pass.
+- `TAS-C`: block. A blocker check fails, wrong scope or unsafe behavior appears,
+  contradictions are material, or core proof is missing.
 - `TAS-D`: invalid review. The provided context or evidence is insufficient to
   judge honestly.
 
@@ -134,6 +137,7 @@ Return or write:
 - `verdict`: `pass`, `revise`, `block`, or `invalid`
 - `rerun_required`
 - `hard_gate_failures`
+- `failed_checks`
 - `finding_log`
 - `rubric_sections`
 - `blocking_findings`

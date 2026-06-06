@@ -8,17 +8,17 @@ Use it to:
 - choose the right rubric families for the ticket
 - load the anti-slop search playbook when the review needs repo-grounded skepticism
 - locate the correct family reference files
-- assign TAS to each family consistently
+- assign one TAS to each family from modular binary checks
 - write one structured review result and link it from the ticket `Evidence` section
 
 ## Shared TAS Contract
 
-- `TAS-A`: pass. Requirements and required evidence are satisfied with only
-  minor or no caveats.
-- `TAS-B`: revise. Directionally correct, but one or more meaningful issues,
-  missing evidence points, or caveats remain before pass.
-- `TAS-C`: block. Wrong scope, unsafe, contradictory, materially unreliable, or
-  missing core proof.
+- `TAS-A`: pass. Required checks pass, blocker checks do not fail, and evidence
+  supports the claim with only minor caveats.
+- `TAS-B`: revise. Directionally correct, but one or more repairable required
+  checks fail or evidence remains too thin for pass.
+- `TAS-C`: block. A blocker check fails, wrong scope or unsafe behavior appears,
+  contradictions are material, or core proof is missing.
 - `TAS-D`: invalid review. The provided context or evidence is insufficient to
   judge honestly.
 
@@ -42,13 +42,15 @@ trust is in scope. It is a cross-cutting search playbook, not a TAS family.
 Use examples like these to separate TAS outcomes:
 
 - `TAS-B`:
-  the work has substance, but a skeptical reviewer still cannot trust it
-  without a focused repair pass.
-  Example: the main feature works in one happy-path screenshot, but edge-state
-  claims remain unproven and the write-up overstates confidence.
+  the work has substance, but a required check fails in a repairable way or a
+  skeptical reviewer still cannot trust the evidence without a focused repair
+  pass.
+  Example: the main feature works in one happy-path screenshot, but the required
+  edge-state evidence check fails and the write-up overstates confidence.
 - `TAS-A`:
-  every important claim maps to an artifact, the touched surfaces are coherent,
-  and remaining issues are polish-level rather than trust-level.
+  required checks pass, every important claim maps to an artifact, the touched
+  surfaces are coherent, and remaining issues are polish-level rather than
+  trust-level.
   Example: the main path is covered and the delta is coherent, but evidence for
   failure states or neighboring integrations is complete enough for the claim.
 - `TAS-C`:
@@ -64,16 +66,22 @@ Every family reference should provide:
 
 - what the family is judging
 - a family-level TAS guide
-- dimensions
-- skeptic questions for each dimension
+- modular checklist groups
 - evidence cues
 - finding cues
+
+Checklist groups should use stable IDs and binary questions. Group related
+checks under small modules such as `required_checks`, `blocker_checks`,
+`evidence_checks`, and optional family-specific modules. Do not assign TAS per
+dimension or average checklist results. Checklist groups guide inspection; the
+family returns exactly one TAS.
 
 For each rubric family, return:
 
 - `tas`
 - `pass`
-- `dimension_tas`
+- `checks`
+- `failed_checks`
 - `findings`
 - `next_action`
 
@@ -100,7 +108,7 @@ Hard gates:
 
 - `evidence-quality` below `TAS-A` cannot pass overall review
 - `integration-readiness` below `TAS-A` cannot pass overall review
-- `ui-quality` cannot pass if `functionality` is below `TAS-A`
+- `ui-quality` cannot pass if required functionality checks fail
 
 ## Rubric Selection
 
@@ -277,7 +285,7 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
 - File: `skill-contract.md`
 - Focus:
   - trigger accuracy
-  - first-load checklist quality
+  - first-load todo list quality
   - repeatability from files alone
   - actor-prompt versus skill-contract boundaries
   - duplication control
@@ -329,7 +337,8 @@ Then include one block per rubric family used:
 
 - `tas`
 - `pass`
-- `dimension_tas`
+- `checks`
+- `failed_checks`
 - `findings`
 - `next_action`
 
@@ -339,7 +348,7 @@ Always ask:
 
 - What would make a skeptical human reviewer reject this?
 - What claim is not actually proven?
-- Which dimension is keeping this out of `TAS-A`?
+- Which failed check is keeping this out of `TAS-A`?
 - What specific weakness makes this `TAS-B` instead of `TAS-A`, or `TAS-C`
   instead of `TAS-B`?
 - What hard gate is failing?

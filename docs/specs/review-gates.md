@@ -181,11 +181,15 @@ Reviewer output should use one normalized shape:
       "name": "evidence-quality",
       "tas": "TAS-B",
       "pass": false,
-      "dimension_tas": {
-        "sufficiency": "TAS-B",
-        "traceability": "TAS-B",
-        "inspectability": "TAS-A"
+      "checks": {
+        "main-claim-proven": true,
+        "important-edge-claims-proven": false,
+        "claim-artifact-map": false
       },
+      "failed_checks": [
+        "important-edge-claims-proven",
+        "claim-artifact-map"
+      ],
       "findings": [
         "Main flow evidence exists, but the packet does not prove the edge-state claims."
       ],
@@ -211,12 +215,12 @@ these fields from an internal role response.
 
 All review families use the same TAS contract:
 
-- `TAS-A`: pass. Requirements and required evidence are satisfied with only
-  minor or no caveats.
-- `TAS-B`: revise. Directionally correct, but one or more meaningful issues,
-  missing evidence points, or caveats remain before pass.
-- `TAS-C`: block. Wrong scope, unsafe, contradictory, materially unreliable, or
-  missing core proof.
+- `TAS-A`: pass. Required checks pass, blocker checks do not fail, and evidence
+  supports the claim with only minor caveats.
+- `TAS-B`: revise. Directionally correct, but one or more repairable required
+  checks fail or evidence remains too thin for pass.
+- `TAS-C`: block. A blocker check fails, wrong scope or unsafe behavior appears,
+  contradictions are material, or core proof is missing.
 - `TAS-D`: invalid review. The provided context or evidence is insufficient to
   judge honestly.
 
@@ -230,8 +234,10 @@ Calibration rules:
 - use `TAS-D` when review context is insufficient, not when the work is merely
   low quality
 
-Detailed family references should add skeptic questions, evidence cues, and
-family-specific TAS guidance so verdicts are easier to separate.
+Detailed family references should expose modular binary checklist groups, evidence
+cues, finding cues, and family-specific TAS guidance so verdicts are easier to
+separate. Checklist groups guide inspection; each selected family returns one
+TAS verdict and must not average or assign TAS per dimension.
 
 Detailed family anchors live in the per-family review references under:
 
@@ -241,7 +247,8 @@ Detailed family anchors live in the per-family review references under:
 
 Default:
 
-- `pass` only if every required dimension is `TAS-A`
+- `pass` only if every required checklist module passes for each required
+  rubric family
 - `pass` only if every required rubric family is `TAS-A`
 - `pass` only if required ticket metrics are traceable to fresh evidence
 - `revise` if work is directionally correct but needs another pass

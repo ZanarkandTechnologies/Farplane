@@ -2,7 +2,7 @@
 
 Use when reviewing recorded verification videos, loom-style walkthroughs, or storyboard/video deliverables.
 
-Threshold: `3.5`
+Required TAS: `TAS-A` when video proof is required; otherwise diagnostic.
 
 ## Family TAS Guide
 
@@ -85,6 +85,7 @@ Attach this rubric in the linked review artifact when used:
 - `tas`
 - `required_tas`
 - `pass`
-- `dimension_tas`
+- `checks`
+- `failed_checks`
 - `findings`
 - `next_action`
