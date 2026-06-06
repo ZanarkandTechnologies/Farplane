@@ -37,7 +37,7 @@ duplication control, repeatability, and review gates.
      [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
      when external skill examples should inform the design.
 4. [ ] Draft or revise the minimum executable contract directly in `SKILL.md`:
-   trigger boundary, job, numbered `## Todo List`, core branches,
+   trigger boundary, context, mixed sequential `## Todo List`, core branches,
    hard gates, judgement questions, proof commands, and outcome contract.
 5. [ ] Place supporting material by load frequency.
    - Keep every-invocation logic in `SKILL.md`.
@@ -68,6 +68,12 @@ Minimal `SKILL.md` shape:
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 1. [ ] ...
+2. [ ] Choose the branch.
+   1. [ ] Default branch.
+   2. [ ] Repair branch.
+3. [ ] Review before completion.
+   - [ ] Repeatability from files alone.
+   - [ ] No duplicated first-load logic.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates

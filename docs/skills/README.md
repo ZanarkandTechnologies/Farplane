@@ -157,7 +157,9 @@ Repo source packages keep first-load todo truth in `SKILL.md`:
 - `SKILL.md` owns the workflow contract, trigger conditions, and references.
 - `SKILL.md` must include a direct marker-delimited `## Todo List` section when
   a skill has required every-invocation todo items. This section is the
-  numbered first-load todo list, not a final review list.
+  first-load todo list, not a final review list. Use numbered markdown todos
+  for sequential work and branch choices; use plain `- [ ]` todos only as
+  embedded verification/detail checks under a numbered todo.
 - Redundant `todos.md` files are pruned after their content matches the direct
   todo list. If a future legacy `todos.md` differs from `SKILL.md`, reconcile
   it manually before deleting either source.

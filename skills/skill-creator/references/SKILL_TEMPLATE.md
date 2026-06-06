@@ -20,9 +20,9 @@ source-of-truth docs, ownership constraints, and assumptions.]
 
 1. [ ] Read required context and current artifacts.
 2. [ ] Choose the branch.
-   - [TODO: default branch]
-   - [TODO: update/repair branch]
-   - [TODO: review branch]
+   1. [ ] Default branch.
+   2. [ ] Update/repair branch.
+   3. [ ] Review branch.
 3. [ ] Execute the workflow for the selected branch.
 4. [ ] Produce or update the required artifact.
 5. [ ] Verify with the named proof command or evidence surface.

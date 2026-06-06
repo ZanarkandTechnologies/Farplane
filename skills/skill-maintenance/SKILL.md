@@ -62,17 +62,6 @@ Use this when working on the skill system itself: tier metadata, direct todo
 lists, legacy `todos.md` cleanup, source ownership, registry sync, link
 hygiene, or consolidation planning.
 
-## Job
-
-1. Read the relevant rollout/spec/docs surfaces.
-2. Classify the skills being touched by tier, source, group, and method owner.
-3. Add or update skill instructions without duplicating lower-tier logic.
-4. Prototype broad migrations on a representative skill sample before scaling.
-5. Keep external skills refreshable by moving local wrapper policy into local
-   caller skills.
-6. Regenerate and validate the skill registry.
-7. Record durable rules only when the change creates a reusable invariant.
-
 ## Core Rules
 
 - Follow `docs/skills/best-practices.md` for first-load todo-list shape,

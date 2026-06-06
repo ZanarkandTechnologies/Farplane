@@ -19,11 +19,6 @@ than expanding into a full research pass.
 Use when a recommendation, plan, or claim needs enough evidence to stop
 guessing. This is the small evidence move, not a research router.
 
-## Job
-
-Name the claim that needs grounding, inspect the smallest trustworthy source
-set, and return a compact evidence note for the active workflow.
-
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 

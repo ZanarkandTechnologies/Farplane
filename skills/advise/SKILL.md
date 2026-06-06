@@ -16,18 +16,6 @@ the owning skill or caller.
 
 Use when the user needs judgment, not a neutral menu.
 
-## Job
-
-Turn an unclear choice into a compact recommendation:
-
-1. Name the real decision.
-2. Start from first principles: objective, user/system need, root cause,
-   constraints, assumptions, proof/falsification, tradeoffs, and non-goals.
-3. Name the criteria that matter here.
-4. Compare exactly 3 viable options.
-5. Recommend one.
-6. State the accepted tradeoff and direct next step.
-
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 

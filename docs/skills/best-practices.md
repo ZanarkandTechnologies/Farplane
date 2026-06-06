@@ -9,13 +9,20 @@ roll it out to other skills only after a representative pass proves the shape.
 - Put a short `## Context` section near the top of `SKILL.md` before the todo
   list when the skill depends on tier, ownership, source, or surrounding
   system shape.
-- `## Todo List` is the numbered first-load todo list.
+- `## Todo List` is the first-load todo list, not a generic checklist section.
 - Use sequential task-list items such as `1. [ ]`, `2. [ ]`, and `3. [ ]` for
-  the main path.
+  ordered work.
+- Use nested numbered task-list items for branch choices that should stay
+  ordered and easy to reference.
+- Use plain markdown todos such as `- [ ]` only for embedded verification or
+  detail checks under a numbered todo.
 - Fold the default workflow into the numbered todo list instead of repeating it
   in a second workflow section.
-- Put final review as the last numbered todo. Nested review checks are allowed
-  under that final todo; avoid nested checkbox trees elsewhere.
+- Do not add a generic `## Job` section when `## Context` plus `## Todo List`
+  already state the work. Use a specific section name such as `## Contract` only
+  when it adds a durable contract that is not just a repeat of the todo list.
+- Put final review as the last numbered todo. Embedded plain todo checks are
+  allowed under that final todo; avoid deep checkbox trees elsewhere.
 - Move onboarding, examples, rubric detail, and long rationale to references.
 - A good first-load todo list should tell the next agent what to do now, not
   teach the whole domain.

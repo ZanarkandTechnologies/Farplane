@@ -25,11 +25,6 @@ execution, review, data work, app work, and skill maintenance the same
 sample-first move: prove `1 -> 10 -> 100`, then scale only when the evidence
 supports it.
 
-## Job
-
-Define the smallest honest prototype that can expose the real pattern, run or
-plan that proof, and decide whether to scale, revise, or stop.
-
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
