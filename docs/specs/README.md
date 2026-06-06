@@ -46,6 +46,9 @@ Current design docs:
 - `harness-engineering-doctrine.md` - routing doctrine for where harness changes belong before editing the repo
 - `harness-engineering-quickstart.md`
 - `harness-techniques.md` - current-state feature and technique inventory
+- `meta-harness-automation.md` - map of Farplane's self-growing surfaces:
+  feature registry, skill registry, skill maintenance, source ingestion,
+  behavior tests, failure capture, review, and durable memory
 - `orchestrator-subagent-loop.md`
 - `runtime-surface.md`
 - `review-gates.md`

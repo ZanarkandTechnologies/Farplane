@@ -93,7 +93,7 @@ flowchart LR
 | `bin/` | Hooks, validators, runtime helpers, launchers, and sync scripts. |
 | `docs/` | Specs, feature inventory, history, memory, troubles, research, and policies. |
 | `docs/features/` | Structured feature registry and feature metadata. |
-| `docs/specs/` | Canonical behavior specs and doc-gardening loop. |
+| `docs/specs/` | Canonical behavior specs, meta-harness automation, and doc-gardening loop. |
 | `experiments/` | Smoke runs, eval artifacts, prototypes, and temporary proof. |
 | `qa/` | QA cookbook, browser proof paths, and reusable test-entry guidance. |
 | `rules/` | Shared policy fragments and prompt-engineering references. |
@@ -105,6 +105,7 @@ flowchart LR
 
 - Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 - Specs index: [docs/specs/README.md](docs/specs/README.md)
+- Self-growing harness map: [docs/specs/meta-harness-automation.md](docs/specs/meta-harness-automation.md)
 - Feature inventory: [harness-techniques.md](docs/specs/harness-techniques.md)
 - Structured feature registry: [docs/features/README.md](docs/features/README.md)
 - Skill guide: [docs/skills/README.md](docs/skills/README.md)

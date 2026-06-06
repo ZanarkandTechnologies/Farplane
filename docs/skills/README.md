@@ -17,6 +17,10 @@ into a second place to maintain skill truth.
   Markdown-reference edges, Tier 3 chain edges, and rendered skill documents.
 - `skills/skill-registry-ui/` is the operator skill for refreshing, opening,
   and validating that graph UI.
+- Skill-applicable harness features live in
+  [`docs/features/registry.jsonl`](../features/registry.jsonl) with
+  `category: "skills"`. This folder owns the generated skill inventory, not a
+  second hand-authored skill feature registry.
 
 ## Human Selection Guide
 
@@ -199,6 +203,12 @@ Use `source` to decide where wrapper logic belongs:
 Use `skills/skill-maintenance/` for bulk tier, source, todo, registry, and
 consolidation work. Keep this module's docs as the registry contract; keep the
 step-by-step maintenance workflow in that skill.
+
+When skill standards or optional skill capabilities change, use
+[`docs/features/registry.jsonl`](../features/registry.jsonl) as the supported
+feature catalog. `skill-maintenance` should report stale or missing adoption
+from the generated skill inventory and feature rows rather than requiring long
+per-skill migration histories.
 
 Use `skills/harness-advisor/` before skill maintenance when the question is
 broader than skills: it compares root policy, global templates, docs/specs,

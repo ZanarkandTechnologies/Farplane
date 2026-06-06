@@ -14,4 +14,6 @@ Rules:
 - Allocate the next unused `FEAT-####` ID after reading all existing IDs.
 - Keep local refs path-like and reviewable; prefer specific ticket or artifact
   refs over broad directories when proof exists.
+- Use `category: "skills"` for features that apply to skill packages; do not
+  create a second hand-authored skill feature registry.
 - Run the registry validation snippet in `README.md` after edits.

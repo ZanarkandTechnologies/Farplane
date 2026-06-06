@@ -51,7 +51,7 @@ Each line in `registry.jsonl` is one JSON object:
 - `status`: `implemented`, `partial`, `proposed`, `designed`, `deferred`, or
   `retired`.
 - `category`: broad grouping such as `planning`, `proof`, `memory`,
-  `source-ingestion`, or `improvement-loop`.
+  `source-ingestion`, `skills`, or `improvement-loop`.
 - `surfaces`: repo paths that own the live behavior.
 - `source_refs`: `SRC-*` records, local docs, tickets, memories, or specs that
   explain why the feature exists.
@@ -77,6 +77,20 @@ Each line in `registry.jsonl` is one JSON object:
 5. When a source proposes a feature, use `harness-scout` to search
    `docs/sources/registry.jsonl` first for source dedupe, then this registry
    for feature dedupe before creating a new ticket.
+
+## Skill-Applicable Features
+
+Use this same registry for features that apply to Farplane skill packages.
+Set `category` to `skills` and keep the operational details in the feature row's
+`surfaces`, `evidence_refs`, `known_limits`, and `metrics`.
+
+Do not create a second hand-authored skill feature registry. The skill package
+inventory already lives in generated form at `docs/skills/registry.jsonl`, and
+future per-skill adoption fields should reference `FEAT-####` handles from this
+registry rather than loose feature names.
+
+Use [docs/specs/meta-harness-automation.md](../specs/meta-harness-automation.md)
+for the full self-growing harness map.
 
 ## ID Allocation
 
