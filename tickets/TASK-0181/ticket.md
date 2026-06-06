@@ -169,10 +169,10 @@ type BehaviorTestReport = {
 ```text
 Source:
   skills/harness-advisor/SKILL.md
-  skills/harness-advisor/todos.md
+  legacy harness-advisor checklist sidecar
 
 Install:
-  render_skill_markdown(SKILL.md, todos.md, "skills/harness-advisor/todos.md")
+  render_skill_markdown(SKILL.md, checklist, "legacy harness-advisor checklist sidecar")
 
 Installed:
   ~/.codex/skills/harness-advisor/SKILL.md
@@ -180,10 +180,10 @@ Installed:
     # Harness Advisor
     ...
     ## Embedded Skill Checklist
-    Source: skills/harness-advisor/todos.md
+    Source: legacy harness-advisor checklist sidecar
     - [ ] State the Codexter improvement request...
     ...
-  ~/.codex/skills/harness-advisor/todos.md
+  ~/.codex/skills/harness-advisor/<checklist sidecar>
     unchanged copy for humans/tools
 
 Fresh agent:

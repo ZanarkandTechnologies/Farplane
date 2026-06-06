@@ -17,9 +17,9 @@ source: local
   feature before proposing a new feature.
 - [ ] Check `docs/skills/registry.jsonl` for an existing skill, method, source
   owner, or consolidation target before proposing a new skill.
-- [ ] Read `docs/policies/README.md` when the request touches policy,
-  canonical ownership, memory, specs, tickets, runtime, hooks, skills,
-  registries, or source/feature provenance.
+- [ ] Read `ARCHITECTURE.md` and the relevant owning spec when the request
+  touches policy, canonical ownership, memory, specs, tickets, runtime, hooks,
+  skills, registries, or source/feature provenance.
 - [ ] Read `docs/specs/harness-engineering-doctrine.md` for placement rules.
 - [ ] For material or ambiguous placement decisions, read
   [placement-axes](./references/placement-axes.md) and score context budget,
@@ -83,9 +83,9 @@ hand the chosen work to a Tier 3 domain skill such as `skill-maintenance`,
 Load only what the request needs:
 
 - `docs/specs/harness-engineering-doctrine.md` for placement rules
-- `docs/policies/README.md` for the policy index and canonical owner map when
-  a request touches policy, memory, specs, tickets, runtime, hooks, skills, or
-  feature/source provenance
+- `ARCHITECTURE.md` for the canonical surface map when a request touches
+  policy, memory, specs, tickets, runtime, hooks, skills, or feature/source
+  provenance
 - `references/placement-axes.md` for material or ambiguous placement decisions
   where context budget, reuse, ownership, determinism, or duplication risk
   needs explicit scoring
@@ -114,9 +114,9 @@ Load only what the request needs:
    [reference-grounding](../reference-grounding/SKILL.md) for compact local
    evidence. Use a focused `research:*` method only when local evidence is not
    enough.
-   Read `docs/policies/README.md` when the request could affect canonical
-   policy ownership or when the owning surface is ambiguous across docs,
-   memory, tickets, skills, hooks, registries, or templates.
+   Read `ARCHITECTURE.md` and the nearest owning spec when the request could
+   affect canonical policy ownership or when the owning surface is ambiguous
+   across docs, memory, tickets, skills, hooks, registries, or templates.
 3. **Check registries.** Look for existing feature rows, skill rows, source
    ownership, and known limits before creating anything new.
 4. **Score axes when needed.** For material or ambiguous decisions, use

@@ -105,7 +105,7 @@ Telegram notification when the loop passes, blocks, or times out.
   - `skills/coderabbit-review/SKILL.md`
   - `docs/features/registry.jsonl`
   - `docs/skills/registry.jsonl`
-  - `docs/policies/README.md`
+  - `ARCHITECTURE.md`
   - `docs/specs/harness-engineering-doctrine.md`
   - `skills/deep-init-project/references/PROJECT_RULES_TEMPLATE.md`
   - `templates/global/AGENTS.md`
@@ -304,7 +304,7 @@ flowchart LR
 - `skills/harness-advisor/SKILL.md`
 - `skills/pr-runtime/SKILL.md`
 - `skills/coderabbit-review/SKILL.md`
-- `docs/policies/README.md`
+- `ARCHITECTURE.md`
 - `docs/specs/harness-engineering-doctrine.md`
 - `skills/deep-init-project/references/PROJECT_RULES_TEMPLATE.md`
 - `templates/global/AGENTS.md`

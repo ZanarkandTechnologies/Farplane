@@ -77,7 +77,7 @@ Use this routing:
 - `PROJECT_RULES.md`: stack, commands, runtime, QA paths, and technical
   conventions.
 - `docs/specs/*`: canonical contract, equation, lifecycle, or planning model.
-- `docs/policies/README.md`: index of where policy lives, not the policy body.
+- `ARCHITECTURE.md`: high-level surface ownership map.
 - `skills/*`: repeated procedure or domain method.
 - `agents/*.toml`: independent context and owned output.
 - hooks/scripts/validators: deterministic drift checks.

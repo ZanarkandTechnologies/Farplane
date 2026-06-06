@@ -2096,8 +2096,7 @@ def skill_opportunity_review_input(
         "source_to_feature": "skills/harness-scout/SKILL.md",
         "feature_options": "skills/advise/SKILL.md",
         "placement": "skills/harness-advisor/SKILL.md",
-        "placement_todos": "skills/harness-advisor/todos.md",
-        "policy_index": "docs/policies/README.md",
+        "surface_map": "ARCHITECTURE.md",
         "harness_doctrine": "docs/specs/harness-engineering-doctrine.md",
     }
     recent_windows = recent_conversation_windows(

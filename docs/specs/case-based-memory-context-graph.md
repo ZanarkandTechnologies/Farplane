@@ -91,17 +91,16 @@ objects for consistency checks, not a fourth place to maintain raw truth.
 
 ## Minimal Implementation Path
 
-1. Add this seed spec and policy index links.
+1. Add this seed spec and registry links.
 2. Add a small extractor that reads existing ledgers into normalized nodes.
-3. Generate a local JSON graph under `docs/policies/context-graph.generated.json`
-   or `experiments/context-graph/` while the shape is still unstable.
+3. Generate a local JSON graph under `experiments/context-graph/` while the
+   shape is still unstable.
 4. Add a query helper for `similar cases for <topic>`.
 5. Feed the helper into `harness-advisor`, `skill-maintenance`, and `review`
    only after the retrieved cases prove useful.
 
 ## Placement
 
-- `docs/policies/README.md`: human policy map and graph entrypoint.
 - `docs/specs/case-based-memory-context-graph.md`: graph model and rollout
   contract.
 - `docs/features/registry.jsonl`: feature row for dedupe and status.

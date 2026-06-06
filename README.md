@@ -91,7 +91,7 @@ flowchart LR
 | `ARCHITECTURE.md` | Deeper system map, ownership boundaries, and read order. |
 | `agents/` | Bounded specialist role configs. |
 | `bin/` | Hooks, validators, runtime helpers, launchers, and sync scripts. |
-| `docs/` | Specs, feature inventory, history, memory, troubles, lessons, research, and policies. |
+| `docs/` | Specs, feature inventory, history, memory, troubles, lessons, and research. |
 | `docs/features/` | Structured feature registry and feature metadata. |
 | `docs/specs/` | Canonical behavior specs, meta-harness automation, and doc-gardening loop. |
 | `experiments/` | Smoke runs, eval artifacts, prototypes, and temporary proof. |
