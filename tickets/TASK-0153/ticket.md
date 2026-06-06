@@ -14,7 +14,7 @@ requires_qa: true
 requires_demo: true
 created_at: 2026-05-19T15:40:00+08:00
 updated_at: 2026-05-19T14:59:00+08:00
-next_action: complete; open docs/skills/graph/index.html or serve the repo and visit /docs/skills/graph/
+next_action: complete; open skills/skill-maintenance/graph/index.html or serve the repo and visit /skills/skill-maintenance/graph/
 last_verification: file URL Playwright check at 1000px clicked a graph node and changed selection from advise to reference-grounding; detail panel was visible, Markdown/raw YAML rendered, inactive decorative buttons count was 0, and console/page errors were absent
 ---
 
@@ -45,21 +45,21 @@ and visually distinguishes chain edges from normal skill-link edges.
 
 ## Plan
 - `Change:` add a generated graph JSON plus a static local graph viewer under a
-  docs/tools surface, likely `docs/skills/graph/`.
+  docs/tools surface, likely `skills/skill-maintenance/graph/`.
 - `Why:` the registry is now mechanically generated, but humans still need a
   visual way to see tiering, references, and common chains without scanning
   JSONL.
 - `Before -> After:`
   - Before: skill relationships are inspectable only through registry rows and
     `rg`.
-  - After: `docs/skills/graph/index.html` opens a local interactive graph with
+  - After: `skills/skill-maintenance/graph/index.html` opens a local interactive graph with
     tier colors, edge legends, filters, and node detail panels.
 - `Touch:`
   - `skills/skill-maintenance/scripts/generate_skill_graph.py` or
     `bin/generate_skill_graph.py`
-  - `docs/skills/graph/skill-graph.json`
-  - `docs/skills/graph/index.html`
-  - `docs/skills/graph/README.md`
+  - `skills/skill-maintenance/graph/skill-graph.json`
+  - `skills/skill-maintenance/graph/index.html`
+  - `skills/skill-maintenance/graph/README.md`
   - `docs/skills/README.md`
   - `tickets/TASK-0153/ticket.md`
 - `Inspect:`
@@ -72,7 +72,7 @@ and visually distinguishes chain edges from normal skill-link edges.
   - `generate_skill_graph.py / load_registry(path): SkillRow[]`
   - `generate_skill_graph.py / build_graph(rows): SkillGraph`
   - `generate_skill_graph.py / write_graph(graph, output_path): None`
-  - `docs/skills/graph/index.html / renderGraph(graph): void`
+  - `skills/skill-maintenance/graph/index.html / renderGraph(graph): void`
 - `Type Sketch:`
   - `SkillNode`: `id`, `label`, `tier`, `source`, `group`, `methods`,
     `has_todos`, `path`
@@ -90,8 +90,8 @@ and visually distinguishes chain edges from normal skill-link edges.
 - `Execution steps:`
   1. Implement a small deterministic graph generator using only the Python
      standard library.
-  2. Generate `docs/skills/graph/skill-graph.json` from the current registry.
-  3. Build `docs/skills/graph/index.html` as a static app with no package
+  2. Generate `skills/skill-maintenance/graph/skill-graph.json` from the current registry.
+  3. Build `skills/skill-maintenance/graph/index.html` as a static app with no package
      install required.
   4. Render nodes with tier colors and external-source styling.
   5. Render Markdown-ref edges as solid lines and common-chain edges as dashed
@@ -200,7 +200,7 @@ flowchart LR
   - `python3 skills/skill-maintenance/scripts/generate_skill_graph.py`
   - `python3 -m py_compile skills/skill-maintenance/scripts/generate_skill_graph.py`
   - graph count equality script
-  - Playwright browser check at `http://127.0.0.1:8765/docs/skills/graph/index.html`
+  - Playwright browser check at `http://127.0.0.1:8765/skills/skill-maintenance/graph/index.html`
 - `Result summary:` graph data generated with 71 nodes, 261 edges, 13
   common-chain edges, and 71 embedded skill docs after adding the
   `skill-registry-ui` package. Follow-up browser proof at `file://` and a

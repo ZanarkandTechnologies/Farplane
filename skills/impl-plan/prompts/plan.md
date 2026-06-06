@@ -7,7 +7,7 @@
 0c. Study the active ticket in `@tickets/*`; if none exists, inspect
 `@tickets/*`.
 0d. Study `@docs/MEMORY.md`.
-0e. Study `@docs/TROUBLES.md` if present.
+0e. Study `@docs/TROUBLES.md` and `@docs/LESSONS.md` if present.
 0f. Search the codebase first.
 
 Plan only. Target one selected ticket.

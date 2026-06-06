@@ -83,7 +83,8 @@ Use this routing:
 - hooks/scripts/validators: deterministic drift checks.
 - tickets: scoped work, proof, blockers, and closeout.
 - `docs/MEMORY.md`: durable invariant only after the rule is reusable.
-- `docs/TROUBLES.md`: repeated miss or correction before promotion.
+- `docs/TROUBLES.md`: repeated miss, blocker, or correction before promotion.
+- `docs/LESSONS.md`: distilled reusable prevention rule after a fix, repent pass, or drain.
 
 ## Artifact Expectations
 

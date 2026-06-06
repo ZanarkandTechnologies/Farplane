@@ -124,7 +124,7 @@ BoardAdapter surface for reading filesystem tickets into normalized `WorkItem`
 JSON. It is intentionally read-first: evidence links still belong in the
 ticket `Evidence` section until a later ticket ships traceable writeback.
 Future board adapters must satisfy
-`docs/specs/board-adapter-conformance.md` before they become live ticket
+`docs/specs/invocation-and-adapters.md` before they become live ticket
 sources.
 
 ## Invariants

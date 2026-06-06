@@ -52,7 +52,7 @@ flowchart LR
     techniques[(harness-techniques.md<br/>current inventory)]:::surface
     featureRegistry[(docs/features<br/>structured feature registry)]:::surface
     doctrine[(harness-engineering-doctrine.md<br/>surface routing)]:::surface
-    memories[(HISTORY.md<br/>MEMORY.md<br/>TROUBLES.md)]:::memory
+    memories[(HISTORY.md<br/>MEMORY.md<br/>TROUBLES.md<br/>LESSONS.md)]:::memory
   end
 
   subgraph Skills["Skill Layer"]
@@ -160,7 +160,7 @@ The public docs are intentionally split by job:
 | [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md) | system diagram, surface ownership, read order, current limits | README, `docs/specs/harness-techniques.md` |
 | [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md) | canonical behavior-spec index and doc-gardening loop | README, this file |
 | [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md) | ticket state machine, invocation policy, metadata contract | ticket template, board/compute specs |
-| [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/HISTORY.md) / [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md) / [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md) | durable timeline, invariants, and repeated misses | closeout tickets and nearest module docs |
+| [docs/HISTORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/HISTORY.md) / [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md) / [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md) / [docs/LESSONS.md](/Users/kenjipcx/coding-harness/Farplane/docs/LESSONS.md) | durable timeline, invariants, raw repeated misses, and distilled lessons | closeout tickets and nearest module docs |
 
 If a public harness claim changes, update the relevant row's surfaces in the
 same pass and run:
@@ -187,19 +187,22 @@ during cleanup unless the replacement carries the same routing information.
 
 - [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md)
   Purpose: index of canonical behavior and execution specs
-- [docs/specs/farplane-v2-milestone.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/farplane-v2-milestone.md)
+- [docs/specs/invocation-and-adapters.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md)
   Purpose: completed capped Symphony-inspired follow-through: explicit
   invocation triggers, adapter conformance, external compute recipes, and clear
   deferrals
 - [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
-- [docs/specs/board-compute-orchestration.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/board-compute-orchestration.md)
+- [docs/specs/invocation-and-adapters.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md)
   Purpose: canonical ownership split for BoardAdapter, WorkItem, explicit
   ticket invocation, ComputeSelector, local Farplane, operator-invoked serial
   Ralph, and future Symphony/shared board compute modes
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
+- [docs/specs/filesystem-lifecycle.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/filesystem-lifecycle.md)
+  Purpose: lifecycle, read defaults, drain flows, and keep/delete rules for
+  durable filesystem state
 - [docs/features/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/features/README.md)
   Purpose: structured feature registry contract for dedupe, provenance, source
   references, evidence links, known limits, and benchmark metrics
@@ -215,7 +218,9 @@ during cleanup unless the replacement carries the same routing information.
 - [docs/MEMORY.md](/Users/kenjipcx/coding-harness/Farplane/docs/MEMORY.md)
   Purpose: curated durable invariants and constraints
 - [docs/TROUBLES.md](/Users/kenjipcx/coding-harness/Farplane/docs/TROUBLES.md)
-  Purpose: repeated misses, user corrections, and prevention ideas
+  Purpose: raw repeated misses, blockers, user corrections, and pain points
+- [docs/LESSONS.md](/Users/kenjipcx/coding-harness/Farplane/docs/LESSONS.md)
+  Purpose: distilled post-fix lessons for prompt, skill, eval, and policy improvements
 - [docs/TASTE.md](/Users/kenjipcx/coding-harness/Farplane/docs/TASTE.md)
   Purpose: shared visual doctrine when a repo has UI work
 - [qa/README.md](/Users/kenjipcx/coding-harness/Farplane/qa/README.md)

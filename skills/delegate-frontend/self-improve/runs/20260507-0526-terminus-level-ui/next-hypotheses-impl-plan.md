@@ -387,7 +387,7 @@ Stop conditions:
 ## Refs
 
 - `docs/MEMORY.md`: `MEM-0080`, `MEM-0083`, `MEM-0084`, `MEM-0085`.
-- `docs/TROUBLES.md`: 2026-05-07 Pi/Kimi scroll-scrub and self-improve misses.
+- `docs/LESSONS.md`: 2026-05-07 Pi/Kimi scroll-scrub and self-improve misses.
 - `skills/delegate-frontend/self-improve/program.md`.
 - `skills/landing-page/self-improve/program.md`.
 - `skills/landing-page/references/spec-first-cinematic-industrial.md`.

@@ -24,6 +24,7 @@ This file is loaded every loop. Keep it operational and project-specific.
 - History: `docs/HISTORY.md`
 - Memory: `docs/MEMORY.md`
 - Troubles: `docs/TROUBLES.md`
+- Lessons: `docs/LESSONS.md`
 - Taste: `docs/TASTE.md`
 - Tickets: active `tickets/TASK-*/ticket.md`, completed `tickets/archive/TASK-*/ticket.md`
 
@@ -84,4 +85,5 @@ slice, proof/falsification, tradeoffs, and non-goals.
 - If the same helper logic is appearing across multiple modules, extract it to
   the approved shared utility surface instead of copying it again.
 - Update ticket status, phase, blockers, and spawned follow-ups in the ticket file as work progresses. When a ticket is complete and its writeback is done, move it into `tickets/archive/`.
-- If the same failure or user correction happens more than once, append a short entry to `docs/TROUBLES.md` with the miss, the correction, and the prevention idea.
+- If the same failure or user correction happens more than once, append a short raw entry to `docs/TROUBLES.md` with the miss, correction, and prevention idea.
+- If that raw entry produces a reusable prompt, skill, eval, or policy improvement, distill it into `docs/LESSONS.md`.

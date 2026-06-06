@@ -104,8 +104,8 @@ Before edits:
 - read nearby specs, PRDs, and module docs
 - search for existing patterns
 - inspect affected files and interfaces
-- bootstrap from active tickets, `docs/prd.md`, `docs/specs/*`, `docs/MEMORY.md`, and `docs/TROUBLES.md`
-- if the repo does not already have Farplane conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `tickets/`, start with `deep-init-project` before applying the full spec or ticket workflow
+- bootstrap from active tickets, `docs/prd.md`, `docs/specs/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and `docs/LESSONS.md`
+- if the repo does not already have Farplane conventions such as `AGENTS.md`, `docs/prd.md`, `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, `docs/LESSONS.md`, and `tickets/`, start with `deep-init-project` before applying the full spec or ticket workflow
 
 No blind edits.
 
@@ -322,7 +322,8 @@ Files:
 - `docs/HISTORY.md` = append-only event ledger for meaningful shipped
   milestones, migrations, and project-shaping decisions
 - `docs/MEMORY.md` = curated durable constraints and invariants
-- `docs/TROUBLES.md` = append-only repeated-failure and correction log
+- `docs/TROUBLES.md` = append-only raw repeated-failure, blocker, and correction log
+- `docs/LESSONS.md` = distilled post-fix lesson log for prompt, skill, eval, and policy improvements
 
 Format:
 
@@ -357,8 +358,9 @@ Troubles format:
 
 Promotion rule:
 
-- `docs/TROUBLES.md` is for raw operator feedback, not durable truth
-- promote repeated or structural lessons from `docs/TROUBLES.md` into `docs/MEMORY.md`, `AGENTS.md`, or the relevant skill only after the pattern is clear
+- `docs/TROUBLES.md` is for raw operator feedback, blockers, and correction pain points, not durable truth
+- write `docs/LESSONS.md` when `repent`, review, or a trouble-drain pass distills a reusable prevention rule
+- promote repeated or structural lessons from `docs/LESSONS.md` into `docs/MEMORY.md`, `AGENTS.md`, or the relevant skill only after the pattern is clear
 
 If you introduce an invariant:
 
@@ -429,7 +431,7 @@ Ownership split:
 
 - `tickets/` = active work visibility and active task metadata
 - nearest folder `README.md` = local or module rationale
-- `docs/MEMORY.md`, `docs/HISTORY.md`, `docs/TROUBLES.md` = durable memory after completion
+- `docs/MEMORY.md`, `docs/HISTORY.md`, `docs/TROUBLES.md`, `docs/LESSONS.md` = durable memory after completion
 
 Anti-goals:
 

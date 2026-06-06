@@ -1,11 +1,15 @@
-# Board, Compute, And Ticket Invocation
+# Invocation And Adapters
 
-Status: Draft v1
+Status: active contract
 
-Purpose: Define how Farplane should treat local or shared board items as work
-context, accept an explicit invocation to run one item, decide where the work
-should run, route normal Codex through installed Farplane skills, and produce
-proof that local or future external runners can trust.
+Purpose: define the single active contract for explicit Farplane invocation,
+board adapter conformance, compute selection, local Codex execution, and future
+external-runner compatibility.
+
+This file replaces the earlier split specs for board/compute orchestration,
+board adapter conformance, Farplane V2 milestone notes, and
+Symphony-compatible runner planning. Keep historical ticket evidence in
+`tickets/archive/`; keep this file focused on the current feature contract.
 
 ## 1. Core Decision
 
@@ -218,7 +222,7 @@ Requirements:
   `FileTicketAdapter` reads `tickets/TASK-*/ticket.md`, rejects selectors
   outside the configured board source, and returns a normalized `WorkItem`.
 - New adapters must satisfy
-  `docs/specs/board-adapter-conformance.md` before they are treated as live.
+  `docs/specs/invocation-and-adapters.md` before they are treated as live.
 - External adapters must normalize into the same `WorkItem` shape.
 - Adapter writes must be explicit and traceable; Farplane should not silently
   mutate external board state as a side effect of reading.
@@ -525,8 +529,7 @@ Completed foundation tickets are archived: `TASK-0112`, `TASK-0113`,
 ## 15. References
 
 - `WORKFLOW.md`
-- `docs/specs/symphony-compatible-farplane-runner.md`
-- `docs/specs/board-adapter-conformance.md`
+- `docs/specs/invocation-and-adapters.md`
 - `skills/farplane-invocation/SKILL.md`
 - `skills/ralph/SKILL.md`
 - `skills/farplane-invocation/references/codex-cloud.md`

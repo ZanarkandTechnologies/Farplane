@@ -6,7 +6,7 @@ If any answer is weak, tighten the plan first.
 ## Must Pass
 
 - Is this still one coherent build-and-proof loop, or did a real split boundary emerge?
-- Did the plan actually use the right references: PRD, specs, ticket, memory, troubles, code?
+- Did the plan actually use the right references: PRD, specs, ticket, memory, troubles, lessons, code?
 - Does the ticket stay in the canonical single-surface body shape instead of a
   parallel reviewer-versus-implementer document?
 - When the flow, ownership, or typed data path is not obvious from the file

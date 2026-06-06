@@ -38,7 +38,7 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Edit
 - [ ] Extract concrete feature candidates and copied-skill candidates, not
   generic themes.
 - [ ] Search `docs/features/registry.jsonl` before declaring anything new.
-- [ ] Search local docs, skills, memory, troubles, tickets, README, and
+- [ ] Search local docs, skills, memory, troubles, lessons, tickets, README, and
   ARCHITECTURE for matching behavior.
 - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
   for compact evidence checks before scoring source claims.
@@ -188,7 +188,7 @@ needed; use [summarize](../summarize/SKILL.md) directly.
     guardrails, metrics, architecture claims, and operational practices.
 11. **Dedupe locally:** search `docs/features/registry.jsonl`,
    `docs/specs/harness-techniques.md`, `README.md`, `ARCHITECTURE.md`,
-   `skills/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and tickets. Use
+   `skills/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`, `docs/LESSONS.md`, and tickets. Use
    [codebase-analysis](../codebase-analysis/SKILL.md) when the local match
    depends on code or cross-file behavior.
 12. **Route research:** use [reference-grounding](../reference-grounding/SKILL.md)

@@ -88,7 +88,8 @@ copy_file "${REF_DIR}/BOOTSTRAP_BRIEF_TEMPLATE.md" "${TARGET_DIR}/docs/bootstrap
 write_file_if_missing "${TARGET_DIR}/docs/prd.md" "# PRD\n\n## Problem / Context\n\n## Audience\n\n## JTBD\n\n## SLC Slice\n\n## Goals\n\n## Non-Goals\n\n## Constraints\n\n## Risks\n\n## Backpressure\n"
 write_file_if_missing "${TARGET_DIR}/docs/HISTORY.md" "# HISTORY\n\nAppend-only change log.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | summary\n\n"
 write_file_if_missing "${TARGET_DIR}/docs/MEMORY.md" "# MEMORY\n\nCurated durable constraints and invariants future work must obey.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | MEM-#### | tags | durable rule\n\n"
-write_file_if_missing "${TARGET_DIR}/docs/TROUBLES.md" "# TROUBLES\n\nAppend-only log for repeated failures, user corrections, and preventable misses.\n\nFormat:\nYYYY-MM-DD HH:mm Z | area,tags | request | miss | correction | prevention\n\nPromote only durable lessons from here into docs/MEMORY.md or the relevant skill/contract.\n\n"
+write_file_if_missing "${TARGET_DIR}/docs/TROUBLES.md" "# TROUBLES\n\nAppend-only raw log for repeated failures, blockers, user corrections, and preventable misses.\n\nFormat:\nYYYY-MM-DD HH:mm Z | area,tags | request | miss | correction | prevention\n\nPromote only stable patterns from here into docs/LESSONS.md, docs/MEMORY.md, or the relevant skill/contract.\n\n"
+write_file_if_missing "${TARGET_DIR}/docs/LESSONS.md" "# LESSONS\n\nDistilled post-fix learning log for prompt, skill, eval, and policy improvements.\n\nFormat:\nYYYY-MM-DD HH:mm Z | area,tags | source | lesson | owner | next_prompt_or_skill_change\n\nUse docs/TROUBLES.md for raw pain; use this file for reusable lessons after a fix, repent pass, review, or drain.\n\n"
 copy_file "${REF_DIR}/TASTE_TEMPLATE.md" "${TARGET_DIR}/docs/TASTE.md"
 
 mkdir -p "${TARGET_DIR}/tickets" "${TARGET_DIR}/tickets/archive" "${TARGET_DIR}/tickets/templates"
@@ -120,7 +121,7 @@ echo "  - Start by refining docs/bootstrap-brief.md with a deep-interview-qualit
 echo "  - Fill the bootstrap brief's agent-experience section so the repo knows how agents should reach, inspect, and verify important app states."
 echo "  - Refine docs/TASTE.md so UI tickets and QA share one visual doctrine."
 echo "  - Use qa/cookbook/ to document evidence-capture launch paths, shortcuts, deep links, seed/reset paths, target URLs, and debug probes for repeatable QA."
-echo "  - Use docs/TROUBLES.md for repeated misses; promote recurring lessons back into the system."
+echo "  - Use docs/TROUBLES.md for repeated misses and blockers; distill recurring lessons into docs/LESSONS.md."
 echo "  - Fill in docs/bootstrap-brief.md with explicit local-hook, heavy-check, CI/deploy gate, runtime-command, and service-assumption decisions before finalizing the scaffold."
 echo "  - Fill in scripts/pre_push_check.sh with the repo's lint, typecheck, test, build, and optional desloppify commands."
 echo "  - Optional: enable .githooks with 'git config core.hooksPath .githooks' and prefer pre-push over pre-commit."

@@ -59,7 +59,7 @@ prompts changed.
 - `rules/prompt-engineering.md`
 - Caller workflow or agent config
 - Ticket proof contract or expected output schema
-- Prior failure notes in `docs/TROUBLES.md` when relevant
+- Prior failure notes in `docs/LESSONS.md` when relevant
 
 ## Finding Cues
 

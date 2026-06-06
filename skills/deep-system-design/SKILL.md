@@ -12,7 +12,7 @@ allowed-tools: Read, Glob, Grep
 
 - [ ] Read product and technical context first: active ticket, `docs/prd.md`,
   `docs/specs/`, nearby schemas/handlers/jobs/config, `docs/MEMORY.md`, and
-  `docs/TROUBLES.md`.
+  `docs/LESSONS.md`.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to separate
   observed local architecture from assumptions.
 - [ ] Choose and state the entry path: customer-first or data-first.

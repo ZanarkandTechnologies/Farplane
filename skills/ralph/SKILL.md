@@ -12,7 +12,7 @@ allowed-tools: Read, Glob, Grep, Bash
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] Read `tickets/README.md`, active tickets, `docs/MEMORY.md`, and `docs/TROUBLES.md`.
+- [ ] Read `tickets/README.md`, active tickets, `docs/MEMORY.md`, and `docs/LESSONS.md`.
 - [ ] Run the read-only selector and inspect skipped-ticket reasons.
 - [ ] Stop on human gates, unresolved blockers, unresolved dependencies, claims, missing tools, or missing permissions.
 - [ ] Decide whether the next safe work unit is one ticket or a low-risk related tiny-ticket batch.
@@ -73,7 +73,7 @@ Use `$work` for execution admission:
 ## Workflow
 
 1. Read `tickets/README.md`, the active tickets, `docs/MEMORY.md`, and
-   `docs/TROUBLES.md` for queue and autonomy constraints.
+   `docs/LESSONS.md` for queue and autonomy constraints.
 2. Run a read-only selector pass. Prefer
    `python3 skills/ralph/scripts/select_next_ticket.py --root . --json` when
    working in this repo. The helper reads tickets through `FileTicketAdapter`

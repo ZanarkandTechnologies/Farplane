@@ -1301,7 +1301,7 @@ def classify_requested_outcome(raw_text: str, intent_mode: str) -> str:
 
     if intent_mode == "documenting" or _contains_any(
         lowered,
-        ("history.md", "memory.md", "troubles.md", "readme", "docs update", "document "),
+        ("history.md", "memory.md", "troubles.md", "lessons.md", "readme", "docs update", "document "),
     ):
         return "docs_update"
 

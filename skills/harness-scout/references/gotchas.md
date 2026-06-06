@@ -8,7 +8,7 @@
 - Do not run commands copied from the source unless the user explicitly approves
   that command as part of the current task.
 - Do not create tickets for duplicate feature names before checking the feature
-  registry, `harness-techniques.md`, skills, memory, troubles, and archived
+  registry, `harness-techniques.md`, skills, memory, troubles, lessons, and archived
   tickets.
 - Do not turn 1-10 scorecards into fake precision. Always include confidence
   and anti-metrics.

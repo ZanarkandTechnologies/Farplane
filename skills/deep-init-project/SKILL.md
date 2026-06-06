@@ -27,7 +27,7 @@ source: local
 - [ ] Use [research:code-patterns](../research/SKILL.md#researchcode-patterns)
   when local or peer repo scaffolding patterns should shape the project.
 - [ ] Create or update the canonical project surfaces: README, AGENTS, PRD,
-  specs, tickets, memory, troubles, and quality commands as applicable.
+  specs, tickets, memory, troubles, lessons, and quality commands as applicable.
 - [ ] Preserve explicit human gates for credentials, deploys, billing, and
   destructive setup.
 - [ ] Use [execute](../execute/SKILL.md) for proof, writeback, and handoff after
@@ -45,7 +45,7 @@ agent-efficient verification guidance.
 - `PROJECT_RULES.md` (project-specific stack, canonical runtime/QA commands, and conventions)
 - `AGENTS.md` (operational contract loaded every loop)
 - `ARCHITECTURE.md` (top-level system map for the repo)
-- `docs/` state (`bootstrap-brief.md`, `prd.md`, `specs/README.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
+- `docs/` state (`bootstrap-brief.md`, `prd.md`, `specs/README.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`, `LESSONS.md`)
 - `qa/` state (`README.md`, `AGENTS.md`, `cookbook/README.md`, `cookbook/TEMPLATE.md`)
 - `tickets/` state (`*.md`, `archive/`, `templates/`, optional `README.md`)
 - `Autonomy Readiness` defaults for permissions, compute, tools, testability,
@@ -181,7 +181,7 @@ repo.
    - `mkdir -p docs/specs`
    - copy `references/BOOTSTRAP_BRIEF_TEMPLATE.md` -> `docs/bootstrap-brief.md`
    - copy `references/SPECS_README_TEMPLATE.md` -> `docs/specs/README.md`
-   - `touch docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TASTE.md docs/TROUBLES.md`
+   - `touch docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TASTE.md docs/TROUBLES.md docs/LESSONS.md`
 6. Create QA state:
    - `mkdir -p qa/cookbook`
    - copy `references/qa/AGENTS.md` -> `qa/AGENTS.md`
@@ -256,7 +256,8 @@ Migration guide:
 - `qa/` also gives the repo one reusable place to say how evidence capture
   should launch the app and which URLs or services QA should trust.
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
-- `docs/TROUBLES.md` is the append-only operator feedback log for repeated misses, failed attempts, and correction patterns that should feed future system improvements.
+- `docs/TROUBLES.md` is the append-only raw feedback log for repeated misses, failed attempts, blockers, and correction pain points.
+- `docs/LESSONS.md` is the distilled learning log for prompt, skill, eval, and policy improvements after a fix, `repent` pass, or trouble drain.
 - `tickets/` is the canonical execution surface, so planning, build, and QA work from one file per active ticket, with completed tickets moved into `tickets/archive/`.
 - `.githooks/` gives each repo one visible place for optional local gates
   without silently mutating git config during bootstrap.
@@ -297,7 +298,7 @@ The generated planning flow should follow these defaults:
   user explicitly asked for a static/throwaway artifact or disabled shadcn.
   Default app UI should initialize shadcn and apply darkmatter.
 - Keep progress notes out of `AGENTS.md`; put them in the active ticket file.
-- Keep repeated failure feedback out of `docs/MEMORY.md`; log it in `docs/TROUBLES.md` first, then promote only durable lessons into `docs/MEMORY.md` or the relevant skill/contract.
+- Keep repeated failure feedback out of `docs/MEMORY.md`; log raw pain in `docs/TROUBLES.md` first, distill reusable lessons into `docs/LESSONS.md`, then promote only durable rules into `docs/MEMORY.md` or the relevant skill/contract.
 - First Convex cloud setup is interactive; stop and ask the human to run it.
 - Do not skip from a fuzzy idea directly to `prd`; use `brainstorm` or `deep-interview` first when the first slice is not obvious.
 - Do not put full domain pipelines in `deep-init-project`; use

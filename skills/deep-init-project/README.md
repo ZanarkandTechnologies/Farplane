@@ -52,7 +52,7 @@ If the repo already exists, do the smallest migration first.
 
 ```bash
 mkdir -p docs/specs tickets tickets/archive tickets/templates
-touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md docs/specs/README.md
+touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md docs/LESSONS.md docs/specs/README.md
 ```
 
 Then copy in:
@@ -149,7 +149,7 @@ Those can come after one clean ticket run.
 - [ ] `PROJECT_RULES.md` names the authoritative app-only and QA/evidence launch commands
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists
-- [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md` exist
+- [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
 - [ ] one QA cookbook page records the evidence-capture launch path and expected targets
 - [ ] `docs/specs/README.md` exists
@@ -159,3 +159,4 @@ Those can come after one clean ticket run.
 - [ ] one first `impl-plan` run is successful
 - [ ] one first `impl` run is successful
 - [ ] repeated failures get logged to `docs/TROUBLES.md`
+- [ ] reusable post-fix lessons get distilled into `docs/LESSONS.md`

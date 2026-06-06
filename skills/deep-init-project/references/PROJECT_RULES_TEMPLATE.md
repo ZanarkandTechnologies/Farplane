@@ -13,7 +13,7 @@ This file defines the project-specific technical rules, tech stack, and conventi
 - `ARCHITECTURE.md`: Top-level system map and canonical surface guide
 - `src/`: Main source code
 - `tests/`: Test files
-- `docs/`: Canonical project state (`prd.md`, `specs/README.md`, `specs/*`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`)
+- `docs/`: Canonical project state (`prd.md`, `specs/README.md`, `specs/*`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`, `LESSONS.md`)
 - `tickets/`: Ticket board (`TASK-*/ticket.md`, `archive/`, `templates/`)
 - `...`: [Other key directories]
 

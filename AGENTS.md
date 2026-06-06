@@ -111,9 +111,9 @@ See `MEM-0072`, `MEM-0076` through `MEM-0085`, and `MEM-0088` through
 `MEM-0096`.
 For Farplane invocation, compute selection, board adapters, and future
 Symphony/Codex Cloud handoff work, use `farplane-invocation`,
-`pr-runtime`, `docs/specs/board-compute-orchestration.md`,
-`docs/specs/farplane-v2-milestone.md`, and
-`docs/specs/symphony-compatible-farplane-runner.md`. Keep Farplane as an
+`pr-runtime`, `docs/specs/invocation-and-adapters.md`,
+`docs/specs/invocation-and-adapters.md`, and
+`docs/specs/invocation-and-adapters.md`. Keep Farplane as an
 explicit invocation and proof layer; do not expand it into a daemon, hosted
 control plane, scheduler, or hidden cloud wrapper without a new ticketed need.
 See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
@@ -123,7 +123,7 @@ See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
 - `README.md`: current product shape, setup, and canonical entry points
 - `agents/`: subagent role configs and prompt contracts
 - `bin/`: hook and runtime scripts
-- `docs/`: durable specs, history, memory, troubles, and research
+- `docs/`: durable specs, history, memory, troubles, lessons, and research
 - `experiments/`: smoke runs, eval outputs, and prototype evidence
 - `qa/`: reusable browser-QA runbooks, shortcuts, and deterministic test-entry guides
 - `rules/`: reusable policy fragments
@@ -143,11 +143,12 @@ For general repo orientation:
 - active ticket under `tickets/`
 - `docs/MEMORY.md`
 - `docs/TROUBLES.md`
+- `docs/LESSONS.md`
 
 For harness tuning and repo-shape changes:
 
 - `docs/specs/harness-engineering-doctrine.md`
-- `docs/specs/harness-engineering-quickstart.md`
+- `docs/specs/harness-engineering-doctrine.md`
 - `docs/specs/harness-techniques.md`
 - `docs/specs/spec-first-execution-loop.md`
 - `docs/specs/orchestrator-subagent-loop.md`
@@ -237,7 +238,8 @@ For harness-design research and external patterns:
   migrations, and project-shaping decisions; routine code deltas and file-level
   summaries belong in git, not history. See `MEM-0071`.
 - `docs/MEMORY.md`: curated invariants and constraints that future work must obey
-- `docs/TROUBLES.md`: repeated misses and prevention ideas
+- `docs/TROUBLES.md`: raw repeated misses, blockers, and correction pain points
+- `docs/LESSONS.md`: distilled lessons from repent, review, and trouble-drain passes
 - `experiments/`: proof artifacts and smoke outputs
 
 Transient execution state stays outside this file. Keep this file short enough that an agent can use it as a map.

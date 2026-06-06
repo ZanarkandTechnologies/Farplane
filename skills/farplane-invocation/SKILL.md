@@ -119,7 +119,7 @@ template. The template is for manual or future-adapter submission through
 diff, or hide review from the local ticket evidence.
 
 For future board adapters, read
-`docs/specs/board-adapter-conformance.md` before adding adapter code. The
+`docs/specs/invocation-and-adapters.md` before adding adapter code. The
 filesystem adapter is the only live adapter today.
 
 ## Local Example

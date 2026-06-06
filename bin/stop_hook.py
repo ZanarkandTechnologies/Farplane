@@ -2086,6 +2086,7 @@ def skill_opportunity_review_input(
         "feature_registry": "docs/features/registry.jsonl",
         "memory": "docs/MEMORY.md",
         "troubles": "docs/TROUBLES.md",
+        "lessons": "docs/LESSONS.md",
         "recent_tickets": recent_ticket_paths,
         "source_project_skills": source_project_skill_paths,
         "source_project_recent_tickets": source_project_ticket_paths,
@@ -2159,7 +2160,7 @@ def skill_opportunity_review_input(
             "Use workflow_refs as the required local routing model: harness-scout for source-to-feature extraction, advise for comparing feature directions, and harness-advisor for placement.",
             "Use workspace_context to understand which project produced the signal and to tag/relate the Notion task when safe; default every clear signal to a reusable Farplane harness improvement.",
             "Review the current window first, then use recent_windows for cross-session complaints and repeated pain.",
-            "Dedupe against existing skills, feature registry, memory, troubles, and recent tickets.",
+            "Dedupe against existing skills, feature registry, memory, troubles, lessons, and recent tickets.",
         ],
     }
 

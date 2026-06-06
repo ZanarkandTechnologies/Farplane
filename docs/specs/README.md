@@ -14,56 +14,49 @@ Documentation ownership:
 - this file indexes canonical specs and the doc-gardening loop.
 - `tickets/README.md` owns ticket metadata, lifecycle, and invocation policy.
 
-Current design docs:
+Active feature and contract specs:
 
-- `adaptive-backoff.md` - always-loaded operating contract and parameter
-  profiles for repeated polling, retries, long-running jobs, subagent waits,
-  and remote status checks without creating hidden daemons or queues
-- `autoresearch-skill-suite.md` - metric-driven autoresearch planning, execution, and skill self-improvement contract
-- `best-of-worlds-workflow.md` - multi-source synthesis workflow for extracting, scoring, and adapting the best transferable features
-- `board-adapter-conformance.md` - fixture/checklist contract future board
-  adapters must satisfy before Linear, Notion, GitHub, or custom boards become
-  live work-item sources
-- `board-compute-orchestration.md` - board adapter, explicit ticket
-  invocation, compute selection, local Farplane, Ralph, and future
-  Symphony/shared-board ownership contract
-- `farplane-v2-milestone.md` - completed capped Symphony-inspired milestone for
-  explicit invocation triggers, adapter conformance, and external-compute
-  recipes, with explicit deferrals so Farplane does not become a daemon
-- `agent-testability-surfaces.md` - post-system-design doctrine for control accelerators, state probes, coordination views, and proof surfaces
-- `diagram-first-conventions.md` - canonical Mermaid-first approval-surface and delta-diagram standard
+- `adaptive-backoff.md` - repeated wait, retry, polling, and long-running job
+  cadence policy without hidden daemons or queues
+- `agent-testability-surfaces.md` - post-system-design control accelerators,
+  state probes, coordination views, and proof-surface planning
+- `case-based-memory-context-graph.md` - designed context graph over history,
+  memory, troubles, lessons, sources, features, tickets, and skills
+- `context-and-handoff-policy.md` - visible progress, reset/resume handoff,
+  documenting, and archive rules for ticketed work
+- `diagram-first-conventions.md` - Mermaid-first approval-surface and
+  delta-diagram standard
 - `doc-governance.md` - structural versus narrative doc-audit policy
-- `first-principles-planning.md` - planning/spec contract for objective, need,
-  assumptions, root cause, constraints, first viable slice, proof, tradeoffs,
-  non-goals, and reusable policy extraction
-- `context-and-handoff-policy.md`
-- `case-based-memory-context-graph.md` - seed design for a generated context
-  graph that connects decisions, features, sources, tickets, memories, and
-  repeated correction cases without replacing the existing ledgers
-- `farplane-aikage-telemetry-sync.md` - local-first Farplane telemetry event
-  ledger, optional Aikage Convex sync, dashboard diagnostics, and skill usage
-  reporting plan
-- `harness-engineering-doctrine.md` - routing doctrine for where harness changes belong before editing the repo
-- `harness-engineering-quickstart.md`
+- `first-principles-planning.md` - planning/spec basis for objective, need,
+  assumptions, root cause, constraints, proof, tradeoffs, and non-goals
+- `filesystem-lifecycle.md` - lifecycle and drain rules for ledgers, tickets,
+  registries, experiments, specs, and research
+- `harness-engineering-doctrine.md` - routing doctrine for where harness
+  changes belong before editing the repo
 - `harness-techniques.md` - current-state feature and technique inventory
-- `meta-harness-automation.md` - map of Farplane's self-growing surfaces:
-  feature registry, skill registry, skill maintenance, source ingestion,
-  behavior tests, failure capture, review, and durable memory
-- `orchestrator-subagent-loop.md`
-- `runtime-surface.md`
-- `review-gates.md`
-- `skill-tier-rollout-plan.md` - planning draft for mapping local skills into
-  Tier 1 primitives, Tier 2 workflow interfaces/methods, and Tier 3 application
-  skills before a dedicated skill registry rollout
-- `skill-self-healing.md` - Tier 3 meta pipeline for detecting broken skill
-  behavior, collecting failure packets, and creating repair tickets through the
-  existing ticket workflow
-- `spec-first-execution-loop.md`
+- `invocation-and-adapters.md` - explicit Farplane invocation, board adapter,
+  compute selection, local execution, and future external-runner contract
+- `meta-harness-automation.md` - feature registry, skill registry,
+  skill-maintenance, source ingestion, evals, failure capture, review, and
+  durable-memory map
+- `orchestrator-subagent-loop.md` - single-ticket `$impl` worker-lane and
+  reviewer/QA/evidence-check orchestration model
+- `review-gates.md` - ticket proof contract, QA, reviewer, and Stop-hook review
+  gates
+- `runtime-surface.md` - current public runtime/control surfaces and retired
+  runtime boundaries
+- `skill-self-healing.md` - skill failure detection and repair-ticket handoff
+  pipeline
 - `spec-authoring-contract.md` - PRD/spec/ticket layer split, spec depth
-  decisions, service-runtime spec template, and conformance matrix format
-- `symphony-compatible-farplane-runner.md` - invocation contract that lets a
-  normal Codex session run Farplane locally now and lets Symphony invoke
-  Farplane-equipped Codex later
+  decisions, service-runtime template, and conformance matrix
+- `spec-first-execution-loop.md` - spec -> ticket -> plan -> build -> QA ->
+  review execution model
+
+Skill-owned contracts should live with their skills, not as separate specs.
+Examples: autoresearch belongs to `skills/autoresearch-plan`,
+`skills/autoresearch-exec`, and `skills/self-improve`; best-of-worlds belongs
+to `skills/best-of-worlds`; skill registry/tier rollout belongs to
+`docs/skills/README.md` and `skills/skill-maintenance`.
 
 Use this folder for:
 

@@ -275,3 +275,5 @@
 2026-06-06 21:24 +0800 | FEAT | add a meta-harness automation map and centralize skill-applicable feature tracking in the main feature registry
 2026-06-06 21:39 +0800 | MIGRATION | force local skill first-load sections from the old checklist heading to Todo List and remove legacy heading compatibility from skill tooling
 2026-06-06 21:45 +0800 | FEAT | add optional skill template version metadata to skill templates, registry generation, and skill-maintenance reports
+2026-06-06 21:53 +0800 | CLEANUP | split raw `docs/TROUBLES.md` from distilled `docs/LESSONS.md`, move the generated skill graph under `skills/skill-maintenance/graph`, and prune active specs to current feature/contract surfaces
+2026-06-06 22:45 +0800 | DOCS | add a filesystem lifecycle spec for ledger, ticket, registry, experiment, spec, and research drain routing

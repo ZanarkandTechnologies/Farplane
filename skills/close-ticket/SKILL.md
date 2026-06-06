@@ -20,7 +20,7 @@ source: local
 - [ ] Update the ticket writeback: evidence, linked docs, handoff, next action,
   and `last_verification`.
 - [ ] Update durable docs that changed in the final pass: `docs/HISTORY.md`,
-  `docs/MEMORY.md`, `docs/TROUBLES.md`, README, or the nearest `AGENTS.md`.
+  `docs/MEMORY.md`, `docs/LESSONS.md`, README, or the nearest `AGENTS.md`.
 - [ ] Run the feature closeout consistency sweep for relevant surfaces:
   `README.md`, `ARCHITECTURE.md`, `docs/specs/README.md`,
   `docs/skills/README.md`, `docs/skills/registry.jsonl`,
@@ -91,7 +91,7 @@ Ensure an agent can execute the core path after only reading this file.
   - do not let commit prep hide missing ticket or doc writeback
 - Outcome contract:
   - ticket evidence, handoff, linked docs, next action, and verification are updated
-  - durable docs such as `docs/HISTORY.md`, `docs/MEMORY.md`, and `docs/TROUBLES.md`
+  - durable docs such as `docs/HISTORY.md`, `docs/MEMORY.md`, and `docs/LESSONS.md`
     are updated when needed
   - the repo has run the appropriate closeout checks
   - commit and push state are explicit in the ticket and final result
@@ -123,7 +123,7 @@ Update durable docs when the closeout pass changes durable repo truth:
 
 - `docs/HISTORY.md`
 - `docs/MEMORY.md`
-- `docs/TROUBLES.md`
+- `docs/LESSONS.md`
 - nearest README or AGENTS surface when the user-visible contract changed
 
 Run a feature closeout consistency sweep before commit:

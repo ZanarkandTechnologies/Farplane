@@ -129,7 +129,7 @@ body.
   - `bin/sync_skill_registry.py`
   - `docs/features/registry.jsonl`
   - `docs/MEMORY.md`
-  - `docs/TROUBLES.md`
+  - `docs/LESSONS.md`
 - `Signature delta:`
   - `bin/install_selected_skills.py / render_skill_package(src: Path, dest: Path, backup_root: Path, dry_run: bool): str`
   - `bin/install_selected_skills.py / render_skill_markdown(skill_md: str, todos_md: str | None, source_label: str): str`

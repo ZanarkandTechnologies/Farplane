@@ -34,7 +34,7 @@ Each piece has a different job:
   ideas before they become local features.
 - `skills/eval`, `skills/agent-behavior-test`, `skills/agent-qa-test`, and
   `bin/check_skill_capabilities.py` prove behavior and capability claims.
-- `skills/repent`, `docs/TROUBLES.md`, and `experiments/hardcases/` turn
+- `skills/repent`, `docs/LESSONS.md`, and `experiments/hardcases/` turn
   corrected failures into reusable learning pressure.
 - `skills/review` and ticket proof contracts stop self-approval before changes
   are treated as ready.

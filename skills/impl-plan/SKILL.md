@@ -15,7 +15,7 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, and nearby code.
+- [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, lessons, and nearby code.
 - [ ] Treat this skill as `PlanTicket<CodingTicket>` inside the
   [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
 - [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,
@@ -143,8 +143,8 @@ matrices into the ticket plan unless the ticket needs the specific proof row.
 0c. Study the active ticket in `@tickets/*` first; if none exists, inspect
 `@tickets/*`.
 0d. Study `@docs/MEMORY.md` for durable constraints.
-0e. Study `@docs/TROUBLES.md` for repeated planning/execution misses when
-present.
+0e. Study `@docs/TROUBLES.md` for raw repeated planning/execution misses and
+`@docs/LESSONS.md` for distilled prevention rules when present.
 0f. Search the codebase before assuming anything is missing.
 0g. When repo-local context cannot define expected feature scope, ground the
 target with the best available installed research surfaces: comparable
@@ -382,7 +382,7 @@ Before returning the plan, run these checks against the drafted output:
 
 1. **Reference coverage**
    - Did the plan actually use the relevant PRD, spec, ticket, memory,
-     troubles, and local code context?
+     troubles, lessons, and local code context?
    - If a source was skipped, is that omission safe and explicit?
 2. **Scope discipline**
    - Is this still one coherent build-and-proof loop?

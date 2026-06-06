@@ -15,7 +15,7 @@ source: local
   `tickets/README.md`, `docs/skills/README.md`,
   `docs/skills/registry.jsonl`, `docs/features/README.md`,
   `docs/features/registry.jsonl`, `docs/specs/README.md`,
-  `docs/MEMORY.md`, and `docs/TROUBLES.md`.
+  `docs/MEMORY.md`, `docs/TROUBLES.md`, and `docs/LESSONS.md`.
 - [ ] Use root `todos.md` for the batch todo list and root `blockers.md` for
   blockers, creating either file only if missing.
 - [ ] Add the ticket ids as top-level todos in `todos.md`; do not expand every
@@ -94,8 +94,8 @@ completed together.
      capability names and shipped/implemented feature context
    - `docs/specs/README.md` for canonical spec surfaces when the tickets point
      at specs
-   - `docs/MEMORY.md` and `docs/TROUBLES.md` for durable constraints and
-     repeated misses
+   - `docs/MEMORY.md`, `docs/TROUBLES.md`, and `docs/LESSONS.md` for durable
+     constraints, raw repeated misses, and distilled prevention rules
 2. Use root `todos.md` as the active batch todo file. Create it if missing.
 3. Use root `blockers.md` as the blocker log. Create it if missing.
 4. Add the top-level ticket range to `todos.md`:
@@ -156,8 +156,9 @@ one ticket at a time with blockers recorded for the unclear ticket.
   implemented/planned harness capabilities and feature names.
 - [docs/specs/README.md](../../docs/specs/README.md): canonical spec index.
 - [docs/MEMORY.md](../../docs/MEMORY.md): durable constraints.
-- [docs/TROUBLES.md](../../docs/TROUBLES.md): repeated misses and prevention
-  notes.
+- [docs/TROUBLES.md](../../docs/TROUBLES.md): raw repeated misses, blockers,
+  and correction pain points.
+- [docs/LESSONS.md](../../docs/LESSONS.md): distilled prevention notes.
 
 ## Decision Branches
 

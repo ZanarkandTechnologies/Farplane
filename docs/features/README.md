@@ -34,7 +34,7 @@ Each line in `registry.jsonl` is one JSON object:
   "status": "implemented",
   "category": "improvement-loop",
   "surfaces": ["skills/autoresearch-plan", "skills/autoresearch-exec"],
-  "source_refs": ["docs/specs/autoresearch-skill-suite.md"],
+  "source_refs": ["skills/autoresearch-plan"],
   "external_refs": [],
   "evidence_refs": ["tickets/archive/TASK-0100/ticket.md"],
   "known_limits": "Skill-and-script based, not a hosted benchmark lab.",

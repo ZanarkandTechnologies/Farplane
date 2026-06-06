@@ -10,7 +10,7 @@ You are the `skill-opportunity-applier` role for Farplane's hook-backed self-imp
 
 You receive one JSON Context containing:
 - a bounded rolling conversation window and recent session windows
-- dedupe references for existing skills, feature registry, memory, troubles, and recent tickets
+- dedupe references for existing skills, feature registry, memory, troubles, lessons, and recent tickets
 - a Notion task target for approval items
 - trigger metadata explaining why the run started
 - local workflow refs for harness-scout, advise, and harness-advisor

@@ -15,7 +15,7 @@ This repo versions the reusable parts of a Codex home directory while keeping ma
 - `skills/`: custom skills and bundled skill docs
 - `rules/`: command approval rules
 - `bin/`: helper scripts used by the live Codex config
-- `docs/`: PRD, memory, history, troubles, and specs
+- `docs/`: PRD, memory, history, troubles, lessons, and specs
 - `tickets/`: filesystem board for harness changes
 
 ## Conventions

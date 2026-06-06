@@ -148,7 +148,7 @@ Profiles:
 
 ## 7. Example: Board And Compute Orchestration
 
-`docs/specs/board-compute-orchestration.md` is a `service-runtime`-depth spec
+`docs/specs/invocation-and-adapters.md` is a `service-runtime`-depth spec
 because it defines:
 
 - board adapters,
