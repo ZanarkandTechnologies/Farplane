@@ -49,7 +49,7 @@ duplication control, repeatability, and review gates.
      writeback in the owning agent prompt or caller skill.
    - [ ] Promote reference logic back into `SKILL.md` when it must be read every
      time; delete or merge empty, thin, or duplicated reference files.
-6. [ ] Run `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+6. [ ] Run `python3 ../skill-maintenance/scripts/check_skills.py --write`
    and fix any reported skill-system drift.
 7. [ ] Review the finished skill contract before completion.
    - [ ] Repeatability from files alone.
@@ -124,18 +124,18 @@ starter file.
 
 ## Output
 
-Use these commands from the Farplane repo root:
+Paths here are relative to the `skill-creator` package.
 
 ```bash
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 ../skill-maintenance/scripts/check_skills.py --write
 ```
 
 When creating or packaging a non-Farplane standalone skill, use the local
 helper scripts:
 
 ```bash
-python3 skills/skill-creator/scripts/init_skill.py <skill-name> --path skills
-python3 skills/skill-creator/scripts/package_skill.py skills/<skill-name>
+python3 scripts/init_skill.py <skill-name> --path ..
+python3 scripts/package_skill.py ../<skill-name>
 ```
 
 Run added or changed scripts directly before claiming they work.

@@ -50,8 +50,8 @@ make skill-system work repeatable instead of hiding rollout state in chat.
    - [ ] Check the actual `SKILL.md` headings and todo shape against the current
      template before setting or keeping `skill_template_version`.
    - [ ] Prune redundant `todos.md` once direct todo-list content matches.
-8. [ ] Validate the skill system with
-   `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
+8. [ ] Validate the skill system with `python3 scripts/check_skills.py --write`
+   from this skill package.
 9. [ ] Review readiness before completion.
    - [ ] For material skill-system changes, delegate final review to the native
      `reviewer` subagent with a reviewer handoff.
@@ -118,7 +118,7 @@ hygiene, or consolidation planning.
 7. Run the standard skill-system check:
 
 ```bash
-python3 skills/skill-maintenance/scripts/check_skills.py --write
+python3 scripts/check_skills.py --write
 ```
 
 This command normalizes direct `## Todo List` sections, prunes
@@ -128,10 +128,10 @@ prints a compact summary. Use the lower-level commands only when debugging a
 specific failure:
 
 ```bash
-python3 skills/skill-maintenance/scripts/sync_skill_checklists.py --write
-python3 bin/sync_skill_registry.py --write
-python3 bin/sync_skill_registry.py --check
-python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
+python3 scripts/sync_skill_checklists.py --write
+python3 ../../bin/sync_skill_registry.py --write
+python3 ../../bin/sync_skill_registry.py --check
+python3 ../../bin/check_skill_todo_tiers.py --allow-peer-tier3
 ```
 
 8. Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
@@ -154,7 +154,7 @@ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 - `docs/skills/registry.jsonl` is regenerated, not hand-edited.
 - External-source skills remain easy to refresh.
 - Consolidation candidates are ticketed or documented before hard migration.
-- `python3 skills/skill-maintenance/scripts/check_skills.py --write` passes
+- `python3 scripts/check_skills.py --write` passes
   before completion is claimed.
 
 ## Templates
@@ -188,5 +188,5 @@ baseline when onboarding a skill to `skill_template_version: "0.1.0"`.
 
 - Updated `skills/*/SKILL.md` files.
 - Regenerated `docs/skills/registry.jsonl`.
-- A passing `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+- A passing `python3 scripts/check_skills.py --write`
   result, or an explicit blocker with the exact failing command.

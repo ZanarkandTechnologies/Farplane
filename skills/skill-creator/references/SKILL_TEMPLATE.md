@@ -18,6 +18,9 @@ source-of-truth docs, ownership constraints, and assumptions.]
 [TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` and
 use a specific contract section only when it adds non-duplicated durable shape.]
 
+[TODO: Paths in this skill are relative to this skill package. Use
+`scripts/foo.py` and `references/foo.md` for nearby files.]
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 

@@ -38,6 +38,11 @@ roll it out to other skills only after a representative pass proves the shape.
 
 - `SKILL.md` owns trigger conditions, job, branch routing, hard gates, and proof
   obligations.
+- Paths inside a skill are relative to that skill package by default. Use
+  `scripts/foo.py` for nearby helper scripts, `references/foo.md` for nearby
+  references, and sibling paths such as `../skill-maintenance/scripts/foo.py`
+  when calling another skill package. Use repo-root paths only when the command
+  truly must be run from the repository root.
 - References own conditional detail: onboarding, examples, templates, long
   rubrics, model maps, and rare-path recipes.
 - If a reference must be read on every invocation, promote the needed rule into
