@@ -31,27 +31,30 @@ make skill-system work repeatable instead of hiding rollout state in chat.
   or consolidation choices are not mechanical.
 5. [ ] For each target skill, identify project files, related skills, proof
   surfaces, and source ownership before editing the first-load contract.
-6. [ ] Use [plan](../plan/SKILL.md) before broad skill rewrites: update a
+6. [ ] For each edited or onboarded skill, verify the actual `SKILL.md`
+  headings and todo shape against the current template before setting or
+  keeping `skill_template_version`.
+7. [ ] Use [plan](../plan/SKILL.md) before broad skill rewrites: update a
   representative sample across Tier 1, Tier 2, and complex Tier 3 packages,
   validate it, and scale only after the pattern is stable.
-7. [ ] Put required todo items directly in `SKILL.md` under `## Todo List`;
+8. [ ] Put required todo items directly in `SKILL.md` under `## Todo List`;
   prune redundant `todos.md` once content matches.
-8. [ ] Keep every-invocation logic in `SKILL.md`; move only conditional
+9. [ ] Keep every-invocation logic in `SKILL.md`; move only conditional
   branches, examples, templates, long rubric detail, model maps, delegated
   prompts, and rare-path recipes into references.
-9. [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
+10. [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
   and artifact writeback out of reusable skills unless the skill is explicitly
   an orchestration skill.
-10. [ ] Promote reference logic back into `SKILL.md` when it must be read every
+11. [ ] Promote reference logic back into `SKILL.md` when it must be read every
   time.
-11. [ ] Keep Tier 2 todos linked to Tier 1 primitives; keep Tier 3 todos linked
+12. [ ] Keep Tier 2 todos linked to Tier 1 primitives; keep Tier 3 todos linked
   to Tier 2 surfaces plus intentional peer Tier 3 handoffs only.
-12. [ ] Keep external skill packages thin and move Farplane wrapper policy into
+13. [ ] Keep external skill packages thin and move Farplane wrapper policy into
   local caller skills.
-13. [ ] Regenerate and validate the registry with
+14. [ ] Regenerate and validate the registry with
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
   edits.
-14. [ ] Review readiness before completion.
+15. [ ] Review readiness before completion.
   - [ ] For material skill-system changes, delegate final review to the native
     `reviewer` subagent with a reviewer handoff.
   - [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
