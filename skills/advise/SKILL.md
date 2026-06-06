@@ -31,8 +31,8 @@ Use when the user needs judgment, not a neutral menu.
   from this Tier 1 primitive.
 6. [ ] Compare exactly 3 viable options with concrete pros and cons.
 7. [ ] Recommend one option clearly and name the tradeoff being accepted.
-8. [ ] Keep source-set feature synthesis out of this primitive; the caller
-  should provide the synthesized choices when the task is broader than advice.
+8. [ ] State whether the recommendation is fully grounded or needs a
+  higher-tier source synthesis step.
 9. [ ] State the direct next step or owning next skill.
 10. [ ] Review before completion.
   - [ ] For changes to this skill, require a separate review pass before claiming
@@ -73,6 +73,8 @@ Use this shape when a visible decision note is useful:
 - Do not use `advise` to delay an obvious reversible action.
 - Do not list neutral options without naming the recommendation.
 - Do not invent a third option just to satisfy the three-option shape.
+- Do not perform source-set feature synthesis in this primitive; the caller
+  should provide synthesized choices when the task is broader than advice.
 
 ## Reference Map
 

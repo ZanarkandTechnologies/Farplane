@@ -128,6 +128,24 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
 
             self.assertTrue(any("unordered prose bullet" in error for error in errors))
 
+    def test_template_structure_rejects_tip_like_top_level_todos(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            check_skills.REPO_ROOT = repo
+            write_registry(repo, "example")
+            write_skill(
+                repo,
+                "example",
+                VALID_SKILL.replace(
+                    "1. [ ] Read context.",
+                    "1. [ ] Use plan when choices are not mechanical.",
+                ),
+            )
+
+            errors = check_skills.template_structure_errors("0.1.0")
+
+            self.assertTrue(any("tip-like top-level todo" in error for error in errors))
+
     def test_template_structure_rejects_marker_comments_inside_fenced_examples(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)

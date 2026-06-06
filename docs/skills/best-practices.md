@@ -12,6 +12,9 @@ roll it out to other skills only after a representative pass proves the shape.
 - `## Todo List` is the first-load todo list, not a generic checklist section.
 - Use sequential task-list items such as `1. [ ]`, `2. [ ]`, and `3. [ ]` for
   ordered work.
+- Make every top-level todo an executable action with an observable result.
+  Move policy, tips, and warnings to `## Gotchas`, `## Core Rules`, or nested
+  verification checks.
 - Use nested numbered task-list items for branch choices that should stay
   ordered and easy to reference.
 - Use plain markdown todos such as `- [ ]` only for embedded verification or

@@ -19,46 +19,44 @@ make skill-system work repeatable instead of hiding rollout state in chat.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] Read `docs/skills/README.md`, `docs/skills/best-practices.md`,
-  `docs/skills/registry.jsonl`, active tickets, and the target skill files
-  before editing.
-2. [ ] Apply `docs/skills/best-practices.md` for todo-list shape, reference
-  placement, actor-prompt versus skill-contract boundaries, duplication
-  control, and repeatability.
-3. [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-  when upstream/external skill examples should inform local updates.
-4. [ ] Use [plan](../plan/SKILL.md) when tier, source, group, method ownership,
-  or consolidation choices are not mechanical.
-5. [ ] For each target skill, identify project files, related skills, proof
-  surfaces, and source ownership before editing the first-load contract.
-6. [ ] For each edited or onboarded skill, verify the actual `SKILL.md`
-  headings and todo shape against the current template before setting or
-  keeping `skill_template_version`.
-7. [ ] Use [plan](../plan/SKILL.md) before broad skill rewrites: update a
-  representative sample across Tier 1, Tier 2, and complex Tier 3 packages,
-  validate it, and scale only after the pattern is stable.
-8. [ ] Put required todo items directly in `SKILL.md` under `## Todo List`;
-  prune redundant `todos.md` once content matches.
-9. [ ] Keep every-invocation logic in `SKILL.md`; move only conditional
-  branches, examples, templates, long rubric detail, model maps, delegated
-  prompts, and rare-path recipes into references.
-10. [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
-  and artifact writeback out of reusable skills unless the skill is explicitly
-  an orchestration skill.
-11. [ ] Promote reference logic back into `SKILL.md` when it must be read every
-  time.
-12. [ ] Keep Tier 2 todos linked to Tier 1 primitives; keep Tier 3 todos linked
-  to Tier 2 surfaces plus intentional peer Tier 3 handoffs only.
-13. [ ] Keep external skill packages thin and move Farplane wrapper policy into
-  local caller skills.
-14. [ ] Regenerate and validate the registry with
-  `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
-  edits.
-15. [ ] Review readiness before completion.
-  - [ ] For material skill-system changes, delegate final review to the native
-    `reviewer` subagent with a reviewer handoff.
-  - [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
-    ticket evidence when the pass needs durable closeout.
+1. [ ] Load the current skill-system baseline before editing.
+   - [ ] Read `docs/skills/README.md`, `docs/skills/best-practices.md`,
+     `docs/skills/registry.jsonl`, active tickets, and the target skill files.
+2. [ ] Classify the maintenance operation for each target skill.
+   1. [ ] Template onboarding or version audit.
+   2. [ ] Todo-list or reference cleanup.
+   3. [ ] Tier, source, group, method, or common-chain metadata update.
+   4. [ ] Consolidation, split, or external-source ownership change.
+3. [ ] Route non-mechanical choices before editing.
+   - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
+     when upstream or external skill examples should change the local contract.
+   - [ ] Use [plan](../plan/SKILL.md) when tier, source, group, method ownership,
+     or consolidation choices have real tradeoffs.
+4. [ ] Record the edit boundary for each target skill.
+   - [ ] Identify source ownership, related skills, first-load dependencies,
+     proof surfaces, and files that may change.
+5. [ ] Prototype broad rewrites on a representative sample before scaling.
+   - [ ] Include a mix of Tier 1, Tier 2, and complex Tier 3 packages when the
+     migration will affect many skills.
+6. [ ] Edit each target `SKILL.md` so first-load work is executable.
+   - [ ] Put required actions in the marker-delimited `## Todo List`.
+   - [ ] Keep every-invocation rules in `SKILL.md`.
+   - [ ] Move conditional branches, examples, templates, long rubric detail,
+     model maps, delegated prompts, and rare-path recipes into references.
+   - [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
+     and artifact writeback out of reusable skills unless the skill is explicitly
+     an orchestration skill.
+7. [ ] Verify template structure before marking a skill onboarded.
+   - [ ] Check the actual `SKILL.md` headings and todo shape against the current
+     template before setting or keeping `skill_template_version`.
+   - [ ] Prune redundant `todos.md` once direct todo-list content matches.
+8. [ ] Validate the skill system with
+   `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
+9. [ ] Review readiness before completion.
+   - [ ] For material skill-system changes, delegate final review to the native
+     `reviewer` subagent with a reviewer handoff.
+   - [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
+     ticket evidence when the pass needs durable closeout.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when working on the skill system itself: tier metadata, direct todo

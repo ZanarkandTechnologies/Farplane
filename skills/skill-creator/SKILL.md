@@ -26,30 +26,32 @@ duplication control, repeatability, and review gates.
 1. [ ] Read the request, related skills, registry row, nearby project docs,
    [docs/skills/README.md](../../docs/skills/README.md), and
    [docs/skills/best-practices.md](../../docs/skills/best-practices.md).
-2. [ ] Choose the ownership branch.
-   1. [ ] New skill: use only when the capability has a stable trigger and reusable
-     workflow.
-   2. [ ] Existing skill update: use when the behavior is a branch, method,
+2. [ ] Decide the owning surface and write the decision into the edit.
+   1. [ ] Create a new skill only when the capability has a stable trigger and
+     reusable workflow.
+   2. [ ] Update an existing skill when the request is a branch, method,
      todo-list fix, reference, script, or prompt inside an existing contract.
-   3. [ ] Unclear ownership: use [plan](../plan/SKILL.md).
-3. [ ] Ground the design when needed.
+   3. [ ] Hand unclear ownership to [plan](../plan/SKILL.md).
+3. [ ] Ground the skill design before drafting when external examples or peer
+   skills could change the contract.
    - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
      [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-     when external skill examples should inform the design.
-4. [ ] Draft or revise the minimum executable contract directly in `SKILL.md`:
-   trigger boundary, context, mixed sequential `## Todo List`, core branches,
-   hard gates, judgement questions, proof commands, and outcome contract.
-5. [ ] Place supporting material by load frequency.
-   - [ ] Keep every-invocation logic in `SKILL.md`.
-   - [ ] Move conditional branches, examples, templates, long rubrics, model maps,
-     delegated prompts, and rare-path recipes into references.
+     when source comparison is required.
+4. [ ] Draft or revise `SKILL.md` so the first-load path is executable without
+   hidden chat context.
+   - [ ] Include trigger boundary, context, ordered `## Todo List`, branches,
+     hard gates, proof command, and output contract.
+5. [ ] Move non-first-load material to the right supporting surface.
+   - [ ] Keep every-invocation rules in `SKILL.md`.
+   - [ ] Move conditional branches, examples, templates, long rubrics, model
+     maps, delegated prompts, and rare-path recipes into references.
    - [ ] Keep actor identity, delegation routing, tool-use policy, and artifact
      writeback in the owning agent prompt or caller skill.
    - [ ] Promote reference logic back into `SKILL.md` when it must be read every
      time; delete or merge empty, thin, or duplicated reference files.
-6. [ ] Validate after edits:
-   `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
-7. [ ] Review readiness before completion.
+6. [ ] Run `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+   and fix any reported skill-system drift.
+7. [ ] Review the finished skill contract before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
    - [ ] Actor-prompt versus skill-contract boundaries are clean.
