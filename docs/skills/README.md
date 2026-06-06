@@ -117,8 +117,11 @@ Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
 editing skill frontmatter, `SKILL.md` Markdown links, or first-load todo lists.
 Use the lower-level commands when debugging one specific failure.
 Use `--template-version <version>` as a non-failing rollout report for skill
-template onboarding, and add `--require-template-version` only when a migration
-is intentionally ready to fail missing or non-current skills.
+template onboarding. Versioned skills are structurally checked even in report
+mode: the current template rejects generic `## Job` sections, requires the
+template spine, and requires numbered top-level todo items. Add
+`--require-template-version` only when a migration is intentionally ready to
+fail missing or non-current skills.
 
 ## First-Load Todo Link Contract
 

@@ -141,6 +141,8 @@ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 - Skill frontmatter remains minimal and valid. Onboarded skills may carry
   `skill_template_version`; missing values remain visible in the generated
   registry and `check_skills.py --template-version <version>` report.
+  Versioned skills fail the check when their structure no longer matches the
+  template promise.
 - Broad skill migrations include a representative `Prototype Note` before full
   batch application.
 - `SKILL.md` contains the required first-load todo list and high-signal logic.
@@ -163,6 +165,8 @@ baseline when onboarding a skill to `skill_template_version: "0.1.0"`.
 
 - Do not mark a skill as onboarded to a template version unless its structure
   actually follows that template.
+- Do not bypass the template-structure validator by treating
+  `skill_template_version` as metadata-only.
 - Do not let generated registry rows become a hand-edited source of truth.
 - Do not bulk-edit every skill before proving the pattern on a representative
   sample.

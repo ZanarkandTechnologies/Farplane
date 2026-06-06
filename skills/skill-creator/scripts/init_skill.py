@@ -17,33 +17,59 @@ from pathlib import Path
 # Fallback template if file is not found
 FALLBACK_SKILL_TEMPLATE = """---
 name: {skill_name}
-version: {version}
-description: [TODO: Complete and informative explanation of what the skill does and when to use it.]
+description: [TODO: Clear trigger/use description. This metadata decides when the skill loads.]
+tier: [TODO: 1 | 2 | 3]
+source: local
 skill_template_version: "0.1.0"
+group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---
 
 # {skill_title}
 
-## Purpose
-[TODO: Describe the purpose of this skill based on your architectural reasoning.]
+## Context
 
-## Documentation Index (Source of Truth)
-- [TODO: Add links to official documentation]
+[TODO: Only context needed every time this skill loads: tier/system placement,
+source-of-truth docs, ownership constraints, and assumptions.]
 
-## Integration Workflow
-1. [TODO: Define the primary workflow steps]
+[TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` and
+use a specific contract section only when it adds non-duplicated durable shape.]
 
-## Architectural Decisions
-- See [references/architecture.md](references/architecture.md)
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
+## Todo List
 
-## Common Gotchas
-- See [references/gotchas.md](references/gotchas.md)
+1. [ ] Read required context and current artifacts.
+2. [ ] Choose the branch.
+   1. [ ] Default branch.
+   2. [ ] Update/repair branch.
+   3. [ ] Review branch.
+3. [ ] Execute the workflow for the selected branch.
+4. [ ] Produce or update the required artifact.
+5. [ ] Verify with the named proof command or evidence surface.
+6. [ ] Review against the gotchas before completion.
+   - [ ] Repeatability from files alone.
+   - [ ] No duplicated first-load logic.
+   - [ ] Explicit proof command or blocker.
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## References
-- [architecture.md](references/architecture.md)
-- [workflows.md](references/workflows.md)
-- [gotchas.md](references/gotchas.md)
+## Templates
+
+- [TODO: Inline one short positive example, or link to `templates/*` /
+  `prompts/*` when examples are too long.]
+
+## Gotchas
+
+- [TODO: Negative example or failure pattern.]
+- [TODO: Negative example or failure pattern.]
+- [TODO: Negative example or failure pattern.]
+
+## Reference Map
+
+- [TODO: `references/name.md` - read only when ...]
+
+## Output
+
+- [TODO: Expected artifact, type, path, or response shape.]
 """
 
 EXAMPLE_HELPER_SCRIPT = '''#!/usr/bin/env python3

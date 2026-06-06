@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from collections import Counter
@@ -19,6 +20,10 @@ def find_repo_root(start: Path) -> Path:
 
 
 REPO_ROOT = find_repo_root(Path(__file__).resolve())
+REQUIRED_TEMPLATE_HEADINGS = ("Context", "Todo List", "Templates", "Gotchas", "Reference Map", "Output")
+HEADING_RE = re.compile(r"^## (?P<heading>.+?)\s*$")
+TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^\d+\. \[ \] ")
+TOP_LEVEL_PLAIN_TODO_RE = re.compile(r"^- \[ \] ")
 
 
 def run(command: list[str]) -> None:
@@ -69,6 +74,92 @@ def registry_summary() -> dict[str, object]:
     }
 
 
+def iter_markdown_headings(text: str) -> list[tuple[int, str]]:
+    headings: list[tuple[int, str]] = []
+    in_fence = False
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if line.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        match = HEADING_RE.match(line)
+        if match:
+            headings.append((line_number, match.group("heading")))
+    return headings
+
+
+def markdown_section(text: str, heading: str) -> str | None:
+    lines = text.splitlines()
+    in_fence = False
+    start: int | None = None
+    for index, line in enumerate(lines):
+        if line.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        match = HEADING_RE.match(line)
+        if not match:
+            continue
+        if start is None:
+            if match.group("heading") == heading:
+                start = index + 1
+            continue
+        return "\n".join(lines[start:index])
+    if start is None:
+        return None
+    return "\n".join(lines[start:])
+
+
+def template_structure_errors(current_version: str) -> list[str]:
+    rows = [
+        json.loads(line)
+        for line in (REPO_ROOT / "docs/skills/registry.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    errors: list[str] = []
+    for row in rows:
+        if row.get("skill_template_version") != current_version:
+            continue
+        path = Path(str(row["path"]))
+        skill_path = REPO_ROOT / path
+        if not skill_path.exists():
+            errors.append(f"{row['name']}: missing skill file at {path}")
+            continue
+
+        text = skill_path.read_text(encoding="utf-8")
+        headings = iter_markdown_headings(text)
+        heading_names = [heading for _, heading in headings]
+        heading_lines = {heading: line_number for line_number, heading in headings}
+
+        for required_heading in REQUIRED_TEMPLATE_HEADINGS:
+            if required_heading not in heading_names:
+                errors.append(f"{row['name']}: missing ## {required_heading}")
+
+        if "Job" in heading_names:
+            errors.append(f"{row['name']}: remove generic ## Job; fold work into Context/Todo List")
+
+        if "Context" in heading_lines and "Todo List" in heading_lines:
+            if heading_lines["Context"] > heading_lines["Todo List"]:
+                errors.append(f"{row['name']}: ## Context must appear before ## Todo List")
+
+        todo_body = markdown_section(text, "Todo List")
+        if todo_body is None:
+            continue
+        if not any(TOP_LEVEL_NUMBERED_TODO_RE.match(line) for line in todo_body.splitlines()):
+            errors.append(f"{row['name']}: ## Todo List needs numbered task items like `1. [ ] ...`")
+        for line_number, line in enumerate(todo_body.splitlines(), start=1):
+            if TOP_LEVEL_PLAIN_TODO_RE.match(line):
+                errors.append(
+                    f"{row['name']}: top-level plain todo in ## Todo List line {line_number}; "
+                    "use numbered todos for main work and indent plain todos under a numbered item"
+                )
+                break
+
+    return errors
+
+
 def validate_template_version(current_version: str, require: bool) -> int:
     rows = [
         json.loads(line)
@@ -99,6 +190,13 @@ def validate_template_version(current_version: str, require: bool) -> int:
     }
     print("skill template version report:")
     print(json.dumps(report, indent=2, sort_keys=True))
+
+    structure_errors = template_structure_errors(current_version)
+    if structure_errors:
+        print("skill template structure errors:")
+        for error in structure_errors:
+            print(f"- {error}")
+        return 1
 
     if require and (missing or not_current):
         return 1

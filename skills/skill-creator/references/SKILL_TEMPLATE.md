@@ -15,6 +15,9 @@ allowed-tools: {tools}
 [TODO: Only context needed every time this skill loads: tier/system placement,
 source-of-truth docs, ownership constraints, and assumptions.]
 
+[TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` and
+use a specific contract section only when it adds non-duplicated durable shape.]
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
