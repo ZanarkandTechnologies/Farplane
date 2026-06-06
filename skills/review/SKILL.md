@@ -8,6 +8,12 @@ skill_template_version: "0.1.0"
 
 # Review
 
+## Context
+
+`review` is a Tier 1 primitive and reusable rubric contract. The caller or
+reviewer actor owns task routing, subagent use, and artifact writeback; this
+skill owns TAS meanings, hard gates, selected family checks, and review output.
+
 Use as the canonical review rubric contract before a plan, implementation,
 evidence bundle, skill, prompt, eval, doc, or completion claim is treated as
 ready.
@@ -25,16 +31,18 @@ checks, hard-gate failures, findings, and one concrete next action.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] Confirm the task context, changed artifacts, and evidence being reviewed
+1. [ ] Confirm the task context, changed artifacts, and evidence being reviewed
   are available.
-- [ ] Start from caller-declared rubric families and TAS gates; add only an
+2. [ ] Start from caller-declared rubric families and TAS gates; add only an
   obvious missing hard-gate family with explanation.
-- [ ] Load only the selected family references and apply their required,
+3. [ ] Load only the selected family references and apply their required,
   blocker, and evidence checklist modules.
-- [ ] Apply one TAS verdict per selected family plus the overall verdict; do
+4. [ ] Apply one TAS verdict per selected family plus the overall verdict; do
   not use numeric scores or per-dimension TAS.
-- [ ] Return failed checks, findings, blocking issues, and one concrete next
+5. [ ] Return failed checks, findings, blocking issues, and one concrete next
   action.
+6. [ ] Review that the verdict is supported by inspected evidence, not general
+  confidence.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 ## Core Flow
 
@@ -144,6 +152,13 @@ Return or write:
 - `blocking_findings`
 - `next_action`
 
+## Templates
+
+- [references/reviewer-handoff.md](references/reviewer-handoff.md) - use when
+  a caller needs a durable reviewer handoff.
+- `Completion Receipt` above - use only for Stop-hook nonce-backed completion
+  review.
+
 ## Guardrails
 
 - Do not apply TAS before inspecting the supplied task context and evidence.
@@ -153,3 +168,16 @@ Return or write:
   the claim.
 - Do not substitute review for QA or visual QA.
 - Do not output only questions; return TAS, findings, verdict, and next action.
+
+## Gotchas
+
+- Do not infer pass readiness from the implementor's summary.
+- Do not silently change the caller's rubric family routing.
+- Do not use `TAS-B` as a pass; it is a revise verdict.
+
+## Reference Map
+
+- [references/review-rubric-index.md](references/review-rubric-index.md) -
+  use when family choice or modular checklist shape is unclear.
+- [references/desloppify.md](references/desloppify.md) - use for cleanup,
+  integration, or evidence-heavy search playbooks.

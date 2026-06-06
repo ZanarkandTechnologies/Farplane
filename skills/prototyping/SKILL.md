@@ -10,6 +10,12 @@ allowed-tools: Read, Glob, Grep
 
 # Prototyping
 
+## Context
+
+`prototyping` is a Tier 1 primitive for scale-risk control. It should hand a
+prototype decision back to the owning planning, research, execution, or review
+workflow instead of becoming that workflow.
+
 Use when work is tempted to scale before the pattern is proven: broad batch
 edits, many records, many skills, many users, wide workflow coverage, new
 architecture, full automation, or polish before the real behavior is known.
@@ -27,19 +33,20 @@ plan that proof, and decide whether to scale, revise, or stop.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] State the scale risk: data volume, users, workflow breadth, architecture,
+1. [ ] State the scale risk: data volume, users, workflow breadth, architecture,
   automation, polish, file count, research breadth, or operational complexity.
-- [ ] Name the hypothesis the prototype must prove or falsify.
-- [ ] Pick the smallest representative slice, usually `1 -> 10 -> 100`.
-- [ ] Include real examples, real edge cases, real users, real files, or real
+2. [ ] Name the hypothesis the prototype must prove or falsify.
+3. [ ] Pick the smallest representative slice, usually `1 -> 10 -> 100`.
+4. [ ] Include real examples, real edge cases, real users, real files, or real
   records where possible.
-- [ ] Prefer the manual or non-scalable path first when it reveals the pattern
+5. [ ] Prefer the manual or non-scalable path first when it reveals the pattern
   faster than automation.
-- [ ] Define the evidence that promotes the work to the next scale.
-- [ ] Define the evidence that forces revision, simplification, or stopping.
-- [ ] Label prototype-only shortcuts so they do not masquerade as production
+6. [ ] Define the evidence that promotes the work to the next scale.
+7. [ ] Define the evidence that forces revision, simplification, or stopping.
+8. [ ] Label prototype-only shortcuts so they do not masquerade as production
   readiness.
-- [ ] Return a `Prototype Note` to the active workflow before broadening scope.
+9. [ ] Return a `Prototype Note` to the active workflow before broadening scope.
+10. [ ] Review that the slice is representative before scale.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Core Flow
@@ -94,6 +101,14 @@ Return this shape to the active workflow:
 - `Revise / stop criteria`
 - `Next scale step`
 
+## Output
+
+Return a `Prototype Note` using the fields above.
+
+## Templates
+
+Use the `Prototype Note` fields above as the default output template.
+
 ## Guardrails
 
 - Do not use toy samples that dodge the actual hard case.
@@ -103,3 +118,14 @@ Return this shape to the active workflow:
 - Do not turn this primitive into a full research, planning, or execution
   workflow; hand back to the owning Tier 2 or domain skill after the prototype
   decision is clear.
+
+## Gotchas
+
+- Do not pick samples only because they are easy to edit or pleasant to demo.
+- Do not use prototype language to avoid naming production blockers.
+- Do not scale a batch command without inspecting a representative sample.
+
+## Reference Map
+
+- [../advise/SKILL.md](../advise/SKILL.md) - use when the representative slice
+  or tradeoff is not obvious.

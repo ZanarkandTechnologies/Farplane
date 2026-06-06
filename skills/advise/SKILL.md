@@ -8,6 +8,12 @@ skill_template_version: "0.1.0"
 
 # Advise
 
+## Context
+
+`advise` is a Tier 1 primitive. Use it only when the active workflow needs a
+judgment call among real options; direct execution requests should stay with
+the owning skill or caller.
+
 Use when the user needs judgment, not a neutral menu.
 
 ## Job
@@ -25,24 +31,30 @@ Turn an unclear choice into a compact recommendation:
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] State the real decision in one sentence.
-- [ ] Start from first principles before comparing options: objective,
+1. [ ] State the real decision in one sentence.
+2. [ ] Start from first principles before comparing options: objective,
   user/system need, root cause, constraints, assumptions, proof/falsification,
   tradeoffs, and non-goals.
-- [ ] Name the evaluation criteria that matter for this user, repo, or ticket.
-- [ ] Require supplied evidence when the recommendation depends on current
+3. [ ] Name the evaluation criteria that matter for this user, repo, or ticket.
+4. [ ] Require supplied evidence when the recommendation depends on current
   facts, official behavior, peer norms, local baseline, or implementation
   examples.
-- [ ] Surface an evidence gap instead of launching a higher-tier research pass
+5. [ ] Surface an evidence gap instead of launching a higher-tier research pass
   from this Tier 1 primitive.
-- [ ] Compare exactly 3 viable options with concrete pros and cons.
-- [ ] Recommend one option clearly and name the tradeoff being accepted.
-- [ ] Keep source-set feature synthesis out of this primitive; the caller
+6. [ ] Compare exactly 3 viable options with concrete pros and cons.
+7. [ ] Recommend one option clearly and name the tradeoff being accepted.
+8. [ ] Keep source-set feature synthesis out of this primitive; the caller
   should provide the synthesized choices when the task is broader than advice.
-- [ ] State the direct next step or owning next skill.
-- [ ] For changes to this skill, require a separate review pass before claiming
+9. [ ] State the direct next step or owning next skill.
+10. [ ] Review before completion.
+  - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
+
+## Templates
+
+Use the visible decision-note shape in `## Output` when the recommendation
+needs to survive beyond chat.
 ## Output
 
 Use this shape when a visible decision note is useful:
@@ -67,3 +79,16 @@ Use this shape when a visible decision note is useful:
   adapted before advice.
 - Hand UI/UX-facing choices to `functional-ui`.
 - Embed this inside `impl-plan` for coding implementation plans.
+
+## Gotchas
+
+- Do not use `advise` to delay an obvious reversible action.
+- Do not list neutral options without naming the recommendation.
+- Do not invent a third option just to satisfy the three-option shape.
+
+## Reference Map
+
+- [../reference-grounding/SKILL.md](../reference-grounding/SKILL.md) - use
+  when the recommendation depends on evidence.
+- [../best-of-worlds/SKILL.md](../best-of-worlds/SKILL.md) - use when supplied
+  sources must be synthesized before advice.

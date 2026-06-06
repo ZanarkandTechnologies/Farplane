@@ -10,6 +10,12 @@ allowed-tools: Read, Glob, Grep
 
 # Reference Grounding
 
+## Context
+
+`reference-grounding` is a Tier 1 primitive for compact evidence. It should
+ground one claim or decision, then hand the result back to the caller rather
+than expanding into a full research pass.
+
 Use when a recommendation, plan, or claim needs enough evidence to stop
 guessing. This is the small evidence move, not a research router.
 
@@ -21,19 +27,20 @@ set, and return a compact evidence note for the active workflow.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] State the one claim, decision, expectation, or comparison that needs
+1. [ ] State the one claim, decision, expectation, or comparison that needs
   grounding.
-- [ ] Capture the local baseline from nearby code, tickets, specs, docs, or
+2. [ ] Capture the local baseline from nearby code, tickets, specs, docs, or
   provided sources when repo scope matters.
-- [ ] Choose the smallest useful source class: local evidence, official docs,
+3. [ ] Choose the smallest useful source class: local evidence, official docs,
   standards, maintained repos, peer products, competitors, or user-provided
   sources.
-- [ ] Prefer primary sources and real implementations over commentary.
-- [ ] Write a compact grounding note with evidence, confidence, and local
+4. [ ] Prefer primary sources and real implementations over commentary.
+5. [ ] Write a compact grounding note with evidence, confidence, and local
   impact.
-- [ ] If compact grounding is not enough, surface the exact evidence gap to the
+6. [ ] If compact grounding is not enough, surface the exact evidence gap to the
   caller instead of launching a higher-tier research method from this primitive.
-- [ ] For changes to this skill, require a separate review pass before claiming
+7. [ ] Review before completion.
+  - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 ## Source Choice
@@ -63,8 +70,24 @@ Return a short `Grounding Note`:
 - `Local impact`
 - `Escalation needed`
 
+## Templates
+
+Use the `Grounding Note` fields above as the default output template.
+
 ## Guardrails
 
 - Do not turn every task into research.
 - Do not claim evidence was checked unless it was actually read.
 - Do not import peer features wholesale; hand broad parity to `research:parity`.
+
+## Gotchas
+
+- Do not treat stale local memory as stronger than live files or primary docs.
+- Do not cite sources that were only searched but not opened or inspected.
+- Do not keep collecting evidence after the active decision is grounded.
+
+## Reference Map
+
+- [../research/SKILL.md](../research/SKILL.md) - use when the caller needs a
+  formal multi-source research method such as parity, gap, docs, or code
+  patterns.

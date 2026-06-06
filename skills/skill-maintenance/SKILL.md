@@ -9,48 +9,53 @@ skill_template_version: "0.1.0"
 
 # Skill Maintenance
 
+## Context
+
+Skill maintenance is the owner for bulk Farplane skill upkeep: template
+onboarding, tier/source metadata, generated registry sync, todo-list shape,
+link hygiene, source ownership, and consolidation planning. Use this skill to
+make skill-system work repeatable instead of hiding rollout state in chat.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] Read `docs/specs/skill-tier-rollout-plan.md`,
-  `docs/skills/README.md`, `docs/skills/registry.jsonl`, active tickets, and
-  the target skill files before editing.
-- [ ] Apply `docs/skills/best-practices.md` for todo-list shape, reference
+1. [ ] Read `docs/skills/README.md`, `docs/skills/best-practices.md`,
+  `docs/skills/registry.jsonl`, active tickets, and the target skill files
+  before editing.
+2. [ ] Apply `docs/skills/best-practices.md` for todo-list shape, reference
   placement, actor-prompt versus skill-contract boundaries, duplication
   control, and repeatability.
-- [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
+3. [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
   when upstream/external skill examples should inform local updates.
-- [ ] Use [plan](../plan/SKILL.md) when tier, source, group, method ownership,
+4. [ ] Use [plan](../plan/SKILL.md) when tier, source, group, method ownership,
   or consolidation choices are not mechanical.
-- [ ] For each target skill, identify project files, related skills, proof
+5. [ ] For each target skill, identify project files, related skills, proof
   surfaces, and source ownership before editing the first-load contract.
-- [ ] Use [plan](../plan/SKILL.md) before broad skill rewrites: update a
+6. [ ] Use [plan](../plan/SKILL.md) before broad skill rewrites: update a
   representative sample across Tier 1, Tier 2, and complex Tier 3 packages,
   validate it, and scale only after the pattern is stable.
-- [ ] Put required todo items directly in `SKILL.md` under `## Todo List`;
+7. [ ] Put required todo items directly in `SKILL.md` under `## Todo List`;
   prune redundant `todos.md` once content matches.
-- [ ] Keep every-invocation logic in `SKILL.md`; move only conditional
+8. [ ] Keep every-invocation logic in `SKILL.md`; move only conditional
   branches, examples, templates, long rubric detail, model maps, delegated
   prompts, and rare-path recipes into references.
-- [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
+9. [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
   and artifact writeback out of reusable skills unless the skill is explicitly
   an orchestration skill.
-- [ ] Promote reference logic back into `SKILL.md` when it must be read every
+10. [ ] Promote reference logic back into `SKILL.md` when it must be read every
   time.
-- [ ] Keep Tier 2 todos linked to Tier 1 primitives; keep Tier 3 todos linked
+11. [ ] Keep Tier 2 todos linked to Tier 1 primitives; keep Tier 3 todos linked
   to Tier 2 surfaces plus intentional peer Tier 3 handoffs only.
-- [ ] Keep external skill packages thin and move Farplane wrapper policy into
+12. [ ] Keep external skill packages thin and move Farplane wrapper policy into
   local caller skills.
-- [ ] Regenerate and validate the registry with
+13. [ ] Regenerate and validate the registry with
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
   edits.
-- [ ] For material skill-system changes, delegate final review to the native
-  `reviewer` subagent with a reviewer handoff: active ticket/task pointer,
-  changed files, proof artifacts, `skill-contract`, `integration-readiness`,
-  and `evidence-quality` families, required TAS gates, hard gates, and expected
-  output path.
-- [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
-  ticket evidence.
+14. [ ] Review readiness before completion.
+  - [ ] For material skill-system changes, delegate final review to the native
+    `reviewer` subagent with a reviewer handoff.
+  - [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
+    ticket evidence when the pass needs durable closeout.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when working on the skill system itself: tier metadata, direct todo
@@ -99,9 +104,8 @@ hygiene, or consolidation planning.
 
 ## Workflow
 
-1. Read `docs/specs/skill-tier-rollout-plan.md`,
-   `docs/skills/README.md`, `docs/skills/registry.jsonl`, and the target
-   skill files.
+1. Read `docs/skills/README.md`, `docs/skills/best-practices.md`,
+   `docs/skills/registry.jsonl`, and the target skill files.
 2. Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
    when comparing external skill examples or upstream instructions.
 3. Use [plan](../plan/SKILL.md) when tier/source/consolidation choices have
@@ -160,3 +164,35 @@ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 - Consolidation candidates are ticketed or documented before hard migration.
 - `python3 skills/skill-maintenance/scripts/check_skills.py --write` passes
   before completion is claimed.
+
+## Templates
+
+Use `skills/skill-creator/references/SKILL_TEMPLATE.md` as the structural
+baseline when onboarding a skill to `skill_template_version: "0.1.0"`.
+
+## Gotchas
+
+- Do not mark a skill as onboarded to a template version unless its structure
+  actually follows that template.
+- Do not let generated registry rows become a hand-edited source of truth.
+- Do not bulk-edit every skill before proving the pattern on a representative
+  sample.
+- Do not move Farplane wrapper behavior into external-source skills.
+
+## Reference Map
+
+- [docs/skills/README.md](../../docs/skills/README.md) - frontmatter,
+  generated registry, link hierarchy, and maintenance commands.
+- [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
+  first-load shape, reference placement, repeatability, and review gates.
+- [../skill-creator/references/SKILL_TEMPLATE.md](../skill-creator/references/SKILL_TEMPLATE.md)
+  - current baseline skill template.
+- [scripts/check_skills.py](scripts/check_skills.py) - standard validation and
+  template-version report.
+
+## Output
+
+- Updated `skills/*/SKILL.md` files.
+- Regenerated `docs/skills/registry.jsonl`.
+- A passing `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+  result, or an explicit blocker with the exact failing command.
