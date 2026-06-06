@@ -4,6 +4,7 @@ description: Create or update Farplane skills when a user wants a reusable workf
 tier: 3
 group: skills
 source: local
+skill_template_version: "0.1.0"
 license: Complete terms in LICENSE.txt
 allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, Glob
 ---

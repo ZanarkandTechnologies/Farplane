@@ -19,6 +19,7 @@ FALLBACK_SKILL_TEMPLATE = """---
 name: {skill_name}
 version: {version}
 description: [TODO: Complete and informative explanation of what the skill does and when to use it.]
+skill_template_version: "0.1.0"
 allowed-tools: {tools}
 ---
 

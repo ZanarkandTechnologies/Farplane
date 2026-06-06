@@ -44,6 +44,18 @@ def registry_summary() -> dict[str, object]:
         "todos_files": dict(
             sorted(Counter("has" if row.get("has_todos") else "missing" for row in rows).items())
         ),
+        "skill_template_versions": dict(
+            sorted(Counter(str(row.get("skill_template_version") or "missing") for row in rows).items())
+        ),
+        "missing_skill_template_version": [
+            {
+                "name": row["name"],
+                "tier": row["tier"],
+                "source": row["source"],
+            }
+            for row in rows
+            if not row.get("skill_template_version")
+        ],
         "missing_checklists": [
             {
                 "name": row["name"],
@@ -55,6 +67,42 @@ def registry_summary() -> dict[str, object]:
             if not row.get("has_checklist")
         ],
     }
+
+
+def validate_template_version(current_version: str, require: bool) -> int:
+    rows = [
+        json.loads(line)
+        for line in (REPO_ROOT / "docs/skills/registry.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    missing = [
+        row
+        for row in rows
+        if not row.get("skill_template_version")
+    ]
+    not_current = [
+        row
+        for row in rows
+        if row.get("skill_template_version") and row.get("skill_template_version") != current_version
+    ]
+
+    report = {
+        "current_skill_template_version": current_version,
+        "missing": [row["name"] for row in missing],
+        "not_current": [
+            {
+                "name": row["name"],
+                "skill_template_version": row.get("skill_template_version"),
+            }
+            for row in not_current
+        ],
+    }
+    print("skill template version report:")
+    print(json.dumps(report, indent=2, sort_keys=True))
+
+    if require and (missing or not_current):
+        return 1
+    return 0
 
 
 def main() -> int:
@@ -69,7 +117,18 @@ def main() -> int:
         action="store_true",
         help="disallow peer Tier 3 todo links; default allows intentional Tier 3 handoffs",
     )
+    parser.add_argument(
+        "--template-version",
+        help="report skills missing or differing from this current skill template version",
+    )
+    parser.add_argument(
+        "--require-template-version",
+        action="store_true",
+        help="fail when --template-version finds missing or non-current skill template versions",
+    )
     args = parser.parse_args()
+    if args.require_template_version and not args.template_version:
+        parser.error("--require-template-version requires --template-version")
 
     try:
         checklist_command = ["python3", "skills/skill-maintenance/scripts/sync_skill_checklists.py"]
@@ -104,6 +163,8 @@ def main() -> int:
 
     print("skill system summary:")
     print(json.dumps(registry_summary(), indent=2, sort_keys=True))
+    if args.template_version:
+        return validate_template_version(args.template_version, args.require_template_version)
     return 0
 
 

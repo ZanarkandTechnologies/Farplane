@@ -4,6 +4,7 @@ description: "Maintain Farplane skill packages in bulk: classify tiers, add or a
 tier: 3
 group: skills
 source: local
+skill_template_version: "0.1.0"
 ---
 
 # Skill Maintenance
@@ -109,8 +110,10 @@ hygiene, or consolidation planning.
    [prototyping](../prototyping/SKILL.md) on a small representative set before
    running bulk commands.
 5. Update `SKILL.md` frontmatter only for manual fields: `tier`, `source`,
-   Tier 3 `group`, optional `methods`, optional `common_chains`, and optional
-   `upstream_url`.
+   optional `skill_template_version`, Tier 3 `group`, optional `methods`,
+   optional `common_chains`, and optional `upstream_url`. Use
+   `skill_template_version` only when the skill has been onboarded to a known
+   structural template baseline; absence means not onboarded yet.
 6. Put the anti-forgetting todo list directly in `SKILL.md` under
    `## Todo List`:
    - project/docs context first
@@ -142,7 +145,9 @@ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 
 ## Outcome Contract
 
-- Skill frontmatter remains minimal and valid.
+- Skill frontmatter remains minimal and valid. Onboarded skills may carry
+  `skill_template_version`; missing values remain visible in the generated
+  registry and `check_skills.py --template-version <version>` report.
 - Broad skill migrations include a representative `Prototype Note` before full
   batch application.
 - `SKILL.md` contains the required first-load todo list and high-signal logic.

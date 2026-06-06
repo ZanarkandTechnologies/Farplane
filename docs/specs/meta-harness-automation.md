@@ -80,9 +80,10 @@ Skill package truth stays split by purpose:
 - `skills/skill-maintenance` reports which skill packages are stale, missing a
   recommended feature, or claiming a feature without matching proof.
 
-Use `skill_template_version` only for the structural skill template baseline
-when that field exists. Use feature references for optional capabilities such
-as capability tests, eval readiness, source sync, install rendering, or
+Use `skill_template_version` only for the structural skill template baseline.
+The field is optional; absence means the skill has not been onboarded to a
+known template baseline yet. Use feature references for optional capabilities
+such as capability tests, eval readiness, source sync, install rendering, or
 behavior-test proof.
 
 Do not store long migration histories in every skill. Git history, the feature
@@ -109,8 +110,9 @@ When Farplane learns or adopts a new harness capability:
 ## Current Limits
 
 - Skill feature adoption is not yet a generated per-skill field.
-- `skill_template_version` is a proposed structural baseline field, not a
-  current registry requirement.
+- `skill_template_version` is optional, so broad rollout status must be read
+  from the generated registry and `skill-maintenance` report rather than
+  treated as a hard requirement for every skill.
 - Skill health monitoring is still local and artifact-driven. Farplane does not
   run a hidden daemon or background scheduler.
 - Feature rows are provenance and support records, not a substitute for tests,

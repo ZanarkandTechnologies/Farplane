@@ -68,6 +68,9 @@ Manual fields:
 - `tier`: required, numeric `1`, `2`, or `3`
 - `source`: required, `local` for Farplane-owned skills or `external` for
   upstream-backed skills that should stay syncable with an outside source
+- `skill_template_version`: optional structural baseline for skills onboarded
+  to a known Farplane skill template version; absence means the skill has not
+  been onboarded yet
 - `group`: required for Tier 3 only
 - `methods`: optional list for method addresses owned by the skill
 - `common_chains`: optional Tier 3 one-way adjacency hints
@@ -80,6 +83,7 @@ Generated fields:
 - `has_checklist`
 - `has_todos`
 - `version`
+- `skill_template_version`
 - `allowed_tools`
 - `source`
 - `upstream_url`
@@ -106,11 +110,15 @@ python3 bin/check_skill_todo_tiers.py
 python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 python3 bin/check_skill_capabilities.py validate
 python3 skills/skill-maintenance/scripts/generate_skill_graph.py
+python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.1.0
 ```
 
 Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
 editing skill frontmatter, `SKILL.md` Markdown links, or first-load todo lists.
 Use the lower-level commands when debugging one specific failure.
+Use `--template-version <version>` as a non-failing rollout report for skill
+template onboarding, and add `--require-template-version` only when a migration
+is intentionally ready to fail missing or non-current skills.
 
 ## First-Load Todo Link Contract
 

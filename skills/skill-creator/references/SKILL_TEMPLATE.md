@@ -3,6 +3,7 @@ name: {skill_name}
 description: [TODO: Clear trigger/use description. This metadata decides when the skill loads.]
 tier: [TODO: 1 | 2 | 3]
 source: local
+skill_template_version: "0.1.0"
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---

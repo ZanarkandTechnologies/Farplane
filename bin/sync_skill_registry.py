@@ -320,6 +320,10 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if version not in (None, ""):
             row["version"] = str(version)
 
+        skill_template_version = metadata.get("skill_template_version")
+        if skill_template_version not in (None, ""):
+            row["skill_template_version"] = str(skill_template_version)
+
         allowed_tools = normalize_allowed_tools(metadata.get("allowed-tools"), skill_path)
         if allowed_tools:
             row["allowed_tools"] = allowed_tools

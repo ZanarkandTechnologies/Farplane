@@ -11,8 +11,9 @@ Rules:
   with `category: "skills"`; do not create a second hand-authored skill feature
   registry.
 - Package-local metadata lives in `skills/*/SKILL.md` frontmatter. Keep it
-  minimal: `tier`, `source`, Tier 3 `group`, optional `methods`, optional
-  `upstream_url`, and optional one-way Tier 3 `common_chains`.
+  minimal: `tier`, `source`, optional `skill_template_version`, Tier 3 `group`,
+  optional `methods`, optional `upstream_url`, and optional one-way Tier 3
+  `common_chains`.
 - For `source: external` skills, keep Farplane-specific wrapper policy in the
   local caller skill instead of editing upstream-owned command/reference bodies.
 - External skills may intentionally omit direct todo lists when the local
