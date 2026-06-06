@@ -16,6 +16,10 @@ roll it out to other skills only after a representative pass proves the shape.
   ordered and easy to reference.
 - Use plain markdown todos such as `- [ ]` only for embedded verification or
   detail checks under a numbered todo.
+- Do not use unordered prose bullets inside `## Todo List`; branch choices
+  should be numbered task items, and embedded checks should be checkbox items.
+- Do not put literal `FARPLANE_IMPORTANT_CHECKLIST` marker comments inside
+  fenced examples; link the source template instead.
 - Fold the default workflow into the numbered todo list instead of repeating it
   in a second workflow section.
 - Do not add a generic `## Job` section when `## Context` plus `## Todo List`

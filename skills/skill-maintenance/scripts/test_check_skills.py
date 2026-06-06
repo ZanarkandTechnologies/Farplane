@@ -110,6 +110,46 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
             self.assertTrue(any("top-level plain todo" in error for error in errors))
             self.assertFalse(any("numbered task items" in error for error in errors))
 
+    def test_template_structure_rejects_unordered_prose_bullets_in_todos(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            check_skills.REPO_ROOT = repo
+            write_registry(repo, "example")
+            write_skill(
+                repo,
+                "example",
+                VALID_SKILL.replace(
+                    "   1. [ ] Default branch.",
+                    "   - Default branch.",
+                ),
+            )
+
+            errors = check_skills.template_structure_errors("0.1.0")
+
+            self.assertTrue(any("unordered prose bullet" in error for error in errors))
+
+    def test_template_structure_rejects_marker_comments_inside_fenced_examples(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            check_skills.REPO_ROOT = repo
+            write_registry(repo, "example")
+            write_skill(
+                repo,
+                "example",
+                VALID_SKILL.replace(
+                    "## Templates\n\n- Template.",
+                    "## Templates\n\n```markdown\n"
+                    "<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->\n"
+                    "## Todo List\n"
+                    "<!-- END FARPLANE_IMPORTANT_CHECKLIST -->\n"
+                    "```",
+                ),
+            )
+
+            errors = check_skills.template_structure_errors("0.1.0")
+
+            self.assertTrue(any("fenced examples" in error for error in errors))
+
     def test_template_structure_rejects_missing_numbered_todos(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)

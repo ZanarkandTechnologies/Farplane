@@ -27,25 +27,25 @@ duplication control, repeatability, and review gates.
    [docs/skills/README.md](../../docs/skills/README.md), and
    [docs/skills/best-practices.md](../../docs/skills/best-practices.md).
 2. [ ] Choose the ownership branch.
-   - New skill: use only when the capability has a stable trigger and reusable
+   1. [ ] New skill: use only when the capability has a stable trigger and reusable
      workflow.
-   - Existing skill update: use when the behavior is a branch, method,
+   2. [ ] Existing skill update: use when the behavior is a branch, method,
      todo-list fix, reference, script, or prompt inside an existing contract.
-   - Unclear ownership: use [plan](../plan/SKILL.md).
+   3. [ ] Unclear ownership: use [plan](../plan/SKILL.md).
 3. [ ] Ground the design when needed.
-   - Use [research:parity](../research/SKILL.md#researchparity) or
+   - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
      [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
      when external skill examples should inform the design.
 4. [ ] Draft or revise the minimum executable contract directly in `SKILL.md`:
    trigger boundary, context, mixed sequential `## Todo List`, core branches,
    hard gates, judgement questions, proof commands, and outcome contract.
 5. [ ] Place supporting material by load frequency.
-   - Keep every-invocation logic in `SKILL.md`.
-   - Move conditional branches, examples, templates, long rubrics, model maps,
+   - [ ] Keep every-invocation logic in `SKILL.md`.
+   - [ ] Move conditional branches, examples, templates, long rubrics, model maps,
      delegated prompts, and rare-path recipes into references.
-   - Keep actor identity, delegation routing, tool-use policy, and artifact
+   - [ ] Keep actor identity, delegation routing, tool-use policy, and artifact
      writeback in the owning agent prompt or caller skill.
-   - Promote reference logic back into `SKILL.md` when it must be read every
+   - [ ] Promote reference logic back into `SKILL.md` when it must be read every
      time; delete or merge empty, thin, or duplicated reference files.
 6. [ ] Validate after edits:
    `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
@@ -65,8 +65,9 @@ Minimal `SKILL.md` shape:
 ```markdown
 ## Context
 
-<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Todo List
+TODO: add the marker-delimited `## Todo List` section from
+`references/SKILL_TEMPLATE.md`.
+
 1. [ ] ...
 2. [ ] Choose the branch.
    1. [ ] Default branch.
@@ -74,7 +75,6 @@ Minimal `SKILL.md` shape:
 3. [ ] Review before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
-<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
 ## Gotchas

@@ -24,6 +24,7 @@ REQUIRED_TEMPLATE_HEADINGS = ("Context", "Todo List", "Templates", "Gotchas", "R
 HEADING_RE = re.compile(r"^## (?P<heading>.+?)\s*$")
 TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^\d+\. \[ \] ")
 TOP_LEVEL_PLAIN_TODO_RE = re.compile(r"^- \[ \] ")
+UNORDERED_PROSE_TODO_RE = re.compile(r"^\s+- (?!\[ \])")
 
 
 def run(command: list[str]) -> None:
@@ -112,6 +113,23 @@ def markdown_section(text: str, heading: str) -> str | None:
     return "\n".join(lines[start:])
 
 
+def marker_counts(text: str) -> tuple[int, int, int]:
+    real_markers = 0
+    fenced_markers = 0
+    in_fence = False
+    for line in text.splitlines():
+        if line.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if "<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->" not in line:
+            continue
+        if in_fence:
+            fenced_markers += 1
+        else:
+            real_markers += 1
+    return real_markers, fenced_markers, text.count("<!-- END FARPLANE_IMPORTANT_CHECKLIST -->")
+
+
 def template_structure_errors(current_version: str) -> list[str]:
     rows = [
         json.loads(line)
@@ -129,6 +147,14 @@ def template_structure_errors(current_version: str) -> list[str]:
             continue
 
         text = skill_path.read_text(encoding="utf-8")
+        real_begin_count, fenced_begin_count, end_count = marker_counts(text)
+        if real_begin_count != 1:
+            errors.append(f"{row['name']}: expected exactly one real todo-list marker section")
+        if fenced_begin_count:
+            errors.append(f"{row['name']}: do not put todo-list marker comments inside fenced examples")
+        if end_count != real_begin_count + fenced_begin_count:
+            errors.append(f"{row['name']}: mismatched todo-list marker comments")
+
         headings = iter_markdown_headings(text)
         heading_names = [heading for _, heading in headings]
         heading_lines = {heading: line_number for line_number, heading in headings}
@@ -154,6 +180,12 @@ def template_structure_errors(current_version: str) -> list[str]:
                 errors.append(
                     f"{row['name']}: top-level plain todo in ## Todo List line {line_number}; "
                     "use numbered todos for main work and indent plain todos under a numbered item"
+                )
+                break
+            if UNORDERED_PROSE_TODO_RE.match(line):
+                errors.append(
+                    f"{row['name']}: unordered prose bullet in ## Todo List line {line_number}; "
+                    "use numbered branch todos or embedded `- [ ]` checks"
                 )
                 break
 
