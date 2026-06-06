@@ -209,10 +209,10 @@ def write_docs(docs: dict[str, Any], output_path: Path, js_path: Path | None) ->
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--registry", default="docs/skills/registry.jsonl")
-    parser.add_argument("--out", default="docs/skills/graph/skill-graph.json")
-    parser.add_argument("--js-out", default="docs/skills/graph/skill-graph.js")
-    parser.add_argument("--docs-out", default="docs/skills/graph/skill-docs.json")
-    parser.add_argument("--docs-js-out", default="docs/skills/graph/skill-docs.js")
+    parser.add_argument("--out", default="skills/skill-maintenance/graph/skill-graph.json")
+    parser.add_argument("--js-out", default="skills/skill-maintenance/graph/skill-graph.js")
+    parser.add_argument("--docs-out", default="skills/skill-maintenance/graph/skill-docs.json")
+    parser.add_argument("--docs-js-out", default="skills/skill-maintenance/graph/skill-docs.js")
     args = parser.parse_args()
 
     rows = load_registry(Path(args.registry))

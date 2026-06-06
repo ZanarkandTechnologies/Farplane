@@ -2,9 +2,9 @@
   "counts": {
     "edge_types": {
       "common-chain": 17,
-      "markdown-ref": 281
+      "markdown-ref": 283
     },
-    "edges": 298,
+    "edges": 300,
     "nodes": 81,
     "sources": {
       "external": 3,
@@ -17,6 +17,20 @@
     }
   },
   "edges": [
+    {
+      "label": "markdown-ref",
+      "source": "advise",
+      "target": "best-of-worlds",
+      "target_ref": "best-of-worlds",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "advise",
+      "target": "reference-grounding",
+      "target_ref": "reference-grounding",
+      "type": "markdown-ref"
+    },
     {
       "label": "markdown-ref",
       "source": "agent-behavior-test",
@@ -1510,6 +1524,13 @@
     },
     {
       "label": "markdown-ref",
+      "source": "reference-grounding",
+      "target": "research",
+      "target_ref": "research",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
       "source": "remotion",
       "target": "execute",
       "target_ref": "execute",
@@ -1702,13 +1723,6 @@
       "source": "self-improve",
       "target": "skill-maintenance",
       "target_ref": "skill-maintenance",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "skill-creator",
-      "target": "execute",
-      "target_ref": "execute",
       "type": "markdown-ref"
     },
     {
@@ -2104,7 +2118,7 @@
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-02T05:21:47+00:00",
+  "generated_at": "2026-06-06T15:39:29+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
@@ -2436,7 +2450,7 @@
       "tier": 2
     },
     {
-      "description": "Operator-forced recovery mode for when the assistant missed something obvious, got defensive, or explained instead of acting. Use when the user explicitly says `repent` or otherwise clearly asks for audit-then-fix behavior on the current task after the default correction-recovery behavior was not enough.",
+      "description": "Operator-marked recovery and lesson capture for cases where the assistant missed something obvious, got defensive, explained instead of acting, or finished a corrected hard case that should become a durable lesson or training/eval sample. Use when the user explicitly says `repent`, `repent lesson`, `repent hardcase`, or asks to capture a corrected failure.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,
@@ -2969,7 +2983,7 @@
       "tier": 3
     },
     {
-      "description": "Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.",
+      "description": "Create or update Farplane skills when a user wants a reusable workflow, domain playbook, prompt/harness capability, or bundled scripts/templates that extend Codex behavior.",
       "group": "skills",
       "has_checklist": true,
       "has_todos": false,

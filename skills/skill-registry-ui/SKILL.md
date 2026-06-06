@@ -15,7 +15,7 @@ allowed-tools: Read, Bash
 - [ ] Regenerate skill metadata and graph data with
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` and
   `python3 skills/skill-maintenance/scripts/generate_skill_graph.py`.
-- [ ] Open `docs/skills/graph/index.html` directly or through a local static
+- [ ] Open `skills/skill-maintenance/graph/index.html` directly or through a local static
   server.
 - [ ] Click at least one node and confirm the detail panel renders parsed
   frontmatter, raw YAML, and the `SKILL.md` Markdown body.
@@ -42,7 +42,7 @@ python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 2. Open the viewer:
 
 ```text
-docs/skills/graph/index.html
+skills/skill-maintenance/graph/index.html
 ```
 
 The page can be opened directly through `file://` because the graph data and

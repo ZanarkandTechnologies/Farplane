@@ -13,8 +13,10 @@ into a second place to maintain skill truth.
 - This README is the human selection guide. Use it to understand why neighboring
   skills differ and which one should own a request before opening the generated
   registry or individual `SKILL.md` files.
-- `graph/` contains a generated local visualization of skill nodes,
-  Markdown-reference edges, Tier 3 chain edges, and rendered skill documents.
+- `skills/skill-maintenance/graph/` contains the generated local visualization
+  of skill nodes, Markdown-reference edges, Tier 3 chain edges, and rendered
+  skill documents. The generated UI is owned by `skill-maintenance` for now so
+  `docs/skills/` stays an index plus registry surface.
 - `skills/skill-registry-ui/` is the operator skill for refreshing, opening,
   and validating that graph UI.
 - Skill-applicable harness features live in

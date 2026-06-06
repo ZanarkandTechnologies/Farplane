@@ -19,7 +19,7 @@ python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 ## Open
 
 Open `index.html` directly, or serve the repo root with a local static server
-and visit `/docs/skills/graph/`.
+and visit `/skills/skill-maintenance/graph/`.
 
 The graph treats `skill_links` as solid Markdown-reference edges and
 `common_chains.after` as dashed chain edges. Nodes are color-coded by tier and
