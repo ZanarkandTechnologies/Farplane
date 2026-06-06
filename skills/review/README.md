@@ -16,7 +16,7 @@ and checks metric traceability against linked evidence.
 ## Public API or Entrypoints
 
 - [`SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/SKILL.md): main review workflow
-- `SKILL.md` Important Checklist: example natural-language todo template for review
+- `SKILL.md` Todo List: example natural-language todo template for review
 - [`references/review-rubric-index.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/review-rubric-index.md): family selection map, shared TAS contract, and hard-gate policy
 - [`references/reviewer-handoff.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/reviewer-handoff.md): reusable caller-to-reviewer handoff template
 - [`references/desloppify.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/desloppify.md): cross-cutting anti-slop search playbook for neighboring-surface consistency checks
@@ -38,7 +38,7 @@ and checks metric traceability against linked evidence.
 ## Minimal Example
 
 ```text
-Use the `SKILL.md` Important Checklist when invoking the skill.
+Use the `SKILL.md` Todo List when invoking the skill.
 Provide task context, changed files, evidence artifacts, and any declared
 metrics, rubric families, required TAS gates, or hard gates.
 Start from caller-declared families such as `code-quality`, `integration-readiness`, and `evidence-quality`.
@@ -55,7 +55,7 @@ Return a clear `pass|revise|block|invalid` verdict grounded in the provided evid
 
 - `git diff --check`
 - `sed -n '1,120p' skills/review/SKILL.md`
-  and expect a marker-delimited `## Important Checklist` with natural-language
+  and expect a marker-delimited `## Todo List` with natural-language
   review steps
 - `rg -n "reviewer-handoff|rubric_families|desloppify|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md skills/review/references agents/reviewer.toml docs/specs/review-gates.md tickets/templates/ticket.md`
   and expect live matches in the updated review surfaces

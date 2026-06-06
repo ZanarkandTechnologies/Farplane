@@ -10,7 +10,7 @@ allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Edit, 
 # Data Visualization Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the product goal, data shape, target screen, active ticket, and
   existing chart/dashboard conventions.

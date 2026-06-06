@@ -16,7 +16,7 @@ execution in v0.
 ## Public API / Entrypoints
 
 - `SKILL.md`: operator-facing serial dispatcher workflow
-- `SKILL.md` Important Checklist: short anti-forgetting checklist for a Ralph run
+- `SKILL.md` Todo List: short anti-forgetting checklist for a Ralph run
 - `references/parallel-ralph.md`: design-only future N-agent Ralph contract
   covering leases, worktrees, merge policy, stale recovery, and batch QA
 - `scripts/select_next_ticket.py`: deterministic read-only selector and smoke

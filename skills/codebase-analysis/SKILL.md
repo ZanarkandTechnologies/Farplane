@@ -8,7 +8,7 @@ source: local
 # Codebase Analysis Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] State the analysis mode: locate, explain, trace, or find comparable local
   patterns.

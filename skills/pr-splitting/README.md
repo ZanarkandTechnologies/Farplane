@@ -9,7 +9,7 @@ feature seams are too entangled.
 ## Public API / Entrypoints
 
 - `SKILL.md`: main PR-splitting contract
-- `SKILL.md` Important Checklist: compact anti-forgetting checklist
+- `SKILL.md` Todo List: compact anti-forgetting checklist
 - [`references/decision-rules.md`](/Users/kenjipcx/coding-harness/Farplane/skills/pr-splitting/references/decision-rules.md)
 - [`references/output-template.md`](/Users/kenjipcx/coding-harness/Farplane/skills/pr-splitting/references/output-template.md)
 - `AGENTS.md`: maintenance notes

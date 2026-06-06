@@ -60,7 +60,7 @@
 ## Modern Scroll-Scrub Recipe
 
 For Terminal/Terminus-inspired, premium industrial, generated-media, or
-asset-heavy pages, use the parent skill `SKILL.md` Important Checklist as the active checklist. The required
+asset-heavy pages, use the parent skill `SKILL.md` Todo List as the active todo list. The required
 order is:
 
 1. competitor/inspiration analysis,

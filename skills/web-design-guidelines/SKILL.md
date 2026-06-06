@@ -9,7 +9,7 @@ source: local
 # Web Interface Guidelines
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Identify the UI source files, route, component, or diff being audited.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to keep the

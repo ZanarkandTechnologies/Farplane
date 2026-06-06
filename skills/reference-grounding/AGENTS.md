@@ -3,7 +3,7 @@
 ## Scope
 
 - `SKILL.md`
-- `SKILL.md` Important Checklist
+- `SKILL.md` Todo List
 - `README.md`
 - `AGENTS.md`
 
@@ -19,4 +19,4 @@
 
 - The workflow starts from one claim or decision.
 - The output includes source confidence and local impact.
-- `SKILL.md` Important Checklist uses Markdown links to dependency skills and method anchors.
+- `SKILL.md` Todo List uses Markdown links to dependency skills and method anchors.

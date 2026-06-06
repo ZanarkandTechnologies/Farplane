@@ -17,7 +17,7 @@ lane visibility and recovery helpers.
 - substantive delegated work grounded via `grounding_summary`
 - delegated wait/backpressure visible via `worker_started_at`, `last_checkpoint_at`, and `checkpoint_summary`
 - ticket mutations visible and intentional
-- keep the `SKILL.md` Important Checklist as plain natural-language checklist text with Markdown links rather than a custom mini-language. See `MEM-0028` and `MEM-0124`.
+- keep the `SKILL.md` Todo List as plain natural-language todo-list text with Markdown links rather than a custom mini-language. See `MEM-0028` and `MEM-0124`.
 
 ## Do Not
 

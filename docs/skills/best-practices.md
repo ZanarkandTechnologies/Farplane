@@ -4,15 +4,21 @@ Use this as the shared standard for creating, reviewing, and maintaining
 Farplane skills. Apply it to `skill-creator` and `skill-maintenance` first;
 roll it out to other skills only after a representative pass proves the shape.
 
-## First-Load Checklist
+## First-Load Shape
 
-- Keep `SKILL.md` checklists operational, not educational.
-- Use flat checkboxes with branch labels such as `1`, `2a`, `2b`, and `3`.
-  Avoid nested checkboxes in the first-load checklist.
-- Put required every-run behavior in the checklist. Move onboarding, examples,
-  rubric detail, and long rationale to references.
-- A good checklist should tell the next agent what to do now, not teach the
-  whole domain.
+- Put a short `## Context` section near the top of `SKILL.md` before the todo
+  list when the skill depends on tier, ownership, source, or surrounding
+  system shape.
+- `## Todo List` is the numbered first-load todo list.
+- Use sequential task-list items such as `1. [ ]`, `2. [ ]`, and `3. [ ]` for
+  the main path.
+- Fold the default workflow into the numbered todo list instead of repeating it
+  in a second workflow section.
+- Put final review as the last numbered todo. Nested review checks are allowed
+  under that final todo; avoid nested checkbox trees elsewhere.
+- Move onboarding, examples, rubric detail, and long rationale to references.
+- A good first-load todo list should tell the next agent what to do now, not
+  teach the whole domain.
 
 ## Main File Versus References
 
@@ -48,7 +54,7 @@ author's memory.
 Check repeatability by asking:
 
 - Can another agent identify when to use the skill from its description?
-- Can it execute the first-load checklist without reading every reference?
+- Can it execute the first-load todo list without reading every reference?
 - Are scripts, commands, paths, artifacts, and validation steps explicit?
 - Are setup/onboarding paths separated from the normal run path?
 - Does the skill avoid verbose duplication that would drift later?
@@ -57,7 +63,7 @@ Check repeatability by asking:
 
 Before calling skill work complete, run a review pass that checks:
 
-- concise first-load checklist
+- concise first-load todo list
 - branch-aware workflow shape
 - references used only for conditional detail
 - no duplicated instructions across surfaces

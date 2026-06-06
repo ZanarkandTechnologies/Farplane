@@ -19,7 +19,7 @@ allowed-tools: Read, Grep, Glob, Bash
 # Video Production
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 # Video Production Todos
 
@@ -84,7 +84,7 @@ MethodSelection(deliverable, methods, constraints) :=
 ```
 
 Use `references/model.md` for scene/deliverable matrix, method selection, and
-execution packet rules. Keep the `SKILL.md` Important Checklist short; upstream references stay
+execution packet rules. Keep the `SKILL.md` Todo List short; upstream references stay
 method-specific detail.
 
 Use method addresses to choose the smallest relevant workflow:

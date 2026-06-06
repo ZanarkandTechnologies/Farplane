@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Runtime Debugging Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Capture the exact symptom, repro path, scope, and success criteria before proposing a fix.
 - [ ] Map the relevant codepath, side-effects, and current observability surface.

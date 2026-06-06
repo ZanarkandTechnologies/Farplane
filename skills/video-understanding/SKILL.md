@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Video Understanding
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the media ingest bundle, transcript status, retention note, contact
   sheet, and selected frames.
@@ -108,7 +108,7 @@ Use [advise](../advise/SKILL.md) when the answer is not mechanical:
 
 1. Do not collapse “what the video shows” and “what the agent should do” into
    one unchecked prompt.
-2. Do not create a new skill when existing skill checklists can be augmented.
+2. Do not create a new skill when existing skill todo lists can be augmented.
 3. Do not claim an accurate reimplementation without frame or screenshot proof.
 
 ## References

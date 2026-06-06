@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep
 # Execute
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the plan, scope, acceptance criteria, and proof contract.
 - [ ] Confirm execution is ready; if scope or proof is still unclear, stop and

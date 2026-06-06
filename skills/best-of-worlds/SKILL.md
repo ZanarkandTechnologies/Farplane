@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep
 # Best Of Worlds
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Identify the input worlds, source artifacts, and comparison target before
   scoring.

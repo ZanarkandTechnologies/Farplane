@@ -72,7 +72,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             self.assertFalse(installed.is_symlink())
             skill_text = (installed / "SKILL.md").read_text(encoding="utf-8")
             self.assertIn(installer.EMBEDDED_TODOS_BEGIN, skill_text)
-            self.assertIn("## Embedded Skill Checklist", skill_text)
+            self.assertIn("## Embedded Skill Todo List", skill_text)
             self.assertIn("- [ ] Read proof.", skill_text)
             self.assertEqual(
                 (installed / "todos.md").read_text(encoding="utf-8"),
@@ -103,7 +103,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             skill_file = repo / "skills" / "review" / "SKILL.md"
             skill_file.write_text(
                 skill_file.read_text(encoding="utf-8")
-                + "\n## Important Checklist\n\n- [ ] Direct proof.\n",
+                + "\n## Todo List\n\n- [ ] Direct proof.\n",
                 encoding="utf-8",
             )
 
@@ -125,7 +125,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             skill_file = repo / "skills" / "review" / "SKILL.md"
             skill_file.write_text(
                 skill_file.read_text(encoding="utf-8")
-                + "\nMention `## Important Checklist` in prose.\n",
+                + "\nMention `## Todo List` in prose.\n",
                 encoding="utf-8",
             )
 

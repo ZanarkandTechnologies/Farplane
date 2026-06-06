@@ -16,7 +16,7 @@ questions. It should not restart product discovery.
 ## Public API
 
 - `SKILL.md`: the loaded skill contract.
-- `SKILL.md` Important Checklist: the checklist used while drafting a goal.
+- `SKILL.md` Todo List: the todo list used while drafting a goal.
 - `fixtures/goal-prep-cases.md`: expected behavior examples for ticket-backed
   state, proxy rejection, quantified issue hunts, and tiny direct asks.
 

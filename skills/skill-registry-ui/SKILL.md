@@ -10,7 +10,7 @@ allowed-tools: Read, Bash
 # Skill Registry UI
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Regenerate skill metadata and graph data with
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` and

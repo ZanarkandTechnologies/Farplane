@@ -5,7 +5,7 @@
 - `SKILL.md`
 - `README.md`
 - `AGENTS.md`
-- `SKILL.md` Important Checklist
+- `SKILL.md` Todo List
 
 ## Boundaries
 
@@ -30,7 +30,7 @@
 - The skill requires 3 options with pros/cons.
 - The skill requires first-principles basis before option comparison.
 - The skill requires a named recommendation and accepted tradeoff.
-- `SKILL.md` Important Checklist links dependency skills with Markdown links.
+- `SKILL.md` Todo List links dependency skills with Markdown links.
 
 ## Testing
 

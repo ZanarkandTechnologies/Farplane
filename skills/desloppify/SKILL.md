@@ -11,7 +11,7 @@ allowed-tools: Read, Grep, Bash
 # Desloppify
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 # Desloppify Todo Template
 

@@ -27,7 +27,7 @@ metadata:
 # Summarize
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Identify the source, requested output shape, and whether provenance or
   quotes matter.

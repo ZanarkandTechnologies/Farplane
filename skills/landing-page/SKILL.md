@@ -11,7 +11,7 @@ allowed-tools: Read, Grep, Glob, Bash
 # Landing Page
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 # Landing Page Todos
 
@@ -89,8 +89,7 @@ MethodSelection(section, methods, constraints) :=
 ```
 
 Use `references/model.md` for the algebra and section matrix rules. Keep the
-Important Checklist short; detailed recipes live in references and method
-records.
+Todo List short; detailed recipes live in references and method records.
 
 ## Use When
 
@@ -317,7 +316,7 @@ For landing pages with reusable formulas or inspiration references:
 - `references/asset-evidence.md` - generated/real media proof gate.
 - `references/designer-judgment.md` - final 5% premium quality rubric.
 - `references/gotchas.md` - common landing-page mistakes.
-- `SKILL.md` Important Checklist - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
+- `SKILL.md` Todo List - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
 
 ## Output Contract
 

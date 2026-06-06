@@ -9,7 +9,7 @@ source: local
 # Close Ticket
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Resolve exactly one active ticket and confirm the remaining work is
   genuinely closeout, not missing implementation.
@@ -98,7 +98,7 @@ Ensure an agent can execute the core path after only reading this file.
 
 ## Ordered Flow
 
-Use the Important Checklist above as the parent closeout sequence.
+Use the Todo List above as the parent closeout sequence.
 
 Related skills:
 
@@ -132,7 +132,7 @@ Run a feature closeout consistency sweep before commit:
   changed
 - `docs/specs/README.md` when a spec is added, moved, renamed, or retired
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` when skills,
-  skill metadata, method addresses, direct checklists, or skill docs changed
+  skill metadata, method addresses, direct todo lists, or skill docs changed
 - `docs/features/registry.jsonl` when a shipped capability is added, renamed,
   retired, or materially changes status
 - nearest module `README.md` or `AGENTS.md` when a local contract changed

@@ -9,9 +9,9 @@ source: local
 # Self Improve
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
-- [ ] Read the target skill package: `SKILL.md`, direct checklist, references,
+- [ ] Read the target skill package: `SKILL.md`, direct todo list, references,
   scripts, and existing `self-improve/` memory.
 - [ ] Use [plan](../plan/SKILL.md) when the improvement target, eval boundary,
   or editable scope is unclear.
@@ -67,7 +67,7 @@ native Goal mode.
 
 ## Workflow
 
-1. **Read target skill:** inspect `SKILL.md`, its direct checklist, references, and
+1. **Read target skill:** inspect `SKILL.md`, its direct todo list, references, and
    scripts. Do not edit yet.
 2. **Load skill memory:** read `self-improve/program.md` when present. If the
    user wants durable skill memory, create it before experiments.

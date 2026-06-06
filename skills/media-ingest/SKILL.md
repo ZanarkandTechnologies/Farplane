@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Media Ingest
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Classify source type, platform, visibility, and whether authenticated
   access or a local export is required.

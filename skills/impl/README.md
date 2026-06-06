@@ -17,7 +17,7 @@ gates, hard gates, and required evidence.
 ## Public Entrypoints
 
 - `SKILL.md` - build-phase orchestration contract
-- `SKILL.md` Important Checklist - example natural-language todo template for orchestration and review/evidence phases
+- `SKILL.md` Todo List - example natural-language todo template for orchestration and review/evidence phases
 - `scripts/tmux_helper.py` - launch, follow up, and inspect visible tmux lanes
 
 The first live delegated-worker contract is carried in runtime state:

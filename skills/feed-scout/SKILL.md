@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Feed Scout
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read existing feed-scout config, profile rows, tracked entities,
   tracked harness resources, ledger/proposal artifacts, and the requested mode

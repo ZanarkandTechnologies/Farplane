@@ -9,7 +9,7 @@ source: local
 # Testing Index
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Classify the system under test and the risk being controlled.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect

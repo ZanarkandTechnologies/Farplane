@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep
 # Plan
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] State the intent, expected artifact, and domain pipeline.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when scope

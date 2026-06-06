@@ -13,7 +13,7 @@ metadata:
 # Remotion
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 # Remotion Todos
 

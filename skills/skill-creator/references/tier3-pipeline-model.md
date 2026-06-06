@@ -23,7 +23,7 @@ MethodSelection(component, methods, constraints) :=
 ## Skill Package Shape
 
 ```text
-SKILL.md               = first-load contract + Important Checklist + compact algebra prelude
+SKILL.md               = first-load contract + Todo List + compact algebra prelude
 references/model.md    = domain algebra and component matrix rules
 references/*.json      = method registries when records are stable
 templates/*.md         = output packet shapes

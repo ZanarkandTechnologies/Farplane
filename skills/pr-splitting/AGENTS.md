@@ -4,7 +4,7 @@
 
 - `SKILL.md`
 - `README.md`
-- `SKILL.md` Important Checklist
+- `SKILL.md` Todo List
 - `references/decision-rules.md`
 - `references/output-template.md`
 
@@ -35,6 +35,6 @@
 ## Testing
 
 - Re-read `SKILL.md` once and confirm it is executable without opening refs.
-- Confirm the `SKILL.md` Important Checklist stays plain checklist text with Markdown links.
+- Confirm the `SKILL.md` Todo List stays plain todo-list text with Markdown links.
 - Confirm the references reinforce feature-first with layer fallback rather than
   drifting toward stack planning or hunk surgery.

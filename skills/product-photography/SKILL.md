@@ -18,7 +18,7 @@ allowed-tools: Read, Grep, Glob, Bash
 # Product Photography
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 # Product Photography Todos
 

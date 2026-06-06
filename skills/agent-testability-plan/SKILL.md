@@ -12,7 +12,7 @@ allowed-tools: Read, Glob, Grep
 # Agent Testability Plan
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the `System Design Brief` first and confirm architecture is already explicit enough.
 - [ ] Map the main agent friction across reachability, hidden-state visibility, coordination visibility, and proof difficulty.

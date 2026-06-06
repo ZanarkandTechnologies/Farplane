@@ -15,7 +15,7 @@ allowed-tools: Read, Grep, Glob, Bash
 # Frontend Craft
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Classify the frontend surface: app screen, workflow component, dashboard,
   AI interface, landing page, portfolio, game/tool, media-heavy page, or

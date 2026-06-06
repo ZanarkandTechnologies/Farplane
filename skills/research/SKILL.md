@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Grep
 # Research
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Choose exactly one primary method first:
   [research:parity](SKILL.md#researchparity),

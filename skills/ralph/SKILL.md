@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Ralph
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read `tickets/README.md`, active tickets, `docs/MEMORY.md`, and `docs/TROUBLES.md`.
 - [ ] Run the read-only selector and inspect skipped-ticket reasons.

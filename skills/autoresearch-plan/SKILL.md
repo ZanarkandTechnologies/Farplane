@@ -9,7 +9,7 @@ source: local
 # Autoresearch Plan
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the target docs, scripts, tests, active ticket, and existing
   autoresearch artifacts before proposing a session.

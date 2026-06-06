@@ -11,7 +11,7 @@ common_chains:
 # Impl
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the selected ticket and linked docs before launching any lanes.
 - [ ] Treat this skill as `ExecuteTicket<CodingTicket>` plus proof integration

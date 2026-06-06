@@ -9,7 +9,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # CodeRabbit Review
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Confirm `coderabbit --version` works in the repo.
 - [ ] Confirm auth status with `coderabbit auth status --agent` or

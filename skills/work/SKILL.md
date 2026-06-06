@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Grep
 # Work
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the operator request, ticket, batch, or board context.
 - [ ] Classify the work unit: direct request, single ticket, ticket batch,

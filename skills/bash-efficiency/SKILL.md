@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Bash Efficiency Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Identify the filesystem/build/debug goal and the safest working
   directory before running commands.

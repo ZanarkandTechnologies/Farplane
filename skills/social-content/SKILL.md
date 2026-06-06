@@ -16,7 +16,7 @@ allowed-tools: Read, Grep, Glob, Bash
 # Social Content
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 # Social Content Todos
 
@@ -74,7 +74,7 @@ MethodSelection(artifact, methods, constraints) :=
 ```
 
 Use `references/model.md` for the artifact matrix and execution packet rules.
-Keep the `SKILL.md` Important Checklist short; upstream references stay method-specific detail.
+Keep the `SKILL.md` Todo List short; upstream references stay method-specific detail.
 
 Use method addresses to choose the smallest relevant workflow:
 

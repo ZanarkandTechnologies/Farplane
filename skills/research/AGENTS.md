@@ -3,7 +3,7 @@
 ## Scope
 
 - `SKILL.md`
-- `SKILL.md` Important Checklist
+- `SKILL.md` Todo List
 - `README.md`
 - `AGENTS.md`
 
@@ -27,5 +27,5 @@
 ## Checks
 
 - Each public method name appears in `SKILL.md`.
-- `SKILL.md` Important Checklist links to method anchors and dependency skills using Markdown.
+- `SKILL.md` Todo List links to method anchors and dependency skills using Markdown.
 - Live docs reference `research:method` names rather than retired package names.

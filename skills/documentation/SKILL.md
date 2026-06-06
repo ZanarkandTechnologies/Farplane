@@ -8,7 +8,7 @@ source: local
 # Documentation Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Identify the library, API, version, and exact behavior question before
   fetching docs.

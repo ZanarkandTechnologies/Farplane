@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Grep
 ---
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the current UI/product context first: active ticket, `docs/prd.md`,
   `docs/specs/`, screenshots if present, nearby UI code, and existing taste or

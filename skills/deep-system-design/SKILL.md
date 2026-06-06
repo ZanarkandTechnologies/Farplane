@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Grep
 ---
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read product and technical context first: active ticket, `docs/prd.md`,
   `docs/specs/`, nearby schemas/handlers/jobs/config, `docs/MEMORY.md`, and

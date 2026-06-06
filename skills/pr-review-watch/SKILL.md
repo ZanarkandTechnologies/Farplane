@@ -13,7 +13,7 @@ common_chains:
 # PR Review Watch
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the selected PR target, target repo, project review memory, and
   requested watch interval before polling anything.

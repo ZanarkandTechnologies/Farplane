@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Eval
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] 1. Check whether evals are set up with `run_evals.py status` or equivalent
   bash; if missing, load [onboarding](references/onboarding.md) and guide or

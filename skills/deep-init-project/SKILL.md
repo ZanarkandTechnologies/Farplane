@@ -10,7 +10,7 @@ source: local
 # Deep Init Project Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the bootstrap brief, `docs/prd.md`, active ticket, project root
   files, and existing `AGENTS.md`/README surfaces before scaffolding.

@@ -24,7 +24,7 @@ Define the smallest honest prototype that can expose the real pattern, run or
 plan that proof, and decide whether to scale, revise, or stop.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] State the scale risk: data volume, users, workflow breadth, architecture,
   automation, polish, file count, research breadth, or operational complexity.

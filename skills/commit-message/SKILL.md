@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep
 # Commit Message
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Inspect staged changes first; if nothing is staged, inspect the intended
   diff boundary before writing a subject.

@@ -10,7 +10,7 @@ teach a reusable skill.
 3. If video evidence exists, run video understanding over transcript status,
    selected frames, and contact sheet evidence.
 4. Extract the source's operational todos.
-5. Compare each source todo against existing Farplane skills and skill checklists.
+5. Compare each source todo against existing Farplane skills and skill todo lists.
 6. Route the copied-skill candidate to the likely owner skill, using
    `harness-advisor` only when ownership is ambiguous.
 

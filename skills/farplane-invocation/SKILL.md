@@ -9,7 +9,7 @@ source: local
 # Farplane Invocation
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the Farplane run envelope, active ticket, repo policy, and relevant
   project docs before selecting a path.

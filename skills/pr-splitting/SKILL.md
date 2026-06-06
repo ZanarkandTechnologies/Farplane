@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # PR Splitting
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Confirm the branch already works end to end before trying to split it.
 - [ ] Pick the real merge target as the base branch.

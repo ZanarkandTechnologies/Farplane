@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and prune migrated skill checklists."""
+"""Validate and prune migrated skill todo lists."""
 
 from __future__ import annotations
 
@@ -9,7 +9,8 @@ import sys
 from pathlib import Path
 
 
-CHECKLIST_HEADING = "## Important Checklist"
+TODO_HEADING = "## Todo List"
+CONTEXT_HEADING = "## Context"
 CHECKLIST_BEGIN = "<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->"
 CHECKLIST_END = "<!-- END FARPLANE_IMPORTANT_CHECKLIST -->"
 SOURCE_RE = re.compile(r"^Source: `[^`\n]+`\n\n?", re.MULTILINE)
@@ -18,7 +19,7 @@ MARKED_SECTION_RE = re.compile(
     re.MULTILINE | re.DOTALL,
 )
 SECTION_RE = re.compile(
-    rf"^{re.escape(CHECKLIST_HEADING)}\n.*?(?=^## |\Z)",
+    rf"^{re.escape(TODO_HEADING)}\n.*?(?=^## |\Z)",
     re.MULTILINE | re.DOTALL,
 )
 
@@ -78,7 +79,7 @@ def extract_marked_checklist(skill_text: str) -> str | None:
     lines = section.strip().splitlines()
     if lines and lines[0].strip() == CHECKLIST_BEGIN:
         lines = lines[1:]
-    if lines and lines[0].strip() == CHECKLIST_HEADING:
+    if lines and lines[0].strip() == TODO_HEADING:
         lines = lines[1:]
     if lines and lines[-1].strip() == CHECKLIST_END:
         lines = lines[:-1]
@@ -91,7 +92,7 @@ def render_section(checklist_text: str) -> str:
         raise ChecklistError("checklist is empty")
     return (
         f"{CHECKLIST_BEGIN}\n"
-        f"{CHECKLIST_HEADING}\n\n"
+        f"{TODO_HEADING}\n\n"
         f"{checklist}\n"
         f"{CHECKLIST_END}\n"
     )
@@ -116,6 +117,11 @@ def insertion_index(lines: list[str]) -> int:
             next_index = index + 1
             while next_index < len(lines) and not lines[next_index].strip():
                 next_index += 1
+            if next_index < len(lines) and lines[next_index].strip() == CONTEXT_HEADING:
+                for context_index in range(next_index + 1, len(lines)):
+                    if lines[context_index].startswith("## "):
+                        return context_index
+                return len(lines)
             return next_index
     return start
 
@@ -135,7 +141,7 @@ def sync_skill_text(skill_text: str, todos_text: str) -> str:
         return MARKED_SECTION_RE.sub(section.rstrip() + "\n", stripped, count=1).rstrip() + "\n"
     if SECTION_RE.search(stripped):
         raise ChecklistError(
-            f"unmarked {CHECKLIST_HEADING!r} section; remove it or wrap it in "
+            f"unmarked {TODO_HEADING!r} section; remove it or wrap it in "
             f"{CHECKLIST_BEGIN} / {CHECKLIST_END} markers before syncing"
         )
     return insert_section(stripped, section)
@@ -146,10 +152,10 @@ def normalize_skill_text(skill_text: str) -> str:
     if checklist is None:
         if SECTION_RE.search(skill_text.rstrip()):
             raise ChecklistError(
-                f"unmarked {CHECKLIST_HEADING!r} section; remove it or wrap it in "
+                f"unmarked {TODO_HEADING!r} section; remove it or wrap it in "
                 f"{CHECKLIST_BEGIN} / {CHECKLIST_END} markers before syncing"
             )
-        raise ChecklistError("missing direct Important Checklist section")
+        raise ChecklistError("missing direct Todo List section")
     section = render_section(checklist)
     return MARKED_SECTION_RE.sub(section.rstrip() + "\n", skill_text.rstrip(), count=1).rstrip() + "\n"
 
@@ -218,33 +224,33 @@ def sync_repo(repo_root: Path, write: bool) -> int:
             removed.append(str(todos_path.relative_to(repo_root)))
 
     if missing:
-        print("skills missing required direct checklists:", file=sys.stderr)
+        print("skills missing required direct todo lists:", file=sys.stderr)
         for item in missing:
             print(f"- {item}", file=sys.stderr)
     if divergent:
-        print("skills have divergent SKILL.md and todos.md checklists:", file=sys.stderr)
+        print("skills have divergent SKILL.md and todos.md todo lists:", file=sys.stderr)
         for item in divergent:
             print(f"- {item}", file=sys.stderr)
     if stale and not write:
-        print("skill checklists need normalization; run with --write:", file=sys.stderr)
+        print("skill todo lists need normalization; run with --write:", file=sys.stderr)
         for item in stale:
             print(f"- {item}", file=sys.stderr)
     if updated:
-        print(f"synced {len(updated)} skill checklist section(s)")
+        print(f"synced {len(updated)} skill todo list section(s)")
     else:
-        print("skill checklist sections OK")
+        print("skill todo list sections OK")
     if removed:
         print(f"removed {len(removed)} redundant todos.md file(s)")
     if skipped_external:
         names = ", ".join(skipped_external)
-        print(f"external skills without direct checklists skipped: {names}")
+        print(f"external skills without direct todo lists skipped: {names}")
 
     return 1 if missing or divergent or (stale and not write) else 0
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--write", action="store_true", help="update stale SKILL.md checklists")
+    parser.add_argument("--write", action="store_true", help="update stale SKILL.md todo lists")
     parser.add_argument(
         "--repo",
         type=Path,

@@ -12,7 +12,7 @@ It stays separate from `$ralph`: `batch-work` runs a named range/list, while
 ## Public API / Entrypoints
 
 - `SKILL.md`: operator-facing batch workflow
-- `SKILL.md` Important Checklist: anti-forgetting checklist for batch ledger, blockers, and review
+- `SKILL.md` Todo List: anti-forgetting checklist for batch ledger, blockers, and review
 
 ## Minimal Example
 

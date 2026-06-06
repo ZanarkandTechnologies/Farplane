@@ -12,7 +12,7 @@ common_chains:
 # Functional UI
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] State the UI/workflow decision and the artifact being produced:
   diagnosis, UX plan, redesign recommendation, or implementation handoff.

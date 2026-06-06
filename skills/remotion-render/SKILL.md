@@ -11,7 +11,7 @@ allowed-tools: Read, Grep, Glob, Bash
 # Remotion Render
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 # Remotion Render Todos
 

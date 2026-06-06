@@ -9,7 +9,7 @@ source: local
 # Visual QA Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the active ticket, its declared screens/states, and its evidence checklist before judging the UI.
 - [ ] Read `docs/TASTE.md` when taste, density, or layout quality is in scope.

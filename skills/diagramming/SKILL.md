@@ -8,7 +8,7 @@ source: local
 # Diagramming
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the active request, ticket, or spec and identify the exact approval question.
 - [ ] Draw one top-level delta map before considering any second diagram.

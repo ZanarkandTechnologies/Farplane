@@ -8,7 +8,7 @@ source: local
 # Find Skills
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Clarify the domain, task, and whether an installable skill is likely to
   help more than existing local skills.

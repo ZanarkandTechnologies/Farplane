@@ -13,7 +13,7 @@ often produces mismatched HTML/CSS/JS, missing assets, and no final review.
 
 ## Phase Contract
 
-Start from the parent skill `SKILL.md` Important Checklist for the full modern scroll-scrub recipe. This gate
+Start from the parent skill `SKILL.md` Todo List for the full modern scroll-scrub recipe. This gate
 defines the phase boundary after the checklist has produced the reference
 matrix, user story, ASCII flow, nested `advise` decisions, and asset plan.
 

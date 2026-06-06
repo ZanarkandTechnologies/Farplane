@@ -8,7 +8,7 @@ source: local
 # External Patterns Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Define the exact code pattern, repo family, language, and freshness bar.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to preserve

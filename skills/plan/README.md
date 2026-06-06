@@ -7,7 +7,7 @@ Define the Tier 2 planning interface that domain-specific skills implement.
 ## Public API / Entrypoints
 
 - `SKILL.md`: generic planning interface
-- `SKILL.md` Important Checklist: planning checklist
+- `SKILL.md` Todo List: planning checklist
 - `AGENTS.md`: maintenance rules
 
 ## Minimal Example

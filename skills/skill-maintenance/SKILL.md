@@ -9,12 +9,12 @@ source: local
 # Skill Maintenance
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read `docs/specs/skill-tier-rollout-plan.md`,
   `docs/skills/README.md`, `docs/skills/registry.jsonl`, active tickets, and
   the target skill files before editing.
-- [ ] Apply `docs/skills/best-practices.md` for checklist shape, reference
+- [ ] Apply `docs/skills/best-practices.md` for todo-list shape, reference
   placement, actor-prompt versus skill-contract boundaries, duplication
   control, and repeatability.
 - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
@@ -26,8 +26,8 @@ source: local
 - [ ] Use [plan](../plan/SKILL.md) before broad skill rewrites: update a
   representative sample across Tier 1, Tier 2, and complex Tier 3 packages,
   validate it, and scale only after the pattern is stable.
-- [ ] Put required checklist items directly in `SKILL.md` under
-  `## Important Checklist`; prune redundant `todos.md` once content matches.
+- [ ] Put required todo items directly in `SKILL.md` under `## Todo List`;
+  prune redundant `todos.md` once content matches.
 - [ ] Keep every-invocation logic in `SKILL.md`; move only conditional
   branches, examples, templates, long rubric detail, model maps, delegated
   prompts, and rare-path recipes into references.
@@ -52,8 +52,8 @@ source: local
   ticket evidence.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use this when working on the skill system itself: tier metadata, direct
-checklists, legacy `todos.md` cleanup, source ownership, registry sync, link
+Use this when working on the skill system itself: tier metadata, direct todo
+lists, legacy `todos.md` cleanup, source ownership, registry sync, link
 hygiene, or consolidation planning.
 
 ## Job
@@ -69,10 +69,10 @@ hygiene, or consolidation planning.
 
 ## Core Rules
 
-- Follow `docs/skills/best-practices.md` for first-load checklist shape,
+- Follow `docs/skills/best-practices.md` for first-load todo-list shape,
   reference placement, repeatability, and review gates.
-- `SKILL.md` is the first-load source of truth. Required checklist items belong
-  in a direct marker-delimited `## Important Checklist` section.
+- `SKILL.md` is the first-load source of truth. Required todo items belong in a
+  direct marker-delimited `## Todo List` section.
 - Keep logic in `SKILL.md` when it affects every invocation: trigger boundary,
   required order, decision routing, escalation, stop conditions, hard gates,
   output contract, and high-risk guardrails.
@@ -81,7 +81,7 @@ hygiene, or consolidation planning.
 - If a reference must be read every time, promote the needed logic into
   `SKILL.md`.
 - Treat `todos.md` as a legacy/transitional input only. Delete it once it
-  matches the direct `SKILL.md` checklist; reconcile divergent duplicates
+  matches the direct `SKILL.md` todo list; reconcile divergent duplicates
   manually.
 - Tier 1 primitives are base obligations for Tier 2.
 - Tier 2 surfaces may link Tier 1 primitives.
@@ -105,14 +105,14 @@ hygiene, or consolidation planning.
    when comparing external skill examples or upstream instructions.
 3. Use [plan](../plan/SKILL.md) when tier/source/consolidation choices have
    real tradeoffs.
-4. For broad migrations such as checklist embedding or reference pruning, use
+4. For broad migrations such as todo-list embedding or reference pruning, use
    [prototyping](../prototyping/SKILL.md) on a small representative set before
    running bulk commands.
 5. Update `SKILL.md` frontmatter only for manual fields: `tier`, `source`,
    Tier 3 `group`, optional `methods`, optional `common_chains`, and optional
    `upstream_url`.
-6. Put the anti-forgetting checklist directly in `SKILL.md` under
-   `## Important Checklist`:
+6. Put the anti-forgetting todo list directly in `SKILL.md` under
+   `## Todo List`:
    - project/docs context first
    - required workflow and branch checks second
    - proof/writeback last
@@ -124,9 +124,9 @@ hygiene, or consolidation planning.
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```
 
-This command normalizes direct `## Important Checklist` sections, prunes
+This command normalizes direct `## Todo List` sections, prunes
 redundant `todos.md` files, regenerates the registry, verifies registry
-metadata, checks checklist tier edges, compiles the registry/check scripts, and
+metadata, checks todo-list tier edges, compiles the registry/check scripts, and
 prints a compact summary. Use the lower-level commands only when debugging a
 specific failure:
 
@@ -145,7 +145,7 @@ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 - Skill frontmatter remains minimal and valid.
 - Broad skill migrations include a representative `Prototype Note` before full
   batch application.
-- `SKILL.md` contains the required first-load checklist and high-signal logic.
+- `SKILL.md` contains the required first-load todo list and high-signal logic.
 - Transitional `todos.md` files are removed when redundant or left only when a
   human must reconcile divergent content.
 - Complex Tier 3 skills keep any algebraic project/component/method model

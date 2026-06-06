@@ -9,7 +9,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Agent Behavior Test
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Define the exact behavior under test and the target persona or skill caller.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the
@@ -81,7 +81,7 @@ This is broader than skill creation. It covers:
 ## Core Branches
 
 - **Skill behavior test**: require the child agent to load the skill, follow
-  its Important Checklist, execute the requested task, and produce a todo
+  its Todo List, execute the requested task, and produce a todo
   ledger with evidence for each required step.
 - **Narrow feature behavior probe**: require the child agent to act like a
   target user, exercise one feature path, capture logs or screenshots when

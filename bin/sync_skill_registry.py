@@ -18,7 +18,7 @@ CHECKLIST_BEGIN = "<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->"
 CHECKLIST_END = "<!-- END FARPLANE_IMPORTANT_CHECKLIST -->"
 CHECKLIST_RE = re.compile(
     rf"^{re.escape(CHECKLIST_BEGIN)}\n"
-    r"## Important Checklist\n\n"
+    r"## Todo List\n\n"
     r"(?:Source: `[^\n]+`\n\n)?"
     rf"(.*?)\n^{re.escape(CHECKLIST_END)}",
     re.MULTILINE | re.DOTALL,
@@ -264,7 +264,7 @@ def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> Non
             refs = ", ".join(sorted(direct_tier1_links))
             source_path = skill_dir / "SKILL.md"
             raise RegistryError(
-                f"{source_path}: tier 3 checklist must link tier 2 surfaces instead of "
+                f"{source_path}: tier 3 todo list must link tier 2 surfaces instead of "
                 f"direct tier 1 primitives: {refs}"
             )
 

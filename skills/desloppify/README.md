@@ -12,7 +12,7 @@ handed back instead of recursing.
 - `SKILL.md`: main workflow and mode selector
 - `README.md`: module summary and test checklist
 - `AGENTS.md`: maintenance notes
-- `SKILL.md` Important Checklist: plain-language checklist for repeated cleanup passes
+- `SKILL.md` Todo List: plain-language checklist for repeated cleanup passes
 
 ## Minimal Example
 
@@ -47,4 +47,4 @@ Write progress back to <ticket-or-doc-path>.
   `--runner codex` review batches.
 - Confirm `.desloppify/` is ignored at the repo root.
 - Confirm the docs inventory mentions the public skill.
-- Confirm the `SKILL.md` Important Checklist stays plain natural-language checklist text.
+- Confirm the `SKILL.md` Todo List stays plain natural-language todo-list text.

@@ -15,28 +15,29 @@ Rules:
   `upstream_url`, and optional one-way Tier 3 `common_chains`.
 - For `source: external` skills, keep Farplane-specific wrapper policy in the
   local caller skill instead of editing upstream-owned command/reference bodies.
-- External skills may intentionally omit direct checklists when the local operational
-  checklist belongs in a caller skill. Prefer `upstream_url` over inventing
+- External skills may intentionally omit direct todo lists when the local
+  operational todo list belongs in a caller skill. Prefer `upstream_url` over inventing
   command-shaped refresh metadata until a second source proves it is needed.
 - Installed skill packages are rendered artifacts: source `SKILL.md` direct
-  checklists stay visible in installed `SKILL.md`. Legacy `todos.md` files may
-  still be embedded during migration, but redundant duplicates should be
-  removed. Update `bin/test_install_selected_skills.py` when changing this contract.
+  first-load todo lists stay visible in installed `SKILL.md`. Legacy `todos.md`
+  files may still be embedded during migration, but redundant duplicates should
+  be removed. Update `bin/test_install_selected_skills.py` when changing this
+  contract.
 - Use `skills/skill-maintenance/` for bulk skill tier/source/todo/registry
   upkeep instead of expanding global prompt rules.
 - Use `skills/harness-advisor/` first when the operator is deciding where a
   Farplane improvement belongs across root policy, global templates, docs/specs,
   skills, subagents, hooks/scripts, ticket contracts, validators, or registries.
 - Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
-  skill frontmatter, Markdown links, or checklist changes.
-- Tier 3 checklists must not direct-link Tier 1 primitives such as
+  skill frontmatter, Markdown links, or first-load todo changes.
+- Tier 3 first-load todos must not direct-link Tier 1 primitives such as
   `advise`, `reference-grounding`, or `review`; link the relevant Tier 2 surface
   instead and let that surface carry Tier 1 obligations.
-- Use `bin/check_skill_todo_tiers.py` to audit all checklist edges against the
-  strict one-level-down hierarchy. Use `--allow-peer-tier3` only when checking
-  the current intentional Tier 3 application handoff graph.
+- Use `bin/check_skill_todo_tiers.py` to audit all first-load todo edges
+  against the strict one-level-down hierarchy. Use `--allow-peer-tier3` only
+  when checking the current intentional Tier 3 application handoff graph.
 - Do not maintain a second hand-authored sequence registry. Generate flow or
   graph views from Tier 3 `group` plus `common_chains` when a view is needed.
-- If a field can be derived from file paths, existing frontmatter, direct
-  checklists, optional legacy `todos.md`, or Markdown links, derive it in the
-  sync script rather than duplicating it in frontmatter.
+- If a field can be derived from file paths, existing frontmatter, direct todo
+  lists, optional legacy `todos.md`, or Markdown links, derive it in the sync
+  script rather than duplicating it in frontmatter.

@@ -11,7 +11,7 @@ allowed-tools: Read, Grep, Glob, Bash
 # Delegate Frontend
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the frontend ticket, product/UX spec, visual/taste brief, target
   routes, expected files, and QA proof requirements.

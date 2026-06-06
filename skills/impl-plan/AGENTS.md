@@ -50,7 +50,7 @@
 - Reference `MEM-0062` for the detailed, action-oriented planning contract.
 - Make optional sections fail if they are decorative, duplicated, or
   placeholder-only.
-- Keep the `SKILL.md` Important Checklist as plain natural-language checklist text
+- Keep the `SKILL.md` Todo List as plain natural-language todo-list text
   with Markdown links rather than a custom mini-language. See `MEM-0028`.
 
 ## Checks

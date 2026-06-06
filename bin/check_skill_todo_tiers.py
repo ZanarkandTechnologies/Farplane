@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that skill first-load checklists link only to allowed tier dependencies."""
+"""Check that skill first-load todo lists link only to allowed tier dependencies."""
 
 from __future__ import annotations
 
@@ -139,7 +139,7 @@ def main() -> int:
     parser.add_argument(
         "--allow-peer-tier3",
         action="store_true",
-        help="allow Tier 3 checklists to link peer Tier 3 execution handoffs",
+        help="allow Tier 3 todo lists to link peer Tier 3 execution handoffs",
     )
     args = parser.parse_args()
 
@@ -153,10 +153,10 @@ def main() -> int:
     if violations:
         for violation in violations:
             print(format_violation(violation, repo_root), file=sys.stderr)
-        print(f"skill checklist tier check failed ({len(violations)} violation(s))", file=sys.stderr)
+        print(f"skill todo tier check failed ({len(violations)} violation(s))", file=sys.stderr)
         return 1
 
-    print("skill checklist tier check OK")
+    print("skill todo tier check OK")
     return 0
 
 

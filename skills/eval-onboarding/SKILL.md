@@ -12,7 +12,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Eval Onboarding
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Confirm the eval target, user-visible behavior, and smallest useful
   pass/fail claim.

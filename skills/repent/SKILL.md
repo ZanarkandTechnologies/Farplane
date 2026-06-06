@@ -8,7 +8,7 @@ source: local
 # Repent
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] 1. Classify the mode: default/`lesson` for recovery plus durable lesson,
   or `hardcase` for a richer eval/training-data candidate after the fix is

@@ -33,7 +33,7 @@ boundaries, or unknown user value to PRD, `deep-interview`, or
 `deep-system-design` before drafting a Goal.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the operator ask and identify whether it needs a native `/goal`,
   normal prompt, ticket workflow, or `$ralph` board drain.

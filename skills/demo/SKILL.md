@@ -11,7 +11,7 @@ common_chains:
 # Demo
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the selected ticket, demo requirement, and latest QA artifacts before
   creating demo output.

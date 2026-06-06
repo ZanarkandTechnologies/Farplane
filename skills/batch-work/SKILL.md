@@ -8,7 +8,7 @@ source: local
 # Batch Work
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Parse the user-specified ticket range or explicit ticket list.
 - [ ] Read the relevant context surfaces:
@@ -21,7 +21,7 @@ source: local
 - [ ] Add the ticket ids as top-level todos in `todos.md`; do not expand every
   ticket at the start.
 - [ ] Expand only the current ticket into concrete todos, including the ticket's
-  own checklist and relevant skill checklists.
+  own checklist and relevant skill todo lists.
 - [ ] Use `$work` admission policy to decide whether the next
   item stays single-ticket or can safely join a related tiny-ticket group.
 - [ ] Use [prototyping](../prototyping/SKILL.md) before scaling a batch pattern
@@ -111,7 +111,7 @@ completed together.
 5. For the current ticket only, replace that ticket line in `todos.md` with the
    ticket's concrete todo/checklist items. Do not expand the whole range at
    once.
-6. Load the ticket's relevant skill checklists into the active checklist only for the
+6. Load the ticket's relevant skill todo lists into the active checklist only for the
    current ticket.
 7. Use [prototyping](../prototyping/SKILL.md) when the batch intends to repeat a
    transformation or proof pattern across many tickets, files, or records.

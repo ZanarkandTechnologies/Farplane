@@ -13,7 +13,7 @@ allowed-tools: Read, Glob, Grep
 # Impl Plan
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, and nearby code.
 - [ ] Treat this skill as `PlanTicket<CodingTicket>` inside the

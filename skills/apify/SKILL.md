@@ -10,7 +10,7 @@ allowed-tools: apify, web_search, documentation-searcher
 # Apify Integration Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Identify the platform, actor, live-run boundary, credential/spend status,
   and output needed before invoking Apify.

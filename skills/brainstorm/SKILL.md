@@ -9,7 +9,7 @@ source: local
 # Brainstorm
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] State whether this pass is loose divergence or structured decomposition.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when options

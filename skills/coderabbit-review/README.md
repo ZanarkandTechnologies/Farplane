@@ -9,7 +9,7 @@ before push or on a PR-sized branch, not as a default Stop-hook behavior.
 
 - [`SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills/coderabbit-review/SKILL.md):
   main workflow contract
-- `SKILL.md` Important Checklist:
+- `SKILL.md` Todo List:
   compact anti-forgetting checklist
 - [`references/stage-matrix.md`](/Users/kenjipcx/coding-harness/Farplane/skills/coderabbit-review/references/stage-matrix.md):
   stage defaults and when to use each path

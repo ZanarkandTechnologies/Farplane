@@ -11,7 +11,7 @@ allowed-tools: Read, Grep, Glob, Bash
 # Delegate CLI
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the selected ticket, linked docs/specs, proof contract, and relevant
   local files before building the delegate prompt.

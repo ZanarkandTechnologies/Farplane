@@ -28,6 +28,8 @@ def write_skill(
                 "",
                 f"# {name}",
                 "",
+                "## Context",
+                "",
                 "Use this for tests.",
                 "",
                 "## Workflow",
@@ -59,8 +61,9 @@ class SyncSkillChecklistsTests(unittest.TestCase):
             self.assertEqual(checklists.sync_repo(repo, write=True), 0)
 
             text = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
-            self.assertIn("## Important Checklist\n\nSource: `SKILL.md`", text)
-            self.assertLess(text.index("## Important Checklist"), text.index("Use this for tests."))
+            self.assertIn("## Todo List\n\n- [ ] Do the important thing.", text)
+            self.assertGreater(text.index("## Todo List"), text.index("Use this for tests."))
+            self.assertLess(text.index("## Todo List"), text.index("## Workflow"))
             self.assertNotIn("# Todos", text)
             self.assertTrue((skill_dir / "todos.md").exists())
 
@@ -99,7 +102,7 @@ class SyncSkillChecklistsTests(unittest.TestCase):
             skill_file.write_text(
                 skill_file.read_text(encoding="utf-8").replace(
                     "Use this for tests.",
-                    "## Important Checklist\n\n- [ ] Manual item.\n\nUse this for tests.",
+                    "## Todo List\n\n- [ ] Manual item.\n\nUse this for tests.",
                 ),
                 encoding="utf-8",
             )
@@ -119,8 +122,7 @@ class SyncSkillChecklistsTests(unittest.TestCase):
                 skill_file.read_text(encoding="utf-8").replace(
                     "Use this for tests.",
                     f"{checklists.CHECKLIST_BEGIN}\n"
-                    f"{checklists.CHECKLIST_HEADING}\n\n"
-                    "Source: `SKILL.md`\n\n"
+                    f"{checklists.TODO_HEADING}\n\n"
                     "- [ ] Manual item.\n"
                     f"{checklists.CHECKLIST_END}\n\n"
                     "Use this for tests.",

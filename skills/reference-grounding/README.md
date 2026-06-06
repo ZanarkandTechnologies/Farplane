@@ -8,7 +8,7 @@ external references before another workflow consumes them.
 ## Public API / Entrypoints
 
 - `SKILL.md`: Tier 1 grounding contract
-- `SKILL.md` Important Checklist: anti-forgetting checklist
+- `SKILL.md` Todo List: anti-forgetting checklist
 - `AGENTS.md`: maintenance rules
 
 ## Minimal Example

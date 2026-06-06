@@ -22,7 +22,7 @@ Turn an unclear choice into a compact recommendation:
 6. State the accepted tradeoff and direct next step.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] State the real decision in one sentence.
 - [ ] Start from first principles before comparing options: objective,

@@ -12,7 +12,7 @@ common_chains:
 # Spec-to-Ticket Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the chosen spec slice and confirm it is small enough for one planning pass.
 - [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,

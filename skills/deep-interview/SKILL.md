@@ -7,7 +7,7 @@ argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea
 ---
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read available context before asking: active ticket, `docs/prd.md`,
   `docs/specs/`, project README/AGENTS, and relevant local files.

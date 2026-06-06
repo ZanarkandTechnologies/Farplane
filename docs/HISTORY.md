@@ -273,3 +273,4 @@
 2026-06-04 18:32 +0800 | FEAT | add frontend anti-slop heuristics for sequential layouts, nested containers, and dense list presentation across functional, visual, and implementation skills
 2026-06-06 20:46 +0800 | CHANGE | migrate review rubric design toward modular binary checklist groups with one TAS verdict per selected family
 2026-06-06 21:24 +0800 | FEAT | add a meta-harness automation map and centralize skill-applicable feature tracking in the main feature registry
+2026-06-06 21:39 +0800 | MIGRATION | force local skill first-load sections from the old checklist heading to Todo List and remove legacy heading compatibility from skill tooling

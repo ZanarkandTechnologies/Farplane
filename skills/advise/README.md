@@ -8,7 +8,7 @@ Guide agents to act like a reliable consultant when the user has not already cho
 
 - `SKILL.md`: main decision-framing contract
 - `AGENTS.md`: maintenance rules
-- `SKILL.md` Important Checklist: Tier 1 decision checklist
+- `SKILL.md` Todo List: Tier 1 decision checklist
 
 ## Minimal Example
 

@@ -12,7 +12,7 @@ common_chains:
 # PRD Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the current project surfaces before asking: `docs/prd.md`, active
   ticket, `docs/specs/`, `docs/MEMORY.md`, and `docs/TROUBLES.md` when present.

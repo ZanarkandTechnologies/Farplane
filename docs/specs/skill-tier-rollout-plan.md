@@ -22,7 +22,7 @@ Best path:
    `docs/skills/registry.jsonl`.
 4. Generate flow or graph views from Tier 3 `group` plus `common_chains`; do
    not maintain a second hand-authored sequence registry.
-5. Put required every-invocation checklist items directly in `SKILL.md` and
+5. Put required every-invocation todo items directly in `SKILL.md` and
    prune redundant `todos.md` files once migration is complete.
 6. Consolidate only after the registry exposes real duplicate surfaces; prefer
    one owning skill with `skill:method` addresses when several wrappers share
@@ -73,15 +73,15 @@ Split the source of truth by ownership:
 - The sync script derives file-local facts:
   `path`, `has_checklist`, legacy `has_todos`, `version`, `allowed_tools`, and
   Markdown skill links.
-- The sync script rejects Tier 3 checklists that direct-link Tier 1
-  primitives. Tier 3 checklists should link the relevant Tier 2 surface and let
+- The sync script rejects Tier 3 todo lists that direct-link Tier 1
+  primitives. Tier 3 todo lists should link the relevant Tier 2 surface and let
   that surface carry Tier 1 obligations.
 - `docs/skills/registry.jsonl` is generated output. Do not hand-edit it.
 - Flow and graph views are generated from Tier 3 `group` and `common_chains`
   metadata. Do not maintain a separate hand-authored sequence registry.
 
-Keep checklist coverage as a derived field instead of a frontmatter field. The
-source of truth is the marker-delimited `## Important Checklist` section inside
+Keep todo-list coverage as a derived field instead of a frontmatter field. The
+source of truth is the marker-delimited `## Todo List` section inside
 `SKILL.md`; legacy `todos.md` files are migration inputs only.
 
 Do not add `role`, `depth_dependencies`, `consolidation`, or `notes` to
@@ -148,7 +148,7 @@ Recommended generated package fields:
 - `group`: required frontmatter for Tier 3 skills only.
 - `common_chains`: optional frontmatter, Tier 3 only, one-directional.
 - `upstream_url`: optional frontmatter for upstream-owned skill packages.
-- `has_checklist`: generated from the direct checklist or temporary legacy todo
+- `has_checklist`: generated from the direct todo list or temporary legacy todo
   source.
 - `has_todos`: generated from the filesystem for migration visibility only.
 - `version`: existing frontmatter when present.
@@ -263,12 +263,12 @@ pieces, prompts, shots, slides, scenes, or sections instead. The registry should
 allow both without pretending every domain needs filesystem tickets.
 
 This makes content creation a good next proving ground for the tier model:
-content skills are domain-specific enough to need Tier 3 checklists, but similar
-enough that one or two shared checklist templates can cover most of them.
+content skills are domain-specific enough to need Tier 3 todo lists, but similar
+enough that one or two shared todo-list templates can cover most of them.
 
-## Content Checklist Template
+## Content Todo List Template
 
-Use this template when adding a direct `## Important Checklist` to content
+Use this template when adding a direct `## Todo List` to content
 creation skills:
 
 - [ ] Classify the artifact: post, carousel, video, storyboard, product photo,
@@ -315,7 +315,7 @@ Expected proof:
 
 ### Phase 2: Frontend And Coding Support Checklists
 
-Add missing direct checklists to frontend, backend, testing, and coding-support
+Add missing direct todo lists to frontend, backend, testing, and coding-support
 skills that are called often but lack checklists:
 
 - `frontend-craft`

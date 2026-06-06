@@ -9,7 +9,7 @@ source: local
 # Demo Realism
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read existing product context first: `docs/prd.md`, active ticket,
   `docs/specs/`, user stories, customer notes, and current demo data.

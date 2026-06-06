@@ -9,7 +9,7 @@ source: local
 # Autoresearch Exec
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read `autoresearch.md`, `autoresearch.jsonl`, optional ideas/checks, git
   status, and the editable scope before changing anything.

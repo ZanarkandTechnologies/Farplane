@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Grep
 # PR Runtime
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the selected ticket, branch/PR context, compute target, QA needs, and
   any existing `.harness/state/tickets/*.runtime.json` record.

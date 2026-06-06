@@ -11,7 +11,7 @@ common_chains:
 # QA
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Read the selected ticket, Proof Contract, acceptance criteria, linked
   specs/docs, and any runtime target handoff.

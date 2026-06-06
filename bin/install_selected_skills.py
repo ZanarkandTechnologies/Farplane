@@ -14,7 +14,7 @@ from typing import Sequence
 
 EMBEDDED_TODOS_BEGIN = "<!-- BEGIN FARPLANE_EMBEDDED_TODOS -->"
 EMBEDDED_TODOS_END = "<!-- END FARPLANE_EMBEDDED_TODOS -->"
-DIRECT_CHECKLIST_HEADINGS = ("## Important Checklist", "## Checklist")
+DIRECT_CHECKLIST_HEADINGS = ("## Todo List", "## Checklist")
 
 
 @dataclass(frozen=True)
@@ -138,8 +138,8 @@ def render_skill_markdown(
         + "\n\n"
         + EMBEDDED_TODOS_BEGIN
         + "\n"
-        + "## Embedded Skill Checklist\n\n"
-        + "This generated section is copied from the skill package checklist so "
+        + "## Embedded Skill Todo List\n\n"
+        + "This generated section is copied from the skill package todo list so "
         + "agents see required steps on first skill load.\n\n"
         + f"Source: `{source_label}`\n\n"
         + todos_md.strip()

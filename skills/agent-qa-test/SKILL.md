@@ -14,7 +14,7 @@ allowed-tools: Read, Glob, Grep, Bash
 # Agent QA Test
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Identify the target behavior and whether the operator wants run mode or
   `agent-qa-test:prompt`.
@@ -118,7 +118,7 @@ agent-qa-test orchestrates
    - edge/error path
    - regression/canary path when relevant
 4. Define required evidence for each case: screenshots, logs, commands, files,
-   traces, browser state, skill checklist ledger, or final JSON report.
+   traces, browser state, skill todo list ledger, or final JSON report.
 5. Write the **claim under test** before running: one sentence naming what a
    pass would prove, plus the main evidence that would falsify it. Keep this
    claim stable unless the final verdict explicitly says the test narrowed.
@@ -230,7 +230,7 @@ rerun/fix policy, and stop condition.
   console/server logs when available, and visual or interaction evidence when
   UI changed.
 - **Skill behavior:** require the tester to load the target skill, follow its
-  first-load checklist, produce visible checkpoints, expose skipped steps, and
+  first-load todo list, produce visible checkpoints, expose skipped steps, and
   usually use `agent-behavior-test`-style captured run artifacts.
 - **Prompt/workflow behavior:** require phase checkpoints and compare the
   emitted report against the expected workflow sequence.

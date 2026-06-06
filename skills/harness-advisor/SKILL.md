@@ -8,7 +8,7 @@ source: local
 # Harness Advisor
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] State the Farplane improvement request as one concrete harness failure or capability gap.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the

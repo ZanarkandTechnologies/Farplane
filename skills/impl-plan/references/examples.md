@@ -30,7 +30,7 @@ interface-heavy work readable in plain text.
   shows both callable and data-shape seams
 - `Touch:` `skills/impl-plan/SKILL.md`, `prompts/plan.md`,
   `references/template.md`, `references/examples.md`, `references/review.md`,
-  `README.md`, `AGENTS.md`, `SKILL.md` Important Checklist,
+  `README.md`, `AGENTS.md`, `SKILL.md` Todo List,
   `tickets/templates/ticket.md`,
   `tickets/README.md`
 - `Inspect:` `docs/MEMORY.md`, `tickets/archive/TASK-0086/ticket.md`,

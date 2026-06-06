@@ -18,7 +18,7 @@ Name the claim that needs grounding, inspect the smallest trustworthy source
 set, and return a compact evidence note for the active workflow.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] State the one claim, decision, expectation, or comparison that needs
   grounding.

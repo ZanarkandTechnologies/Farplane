@@ -22,7 +22,7 @@ Applies to files in this directory:
 - Keep the output contract stable so agents produce consistent debugging sessions.
 - Reference durable runtime-debugging rules with `MEM-0001` when changing boundaries.
 - Reference `MEM-0003` when changing the router-vs-reference split.
-- Keep the `SKILL.md` Important Checklist as plain natural-language checklist text with Markdown links rather than a custom mini-language. See `MEM-0028` and `MEM-0124`.
+- Keep the `SKILL.md` Todo List as plain natural-language todo-list text with Markdown links rather than a custom mini-language. See `MEM-0028` and `MEM-0124`.
 
 ## Required Checks After Edits
 

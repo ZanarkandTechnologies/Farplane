@@ -47,15 +47,15 @@ repair ticket. See `MEM-0107`.
 
 Keep skill dependencies tiered rather than hidden behind nested routers:
 Tier 1 primitives cover `advise`, `reference-grounding`, `prototyping`,
-`review`, and skill first-load checklist loading; Tier 2 names generic
+`review`, and skill first-load todo-list loading; Tier 2 names generic
 workflow interfaces such as `brainstorm`, `research:*`, `plan`, and
 `execute`; Tier 3 application skills implement those interfaces for a domain.
-Tier 3 checklists should usually link Tier 2 surfaces rather than direct Tier
+Tier 3 todo lists should usually link Tier 2 surfaces rather than direct Tier
 1 primitives, because Tier 2 carries the Tier 1 obligations. In Farplane
 today, `spec-to-ticket`, `impl-plan`, `$impl`, and `close-ticket` are coding
 workflow skills, not the generic Tier 2 interfaces themselves. Keep
 `skill:method` names as explicit addresses inside one owning skill surface.
-The skill registry check enforces this by failing when Tier 3 checklists
+The skill registry check enforces this by failing when Tier 3 todo lists
 direct-link Tier 1 primitives. See `MEM-0098`, `MEM-0100`, and `MEM-0125`.
 Create new Tier 1 primitives only when multiple Tier 2 interfaces need that
 move as a base dependency; otherwise keep common reusable work as a Tier 2
@@ -63,17 +63,17 @@ interface or method. User research starts as `research:user-grounding`, not a
 Tier 1 primitive. See `MEM-0101`.
 Use `skill-maintenance` for periodic bulk skill-system upkeep instead of
 expanding the always-loaded prompt. Bulk skill edits should read project and
-registry docs first, keep Tier 2 checklists linked to Tier 1 primitives, keep
-Tier 3 checklists linked to Tier 2 surfaces plus intentional peer Tier 3
-handoffs, and leave external skills without local checklists when wrapper logic
+registry docs first, keep Tier 2 todo lists linked to Tier 1 primitives, keep
+Tier 3 todo lists linked to Tier 2 surfaces plus intentional peer Tier 3
+handoffs, and leave external skills without local todo lists when wrapper logic
 belongs in callers. Run
 `python3 skills/skill-maintenance/scripts/check_skills.py --write` after skill
-metadata, Markdown links, or checklist changes. See `MEM-0104`.
-Local Farplane skills keep required checklist items directly in `SKILL.md`
-under a marker-delimited `## Important Checklist` section. Redundant
+metadata, Markdown links, or todo-list changes. See `MEM-0104`.
+Local Farplane skills keep required todo items directly in `SKILL.md`
+under a marker-delimited `## Todo List` section. Redundant
 `todos.md` files should be pruned once their content matches the direct
 checklist, and future divergent duplicates must be reconciled manually. External
-skills may omit local first-load checklists when wrapper logic belongs in
+skills may omit local first-load todo lists when wrapper logic belongs in
 callers. Run
 `check_skills.py --write` and reinstall after source skill edits before judging
 live installed behavior. See `MEM-0117` and `MEM-0124`.

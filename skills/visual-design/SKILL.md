@@ -13,7 +13,7 @@ allowed-tools: Read, Grep, Glob
 # Visual Design
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Confirm the functional basis: user, primary action, states, workflow, and
   existing UX decision. If missing, route to

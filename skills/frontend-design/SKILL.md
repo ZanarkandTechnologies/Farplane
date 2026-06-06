@@ -11,7 +11,7 @@ allowed-tools: mcp__shadcn__*, Read, Write, Edit, LS
 # Frontend Design Skill
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Confirm the owning frontend path: use
   [frontend-craft](../frontend-craft/SKILL.md) for end-to-end builds,

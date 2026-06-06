@@ -14,7 +14,7 @@ review that needs to reconcile planned goals with actual Notion tasks,
 meeting notes, people signals, Codex threads, and opportunity research.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Important Checklist
+## Todo List
 
 - [ ] Use a direct, high-agency planning stance: recommendation first,
       tradeoffs explicit, no passive status digest.
