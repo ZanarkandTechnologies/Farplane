@@ -2,6 +2,11 @@
 
 Use this shape for `repent hardcase` artifacts.
 
+Hardcases are data-capture artifacts, not runnable eval rows. They preserve the
+corrected episode and one future eval idea. Create or update runnable eval task
+files only through `repent:eval`, `eval`, or the owning self-improvement
+workflow.
+
 ```markdown
 # <short title>
 

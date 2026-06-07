@@ -68,8 +68,9 @@ skills, tickets, or models.
   needed, then record a concise lesson in `docs/LESSONS.md` and optionally
   create a Notion improvement proposal for triage.
 - `repent hardcase`: after the problem is fixed, create a sanitized hard-case
-  artifact under `experiments/hardcases/` for future evals, skill improvement,
-  model-training data, or saleable data review.
+  artifact under `experiments/hardcases/` for future eval design, skill
+  improvement, model-training data, or saleable data review. A hardcase is a
+  rich data-capture artifact, not a runnable eval row.
 - `repent eval`: after the problem is fixed, create the smallest durable
   regression eval that would have caught the miss. Also create a hardcase when
   the corrected episode needs context beyond one task row. Use
@@ -221,6 +222,11 @@ The hardcase must be sanitized. Do not include secrets, private raw transcripts,
 credentials, proprietary payloads, or unrelated user data. Prefer short
 evidence excerpts, artifact paths, failure class, expected behavior, and the
 fixed outcome.
+
+A hardcase is not the same as adding an eval case. It can include a future eval
+idea and enough context for a later eval, but runnable regression rows belong in
+the owning eval surface such as `.codex/evals/tasks/*.json` or a skill-local
+self-improvement eval folder.
 
 ## Eval Destination
 
