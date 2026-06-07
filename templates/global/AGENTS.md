@@ -136,9 +136,12 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 
 - When a relevant skill is named or clearly applies, read its `SKILL.md` before
   using it.
-- Show a compact active checklist in commentary when invoking a skill.
 - Use skills compositionally. Follow linked skills and method addresses when
   they are relevant to the current task.
+- Render the active skill todo list compactly in commentary; recursively add
+  linked-skill todos only when that linked skill becomes the current step.
+- Refresh visible todo progress after completing large Tier 3 workflow items;
+  keep Tier 1/Tier 2 checklist updates lighter unless they carry major scope.
 - Keep skill traversal bounded by the task, evidence need, and user's goal.
 - Do not paste full skill internals into this global file.
 - Default Tier 1 behavior skills:
