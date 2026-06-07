@@ -32,6 +32,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Start material decisions from first principles: objective, user/system need,
   root cause, constraints, assumptions, proof or falsification, tradeoffs, and
   non-goals.
+- Before product, workflow, or UX work, clarify what the user actually wants,
+  what success looks like, and what would make the result valuable; use
+  `deep-interview`, `research:user-grounding`, or `advise` when that is not
+  already clear.
 - Use `advise` when the user needs options or a recommendation and has not
   already supplied a clear take.
 - For real choices, compare three viable options when three exist, recommend
