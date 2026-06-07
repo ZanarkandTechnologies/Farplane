@@ -50,6 +50,20 @@ Work flows through:
 - Identify affected interfaces first.
 - No blind edits.
 
+## Code Ownership Defaults
+
+- Follow the project's language, style, and quality gates in
+  `PROJECT_RULES.md`.
+- For TypeScript projects, prefer strict types, no `any`, explicit exported API
+  return types, and tests colocated when practical.
+- Prefer modular, feature-owned files over catch-all helpers.
+- Keep root entrypoints focused; push detailed workflow logic into owning
+  modules.
+- Keep local helpers near the owning feature; promote them to the shared utility
+  surface in `PROJECT_RULES.md` only after real reuse appears.
+- When code grows custom behavior, state, or variants, extract the owning
+  feature/module instead of growing one oversized file.
+
 ## First-Principles Planning
 
 Before specs, tickets, or implementation plans, reduce the work to: objective,

@@ -278,3 +278,4 @@
 2026-06-06 21:53 +0800 | CLEANUP | split raw `docs/TROUBLES.md` from distilled `docs/LESSONS.md`, move the generated skill graph under `skills/skill-maintenance/graph`, and prune active specs to current feature/contract surfaces
 2026-06-06 22:45 +0800 | DOCS | add a filesystem lifecycle spec for ledger, ticket, registry, experiment, spec, and research drain routing
 2026-06-06 23:52 +0800 | CLEANUP | delete the redundant `docs/policies/` policy index and route policy ownership lookups back to `README.md`, `ARCHITECTURE.md`, specs, and owning skills
+2026-06-07 00:00 +0800 | CLEANUP | slim the installed global AGENTS template into an always-loaded operating kernel and route detailed ticket, skill, memory, review, code-ownership, and harness logic to owning project AGENTS, docs, and skills

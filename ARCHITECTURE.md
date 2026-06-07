@@ -294,12 +294,9 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - Review scoring belongs in `skills/review/*`.
 - Runtime machinery belongs in `bin/`, `hooks.json`, and the runtime specs.
 - Reusable workflow detail belongs in `skills/*`.
-- Skill dependency hierarchy belongs in `templates/global/AGENTS.md` plus
-  skill `todos.md` Markdown links. Treat `advise`, `reference-grounding`,
-  `review`, and todo loading as Tier 1; `brainstorm`, `research:*`, `plan`, and
-  `execute` as Tier 2 interfaces; and concrete skills such as
-  `spec-to-ticket`, `impl-plan`, `$work`, `$impl`, and `close-ticket` as Tier 3
-  Farplane coding-pipeline implementations.
+- Skill dependency hierarchy belongs in `docs/skills/README.md`, the generated
+  skill registry, and direct `SKILL.md` checklist links. The global template
+  carries only the always-loaded skill-loading reflex.
 
 ## Read Order
 
