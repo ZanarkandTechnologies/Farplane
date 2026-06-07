@@ -115,19 +115,36 @@
   },
   {
     "id": "global_multitopic_focus_01",
-    "title": "Keep active topics visible in a multitopic thread",
+    "title": "Keep a whole-thread topic ledger in a multitopic thread",
     "query": "We are juggling the global AGENTS rewrite, the eval suite location, and whether hardcases should create runnable evals. Answer the hardcase question, then tell me what behavior we still need to add to AGENTS.md.",
     "reference_points": [
-      "Starts the substantial reply by naming the active topics or topic focus",
+      "Starts the substantial reply by naming a whole-thread topic ledger, not only the newest topic",
       "Includes at least the topics global AGENTS behavior, eval suite location, and hardcase versus runnable eval semantics",
       "Answers the newest hardcase question directly before drifting into older work",
       "Explains that a hardcase is a rich corrected-episode data artifact and not the same as a runnable eval case",
       "Explains that high-priority corrected misses may produce both a hardcase and a runnable eval through the owning eval workflow",
-      "Identifies the AGENTS.md behavior still needed as topic-focus or active-topic labeling for long multitopic threads",
+      "Identifies the AGENTS.md behavior still needed as whole-thread topic ledger handling for long multitopic threads",
+      "Suggests splitting independently executable or context-heavy tangents into separate threads with short handoffs when appropriate",
       "Keeps the answer concise and does not dump the full conversation history"
     ],
     "tags": ["system-prompt", "communication", "multitopic", "focus"],
-    "notes": "Tests whether long-thread responses keep the current topic set visible so the agent does not get lost across parallel prompt, eval, and hardcase work."
+    "notes": "Tests whether long-thread responses keep the whole topic set visible so the agent does not get lost across parallel prompt, eval, and hardcase work."
+  },
+  {
+    "id": "global_thread_ledger_return_01",
+    "title": "Return to the original main topic after a tangent",
+    "query": "We started by slimming the global AGENTS prompt. Then we detoured into eval placement, repent hardcases, validator hardcases, and README positioning. Summarize the current answer, then tell me what is still left from the original AGENTS.md work and whether any tangent should be split into a new thread.",
+    "reference_points": [
+      "Starts with a whole-thread topic ledger rather than only the newest topic",
+      "Includes the original global AGENTS prompt work as the main or root topic",
+      "Includes tangents such as eval placement, repent or hardcase capture, validator hardcases, and README or feature registry positioning",
+      "Answers the newest request without losing the original AGENTS.md objective",
+      "Identifies what remains hanging from the original AGENTS.md work",
+      "Recommends splitting independently executable or context-heavy follow-ups into new threads with short handoffs",
+      "Keeps the answer concise and does not dump the entire chat history"
+    ],
+    "tags": ["system-prompt", "communication", "multitopic", "thread-splitting"],
+    "notes": "Tests that long-thread topic handling preserves original objectives after tangents and knows when to split threads."
   },
   {
     "id": "global_validator_hardcase_capture_01",

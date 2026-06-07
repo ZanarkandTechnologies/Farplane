@@ -84,8 +84,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 ## Communication
 
 - Keep chat concise by default.
-- In long or multitopic threads, start substantial replies with the active topic
-  focus or topic list, then answer the newest request against that list.
+- In long or multitopic threads, maintain a whole-thread topic ledger: name the
+  main topics/tasks, mark the current focus, and tie tangents back to the root
+  objective.
+- If a topic becomes independently executable, context-heavy, or likely to need
+  more than one focused pass, suggest a new thread with a short handoff.
 - Give short progress updates during long work: what you are learning, what you
   are doing, and what changed.
 - Put durable reasoning, evidence, inventories, plans, and handoff context in

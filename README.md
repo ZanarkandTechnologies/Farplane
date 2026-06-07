@@ -105,9 +105,10 @@ flowchart LR
   cover grounding, context gathering, advice routing, proactive action,
   holdback on risky work, skill todo rendering, repent eval capture,
   multitopic focus, and validator-triggered hardcase capture.
-- **Long threads keep their topic ledger.** In multitopic work, substantial
-  replies name the active focus before answering so the agent does not drift
-  between prompt, eval, hardcase, and docs work.
+- **Long threads keep a whole-thread topic ledger.** In multitopic work,
+  substantial replies name the root topic, tangents, and current focus, then
+  split independently executable follow-ups into new-thread handoffs when the
+  current chat is carrying too much.
 
 ## Improvement Loop
 
