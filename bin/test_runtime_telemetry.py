@@ -75,7 +75,7 @@ class RuntimeTelemetryTests(unittest.TestCase):
                         "counts": {"turn_count": 10},
                     },
                 )
-            files = list((project_root / ".harness" / "events").glob("*.jsonl"))
+            files = list((project_root / ".farplane" / "events").glob("*.jsonl"))
             event = json.loads(files[0].read_text(encoding="utf-8").splitlines()[0])
 
         self.assertFalse(posted)

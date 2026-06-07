@@ -215,9 +215,9 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_load_runtime_claim_prefers_nested_run_state_claim(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
-            run_state = project_root / ".harness" / "runs" / "task-0035-building.json"
+            run_state = project_root / ".farplane" / "runs" / "task-0035-building.json"
             run_state.parent.mkdir(parents=True, exist_ok=True)
             run_state.write_text(
                 json.dumps(
@@ -260,7 +260,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_load_current_run_prefers_session_state_over_global_pointer(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
             session_path = session_state_path(project_root, "sess-123")
             session_path.parent.mkdir(parents=True, exist_ok=True)
@@ -300,9 +300,9 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_load_current_run_falls_through_session_stub_to_same_session_global_run_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
-            run_state = project_root / ".harness" / "runs" / "task-0016-building.json"
+            run_state = project_root / ".farplane" / "runs" / "task-0016-building.json"
             run_state.parent.mkdir(parents=True, exist_ok=True)
             run_state.write_text(
                 json.dumps(
@@ -365,7 +365,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_load_current_run_explicit_run_state_outranks_session_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            run_state = project_root / ".harness" / "runs" / "task-0042-building.json"
+            run_state = project_root / ".farplane" / "runs" / "task-0042-building.json"
             run_state.parent.mkdir(parents=True, exist_ok=True)
             run_state.write_text(
                 json.dumps(
@@ -428,7 +428,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_capture_user_turn_initializes_control_session_and_current_run_without_existing_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
 
             captured = capture_user_turn(
                 project_root=project_root,
@@ -481,7 +481,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_conversation_window_trims_to_last_ten_exchanges_and_tracks_cadence(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
             for index in range(12):
                 user_turn = normalize_user_turn(
                     f"$impl-plan TASK-{index:04d}",
@@ -534,7 +534,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_capture_user_turn_impl_plan_stays_control_but_does_not_activate_impl_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
 
             captured = capture_user_turn(
                 project_root=project_root,
@@ -558,7 +558,7 @@ class RuntimeClaimTests(unittest.TestCase):
     def test_capture_user_turn_explicit_impl_seeds_unambiguous_active_ticket_runtime(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
             ticket_path = project_root / "tickets" / "TASK-0016" / "ticket.md"
             ticket_path.parent.mkdir(parents=True, exist_ok=True)
@@ -617,7 +617,7 @@ linked_docs: []
     def test_capture_user_turn_ralph_stays_control_without_activating_impl_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
 
             captured = capture_user_turn(
                 project_root=project_root,
@@ -641,7 +641,7 @@ linked_docs: []
     def test_capture_user_turn_work_stays_control_without_activating_impl_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
 
             captured = capture_user_turn(
                 project_root=project_root,
@@ -665,7 +665,7 @@ linked_docs: []
     def test_capture_user_turn_ignores_non_control_session_without_existing_origin(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
 
             captured = capture_user_turn(
                 project_root=project_root,
@@ -682,7 +682,7 @@ linked_docs: []
     def test_capture_user_turn_requires_dollar_prefixed_control_skill(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
 
             captured = capture_user_turn(
                 project_root=project_root,
@@ -699,7 +699,7 @@ linked_docs: []
     def test_capture_user_turn_rejects_hyphen_suffixed_skill_lookalike(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            (project_root / ".harness" / "state").mkdir(parents=True, exist_ok=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
 
             captured = capture_user_turn(
                 project_root=project_root,
@@ -716,7 +716,7 @@ linked_docs: []
     def test_capture_user_turn_writes_claimed_by_to_ticket(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
             ticket_path = project_root / "tickets" / "TASK-1234" / "ticket.md"
             ticket_path.parent.mkdir(parents=True, exist_ok=True)
@@ -792,11 +792,11 @@ linked_docs: []
     def test_capture_user_turn_updates_only_resolved_session_lane(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
 
-            run_state_a = project_root / ".harness" / "runs" / "task-0042-building.json"
-            run_state_b = project_root / ".harness" / "runs" / "task-0041-planning.json"
+            run_state_a = project_root / ".farplane" / "runs" / "task-0042-building.json"
+            run_state_b = project_root / ".farplane" / "runs" / "task-0041-planning.json"
             run_state_a.parent.mkdir(parents=True, exist_ok=True)
             run_state_a.write_text(
                 json.dumps(
@@ -907,11 +907,11 @@ linked_docs: []
     def test_capture_user_turn_explicit_impl_activates_only_resolved_session_lane(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
 
-            run_state_a = project_root / ".harness" / "runs" / "task-0042-building.json"
-            run_state_b = project_root / ".harness" / "runs" / "task-0041-planning.json"
+            run_state_a = project_root / ".farplane" / "runs" / "task-0042-building.json"
+            run_state_b = project_root / ".farplane" / "runs" / "task-0041-planning.json"
             run_state_a.parent.mkdir(parents=True, exist_ok=True)
             run_state_a.write_text(
                 json.dumps(
@@ -1008,7 +1008,7 @@ linked_docs: []
     def test_capture_user_turn_explicit_qa_seeds_execution_phase(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
             ticket_path = project_root / "tickets" / "TASK-0042" / "ticket.md"
             ticket_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1058,7 +1058,7 @@ linked_docs: []
     def test_capture_user_turn_explicit_demo_forces_demo_requirement(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            state_dir = project_root / ".harness" / "state"
+            state_dir = project_root / ".farplane" / "state"
             state_dir.mkdir(parents=True, exist_ok=True)
             ticket_path = project_root / "tickets" / "TASK-0043" / "ticket.md"
             ticket_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1125,7 +1125,7 @@ linked_docs: []
     def test_is_internal_user_prompt_keeps_real_operator_requests(self) -> None:
         prompt = (
             "please investigate why the hook is creating extra runs in "
-            "/Users/kenjipcx/60x/ai-brain/.harness and fix the harness bug"
+            "/Users/kenjipcx/60x/ai-brain/.farplane and fix the harness bug"
         )
 
         self.assertFalse(is_internal_user_prompt(prompt))

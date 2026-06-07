@@ -98,7 +98,7 @@ def env_enabled() -> bool:
 def has_project_runtime_context(project_root: Path | None) -> bool:
     if project_root is None:
         return False
-    return (project_root / ".harness").exists() or (project_root / "tickets").exists()
+    return (project_root / ".farplane").exists() or (project_root / "tickets").exists()
 
 
 def has_explicit_ticket_selector() -> bool:
@@ -261,7 +261,7 @@ def now_iso() -> str:
 
 
 def append_hook_log(base: Path, payload: dict[str, object]) -> None:
-    log_dir = base / ".harness" / "logs"
+    log_dir = base / ".farplane" / "logs"
     try:
         log_dir.mkdir(parents=True, exist_ok=True)
         log_file = log_dir / "stop-hook.jsonl"
@@ -282,7 +282,7 @@ def write_json(path: Path, payload: dict[str, object]) -> None:
 
 
 def current_run_state_path(project_root: Path) -> Path:
-    return project_root / ".harness" / "state" / "current-run.json"
+    return project_root / ".farplane" / "state" / "current-run.json"
 
 
 def load_current_run(
@@ -2108,7 +2108,7 @@ def skill_opportunity_review_input(
         recent_windows.insert(0, dict(window))
     raw_cwd = payload.get("cwd") or payload.get("workdir") or payload.get("current_working_directory")
     invocation_cwd = str(raw_cwd).strip() if isinstance(raw_cwd, str) and raw_cwd.strip() else ""
-    status_context_cache = project_root / ".harness" / "state" / "notion-context" / "latest-status-context.md"
+    status_context_cache = project_root / ".farplane" / "state" / "notion-context" / "latest-status-context.md"
     workspace_context = {
         "current_project_name": project_root.name,
         "current_project_root": str(project_root),

@@ -78,7 +78,7 @@ flowchart LR
   subgraph Runtime["Runtime + Tooling"]
     hooks[(hooks.json<br/>Stop + input hooks)]:::runtime
     bin[(bin/*<br/>runtime, validators, launchers)]:::runtime
-    harness[(.harness/state/*<br/>session + ticket runtime)]:::runtime
+    harness[(.farplane/state/*<br/>session + ticket runtime)]:::runtime
     agentsDir[(agents/*.toml<br/>bounded specialists)]:::runtime
   end
 
@@ -258,7 +258,7 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - [docs/specs/orchestrator-subagent-loop.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/orchestrator-subagent-loop.md)
   Purpose: lane roles and orchestration boundaries
 - [docs/specs/runtime-surface.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md)
-  Purpose: runtime state and operator-visible surfaces, with `.harness/` as the canonical live root
+  Purpose: runtime state and operator-visible surfaces, with `.farplane/` as the canonical live root
 - [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/ralph/SKILL.md)
   Purpose: public board context surface that selects one eligible filesystem
   ticket or safe tiny-ticket batch and hands the work unit to `$work`

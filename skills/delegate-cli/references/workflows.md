@@ -29,5 +29,5 @@ tickets/TASK-XXXX/artifacts/external-cli/<run-id>/
 Runtime-only bundles stay under:
 
 ```text
-.harness/external-cli/runs/<run-id>/
+.farplane/external-cli/runs/<run-id>/
 ```

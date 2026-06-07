@@ -23,7 +23,7 @@ FARPLANE_IMPL_HOOK = "1"
 # FARPLANE_TELEMETRY_API_TOKEN = "replace-me"
 # FARPLANE_TELEMETRY_TIMEOUT_SECS = "2.0"
 # Hook-backed skill-opportunity proposer. Captured windows stay local under
-# `.harness/state/self-improve/`. The Stop hook launches a background
+# `.farplane/state/self-improve/`. The Stop hook launches a background
 # fire-and-forget Codex job every interval by default. The job creates Notion
 # approval tasks tagged as agent self-improvement; it does not edit skills.
 # Set FARPLANE_SKILL_OPPORTUNITY_APPLY = "0" locally to disable it.
@@ -38,7 +38,7 @@ FARPLANE_SKILL_OPPORTUNITY_NOTION_TAG = "agent self improvement"
 FARPLANE_SKILL_OPPORTUNITY_NOTION_STATUS = "Review"
 # FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN = "1"
 # Optional explicit force-on for Farplane hook behavior. The Stop hook also
-# auto-activates from clear runtime context such as `.harness/`, `tickets/`,
+# auto-activates from clear runtime context such as `.farplane/`, `tickets/`,
 # `IMPL_RESULT`, or explicit ticket selectors.
 # Keep machine-specific hook tuning local if you need non-default behavior.
 

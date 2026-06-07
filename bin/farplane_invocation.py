@@ -386,12 +386,12 @@ def build_run_id(item: WorkItem, phase: str) -> str:
 def resolve_proof_path(path: str, item: WorkItem, root: Path) -> Path:
     resolved = resolve_path(path, root)
     allowed_roots = [
-        (root / ".harness" / "results").resolve(),
+        (root / ".farplane" / "results").resolve(),
         Path(item.artifacts_path).resolve(),
     ]
     if not any(is_under(resolved, allowed_root) for allowed_root in allowed_roots):
         raise InvocationError(
-            "proofPacketPath must stay under .harness/results/ or the ticket artifacts directory"
+            "proofPacketPath must stay under .farplane/results/ or the ticket artifacts directory"
         )
     if resolved.suffix != ".json":
         raise InvocationError("proofPacketPath must end in .json")
@@ -521,7 +521,7 @@ def print_json(payload: Any) -> None:
 
 def build_envelope_from_args(args: argparse.Namespace) -> FarplaneRunEnvelope:
     ticket_id = normalize_ticket_id(args.ticket) if args.ticket else None
-    proof_path = args.proof or f".harness/results/{(ticket_id or 'farplane').lower()}-{args.phase}.proof.json"
+    proof_path = args.proof or f".farplane/results/{(ticket_id or 'farplane').lower()}-{args.phase}.proof.json"
     return FarplaneRunEnvelope(
         workflow_path=args.workflow,
         work_item_id=ticket_id,

@@ -21,7 +21,7 @@ from install_selected_skills import Skill, discover_skills
 MARKER = ".farplane-skill-plugin"
 MARKETPLACE_PATH = Path(".agents/plugins/marketplace.json")
 PLUGIN_ROOT = Path("plugins")
-DEFAULT_OUTPUT_ROOT = Path(".harness/generated/skill-plugins")
+DEFAULT_OUTPUT_ROOT = Path(".farplane/generated/skill-plugins")
 LOCAL_PLUGIN_ROOT = Path(".codex/plugins/farplane")
 PERSONAL_MARKETPLACE_PATH = Path(".agents/plugins/marketplace.json")
 PLUGIN_VERSION = "0.1.0"
@@ -487,7 +487,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--output-root",
         type=Path,
         default=DEFAULT_OUTPUT_ROOT,
-        help="Root for generated repo-local plugin output. Defaults to .harness/generated/skill-plugins.",
+        help="Root for generated repo-local plugin output. Defaults to .farplane/generated/skill-plugins.",
     )
     parser.add_argument(
         "--install-local",

@@ -288,3 +288,4 @@
 2026-06-07 19:32 +0800 | FEAT | make skill todo tier validation write deduplicated hardcase artifacts for clear contract violations and add eval coverage for validator-triggered hardcase capture
 2026-06-07 19:40 +0800 | DOCS | summarize the new self-improving harness loop in README, update the feature registry with global prompt eval and hardcase capture features, and sync the meta-harness map
 2026-06-07 19:32 +0800 | DOCS | extend global AGENTS multitopic focus into a whole-thread topic ledger with split-thread handoff guidance and return-to-root eval coverage
+2026-06-07 20:05 +0800 | MIGRATION | commit pre-launch Farplane identity by switching live project state from `.harness/` to `.farplane/` and documenting Farplane AI as the Zanarkand Labs product shell with skill-owned UI incubation

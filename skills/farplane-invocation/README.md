@@ -25,7 +25,7 @@ needs to route one work item through the existing Farplane skills.
 python3 bin/farplane_invocation.py prepare \
   --ticket TASK-0107 \
   --phase planning \
-  --proof .harness/results/task-0107-plan.proof.json
+  --proof .farplane/results/task-0107-plan.proof.json
 ```
 
 The helper prints a route such as `impl-plan`; Codex still performs the actual

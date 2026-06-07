@@ -308,7 +308,7 @@ runner:
 
 - `local_shared` is implemented and needs no runtime record.
 - `local_worktree` is implemented only when a ticket runtime record already
-  exists at `.harness/state/tickets/<ticket>.runtime.json`; otherwise it returns
+  exists at `.farplane/state/tickets/<ticket>.runtime.json`; otherwise it returns
   `missing_worktree_runtime` and a `bin/ticket_runtime.py ensure ...` setup
   hint.
 - `symphony` and `codex_cloud` always return `unsupported_target` until real

@@ -49,7 +49,7 @@ def _redact_text(raw: object, *, limit: int = MAX_MESSAGE_EXCERPT) -> str:
 
 
 def _event_files(project_root: Path) -> list[Path]:
-    event_dir = project_root / ".harness" / "events"
+    event_dir = project_root / ".farplane" / "events"
     if not event_dir.exists():
         return []
     return sorted(
@@ -85,7 +85,7 @@ def _counter(events: list[dict[str, object]], key: str) -> dict[str, int]:
 
 def summarize_events(project_root: Path) -> dict[str, object]:
     events = load_events(project_root)
-    failed_sync_path = project_root / ".harness" / "events" / "failed-sync.jsonl"
+    failed_sync_path = project_root / ".farplane" / "events" / "failed-sync.jsonl"
     failed_sync_count = 0
     if failed_sync_path.exists():
         failed_sync_count = len([line for line in failed_sync_path.read_text(encoding="utf-8").splitlines() if line.strip()])
@@ -102,7 +102,7 @@ def summarize_events(project_root: Path) -> dict[str, object]:
 
 
 def self_improve_root(project_root: Path) -> Path:
-    return project_root / ".harness" / "state" / "self-improve"
+    return project_root / ".farplane" / "state" / "self-improve"
 
 
 def _windows(project_root: Path) -> list[dict[str, object]]:

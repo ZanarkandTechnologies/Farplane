@@ -20,7 +20,7 @@ Run exactly one Farplane work item from the envelope below.
   "mode": "external_runner",
   "requestedBy": "codex-cloud",
   "requestedAt": "2026-05-06T00:00:00Z",
-  "proofPacketPath": ".harness/results/task-0123-cloud.proof.json"
+  "proofPacketPath": ".farplane/results/task-0123-cloud.proof.json"
 }
 ```
 

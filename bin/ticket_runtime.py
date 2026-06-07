@@ -36,7 +36,7 @@ def now_iso() -> str:
 
 
 def runtime_state_dir(root: Path | None = None) -> Path:
-    return (root or project_root()) / ".harness" / "state"
+    return (root or project_root()) / ".farplane" / "state"
 
 
 def ticket_runtime_dir(root: Path | None = None) -> Path:
@@ -52,7 +52,7 @@ def ports_state_path(root: Path | None = None) -> Path:
 
 
 def runtime_record_path(ticket_id: str, root: Path | None = None) -> Path:
-    # MEM-0060: ticket-scoped runtime metadata lives under `.harness/state/tickets/`.
+    # MEM-0060: ticket-scoped runtime metadata lives under `.farplane/state/tickets/`.
     return ticket_runtime_dir(root) / f"{ticket_id}.runtime.json"
 
 

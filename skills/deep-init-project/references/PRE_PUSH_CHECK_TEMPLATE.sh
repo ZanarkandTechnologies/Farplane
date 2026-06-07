@@ -23,7 +23,7 @@ trap cleanup EXIT
 
 is_excluded_path() {
   case "$1" in
-    .git/*|.harness/*|.next/*|dist/*|build/*|coverage/*|out/*|tmp/*|temp/*|vendor/*|third_party/*|node_modules/*|.turbo/*|.cache/*|.desloppify/*|generated/*|__generated__/*)
+    .git/*|.farplane/*|.next/*|dist/*|build/*|coverage/*|out/*|tmp/*|temp/*|vendor/*|third_party/*|node_modules/*|.turbo/*|.cache/*|.desloppify/*|generated/*|__generated__/*)
       return 0
       ;;
     *)

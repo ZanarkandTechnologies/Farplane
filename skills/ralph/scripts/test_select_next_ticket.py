@@ -214,7 +214,7 @@ class RalphSelectorTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_ticket(root, "TASK-0001", {"compute_target": "local_worktree"})
-            runtime_record = root / ".harness" / "state" / "tickets" / "TASK-0001.runtime.json"
+            runtime_record = root / ".farplane" / "state" / "tickets" / "TASK-0001.runtime.json"
             runtime_record.parent.mkdir(parents=True, exist_ok=True)
             runtime_record.write_text('{"ticket_id":"TASK-0001"}\n', encoding="utf-8")
 

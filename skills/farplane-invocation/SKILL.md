@@ -100,7 +100,7 @@ configured board source and returns a manual writeback result for evidence
 instead of silently mutating ticket files.
 
 `farplane_compute.py` is also read-first/admission-only. It can select
-`local_shared`, defer `local_worktree` until `.harness/state/tickets/*.runtime.json`
+`local_shared`, defer `local_worktree` until `.farplane/state/tickets/*.runtime.json`
 exists, and block `symphony` or `codex_cloud` until external adapters exist.
 
 For Symphony-shaped requests, read
@@ -128,7 +128,7 @@ filesystem adapter is the only live adapter today.
 python3 bin/farplane_invocation.py prepare \
   --ticket TASK-0107 \
   --phase planning \
-  --proof .harness/results/task-0107-plan.proof.json
+  --proof .farplane/results/task-0107-plan.proof.json
 ```
 
 If the result routes to `impl-plan`, use the `impl-plan` skill against the
@@ -140,7 +140,7 @@ selected ticket and keep the ticket in `review` until approval exists.
 python3 bin/farplane_invocation.py write-proof \
   --ticket TASK-0107 \
   --phase planning \
-  --proof .harness/results/task-0107-plan.proof.json \
+  --proof .farplane/results/task-0107-plan.proof.json \
   --verdict pass \
   --next-action "ready for build"
 ```

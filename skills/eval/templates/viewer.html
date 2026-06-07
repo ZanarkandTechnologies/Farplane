@@ -916,7 +916,7 @@
         const summary = state.summary;
         const cards = [
           { label: "Job", value: summary.label || "--", subtle: summary.job_id || "" },
-          { label: "Harness", value: summary.harness || "--", subtle: `Judge: ${summary.judge_harness || "--"}` },
+          { label: "Harness", value: summary.farplane || "--", subtle: `Judge: ${summary.judge_harness || "--"}` },
           { label: "Suite", value: summary.suite || "--", subtle: sourceLabel(summary.task_files) },
           { label: "Tasks", value: numberValue(summary.task_count), subtle: `${countDetailsLoaded()} details loaded` },
           { label: "Pass rate", value: percent(summary.pass_rate), subtle: formatDate(summary.created_at) },
@@ -1052,7 +1052,7 @@
               <span class="badge ${judge.pass ? "pass-true" : "pass-false"}">${judge.pass ? "pass" : "needs work"}</span>
               <span class="tag">${escapeHtml(task.id || taskRow.task_id)}</span>
               ${(taskTags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}
-              <span class="tag">${escapeHtml(`agent ${detail.run_config && detail.run_config.harness ? detail.run_config.harness : "--"}`)}</span>
+              <span class="tag">${escapeHtml(`agent ${detail.run_config && detail.run_config.farplane ? detail.run_config.farplane : "--"}`)}</span>
               <span class="tag">${escapeHtml(`judge ${detail.run_config && detail.run_config.judge_harness ? detail.run_config.judge_harness : "--"}`)}</span>
             </div>
           </div>

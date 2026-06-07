@@ -81,14 +81,14 @@ class TmuxHelperOutputFormattingTests(unittest.TestCase):
                 "tmux_pane": "%42",
                 "tmux_session": "main",
                 "run_state": str(
-                    ROOT / ".harness" / "runs" / "task-0025-building-20260410T091500000000Z.json"
+                    ROOT / ".farplane" / "runs" / "task-0025-building-20260410T091500000000Z.json"
                 ),
             }
         )
 
         self.assertEqual(
             line,
-            "followup ok: TASK-0025 -> building pane=%42 session=main run=.harness/runs/task-0025-building-20260410T091500000000Z.json",
+            "followup ok: TASK-0025 -> building pane=%42 session=main run=.farplane/runs/task-0025-building-20260410T091500000000Z.json",
         )
 
     def test_print_followup_failure_keeps_actionable_shape(self) -> None:

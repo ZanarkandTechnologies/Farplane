@@ -99,7 +99,7 @@ CAPABILITIES: dict[str, ComputeCapability] = {
         requires_external_runner=False,
         requires_runtime_record=True,
         setup_hint=(
-            "prepare .harness/state/tickets/<ticket>.runtime.json with "
+            "prepare .farplane/state/tickets/<ticket>.runtime.json with "
             "bin/ticket_runtime.py ensure or pr-runtime"
         ),
         handoff="route to the selected Farplane phase skill after the runtime record exists",
@@ -128,7 +128,7 @@ CAPABILITIES: dict[str, ComputeCapability] = {
 
 
 def runtime_record_path(ticket_id: str, root: Path) -> Path:
-    return root / ".harness" / "state" / "tickets" / f"{ticket_id}.runtime.json"
+    return root / ".farplane" / "state" / "tickets" / f"{ticket_id}.runtime.json"
 
 
 def select_compute(

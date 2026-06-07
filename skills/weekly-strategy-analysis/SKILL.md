@@ -72,7 +72,7 @@ meeting notes, people signals, Codex threads, and opportunity research.
 - [ ] Do not count automation/system maintenance as strategic progress unless
       it directly supported a live project or goal.
 - [ ] Refresh the compact Notion status cache at
-      `/Users/kenjipcx/coding-harness/Farplane/.harness/state/notion-context/latest-status-context.md`.
+      `/Users/kenjipcx/coding-harness/Farplane/.farplane/state/notion-context/latest-status-context.md`.
 - [ ] If Notion status refresh fails, preserve the previous cache and write a
       clear error note when possible.
 - [ ] Write the bounded local context bundle before deep synthesis.
@@ -268,7 +268,7 @@ database contents, or large unrelated logs.
 Refresh the compact local status cache inside this weekly run:
 
 ```text
-/Users/kenjipcx/coding-harness/Farplane/.harness/state/notion-context/latest-status-context.md
+/Users/kenjipcx/coding-harness/Farplane/.farplane/state/notion-context/latest-status-context.md
 ```
 
 Include generated timestamp, source queries/pages used, current project/goal

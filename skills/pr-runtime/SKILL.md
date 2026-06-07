@@ -14,7 +14,7 @@ allowed-tools: Read, Glob, Grep
 ## Todo List
 
 - [ ] Read the selected ticket, branch/PR context, compute target, QA needs, and
-  any existing `.harness/state/tickets/*.runtime.json` record.
+  any existing `.farplane/state/tickets/*.runtime.json` record.
 - [ ] Use [plan](../plan/SKILL.md) when checkout mode, runtime mode, or compute
   target is a real decision.
 - [ ] Decide checkout mode: shared checkout, isolated worktree, or existing
@@ -26,7 +26,7 @@ allowed-tools: Read, Glob, Grep
   record instead of chat-only port notes.
 - [ ] Hand the runtime record to [qa](../qa/SKILL.md) so browser/API evidence
   runs against the declared target.
-- [ ] Keep runtime state under `.harness/state/`; do not write live ports or
+- [ ] Keep runtime state under `.farplane/state/`; do not write live ports or
   transient targets into tracked docs.
 - [ ] Record the selected checkout mode, runtime mode, runtime record path, QA
   target, and reason in the owning ticket or handoff.
@@ -77,7 +77,7 @@ reads the target.
 1. Treating a branch name as filesystem isolation when two live writers still
    share the same checkout.
 2. Storing live ports or runtime targets in tracked repo files instead of
-   `.harness/state/`.
+   `.farplane/state/`.
 3. Making QA guess the correct target from chat instead of reading the runtime
    record.
 
@@ -86,7 +86,7 @@ reads the target.
 When this skill is used, return:
 
 1. `Best:` chosen checkout mode and runtime mode
-2. `Runtime record:` path under `.harness/state/`
+2. `Runtime record:` path under `.farplane/state/`
 3. `QA target:` live frontend/backend target or explicit `none`
 4. `Why:` one short line explaining why isolation was or was not required
 
@@ -94,7 +94,7 @@ When this skill is used, return:
 
 - Never allow more than one live writer in the same filesystem.
 - Tickets remain the durable task surface; runtime records stay under
-  `.harness/state/`.
+  `.farplane/state/`.
 - Existing PR branch follow-up should default to isolated checkout.
 - Hand QA live frontend/backend targets through the runtime record so
   [qa](../qa/SKILL.md) does not infer ports, processes, or worktrees from chat.
@@ -114,11 +114,11 @@ Use:
 
 Runtime records live at:
 
-- `.harness/state/tickets/TASK-XXXX.runtime.json`
+- `.farplane/state/tickets/TASK-XXXX.runtime.json`
 
 Port reservations live at:
 
-- `.harness/state/ports.json`
+- `.farplane/state/ports.json`
 
 ## Minimal Example
 

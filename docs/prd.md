@@ -42,7 +42,7 @@ Farplane to work.
 
 ## Goals
 
-- Farplane writes deterministic local JSONL events under `.harness/events/`.
+- Farplane writes deterministic local JSONL events under `.farplane/events/`.
 - Existing hook telemetry calls reuse the local event writer before attempting
   network sync.
 - Aikage accepts a richer `farplane_event` ingest shape through Convex HTTP.
@@ -59,7 +59,7 @@ Farplane to work.
 
 - Primary candidate: event ledger parse pass.
 - Direction: pass/fail.
-- Verification idea: parse every `.harness/events/*.jsonl` event emitted by
+- Verification idea: parse every `.farplane/events/*.jsonl` event emitted by
   tests and validate required fields.
 - Guard idea: existing hook tests plus new runtime telemetry tests pass.
 
@@ -200,7 +200,7 @@ duplicative, or worth turning into methods.
 - FR-1: Define a versioned `FarplaneEvent` envelope with required fields:
   `schema_version`, `event_id`, `event_type`, `timestamp`, `source`,
   `project_root`, `session_id`, and optional ticket/skill/hook/sync fields.
-- FR-2: Store local events under `.harness/events/YYYY-MM-DD.jsonl`.
+- FR-2: Store local events under `.farplane/events/YYYY-MM-DD.jsonl`.
 - FR-3: Emit local events from user-turn capture, stop-hook completion,
   self-improvement review decisions, telemetry sync attempts, and validators
   where practical.

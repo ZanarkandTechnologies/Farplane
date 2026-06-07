@@ -24,7 +24,7 @@ The install-time global harness contract now lives at `templates/global/AGENTS.m
 
 ## Local Operating Rules
 
-- Prefer `.harness/` for live runtime state.
+- Prefer `.farplane/` for live runtime state.
 """
 
 RUNTIME_SURFACE_TEXT = """\
@@ -34,14 +34,14 @@ There is no separate public retired execution surface anymore.
 
 ## Documentation Rules
 
-- Public docs should describe `.harness/` as the canonical live runtime root.
+- Public docs should describe `.farplane/` as the canonical live runtime root.
 """
 
 BIN_README_TEXT = """\
 # Bin
 
 - raw `session_id` should stay runtime-only
-- `.harness/state/current-run.json`
+- `.farplane/state/current-run.json`
 """
 
 TICKETS_README_TEXT = """\

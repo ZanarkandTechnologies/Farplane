@@ -32,18 +32,18 @@ RULES: tuple[HarnessRule, ...] = (
         required_substrings=(
             "project-local context for developing Farplane itself.",
             "templates/global/AGENTS.md",
-            "Prefer `.harness/` for live runtime state.",
+            "Prefer `.farplane/` for live runtime state.",
         ),
         remediation=(
             "keep root AGENTS repo-local, point install policy at "
-            "`templates/global/AGENTS.md`, and preserve `.harness/` as the "
+            "`templates/global/AGENTS.md`, and preserve `.farplane/` as the "
             "live runtime root"
         ),
     ),
     HarnessRule(
         relative_path="docs/specs/runtime-surface.md",
         required_substrings=(
-            "Public docs should describe `.harness/` as the canonical live runtime root.",
+            "Public docs should describe `.farplane/` as the canonical live runtime root.",
             "There is no separate public retired execution surface anymore.",
         ),
         forbidden_substrings=(
@@ -52,7 +52,7 @@ RULES: tuple[HarnessRule, ...] = (
         ),
         remediation=(
             "keep runtime-surface docs on the live Farplane contract: "
-            "`.harness/` is canonical and retired runtime paths belong only "
+            "`.farplane/` is canonical and retired runtime paths belong only "
             "in historical surfaces"
         ),
     ),
@@ -60,11 +60,11 @@ RULES: tuple[HarnessRule, ...] = (
         relative_path="bin/README.md",
         required_substrings=(
             "raw `session_id` should stay runtime-only",
-            ".harness/state/current-run.json",
+            ".farplane/state/current-run.json",
         ),
         remediation=(
             "document runtime identity as runtime-only and keep public runtime "
-            "examples on `.harness/` surfaces"
+            "examples on `.farplane/` surfaces"
         ),
     ),
     HarnessRule(

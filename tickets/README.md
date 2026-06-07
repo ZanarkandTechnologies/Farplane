@@ -6,7 +6,7 @@ One source of truth per concern:
 
 - frontmatter = queue state and execution state
 - body = plan, references, evidence, and blockers
-- `.harness/state/` = live runtime state
+- `.farplane/state/` = live runtime state
 - `docs/` = durable knowledge after the ticket is done
 - transcript = disposable context, not the canonical resume surface
 
@@ -41,7 +41,7 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 ## Progress Surface Policy
 
 - the ticket is the canonical durable progress surface
-- `.harness/state/` is runtime-only and may track active claim/lane/session/verdict state
+- `.farplane/state/` is runtime-only and may track active claim/lane/session/verdict state
 - transcripts are useful evidence but are not the canonical resume surface
 - deliberate reset/resume requires the ticket to carry a clear `next_action`,
   `last_verification`, blockers, and evidence references
@@ -101,7 +101,7 @@ last_verification: none
   adapter support them.
   - `local_shared` runs in the current checkout.
   - `local_worktree` requires a ticket runtime record under
-    `.harness/state/tickets/TASK-XXXX.runtime.json`.
+    `.farplane/state/tickets/TASK-XXXX.runtime.json`.
   - `symphony` and `codex_cloud` are future external-adapter targets and must
     stay blocked in local Farplane until those adapters exist.
 - `depends_on`: structural prerequisites

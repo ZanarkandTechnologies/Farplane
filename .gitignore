@@ -26,7 +26,7 @@ memories/
 tmp/
 .personality_migration
 .omx/
-.harness/
+.farplane/
 .codex/evals/*
 !.codex/evals/
 !.codex/evals/tasks/

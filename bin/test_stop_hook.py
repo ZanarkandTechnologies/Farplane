@@ -301,9 +301,9 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
     def test_maybe_launch_skill_opportunity_review_dry_run_writes_report_and_marks_window(self) -> None:
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-") as td:
             project_root = Path(td)
-            (project_root / ".harness" / "state").mkdir(parents=True)
-            (project_root / ".harness" / "state" / "notion-context").mkdir(parents=True)
-            (project_root / ".harness" / "state" / "notion-context" / "latest-status-context.md").write_text(
+            (project_root / ".farplane" / "state").mkdir(parents=True)
+            (project_root / ".farplane" / "state" / "notion-context").mkdir(parents=True)
+            (project_root / ".farplane" / "state" / "notion-context" / "latest-status-context.md").write_text(
                 "# status\n",
                 encoding="utf-8",
             )
@@ -337,7 +337,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             report = json.loads((run_path / "report.json").read_text(encoding="utf-8"))
             input_payload = json.loads((run_path / "input.json").read_text(encoding="utf-8"))
             saved_window = json.loads(
-                (project_root / ".harness" / "state" / "self-improve" / "windows" / "sess-123.json").read_text(
+                (project_root / ".farplane" / "state" / "self-improve" / "windows" / "sess-123.json").read_text(
                     encoding="utf-8"
                 )
             )
@@ -376,7 +376,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(input_payload["workspace_context"]["hook_invocation_cwd"], str(cwd))
         self.assertEqual(
             input_payload["workspace_context"]["status_context_cache"],
-            str(project_root / ".harness" / "state" / "notion-context" / "latest-status-context.md"),
+            str(project_root / ".farplane" / "state" / "notion-context" / "latest-status-context.md"),
         )
         self.assertTrue(input_payload["workspace_context"]["status_context_cache_exists"])
         self.assertEqual(input_payload["workspace_context"]["task_scope_default"], "harness_self_improvement")
@@ -391,9 +391,9 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 (base / "skills" / "harness-advisor" / "SKILL.md").write_text("# Harness Advisor\n", encoding="utf-8")
                 (base / "tickets" / "TASK-0001").mkdir(parents=True)
                 (base / "tickets" / "TASK-0001" / "ticket.md").write_text("# TASK-0001\n", encoding="utf-8")
-                (project_root / ".harness" / "state" / "notion-context").mkdir(parents=True)
+                (project_root / ".farplane" / "state" / "notion-context").mkdir(parents=True)
                 project_status_context = (
-                    project_root / ".harness" / "state" / "notion-context" / "latest-status-context.md"
+                    project_root / ".farplane" / "state" / "notion-context" / "latest-status-context.md"
                 )
                 project_status_context.write_text("# Project status\n", encoding="utf-8")
                 window = {
@@ -470,7 +470,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             self.stop_hook.log_hooklet_result(base, hooklet)
             rows = [
                 json.loads(line)
-                for line in (base / ".harness" / "logs" / "stop-hook.jsonl").read_text(encoding="utf-8").splitlines()
+                for line in (base / ".farplane" / "logs" / "stop-hook.jsonl").read_text(encoding="utf-8").splitlines()
             ]
 
         self.assertEqual(rows[0]["mode"], "hooklet")
@@ -482,9 +482,9 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
     def test_stop_hook_launches_learning_review_without_persisted_runtime_turn(self) -> None:
         with tempfile.TemporaryDirectory(prefix="stop-hook-learning-main-") as td:
             project_root = Path(td)
-            (project_root / ".harness" / "state" / "self-improve" / "windows").mkdir(parents=True)
+            (project_root / ".farplane" / "state" / "self-improve" / "windows").mkdir(parents=True)
             (project_root / "tickets").mkdir(parents=True)
-            window_path = project_root / ".harness" / "state" / "self-improve" / "windows" / "sess-main.json"
+            window_path = project_root / ".farplane" / "state" / "self-improve" / "windows" / "sess-main.json"
             window_path.write_text(
                 json.dumps(
                     {
@@ -545,7 +545,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 result = self.stop_hook.main()
 
             saved_window = json.loads(window_path.read_text(encoding="utf-8"))
-            reports = sorted((project_root / ".harness" / "state" / "self-improve" / "applications").glob("*/report.json"))
+            reports = sorted((project_root / ".farplane" / "state" / "self-improve" / "applications").glob("*/report.json"))
 
         self.assertEqual(result, 0)
         self.assertTrue(json.loads(stdout_buffer.getvalue())["continue"])
@@ -574,7 +574,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         probe = load_self_improve_probe_module()
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-probe-") as td:
             project_root = Path(td)
-            (project_root / ".harness" / "state").mkdir(parents=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True)
             (project_root / "tickets").mkdir(parents=True)
             stdout_buffer = io.StringIO()
 
@@ -602,14 +602,14 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(payload["hooklet_result"]["readiness"], "ready")
         self.assertEqual(payload["launch_result"]["pid"], "dry-run")
         self.assertTrue(payload["recent_application_runs"][0]["report_path"].endswith("report.json"))
-        self.assertFalse((project_root / ".harness" / "state" / "current-run.json").exists())
-        self.assertFalse((project_root / ".harness" / "state" / "sessions" / "probe-session.json").exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "current-run.json").exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "probe-session.json").exists())
 
     def test_self_improve_hook_probe_honors_custom_interval(self) -> None:
         probe = load_self_improve_probe_module()
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-probe-") as td:
             project_root = Path(td)
-            (project_root / ".harness" / "state").mkdir(parents=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True)
             (project_root / "tickets").mkdir(parents=True)
             stdout_buffer = io.StringIO()
 
@@ -640,7 +640,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         probe = load_self_improve_probe_module()
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-probe-") as td:
             project_root = Path(td)
-            (project_root / ".harness" / "state").mkdir(parents=True)
+            (project_root / ".farplane" / "state").mkdir(parents=True)
             (project_root / "tickets").mkdir(parents=True)
             stdout_buffer = io.StringIO()
 
@@ -1548,7 +1548,7 @@ class StopHookTmuxFollowupTests(unittest.TestCase):
         current_run = {
             "tmux_session": "main",
             "auto_continue": True,
-            "run_state": ".harness/runs/task-0033-building.json",
+            "run_state": ".farplane/runs/task-0033-building.json",
         }
         captured: dict[str, object] = {}
 

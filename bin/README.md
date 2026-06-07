@@ -89,7 +89,7 @@ Runtime routing is session-first for parallel Codex usage:
 
 - explicit run-state selector when a managed lane exports one
 - hook `session_id` for lane-scoped session state
-- `.harness/state/current-run.json` as the live current-run pointer / last-active selector
+- `.farplane/state/current-run.json` as the live current-run pointer / last-active selector
 - only `session_origin=control` sessions may persist canonical `last_user_turn` and advance the live current-run pointer
 
 See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md) for the canonical decision table.
@@ -138,7 +138,7 @@ success quiet and make failure output the thing that stands out.
 - `python3 -m unittest bin/test_farplane_compute.py`
   Use to prove compute precedence, blockers, worktree runtime hints, and future
   target behavior without launching local or remote compute
-- `python3 bin/farplane_invocation.py prepare --ticket <ticket> --phase planning --proof .harness/results/<ticket>.proof.json`
+- `python3 bin/farplane_invocation.py prepare --ticket <ticket> --phase planning --proof .farplane/results/<ticket>.proof.json`
   Use to validate a local Farplane invocation envelope and inspect the selected
   skill route without launching Codex
 - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
@@ -148,13 +148,13 @@ success quiet and make failure output the thing that stands out.
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
 - `python3 bin/self_improve_hook_probe.py simulate --session-id self-improve-probe --turns 10`
   Use to prove the self-learning hook path writes a rolling window and dry-run
-  review report under `.harness/state/self-improve/`. Add `--live` only when
+  review report under `.farplane/state/self-improve/`. Add `--live` only when
   you intentionally want to spawn the real Codex sidecar. The generated input
   includes `workspace_context` so the sidecar can see the originating project,
   invocation cwd, and weekly Notion status cache path while still defaulting
   clear findings to reusable Farplane harness-improvement tasks. The `simulate`
   and `force-review` outputs include `hooklet_result`, the same named result
-  shape logged to `.harness/logs/stop-hook.jsonl` by the live Stop hook. Sidecar
+  shape logged to `.farplane/logs/stop-hook.jsonl` by the live Stop hook. Sidecar
   reports include a five-hop `proof_hops` checklist for `user_capture`,
   `assistant_capture`, `rolling_window_write`, `background_codex_launch`, and
   `notion_task_creation`; dry-run reports mark the live Notion hop as
@@ -165,7 +165,7 @@ success quiet and make failure output the thing that stands out.
 Examples:
 
 ```text
-followup ok: TASK-0033 -> building pane=%42 session=main run=.harness/runs/task-0033-building-20260410T091500000000Z.json dry-run
+followup ok: TASK-0033 -> building pane=%42 session=main run=.farplane/runs/task-0033-building-20260410T091500000000Z.json dry-run
 ```
 
 ```text

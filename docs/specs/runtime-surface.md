@@ -70,7 +70,7 @@ context, not automatic run triggers.
 For hook-backed skill-opportunity approval capture, the runtime contract is:
 
 - `UserPromptSubmit` appends only control-session user turns to a bounded
-  rolling conversation window under `.harness/state/self-improve/windows/`
+  rolling conversation window under `.farplane/state/self-improve/windows/`
 - `Stop` appends the matching assistant response and trims the window to the
   configured maximum, defaulting to 10 exchanges
 - every configured interval, defaulting to 10 captured user turns,
@@ -80,16 +80,16 @@ For hook-backed skill-opportunity approval capture, the runtime contract is:
   defaulting to 5 sessions, so repeated complaints and painful patterns can be
   recognized across nearby conversations
 - proposer input and output live under
-  `.harness/state/self-improve/applications/`
+  `.farplane/state/self-improve/applications/`
 - Stop hook logs every self-improve sidecar readiness check as a named
-  `skill-opportunity-review` hooklet row in `.harness/logs/stop-hook.jsonl`,
+  `skill-opportunity-review` hooklet row in `.farplane/logs/stop-hook.jsonl`,
   including skipped checks that are not yet due. The row carries `status`,
   `readiness`, `reason`, trigger counts, project root, session id, and artifact
   handles.
 - proposer side effects are bounded to Notion Tasks: it creates approval tasks
   tagged `agent self improvement` using the Notion-context Tasks data source
 - the proposer must not mutate local repo files, including skills, docs,
-  memory, tickets, install config, hooks, bin helpers, agents, or `.harness/`
+  memory, tickets, install config, hooks, bin helpers, agents, or `.farplane/`
 - Stop-hook stdout remains reserved for the single hook JSON payload; proposer
   stdout and stderr are redirected to run-scoped files
 
@@ -108,7 +108,7 @@ For serial `$ralph`, the runtime contract is:
 For ticket-scoped isolated checkout and local QA targeting, runtime may also
 persist ticket runtime records under:
 
-- `.harness/state/tickets/TASK-XXXX.runtime.json`
+- `.farplane/state/tickets/TASK-XXXX.runtime.json`
 
 Those records are runtime-only and may carry:
 
@@ -143,12 +143,12 @@ Those records are runtime-only and may carry:
   compute-heavy execution.
 - Public docs should describe `batch-work` as a standalone explicit range/list
   skill that shares `$work` batch proof policy.
-- Public docs should describe `.harness/` as the canonical live runtime root.
+- Public docs should describe `.farplane/` as the canonical live runtime root.
 - `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
 - `ticket_runtime.py` may be documented as the narrow ticket-runtime shim for
   isolated checkout, declared runtime launch/stop, and live QA target setup.
 - Public docs should describe `current-run.json` as control-session-owned state, not a generic sink for every prompt-bearing session.
-- Public docs should describe `.harness/state/tickets/*.runtime.json` as
+- Public docs should describe `.farplane/state/tickets/*.runtime.json` as
   runtime-only metadata, not as a durable replacement for ticket truth.
 - Public docs should describe same-ticket `$impl` continuation as requiring both the session-scoped loop gate and the matching runtime claim.
 - Public docs should describe native `/goal` as the preferred surface for

@@ -121,7 +121,7 @@ function isEvalSummary(value: unknown): value is EvalSummary {
     typeof value.job_id === 'string' &&
     typeof value.label === 'string' &&
     typeof value.created_at === 'string' &&
-    typeof value.harness === 'string' &&
+    typeof value.farplane === 'string' &&
     typeof value.judge_harness === 'string' &&
     typeof value.suite === 'string' &&
     typeof value.task_count === 'number' &&
@@ -380,7 +380,7 @@ function App() {
                 <CardContent className="grid gap-3">
                   <Metric label="Pass rate" value={summary ? formatPercent(summary.pass_rate) : '--'} />
                   <Metric label="Tasks" value={summary ? String(summary.task_count) : '--'} />
-                  <Metric label="Harness" value={summary?.harness ?? '--'} />
+                  <Metric label="Harness" value={summary?.farplane ?? '--'} />
                   <Metric label="Judge" value={summary?.judge_harness ?? '--'} />
                   {summary ? <p className="text-xs text-muted-foreground">{formatDate(summary.created_at)}</p> : null}
                 </CardContent>
@@ -618,7 +618,7 @@ function TaskDetailPanel({ detail, fallback }: { detail?: TaskDetail; fallback: 
 
         <ReportSection title="Paths" description="Raw artifacts and run configuration.">
           <PathRow label="Agent answer" value={detail.agent.answer_path} />
-          <PathRow label="Harness" value={detail.run_config.harness} />
+          <PathRow label="Harness" value={detail.run_config.farplane} />
           <PathRow label="Judge" value={detail.run_config.judge_harness} />
         </ReportSection>
     </div>

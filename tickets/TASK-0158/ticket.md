@@ -298,7 +298,7 @@ flowchart LR
 ## Runtime Decision
 - `Checkout mode:` shared checkout
 - `Runtime mode:` shared
-- `Runtime record:` none; `.harness/state/tickets/TASK-0158.runtime.json` is not needed
+- `Runtime record:` none; `.farplane/state/tickets/TASK-0158.runtime.json` is not needed
 - `QA target:` none; this ticket changes skill/docs/source-run artifacts and has no live frontend/backend target
 - `Why:` a single local writer can verify the ticket through deterministic file checks, registry checks, source artifact inspection, and review without branch isolation or a live server
 

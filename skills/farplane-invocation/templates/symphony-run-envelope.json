@@ -7,5 +7,5 @@
   "mode": "symphony_worker",
   "requestedBy": "symphony",
   "requestedAt": "2026-05-05T00:00:00Z",
-  "proofPacketPath": ".harness/results/symphony-task-0112.proof.json"
+  "proofPacketPath": ".farplane/results/symphony-task-0112.proof.json"
 }

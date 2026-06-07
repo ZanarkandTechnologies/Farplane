@@ -34,10 +34,10 @@ belongs in the ticket `Evidence` section.
 
 ### Runtime State
 
-`.harness/state/sessions/{session_id}.json` is the preferred runtime lane surface
+`.farplane/state/sessions/{session_id}.json` is the preferred runtime lane surface
 when hook `session_id` is available.
 
-`.harness/state/current-run.json` is the runtime-only compatibility state.
+`.farplane/state/current-run.json` is the runtime-only compatibility state.
 
 It may carry:
 
@@ -61,7 +61,7 @@ Lookup precedence should be:
 
 1. explicit run-state selector for a managed lane
 2. hook `session_id` mapped to a session state file
-3. `.harness/state/current-run.json`
+3. `.farplane/state/current-run.json`
 
 It must not become the durable source of:
 

@@ -37,7 +37,7 @@ def _safe_metadata_value(value: object) -> str | int | float | bool | None:
 
 def event_log_path(project_root: Path, timestamp: str) -> Path:
     day = timestamp[:10] if len(timestamp) >= 10 else now_iso()[:10]
-    return project_root / ".harness" / "events" / f"{day}.jsonl"
+    return project_root / ".farplane" / "events" / f"{day}.jsonl"
 
 
 def telemetry_config() -> tuple[str, str, float]:
@@ -134,7 +134,7 @@ def emit_farplane_event(project_root: Path, event: Mapping[str, object]) -> bool
             response.read(1)
             return 200 <= response.status < 300
     except (error.URLError, TimeoutError, OSError):
-        failed = project_root / ".harness" / "events" / "failed-sync.jsonl"
+        failed = project_root / ".farplane" / "events" / "failed-sync.jsonl"
         failed.parent.mkdir(parents=True, exist_ok=True)
         with failed.open("a", encoding="utf-8") as handle:
             handle.write(

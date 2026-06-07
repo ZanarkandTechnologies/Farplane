@@ -15,6 +15,22 @@ Use this when writing or revising task files and judge prompts.
 - Keep task prompts realistic. The task should look like a user request the
   harness would actually receive.
 
+## Admission And Aggregation
+
+- Adding a feature should trigger a proof-surface decision, not an automatic
+  eval row.
+- Write an eval when the feature is behavioral, prompt-like, workflow-like,
+  easy to regress silently, or came from a high-priority correction.
+- Prefer a deterministic test, validator, or static check when the feature is
+  structural and the expected output can be checked mechanically.
+- Skip a new eval when the change is tiny, one-off, already covered by a
+  stronger proof surface, or the eval would only assert wording.
+- Use a broad "response format" eval as a smoke canary for always-on behavior
+  bundles, but do not overload one task with every important behavior. Broad
+  canaries catch drift; narrow evals diagnose regressions.
+- If a broad canary fails twice or hides the cause of failure, split the missed
+  behavior into its own focused eval or deterministic check.
+
 ## Judge Design
 
 - Do not ask the judge for 0-100 scores. Small numeric differences are false

@@ -215,7 +215,7 @@ For harness-design research and external patterns:
   working inside Farplane, using the `reviewer` lane for material review when
   native subagents are available. See `MEM-0127` and `MEM-0129`.
 - Keep live repo-owned skills and docs Farplane-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
-- Prefer `.harness/` for live runtime state.
+- Prefer `.farplane/` for live runtime state.
 - Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.
 - For Farplane harness brainstorming, explicitly compare repo-local `AGENTS.md`, `templates/global/AGENTS.md`, `skills/*`, `agents/*.toml`, and hooks / `bin/*`, then explain why the chosen surface should change now and why the others should not be the primary change surface.
 - For harness-surface placement decisions, use `docs/specs/harness-engineering-doctrine.md` before expanding root policy, subagents, hooks, or validators.

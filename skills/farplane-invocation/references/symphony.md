@@ -77,14 +77,14 @@ local review/proof decides whether the work is trustworthy.
 - Use `workItemPath` when Symphony materializes a filesystem ticket in the
   workspace. Future Linear/Notion adapters may use `workItemId` once those
   adapters exist.
-- Keep `proofPacketPath` under `.harness/results/` or the ticket's
+- Keep `proofPacketPath` under `.farplane/results/` or the ticket's
   `artifacts/` directory.
 
 ## Prompt Shape
 
 ```text
 Use the farplane-invocation skill with this request file:
-.harness/requests/<ticket>.farplane-run.json
+.farplane/requests/<ticket>.farplane-run.json
 
 After the selected phase skill finishes, write the requested ProofPacket. Do not
 poll the board, launch another scheduler, submit cloud work, or infer another
@@ -104,7 +104,7 @@ The command should return JSON with:
 - `workflow.name: "farplane-invocation"`
 - `compute.target: "local_shared"`
 - `route.skillName` for the requested phase
-- `proof_packet_path` under `.harness/results/`
+- `proof_packet_path` under `.farplane/results/`
 
 ## AI Misread Risks
 

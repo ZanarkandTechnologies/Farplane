@@ -17,7 +17,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
     def test_build_status_summarizes_events_and_learning_runs(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
-            event_dir = project_root / ".harness" / "events"
+            event_dir = project_root / ".farplane" / "events"
             event_dir.mkdir(parents=True)
             (event_dir / "2026-05-26.jsonl").write_text(
                 "\n".join(
@@ -45,13 +45,13 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                 + "\n",
                 encoding="utf-8",
             )
-            windows_dir = project_root / ".harness" / "state" / "self-improve" / "windows"
+            windows_dir = project_root / ".farplane" / "state" / "self-improve" / "windows"
             windows_dir.mkdir(parents=True)
             (windows_dir / "sess-123.json").write_text(
                 json.dumps({"session_id": "sess-123", "turn_count": 10, "last_review_turn_count": 10}),
                 encoding="utf-8",
             )
-            run_dir = project_root / ".harness" / "state" / "self-improve" / "applications" / "20260526-sess-123"
+            run_dir = project_root / ".farplane" / "state" / "self-improve" / "applications" / "20260526-sess-123"
             run_dir.mkdir(parents=True)
             (run_dir / "input.json").write_text(
                 json.dumps(
@@ -137,7 +137,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
             "learning": {
                 "latest_runs": [
                     {
-                        "run_path": "/Users/example/private/Farplane/.harness/state/self-improve/applications/run-1",
+                        "run_path": "/Users/example/private/Farplane/.farplane/state/self-improve/applications/run-1",
                         "candidate_title": "Improve proof",
                         "messages": [{"role": "user", "summary": "hello", "redacted_excerpt": "[local path]"}],
                         "artifacts": {

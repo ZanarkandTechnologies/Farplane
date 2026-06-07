@@ -1,19 +1,19 @@
 {
   "counts": {
     "edge_types": {
-      "common-chain": 17,
-      "markdown-ref": 283
+      "common-chain": 15,
+      "markdown-ref": 280
     },
-    "edges": 300,
-    "nodes": 81,
+    "edges": 295,
+    "nodes": 80,
     "sources": {
       "external": 3,
-      "local": 78
+      "local": 77
     },
     "tiers": {
       "1": 4,
       "2": 31,
-      "3": 46
+      "3": 45
     }
   },
   "edges": [
@@ -596,41 +596,6 @@
       "source": "documentation",
       "target": "review",
       "target_ref": "review",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "common_chains.after",
-      "source": "eval-onboarding",
-      "target": "agent-qa-test",
-      "target_ref": "agent-qa-test",
-      "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "eval-onboarding",
-      "target": "eval",
-      "target_ref": "eval",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "eval-onboarding",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "common_chains.after",
-      "source": "eval-onboarding",
-      "target": "testing",
-      "target_ref": "testing",
-      "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "eval-onboarding",
-      "target": "testing",
-      "target_ref": "testing",
       "type": "markdown-ref"
     },
     {
@@ -2118,7 +2083,7 @@
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-06T15:51:57+00:00",
+  "generated_at": "2026-06-07T12:08:51+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
@@ -2450,13 +2415,17 @@
       "tier": 2
     },
     {
-      "description": "Operator-marked recovery and lesson capture for cases where the assistant missed something obvious, got defensive, explained instead of acting, or finished a corrected hard case that should become a durable lesson or training/eval sample. Use when the user explicitly says `repent`, `repent lesson`, `repent hardcase`, or asks to capture a corrected failure.",
+      "description": "Operator-marked recovery and lesson, hardcase, or high-priority regression capture for cases where the assistant missed something obvious, got defensive, explained instead of acting, or finished a corrected hard case that should become durable learning or eval coverage. Use when the user explicitly says `repent`, `repent lesson`, `repent hardcase`, `repent eval`, or asks to capture a corrected failure.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,
       "id": "repent",
       "label": "repent",
-      "methods": [],
+      "methods": [
+        "repent:lesson",
+        "repent:hardcase",
+        "repent:eval"
+      ],
       "path": "skills/repent/SKILL.md",
       "source": "local",
       "tier": 2
@@ -2704,20 +2673,10 @@
       "has_todos": false,
       "id": "eval",
       "label": "eval",
-      "methods": [],
+      "methods": [
+        "eval:onboarding"
+      ],
       "path": "skills/eval/SKILL.md",
-      "source": "local",
-      "tier": 3
-    },
-    {
-      "description": "Guide newcomers through setting up a minimal, clean-room eval harness for coding agents, prompts, skills, or workflow changes. Use when the user asks for basic eval JSON tasks, synthetic fixtures, judge shape, harness setup, or an example evaluation workflow without copying private or third-party systems.",
-      "group": "harness",
-      "has_checklist": true,
-      "has_todos": false,
-      "id": "eval-onboarding",
-      "label": "eval-onboarding",
-      "methods": [],
-      "path": "skills/eval-onboarding/SKILL.md",
       "source": "local",
       "tier": 3
     },

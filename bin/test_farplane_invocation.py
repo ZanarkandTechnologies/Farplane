@@ -104,7 +104,7 @@ class FarplaneInvocationTests(unittest.TestCase):
                         "mode": "local_codex",
                         "requestedBy": "test",
                         "requestedAt": "2026-05-05T00:00:00Z",
-                        "proofPacketPath": ".harness/results/task-1234-proof.json",
+                        "proofPacketPath": ".farplane/results/task-1234-proof.json",
                     }
                 ),
                 root,
@@ -129,7 +129,7 @@ class FarplaneInvocationTests(unittest.TestCase):
                         "workflowPath": "WORKFLOW.md",
                         "workItemId": "TASK-1234",
                         "phase": "planning",
-                        "proofPacketPath": ".harness/results/task-1234-proof.json",
+                        "proofPacketPath": ".farplane/results/task-1234-proof.json",
                     }
                 ),
                 root,
@@ -164,7 +164,7 @@ class FarplaneInvocationTests(unittest.TestCase):
             self.assertEqual(plan.compute.target, "local_shared")
             self.assertEqual(plan.route.skill_name, "impl-plan")
             expected_proof = (
-                root / ".harness" / "results" / "symphony-task-0112.proof.json"
+                root / ".farplane" / "results" / "symphony-task-0112.proof.json"
             ).resolve()
             self.assertEqual(
                 plan.proof_packet_path,
@@ -185,7 +185,7 @@ class FarplaneInvocationTests(unittest.TestCase):
                         "mode": "external_runner",
                         "requestedBy": "codex-cloud-task",
                         "requestedAt": "2026-05-05T00:00:00Z",
-                        "proofPacketPath": ".harness/results/task-1234-cloud.proof.json",
+                        "proofPacketPath": ".farplane/results/task-1234-cloud.proof.json",
                     }
                 ),
                 root,
@@ -210,7 +210,7 @@ class FarplaneInvocationTests(unittest.TestCase):
                             "workItemId": "TASK-1234",
                             "phase": "planning",
                             "mode": "polling_daemon",
-                            "proofPacketPath": ".harness/results/task-1234-proof.json",
+                            "proofPacketPath": ".farplane/results/task-1234-proof.json",
                         }
                     ),
                     root,
@@ -227,7 +227,7 @@ class FarplaneInvocationTests(unittest.TestCase):
                         "workflowPath": "WORKFLOW.md",
                         "workItemId": "TASK-1234",
                         "phase": "building",
-                        "proofPacketPath": ".harness/results/task-1234-proof.json",
+                        "proofPacketPath": ".farplane/results/task-1234-proof.json",
                     }
                 ),
                 root,
@@ -249,7 +249,7 @@ class FarplaneInvocationTests(unittest.TestCase):
                         "workItemId": "TASK-1234",
                         "phase": "planning",
                         "computeTarget": "symphony",
-                        "proofPacketPath": ".harness/results/task-1234-proof.json",
+                        "proofPacketPath": ".farplane/results/task-1234-proof.json",
                     }
                 ),
                 root,
@@ -269,7 +269,7 @@ class FarplaneInvocationTests(unittest.TestCase):
                         "workflowPath": "WORKFLOW.md",
                         "workItemId": "TASK-1234",
                         "phase": "planning",
-                        "proofPacketPath": ".harness/results/task-1234-proof.json",
+                        "proofPacketPath": ".farplane/results/task-1234-proof.json",
                     }
                 ),
                 root,

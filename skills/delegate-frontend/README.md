@@ -8,8 +8,8 @@ keeping Farplane responsible for final integration, QA, and claims.
 ## Public API / Entrypoints
 
 - `SKILL.md`: delegation contract and command pattern.
-- `.harness/external-cli/profiles/frontend-pi-kimi`: mounted Pi skill profile.
-- `.harness/external-cli/runs/<run-id>`: prompt, command, sessions, and handoff.
+- `.farplane/external-cli/profiles/frontend-pi-kimi`: mounted Pi skill profile.
+- `.farplane/external-cli/runs/<run-id>`: prompt, command, sessions, and handoff.
 
 ## Minimal Example
 

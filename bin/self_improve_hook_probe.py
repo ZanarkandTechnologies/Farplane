@@ -177,7 +177,7 @@ def build_parser() -> argparse.ArgumentParser:
         target.add_argument(
             "--project-root",
             default=default or str(ROOT),
-            help="Project root containing .harness and tickets",
+            help="Project root containing .farplane and tickets",
         )
         target.add_argument(
             "--session-id",

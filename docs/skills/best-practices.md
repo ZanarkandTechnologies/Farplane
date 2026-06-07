@@ -4,6 +4,10 @@ Use this as the shared standard for creating, reviewing, and maintaining
 Farplane skills. Apply it to `skill-creator` and `skill-maintenance` first;
 roll it out to other skills only after a representative pass proves the shape.
 
+Keep this file focused on skill authoring and review quality. Do not redefine
+tier, source, template-version, or feature-tracking policy here; link
+`docs/skills/system.md` for stable skill-system rules.
+
 ## First-Load Shape
 
 - Put a short `## Context` section near the top of `SKILL.md` before the todo
@@ -78,6 +82,23 @@ Check repeatability by asking:
 - Are scripts, commands, paths, artifacts, and validation steps explicit?
 - Are setup/onboarding paths separated from the normal run path?
 - Does the skill avoid verbose duplication that would drift later?
+
+## On-Contact Upgrade Check
+
+When touching a skill that has not been onboarded to the current standard, do
+the smallest useful upgrade in the same pass:
+
+- Check whether the first-load `## Todo List` is ordered, executable, and
+  marker-delimited.
+- Move optional detail, rare branches, examples, long rubrics, and model maps
+  into references.
+- Remove duplicate workflow prose when the todo list already carries the
+  default path.
+- Confirm proof commands, output artifacts, or explicit blockers are named.
+- Set or keep `skill_template_version` only after the actual `SKILL.md`
+  structure has been verified against the template.
+- Reinstall and inspect the live installed skill when visible Codex behavior is
+  part of the claim.
 
 ## Review Gate
 

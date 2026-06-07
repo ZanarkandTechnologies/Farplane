@@ -294,7 +294,7 @@ def run_task(
     agent_answer_path = task_dir / "agent_answer.txt"
     agent_prompt_path.write_text(agent_prompt)
     agent_result = run_harness(
-        args.harness,
+        args.farplane,
         agent_prompt,
         agent_answer_path,
         Path(args.target_root).resolve(),
@@ -315,7 +315,7 @@ def run_task(
         judge_answer_path = task_dir / "judge_answer.txt"
         judge_prompt_path.write_text(judge_prompt)
         judge_result = run_harness(
-            args.judge_harness or args.harness,
+            args.judge_harness or args.farplane,
             judge_prompt,
             judge_answer_path,
             Path(args.target_root).resolve(),
@@ -341,8 +341,8 @@ def run_task(
     detail = {
         "task": json.loads(task_to_json(task)),
         "run_config": {
-            "harness": args.harness,
-            "judge_harness": args.judge_harness or args.harness,
+            "harness": args.farplane,
+            "judge_harness": args.judge_harness or args.farplane,
         },
         "agent": {
             "returncode": agent_result.returncode,
@@ -385,20 +385,20 @@ def inspect_eval_setup(harness: str, target_root: Path, eval_dir: str | None) ->
 
 
 def command_status(args: argparse.Namespace) -> int:
-    eval_dir, missing = inspect_eval_setup(args.harness, Path(args.target_root), args.eval_dir)
+    eval_dir, missing = inspect_eval_setup(args.farplane, Path(args.target_root), args.eval_dir)
     if missing:
         print(f"Eval setup missing in {eval_dir}")
         for relative in missing:
             print(f"- {relative}")
         print("")
-        print(f"Initialize it with: python3 skills/eval/scripts/run_evals.py init --harness {args.harness} --target-root {Path(args.target_root).resolve()}")
+        print(f"Initialize it with: python3 skills/eval/scripts/run_evals.py init --harness {args.farplane} --target-root {Path(args.target_root).resolve()}")
         return 1
     print(f"Eval setup ready in {eval_dir}")
     return 0
 
 
 def command_run(args: argparse.Namespace) -> int:
-    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, Path(args.target_root).resolve())
+    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.farplane, Path(args.target_root).resolve())
     task_paths = resolve_task_paths(eval_dir, args.tasks, args.suite)
     tasks = load_task_suite(task_paths, args.limit)
     if args.max_parallel_tasks < 1:
@@ -430,8 +430,8 @@ def command_run(args: argparse.Namespace) -> int:
         "job_id": job_id,
         "label": args.label,
         "created_at": created_at,
-        "harness": args.harness,
-        "judge_harness": args.judge_harness or args.harness,
+        "harness": args.farplane,
+        "judge_harness": args.judge_harness or args.farplane,
         "suite": args.suite if not args.tasks else "custom",
         "task_files": [str(path) for path in task_paths],
         "task_count": len(rows),
@@ -462,7 +462,7 @@ def copy_template_dir(src: Path, dest: Path, force: bool) -> None:
 
 def command_init(args: argparse.Namespace) -> int:
     target_root = Path(args.target_root).resolve()
-    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, target_root)
+    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.farplane, target_root)
     templates = script_root() / "templates"
     copy_template(templates / "harness_tasks.json", eval_dir / "tasks" / "harness_tasks.json", args.force)
     copy_template(templates / "agent.md", eval_dir / "prompts" / "agent.md", args.force)
@@ -477,7 +477,7 @@ def command_init(args: argparse.Namespace) -> int:
     print("Next steps:")
     print(f"  1. Edit {eval_dir / 'tasks' / 'harness_tasks.json'} with one important skill, workflow, or system-prompt task.")
     print("  2. Use tags/notes to mark whether a task is skill, workflow, or system-prompt level.")
-    print(f"  3. Run: python3 {eval_dir / 'run_evals.py'} run --harness {args.harness} --label baseline --limit 1")
+    print(f"  3. Run: python3 {eval_dir / 'run_evals.py'} run --harness {args.farplane} --label baseline --limit 1")
     print(f"  4. Inspect results with either {eval_dir / 'viewer.html'} or the React viewer:")
     print(f"     cd {eval_dir / 'viewer-react'} && pnpm install && pnpm dev --host 127.0.0.1")
     return 0

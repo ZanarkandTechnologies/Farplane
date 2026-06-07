@@ -16,6 +16,10 @@ fields, and todo-link rules stay in one place.
   skill-applicable features with `category: "skills"`.
 - `docs/skills/registry.jsonl` is generated inventory, not hand-authored truth.
 
+Keep this file focused on stable system rules. Do not duplicate first-load
+authoring detail here; link `docs/skills/best-practices.md` for checklist
+shape, reference placement, repeatability, and review gates.
+
 ## Tier Model
 
 Tier 1 skills are primitives. They are core thinking moves that multiple Tier 2
@@ -105,6 +109,20 @@ python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.1.
 
 Add `--require-template-version` only when the rollout is intentionally ready to
 fail missing or non-current skills.
+
+## Rollout Policy
+
+Roll out skill-system standards from the most compound surfaces first:
+
+1. Meta skills and Tier 1 primitives stay current by default.
+2. Core Tier 2 interfaces are updated when standards change.
+3. Tier 3 skills are updated on contact, by cluster, or when repeated failure
+   evidence shows the old shape is hurting execution.
+4. Broad migration requires a representative sample before a full batch.
+5. Missing `skill_template_version` means not onboarded yet, not invalid.
+
+Use `skill-maintenance` for rollout audits and `docs/skills/best-practices.md`
+for the concrete on-contact upgrade checklist.
 
 ## Feature Tracking
 

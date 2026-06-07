@@ -159,7 +159,7 @@ non-source for the target pass. Common safe candidates include:
 - build output such as `dist/`, `build/`, `.next/`, `coverage/`
 - vendored dependencies such as `node_modules/`, `vendor/`
 - generated SDKs or codegen output when the repo already treats them as derived
-- worktree/runtime/state paths such as `.git/`, `.harness/`, `.desloppify/`
+- worktree/runtime/state paths such as `.git/`, `.farplane/`, `.desloppify/`
 
 If a path contains hand-edited source, docs, tests, or config, treat it as
 questionable and ask before excluding.

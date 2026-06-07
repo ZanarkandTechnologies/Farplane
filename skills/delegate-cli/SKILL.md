@@ -87,7 +87,7 @@ Use `advise` when choosing:
 
 1. Do not let an external CLI mutate queue state, approve completion, push,
    deploy, publish, or spend without an explicit human gate.
-2. Do not track generated `.harness/external-cli/` runtime bundles or secrets.
+2. Do not track generated `.farplane/external-cli/` runtime bundles or secrets.
 3. Do not ship a profile as active until the launcher can dry-run it and attach
    reproducible artifacts.
 4. For Pi, `@file` is an attachment syntax, not a prompt-file execution syntax.

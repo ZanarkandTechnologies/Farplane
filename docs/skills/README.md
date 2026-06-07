@@ -19,6 +19,10 @@ into a second place to maintain skill truth.
   `docs/skills/` stays an index plus registry surface.
 - `skills/skill-registry-ui/` is the operator skill for refreshing, opening,
   and validating that graph UI.
+- If the graph expands beyond skills into repo-wide Markdown or JSON backlinks,
+  graduate it into a separate harness map surface. `skill-maintenance` should
+  keep owning skill registry correctness, while `harness-advisor` consumes the
+  broader map for placement decisions instead of owning the generator or UI.
 - Skill-applicable harness features live in
   [`docs/features/registry.jsonl`](../features/registry.jsonl) with
   `category: "skills"`. This folder owns the generated skill inventory, not a

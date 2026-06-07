@@ -70,7 +70,7 @@ def discover_project_root(start: Path | None) -> Path | None:
     if current.is_file():
         current = current.parent
     for candidate in (current, *current.parents):
-        if (candidate / ".harness").exists() or (candidate / "tickets").exists():
+        if (candidate / ".farplane").exists() or (candidate / "tickets").exists():
             return candidate
     return None
 
@@ -86,7 +86,7 @@ def project_root_from_payload(payload: Mapping[str, object]) -> Path | None:
 
 
 def runtime_dir(project_root: Path) -> Path:
-    return project_root / ".harness"
+    return project_root / ".farplane"
 
 
 def current_run_state_path(project_root: Path) -> Path:

@@ -61,7 +61,7 @@ class ComputeSelectorTests(unittest.TestCase):
     def test_ticket_override_wins_over_workflow_default(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            runtime_path = root / ".harness" / "state" / "tickets" / "TASK-1234.runtime.json"
+            runtime_path = root / ".farplane" / "state" / "tickets" / "TASK-1234.runtime.json"
             runtime_path.parent.mkdir(parents=True)
             runtime_path.write_text("{}\n", encoding="utf-8")
 

@@ -696,11 +696,11 @@ def load_profile(profile: str, root: Path | None = None) -> DelegateProfile:
 
 
 def profile_root(profile: str, root: Path | None = None) -> Path:
-    return (root or project_root()) / ".harness" / "external-cli" / "profiles" / profile
+    return (root or project_root()) / ".farplane" / "external-cli" / "profiles" / profile
 
 
 def runs_root(root: Path | None = None) -> Path:
-    return (root or project_root()) / ".harness" / "external-cli" / "runs"
+    return (root or project_root()) / ".farplane" / "external-cli" / "runs"
 
 
 def skill_source_path(name: str, root: Path | None = None) -> Path:

@@ -17,6 +17,9 @@ source: local
   feature before proposing a new feature.
 - [ ] Check `docs/skills/registry.jsonl` for an existing skill, method, source
   owner, or consolidation target before proposing a new skill.
+- [ ] When a generated harness or skill graph exists, inspect it for backlinks,
+  owner clusters, and surprising dependencies before recommending broad
+  placement changes.
 - [ ] Read `ARCHITECTURE.md` and the relevant owning spec when the request
   touches policy, canonical ownership, memory, specs, tickets, runtime, hooks,
   skills, registries, or source/feature provenance.
@@ -92,6 +95,8 @@ Load only what the request needs:
 - `docs/features/README.md` and `docs/features/registry.jsonl` for existing
   harness techniques
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` for existing skills
+- `skills/skill-maintenance/graph/*` or a future harness map artifact when the
+  decision benefits from backlink, dependency, or owner-cluster context
 - root `AGENTS.md` and `templates/global/AGENTS.md` when policy placement is a
   candidate
 - `skills/deep-init-project/references/AGENTS_TEMPLATE.md` when generated

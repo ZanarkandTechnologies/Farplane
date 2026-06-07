@@ -44,8 +44,8 @@ handoff, and let Farplane integrate or reject the result.
 
 - Adapter: `pi`
 - Model: `openrouter/moonshotai/kimi-k2.6`
-- Profile root: `.harness/external-cli/profiles/frontend-pi-kimi`
-- Run root: `.harness/external-cli/runs`
+- Profile root: `.farplane/external-cli/profiles/frontend-pi-kimi`
+- Run root: `.farplane/external-cli/runs`
 
 ## Phase Types
 
@@ -66,32 +66,32 @@ handoff, and let Farplane integrate or reject the result.
 - stack facts: framework/router, Tailwind version, package availability,
   shadcn config, registry/theme plan
 - acceptance criteria
-- handoff path under `.harness/external-cli/runs/<run-id>/handoff.md`
+- handoff path under `.farplane/external-cli/runs/<run-id>/handoff.md`
 
 ## Command Pattern
 
-Write the prompt to `.harness/external-cli/runs/<run-id>/prompt.md`, then run:
+Write the prompt to `.farplane/external-cli/runs/<run-id>/prompt.md`, then run:
 
 ```bash
 pi \
-  --session-dir .harness/external-cli/runs/<run-id>/sessions \
+  --session-dir .farplane/external-cli/runs/<run-id>/sessions \
   --model openrouter/moonshotai/kimi-k2.6 \
   --thinking low \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/frontend-craft \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/functional-ui \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/visual-design \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/landing-page \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/best-of-worlds \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/brainstorm \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/frontend-design \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/image-generation \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/video-generation \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/product-photography \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/agent-browser \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/visual-qa \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/review \
-  --skill .harness/external-cli/profiles/frontend-pi-kimi/skills/web-design-guidelines \
-  -p @.harness/external-cli/runs/<run-id>/prompt.md
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/frontend-craft \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/functional-ui \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/visual-design \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/landing-page \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/best-of-worlds \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/brainstorm \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/frontend-design \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/image-generation \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/video-generation \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/product-photography \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/agent-browser \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/visual-qa \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/review \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/web-design-guidelines \
+  -p @.farplane/external-cli/runs/<run-id>/prompt.md
 ```
 
 Add other mounted skills only when the phase needs them.

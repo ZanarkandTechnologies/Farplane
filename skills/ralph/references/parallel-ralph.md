@@ -81,10 +81,10 @@ type StopReason =
   | "batch_limit";
 ```
 
-Future storage should stay under `.harness/state/ralph/`:
+Future storage should stay under `.farplane/state/ralph/`:
 
-- `.harness/state/ralph/batches/<batch_id>.json`
-- `.harness/state/ralph/leases/<ticket_id>.json`
+- `.farplane/state/ralph/batches/<batch_id>.json`
+- `.farplane/state/ralph/leases/<ticket_id>.json`
 
 These are runtime records, not durable ticket memory. Tickets still carry
 human-facing progress, blockers, evidence, and final closeout.
@@ -200,7 +200,7 @@ Parallel Ralph stops without selecting more work when any of these happens:
 
 | Future ticket | Purpose | Exit proof |
 | --- | --- | --- |
-| Parallel Ralph lease registry | Implement atomic batch and lease records under `.harness/state/ralph/` | lease acquire/release tests |
+| Parallel Ralph lease registry | Implement atomic batch and lease records under `.farplane/state/ralph/` | lease acquire/release tests |
 | Write-scope declaration | Add optional ticket write-scope metadata and conservative inference | conflict fixture tests |
 | Worktree lane setup | Wire `local_worktree` runtime setup into the future parallel runner | no shared-checkout writer tests |
 | Proof collector | Gather per-ticket `ProofPacket` results and stop on invalid/missing proof | malformed proof tests |

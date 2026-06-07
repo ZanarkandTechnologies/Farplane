@@ -17,7 +17,7 @@
 ## Conventions
 
 - Lead with when isolation is required, not with raw git commands.
-- Keep runtime state under `.harness/state/`, not tracked repo files.
+- Keep runtime state under `.farplane/state/`, not tracked repo files.
 - Treat existing PR branch follow-up and multiple live writers as the primary
   triggers for isolated checkout use.
 

@@ -2,7 +2,7 @@
 
 ## Spec Research
 
-1. Write the prompt and command metadata under `.harness/external-cli/runs/<run-id>`.
+1. Write the prompt and command metadata under `.farplane/external-cli/runs/<run-id>`.
 2. Name one first-write planning artifact.
 3. Mount `landing-page`, `best-of-worlds`, `brainstorm`, and visual/review
    support skills.

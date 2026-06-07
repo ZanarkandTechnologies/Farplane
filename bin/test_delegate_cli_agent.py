@@ -492,7 +492,7 @@ class DelegateCliAgentTests(unittest.TestCase):
             copied = delegate_cli_agent.copy_skill_bundle(profile, root)
             copied_names = {Path(path).name for path in copied}
             self.assertEqual(copied_names, {"frontend-craft", "image-generation", "video-generation"})
-            self.assertFalse((root / ".harness" / "external-cli" / "profiles" / "frontend-pi-kimi" / "skills" / "imagegen").exists())
+            self.assertFalse((root / ".farplane" / "external-cli" / "profiles" / "frontend-pi-kimi" / "skills" / "imagegen").exists())
 
     def test_profile_copy_waits_for_existing_profile_lock(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
