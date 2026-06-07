@@ -65,6 +65,9 @@ Use this shape when a visible decision note is useful:
 - Use `reference-grounding` when the recommendation depends on evidence.
 - Use `best-of-worlds` when known sources must be extracted, scored, and
   adapted before advice.
+- Escalate to `deliberative-advice` / `advise:complex` when the decision is
+  high-stakes, expensive, ambiguous across several credible perspectives, or
+  likely to benefit from independent critique before synthesis.
 - Hand UI/UX-facing choices to `functional-ui`.
 - Embed this inside `impl-plan` for coding implementation plans.
 
@@ -82,3 +85,6 @@ Use this shape when a visible decision note is useful:
   when the recommendation depends on evidence.
 - [../best-of-worlds/SKILL.md](../best-of-worlds/SKILL.md) - use when supplied
   sources must be synthesized before advice.
+- [../deliberative-advice/SKILL.md](../deliberative-advice/SKILL.md) - use for
+  high-stakes or complex recommendations that need independent perspectives,
+  critique, synthesis, and visible dissent.

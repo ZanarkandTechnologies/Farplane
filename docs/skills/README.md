@@ -36,6 +36,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Need | Use | Why This One | Do Not Use When |
 | --- | --- | --- | --- |
 | Choose among real options and name a recommendation | `advise` | It starts from first principles, frames 3 viable choices, names one recommendation, and states the accepted tradeoff. | The user already gave a direct execution request. |
+| Make a high-stakes or complex recommendation with independent critique | `deliberative-advice` / `advise:complex` | It escalates advice into a council workflow: independent perspective briefs, critique/ranking, chair synthesis, visible dissent, and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs a concise 3-option recommendation. |
 | Ground a claim in local files, docs, official references, or provided sources | `reference-grounding` | It supplies compact evidence before advice, planning, or review claims. | You need a full research brief or feature synthesis. |
 | Prove a pattern before expanding scope, automation, data, file count, or research breadth | `prototyping` | It forces a representative `1 -> 10 -> 100` sample and a Prototype Note before scale. | The task is already small, one-off, or mechanically proven. |
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
