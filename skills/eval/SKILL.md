@@ -4,6 +4,8 @@ description: Check, initialize, and run harness-native evals for Codex or Claude
 tier: 3
 group: harness
 source: local
+methods:
+  - eval:onboarding
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -18,7 +20,10 @@ allowed-tools: Read, Glob, Grep, Bash
 - [ ] 2a. If adding evals, load
   [eval best practices](references/eval-best-practices.md) and edit the task or
   judge files.
-- [ ] 2b. If running evals, use the installed `run_evals.py run` script.
+- [ ] 2b. If designing a first eval or clean-room starter, use
+  [onboarding](references/onboarding.md) plus the templates under
+  [references/onboarding](references/onboarding/).
+- [ ] 2c. If running evals, use the installed `run_evals.py run` script.
 - [ ] 3. Summarize findings from `summary.json` and task detail artifacts: verdict
   counts, important failures, likely cause, and the next concrete fix.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -27,6 +32,10 @@ Use this skill when the user wants to run, create, or repair a first real eval
 for an agent harness, prompt, skill, or workflow. It is intentionally
 harness-native: Codex evals live under `.codex/evals`; Claude evals live under
 `.claude/evals`.
+
+Use method address `eval:onboarding` when the user needs a clean-room first
+eval shape, starter JSON tasks, judge prompt guidance, or a minimal smoke
+workflow before a full eval suite exists.
 
 ## Commands
 
@@ -59,3 +68,18 @@ The runner writes the proof surfaces this skill should summarize:
 - `runs/<job_id>/tasks/<task_id>.json`: task, prompt, answer, judge, and raw
   command detail.
 - `runs/index.json`: newest-first run index.
+
+## Reference Map
+
+- [references/onboarding.md](references/onboarding.md) - first eval setup,
+  clean-room constraints, and starter workflow.
+- [references/onboarding/harness-layout.md](references/onboarding/harness-layout.md) -
+  minimal harness layout and smoke checklist.
+- [references/onboarding/task-template.json](references/onboarding/task-template.json) -
+  starter task JSON examples.
+- [references/onboarding/judge-prompt-template.md](references/onboarding/judge-prompt-template.md) -
+  tier/boolean judge prompt template.
+- [references/onboarding/run-report-template.json](references/onboarding/run-report-template.json) -
+  report shape example.
+- [examples/first-harness-eval/tasks.json](examples/first-harness-eval/tasks.json) -
+  clean-room starter task set.

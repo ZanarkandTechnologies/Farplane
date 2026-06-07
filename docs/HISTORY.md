@@ -279,3 +279,4 @@
 2026-06-06 22:45 +0800 | DOCS | add a filesystem lifecycle spec for ledger, ticket, registry, experiment, spec, and research drain routing
 2026-06-06 23:52 +0800 | CLEANUP | delete the redundant `docs/policies/` policy index and route policy ownership lookups back to `README.md`, `ARCHITECTURE.md`, specs, and owning skills
 2026-06-07 00:00 +0800 | CLEANUP | slim the installed global AGENTS template into an always-loaded operating kernel and route detailed ticket, skill, memory, review, code-ownership, and harness logic to owning project AGENTS, docs, and skills
+2026-06-07 00:00 +0800 | CLEANUP | collapse eval-onboarding into the eval skill as eval:onboarding with clean-room starter templates and examples
