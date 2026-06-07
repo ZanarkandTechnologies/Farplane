@@ -1,8 +1,12 @@
 ---
 name: repent
-description: Operator-marked recovery and lesson capture for cases where the assistant missed something obvious, got defensive, explained instead of acting, or finished a corrected hard case that should become a durable lesson or training/eval sample. Use when the user explicitly says `repent`, `repent lesson`, `repent hardcase`, or asks to capture a corrected failure.
+description: Operator-marked recovery and lesson, hardcase, or high-priority regression capture for cases where the assistant missed something obvious, got defensive, explained instead of acting, or finished a corrected hard case that should become durable learning or eval coverage. Use when the user explicitly says `repent`, `repent lesson`, `repent hardcase`, `repent eval`, or asks to capture a corrected failure.
 tier: 2
 source: local
+methods:
+  - repent:lesson
+  - repent:hardcase
+  - repent:eval
 ---
 
 # Repent
@@ -11,8 +15,8 @@ source: local
 ## Todo List
 
 - [ ] 1. Classify the mode: default/`lesson` for recovery plus durable lesson,
-  or `hardcase` for a richer eval/training-data candidate after the fix is
-  known.
+  `hardcase` for a richer eval/training-data candidate after the fix is known,
+  or `eval` for high-priority regression capture after the fix is known.
 - [ ] 2. Read the user's correction, active artifact, and recent work before
   apologizing, acting, or logging.
 - [ ] 3. Use [reference-grounding](../reference-grounding/SKILL.md) to verify
@@ -35,6 +39,9 @@ source: local
   Notion context and tools are available.
 - [ ] 6b. For `hardcase`, delegate or apply the `hardcase-curator` contract to
   create a sanitized artifact under `experiments/hardcases/`.
+- [ ] 6c. For `eval`, create or update the narrowest regression eval, then route
+  to `agent-qa-test` or `agent-behavior-test` when visible child-agent behavior
+  needs proof beyond static eval task capture.
 - [ ] 7. Use [review](../review/SKILL.md) before claiming recovery or capture is
   complete for repo-changing work.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -45,12 +52,15 @@ Use it when the assistant has likely missed an obvious requirement and the user
 wants the agent to stop defending itself, verify the complaint, recover
 immediately when safe, and record the corrected failure after the fix is known.
 The same public skill also supports `repent hardcase` when the corrected
-episode is valuable enough to preserve as a clean eval or training-data sample.
+episode is valuable enough to preserve as a clean eval or training-data sample,
+and `repent eval` when a high-priority corrected miss should become regression
+coverage immediately.
 
 Do not use it for broad new work, destructive requests, or ambiguous direction
 changes, or general self-improvement drains. This skill captures human-marked
-failure signals; later improvement workflows decide whether to edit prompts,
-skills, evals, tickets, or models.
+failure signals and may create narrow regression coverage for high-priority
+misses; broader improvement workflows still decide whether to change prompts,
+skills, tickets, or models.
 
 ## Modes
 
@@ -60,10 +70,20 @@ skills, evals, tickets, or models.
 - `repent hardcase`: after the problem is fixed, create a sanitized hard-case
   artifact under `experiments/hardcases/` for future evals, skill improvement,
   model-training data, or saleable data review.
+- `repent eval`: after the problem is fixed, create the smallest durable
+  regression eval that would have caught the miss. Also create a hardcase when
+  the corrected episode needs context beyond one task row. Use
+  `agent-qa-test` or `agent-behavior-test` only when the behavior must be
+  proven by a fresh child-agent run, command log, or adversarial evidence pass.
 
 If the user says only `capture` in the same failure context, treat it as
 `repent hardcase` unless another active skill named `capture` clearly owns the
 turn.
+
+Treat a correction as high priority for `repent eval` when the operator says
+`high priority`, `eval`, `test this`, `this should never happen again`, or the
+miss affected prompt ownership, source-of-truth placement, safety boundaries,
+completion claims, install/source boundaries, or repeated workflow behavior.
 
 ## Recovery Workflow
 
@@ -84,7 +104,8 @@ turn.
 6. If `ambiguous`:
    - ask the minimum blocking question
    - do not launch into a long postmortem
-7. Once the fix status is known, create the lesson or hardcase seed packet.
+7. Once the fix status is known, create the lesson, hardcase, or eval seed
+   packet.
 8. Prefer a native subagent for synthesis when available:
    - `agents/repent-scribe.toml` for `lesson`
    - `agents/hardcase-curator.toml` for `hardcase`
@@ -98,7 +119,7 @@ whole conversation from scratch:
 
 ```json
 {
-  "mode": "lesson|hardcase",
+  "mode": "lesson|hardcase|eval",
   "user_correction": "what the operator said should have happened",
   "original_request": "short task summary when recoverable from context",
   "suspected_failure": "short failure hypothesis",
@@ -110,7 +131,7 @@ whole conversation from scratch:
   ],
   "relevant_excerpt": "short bounded chat excerpt or empty string",
   "privacy_level": "local_only|redacted_shareable|training_candidate",
-  "recommended_destination": "lessons|notion_proposal|hardcase_artifact"
+  "recommended_destination": "lessons|notion_proposal|hardcase_artifact|eval_task"
 }
 ```
 
@@ -150,6 +171,7 @@ For completed capture, report only the durable outputs:
 
 - `Lesson:` `docs/LESSONS.md` entry and optional Notion proposal title/URL
 - `Hardcase:` artifact path and privacy level
+- `Eval:` task file path, task ID, run result or skipped-run reason
 - `Skipped:` unavailable Notion tools, ambiguous target, or false alarm reason
 
 ## Safe Boundary
@@ -200,19 +222,43 @@ credentials, proprietary payloads, or unrelated user data. Prefer short
 evidence excerpts, artifact paths, failure class, expected behavior, and the
 fixed outcome.
 
+## Eval Destination
+
+Use `repent eval` only after the fix status is known. The eval must be the
+narrowest durable regression that would have caught the miss:
+
+- project-level Codex behavior: `.codex/evals/tasks/*.json`
+- project-level Claude behavior: `.claude/evals/tasks/*.json`
+- skill-local self-improvement: `skills/<name>/self-improve/evals/`
+- generic starter examples: `skills/eval/examples/` only when the eval teaches
+  the eval skill itself, not a project's agent behavior
+
+Task `query` fields should be realistic user prompts. Do not write
+meta-instructions like "A user asks..." or tell the agent which exact file or
+repo to inspect unless the real user prompt would include that. Put expected
+proactive behavior, source checks, grounding, and pass criteria in
+`reference_points`.
+
+After adding the eval, run the cheapest structural check first. Run the eval or
+an `agent-behavior-test`/`agent-qa-test` pass when the behavior claim depends on
+visible child-agent behavior and the tools are available. If a run would be too
+expensive, destructive, or blocked, record the skipped-run reason with the eval
+task path.
+
 ## Not Owned Here
 
 `repent` does not own:
 
 - draining lessons into skill edits
-- automatically creating evals
+- broad automatic eval-suite creation for every correction
 - updating prompts or global policy from one raw lesson
 - editing installed or external skill bodies
 - creating approved repo tickets from every failure
 - training or selling data
 
 Those belong to later self-improvement, eval, ticketing, or data-curation
-workflows that consume the captured lessons and hardcases.
+workflows that consume the captured lessons, hardcases, and narrow regression
+tasks.
 
 ## Deterministic Fixtures
 
@@ -226,6 +272,7 @@ fixture before responding. The fixtures cover:
 - unsafe branching complaint
 - post-fix lesson capture
 - hardcase capture
+- high-priority eval capture
 
 ## Output Shape
 
@@ -234,7 +281,7 @@ Keep the first response compact:
 - `Reality check:` true miss, false alarm, or ambiguous
 - `Action:` what you are doing now, or the minimum blocking question
 - `Result:` what changed, or what evidence shows the complaint was false
-- `Capture:` lesson or hardcase artifact when requested and safe
+- `Capture:` lesson, hardcase artifact, or eval task when requested and safe
 
 ## Notes
 

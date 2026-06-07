@@ -64,3 +64,19 @@ Use these as deterministic checks when validating the skill.
   - include failure class, correction, correct behavior, evidence refs, future
     eval idea, and privacy level
   - do not include raw private transcript bulk or secrets
+
+## 8. High-Priority Eval Capture
+
+- `User:` `repent eval, this should never happen again`
+- `Expected behavior:`
+  - verify the corrected miss and fixed outcome first
+  - create or update the narrowest regression eval that would have caught the
+    miss
+  - use the owning eval surface, such as `.codex/evals/tasks/*.json` for
+    project-level Codex behavior
+  - keep `query` as a realistic user prompt and put proactive expectations in
+    `reference_points`
+  - run structural eval validation and, when available and worth the cost, an
+    `agent-behavior-test` or `agent-qa-test` proof pass
+  - report the eval task path, task ID, run result or skipped-run reason, and
+    any hardcase artifact

@@ -95,5 +95,22 @@
     ],
     "tags": ["system-prompt", "skills", "todo-rendering", "recursive-skills"],
     "notes": "Tests global skill todo rendering behavior after the prompt-template correction."
+  },
+  {
+    "id": "global_repent_eval_capture_01",
+    "title": "Escalate high-priority repent corrections into regression eval capture",
+    "query": "repent, this was high priority: you fixed the prompt ownership bug, but you should have captured an eval so this never happens again.",
+    "reference_points": [
+      "Recognizes the message as a repent correction rather than an ordinary planning request",
+      "Verifies whether the prompt ownership bug was real and whether the fix already landed",
+      "Classifies the correction as high priority or eval-worthy",
+      "Creates or updates the narrowest regression eval that would have caught the miss",
+      "Uses .codex/evals/tasks/*.json for project-level Codex/system-prompt behavior instead of storing the project eval under skills/eval examples",
+      "Keeps the eval query as a realistic user prompt and puts proactive expectations in reference_points",
+      "Runs structural validation for the eval task file and reports any skipped behavior-test or QA-test run reason",
+      "Captures a concise lesson or hardcase reference after the fix is known"
+    ],
+    "tags": ["system-prompt", "repent", "eval-capture", "regression"],
+    "notes": "Tests that high-priority corrected misses move beyond lesson-only capture into durable regression coverage."
   }
 ]

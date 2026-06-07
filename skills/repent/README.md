@@ -4,7 +4,7 @@
 
 Provide an operator-visible recovery and lesson-capture mode for when the
 assistant likely missed an obvious requirement, then optionally preserve the
-fixed episode as a hardcase for future eval or training-data review.
+fixed episode as a hardcase or high-priority regression eval.
 
 ## Entrypoint
 
@@ -19,6 +19,9 @@ fixed episode as a hardcase for future eval or training-data review.
 - User: `repent hardcase, this is a good sample`
 - Expected behavior: after the fix is known, create a sanitized artifact under
   `experiments/hardcases/`.
+- User: `repent eval, this should never happen again`
+- Expected behavior: after the fix is known, create the narrowest regression
+  eval in the owning eval surface and report validation or skipped-run reason.
 
 ## How To Test
 
