@@ -22,6 +22,8 @@ source: local
   patterns.
 - [ ] Define the client operating hypothesis without pretending it is verified
   client truth.
+- [ ] Ground realism-critical source artifacts in real public, user-provided, or
+  locally supplied material before inventing synthetic replacements.
 - [ ] Pick the pitch-worthy MVP slice and decompose it into workflow,
   screen/state, and data needs.
 - [ ] Generate realistic entities, records, timelines, statuses, edge cases,
@@ -86,11 +88,14 @@ Ensure an agent can execute the core path after only reading this file.
   - realism pack strong enough -> hand off before final design/build
 - Top 3 gotchas:
   - do not stop at generic mock data labels
+  - do not substitute synthetic artifacts when real public or user-provided
+    artifacts are acceptable and findable
   - do not claim exact client truth; this is pitch-potential synthesis
   - do not own final UI/design or implementation here
 - Outcome contract:
   - one demo-realism pack exists in the current response, ticket, or spec artifact
-  - the pack contains operating hypothesis, MVP slice, workflow ladder, screen/state ladder, demo-data pack, and realism rubric
+  - the pack contains operating hypothesis, MVP slice, workflow ladder,
+    screen/state ladder, demo-data pack, source provenance, and realism rubric
 
 ## Output Contract
 
@@ -101,6 +106,7 @@ Produce one compact realism pack with:
 - `Workflow ladder`
 - `Screen/state ladder`
 - `Demo-data pack`
+- `Source provenance`
 - `Realism rubric`
 - `Assumption ledger`
 - `Recommended handoff`
@@ -110,17 +116,27 @@ Produce one compact realism pack with:
 1. Capture the client type, operator, and business context.
 2. Infer the likely day-to-day operating loop and adjacent tools.
 3. Name the highest-value MVP slice for a believable demo.
-4. Decompose that slice:
+4. Run the source-artifact ladder when the demo depends on documents, media,
+   forms, records, blueprints, logs, invoices, regulations, or other concrete
+   real-world inputs:
+   - use user-provided or locally supplied material first
+   - then search for public, non-password-protected source artifacts with
+     stable URLs and record provenance
+   - use synthetic artifacts only when real artifacts are unavailable,
+     sensitive, explicitly out of scope, or the user asks for synthetic
+   - label every artifact as `real-public`, `user-provided`, `local-supplied`,
+     or `synthetic-fallback`
+5. Decompose that slice:
    - app/story level
    - workflow/feature level
    - screen/state level
-5. Derive the data pack:
+6. Derive the data pack:
    - core entities
    - realistic records
    - timelines and statuses
    - edge cases and failure states
-6. Score the result using the realism rubric in [`references/rubric.md`](references/rubric.md).
-7. Hand off:
+7. Score the result using the realism rubric in [`references/rubric.md`](references/rubric.md).
+8. Hand off:
    - `functional-ui` if workflow shape still needs product/UI planning
    - `visual-design` if realism is settled and visual direction should start
    - `frontend-craft` if realism is settled and implementation should start
@@ -145,6 +161,10 @@ Produce one compact realism pack with:
 - optimize for believable operational plausibility, not perfect factual reconstruction
 - keep the pack concrete enough that downstream skills can build from it immediately
 - do not let the output collapse into generic lorem-ipsum data
+- do not claim real-data realism from synthetic fixtures, generated documents,
+  or invented artifacts
+- do not create synthetic replacements for realism-critical artifacts until the
+  source-artifact ladder has been attempted or intentionally waived
 - do not stop at screens; tie every screen back to a workflow and operator need
 - hand off before final UI/design/build execution
 

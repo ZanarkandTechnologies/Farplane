@@ -272,6 +272,7 @@
 2026-06-04 17:41 +0800 | FEAT | extend `repent` into a post-fix lesson and hardcase capture primitive with scribe and curator subagent contracts
 2026-06-04 18:32 +0800 | FEAT | add frontend anti-slop heuristics for sequential layouts, nested containers, and dense list presentation across functional, visual, and implementation skills
 2026-06-06 20:46 +0800 | CHANGE | migrate review rubric design toward modular binary checklist groups with one TAS verdict per selected family
+2026-06-07 22:33 +0800 | FIX | add a source-artifact provenance gate to `demo-realism` so public, user-provided, or local real artifacts are preferred before synthetic fallback in realism-critical demos
 2026-06-06 21:24 +0800 | FEAT | add a meta-harness automation map and centralize skill-applicable feature tracking in the main feature registry
 2026-06-06 21:39 +0800 | MIGRATION | force local skill first-load sections from the old checklist heading to Todo List and remove legacy heading compatibility from skill tooling
 2026-06-06 21:45 +0800 | FEAT | add optional skill template version metadata to skill templates, registry generation, and skill-maintenance reports
@@ -290,3 +291,4 @@
 2026-06-07 19:32 +0800 | DOCS | extend global AGENTS multitopic focus into a whole-thread topic ledger with split-thread handoff guidance and return-to-root eval coverage
 2026-06-07 20:05 +0800 | MIGRATION | commit pre-launch Farplane identity by switching live project state from `.harness/` to `.farplane/` and documenting Farplane AI as the Zanarkand Labs product shell with skill-owned UI incubation
 2026-06-07 21:36 +0800 | MIGRATION | standardize all Farplane subagent role configs and install defaults on `gpt-5.5` with medium reasoning effort
+2026-06-07 22:52 +0800 | FEAT | add Goal algebra composition to `goal-crafter`, sync `agent-qa-test`, and import `hitl-autoresearch` plus `telegram-message` as Farplane source skills for human-feedback review loops

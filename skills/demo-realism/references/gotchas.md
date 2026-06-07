@@ -5,6 +5,10 @@
 - **Generic mock-data theater**
   - Swapping in slightly better names or labels is not enough if the workflows,
     statuses, and timelines still feel fake.
+- **Synthetic source substitution**
+  - When public or user-provided source artifacts would make the demo real,
+    inventing a similar-looking document, blueprint, policy, log, or dataset is
+    a realism failure, not harmless scaffolding.
 - **Design-first drift**
   - Jumping into polished UI language before the operating model is believable
     creates prettier but still fake demos.
@@ -23,3 +27,5 @@
 - If the app feels fake, step back from screens to workflow.
 - If the workflow feels fake, step back from workflow to operator context.
 - If the data feels fake, trace each entity back to a real operational event.
+- If a source artifact feels fake, search for public or user-provided material,
+  record provenance, and only then use a clearly labeled synthetic fallback.

@@ -42,6 +42,9 @@ boundaries, or unknown user value to PRD, `deep-interview`, or
 - [ ] Identify the desired end state, specific evidence, constraints, allowed
   inputs/tools/boundaries, iteration policy, blocked report, and optional
   budget.
+- [ ] When the operator composes review or improvement skills such as
+  `agent-qa-test` or `hitl-autoresearch`, compile them as Goal parameters
+  instead of treating them as competing entrypoints.
 - [ ] For skill-improvement goals, require the Goal to read the target skill's
   `self-improve/program.md`, evals, latest results, failure analysis, prompt
   candidates, and prior run notes when present; use those files as Goal
@@ -84,6 +87,56 @@ A strong goal should include:
   missing input that would unlock progress
 - `Budget`: optional turn/time/spend limit when relevant
 
+## Goal Algebra
+
+Use this compact model when several workflow skills are invoked together. The
+job of `goal-crafter` is to compile the operator's intent into one native Goal
+contract, not to run each named skill as a separate top-level workflow.
+
+```text
+Goal := Task + Metric + Review + Resolve
+
+Task :=
+  desired_end_state
++ boundaries
++ constraints
++ non_goals
+
+Metric :=
+  mechanical_evidence
+| human_feedback
+| hybrid_metric
+
+Review :=
+  self_check
+| agent_qa_test
+| human_feedback
+| final_review
+
+Resolve :=
+  iteration_policy
++ accept_condition
++ rerun_condition
++ blocked_stop
+```
+
+Composition rules:
+
+- `agent-qa-test` fills `Review.agent_qa_test` and the
+  `Resolve.rerun_condition` / fix-or-rerun policy.
+- `hitl-autoresearch` fills `Metric.human_feedback` and
+  `Review.human_feedback` through `feedback-request.md`, `feedback.json`, and
+  `human_score` or `accepted`.
+- `review` fills `Review.final_review` for serious completion, skill-contract,
+  or proof-bundle judgments.
+- `$work`, `impl`, or an active ticket fills `Task` execution routing when the
+  goal requires implementation rather than planning only.
+
+When the operator asks for a Goal plus agent QA plus HITL feedback, emit one
+Goal whose evidence, metric, review, and iteration policy name those providers
+explicitly. Do not produce separate disconnected prompts unless the operator
+asks for prompt-only artifacts.
+
 For skill-improvement work, native Goal mode is the durable loop runner. Draft
 the Goal so it reads the target skill package plus any `self-improve/`
 context, optimizes toward `program.md`, uses `$self-improve` only for
@@ -103,6 +156,8 @@ GoalPrepState {
   constraints: string[]
   current_state: string[]
   next_action: string
+  review: string[]
+  resolve: string[]
   proxy_rejects: string[]
   blocked_stop: string
   questions: string[]
@@ -115,9 +170,11 @@ Fill the template from `GoalPrepState`:
 - `specific evidence`: `validation` plus `metric`
 - `constraints`: `constraints`, `non_goals`, and `proxy_rejects`
 - `allowed inputs, tools, or boundaries`: ticket/operator boundaries
-- `iteration policy`: `next_action` plus how Codex should choose after each
-  result
+- `iteration policy`: `next_action` plus `resolve` and how Codex should choose
+  after each result
 - `blocked report`: `blocked_stop` plus unresolved `questions`
+- `review`: include `review` providers in the evidence and iteration clauses
+  instead of leaving them as detached side requests
 
 Question policy:
 
@@ -140,6 +197,12 @@ remain, <what Codex should report and what would unlock progress>.
 
 If several framings are genuinely viable, use `advise` first, then emit the
 recommended goal using this template.
+
+## Reference Map
+
+- [`references/goal-algebra.md`](references/goal-algebra.md) - compact
+  composition model for Goal providers such as agent QA, HITL feedback, and
+  final review.
 
 ## Skill Improvement Template
 

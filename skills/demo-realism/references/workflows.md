@@ -11,20 +11,29 @@
    - What spreadsheets, dashboards, inboxes, or systems likely surround the workflow?
 3. **Choose the pitch-worthy MVP slice**
    - Which narrow slice best shows future-state value in a believable way?
-4. **Build the workflow ladder**
+4. **Run the source-artifact ladder when realism depends on concrete inputs**
+   - Prefer user-provided or local source files.
+   - Search for public, non-password-protected artifacts before inventing
+     replacements.
+   - Record stable URLs, access notes, artifact type, and whether each artifact
+     is `real-public`, `user-provided`, `local-supplied`, or
+     `synthetic-fallback`.
+   - Use synthetic artifacts only after real sources fail, are sensitive, are
+     explicitly out of scope, or are requested by the user.
+5. **Build the workflow ladder**
    - Start from the whole story
    - Break into concrete workflows/features
-5. **Build the screen/state ladder**
+6. **Build the screen/state ladder**
    - For each workflow, list the screens, states, and operational transitions that matter
-6. **Build the demo-data pack**
+7. **Build the demo-data pack**
    - entities
    - realistic records
    - timelines
    - statuses
    - edge cases
    - failure/empty states
-7. **Score the pack with the realism rubric**
-8. **Recommend the next handoff**
+8. **Score the pack with the realism rubric**
+9. **Recommend the next handoff**
 
 ## Output Shape
 
@@ -34,6 +43,7 @@ Pitch-worthy MVP slice
 Workflow ladder
 Screen/state ladder
 Demo-data pack
+Source provenance
 Realism rubric score
 Assumption ledger
 Recommended handoff

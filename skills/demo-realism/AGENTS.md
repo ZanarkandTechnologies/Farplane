@@ -4,6 +4,8 @@ Local rules for the `demo-realism` skill.
 
 - Keep this skill upstream of final design/build. It owns realism synthesis, not execution.
 - Prefer believable operating assumptions over generic placeholder examples.
+- Prefer real public, user-provided, or local source artifacts over synthetic
+  artifacts when the artifact itself determines demo credibility.
 - Treat aggressive inference as allowed, but never phrase the result like verified client truth.
 - Every output should connect:
   - operator

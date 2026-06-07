@@ -83,6 +83,12 @@ between high-level intent and raw run capture: it turns the operator's "test
 this properly" instruction into an executable adversarial testing loop or a
 paste-ready prompt.
 
+When composed inside `goal-crafter`'s Goal algebra, `agent-qa-test` is the
+`Review.agent_qa_test` provider and supplies the Goal's fix/rerun evidence
+threshold. It should not compete with Goal mode for continuation ownership:
+Goal mode owns continuation and blocked stops; `agent-qa-test` owns the
+adversarial proof loop for the claim under test.
+
 For serious readiness claims, the proof stack is:
 
 ```text
@@ -220,6 +226,11 @@ execution:
 
 - `prompts/run-loop.md` for the default adversarial testing loop
 - `prompts/prompt-only.md` for a compact paste-ready instruction block
+
+## Reference Map
+
+- [`references/goal-composition.md`](references/goal-composition.md) - split
+  between Goal lifecycle ownership and agent QA proof ownership.
 
 Keep generated prompts concrete: target, cases, evidence, lane prompts,
 rerun/fix policy, and stop condition.
