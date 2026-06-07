@@ -78,10 +78,54 @@ flowchart LR
 - **Test-case memory.** The harness can preserve disliked outputs, misses, and
   benchmark cases so failures become reusable improvement pressure.
 - **Human-marked hard cases.** `repent lesson` and `repent hardcase` turn fixed
-  agent failures into local lessons, Notion improvement proposals, or sanitized
-  hardcase artifacts for future eval and training-data review.
+  agent failures into local lessons, Notion improvement proposals, sanitized
+  hardcase artifacts, or narrow high-priority regression eval rows.
 - **Ticket-first autonomy as one mode.** Tickets remain the durable execution
   surface for coding work, but they are not the whole product.
+
+## Gamechanging Workflows
+
+- **Ask -> ground -> decide -> act.** Material work starts by checking local
+  evidence, peer patterns, official/current docs when needed, and then uses
+  advice-shaped decisions before execution.
+- **Global prompt stays lean.** The installed AGENTS template carries only
+  every-turn behavior; project coding defaults, skill procedures, review rules,
+  and workflow detail live in owner files that can be tested and changed
+  independently.
+- **Skills render their own operating checklist.** Skill `SKILL.md` files own
+  first-load todo lists, tiered dependency shape, references, and scripts so the
+  agent can recursively compose workflows without stuffing the global prompt.
+- **Failures become pressure, not vibes.** Operator corrections flow through
+  `repent`: fix first, then capture a lesson, hardcase, or narrow regression
+  eval when the miss is high-priority.
+- **Validators can create hardcase seeds.** Deterministic skill-contract checks
+  such as todo-tier violations can write deduplicated hardcases automatically,
+  so obvious process failures become future eval/self-improvement material.
+- **System-prompt behavior is evalable.** Project-level `.codex/evals` tasks
+  cover grounding, context gathering, advice routing, proactive action,
+  holdback on risky work, skill todo rendering, repent eval capture,
+  multitopic focus, and validator-triggered hardcase capture.
+- **Long threads keep their topic ledger.** In multitopic work, substantial
+  replies name the active focus before answering so the agent does not drift
+  between prompt, eval, hardcase, and docs work.
+
+## Improvement Loop
+
+```mermaid
+flowchart LR
+  classDef input fill:#dbeafe,stroke:#2563eb,color:#111827
+  classDef surface fill:#e5e7eb,stroke:#4b5563,color:#111827
+  classDef proof fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  classDef learn fill:#ccfbf1,stroke:#0f766e,color:#111827
+
+  ask[/operator ask or correction/]:::input --> ground["reference grounding<br/>local + world evidence"]:::surface
+  ground --> decide["advise / placement<br/>choose owning surface"]:::surface
+  decide --> change["skill, prompt, doc,<br/>validator, ticket, or agent"]:::surface
+  change --> verify["tests, evals,<br/>QA, review"]:::proof
+  verify --> capture["lessons, hardcases,<br/>feature registry"]:::learn
+  capture --> evals["regression evals<br/>or behavior tests"]:::proof
+  evals --> change
+```
 
 ## Repo Index
 
@@ -108,6 +152,7 @@ flowchart LR
 - Self-growing harness map: [docs/specs/meta-harness-automation.md](docs/specs/meta-harness-automation.md)
 - Feature inventory: [harness-techniques.md](docs/specs/harness-techniques.md)
 - Structured feature registry: [docs/features/README.md](docs/features/README.md)
+- Feature registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)
 - Skill guide: [docs/skills/README.md](docs/skills/README.md)
 - Ticket contract: [tickets/README.md](tickets/README.md)
 - QA cookbook surface: [qa/README.md](qa/README.md)

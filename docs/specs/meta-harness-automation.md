@@ -35,7 +35,10 @@ Each piece has a different job:
 - `skills/eval`, `skills/agent-behavior-test`, `skills/agent-qa-test`, and
   `bin/check_skill_capabilities.py` prove behavior and capability claims.
 - `skills/repent`, `docs/LESSONS.md`, and `experiments/hardcases/` turn
-  corrected failures into reusable learning pressure.
+  corrected failures into reusable learning pressure; high-priority misses may
+  also write narrow regression eval rows in the owning eval surface.
+- `bin/check_skill_todo_tiers.py --hardcase-on-failure` lets deterministic
+  validators seed hardcases for clear skill-contract violations.
 - `skills/review` and ticket proof contracts stop self-approval before changes
   are treated as ready.
 - `docs/HISTORY.md`, `docs/MEMORY.md`, and `docs/features/registry.jsonl`
@@ -66,6 +69,9 @@ Examples today include:
 - `FEAT-0024` Skill capability sanity tests
 - `FEAT-0030` On-demand skill plugin packaging
 - `FEAT-0033` Embedded skill checklist install
+- `FEAT-0039` Repent lesson, hardcase, and narrow eval capture
+- `FEAT-0043` Project-level system prompt eval suite
+- `FEAT-0044` Validator-triggered hardcase capture
 
 When a future skill frontmatter field records feature adoption, it should
 reference these `FEAT-####` handles rather than inventing loose feature names.
