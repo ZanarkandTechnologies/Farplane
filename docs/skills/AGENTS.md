@@ -40,6 +40,9 @@ Rules:
 - Use `bin/check_skill_todo_tiers.py` to audit all first-load todo edges
   against the strict one-level-down hierarchy. Use `--allow-peer-tier3` only
   when checking the current intentional Tier 3 application handoff graph.
+- Use `--hardcase-on-failure` during normal skill-maintenance checks so clear
+  todo-tier contract violations leave a deduplicated hardcase artifact for
+  repent, eval, or self-improvement follow-up.
 - Do not maintain a second hand-authored sequence registry. Generate flow or
   graph views from Tier 3 `group` plus `common_chains` when a view is needed.
 - If a field can be derived from file paths, existing frontmatter, direct todo

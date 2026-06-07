@@ -285,3 +285,4 @@
 2026-06-07 00:00 +0800 | EVAL | move global AGENTS workflow eval tasks into `.codex/evals/tasks/` and rewrite queries as minimal realistic user prompts with specific reference points
 2026-06-07 19:17 +0800 | FEAT | extend `repent` with high-priority eval capture that can add narrow regression evals and chain to agent QA or behavior tests when visible child-agent proof is needed
 2026-06-07 19:24 +0800 | DOCS | clarify hardcases as corrected-episode data artifacts distinct from runnable eval rows and add global AGENTS multitopic focus behavior with eval coverage
+2026-06-07 19:32 +0800 | FEAT | make skill todo tier validation write deduplicated hardcase artifacts for clear contract violations and add eval coverage for validator-triggered hardcase capture

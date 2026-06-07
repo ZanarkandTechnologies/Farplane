@@ -41,7 +41,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
 | Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.codex/evals` or `.claude/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, runs tagged harness task files, and judges with boolean/tier verdicts. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include `agent-behavior-test`-style run capture. | You only need one cheap conformance probe and no adversarial proof loop. |
-| Recover from a corrected agent failure or capture it as a hard case | `repent` | It keeps the main agent fix-first, then routes post-fix lessons to `docs/LESSONS.md`, optional Notion proposals, or sanitized hardcase artifacts through scribe/curator roles. | You want a broad self-improvement drain, automatic eval generation, model training, or data-sale workflow; use a later consuming skill. |
+| Recover from a corrected agent failure or capture it as a hard case | `repent` | It keeps the main agent fix-first, then routes post-fix lessons to `docs/LESSONS.md`, optional Notion proposals, sanitized hardcase artifacts, or narrow high-priority regression eval capture. | You want a broad self-improvement drain, broad eval-suite generation, model training, or data-sale workflow; use a later consuming skill. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It scores the work against anchored rubric families and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
 | Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
 | Maintain skill frontmatter, checklists, registry metadata, or skill-system docs | `skill-maintenance` | It owns bulk skill upkeep, tier checks, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. |
@@ -140,6 +140,11 @@ Tiered loading is enforced at the first-load todo boundary:
 - `bin/check_skill_todo_tiers.py` audits every first-load todo edge against strict
   one-level-down loading. Use `--allow-peer-tier3` while Tier 3 application
   handoffs such as content skill -> media execution skill remain intentional.
+- `bin/check_skill_todo_tiers.py --hardcase-on-failure` writes a deduplicated
+  sanitized hardcase under `experiments/hardcases/` when the validator catches
+  a clear skill todo tier violation. This captures the contract failure for
+  repent or eval follow-up without turning every validator failure into a
+  runnable eval row.
 
 ## Tier 3 Pipeline Shape
 

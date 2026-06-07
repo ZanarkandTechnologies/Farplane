@@ -287,6 +287,7 @@ def main() -> int:
         tier_command = ["python3", "bin/check_skill_todo_tiers.py"]
         if not args.strict_tier3:
             tier_command.append("--allow-peer-tier3")
+        tier_command.append("--hardcase-on-failure")
         run(tier_command)
         run(["python3", "bin/check_skill_capabilities.py", "validate"])
 

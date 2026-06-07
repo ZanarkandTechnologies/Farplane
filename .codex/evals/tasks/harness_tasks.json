@@ -128,5 +128,21 @@
     ],
     "tags": ["system-prompt", "communication", "multitopic", "focus"],
     "notes": "Tests whether long-thread responses keep the current topic set visible so the agent does not get lost across parallel prompt, eval, and hardcase work."
+  },
+  {
+    "id": "global_validator_hardcase_capture_01",
+    "title": "Capture validator-detected skill contract violations as hardcases",
+    "query": "A skill-maintenance check fails because a Tier 2 skill todo list direct-links a peer Tier 2 skill. Fix the checklist and make sure this kind of miss becomes future eval material.",
+    "reference_points": [
+      "Recognizes the tier-check failure as a clear skill todo contract violation",
+      "Fixes or proposes the checklist routing through the correct owning tier surface instead of only suppressing the validator",
+      "Reruns the skill-maintenance validation after the fix",
+      "Captures or verifies a sanitized hardcase artifact for the validator-detected violation",
+      "Explains that the hardcase is a data artifact and not itself a runnable eval row",
+      "Proposes or adds a narrow regression eval only when the pattern is high priority or repeatable",
+      "Reports the hardcase path, validation result, and any eval task path or skipped-eval reason"
+    ],
+    "tags": ["system-prompt", "skill-maintenance", "hardcase", "validator"],
+    "notes": "Tests that deterministic validator failures become hardcase/eval material instead of disappearing after the immediate fix."
   }
 ]
