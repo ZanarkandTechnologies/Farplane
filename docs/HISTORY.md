@@ -289,3 +289,4 @@
 2026-06-07 19:40 +0800 | DOCS | summarize the new self-improving harness loop in README, update the feature registry with global prompt eval and hardcase capture features, and sync the meta-harness map
 2026-06-07 19:32 +0800 | DOCS | extend global AGENTS multitopic focus into a whole-thread topic ledger with split-thread handoff guidance and return-to-root eval coverage
 2026-06-07 20:05 +0800 | MIGRATION | commit pre-launch Farplane identity by switching live project state from `.harness/` to `.farplane/` and documenting Farplane AI as the Zanarkand Labs product shell with skill-owned UI incubation
+2026-06-07 21:36 +0800 | MIGRATION | standardize all Farplane subagent role configs and install defaults on `gpt-5.5` with medium reasoning effort

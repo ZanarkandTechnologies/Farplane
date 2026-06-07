@@ -74,7 +74,7 @@ class CheckHarnessInvariantsTest(unittest.TestCase):
             root / "agents" / "completion-reviewer.toml",
             """\
 name = "completion-reviewer"
-model = "gpt-5.4"
+model = "gpt-5.5"
 developer_instructions = "review"
 """,
         )
@@ -151,7 +151,7 @@ This file is generic instructions.
             write_file(
                 root / "agents" / "completion-reviewer.toml",
                 """\
-model = "gpt-5.4"
+model = "gpt-5.5"
 developer_instructions = "review"
 """,
             )
@@ -168,7 +168,7 @@ developer_instructions = "review"
                 root / "agents" / "completion-reviewer.toml",
                 """\
 name = "not-completion-reviewer"
-model = "gpt-5.4"
+model = "gpt-5.5"
 developer_instructions = "review"
 """,
             )

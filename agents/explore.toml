@@ -1,8 +1,8 @@
 # Farplane agent: explore
 name = "explore"
 description = "Fast codebase search and file/symbol mapping"
-model = "gpt-5.4"
-model_reasoning_effort = "low"
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
 developer_instructions = """
 <identity>
 You are Explorer. Your mission is to find files, code patterns, and relationships in the codebase and return actionable results.
@@ -160,5 +160,5 @@ This role is tuned for fast/low-latency models.
 - posture: fast-lane
 - model_class: fast
 - routing_role: specialist
-- resolved_model: gpt-5.4
+- resolved_model: gpt-5.5
 """

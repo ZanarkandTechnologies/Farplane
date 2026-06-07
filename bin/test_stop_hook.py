@@ -55,8 +55,8 @@ class StopHookRoleConfigTests(unittest.TestCase):
             (agents / "completion-reviewer.toml").write_text(
                 '\n'.join(
                     [
-                        'model = "gpt-5.4"',
-                        'model_reasoning_effort = "high"',
+                        'model = "gpt-5.5"',
+                        'model_reasoning_effort = "medium"',
                         'developer_instructions = """',
                         'You are the completion reviewer.',
                         '"""',
@@ -72,8 +72,8 @@ class StopHookRoleConfigTests(unittest.TestCase):
                 parsed,
                 {
                     "developer_instructions": "You are the completion reviewer.",
-                    "model": "gpt-5.4",
-                    "model_reasoning_effort": "high",
+                    "model": "gpt-5.5",
+                    "model_reasoning_effort": "medium",
                 },
             )
 
@@ -82,7 +82,7 @@ class StopHookRoleConfigTests(unittest.TestCase):
             base = Path(td)
             agents = base / "agents"
             agents.mkdir(parents=True)
-            (agents / "completion-reviewer.toml").write_text('model = "gpt-5.4"\n', encoding="utf-8")
+            (agents / "completion-reviewer.toml").write_text('model = "gpt-5.5"\n', encoding="utf-8")
 
             parsed = self.stop_hook.load_role_config(base, "completion-reviewer")
 
@@ -94,14 +94,14 @@ class StopHookRoleConfigTests(unittest.TestCase):
             Path("/tmp/out.json"),
             {
                 "developer_instructions": "Line one\nLine two",
-                "model": "gpt-5.4",
-                "model_reasoning_effort": "high",
+                "model": "gpt-5.5",
+                "model_reasoning_effort": "medium",
             },
         )
 
         self.assertIn("-m", cmd)
-        self.assertIn("gpt-5.4", cmd)
-        self.assertIn('model_reasoning_effort="high"', cmd)
+        self.assertIn("gpt-5.5", cmd)
+        self.assertIn('model_reasoning_effort="medium"', cmd)
         injected = next(part for part in cmd if part.startswith("developer_instructions="))
         self.assertIn("\\n", injected)
         self.assertIn("Line one", injected)
@@ -559,7 +559,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             Path("/tmp/report.json"),
             {
                 "developer_instructions": "Return JSON only.",
-                "model": "gpt-5.4",
+                "model": "gpt-5.5",
                 "model_reasoning_effort": "medium",
             },
         )

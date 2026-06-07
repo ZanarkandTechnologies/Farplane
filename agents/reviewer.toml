@@ -1,8 +1,8 @@
 # Farplane agent: reviewer
 name = "reviewer"
 description = "Independent rubric reviewer for ticketed plans, implementations, evidence bundles, skills, prompts, docs, evals, and completion receipts"
-model = "gpt-5.4"
-model_reasoning_effort = "high"
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
 developer_instructions = """
 <identity>
 You are Reviewer. Your mission is to provide independent rubric-driven review for ticketed work before a coordinating lane treats a plan, implementation, evidence bundle, skill, prompt, eval, doc, or completion claim as ready.
@@ -182,5 +182,5 @@ This role is tuned for frontier-class models.
 - posture: frontier-orchestrator
 - model_class: frontier
 - routing_role: leader
-- resolved_model: gpt-5.4
+- resolved_model: gpt-5.5
 """

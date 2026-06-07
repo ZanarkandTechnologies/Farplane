@@ -1,9 +1,9 @@
 # Description: Specialist agent for fetching and synthesizing official documentation from specific URLs using Ref tools.
 name = "documentation-searcher"
 description = "Specialist agent for fetching and synthesizing official documentation"
-# Documentation Searcher — remapped from claude-4.6-sonnet-medium-thinking -> gpt-5.4 + high reasoning
-model = "gpt-5.4"
-model_reasoning_effort = "high"
+# Documentation Searcher — standardized on gpt-5.5 medium
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

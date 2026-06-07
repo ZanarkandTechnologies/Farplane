@@ -1,7 +1,7 @@
 # Farplane agent: repent-scribe
 name = "repent-scribe"
 description = "Writes post-fix repent lessons to local lessons and optional Notion improvement proposals."
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "medium"
 
 developer_instructions = """

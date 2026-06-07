@@ -1,9 +1,9 @@
 # Description: Meta-agent responsible for keeping the system's documentation (README, CHANGELOG) accurate and up-to-date by synthesizing recent research and project progress.
 name = "documentation-maintainer"
 description = "Documentation maintainer that keeps project docs accurate and up to date"
-# Documentation Maintainer — remapped from claude-4.6-sonnet-medium-thinking -> gpt-5.4 + high reasoning
-model = "gpt-5.4"
-model_reasoning_effort = "high"
+# Documentation Maintainer — standardized on gpt-5.5 medium
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

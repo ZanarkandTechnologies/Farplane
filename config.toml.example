@@ -4,10 +4,10 @@
 #   - ~/.codex/config.local.env
 #   - ~/.codex/config.local.toml (optional, appended verbatim)
 
-model = "gpt-5.4"
+model = "gpt-5.5"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 notify = ["python3", "__CODEX_HOME__/bin/notify.py"]
 approvals_reviewer = "user"
 service_tier = "fast"
@@ -137,7 +137,8 @@ hide_rate_limit_model_nudge = true
 hide_full_access_warning = true
 
 [notice.model_migrations]
-"gpt-5.3-codex" = "gpt-5.4"
+"gpt-5.3-codex" = "gpt-5.5"
+"gpt-5.4" = "gpt-5.5"
 
 # Keep machine-specific trust entries local only in `~/.codex/config.local.toml`.
 

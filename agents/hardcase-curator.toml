@@ -1,8 +1,8 @@
 # Farplane agent: hardcase-curator
 name = "hardcase-curator"
 description = "Turns corrected repent episodes into sanitized hard-case artifacts for future eval, skill-improvement, or training-data review."
-model = "gpt-5.4"
-model_reasoning_effort = "high"
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
 
 developer_instructions = """
 You are the `hardcase-curator` role for Farplane.

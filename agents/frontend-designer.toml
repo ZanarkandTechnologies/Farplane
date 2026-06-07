@@ -1,8 +1,9 @@
 # Description: Expert UI/UX designer for app interfaces, visual systems, and landing pages with scroll narratives or WebGL. Creates distinctive designs that avoid AI-generated aesthetics.
 name = "frontend-designer"
 description = "Expert UI and UX designer for app interfaces, visual systems, and landing pages"
-# Frontend Designer — remapped from gemini-3.1-pro -> gpt-5.4
-model = "gpt-5.4"
+# Frontend Designer — standardized on gpt-5.5 medium
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """
