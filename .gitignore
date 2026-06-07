@@ -27,7 +27,10 @@ tmp/
 .personality_migration
 .omx/
 .harness/
-.codex/evals/
+.codex/evals/*
+!.codex/evals/
+!.codex/evals/tasks/
+!.codex/evals/tasks/*.json
 .ralph/
 .agents/*
 plugins/

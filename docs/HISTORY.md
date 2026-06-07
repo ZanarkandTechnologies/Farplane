@@ -282,3 +282,4 @@
 2026-06-07 00:00 +0800 | CLEANUP | collapse eval-onboarding into the eval skill as eval:onboarding with clean-room starter templates and examples
 2026-06-07 00:00 +0800 | DOCS | clarify global skill todo rendering so active linked-skill checklists expand only when they become the current step
 2026-06-07 00:00 +0800 | EVAL | add global AGENTS workflow eval seed tasks covering grounding, context gathering, advice routing, autonomy, holdback, and skill todo rendering
+2026-06-07 00:00 +0800 | EVAL | move global AGENTS workflow eval tasks into `.codex/evals/tasks/` and rewrite queries as minimal realistic user prompts with specific reference points

@@ -83,5 +83,3 @@ The runner writes the proof surfaces this skill should summarize:
   report shape example.
 - [examples/first-harness-eval/tasks.json](examples/first-harness-eval/tasks.json) -
   clean-room starter task set.
-- [examples/global-agents-workflow/tasks.json](examples/global-agents-workflow/tasks.json) -
-  system-prompt workflow eval seeds for global AGENTS behavior.
