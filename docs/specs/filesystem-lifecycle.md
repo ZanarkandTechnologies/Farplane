@@ -20,6 +20,82 @@ Use the smallest durable surface that matches the state:
 Normal agents should read recent or topic-matched entries first. Drain and audit
 passes may scan full files.
 
+## Artifact-First Write Rule
+
+Treat durable information as a file-backed variable, not as chat-only prose.
+When a result is likely to be reused, referenced, resumed, audited, optimized, or
+extended, write or update the owning file first and return only the useful
+summary plus pointer in chat.
+
+Write a file first for:
+
+- specs, standards, schemas, process definitions, and stable equations
+- tickets, plans, acceptance criteria, blockers, and proof contracts
+- research syntheses, source decisions, comparison matrices, and gap notes
+- eval tasks, judge rubrics, run reports, and representative hardcases
+- reusable lessons, invariants, troubleshooting records, and closeout evidence
+- generated artifacts, implementation evidence, QA captures, and review reports
+
+Respond directly for:
+
+- one-off answers that have no future owner
+- short status updates or command outputs
+- early ambiguous brainstorming before the durable surface is known
+- tiny corrections where editing an owning file would create clutter
+
+If the right owner is unknown but the information clearly matters, create the
+smallest honest artifact under the nearest owning surface, such as a ticket
+artifact, `docs/research/**`, `experiments/**`, or a draft spec. Do not hide
+durable state in chat because the exact final home is still uncertain.
+
+## Markdown Front Matter Standard
+
+New durable Markdown files should begin with YAML front matter. Front matter
+stores routing and machine-readable metadata; the body stores the human-facing
+contract, explanation, evidence, or narrative. Do not duplicate long metadata in
+the body unless a reader needs it there.
+
+Default shape:
+
+```yaml
+---
+title: "Short Human Title"
+status: draft
+owner: doc-governance
+created_at: 2026-06-09
+updated_at: 2026-06-09
+tags:
+  - farplane
+refs: []
+---
+```
+
+Use these fields as the default baseline:
+
+- `title`: human-readable title for indexes, search, and generated summaries
+- `status`: `draft`, `active`, `designed`, `implemented`, `archived`,
+  `superseded`, or the owning surface's stricter local state
+- `owner`: skill, workflow, module, or governance owner responsible for upkeep
+- `created_at`: ISO date when the artifact was created
+- `updated_at`: ISO date for the last material update
+- `tags`: small topic tags for retrieval
+- `refs`: stable related files, ticket IDs, feature IDs, source IDs, memory IDs,
+  or artifact paths
+
+Surface-specific schemas may add or replace fields:
+
+- skill files use their existing `SKILL.md` front matter contract
+- ticket files use the ticket template metadata contract
+- feature and source registries stay JSONL, not Markdown front matter
+- research artifacts may add `source_refs`, `method`, `confidence`, or
+  `decision`
+- eval artifacts may add `suite`, `metric`, `judge`, or `run_id`
+- specs may add `feature_id`, `supersedes`, `last_verified`, or `review_refs`
+
+Keep front matter compact. Do not put secrets, private handles, raw transcripts,
+large evidence blobs, or long prose in front matter. Store those in the right
+body section, redacted artifact, or private local context.
+
 ## Lifecycle Table
 
 | Surface | Role | Write Trigger | Read Default | Drain / Cleanup | Owner |

@@ -6,23 +6,123 @@ Date: 2026-06-09
 
 ## Purpose
 
-Define harness engineering as a mathematical optimization problem around a
-model. The spec starts from the basic model call, defines the harness variables,
-objective and reward functions, and update loop, then shows how skills, evals,
-hooks, memory drains, tickets, and meta-skills become composable functions over
-typed artifacts and state transitions.
+Define harness engineering with math-like definitions, starting from the basic
+model call and building up to context, skills, tools, memory, subagents,
+verification, reward functions, and self-improvement.
 
-This spec is the canonical place for the algebra thesis. Individual skills may
-carry compact function contracts, but the system-wide notation belongs here.
+The goal is to teach the harness as an optimization system:
 
-## Decision
+> A prompt is not the product. The harness is the equation around the model.
 
-Farplane should teach harness engineering as constrained optimization over an
-agent's context interface:
+## Response Notation Preference
+
+Function signatures are also a response format, not only an internal spec
+format. When an explanation introduces an important concept, standard, process,
+skill, hook, eval, memory rule, or reusable abstraction, prefer a compact
+signature that makes the input/output shape obvious.
+
+```text
+concept_name(inputs, optional_state?) -> outputs + evidence
+```
+
+Good signatures highlight:
+
+- inputs consumed
+- state or files read
+- transformation applied
+- outputs produced
+- durable variables written
+- evidence or reward signal used to judge success
+
+Examples:
+
+```text
+artifact_first(result, owner?) -> file_ref + chat_summary
+
+frontmatter(markdown_body, metadata) -> routable_markdown_file
+
+skill(task, context, state) -> outputs + write_set + evidence
+
+eval(candidate_output, rubric, fixtures) -> score + failure_modes
+```
+
+Do not force signatures into tiny status updates, purely emotional responses,
+or cases where they would make the answer less clear. The purpose is intuition:
+make the object manipulable by showing what flows in and what flows out.
+
+## 1. Prompt Algebra
+
+Start with the simplest model:
+
+```text
+Codex = f(input_prompt) -> reasoning -> text_output
+```
+
+A real interaction is multi-turn:
+
+```text
+Codex_N =
+  f(input_prompt
+    + text_output_1
+    + ...
+    + text_output_{N-1})
+  -> text_output_N
+```
+
+Where:
+
+- `N` is the turn number.
+- Each turn changes the effective prompt by adding prior outputs, user
+  responses, tool results, and accumulated context.
+- The harness decides which variables enter the next prompt.
+
+## 2. Prompt Size Is A Proxy, Not The Goal
+
+A naive first approximation:
+
+```text
+prompt_size proportional_to (hallucination, cost_time_money)
+```
+
+This is useful intuition, but too simple.
+
+Better:
+
+```text
+cost + latency ~= prompt_size + tool_calls + turns
+
+hallucination ~= missing_context
+               + noisy_context
+               + contradictory_context
+               + weak_verification
+```
+
+So the goal is not:
+
+```text
+min(prompt_size)
+```
+
+The goal is:
+
+```text
+minimize irrelevant_context
+maximize useful_constraints
+minimize turns + coordination_cost
+subject to acceptable_output_quality
+```
+
+## 3. Context Definition
+
+The model is better written as:
 
 ```text
 Codex = M(context, task) -> output
+```
 
+Where:
+
+```text
 context =
   system_prompt
 + tool_descriptions
@@ -30,102 +130,27 @@ context =
 + memory
 + conversation_history
 + task_input
-
-Harness H := policy for constructing, updating, verifying, and optimizing
-that context for a class of tasks.
 ```
 
-The real objective is not to make every prompt look mathematical. The objective
-is to define the variables, reward function, constraints, and update rules that
-let Farplane improve the harness without drifting into prompt bloat,
-self-approval, or hidden state.
-
-The process-function model still matters, but it sits under the optimization
-model:
+And:
 
 ```text
-Process := Inputs + ReadSet + Transform + WriteSet + Outputs + Evidence
+input_prompt =
+  system_prompt
++ mcp_tools_prompt
++ skills_prompt
++ user_prompt
 ```
 
-Every reusable harness process should answer:
-
-- what inputs it consumes
-- what files, ledgers, tools, or runtime state it reads
-- what transformation it applies
-- what outputs it produces
-- what durable variables it writes
-- what evidence proves the transformation worked
-- how it composes with upstream and downstream processes
-
-## Advise Decision
-
-The placement decision had three viable options:
-
-1. Put full algebra blocks in every `SKILL.md` immediately.
-   - Pros: maximum visibility and immediate pressure toward formal contracts.
-   - Cons: noisy migration, high chance of generic filler, and too much churn
-     before the notation is proven.
-2. Create this canonical spec, add a compact skill-template `Function Contract`,
-   and roll it out on contact or through representative samples.
-   - Pros: gives the system one source of truth while letting skill contracts
-     stay concise and useful.
-   - Cons: slower adoption; early coverage will be uneven.
-3. Build validators and schemas first, then require every process to conform.
-   - Pros: strongest long-term enforcement.
-   - Cons: premature until the model has passed real skill/template examples.
-
-Recommendation: use option 2. The tradeoff accepted is uneven early adoption in
-exchange for a model that can mature before it becomes a validator requirement.
-
-## ML-Course Framing
-
-Harness engineering is analogous to learning a policy around a frozen or
-semi-fixed model.
+With:
 
 ```text
-Base model:
-  y = M(c, x)
-
-where:
-  x = task
-  c = context
-  y = output
+skill = { skill_prompt, scripts, references, templates, evals? }
 ```
 
-A harness is the policy that chooses the context, tools, memory, skills,
-delegation, and verification around the model:
+## 4. Harness Definition
 
-```text
-H_theta(x, s) -> c
-```
-
-Where:
-
-- `theta` is the harness configuration: prompts, skill contracts, routing
-  rules, tool policy, memory policy, evals, budgets, and review gates.
-- `x` is the current task.
-- `s` is current harness state: files, memory, conversation, runtime state,
-  tool availability, and prior evidence.
-- `c` is the context handed to the model.
-
-The full agent behavior becomes:
-
-```text
-y = M(H_theta(x, s), x)
-```
-
-And the harness state updates after evidence:
-
-```text
-s_{t+1} = U(s_t, x_t, y_t, e_t)
-```
-
-Where `e_t` is evidence from tests, evals, review, user feedback, telemetry, or
-runtime traces.
-
-## Harness Definition
-
-The harness is the set of functions that mediate between a user task and the
+A harness is the function that chooses the context and control loop around the
 model:
 
 ```text
@@ -140,28 +165,263 @@ Harness H :=
 + BudgetPolicy
 ```
 
-Each component is itself a function:
+The harness turns a task and current state into model context:
 
 ```text
-ContextBuilder(task, state) -> context
-SkillSelector(task, state, registry) -> selected_skills
-ToolPolicy(task, state, tool_registry) -> allowed_tools
-MemoryPolicy(task, ledgers, retrieval_rule) -> memory_slice
-DelegationPolicy(task, constraints) -> subagent_plan | none
-VerificationPolicy(output, proof_contract) -> evidence
-UpdatePolicy(harness, evidence, constraints) -> harness_delta | reject
-BudgetPolicy(task, constraints) -> token_turn_time_budget
+context_n = H_theta(task_n, state_n)
 ```
 
-The harness is useful when these functions compose into reliable behavior for a
-task distribution, not merely one prompt.
-
-## Task Distribution
-
-Optimization needs a task distribution, not a single anecdote:
+Then the model produces output:
 
 ```text
-D = { task_i, expected_properties_i, constraints_i, evaluation_i }
+output_n = M(context_n, task_n)
+```
+
+Equivalently:
+
+```text
+y_n = M(H_theta(task_n, state_n), task_n)
+```
+
+Then the harness updates state:
+
+```text
+state_{n+1} = update(state_n, output_n, evidence_n)
+```
+
+And for the model-visible context:
+
+```text
+context_{n+1} = update(context_n, output_n, evidence_n)
+```
+
+So the full loop is:
+
+```text
+task_n -> H_theta(task_n, state_n) -> context_n
+context_n + task_n -> M -> output_n
+output_n + evidence_n -> update -> state_{n+1}
+```
+
+## 5. Harness Variables
+
+The harness parameters are:
+
+```text
+theta =
+  system_prompt
++ selected_skills
++ tool_set
++ memory_policy
++ subagent_topology
++ verification_tests
++ routing_policy
++ budget_limits
++ review_policy
++ update_policy
+```
+
+Equivalently:
+
+```text
+H_theta = {
+  system_prompt,
+  selected_skills,
+  tool_set,
+  memory_policy,
+  subagent_topology,
+  verification_tests,
+  routing_policy,
+  budget_limits
+}
+```
+
+Harness engineering is choosing `theta`.
+
+## 6. Skill Selection
+
+Skill selection is a harness function:
+
+```text
+find_skills(task_x, skill_registry, state) -> selected_skills
+```
+
+A task run can be written as:
+
+```text
+task_x =
+  (system_prompt + mcp_tools + user_prompt)
+  -> find_skills(task_x)
+  -> selected_skills
+  -> N_turns
+  -> output_x
+```
+
+The goal is not only to choose more skills. The goal is to choose the minimum
+sufficient reusable skill context:
+
+```text
+goal -> min(skill_prompt_duplication)
+goal -> max(reusable_behavior)
+```
+
+## 7. Turn Minimization
+
+Turn count is a cost variable:
+
+```text
+goal -> min(N_turns)
+```
+
+But turn minimization is constrained:
+
+```text
+min(N_turns)
+subject to:
+  quality >= threshold
+  verification_passes = true
+  user_goal_satisfied = true
+```
+
+If reducing turns removes verification, the harness got faster but worse.
+
+## 8. Delegation And Subagents
+
+Delegation splits turn work across agents:
+
+```text
+N_turns -> subagent_a_turns + subagent_b_turns + ... + integration_turns
+```
+
+A subagent is:
+
+```text
+subagent = Codex(subagent_prompt, task_prompt)
+```
+
+More generally:
+
+```text
+subagent_i = M(context_i, task_i)
+```
+
+Where:
+
+```text
+context_i =
+  subagent_prompt
++ task_prompt
++ selected_skills_i
++ tool_policy_i
++ evidence_requirements_i
+```
+
+The subagent optimization problem:
+
+```text
+goal -> min(subagent_prompt)
+subject to:
+  role_clarity >= threshold
+  owned_output_defined = true
+  integration_evidence_passes = true
+```
+
+Skills help because reusable skill variables prevent duplicating the same
+instructions inside every subagent prompt.
+
+## 9. CSP Versus Constrained Optimization
+
+Pure CSP asks:
+
+```text
+Find assignments to variables such that all constraints are satisfied.
+```
+
+Harness engineering usually asks:
+
+```text
+Find the best harness configuration
+minimizing cost / turns / context size / duplication
+while satisfying quality / safety / reliability constraints.
+```
+
+So harness engineering is better described as constrained optimization:
+
+```text
+minimize:
+  tokens
++ latency
++ turns
++ duplicated_instructions
++ failure_rate
+
+subject to:
+  quality >= threshold
+  safety == acceptable
+  tests == pass
+  user_goal == satisfied
+  cost <= budget
+```
+
+Compact thesis:
+
+```text
+Harness engineering =
+  constrained optimization over context, tools, memory, skills,
+  delegation, and verification.
+```
+
+## 10. Reward Function
+
+For a task distribution `D`, define a harness score:
+
+```text
+S(H, D) =
+  task_success
++ reliability
++ reusable_behavior
++ downstream_transfer
++ auditability
+- token_cost
+- latency
+- turn_count
+- duplicated_instruction
+- failure_rate
+- regression_rate
+```
+
+Weighted version:
+
+```text
+S(H, D) =
+  w_success * TaskSuccess(H, D)
++ w_reliability * Reliability(H, D)
++ w_reuse * Reuse(H, D)
++ w_transfer * DownstreamTransfer(H, D)
++ w_audit * Auditability(H, D)
+- w_token * TokenCost(H, D)
+- w_latency * Latency(H, D)
+- w_turns * Turns(H, D)
+- w_dup * Duplication(H)
+- w_fail * FailureRate(H, D)
+- w_regress * RegressionRate(H, D)
+```
+
+In practice, Farplane should often use a Pareto frontier instead of one scalar:
+
+```text
+accept if:
+  quality improves and cost does not increase
+  OR cost decreases and quality does not regress
+  OR downstream transfer improves with acceptable added cost
+```
+
+## 11. Task Distribution
+
+Self-improvement needs a task distribution, not one anecdote:
+
+```text
+D = { task_i, expected_properties_i, constraints_i, eval_i }
 ```
 
 Examples:
@@ -171,394 +431,199 @@ Examples:
 - review tasks
 - eval-writing tasks
 - research-to-ticket tasks
-- user correction recovery tasks
+- correction recovery tasks
 
-Without a distribution `D`, an agent can overfit one case and call that
-self-improvement.
+Without `D`, the agent optimizes for vibes or overfits a single example.
 
-## Reward And Objective Functions
+## 12. Harness Self-Improvement
 
-Define the reward of a harness configuration against a task distribution:
+Let:
 
 ```text
-R(H_theta, D) =
-  w_success * TaskSuccess(H_theta, D)
-+ w_reliability * Reliability(H_theta, D)
-+ w_reuse * ReuseTransfer(H_theta, D)
-+ w_audit * Auditability(H_theta, D)
-- w_cost * Cost(H_theta, D)
-- w_latency * Latency(H_theta, D)
-- w_turns * Turns(H_theta, D)
-- w_context * ContextTokens(H_theta, D)
-- w_dup * DuplicatedInstruction(H_theta)
-- w_regression * RegressionRate(H_theta, D)
+H_t = current_harness
+Delta H_t = proposed_harness_change
+S(H_t, D) = baseline_score
 ```
 
-The constrained form is often safer than a single scalar:
+The loop:
 
 ```text
-minimize:
-  context_tokens
-+ turns
+1. Define task distribution D
+2. Define harness H
+3. Define score function S(H, D)
+4. Run baseline score
+5. Agent proposes one change Delta H
+6. Run evals again
+7. Accept only if score improves and constraints still pass
+8. Record lesson
+9. Repeat
+```
+
+Update rule:
+
+```text
+H_{t+1} =
+  H_t + Delta H_t  if Accept(Delta H_t)
+  H_t              otherwise
+```
+
+Acceptance rule:
+
+```text
+Accept(Delta H) :=
+  quality_improves
+  AND cost <= budget
+  AND prompt_size <= limit
+  AND no_safety_regression
+  AND no_test_regression
+  AND heldout_score_does_not_regress
+```
+
+This is gradient-descent-like:
+
+```text
+loss(H) =
+  bad_outputs
++ regressions
++ token_cost
 + latency
 + duplicated_instruction
-+ maintenance_cost
-
-subject to:
-  task_success >= baseline
-  reliability >= threshold
-  safety_constraints pass
-  review/eval/proof gates pass
-  regression_rate <= threshold
-  user_boundaries are respected
++ drift
 ```
 
-This is the cleaner version of the original prompt-size intuition:
-
-> Minimize irrelevant context and coordination cost, subject to quality,
-> reliability, safety, and proof constraints.
-
-## Error Model
-
-Prompt size alone is not the hallucination variable.
-
-Better approximation:
+Then:
 
 ```text
-cost + latency ~= context_tokens + tool_calls + turns
-
-error_risk ~= missing_context
-           + noisy_context
-           + contradictory_instructions
-           + weak_verification
-           + bad_tool_or_skill_selection
+H_{t+1} = H_t - alpha * estimated_gradient(loss)
 ```
 
-So the harness should not optimize for the shortest prompt. It should optimize
-for the minimum sufficient context and proof loop.
-
-## Harness Update Rule
-
-The self-improvement loop is:
+But in Farplane the space is discrete. We do not usually have a real gradient.
+So the practical optimizer is closer to coordinate descent or evolutionary
+search:
 
 ```text
-1. choose task distribution D
-2. choose current harness H_theta
-3. run baseline score R(H_theta, D)
-4. propose one bounded change delta_theta
-5. evaluate H_{theta + delta_theta}
-6. accept only if reward improves and constraints still pass
-7. record accepted and rejected lessons
-8. repeat until plateau, budget, or blocked condition
+choose one coordinate:
+  skill_prompt
+  system_prompt
+  tool_policy
+  memory_policy
+  eval_suite
+  routing_rule
+  subagent_prompt
+  review_gate
+
+change it
+measure it
+keep or revert
 ```
 
-In notation:
+## 13. Failure Modes
+
+Unconstrained optimization drifts:
 
 ```text
-theta_{t+1} =
-  theta_t + delta_theta_t  if Accept(delta_theta_t)
-  theta_t                  otherwise
+goal: improve reliability
+agent action: add more instructions
+result: prompt bloat, higher cost, more contradictions
 ```
-
-Where:
 
 ```text
-Accept(delta_theta) :=
-  R(H_{theta + delta_theta}, D_eval) > R(H_theta, D_eval)
-  and constraints(H_{theta + delta_theta}) pass
-  and heldout_regressions(H_{theta + delta_theta}) = 0
+goal: reduce turns
+agent action: skip verification
+result: faster but less trustworthy
 ```
-
-This is gradient-descent-like, but Farplane usually does not have smooth
-gradients. It uses heuristic search over discrete harness changes:
 
 ```text
-delta_theta in {
-  edit skill prompt,
-  move detail to reference,
-  add eval case,
-  change tool policy,
-  add proof gate,
-  adjust routing rule,
-  improve memory retrieval,
-  add or remove delegation
-}
+goal: pass evals
+agent action: overfit test cases
+result: eval score improves, general behavior gets worse
 ```
-
-The gradient analogy is useful for teaching:
 
 ```text
-loss(H) = bad_outputs + regressions + cost + drift
-
-delta_theta points toward lower loss.
+goal: make itself better
+agent action: edit its own rules without stable benchmark
+result: self-referential drift
 ```
 
-But the implementation is closer to coordinate descent, evolutionary search,
-or autoresearch:
-
-- change one bounded coordinate
-- measure
-- keep or reject
-- preserve the evidence trail
-
-## Original Intuition, Formalized
-
-The original simple model:
+The correction:
 
 ```text
-Codex = f(input_prompt) -> text_output
+Do not optimize "be better."
+Optimize a bounded harness artifact against a fixed eval distribution.
 ```
 
-Becomes:
+## 14. Skills As Functions
+
+Once the harness model is defined, each skill can be written as a function:
 
 ```text
-output_n = M(context_n, task_n)
-context_n = H_theta(task_n, state_n)
-state_{n+1} = U(state_n, output_n, evidence_n)
+skill_s(input, context, artifacts) -> output + evidence + write_set
 ```
 
-The harness optimization goal:
+For a Farplane skill:
 
 ```text
-theta* = argmax_theta R(H_theta, D)
+Skill_s :=
+  skill_prompt
++ todo_list
++ references
++ scripts
++ templates
++ proof_contract
 ```
 
-Or constrained:
+Function contract:
 
 ```text
-theta* = argmin_theta Cost(H_theta, D)
-subject to Quality(H_theta, D) >= threshold
+skill_name: Inputs -> Outputs
+
+Inputs:
+  operator_intent
+  required_context
+  readable_artifacts
+  optional_tools
+
+Outputs:
+  primary_response_or_artifact
+  write_set
+  evidence
+
+Composition:
+  upstream
+  downstream
+  transitive_effects
 ```
 
-Skills are reusable variables inside `theta`; tools are action variables;
-subagents are parallel branches; memory is persistent state; evals and review
-are constraints/reward estimators.
+Do not add this section as decoration. Add it when it clarifies the variables
+the skill consumes and produces.
 
-## Core Types
+## 15. Evals As Functions
+
+An eval is a scoring function:
 
 ```text
-Artifact :=
-  path
-+ owner
-+ schema_or_shape
-+ lifecycle
-+ proof_status
+Eval(candidate, task_distribution, judge) -> score + verdict + evidence
 ```
 
-An artifact is a visible variable in the harness. Files, ticket sections,
-registry rows, eval run JSON, review receipts, generated graphs, and memory
-ledger rows are all artifacts.
+Or:
 
 ```text
-HarnessState :=
-  FilesystemState
-+ RuntimeState
-+ MemoryState
-+ ExternalState
-+ ConversationState
+E(H, D) -> S(H, D)
 ```
 
-The filesystem is the most important state carrier because it can survive chat
-compaction and fresh agents. Runtime state and external state are real, but they
-must be named explicitly because they are easier to lose or mutate
-accidentally.
+Good evals define:
 
-```text
-Process<I, O> :=
-  input: I
-  read_set: Artifact[]
-  transform: I + read_set -> O
-  write_set: Artifact[]
-  evidence: Evidence
-  state_delta: HarnessState -> HarnessState
-```
+- input candidate
+- task cases
+- expected properties
+- judge or assertions
+- score
+- failure evidence
+- heldout split
 
-Processes should be judged by whether another agent can replay or audit this
-contract from repo files alone.
+## 16. Files As Variables
 
-## Harness Primitives As Functions
-
-### Skill
-
-```text
-Skill<I, O> :=
-  Process<
-    OperatorIntent + RequiredContext + Artifacts,
-    ChatOutput | ArtifactOutput | HandoffOutput
-  >
-```
-
-A skill is not just a prompt. A skill is a reusable function contract with:
-
-- trigger conditions
-- required context
-- first-load todo list
-- optional references, scripts, templates, and tools
-- expected outputs
-- proof obligations
-- composition hints
-
-### Eval
-
-```text
-Eval<Candidate, Verdict> :=
-  Process<
-    Candidate + TestCases + JudgeOrAssertions,
-    Verdict + Score + EvidenceArtifacts
-  >
-```
-
-An eval is a function from a candidate behavior or artifact to a verdict. Good
-evals make the judge inputs, task cases, output shape, and failure evidence
-explicit.
-
-### Meta-Skill
-
-```text
-MetaSkill<SystemSurface, Change> :=
-  Process<
-    SystemSurface + ImprovementGoal + MetricOrRubric,
-    Proposal | Patch | Ticket | ReviewArtifact
-  >
-```
-
-Meta-skills operate on the harness itself. Examples include `skill-maintenance`,
-`harness-advisor`, `self-improve`, `eval`, and `repent`.
-
-### Hook
-
-```text
-Hook<Event, Decision> :=
-  Process<
-    Event + RuntimeState + VisibleArtifacts,
-    GateDecision + Telemetry + OptionalHandoff
-  >
-```
-
-Hooks should remain deterministic boundary functions. They can observe, block,
-route, record, or hand off. They should not hide broad judgment or become a
-background autonomy brain.
-
-### Memory Drain
-
-```text
-MemoryDrain<RawLedger, DurableOutcome> :=
-  Process<
-    RawSignals + ExistingMemory + CurrentSpecs,
-    Lessons | MemoryRules | Tickets | ArchiveActions
-  >
-```
-
-Drain functions turn raw signals into smaller durable variables. They should
-promote only the smallest rule, ticket, eval, or archive action needed.
-
-### Ticket
-
-```text
-Ticket :=
-  Task
-+ Plan
-+ ProofContract
-+ AgentContract?
-+ Evidence
-+ State
-```
-
-A ticket is a work-package function waiting to execute. It defines the inputs,
-expected state transition, proof function, and closeout path for one coherent
-build loop.
-
-## Composition Rules
-
-### Sequential Composition
-
-```text
-B after A := B(A(input))
-```
-
-Sequential composition is valid when `A.output` satisfies `B.input` and the
-artifact written by `A` is readable by `B`.
-
-Example:
-
-```text
-reference-grounding -> advise -> harness-advisor -> ticket
-```
-
-### Parallel Composition
-
-```text
-A || B := Merge(A(input), B(input))
-```
-
-Parallel composition is valid only when the write sets do not conflict or when
-there is an explicit merge function and proof surface.
-
-Parallel work must name:
-
-- independent read sets
-- independent write sets
-- merge owner
-- integration proof
-- rollback or conflict policy
-
-### Transitive Composition
-
-```text
-if C depends on B and B depends on A, then C transitively depends on A
-```
-
-This is why lower-level skill improvements can compound. If `advise` improves,
-every downstream process that depends on `advise` should be eligible for
-rerun, regression checks, or score comparison.
-
-### Fixed-Point Improvement
-
-```text
-H_{n+1} = Improve(H_n)
-stop when Score(H_{n+1}) <= Score(H_n) or constraints fail
-```
-
-Self-improvement is a bounded search for a better harness state. It must have
-a metric or rubric, guard checks, rollback or rejection rules, and a clear stop
-condition.
-
-## Process-Level Optimization Objective
-
-At the process level, Farplane should still use Pareto reasoning instead of one
-fake scalar. This is the implementation-facing version of the reward model
-above:
-
-```text
-maximize:
-  task_success
-+ downstream_transfer
-+ reuse
-+ auditability
-
-minimize:
-  context_tokens
-+ turns
-+ duplicated_instruction
-+ latency
-+ regression_rate
-+ maintenance_cost
-
-subject to:
-  safety_constraints
-  proof_contract
-  user_boundaries
-  no hidden state
-```
-
-This turns the original prompt-size intuition into a safer rule:
-
-> Find the minimum sufficient context and artifact contract that preserves or
-> improves local and downstream behavior.
-
-## Files As Variables
-
-The filesystem is Farplane's main variable store.
+The filesystem is the harness variable store:
 
 ```text
 FileVariable :=
@@ -571,90 +636,51 @@ FileVariable :=
 + validation
 ```
 
-A file should not merely exist; it should have an owner, a reason to be read,
-and a known lifecycle. Weak harness behavior often comes from implicit
-variables: files that agents write but later agents do not know to read, trust,
-drain, or delete.
+Files are not just files. They are variables in the optimization system.
 
-When a process writes a file, the process should name:
+Examples:
 
-- the artifact path
-- the shape or schema
-- the intended readers
-- the proof command or review surface
-- whether the file is durable, runtime-only, generated, experimental, or
-  archival
+- `README.md` is a public routing variable.
+- `docs/specs/*.md` are durable contract variables.
+- `docs/features/registry.jsonl` is a feature-state variable.
+- `docs/skills/registry.jsonl` is a generated skill-inventory variable.
+- `tickets/TASK-*/ticket.md` is a work-state variable.
+- eval run JSON is reward/evidence state.
 
-## Skill Function Contract
+Weak harness behavior often comes from implicit variables: files that agents
+write but later agents do not know to read, trust, update, drain, or delete.
 
-Use a compact `## Function Contract` in `SKILL.md` when a skill benefits from a
-formal contract. Put it near the top, after `## Context` and before
-`## Todo List`, so it informs execution without burying the first-load
-checklist.
+## 17. Research Thesis
 
-Recommended shape:
+The core thesis:
 
 ```text
-## Function Contract
-
-`skill_name: Inputs -> Outputs`
-
-Inputs:
-- operator intent:
-- required context:
-- readable artifacts:
-- optional tools:
-
-Outputs:
-- primary response or artifact:
-- write set:
-- evidence:
-
-Composition:
-- upstream:
-- downstream:
-- transitive effects:
+A self-improving agent harness is not an agent with a goal.
+It is a constrained optimizer over its own context interface.
 ```
 
-Do not add a function contract when it would only restate the todo list. Use it
-when it clarifies inputs, outputs, files, method composition, eval boundaries,
-or downstream reuse.
+Without constraints, it drifts.
 
-## Rollout
+With evals, budgets, and rollback, it can learn better harness configurations.
 
-Start with representative high-leverage surfaces:
+Research framing:
 
-1. `advise`, `reference-grounding`, `plan`, `execute`, and `review`.
-2. Meta-skills: `harness-advisor`, `skill-maintenance`, `skill-creator`,
-   `self-improve`, `eval`, and `repent`.
-3. One complex Tier 3 domain skill with methods and templates, such as
-   `landing-page` or `frontend-craft`.
-4. Ticket template and proof contract refinements if the sample proves useful.
-5. Validator or registry fields only after the function-contract shape catches
-   real failures.
+```text
+Agent harnesses are constrained self-optimizing systems.
+```
 
-Do not bulk-edit every skill before a representative sample proves the format.
+## 18. Rollout
 
-## Open Questions
+Use this spec as the canonical model. Then roll out function contracts in
+samples:
 
-- Which parts of `Function Contract` should become template-required versus
-  optional on-contact guidance?
-- Should generated skill graph tooling derive inputs and outputs from the
-  function contract, frontmatter, or separate fixtures?
-- What is the smallest useful schema for `Artifact`, `EvalCase`, and
-  `Process` without creating bureaucracy?
-- Which metric best captures compounding ROI: success per context token,
-  downstream pass-rate delta, reduced turns, fewer user corrections, or a
-  Pareto frontier over all of them?
+1. `advise`
+2. `reference-grounding`
+3. `plan` or `execute`
+4. `harness-advisor`
+5. `skill-maintenance`
+6. `eval`
+7. one complex Tier 3 skill such as `landing-page` or `frontend-craft`
 
-## Next Ticket Shape
-
-The next implementation ticket should:
-
-- add this spec to the README and spec index
-- add `Function Contract` guidance to skill authoring docs and the skill
-  template
-- define a representative sample of skills for contract onboarding
-- avoid a full registry-wide migration until the sample is reviewed
-- decide whether a future validator should check only shape, only presence, or
-  semantic consistency
+Do not bulk-edit every skill until the sample proves the notation improves
+composition, eval design, or harness optimization.

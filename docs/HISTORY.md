@@ -292,3 +292,7 @@
 2026-06-07 20:05 +0800 | MIGRATION | commit pre-launch Farplane identity by switching live project state from `.harness/` to `.farplane/` and documenting Farplane AI as the Zanarkand Labs product shell with skill-owned UI incubation
 2026-06-07 21:36 +0800 | MIGRATION | standardize all Farplane subagent role configs and install defaults on `gpt-5.5` with medium reasoning effort
 2026-06-07 22:52 +0800 | FEAT | add Goal algebra composition to `goal-crafter`, sync `agent-qa-test`, and import `hitl-autoresearch` plus `telegram-message` as Farplane source skills for human-feedback review loops
+2026-06-09 18:19 +0800 | DOCS | add artifact-first response and Markdown front matter standards to the global operating template and filesystem lifecycle spec
+2026-06-09 18:23 +0800 | DOCS | require completed behavior-change summaries to include compact Before, After, and Example deltas by default
+2026-06-09 18:26 +0800 | DOCS | add function-signature notation as a preferred response format for important harness concepts and reusable processes
+2026-06-09 18:28 +0800 | DOCS | add Markdown h3 section headings as the default scan format for multi-change system summaries

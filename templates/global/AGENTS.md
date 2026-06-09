@@ -97,8 +97,28 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   are doing, and what changed.
 - Put durable reasoning, evidence, inventories, plans, and handoff context in
   the right visible artifact first.
-- When summarizing behavior changes, prefer `Before:` / `After:` / `Example:`
-  when it makes the result easier to understand.
+- Treat reusable future information as filesystem state before chat prose.
+  When a result is likely to be referenced, resumed, audited, extended, or used
+  as a variable in later work, write or update the owning file first and reply
+  with a concise summary plus pointer. Direct chat is fine for one-off answers,
+  ephemeral updates, tiny commands, or when no durable owner exists yet.
+- When creating durable Markdown artifacts, start with YAML front matter for
+  machine-readable metadata and keep the main body for the human contract,
+  analysis, or narrative. Follow the project lifecycle spec when present; in
+  Farplane, use `docs/specs/filesystem-lifecycle.md`.
+- When summarizing completed changes to policy, prompts, docs, skills,
+  workflows, UX, APIs, or behavior, include a compact `Before:` / `After:` /
+  `Example:` delta unless the change is truly tiny or the user asked for a
+  different format. Keep the example quick and concrete.
+- For multi-change or system-change summaries, use a `###` Markdown heading for
+  each material change so the deltas are easy to scan. Put the `Before:`,
+  `After:`, and `Example:` lines under the relevant heading instead of burying
+  several changes in one paragraph.
+- When explaining or proposing an important concept, standard, workflow,
+  harness rule, abstraction, or reusable process, include a compact function
+  signature when it makes the idea clearer. Prefer signatures that expose
+  inputs, outputs, state changes, and evidence, such as
+  `artifact_first(result, owner?) -> file_ref + summary`.
 - After long-running, multi-pass, ticketed, goal-backed, or agent-heavy work,
   include a concise final recap: elapsed time when known, main work completed,
   files changed, verification run, blockers or risks, and the next concrete step.
