@@ -1,7 +1,7 @@
 ---
 name: impl-plan
-version: 2.5.0
-description: "Unified per-ticket planning skill with a detailed file-map-first plan centered on ordered action, callable seams, typed data flow, blast radius, verification, and explicit gap analysis for missing or partial features."
+version: 2.6.0
+description: "Unified per-ticket planning skill with a compact delta-and-map output centered on before/after change, diagram-first code seams, ordered action, verification, and conditional detail for gaps, options, autonomy, and audit needs."
 tier: 3
 group: coding
 source: local
@@ -37,13 +37,13 @@ allowed-tools: Read, Glob, Grep
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the proof and execution plan.
 - [ ] Write or refine the ticket `Proof Contract`: metrics or `none mechanical`,
   caller-declared review rubric families, required TAS gates, hard gates,
-  reviewer handoff fields, required evidence, and optional autoresearch session
+  reviewer handoff fields, required proof, and optional autoresearch session
   path.
-- [ ] Compare 3 viable options and recommend one clearly.
+- [ ] Compare 3 viable options only when a real material choice exists, then recommend one clearly.
 - [ ] Keep the output in the canonical ticket-body shape instead of inventing a `Human` / `Agent` split.
-- [ ] Make the `Plan` section carry callable seams in `Signature delta` and typed data seams in `Type Sketch`.
-- [ ] Add one `Typed flow example` for material, stateful, interface-heavy, or cross-boundary work when it improves trust.
-- [ ] Add `Execution steps` whenever the build has more than one non-trivial step.
+- [ ] Make the `Map` section carry visual before/after flow, changed callable seams, and typed data movement when that improves trust.
+- [ ] Add separate `Signature delta`, `Type Sketch`, or `Typed flow example` detail only when the map cannot stay readable without it.
+- [ ] Add `Build Plan` whenever the build has more than one non-trivial step.
 - [ ] Use decisive action language in the recommendation and ordered steps.
 - [ ] Make proof concrete and observable rather than generic.
 - [ ] Keep metrics and rubrics distinct: metrics are mechanical signals; rubrics are review judgment frames.
@@ -82,6 +82,7 @@ bypass `impl-plan`; vague epics should route back to PRD, system design, or
 <!-- MEM-0031 decision: impl-plan should stay compact and file-map-first: change, why, touched files, signature deltas, blast radius, and verification. -->
 <!-- MEM-0050 decision: impl-plan must align with the canonical single-surface ticket template and make typed data flow explicit when it materially affects trust. -->
 <!-- MEM-0062 decision: compact chat does not mean thin planning; impl-plan should be detailed and action-oriented enough that a builder can execute the ticket without inventing the missing order or tone. -->
+<!-- Local decision: impl-plan output should organize around Delta, Map, Build Plan, Verification, and Notes; diagrams may carry inline signatures and typed flow, while Evidence, Refs, Options, and Autonomy Readiness stay conditional or ticket-owned. -->
 
 When this skill needs diagram taste or pattern depth, reuse
 `skills/diagramming/SKILL.md` plus
@@ -106,14 +107,15 @@ explicit follow-up ticket makes narrower scope real.
 The highest-signal plan answers:
 
 - what changes and why now
-- where it lives: touched files, inspected files, signature deltas, and key
-  data shapes
+- what the before/after delta is
+- where it lives: touched files, inspected files, changed seams, and key data
+  movement
 - for incomplete feature work: what production-grade capability looks like and
   what the repo is still missing
 - blast radius: callers, systems, workflows, or edges that could break
-- how to verify it: tests, checks, strongest evidence, and the ticket-level
-  `Proof Contract` that names metrics, review rubric gates, reviewer handoff,
-  and required artifacts
+- how to verify it: tests, checks, strongest proof, and the ticket-level
+  `Proof Contract` that names metrics, review rubric gates, hard gates, and
+  required artifacts
 
 If the plan leaves the builder inventing execution steps or the next concrete
 move, it is too thin.
@@ -121,8 +123,8 @@ move, it is too thin.
 ## Modes
 
 - **Default:** detailed, action-oriented planning in the canonical
-  ticket-body shape, keeping the top skimmable while making the execution path
-  explicit enough to build from directly
+  ticket-body shape, centered on a compact before/after delta and one visual
+  map when that makes the execution path easier to understand
 - **`--consensus`:** run the former `ralplan` challenge loop with
   Planner/Architect/Critic before presenting the final plan
 - **`--interactive`:** consensus mode only; present the draft and final plan
@@ -167,7 +169,7 @@ Before finalizing the plan or handing off to execution:
 3. Preserve or create a ticket-level `Proof Contract` for material tickets:
    honest mechanical metrics when available, `Metrics: none mechanical` when
    not, caller-declared review rubric families, required TAS gates, hard gates,
-   reviewer handoff fields, required evidence, and optional autoresearch
+   reviewer handoff fields, required proof, and optional autoresearch
    session path.
 4. Preserve any `Autonomy Readiness` fields from the ticket, PRD, bootstrap
    brief, system design, taste brief, or agent-testability brief; for `$ralph`
@@ -210,20 +212,20 @@ unknowns.
    dependency, or runtime ownership genuinely improves; do not force a split
    just because the work will span multiple commits, feels safer, or could be
    shipped incrementally.
-3. **Compare:** show 3 viable options with bounded pros/cons when the user did
-   not already provide a take on a material choice.
+3. **Compare:** show 3 viable options with bounded pros/cons only when the user
+   did not already provide a take on a real material choice.
 4. **Recommend:** state the best option and the tradeoff being accepted.
 5. **Gap check when needed:** for missing or partial feature work, define the
    current state, production expectation, missing gaps, grounding references,
    and recommended now/later boundary.
 6. **Proof contract:** for material tickets, write or refine the ticket's
-   `Proof Contract` with metrics, caller-declared rubric families, required
-   TAS gates, reviewer handoff fields, and required evidence. Use `Metrics:
-   none mechanical` when a number would be dishonest; use `autoresearch-plan`
-   only when repeated metric experiments are warranted.
-7. **Build one detailed plan:** use the canonical ticket sections and make the
-   `Plan` section explicit enough that the builder does not have to invent the
-   sequence.
+   compact `Proof Contract` with metrics, caller-declared rubric families,
+   required TAS gates, hard gates, and required proof. Use `Metrics: none
+   mechanical` when a number would be dishonest; use `autoresearch-plan` only
+   when repeated metric experiments are warranted.
+7. **Build one detailed plan:** use the compact ticket sections and make the
+   `Delta`, `Map`, `Build Plan`, and `Verification` explicit enough that the
+   builder does not have to invent the sequence.
 8. **Review + handoff:** run the plan through the quality gate, fix weak spots
    before handoff, then end with a decisive readiness call and next move.
 
@@ -249,11 +251,10 @@ Use consensus mode when:
 - **Low risk / obvious fit:** keep the whole plan lean, but still state the
   concrete action sequence plainly; text-only is okay if the change is truly
   localized.
-- **Material / cross-module:** require a clear file map and add a diagram only
-  when the flow, ownership, or typed data path is not obvious from the file
-  map alone.
-- **Interface-heavy / data-shape-heavy:** require explicit signature deltas,
-  type sketches, and one typed flow example through the main path.
+- **Material / cross-module:** require a clear map when visual shape makes the
+  flow, ownership, changed seams, or typed data path easier to understand.
+- **Interface-heavy / data-shape-heavy:** put inline signatures and typed flow
+  in the map first; add fallback detail only when the map cannot stay readable.
 - **High ambiguity / risk:** add only the extra sections that reduce ambiguity.
 - **High risk / architectural tension:** prefer `--consensus`.
 - **Linked `Agent Testability Brief`:** carry it into proof/testability
@@ -268,91 +269,111 @@ Use consensus mode when:
 
 ## Plan Shape
 
-Use the canonical ticket-body shape:
+Use the compact ticket-body shape:
 
 - `Summary`
 - `Scope`
-- `Plan`
-- optional `Gap Analysis`
-- optional `Diagram`
-- `Acceptance Criteria`
+- `Delta`
+- `Map`
+- `Build Plan`
 - `Verification`
-- `Proof Contract`
+- `Notes`
+- optional `Gap Analysis`
+- optional `Acceptance Criteria`
+- optional compact `Proof Contract`
 - optional `Autonomy Readiness`
-- optional `Refs`
-- `Evidence`
-- `Blockers`
+- optional `Citations`
+- optional `Blockers`
 
-`Plan` is the action core of the ticket and should include:
+`Delta` is the approval core of the ticket and should include:
 
-1. `Change`
-2. `Why`
-3. `First-principles basis`
+1. `Before`
+2. `After`
+3. `Why now`
+4. `First-principles basis`
    - objective, need, assumptions, root cause, constraints, first viable slice,
      proof/falsification, tradeoff, and non-goals when material
-4. `Before -> After`
-5. `Touch`
-6. `Inspect`
-7. `Signature delta`
-   - compact callable seams in the form `file / symbol(input): output`
-8. `Type Sketch`
-   - compact struct/type shapes for the data crossing boundaries
-   - only the fields that matter
-   - never a full dump
-9. `Typed flow example`
-   - one golden-path dry run showing a representative object or payload
-     evolving through the main stages
-10. `Execution steps`
-   - ordered implementation steps using concrete verbs
-11. `Recommendation`
-12. `Options considered`
-    - only when the user did not already provide a take on a material choice
-13. `Blast radius`
-14. `Risks`
+
+`Map` is the comprehension core of the ticket and should include:
+
+1. one Mermaid delta diagram when the work is material, cross-module, or easier
+   to understand visually
+2. inline signatures in nodes or edges when callable seams matter, using
+   `file / symbol(input): output` where readable
+3. one numbered typed-flow path inside the diagram when structs, payloads, or
+   state evolve across boundaries
+4. a short `Touch` / `Inspect` list when the diagram cannot cleanly carry file
+   grounding
+5. separate `Signature delta`, `Type Sketch`, or `Typed flow example` blocks
+   only when the map would become crowded or ambiguous
+
+`Build Plan` is the action core of the ticket and should include ordered
+implementation steps with concrete verbs plus any concise recommendation or
+real option choice that changes the build path.
+
+`Verification` is the proof core of the plan and should include concrete tests,
+manual checks, review focus, and any human gate. The ticket stores execution
+evidence after the build; the plan should not preallocate an audit report.
+
+`Notes` should stay sparse: only real blast radius, risks, rollback,
+citations, blockers, or follow-up boundaries.
 
 ## Applicability Rule
 
-- **File map + signature delta required:** material feature work,
-  workflow/tooling changes, ambiguous implementation work, cross-module
-  changes, or any ticket where trust depends on seeing real code seams.
-- **Type Sketch + Typed flow example required:** material, stateful,
-  interface-heavy, or cross-boundary work where trust depends on seeing data
-  shapes stay coherent across steps.
-- **Diagram optional but expected for material work:** when system shape, flow,
-  ownership, or typed data path is not obvious from the file map alone.
+- **Map required by default for material work:** use a Mermaid delta diagram
+  when visual shape makes the plan easier to understand, especially for
+  feature, workflow/tooling, ambiguous, cross-module, ownership, or typed data
+  changes.
+- **Callable seams belong in `Map` first:** use inline signatures in diagram
+  nodes or edges when trust depends on seeing real code seams. Add a separate
+  `Signature delta` only when the visual map would become crowded.
+- **Typed flow belongs in `Map` first:** use a numbered typed path in the
+  diagram when structs, objects, payloads, or state evolve across boundaries.
+  Add a separate `Type Sketch` or `Typed flow example` only when data shape is
+  the main risk and needs more room.
 - **Gap Analysis required:** missing or partially implemented feature work,
   parity work, or tickets whose scope depends on external expectations rather
   than an already-clear local implementation.
-- **Autonomy Readiness required:** tickets intended for `$ralph`, unattended
-  long-running work, external-service work, hard-to-QA UI/motion/simulation, or
+- **Options considered required only for real forks:** include options only
+  when the planner chose among materially different viable paths.
+- **Autonomy Readiness belongs upstream:** preserve existing readiness fields
+  from the spec or ticket, but in the impl plan reduce them to testability,
+  human gates, or blockers unless the ticket is intended for `$ralph`,
+  unattended execution, external services, hard-to-QA UI/motion/simulation, or
   deploy/spend/destructive boundaries.
-- **Proof Contract required:** material, review-sensitive, agentically hard, or
-  ticketed build work. Include mechanical metrics when useful, `Metrics: none
-  mechanical` when not, caller-declared review rubric families, required TAS
-  gates, hard gates, reviewer handoff fields, required evidence, and optional
-  autoresearch session path.
+- **Proof Contract compact by default:** for material, review-sensitive,
+  agentically hard, or ticketed build work, name metric or `none mechanical`,
+  review rubrics/TAS gates, hard gates, and required proof. Keep detailed
+  execution evidence in the ticket after implementation, not in the plan.
+- **Citations inline by default:** cite sources only when they affect the plan.
+  Use a `Citations` line or section only when multiple references matter.
+- **Evidence is ticket-owned:** do not include a planning `Evidence` section
+  unless the user explicitly asks for audit detail; plan review can be a
+  one-line readiness note.
 - **Text-only allowed:** trivial, single-bug, or narrowly localized fixes where
   the file, symbol, or error already anchors the work concretely.
 
 ## Top Gotchas
 
 1. Do not implement; this skill is plan-only.
-2. Do not duplicate the same idea across summary, plan, criteria, and evidence.
+2. Do not duplicate the same idea across summary, delta, map, criteria, and
+   verification.
 3. Do not skip first-principles basis for material work; objective, root cause,
    assumptions, first slice, proof, tradeoff, and non-goals should be visible.
-4. Do not hide the key interfaces in prose when a short signature delta would
+4. Do not hide the key interfaces in prose when inline diagram signatures would
    prove understanding faster.
-5. Do not show callable seams without the matching data seams when the change
-   depends on typed payloads, structs, or objects crossing boundaries.
+5. Do not split callable seams, type sketches, and typed examples into separate
+   sections when one readable visual map can carry the same before/after delta.
 6. Do not leave the builder inferring the execution sequence when the ticket is
    material enough to need an explicit order of operations.
 7. Do not preallocate empty review output inside the input ticket.
 8. Do not make `Acceptance Criteria` and `Verification` say the same thing;
-   criteria define done, verification defines measurement.
+   criteria define done, verification defines measurement. Omit criteria when
+   the ticket already owns clear ACs.
 9. Do not confuse metrics with rubrics: metrics are mechanical signals,
    rubrics are review judgment frames. Put both in the `Proof Contract` when
    they matter.
-10. Do not skip the option comparison for material choices.
+10. Do not include option comparison when there was no real material fork.
 11. Do not guess at "production-ready" scope from intuition alone when
    comparable products, codebases, or official docs can ground it.
 12. Do not rewrite a coherent ticket into "part 1" or "first slice" just
@@ -361,15 +382,17 @@ Use the canonical ticket-body shape:
     should be making a recommendation or naming an execution step.
 14. Do not hand off a `$ralph`-eligible ticket with vague autonomy-readiness
     fields; name the blockers or keep the ticket gated.
+15. Do not include `Evidence` as planning boilerplate; evidence belongs in the
+    ticket after execution unless audit detail is explicitly requested.
 
 ## Efficiency Rules
 
-- Lead with the plan, not the appendix.
+- Lead with the delta and map, not the appendix.
 - If the user did not provide a take, default to consultative guidance instead
   of neutral mirroring.
 - Prefer clear action language over hedging.
-- Reuse the `diagramming` skill's compact delta-map patterns instead of
-  inventing a new diagram style in each plan.
+- Reuse the `diagramming` skill's compact delta-map patterns and put changed
+  signatures or typed flow into the map when that improves skimmability.
 - Reuse existing modules; justify every new file or abstraction in one line.
 - If planning reveals overflow scope, split it into new `tickets/` follow-ups
   instead of stretching one ticket.
@@ -391,26 +414,29 @@ Before returning the plan, run these checks against the drafted output:
    - If the ticket was already modularized from the spec, does the plan still
      target the whole ticket instead of inventing a narrower first pass?
 3. **Recommendation quality**
-   - Did the plan compare real options instead of cosmetic variants?
+   - If a real material choice existed, did the plan compare real options
+     instead of cosmetic variants?
    - Is the chosen path clearly recommended, not merely listed?
-4. **Diagram usefulness**
-   - For material work, would a compact diagram make the flow or ownership
-     easier to skim?
-   - If no diagram is present, is the file map alone clearly enough?
+   - If no options are listed, is that because no real fork existed?
+4. **Map usefulness**
+   - For material work, does the map make the before/after flow, ownership, or
+     changed seams easier to skim?
+   - If no map is present, are the delta and build steps clearly enough?
 5. **Signature usefulness**
-   - Does the signature delta name the real seams that matter?
-   - Is it explicit enough to guide implementation?
-   - Would it convince a reviewer that the planner understands the codebase?
+   - Are the real callable seams visible in the map or in a compact fallback
+     signature list?
+   - Would the seams convince a reviewer that the planner understands the
+     codebase?
 6. **Type-flow usefulness**
-   - Do the named types prove how data crosses the important seams?
-   - Is one golden-path object or payload trace enough to make the flow
-     believable?
+   - If typed data matters, does the map show a believable representative
+     payload or state path?
    - Did we avoid turning the plan into a schema dump?
 7. **Proof quality**
    - Are the checks concrete and observable?
    - Would a reviewer know exactly how to tell success from failure?
-   - Does the `Proof Contract` clearly separate mechanical metrics, review
-     rubric gates, reviewer handoff, and required evidence?
+   - Does the compact `Proof Contract` name mechanical metrics or `none
+     mechanical`, review rubric gates, hard gates, and required proof without
+     duplicating post-build evidence?
    - If no metric exists, does it honestly say `Metrics: none mechanical`
      instead of inventing a proxy?
 8. **Risk clarity**
@@ -425,6 +451,8 @@ Before returning the plan, run these checks against the drafted output:
    - Are they concrete rather than decorative or duplicated filler?
    - Does the plan speak in decisive action language instead of hedged
      possibilities?
+   - Are refs/citations present only when they ground a claim or decision?
+   - Is evidence omitted unless audit detail was explicitly requested?
 11. **Architecture boundary**
    - If the plan still depends on invented entities, storage ownership, or
      runtime boundaries, did we stop and route to `deep-system-design`?

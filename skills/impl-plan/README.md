@@ -2,9 +2,10 @@
 
 ## Purpose
 
-Guide agents to produce one clear per-ticket planning artifact, with a detailed
-action-oriented ticket-body plan shape, conditional diagrams when the file map
-alone is not enough, and optional consensus challenge for riskier work.
+Guide agents to produce one clear per-ticket planning artifact, with a compact
+before/after delta, a visual map that can carry changed seams and typed flow,
+an ordered build plan, concrete verification, and optional consensus challenge
+for riskier work.
 This is the Tier 3 coding-pipeline implementation of the generic
 [`plan`](/Users/kenjipcx/coding-harness/Farplane/skills/plan/SKILL.md)
 interface.
@@ -31,26 +32,28 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 3. Treat the selected ticket as the planning boundary by default, and split
    only if a real boundary justifies it.
 4. Choose default mode or `--consensus`.
-5. Output one detailed ticket plan with summary, scope, `Plan`, and only the
-   optional sections the ticket actually needs.
-6. Use `Signature delta` for callable seams and `Type Sketch` plus `Typed flow
-   example` when typed data continuity matters.
+5. Output one detailed ticket plan with `Summary`, `Scope`, `Delta`, `Map`,
+   `Build Plan`, `Verification`, and sparse `Notes`.
+6. Put callable seams and typed data movement in the map first; add fallback
+   signature or type-flow detail only when the map would become crowded.
 
 ## How to Test
 
-- Confirm the output matches the canonical ticket-body shape.
+- Confirm the output matches the compact ticket-body shape.
 - Confirm the plan targets the full selected ticket instead of inventing a
   smaller internal "first slice" without a real boundary.
-- Confirm `Execution steps` make the next build steps explicit when sequencing
+- Confirm `Build Plan` makes the next build steps explicit when sequencing
   matters.
-- Confirm the diagram appears near the top when material work needs one to make
-  flow, ownership, or typed data path legible.
-- Confirm a compact `Signature delta` appears when interfaces matter.
-- Confirm `Type Sketch` plus `Typed flow example` appear for material,
+- Confirm the map appears near the top when material work is easier to
+  understand visually.
+- Confirm callable seams appear in the map or a compact fallback list when
+  interfaces matter.
+- Confirm typed flow appears in the map or compact fallback flow for material,
   stateful, or interface-heavy work.
 - Confirm the `SKILL.md` Todo List reinforces planning behaviors as plain natural-language todo-list text without becoming a second template.
-- Confirm the recommendation appears near the top.
+- Confirm the recommendation appears only when a real decision exists.
 - Confirm optional sections are required only when the applicability rule says
   they should be.
+- Confirm `Evidence` is not emitted as default planning boilerplate.
 - Confirm consensus mode still preserves Planner/Architect/Critic challenge inside the same public skill.
 - Confirm any `Agent Testability Brief` is carried into the proof/testability shape instead of being ignored.

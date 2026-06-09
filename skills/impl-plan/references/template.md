@@ -1,119 +1,101 @@
 # Impl Plan Template
 
 ## Summary
-2-3 sentences on what changes, why it matters now, and the decisive path being
-recommended.
+2-3 sentences on the recommended before/after change, why it matters now, and
+the decisive path.
 
 ## Scope
 
-- In:
-- Out:
+- `In:`
+- `Out:`
 
-## Plan
+## Delta
 
-- `Change:`
-- `Why:`
-- `Before -> After:`
+- `Before:`
+- `After:`
+- `Why now:`
+- `First-principles basis:` objective, need, assumptions, root cause,
+  constraints, first viable slice, proof/falsification, tradeoff, and non-goals
+  when material
+
+## Map
+
+Use one Mermaid delta map when the work is material, cross-module, or easier to
+understand visually. Put changed signatures and typed flow in the map when that
+keeps the plan clearer.
+
 - `Touch:`
 - `Inspect:`
-- `Signature delta:`
-  - `Format:` `module / symbol(input): output`
-  - `Use:` 3-7 seams that prove codebase understanding
-- `Type Sketch:`
-  - `Format:` `TypeName { field: Type }` or `type Name = { field: Type }`
-  - `Use:` only the fields that matter to the plan
-  - `Avoid:` full dumps
-- `Typed flow example:`
-  - one golden-path dry run using the named types
-- `Execution steps:`
-  - ordered build steps with concrete verbs
-- `Recommendation:`
-- `Options considered:`
-  - only when a material choice exists
+- `Legend:` keep | change | add | remove
+
+```mermaid
+flowchart LR
+  %% Prefer one compact visual before/after map.
+  %% Put inline signatures in nodes or edges when seams matter.
+  %% Number typed-flow edges when payload/state movement matters.
+```
+
+Optional fallback detail when the map would become crowded:
+
+- `Signature delta:` `module / symbol(input): output`
+- `Type sketch:` `TypeName { field: Type }`
+- `Typed flow:` one representative object or payload path
+
+## Build Plan
+
+1. Ordered implementation step with a concrete verb.
+2. Next step.
+3. Final integration or cleanup step.
+
+Include `Recommendation:` only when it changes the build path.
+
+Include `Options considered:` only when there is a real material fork.
+
+## Verification
+
+- `Tests:`
+- `Manual checks:`
+- `Review focus:`
+- `Human gate:`
+
+## Notes
+
 - `Blast radius:`
-- `Risks:`
+- `Risks / rollback:`
+- `Follow-ups:`
+- `Citations:` inline or compact references only when they ground a claim or decision
+- `Blockers:` omit when none
 
 ## Gap Analysis
 
-- `Required:` for missing, partial, parity-driven, or product-shaping feature
-  work. Optional for tightly scoped bug fixes, internal refactors, or obvious
-  one-surface changes.
+- `Required:` only for missing, partial, parity-driven, or product-shaping
+  feature work
 - `Current state:`
 - `Production expectation:`
 - `Missing gaps:`
 - `Comparable implementations:`
 - `Recommendation:`
 
-## Diagram
-
-- `Required:` when material or cross-module work needs a diagram because the
-  file map alone is not enough; optional for trivial localized fixes
-- `Legend:` keep | change | add | remove
-
-```mermaid
-flowchart LR
-  %% Keep this compact. Prefer one top-level delta map when it adds clarity.
-```
-
-## Applicability Rule
-
-- `Diagram` is expected for material feature work, workflow/tooling changes,
-  ambiguous implementation work, and any ticket where trust depends on seeing
-  changed components or interfaces but the file map alone is not enough.
-- `Type Sketch` plus `Typed flow example` are required for material,
-  stateful, interface-heavy, or cross-boundary work where trust depends on
-  seeing data-shape continuity.
-- `Gap Analysis` is required only when the work is missing, partial,
-  parity-driven, or otherwise under-specified.
-- `Type Sketch`, `Typed flow example`, and `Diagram` may be short or omitted
-  for trivial, narrowly localized fixes where the code context already anchors
-  the expected behavior.
-
 ## Acceptance Criteria
+
+Optional when the ticket already owns clear acceptance criteria.
 
 - [ ] AC-1
 
-## Verification
-
-- `Tests:`
-- `Manual checks:`
-- `Evidence required:`
-
 ## Proof Contract
 
-- `Metrics:`
-  - `Primary metric:` numeric/boolean signal, or `none mechanical`
-  - `Direction:` higher | lower | pass/fail | none
-  - `Verify:`
-  - `Guard:`
-  - `Min acceptable result:`
-  - `Autoresearch warranted:` yes | no
-  - `Autoresearch session:`
-- `Review Rubrics:`
-  - caller-declared rubric families and required TAS gates
-  - hard gates
-- `Reviewer Handoff:`
-  - task path, review focus, changed files, evidence, rubric families,
-    required TAS gates, hard gates, and expected output path
-- `Required Evidence:`
-  - artifacts or command outputs required before completion
+Optional for tiny localized fixes; compact by default for material tickets.
 
-## Refs
+- `Metric:` numeric/boolean signal, or `none mechanical`
+- `Direction:` higher | lower | pass/fail | none
+- `Review rubrics / TAS gates:`
+- `Hard gates:`
+- `Required proof:`
+- `Autoresearch:` warranted yes/no, session path if applicable
 
-- optional durable links only; this is the canonical place for linked docs
+## Autonomy Readiness
 
-## Evidence
-
-- `Artifacts:`
-- `Commands:`
-- `Result summary:`
-- `Plan review:`
-  - `Refs used:`
-  - `Checks:`
-  - `Tone:`
-  - `Fixes:`
-- `Ready:` yes / no
-
-## Blockers
-
-- none
+Use only when the ticket is intended for `$ralph`, unattended work, external
+services, hard-to-QA UI/motion/simulation, or deploy/spend/destructive
+boundaries. Otherwise keep readiness in the spec or ticket and reflect only the
+testability or human gate in `Verification`.

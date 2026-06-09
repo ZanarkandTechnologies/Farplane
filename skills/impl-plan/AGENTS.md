@@ -14,8 +14,12 @@
 - Keep repo rules in root `AGENTS.md`; keep planning mechanics in this skill.
 - Keep the plan detailed enough that a builder can execute it without
   inventing missing steps, while still staying skimmable from the top.
-- Use diagram-first approval only when material work needs a diagram because the
-  file map alone is not enough. See `MEM-0030`.
+- Center the output on `Delta`, `Map`, `Build Plan`, `Verification`, and sparse
+  `Notes`; keep `Evidence`, `Refs`, `Options considered`, and
+  `Autonomy Readiness` conditional or ticket-owned.
+- Use the map as the primary visual approval surface for material work when it
+  makes the before/after flow, changed seams, or typed data path easier to
+  understand. See `MEM-0030`.
 - Keep `impl-plan` aligned with the canonical ticket template instead of
   inventing a parallel `Human` / `Agent` contract. See `MEM-0031`.
 - When an `Agent Testability Brief` exists, preserve its proof/testability
@@ -28,15 +32,16 @@
 
 ## Conventions
 
-- Lead with one top-level delta diagram before the deeper prose only when the
-  work needs a diagram because flow, ownership, or typed data path is not
-  obvious from the file map alone.
-- Require explicit `Execution steps` when the ticket is material enough that
-  the builder should not have to infer sequencing.
-- Require compact callable seams in `Signature delta` when trust depends on
-  seeing code seams, interfaces, ownership boundaries, or changed handlers.
-- Require `Type Sketch` plus one `Typed flow example` when trust depends on
-  seeing structs, objects, payloads, or typed state evolve across boundaries.
+- Lead with one top-level delta map when it makes flow, ownership, changed
+  seams, or typed data path easier to understand.
+- Require an explicit `Build Plan` when the ticket is material enough that the
+  builder should not have to infer sequencing.
+- Put compact callable seams in the map first when trust depends on seeing code
+  seams, interfaces, ownership boundaries, or changed handlers.
+- Put typed flow in the map first when trust depends on seeing structs,
+  objects, payloads, or typed state evolve across boundaries.
+- Add fallback `Signature delta`, `Type sketch`, or `Typed flow` blocks only
+  when the map would become crowded or ambiguous.
 - Keep the recommendation above the fold and phrased as a decisive action, not
   a tentative suggestion.
 - When diagrams are needed, reference `skills/diagramming/SKILL.md` and
@@ -56,12 +61,13 @@
 ## Checks
 
 - The output matches the canonical ticket-body shape.
-- `Diagram` is present when a material or cross-module plan needs one because
-  flow, ownership, or typed data path is not obvious from the file map alone.
-- `Signature delta` is present when interface shape matters.
-- `Type Sketch` plus `Typed flow example` are present when typed data flow
+- `Map` is present when a material or cross-module plan is easier to understand
+  visually.
+- Changed callable seams are visible in the map or compact fallback signature
+  list when interface shape matters.
+- Typed flow is visible in the map or compact fallback flow when data movement
   matters.
-- `Execution steps` are present when sequencing is non-trivial.
+- `Build Plan` is present when sequencing is non-trivial.
 - The recommendation is decisive and action-oriented when the ticket involves a
   material choice.
 - Split rule remains explicit.
@@ -73,9 +79,9 @@
 
 - Re-read `SKILL.md` once and confirm the contract is executable without references.
 - Compare prompt/template/example against `SKILL.md` for drift.
-- Confirm the diagram-first approval surface can be skimmed without an
-  appendix.
-- Confirm the callable seams and type shapes prove real code understanding
-  without becoming a type dump.
+- Confirm the map-first approval surface can be skimmed without an appendix.
+- Confirm callable seams and typed flow prove real code understanding without
+  becoming a type dump.
 - Confirm any `Agent Testability Brief` is reflected in proof/testability planning.
-- Confirm the recommendation is directly justified against the listed options.
+- Confirm options, refs, autonomy, evidence, and gap sections appear only when
+  they reduce ambiguity.
