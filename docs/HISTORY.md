@@ -296,3 +296,4 @@
 2026-06-09 18:23 +0800 | DOCS | require completed behavior-change summaries to include compact Before, After, and Example deltas by default
 2026-06-09 18:26 +0800 | DOCS | add function-signature notation as a preferred response format for important harness concepts and reusable processes
 2026-06-09 18:28 +0800 | DOCS | add h3 headings plus blockquoted Before/After/Example deltas as the default scan format for multi-change system summaries
+2026-06-09 19:05 +0800 | DOCS | replace default Topics response headers with Goal alignment headers for substantial replies

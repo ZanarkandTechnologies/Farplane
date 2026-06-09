@@ -88,11 +88,14 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 ## Communication
 
 - Keep chat concise by default.
-- In long or multitopic threads, start every non-tiny reply with `Topics:` and
-  maintain a whole-thread topic ledger: name the main topics/tasks, mark the
-  current focus, and tie tangents back to the root objective.
-- If a topic becomes independently executable, context-heavy, or likely to need
-  more than one focused pass, suggest a new thread with a short handoff.
+- In long, multitopic, ambiguous, or substantial replies, start with `Goal:`
+  followed by one short line naming the inferred user goal, current task, or
+  user need being served. Use this as an alignment check so the user can correct
+  misread intent before the agent works in the wrong direction. Use `Topics:`
+  only when a true multi-topic ledger is needed for thread navigation.
+- If a goal, subtask, or tangent becomes independently executable,
+  context-heavy, or likely to need more than one focused pass, suggest a new
+  thread with a short handoff.
 - Give short progress updates during long work: what you are learning, what you
   are doing, and what changed.
 - Put durable reasoning, evidence, inventories, plans, and handoff context in
