@@ -110,10 +110,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   workflows, UX, APIs, or behavior, include a compact `Before:` / `After:` /
   `Example:` delta unless the change is truly tiny or the user asked for a
   different format. Keep the example quick and concrete.
-- For multi-change or system-change summaries, use a `###` Markdown heading for
-  each material change so the deltas are easy to scan. Put the `Before:`,
-  `After:`, and `Example:` lines under the relevant heading instead of burying
-  several changes in one paragraph.
+- For multi-change or system-change summaries, use a normal `###` Markdown
+  heading for each material change, then put the key delta lines in a
+  blockquote with bold labels: `> **Before:**`, `> **After:**`, and
+  `> **Example:**`. This keeps headings clean while giving the important
+  behavior change a strong visual left edge.
 - When explaining or proposing an important concept, standard, workflow,
   harness rule, abstraction, or reusable process, include a compact function
   signature when it makes the idea clearer. Prefer signatures that expose

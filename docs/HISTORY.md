@@ -295,4 +295,4 @@
 2026-06-09 18:19 +0800 | DOCS | add artifact-first response and Markdown front matter standards to the global operating template and filesystem lifecycle spec
 2026-06-09 18:23 +0800 | DOCS | require completed behavior-change summaries to include compact Before, After, and Example deltas by default
 2026-06-09 18:26 +0800 | DOCS | add function-signature notation as a preferred response format for important harness concepts and reusable processes
-2026-06-09 18:28 +0800 | DOCS | add Markdown h3 section headings as the default scan format for multi-change system summaries
+2026-06-09 18:28 +0800 | DOCS | add h3 headings plus blockquoted Before/After/Example deltas as the default scan format for multi-change system summaries
