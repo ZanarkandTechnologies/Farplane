@@ -15,7 +15,7 @@ Usage:
   bash install.sh --skills-only --search QUERY [--target TARGET_DIR]
   bash install.sh --skills-only --skills skill-a,skill-b [--target TARGET_DIR]
 
-Full install links the Farplane harness, renders skills, and renders config.toml.
+Full install installs the Farplane harness, renders skills, and renders config.toml.
 Skills-only mode renders selected skills without rendering config.toml.
 
 Options:
@@ -235,6 +235,28 @@ link_path() {
   ln -s "$src" "$dest"
 }
 
+copy_path() {
+  local src="$1"
+  local dest="$2"
+  local relative
+  local backup_dest
+
+  mkdir -p "$(dirname "$dest")"
+
+  if [ -f "$dest" ] && [ ! -L "$dest" ] && cmp -s "$src" "$dest"; then
+    return 0
+  fi
+
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    relative="${dest#${TARGET_DIR}/}"
+    backup_dest="${BACKUP_ROOT}/${relative}"
+    mkdir -p "$(dirname "$backup_dest")"
+    mv "$dest" "$backup_dest"
+  fi
+
+  cp "$src" "$dest"
+}
+
 echo "Installing Codex harness from $REPO_DIR to $TARGET_DIR"
 
 mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin"
@@ -248,7 +270,7 @@ if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   exit 0
 fi
 
-link_path "$REPO_DIR/templates/global/AGENTS.md" "$TARGET_DIR/AGENTS.md"
+copy_path "$REPO_DIR/templates/global/AGENTS.md" "$TARGET_DIR/AGENTS.md"
 link_path "$REPO_DIR/PROJECT_RULES.md" "$TARGET_DIR/PROJECT_RULES.md"
 if [ -f "$REPO_DIR/hooks.json" ]; then
   link_path "$REPO_DIR/hooks.json" "$TARGET_DIR/hooks.json"
