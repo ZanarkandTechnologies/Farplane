@@ -22,6 +22,30 @@ only when it adds non-duplicated durable shape.]
 [TODO: Paths in this skill are relative to this skill package. Use
 `scripts/foo.py` and `references/foo.md` for nearby files.]
 
+## Function Contract
+
+[TODO: Keep this only when it clarifies real inputs, outputs, artifacts,
+evidence, or composition. Otherwise delete this section. See
+`docs/specs/harness-algebra.md`.]
+
+`{skill_name}: Inputs -> Outputs`
+
+Inputs:
+- operator intent:
+- required context:
+- readable artifacts:
+- optional tools:
+
+Outputs:
+- primary response or artifact:
+- write set:
+- evidence:
+
+Composition:
+- upstream:
+- downstream:
+- transitive effects:
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 

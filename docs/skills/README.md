@@ -153,6 +153,10 @@ Tiered loading is enforced at the first-load todo boundary:
 
 ## Tier 3 Pipeline Shape
 
+For the system-wide function model, use
+[`docs/specs/harness-algebra.md`](../specs/harness-algebra.md). This section is
+only the skill-specific shorthand for complex Tier 3 pipelines.
+
 Complex Tier 3 skills may use a compact algebraic model when they decompose
 work into components and choose methods per component:
 

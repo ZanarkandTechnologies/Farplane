@@ -13,6 +13,10 @@ tier, source, template-version, or feature-tracking policy here; link
 - Put a short `## Context` section near the top of `SKILL.md` before the todo
   list when the skill depends on tier, ownership, source, or surrounding
   system shape.
+- Put a compact `## Function Contract` after `## Context` when the skill needs
+  formal inputs, outputs, write sets, evidence, or composition boundaries.
+  Follow [`docs/specs/harness-algebra.md`](../specs/harness-algebra.md) and do
+  not add the section when it only restates the todo list.
 - `## Todo List` is the first-load todo list, not a generic checklist section.
 - Use visible sequential task-list items such as `- [ ] 1.`, `- [ ] 2.`, and
   `- [ ] 3.` for ordered work. Put the number after the checkbox marker so
@@ -43,6 +47,9 @@ tier, source, template-version, or feature-tracking policy here; link
 
 - `SKILL.md` owns trigger conditions, job, branch routing, hard gates, and proof
   obligations.
+- `SKILL.md` owns a short function contract when the skill's inputs, outputs,
+  artifact variables, eval boundaries, or downstream composition would
+  otherwise stay implicit.
 - Paths inside a skill are relative to that skill package by default. Use
   `scripts/foo.py` for nearby helper scripts, `references/foo.md` for nearby
   references, and sibling paths such as `../skill-maintenance/scripts/foo.py`
@@ -81,6 +88,8 @@ Check repeatability by asking:
 - Can it execute the first-load todo list without reading every reference?
 - Are scripts, commands, paths, artifacts, and validation steps explicit?
 - Are setup/onboarding paths separated from the normal run path?
+- Are the skill's inputs, outputs, write-set artifacts, evidence, and
+  downstream handoffs explicit enough to compose with other skills?
 - Does the skill avoid verbose duplication that would drift later?
 
 ## On-Contact Upgrade Check
@@ -90,6 +99,8 @@ the smallest useful upgrade in the same pass:
 
 - Check whether the first-load `## Todo List` is ordered, executable, and
   marker-delimited.
+- Add or tighten `## Function Contract` when it would clarify real process
+  inputs, outputs, files, evidence, or composition.
 - Move optional detail, rare branches, examples, long rubrics, and model maps
   into references.
 - Remove duplicate workflow prose when the todo list already carries the

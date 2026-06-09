@@ -31,6 +31,8 @@ Active feature and contract specs:
   assumptions, root cause, constraints, proof, tradeoffs, and non-goals
 - `filesystem-lifecycle.md` - lifecycle and drain rules for ledgers, tickets,
   registries, experiments, specs, and research
+- `harness-algebra.md` - canonical function model for skills, evals, hooks,
+  memory drains, tickets, artifacts, composition, and optimization
 - `harness-engineering-doctrine.md` - routing doctrine for where harness
   changes belong before editing the repo
 - `harness-techniques.md` - current-state feature and technique inventory

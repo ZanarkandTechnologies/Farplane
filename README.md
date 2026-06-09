@@ -113,6 +113,10 @@ flowchart LR
 - **Structured skills.** Skills are not loose prompt snippets; they have
   contracts, checklists, dependency shape, references, and on-demand plugin
   packaging when users want Codex plugin installs.
+- **Function-defined harness.** Harness processes can be modeled as functions
+  over inputs, visible artifacts, outputs, evidence, and state transitions, so
+  skills, evals, hooks, memory drains, and tickets can compose without hidden
+  variables.
 - **Opinionated hooks.** Hooks track user intent, stop weak completion claims,
   route review, and will grow into real-time benchmark and skill-health
   monitoring.
@@ -192,6 +196,7 @@ flowchart LR
 
 - Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 - Specs index: [docs/specs/README.md](docs/specs/README.md)
+- Harness algebra: [docs/specs/harness-algebra.md](docs/specs/harness-algebra.md)
 - Self-growing harness map: [docs/specs/meta-harness-automation.md](docs/specs/meta-harness-automation.md)
 - Feature inventory: [harness-techniques.md](docs/specs/harness-techniques.md)
 - Structured feature registry: [docs/features/README.md](docs/features/README.md)
