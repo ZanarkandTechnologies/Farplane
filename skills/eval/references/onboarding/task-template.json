@@ -2,26 +2,32 @@
   {
     "id": "skill_example_01",
     "title": "Skill does its main job",
-    "query": "Ask the harness to use one named skill on a realistic request.",
+    "query": "Use the advise skill shape. Where should a new support-ticket triage workflow live: root agent policy, a reusable skill, or a hook?",
     "reference_points": [
       "The answer follows the skill's main workflow",
       "The answer includes the required evidence or next step",
-      "The answer avoids the known failure mode this eval is meant to catch"
+      "The answer avoids the known failure mode this eval is meant to catch",
+      "The answer stays inside the toy-company scenario unless the real repo is the behavior under test"
     ],
-    "tags": ["skill"],
-    "notes": "Use this for one individual skill. Keep rubric rules in prompts/judge.md."
+    "tags": [
+      "skill"
+    ],
+    "notes": "Use this for one individual skill. Prefer AGI Toy Shop for safe clean-room scenarios. Keep rubric rules in prompts/judge.md."
   },
   {
     "id": "workflow_example_01",
     "title": "Workflow combines skills correctly",
-    "query": "Ask the harness to handle a realistic workflow that should combine two or more skills.",
+    "query": "Plan a release-risk review and decide what proof artifact should exist before launch.",
     "reference_points": [
       "The answer identifies the real problem or decision",
       "The answer uses the right skill sequence",
       "The answer produces or requests the right proof artifact",
-      "The answer does not skip review before a completion claim"
+      "The answer does not skip review before a completion claim",
+      "The answer does not ask to mutate live configs, deploy, delete, or push unless the eval runner provides a sandbox fixture"
     ],
-    "tags": ["workflow"],
+    "tags": [
+      "workflow"
+    ],
     "notes": "Use this for a multi-skill path. Start with one workflow task before adding more."
   }
 ]

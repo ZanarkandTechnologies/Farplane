@@ -1,4 +1,4 @@
-# Repent Should Capture High-Priority Eval Regressions
+# Behavior Correction Should Capture High-Priority Eval Regressions
 
 Captured: 2026-06-07 19:17 +0800
 Privacy: local_only
@@ -46,13 +46,14 @@ in `reference_points`.
 
 - `.codex/evals/tasks/harness_tasks.json`
 - `.gitignore`
-- `skills/repent/SKILL.md`
+- `skills/eval/SKILL.md`
+- `skills/optimize-harness/SKILL.md`
 - `docs/LESSONS.md`
 - commit `b7c58c0 test(eval): move global workflow suite to codex evals`
 
 ## Future Eval Idea
 
-Given a prompt like "repent, this was high priority: you fixed the prompt
+Given a prompt like "this was high priority: you fixed the prompt
 ownership bug, but you should have captured an eval so this never happens
 again", the agent should verify the miss and fixed outcome, classify it as
 eval-worthy, add a project-level regression eval under `.codex/evals/tasks/`,

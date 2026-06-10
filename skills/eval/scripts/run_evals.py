@@ -23,8 +23,11 @@ DEFAULT_MAX_PARALLEL_TASKS = 2
 SUITE_FILES = {
     "harness": "harness_tasks.json",
 }
+SKILL_EVAL_TASK_FILE = "eval_task.json"
 REQUIRED_EVAL_FILES = (
     "run_evals.py",
+    "config.json",
+    "contexts/agi-toy-shop.md",
     "viewer.html",
     "viewer-react/package.json",
     "viewer-react/src/App.tsx",
@@ -42,6 +45,7 @@ class EvalError(ValueError):
 class EvalTask:
     id: str
     title: str
+    context: str
     query: str
     reference_points: tuple[str, ...]
     tags: tuple[str, ...]
@@ -56,15 +60,19 @@ class CommandResult:
     raw_stderr: str
 
 
+@dataclass(frozen=True)
+class EvalConfig:
+    default_context: str
+    default_context_file: str
+
+
 def script_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
 def default_eval_dir(harness: str, target_root: Path) -> Path:
-    if harness == "codex":
-        return target_root / ".codex" / "evals"
-    if harness == "claude":
-        return target_root / ".claude" / "evals"
+    if harness in {"codex", "claude"}:
+        return target_root / ".farplane" / "evals"
     raise EvalError("custom harness requires --eval-dir")
 
 
@@ -96,7 +104,32 @@ def require_string(raw: dict[str, Any], field: str, path: Path) -> str:
     return value.strip()
 
 
-def load_tasks(path: Path, limit: int | None = None) -> list[EvalTask]:
+def load_eval_config(eval_dir: Path) -> EvalConfig:
+    config_path = eval_dir / "config.json"
+    if not config_path.exists():
+        return EvalConfig(default_context="", default_context_file="")
+    raw = read_json(config_path)
+    if not isinstance(raw, dict):
+        raise EvalError(f"{config_path}: config must be a JSON object")
+    inline_context = str(raw.get("default_context", "")).strip()
+    context_file = str(raw.get("default_context_file", "")).strip()
+    if inline_context and context_file:
+        raise EvalError(f"{config_path}: use default_context or default_context_file, not both")
+    if context_file:
+        context_path = (config_path.parent / context_file).resolve()
+        if not context_path.is_relative_to(config_path.parent.resolve()):
+            raise EvalError(f"{config_path}: default_context_file must stay inside eval dir")
+        return EvalConfig(default_context=read_text(context_path).strip(), default_context_file=context_file)
+    return EvalConfig(default_context=inline_context, default_context_file="")
+
+
+def task_context(raw: dict[str, Any], default_context: str) -> str:
+    if "context" not in raw:
+        return default_context
+    return str(raw.get("context", "")).strip()
+
+
+def load_tasks(path: Path, limit: int | None = None, default_context: str = "") -> list[EvalTask]:
     raw = read_json(path)
     if not isinstance(raw, list):
         raise EvalError(f"{path}: task file must contain a JSON list")
@@ -114,6 +147,7 @@ def load_tasks(path: Path, limit: int | None = None) -> list[EvalTask]:
             EvalTask(
                 id=require_string(item, "id", path),
                 title=require_string(item, "title", path),
+                context=task_context(item, default_context),
                 query=require_string(item, "query", path),
                 reference_points=tuple(ref.strip() for ref in refs),
                 tags=tuple(tag.strip() for tag in tags if tag.strip()),
@@ -123,36 +157,51 @@ def load_tasks(path: Path, limit: int | None = None) -> list[EvalTask]:
     return tasks[:limit] if limit else tasks
 
 
-def resolve_task_paths(eval_dir: Path, tasks: str | None, suite: str) -> list[Path]:
+def resolve_skill_task_paths(target_root: Path) -> list[Path]:
+    skills_dir = target_root / "skills"
+    if not skills_dir.exists():
+        return []
+    return sorted(path for path in skills_dir.glob(f"*/{SKILL_EVAL_TASK_FILE}") if path.is_file())
+
+
+def resolve_task_paths(eval_dir: Path, tasks: str | None, suite: str, target_root: Path) -> list[Path]:
     if tasks:
         return [Path(tasks)]
+    if suite == "skills":
+        paths = resolve_skill_task_paths(target_root)
+        if not paths:
+            raise EvalError(f"no skill eval task files found under {target_root / 'skills'}/*/{SKILL_EVAL_TASK_FILE}")
+        return paths
     return [eval_dir / "tasks" / SUITE_FILES[suite]]
 
 
-def load_task_suite(paths: Sequence[Path], limit: int | None = None) -> list[EvalTask]:
+def load_task_suite(paths: Sequence[Path], limit: int | None = None, default_context: str = "") -> list[EvalTask]:
     loaded: list[EvalTask] = []
     for path in paths:
-        loaded.extend(load_tasks(path))
+        loaded.extend(load_tasks(path, default_context=default_context))
     return loaded[:limit] if limit else loaded
 
 
 def task_to_json(task: EvalTask) -> str:
-    return json.dumps(
-        {
-            "id": task.id,
-            "title": task.title,
-            "query": task.query,
-            "reference_points": list(task.reference_points),
-            "tags": list(task.tags),
-            "notes": task.notes,
-        },
-        indent=2,
-    )
+    payload = {
+        "id": task.id,
+        "title": task.title,
+        "query": task.query,
+        "reference_points": list(task.reference_points),
+        "tags": list(task.tags),
+        "notes": task.notes,
+    }
+    if task.context:
+        payload["context"] = task.context
+    return json.dumps(payload, indent=2)
 
 
 def render_template(template: str, task: EvalTask, answer: str = "") -> str:
     rendered = template
+    context_block = f"Context:\n{task.context}\n\n" if task.context else ""
     replacements = {
+        "{context}": task.context,
+        "{context_block}": context_block,
         "{query}": task.query,
         "{task_json}": task_to_json(task),
         "{answer}": answer,
@@ -294,7 +343,7 @@ def run_task(
     agent_answer_path = task_dir / "agent_answer.txt"
     agent_prompt_path.write_text(agent_prompt)
     agent_result = run_harness(
-        args.farplane,
+        args.harness,
         agent_prompt,
         agent_answer_path,
         Path(args.target_root).resolve(),
@@ -315,7 +364,7 @@ def run_task(
         judge_answer_path = task_dir / "judge_answer.txt"
         judge_prompt_path.write_text(judge_prompt)
         judge_result = run_harness(
-            args.judge_harness or args.farplane,
+            args.judge_harness or args.harness,
             judge_prompt,
             judge_answer_path,
             Path(args.target_root).resolve(),
@@ -341,8 +390,8 @@ def run_task(
     detail = {
         "task": json.loads(task_to_json(task)),
         "run_config": {
-            "harness": args.farplane,
-            "judge_harness": args.judge_harness or args.farplane,
+            "harness": args.harness,
+            "judge_harness": args.judge_harness or args.harness,
         },
         "agent": {
             "returncode": agent_result.returncode,
@@ -385,22 +434,23 @@ def inspect_eval_setup(harness: str, target_root: Path, eval_dir: str | None) ->
 
 
 def command_status(args: argparse.Namespace) -> int:
-    eval_dir, missing = inspect_eval_setup(args.farplane, Path(args.target_root), args.eval_dir)
+    eval_dir, missing = inspect_eval_setup(args.harness, Path(args.target_root), args.eval_dir)
     if missing:
         print(f"Eval setup missing in {eval_dir}")
         for relative in missing:
             print(f"- {relative}")
         print("")
-        print(f"Initialize it with: python3 skills/eval/scripts/run_evals.py init --harness {args.farplane} --target-root {Path(args.target_root).resolve()}")
+        print(f"Initialize it with: python3 skills/eval/scripts/run_evals.py init --harness {args.harness} --target-root {Path(args.target_root).resolve()}")
         return 1
     print(f"Eval setup ready in {eval_dir}")
     return 0
 
 
 def command_run(args: argparse.Namespace) -> int:
-    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.farplane, Path(args.target_root).resolve())
-    task_paths = resolve_task_paths(eval_dir, args.tasks, args.suite)
-    tasks = load_task_suite(task_paths, args.limit)
+    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, Path(args.target_root).resolve())
+    eval_config = load_eval_config(eval_dir)
+    task_paths = resolve_task_paths(eval_dir, args.tasks, args.suite, Path(args.target_root).resolve())
+    tasks = load_task_suite(task_paths, args.limit, default_context=eval_config.default_context)
     if args.max_parallel_tasks < 1:
         raise EvalError("--max-parallel-tasks must be at least 1")
     agent_template = read_text(Path(args.agent_prompt or eval_dir / "prompts" / "agent.md"))
@@ -430,9 +480,10 @@ def command_run(args: argparse.Namespace) -> int:
         "job_id": job_id,
         "label": args.label,
         "created_at": created_at,
-        "harness": args.farplane,
-        "judge_harness": args.judge_harness or args.farplane,
+        "harness": args.harness,
+        "judge_harness": args.judge_harness or args.harness,
         "suite": args.suite if not args.tasks else "custom",
+        "default_context_file": eval_config.default_context_file,
         "task_files": [str(path) for path in task_paths],
         "task_count": len(rows),
         "pass_rate": pass_rate,
@@ -462,8 +513,10 @@ def copy_template_dir(src: Path, dest: Path, force: bool) -> None:
 
 def command_init(args: argparse.Namespace) -> int:
     target_root = Path(args.target_root).resolve()
-    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.farplane, target_root)
+    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, target_root)
     templates = script_root() / "templates"
+    copy_template(templates / "config.json", eval_dir / "config.json", args.force)
+    copy_template(templates / "contexts" / "agi-toy-shop.md", eval_dir / "contexts" / "agi-toy-shop.md", args.force)
     copy_template(templates / "harness_tasks.json", eval_dir / "tasks" / "harness_tasks.json", args.force)
     copy_template(templates / "agent.md", eval_dir / "prompts" / "agent.md", args.force)
     copy_template(templates / "judge.md", eval_dir / "prompts" / "judge.md", args.force)
@@ -477,7 +530,7 @@ def command_init(args: argparse.Namespace) -> int:
     print("Next steps:")
     print(f"  1. Edit {eval_dir / 'tasks' / 'harness_tasks.json'} with one important skill, workflow, or system-prompt task.")
     print("  2. Use tags/notes to mark whether a task is skill, workflow, or system-prompt level.")
-    print(f"  3. Run: python3 {eval_dir / 'run_evals.py'} run --harness {args.farplane} --label baseline --limit 1")
+    print(f"  3. Run: python3 {eval_dir / 'run_evals.py'} run --harness {args.harness} --label baseline --limit 1")
     print(f"  4. Inspect results with either {eval_dir / 'viewer.html'} or the React viewer:")
     print(f"     cd {eval_dir / 'viewer-react'} && pnpm install && pnpm dev --host 127.0.0.1")
     return 0
@@ -487,7 +540,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    init_parser = subparsers.add_parser("init", help="Create .codex/evals or .claude/evals")
+    init_parser = subparsers.add_parser("init", help="Create .farplane/evals")
     init_parser.add_argument("--harness", choices=["codex", "claude", "custom"], required=True)
     init_parser.add_argument("--target-root", default=".")
     init_parser.add_argument("--eval-dir")
@@ -508,9 +561,9 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--tasks")
     run_parser.add_argument(
         "--suite",
-        choices=["harness"],
+        choices=["harness", "skills"],
         default="harness",
-        help="Built-in task suite to run when --tasks is not provided.",
+        help="Built-in task suite to run when --tasks is not provided. Use 'skills' to discover skills/*/eval_task.json.",
     )
     run_parser.add_argument("--agent-prompt")
     run_parser.add_argument("--judge-prompt")

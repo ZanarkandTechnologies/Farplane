@@ -19,9 +19,14 @@ All task types live in one file. Use `tags` and `notes` to mark the layer.
 Start with one or two tasks total. Add more only after the first run shows a
 useful failure.
 
+Skill-specific tasks may instead live in the owning skill package as
+`skills/<skill-name>/eval_task.json`. Use that modular file when a task proves
+one skill's behavior rather than the whole harness.
+
 ## Edit These First
 
 - `tasks/harness_tasks.json`: skill, workflow, and system-prompt tasks.
+- `config.json` and `contexts/*`: shared fixture setup such as AGI Toy Shop.
 - `prompts/judge.md`: the rubric. Keep rubric rules here, not in task JSON,
   and use A-D tiers plus booleans instead of 0-100 scores.
 
@@ -41,21 +46,28 @@ Task JSON should stay simple:
 }
 ```
 
+Use `config.json` and `contexts/*` for stable fixture setup, company
+background, role assumptions, and safety boundaries. Keep `query` as the
+realistic user request the harness should answer. Add task `context` only for a
+specific override, and use `"context": ""` when a task should not inherit the
+default context.
+
 ## Run
 
 Check whether evals are installed:
 
 ```bash
-python3 .codex/evals/run_evals.py status --harness codex
+python3 .farplane/evals/run_evals.py status --harness codex
 ```
 
 Run one task:
 
 ```bash
-python3 .codex/evals/run_evals.py run --harness codex --label baseline --limit 1
+python3 .farplane/evals/run_evals.py run --harness codex --label baseline --limit 1
+python3 .farplane/evals/run_evals.py run --harness codex --suite skills --label skill-baseline
 ```
 
-Claude users should run the same commands from `.claude/evals` with
+Claude users should run the same `.farplane/evals/run_evals.py` commands with
 `--harness claude`.
 
 ## Viewer
@@ -63,7 +75,7 @@ Claude users should run the same commands from `.claude/evals` with
 Use the packaged shadcn React viewer:
 
 ```bash
-cd .codex/evals/viewer-react
+cd .farplane/evals/viewer-react
 pnpm install
 pnpm dev --host 127.0.0.1
 ```
@@ -81,7 +93,7 @@ If you want the quick loader to pull the newest run from `./runs`, serve the
 folder locally first:
 
 ```bash
-cd .codex/evals
+cd .farplane/evals
 python3 -m http.server
 ```
 

@@ -15,6 +15,8 @@ fields, and todo-link rules stay in one place.
 - `docs/features/registry.jsonl` owns harness-wide feature rows, including
   skill-applicable features with `category: "skills"`.
 - `docs/skills/registry.jsonl` is generated inventory, not hand-authored truth.
+- `skills/<skill-name>/eval_task.json` owns focused modular eval tasks for one
+  skill's behavior when a runnable eval is the right proof surface.
 
 Keep this file focused on stable system rules. Do not duplicate first-load
 authoring detail here; link `docs/skills/best-practices.md` for checklist
@@ -98,6 +100,9 @@ instead of duplicating them in frontmatter.
   refreshable. Keep local Farplane wrapper policy in local caller skills.
 - Do not patch installed skill bodies such as `~/.codex/skills/*` as the source
   of truth. Edit the Farplane source package, then reinstall selected skills.
+- Put skill-specific eval tasks beside the source skill as `eval_task.json`.
+  Keep broad working suites under `.farplane/evals` and reusable cross-skill
+  examples under `skills/eval/examples`.
 
 ## Template Versioning
 

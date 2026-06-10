@@ -297,3 +297,10 @@
 2026-06-09 18:26 +0800 | DOCS | add function-signature notation as a preferred response format for important harness concepts and reusable processes
 2026-06-09 18:28 +0800 | DOCS | add h3 headings plus blockquoted Before/After/Example deltas as the default scan format for multi-change system summaries
 2026-06-09 19:05 +0800 | DOCS | replace default Topics response headers with Goal alignment headers for substantial replies
+2026-06-10 02:07 +0800 | DOCS | add attention-protection pushback, escalation shape, and artifact-adoption accountability to the global agent template
+2026-06-10 02:18 +0800 | EVAL | standardize generic harness eval scenarios on the AGI Toy Shop clean-room toy company and rewrite new global behavior evals to avoid live config risk
+2026-06-10 02:31 +0800 | EVAL | add optional eval task context rendering so AGI Toy Shop fixture setup stays separate from realistic user queries
+2026-06-10 14:45 +0800 | EVAL | move AGI Toy Shop fixture setup into eval config and a shared context file with task-level context overrides
+2026-06-10 14:55 +0800 | CLEANUP | remove the accidental repo-local `.codex/` eval tree, preserve unique Farplane eval tasks under `skills/eval/examples/farplane-global-harness/`, and route Codex eval runtime defaults to `.farplane/evals`
+2026-06-10 15:20 +0800 | SKILL | add `skill-gap-analysis` as a Tier 2 diagnostic interface for comparing a target skill with an intended function contract before choosing the remediation owner
+2026-06-11 21:25 +0800 | EVAL | add modular skill-local `eval_task.json` standard and teach the eval runner to discover `skills/*/eval_task.json` with `--suite skills`

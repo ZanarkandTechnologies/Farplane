@@ -18,7 +18,7 @@ SelfGrowingHarness :=
 + SkillMaintenance
 + SourceIngestion
 + EvaluationAndBehaviorTests
-+ FailureCapture
++ GapAnalysisAndOptimization
 + ReviewAndProof
 + DurableMemory
 ```
@@ -34,9 +34,12 @@ Each piece has a different job:
   ideas before they become local features.
 - `skills/eval`, `skills/agent-behavior-test`, `skills/agent-qa-test`, and
   `bin/check_skill_capabilities.py` prove behavior and capability claims.
-- `skills/repent`, `docs/LESSONS.md`, and `experiments/hardcases/` turn
-  corrected failures into reusable learning pressure; high-priority misses may
-  also write narrow regression eval rows in the owning eval surface.
+- `skills/gap-analysis`, `skills/harness-advisor`, and
+  `skills/optimize-harness` turn observed versus expected behavior into a
+  grounded owner, implementation route, eval plan, and proof loop.
+- `skills/eval`, `docs/LESSONS.md`, and `experiments/hardcases/` turn
+  corrected failures into reusable learning pressure; hardcase is eval
+  metadata, not a separate capture workflow.
 - `bin/check_skill_todo_tiers.py --hardcase-on-failure` lets deterministic
   validators seed hardcases for clear skill-contract violations.
 - `skills/review` and ticket proof contracts stop self-approval before changes
@@ -69,7 +72,7 @@ Examples today include:
 - `FEAT-0024` Skill capability sanity tests
 - `FEAT-0030` On-demand skill plugin packaging
 - `FEAT-0033` Embedded skill checklist install
-- `FEAT-0039` Repent lesson, hardcase, and narrow eval capture
+- `FEAT-0039` Behavior correction, hardcase metadata, and narrow eval capture
 - `FEAT-0043` Project-level system prompt eval suite
 - `FEAT-0044` Validator-triggered hardcase capture
 

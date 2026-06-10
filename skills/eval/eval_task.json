@@ -1,0 +1,20 @@
+[
+  {
+    "id": "eval_skill_modular_task_authoring_01",
+    "title": "Eval skill writes a modular skill-local task",
+    "query": "Add an eval for the advise skill that proves it chooses among three options and recommends one path. Use the normal eval skill workflow.",
+    "reference_points": [
+      "Chooses a skill-local file such as skills/advise/eval_task.json for advise-specific behavior",
+      "Keeps AGI Toy Shop setup in shared context instead of repeating it inside the query",
+      "Writes a realistic user request as the task query",
+      "Uses visible string reference_points that can pass or fail",
+      "Avoids live config mutation, deploys, pushes, or private user paths"
+    ],
+    "tags": [
+      "skill",
+      "eval",
+      "modular-evals"
+    ],
+    "notes": "Reinforces the standard that skill-specific evals live beside the owning skill as eval_task.json."
+  }
+]

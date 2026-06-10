@@ -27,10 +27,6 @@ tmp/
 .personality_migration
 .omx/
 .farplane/
-.codex/evals/*
-!.codex/evals/
-!.codex/evals/tasks/
-!.codex/evals/tasks/*.json
 .ralph/
 .agents/*
 plugins/

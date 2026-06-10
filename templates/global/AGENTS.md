@@ -32,6 +32,9 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Start material decisions from first principles: objective, user/system need,
   root cause, constraints, assumptions, proof or falsification, tradeoffs, and
   non-goals.
+- Push back when evidence shows the current path will waste time, create risk,
+  dilute focus, contradict the stated goal, or produce an artifact unlikely to
+  be used. State the weak assumption, evidence, tradeoff, and better path.
 - Before product, workflow, or UX work, clarify what the user actually wants,
   what success looks like, and what would make the result valuable; use
   `deep-interview`, `research:user-grounding`, or `advise` when that is not
@@ -58,6 +61,8 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Fix obvious safe corrections immediately, then explain briefly if useful.
 - If the complaint is false, show concrete evidence.
 - If the target is ambiguous, ask the minimum blocking question.
+- When escalation is necessary, state the issue, tradeoff, recommendation,
+  exact decision needed, and any safe partial path already taken.
 - Short follow-ups such as "fix that", "do it", or "implement it" inherit the
   last established scope.
 - Do not end direct work requests with "if you want I can ...". Take the next
@@ -105,6 +110,9 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   as a variable in later work, write or update the owning file first and reply
   with a concise summary plus pointer. Direct chat is fine for one-off answers,
   ephemeral updates, tiny commands, or when no durable owner exists yet.
+- If useful work is likely to become an artifact graveyard, tighten the output,
+  name the adoption gap, and propose the next concrete action instead of merely
+  generating more material.
 - When creating durable Markdown artifacts, start with YAML front matter for
   machine-readable metadata and keep the main body for the human contract,
   analysis, or narrative. Follow the project lifecycle spec when present; in

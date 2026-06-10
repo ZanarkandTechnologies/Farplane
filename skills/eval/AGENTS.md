@@ -4,14 +4,19 @@
 
 This module owns the reusable local eval harness for Codex and Claude:
 
-- scaffold `.codex/evals` or `.claude/evals`
+- scaffold `.farplane/evals`
 - define the simple task JSON contract
+- define shared eval config such as default fixture context
 - run harness-native evals
 - render local run artifacts through the bundled viewer
 
 ## Editing Rules
 
-- Keep task JSON simple: `id`, `title`, `query`, `reference_points`, optional `tags`, optional `notes`.
+- Keep task JSON simple: `id`, `title`, optional `context`, `query`,
+  `reference_points`, optional `tags`, optional `notes`.
+- Put suite-wide fixture setup in `config.json` plus `contexts/*`; use task
+  `context` only for overrides, and use `context: ""` to disable the default
+  context for a real-repo task.
 - Keep rubric policy in judge prompts, not task JSON.
 - Prefer reusable templates under `templates/` over one-off runtime-only changes.
 - If install-time behavior changes, update `scripts/run_evals.py`, the matching template files, and tests together.

@@ -6,7 +6,7 @@
   "judge_harness": "codex",
   "suite": "harness",
   "task_files": [
-    ".codex/evals/tasks/harness_tasks.json"
+    ".farplane/evals/tasks/harness_tasks.json"
   ],
   "task_count": 1,
   "pass_rate": 1.0,
@@ -20,7 +20,7 @@
       "verdict": "A",
       "pass": true,
       "reason": "The answer met the required reference points.",
-      "detail_path": ".codex/evals/runs/20260101-000000-baseline/tasks/skill_example_01.json"
+      "detail_path": ".farplane/evals/runs/20260101-000000-baseline/tasks/skill_example_01.json"
     }
   ]
 }

@@ -638,7 +638,7 @@
           <p>
             This viewer reads the local eval artifacts written by `run_evals.py`.
             It works two ways: load the latest run from `./runs` when served from
-            `.codex/evals` or `.claude/evals`, or open the file directly and pick
+            `.farplane/evals`, or open the file directly and pick
             `summary.json` plus task detail JSON files from your machine.
           </p>
         </div>
@@ -1052,13 +1052,15 @@
               <span class="badge ${judge.pass ? "pass-true" : "pass-false"}">${judge.pass ? "pass" : "needs work"}</span>
               <span class="tag">${escapeHtml(task.id || taskRow.task_id)}</span>
               ${(taskTags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}
-              <span class="tag">${escapeHtml(`agent ${detail.run_config && detail.run_config.farplane ? detail.run_config.farplane : "--"}`)}</span>
+              <span class="tag">${escapeHtml(`agent ${detail.run_config && detail.run_config.harness ? detail.run_config.harness : "--"}`)}</span>
               <span class="tag">${escapeHtml(`judge ${detail.run_config && detail.run_config.judge_harness ? detail.run_config.judge_harness : "--"}`)}</span>
             </div>
           </div>
 
           <div class="detail-card">
             <h3>Task prompt</h3>
+            ${task.context ? `<p class="reason"><strong>Context:</strong> ${escapeHtml(task.context)}</p>` : ""}
+            <h4>User request</h4>
             <p>${escapeHtml(task.query || "No query recorded.")}</p>
             ${task.notes ? `<p class="reason">${escapeHtml(task.notes)}</p>` : ""}
           </div>

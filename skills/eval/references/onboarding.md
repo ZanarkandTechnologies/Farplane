@@ -26,17 +26,22 @@ structure unless the source is explicitly shareable.
 4. Start with one task; grow to `3-5` synthetic tasks only after the smoke pass.
 5. Cover happy path, ambiguity path, failure/refusal path, and regression canary
    when the suite grows beyond one task.
-6. Write `reference_points` as plain strings that describe the expected visible
+6. Put stable fixture setup in `config.json` plus `contexts/*`; keep `query` as
+   the raw user request the agent should answer.
+7. Use optional task `context` only for overrides. Use `"context": ""` when a
+   real-repo task should not inherit the suite default context.
+8. Write `reference_points` as plain strings that describe the expected visible
    answer or artifact.
-7. Keep judge policy in `prompts/judge.md`; use A-D tiers and booleans instead
+9. Keep judge policy in `prompts/judge.md`; use A-D tiers and booleans instead
    of 0-100 scores.
-8. Define judge inputs before running: changed files, command output, child
+10. Define judge inputs before running: changed files, command output, child
    agent event logs, screenshots, JSON reports, or reviewer notes.
-9. Keep `prompts/agent.md` realistic. For harness evals, use `{query}` unless
-   the user explicitly wants an extra wrapper prompt.
-10. Run one task with `--limit 1`, inspect `summary.json`, then inspect task
+11. Keep `prompts/agent.md` realistic. For harness evals, use
+    `{context_block}User request:\n{query}` unless the user explicitly wants an
+    extra wrapper prompt.
+12. Run one task with `--limit 1`, inspect `summary.json`, then inspect task
     detail when the verdict surprises you.
-11. Revise the task or judge before adding more tasks.
+13. Revise the task or judge before adding more tasks.
 
 ## Templates
 
@@ -66,7 +71,7 @@ Codex:
 ```bash
 python3 skills/eval/scripts/run_evals.py status --harness codex --target-root .
 python3 skills/eval/scripts/run_evals.py init --harness codex --target-root .
-python3 .codex/evals/run_evals.py run --harness codex --label baseline --limit 1
+python3 .farplane/evals/run_evals.py run --harness codex --label baseline --limit 1
 ```
 
 Claude:
@@ -74,7 +79,7 @@ Claude:
 ```bash
 python3 skills/eval/scripts/run_evals.py status --harness claude --target-root .
 python3 skills/eval/scripts/run_evals.py init --harness claude --target-root .
-python3 .claude/evals/run_evals.py run --harness claude --label baseline --limit 1
+python3 .farplane/evals/run_evals.py run --harness claude --label baseline --limit 1
 ```
 
 Run `init` only when `status` reports missing eval files.

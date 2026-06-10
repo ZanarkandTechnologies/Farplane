@@ -15,14 +15,18 @@ into a second place to maintain skill truth.
   registry or individual `SKILL.md` files.
 - `skills/skill-maintenance/graph/` contains the generated local visualization
   of skill nodes, Markdown-reference edges, Tier 3 chain edges, and rendered
-  skill documents. The generated UI is owned by `skill-maintenance` for now so
-  `docs/skills/` stays an index plus registry surface.
+  skill documents. It also generates a repo-wide harness reference graph and
+  docs audit report for backlink cleanup. The generated UI is owned by
+  `skill-maintenance` for now so `docs/skills/` stays an index plus registry
+  surface.
 - `skills/skill-registry-ui/` is the operator skill for refreshing, opening,
   and validating that graph UI.
 - If the graph expands beyond skills into repo-wide Markdown or JSON backlinks,
-  graduate it into a separate harness map surface. `skill-maintenance` should
-  keep owning skill registry correctness, while `harness-advisor` consumes the
-  broader map for placement decisions instead of owning the generator or UI.
+  keep the generator as a maintenance/reporting utility until a dedicated
+  harness map surface has a real consumer. `skill-maintenance` should keep
+  owning registry correctness and generated audits, while `harness-advisor`
+  consumes the broader map for placement decisions instead of owning the
+  generator or UI.
 - Skill-applicable harness features live in
   [`docs/features/registry.jsonl`](../features/registry.jsonl) with
   `category: "skills"`. This folder owns the generated skill inventory, not a
@@ -45,7 +49,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Do the work, prove it, write back, and review without owning a domain | `execute` | It is the generic execution interface behind domain-specific build flows. | A public domain execution skill such as `impl` or `frontend-craft` should own the pass. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing `pr-runtime` and `coderabbit-review`. | You only need an isolated checkout (`pr-runtime`) or one explicit heavy CodeRabbit pass (`coderabbit-review`). |
 | Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
-| Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.farplane/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, runs tagged harness task files, judges with boolean/tier verdicts, and treats hardcase as eval metadata. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
+| Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.farplane/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, discovers modular `skills/*/eval_task.json` rows, judges with boolean/tier verdicts, and treats hardcase as eval metadata. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include `agent-behavior-test`-style run capture. | You only need one cheap conformance probe and no adversarial proof loop. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It scores the work against anchored rubric families and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
 | Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |

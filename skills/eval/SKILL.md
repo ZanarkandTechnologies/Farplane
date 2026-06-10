@@ -5,6 +5,8 @@ tier: 3
 group: harness
 source: local
 skill_template_version: "0.2.0"
+feature_refs:
+  - FEAT-0054
 methods:
   - eval:onboarding
 allowed-tools: Read, Glob, Grep, Bash
@@ -18,13 +20,14 @@ Use this skill when the user wants to run, create, or repair a first real eval
 for an agent harness, prompt, skill, or workflow. It is intentionally
 harness-native: project working evals live under `.farplane/evals` for Codex
 or Claude runs. Repo-owned reusable task suites live under
-`skills/eval/examples/`.
+`skills/eval/examples/`. Skill-specific evals live next to their owning skill
+as `skills/<skill-name>/eval_task.json`.
 
 ## Skill Signature
 
 ```text
 eval(task_intent, harness?, target_root?, mode?) -> eval_case? + run_summary? + next_fix
-state: reads(existing evals, fixtures, task context, expected behavior); writes(eval tasks, hardcase metadata, run artifacts)
+state: reads(existing evals, skill eval_task.json files, fixtures, task context, expected behavior); writes(eval tasks, hardcase metadata, run artifacts)
 gates: expected_behavior:testable; baseline_before_mutation; hardcase:sanitized_and_reusable
 routes: optimize-harness | self-improve | skill-maintenance | agent-behavior-test | agent-qa-test | review
 fails: wording-only eval; stores raw private transcript; delays obvious regression coverage; marks hardcase without benchmark value
@@ -37,6 +40,15 @@ Common modes:
 - `hardcase`: mark an eval case as unusually difficult, reusable,
   benchmark-worthy, or saleable after sanitization. A hardcase is still a
   runnable eval case, not a separate capture backlog.
+
+## Default Fixture
+
+AGI Toy Shop is the default clean-room eval company: a fictional toy app
+business fully run by agents, with an agent-run storefront, toy inventory,
+support desk, safety review, marketing, release workflow, docs, skills, and
+tickets. Use it for generic harness evals that test language, reasoning,
+routing, escalation, pushback, planning, artifact selection, self-improvement,
+or proof behavior without touching real files.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -60,7 +72,11 @@ Common modes:
 - [ ] 3. Write eval tasks with the core shape: realistic `query`, shared fixture
   in `config.json` plus `contexts/*`, visible `reference_points`, narrow tags,
   and no live side effects unless the runner owns a sandbox fixture.
-- [ ] 4. Summarize findings from `summary.json` and task detail artifacts: verdict
+- [ ] 4. For skill-specific behavior, prefer the modular owner file
+  `skills/<skill-name>/eval_task.json`; use `.farplane/evals/tasks/*` for
+  active working suites and `skills/eval/examples/*` for reusable cross-skill
+  examples.
+- [ ] 5. Summarize findings from `summary.json` and task detail artifacts: verdict
   counts, important failures, likely cause, and the next concrete fix.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -129,6 +145,18 @@ Hardcase metadata:
   "benchmark_value": "Tests a realistic nested self-improvement workflow",
   "sanitization_notes": "Remove private project names, secrets, and raw transcript details before sharing."
 }
+```
+
+Skill-local eval files use the same JSON-list schema:
+
+```text
+skills/advise/eval_task.json
+```
+
+Run all skill-local evals with:
+
+```bash
+python3 .farplane/evals/run_evals.py run --harness codex --suite skills --label skill-baseline
 ```
 
 ## Commands

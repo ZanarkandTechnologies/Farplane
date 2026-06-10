@@ -59,6 +59,9 @@ fails: known bad behavior; overbroad behavior; misplaced ownership
 
 - [TODO: Inline one short positive example, or link to `templates/*` /
   `prompts/*` when examples are too long.]
+- [TODO: If this skill needs a focused behavioral eval, add
+  `eval_task.json` at the skill package root using the eval task JSON-list
+  schema.]
 
 ## Gotchas
 

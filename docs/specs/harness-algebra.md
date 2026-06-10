@@ -582,7 +582,9 @@ Drain(source_file, target_file, rule) -> target_delta + evidence
 Examples:
 
 ```text
-repent_log -> docs/TROUBLES.md -> docs/LESSONS.md
+behavior_gap -> gap_analysis -> optimize_harness
+hardcase_signal -> eval_task[hardcase=true]
+trouble_signal -> docs/TROUBLES.md -> docs/LESSONS.md
 docs/LESSONS.md -> docs/MEMORY.md
 docs/MEMORY.md -> project AGENTS.md
 source_observation -> docs/features/registry.jsonl

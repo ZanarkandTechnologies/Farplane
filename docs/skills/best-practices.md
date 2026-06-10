@@ -58,6 +58,10 @@ tier, source, template-version, or feature-tracking policy here; link
   truly must be run from the repository root.
 - References own conditional detail: onboarding, examples, templates, long
   rubrics, model maps, and rare-path recipes.
+- Skill-local evals own focused behavioral regression tasks for that skill.
+  Use `eval_task.json` at the skill package root when the task proves the
+  skill's own contract; use cross-skill examples or `.farplane/evals` when the
+  behavior belongs to the broader harness.
 - If a reference must be read on every invocation, promote the needed rule into
   `SKILL.md`.
 - Do not copy the same instruction into `SKILL.md`, references, templates, and

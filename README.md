@@ -146,10 +146,10 @@ flowchart LR
 - **Validators can create hardcase seeds.** Deterministic skill-contract checks
   such as todo-tier violations can write deduplicated hardcases automatically,
   so obvious process failures become future eval/self-improvement material.
-- **System-prompt behavior is evalable.** Project-level `.codex/evals` tasks
-  cover grounding, context gathering, advice routing, proactive action,
-  holdback on risky work, skill todo rendering, repent eval capture,
-  multitopic focus, and validator-triggered hardcase capture.
+- **System-prompt behavior is evalable.** Repo-owned eval examples under
+  `skills/eval/examples/` cover grounding, context gathering, advice routing,
+  proactive action, holdback on risky work, skill todo rendering, repent eval
+  capture, multitopic focus, and validator-triggered hardcase capture.
 - **Long threads keep a whole-thread topic ledger.** In multitopic work,
   substantial replies name the root topic, tangents, and current focus, then
   split independently executable follow-ups into new-thread handoffs when the

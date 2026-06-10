@@ -60,6 +60,7 @@ type EvalSummary = {
 type EvalTask = {
   id: string
   title: string
+  context?: string
   query: string
   reference_points: string[]
   tags?: string[]
@@ -121,7 +122,7 @@ function isEvalSummary(value: unknown): value is EvalSummary {
     typeof value.job_id === 'string' &&
     typeof value.label === 'string' &&
     typeof value.created_at === 'string' &&
-    typeof value.farplane === 'string' &&
+    typeof value.harness === 'string' &&
     typeof value.judge_harness === 'string' &&
     typeof value.suite === 'string' &&
     typeof value.task_count === 'number' &&
@@ -559,7 +560,14 @@ function TaskDetailPanel({ detail, fallback }: { detail?: TaskDetail; fallback: 
   return (
     <div className="grid gap-6">
         <ReportSection title="Task" description="The input task the harness received.">
+          {detail.task.context ? (
+            <div className="rounded-lg border bg-card p-3">
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Context</p>
+              <p className="mt-2 text-sm leading-6">{detail.task.context}</p>
+            </div>
+          ) : null}
           <div className="rounded-lg border bg-muted/30 p-3">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">User request</p>
             <p className="text-sm leading-6">{detail.task.query}</p>
           </div>
           <div className="flex flex-wrap gap-2">

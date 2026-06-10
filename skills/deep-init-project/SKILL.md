@@ -257,7 +257,7 @@ Migration guide:
   should launch the app and which URLs or services QA should trust.
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
 - `docs/TROUBLES.md` is the append-only raw feedback log for repeated misses, failed attempts, blockers, and correction pain points.
-- `docs/LESSONS.md` is the distilled learning log for prompt, skill, eval, and policy improvements after a fix, `repent` pass, or trouble drain.
+- `docs/LESSONS.md` is the distilled learning log for prompt, skill, eval, and policy improvements after a fix, review pass, eval pass, or trouble drain.
 - `tickets/` is the canonical execution surface, so planning, build, and QA work from one file per active ticket, with completed tickets moved into `tickets/archive/`.
 - `.githooks/` gives each repo one visible place for optional local gates
   without silently mutating git config during bootstrap.
