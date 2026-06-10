@@ -3,7 +3,7 @@ name: {skill_name}
 description: [TODO: Clear trigger/use description. This metadata decides when the skill loads.]
 tier: [TODO: 1 | 2 | 3]
 source: local
-skill_template_version: "0.1.0"
+skill_template_version: "0.2.0"
 feature_refs:
   - FEAT-XXXX
 group: [TODO: required for Tier 3]
@@ -24,29 +24,19 @@ only when it adds non-duplicated durable shape.]
 [TODO: Paths in this skill are relative to this skill package. Use
 `scripts/foo.py` and `references/foo.md` for nearby files.]
 
-## Function Contract
+## Skill Signature
 
-[TODO: Keep this only when it clarifies real inputs, outputs, artifacts,
-evidence, or composition. Otherwise delete this section. See
-`docs/specs/harness-algebra.md`.]
+[TODO: Keep this when it clarifies callable behavior, state, gates, routes, or
+failure modes. Delete it only for tiny skills where the todo list already makes
+composition obvious. See `docs/specs/self-improvement-contracts.md`.]
 
-`{skill_name}: Inputs -> Outputs`
-
-Inputs:
-- operator intent:
-- required context:
-- readable artifacts:
-- optional tools:
-
-Outputs:
-- primary response or artifact:
-- write set:
-- evidence:
-
-Composition:
-- upstream:
-- downstream:
-- transitive effects:
+```text
+{skill_function}(input_text, state?) -> primary_output + evidence?
+state: reads(...); writes(...); remembers(...)
+gates: proof_or_review_condition; blocker_condition
+routes: next-skill | next-skill:method | direct-answer
+fails: known bad behavior; overbroad behavior; misplaced ownership
+```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List

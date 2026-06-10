@@ -3,7 +3,7 @@ name: harness-advisor
 description: Tier 2 Farplane harness placement advisor. Use when the user wants to make Farplane better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, registries, or generated harness-map surfaces.
 tier: 2
 source: local
-skill_template_version: "0.1.0"
+skill_template_version: "0.2.0"
 feature_refs:
   - FEAT-0023
   - FEAT-0040
@@ -28,38 +28,22 @@ This is a Tier 2 workflow surface. It may use Tier 1 primitives directly, then
 hand implementation to a Tier 3 skill such as `skill-maintenance`, `impl-plan`,
 `impl`, `qa`, `demo`, or another Farplane application skill.
 
-## Function Contract
+## Skill Signature
 
-`harness-advisor: ImprovementRequest + Evidence -> PlacementDecision`
-
-Inputs:
-- operator intent: one Farplane improvement request, failure, or capability gap
-- required context: smallest relevant specs, registries, current surface files,
-  and evidence for the claimed failure
-- readable artifacts: feature registry, skill registry, owning specs, skill
-  files, agent prompts, hooks/scripts, templates, ticket contracts, generated
-  graph/map artifacts when relevant
-- optional tools: repository search, validators, reviewer handoff, eval runner
-
-Outputs:
-- primary response or artifact: placement decision with one primary owner
-- write set: visible ticket or handoff only when the recommendation becomes work
-- evidence: current evidence, rejected surfaces, proof plan, validation path,
-  tradeoff accepted, and next ticket or owner
-
-Composition:
-- upstream: operator request, `reference-grounding`, `advise`,
-  `deliberative-advice`, `harness-scout`, or review findings
-- downstream: `skill-maintenance`, `skill-creator`, `spec-to-ticket`,
-  `impl-plan`, `eval`, `review`, or a ticketed implementation pass
-- transitive effects: avoid root-prompt bloat, preserve source ownership, and
-  prefer compounding skill/eval/review improvements when evidence supports them
+```text
+harness_place(gap_or_request, evidence?) -> placement_decision
+state: reads(harness doctrine, feature registry, skill registry, relevant surfaces); writes(ticket? handoff?)
+gates: failure_named; owner_surface:named; rejected_surfaces:named; proof_path:named
+routes: gap-analysis | eval | self-improve | skill-maintenance | impl-plan | spec-to-ticket | direct-answer
+fails: defaults to AGENTS.md; creates new skill before checking registry; recommends hooks for judgment-heavy work
+```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. State the improvement request as one concrete harness failure or
-   capability gap.
+   capability gap; route to `gap-analysis` first when the observed-versus-
+   expected gap is still fuzzy.
 - [ ] 2. Ground the current state with the smallest relevant evidence.
    - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for compact
      local evidence before recommending a surface.
@@ -97,6 +81,8 @@ Composition:
      harness deltas.
 - [ ] 7. Hand implementation to the relevant Tier 3 workflow, ticket, or
    visible artifact instead of doing hidden stateful work in chat.
+   - [ ] Use `optimize-harness` when the user
+     wants the full diagnose-place-prove-change-review loop owned end to end.
 - [ ] 8. Review readiness before treating a material placement decision as
    ready.
    - [ ] Use [review](../review/SKILL.md) for material recommendations.

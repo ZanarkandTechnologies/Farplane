@@ -1,0 +1,515 @@
+skill todo list sections OK
+external skills without direct todo lists skipped: agent-browser, convex, vercel-react-best-practices
+wrote docs/skills/registry.jsonl (84 skill rows)
+skill registry OK (84 skill rows)
+skill todo tier check OK
+skill capability fixtures OK (2 capabilities, 2 value signals)
++ python3 skills/skill-maintenance/scripts/sync_skill_checklists.py --write
++ python3 bin/sync_skill_registry.py --write
++ python3 bin/sync_skill_registry.py --check
++ python3 bin/check_skill_todo_tiers.py --allow-peer-tier3 --hardcase-on-failure
++ python3 bin/check_skill_capabilities.py validate
++ python3 -m py_compile bin/sync_skill_registry.py bin/check_skill_todo_tiers.py bin/check_skill_capabilities.py skills/skill-maintenance/scripts/check_skills.py skills/skill-maintenance/scripts/sync_skill_checklists.py
+skill system summary:
+{
+  "checklists": {
+    "has": 81,
+    "missing": 3
+  },
+  "missing_checklists": [
+    {
+      "name": "agent-browser",
+      "source": "external",
+      "tier": 2,
+      "upstream_url": "https://github.com/vercel-labs/agent-browser/blob/main/skill-data/core/SKILL.md"
+    },
+    {
+      "name": "convex",
+      "source": "external",
+      "tier": 3,
+      "upstream_url": "https://github.com/get-convex/agent-skills/blob/main/skills/convex/SKILL.md"
+    },
+    {
+      "name": "vercel-react-best-practices",
+      "source": "external",
+      "tier": 3,
+      "upstream_url": "https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices"
+    }
+  ],
+  "missing_skill_template_version": [
+    {
+      "name": "agent-behavior-test",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "agent-browser",
+      "source": "external",
+      "tier": 2
+    },
+    {
+      "name": "agent-qa-test",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "agent-testability-plan",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "apify",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "autoresearch-exec",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "autoresearch-plan",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "bash-efficiency",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "batch-work",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "best-of-worlds",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "brainstorm",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "close-ticket",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "codebase-analysis",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "coderabbit-review",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "commit-message",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "convex",
+      "source": "external",
+      "tier": 3
+    },
+    {
+      "name": "data-viz",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "deep-init-project",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "deep-interview",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "deep-system-design",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "deep-ui-design",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "delegate-cli",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "delegate-frontend",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "demo",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "demo-realism",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "desloppify",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "diagramming",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "documentation",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "execute",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "external-patterns",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "farplane-invocation",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "feed-scout",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "find-skills",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "frontend-craft",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "frontend-design",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "functional-ui",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "goal-crafter",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "harness-scout",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "hitl-autoresearch",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "image-generation",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "impl",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "impl-plan",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "landing-page",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "media-ingest",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "plan",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "pr-review-watch",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "pr-runtime",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "pr-splitting",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "prd",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "product-photography",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "qa",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "ralph",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "react-flow",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "remotion",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "remotion-render",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "research",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "runtime-debugging",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "skill-registry-ui",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "social-content",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "spec-to-ticket",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "summarize",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "telegram-message",
+      "source": "local",
+      "tier": 1
+    },
+    {
+      "name": "testing",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "vercel-react-best-practices",
+      "source": "external",
+      "tier": 3
+    },
+    {
+      "name": "video-generation",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "video-production",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "video-understanding",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "visual-design",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "visual-qa",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "web-design-guidelines",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "name": "weekly-strategy-analysis",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "name": "work",
+      "source": "local",
+      "tier": 3
+    }
+  ],
+  "rows": 84,
+  "skill_template_versions": {
+    "0.1.0": 4,
+    "0.2.0": 8,
+    "missing": 72
+  },
+  "sources": {
+    "external": 3,
+    "local": 81
+  },
+  "tiers": {
+    "1": 5,
+    "2": 32,
+    "3": 47
+  },
+  "todos_files": {
+    "missing": 84
+  }
+}
+skill template version report:
+{
+  "current_skill_template_version": "0.2.0",
+  "missing": [
+    "agent-behavior-test",
+    "agent-browser",
+    "agent-qa-test",
+    "agent-testability-plan",
+    "apify",
+    "autoresearch-exec",
+    "autoresearch-plan",
+    "bash-efficiency",
+    "batch-work",
+    "best-of-worlds",
+    "brainstorm",
+    "close-ticket",
+    "codebase-analysis",
+    "coderabbit-review",
+    "commit-message",
+    "convex",
+    "data-viz",
+    "deep-init-project",
+    "deep-interview",
+    "deep-system-design",
+    "deep-ui-design",
+    "delegate-cli",
+    "delegate-frontend",
+    "demo",
+    "demo-realism",
+    "desloppify",
+    "diagramming",
+    "documentation",
+    "execute",
+    "external-patterns",
+    "farplane-invocation",
+    "feed-scout",
+    "find-skills",
+    "frontend-craft",
+    "frontend-design",
+    "functional-ui",
+    "goal-crafter",
+    "harness-scout",
+    "hitl-autoresearch",
+    "image-generation",
+    "impl",
+    "impl-plan",
+    "landing-page",
+    "media-ingest",
+    "plan",
+    "pr-review-watch",
+    "pr-runtime",
+    "pr-splitting",
+    "prd",
+    "product-photography",
+    "qa",
+    "ralph",
+    "react-flow",
+    "remotion",
+    "remotion-render",
+    "research",
+    "runtime-debugging",
+    "skill-registry-ui",
+    "social-content",
+    "spec-to-ticket",
+    "summarize",
+    "telegram-message",
+    "testing",
+    "vercel-react-best-practices",
+    "video-generation",
+    "video-production",
+    "video-understanding",
+    "visual-design",
+    "visual-qa",
+    "web-design-guidelines",
+    "weekly-strategy-analysis",
+    "work"
+  ],
+  "not_current": [
+    {
+      "name": "advise",
+      "skill_template_version": "0.1.0"
+    },
+    {
+      "name": "deliberative-advice",
+      "skill_template_version": "0.1.0"
+    },
+    {
+      "name": "prototyping",
+      "skill_template_version": "0.1.0"
+    },
+    {
+      "name": "reference-grounding",
+      "skill_template_version": "0.1.0"
+    }
+  ]
+}

@@ -3,7 +3,7 @@ name: review
 description: Reusable TAS review rubric contract for judging whether provided task context, artifacts, and evidence are pass-ready, need revision, blocked, or invalid to review.
 tier: 1
 source: local
-skill_template_version: "0.1.0"
+skill_template_version: "0.2.0"
 ---
 
 # Review
@@ -21,6 +21,16 @@ ready.
 This skill is not an actor prompt. It does not decide whether to spawn a
 reviewer, how to route subagents, or how to write back to a ticket. The caller
 or reviewer actor supplies the task context and owns artifact writeback.
+
+## Skill Signature
+
+```text
+review_change(change_or_evidence, rubric_requirements?) -> review_receipt
+state: reads(task context, changed artifacts, evidence, selected rubrics); writes(review artifact?)
+gates: evidence_inspected; rubric_family_named; TAS_supported; next_action_named
+routes: caller-owned
+fails: approves without evidence; silently changes rubrics; treats TAS-B as pass
+```
 
 ## Contract
 

@@ -2,18 +2,18 @@
   "counts": {
     "edge_types": {
       "common-chain": 15,
-      "markdown-ref": 280
+      "markdown-ref": 294
     },
-    "edges": 295,
-    "nodes": 80,
+    "edges": 309,
+    "nodes": 84,
     "sources": {
       "external": 3,
-      "local": 77
+      "local": 81
     },
     "tiers": {
-      "1": 4,
-      "2": 31,
-      "3": 45
+      "1": 5,
+      "2": 32,
+      "3": 47
     }
   },
   "edges": [
@@ -22,6 +22,13 @@
       "source": "advise",
       "target": "best-of-worlds",
       "target_ref": "best-of-worlds",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "advise",
+      "target": "deliberative-advice",
+      "target_ref": "deliberative-advice",
       "type": "markdown-ref"
     },
     {
@@ -509,6 +516,34 @@
     },
     {
       "label": "markdown-ref",
+      "source": "deliberative-advice",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "deliberative-advice",
+      "target": "reference-grounding",
+      "target_ref": "reference-grounding",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "deliberative-advice",
+      "target": "research",
+      "target_ref": "research",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "deliberative-advice",
+      "target": "review",
+      "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
       "source": "demo",
       "target": "agent-browser",
       "target_ref": "agent-browser",
@@ -943,6 +978,34 @@
     },
     {
       "label": "markdown-ref",
+      "source": "gap-analysis",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "gap-analysis",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "gap-analysis",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "gap-analysis",
+      "target": "reference-grounding",
+      "target_ref": "reference-grounding",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
       "source": "goal-crafter",
       "target": "advise",
       "target_ref": "advise",
@@ -974,13 +1037,6 @@
       "source": "harness-advisor",
       "target": "review",
       "target_ref": "review",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "harness-advisor",
-      "target": "skill-maintenance",
-      "target_ref": "skill-maintenance",
       "type": "markdown-ref"
     },
     {
@@ -1212,6 +1268,55 @@
       "source": "media-ingest",
       "target": "video-understanding",
       "target_ref": "video-understanding",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "execute",
+      "target_ref": "execute",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "gap-analysis",
+      "target_ref": "gap-analysis",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "review",
+      "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "self-improve",
+      "target_ref": "self-improve",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "skill-maintenance",
+      "target_ref": "skill-maintenance",
       "type": "markdown-ref"
     },
     {
@@ -1622,20 +1727,6 @@
     },
     {
       "label": "markdown-ref",
-      "source": "repent",
-      "target": "reference-grounding",
-      "target_ref": "reference-grounding",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "repent",
-      "target": "review",
-      "target_ref": "review",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
       "source": "research",
       "target": "advise",
       "target_ref": "advise",
@@ -1667,6 +1758,13 @@
       "source": "self-improve",
       "target": "autoresearch-plan",
       "target_ref": "autoresearch-plan",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "self-improve",
+      "target": "eval",
+      "target_ref": "eval",
       "type": "markdown-ref"
     },
     {
@@ -2083,7 +2181,7 @@
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-07T12:08:51+00:00",
+  "generated_at": "2026-06-10T15:04:24+00:00",
   "nodes": [
     {
       "description": "Use when the user wants advice, tradeoff framing, or a recommendation and has not already supplied a clear take. Produces 3 viable options with pros/cons and names the best recommendation directly.",
@@ -2130,6 +2228,18 @@
       "label": "review",
       "methods": [],
       "path": "skills/review/SKILL.md",
+      "source": "local",
+      "tier": 1
+    },
+    {
+      "description": "Send a Telegram message from Codex using TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID. Use as a reusable notification primitive for HITL review requests, automation status, blockers, and short artifact review messages. Never hardcode Telegram secrets.",
+      "group": "",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "telegram-message",
+      "label": "telegram-message",
+      "methods": [],
+      "path": "skills/telegram-message/SKILL.md",
       "source": "local",
       "tier": 1
     },
@@ -2307,6 +2417,21 @@
       "tier": 2
     },
     {
+      "description": "Use for high-stakes, ambiguous, or expensive recommendations that need independent perspectives, critique, synthesis, and visible dissent before choosing a path. Method aliases: advise:complex and advise:council.",
+      "group": "",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "deliberative-advice",
+      "label": "deliberative-advice",
+      "methods": [
+        "advise:complex",
+        "advise:council"
+      ],
+      "path": "skills/deliberative-advice/SKILL.md",
+      "source": "local",
+      "tier": 2
+    },
+    {
       "description": "Use when a plan, spec, ticket, architecture note, or code explanation needs compact Mermaid system-design diagrams such as top-level delta maps, zoom-ins, numbered data-flow traces, or inline-signature component diagrams.",
       "group": "",
       "has_checklist": true,
@@ -2367,6 +2492,23 @@
       "tier": 2
     },
     {
+      "description": "Diagnose gaps between current and expected behavior across skills, harness workflows, UI/product surfaces, docs, or code, then produce a grounded GapReport with owner surface and proof path.",
+      "group": "",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "gap-analysis",
+      "label": "gap-analysis",
+      "methods": [
+        "gap-analysis:skill",
+        "gap-analysis:harness",
+        "gap-analysis:ui",
+        "gap-analysis:feature"
+      ],
+      "path": "skills/gap-analysis/SKILL.md",
+      "source": "local",
+      "tier": 2
+    },
+    {
       "description": "Turn fuzzy operator intent into a strong Codex /goal command with an auditable outcome, verification surface, constraints, boundaries, iteration policy, and blocked stop condition. Use before activating Goal mode when the task should continue across turns but the completion contract is not yet crisp.",
       "group": "",
       "has_checklist": true,
@@ -2379,7 +2521,7 @@
       "tier": 2
     },
     {
-      "description": "Tier 2 Farplane harness placement advisor. Use when the user wants to make Farplane better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, or registries.",
+      "description": "Tier 2 Farplane harness placement advisor. Use when the user wants to make Farplane better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, registries, or generated harness-map surfaces.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,
@@ -2411,22 +2553,6 @@
       "label": "plan",
       "methods": [],
       "path": "skills/plan/SKILL.md",
-      "source": "local",
-      "tier": 2
-    },
-    {
-      "description": "Operator-marked recovery and lesson, hardcase, or high-priority regression capture for cases where the assistant missed something obvious, got defensive, explained instead of acting, or finished a corrected hard case that should become durable learning or eval coverage. Use when the user explicitly says `repent`, `repent lesson`, `repent hardcase`, `repent eval`, or asks to capture a corrected failure.",
-      "group": "",
-      "has_checklist": true,
-      "has_todos": false,
-      "id": "repent",
-      "label": "repent",
-      "methods": [
-        "repent:lesson",
-        "repent:hardcase",
-        "repent:eval"
-      ],
-      "path": "skills/repent/SKILL.md",
       "source": "local",
       "tier": 2
     },
@@ -2667,7 +2793,7 @@
       "tier": 3
     },
     {
-      "description": "Check, initialize, and run harness-native evals for Codex or Claude using simple JSON tasks, boolean/tier judge prompts, and local run artifacts under .codex/evals or .claude/evals.",
+      "description": "Check, initialize, and run harness-native evals for Codex or Claude using simple JSON tasks, boolean/tier judge prompts, and run artifacts under .farplane/evals.",
       "group": "harness",
       "has_checklist": true,
       "has_todos": false,
@@ -2755,6 +2881,18 @@
       "tier": 3
     },
     {
+      "description": "Set up human-in-the-loop autoresearch sessions for marketing, demos, content, screenshots, landing pages, videos, and other subjective artifacts where Codex should iterate quickly, request human feedback through telegram-message or a local feedback file, and resume from a feedback score or review file.",
+      "group": "self-improvement",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "hitl-autoresearch",
+      "label": "hitl-autoresearch",
+      "methods": [],
+      "path": "skills/hitl-autoresearch/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
       "description": "Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Farplane's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.",
       "group": "content-image",
       "has_checklist": true,
@@ -2779,7 +2917,7 @@
       "tier": 3
     },
     {
-      "description": "Unified per-ticket planning skill with a detailed file-map-first plan centered on ordered action, callable seams, typed data flow, blast radius, verification, and explicit gap analysis for missing or partial features.",
+      "description": "Unified per-ticket planning skill with a compact delta-and-map output centered on before/after change, diagram-first code seams, ordered action, verification, and conditional detail for gaps, options, autonomy, and audit needs.",
       "group": "coding",
       "has_checklist": true,
       "has_todos": false,
@@ -2799,6 +2937,18 @@
       "label": "landing-page",
       "methods": [],
       "path": "skills/landing-page/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "description": "High-level Farplane harness improvement workflow for turning observed versus expected behavior into a gap report, placement decision, proof or eval, optional metric experiment, accepted change, and review.",
+      "group": "harness",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "optimize-harness",
+      "label": "optimize-harness",
+      "methods": [],
+      "path": "skills/optimize-harness/SKILL.md",
       "source": "local",
       "tier": 3
     },

@@ -4,7 +4,7 @@ description: "Maintain Farplane skill packages in bulk: classify tiers, add or a
 tier: 3
 group: skills
 source: local
-skill_template_version: "0.1.0"
+skill_template_version: "0.2.0"
 feature_refs:
   - FEAT-0037
   - FEAT-0040
@@ -20,6 +20,16 @@ onboarding, tier/source metadata, generated registry sync, todo-list shape,
 link hygiene, source ownership, and consolidation planning. Use this skill to
 make skill-system work repeatable instead of hiding rollout state in chat.
 
+## Skill Signature
+
+```text
+maintain_skills(accepted_change, targets?, rollout_scope?) -> applied_change + registry_checks
+state: reads(skill-system docs, target skills, registries, active ticket); writes(SKILL.md, references?, registry, proof notes)
+gates: template_structure_valid; source_owner_preserved; registry_synced; review_or_blocker_recorded
+routes: gap-analysis | skill-creator | eval | review | execute
+fails: bulk-edits without prototype; marks version without structure; edits installed copies as source of truth
+```
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
@@ -28,7 +38,7 @@ make skill-system work repeatable instead of hiding rollout state in chat.
      `docs/skills/best-practices.md`, `docs/skills/registry.jsonl`, active
      tickets, and the target skill files.
 - [ ] 2. Classify the maintenance operation for each target skill.
-   - [ ] 1. Template onboarding or version audit.
+   - [ ] 1. Template onboarding, signature rollout, or version audit.
    - [ ] 2. Todo-list or reference cleanup.
    - [ ] 3. Tier, source, group, feature-ref, method, or common-chain metadata
      update.
@@ -54,8 +64,9 @@ make skill-system work repeatable instead of hiding rollout state in chat.
      and artifact writeback out of reusable skills unless the skill is explicitly
      an orchestration skill.
 - [ ] 7. Verify template structure before marking a skill onboarded.
-   - [ ] Check the actual `SKILL.md` headings and todo shape against the current
-     template before setting or keeping `skill_template_version`.
+   - [ ] Check the actual `SKILL.md` headings, todo shape, and `## Skill
+     Signature` against the current template before setting or keeping
+     `skill_template_version`.
    - [ ] Prune redundant `todos.md` once direct todo-list content matches.
 - [ ] 8. Validate the skill system with `python3 scripts/check_skills.py --write`
    from this skill package.
@@ -176,12 +187,14 @@ python3 ../../bin/check_skill_todo_tiers.py --allow-peer-tier3
 ## Templates
 
 Use `skills/skill-creator/references/SKILL_TEMPLATE.md` as the structural
-baseline when onboarding a skill to `skill_template_version: "0.1.0"`.
+baseline when onboarding a skill to `skill_template_version: "0.2.0"`.
 
 ## Gotchas
 
 - Do not mark a skill as onboarded to a template version unless its structure
   actually follows that template.
+- Do not add a verbose type schema when a compact `## Skill Signature` captures
+  callable behavior, state, gates, routes, and failure modes.
 - Do not bypass the template-structure validator by treating
   `skill_template_version` as metadata-only.
 - Do not let generated registry rows become a hand-edited source of truth.

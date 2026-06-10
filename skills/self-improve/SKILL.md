@@ -4,36 +4,18 @@ description: Use when the user wants to improve an existing Codex skill, make a 
 tier: 3
 group: self-improvement
 source: local
+skill_template_version: "0.2.0"
 ---
 
 # Self Improve
 
-<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Todo List
+## Context
 
-- [ ] Read the target skill package: `SKILL.md`, direct todo list, references,
-  scripts, and existing `self-improve/` memory.
-- [ ] Use [plan](../plan/SKILL.md) when the improvement target, eval boundary,
-  or editable scope is unclear.
-- [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-  when comparing external skill examples or prior variants.
-- [ ] Define the quality rubric and convert it into binary assertions before
-  optimizing.
-- [ ] Establish a baseline score before mutating the target skill.
-- [ ] For durable iterative work, prefer native Goal mode as the loop runner;
-  use this skill as the eval, prompt-profile, and skill-memory context surface.
-- [ ] Use [autoresearch-plan](../autoresearch-plan/SKILL.md) only when the
-  operator explicitly wants filesystem autoresearch artifacts in addition to a
-  native Goal.
-- [ ] Promote only durable lessons, evals, and accepted changes into the target
-  skill package, normally through [skill-maintenance](../skill-maintenance/SKILL.md).
-<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
-
-Improve a target skill by giving native Goal mode the context it needs to run a
-measured loop. This skill owns skill-local memory, rubrics, binary evals,
-prompt/profile variants, baseline results, failure analysis, and reusable
-lessons. It does not need to own the durable loop when a native `/goal` can do
-that directly.
+Use this when a target skill, prompt, or harness surface needs measured
+optimization against a metric. This skill owns experiment context, evals,
+baselines, candidate comparison, skill-local memory, and promotion rules. It is
+not a generic implementation planner and should not mutate a target before the
+metric and proof path are clear.
 
 Current mental model:
 
@@ -43,6 +25,42 @@ goal-crafter = writes the Goal contract
 self-improve/ = target skill memory, evals, prompt candidates, and results
 skill-maintenance = accepted writeback into SKILL.md/references/source copies
 ```
+
+## Skill Signature
+
+```text
+self_improve_experiment(target_skill_or_surface, metric, search_space?, eval_suite?) -> best_candidate + experiment_log + promotion_recommendation
+state: reads(target package, evals, metric, prior runs, candidate constraints); writes(program.md?, evals?, results?, promoted_change?)
+gates: metric_named; baseline_recorded; candidates_compared; promotion_rule_met
+routes: eval | goal-crafter | autoresearch-plan | skill-maintenance | review
+fails: optimizes by taste; mutates before baseline; promotes unmeasured changes; bloats the target skill
+```
+
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
+## Todo List
+
+- [ ] 1. Read the target skill package or harness surface: `SKILL.md`, direct todo list, references,
+  scripts, and existing `self-improve/` memory.
+- [ ] 2. Clarify the improvement target, eval boundary, or editable scope with
+  [plan](../plan/SKILL.md) when any of them is unclear.
+- [ ] 3. Ground external examples or prior variants with
+  [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
+  when comparison is required.
+- [ ] 4. Define the quality rubric and convert it into binary assertions before
+  optimizing.
+- [ ] 5. Establish a baseline score before mutating the target skill.
+- [ ] 6. For durable iterative work, prefer native Goal mode as the loop runner;
+  use this skill as the eval, prompt-profile, and skill-memory context surface.
+- [ ] 7. Route to [autoresearch-plan](../autoresearch-plan/SKILL.md) only when
+  the operator explicitly wants filesystem autoresearch artifacts in addition
+  to a native Goal.
+- [ ] 8. Promote only durable lessons, evals, and accepted changes into the target
+  skill package, normally through [skill-maintenance](../skill-maintenance/SKILL.md).
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
+
+Improve a target by giving native Goal mode or a filesystem experiment loop the
+context it needs to run a measured search. It does not need to own the durable
+loop when a native `/goal` can do that directly.
 
 ## Trigger Conditions
 
@@ -207,7 +225,7 @@ installed copies.
 - **Native Goal can carry the loop:** keep this skill focused on context,
   memory, evals, and evidence; do not create parallel loop machinery.
 
-## Top Gotchas
+## Gotchas
 
 1. Do not leak the intended answer into eval prompts.
 2. Do not use judge-only subjective scores as the primary keep/discard metric.
@@ -220,7 +238,44 @@ installed copies.
 7. Do not fill target skill packages with bulky raw logs; store durable
   summaries, accepted evals, and reusable lessons.
 
-## Outcome Contract
+## Reference Map
+
+- [references/architecture.md](references/architecture.md) - self-improvement
+  boundary and ownership model.
+- [references/workflows.md](references/workflows.md) - eval and optimization
+  phases.
+- [references/gotchas.md](references/gotchas.md) - eval leakage and
+  overfitting risks.
+- [references/skill-evals.md](references/skill-evals.md) - case and assertion
+  design.
+- [references/skill-memory.md](references/skill-memory.md) - target-skill
+  `program.md` and run history.
+- [eval](../eval/SKILL.md) - proof and hardcase-marked eval cases.
+- [skill-maintenance](../skill-maintenance/SKILL.md) - accepted writeback to
+  skill source files.
+
+## Templates
+
+Experiment spine:
+
+```text
+target + metric + search_space + eval_suite -> baseline -> candidates -> comparison -> promotion
+```
+
+Promotion note:
+
+```text
+Target:
+Metric:
+Baseline:
+Candidates:
+Best candidate:
+Promotion rule:
+Accepted writeback:
+Residual risk:
+```
+
+## Output
 
 A self-improvement pass should leave:
 

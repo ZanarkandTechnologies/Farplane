@@ -38,18 +38,18 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Choose among real options and name a recommendation | `advise` | It starts from first principles, frames 3 viable choices, names one recommendation, and states the accepted tradeoff. | The user already gave a direct execution request. |
 | Make a high-stakes or complex recommendation with independent critique | `deliberative-advice` / `advise:complex` | It escalates advice into a council workflow: independent perspective briefs, critique/ranking, chair synthesis, visible dissent, and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs a concise 3-option recommendation. |
 | Ground a claim in local files, docs, official references, or provided sources | `reference-grounding` | It supplies compact evidence before advice, planning, or review claims. | You need a full research brief or feature synthesis. |
-| Analyze one skill against an intended behavior | `skill-gap-analysis` | It turns a repeated "what is missing from this skill?" prompt into a grounded function-contract gap report with missing inputs, outputs, proof, evals, owner surface, and verification. | You already know the exact edit; use the target skill or `skill-maintenance` directly. |
+| Diagnose the gap between current and expected behavior | `gap-analysis` | It turns a repeated "what is missing here?" prompt into a grounded gap report with current contract, expected signature, missing inputs, outputs, proof, evals, owner surface, and verification. | You already know the exact edit; use the target surface or `skill-maintenance` directly. |
 | Prove a pattern before expanding scope, automation, data, file count, or research breadth | `prototyping` | It forces a representative `1 -> 10 -> 100` sample and a Prototype Note before scale. | The task is already small, one-off, or mechanically proven. |
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
 | Turn intent into executable shape without owning a domain | `plan` | It is the generic planning interface for proof, boundaries, and handoff. | A domain skill such as `impl-plan`, `landing-page`, or `video-production` already owns the workflow. |
 | Do the work, prove it, write back, and review without owning a domain | `execute` | It is the generic execution interface behind domain-specific build flows. | A public domain execution skill such as `impl` or `frontend-craft` should own the pass. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing `pr-runtime` and `coderabbit-review`. | You only need an isolated checkout (`pr-runtime`) or one explicit heavy CodeRabbit pass (`coderabbit-review`). |
 | Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
-| Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.farplane/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, runs tagged harness task files, and judges with boolean/tier verdicts. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
+| Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.farplane/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, runs tagged harness task files, judges with boolean/tier verdicts, and treats hardcase as eval metadata. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include `agent-behavior-test`-style run capture. | You only need one cheap conformance probe and no adversarial proof loop. |
-| Recover from a corrected agent failure or capture it as a hard case | `repent` | It keeps the main agent fix-first, then routes post-fix lessons to `docs/LESSONS.md`, optional Notion proposals, sanitized hardcase artifacts, or narrow high-priority regression eval capture. | You want a broad self-improvement drain, broad eval-suite generation, model training, or data-sale workflow; use a later consuming skill. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It scores the work against anchored rubric families and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
 | Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
+| Fix a harness behavior end to end | `optimize-harness` | It orchestrates gap diagnosis, placement, eval/proof, optional metric experiment, implementation routing, and review without absorbing the lower-level skill jobs. | You only need a placement recommendation; use `harness-advisor` directly. |
 | Maintain skill frontmatter, checklists, registry metadata, or skill-system docs | `skill-maintenance` | It owns bulk skill upkeep, tier checks, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. |
 
 Agent testing stack:
@@ -121,7 +121,7 @@ python3 bin/check_skill_todo_tiers.py
 python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 python3 bin/check_skill_capabilities.py validate
 python3 skills/skill-maintenance/scripts/generate_skill_graph.py
-python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.1.0
+python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0
 ```
 
 Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
@@ -151,9 +151,8 @@ Tiered loading is enforced at the first-load todo boundary:
   handoffs such as content skill -> media execution skill remain intentional.
 - `bin/check_skill_todo_tiers.py --hardcase-on-failure` writes a deduplicated
   sanitized hardcase under `experiments/hardcases/` when the validator catches
-  a clear skill todo tier violation. This captures the contract failure for
-  repent or eval follow-up without turning every validator failure into a
-  runnable eval row.
+  a clear skill todo tier violation. Treat those files as eval follow-up seeds:
+  durable hard cases should become runnable eval rows with hardcase metadata.
 
 ## Tier 3 Pipeline Shape
 

@@ -4,7 +4,7 @@ description: Create or update Farplane skills when a user wants a reusable workf
 tier: 3
 group: skills
 source: local
-skill_template_version: "0.1.0"
+skill_template_version: "0.2.0"
 feature_refs:
   - FEAT-0048
 license: Complete terms in LICENSE.txt
@@ -22,6 +22,16 @@ and todo-link rules before changing a skill's shape. Use
 [docs/skills/best-practices.md](../../docs/skills/best-practices.md)
 for first-load todo shape, reference placement, actor-prompt boundaries,
 duplication control, repeatability, and review gates.
+
+## Skill Signature
+
+```text
+create_or_update_skill(request, existing_surface?, proof_need?) -> skill_package_change + validation_result
+state: reads(skill-system docs, registry, target skill, template); writes(SKILL.md, references?, scripts?, registry?)
+gates: trigger_stable; template_structure_valid; proof_or_blocker_named; review_ready
+routes: gap-analysis | skill-maintenance | research:source-synthesis | review
+fails: creates duplicate skills; hides required logic in references; omits proof; stamps stale template version
+```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -43,8 +53,9 @@ duplication control, repeatability, and review gates.
      when source comparison is required.
 - [ ] 4. Draft or revise `SKILL.md` so the first-load path is executable without
    hidden chat context.
-   - [ ] Include trigger boundary, context, ordered `## Todo List`, branches,
-     hard gates, proof command, and output contract.
+   - [ ] Include trigger boundary, context, `## Skill Signature` when useful,
+     ordered `## Todo List`, branches, hard gates, proof command, and output
+     contract.
 - [ ] 5. Move non-first-load material to the right supporting surface.
    - [ ] Keep every-invocation rules in `SKILL.md`.
    - [ ] Move conditional branches, examples, templates, long rubrics, model
@@ -70,6 +81,16 @@ Minimal `SKILL.md` shape:
 
 ```markdown
 ## Context
+
+## Skill Signature
+
+```text
+skill_action(input_text, state?) -> primary_output + evidence?
+state: reads(...); writes(...)
+gates: proof_condition; review_condition
+routes: next-skill | direct-answer
+fails: known bad behavior
+```
 
 TODO: add the marker-delimited `## Todo List` section from
 `references/SKILL_TEMPLATE.md`.

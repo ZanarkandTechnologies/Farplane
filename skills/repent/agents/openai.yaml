@@ -1,4 +1,0 @@
-interface:
-  display_name: "Repent"
-  short_description: "Audit a complaint, then recover by fixing it now if it is real"
-  default_prompt: "Use `repent` when the assistant missed something obvious and needs audit-then-fix recovery on the current task."

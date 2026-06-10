@@ -108,7 +108,7 @@ template spine and todo-list shape for that version.
 Use:
 
 ```bash
-python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.1.0
+python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0
 ```
 
 Add `--require-template-version` only when the rollout is intentionally ready to
@@ -127,6 +127,23 @@ Roll out skill-system standards from the most compound surfaces first:
 
 Use `skill-maintenance` for rollout audits and `docs/skills/best-practices.md`
 for the concrete on-contact upgrade checklist.
+
+## Skill Signatures
+
+Template `0.2.0` adds a compact `## Skill Signature` section for skills whose
+composition would otherwise stay implicit. The signature is a human-readable
+contract, not a heavy schema:
+
+```text
+skill_action(input_text, state?) -> primary_output + evidence?
+state: reads(...); writes(...)
+gates: proof_condition; review_condition
+routes: next-skill | next-skill:method | direct-answer
+fails: known bad behavior
+```
+
+Use `docs/specs/self-improvement-contracts.md` for the full grammar and the
+self-improvement workflow contracts.
 
 ## Feature Tracking
 
