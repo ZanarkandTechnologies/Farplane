@@ -5,6 +5,10 @@ tier: 3
 group: skills
 source: local
 skill_template_version: "0.1.0"
+feature_refs:
+  - FEAT-0037
+  - FEAT-0040
+  - FEAT-0044
 ---
 
 # Skill Maintenance
@@ -26,7 +30,8 @@ make skill-system work repeatable instead of hiding rollout state in chat.
 - [ ] 2. Classify the maintenance operation for each target skill.
    - [ ] 1. Template onboarding or version audit.
    - [ ] 2. Todo-list or reference cleanup.
-   - [ ] 3. Tier, source, group, method, or common-chain metadata update.
+   - [ ] 3. Tier, source, group, feature-ref, method, or common-chain metadata
+     update.
    - [ ] 4. Consolidation, split, or external-source ownership change.
 - [ ] 3. Route non-mechanical choices before editing.
    - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
@@ -34,8 +39,9 @@ make skill-system work repeatable instead of hiding rollout state in chat.
    - [ ] Use [plan](../plan/SKILL.md) when tier, source, group, method ownership,
      or consolidation choices have real tradeoffs.
 - [ ] 4. Record the edit boundary for each target skill.
-   - [ ] Identify source ownership, related skills, first-load dependencies,
-     proof surfaces, and files that may change.
+   - [ ] Identify source ownership, related skills, adopted `FEAT-####`
+     records, first-load dependencies, proof surfaces, and files that may
+     change.
 - [ ] 5. Prototype broad rewrites on a representative sample before scaling.
    - [ ] Include a mix of Tier 1, Tier 2, and complex Tier 3 packages when the
      migration will affect many skills.
@@ -111,10 +117,12 @@ hygiene, or consolidation planning.
    [prototyping](../prototyping/SKILL.md) on a small representative set before
    running bulk commands.
 5. Update `SKILL.md` frontmatter only for manual fields: `tier`, `source`,
-   optional `skill_template_version`, Tier 3 `group`, optional `methods`,
-   optional `common_chains`, and optional `upstream_url`. Use
-   `skill_template_version` only when the skill has been onboarded to a known
-   structural template baseline; absence means not onboarded yet.
+   optional `skill_template_version`, optional `feature_refs`, Tier 3 `group`,
+   optional `methods`, optional `common_chains`, and optional `upstream_url`.
+   Use `feature_refs` only for compact `FEAT-####` handles already present in
+   `docs/features/registry.jsonl`. Use `skill_template_version` only when the
+   skill has been onboarded to a known structural template baseline; absence
+   means not onboarded yet.
 6. Put the anti-forgetting todo list directly in `SKILL.md` under
    `## Todo List`:
    - project/docs context first
@@ -146,7 +154,8 @@ python3 ../../bin/check_skill_todo_tiers.py --allow-peer-tier3
 
 ## Outcome Contract
 
-- Skill frontmatter remains minimal and valid. Onboarded skills may carry
+- Skill frontmatter remains minimal and valid. Skills may carry `feature_refs`
+  for adopted harness feature handles. Onboarded skills may carry
   `skill_template_version`; missing values remain visible in the generated
   registry and `check_skills.py --template-version <version>` report.
   Versioned skills fail the check when their structure no longer matches the

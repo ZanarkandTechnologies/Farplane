@@ -4,6 +4,8 @@ description: [TODO: Clear trigger/use description. This metadata decides when th
 tier: [TODO: 1 | 2 | 3]
 source: local
 skill_template_version: "0.1.0"
+feature_refs:
+  - FEAT-XXXX
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---

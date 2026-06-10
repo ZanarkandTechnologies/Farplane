@@ -47,6 +47,7 @@ def validate_skill(skill_path):
         'description',
         'version',
         'skill_template_version',
+        'feature_refs',
         'license',
         'allowed-tools',
         'metadata',

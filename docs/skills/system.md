@@ -76,6 +76,9 @@ Manual fields:
 - `source`: required, `local` or `external`.
 - `skill_template_version`: optional structural baseline for skills onboarded
   to a known Farplane skill template version; absence means not onboarded yet.
+- `feature_refs`: optional compact list of `FEAT-####` records this skill
+  package implements, depends on, or deliberately adopts. The feature registry
+  owns the feature details, evidence, limits, and metrics.
 - `group`: required for Tier 3 only.
 - `methods`: optional method addresses owned by the skill.
 - `common_chains`: optional one-way Tier 3 adjacency hints.
@@ -83,8 +86,9 @@ Manual fields:
 
 Generated registry fields include `path`, `description`, `has_checklist`,
 `has_todos`, `version`, `allowed_tools`, `skill_links`, and the manual fields
-above. Derive generated fields from source files instead of duplicating them in
-frontmatter.
+above. `feature_refs` values are validated against
+`docs/features/registry.jsonl`. Derive generated fields from source files
+instead of duplicating them in frontmatter.
 
 ## Source Ownership
 
@@ -133,12 +137,14 @@ Skill-applicable capabilities belong in the harness-wide feature registry:
 ```
 
 Use feature rows for supported optional capabilities such as eval support,
-skill capability fixtures, or autoresearchability. Use
-`skill_template_version` for structural template onboarding.
+skill capability fixtures, or autoresearchability. Use `feature_refs` in skill
+frontmatter only to record compact `FEAT-####` adoption handles for the skill
+package. Use `skill_template_version` for structural template onboarding.
 
 Do not store long applied-migration histories in skill frontmatter. If a
 migration needs rollout tracking, let `skill-maintenance` compare the generated
-skill inventory, template version report, and relevant feature rows.
+skill inventory, template version report, `feature_refs`, and relevant feature
+rows.
 
 ## Installed Rendering
 

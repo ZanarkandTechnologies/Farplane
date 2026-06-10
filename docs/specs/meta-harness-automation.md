@@ -73,8 +73,8 @@ Examples today include:
 - `FEAT-0043` Project-level system prompt eval suite
 - `FEAT-0044` Validator-triggered hardcase capture
 
-When a future skill frontmatter field records feature adoption, it should
-reference these `FEAT-####` handles rather than inventing loose feature names.
+When skill frontmatter records feature adoption, use `feature_refs` with these
+`FEAT-####` handles rather than inventing loose feature names.
 
 ## Skill Standards
 
@@ -88,8 +88,8 @@ Skill package truth stays split by purpose:
 
 Use `skill_template_version` only for the structural skill template baseline.
 The field is optional; absence means the skill has not been onboarded to a
-known template baseline yet. Use feature references for optional capabilities
-such as capability tests, eval readiness, source sync, install rendering, or
+known template baseline yet. Use `feature_refs` for optional capabilities such
+as capability tests, eval readiness, source sync, install rendering, or
 behavior-test proof.
 
 Do not store long migration histories in every skill. Git history, the feature
@@ -115,7 +115,9 @@ When Farplane learns or adopts a new harness capability:
 
 ## Current Limits
 
-- Skill feature adoption is not yet a generated per-skill field.
+- Skill feature adoption is now generated from optional skill frontmatter
+  `feature_refs`, but broad adoption coverage is still manual and should be
+  rolled out on contact or by targeted clusters.
 - `skill_template_version` is optional, so broad rollout status must be read
   from the generated registry and `skill-maintenance` report rather than
   treated as a hard requirement for every skill.
