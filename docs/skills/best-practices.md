@@ -1,14 +1,106 @@
 # Skill Best Practices
 
 Use this as the shared standard for creating, reviewing, and maintaining
-Farplane skills. Apply it to `skill-creator` and `skill-maintenance` first;
-roll it out to other skills only after a representative pass proves the shape.
+Farplane skills. This is an authoring and maintenance standard, not runtime
+context for every skill invocation. Apply it to `skill-creator` and
+`skill-maintenance` first; roll it out to other skills only after a
+representative pass proves the shape.
 
 Keep this file focused on skill authoring and review quality. Do not redefine
 tier, source, template-version, or feature-tracking policy here; link
 `docs/skills/system.md` for stable skill-system rules.
 
+## Load Policy
+
+Do not require normal skill users to load this whole file. A skill should be
+usable from its own `SKILL.md` first-load contract unless the active task is
+creating, maintaining, auditing, or reviewing skill structure.
+
+```text
+load_skill_authoring_context(task, target_skill, change_type)
+  -> no_load | SKILL.md_inline_rule | anchored_section | full_doc
+```
+
+Use this file directly when:
+
+- creating a new skill;
+- changing a skill's first-load shape, references, template version, eval
+  coverage, or audit record;
+- reviewing skill-system work;
+- changing a shared skill-system standard.
+
+Do not load this file for ordinary use of an unrelated skill. Instead, distill
+any rule needed for that skill's normal execution into that skill's `SKILL.md`.
+If the rule is short and prevents common wrong behavior, duplicate the short
+rule in first load and link the shared source only for deeper rationale.
+
+Use anchored sections instead of the full file when the task is narrow:
+
+- `#first-load-shape` for first-load contract and todo-list shape.
+- `#placement-boundaries` for `SKILL.md` versus references versus docs.
+- `#structure-optimization` for metric tradeoffs.
+- `#advice-and-proof-routing` for advice tier, research, eval, and review
+  routing.
+- `#skill-audit-records` for audit artifacts.
+
+If this file grows past roughly 500 lines, or any one section grows past roughly
+100 lines, split the long section into a topic file under `docs/skills/` or a
+skill-owned reference and keep this file as the index plus first-load authoring
+standard. Shared policy stays in docs; one-skill conditional detail belongs in
+that skill's references; always-needed runtime behavior belongs in the owning
+`SKILL.md`.
+
 ## First-Load Shape
+
+First-load sufficiency has priority over modular neatness. A skill can have
+beautiful references and still fail if the agent cannot execute the normal path
+from `SKILL.md` alone.
+
+```text
+first_load_contract(skill) -> trigger + context + signature? + todo_path + gates + proof + output
+```
+
+Put these in `SKILL.md` for every non-trivial skill:
+
+- Trigger boundary: when to use the skill and when not to.
+- Minimal context: owner docs, source-of-truth constraints, fixture assumptions,
+  and surrounding system shape needed every time.
+- Skill signature when composition would otherwise be implicit: inputs, outputs,
+  state reads/writes, gates, routes, and failure modes.
+- Ordered todo path: default branch, important branches, proof, and final
+  review.
+- Hard gates and stop conditions: safety, evidence, review, or setup checks that
+  cannot be optional.
+- Output contract: artifacts, response shape, proof paths, or handoff shape.
+- Reference routing: exactly which reference to load for conditional detail.
+
+Only move material out of `SKILL.md` when the remaining first-load contract is
+still executable without hidden chat context.
+
+Frontmatter `description` is the exception to first-load richness: keep it as a
+one-sentence functional routing definition capped at 220 characters. It should
+help the main model decide whether to load the skill before the skill body is
+visible.
+
+Use this shape:
+
+```text
+Verb input/context into output/artifact when call-condition.
+```
+
+Good descriptions name:
+
+- the input or starting context, such as a URL, ticket, decision, bug, prompt,
+  PR, design goal, media file, or existing codebase
+- the output or artifact, such as a recommendation, plan, evidence bundle,
+  generated asset, rendered video, ticket, proof packet, review verdict, or
+  implementation handoff
+- the ownership condition that separates this skill from neighboring skills
+
+Do not use description text for trigger phrase catalogs, examples,
+model/provider maps, orchestration policy, tool instructions, long caveats,
+method lists, or downstream routing chains. Put that detail in `SKILL.md` or a
+reference so it is loaded only after selection.
 
 - Put a short `## Context` section near the top of `SKILL.md` before the todo
   list when the skill depends on tier, ownership, source, or surrounding
@@ -43,6 +135,253 @@ tier, source, template-version, or feature-tracking policy here; link
 - Move onboarding, examples, rubric detail, and long rationale to references.
 - A good first-load todo list should tell the next agent what to do now, not
   teach the whole domain.
+
+## Placement Boundaries
+
+Use access frequency and ownership before line count. Length is a pressure
+signal, not the source of truth.
+
+```text
+place_skill_content(content, access_frequency, owner_scope, depth, line_count)
+  -> SKILL.md | skill_reference | shared_doc | template | eval
+```
+
+Put content directly in `SKILL.md` when it is needed for most invocations:
+
+- Trigger and non-trigger boundaries.
+- Required context that changes the first action.
+- The default todo path and branch routing.
+- Hard gates, stop conditions, proof requirements, and final review checks.
+- Output contract and handoff shape.
+- Short examples or negative examples that prevent common wrong behavior.
+- Exact reference-routing hints for conditional detail.
+
+Put content in a skill-local `references/*.md` file when it is owned by one
+skill but not needed every time:
+
+- Onboarding walkthroughs, long examples, deep rubrics, model maps, provider
+  maps, command recipes, or rare branches.
+- Detail that is loaded by one explicit todo branch.
+- Material that would make `SKILL.md` harder to scan while not changing the
+  default action.
+
+Put content in `docs/*` when it is a shared standard, stable system contract, or
+cross-skill policy:
+
+- Rules used by multiple skills, templates, reviewers, validators, or agents.
+- Concepts that need one canonical owner, such as tiering, file lifecycle,
+  review gates, skill structure, or harness algebra.
+- Decisions that should not drift across multiple skill-local references.
+
+Use these thresholds as review triggers:
+
+- If a `SKILL.md` section grows past roughly 100 lines, ask whether part of it is
+  branch-specific detail that belongs in a reference.
+- If `SKILL.md` grows past roughly 250 lines, run a structure review; keep it
+  long only when most lines are truly first-load contract.
+- If one reference grows past roughly 200 lines, split by branch, provider,
+  method, or artifact type.
+- If the same rule appears in two or more skills, consider a shared doc or
+  template owner. Keep a one-line pointer in each `SKILL.md` when the rule is
+  required for first-load behavior.
+
+Prefer duplication of a short first-load rule over hiding required behavior in a
+deep reference. Prefer a shared doc over duplicated long policy. Prefer a
+skill-local reference over a shared doc when only one skill owns the detail.
+
+## Structure Optimization
+
+Use first principles before moving content between `SKILL.md`, references,
+templates, evals, or review checks:
+
+```text
+maximize task_success + reliability + reusable_behavior + auditability
+minimize token_cost + turn_count + duplicated_instruction + missing_context
+subject to prompt_size <= limit and no quality regression
+```
+
+Key metrics:
+
+| Metric | Direction | How to Estimate |
+| --- | --- | --- |
+| `first_load_sufficiency` | maximize | A new agent can execute the default path from `SKILL.md` without chat context. |
+| `reference_load_precision` | maximize | References are loaded only when the current branch needs them. |
+| `missing_context_rate` | minimize | The agent has to ask or rediscover info that should have been in first-load scope. |
+| `noisy_context_rate` | minimize | First-load content includes optional detail irrelevant to the current branch. |
+| `duplicated_instruction_count` | minimize | Same rule appears in `SKILL.md`, references, templates, docs, and examples without distinct jobs. |
+| `prompt_size_tokens` | constrain/minimize | `SKILL.md` stays below the size where agents skip or flatten it. |
+| `task_success_rate` | maximize | Skill eval tasks pass without weakening workflow evals. |
+| `review_tas_rate` | maximize | Skill-contract and eval-quality reviews reach required TAS-A. |
+| `maintenance_locality` | maximize | Future edits have one obvious owner surface. |
+| `composition_clarity` | maximize | Inputs, outputs, state reads/writes, evidence, and routes are explicit. |
+
+Placement rule:
+
+```text
+place_instruction(rule, frequency, failure_cost, token_cost)
+  -> SKILL.md | reference | template | eval | review_check
+```
+
+Put a rule in `SKILL.md` when all are true:
+
+- It is needed in most invocations.
+- Missing it causes wrong behavior or extra turns.
+- It is short enough to state without tutorial bloat.
+- It affects routing, output shape, proof, or safety.
+
+Put a rule in a reference when any are true:
+
+- It is branch-specific, rare, long, or example-heavy.
+- It teaches the domain rather than directing the current action.
+- It is useful for authoring or review but not for every run.
+
+Use a deliberative-advice loop only for structural changes that are expensive,
+high-blast-radius, or likely to set precedent across many skills. The default
+path for ordinary skill edits is still:
+
+```text
+skill_change -> review(skill-contract + eval-quality) -> TAS verdict
+```
+
+Escalate only for standard-setting changes:
+
+```text
+skill_system_standard_change
+  -> deliberative-advice perspectives
+  -> review(skill-contract + eval-quality + integration-readiness)
+  -> eval or validator proof
+```
+
+Review routing:
+
+```text
+route_skill_structure_review(skill_change, template_age, drift, blast_radius)
+  -> self_check | advise | deliberative_advice | reviewer
+```
+
+## Advice And Proof Routing
+
+```text
+route_skill_decision(decision, stakes, uncertainty, evidence_need, blast_radius)
+  -> first_principles | advise | deliberative_advice | research | eval | reviewer
+```
+
+Use first-principles reasoning directly when the choice is obvious, reversible,
+local to one skill, and does not set precedent. Record the reasoning in the
+audit for material edits.
+
+Use `advise` when there are real options but the decision is still local,
+reversible, and cheap to correct. Good examples: one-skill reference placement,
+whether to add a short example, or choosing between two equivalent output
+shapes.
+
+Use `deliberative-advice` before editing when the decision changes a shared
+standard, affects Tier 1 primitives, meta skills, `skill-creator`,
+`skill-maintenance`, `eval`, reviewer rubrics, templates, cross-skill policy,
+or any rule likely to compound across many downstream workflows.
+
+Use `research` before advice when the recommendation depends on external facts,
+official behavior, peer patterns, source comparisons, or current local baselines
+that are not already in context.
+
+Use `eval` when the claim is behavioral, disputed, regression-prone, or cannot
+be judged by file inspection. Do not use evals just to bless an obvious
+structure placement.
+
+Use the native `reviewer` lane before calling material skill-system work ready.
+The reviewer judges the final artifact and evidence; it does not replace
+`deliberative-advice` for important pre-edit decisions.
+
+Always review skill creation and maintenance against the structure metrics. Vary
+the review depth:
+
+- Use a direct self-check for tiny mechanical edits that do not change trigger,
+  routing, proof, references, or first-load behavior.
+- Use `advise` for recent skills that already match the current template and
+  need a normal placement decision.
+- Default to `deliberative-advice` for structural changes to Tier 1 primitives,
+  meta skills, `skill-creator`, `skill-maintenance`, `eval`, cross-skill
+  standards, or any skill whose behavior compounds across many downstream
+  workflows.
+- Also use `deliberative-advice` when the skill is old, far from the current
+  template, high-traffic, cross-skill, precedent-setting, or likely to move
+  important rules between `SKILL.md`, references, templates, evals, and review
+  checks.
+- Use the native `reviewer` lane for material skill-system changes before
+  calling them ready. The reviewer should explicitly judge
+  `first_load_sufficiency`, `reference_load_precision`, `missing_context_rate`,
+  `noisy_context_rate`, `duplicated_instruction_count`, `prompt_size_tokens`,
+  `task_success_rate`, `review_tas_rate`, `maintenance_locality`, and
+  `composition_clarity`.
+- Do not assert `task_success_rate` or `review_tas_rate` from file inspection
+  alone. Those need eval run artifacts, reviewer receipts, or explicit evidence
+  gaps.
+
+## Skill Audit Records
+
+Use binary rubric outcomes instead of health scores. Numeric scores hide the
+reason for disagreement and are too easy to overfit. A skill audit should say
+which checks passed, which failed, what evidence exists, and what changed before
+and after the edit.
+
+```text
+audit_skill_structure(skill, change, reasoning, evidence?) -> audit_record + pass_fail_rubric + followups
+```
+
+For material skill creation or maintenance, write an audit record under the
+skill package:
+
+```text
+skills/<skill-name>/audits/YYYY-MM-DD-<short-change>.md
+```
+
+Material means the change affects trigger behavior, first-load content,
+reference placement, routing, proof gates, templates, eval tasks, reviewer
+rubrics, Tier 1/meta behavior, or any cross-skill standard. Tiny metadata,
+typo, link, or formatting edits can skip the audit record when they do not
+change behavior.
+
+Each audit record should include YAML front matter and a binary checklist:
+
+- `skill`, `date`, `change_type`, `owner`, and `status`.
+- `before_ref` and `after_ref` when there are commits, branches, or artifact
+  paths to compare.
+- `review_route`: `self_check`, `advise`, `deliberative_advice`, or `reviewer`.
+- `reasoning_basis`: first-principles review, `advise`, `deliberative_advice`,
+  reviewer receipt, eval run, or a combination.
+- `proof_artifacts`: commands, eval artifact paths, reviewer receipts, or
+  explicit evidence gaps.
+- `eval_required`: `yes` or `no`, with a short reason.
+- `rubric`: pass/fail/unknown rows for the structure metrics.
+- `before_behavior`, `after_behavior`, and `followups`.
+
+Do not put `health_score` in `SKILL.md` front matter. Do not add `last_edited`
+when git history already carries that fact. If a freshness signal is needed,
+derive it from git history and the newest audit record rather than duplicating
+state in every skill.
+
+Use `unknown` rather than guessing for evidence-backed checks such as
+`task_success_rate` and `review_tas_rate` when no eval run or reviewer receipt
+exists.
+
+First-principles reasoning is the default review engine for skill structure.
+Use it to inspect where instructions belong, whether the first-load path is
+executable, whether references are precise, and whether the change compounds
+cleanly through other skills.
+
+```text
+improve_skill_structure(skill_change)
+  -> first_principles_review
+  -> advise_or_deliberative_advice_when_high_leverage
+  -> targeted_eval_or_reviewer_receipt_when_needed
+  -> audit_record
+```
+
+Run evals, variant tournaments, or reviewer receipts when reasoning alone cannot
+settle the choice, when reviewers disagree, when the change is a regression
+guard, or when the final claim depends on measured behavior. Do not require
+benchmarks for every skill edit, and do not claim measured improvement without
+proof.
 
 ## Main File Versus References
 

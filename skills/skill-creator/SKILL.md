@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: Create or update Farplane skills when a user wants a reusable workflow, domain playbook, prompt/harness capability, or bundled scripts/templates that extend Codex behavior.
+description: "Turn a reusable workflow or capability idea into a Farplane skill package with frontmatter, todo path, references, and proof surfaces."
 tier: 3
 group: skills
 source: local
@@ -19,9 +19,10 @@ Skill creation is part of the Farplane skill system. Read
 [docs/skills/system.md](../../docs/skills/system.md) for the tier model,
 source ownership, frontmatter contract, template versioning, feature tracking,
 and todo-link rules before changing a skill's shape. Use
-[docs/skills/best-practices.md](../../docs/skills/best-practices.md)
-for first-load todo shape, reference placement, actor-prompt boundaries,
-duplication control, repeatability, and review gates.
+[docs/skills/best-practices.md](../../docs/skills/best-practices.md) as the
+skill-authoring standard. Prefer the specific anchored section needed for the
+current edit; load the whole file only when shaping or reviewing the full skill
+contract.
 
 ## Skill Signature
 
@@ -29,7 +30,7 @@ duplication control, repeatability, and review gates.
 create_or_update_skill(request, existing_surface?, proof_need?) -> skill_package_change + validation_result
 state: reads(skill-system docs, registry, target skill, template); writes(SKILL.md, references?, scripts?, registry?)
 gates: trigger_stable; template_structure_valid; proof_or_blocker_named; review_ready
-routes: gap-analysis | skill-maintenance | research:source-synthesis | review
+routes: gap-analysis | skill-maintenance | research:source-synthesis | advise | deliberative-advice | review
 fails: creates duplicate skills; hides required logic in references; omits proof; stamps stale template version
 ```
 
@@ -39,6 +40,7 @@ fails: creates duplicate skills; hides required logic in references; omits proof
 - [ ] 1. Read the request, related skills, registry row, nearby project docs,
    [docs/skills/system.md](../../docs/skills/system.md),
    [docs/skills/README.md](../../docs/skills/README.md), and
+   the relevant anchored section of
    [docs/skills/best-practices.md](../../docs/skills/best-practices.md).
 - [ ] 2. Decide the owning surface and write the decision into the edit.
    - [ ] 1. Create a new skill only when the capability has a stable trigger and
@@ -51,11 +53,27 @@ fails: creates duplicate skills; hides required logic in references; omits proof
    - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
      [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
      when source comparison is required.
+   - [ ] Use
+     [advice and proof routing](../../docs/skills/best-practices.md#advice-and-proof-routing)
+     before changing shared standards, Tier 1 primitives, meta skills, `eval`,
+     templates, reviewer rubrics, or cross-skill policy.
 - [ ] 4. Draft or revise `SKILL.md` so the first-load path is executable without
    hidden chat context.
+   - [ ] Write `description` as one sentence under 220 characters using
+     `Verb input/context into output/artifact when call-condition`.
    - [ ] Include trigger boundary, context, `## Skill Signature` when useful,
      ordered `## Todo List`, branches, hard gates, proof command, and output
      contract.
+   - [ ] Prefer first-load sufficiency over modular neatness: keep required
+     every-invocation context and gates in `SKILL.md` even when they could be
+     abstracted into a reference.
+   - [ ] Use
+     [docs/skills/best-practices.md#placement-boundaries](../../docs/skills/best-practices.md#placement-boundaries)
+     to place content by access frequency, owner scope, depth, and length.
+   - [ ] Use the structure optimization metrics in
+     [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization)
+     to decide what belongs in first-load `SKILL.md` versus references,
+     templates, evals, or review checks.
 - [ ] 5. Move non-first-load material to the right supporting surface.
    - [ ] Keep every-invocation rules in `SKILL.md`.
    - [ ] Move conditional branches, examples, templates, long rubrics, model
@@ -67,7 +85,22 @@ fails: creates duplicate skills; hides required logic in references; omits proof
 - [ ] 6. Run `python3 ../skill-maintenance/scripts/check_skills.py --write`
    and fix any reported skill-system drift.
 - [ ] 7. Review the finished skill contract before completion.
+   - [ ] For material skill creation or structural edits, create
+     `skills/<skill-name>/audits/YYYY-MM-DD-<short-change>.md` from
+     [skill-maintenance/templates/skill-audit.md](../skill-maintenance/templates/skill-audit.md),
+     or state why the change is mechanical enough to skip an audit record.
    - [ ] Repeatability from files alone.
+   - [ ] Structure metrics checked:
+     `first_load_sufficiency`, `reference_load_precision`,
+     `missing_context_rate`, `noisy_context_rate`,
+     `duplicated_instruction_count`, `prompt_size_tokens`,
+     `task_success_rate`, `review_tas_rate`, `maintenance_locality`, and
+     `composition_clarity`.
+   - [ ] Review depth chosen with
+     [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization):
+     direct self-check for tiny mechanical edits, `advise` for normal recent
+     skills, and `deliberative-advice` for Tier 1, meta, `eval`, stale,
+     high-blast-radius, cross-skill, or precedent-setting structure changes.
    - [ ] No duplicated first-load logic.
    - [ ] Actor-prompt versus skill-contract boundaries are clean.
    - [ ] Explicit proof commands or blockers are recorded.
@@ -121,6 +154,8 @@ starter file.
   makes the skill fail, `SKILL.md` is too thin.
 - Do not teach the whole domain in `SKILL.md`. If it reads like onboarding,
   move the material to references.
+- Do not use frontmatter `description` as a trigger catalog or mini manual. It
+  is only the pre-load routing definition.
 - Do not duplicate the same rule across `SKILL.md`, references, templates,
   prompts, and README-style docs.
 - Do not put actor identity, delegation routing, tool-use policy, or artifact
@@ -135,7 +170,8 @@ starter file.
   guide, generated registry surface, and maintenance commands.
 - [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
   first-load todo shape, reference placement, actor-prompt boundaries,
-  duplication control, repeatability, and review gates.
+  structure optimization metrics, duplication control, repeatability, and
+  review gates.
 - [references/SKILL_TEMPLATE.md](references/SKILL_TEMPLATE.md) - minimal starter
   template for new skill packages.
 - [references/workflows.md](references/workflows.md) - branch and
@@ -172,6 +208,8 @@ After this skill runs:
 
 - The target skill has valid frontmatter and a direct marker-delimited
   `## Todo List`.
+- The target skill `description` is a one-sentence functional routing
+  definition under 220 characters.
 - `SKILL.md` contains the minimum first-load contract without tutorial bloat.
 - References are linked directly from `SKILL.md` and used only for conditional
   detail.

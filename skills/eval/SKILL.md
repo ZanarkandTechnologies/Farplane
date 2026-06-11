@@ -1,6 +1,6 @@
 ---
 name: eval
-description: Check, initialize, and run harness-native evals for Codex or Claude using simple JSON tasks, boolean/tier judge prompts, and run artifacts under .farplane/evals.
+description: "Turn agent, prompt, or skill behavior into local eval tasks, boolean or tier judges, run artifacts, and verdicts."
 tier: 3
 group: harness
 source: local
@@ -29,7 +29,7 @@ as `skills/<skill-name>/eval_task.json`.
 eval(task_intent, harness?, target_root?, mode?) -> eval_case? + run_summary? + next_fix
 state: reads(existing evals, skill eval_task.json files, fixtures, task context, expected behavior); writes(eval tasks, hardcase metadata, run artifacts)
 gates: expected_behavior:testable; baseline_before_mutation; hardcase:sanitized_and_reusable
-routes: optimize-harness | self-improve | skill-maintenance | agent-behavior-test | agent-qa-test | review
+routes: optimize-harness | self-improve | skill-maintenance | deliberative-advice | agent-behavior-test | agent-qa-test | review
 fails: wording-only eval; stores raw private transcript; delays obvious regression coverage; marks hardcase without benchmark value
 ```
 
@@ -69,6 +69,10 @@ or proof behavior without touching real files.
     sanitization notes, and benchmark value.
   - [ ] 4. If running evals, use the installed `.farplane/evals/run_evals.py run`
     script and inspect the generated task detail artifacts before judging.
+  - [ ] 5. If writing evals for skill-structure quality, load
+    [eval skill structure cases](references/eval-skill-structure-cases.md) and
+    route Tier 1, meta, `eval`, cross-skill, or precedent-setting structure
+    changes through `deliberative-advice` before final review.
 - [ ] 3. Write eval tasks with the core shape: realistic `query`, shared fixture
   in `config.json` plus `contexts/*`, visible `reference_points`, narrow tags,
   and no live side effects unless the runner owns a sandbox fixture.
@@ -78,6 +82,15 @@ or proof behavior without touching real files.
   examples.
 - [ ] 5. Summarize findings from `summary.json` and task detail artifacts: verdict
   counts, important failures, likely cause, and the next concrete fix.
+- [ ] 6. Review before completion.
+  - [ ] If the eval task changes a Tier 1, meta, `eval`, cross-skill, or
+    precedent-setting behavior, record the `deliberative-advice` recommendation
+    or the explicit reason it was not needed.
+  - [ ] For skill or workflow evals, check first-load sufficiency, reference-load
+    precision, missing/noisy context risk, duplicated instructions, prompt-size
+    cost, maintenance locality, and composition clarity.
+  - [ ] Do not claim `task_success_rate` or `review_tas_rate` improved unless run
+    artifacts or reviewer receipts prove it.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use method address `eval:onboarding` when the user needs a clean-room first
@@ -204,6 +217,9 @@ The runner writes the proof surfaces this skill should summarize:
   tier/boolean judge prompt template.
 - [references/onboarding/run-report-template.json](references/onboarding/run-report-template.json) -
   report shape example.
+- [references/eval-skill-structure-cases.md](references/eval-skill-structure-cases.md) -
+  load when writing evals for skill-structure quality or reviewing the
+  compounding impact of Tier 1, meta, `eval`, or cross-skill skill changes.
 - [examples/first-harness-eval/tasks.json](examples/first-harness-eval/tasks.json) -
   clean-room starter task set.
 

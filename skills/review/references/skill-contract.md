@@ -55,6 +55,11 @@ templates, or skill maintenance rules changed.
   templates were inspected, not only generated registry rows.
 - [ ] `best-practices-checked`: `docs/skills/best-practices.md` was checked
   when checklist shape, reference placement, or repeatability changed.
+- [ ] `route-appropriate`: The chosen reasoning route matched
+  `docs/skills/best-practices.md#advice-and-proof-routing`; standards,
+  compounding surfaces, behavioral claims, and evidence gaps used the right
+  combination of first-principles reasoning, `advise`, `deliberative-advice`,
+  research, evals, and reviewer readiness.
 - [ ] `registry-validated`: Registry or generated graph/plugin sync output was
   validated when metadata or generated surfaces changed.
 

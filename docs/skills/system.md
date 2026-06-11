@@ -8,7 +8,8 @@ fields, and todo-link rules stay in one place.
 
 - `docs/skills/system.md` owns the stable skill-system contract.
 - `docs/skills/README.md` owns human skill selection and registry commands.
-- `docs/skills/best-practices.md` owns first-load authoring quality.
+- `docs/skills/best-practices.md` owns skill authoring and maintenance quality,
+  not runtime context for every skill invocation.
 - `skills/skill-creator/` owns creating or updating one reusable skill package.
 - `skills/skill-maintenance/` owns bulk upkeep, validation, generated registry
   sync, and rollout audits.
@@ -75,6 +76,12 @@ Keep skill frontmatter small.
 Manual fields:
 
 - `tier`: required, numeric `1`, `2`, or `3`.
+- `description`: required one-sentence functional routing definition of 220
+  characters or less. Prefer
+  `Verb input/context into output/artifact when call-condition`.
+  Include the input and output when they are not obvious. Keep trigger
+  catalogs, examples, model/provider maps, routing policy, and detailed caveats
+  in the skill body or references.
 - `source`: required, `local` or `external`.
 - `skill_template_version`: optional structural baseline for skills onboarded
   to a known Farplane skill template version; absence means not onboarded yet.

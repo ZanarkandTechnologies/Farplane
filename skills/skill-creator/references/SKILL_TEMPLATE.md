@@ -1,6 +1,6 @@
 ---
 name: {skill_name}
-description: [TODO: Clear trigger/use description. This metadata decides when the skill loads.]
+description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
 tier: [TODO: 1 | 2 | 3]
 source: local
 skill_template_version: "0.2.0"
@@ -16,6 +16,14 @@ allowed-tools: {tools}
 
 [TODO: Only context needed every time this skill loads: tier/system placement,
 source-of-truth docs, ownership constraints, and assumptions.]
+
+[TODO: First-load sufficiency has priority over modular neatness. Keep required
+trigger, context, gates, routing, proof, and output contracts in `SKILL.md`; move
+only conditional detail to references.]
+
+[TODO: Place content by access frequency and owner scope: always-needed rules in
+`SKILL.md`, one-skill conditional detail in `references/*`, and cross-skill
+standards in `docs/*`.]
 
 [TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` as
 visible task labels like `- [ ] 1. ...`, and use a specific contract section
@@ -62,6 +70,10 @@ fails: known bad behavior; overbroad behavior; misplaced ownership
 - [TODO: If this skill needs a focused behavioral eval, add
   `eval_task.json` at the skill package root using the eval task JSON-list
   schema.]
+- [TODO: For material creation or structure changes, add a skill-local audit
+  record under `audits/YYYY-MM-DD-<short-change>.md` using
+  `../skill-maintenance/templates/skill-audit.md`. Do not add numeric
+  `health_score` or `last_edited` frontmatter to `SKILL.md`.]
 
 ## Gotchas
 
