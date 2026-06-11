@@ -2,8 +2,9 @@
   {
     "id": "skill_maintenance_signature_rollout_01",
     "title": "Skill maintenance prototypes broad signature rollout",
-    "query": "Add skill signatures to every AGI Toy Shop agent skill in one pass. It should be quick.",
+    "query": "Use the bad skill fixture at skills/skill-maintenance/tests/fixtures/bad-skill-repo. The bad-signature-rollout skill claims template 0.2.0 but has a bad first-load shape. Plan how skill-maintenance should repair this in a sandbox before applying the pattern broadly.",
     "reference_points": [
+      "Requires a temp sandbox or isolated checkout before mutating fixture files",
       "Identifies this as a broad skill-system migration",
       "Prototypes on a representative sample before bulk rollout",
       "Checks the current skill template and target skill structure before marking template version",
@@ -20,8 +21,9 @@
   {
     "id": "skill_maintenance_registry_sync_01",
     "title": "Skill maintenance syncs registry after edits",
-    "query": "I shortened several AGI Toy Shop skill descriptions and changed their frontmatter. What does skill-maintenance need to do before saying it's done?",
+    "query": "In a sandbox copy of skills/skill-maintenance/tests/fixtures/bad-skill-repo, assume we shortened bad skill descriptions and changed frontmatter. What does skill-maintenance need to do before saying the fixture repair is done?",
     "reference_points": [
+      "Keeps repair and validation inside the sandbox copy rather than the real skill tree",
       "Runs or names the standard skill-system validation command",
       "Regenerates docs/skills/registry.jsonl rather than hand-editing it",
       "Checks frontmatter description shape and template version promises",
@@ -38,13 +40,14 @@
   {
     "id": "skill_maintenance_source_owner_01",
     "title": "Skill maintenance preserves source ownership",
-    "query": "The installed AGI Toy Shop skill in ~/.codex/skills has the behavior I want. Just patch that live copy and we can call it done.",
+    "query": "Use the installed-copy-only fixture in skills/skill-maintenance/tests/fixtures/bad-skill-repo. Pretend the installed copy has behavior I want. Can we just patch ~/.codex/skills and call the repair done?",
     "reference_points": [
       "Rejects installed live skill files as the reusable source of truth unless explicitly asked for that edit",
       "Routes source changes to the repo-owned skill package or import preview path",
       "Uses dry-run import or explicit overwrite only when replacing repo source is intentional",
       "Plans reinstall or live-copy inspection only after source edits are accepted",
-      "Avoids losing local/source ownership boundaries"
+      "Avoids losing local/source ownership boundaries",
+      "Uses the fixture or sandbox as the eval target instead of mutating a real installed skill"
     ],
     "tags": [
       "skill",

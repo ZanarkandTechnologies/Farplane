@@ -298,6 +298,9 @@ Use `templates/skill-audit.md` for skill-local audit records.
   - current baseline skill template.
 - [templates/skill-audit.md](templates/skill-audit.md) - binary before/after
   audit record template for material skill changes.
+- [references/eval-fixture-sandbox.md](references/eval-fixture-sandbox.md) -
+  bad-skill fixture and sandbox pattern for skill-maintenance evals that must
+  not mutate the real skill tree.
 - [scripts/check_skills.py](scripts/check_skills.py) - standard validation and
   template-version report.
 
