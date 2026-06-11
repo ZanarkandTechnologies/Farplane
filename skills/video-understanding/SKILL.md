@@ -1,7 +1,7 @@
 ---
 name: video-understanding
 version: 0.1.0
-description: Use after media ingest when transcript evidence and representative frames need to be turned into a storyboard, visible workflow reconstruction, extracted source todos, skill-to-skill comparison, copied-skill candidate, and proof requirements.
+description: "Turn transcripts and representative media frames into storyboard evidence, workflow reconstruction, extracted todos, and proof requirements."
 tier: 2
 source: local
 allowed-tools: Read, Glob, Grep, Bash

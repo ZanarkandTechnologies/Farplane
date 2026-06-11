@@ -1,6 +1,6 @@
 ---
 name: summarize
-description: Summarize or extract text/transcripts from URLs, podcasts, and local files.
+description: "Turn URLs, podcasts, transcripts, or local files into concise summaries or extracted text."
 tier: 2
 source: local
 homepage: https://summarize.sh

@@ -1,6 +1,6 @@
 ---
 name: data-viz
-description: Index of best practices for building charts, dashboards, and knowledge graphs using D3.js and Recharts.
+description: "Turn chart, dashboard, or graph UI needs into D3 or Recharts implementation guidance when data visualization is the core task."
 tier: 3
 group: frontend-data
 source: local

@@ -1,6 +1,6 @@
 ---
 name: impl
-description: Build-phase orchestrator for one selected ticket. Runs ephemerally, coordinates builder/reviewer/QA/evidence-check lanes, and hands results back to the Stop hook.
+description: "Turn one selected ticket into coordinated build, review, QA, evidence-check, and Stop-hook handoff artifacts."
 tier: 3
 group: coding
 source: local

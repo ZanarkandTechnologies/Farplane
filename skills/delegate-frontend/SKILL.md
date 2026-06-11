@@ -1,7 +1,7 @@
 ---
 name: delegate-frontend
 version: 0.1.0
-description: Delegate frontend implementation or design-polish work to the configured external CLI frontend profile, currently frontend-pi-kimi via delegate-cli, while preserving Farplane ticket, QA, visual review, and integration authority.
+description: "Turn frontend build or polish work into an external CLI handoff while Farplane keeps ticket, QA, visual review, and integration control."
 tier: 3
 group: frontend
 source: local

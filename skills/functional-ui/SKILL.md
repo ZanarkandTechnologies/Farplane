@@ -1,7 +1,7 @@
 ---
 name: functional-ui
 version: 1.1.0
-description: Use when planning, diagnosing, or redesigning product UI and UX flows, especially "this UI sucks" broken-component requests. Grounds recommendations in user stories, current UI diagnosis, comparable/latest examples, states, and a clear implementation handoff before visual-design or frontend-craft builds.
+description: "Turn broken or unclear product workflows into user stories, UI-state diagnosis, comparable examples, and implementation handoff."
 tier: 3
 group: frontend
 source: local

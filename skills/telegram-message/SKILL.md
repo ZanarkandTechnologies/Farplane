@@ -1,6 +1,6 @@
 ---
 name: telegram-message
-description: Send a Telegram message from Codex using TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID. Use as a reusable notification primitive for HITL review requests, automation status, blockers, and short artifact review messages. Never hardcode Telegram secrets.
+description: "Turn short HITL, automation, blocker, or artifact-review updates into Telegram notifications using configured environment variables."
 tier: 1
 source: local
 allowed-tools: Bash, Read

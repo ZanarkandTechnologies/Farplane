@@ -1,7 +1,7 @@
 ---
 name: harness-scout
 version: 0.1.0
-description: Use when the user provides a URL, YouTube video, blog, transcript, repo, tweet thread, or external source and wants Farplane to extract harness feature ideas, dedupe the source against the source registry, dedupe candidates against the local feature registry, compare Farplane versus the source, and produce adopt/adapt/reject/defer decisions with scorecards and ticket handoffs.
+description: "Turn an external source into deduped Farplane feature candidates, adopt/adapt/reject/defer scorecards, and ticket handoffs."
 tier: 3
 group: harness
 source: local

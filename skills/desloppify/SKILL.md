@@ -1,7 +1,7 @@
 ---
 name: desloppify
 version: 0.1.0
-description: "Use when the operator wants repo-quality cleanup driven by the `desloppify` CLI. This skill supports two modes: the main agent delegates one bounded worker for the scan/next/resolve loop, while a delegated worker runs the CLI directly without spawning again. If worker mode hits nested `desloppify review --run-batches --runner codex` work, it must stop and hand control back instead of nesting another Codex runner."
+description: "Turn repo cleanup requests into desloppify scan, next, and resolve loops while keeping nested runner ownership explicit."
 tier: 3
 group: repo-health
 source: local

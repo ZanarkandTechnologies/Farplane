@@ -1,6 +1,6 @@
 ---
 name: agent-behavior-test
-description: Use when the operator wants an isolated agent or Codex exec run captured as a visible behavior probe for a skill, prompt, workflow, or narrow feature path, with logs, command events, final output, artifacts, and a scored evidence report.
+description: "Capture one isolated agent or Codex exec run into logs, artifacts, and a scored behavior report when behavior needs proof."
 tier: 2
 source: local
 allowed-tools: Read, Glob, Grep, Bash

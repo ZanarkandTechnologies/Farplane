@@ -1,6 +1,6 @@
 ---
 name: optimize-harness
-description: High-level Farplane harness improvement workflow for turning observed versus expected behavior into a gap report, placement decision, proof or eval, optional metric experiment, accepted change, and review.
+description: "Turn observed Farplane behavior gaps into placement decisions, proof or eval, accepted changes, and review."
 tier: 3
 group: harness
 source: local

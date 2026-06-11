@@ -1,7 +1,7 @@
 ---
 name: convex
 version: 4.0.0
-description: "External Convex routing skill. Prefer the official Convex AI files installed into the current project, with this package kept as a thin upstream pointer."
+description: "Route Convex project questions to official Convex AI instructions when a repo uses Convex backend files or deployment tooling."
 tier: 3
 group: backend
 source: external

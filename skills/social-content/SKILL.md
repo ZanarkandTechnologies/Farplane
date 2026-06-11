@@ -1,7 +1,7 @@
 ---
 name: social-content
 version: 1.0.0
-description: "Plan and produce social media content through method-addressed workflows: social-content:cross-platform, social-content:carousel, social-content:linkedin, and social-content:twitter-thread. Use for social posts, captions, hooks, content calendars, carousel plans, LinkedIn posts, Twitter/X threads, UGC concepts, thumbnails, and cross-platform campaign bundles. Routes still visuals through `imagegen` or `image-generation`, video clips through `video-generation`, deterministic video through `remotion` or `remotion-render`, and campaign or web bundles through `frontend-craft`."
+description: "Turn social campaign goals into posts, carousels, threads, calendars, hooks, captions, thumbnails, or cross-platform bundles."
 tier: 3
 group: content-social
 source: local

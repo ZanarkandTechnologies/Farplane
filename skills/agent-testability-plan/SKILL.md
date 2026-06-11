@@ -1,7 +1,7 @@
 ---
 name: agent-testability-plan
 version: 0.1.0
-description: "Post-system-design planning skill that turns a System Design Brief into an Agent Testability Brief covering control accelerators, state probes, coordination views, tooling, and proof surfaces before ticketization or per-ticket build planning."
+description: "Turn a System Design Brief into an Agent Testability Brief with controls, state probes, coordination views, tooling, and proof surfaces."
 tier: 3
 group: coding
 source: local

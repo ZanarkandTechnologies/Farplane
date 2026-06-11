@@ -1,6 +1,6 @@
 ---
 name: gap-analysis
-description: Diagnose gaps between current and expected behavior across skills, harness workflows, UI/product surfaces, docs, or code, then produce a grounded GapReport with owner surface and proof path.
+description: "Turn current-vs-expected behavior evidence into a grounded GapReport with missing pieces, owner surface, and proof path."
 tier: 2
 source: local
 skill_template_version: "0.2.0"

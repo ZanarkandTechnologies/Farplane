@@ -1,6 +1,6 @@
 ---
 name: pr-splitting
-description: Use when a finished working branch needs to be broken into smaller non-stacked pull requests, preferring feature-first slices and falling back to layer-based buckets when feature seams are too entangled.
+description: "Turn a finished branch into smaller non-stacked pull requests when feature seams or layers can be separated."
 tier: 3
 group: coding
 source: local

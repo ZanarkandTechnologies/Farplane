@@ -1,6 +1,6 @@
 ---
 name: demo
-description: Run the demo phase for one selected ticket by turning passing QA artifacts into demo-ready outputs and producing a structured demo result artifact for Stop-hook gating.
+description: "Turn passing QA artifacts for one ticket into demo-ready outputs and a structured demo result for Stop-hook gating."
 tier: 3
 group: coding
 source: local

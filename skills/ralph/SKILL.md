@@ -1,6 +1,6 @@
 ---
 name: ralph
-description: Goal-backed board-drain context provider for prepared Farplane ticket boards. Use after specs and tickets exist when the operator wants the board read, eligible work selected or grouped, and each selected work unit handed to $work until the native Goal stops on no ready work, blockers, or human gates.
+description: "Turn a prepared Farplane ticket board into eligible work selection, safe grouping, and Work Admission handoffs under Goal control."
 tier: 3
 group: coding
 source: local

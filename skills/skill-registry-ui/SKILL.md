@@ -1,6 +1,6 @@
 ---
 name: skill-registry-ui
-description: Open, refresh, and validate the Farplane skill registry graph UI, including clickable skill nodes, rendered SKILL.md Markdown, frontmatter details, tier colors, and common-chain edges.
+description: "Turn the Farplane skill registry into a refreshed graph UI with rendered skill docs, frontmatter, tier colors, and chain edges."
 tier: 3
 group: skills
 source: local

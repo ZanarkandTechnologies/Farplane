@@ -1,6 +1,6 @@
 ---
 name: harness-advisor
-description: Tier 2 Farplane harness placement advisor. Use when the user wants to make Farplane better at something and needs a grounded recommendation for whether to change AGENTS.md, global templates, skills, subagents, hooks/scripts, ticket contracts, docs/specs, validators, registries, or generated harness-map surfaces.
+description: "Turn a Farplane improvement idea into a recommended owner surface across policy, templates, skills, agents, hooks, tickets, docs, or validators."
 tier: 2
 source: local
 skill_template_version: "0.2.0"

@@ -1,6 +1,6 @@
 ---
 name: goal-crafter
-description: Turn fuzzy operator intent into a strong Codex /goal command with an auditable outcome, verification surface, constraints, boundaries, iteration policy, and blocked stop condition. Use before activating Goal mode when the task should continue across turns but the completion contract is not yet crisp.
+description: "Turn fuzzy operator intent into a crisp Codex /goal command with outcome, verification, constraints, iteration policy, and stop condition."
 tier: 2
 source: local
 version: 0.1.0

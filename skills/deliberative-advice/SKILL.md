@@ -1,6 +1,6 @@
 ---
 name: deliberative-advice
-description: "Use for high-stakes, ambiguous, or expensive recommendations that need independent perspectives, critique, synthesis, and visible dissent before choosing a path. Method aliases: advise:complex and advise:council."
+description: "Turn a high-stakes or expensive decision into independent perspectives, critique, synthesis, dissent, and one recommended path."
 tier: 2
 source: local
 skill_template_version: "0.1.0"

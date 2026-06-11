@@ -1,7 +1,7 @@
 ---
 name: spec-to-ticket
 version: 1.5.0
-description: "Phase-2 Farplane skill: convert one SLC slice from specs into raw ticket files under tickets/, including compact diagram-first summaries plus agent-contract and evidence-checklist requirements for UI-bearing work, and consume an Agent Testability Brief when present."
+description: "Turn one SLC spec slice into filesystem tickets with compact summaries, agent contracts, and evidence requirements."
 tier: 3
 group: coding
 source: local

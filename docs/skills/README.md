@@ -78,6 +78,11 @@ Keep frontmatter small.
 Manual fields:
 
 - `tier`: required, numeric `1`, `2`, or `3`
+- `description`: required one-sentence functional routing definition, 220
+  characters or less. Prefer
+  `Verb input/context into output/artifact when call-condition`; move trigger
+  catalogs, examples, model maps, and detailed routing rules into `SKILL.md` or
+  references.
 - `source`: required, `local` for Farplane-owned skills or `external` for
   upstream-backed skills that should stay syncable with an outside source
 - `skill_template_version`: optional structural baseline for skills onboarded

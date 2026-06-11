@@ -17,7 +17,7 @@ from pathlib import Path
 # Fallback template if file is not found
 FALLBACK_SKILL_TEMPLATE = """---
 name: {skill_name}
-description: [TODO: Clear trigger/use description. This metadata decides when the skill loads.]
+description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
 tier: [TODO: 1 | 2 | 3]
 source: local
 skill_template_version: "0.1.0"

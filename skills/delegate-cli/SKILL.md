@@ -1,7 +1,7 @@
 ---
 name: delegate-cli
 version: 0.1.0
-description: Route bounded Farplane work to configured external coding-agent CLIs through explicit adapter/profile contracts, managed prompts, runtime logs, and ticket evidence handoff. Use when another local CLI/model/harness is stronger for a task but Farplane must keep ticket, QA, review, and integration authority.
+description: "Turn bounded Farplane work into an external coding-agent CLI handoff while preserving ticket, log, QA, review, and integration control."
 tier: 3
 group: harness
 source: local

@@ -1,6 +1,6 @@
 ---
 name: deep-interview
-description: Socratic deep interview with mathematical ambiguity gating before execution
+description: "Turn ambiguous user intent into clarified goals, constraints, and decision points through a Socratic interview before execution."
 tier: 2
 source: local
 argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea or vague description>"

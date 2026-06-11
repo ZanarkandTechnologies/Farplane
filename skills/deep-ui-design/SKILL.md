@@ -1,6 +1,6 @@
 ---
 name: deep-ui-design
-description: Socratic deep UI taste interview with ambiguity gating before visual implementation. Use when workflow is clear but the user's aesthetic direction, taste boundaries, and anti-generic preferences are still unclear.
+description: "Turn unclear UI taste or aesthetic direction into grounded visual preferences and boundaries before design implementation."
 tier: 2
 source: local
 argument-hint: "[--quick|--standard|--deep] <product, page, feature, or visual direction>"

@@ -1,7 +1,7 @@
 ---
 name: brainstorm
 version: 0.1.0
-description: "Early-stage option exploration before requirements commitment."
+description: "Turn early ambiguous intent into option space, useful questions, and candidate directions before requirements are committed."
 tier: 2
 source: local
 ---

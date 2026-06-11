@@ -1,7 +1,7 @@
 ---
 name: commit-message
 version: 0.1.0
-description: "Compact commit-subject skill. Use when writing a commit message from staged changes or recent diffs. Follows the repo style: type(scope): lower-case imperative summary."
+description: "Turn staged or recent git diffs into a compact repo-style commit subject when a commit message is needed."
 tier: 2
 source: local
 allowed-tools: Read, Glob, Grep

@@ -1,6 +1,6 @@
 ---
 name: review
-description: Reusable TAS review rubric contract for judging whether provided task context, artifacts, and evidence are pass-ready, need revision, blocked, or invalid to review.
+description: "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid."
 tier: 1
 source: local
 skill_template_version: "0.2.0"
@@ -83,6 +83,7 @@ Common families:
 - `spec-contract`
 - `implementation-plan`
 - `code-quality`
+- `frontend-code-maintainability`
 - `ui-quality`
 - `frontend-guidelines`
 - `user-intent-satisfaction`

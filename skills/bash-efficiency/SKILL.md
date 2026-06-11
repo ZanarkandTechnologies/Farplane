@@ -1,7 +1,7 @@
 ---
 name: bash-efficiency
 version: 1.0.0
-description: "Bash efficiency workflow skill for shell-heavy tasks. Use when handling multi-step filesystem/build/debug work and when command safety, speed, and reproducibility matter."
+description: "Turn shell-heavy filesystem, build, or debug work into safe command sequences and verification when terminal execution is central."
 tier: 2
 source: local
 allowed-tools: Read, Glob, Grep, Bash

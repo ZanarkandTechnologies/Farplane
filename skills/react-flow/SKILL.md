@@ -1,6 +1,6 @@
 ---
 name: react-flow
-description: Index of best practices for building graph-based applications and node-based editors using React Flow.
+description: "Turn graph-app or node-editor needs into React Flow implementation guidance and best-practice patterns."
 tier: 3
 group: frontend-data
 source: local

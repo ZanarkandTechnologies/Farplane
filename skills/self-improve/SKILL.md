@@ -1,6 +1,6 @@
 ---
 name: self-improve
-description: Use when the user wants to improve an existing Codex skill, make a skill self-improving, build skill evals, compare skill variants, create skill-local memory, or provide eval/prompt context for native Goal-backed skill improvement.
+description: "Turn an existing skill improvement goal into evals, variant comparison, prompt context, memory, or Goal-backed improvement artifacts."
 tier: 3
 group: self-improvement
 source: local

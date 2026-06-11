@@ -1,7 +1,7 @@
 ---
 name: deep-init-project
 version: 3.0.0
-description: "Deep bootstrap workflow for new projects. Use a deep-interview-quality intake, then scaffold docs-first operating files, explicit local-vs-deploy quality-gate decisions, canonical runtime/QA command guidance, and reusable plan/build prompts."
+description: "Turn a new-project intake into docs-first operating files, runtime commands, QA gates, and reusable planning/build prompts."
 tier: 3
 group: coding
 source: local

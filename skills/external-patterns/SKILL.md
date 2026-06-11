@@ -1,6 +1,6 @@
 ---
 name: external-patterns
-description: Workflows for finding code patterns across GitHub and exploring specific repositories. Use when searching for how others implement features or deep diving into libraries.
+description: "Turn API or implementation uncertainty into GitHub code examples and repository pattern findings."
 tier: 2
 source: local
 ---

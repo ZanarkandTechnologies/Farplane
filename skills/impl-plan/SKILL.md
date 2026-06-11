@@ -1,7 +1,7 @@
 ---
 name: impl-plan
 version: 2.6.0
-description: "Unified per-ticket planning skill with a compact delta-and-map output centered on before/after change, diagram-first code seams, ordered action, verification, and conditional detail for gaps, options, autonomy, and audit needs."
+description: "Turn one ticket into a before/after implementation plan with code maps, ordered edits, verification, and audit notes."
 tier: 3
 group: coding
 source: local

@@ -1,7 +1,7 @@
 ---
 name: frontend-design
 version: 1.1.0
-description: App-UI implementation reference for shadcn, AI Elements, curated registries, theming, and component construction after functional-ui and visual-design have settled the workflow and look. For new frontend implementation, prefer frontend-craft as the public orchestrator.
+description: "Turn settled app UX and visual direction into shadcn, AI Elements, theming, registry, and component implementation guidance."
 tier: 3
 group: frontend
 source: local

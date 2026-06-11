@@ -27,6 +27,7 @@ ALLOWED_COMMON_CHAIN_KEYS = {"after"}
 TIER1_PRIMITIVES = {"advise", "reference-grounding", "review"}
 ALLOWED_SOURCES = {"local", "external"}
 FEATURE_ID_RE = re.compile(r"^FEAT-\d{4}$")
+DESCRIPTION_MAX_CHARS = 220
 
 
 class RegistryError(Exception):
@@ -336,6 +337,14 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if source not in ALLOWED_SOURCES:
             allowed = ", ".join(sorted(ALLOWED_SOURCES))
             raise RegistryError(f"{skill_path}: source must be one of: {allowed}")
+        description = metadata.get("description", "")
+        if not isinstance(description, str) or not description.strip():
+            raise RegistryError(f"{skill_path}: description must be a non-empty string")
+        if len(description) > DESCRIPTION_MAX_CHARS:
+            raise RegistryError(
+                f"{skill_path}: description is {len(description)} chars; "
+                f"keep it at or below {DESCRIPTION_MAX_CHARS} chars"
+            )
         group = metadata.get("group")
         if tier == 3 and not isinstance(group, str):
             raise RegistryError(f"{skill_path}: tier 3 skills must set group")
@@ -349,7 +358,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
             "tier": tier,
             "source": source,
             "path": str(skill_path.relative_to(repo_root)),
-            "description": metadata.get("description", ""),
+            "description": description,
             "has_checklist": has_checklist,
             "has_todos": has_todos,
             "skill_links": collect_skill_links(skill_dir, name),

@@ -8,6 +8,8 @@ import re
 import yaml
 from pathlib import Path
 
+DESCRIPTION_MAX_CHARS = 220
+
 
 def validate_skill(skill_path):
     """Basic validation of a skill"""
@@ -72,23 +74,31 @@ def validate_skill(skill_path):
         return False, "Missing 'name' in frontmatter"
     if 'description' not in frontmatter:
         return False, "Missing 'description' in frontmatter"
+    description = frontmatter.get('description')
+    if not isinstance(description, str) or not description.strip():
+        return False, "'description' must be a non-empty string"
+    if 'TODO' in description:
+        return False, "'description' still contains TODO text"
+    if len(description) > DESCRIPTION_MAX_CHARS:
+        return False, (
+            f"'description' is {len(description)} chars; keep it at or below "
+            f"{DESCRIPTION_MAX_CHARS} chars"
+        )
 
     # Validate name
     name = frontmatter.get('name', '')
     if not re.match(r'^[a-z0-9-]+$', str(name)):
         return False, f"Name '{name}' should be hyphen-case"
 
-    # Validate the reference surface without enforcing a fixed file taxonomy.
-    references_dir = skill_path / 'references'
-    if not references_dir.exists() or not references_dir.is_dir():
-        return False, "Missing 'references/' directory"
-
-    reference_files = [
-        p for p in references_dir.rglob('*.md')
-        if p.is_file()
-    ]
-    if not reference_files:
-        return False, "Missing reference markdown files under 'references/'"
+    # Validate reusable support surfaces without enforcing a fixed taxonomy.
+    support_dirs = ['references', 'templates', 'prompts']
+    support_files = []
+    for dirname in support_dirs:
+        support_dir = skill_path / dirname
+        if support_dir.exists() and support_dir.is_dir():
+            support_files.extend(p for p in support_dir.rglob('*.md') if p.is_file())
+    if not support_files:
+        return False, "Missing markdown support files under references/, templates/, or prompts/"
 
     return True, "Skill is valid!"
 

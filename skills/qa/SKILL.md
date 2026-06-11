@@ -1,6 +1,6 @@
 ---
 name: qa
-description: Run the QA phase for one selected ticket by collecting proof artifacts, reconciling acceptance criteria, and producing a structured QA result artifact for Stop-hook gating.
+description: "Turn one selected ticket into proof artifacts, reconciled acceptance criteria, and a structured QA result for Stop-hook gating."
 tier: 3
 group: coding
 source: local

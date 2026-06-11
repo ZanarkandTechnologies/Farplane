@@ -1,6 +1,6 @@
 ---
 name: work
-description: Classify one request, ticket, ticket batch, board-selected unit, epic, or metric loop into an execution profile, then route to the right Farplane skill, native Goal, compute target, and proof policy before implementation starts.
+description: "Turn one request, ticket, batch, board unit, epic, or metric loop into execution profile, target skill, compute mode, and proof policy."
 tier: 3
 group: coding
 source: local

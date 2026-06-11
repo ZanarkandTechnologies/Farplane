@@ -1,7 +1,7 @@
 ---
 name: prd
 version: 1.0.0
-description: "Phase-1 Farplane skill for requirements gathering and PRD authoring."
+description: "Turn product intent into a Phase-1 Farplane PRD with requirements, scope, and handoff shape."
 tier: 3
 group: coding
 source: local

@@ -1,6 +1,6 @@
 ---
 name: codebase-analysis
-description: Patterns for exploring local codebases - finding files, understanding implementations, and extracting reusable patterns. Use when exploring WHERE, HOW, or SHOW ME questions about local code.
+description: "Turn local codebase questions into file maps, implementation explanations, and reusable pattern findings."
 tier: 2
 source: local
 ---

@@ -1,7 +1,7 @@
 ---
 name: pr-runtime
 version: 0.1.0
-description: "Prepare an isolated checkout and ticket runtime record for PR follow-up or any task that needs a separate live writer or declared QA target."
+description: "Turn PR follow-up or separate-writer work into an isolated checkout and ticket runtime record."
 tier: 3
 group: coding
 source: local

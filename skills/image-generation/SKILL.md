@@ -1,7 +1,7 @@
 ---
 name: image-generation
 version: 1.0.0
-description: Generate, edit, upscale, or process images with inference.sh `belt` image apps, using a broad AI-image model map plus Farplane's workspace, spend-gate, and frontend asset rules. Covers GPT-Image-2, Gemini/Nano Banana, Qwen Image, FLUX, Pruna P-Image, background removal, image upscaling, text-to-image, image editing, inpainting, LoRA styles, product mockups, social graphics, marketing visuals, illustrations, and frontend-bound image assets. Prefer built-in `imagegen` for normal Codex-native bitmap generation unless the user asks for inference.sh, belt, a named model, or CLI-based image pipelines.
+description: "Turn image generation or editing requests into inference.sh belt image pipeline outputs when Codex-native imagegen is not enough."
 tier: 3
 group: content-image
 source: local

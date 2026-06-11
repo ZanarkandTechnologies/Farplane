@@ -1,6 +1,6 @@
 ---
 name: agent-qa-test
-description: Design or run the adversarial testing prompt bundle for an app feature, skill, prompt, or workflow. Use when the operator appends "$test", says "please test", or wants the main agent to design tests, spawn a QA/tester lane to gather evidence, spawn an evidence-review lane to attack that evidence, optionally use agent-behavior-test-style run capture for child-agent logs, and iterate until the behavior is proved, fixed, or honestly blocked. Use agent-qa-test:prompt when the operator only wants the reusable prompt instead of execution.
+description: "Turn an app, skill, prompt, or workflow claim into adversarial QA cases, tester evidence, critique, and rerun guidance."
 tier: 2
 source: local
 methods:

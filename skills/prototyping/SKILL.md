@@ -1,7 +1,7 @@
 ---
 name: prototyping
 version: 0.1.0
-description: Tier 1 primitive for proving a pattern at the smallest honest scale before expanding scope, automation, data volume, user count, file count, research breadth, or implementation complexity.
+description: "Turn an unproven pattern into the smallest representative proof before expanding scope, automation, volume, or implementation depth."
 tier: 1
 source: local
 skill_template_version: "0.1.0"

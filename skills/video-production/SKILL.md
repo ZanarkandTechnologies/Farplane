@@ -1,7 +1,7 @@
 ---
 name: video-production
 version: 1.0.0
-description: "Plan and produce video workflows through method-addressed routes: video-production:marketing, video-production:explainer, video-production:storyboard, video-production:talking-head, and video-production:ad-spec. Use for marketing videos, promo clips, launch videos, explainer videos, product demos, storyboards, shot lists, talking-head/avatar/lipsync videos, and platform-specific video ad specs. Routes model-native generation through `video-generation`, still assets through `imagegen` or `image-generation`, deterministic assembly through `remotion` or `remotion-render`, and campaign/web integration through `frontend-craft`."
+description: "Turn video deliverable goals into marketing clips, explainers, storyboards, talking-head pieces, demos, or platform ad specs."
 tier: 3
 group: content-video
 source: local

@@ -1,6 +1,6 @@
 ---
 name: weekly-strategy-analysis
-description: Run Kenji's weekly strategy analysis by collecting Notion plans, done and not-done tasks, meeting notes, people signals, Codex thread history, and public opportunity signals into a local context bundle, then using bounded analysis lanes to produce priorities, depriorities, due dates, drift analysis, and a chat-ready weekly plan. Use for the weekly strategy automation, Plan Week retros, Codex drift reviews, and personal operating reviews that compare planned work against actual tasks, meetings, and agent threads.
+description: "Turn weekly plans, tasks, meetings, people signals, Codex threads, and opportunities into priorities, due dates, and drift analysis."
 tier: 3
 group: personal-ops
 source: local

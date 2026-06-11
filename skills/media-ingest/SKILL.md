@@ -1,7 +1,7 @@
 ---
 name: media-ingest
 version: 0.1.0
-description: Use when a workflow needs to turn a URL, social post, audio file, video file, or local media path into a compact evidence bundle with source metadata, extraction commands, transcript status, representative frames, retention notes, and downstream handoff paths.
+description: "Turn URLs or local audio, video, or social media into metadata, transcript status, representative frames, retention notes, and handoff paths."
 tier: 2
 source: local
 allowed-tools: Read, Glob, Grep, Bash

@@ -1,6 +1,6 @@
 ---
 name: farplane-invocation
-description: Interpret a FarplaneRunEnvelope inside normal Codex, validate repo policy and one filesystem ticket, select local compute, route to existing Farplane skills, and write a ProofPacket.
+description: "Turn a FarplaneRunEnvelope into policy validation, compute selection, skill routing, and a filesystem ProofPacket."
 tier: 3
 group: harness
 source: local

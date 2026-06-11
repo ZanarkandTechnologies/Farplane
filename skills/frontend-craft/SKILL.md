@@ -1,7 +1,7 @@
 ---
 name: frontend-craft
 version: 1.0.0
-description: Main frontend implementation orchestrator. Use when the user asks to build, implement, improve, or ship a frontend surface and may need UX planning, visual design, landing-page treatment, motion, Three.js/WebGL, generated image/video assets, standards audit, or QA routing. Routes through functional-ui, visual-design, landing-page, frontend-design references, imagegen, image-generation, video-generation, remotion, remotion-render, web-design-guidelines, and visual-qa as needed.
+description: "Turn a frontend build or improvement request into UX planning, visual design, implementation, assets, standards review, and QA."
 tier: 3
 group: frontend
 source: local

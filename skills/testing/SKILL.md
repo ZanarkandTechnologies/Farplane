@@ -1,7 +1,7 @@
 ---
 name: testing
 version: 1.1.0
-description: "Testing index skill for selecting backpressure and domain guidance."
+description: "Turn a testing need into the right Farplane testing guidance, backpressure, and domain-specific verification path."
 tier: 2
 source: local
 ---

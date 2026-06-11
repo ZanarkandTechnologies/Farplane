@@ -1,6 +1,6 @@
 ---
 name: batch-work
-description: Execute a user-specified range or list of tickets in one unattended solo-local pass, using Work Admission and batch proof rows so each ticket stays testable while the batch shares setup and regression checks.
+description: "Turn a requested ticket range or list into one unattended local execution batch with per-ticket proof rows and shared checks."
 tier: 2
 source: local
 ---

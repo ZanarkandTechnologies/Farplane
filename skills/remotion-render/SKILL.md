@@ -1,7 +1,7 @@
 ---
 name: remotion-render
 version: 1.0.0
-description: Render React/Remotion component code into video through the inference.sh `belt` CLI when available. Use for code-to-video, TSX-to-MP4, programmatic motion graphics, data-driven videos, animated UI sequences, and deterministic React animation exports. Do not use for model-native text-to-video, image-to-video, avatar/lipsync, or video editing; use `video-generation` for those.
+description: "Turn existing React/Remotion video code into rendered MP4 output through inference.sh belt when code-to-video export is needed."
 tier: 3
 group: content-video
 source: local

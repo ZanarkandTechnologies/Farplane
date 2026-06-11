@@ -1,7 +1,7 @@
 ---
 name: pr-review-watch
 version: 0.1.0
-description: Watch an explicitly selected GitHub pull request until configured review agents and checks pass, using project-local review memory, bounded heartbeat polling, fix loops, and terminal Telegram notifications.
+description: "Turn an explicit GitHub PR into bounded polling, review-memory checks, fix loops, and notification-ready status until checks pass."
 tier: 3
 group: coding
 source: local
