@@ -14,46 +14,71 @@ Documentation ownership:
 - this file indexes canonical specs and the doc-gardening loop.
 - `tickets/README.md` owns ticket metadata, lifecycle, and invocation policy.
 
-Active feature and contract specs:
+Canonical operating specs:
 
-- `adaptive-backoff.md` - repeated wait, retry, polling, and long-running job
-  cadence policy without hidden daemons or queues
-- `agent-testability-surfaces.md` - post-system-design control accelerators,
-  state probes, coordination views, and proof-surface planning
-- `case-based-memory-context-graph.md` - designed context graph over history,
-  memory, troubles, lessons, sources, features, tickets, and skills
-- `context-and-handoff-policy.md` - visible progress, reset/resume handoff,
-  documenting, and archive rules for ticketed work
-- `diagram-first-conventions.md` - Mermaid-first approval-surface and
-  delta-diagram standard
-- `doc-governance.md` - structural versus narrative doc-audit policy
-- `first-principles-planning.md` - planning/spec basis for objective, need,
-  assumptions, root cause, constraints, proof, tradeoffs, and non-goals
-- `filesystem-lifecycle.md` - lifecycle and drain rules for ledgers, tickets,
-  registries, experiments, specs, and research
 - `harness-algebra.md` - canonical constrained-optimization model for context,
   tools, skills, memory, delegation, verification, self-improvement, and
-  lower-level function contracts
+  lower-level function contracts. This is the harness math doc.
 - `harness-engineering-doctrine.md` - routing doctrine for where harness
-  changes belong before editing the repo
-- `harness-techniques.md` - current-state feature and technique inventory
+  changes belong before editing the repo.
+- `harness-techniques.md` - current-state feature and technique inventory.
+- `filesystem-lifecycle.md` - lifecycle and drain rules for ledgers, tickets,
+  registries, experiments, specs, and research.
+- `doc-governance.md` - structural versus narrative doc-audit policy.
+
+Execution and proof specs:
+
+- `spec-first-execution-loop.md` - spec -> ticket -> plan -> build -> QA ->
+  review execution model.
+- `review-gates.md` - ticket proof contract, QA, reviewer, and Stop-hook review
+  gates.
+- `orchestrator-subagent-loop.md` - single-ticket `$impl` worker-lane and
+  reviewer/QA/evidence-check orchestration model.
+- `agent-testability-surfaces.md` - post-system-design control accelerators,
+  state probes, coordination views, and proof-surface planning.
+- `adaptive-backoff.md` - repeated wait, retry, polling, and long-running job
+  cadence policy without hidden daemons or queues.
+
+Planning and authoring specs:
+
+- `first-principles-planning.md` - planning/spec basis for objective, need,
+  assumptions, root cause, constraints, proof, tradeoffs, and non-goals.
+- `spec-authoring-contract.md` - PRD/spec/ticket layer split, spec depth
+  decisions, service-runtime template, and conformance matrix.
+- `diagram-first-conventions.md` - Mermaid-first approval-surface and
+  delta-diagram standard.
+- `context-and-handoff-policy.md` - visible progress, reset/resume handoff,
+  documenting, and archive rules for ticketed work.
+
+Invocation and runtime specs:
+
 - `invocation-and-adapters.md` - explicit Farplane invocation, board adapter,
-  compute selection, local execution, and future external-runner contract
+  compute selection, local execution, and future external-runner contract.
+- `runtime-surface.md` - current public runtime/control surfaces and retired
+  runtime boundaries.
+
+Meta-harness and consolidation candidates:
+
+- `self-improvement-contracts.md` - canonical signatures for gap analysis,
+  harness advising, eval capture, skill maintenance, self-improve, and
+  optimize-harness workflows.
 - `meta-harness-automation.md` - feature registry, skill registry,
   skill-maintenance, source ingestion, evals, failure capture, review, and
-  durable-memory map
-- `orchestrator-subagent-loop.md` - single-ticket `$impl` worker-lane and
-  reviewer/QA/evidence-check orchestration model
-- `review-gates.md` - ticket proof contract, QA, reviewer, and Stop-hook review
-  gates
-- `runtime-surface.md` - current public runtime/control surfaces and retired
-  runtime boundaries
+  durable-memory map. Merge active details into `harness-techniques.md` and
+  `self-improvement-contracts.md` before archiving.
 - `skill-self-healing.md` - skill failure detection and repair-ticket handoff
-  pipeline
-- `spec-authoring-contract.md` - PRD/spec/ticket layer split, spec depth
-  decisions, service-runtime template, and conformance matrix
-- `spec-first-execution-loop.md` - spec -> ticket -> plan -> build -> QA ->
-  review execution model
+  pipeline. Merge active details into `self-improvement-contracts.md`,
+  `docs/skills/README.md`, and `skills/eval` before archiving.
+- `case-based-memory-context-graph.md` - designed context graph over history,
+  memory, troubles, lessons, sources, features, tickets, and skills. Merge
+  durable parts into `harness-algebra.md` or `filesystem-lifecycle.md` if this
+  remains conceptual rather than executable.
+
+Generated audit:
+
+- `../doc-audit/generated/doc-reference-report.md` - generated docs backlink
+  and cleanup preview from
+  `skills/skill-maintenance/scripts/generate_harness_graph.py`.
 
 Skill-owned contracts should live with their skills, not as separate specs.
 Examples: autoresearch belongs to `skills/autoresearch-plan`,

@@ -1,7 +1,7 @@
 ---
 name: landing-page
 version: 1.0.0
-description: Use for one-page marketing, launch, homepage, portfolio, hero-heavy, cinematic, or scrolltelling frontend surfaces. Shapes the offer, story arc, sections, assets, motion, and proof before frontend-craft implements.
+description: "Turn a one-page marketing or launch surface into offer, story arc, sections, assets, motion, and proof before frontend implementation."
 tier: 3
 group: frontend-content
 source: local
@@ -26,6 +26,9 @@ when the request earns that depth.
   supplied reference when available.
 - [ ] Use [research-synthesis](./references/research-synthesis.md) to extract
   section order, hero media, motion, proof, layout, and asset patterns.
+- [ ] For public/premium category pages, capture at least one gold-reference
+  screenshot and write a gap note before implementation; do not rely only on
+  text snippets or memory.
 
 ## 2. Model
 
@@ -55,6 +58,10 @@ when the request earns that depth.
 
 - [ ] Write or update `LANDING_SPEC.md` with the section matrix, selected
   methods, execution packets, asset plan, motion plan, and QA gates.
+- [ ] For industrial, physical-economy, hardware, logistics, construction, or
+  manufacturing pages, specify the first-viewport reality signal: real or
+  generated workplace/product/media that makes the category visible before
+  abstract UI, 3D, or dashboard language.
 - [ ] For premium/cinematic pages, use
   [planner-executor](./references/planner-executor.md) and
   [asset-evidence](./references/asset-evidence.md) before implementation.
@@ -126,6 +133,9 @@ builder until the spec passes the planning gates below.
    record what assets, section order, proof patterns, layout moves, motion
    style, and claim boundaries they use. For current websites, browse or inspect
    the live source instead of relying on memory.
+   For public industrial or physical-economy pages, also capture desktop and
+   mobile screenshots for the strongest gold reference and write a gap note
+   naming what the local page must match, adapt, reject, or defer.
 4. **Synthesize best-of-worlds decisions.** Use `best-of-worlds` to mark the
    reference patterns `adopt`, `adapt`, `reject`, or `defer`, then use
    `brainstorm` to define a unique take that is not a collage of competitor
@@ -150,6 +160,11 @@ builder until the spec passes the planning gates below.
    or hand-authored SVG/data-overlay visuals for premium landing-page graphics;
    use generated/real raster media or real WebGL/Three.js when the page needs a
    visual system. Use `advise` when the best carrier is not obvious.
+   For industrial or physical-industry public pages, prefer real/generated
+   workplace, machinery, product, site, or operations media as the first
+   credibility signal. Code-native 3D, dashboards, and diagrams may support the
+   page, but should not be the primary hero unless they are visibly more
+   credible than real-world media.
    For cinematic heroes, do not stop at "scroll scrub video" as a label: plan a
    long scrub with named story beats, progress ranges, and at least one
    sectioned effect layer such as GSAP timeline overlays, WebGL shader/scan
@@ -287,6 +302,13 @@ For landing pages with reusable formulas or inspiration references:
 - Do not keep stale local GSAP examples as API truth; route to official GreenSock skills or docs.
 - Do not ask one builder pass to plan, generate assets, implement, visually review, and repair a cinematic page. Split the pass or expect stalls and mismatched files.
 - Do not accept code-native SVG stand-ins as Terminal-quality media unless the brief marks them as a placeholder and includes a concrete generated-media or real-media upgrade path.
+- Do not let internal operating-model language dominate public hero copy. For
+  example, "clone and localize startups" can guide the build strategy, but the
+  public first viewport should sell the buyer's category, job, proof, and next
+  action.
+- Do not mark a HITL landing iteration complete merely because screenshots were
+  presented. Completion needs explicit human accept/keep feedback, or a stated
+  stop from the operator.
 
 ## Reference Map
 

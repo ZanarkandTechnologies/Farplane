@@ -90,6 +90,7 @@ Default required family verdicts:
 - `spec-contract`: `TAS-A`
 - `implementation-plan`: `TAS-A`
 - `code-quality`: `TAS-A`
+- `frontend-code-maintainability`: `TAS-A` when selected
 - `debloatability`: `TAS-A`, or `TAS-B` when cleanup is advisory and no hard
   gate depends on it
 - `ui-quality`: `TAS-A`
@@ -134,6 +135,11 @@ Choose rubric families from the ticket context:
 - UI work:
   - `ui-quality`
   - `frontend-guidelines` via `web-design-guidelines` when source files are available
+  - `frontend-code-maintainability` when UI source files are long, stateful,
+    reused, provider-like, component-heavy, or likely to keep growing
+  - `vercel-react-best-practices` as a supporting skill when React/Next.js
+    performance, waterfalls, bundle size, data fetching, rerenders, or
+    rendering behavior are in scope
   - `user-intent-satisfaction` when the ticket clearly expresses the user-facing ask or success feel
   - `code-quality`
   - `evidence-quality`
@@ -226,6 +232,14 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - source-fresh Web Interface Guidelines audit
   - accessibility, focus, forms, navigation, animation, content handling, and web-interface fundamentals
   - comparable metric for aligning agent reviews with an external checklist
+
+### 4c. Frontend Code Maintainability
+- File: `frontend-code-maintainability.md`
+- Focus:
+  - React/component modularity, file length, hooks, state ownership, DRY, comments, and testable helper seams
+  - agent/human readability for frontend code that will grow by breadth
+  - long-file thresholds and extraction cues for dialogs, providers, pages, canvas scenes, and feature modules
+  - routing React/Next.js performance-specific review to `vercel-react-best-practices` instead of duplicating that rulebook
 
 ### 5. Debloatability
 - File: `debloatability.md`

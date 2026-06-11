@@ -6,4 +6,6 @@
   failures.
 - Do not merge `ui-quality` and `frontend-guidelines`; keep both TAS verdicts visible
   for metric comparison.
+- Do not let a visually acceptable UI pass frontend source review when the main
+  component, provider, or dialog has become a hard-to-maintain god file.
 - Do not approve weak evidence just because the implementation looks plausible.

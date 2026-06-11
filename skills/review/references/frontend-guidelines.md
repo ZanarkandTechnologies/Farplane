@@ -5,8 +5,8 @@ ticket that claims accessibility, interaction, responsive, form, animation, or
 web-interface quality.
 
 This is a bridge between the source-fresh `web-design-guidelines` skill and the
-TAS `review` contract. It is not a replacement for `ui-quality` or
-`visual-qa`.
+TAS `review` contract. It is not a replacement for `ui-quality`,
+`frontend-code-maintainability`, `vercel-react-best-practices`, or `visual-qa`.
 
 ## Source Of Truth
 
@@ -39,6 +39,10 @@ source, backend/API code, or docs-only work.
 5. Attach the TAS beside `ui-quality`, not inside it.
 6. Use serious guideline failures as evidence for `ui-quality`,
    `evidence-quality`, or `integration-readiness` when they affect trust.
+7. Use `frontend-code-maintainability` separately when the source code's
+   component shape, file size, state ownership, or testability is in question.
+8. Use `vercel-react-best-practices` separately when React/Next.js performance,
+   bundle size, data fetching, rerenders, or rendering behavior are in question.
 
 ## TAS Guide
 

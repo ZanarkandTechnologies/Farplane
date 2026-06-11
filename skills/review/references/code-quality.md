@@ -1,6 +1,12 @@
 # Code Quality
 
-Use when reviewing code changes. This is the main code rubric; API/backend/type concerns live as explicit sub-lenses inside it rather than separate live skill trees.
+Use when reviewing code changes. This is the main code rubric; API/backend/type
+concerns live as explicit sub-lenses inside it rather than separate live skill
+trees. For frontend source code with meaningful component, hook, state,
+provider, or UI feature structure, pair this with
+[`frontend-code-maintainability.md`](frontend-code-maintainability.md). For
+React/Next.js performance-specific review, use `vercel-react-best-practices`
+as the supporting rule source rather than duplicating those checks here.
 
 Required TAS: `TAS-A`
 
@@ -88,6 +94,11 @@ Use these lenses when relevant and include findings under this rubric:
 - `api`: contract correctness, validation/error-path proof, backward safety
 - `backend`: state/data correctness, mutation safety, regression exposure
 - `types`: invariant strength, illegal-state prevention, mutation safety
+- `frontend-code-maintainability`: React/component modularity, file length,
+  hook boundaries, state ownership, DRY, comments, and testable frontend seams
+- `vercel-react-best-practices`: React/Next.js waterfalls, bundle size,
+  server/client data fetching, rerenders, rendering, and JavaScript performance
+  checks
 
 ## Evidence and Finding Cues
 

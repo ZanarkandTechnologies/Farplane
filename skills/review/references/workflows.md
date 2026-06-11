@@ -14,9 +14,15 @@
 
 1. Include `ui-quality` for visible product quality.
 2. Include `frontend-guidelines` when UI source files changed.
-3. Run `web-design-guidelines` on the changed UI files.
-4. Include `visual-qa` evidence when rendered UI proof is in scope.
-5. Compare `ui-quality` and `frontend-guidelines` TAS verdicts for alignment.
+3. Include `frontend-code-maintainability` when changed frontend files are long,
+   stateful, provider-like, component-heavy, or expected to keep growing.
+4. Include `vercel-react-best-practices` as a supporting skill when React or
+   Next.js performance, bundle size, data fetching, waterfalls, rerenders, or
+   rendering behavior are in scope.
+5. Run `web-design-guidelines` on the changed UI files.
+6. Include `visual-qa` evidence when rendered UI proof is in scope.
+7. Compare `ui-quality`, `frontend-guidelines`, and
+   `frontend-code-maintainability` TAS verdicts for alignment.
 
 ## Completion Review
 

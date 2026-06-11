@@ -5,9 +5,12 @@ Use when reviewing UI, interaction, layout, routing, or other visible product be
 Required TAS: `TAS-A`
 
 For UI source review, pair this with
-[`frontend-guidelines.md`](frontend-guidelines.md). `ui-quality` judges product
-intent, taste, cohesion, and visible behavior; `frontend-guidelines` records the
-source-fresh Web Interface Guidelines audit TAS.
+[`frontend-guidelines.md`](frontend-guidelines.md). Add
+[`frontend-code-maintainability.md`](frontend-code-maintainability.md) when
+frontend source structure, file length, state ownership, hooks, or testability
+matter. `ui-quality` judges product intent, taste, cohesion, and visible
+behavior; `frontend-guidelines` records the source-fresh Web Interface
+Guidelines audit TAS.
 
 ## Family TAS Guide
 

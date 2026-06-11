@@ -81,6 +81,10 @@ evidence-gate judgment, and concrete next action.
 For user-facing work, reviewer rubric selection may also include a dedicated
 user-intent-satisfaction family so the system can judge "correct" separately
 from "actually satisfying for the intended user."
+For frontend source work, reviewer rubric selection may include
+`frontend-code-maintainability` so the system can judge maintainable component,
+hook, provider, and state structure separately from visible UI quality and
+external web-interface guideline compliance.
 For Stop-hook completion paths, reviewer should ground that judgment through the
 live `$review` skill contract in the visible `reviewer` lane, write a linked
 completion-review receipt when final completion is being judged, and make one

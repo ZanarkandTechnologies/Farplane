@@ -104,6 +104,18 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
 - Terminal Industries quality is not just palette/nav imitation; it depends on
   physical-world media fidelity, object scale, deliberate mobile crop, and
   proof-ready visual restraint.
+- Faction-grade industrial landing quality depends on looking industrial before
+  explaining AI: real workplace/product/media in the first viewport, sparse
+  category copy, concrete modules, proof profiles, integration reassurance, and
+  adoption timeline.
+- Internal strategy language should not automatically become public hero copy.
+  In the Valefor run, "clone Western startups and localize them" was useful
+  operating strategy, but the page improved when the hero sold "AI for
+  factories, yards, sites, and plants" and moved clone/localize into the module
+  story.
+- HITL landing goals should not complete at "feedback requested"; feedback is
+  the reward signal. The loop should continue until the operator accepts,
+  requests a specific revision, or explicitly stops.
 - Timed-out external CLI runs with partial files are benchmark failures even
   when the page can be repaired enough to render.
 - Broad prompts that ask one agent to spec, build, generate assets, review, and

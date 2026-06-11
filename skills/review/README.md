@@ -23,6 +23,7 @@ and checks metric traceability against linked evidence.
 - [`references/spec-contract.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/spec-contract.md)
 - [`references/implementation-plan.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/implementation-plan.md)
 - [`references/code-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/code-quality.md)
+- [`references/frontend-code-maintainability.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/frontend-code-maintainability.md)
 - [`references/ui-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/ui-quality.md)
 - [`references/user-intent-satisfaction.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/user-intent-satisfaction.md)
 - [`references/evidence-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/evidence-quality.md)

@@ -1,6 +1,6 @@
 ---
 name: hitl-autoresearch
-description: Set up human-in-the-loop autoresearch sessions for marketing, demos, content, screenshots, landing pages, videos, and other subjective artifacts where Codex should iterate quickly, request human feedback through telegram-message or a local feedback file, and resume from a feedback score or review file.
+description: "Turn subjective artifact goals into human-in-the-loop autoresearch sessions with feedback requests, scoring, and resumable review."
 tier: 3
 group: self-improvement
 source: local
@@ -80,7 +80,9 @@ artifact also needs evidence beyond human judgment.
    - agent stops or waits for `feedback.json`
    - next run uses feedback to improve the next variant
 7. Keep/discard variants by feedback score and stated rationale.
-8. Finish with the best artifact, feedback history, and next recommendation.
+8. Finish only after the feedback source says `accepted`, `keep`, or the
+   operator explicitly stops the loop. A request for feedback is a checkpoint,
+   not completion.
 
 ## Session Shape
 
@@ -152,6 +154,8 @@ The feedback request must include:
    contract and only ask for the next review decision.
 3. Do not let agents publish, send outreach, spend money, or make promises from
    a HITL loop. Human feedback is review, not external approval.
+4. Do not treat screenshot delivery as the end of a HITL run. Screenshots create
+   the review surface; human accept/revise feedback determines the next action.
 
 ## Judgment Questions
 
