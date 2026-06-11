@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-11T07:02:27+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-11T08:01:39+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -30,9 +30,9 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 ## Counts
 
 - Scanned files: `926`
-- Nodes: `616`
-- Edges: `2105`
-- Unresolved local-looking refs: `758`
+- Nodes: `615`
+- Edges: `2060`
+- Unresolved local-looking refs: `762`
 
 ## Most Referenced Docs
 
@@ -49,15 +49,15 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 | `docs/prd.md` | 19 | 17 |
 | `docs/TASTE.md` | 18 | 14 |
 | `docs/specs/harness-techniques.md` | 16 | 2 |
+| `docs/review/rubrics` | 14 | 3 |
 | `docs/sources/registry.jsonl` | 13 | 5 |
 | `docs/skills/best-practices.md` | 13 | 10 |
 | `docs/skills/system.md` | 12 | 7 |
 | `docs/specs/harness-engineering-doctrine.md` | 12 | 5 |
 | `docs/features/README.md` | 11 | 3 |
-| `docs/review/rubrics/review-rubric-index.md` | 11 | 6 |
 | `docs/research` | 11 | 2 |
 | `docs/specs/self-improvement-contracts.md` | 11 | 6 |
-| `docs/review/rubrics` | 10 | 3 |
+| `docs/review/rubrics/review-rubric-index.md` | 10 | 5 |
 
 ## Spec Status Preview
 
@@ -122,8 +122,11 @@ can still be worth keeping.
 | `docs/review/rubrics/debloatability.md` | review before archive or merge |
 | `docs/review/rubrics/demo-quality.md` | review before archive or merge |
 | `docs/review/rubrics/eval-quality.md` | review before archive or merge |
+| `docs/review/rubrics/evidence-quality.md` | review before archive or merge |
 | `docs/review/rubrics/frontend-code-maintainability.md` | review before archive or merge |
 | `docs/review/rubrics/gotchas.md` | review before archive or merge |
+| `docs/review/rubrics/implementation-plan.md` | review before archive or merge |
+| `docs/review/rubrics/integration-readiness.md` | review before archive or merge |
 | `docs/review/rubrics/prompt-quality.md` | review before archive or merge |
 | `docs/review/rubrics/spec-contract.md` | review before archive or merge |
 | `docs/review/rubrics/ui-quality.md` | review before archive or merge |

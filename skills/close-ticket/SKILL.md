@@ -15,8 +15,8 @@ source: local
   genuinely closeout, not missing implementation.
 - [ ] Treat this skill as `CloseTicket<CodingTicket>` inside the
   [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
-- [ ] Use the generic [execute](../execute/SKILL.md) interface's proof and
-  writeback shape, but keep `close-ticket` coding-ticket closeout specific.
+- [ ] Close through the native execution phase proof and writeback shape, but
+  keep `close-ticket` coding-ticket closeout specific.
 - [ ] Update the ticket writeback: evidence, linked docs, handoff, next action,
   and `last_verification`.
 - [ ] Update durable docs that changed in the final pass: `docs/HISTORY.md`,
@@ -26,7 +26,7 @@ source: local
   `docs/skills/README.md`, `docs/skills/registry.jsonl`,
   `docs/features/registry.jsonl`, and nearest module `README.md`/`AGENTS.md`.
 - [ ] If the final proof or linked review artifact is stale, re-enter the
-  [execute](../execute/SKILL.md) proof/review closeout shape before closing
+  the native execution phase proof/review closeout shape before closing
   the ticket.
 - [ ] Run the repo-local validators and final checks that actually match the
   touched surfaces.
@@ -44,8 +44,8 @@ Use this skill when one ticket is functionally done and the remaining work is
 to close it cleanly instead of doing more implementation.
 
 `close-ticket` is a Tier 3 Farplane coding-pipeline closeout skill. It consumes
-the generic [execute](../execute/SKILL.md) interface's proof/writeback shape but
-keeps Farplane-specific ticket, docs, commit, and archive rules here.
+the native execution phase proof/writeback shape but keeps Farplane-specific
+ticket, docs, commit, and archive rules here.
 
 This is the canonical public closeout surface. `$docs-closeout` is a backward
 compatible alias, not the preferred live name.

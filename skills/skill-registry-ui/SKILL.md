@@ -23,7 +23,7 @@ allowed-tools: Read, Bash
   edges, and common-chain edges behave as expected.
 - [ ] Use [visual-qa](../visual-qa/SKILL.md) when the UI changed and needs
   screenshot-level proof.
-- [ ] Use [execute](../execute/SKILL.md) for final proof, writeback, and
+- [ ] Use the native execution phase for final proof, writeback, and
   handoff.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

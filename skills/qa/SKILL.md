@@ -15,7 +15,7 @@ common_chains:
 
 - [ ] Read the selected ticket, Proof Contract, acceptance criteria, linked
   specs/docs, and any runtime target handoff.
-- [ ] Use the generic [execute](../execute/SKILL.md) proof/writeback shape, but
+- [ ] Use the native execution phase proof/writeback shape, but
   keep `$qa` focused on ticket-scoped evidence collection.
 - [ ] If browser evidence is needed, use [agent-browser](../agent-browser/SKILL.md)
   as the browser tool surface and keep Farplane-specific artifact rules here.

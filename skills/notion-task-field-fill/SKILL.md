@@ -57,7 +57,7 @@ only applies live Notion property updates from typed high-confidence proposals.
       artifact when it is not.
 - [ ] 14. In live mode, apply only high-confidence typed patches and verify readback;
       keep medium/low-confidence fields out of Notion writes.
-- [ ] 15. Use [execute](../execute/SKILL.md) for proof/writeback/review before
+- [ ] 15. Use the native execution phase for proof/writeback/review before
       claiming a new automation, skill change, or live-write path is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

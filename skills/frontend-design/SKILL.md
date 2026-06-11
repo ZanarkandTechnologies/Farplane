@@ -30,7 +30,7 @@ allowed-tools: mcp__shadcn__*, Read, Write, Edit, LS
   deliberate brief changes them.
 - [ ] Hand concrete component, registry, theme, state-matrix, and integration
   guidance to [frontend-craft](../frontend-craft/SKILL.md).
-- [ ] Use [execute](../execute/SKILL.md) for proof/writeback shape before
+- [ ] Use the native execution phase for proof/writeback shape before
   claiming implementation guidance is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

@@ -50,7 +50,7 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Edit
   `adapt` candidate could belong in more than one Farplane harness surface.
 - [ ] Use [best-of-worlds](../best-of-worlds/SKILL.md) for multi-source
   synthesis.
-- [ ] Use the [plan](../plan/SKILL.md) interface for material judgment calls
+- [ ] Use the native planning phase for material judgment calls
   that evidence cannot settle.
 - [ ] Score each candidate and choose `adopt`, `adapt`, `reject`, or `defer`.
 - [ ] Create an [impl-plan](../impl-plan/SKILL.md) handoff only for strong

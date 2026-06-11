@@ -15,7 +15,7 @@ allowed-tools: Read, Grep, Glob, Bash
 
 - [ ] Read the selected ticket, linked docs/specs, proof contract, and relevant
   local files before building the delegate prompt.
-- [ ] Use [plan](../plan/SKILL.md) when profile choice, checkout mode, live run
+- [ ] Use the native planning phase when profile choice, checkout mode, live run
   permission, or expected output is not already clear.
 - [ ] Identify the minimal context bundle: key files, constraints, output paths,
   acceptance criteria, proof artifacts, and off-limits surfaces.

@@ -2,17 +2,17 @@ window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
       "common-chain": 16,
-      "markdown-ref": 295
+      "markdown-ref": 249
     },
-    "edges": 311,
+    "edges": 265,
     "nodes": 86,
     "sources": {
       "external": 3,
       "local": 83
     },
     "tiers": {
-      "1": 5,
-      "2": 32,
+      "1": 4,
+      "2": 33,
       "3": 49
     }
   },
@@ -104,13 +104,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "autoresearch-exec",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "autoresearch-exec",
       "target": "self-improve",
       "target_ref": "self-improve",
       "type": "markdown-ref"
@@ -120,13 +113,6 @@ window.SKILL_GRAPH = {
       "source": "autoresearch-plan",
       "target": "autoresearch-exec",
       "target_ref": "autoresearch-exec",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "autoresearch-plan",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -258,13 +244,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "close-ticket",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "close-ticket",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
@@ -344,20 +323,6 @@ window.SKILL_GRAPH = {
       "source": "data-viz",
       "target": "visual-qa",
       "target_ref": "visual-qa",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "deep-init-project",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "deep-init-project",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -449,13 +414,6 @@ window.SKILL_GRAPH = {
       "source": "delegate-cli",
       "target": "impl",
       "target_ref": "impl",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "delegate-cli",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -636,13 +594,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "execute",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "execute",
       "target": "prototyping",
       "target_ref": "prototyping",
       "type": "markdown-ref"
@@ -684,20 +635,6 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
-      "source": "farplane-invocation",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "farplane-invocation",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
       "source": "feed-scout",
       "target": "advise",
       "target_ref": "advise",
@@ -729,13 +666,6 @@ window.SKILL_GRAPH = {
       "source": "feed-scout",
       "target": "impl-plan",
       "target_ref": "impl-plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "feed-scout",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -790,13 +720,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "frontend-craft",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "frontend-craft",
       "target": "frontend-design",
       "target_ref": "frontend-design",
       "type": "markdown-ref"
@@ -813,13 +736,6 @@ window.SKILL_GRAPH = {
       "source": "frontend-craft",
       "target": "image-generation",
       "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "frontend-craft",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -881,13 +797,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "frontend-design",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "frontend-design",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
       "type": "markdown-ref"
@@ -923,22 +832,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "functional-ui",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "functional-ui",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "functional-ui",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -1112,13 +1007,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "harness-scout",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "harness-scout",
       "target": "reference-grounding",
       "target_ref": "reference-grounding",
       "type": "markdown-ref"
@@ -1173,13 +1061,6 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
-      "label": "markdown-ref",
-      "source": "impl",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
       "label": "common_chains.after",
       "source": "impl",
       "target": "qa",
@@ -1210,13 +1091,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "impl-plan",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "impl-plan",
       "target": "research",
       "target_ref": "research",
       "type": "markdown-ref"
@@ -1233,13 +1107,6 @@ window.SKILL_GRAPH = {
       "source": "impl-plan",
       "target": "research",
       "target_ref": "research#researchparity",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "landing-page",
-      "target": "execute",
-      "target_ref": "execute",
       "type": "markdown-ref"
     },
     {
@@ -1271,13 +1138,6 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
-      "label": "markdown-ref",
-      "source": "notion-task-field-fill",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
       "label": "common_chains.after",
       "source": "notion-task-field-fill",
       "target": "weekly-strategy-analysis",
@@ -1289,13 +1149,6 @@ window.SKILL_GRAPH = {
       "source": "optimize-harness",
       "target": "eval",
       "target_ref": "eval",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "optimize-harness",
-      "target": "execute",
-      "target_ref": "execute",
       "type": "markdown-ref"
     },
     {
@@ -1383,20 +1236,6 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
-      "label": "markdown-ref",
-      "source": "pr-review-watch",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "pr-review-watch",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
       "label": "common_chains.after",
       "source": "pr-review-watch",
       "target": "pr-runtime",
@@ -1413,22 +1252,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "pr-runtime",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "pr-runtime",
       "target": "qa",
       "target_ref": "qa",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "prd",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -1469,13 +1294,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "product-photography",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "product-photography",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
       "type": "markdown-ref"
@@ -1485,13 +1303,6 @@ window.SKILL_GRAPH = {
       "source": "product-photography",
       "target": "image-generation",
       "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "product-photography",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -1535,13 +1346,6 @@ window.SKILL_GRAPH = {
       "target": "demo",
       "target_ref": "demo",
       "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "qa",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
     },
     {
       "label": "markdown-ref",
@@ -1616,13 +1420,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "remotion",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "remotion",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
       "type": "markdown-ref"
@@ -1632,13 +1429,6 @@ window.SKILL_GRAPH = {
       "source": "remotion",
       "target": "image-generation",
       "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "remotion",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -1686,22 +1476,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "remotion-render",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "remotion-render",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "remotion-render",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -1782,13 +1558,6 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
-      "label": "markdown-ref",
-      "source": "self-improve",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
       "label": "research#researchsource-synthesis",
       "source": "self-improve",
       "target": "research",
@@ -1800,13 +1569,6 @@ window.SKILL_GRAPH = {
       "source": "self-improve",
       "target": "skill-maintenance",
       "target_ref": "skill-maintenance",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "skill-creator",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -1826,20 +1588,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "skill-maintenance",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "skill-maintenance",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "skill-maintenance",
       "target": "prototyping",
       "target_ref": "prototyping",
       "type": "markdown-ref"
@@ -1854,22 +1602,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "skill-registry-ui",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "skill-registry-ui",
       "target": "visual-qa",
       "target_ref": "visual-qa",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "social-content",
-      "target": "execute",
-      "target_ref": "execute",
       "type": "markdown-ref"
     },
     {
@@ -1884,13 +1618,6 @@ window.SKILL_GRAPH = {
       "source": "social-content",
       "target": "image-generation",
       "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "social-content",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -1934,13 +1661,6 @@ window.SKILL_GRAPH = {
       "target": "impl-plan",
       "target_ref": "impl-plan",
       "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "spec-to-ticket",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
     },
     {
       "label": "markdown-ref",
@@ -1994,13 +1714,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "video-production",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "video-production",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
       "type": "markdown-ref"
@@ -2010,13 +1723,6 @@ window.SKILL_GRAPH = {
       "source": "video-production",
       "target": "image-generation",
       "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "video-production",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -2104,13 +1810,6 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
-      "label": "markdown-ref",
-      "source": "visual-design",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
       "label": "common_chains.after",
       "source": "visual-design",
       "target": "frontend-craft",
@@ -2136,13 +1835,6 @@ window.SKILL_GRAPH = {
       "source": "visual-design",
       "target": "functional-ui",
       "target_ref": "functional-ui",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "visual-design",
-      "target": "plan",
-      "target_ref": "plan",
       "type": "markdown-ref"
     },
     {
@@ -2179,23 +1871,9 @@ window.SKILL_GRAPH = {
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "work",
-      "target": "execute",
-      "target_ref": "execute",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "work",
-      "target": "plan",
-      "target_ref": "plan",
-      "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-11T07:02:28+00:00",
+  "generated_at": "2026-06-11T08:01:39+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -2230,18 +1908,6 @@ window.SKILL_GRAPH = {
       "label": "reference-grounding",
       "methods": [],
       "path": "skills/reference-grounding/SKILL.md",
-      "source": "local",
-      "tier": 1
-    },
-    {
-      "description": "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid.",
-      "group": "",
-      "has_checklist": true,
-      "has_todos": false,
-      "id": "review",
-      "label": "review",
-      "methods": [],
-      "path": "skills/review/SKILL.md",
       "source": "local",
       "tier": 1
     },
@@ -2470,7 +2136,7 @@ window.SKILL_GRAPH = {
       "tier": 2
     },
     {
-      "description": "Turn an approved workflow into implementation, proof, writeback, and review when no domain-specific execution skill owns it.",
+      "description": "Deprecated compatibility wrapper for native execution phase guidance when no domain execution skill owns the artifact.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,
@@ -2559,7 +2225,7 @@ window.SKILL_GRAPH = {
       "tier": 2
     },
     {
-      "description": "Turn intent into executable scope, ordered work, proof, boundaries, and handoff rules when no domain planning skill owns it.",
+      "description": "Deprecated compatibility wrapper for native planning phase guidance when no domain planning skill owns the artifact.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,
@@ -2587,6 +2253,18 @@ window.SKILL_GRAPH = {
         "research:source-synthesis"
       ],
       "path": "skills/research/SKILL.md",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "description": "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid.",
+      "group": "",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "review",
+      "label": "review",
+      "methods": [],
+      "path": "skills/review/SKILL.md",
       "source": "local",
       "tier": 2
     },

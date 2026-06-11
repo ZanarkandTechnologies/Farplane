@@ -20,9 +20,9 @@ allowed-tools: Read, Glob, Grep
   reslicing, or needs a metric/research loop.
 - [ ] Choose the execution profile: ambition, Goal policy, compute target,
   planning route, proof route, testability route, and blocker policy.
-- [ ] Use [plan](../plan/SKILL.md) or `impl-plan` only when material planning
+- [ ] Use the native planning phase or `impl-plan` only when material planning
   is warranted.
-- [ ] Use [execute](../execute/SKILL.md), `$impl`, direct local work, or
+- [ ] Use the native execution phase, `$impl`, direct local work, or
   `close-ticket` only after the work unit is executable.
 - [ ] For ticket batches, require one proof row per ticket plus one batch-level
   regression row before completion.

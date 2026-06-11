@@ -40,7 +40,7 @@ is active.
   [research:parity](../research/SKILL.md#researchparity) when examples,
   platform specs, source assets, current model behavior, peer videos, or
   production standards should guide scope.
-- [ ] Use [plan](../plan/SKILL.md) when campaign angle, structure, visual
+- [ ] Use the native planning phase when campaign angle, structure, visual
   carrier, model family, platform cut, production route, or scope boundary
   needs a real tradeoff decision.
 - [ ] Load the shared [domain video production workflow](../video-generation/references/domain-production.md).
@@ -63,7 +63,7 @@ is active.
 - [ ] Do not publish, post, upload, buy media, spend media budget, or represent
   generated identity assets as approved unless the user explicitly authorizes
   that use.
-- [ ] Follow the [execute](../execute/SKILL.md) proof and writeback loop before
+- [ ] Follow the native execution phase proof and writeback loop before
   claiming narrative quality, continuity, platform fit, likeness/voice quality,
   creative quality, render quality, or final production quality.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

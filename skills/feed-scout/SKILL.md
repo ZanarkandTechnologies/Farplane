@@ -16,7 +16,7 @@ allowed-tools: Read, Glob, Grep, Bash
 - [ ] Read existing feed-scout config, profile rows, tracked entities,
   tracked harness resources, ledger/proposal artifacts, and the requested mode
   before doing any external discovery.
-- [ ] Use [plan](../plan/SKILL.md) when cadence, destination, profile value, or
+- [ ] Use the native planning phase when cadence, destination, profile value, or
   live-spend boundaries are unclear.
 - [ ] Configure or validate tracked profiles, entities, and harness-resource
   references before discovery.

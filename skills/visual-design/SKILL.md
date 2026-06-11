@@ -24,7 +24,7 @@ allowed-tools: Read, Grep, Glob
 - [ ] When the user provides a strong reference or the surface needs a taste
   upgrade, use [best-of-worlds](../best-of-worlds/SKILL.md) to extract what to
   adopt, adapt, reject, or defer before defining the final visual system.
-- [ ] Use [plan](../plan/SKILL.md) to choose the visual register and accepted
+- [ ] Use the native planning phase to choose the visual register and accepted
   tradeoff before specifying style.
 - [ ] Set numeric taste dials for density, variance, motion, color commitment,
   and materiality.
@@ -35,7 +35,7 @@ allowed-tools: Read, Grep, Glob
 - [ ] Hand off to [frontend-design](../frontend-design/SKILL.md) for app UI
   implementation references or [frontend-craft](../frontend-craft/SKILL.md) for
   the full build path.
-- [ ] Use [execute](../execute/SKILL.md) for proof/writeback shape before
+- [ ] Use the native execution phase for proof/writeback shape before
   claiming the visual direction is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

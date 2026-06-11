@@ -24,14 +24,14 @@ common_chains:
   workflows or established product patterns should shape the options.
 - [ ] Diagnose the current UI or planned workflow before proposing visual or
   component changes.
-- [ ] Use [plan](../plan/SKILL.md) to compare the strongest interaction models
+- [ ] Use the native planning phase to compare the strongest interaction models
   and choose one recommended workflow.
 - [ ] Define screens, states, IA, interaction rules, data/content ranges, and
   edge cases.
 - [ ] Hand off to [visual-design](../visual-design/SKILL.md) when look/taste is
   still open, or [frontend-craft](../frontend-craft/SKILL.md) when the workflow
   is ready to build.
-- [ ] Use [execute](../execute/SKILL.md) for proof/writeback shape before
+- [ ] Use the native execution phase for proof/writeback shape before
   claiming the functional UI plan is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

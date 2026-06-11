@@ -15,8 +15,8 @@ common_chains:
 ## Todo List
 
 - [ ] Read the chosen spec slice and confirm it is small enough for one planning pass.
-- [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,
-  but keep `spec-to-ticket` coding-ticket specific.
+- [ ] Shape tickets through the native planning phase, but keep
+  `spec-to-ticket` coding-ticket specific.
 - [ ] Use the relevant [research](../research/SKILL.md) method when ticket
   scope depends on local baseline, examples, official behavior, peer norms, or
   implementation patterns.
@@ -53,9 +53,8 @@ common_chains:
 
 Use this as the second session in the Farplane workflow.
 
-`spec-to-ticket` is a Tier 3 Farplane coding-pipeline skill. It implements the
-generic [plan](../plan/SKILL.md) interface for turning code-oriented specs into
-proofable tickets.
+`spec-to-ticket` is a Tier 3 Farplane coding-pipeline skill. It specializes the
+native planning phase for turning code-oriented specs into proofable tickets.
 
 <!--
 This skill is where product intent becomes executable ticket truth.

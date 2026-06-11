@@ -38,7 +38,7 @@ Use this checklist whenever `product-photography` is active.
   [research:parity](../research/SKILL.md#researchparity) when product
   examples, marketplace specs, source assets, current model behavior, or
   commerce norms should guide the brief.
-- [ ] Use [plan](../plan/SKILL.md) when shot set, background/style, realism
+- [ ] Use the native planning phase when shot set, background/style, realism
   tradeoff, model family, output route, or marketplace scope needs a real
   decision.
 - [ ] Load the shared [image/social production workflow](../image-generation/references/domain-production.md).
@@ -56,7 +56,7 @@ Use this checklist whenever `product-photography` is active.
   acceptable before running model or `belt` jobs.
 - [ ] Do not publish, upload, or change store listings unless the user
   explicitly asks for that action.
-- [ ] Follow the [execute](../execute/SKILL.md) proof and writeback loop before
+- [ ] Follow the native execution phase proof and writeback loop before
   claiming commercial, marketplace, or product-clarity quality.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

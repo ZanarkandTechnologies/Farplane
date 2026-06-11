@@ -13,7 +13,7 @@ source: local
 
 - [ ] Read `autoresearch.md`, `autoresearch.jsonl`, optional ideas/checks, git
   status, and the editable scope before changing anything.
-- [ ] Use [plan](../plan/SKILL.md) if the session contract, metric, guard, or
+- [ ] Use the native planning phase if the session contract, metric, guard, or
   editable scope is inconsistent.
 - [ ] Resume from the logged baseline, best metric, last run, and next run
   number.

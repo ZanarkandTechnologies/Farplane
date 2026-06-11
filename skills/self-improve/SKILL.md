@@ -42,7 +42,7 @@ fails: optimizes by taste; mutates before baseline; promotes unmeasured changes;
 - [ ] 1. Read the target skill package or harness surface: `SKILL.md`, direct todo list, references,
   scripts, and existing `self-improve/` memory.
 - [ ] 2. Clarify the improvement target, eval boundary, or editable scope with
-  [plan](../plan/SKILL.md) when any of them is unclear.
+  the native planning phase when any of them is unclear.
 - [ ] 3. Ground external examples or prior variants with
   [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
   when comparison is required.

@@ -36,7 +36,7 @@ active.
   [research:parity](../research/SKILL.md#researchparity) when examples,
   platform specs, peer posts, swipe patterns, or campaign expectations should
   guide scope.
-- [ ] Use [plan](../plan/SKILL.md) when platform mix, format, hook, asset
+- [ ] Use the native planning phase when platform mix, format, hook, asset
   route, CTA, or scope boundary needs a real tradeoff decision.
 - [ ] Load upstream method references only when their platform constraints,
   examples, or format rules matter.
@@ -54,7 +54,7 @@ active.
   acceptable before running model or `belt` jobs.
 - [ ] Do not publish, post, reply, comment, DM, schedule, or cross-post unless
   the user explicitly asks for that action.
-- [ ] Follow the [execute](../execute/SKILL.md) proof and writeback loop before
+- [ ] Follow the native execution phase proof and writeback loop before
   claiming platform fit, campaign readiness, professional voice, slide
   hierarchy, thread quality, or final quality.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

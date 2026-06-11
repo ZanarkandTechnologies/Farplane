@@ -41,7 +41,7 @@ common_chains:
 - [ ] Use the PRD references already owned by this skill:
   `references/prd-template.md`, `references/requirements-discovery.md`, and
   `references/review.md`.
-- [ ] Use [plan](../plan/SKILL.md) when several PRD shapes or first-slice
+- [ ] Use the native planning phase when several PRD shapes or first-slice
   boundaries are viable and the tradeoff needs to be explicit.
 - [ ] Stop after PRD authoring and hand off to
   [spec-to-ticket](../spec-to-ticket/SKILL.md) only after the PRD is accepted.

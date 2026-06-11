@@ -2,12 +2,12 @@ window.HARNESS_GRAPH = {
   "counts": {
     "edge_types": {
       "literal-path": 1609,
-      "markdown-link": 496
+      "markdown-link": 451
     },
-    "edges": 2105,
+    "edges": 2060,
     "node_kinds": {
       "agent": 18,
-      "doc": 42,
+      "doc": 41,
       "file": 369,
       "research": 12,
       "root-doc": 5,
@@ -17,9 +17,9 @@ window.HARNESS_GRAPH = {
       "spec": 22,
       "template": 8
     },
-    "nodes": 616,
+    "nodes": 615,
     "scanned_files": 926,
-    "unresolved_refs": 758
+    "unresolved_refs": 762
   },
   "edges": [
     {
@@ -1577,6 +1577,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "bin/sync_skill_plugins.py",
+      "raw_ref": "docs/review/rubrics",
+      "source": "file:bin/sync_skill_plugins.py",
+      "target": "file:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
       "from_file": "bin/sync_skill_registry.py",
       "raw_ref": "docs/features/registry.jsonl",
       "source": "file:bin/sync_skill_registry.py",
@@ -1749,6 +1756,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/harness-scout/SKILL.md",
       "source": "file:bin/test_stop_hook.py",
       "target": "file:skills/harness-scout/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/test_sync_skill_plugins.py",
+      "raw_ref": "docs/review/rubrics",
+      "source": "file:bin/test_sync_skill_plugins.py",
+      "target": "file:docs/review/rubrics",
       "type": "literal-path"
     },
     {
@@ -2278,6 +2292,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "bin/check_tier0_phase_protocol.py",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:bin/check_tier0_phase_protocol.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "bin/farplane_boards.py",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:bin/farplane_boards.py",
@@ -2449,6 +2470,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/features/registry.jsonl",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/features/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "docs/review/rubrics",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:docs/review/rubrics",
       "type": "literal-path"
     },
     {
@@ -4623,9 +4651,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/system.md",
-      "raw_ref": "docs/review/",
+      "raw_ref": "docs/review/rubrics/",
       "source": "file:docs/skills/system.md",
-      "target": "file:docs/review",
+      "target": "file:docs/review/rubrics",
       "type": "literal-path"
     },
     {
@@ -6898,13 +6926,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/autoresearch-exec/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:autoresearch-exec",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/autoresearch-exec/SKILL.md",
       "raw_ref": "../self-improve/SKILL.md",
       "source": "skill:autoresearch-exec",
       "target": "file:skills/self-improve/SKILL.md",
@@ -6923,13 +6944,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:autoresearch-plan",
       "target": "file:skills/autoresearch-plan/scripts/init_session.py",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/autoresearch-plan/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:autoresearch-plan",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/autoresearch-plan/SKILL.md",
@@ -7347,13 +7361,6 @@ window.HARNESS_GRAPH = {
     {
       "from_file": "skills/close-ticket/README.md",
       "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/skills/execute/SKILL.md",
-      "source": "skill:close-ticket",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/close-ticket/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
       "source": "skill:close-ticket",
       "target": "file:skills/execute/SKILL.md",
       "type": "markdown-link"
@@ -8158,20 +8165,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/deep-init-project/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:deep-init-project",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/deep-init-project/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:deep-init-project",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/deep-init-project/SKILL.md",
       "raw_ref": "../research/SKILL.md#researchofficial-docs",
       "source": "skill:deep-init-project",
       "target": "file:skills/research/SKILL.md",
@@ -8543,13 +8536,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/delegate-cli/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:delegate-cli",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/delegate-cli/SKILL.md",
       "raw_ref": "../qa/SKILL.md",
       "source": "skill:delegate-cli",
       "target": "file:skills/qa/SKILL.md",
@@ -8693,34 +8679,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
       "source": "skill:delegate-frontend",
       "target": "file:docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
-      "raw_ref": "docs/review/rubrics/evidence-quality.md",
-      "source": "skill:delegate-frontend",
-      "target": "file:docs/review/rubrics/evidence-quality.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
-      "raw_ref": "docs/review/rubrics/implementation-plan.md",
-      "source": "skill:delegate-frontend",
-      "target": "file:docs/review/rubrics/implementation-plan.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
-      "raw_ref": "docs/review/rubrics/integration-readiness.md",
-      "source": "skill:delegate-frontend",
-      "target": "file:docs/review/rubrics/integration-readiness.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
-      "raw_ref": "docs/review/rubrics/review-rubric-index.md",
-      "source": "skill:delegate-frontend",
-      "target": "file:docs/review/rubrics/review-rubric-index.md",
       "type": "literal-path"
     },
     {
@@ -9886,13 +9844,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/farplane-invocation/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:farplane-invocation",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/farplane-invocation/AGENTS.md",
       "raw_ref": "skills/farplane-invocation/AGENTS.md",
       "source": "skill:farplane-invocation",
@@ -9940,13 +9891,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:farplane-invocation",
       "target": "file:skills/farplane-invocation/templates/symphony-run-envelope.json",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/farplane-invocation/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:farplane-invocation",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/farplane-invocation/templates/symphony-run-envelope.json",
@@ -10069,13 +10013,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/feed-scout/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:feed-scout",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/feed-scout/SKILL.md",
       "raw_ref": "../review/SKILL.md",
       "source": "skill:feed-scout",
       "target": "file:skills/review/SKILL.md",
@@ -10145,13 +10082,6 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/frontend-craft/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:frontend-craft",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/frontend-craft/README.md",
       "raw_ref": "skills/frontend-craft",
       "source": "skill:frontend-craft",
@@ -10191,13 +10121,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../../image-generation/references/domain-production.md",
       "source": "skill:frontend-craft",
       "target": "file:skills/image-generation/references/domain-production.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/frontend-craft/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:frontend-craft",
-      "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -10286,13 +10209,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/frontend-design/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:frontend-design",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/frontend-design/SKILL.md",
       "raw_ref": "../frontend-craft/SKILL.md",
       "source": "skill:frontend-design",
       "target": "file:skills/frontend-craft/SKILL.md",
@@ -10342,23 +10258,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/functional-ui/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:functional-ui",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/functional-ui/SKILL.md",
       "raw_ref": "../frontend-craft/SKILL.md",
       "source": "skill:functional-ui",
       "target": "file:skills/frontend-craft/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/functional-ui/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:functional-ui",
-      "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -11021,13 +10923,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/harness-scout/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:harness-scout",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/harness-scout/SKILL.md",
       "raw_ref": "../reference-grounding/SKILL.md",
       "source": "skill:harness-scout",
       "target": "file:skills/reference-grounding/SKILL.md",
@@ -11197,13 +11092,6 @@ window.HARNESS_GRAPH = {
     {
       "from_file": "skills/impl/README.md",
       "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/skills/execute/SKILL.md",
-      "source": "skill:impl",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/impl/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
       "source": "skill:impl",
       "target": "file:skills/execute/SKILL.md",
       "type": "markdown-link"
@@ -11483,13 +11371,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/impl-plan/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:impl-plan",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/impl-plan/SKILL.md",
       "raw_ref": "../research/SKILL.md",
       "source": "skill:impl-plan",
       "target": "file:skills/research/SKILL.md",
@@ -11529,13 +11410,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:landing-page",
       "target": "file:skills/delegate-frontend/SKILL.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/landing-page/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:landing-page",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/landing-page/SKILL.md",
@@ -11986,13 +11860,6 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/notion-task-field-fill/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:notion-task-field-fill",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/notion-task-field-fill/tests/field-fill-fixtures.json",
       "raw_ref": "skills/notion-task-field-fill/references/confidence.md",
       "source": "skill:notion-task-field-fill",
@@ -12039,13 +11906,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../eval/SKILL.md",
       "source": "skill:optimize-harness",
       "target": "file:skills/eval/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/optimize-harness/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:optimize-harness",
-      "target": "file:skills/execute/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -12224,20 +12084,6 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/pr-review-watch/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:pr-review-watch",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/pr-review-watch/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:pr-review-watch",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/pr-review-watch/README.md",
       "raw_ref": "skills/pr-review-watch/fixtures/clean-pass.json",
       "source": "skill:pr-review-watch",
@@ -12306,13 +12152,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:pr-runtime",
       "target": "file:bin/ticket_runtime.py",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/pr-runtime/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:pr-runtime",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/pr-runtime/SKILL.md",
@@ -12442,13 +12281,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/prd/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:prd",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/prd/SKILL.md",
       "raw_ref": "../research/SKILL.md#researchuser-grounding",
       "source": "skill:prd",
       "target": "file:skills/research/SKILL.md",
@@ -12459,13 +12291,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../spec-to-ticket/SKILL.md",
       "source": "skill:prd",
       "target": "file:skills/spec-to-ticket/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/product-photography/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:product-photography",
-      "target": "file:skills/execute/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -12487,13 +12312,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../image-generation/references/domain-production.md",
       "source": "skill:product-photography",
       "target": "file:skills/image-generation/references/domain-production.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/product-photography/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:product-photography",
-      "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -12564,13 +12382,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../agent-browser/SKILL.md",
       "source": "skill:qa",
       "target": "file:skills/agent-browser/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/qa/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:qa",
-      "target": "file:skills/execute/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -12750,13 +12561,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/remotion/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:remotion",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/remotion/SKILL.md",
       "raw_ref": "../frontend-craft/SKILL.md",
       "source": "skill:remotion",
       "target": "file:skills/frontend-craft/SKILL.md",
@@ -12767,13 +12571,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../image-generation/SKILL.md",
       "source": "skill:remotion",
       "target": "file:skills/image-generation/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/remotion/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:remotion",
-      "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -12960,23 +12757,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/remotion-render/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:remotion-render",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/remotion-render/SKILL.md",
       "raw_ref": "../frontend-craft/SKILL.md",
       "source": "skill:remotion-render",
       "target": "file:skills/frontend-craft/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/remotion-render/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:remotion-render",
-      "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -13296,13 +13079,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/self-improve/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:self-improve",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/self-improve/SKILL.md",
       "raw_ref": "skills/prd",
       "source": "skill:self-improve",
       "target": "file:skills/prd/SKILL.md",
@@ -13384,13 +13160,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:skill-creator",
       "target": "file:docs/specs/self-improvement-contracts.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-creator/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:skill-creator",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/skill-creator/SKILL.md",
@@ -13681,20 +13450,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
       "raw_ref": "../prototyping/SKILL.md",
       "source": "skill:skill-maintenance",
       "target": "file:skills/prototyping/SKILL.md",
@@ -13841,13 +13596,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-registry-ui/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:skill-registry-ui",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/skill-registry-ui/AGENTS.md",
       "raw_ref": "skills/skill-maintenance/graph/",
       "source": "skill:skill-registry-ui",
@@ -13912,13 +13660,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/social-content/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:social-content",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/social-content/SKILL.md",
       "raw_ref": "../frontend-craft/SKILL.md",
       "source": "skill:social-content",
       "target": "file:skills/frontend-craft/SKILL.md",
@@ -13936,13 +13677,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../image-generation/references/domain-production.md",
       "source": "skill:social-content",
       "target": "file:skills/image-generation/references/domain-production.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/social-content/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:social-content",
-      "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -14151,13 +13885,6 @@ window.HARNESS_GRAPH = {
     {
       "from_file": "skills/spec-to-ticket/README.md",
       "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/skills/plan/SKILL.md",
-      "source": "skill:spec-to-ticket",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/spec-to-ticket/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
       "source": "skill:spec-to-ticket",
       "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
@@ -14402,13 +14129,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/video-production/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:video-production",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/video-production/SKILL.md",
       "raw_ref": "../frontend-craft/SKILL.md",
       "source": "skill:video-production",
       "target": "file:skills/frontend-craft/SKILL.md",
@@ -14419,13 +14139,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../image-generation/SKILL.md",
       "source": "skill:video-production",
       "target": "file:skills/image-generation/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/video-production/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:video-production",
-      "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -14598,13 +14311,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/visual-design/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:visual-design",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/visual-design/SKILL.md",
       "raw_ref": "../frontend-craft/SKILL.md",
       "source": "skill:visual-design",
       "target": "file:skills/frontend-craft/SKILL.md",
@@ -14622,13 +14328,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../functional-ui/SKILL.md",
       "source": "skill:visual-design",
       "target": "file:skills/functional-ui/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/visual-design/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:visual-design",
-      "target": "file:skills/plan/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -14730,20 +14429,6 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/work/SKILL.md",
-      "raw_ref": "../execute/SKILL.md",
-      "source": "skill:work",
-      "target": "file:skills/execute/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/work/SKILL.md",
-      "raw_ref": "../plan/SKILL.md",
-      "source": "skill:work",
-      "target": "file:skills/plan/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/work/README.md",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:work",
@@ -14758,7 +14443,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-06-11T07:02:27+00:00",
+  "generated_at": "2026-06-11T08:01:39+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -14957,12 +14642,6 @@ window.HARNESS_GRAPH = {
       "kind": "doc",
       "label": "docs/research",
       "path": "docs/research"
-    },
-    {
-      "id": "file:docs/review",
-      "kind": "doc",
-      "label": "docs/review",
-      "path": "docs/review"
     },
     {
       "id": "file:docs/review/rubrics",

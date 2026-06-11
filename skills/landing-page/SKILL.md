@@ -71,7 +71,7 @@ when the request earns that depth.
 ## 5. Execute And Prove
 
 - [ ] Hand approved execution packets to [frontend-craft](../frontend-craft/SKILL.md).
-- [ ] Use [execute](../execute/SKILL.md) for proof, writeback, and review.
+- [ ] Use the native execution phase for proof, writeback, and review.
 - [ ] Run landing QA from [qa](./references/qa.md), plus scroll/media QA when
   the selected method requires it.
 - [ ] Record desktop/mobile screenshots, asset manifest/provenance, method

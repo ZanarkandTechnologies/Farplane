@@ -15,7 +15,7 @@ allowed-tools: Read, Glob, Grep
 
 - [ ] Read the selected ticket, branch/PR context, compute target, QA needs, and
   any existing `.farplane/state/tickets/*.runtime.json` record.
-- [ ] Use [plan](../plan/SKILL.md) when checkout mode, runtime mode, or compute
+- [ ] Use the native planning phase when checkout mode, runtime mode, or compute
   target is a real decision.
 - [ ] Decide checkout mode: shared checkout, isolated worktree, or existing
   branch/runtime workspace.

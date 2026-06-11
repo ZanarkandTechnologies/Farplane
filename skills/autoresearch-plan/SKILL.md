@@ -13,7 +13,7 @@ source: local
 
 - [ ] Read the target docs, scripts, tests, active ticket, and existing
   autoresearch artifacts before proposing a session.
-- [ ] Use [plan](../plan/SKILL.md) when the goal, scope, metric, direction,
+- [ ] Use the native planning phase when the goal, scope, metric, direction,
   verify command, or guard is not executable yet.
 - [ ] Use [research:code-patterns](../research/SKILL.md#researchcode-patterns)
   only when a metric loop or eval harness needs local/peer implementation

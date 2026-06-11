@@ -30,7 +30,7 @@ allowed-tools: Read, Grep, Glob, Bash
   references plus 2-4 comparable products or strong examples, then use
   [best-of-worlds](../best-of-worlds/SKILL.md) to decide what to adopt, adapt,
   reject, or defer before implementing.
-- [ ] Use [plan](../plan/SKILL.md) to choose lanes, scope cuts, proof surfaces,
+- [ ] Use the native planning phase to choose lanes, scope cuts, proof surfaces,
   and accepted tradeoffs before implementation.
 - [ ] Capture stack facts before importing UI libraries or writing
   framework-specific code.
@@ -50,7 +50,7 @@ allowed-tools: Read, Grep, Glob, Bash
   user-visible visual proof.
 - [ ] Use [agent-browser](../agent-browser/SKILL.md) or ticket QA to collect
   screenshots, snapshots, console/page errors, and route proof.
-- [ ] Use [execute](../execute/SKILL.md) for final proof, writeback, and
+- [ ] Use the native execution phase for final proof, writeback, and
   handoff before claiming the frontend work is complete.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

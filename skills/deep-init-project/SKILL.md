@@ -20,7 +20,7 @@ source: local
 - [ ] Load [project-lifecycle](./references/project-lifecycle.md) and record
   the lifecycle route in `docs/bootstrap-brief.md` and generated project
   `AGENTS.md`.
-- [ ] Use [plan](../plan/SKILL.md) to lock the project shape, first slice,
+- [ ] Use the native planning phase to lock the project shape, first slice,
   quality gates, and durable docs before writing files.
 - [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs)
   when stack setup commands or framework conventions may be stale.
@@ -30,7 +30,7 @@ source: local
   specs, tickets, memory, troubles, lessons, and quality commands as applicable.
 - [ ] Preserve explicit human gates for credentials, deploys, billing, and
   destructive setup.
-- [ ] Use [execute](../execute/SKILL.md) for proof, writeback, and handoff after
+- [ ] Use the native execution phase for proof, writeback, and handoff after
   scaffold changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

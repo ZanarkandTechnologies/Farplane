@@ -13,7 +13,7 @@ source: local
 
 - [ ] Read the Farplane run envelope, active ticket, repo policy, and relevant
   project docs before selecting a path.
-- [ ] Use [plan](../plan/SKILL.md) when the envelope, ticket, compute target, or
+- [ ] Use the native planning phase when the envelope, ticket, compute target, or
   proof contract is underspecified.
 - [ ] Validate ticket identity, readiness, filesystem target, and compute
   expectations without launching hidden work.
@@ -21,7 +21,7 @@ source: local
   runner, daemon, scheduler, or retry loop.
 - [ ] Write a proof packet or diagnostic artifact that names what was selected,
   what was rejected, and what remains blocked.
-- [ ] Use [execute](../execute/SKILL.md) only for artifact writeback and proof
+- [ ] Use the native execution phase only for artifact writeback and proof
   shape, not for hidden autonomous dispatch.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

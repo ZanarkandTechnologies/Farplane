@@ -60,7 +60,7 @@ fails: changes without proof; optimizes vague taste; creates new skill before ch
     skill-template, registry, bulk rollout, or skill-contract migrations.
 - [ ] 6. Apply the accepted change through the owning implementation workflow
   and keep evidence in the active ticket or proof artifact.
-- [ ] 7. Use [execute](../execute/SKILL.md) for final proof, writeback, and
+- [ ] 7. Use the native execution phase for final proof, writeback, and
   review routing before claiming the harness behavior is improved.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -111,7 +111,7 @@ Review gate:
   template, registry, contract, and bulk maintenance changes.
 - [review](../review/SKILL.md) - judge plans, skill changes, evals, proof, and
   completion claims.
-- [execute](../execute/SKILL.md) - final proof, writeback, and review routing
+- the native execution phase - final proof, writeback, and review routing
   for applied changes.
 - [docs/specs/harness-engineering-doctrine.md](../../docs/specs/harness-engineering-doctrine.md) -
   Farplane placement doctrine.

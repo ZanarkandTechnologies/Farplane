@@ -17,9 +17,9 @@ common_chains:
 
 - [ ] Read the selected PR target, target repo, project review memory, and
   requested watch interval before polling anything.
-- [ ] Use [execute](../execute/SKILL.md) for proof/writeback shape and keep this
+- [ ] Use the native execution phase for proof/writeback shape and keep this
   skill focused on the coding-ticket PR watcher workflow.
-- [ ] Use [plan](../plan/SKILL.md) when repo target, PR number, notification
+- [ ] Use the native planning phase when repo target, PR number, notification
   policy, push permission, or project review commands are unclear.
 - [ ] Use [pr-runtime](../pr-runtime/SKILL.md) when an existing PR branch,
   isolated checkout, or declared QA target is needed.
@@ -54,7 +54,7 @@ This skill composes existing Farplane surfaces:
   isolated checkout or runtime record.
 - [coderabbit-review](../coderabbit-review/SKILL.md) runs a heavyweight local
   CodeRabbit pass only when project memory asks for it.
-- [execute](../execute/SKILL.md) supplies the proof/writeback shape for ticketed
+- the native execution phase supplies the proof/writeback shape for ticketed
   implementation and evidence.
 
 ## Trigger Conditions

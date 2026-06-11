@@ -18,8 +18,8 @@ allowed-tools: Read, Glob, Grep
 - [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, lessons, and nearby code.
 - [ ] Treat this skill as `PlanTicket<CodingTicket>` inside the
   [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
-- [ ] Use the generic [plan](../plan/SKILL.md) interface as the Tier 2 contract,
-  but keep `impl-plan` coding-specific.
+- [ ] Plan through the native planning phase, but keep `impl-plan`
+  coding-ticket specific.
 - [ ] Use the relevant [research](../research/SKILL.md) method when expected
   behavior depends on local baseline, official behavior, examples, or peer
   norms.
@@ -48,7 +48,7 @@ allowed-tools: Read, Glob, Grep
 - [ ] Make proof concrete and observable rather than generic.
 - [ ] Keep metrics and rubrics distinct: metrics are mechanical signals; rubrics are review judgment frames.
 - [ ] If the change is high-risk or contentious, run the `--consensus` version of this skill.
-- [ ] Run the [plan](../plan/SKILL.md) challenge/review shape before claiming
+- [ ] Run the native planning phase challenge/review shape before claiming
   the plan is ready.
 - [ ] Pitch the full-ticket plan to the user for approval and revise it before
   build starts.
@@ -58,9 +58,9 @@ allowed-tools: Read, Glob, Grep
 Use this for per-ticket implementation planning after a bounded ticket already
 exists.
 
-`impl-plan` is a Tier 3 Farplane coding-pipeline skill. It implements the
-generic [plan](../plan/SKILL.md) interface for code tickets; it is not the
-universal Tier 2 planning interface for every application domain.
+`impl-plan` is a Tier 3 Farplane coding-pipeline skill. It specializes the
+native planning phase for code tickets; it is not a universal Tier 2 planning
+interface for every application domain.
 
 `impl-plan` remains the one public planner:
 

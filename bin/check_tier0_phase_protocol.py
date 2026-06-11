@@ -79,9 +79,6 @@ def main() -> int:
             errors.append(f"{skill_path.relative_to(ROOT)}: tier: 0 is forbidden; Tier 0 is a phase protocol")
 
     for row in registry_rows():
-        tier = row.get("tier")
-        if tier not in {1, 2}:
-            continue
         path = ROOT / str(row.get("path"))
         if not path.exists():
             continue
@@ -90,7 +87,7 @@ def main() -> int:
             if SKILL_LINK_RE.search(line):
                 errors.append(
                     f"{path.relative_to(ROOT)} todo line {line_number}: "
-                    "Tier 1/Tier 2 todo lists must not link to plan/execute compatibility wrappers"
+                    "skill todo lists must not link to plan/execute compatibility wrappers"
                 )
 
     for path in live_text_files():

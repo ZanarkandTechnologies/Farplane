@@ -16,8 +16,8 @@ common_chains:
 - [ ] Read the selected ticket and linked docs before launching any lanes.
 - [ ] Treat this skill as `ExecuteTicket<CodingTicket>` plus proof integration
   inside the [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
-- [ ] Use the generic [execute](../execute/SKILL.md) interface as the Tier 2
-  contract, but keep `$impl` coding-ticket specific.
+- [ ] Execute through the native execution phase, but keep `$impl`
+  coding-ticket specific.
 - [ ] Confirm the ticket is actually ready for build orchestration rather than still needing planning.
 - [ ] Use the relevant [research](../research/SKILL.md) method when execution
   depends on official behavior, local invariants, examples, or peer norms.
@@ -28,7 +28,7 @@ common_chains:
 - [ ] If the `Proof Contract` links an autoresearch session, run `autoresearch-exec` as a bounded execution subphase; otherwise keep autoresearch out of the run.
 - [ ] Make the delegated `worker_name`, `main_artifact_path`, and `grounding_summary` explicit before delegating.
 - [ ] Launch the visible lanes and keep their responsibilities distinct.
-- [ ] When review starts, use the [execute](../execute/SKILL.md) proof/review
+- [ ] When review starts, use the native execution phase proof/review
   shape and pass the ticket's reviewer handoff instead of improvising rubric
   routing inside the reviewer lane.
 - [ ] When UI evidence needs judgment, use the [Visual QA](../visual-qa/SKILL.md) skill.
@@ -38,9 +38,9 @@ common_chains:
 
 `$impl` is the build-phase orchestration surface for Farplane.
 
-`$impl` is a Tier 3 Farplane coding-pipeline skill. It implements the generic
-[execute](../execute/SKILL.md) interface for code tickets; it is not the
-universal Tier 2 execution interface for every application domain.
+`$impl` is a Tier 3 Farplane coding-pipeline skill. It specializes the native
+execution phase for code tickets; it is not a universal Tier 2 execution
+interface for every application domain.
 
 Use it when:
 
