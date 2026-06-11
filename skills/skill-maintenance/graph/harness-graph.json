@@ -1,97 +1,76 @@
 {
   "counts": {
     "edge_types": {
-      "directory-contains": 89,
-      "literal-path": 1618,
-      "markdown-link": 448
+      "directory-contains": 86,
+      "literal-path": 1632,
+      "markdown-link": 446
     },
-    "edges": 2155,
+    "edges": 2164,
     "node_kinds": {
       "agent": 18,
       "doc": 22,
-      "file": 409,
+      "file": 411,
       "research": 11,
       "review-rubric": 22,
       "root-doc": 5,
       "script": 49,
       "skill": 86,
       "skill-doc": 5,
-      "spec": 17,
+      "spec": 16,
       "template": 5
     },
-    "nodes": 649,
+    "nodes": 650,
     "scanned_files": 934,
-    "unresolved_refs": 766
+    "unresolved_refs": 740
   },
   "edges": [
     {
-      "from_file": "docs/research",
-      "raw_ref": "docs/research",
-      "source": "dir:docs/research",
-      "target": "file:docs/research/2026-04-12_deep-skill-opportunities.md",
+      "from_file": "docs/archive/research",
+      "raw_ref": "docs/archive/research",
+      "source": "dir:docs/archive/research",
+      "target": "file:docs/archive/research/2026-04-12_deep-skill-opportunities.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "from_file": "docs/archive/specs",
+      "raw_ref": "docs/archive/specs",
+      "source": "dir:docs/archive/specs",
+      "target": "file:docs/archive/specs/case-based-memory-context-graph.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "from_file": "docs/archive/specs",
+      "raw_ref": "docs/archive/specs",
+      "source": "dir:docs/archive/specs",
+      "target": "file:docs/archive/specs/meta-harness-automation.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-04-02_run-artifacts-risk-analysis.md",
+      "from_file": "docs/archive/specs",
+      "raw_ref": "docs/archive/specs",
+      "source": "dir:docs/archive/specs",
+      "target": "file:docs/archive/specs/orchestrator-subagent-loop.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-04-03_ralf-form-factor-proposal.md",
+      "from_file": "docs/archive/specs",
+      "raw_ref": "docs/archive/specs",
+      "source": "dir:docs/archive/specs",
+      "target": "file:docs/archive/specs/runtime-surface.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md",
+      "from_file": "docs/archive/specs",
+      "raw_ref": "docs/archive/specs",
+      "source": "dir:docs/archive/specs",
+      "target": "file:docs/archive/specs/skill-self-healing.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "type": "directory-contains"
-    },
-    {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
-      "type": "directory-contains"
-    },
-    {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
-      "type": "directory-contains"
-    },
-    {
-      "from_file": "docs/research/web-research",
-      "raw_ref": "docs/research/web-research",
-      "source": "dir:docs/research/web-research",
-      "target": "file:docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "from_file": "docs/doc-audit",
+      "raw_ref": "docs/doc-audit",
+      "source": "dir:docs/doc-audit",
+      "target": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
       "type": "directory-contains"
     },
     {
@@ -719,9 +698,16 @@
     },
     {
       "from_file": "AGENTS.md",
-      "raw_ref": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
       "source": "file:AGENTS.md",
-      "target": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "AGENTS.md",
+      "raw_ref": "docs/features/registry.jsonl",
+      "source": "file:AGENTS.md",
+      "target": "file:docs/features/registry.jsonl",
       "type": "literal-path"
     },
     {
@@ -729,6 +715,13 @@
       "raw_ref": "docs/skills/system.md",
       "source": "file:AGENTS.md",
       "target": "file:docs/skills/system.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "AGENTS.md",
+      "raw_ref": "docs/sources/registry.jsonl",
+      "source": "file:AGENTS.md",
+      "target": "file:docs/sources/registry.jsonl",
       "type": "literal-path"
     },
     {
@@ -1328,16 +1321,9 @@
     },
     {
       "from_file": "README.md",
-      "raw_ref": "./docs/assets/farplane-hero.png",
+      "raw_ref": "./assets/farplane-hero.png",
       "source": "file:README.md",
-      "target": "file:docs/assets/farplane-hero.png",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "README.md",
-      "raw_ref": "./docs/assets/farplane-hero.png",
-      "source": "file:README.md",
-      "target": "file:docs/assets/farplane-hero.png",
+      "target": "file:assets/farplane-hero.png",
       "type": "markdown-link"
     },
     {
@@ -1468,9 +1454,9 @@
     },
     {
       "from_file": "agents/convex-builder.toml",
-      "raw_ref": "docs/research/",
+      "raw_ref": "docs/archive/research/",
       "source": "file:agents/convex-builder.toml",
-      "target": "dir:docs/research",
+      "target": "dir:docs/archive/research",
       "type": "literal-path"
     },
     {
@@ -1489,23 +1475,9 @@
     },
     {
       "from_file": "agents/deep-researcher.toml",
-      "raw_ref": "docs/research/web-research/",
-      "source": "file:agents/deep-researcher.toml",
-      "target": "dir:docs/research/web-research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "agents/deep-researcher.toml",
       "raw_ref": "README.md",
       "source": "file:agents/deep-researcher.toml",
       "target": "file:README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "agents/documentation-maintainer.toml",
-      "raw_ref": "docs/research/",
-      "source": "file:agents/documentation-maintainer.toml",
-      "target": "dir:docs/research",
       "type": "literal-path"
     },
     {
@@ -1520,6 +1492,20 @@
       "raw_ref": "README.md",
       "source": "file:agents/documentation-maintainer.toml",
       "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/documentation-searcher.toml",
+      "raw_ref": "docs/archive/research/",
+      "source": "file:agents/documentation-searcher.toml",
+      "target": "dir:docs/archive/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/documentation-searcher.toml",
+      "raw_ref": "docs/sources/registry.jsonl",
+      "source": "file:agents/documentation-searcher.toml",
+      "target": "file:docs/sources/registry.jsonl",
       "type": "literal-path"
     },
     {
@@ -1545,9 +1531,9 @@
     },
     {
       "from_file": "agents/librarian.toml",
-      "raw_ref": "docs/research/",
+      "raw_ref": "docs/archive/research/",
       "source": "file:agents/librarian.toml",
-      "target": "dir:docs/research",
+      "target": "dir:docs/archive/research",
       "type": "literal-path"
     },
     {
@@ -1572,17 +1558,31 @@
       "type": "literal-path"
     },
     {
-      "from_file": "agents/memory.toml",
-      "raw_ref": "docs/research/",
-      "source": "file:agents/memory.toml",
-      "target": "dir:docs/research",
+      "from_file": "agents/librarian.toml",
+      "raw_ref": "docs/features/registry.jsonl",
+      "source": "file:agents/librarian.toml",
+      "target": "file:docs/features/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/librarian.toml",
+      "raw_ref": "docs/sources/registry.jsonl",
+      "source": "file:agents/librarian.toml",
+      "target": "file:docs/sources/registry.jsonl",
       "type": "literal-path"
     },
     {
       "from_file": "agents/memory.toml",
-      "raw_ref": "docs/research/web-research/",
+      "raw_ref": "docs/archive/research/",
       "source": "file:agents/memory.toml",
-      "target": "dir:docs/research/web-research",
+      "target": "dir:docs/archive/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/memory.toml",
+      "raw_ref": "docs/doc-audit/",
+      "source": "file:agents/memory.toml",
+      "target": "dir:docs/doc-audit",
       "type": "literal-path"
     },
     {
@@ -1594,16 +1594,37 @@
     },
     {
       "from_file": "agents/memory.toml",
+      "raw_ref": "docs/LESSONS.md",
+      "source": "file:agents/memory.toml",
+      "target": "file:docs/LESSONS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/memory.toml",
       "raw_ref": "docs/MEMORY.md",
       "source": "file:agents/memory.toml",
       "target": "file:docs/MEMORY.md",
       "type": "literal-path"
     },
     {
-      "from_file": "agents/planner-agent.toml",
-      "raw_ref": "docs/research/",
-      "source": "file:agents/planner-agent.toml",
-      "target": "dir:docs/research",
+      "from_file": "agents/memory.toml",
+      "raw_ref": "docs/TROUBLES.md",
+      "source": "file:agents/memory.toml",
+      "target": "file:docs/TROUBLES.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/memory.toml",
+      "raw_ref": "docs/features/registry.jsonl",
+      "source": "file:agents/memory.toml",
+      "target": "file:docs/features/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/memory.toml",
+      "raw_ref": "docs/sources/registry.jsonl",
+      "source": "file:agents/memory.toml",
+      "target": "file:docs/sources/registry.jsonl",
       "type": "literal-path"
     },
     {
@@ -2350,9 +2371,9 @@
     },
     {
       "from_file": "docs/HISTORY.md",
-      "raw_ref": "docs/policies/",
+      "raw_ref": "docs/archive/research/",
       "source": "file:docs/HISTORY.md",
-      "target": "dir:docs/policies",
+      "target": "dir:docs/archive/research",
       "type": "literal-path"
     },
     {
@@ -2416,6 +2437,13 @@
       "raw_ref": "qa/cookbook",
       "source": "file:docs/HISTORY.md",
       "target": "file:qa/cookbook/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/HISTORY.md",
+      "raw_ref": "skills/diagramming",
+      "source": "file:docs/HISTORY.md",
+      "target": "file:skills/diagramming/README.md",
       "type": "literal-path"
     },
     {
@@ -2490,9 +2518,9 @@
     },
     {
       "from_file": "docs/MEMORY.md",
-      "raw_ref": "docs/research/",
+      "raw_ref": "docs/archive/research/",
       "source": "file:docs/MEMORY.md",
-      "target": "dir:docs/research",
+      "target": "dir:docs/archive/research",
       "type": "literal-path"
     },
     {
@@ -2724,6 +2752,279 @@
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:docs/TROUBLES.md",
       "target": "file:templates/global/AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "AGENTS.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "PROJECT_RULES.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:PROJECT_RULES.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "README.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "agents/deep-researcher.toml",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:agents/deep-researcher.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "agents/documentation-maintainer.toml",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:agents/documentation-maintainer.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "agents/documentation-searcher.toml",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:agents/documentation-searcher.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "agents/explore.toml",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:agents/explore.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "agents/memory.toml",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:agents/memory.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "agents/planner-agent.toml",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:agents/planner-agent.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "agents/qa-tester.toml",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:agents/qa-tester.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/HISTORY.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:docs/HISTORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/MEMORY.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:docs/MEMORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/TASTE.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:docs/TASTE.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/TROUBLES.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:docs/TROUBLES.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/prd.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:docs/prd.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "skills/prd/SKILL.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:skills/prd/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "skills/runtime-debugging/SKILL.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:skills/runtime-debugging/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "skills/spec-to-ticket/SKILL.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:skills/spec-to-ticket/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "skills/visual-qa/SKILL.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:skills/visual-qa/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "tickets/templates/ticket.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:tickets/templates/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "raw_ref": "AGENTS.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "target": "file:AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "raw_ref": "README.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "raw_ref": "skills/ralph",
+      "source": "file:docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "target": "file:skills/ralph/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "raw_ref": "skills/ralph/SKILL.md",
+      "source": "file:docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "target": "file:skills/ralph/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "templates/external-cli/profiles/frontend-pi-kimi/",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "dir:templates/external-cli/profiles/frontend-pi-kimi",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "AGENTS.md",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "ARCHITECTURE.md",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:ARCHITECTURE.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "README.md",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "bin/delegate_cli_agent.py",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:bin/delegate_cli_agent.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "docs/specs/harness-techniques.md",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:docs/specs/harness-techniques.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "skills/delegate-cli/",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:skills/delegate-cli/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "skills/delegate-frontend/",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:skills/delegate-frontend/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "templates/external-cli/adapters/pi/",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:templates/external-cli/adapters/pi/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "templates/global/AGENTS.md",
+      "source": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "file:templates/global/AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "raw_ref": "skills/landing-page/scripts/scroll_scrub_qa.cjs",
+      "source": "file:docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "target": "file:skills/landing-page/scripts/scroll_scrub_qa.cjs",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "raw_ref": "README.md",
+      "source": "file:docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "raw_ref": "AGENTS.md",
+      "source": "file:docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "target": "file:AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "raw_ref": "README.md",
+      "source": "file:docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "raw_ref": "docs/skills/README.md",
+      "source": "file:docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "target": "file:docs/skills/README.md",
       "type": "literal-path"
     },
     {
@@ -2976,6 +3277,118 @@
       "raw_ref": "skills/skill-maintenance",
       "source": "file:docs/archive/specs/skill-self-healing.md",
       "target": "file:skills/skill-maintenance/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/archive/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "dir:docs/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/archive/research/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "dir:docs/archive/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/archive/specs/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "dir:docs/archive/specs",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/doc-audit/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "dir:docs/doc-audit",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/review/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "dir:docs/review",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "AGENTS.md",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "ARCHITECTURE.md",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:ARCHITECTURE.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "README.md",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/features/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:docs/features/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/skills/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:docs/skills/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/sources/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:docs/sources/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/specs/",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:docs/specs/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/specs/doc-governance.md",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:docs/specs/doc-governance.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/specs/first-principles-planning.md",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:docs/specs/first-principles-planning.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "docs/specs/spec-authoring-contract.md",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:docs/specs/spec-authoring-contract.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "raw_ref": "skills/diagramming/SKILL.md",
+      "source": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "target": "file:skills/diagramming/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -4239,293 +4652,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/research/",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "dir:docs/research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/research/web-research/",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "dir:docs/research/web-research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "AGENTS.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "PROJECT_RULES.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:PROJECT_RULES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "README.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "agents/deep-researcher.toml",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:agents/deep-researcher.toml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "agents/documentation-maintainer.toml",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:agents/documentation-maintainer.toml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "agents/documentation-searcher.toml",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:agents/documentation-searcher.toml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "agents/explore.toml",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:agents/explore.toml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "agents/memory.toml",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:agents/memory.toml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "agents/planner-agent.toml",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:agents/planner-agent.toml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "agents/qa-tester.toml",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:agents/qa-tester.toml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/HISTORY.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:docs/HISTORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/MEMORY.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:docs/MEMORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/TASTE.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:docs/TASTE.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/prd.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:docs/prd.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "skills/prd/SKILL.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:skills/prd/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "skills/runtime-debugging/SKILL.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:skills/runtime-debugging/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "skills/spec-to-ticket/SKILL.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:skills/spec-to-ticket/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "skills/visual-qa/SKILL.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:skills/visual-qa/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "raw_ref": "AGENTS.md",
-      "source": "file:docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "target": "file:AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "raw_ref": "README.md",
-      "source": "file:docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "target": "file:README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "raw_ref": "skills/ralph",
-      "source": "file:docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "target": "file:skills/ralph/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "raw_ref": "skills/ralph/SKILL.md",
-      "source": "file:docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "target": "file:skills/ralph/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "templates/external-cli/profiles/frontend-pi-kimi/",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "dir:templates/external-cli/profiles/frontend-pi-kimi",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "AGENTS.md",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "ARCHITECTURE.md",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:ARCHITECTURE.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "README.md",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "bin/delegate_cli_agent.py",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:bin/delegate_cli_agent.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "docs/specs/harness-techniques.md",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:docs/specs/harness-techniques.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "skills/delegate-cli/",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:skills/delegate-cli/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "skills/delegate-frontend/",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:skills/delegate-frontend/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "templates/external-cli/adapters/pi/",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:templates/external-cli/adapters/pi/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "templates/global/AGENTS.md",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:templates/global/AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
-      "raw_ref": "skills/landing-page/scripts/scroll_scrub_qa.cjs",
-      "source": "file:docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
-      "target": "file:skills/landing-page/scripts/scroll_scrub_qa.cjs",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
-      "raw_ref": "README.md",
-      "source": "file:docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
-      "target": "file:README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
-      "raw_ref": "AGENTS.md",
-      "source": "file:docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
-      "target": "file:AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
-      "raw_ref": "README.md",
-      "source": "file:docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
-      "target": "file:README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
-      "raw_ref": "docs/skills/README.md",
-      "source": "file:docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
-      "target": "file:docs/skills/README.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/review/rubrics/prompt-quality.md",
       "raw_ref": "docs/LESSONS.md",
       "source": "file:docs/review/rubrics/prompt-quality.md",
@@ -5570,16 +5696,16 @@
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "raw_ref": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "target": "file:docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
       "type": "literal-path"
     },
     {
@@ -5696,9 +5822,9 @@
     },
     {
       "from_file": "docs/specs/README.md",
-      "raw_ref": "docs/research/",
+      "raw_ref": "docs/archive/research/",
       "source": "file:docs/specs/README.md",
-      "target": "dir:docs/research",
+      "target": "dir:docs/archive/research",
       "type": "literal-path"
     },
     {
@@ -5870,20 +5996,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/diagram-first-conventions.md",
-      "raw_ref": "skills/diagramming/SKILL.md",
-      "source": "file:docs/specs/diagram-first-conventions.md",
-      "target": "file:skills/diagramming/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/diagram-first-conventions.md",
-      "raw_ref": "../../skills/diagramming/SKILL.md",
-      "source": "file:docs/specs/diagram-first-conventions.md",
-      "target": "file:skills/diagramming/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "docs/specs/doc-governance.md",
       "raw_ref": "AGENTS.md",
       "source": "file:docs/specs/doc-governance.md",
@@ -5997,9 +6109,9 @@
     },
     {
       "from_file": "docs/specs/filesystem-lifecycle.md",
-      "raw_ref": "docs/research/",
+      "raw_ref": "docs/archive/research/",
       "source": "file:docs/specs/filesystem-lifecycle.md",
-      "target": "dir:docs/research",
+      "target": "dir:docs/archive/research",
       "type": "literal-path"
     },
     {
@@ -8804,13 +8916,6 @@
     },
     {
       "from_file": "skills/deep-interview/SKILL.md",
-      "raw_ref": "docs/research/",
-      "source": "skill:deep-interview",
-      "target": "dir:docs/research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/deep-interview/SKILL.md",
       "raw_ref": "docs/prd.md",
       "source": "skill:deep-interview",
       "target": "file:docs/prd.md",
@@ -9335,38 +9440,38 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-impl-plan.md",
+      "raw_ref": "docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "source": "skill:delegate-frontend",
+      "target": "file:docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
+      "raw_ref": "docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "source": "skill:delegate-frontend",
+      "target": "file:docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-impl-plan.md",
+      "raw_ref": "docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "source": "skill:delegate-frontend",
+      "target": "file:docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
+      "raw_ref": "docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "source": "skill:delegate-frontend",
+      "target": "file:docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
       "raw_ref": "docs/prd.md",
       "source": "skill:delegate-frontend",
       "target": "file:docs/prd.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-impl-plan.md",
-      "raw_ref": "docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
-      "source": "skill:delegate-frontend",
-      "target": "file:docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
-      "raw_ref": "docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
-      "source": "skill:delegate-frontend",
-      "target": "file:docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-impl-plan.md",
-      "raw_ref": "docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
-      "source": "skill:delegate-frontend",
-      "target": "file:docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-plan-review.json",
-      "raw_ref": "docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
-      "source": "skill:delegate-frontend",
-      "target": "file:docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
       "type": "literal-path"
     },
     {
@@ -9966,24 +10071,10 @@
     },
     {
       "from_file": "skills/diagramming/AGENTS.md",
-      "raw_ref": "docs/specs/diagram-first-conventions.md",
+      "raw_ref": "skills/diagramming/SKILL.md",
       "source": "skill:diagramming",
-      "target": "file:docs/specs/diagram-first-conventions.md",
+      "target": "file:skills/diagramming/SKILL.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/diagramming/SKILL.md",
-      "raw_ref": "docs/specs/diagram-first-conventions.md",
-      "source": "skill:diagramming",
-      "target": "file:docs/specs/diagram-first-conventions.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/diagramming/SKILL.md",
-      "raw_ref": "../../docs/specs/diagram-first-conventions.md",
-      "source": "skill:diagramming",
-      "target": "file:docs/specs/diagram-first-conventions.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/diagramming/README.md",
@@ -11852,27 +11943,6 @@
       "raw_ref": "docs/specs/",
       "source": "skill:impl-plan",
       "target": "file:docs/specs/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/impl-plan/AGENTS.md",
-      "raw_ref": "docs/specs/diagram-first-conventions.md",
-      "source": "skill:impl-plan",
-      "target": "file:docs/specs/diagram-first-conventions.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/impl-plan/SKILL.md",
-      "raw_ref": "docs/specs/diagram-first-conventions.md",
-      "source": "skill:impl-plan",
-      "target": "file:docs/specs/diagram-first-conventions.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/impl-plan/prompts/plan.md",
-      "raw_ref": "docs/specs/diagram-first-conventions.md",
-      "source": "skill:impl-plan",
-      "target": "file:docs/specs/diagram-first-conventions.md",
       "type": "literal-path"
     },
     {
@@ -13816,9 +13886,9 @@
     },
     {
       "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
-      "raw_ref": "docs/research/",
+      "raw_ref": "docs/archive/research/",
       "source": "skill:skill-maintenance",
-      "target": "dir:docs/research",
+      "target": "dir:docs/archive/research",
       "type": "literal-path"
     },
     {
@@ -14474,13 +14544,6 @@
     },
     {
       "from_file": "skills/spec-to-ticket/SKILL.md",
-      "raw_ref": "docs/specs/diagram-first-conventions.md",
-      "source": "skill:spec-to-ticket",
-      "target": "file:docs/specs/diagram-first-conventions.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/spec-to-ticket/SKILL.md",
       "raw_ref": "docs/specs/first-principles-planning.md",
       "source": "skill:spec-to-ticket",
       "target": "file:docs/specs/first-principles-planning.md",
@@ -15110,7 +15173,7 @@
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-06-11T16:52:43+00:00",
+  "generated_at": "2026-06-11T17:13:42+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -15281,10 +15344,10 @@
       "path": "docs/archive/specs/skill-self-healing.md"
     },
     {
-      "id": "file:docs/assets/farplane-hero.png",
+      "id": "file:docs/doc-audit/2026-06-12-docs-structure-audit.md",
       "kind": "doc",
-      "label": "docs/assets/farplane-hero.png",
-      "path": "docs/assets/farplane-hero.png"
+      "label": "docs/doc-audit/2026-06-12-docs-structure-audit.md",
+      "path": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
       "id": "file:docs/doc-audit/generated/doc-reference-report.md",
@@ -15353,28 +15416,40 @@
       "path": "docs/sources/validate_sources.py"
     },
     {
+      "id": "file:assets/farplane-hero.png",
+      "kind": "file",
+      "label": "assets/farplane-hero.png",
+      "path": "assets/farplane-hero.png"
+    },
+    {
       "id": "dir:docs/archive",
       "kind": "file",
       "label": "docs/archive/",
       "path": "docs/archive"
     },
     {
-      "id": "dir:docs/policies",
+      "id": "dir:docs/archive/research",
       "kind": "file",
-      "label": "docs/policies/",
-      "path": "docs/policies"
+      "label": "docs/archive/research/",
+      "path": "docs/archive/research"
     },
     {
-      "id": "dir:docs/research",
+      "id": "dir:docs/archive/specs",
       "kind": "file",
-      "label": "docs/research/",
-      "path": "docs/research"
+      "label": "docs/archive/specs/",
+      "path": "docs/archive/specs"
     },
     {
-      "id": "dir:docs/research/web-research",
+      "id": "dir:docs/doc-audit",
       "kind": "file",
-      "label": "docs/research/web-research/",
-      "path": "docs/research/web-research"
+      "label": "docs/doc-audit/",
+      "path": "docs/doc-audit"
+    },
+    {
+      "id": "dir:docs/review",
+      "kind": "file",
+      "label": "docs/review/",
+      "path": "docs/review"
     },
     {
       "id": "file:experiments/README.md",
@@ -17807,70 +17882,70 @@
       "path": "tickets/templates/ticket.md"
     },
     {
-      "id": "file:docs/research/2026-04-12_deep-skill-opportunities.md",
+      "id": "file:docs/archive/research/2026-04-12_deep-skill-opportunities.md",
       "kind": "research",
-      "label": "docs/research/2026-04-12_deep-skill-opportunities.md",
-      "path": "docs/research/2026-04-12_deep-skill-opportunities.md"
+      "label": "docs/archive/research/2026-04-12_deep-skill-opportunities.md",
+      "path": "docs/archive/research/2026-04-12_deep-skill-opportunities.md"
     },
     {
-      "id": "file:docs/research/code-reviews/2026-04-05_ralph-prototype_review.md",
+      "id": "file:docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md",
       "kind": "research",
-      "label": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md",
-      "path": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+      "label": "docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md",
+      "path": "docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "id": "file:docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "path": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+      "label": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "path": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "id": "file:docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
-      "path": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+      "label": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "path": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-04-02_run-artifacts-risk-analysis.md",
+      "id": "file:docs/archive/research/web-research/2026-04-02_run-artifacts-risk-analysis.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-04-02_run-artifacts-risk-analysis.md",
-      "path": "docs/research/web-research/2026-04-02_run-artifacts-risk-analysis.md"
+      "label": "docs/archive/research/web-research/2026-04-02_run-artifacts-risk-analysis.md",
+      "path": "docs/archive/research/web-research/2026-04-02_run-artifacts-risk-analysis.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-04-03_ralf-form-factor-proposal.md",
+      "id": "file:docs/archive/research/web-research/2026-04-03_ralf-form-factor-proposal.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-04-03_ralf-form-factor-proposal.md",
-      "path": "docs/research/web-research/2026-04-03_ralf-form-factor-proposal.md"
+      "label": "docs/archive/research/web-research/2026-04-03_ralf-form-factor-proposal.md",
+      "path": "docs/archive/research/web-research/2026-04-03_ralf-form-factor-proposal.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md",
+      "id": "file:docs/archive/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md",
-      "path": "docs/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md"
+      "label": "docs/archive/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md",
+      "path": "docs/archive/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "id": "file:docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "path": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
+      "label": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "path": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "id": "file:docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
-      "path": "docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md"
+      "label": "docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "path": "docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "id": "file:docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
-      "path": "docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md"
+      "label": "docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "path": "docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md"
     },
     {
-      "id": "file:docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "id": "file:docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
       "kind": "research",
-      "label": "docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
-      "path": "docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md"
+      "label": "docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "path": "docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md"
     },
     {
       "id": "dir:docs/review/rubrics",
@@ -18905,12 +18980,6 @@
       "path": "docs/specs/context-and-handoff-policy.md"
     },
     {
-      "id": "file:docs/specs/diagram-first-conventions.md",
-      "kind": "spec",
-      "label": "docs/specs/diagram-first-conventions.md",
-      "path": "docs/specs/diagram-first-conventions.md"
-    },
-    {
       "id": "file:docs/specs/doc-governance.md",
       "kind": "spec",
       "label": "docs/specs/doc-governance.md",
@@ -19010,16 +19079,6 @@
   "schema_version": "1.0.0",
   "unresolved_refs": [
     {
-      "candidate": "docs/research/web-research/2026-04-02_farplane-change-proposal.md",
-      "raw_ref": "docs/research/web-research/2026-04-02_farplane-change-proposal.md",
-      "source": "AGENTS.md"
-    },
-    {
-      "candidate": "docs/research/web-research/2026-04-02_farplane-vs-omx-gap-analysis.md",
-      "raw_ref": "docs/research/web-research/2026-04-02_farplane-vs-omx-gap-analysis.md",
-      "source": "AGENTS.md"
-    },
-    {
       "candidate": "tickets/TASK-",
       "raw_ref": "tickets/TASK-",
       "source": "ARCHITECTURE.md"
@@ -19028,20 +19087,10 @@
       "candidate": "tickets/TASK-",
       "raw_ref": "tickets/TASK-",
       "source": "ARCHITECTURE.md"
-    },
-    {
-      "candidate": "docs/research/design/YYYY-MM-DD_HHMMSS_asset-exploration.md",
-      "raw_ref": "docs/research/design/YYYY-MM-DD_HHMMSS_asset-exploration.md",
-      "source": "agents/asset-generator.toml"
     },
     {
       "candidate": "docs/progress.md",
       "raw_ref": "docs/progress.md",
-      "source": "agents/convex-builder.toml"
-    },
-    {
-      "candidate": "docs/research/convex-builder/YYYY-MM-DD_",
-      "raw_ref": "docs/research/convex-builder/YYYY-MM-DD_",
       "source": "agents/convex-builder.toml"
     },
     {
@@ -19065,9 +19114,9 @@
       "source": "agents/deep-researcher.toml"
     },
     {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "agents/documentation-maintainer.toml"
+      "candidate": "experiments/research",
+      "raw_ref": "experiments/research/",
+      "source": "agents/deep-researcher.toml"
     },
     {
       "candidate": "docs/progress.md",
@@ -19120,38 +19169,18 @@
       "source": "agents/documentation-maintainer.toml"
     },
     {
-      "candidate": "docs/research/analysis_Y.md",
-      "raw_ref": "docs/research/analysis_Y.md",
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
       "source": "agents/documentation-maintainer.toml"
     },
     {
-      "candidate": "docs/research/explorer/YYYY-MM-DD_topic.md",
-      "raw_ref": "docs/research/explorer/YYYY-MM-DD_topic.md",
-      "source": "agents/documentation-maintainer.toml"
-    },
-    {
-      "candidate": "docs/research/remote-documentation",
-      "raw_ref": "docs/research/remote-documentation/",
-      "source": "agents/documentation-searcher.toml"
-    },
-    {
-      "candidate": "docs/research/remote-documentation",
-      "raw_ref": "docs/research/remote-documentation/",
-      "source": "agents/documentation-searcher.toml"
-    },
-    {
-      "candidate": "docs/research/remote-documentation/YYYY-MM-DD_",
-      "raw_ref": "docs/research/remote-documentation/YYYY-MM-DD_",
+      "candidate": "experiments/research",
+      "raw_ref": "experiments/research/",
       "source": "agents/documentation-searcher.toml"
     },
     {
       "candidate": "docs/research/design",
       "raw_ref": "docs/research/design/",
-      "source": "agents/frontend-designer.toml"
-    },
-    {
-      "candidate": "docs/research/design/YYYY-MM-DD_",
-      "raw_ref": "docs/research/design/YYYY-MM-DD_",
       "source": "agents/frontend-designer.toml"
     },
     {
@@ -19170,38 +19199,13 @@
       "source": "agents/librarian.toml"
     },
     {
-      "candidate": "docs/research/librarian",
-      "raw_ref": "docs/research/librarian/",
+      "candidate": "experiments/research",
+      "raw_ref": "experiments/research/",
       "source": "agents/librarian.toml"
     },
     {
       "candidate": "docs/progress.md",
       "raw_ref": "docs/progress.md",
-      "source": "agents/memory.toml"
-    },
-    {
-      "candidate": "docs/research/explorer",
-      "raw_ref": "docs/research/explorer/",
-      "source": "agents/memory.toml"
-    },
-    {
-      "candidate": "docs/research/librarian",
-      "raw_ref": "docs/research/librarian/",
-      "source": "agents/memory.toml"
-    },
-    {
-      "candidate": "docs/research/qa-testing",
-      "raw_ref": "docs/research/qa-testing/",
-      "source": "agents/memory.toml"
-    },
-    {
-      "candidate": "docs/research/remote-documentation",
-      "raw_ref": "docs/research/remote-documentation/",
-      "source": "agents/memory.toml"
-    },
-    {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
       "source": "agents/planner-agent.toml"
     },
     {
@@ -19225,13 +19229,13 @@
       "source": "agents/planner-agent.toml"
     },
     {
-      "candidate": "docs/research/librarian/2025-12-30_express_rate_limiting.md",
-      "raw_ref": "docs/research/librarian/2025-12-30_express_rate_limiting.md",
+      "candidate": "experiments/research/2025-12-30_express_rate_limit_docs.md",
+      "raw_ref": "experiments/research/2025-12-30_express_rate_limit_docs.md",
       "source": "agents/planner-agent.toml"
     },
     {
-      "candidate": "docs/research/remote-documentation/2025-12-30_express_rate_limit_docs.md",
-      "raw_ref": "docs/research/remote-documentation/2025-12-30_express_rate_limit_docs.md",
+      "candidate": "experiments/research/2025-12-30_express_rate_limiting.md",
+      "raw_ref": "experiments/research/2025-12-30_express_rate_limiting.md",
       "source": "agents/planner-agent.toml"
     },
     {
@@ -19415,8 +19419,23 @@
       "source": "bin/test_tmux_helper.py"
     },
     {
+      "candidate": "docs/assets",
+      "raw_ref": "docs/assets/",
+      "source": "docs/HISTORY.md"
+    },
+    {
       "candidate": "docs/checks/commit/push",
       "raw_ref": "docs/checks/commit/push",
+      "source": "docs/HISTORY.md"
+    },
+    {
+      "candidate": "docs/policies",
+      "raw_ref": "docs/policies/",
+      "source": "docs/HISTORY.md"
+    },
+    {
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
       "source": "docs/HISTORY.md"
     },
     {
@@ -19475,6 +19494,496 @@
       "source": "docs/TROUBLES.md"
     },
     {
+      "candidate": "bin/ralph_judge.py:227",
+      "raw_ref": "bin/ralph_judge.py:227",
+      "source": "docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+    },
+    {
+      "candidate": "bin/ralph_orchestrate.py:226",
+      "raw_ref": "bin/ralph_orchestrate.py:226",
+      "source": "docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+    },
+    {
+      "candidate": "bin/stop_hook.py:157",
+      "raw_ref": "bin/stop_hook.py:157",
+      "source": "docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+    },
+    {
+      "candidate": "bin/stop_hook.py:259",
+      "raw_ref": "bin/stop_hook.py:259",
+      "source": "docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+    },
+    {
+      "candidate": "experiments/run_ralph_smoke_evals.py:251",
+      "raw_ref": "experiments/run_ralph_smoke_evals.py:251",
+      "source": "docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/research/explorer",
+      "raw_ref": "docs/research/explorer/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/research/remote-documentation",
+      "raw_ref": "docs/research/remote-documentation/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/runs",
+      "raw_ref": "docs/runs/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "docs/runs",
+      "raw_ref": "docs/runs/",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "skills/tech-impl-plan/SKILL.md",
+      "raw_ref": "skills/tech-impl-plan/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "tickets/INDEX.md",
+      "raw_ref": "tickets/INDEX.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "tickets/INDEX.md",
+      "raw_ref": "tickets/INDEX.md",
+      "source": "docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/README.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/README.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/README.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/README.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/prompts/executor.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/prompts/executor.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/prompts/executor.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/prompts/executor.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/cancel/SKILL.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/cancel/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/cancel/SKILL.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/cancel/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/ralph/SKILL.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/ralph/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/ralph/SKILL.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/ralph/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/team/SKILL.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/team/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/team/SKILL.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/team/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/index.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/index.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/ralph.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/ralph.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/ralph.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/ralph.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/setup.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/setup.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/setup.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/setup.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/config/generator.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/config/generator.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/config/generator.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/config/generator.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-detector.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-detector.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-detector.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-detector.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-registry.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-registry.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-registry.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-registry.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/session.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/session.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/session.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/session.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hud/index.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hud/index.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/memory-server.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/memory-server.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/openclaw/index.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/openclaw/index.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/persistence.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/persistence.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/persistence.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/persistence.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/scripts/notify-hook.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/scripts/notify-hook.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/scripts/notify-hook.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/scripts/notify-hook.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/verification/verifier.ts",
+      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/verification/verifier.ts",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "skills/cancel/SKILL.md",
+      "raw_ref": "skills/cancel/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "skills/cancel/SKILL.md",
+      "raw_ref": "skills/cancel/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "skills/team/SKILL.md",
+      "raw_ref": "skills/team/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "skills/team/SKILL.md",
+      "raw_ref": "skills/team/SKILL.md",
+      "source": "docs/archive/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
+    },
+    {
+      "candidate": "docs/memory",
+      "raw_ref": "docs/memory",
+      "source": "docs/archive/research/web-research/2026-04-02_run-artifacts-risk-analysis.md"
+    },
+    {
+      "candidate": "docs/progress",
+      "raw_ref": "docs/progress",
+      "source": "docs/archive/research/web-research/2026-04-03_ralf-form-factor-proposal.md"
+    },
+    {
+      "candidate": "bin/delegate_frontend_pi.py",
+      "raw_ref": "bin/delegate_frontend_pi.py",
+      "source": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
+    },
+    {
+      "candidate": "skills/context",
+      "raw_ref": "skills/context",
+      "source": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
+    },
+    {
+      "candidate": "templates/external-cli/adapters/bog",
+      "raw_ref": "templates/external-cli/adapters/bog/",
+      "source": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
+    },
+    {
+      "candidate": "tickets/TASK-",
+      "raw_ref": "tickets/TASK-",
+      "source": "docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md"
+    },
+    {
+      "candidate": "/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md",
+      "source": "docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md"
+    },
+    {
       "candidate": "docs/specs/case-based-memory-context-graph.md",
       "raw_ref": "docs/specs/case-based-memory-context-graph.md",
       "source": "docs/archive/specs/case-based-memory-context-graph.md"
@@ -19500,514 +20009,74 @@
       "source": "docs/archive/specs/runtime-surface.md"
     },
     {
-      "candidate": "tickets/archive/TASK-0100/ticket.md",
-      "raw_ref": "tickets/archive/TASK-0100/ticket.md",
-      "source": "docs/features/README.md"
+      "candidate": "docs/assets",
+      "raw_ref": "docs/assets/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "bin/ralph_judge.py:227",
-      "raw_ref": "bin/ralph_judge.py:227",
-      "source": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+      "candidate": "docs/assets/farplane-hero.png",
+      "raw_ref": "docs/assets/farplane-hero.png",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "bin/ralph_orchestrate.py:226",
-      "raw_ref": "bin/ralph_orchestrate.py:226",
-      "source": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+      "candidate": "docs/policies",
+      "raw_ref": "docs/policies",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "bin/stop_hook.py:157",
-      "raw_ref": "bin/stop_hook.py:157",
-      "source": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+      "candidate": "docs/policies",
+      "raw_ref": "docs/policies/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "bin/stop_hook.py:259",
-      "raw_ref": "bin/stop_hook.py:259",
-      "source": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+      "candidate": "docs/policies",
+      "raw_ref": "docs/policies/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "experiments/run_ralph_smoke_evals.py:251",
-      "raw_ref": "experiments/run_ralph_smoke_evals.py:251",
-      "source": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md"
+      "candidate": "docs/policies",
+      "raw_ref": "docs/policies/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+      "candidate": "docs/research",
+      "raw_ref": "docs/research/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
-    },
-    {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
-    },
-    {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+      "candidate": "docs/research/design",
+      "raw_ref": "docs/research/design/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
       "candidate": "docs/research/explorer",
       "raw_ref": "docs/research/explorer/",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
+    },
+    {
+      "candidate": "docs/research/librarian",
+      "raw_ref": "docs/research/librarian/",
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     },
     {
       "candidate": "docs/research/remote-documentation",
       "raw_ref": "docs/research/remote-documentation/",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
-    },
-    {
-      "candidate": "docs/runs",
-      "raw_ref": "docs/runs/",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
-    },
-    {
-      "candidate": "docs/runs",
-      "raw_ref": "docs/runs/",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
-    },
-    {
-      "candidate": "skills/tech-impl-plan/SKILL.md",
-      "raw_ref": "skills/tech-impl-plan/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
-    },
-    {
-      "candidate": "tickets/INDEX.md",
-      "raw_ref": "tickets/INDEX.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
-    },
-    {
-      "candidate": "tickets/INDEX.md",
-      "raw_ref": "tickets/INDEX.md",
-      "source": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/AGENTS.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/README.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/README.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/README.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/README.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/prompts/executor.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/prompts/executor.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/prompts/executor.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/prompts/executor.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/cancel/SKILL.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/cancel/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/cancel/SKILL.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/cancel/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/ralph/SKILL.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/ralph/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/ralph/SKILL.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/ralph/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/team/SKILL.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/team/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/team/SKILL.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/skills/team/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/index.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/index.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/ralph.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/ralph.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/ralph.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/ralph.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/setup.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/setup.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/setup.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/setup.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/cli/team.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/config/generator.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/config/generator.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/config/generator.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/config/generator.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-detector.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-detector.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-detector.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-detector.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-registry.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-registry.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-registry.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/keyword-registry.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/session.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/session.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/session.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hooks/session.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hud/index.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/hud/index.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/memory-server.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/memory-server.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-paths.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/mcp/state-server.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/openclaw/index.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/openclaw/index.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/contract.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/persistence.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/persistence.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/persistence.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/ralph/persistence.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/scripts/notify-hook.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/scripts/notify-hook.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/scripts/notify-hook.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/scripts/notify-hook.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/runtime.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/locks.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/state/tasks.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/team/worktree.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/oh-my-codex/src/verification/verifier.ts",
-      "raw_ref": "/Users/kenjipcx/coding-harness/oh-my-codex/src/verification/verifier.ts",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "skills/cancel/SKILL.md",
-      "raw_ref": "skills/cancel/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "skills/cancel/SKILL.md",
-      "raw_ref": "skills/cancel/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "skills/team/SKILL.md",
-      "raw_ref": "skills/team/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "skills/team/SKILL.md",
-      "raw_ref": "skills/team/SKILL.md",
-      "source": "docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md"
-    },
-    {
-      "candidate": "docs/memory",
-      "raw_ref": "docs/memory",
-      "source": "docs/research/web-research/2026-04-02_run-artifacts-risk-analysis.md"
-    },
-    {
-      "candidate": "docs/progress",
-      "raw_ref": "docs/progress",
-      "source": "docs/research/web-research/2026-04-03_ralf-form-factor-proposal.md"
-    },
-    {
-      "candidate": "bin/delegate_frontend_pi.py",
-      "raw_ref": "bin/delegate_frontend_pi.py",
-      "source": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
-    },
-    {
-      "candidate": "skills/context",
-      "raw_ref": "skills/context",
-      "source": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
-    },
-    {
-      "candidate": "templates/external-cli/adapters/bog",
-      "raw_ref": "templates/external-cli/adapters/bog/",
-      "source": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md"
-    },
-    {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md"
-    },
-    {
-      "candidate": "/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Codexter/docs/skills/README.md",
-      "source": "docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md"
-    },
-    {
-      "candidate": "docs/progress.md",
-      "raw_ref": "docs/progress.md",
-      "source": "docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md"
-    },
-    {
-      "candidate": "frontend-code-maintainability.md",
-      "raw_ref": "frontend-code-maintainability.md",
-      "source": "docs/review/rubrics/code-quality.md"
-    },
-    {
-      "candidate": "frontend-code-maintainability.md",
-      "raw_ref": "frontend-code-maintainability.md",
-      "source": "docs/review/rubrics/ui-quality.md"
-    },
-    {
-      "candidate": "frontend-guidelines.md",
-      "raw_ref": "frontend-guidelines.md",
-      "source": "docs/review/rubrics/ui-quality.md"
-    },
-    {
-      "candidate": "docs/bootstrap-brief.md",
-      "raw_ref": "docs/bootstrap-brief.md",
-      "source": "docs/skills/README.md"
-    },
-    {
-      "candidate": "experiments/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md",
-      "source": "docs/sources/README.md"
-    },
-    {
-      "candidate": "docs/research/web-research/2026-04-02_farplane-change-proposal.md",
-      "raw_ref": "docs/research/web-research/2026-04-02_farplane-change-proposal.md",
-      "source": "docs/sources/registry.jsonl"
-    },
-    {
-      "candidate": "docs/research/web-research/2026-04-02_farplane-vs-omx-gap-analysis.md",
-      "raw_ref": "docs/research/web-research/2026-04-02_farplane-vs-omx-gap-analysis.md",
-      "source": "docs/sources/registry.jsonl"
-    },
-    {
-      "candidate": "docs/research/web-research/2026-05-04_symphony-farplane-benchmark.md",
-      "raw_ref": "docs/research/web-research/2026-05-04_symphony-farplane-benchmark.md",
-      "source": "docs/sources/registry.jsonl"
+      "source": "docs/doc-audit/2026-06-12-docs-structure-audit.md"
     }
   ]
 }

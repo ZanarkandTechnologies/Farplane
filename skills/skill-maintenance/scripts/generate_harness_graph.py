@@ -172,7 +172,7 @@ def node_kind(node_id: str) -> str:
         return "spec"
     if path.startswith("docs/skills/"):
         return "skill-doc"
-    if path.startswith("docs/research/"):
+    if path.startswith("docs/archive/research/"):
         return "research"
     if path.startswith("dir:docs/review/rubrics") or path.startswith("docs/review/rubrics/"):
         return "review-rubric"
@@ -447,7 +447,7 @@ can still be worth keeping.
    especially template-era `docs/progress.md` and old external repo paths.
 2. Keep `docs/review/rubrics/*` as canonical docs even when individual family
    files are primarily reached through the directory and rubric index.
-3. Keep `docs/research/**` as historical evidence unless a source registry row
+3. Keep `docs/archive/research/**` as historical evidence unless a source registry row
    or active spec requires a new location.
 4. Use this report before any future archive move: redirect active inbound refs
    first, then move superseded files under `docs/archive/`.

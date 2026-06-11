@@ -74,7 +74,7 @@ this article/spec/video, and what did we decide from it?"
   - `docs/features/README.md`
   - `docs/features/registry.jsonl`
   - `experiments/harness-scout/runs/*`
-  - `docs/research/web-research/*`
+  - `docs/archive/research/web-research/*`
   - `docs/specs/harness-engineering-quickstart.md`
   - `skills/harness-scout/templates/source-run.md`
 - `Signature delta:`

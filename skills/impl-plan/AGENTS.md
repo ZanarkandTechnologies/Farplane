@@ -45,7 +45,7 @@
 - Keep the recommendation above the fold and phrased as a decisive action, not
   a tentative suggestion.
 - When diagrams are needed, reference `skills/diagramming/SKILL.md` and
-  `docs/specs/diagram-first-conventions.md` for compactness, color/legend
+  `skills/diagramming/SKILL.md` for compactness, color/legend
   practice, and inline-signature patterns.
 - Reference `MEM-0007` for the original compact plan contract.
 - Reference `MEM-0008` for the root-AGENTS compression boundary.

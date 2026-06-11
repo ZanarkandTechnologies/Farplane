@@ -75,7 +75,7 @@ frontend implementation and design-polish tasks.
   - `README.md`
   - `ARCHITECTURE.md`
   - `docs/HISTORY.md`
-- `Inspect:` `docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md`,
+- `Inspect:` `docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md`,
   `docs/specs/harness-engineering-doctrine.md`, `docs/specs/runtime-surface.md`,
   `docs/specs/orchestrator-subagent-loop.md`, `tickets/README.md`,
   `tickets/templates/ticket.md`, `bin/AGENTS.md`, `bin/README.md`,
@@ -269,7 +269,7 @@ flowchart LR
   or ship unproven adapters as active capabilities.
 
 ## Refs
-- [External CLI Delegation Proposal](/Users/kenjipcx/coding-harness/Codexter/docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md)
+- [External CLI Delegation Proposal](/Users/kenjipcx/coding-harness/Codexter/docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md)
 - [Harness Engineering Doctrine](/Users/kenjipcx/coding-harness/Codexter/docs/specs/harness-engineering-doctrine.md)
 - [Runtime Surface](/Users/kenjipcx/coding-harness/Codexter/docs/specs/runtime-surface.md)
 - [Orchestrator Subagent Loop](/Users/kenjipcx/coding-harness/Codexter/docs/specs/orchestrator-subagent-loop.md)

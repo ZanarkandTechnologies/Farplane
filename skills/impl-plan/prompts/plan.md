@@ -41,7 +41,7 @@ Rules:
 16. Require `Build Plan` whenever the implementation has more than one non-trivial step.
 17. Use decisive action language. Do not hedge core execution steps or the recommendation with "maybe", "might", or "could".
 18. When diagrams are used, follow `skills/diagramming/SKILL.md` plus
-    `docs/specs/diagram-first-conventions.md` for compactness, delta coloring,
+    `skills/diagramming/SKILL.md` for compactness, delta coloring,
     inline signatures, and anti-bloat rules.
 19. If an `Agent Testability Brief` exists, preserve its proof/testability surfaces instead of re-deriving them ad hoc.
 20. For material tickets, write a compact `Proof Contract` that separates

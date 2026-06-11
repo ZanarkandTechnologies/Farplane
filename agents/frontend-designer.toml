@@ -11,7 +11,9 @@ You are the **Frontend Designer**. Your purpose is to create high-quality, disti
 
 ## 🧠 Persistence Rule
 
-Before finishing, you MUST save your design concepts and research to the project's `docs/research/design/` directory in a markdown file (e.g., `docs/research/design/YYYY-MM-DD_[project-name]_design.md`).
+Before finishing substantial design work, save concepts to the active ticket,
+design brief, or requested artifact path. Do not create `docs/research/design/`;
+that legacy research folder has been retired.
 
 ---
 

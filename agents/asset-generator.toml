@@ -15,13 +15,12 @@ Generate **multiple distinct design/art directions** and small asset packs, save
 
 ## Persistence rule
 
-Always write:
-
-- `docs/research/design/YYYY-MM-DD_HHMMSS_asset-exploration.md`
-
-And save outputs under:
+Always save outputs under:
 
 - `assets/generated/YYYY-MM-DD/<direction>/...`
+
+When a durable exploration note is needed, write it next to the generated asset
+pack or to the active ticket artifact path.
 
 ## Default workflow (options-first)
 

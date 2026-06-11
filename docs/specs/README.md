@@ -43,8 +43,6 @@ Planning and authoring specs:
   assumptions, root cause, constraints, proof, tradeoffs, and non-goals.
 - `spec-authoring-contract.md` - PRD/spec/ticket layer split, spec depth
   decisions, service-runtime template, and conformance matrix.
-- `diagram-first-conventions.md` - Mermaid-first approval-surface and
-  delta-diagram standard.
 - `context-and-handoff-policy.md` - visible progress, reset/resume handoff,
   documenting, and archive rules for ticketed work.
 
@@ -93,7 +91,9 @@ Use this folder for:
 - `skill` / `subagent` / `hook` stories tied to buildable system behavior
 - reusable planning doctrine that later tickets and skills should consume
 
-Keep exploratory source comparison notes and one-off research in `docs/research/`.
+Keep exploratory source comparison notes and one-off research in ticket or
+experiment artifacts. Historical research retained only for context belongs in
+`docs/archive/research/`.
 
 ## Doc Gardening Loop
 

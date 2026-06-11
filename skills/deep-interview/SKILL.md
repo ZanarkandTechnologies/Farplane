@@ -59,7 +59,7 @@ Execution quality is usually bottlenecked by intent clarity, not just missing im
 - **Quick (`--quick`)**: fast pre-PRD pass; target threshold `<= 0.30`; max rounds 5
 - **Standard (`--standard`, default)**: full requirement interview; target threshold `<= 0.20`; max rounds 12
 - **Deep (`--deep`)**: high-rigor exploration; target threshold `<= 0.15`; max rounds 20
-- **Autoresearch (`--autoresearch`)**: same interview rigor as Standard, but specialized for research-brief launch readiness and a Farplane-native handoff through the active ticket or a deliberate `docs/research/` draft when the user explicitly wants durable research artifacts
+- **Autoresearch (`--autoresearch`)**: same interview rigor as Standard, but specialized for research-brief launch readiness and a Farplane-native handoff through the active ticket or a deliberate experiment/ticket artifact when the user explicitly wants durable research artifacts
 - **Bootstrap (`--bootstrap`)**: same interview rigor as Standard, but specialized for project bootstrap readiness and a Farplane-native handoff through `docs/bootstrap-brief.md` for `deep-init-project`
 
 If no flag is provided, use **Standard**.
@@ -262,7 +262,7 @@ When the clarified task is specifically about a research brief, or the skill is 
 
 - **Accepted seed inputs:** `topic`, `evaluator`, `keep-policy`, `slug`, existing mission draft text, and prior evaluator examples/templates
 - **Required interview focus:** mission clarity, evaluator readiness, keep policy, slug/session naming, and whether the draft is ready to launch now or should refine further
-- **Canonical artifact surface:** the active ticket when one exists, or a deliberate draft under `docs/research/` when the user explicitly wants a durable research brief
+- **Canonical artifact surface:** the active ticket when one exists, or a deliberate experiment/ticket artifact when the user explicitly wants a durable research brief
 - **Launch artifact bundle:** one current Farplane brief containing `Mission Draft`, `Evaluator Draft`, `Launch Readiness`, `Seed Inputs`, and `Confirmation Bridge`
 - **Launch artifact location:** keep it on the chosen live Farplane surface above; do not create hidden sidecar spec folders
 - **Required artifact sections:**

@@ -68,8 +68,8 @@ on in discussion so future agents do not have to reconstruct it from chat.
   - `docs/specs/symphony-compatible-codexter-runner.md`
   - `WORKFLOW.md`
   - `skills/codexter-invocation/SKILL.md`
-  - `docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md`
-  - `docs/research/web-research/2026-05-05_symphony-dagster-codexter-integration.md`
+  - `docs/archive/research/web-research/2026-05-04_symphony-codexter-benchmark.md`
+  - `docs/archive/research/web-research/2026-05-05_symphony-dagster-codexter-integration.md`
   - `experiments/harness-scout/runs/2026-05-05-symphony-compatible-codexter/`
   - `skills/ralph/SKILL.md`
   - `skills/ralph/scripts/select_next_ticket.py`
@@ -215,8 +215,8 @@ flowchart LR
 
 ## Refs
 - `docs/specs/symphony-compatible-codexter-runner.md`
-- `docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md`
-- `docs/research/web-research/2026-05-05_symphony-dagster-codexter-integration.md`
+- `docs/archive/research/web-research/2026-05-04_symphony-codexter-benchmark.md`
+- `docs/archive/research/web-research/2026-05-05_symphony-dagster-codexter-integration.md`
 - `WORKFLOW.md`
 - `skills/codexter-invocation/SKILL.md`
 

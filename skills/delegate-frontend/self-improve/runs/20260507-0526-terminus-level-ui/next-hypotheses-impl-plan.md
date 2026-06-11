@@ -391,8 +391,8 @@ Stop conditions:
 - `skills/delegate-frontend/self-improve/program.md`.
 - `skills/landing-page/self-improve/program.md`.
 - `skills/landing-page/references/spec-first-cinematic-industrial.md`.
-- `docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md`.
-- `docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md`.
+- `docs/archive/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md`.
+- `docs/archive/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md`.
 
 ## Evidence
 

@@ -168,9 +168,9 @@ For install and bootstrap work:
 
 For harness-design research and external patterns:
 
-- `docs/research/web-research/2026-04-02_anthropic-harness-comparison.md`
-- `docs/research/web-research/2026-04-02_farplane-change-proposal.md`
-- `docs/research/web-research/2026-04-02_farplane-vs-omx-gap-analysis.md`
+- `docs/sources/registry.jsonl`
+- `docs/features/registry.jsonl`
+- `docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md`
 
 ## Local Operating Rules
 

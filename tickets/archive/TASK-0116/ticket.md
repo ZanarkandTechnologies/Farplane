@@ -196,7 +196,7 @@ flowchart LR
 - `docs/specs/review-gates.md`
 - `skills/deep-system-design/SKILL.md`
 - `skills/spec-to-ticket/SKILL.md`
-- `docs/research/web-research/2026-05-04_symphony-codexter-benchmark.md`
+- `docs/archive/research/web-research/2026-05-04_symphony-codexter-benchmark.md`
 
 ## Evidence
 - `Artifacts:`

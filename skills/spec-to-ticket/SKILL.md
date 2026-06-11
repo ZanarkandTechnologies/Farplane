@@ -101,7 +101,7 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
     objective, need, assumptions, root cause, constraints, first viable slice,
     proof/falsification, tradeoffs, and non-goals.
 17. When the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry so QA inherits the same fast-entry, stabilize, inspect, and proof surfaces as the ticket.
-18. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` plus `docs/specs/diagram-first-conventions.md` for style/taste.
+18. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` for style/taste.
 
 ## Inputs
 

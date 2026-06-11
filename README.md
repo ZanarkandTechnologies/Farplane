@@ -1,6 +1,6 @@
 # Farplane
 
-![Farplane AI hero banner](./docs/assets/farplane-hero.png)
+![Farplane AI hero banner](./assets/farplane-hero.png)
 
 Farplane is the engine behind Zanarkand Labs' Farplane AI: a
 drift-resistant, evolve-first harness and product shell for agentic work.
@@ -181,6 +181,7 @@ flowchart LR
 | `AGENTS.md` | Project-local operating contract for developing Farplane itself. |
 | `ARCHITECTURE.md` | Deeper system map, ownership boundaries, and read order. |
 | `agents/` | Bounded specialist role configs. |
+| `assets/` | Repo-level media and generated assets. |
 | `bin/` | Hooks, validators, runtime helpers, launchers, and sync scripts. |
 | `docs/` | Specs, feature inventory, history, memory, troubles, lessons, and research. |
 | `docs/features/` | Structured feature registry and feature metadata. |

@@ -98,7 +98,7 @@ Produce the final markdown plan and save it to `docs/progress.md`.
 [Summary of the goal and the general approach]
 
 ## Research & Assumptions
-- **Example Pattern**: [Link to research in `docs/research/`]
+- **Example Pattern**: [Link to ticket, source registry, experiment, or archived research evidence]
 - **Assumptions**: [Key technical assumptions made]
 
 ## Action Items
@@ -149,8 +149,8 @@ Here's what a good plan looks like:
 Implement token bucket rate limiting for all public API endpoints to prevent abuse. Based on research from Express.js rate limiting patterns and the `express-rate-limit` library documentation.
 
 ## Research & Assumptions
-- **Example Pattern**: `docs/research/librarian/2025-12-30_express_rate_limiting.md`
-- **Documentation**: `docs/research/remote-documentation/2025-12-30_express_rate_limit_docs.md`
+- **Example Pattern**: `experiments/research/2025-12-30_express_rate_limiting.md`
+- **Documentation**: `experiments/research/2025-12-30_express_rate_limit_docs.md`
 - **Assumptions**:
   - Using Redis for distributed rate limiting (confirmed in CONTEXT.md)
   - Need backward compatibility (no breaking changes to API responses)

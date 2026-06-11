@@ -13,7 +13,8 @@
 - Keep this skill about system-design diagrams, not visual illustration.
 - Keep Mermaid-first output as the default.
 - Keep the skill compact; detailed patterns belong in references.
-- Align with `docs/specs/diagram-first-conventions.md` when updating the repo.
+- Treat `skills/diagramming/SKILL.md` as the owner of Farplane diagram-first
+  conventions when updating the repo.
 
 ## Conventions
 

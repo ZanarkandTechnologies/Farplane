@@ -95,9 +95,7 @@ If the diagram pack still needs long prose to make sense, it is not ready.
 1. Read the active ticket/spec/request and identify the exact approval question.
 2. Choose the lightest useful pattern from
    [`references/patterns.md`](references/patterns.md).
-3. In Farplane, align the output with
-   [`docs/specs/diagram-first-conventions.md`](../../docs/specs/diagram-first-conventions.md)
-   when that file exists.
+3. In Farplane, use this skill as the owner of diagram-first convention.
 4. Draw the top-level map:
    - system boundary
    - changed components
@@ -141,5 +139,11 @@ If the diagram pack still needs long prose to make sense, it is not ready.
 
 - Pattern library: [`references/patterns.md`](references/patterns.md)
 - Review checklist: [`references/review.md`](references/review.md)
-- Farplane canonical convention:
-  [`docs/specs/diagram-first-conventions.md`](../../docs/specs/diagram-first-conventions.md)
+
+## Farplane Convention
+
+Use diagram-first approval surfaces for material, cross-module, workflow,
+tooling, or architecture-facing changes when visual structure is easier to
+approve than prose. Prefer one compact delta diagram plus a short legend and
+2-5 notes. Add one zoom-in or numbered data-flow diagram only when the first
+diagram cannot carry the decision.

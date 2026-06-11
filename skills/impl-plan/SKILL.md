@@ -85,9 +85,7 @@ bypass `impl-plan`; vague epics should route back to PRD, system design, or
 <!-- Local decision: impl-plan output should organize around Delta, Map, Build Plan, Verification, and Notes; diagrams may carry inline signatures and typed flow, while Evidence, Refs, Options, and Autonomy Readiness stay conditional or ticket-owned. -->
 
 When this skill needs diagram taste or pattern depth, reuse
-`skills/diagramming/SKILL.md` plus
-`docs/specs/diagram-first-conventions.md` instead of inventing a second diagram
-style here.
+`skills/diagramming/SKILL.md` instead of inventing a second diagram style here.
 
 When the architecture itself is still under-specified, or the plan would have
 to invent entities, storage ownership, or runtime boundaries, stop and use

@@ -45,7 +45,7 @@ Respond directly for:
 
 If the right owner is unknown but the information clearly matters, create the
 smallest honest artifact under the nearest owning surface, such as a ticket
-artifact, `docs/research/**`, `experiments/**`, or a draft spec. Do not hide
+artifact, `experiments/**`, `docs/archive/research/**`, or a draft spec. Do not hide
 durable state in chat because the exact final home is still uncertain.
 
 ## Markdown Front Matter Standard
@@ -112,7 +112,7 @@ body section, redacted artifact, or private local context.
 | `experiments/hardcases/` | temporary sanitized benchmark seeds | deterministic validators or legacy captures leave a clear contract violation before it becomes a runnable eval row | only when building evals or self-improvement | promote into eval fixtures with hardcase metadata; archive or delete stale standalone seeds once covered | self-improve / eval / validators |
 | other `experiments/` | scratch proof, smoke runs, prototype evidence | bounded experiment or temporary proof | only when linked by ticket/source/feature | promote outcome or delete/archive stale scratch evidence | owning skill |
 | `docs/specs/*.md` | current behavior contracts | stable feature, doctrine, schema, lifecycle, or execution flow | spec index first, then relevant file | merge duplicates, delete superseded plans, move skill-owned contracts to skills | doc governance |
-| `docs/research/**` | research and comparison evidence | research pass or external comparison | only by topic/source need | keep as historical evidence; do not promote raw research into active contracts | research / harness-scout |
+| `docs/archive/research/**` | historical research and comparison evidence | retired research pass or external comparison | only by topic/source need | keep as cold evidence; do not promote raw research into active contracts | research / harness-scout |
 
 ## Read Rules
 

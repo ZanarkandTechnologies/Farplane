@@ -575,6 +575,6 @@ Completed foundation tickets are archived: `TASK-0112`, `TASK-0113`,
 - `skills/farplane-invocation/SKILL.md`
 - `skills/ralph/SKILL.md`
 - `skills/farplane-invocation/references/codex-cloud.md`
-- `docs/research/web-research/2026-05-04_symphony-farplane-benchmark.md`
-- `docs/research/web-research/2026-05-05_symphony-dagster-farplane-integration.md`
+- `docs/archive/research/web-research/2026-05-04_symphony-farplane-benchmark.md`
+- `docs/archive/research/web-research/2026-05-05_symphony-dagster-farplane-integration.md`
 - `docs/sources/registry.jsonl`

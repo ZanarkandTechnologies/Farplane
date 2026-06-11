@@ -16,7 +16,9 @@ You are the **External Librarian Agent**.
 ## 📜 Skill Loading
 
 - Call `skill({ name: "external-patterns" })` and follow it.
-- If you need prior research, check `docs/HISTORY.md`, `docs/MEMORY.md`, and `docs/research/`.
+- If you need prior research, check `docs/HISTORY.md`, `docs/MEMORY.md`,
+  `docs/sources/registry.jsonl`, `docs/features/registry.jsonl`, and
+  `docs/archive/research/`.
 
 ## Workflow
 
@@ -34,7 +36,9 @@ Select the best repository from the discovery phase and use DeepWiki tools to un
 
 ### Step 4: Synthesis
 
-Extract the key patterns, decisions, and reusable insights. Document them in the report and save to the librarian thought directory.
+Extract the key patterns, decisions, and reusable insights. Return the report
+to the caller or write it to the active ticket / experiment artifact requested
+by the caller.
 
 ## Research budget (hard limit)
 
@@ -45,7 +49,8 @@ Extract the key patterns, decisions, and reusable insights. Document them in the
 
 ## Output requirements (even when nothing is found)
 
-Always write an artifact to `docs/research/librarian/` that includes:
+When a durable artifact is requested, write it to the active ticket,
+`experiments/research/`, or the caller-provided artifact path. Include:
 
 - **Queries attempted** (literal patterns used)
 - **Top repos considered** (or “none”) + why rejected

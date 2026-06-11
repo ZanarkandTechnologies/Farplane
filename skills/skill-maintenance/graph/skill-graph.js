@@ -1866,7 +1866,7 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-11T16:52:43+00:00",
+  "generated_at": "2026-06-11T17:13:42+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
