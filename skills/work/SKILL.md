@@ -28,12 +28,13 @@ allowed-tools: Read, Glob, Grep
   regression row before completion.
 - [ ] For board drains, hand board selection and grouping to `$ralph`; do not
   create hidden scheduler state here.
-- [ ] Use `goal-crafter` or native `/goal` when the work is ambitious,
+- [ ] Use `goal-advisor` or native `/goal` when the work is ambitious,
   long-running, batch-oriented, board-draining, metric-driven, or likely to
   need durable unblock behavior.
 - [ ] When a ticket already has metrics, acceptance criteria, proof commands,
-  or blockers and Goal is recommended, route through goal-crafter's
-  ticket-backed `GoalPrepState` branch instead of restarting discovery.
+  or blockers and Goal is recommended, route through `goal-advisor` for Goal
+  Packet shape and prompt compilation instead of restarting
+  discovery.
 - [ ] Record blockers with evidence instead of asking the operator when the
   ticket policy already gives a safe fallback.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -49,7 +50,8 @@ batching the work deserves.
 the owning surface:
 
 - native `/goal` for durable ambition and stopping criteria
-- `goal-crafter` when the Goal needs a crisp proof and blocked-stop contract
+- `goal-advisor` when the system must choose active Goal, heartbeat, rollout,
+  feedback provider, ticket setup, or direct work
 - `$ralph` for board context and board-drain selection
 - `batch-work` for an explicit operator-supplied ticket range or list
 - `spec-to-ticket` or PRD work when the unit is an epic, not executable work
@@ -66,7 +68,8 @@ right compute unit.
 ```text
 Board = source of truth for work items
 Ticket/card = durable work contract
-Goal = durable intent + stopping checker
+Goal = durable continuation engine
+Goal Packet = ticket.md + program.md + progress.md + generated prompt + drift policy
 Work = admission + execution profile for one work unit
 Batch-work = explicit operator range/list runner
 Ralph = board-aware scheduler/context provider
@@ -112,11 +115,15 @@ Use native `/goal` when the work benefits from durable continuation:
 - a long unblock or research loop
 - any work where stopping criteria must survive context drift
 
-Use goal-crafter's ticket-backed `GoalPrepState` branch when Goal is useful and
-the work unit already carries a ticket, plan, or Proof Contract with metrics,
-acceptance criteria, verification commands, blockers, or scope boundaries. In
-that case `$work` should preserve the existing work contract and ask only
-missing execution-safety questions, not broad product-discovery questions.
+Use `goal-advisor` when Goal is useful and the system must decide whether the
+current work should run as an active Goal, heartbeat, rollout, feedback loop,
+or direct execution. For material Goal work, the result should attach to a
+Goal Packet with `ticket.md`, `program.md`, and `progress.md`.
+
+When the work unit already carries a ticket, plan, or Proof Contract with
+metrics, acceptance criteria, verification commands, blockers, or scope
+boundaries, `goal-advisor` should preserve the existing work contract and ask
+only missing execution-safety questions, not broad product-discovery questions.
 
 Do not use Goal for:
 
@@ -181,10 +188,11 @@ execution still starts only from explicit invocation.
      `$work` for each selected unit
    - `epic_slice`: route to PRD, `spec-to-ticket`, or `deep-system-design`
    - `metric_loop`: route to autoresearch before implementation
-4. If Goal is recommended but not already active, use `goal-crafter` to produce
-   one paste-ready Goal for the current scope. Use `goalPrep=ticket_backed_state`
-   when the ticket already has metrics, acceptance criteria, proof commands,
-   blockers, or scope boundaries.
+4. If Goal is recommended but not already active, use `goal-advisor` to decide
+   the trigger, feedback provider, heartbeat, rollout, ticket setup, and
+   paste-ready native Goal prompt for the chosen Goal Packet. Use ticket-backed
+   state when the ticket already has metrics, acceptance criteria, proof
+   commands, blockers, or scope boundaries.
 5. Route to the owning skill and keep evidence in the ticket or batch surface.
 6. If blocked, record evidence, attempted paths, safe options, recommended
    next action, and the single missing input that would unlock progress.
@@ -275,9 +283,10 @@ budget are real.
 Return or write:
 
 - selected `ExecutionProfile`
-- chosen Goal policy and paste-ready Goal when needed
-- chosen goal prep mode: none, compact paste-ready Goal, or ticket-backed
-  `GoalPrepState`
+- chosen Goal policy and Goal Packet shape when needed
+- chosen Goal Packet surfaces: none, ticket only, or
+  `ticket.md + program.md + progress.md`
+- chosen native `/goal` prompt when Goal mode is recommended
 - chosen compute target and why
 - chosen route: direct, batch-work, Ralph, spec-to-ticket, impl-plan, `$impl`,
   autoresearch, or close-ticket

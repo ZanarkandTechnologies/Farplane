@@ -1,6 +1,6 @@
 ---
 name: telegram-message
-description: "Turn short HITL, automation, blocker, or artifact-review updates into Telegram notifications using configured environment variables."
+description: "Turn short feedback, automation, blocker, or artifact-review updates into Telegram notifications using configured environment variables."
 tier: 1
 source: local
 allowed-tools: Bash, Read
@@ -22,9 +22,8 @@ allowed-tools: Bash, Read
 
 Use this skill when a workflow needs to notify Kenji on Telegram.
 
-This is a small reusable primitive. Higher-level skills such as
-`hitl-autoresearch` should write their own message body, then call this skill to
-send it.
+This is a small reusable primitive. Higher-level skills such as `with-human`
+should write their own message body, then call this skill to send it.
 
 ## Requirements
 
@@ -74,7 +73,7 @@ Use `--parse-mode Markdown` only when the message is simple Markdown. Use
 
 ## Core Branches
 
-- **HITL feedback request:** send the generated review message file.
+- **Human feedback request:** send the generated review message file.
 - **Automation status:** send a concise success/blocker summary.
 - **Artifact ready:** send local paths or public links plus the review question.
 - **Missing Telegram config:** do not block the whole workflow if a local review

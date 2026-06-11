@@ -305,3 +305,5 @@
 2026-06-10 14:55 +0800 | CLEANUP | remove the accidental repo-local `.codex/` eval tree, preserve unique Farplane eval tasks under `skills/eval/examples/farplane-global-harness/`, and route Codex eval runtime defaults to `.farplane/evals`
 2026-06-10 15:20 +0800 | SKILL | add `skill-gap-analysis` as a Tier 2 diagnostic interface for comparing a target skill with an intended function contract before choosing the remediation owner
 2026-06-11 21:25 +0800 | EVAL | add modular skill-local `eval_task.json` standard and teach the eval runner to discover `skills/*/eval_task.json` with `--suite skills`
+2026-06-12 16:30 +0800 | FEAT | add the Goal Packet contract for native Codex Goal loops, including `goal-advisor`, upgraded `goal-crafter`, `with-human`, ticket `program.md`/`progress.md` templates, and a read-only goal drift reviewer agent
+2026-06-12 17:05 +0800 | CLEANUP | remove the old session-shaped human-feedback autoresearch skill now that `with-human` is the Goal Packet feedback provider

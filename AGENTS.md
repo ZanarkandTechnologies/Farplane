@@ -80,6 +80,12 @@ skills may omit local first-load todo lists when wrapper logic belongs in
 callers. Run
 `check_skills.py --write` and reinstall after source skill edits before judging
 live installed behavior. See `MEM-0117` and `MEM-0124`.
+Native Codex Goal mode is the continuation engine for material Goal loops, but
+Farplane owns the visible state around it. Material Goals should create or
+attach to a ticket and use a Goal Packet: `ticket.md` for the task contract,
+`program.md` for loop configuration, and `progress.md` for append-only turn
+logs. Use `goal-advisor` to choose Goal versus heartbeat, rollout, or feedback
+shape and to compile the final native `/goal` prompt.
 Use `harness-advisor` for Farplane improvement placement decisions before
 expanding root policy, global templates, skills, subagents, hooks/scripts,
 ticket contracts, docs/specs, validators, or registries. It reads the feature

@@ -26,7 +26,7 @@
       "Does not start mutating the harness from vague taste language",
       "Asks for or derives a concrete observed behavior, expected behavior, metric, or evidence need",
       "Marks unknown expected behavior when it cannot be inferred safely",
-      "Names a safe partial path such as gap clarification, prototype, or HITL review",
+      "Names a safe partial path such as gap clarification, prototype, or human-feedback review",
       "Avoids creating evals or skill changes before the target behavior is testable"
     ],
     "tags": [

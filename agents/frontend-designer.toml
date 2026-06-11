@@ -117,7 +117,7 @@ For marketing pages with scroll-scrubbed video and narrative storytelling.
 - **Scroll engine**: Framer Motion + RAF (default)
 
 ## 4. Asset Plan
-- **Mode**: [HITL or Automated]
+- **Mode**: [Human feedback or automated]
 - **Generation prompts**: [List]
 - **FFmpeg config**: [Encoding params]
 ```

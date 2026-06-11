@@ -21,7 +21,7 @@ Current mental model:
 
 ```text
 Goal mode = durable loop runner
-goal-crafter = writes the Goal contract
+goal-advisor = writes the Goal contract
 self-improve/ = target skill memory, evals, prompt candidates, and results
 skill-maintenance = accepted writeback into SKILL.md/references/source copies
 ```
@@ -32,7 +32,7 @@ skill-maintenance = accepted writeback into SKILL.md/references/source copies
 self_improve_experiment(target_skill_or_surface, metric, search_space?, eval_suite?) -> best_candidate + experiment_log + promotion_recommendation
 state: reads(target package, evals, metric, prior runs, candidate constraints); writes(program.md?, evals?, results?, promoted_change?)
 gates: metric_named; baseline_recorded; candidates_compared; promotion_rule_met
-routes: eval | goal-crafter | autoresearch-plan | skill-maintenance | review
+routes: eval | goal-advisor | autoresearch-plan | skill-maintenance | review
 fails: optimizes by taste; mutates before baseline; promotes unmeasured changes; bloats the target skill
 ```
 
@@ -78,7 +78,7 @@ Use when the user asks to:
   behavior
 - prepare context files that a native Goal should read while optimizing a skill
 
-Use `goal-crafter` first when the user wants a durable native Goal. Use
+Use `goal-advisor` first when the user wants a durable native Goal. Use
 `autoresearch-plan` only when the user explicitly wants filesystem
 autoresearch artifacts, separate experiment scripts, or a metric loop outside
 native Goal mode.

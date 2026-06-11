@@ -1,0 +1,57 @@
+[
+  {
+    "id": "goal_advisor_material_goal_packet_01",
+    "title": "Goal advisor creates a ticket-backed Goal Packet for material work",
+    "query": "I want AGI Toy Shop to keep improving its autonomous storefront until the checkout and support workflow are clearly better. How should we use Goal mode?",
+    "reference_points": [
+      "Recommends native Goal mode only with a ticket-backed Goal Packet",
+      "Names ticket.md, program.md, and progress.md with distinct ownership",
+      "Chooses a metric or feedback provider without inventing fake numbers",
+      "Defines a drift policy and when to use goal-drift-reviewer",
+      "Includes or promises a native /goal prompt after choosing the Goal Packet shape"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "goal-packet"
+    ],
+    "notes": "Protects the combined architecture-plus-prompt responsibility without reducing the skill to template fill-in."
+  },
+  {
+    "id": "goal_advisor_heartbeat_vs_goal_01",
+    "title": "Goal advisor chooses heartbeat for delayed loops",
+    "query": "Run a weekly AGI Toy Shop strategy loop that checks store performance, proposes the highest-ROI next task, and asks me for feedback when needed.",
+    "reference_points": [
+      "Classifies the loop as heartbeat or scheduled continuation rather than an always-active Goal",
+      "Uses the same ticket.md, program.md, and progress.md contract as active Goals",
+      "Explains that heartbeat is a trigger, not a separate loop runtime",
+      "Includes human feedback as a provider only when useful",
+      "Names no-op, blocked, and resume behavior"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "heartbeat"
+    ],
+    "notes": "Tests the Goal versus heartbeat boundary."
+  },
+  {
+    "id": "goal_advisor_skill_improvement_with_human_01",
+    "title": "Goal advisor designs a skill-improvement loop with human feedback",
+    "query": "I want AGI Toy Shop's social-content skill to keep improving short-form toy launch posts by showing me variants for feedback before we try market tests. How should we use Goal mode?",
+    "reference_points": [
+      "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime",
+      "Requires a ticket-backed Goal Packet with ticket.md, program.md, and progress.md",
+      "Uses with-human as the human feedback provider and defines the feedback artifact shape",
+      "Includes a native /goal prompt or prompt plan with Task, Logging, Metric, and After each turn sections",
+      "Names drift review or inline drift checks before continuing after feedback"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "skill-improvement",
+      "with-human"
+    ],
+    "notes": "Guards the first intended rollout: content-skill self-improvement with Kenji feedback before market exposure."
+  }
+]

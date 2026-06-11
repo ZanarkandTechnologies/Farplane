@@ -88,6 +88,10 @@ config_file = "agents/bash-operator.toml"
 description = "Independent rubric reviewer for ticketed plans, implementations, evidence bundles, skills, prompts, docs, evals, and completion receipts. Use proactively before material completion claims."
 config_file = "agents/reviewer.toml"
 
+[agents.goal-drift-reviewer]
+description = "Read-only Goal Packet drift reviewer that compares ticket, program, progress, and the current continuation claim."
+config_file = "agents/goal-drift-reviewer.toml"
+
 [agents.orchestrator]
 description = "Stop-hook orchestrator for ticket handoff, continuation, and next-ticket routing."
 config_file = "agents/orchestrator.toml"

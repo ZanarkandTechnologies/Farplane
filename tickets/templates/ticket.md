@@ -159,6 +159,23 @@ flowchart LR
 - `Batch reason:` shared module/workflow/setup/proof surface, or no-batch
   reason
 
+## Goal Packet
+- Required when `Goal recommendation` is `required`, and recommended for any
+  material native Goal, heartbeat, rollout, skill-improvement loop, or
+  human-feedback loop.
+- `Goal packet:` `none` | `required` | `active`
+- `Program:` `tickets/TASK-XXXX/program.md` or `none`
+- `Progress:` `tickets/TASK-XXXX/progress.md` or `none`
+- `Generated Goal prompt:` paste or link the current native `/goal` prompt
+- `Metric provider:` `mechanical` | `review` | `agent_qa` | `with-human` |
+  `market` | `hybrid` | `none`
+- `Drift reviewer:` `goal-drift-reviewer` | `reviewer` | `inline` | `none`
+- `Heartbeat:` cadence or `none`
+- `Stop condition:` complete, blocked, pause, or escalation condition
+- `Refs:` `docs/specs/goal-loop-contract.md`,
+  `tickets/templates/goal-loop/program.md`,
+  `tickets/templates/goal-loop/progress.md`
+
 ## Evidence Checklist
 - Optional for non-UI work. Keep it short and concrete for UI-bearing or
   agentically hard tickets.

@@ -16,6 +16,8 @@ One source of truth per concern:
 tickets/
   TASK-0001/
     ticket.md
+    program.md      # optional Goal Packet loop configuration
+    progress.md     # optional Goal Packet append-only loop log
     artifacts/
   TASK-0002/
     ticket.md
@@ -41,10 +43,34 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 ## Progress Surface Policy
 
 - the ticket is the canonical durable progress surface
+- for material native Goal work, the ticket should carry or point to a Goal
+  Packet: `ticket.md` for the task contract, `program.md` for loop
+  configuration, and `progress.md` for append-only turn logs
 - `.farplane/state/` is runtime-only and may track active claim/lane/session/verdict state
 - transcripts are useful evidence but are not the canonical resume surface
 - deliberate reset/resume requires the ticket to carry a clear `next_action`,
   `last_verification`, blockers, and evidence references
+
+## Goal Packets
+
+Use a Goal Packet when native Goal mode is used for material, long-running,
+feedback-heavy, rollout, heartbeat, business-loop, or skill-improvement work.
+
+```text
+goal_loop(ticket.md, program.md, progress.md, trigger)
+  -> next_turn + evidence + drift_verdict + state_delta
+```
+
+- `ticket.md` owns objective, scope, acceptance criteria, proof, blockers, and
+  current next action.
+- `program.md` owns trigger mode, metric or feedback provider, budget,
+  after-each-turn routine, drift policy, heartbeat policy, and stop conditions.
+- `progress.md` owns compact append-only turn logs, evidence pointers,
+  feedback samples, drift verdicts, blockers, and next actions.
+
+Use `tickets/templates/goal-loop/program.md` and
+`tickets/templates/goal-loop/progress.md` when scaffolding these files. See
+`docs/specs/goal-loop-contract.md` for the full contract.
 
 ## Invocation Policy
 

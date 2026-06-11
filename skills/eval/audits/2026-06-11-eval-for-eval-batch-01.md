@@ -1,7 +1,7 @@
 ---
 title: Eval For Eval Batch 01 Review
 owner: skills/eval
-status: hitl-review
+status: human-feedback-review
 updated: 2026-06-11
 review_route: internal
 proof_artifacts:
@@ -22,7 +22,7 @@ The ongoing idea/test/feedback loop is tracked in
 
 ```text
 eval_for_eval_batch(eval_skill, agi_toy_shop_fixture, review_metrics)
-  -> skill_local_eval_task_json + review_note + hitl_feedback_request
+  -> skill_local_eval_task_json + review_note + human_feedback_request
 ```
 
 ## Candidate Tasks
@@ -45,7 +45,7 @@ eval_for_eval_batch(eval_skill, agi_toy_shop_fixture, review_metrics)
 | `duplicated_instruction_count` | pass | The task file points at behaviors; detailed rubric policy stays in references and judge prompt. |
 | `prompt_size_tokens` | pass | The batch adds four compact tasks, not long embedded examples or full standards. |
 | `task_success_rate` | unknown | Needs real harness runs before making success claims. |
-| `review_tas_rate` | unknown | Needs reviewer/HITL judgment after this checkpoint. |
+| `review_tas_rate` | unknown | Needs reviewer or human judgment after this checkpoint. |
 | `maintenance_locality` | pass | The tasks live in `skills/eval/eval_task.json`, beside the skill they test. |
 | `composition_clarity` | pass | The batch separates authoring, running, bad-task rejection, and structure placement behaviors. |
 
@@ -76,7 +76,7 @@ Smoke result:
 - Note: this proves task loading, fixture plumbing, artifact writing, and judge
   JSON parsing only. It does not prove real agent task success.
 
-## HITL Question
+## Human Feedback Question
 
 Should this become the standard seed pattern for eval-skill evals?
 

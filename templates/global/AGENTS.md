@@ -189,6 +189,13 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 
 - When a repo has a ticket workflow, treat the active ticket as the task-local
   memory, plan, evidence, blocker, and handoff surface.
+- When native Goal mode is used for material work, create or attach to a ticket
+  and use a Goal Packet: `ticket.md` for the task contract, `program.md` for
+  loop configuration, and `progress.md` for append-only turn logs. The Goal
+  prompt is generated from those files; it is not the durable source of truth.
+- At the start or end of material Goal continuations, compare current progress
+  against the ticket and Goal program. Use a read-only drift reviewer when the
+  work is high-stakes, long-running, rollout-like, or easy to self-approve.
 - Keep ticket metadata and body consistent with the current state.
 - Store detailed proof, blockers, and follow-up scope in the ticket or
   ticket-scoped artifacts rather than in chat.

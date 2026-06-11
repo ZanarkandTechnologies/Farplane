@@ -36,6 +36,9 @@ Execution and proof specs:
   state probes, coordination views, and proof-surface planning.
 - `adaptive-backoff.md` - repeated wait, retry, polling, and long-running job
   cadence policy without hidden daemons or queues.
+- `goal-loop-contract.md` - Goal Packet model for native Codex Goals backed by
+  tickets, `program.md`, `progress.md`, drift review, human feedback, heartbeat
+  triggers, and rollout patterns.
 
 Planning and authoring specs:
 

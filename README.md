@@ -128,6 +128,10 @@ flowchart LR
   `eval`.
 - **Ticket-first autonomy as one mode.** Tickets remain the durable execution
   surface for coding work, but they are not the whole product.
+- **Goal Packets make long loops visible.** Native Codex Goal mode owns
+  continuation, while Farplane stores the transparent loop contract in
+  `ticket.md`, `program.md`, and `progress.md` so drift, feedback, heartbeat,
+  rollout, and completion decisions can be inspected.
 
 ## Gamechanging Workflows
 
@@ -155,6 +159,10 @@ flowchart LR
   substantial replies name the root topic, tangents, and current focus, then
   split independently executable follow-ups into new-thread handoffs when the
   current chat is carrying too much.
+- **Goal Advisor chooses loop shape.** Ambitious work should use
+  `goal-advisor` to decide between active Goal, heartbeat, rollout, feedback
+  loop, skill improvement, business loop, or direct work, then compile the
+  selected Goal Packet into the native `/goal` prompt.
 
 ## Improvement Loop
 

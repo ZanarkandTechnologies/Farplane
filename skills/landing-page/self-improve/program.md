@@ -113,7 +113,7 @@ make landing-page produce Terminal-quality spec-first cinematic industrial landi
   operating strategy, but the page improved when the hero sold "AI for
   factories, yards, sites, and plants" and moved clone/localize into the module
   story.
-- HITL landing goals should not complete at "feedback requested"; feedback is
+- Human-feedback landing goals should not complete at "feedback requested"; feedback is
   the reward signal. The loop should continue until the operator accepts,
   requests a specific revision, or explicitly stops.
 - Timed-out external CLI runs with partial files are benchmark failures even

@@ -75,7 +75,7 @@ The tester lane owns using the app, skill, prompt, or workflow and collecting
 evidence. The evidence-review lane owns attacking whether the tester's evidence
 actually proves the behavior.
 
-`goal-crafter` writes high-level native Goals. `agent-behavior-test` owns
+`goal-advisor` writes high-level native Goals. `agent-behavior-test` owns
 isolated run capture and scoring. `agent-qa-test` composes that lower-level
 capture when tester-lane evidence needs durable child-agent logs, command
 events, final output, or scored artifact conformance. `agent-qa-test` sits
@@ -83,11 +83,11 @@ between high-level intent and raw run capture: it turns the operator's "test
 this properly" instruction into an executable adversarial testing loop or a
 paste-ready prompt.
 
-When composed inside `goal-crafter`'s Goal algebra, `agent-qa-test` is the
-`Review.agent_qa_test` provider and supplies the Goal's fix/rerun evidence
-threshold. It should not compete with Goal mode for continuation ownership:
-Goal mode owns continuation and blocked stops; `agent-qa-test` owns the
-adversarial proof loop for the claim under test.
+When composed inside Goal Packet algebra, `agent-qa-test` is an `agent_qa`
+metric or proof provider and supplies the fix/rerun evidence threshold. It
+should not compete with Goal mode for continuation ownership: Goal mode owns
+continuation and blocked stops; `agent-qa-test` owns the adversarial proof loop
+for the claim under test.
 
 For serious readiness claims, the proof stack is:
 

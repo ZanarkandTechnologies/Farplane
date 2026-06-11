@@ -11,7 +11,8 @@ metric: human_feedback_plus_eval_pass
 ## Objective
 
 Make the `eval` skill reliably produce realistic, modular, clean-room evals that
-test one visible behavior at a time and improve through Goal-backed HITL loops.
+test one visible behavior at a time and improve through Goal-backed
+human-feedback loops.
 Current pivot: use the eval-improvement loop to clarify the broader skill-system
 model where Tier 0 is the universal phase protocol, skills are callable mini
 harnesses with signatures, and review is a protocol/rubric surface rather than
@@ -20,14 +21,14 @@ the owner of all review workflow.
 ## Loop Contract
 
 ```text
-goal_hitl_eval_loop(idea, candidate_eval_batch, proof, kenji_feedback)
+goal_human_feedback_eval_loop(idea, candidate_eval_batch, proof, kenji_feedback)
   -> accepted_pattern | revised_batch | rejected_idea | next_hypothesis
 ```
 
 Native Goal mode owns continuation. This program owns durable memory for the
 loop: ideas, tests, feedback requests, Kenji's responses, accepted lessons, and
-next hypotheses. `hitl-autoresearch` provides the human-feedback shape, but the
-loop can stay lightweight until it needs a full session directory.
+next hypotheses. `with-human` provides the human-feedback shape, but the loop
+can stay lightweight until it needs a full feedback request.
 
 ## Current Skill Contract
 
@@ -87,10 +88,11 @@ Expected feedback shape:
 
 | Date | Run | Idea | Test | Result | Keep? | Lesson |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2026-06-11 | batch-01 | Seed `eval` with a skill-local four-task eval batch covering modular authoring, bad-task rejection, best-practice load precision, and skill-structure placement. | Added `skills/eval/eval_task.json` rows and audit note; deterministic custom-harness smoke wrote `.farplane/evals/runs/20260611-052148-eval-skill-smoke/summary.json` with 4 loaded tasks. | Pending HITL review. | pending | A useful eval-for-eval batch should test how evals are written, not only whether a sample answer sounds good. |
+| 2026-06-11 | batch-01 | Seed `eval` with a skill-local four-task eval batch covering modular authoring, bad-task rejection, best-practice load precision, and skill-structure placement. | Added `skills/eval/eval_task.json` rows and audit note; deterministic custom-harness smoke wrote `.farplane/evals/runs/20260611-052148-eval-skill-smoke/summary.json` with 4 loaded tasks. | Pending human-feedback review. | pending | A useful eval-for-eval batch should test how evals are written, not only whether a sample answer sounds good. |
 | 2026-06-11 | program-loop | Add `self-improve/program.md` so Goal loops have persistent memory for ideas, tests, feedback requests, and Kenji responses. | Created this program file. | Pending validation and feedback. | pending | Goal state is not enough; the skill needs local memory that future agents can read on first improvement pass. |
-| 2026-06-11 | rubric-first | Define a good-eval-writing rubric before adding more eval-for-eval cases. | Added `references/eval-writing-rubric.md` and linked it from `SKILL.md`. | Pending HITL review. | pending | The eval skill needs a quality function for eval design before it can reliably choose high-ROI breadth/depth cases. |
-| 2026-06-12 | core-self-improvement-batch | Add first eval coverage for core self-improvement skills after TASK-0190. | Added skill-local evals for `gap-analysis`, `harness-advisor`, `self-improve`, `optimize-harness`, and `skill-maintenance`; expanded `eval` hardcase/regression coverage; added one project-level workflow proof-surface canary. Validation pending. | Pending validation and HITL review. | pending | Split skill-local behavior quality from project-level workflow enforcement while covering the compounding self-improvement primitives. |
+| 2026-06-11 | rubric-first | Define a good-eval-writing rubric before adding more eval-for-eval cases. | Added `references/eval-writing-rubric.md` and linked it from `SKILL.md`. | Pending human-feedback review. | pending | The eval skill needs a quality function for eval design before it can reliably choose high-ROI breadth/depth cases. |
+| 2026-06-12 | core-self-improvement-batch | Add first eval coverage for core self-improvement skills after TASK-0190. | Added skill-local evals for `gap-analysis`, `harness-advisor`, `self-improve`, `optimize-harness`, and `skill-maintenance`; expanded `eval` hardcase/regression coverage; added one project-level workflow proof-surface canary. Validation pending. | Pending validation and human-feedback review. | pending | Split skill-local behavior quality from project-level workflow enforcement while covering the compounding self-improvement primitives. |
+| 2026-06-12 | skill-maintenance-fixtures | Make skill-maintenance evals realistic without mutating the real skill tree. | Added `skills/skill-maintenance/references/eval-fixture-sandbox.md` and seeded bad-skill fixtures under `skills/skill-maintenance/tests/fixtures/bad-skill-repo/`; revised skill-maintenance eval queries to require sandbox use. | Pending validation and human-feedback review. | pending | Skill-maintenance evals need concrete bad skills, but repair attempts must happen in a temp fixture copy or isolated checkout. |
 
 ## Feedback Log
 
@@ -100,7 +102,7 @@ Expected feedback shape:
 | 2026-06-11 | design-question | Ask how to test whether the eval skill is good. | Separate skill evals from workflow evals. Skill evals should test whether `eval` writes high-ROI, realistic, breadth/depth-aware, edge-case-covering tasks. Workflow evals should live at project level and test whether skill changes trigger proof-surface/eval decisions automatically. Consider council to find high-ROI guardrail evals. | Use this to shape the next batch before rollout. |
 | 2026-06-11 | rubric-first | Suggest starting from a good rubric for writing evals. | A good rubric should probably come before more task cases. | Added a draft rubric covering behavior focus, ROI, breadth/depth, realism, judgeability, safety, locality, proof-surface fit, diagnosticity, and maintenance cost. |
 | 2026-06-11 | skill-model | Question whether review is really a skill, whether every skill is a mini harness, and whether plan/impl/review should be primitives used inside all skills. | Review may be better understood as a rubric/proof contract store plus judging protocol; each skill should expose a granular unit of work and phase checkpoints. Need distinguish universal task phases from skill tiers. | Use this mental model before expanding eval/review standards. |
-| 2026-06-11 | tier0-phase-protocol | Adopt Option 3 direction: native Codex owns plan/execute phases, Tier 0 is phase protocol, and skills should bind signatures before execution. | Updated skill-system docs, global AGENTS template, skill template, and best-practices draft. | Pending validation and HITL review. | pending | Do not create `tier: 0` skills; use Tier 0 for universal phases and `group: meta`/`group: skills` for meta workflows. |
+| 2026-06-11 | tier0-phase-protocol | Adopt Option 3 direction: native Codex owns plan/execute phases, Tier 0 is phase protocol, and skills should bind signatures before execution. | Updated skill-system docs, global AGENTS template, skill template, and best-practices draft. | Pending validation and human-feedback review. | pending | Do not create `tier: 0` skills; use Tier 0 for universal phases and `group: meta`/`group: skills` for meta workflows. |
 
 ## Accepted Learnings
 
@@ -152,3 +154,5 @@ Expected feedback shape:
   fixture proves useful in practice.
 - Review the core self-improvement batch for ROI and overlap, then decide
   whether to keep all cases or trim to the highest-signal seed suite.
+- For mutation-capable skills, prefer seeded fixture repos plus temp sandboxes
+  over abstract prompts or direct real-repo mutation.

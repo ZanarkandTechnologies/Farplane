@@ -306,7 +306,7 @@ For landing pages with reusable formulas or inspiration references:
   example, "clone and localize startups" can guide the build strategy, but the
   public first viewport should sell the buyer's category, job, proof, and next
   action.
-- Do not mark a HITL landing iteration complete merely because screenshots were
+- Do not mark a human-feedback landing iteration complete merely because screenshots were
   presented. Completion needs explicit human accept/keep feedback, or a stated
   stop from the operator.
 

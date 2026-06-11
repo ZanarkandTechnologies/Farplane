@@ -223,7 +223,7 @@ repo.
     without stopping and what must remain a human gate.
 14. If the idea is still open-ended, use `brainstorm`.
 15. If the first slice or bootstrap shape is still vague, use `deep-interview`.
-16. Use `prd` skill for requirements and PRD authoring (HITL loop).
+16. Use `prd` skill for requirements and PRD authoring with human feedback when needed.
 17. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration

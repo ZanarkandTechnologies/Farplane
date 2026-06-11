@@ -227,7 +227,7 @@ The runner writes the proof surfaces this skill should summarize:
 - [references/eval-writing-rubric.md](references/eval-writing-rubric.md) -
   load when judging eval-task quality, batch ROI, owner locality, breadth/depth,
   and skill-local versus workflow-level placement.
-- [self-improve/program.md](self-improve/program.md) - Goal-backed HITL memory
+- [self-improve/program.md](self-improve/program.md) - Goal-backed human-feedback memory
   for improving eval-writing patterns through ideas, tests, feedback, and
   accepted lessons.
 - [examples/first-harness-eval/tasks.json](examples/first-harness-eval/tasks.json) -

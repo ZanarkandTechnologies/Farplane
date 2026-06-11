@@ -216,7 +216,7 @@ Until then:
   - `skills/skill-maintenance/SKILL.md`
   - `skills/review/SKILL.md`
   - optional: `skills/agent-qa-test/SKILL.md`,
-    `skills/agent-behavior-test/SKILL.md`, `skills/goal-crafter/SKILL.md`
+    `skills/agent-behavior-test/SKILL.md`, `skills/goal-advisor/SKILL.md`
 - `Inspect:`
   - `docs/skills/system.md`
   - `docs/skills/best-practices.md`
@@ -348,7 +348,7 @@ examples:
 self_improve_experiment(target_skill_or_surface, metric, search_space?, eval_suite?) -> best_candidate + experiment_log + promotion_recommendation
 state: reads(target, references, scripts, self-improve context, evals, prior results, failure analysis, candidates); writes(experiments, candidate_variants, scores, lessons?)
 gates: baseline:recorded; metric:honest; candidate:beats_baseline; promotion:reviewed
-routes: skill-maintenance | review | goal-crafter | no-change
+routes: skill-maintenance | review | goal-advisor | no-change
 fails: directly edits source without experiment loop; optimizes vague taste; promotes candidate without benchmark; treats one lucky run as durable improvement
 examples:
 - improve `advise` for direct recommendation -> compare candidate checklist/prompts against eval suite and recommend promotion only if the metric improves
@@ -386,7 +386,7 @@ examples:
 ```
 
 ```md
-craft_goal(intent, proof_requirements?) -> native_goal_contract
+advise_goal_use(intent, proof_requirements?) -> native_goal_contract
 state: reads(ticket?, proof_contract?, target_skill?, self-improve context?); writes(goal_prompt)
 gates: evidence:not_proxy_only; blocked_stop:explicit; boundaries:clear
 routes: native-goal | work | self-improve | agent-qa-test | review

@@ -392,27 +392,62 @@ prefer the owning Tier 3 skill, ticket contract, or reference.
 
 ## 6. Goals As Functions
 
-A goal is a harness objective compiled into a measurable task contract.
+A native Codex Goal is the continuation engine. Farplane represents material
+Goal use with a Goal Packet:
 
 ```text
-Goal := Task + Metric + Review + Resolve
+GoalPacket :=
+  ticket.md
++ program.md
++ progress.md
++ generated_goal_prompt
++ drift_check_contract
 ```
 
-Goal-crafter turns fuzzy operator intent into:
+Goal execution becomes:
 
 ```text
-Goal(intent, context) -> desired_end_state
-                       + evidence
-                       + constraints
-                       + iteration_policy
-                       + blocked_stop
+goal_loop(ticket, program, progress, trigger)
+  -> next_turn + evidence + drift_verdict + state_delta
 ```
 
-Goals optimize the harness by making the reward or loss explicit before work
-starts:
+Surface ownership:
 
 ```text
-goal -> metric -> accept_condition -> update_rule
+ticket.md = task contract
+program.md = loop configuration
+progress.md = observed execution
+generated_goal_prompt = runtime instruction
+drift_check_contract = read-only alignment check
+```
+
+Goal-advisor compiles a chosen Goal Packet into:
+
+```text
+advise_goal_use(goal_packet, context)
+  -> task_section
+   + logging_policy
+   + metric_provider
+   + after_each_turn_policy
+   + blocked_stop
+```
+
+Goal-advisor chooses the Goal architecture first:
+
+```text
+advise_goal_use(intent, state)
+  -> direct_work
+   | active_goal_packet
+   | heartbeat_packet
+   | feedback_loop_packet
+   | rollout_packet
+```
+
+Goals optimize the harness by making the reward, feedback provider, or loss
+explicit before work starts:
+
+```text
+goal -> metric_provider -> accept_condition -> update_rule
 ```
 
 Examples:
@@ -426,6 +461,38 @@ goal: reduce prompt bloat
 metric: duplicated_instruction_count + context_tokens
 accept: duplication decreases and task_success does not regress
 ```
+
+Feedback providers are signals consumed by the Goal program:
+
+```text
+feedback_provider(request, rubric, context)
+  -> observation | score | decision
+```
+
+`with-human` is the human feedback provider. It asks Kenji for labels, scores,
+rankings, or keep/revise decisions when human judgment is the cheapest honest
+metric. It does not own the continuation loop.
+
+Heartbeat and Goal are the same state transition with different triggers:
+
+```text
+trigger =
+  immediate_goal_continuation
+| scheduled_heartbeat
+| human_feedback_received
+| external_event
+```
+
+Drift review is a comparison function:
+
+```text
+drift_check(ticket, program, progress_tail, current_claim)
+  -> aligned | drifting | blocked | complete_candidate
+   + evidence_refs
+   + recovery_action
+```
+
+The drift checker is read-only and does not choose implementation strategy.
 
 ## 7. Skills As Functions
 
