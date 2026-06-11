@@ -379,6 +379,48 @@ execute. The selector still checks workflow policy, dependencies, blockers,
 approval gates, implementation support, and the presence of an explicit
 invocation.
 
+## 7b. Runtime Surface
+
+The active runtime surface is intentionally narrow:
+
+- `$work` admits one request, ticket, batch, board-selected unit, epic, or
+  metric loop before choosing Goal, compute, planning, proof, and route.
+- `impl-plan` plans one selected work package when material planning is needed.
+- `$impl` is the public build-phase orchestrator for one selected ticket.
+- `$ralph` is an operator-invoked serial board context selector that hands one
+  eligible ticket or safe tiny-ticket batch to `$work`.
+- native `/goal` owns semantic continuation when outcome, verification surface,
+  constraints, iteration policy, and blocked stop condition can be expressed as
+  a Goal.
+- `stop_hook.py` remains a mechanical active-ticket artifact, phase, review,
+  and nonce gate.
+
+There is no separate public retired execution surface anymore. Same-ticket
+repeats re-enter `$impl`; serial board drains enter through `$ralph` and then
+`$work`; future external runners enter through an explicit invocation envelope.
+
+Public docs should describe `.farplane/` as the canonical live runtime root.
+Runtime-only records may live under `.farplane/state/**`, including ticket
+runtime records such as `.farplane/state/tickets/TASK-XXXX.runtime.json`.
+Tickets remain durable truth; runtime records only carry transient checkout,
+branch, target, port, command, launch, and owner-session metadata.
+
+Runtime docs should preserve these boundaries:
+
+- `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and
+  `stop_hook.py` are operator/runtime shims, not a public control plane.
+- `ticket_runtime.py` is a narrow ticket-runtime shim for isolated checkout,
+  declared runtime launch/stop, and live QA target setup.
+- `current-run.json` is control-session-owned state, not a generic sink for
+  every prompt-bearing session.
+- tmux `auto_continue` is lane-follow-up plumbing, not the source of truth for
+  whether a `$impl` loop is active.
+- Stop hook is a mechanical protocol/artifact gate, not the autonomy brain for
+  Goal-backed work.
+- retired prototype dot-directories and old wrappers such as
+  `ralph_orchestrate.py` and `ralph_worker.sh` belong only in historical
+  surfaces, not live runtime docs.
+
 ## 8. State Machines
 
 ### Local Conversational Run

@@ -95,7 +95,7 @@ Runtime routing is session-first for parallel Codex usage:
 - `.farplane/state/current-run.json` as the live current-run pointer / last-active selector
 - only `session_origin=control` sessions may persist canonical `last_user_turn` and advance the live current-run pointer
 
-See [the runtime-surface spec](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md) for the canonical decision table.
+See [the invocation and adapters spec](/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md) for the canonical runtime and invocation decision table.
 
 ## Preferred Agent-Facing Command Surfaces
 

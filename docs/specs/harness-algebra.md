@@ -1290,3 +1290,66 @@ That is the core thesis in operational form:
 A harness is a constrained optimizer over its own context, capability, control,
 state, and verification variables.
 ```
+
+## 20. Case-Based Memory Graph
+
+Case-based memory is a generated retrieval layer over existing records, not a
+new manual registry and not a replacement for the ledgers. It helps the harness
+ask whether a proposed change resembles an older decision, correction, feature,
+ticket, or invariant before editing the system.
+
+Source nodes:
+
+```text
+MEM-*      := durable invariant from docs/MEMORY.md
+HISTORY    := timeline event from docs/HISTORY.md
+TROUBLE    := raw miss, blocker, or correction from docs/TROUBLES.md
+LESSON     := distilled prevention rule from docs/LESSONS.md
+FEAT-*     := feature row from docs/features/registry.jsonl
+SRC-*      := source row from docs/sources/registry.jsonl
+TASK-*     := ticket node from tickets/**/ticket.md
+SKILL      := skill package from docs/skills/registry.jsonl
+SPEC       := active contract under docs/specs/*.md
+```
+
+Derived edges:
+
+```text
+introduced_by(feature, ticket_or_source)
+constrained_by(feature_or_skill_or_spec, memory)
+corrected_by(policy, trouble_or_lesson)
+implemented_in(feature, surface)
+proved_by(feature_or_ticket, evidence)
+routes_to(skill_or_spec, owner_workflow)
+contradicts_candidate(candidate_change, invariant_or_known_limit)
+```
+
+Minimal case shape:
+
+```json
+{
+  "case_id": "CASE-0001",
+  "summary": "External skill self-healing should not edit installed skill bodies",
+  "trigger": "A repair path tried to patch an installed external skill directly",
+  "decision": "Mirror, ticket, or wrap external skills unless the operator explicitly approves direct edit",
+  "nodes": ["MEM-0107", "FEAT-0024", "docs/specs/self-improvement-contracts.md"],
+  "evidence": ["docs/TROUBLES.md", "docs/LESSONS.md", "tickets/TASK-0164/ticket.md"],
+  "reuse_when": ["skill self-healing", "external skill maintenance"],
+  "avoid_when": ["operator explicitly requests a specific external skill edit"]
+}
+```
+
+Use cases:
+
+- `policy_consistency`: retrieve related memories, features, trouble cases,
+  lessons, and owner specs before changing policy.
+- `feature_duplicate_check`: retrieve matching feature rows and source
+  decisions before adding a new feature.
+- `correction_pattern_check`: retrieve similar trouble rows and promoted
+  lessons when the operator reports a repeated miss.
+- `skill_boundary_check`: retrieve source ownership rules before broad skill
+  maintenance.
+
+First implementation should be a generated local JSON graph and query helper.
+No hosted database, no hidden daemon, no giant hand-maintained graph file, and
+no autonomy decisions from graph similarity alone.

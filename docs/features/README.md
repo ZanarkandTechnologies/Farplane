@@ -89,7 +89,7 @@ inventory already lives in generated form at `docs/skills/registry.jsonl`, and
 future per-skill adoption fields should reference `FEAT-####` handles from this
 registry rather than loose feature names.
 
-Use [docs/specs/meta-harness-automation.md](../specs/meta-harness-automation.md)
+Use [docs/specs/harness-techniques.md](../specs/harness-techniques.md#self-growing-harness-map)
 for the full self-growing harness map.
 
 ## ID Allocation

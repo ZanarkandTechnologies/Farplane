@@ -299,4 +299,4 @@ empty review-output fields in the template or repeating the artifact path under
 Canonical policy references:
 
 - [context-and-handoff-policy.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/context-and-handoff-policy.md)
-- [runtime-surface spec](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md)
+- [invocation and adapters spec](/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md)

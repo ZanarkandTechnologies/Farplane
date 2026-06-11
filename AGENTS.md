@@ -52,10 +52,11 @@ guardrail, review evidence, and write back. Tier 1 primitives cover `advise`,
 `reference-grounding`, `prototyping`, and skill first-load todo-list loading;
 Tier 2 names generic workflow surfaces such as `brainstorm`, `research:*`, and
 `harness-advisor`; Tier 3 application skills implement concrete domains. `plan`
-and `execute` are deprecated compatibility wrappers for native Codex phases,
-not normal dependencies for new skill work. `review` is a callable TAS wrapper
-over docs-owned rubrics in `docs/review/rubrics/*`, not the owner of every
-review workflow. See `MEM-0098`, `MEM-0100`, `MEM-0125`, and the Tier 0 update
+is a planning prompt-template and todo-composition interface, not the Tier 0
+planning phase itself. `execute` is a deprecated compatibility wrapper for
+native Codex execution, not a normal dependency for new skill work. `review` is
+a callable TAS wrapper over docs-owned rubrics in `docs/review/rubrics/*`, not
+the owner of every review workflow. See `MEM-0098`, `MEM-0100`, `MEM-0125`, and the Tier 0 update
 in `docs/skills/system.md`.
 Create new Tier 1 primitives only when multiple Tier 2 interfaces need that
 move as a base dependency; otherwise keep common reusable work as a Tier 2
@@ -152,8 +153,8 @@ For harness tuning and repo-shape changes:
 - `docs/specs/harness-engineering-doctrine.md`
 - `docs/specs/harness-techniques.md`
 - `docs/specs/spec-first-execution-loop.md`
-- `docs/specs/orchestrator-subagent-loop.md`
 - `docs/specs/review-gates.md`
+- `docs/specs/invocation-and-adapters.md`
 
 For install and bootstrap work:
 

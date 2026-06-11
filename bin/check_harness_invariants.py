@@ -41,7 +41,7 @@ RULES: tuple[HarnessRule, ...] = (
         ),
     ),
     HarnessRule(
-        relative_path="docs/specs/runtime-surface.md",
+        relative_path="docs/specs/invocation-and-adapters.md",
         required_substrings=(
             "Public docs should describe `.farplane/` as the canonical live runtime root.",
             "There is no separate public retired execution surface anymore.",
@@ -51,7 +51,7 @@ RULES: tuple[HarnessRule, ...] = (
             ".omx/",
         ),
         remediation=(
-            "keep runtime-surface docs on the live Farplane contract: "
+            "keep invocation/runtime docs on the live Farplane contract: "
             "`.farplane/` is canonical and retired runtime paths belong only "
             "in historical surfaces"
         ),

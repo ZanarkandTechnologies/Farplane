@@ -32,8 +32,6 @@ Execution and proof specs:
   review execution model.
 - `review-gates.md` - ticket proof contract, QA, reviewer, and Stop-hook review
   gates.
-- `orchestrator-subagent-loop.md` - single-ticket `$impl` worker-lane and
-  reviewer/QA/evidence-check orchestration model.
 - `agent-testability-surfaces.md` - post-system-design control accelerators,
   state probes, coordination views, and proof-surface planning.
 - `adaptive-backoff.md` - repeated wait, retry, polling, and long-running job
@@ -53,26 +51,27 @@ Planning and authoring specs:
 Invocation and runtime specs:
 
 - `invocation-and-adapters.md` - explicit Farplane invocation, board adapter,
-  compute selection, local execution, and future external-runner contract.
-- `runtime-surface.md` - current public runtime/control surfaces and retired
-  runtime boundaries.
+  compute selection, local execution, runtime surface boundaries, and future
+  external-runner contract.
 
-Meta-harness and consolidation candidates:
+Meta-harness specs:
 
 - `self-improvement-contracts.md` - canonical signatures for gap analysis,
-  harness advising, eval capture, skill maintenance, self-improve, and
-  optimize-harness workflows.
-- `meta-harness-automation.md` - feature registry, skill registry,
-  skill-maintenance, source ingestion, evals, failure capture, review, and
-  durable-memory map. Merge active details into `harness-techniques.md` and
-  `self-improvement-contracts.md` before archiving.
-- `skill-self-healing.md` - skill failure detection and repair-ticket handoff
-  pipeline. Merge active details into `self-improvement-contracts.md`,
-  `docs/skills/README.md`, and `skills/eval` before archiving.
-- `case-based-memory-context-graph.md` - designed context graph over history,
-  memory, troubles, lessons, sources, features, tickets, and skills. Merge
-  durable parts into `harness-algebra.md` or `filesystem-lifecycle.md` if this
-  remains conceptual rather than executable.
+  harness advising, eval capture, skill maintenance, self-improve,
+  skill self-healing, and optimize-harness workflows.
+
+Archived or superseded specs:
+
+- `../archive/specs/meta-harness-automation.md` - folded into
+  `harness-techniques.md` and `self-improvement-contracts.md`.
+- `../archive/specs/skill-self-healing.md` - folded into
+  `self-improvement-contracts.md` and `docs/skills/README.md`.
+- `../archive/specs/runtime-surface.md` - folded into
+  `invocation-and-adapters.md`.
+- `../archive/specs/orchestrator-subagent-loop.md` - folded into
+  `spec-first-execution-loop.md`.
+- `../archive/specs/case-based-memory-context-graph.md` - folded into
+  `harness-algebra.md`.
 
 Generated audit:
 

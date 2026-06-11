@@ -111,3 +111,45 @@ A hardcase should be:
 
 Plain lessons and troubles remain direct docs actions when needed. They are not
 part of the core self-improvement skill pipeline.
+
+## Skill Self-Healing Contract
+
+Skill self-healing is a meta pipeline over existing skills, not a scheduler or
+new hidden runtime. It starts when an invoked skill fails its advertised
+behavior, when a required tool/file/registry row is missing, when a wrapper
+returns a gap where a working operation was expected, or when repeated user
+correction shows a skill contract is failing.
+
+Core flow:
+
+```text
+skill_failure
+  -> gap_analysis(skill_operation, expected_behavior, evidence)
+  -> skill_failure_packet
+  -> safe_local_fix ? repair_ticket : escalation_recommendation
+  -> spec-to-ticket | impl-plan | impl | review
+```
+
+Preferred failure packet:
+
+```text
+skill_failure_packet(skill, operation, expected, observed, failure_class, evidence_refs)
+  -> repair_ticket | escalation_recommendation
+state: reads(skill registry, capability fixtures, observed run evidence); writes(ticket? artifact?)
+gates: failure_grounded; external_body_not_edited_without_operator_request; priority_named
+routes: skill-maintenance | self-improve | runtime-debugging | spec-to-ticket | review
+fails: silently patches installed external skills; creates hidden repair work; treats opportunity ideas as direct execution
+```
+
+Keep capability fixtures small and close to ownership:
+
+- repo-owned skill sanity fixtures live under `skills/<skill>/tests/`
+- installed or external skill mirrors live under `tests/<skill>/`
+- deterministic fixture validation lives in `bin/check_skill_capabilities.py`
+- repair execution still uses the normal ticket pipeline
+
+Opportunity triggers, such as a high-value missing capability inferred from
+current work, should create a proposal ticket unless the action is clearly
+same-scope and safe. Repair triggers can create repair tickets directly when
+the fix is local, non-destructive, and targets repo-owned wrappers, fixtures,
+registry rows, or docs.

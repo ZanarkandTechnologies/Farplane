@@ -106,15 +106,15 @@ def is_external(ref: str) -> bool:
     return bool(re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", ref)) and not ref.startswith("file:")
 
 
-def resolve_local_ref(ref: str, source: Path, repo_root: Path) -> tuple[str | None, str | None]:
+def resolve_local_ref(ref: str, source: Path, repo_root: Path) -> tuple[str | None, str | None, bool]:
     cleaned = clean_ref(ref)
     if not cleaned or cleaned.startswith("#") or is_external(cleaned):
-        return None, None
+        return None, None, False
     path_part = cleaned.split("#", 1)[0]
     if not path_part:
-        return None, None
+        return None, None, False
     if any(marker in path_part for marker in ("TASK-XXXX", "<", ">", "{", "}")):
-        return None, None
+        return None, None, False
     path_part = path_part.replace("%20", " ")
     candidate = Path(path_part)
     if candidate.is_absolute():
@@ -127,7 +127,7 @@ def resolve_local_ref(ref: str, source: Path, repo_root: Path) -> tuple[str | No
                 suffix = parts[parts.index("Farplane") + 1 :]
                 candidate = (repo_root / Path(*suffix)).resolve()
             else:
-                return None, path_part
+                return None, path_part, False
     elif path_part.startswith("../") or path_part.startswith("./"):
         candidate = (source.parent / path_part).resolve()
     else:
@@ -135,15 +135,16 @@ def resolve_local_ref(ref: str, source: Path, repo_root: Path) -> tuple[str | No
     try:
         local = candidate.relative_to(repo_root.resolve()).as_posix()
     except ValueError:
-        return None, path_part
+        return None, path_part, False
     if candidate.exists():
         if candidate.is_dir():
             for name in ("README.md", "SKILL.md"):
                 index = candidate / name
                 if index.exists():
-                    return rel(index, repo_root), None
-        return local, None
-    return None, local
+                    return rel(index, repo_root), None, False
+            return local, None, True
+        return local, None, False
+    return None, local, False
 
 
 def extract_refs(text: str) -> list[tuple[str, str]]:
@@ -173,6 +174,8 @@ def node_kind(node_id: str) -> str:
         return "skill-doc"
     if path.startswith("docs/research/"):
         return "research"
+    if path.startswith("dir:docs/review/rubrics") or path.startswith("docs/review/rubrics/"):
+        return "review-rubric"
     if path.startswith("docs/"):
         return "doc"
     if path.startswith("templates/"):
@@ -210,18 +213,18 @@ def build_graph(repo_root: Path) -> dict[str, Any]:
         except UnicodeDecodeError:
             continue
         for raw_ref, ref_type in extract_refs(text):
-            target_path, missing = resolve_local_ref(raw_ref, path, repo_root)
+            target_path, missing, is_directory = resolve_local_ref(raw_ref, path, repo_root)
             if missing:
                 unresolved.append({"source": local_source, "raw_ref": clean_ref(raw_ref), "candidate": missing})
                 continue
             if not target_path:
                 continue
-            target = f"file:{target_path}"
+            target = f"dir:{target_path}" if is_directory else f"file:{target_path}"
             nodes.setdefault(
                 target,
                 {
                     "id": target,
-                    "label": target_path,
+                    "label": target_path + ("/" if is_directory else ""),
                     "kind": node_kind(target),
                     "path": target_path,
                 },
@@ -239,6 +242,35 @@ def build_graph(repo_root: Path) -> dict[str, Any]:
                     "raw_ref": clean_ref(raw_ref),
                 }
             )
+            if is_directory:
+                directory = repo_root / target_path
+                for child in sorted(directory.iterdir()):
+                    if not child.is_file() or child.suffix not in {".md", ".jsonl", ".py"}:
+                        continue
+                    child_path = rel(child, repo_root)
+                    child_target = f"file:{child_path}"
+                    nodes.setdefault(
+                        child_target,
+                        {
+                            "id": child_target,
+                            "label": child_path,
+                            "kind": node_kind(child_target),
+                            "path": child_path,
+                        },
+                    )
+                    child_key = (target, child_target, "directory-contains", target_path)
+                    if child_key in seen_edges:
+                        continue
+                    seen_edges.add(child_key)
+                    edges.append(
+                        {
+                            "source": target,
+                            "target": child_target,
+                            "type": "directory-contains",
+                            "from_file": target_path,
+                            "raw_ref": target_path,
+                        }
+                    )
 
     edge_type_counts = Counter(edge["type"] for edge in edges)
     kind_counts = Counter(node["kind"] for node in nodes.values())
@@ -324,11 +356,11 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
 
     specs = [["Spec", "All refs", "Skill refs", "Suggested status"]]
     consolidation_candidates = {
-        "docs/specs/case-based-memory-context-graph.md": "merge into harness-algebra or filesystem-lifecycle if the context graph stays conceptual",
-        "docs/specs/meta-harness-automation.md": "merge active pieces into harness-techniques and self-improvement-contracts",
-        "docs/specs/orchestrator-subagent-loop.md": "merge durable gates into spec-first-execution-loop and review-gates",
-        "docs/specs/runtime-surface.md": "merge current runtime boundaries into invocation-and-adapters",
-        "docs/specs/skill-self-healing.md": "merge into self-improvement-contracts, eval, and skill-maintenance docs",
+        "docs/archive/specs/case-based-memory-context-graph.md": "archived after folding active model into harness-algebra",
+        "docs/archive/specs/meta-harness-automation.md": "archived after folding active map into harness-techniques and self-improvement-contracts",
+        "docs/archive/specs/orchestrator-subagent-loop.md": "archived after folding durable lane rules into spec-first-execution-loop",
+        "docs/archive/specs/runtime-surface.md": "archived after folding runtime boundaries into invocation-and-adapters",
+        "docs/archive/specs/skill-self-healing.md": "archived after folding repair contract into self-improvement-contracts and docs/skills",
     }
     for path in sorted(spec_paths):
         status = consolidation_candidates.get(path, "keep active")
@@ -339,9 +371,12 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
         "docs/specs/harness-algebra.md",
         "docs/specs/harness-engineering-doctrine.md",
         "docs/specs/self-improvement-contracts.md",
+        "docs/specs/invocation-and-adapters.md",
         "docs/skills/README.md",
         "docs/skills/system.md",
         "docs/skills/best-practices.md",
+        "docs/review/rubrics/review-rubric-index.md",
+        "docs/review/rubrics/reviewer-handoff.md",
         "docs/specs/filesystem-lifecycle.md",
     ]:
         global_bundle.append([f"`{path}`", "high leverage for installed skills or harness placement"])
@@ -408,13 +443,14 @@ can still be worth keeping.
 {markdown_table(unreferenced_rows)}
 ## Next Cleanup Pass
 
-1. Merge active content from the consolidation candidates into the target
-   canonical specs.
-2. Update references.
-3. Move superseded files under `docs/archive/` only after the graph shows their
-   important inbound refs have been redirected.
-4. Keep `docs/research/**` as historical evidence unless a source registry row
+1. Reduce unresolved local-looking refs that point to missing active surfaces,
+   especially template-era `docs/progress.md` and old external repo paths.
+2. Keep `docs/review/rubrics/*` as canonical docs even when individual family
+   files are primarily reached through the directory and rubric index.
+3. Keep `docs/research/**` as historical evidence unless a source registry row
    or active spec requires a new location.
+4. Use this report before any future archive move: redirect active inbound refs
+   first, then move superseded files under `docs/archive/`.
 """
 
 

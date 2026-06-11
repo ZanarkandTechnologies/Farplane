@@ -221,7 +221,7 @@ Until then:
   - `docs/skills/system.md`
   - `docs/skills/best-practices.md`
   - `docs/specs/harness-engineering-doctrine.md`
-  - `docs/specs/skill-self-healing.md`
+  - `docs/specs/self-improvement-contracts.md`
   - `skills/harness-advisor/SKILL.md`
   - `skills/eval/references/eval-best-practices.md`
   - `skills/self-improve/references/skill-evals.md`
@@ -519,7 +519,7 @@ examples:
 
 - `docs/skills/system.md`
 - `docs/specs/harness-engineering-doctrine.md`
-- `docs/specs/skill-self-healing.md`
+- `docs/specs/self-improvement-contracts.md`
 - `skills/harness-advisor/SKILL.md`
 - `skills/eval/SKILL.md`
 - `skills/self-improve/SKILL.md`

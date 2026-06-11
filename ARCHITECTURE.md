@@ -254,11 +254,9 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 ### Runtime and orchestration surfaces
 
 - [docs/specs/spec-first-execution-loop.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/spec-first-execution-loop.md)
-  Purpose: end-to-end execution model
-- [docs/specs/orchestrator-subagent-loop.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/orchestrator-subagent-loop.md)
-  Purpose: lane roles and orchestration boundaries
-- [docs/specs/runtime-surface.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md)
-  Purpose: runtime state and operator-visible surfaces, with `.farplane/` as the canonical live root
+  Purpose: end-to-end execution model, lane roles, and orchestration boundaries
+- [docs/specs/invocation-and-adapters.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md)
+  Purpose: invocation, adapter, compute, runtime state, and operator-visible surfaces, with `.farplane/` as the canonical live root
 - [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/ralph/SKILL.md)
   Purpose: public board context surface that selects one eligible filesystem
   ticket or safe tiny-ticket batch and hands the work unit to `$work`

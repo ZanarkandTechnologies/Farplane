@@ -1,27 +1,666 @@
 window.HARNESS_GRAPH = {
   "counts": {
     "edge_types": {
-      "literal-path": 1609,
-      "markdown-link": 451
+      "directory-contains": 89,
+      "literal-path": 1611,
+      "markdown-link": 448
     },
-    "edges": 2060,
+    "edges": 2148,
     "node_kinds": {
       "agent": 18,
-      "doc": 41,
-      "file": 369,
-      "research": 12,
+      "doc": 22,
+      "file": 408,
+      "research": 11,
+      "review-rubric": 22,
       "root-doc": 5,
       "script": 49,
       "skill": 86,
       "skill-doc": 5,
-      "spec": 22,
-      "template": 8
+      "spec": 17,
+      "template": 5
     },
-    "nodes": 615,
-    "scanned_files": 926,
-    "unresolved_refs": 762
+    "nodes": 648,
+    "scanned_files": 927,
+    "unresolved_refs": 767
   },
   "edges": [
+    {
+      "from_file": "docs/research",
+      "raw_ref": "docs/research",
+      "source": "dir:docs/research",
+      "target": "file:docs/research/2026-04-12_deep-skill-opportunities.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-04-02_oh-my-codex-harness-analysis.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-04-02_run-artifacts-risk-analysis.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-04-03_ralf-form-factor-proposal.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-05-07_scroll-scrub-qa-gap-analysis.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-05-07_terminal-industries-parity-landing-page.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/research/web-research",
+      "raw_ref": "docs/research/web-research",
+      "source": "dir:docs/research/web-research",
+      "target": "file:docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/architecture.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/code-quality.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/debloatability.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/demo-quality.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/desloppify.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/eval-quality.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/evidence-quality.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/frontend-code-maintainability.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/frontend-guidelines.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/gotchas.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/implementation-plan.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/integration-readiness.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/prompt-quality.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/review-rubric-index.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/reviewer-handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/skill-contract.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/spec-contract.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/ui-quality.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/user-intent-satisfaction.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/video-quality.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "docs/review/rubrics",
+      "raw_ref": "docs/review/rubrics",
+      "source": "dir:docs/review/rubrics",
+      "target": "file:docs/review/rubrics/workflows.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/ASSET_PHASE_READY.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success/SPEC.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/SPEC.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase/SPEC.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/SPEC.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/PROBE.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "source": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/architecture.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/asset-evidence.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/cinematic-scroll-site-guideline.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/designer-judgment.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/gotchas.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/method-selection-smoke.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/model.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/motion-and-media.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/planner-executor.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/product-demo-media.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/qa.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/registry-format.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/research-synthesis.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/scrolltelling.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/spec-first-cinematic-industrial.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/terminal-scroll-review.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/references",
+      "raw_ref": "skills/landing-page/references",
+      "source": "dir:skills/landing-page/references",
+      "target": "file:skills/landing-page/references/workflows.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/scripts",
+      "raw_ref": "skills/landing-page/scripts",
+      "source": "dir:skills/landing-page/scripts",
+      "target": "file:skills/landing-page/scripts/asset_evidence_lint.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/scripts",
+      "raw_ref": "skills/landing-page/scripts",
+      "source": "dir:skills/landing-page/scripts",
+      "target": "file:skills/landing-page/scripts/landing_spec_lint.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/scripts",
+      "raw_ref": "skills/landing-page/scripts",
+      "source": "dir:skills/landing-page/scripts",
+      "target": "file:skills/landing-page/scripts/terminal_landing_score.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/scripts",
+      "raw_ref": "skills/landing-page/scripts",
+      "source": "dir:skills/landing-page/scripts",
+      "target": "file:skills/landing-page/scripts/test_asset_evidence_lint.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/scripts",
+      "raw_ref": "skills/landing-page/scripts",
+      "source": "dir:skills/landing-page/scripts",
+      "target": "file:skills/landing-page/scripts/test_landing_spec_lint.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/scripts",
+      "raw_ref": "skills/landing-page/scripts",
+      "source": "dir:skills/landing-page/scripts",
+      "target": "file:skills/landing-page/scripts/test_terminal_landing_score.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/landing-page/self-improve",
+      "raw_ref": "skills/landing-page/self-improve",
+      "source": "dir:skills/landing-page/self-improve",
+      "target": "file:skills/landing-page/self-improve/program.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "templates/external-cli/profiles/frontend-pi-kimi",
+      "raw_ref": "templates/external-cli/profiles/frontend-pi-kimi",
+      "source": "dir:templates/external-cli/profiles/frontend-pi-kimi",
+      "target": "file:templates/external-cli/profiles/frontend-pi-kimi/APPEND_SYSTEM.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "templates/global",
+      "raw_ref": "templates/global",
+      "source": "dir:templates/global",
+      "target": "file:templates/global/AGENTS.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "tickets/templates",
+      "raw_ref": "tickets/templates",
+      "source": "dir:tickets/templates",
+      "target": "file:tickets/templates/ticket.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "AGENTS.md",
+      "raw_ref": "docs/review/rubrics/",
+      "source": "file:AGENTS.md",
+      "target": "dir:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "AGENTS.md",
+      "raw_ref": "templates/global/",
+      "source": "file:AGENTS.md",
+      "target": "dir:templates/global",
+      "type": "literal-path"
+    },
     {
       "from_file": "AGENTS.md",
       "raw_ref": "AGENTS.md",
@@ -87,13 +726,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "AGENTS.md",
-      "raw_ref": "docs/review/rubrics/",
-      "source": "file:AGENTS.md",
-      "target": "file:docs/review/rubrics",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "AGENTS.md",
       "raw_ref": "docs/skills/system.md",
       "source": "file:AGENTS.md",
       "target": "file:docs/skills/system.md",
@@ -125,13 +757,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/specs/invocation-and-adapters.md",
       "source": "file:AGENTS.md",
       "target": "file:docs/specs/invocation-and-adapters.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "AGENTS.md",
-      "raw_ref": "docs/specs/orchestrator-subagent-loop.md",
-      "source": "file:AGENTS.md",
-      "target": "file:docs/specs/orchestrator-subagent-loop.md",
       "type": "literal-path"
     },
     {
@@ -171,17 +796,24 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "AGENTS.md",
-      "raw_ref": "templates/global/",
-      "source": "file:AGENTS.md",
-      "target": "file:templates/global",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "AGENTS.md",
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:AGENTS.md",
       "target": "file:templates/global/AGENTS.md",
       "type": "literal-path"
+    },
+    {
+      "from_file": "ARCHITECTURE.md",
+      "raw_ref": "tickets/archive",
+      "source": "file:ARCHITECTURE.md",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "ARCHITECTURE.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/tickets/archive",
+      "source": "file:ARCHITECTURE.md",
+      "target": "dir:tickets/archive",
+      "type": "markdown-link"
     },
     {
       "from_file": "ARCHITECTURE.md",
@@ -437,20 +1069,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "ARCHITECTURE.md",
-      "raw_ref": "docs/specs/orchestrator-subagent-loop.md",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:docs/specs/orchestrator-subagent-loop.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/orchestrator-subagent-loop.md",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:docs/specs/orchestrator-subagent-loop.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
       "raw_ref": "docs/specs/review-gates.md",
       "source": "file:ARCHITECTURE.md",
       "target": "file:docs/specs/review-gates.md",
@@ -461,20 +1079,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/review-gates.md",
       "source": "file:ARCHITECTURE.md",
       "target": "file:docs/specs/review-gates.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "docs/specs/runtime-surface.md",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:docs/specs/runtime-surface.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:docs/specs/runtime-surface.md",
       "type": "markdown-link"
     },
     {
@@ -647,20 +1251,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "ARCHITECTURE.md",
-      "raw_ref": "tickets/archive",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:tickets/archive",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/tickets/archive",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:tickets/archive",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
       "raw_ref": "tickets/scripts/check_ticket_metadata.py",
       "source": "file:ARCHITECTURE.md",
       "target": "file:tickets/scripts/check_ticket_metadata.py",
@@ -706,6 +1296,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "bin/notify.py",
       "source": "file:PROJECT_RULES.md",
       "target": "file:bin/notify.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "README.md",
+      "raw_ref": "skills/eval/examples/",
+      "source": "file:README.md",
+      "target": "dir:skills/eval/examples",
       "type": "literal-path"
     },
     {
@@ -822,27 +1419,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "README.md",
-      "raw_ref": "docs/specs/harness-techniques.md",
+      "raw_ref": "docs/specs/harness-techniques.md#self-growing-harness-map",
       "source": "file:README.md",
       "target": "file:docs/specs/harness-techniques.md",
       "type": "markdown-link"
     },
     {
       "from_file": "README.md",
-      "raw_ref": "docs/specs/meta-harness-automation.md",
-      "source": "file:README.md",
-      "target": "file:docs/specs/meta-harness-automation.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "README.md",
-      "raw_ref": "docs/specs/meta-harness-automation.md",
-      "source": "file:README.md",
-      "target": "file:docs/specs/meta-harness-automation.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "README.md",
       "raw_ref": "qa/README.md",
       "source": "file:README.md",
       "target": "file:qa/README.md",
@@ -854,13 +1437,6 @@ window.HARNESS_GRAPH = {
       "source": "file:README.md",
       "target": "file:qa/README.md",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "README.md",
-      "raw_ref": "skills/eval/examples/",
-      "source": "file:README.md",
-      "target": "file:skills/eval/examples",
-      "type": "literal-path"
     },
     {
       "from_file": "README.md",
@@ -889,6 +1465,13 @@ window.HARNESS_GRAPH = {
       "source": "file:README.md",
       "target": "file:tickets/README.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "agents/convex-builder.toml",
+      "raw_ref": "docs/research/",
+      "source": "file:agents/convex-builder.toml",
+      "target": "dir:docs/research",
+      "type": "literal-path"
     },
     {
       "from_file": "agents/convex-builder.toml",
@@ -905,10 +1488,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "agents/convex-builder.toml",
-      "raw_ref": "docs/research/",
-      "source": "file:agents/convex-builder.toml",
-      "target": "file:docs/research",
+      "from_file": "agents/deep-researcher.toml",
+      "raw_ref": "docs/research/web-research/",
+      "source": "file:agents/deep-researcher.toml",
+      "target": "dir:docs/research/web-research",
       "type": "literal-path"
     },
     {
@@ -919,10 +1502,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "agents/deep-researcher.toml",
-      "raw_ref": "docs/research/web-research/",
-      "source": "file:agents/deep-researcher.toml",
-      "target": "file:docs/research/web-research",
+      "from_file": "agents/documentation-maintainer.toml",
+      "raw_ref": "docs/research/",
+      "source": "file:agents/documentation-maintainer.toml",
+      "target": "dir:docs/research",
       "type": "literal-path"
     },
     {
@@ -937,13 +1520,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "README.md",
       "source": "file:agents/documentation-maintainer.toml",
       "target": "file:README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "agents/documentation-maintainer.toml",
-      "raw_ref": "docs/research/",
-      "source": "file:agents/documentation-maintainer.toml",
-      "target": "file:docs/research",
       "type": "literal-path"
     },
     {
@@ -969,6 +1545,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "agents/librarian.toml",
+      "raw_ref": "docs/research/",
+      "source": "file:agents/librarian.toml",
+      "target": "dir:docs/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/librarian.toml",
       "raw_ref": "README.md",
       "source": "file:agents/librarian.toml",
       "target": "file:README.md",
@@ -989,10 +1572,17 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "agents/librarian.toml",
+      "from_file": "agents/memory.toml",
       "raw_ref": "docs/research/",
-      "source": "file:agents/librarian.toml",
-      "target": "file:docs/research",
+      "source": "file:agents/memory.toml",
+      "target": "dir:docs/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "agents/memory.toml",
+      "raw_ref": "docs/research/web-research/",
+      "source": "file:agents/memory.toml",
+      "target": "dir:docs/research/web-research",
       "type": "literal-path"
     },
     {
@@ -1010,17 +1600,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "agents/memory.toml",
+      "from_file": "agents/planner-agent.toml",
       "raw_ref": "docs/research/",
-      "source": "file:agents/memory.toml",
-      "target": "file:docs/research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "agents/memory.toml",
-      "raw_ref": "docs/research/web-research/",
-      "source": "file:agents/memory.toml",
-      "target": "file:docs/research/web-research",
+      "source": "file:agents/planner-agent.toml",
+      "target": "dir:docs/research",
       "type": "literal-path"
     },
     {
@@ -1042,13 +1625,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/prd.md",
       "source": "file:agents/planner-agent.toml",
       "target": "file:docs/prd.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "agents/planner-agent.toml",
-      "raw_ref": "docs/research/",
-      "source": "file:agents/planner-agent.toml",
-      "target": "file:docs/research",
       "type": "literal-path"
     },
     {
@@ -1277,9 +1853,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/README.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md",
       "source": "file:bin/README.md",
-      "target": "file:docs/specs/runtime-surface.md",
+      "target": "file:docs/specs/invocation-and-adapters.md",
       "type": "markdown-link"
     },
     {
@@ -1382,16 +1958,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/check_harness_invariants.py",
-      "raw_ref": "AGENTS.md",
+      "raw_ref": "agents/",
       "source": "file:bin/check_harness_invariants.py",
-      "target": "file:AGENTS.md",
+      "target": "dir:agents",
       "type": "literal-path"
     },
     {
       "from_file": "bin/check_harness_invariants.py",
-      "raw_ref": "agents/",
+      "raw_ref": "AGENTS.md",
       "source": "file:bin/check_harness_invariants.py",
-      "target": "file:agents",
+      "target": "file:AGENTS.md",
       "type": "literal-path"
     },
     {
@@ -1403,9 +1979,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/check_harness_invariants.py",
-      "raw_ref": "docs/specs/runtime-surface.md",
+      "raw_ref": "docs/specs/invocation-and-adapters.md",
       "source": "file:bin/check_harness_invariants.py",
-      "target": "file:docs/specs/runtime-surface.md",
+      "target": "file:docs/specs/invocation-and-adapters.md",
       "type": "literal-path"
     },
     {
@@ -1452,16 +2028,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/check_tier0_phase_protocol.py",
-      "raw_ref": "AGENTS.md",
+      "raw_ref": "docs/review/rubrics/",
       "source": "file:bin/check_tier0_phase_protocol.py",
-      "target": "file:AGENTS.md",
+      "target": "dir:docs/review/rubrics",
       "type": "literal-path"
     },
     {
       "from_file": "bin/check_tier0_phase_protocol.py",
-      "raw_ref": "docs/review/rubrics/",
+      "raw_ref": "tickets/templates",
       "source": "file:bin/check_tier0_phase_protocol.py",
-      "target": "file:docs/review/rubrics",
+      "target": "dir:tickets/templates",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/check_tier0_phase_protocol.py",
+      "raw_ref": "AGENTS.md",
+      "source": "file:bin/check_tier0_phase_protocol.py",
+      "target": "file:AGENTS.md",
       "type": "literal-path"
     },
     {
@@ -1483,13 +2066,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/README.md",
       "source": "file:bin/check_tier0_phase_protocol.py",
       "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/check_tier0_phase_protocol.py",
-      "raw_ref": "tickets/templates",
-      "source": "file:bin/check_tier0_phase_protocol.py",
-      "target": "file:tickets/templates",
       "type": "literal-path"
     },
     {
@@ -1571,16 +2147,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/sync_skill_plugins.py",
-      "raw_ref": "bin/sync_skill_plugins.py",
+      "raw_ref": "docs/review/rubrics",
       "source": "file:bin/sync_skill_plugins.py",
-      "target": "file:bin/sync_skill_plugins.py",
+      "target": "dir:docs/review/rubrics",
       "type": "literal-path"
     },
     {
       "from_file": "bin/sync_skill_plugins.py",
-      "raw_ref": "docs/review/rubrics",
+      "raw_ref": "bin/sync_skill_plugins.py",
       "source": "file:bin/sync_skill_plugins.py",
-      "target": "file:docs/review/rubrics",
+      "target": "file:bin/sync_skill_plugins.py",
       "type": "literal-path"
     },
     {
@@ -1697,9 +2273,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/test_harness_invariants.py",
-      "raw_ref": "docs/specs/runtime-surface.md",
+      "raw_ref": "docs/specs/invocation-and-adapters.md",
       "source": "file:bin/test_harness_invariants.py",
-      "target": "file:docs/specs/runtime-surface.md",
+      "target": "file:docs/specs/invocation-and-adapters.md",
       "type": "literal-path"
     },
     {
@@ -1762,7 +2338,7 @@ window.HARNESS_GRAPH = {
       "from_file": "bin/test_sync_skill_plugins.py",
       "raw_ref": "docs/review/rubrics",
       "source": "file:bin/test_sync_skill_plugins.py",
-      "target": "file:docs/review/rubrics",
+      "target": "dir:docs/review/rubrics",
       "type": "literal-path"
     },
     {
@@ -1770,6 +2346,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/features",
       "source": "file:bin/test_sync_skill_registry.py",
       "target": "file:docs/features/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/HISTORY.md",
+      "raw_ref": "docs/policies/",
+      "source": "file:docs/HISTORY.md",
+      "target": "dir:docs/policies",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/HISTORY.md",
+      "raw_ref": "skills/eval/examples/farplane-global-harness/",
+      "source": "file:docs/HISTORY.md",
+      "target": "dir:skills/eval/examples/farplane-global-harness",
       "type": "literal-path"
     },
     {
@@ -1823,23 +2413,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/HISTORY.md",
-      "raw_ref": "docs/policies/",
-      "source": "file:docs/HISTORY.md",
-      "target": "file:docs/policies",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/HISTORY.md",
       "raw_ref": "qa/cookbook",
       "source": "file:docs/HISTORY.md",
       "target": "file:qa/cookbook/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/HISTORY.md",
-      "raw_ref": "skills/eval/examples/farplane-global-harness/",
-      "source": "file:docs/HISTORY.md",
-      "target": "file:skills/eval/examples/farplane-global-harness",
       "type": "literal-path"
     },
     {
@@ -1910,6 +2486,34 @@ window.HARNESS_GRAPH = {
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:docs/LESSONS.md",
       "target": "file:templates/global/AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/MEMORY.md",
+      "raw_ref": "docs/research/",
+      "source": "file:docs/MEMORY.md",
+      "target": "dir:docs/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/MEMORY.md",
+      "raw_ref": "docs/review/rubrics/",
+      "source": "file:docs/MEMORY.md",
+      "target": "dir:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/MEMORY.md",
+      "raw_ref": "skills/eval/examples/",
+      "source": "file:docs/MEMORY.md",
+      "target": "dir:skills/eval/examples",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/MEMORY.md",
+      "raw_ref": "skills/landing-page/references/",
+      "source": "file:docs/MEMORY.md",
+      "target": "dir:skills/landing-page/references",
       "type": "literal-path"
     },
     {
@@ -2005,20 +2609,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/MEMORY.md",
-      "raw_ref": "docs/research/",
-      "source": "file:docs/MEMORY.md",
-      "target": "file:docs/research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/MEMORY.md",
-      "raw_ref": "docs/review/rubrics/",
-      "source": "file:docs/MEMORY.md",
-      "target": "file:docs/review/rubrics",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/MEMORY.md",
       "raw_ref": "docs/review/rubrics/frontend-guidelines.md",
       "source": "file:docs/MEMORY.md",
       "target": "file:docs/review/rubrics/frontend-guidelines.md",
@@ -2068,23 +2658,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/MEMORY.md",
-      "raw_ref": "skills/eval/examples/",
-      "source": "file:docs/MEMORY.md",
-      "target": "file:skills/eval/examples",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/MEMORY.md",
       "raw_ref": "skills/eval/templates/",
       "source": "file:docs/MEMORY.md",
       "target": "file:skills/eval/templates/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/MEMORY.md",
-      "raw_ref": "skills/landing-page/references/",
-      "source": "file:docs/MEMORY.md",
-      "target": "file:skills/landing-page/references",
       "type": "literal-path"
     },
     {
@@ -2151,6 +2727,258 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "docs/archive/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/HISTORY.md",
+      "source": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "target": "file:docs/HISTORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/LESSONS.md",
+      "source": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "target": "file:docs/LESSONS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/MEMORY.md",
+      "source": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "target": "file:docs/MEMORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/TROUBLES.md",
+      "source": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "target": "file:docs/TROUBLES.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/features/registry.jsonl",
+      "source": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "target": "file:docs/features/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/skills/registry.jsonl",
+      "source": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "target": "file:docs/skills/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/sources/registry.jsonl",
+      "source": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "target": "file:docs/sources/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/specs/",
+      "source": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "target": "file:docs/specs/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "bin/check_doc_parity.py",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:bin/check_doc_parity.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "bin/check_harness_invariants.py",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:bin/check_harness_invariants.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "bin/check_skill_capabilities.py",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:bin/check_skill_capabilities.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:bin/check_skill_todo_tiers.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "docs/HISTORY.md",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:docs/HISTORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "docs/LESSONS.md",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:docs/LESSONS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "docs/MEMORY.md",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:docs/MEMORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "docs/features/registry.jsonl",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:docs/features/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "docs/features/validate_features.py",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:docs/features/validate_features.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "docs/skills/registry.jsonl",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:docs/skills/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "docs/sources/registry.jsonl",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:docs/sources/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "experiments/hardcases/",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:experiments/hardcases/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/agent-behavior-test",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/agent-behavior-test/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/agent-qa-test",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/agent-qa-test/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/eval",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/eval/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/gap-analysis",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/gap-analysis/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/harness-advisor",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/harness-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/harness-scout",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/harness-scout/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/optimize-harness",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/optimize-harness/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/review",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/review/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/skill-maintenance",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/skill-maintenance/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/meta-harness-automation.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "file:docs/archive/specs/meta-harness-automation.md",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/runtime-surface.md",
+      "raw_ref": "skills/impl/scripts/tmux_helper.py",
+      "source": "file:docs/archive/specs/runtime-surface.md",
+      "target": "file:skills/impl/scripts/tmux_helper.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/runtime-surface.md",
+      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
+      "source": "file:docs/archive/specs/runtime-surface.md",
+      "target": "file:tickets/scripts/check_ticket_metadata.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/skill-self-healing.md",
+      "raw_ref": "bin/check_skill_capabilities.py",
+      "source": "file:docs/archive/specs/skill-self-healing.md",
+      "target": "file:bin/check_skill_capabilities.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/skill-self-healing.md",
+      "raw_ref": "docs/skills/registry.jsonl",
+      "source": "file:docs/archive/specs/skill-self-healing.md",
+      "target": "file:docs/skills/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/skill-self-healing.md",
+      "raw_ref": "skills/self-improve",
+      "source": "file:docs/archive/specs/skill-self-healing.md",
+      "target": "file:skills/self-improve/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/archive/specs/skill-self-healing.md",
+      "raw_ref": "skills/skill-maintenance",
+      "source": "file:docs/archive/specs/skill-self-healing.md",
+      "target": "file:skills/skill-maintenance/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "docs/features/AGENTS.md",
       "raw_ref": "README.md",
       "source": "file:docs/features/AGENTS.md",
@@ -2201,16 +3029,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/README.md",
-      "raw_ref": "docs/specs/meta-harness-automation.md",
+      "raw_ref": "../specs/harness-techniques.md#self-growing-harness-map",
       "source": "file:docs/features/README.md",
-      "target": "file:docs/specs/meta-harness-automation.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/README.md",
-      "raw_ref": "../specs/meta-harness-automation.md",
-      "source": "file:docs/features/README.md",
-      "target": "file:docs/specs/meta-harness-automation.md",
+      "target": "file:docs/specs/harness-techniques.md",
       "type": "markdown-link"
     },
     {
@@ -2232,6 +3053,48 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/harness-advisor/",
       "source": "file:docs/features/README.md",
       "target": "file:skills/harness-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "docs/review/rubrics",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "dir:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "experiments/harness-scout",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "dir:experiments/harness-scout",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "tickets/archive/TASK-0112/artifacts/smoke",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "dir:tickets/archive/TASK-0112/artifacts/smoke",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "tickets/archive/TASK-0114/artifacts/compute",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "dir:tickets/archive/TASK-0114/artifacts/compute",
       "type": "literal-path"
     },
     {
@@ -2474,13 +3337,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "docs/review/rubrics",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:docs/review/rubrics",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "docs/skills/README.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/skills/README.md",
@@ -2526,13 +3382,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/specs/adaptive-backoff.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/specs/adaptive-backoff.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "docs/specs/case-based-memory-context-graph.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:docs/specs/case-based-memory-context-graph.md",
       "type": "literal-path"
     },
     {
@@ -2586,13 +3435,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "docs/specs/meta-harness-automation.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:docs/specs/meta-harness-automation.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "docs/specs/review-gates.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/specs/review-gates.md",
@@ -2600,23 +3442,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "docs/specs/runtime-surface.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:docs/specs/runtime-surface.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "docs/specs/self-improvement-contracts.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/specs/self-improvement-contracts.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "docs/specs/skill-self-healing.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:docs/specs/skill-self-healing.md",
       "type": "literal-path"
     },
     {
@@ -2656,20 +3484,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/harness-scout",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
@@ -2680,13 +3494,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
       "type": "literal-path"
     },
     {
@@ -3328,13 +4135,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "tickets/archive/TASK-0112/artifacts/smoke",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:tickets/archive/TASK-0112/artifacts/smoke",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "tickets/archive/TASK-0112/ticket.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:tickets/archive/TASK-0112/ticket.md",
@@ -3345,13 +4145,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/archive/TASK-0113/ticket.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:tickets/archive/TASK-0113/ticket.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "tickets/archive/TASK-0114/artifacts/compute",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:tickets/archive/TASK-0114/artifacts/compute",
       "type": "literal-path"
     },
     {
@@ -3443,6 +4236,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/scripts/check_ticket_metadata.py",
       "source": "file:docs/private-tool-context.md",
       "target": "file:tickets/scripts/check_ticket_metadata.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/research/",
+      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "dir:docs/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "raw_ref": "docs/research/web-research/",
+      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
+      "target": "dir:docs/research/web-research",
       "type": "literal-path"
     },
     {
@@ -3552,20 +4359,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/research/",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:docs/research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "raw_ref": "docs/research/web-research/",
-      "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
-      "target": "file:docs/research/web-research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
       "raw_ref": "skills/prd/SKILL.md",
       "source": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
       "target": "file:skills/prd/SKILL.md",
@@ -3629,6 +4422,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "raw_ref": "templates/external-cli/profiles/frontend-pi-kimi/",
+      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
+      "target": "dir:templates/external-cli/profiles/frontend-pi-kimi",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
       "raw_ref": "AGENTS.md",
       "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
       "target": "file:AGENTS.md",
@@ -3681,13 +4481,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "templates/external-cli/adapters/pi/",
       "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
       "target": "file:templates/external-cli/adapters/pi/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "raw_ref": "templates/external-cli/profiles/frontend-pi-kimi/",
-      "source": "file:docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md",
-      "target": "file:templates/external-cli/profiles/frontend-pi-kimi",
       "type": "literal-path"
     },
     {
@@ -3818,6 +4611,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/README.md",
+      "raw_ref": "docs/review/rubrics/",
+      "source": "file:docs/skills/README.md",
+      "target": "dir:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/README.md",
       "raw_ref": "AGENTS.md",
       "source": "file:docs/skills/README.md",
       "target": "file:AGENTS.md",
@@ -3888,13 +4688,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/README.md",
-      "raw_ref": "docs/review/rubrics/",
-      "source": "file:docs/skills/README.md",
-      "target": "file:docs/review/rubrics",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/README.md",
       "raw_ref": "docs/skills/",
       "source": "file:docs/skills/README.md",
       "target": "file:docs/skills/README.md",
@@ -3919,6 +4712,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../specs/harness-algebra.md",
       "source": "file:docs/skills/README.md",
       "target": "file:docs/specs/harness-algebra.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/skills/README.md",
+      "raw_ref": "docs/specs/self-improvement-contracts.md",
+      "source": "file:docs/skills/README.md",
+      "target": "file:docs/specs/self-improvement-contracts.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/README.md",
+      "raw_ref": "../specs/self-improvement-contracts.md",
+      "source": "file:docs/skills/README.md",
+      "target": "file:docs/specs/self-improvement-contracts.md",
       "type": "markdown-link"
     },
     {
@@ -4630,6 +5437,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/system.md",
+      "raw_ref": "docs/review/rubrics/",
+      "source": "file:docs/skills/system.md",
+      "target": "dir:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/system.md",
+      "raw_ref": "skills/eval/examples",
+      "source": "file:docs/skills/system.md",
+      "target": "dir:skills/eval/examples",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/system.md",
       "raw_ref": "bin/check_skill_todo_tiers.py",
       "source": "file:docs/skills/system.md",
       "target": "file:bin/check_skill_todo_tiers.py",
@@ -4647,13 +5468,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/features/registry.jsonl",
       "source": "file:docs/skills/system.md",
       "target": "file:docs/features/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/system.md",
-      "raw_ref": "docs/review/rubrics/",
-      "source": "file:docs/skills/system.md",
-      "target": "file:docs/review/rubrics",
       "type": "literal-path"
     },
     {
@@ -4689,13 +5503,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/specs/self-improvement-contracts.md",
       "source": "file:docs/skills/system.md",
       "target": "file:docs/specs/self-improvement-contracts.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/system.md",
-      "raw_ref": "skills/eval/examples",
-      "source": "file:docs/skills/system.md",
-      "target": "file:skills/eval/examples",
       "type": "literal-path"
     },
     {
@@ -4889,6 +5696,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/README.md",
+      "raw_ref": "docs/research/",
+      "source": "file:docs/specs/README.md",
+      "target": "dir:docs/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/README.md",
       "raw_ref": "ARCHITECTURE.md",
       "source": "file:docs/specs/README.md",
       "target": "file:ARCHITECTURE.md",
@@ -4945,13 +5759,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/README.md",
-      "raw_ref": "docs/research/",
-      "source": "file:docs/specs/README.md",
-      "target": "file:docs/research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/README.md",
       "raw_ref": "docs/skills/README.md",
       "source": "file:docs/specs/README.md",
       "target": "file:docs/skills/README.md",
@@ -4990,13 +5797,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/best-of-worlds",
       "source": "file:docs/specs/README.md",
       "target": "file:skills/best-of-worlds/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/README.md",
-      "raw_ref": "skills/eval",
-      "source": "file:docs/specs/README.md",
-      "target": "file:skills/eval/README.md",
       "type": "literal-path"
     },
     {
@@ -5063,80 +5863,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/HISTORY.md",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/HISTORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/MEMORY.md",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/MEMORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/features/registry.jsonl",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/features/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/skills/registry.jsonl",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/skills/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/sources/registry.jsonl",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/sources/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/specs/",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/specs/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/specs/case-based-memory-context-graph.md",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/specs/case-based-memory-context-graph.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/case-based-memory-context-graph.md",
-      "raw_ref": "docs/specs/skill-self-healing.md",
-      "source": "file:docs/specs/case-based-memory-context-graph.md",
-      "target": "file:docs/specs/skill-self-healing.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/specs/context-and-handoff-policy.md",
       "raw_ref": "tickets/archive/",
       "source": "file:docs/specs/context-and-handoff-policy.md",
-      "target": "file:tickets/archive",
+      "target": "dir:tickets/archive",
       "type": "literal-path"
     },
     {
@@ -5267,6 +5997,27 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/filesystem-lifecycle.md",
+      "raw_ref": "docs/research/",
+      "source": "file:docs/specs/filesystem-lifecycle.md",
+      "target": "dir:docs/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/filesystem-lifecycle.md",
+      "raw_ref": "experiments/harness-scout/runs/",
+      "source": "file:docs/specs/filesystem-lifecycle.md",
+      "target": "dir:experiments/harness-scout/runs",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/filesystem-lifecycle.md",
+      "raw_ref": "tickets/archive",
+      "source": "file:docs/specs/filesystem-lifecycle.md",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/filesystem-lifecycle.md",
       "raw_ref": "AGENTS.md",
       "source": "file:docs/specs/filesystem-lifecycle.md",
       "target": "file:AGENTS.md",
@@ -5316,13 +6067,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/filesystem-lifecycle.md",
-      "raw_ref": "docs/research/",
-      "source": "file:docs/specs/filesystem-lifecycle.md",
-      "target": "file:docs/research",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/filesystem-lifecycle.md",
       "raw_ref": "docs/sources",
       "source": "file:docs/specs/filesystem-lifecycle.md",
       "target": "file:docs/sources/README.md",
@@ -5351,23 +6095,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/filesystem-lifecycle.md",
-      "raw_ref": "experiments/harness-scout/runs/",
-      "source": "file:docs/specs/filesystem-lifecycle.md",
-      "target": "file:experiments/harness-scout/runs",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/filesystem-lifecycle.md",
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:docs/specs/filesystem-lifecycle.md",
       "target": "file:templates/global/AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/filesystem-lifecycle.md",
-      "raw_ref": "tickets/archive",
-      "source": "file:docs/specs/filesystem-lifecycle.md",
-      "target": "file:tickets/archive",
       "type": "literal-path"
     },
     {
@@ -5442,6 +6172,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-algebra.md",
+      "raw_ref": "docs/HISTORY.md",
+      "source": "file:docs/specs/harness-algebra.md",
+      "target": "file:docs/HISTORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-algebra.md",
       "raw_ref": "docs/LESSONS.md",
       "source": "file:docs/specs/harness-algebra.md",
       "target": "file:docs/LESSONS.md",
@@ -5477,9 +6214,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-algebra.md",
+      "raw_ref": "docs/sources/registry.jsonl",
+      "source": "file:docs/specs/harness-algebra.md",
+      "target": "file:docs/sources/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-algebra.md",
       "raw_ref": "docs/specs/",
       "source": "file:docs/specs/harness-algebra.md",
       "target": "file:docs/specs/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-algebra.md",
+      "raw_ref": "docs/specs/self-improvement-contracts.md",
+      "source": "file:docs/specs/harness-algebra.md",
+      "target": "file:docs/specs/self-improvement-contracts.md",
       "type": "literal-path"
     },
     {
@@ -5550,6 +6301,27 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/README.md",
       "source": "file:docs/specs/harness-engineering-doctrine.md",
       "target": "file:tickets/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "docs/review/rubrics/",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "dir:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "experiments/harness-scout",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "dir:experiments/harness-scout",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "templates/external-cli/",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "dir:templates/external-cli",
       "type": "literal-path"
     },
     {
@@ -5722,13 +6494,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "docs/review/rubrics/",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:docs/review/rubrics",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "docs/skills/README.md",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:docs/skills/README.md",
@@ -5799,6 +6564,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "docs/specs/harness-techniques.md",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "file:docs/specs/harness-techniques.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "docs/specs/invocation-and-adapters.md",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:docs/specs/invocation-and-adapters.md",
@@ -5806,30 +6578,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "docs/specs/meta-harness-automation.md",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:docs/specs/meta-harness-automation.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "docs/specs/orchestrator-subagent-loop.md",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:docs/specs/orchestrator-subagent-loop.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "docs/specs/review-gates.md",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:docs/specs/review-gates.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "docs/specs/runtime-surface.md",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:docs/specs/runtime-surface.md",
       "type": "literal-path"
     },
     {
@@ -5862,13 +6613,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "experiments/harness-scout",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:experiments/harness-scout",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "skills/advise",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:skills/advise/README.md",
@@ -5876,9 +6620,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "skills/agent-behavior-test",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "file:skills/agent-behavior-test/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "skills/agent-browser",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:skills/agent-browser/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "skills/agent-qa-test",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "file:skills/agent-qa-test/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -6072,6 +6830,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "skills/plan",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "file:skills/plan/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "skills/pr-runtime",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:skills/pr-runtime/README.md",
@@ -6198,13 +6963,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "templates/external-cli/",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:templates/external-cli",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:templates/global/AGENTS.md",
@@ -6229,6 +6987,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/templates/ticket.md",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:tickets/templates/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/invocation-and-adapters.md",
+      "raw_ref": "tickets/archive/",
+      "source": "file:docs/specs/invocation-and-adapters.md",
+      "target": "dir:tickets/archive",
       "type": "literal-path"
     },
     {
@@ -6296,6 +7061,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/invocation-and-adapters.md",
+      "raw_ref": "skills/impl/scripts/tmux_helper.py",
+      "source": "file:docs/specs/invocation-and-adapters.md",
+      "target": "file:skills/impl/scripts/tmux_helper.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/invocation-and-adapters.md",
       "raw_ref": "skills/ralph/SKILL.md",
       "source": "file:docs/specs/invocation-and-adapters.md",
       "target": "file:skills/ralph/SKILL.md",
@@ -6309,171 +7081,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/invocation-and-adapters.md",
-      "raw_ref": "tickets/archive/",
-      "source": "file:docs/specs/invocation-and-adapters.md",
-      "target": "file:tickets/archive",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "bin/check_doc_parity.py",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:bin/check_doc_parity.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "bin/check_harness_invariants.py",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:bin/check_harness_invariants.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "bin/check_skill_capabilities.py",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:bin/check_skill_capabilities.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:bin/check_skill_todo_tiers.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "docs/HISTORY.md",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:docs/HISTORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "docs/MEMORY.md",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:docs/MEMORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "docs/features/registry.jsonl",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:docs/features/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "docs/features/validate_features.py",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:docs/features/validate_features.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "docs/skills/registry.jsonl",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:docs/skills/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "docs/sources/registry.jsonl",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:docs/sources/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "experiments/hardcases/",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:experiments/hardcases/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/agent-behavior-test",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/agent-behavior-test/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/agent-qa-test",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/agent-qa-test/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/eval",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/eval/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/gap-analysis",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/gap-analysis/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/harness-advisor",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/harness-advisor/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/harness-scout",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/harness-scout/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/optimize-harness",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/optimize-harness/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/review",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/review/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/skill-maintenance",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/skill-maintenance/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/meta-harness-automation.md",
-      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
-      "source": "file:docs/specs/meta-harness-automation.md",
-      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/specs/review-gates.md",
       "raw_ref": "docs/review/rubrics/",
       "source": "file:docs/specs/review-gates.md",
-      "target": "file:docs/review/rubrics",
+      "target": "dir:docs/review/rubrics",
       "type": "literal-path"
     },
     {
@@ -6491,20 +7102,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/runtime-surface.md",
-      "raw_ref": "skills/impl/scripts/tmux_helper.py",
-      "source": "file:docs/specs/runtime-surface.md",
-      "target": "file:skills/impl/scripts/tmux_helper.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/runtime-surface.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:docs/specs/runtime-surface.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/specs/self-improvement-contracts.md",
       "raw_ref": "AGENTS.md",
       "source": "file:docs/specs/self-improvement-contracts.md",
@@ -6512,31 +7109,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/skill-self-healing.md",
+      "from_file": "docs/specs/self-improvement-contracts.md",
       "raw_ref": "bin/check_skill_capabilities.py",
-      "source": "file:docs/specs/skill-self-healing.md",
+      "source": "file:docs/specs/self-improvement-contracts.md",
       "target": "file:bin/check_skill_capabilities.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/skill-self-healing.md",
-      "raw_ref": "docs/skills/registry.jsonl",
-      "source": "file:docs/specs/skill-self-healing.md",
-      "target": "file:docs/skills/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/skill-self-healing.md",
-      "raw_ref": "skills/self-improve",
-      "source": "file:docs/specs/skill-self-healing.md",
-      "target": "file:skills/self-improve/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/skill-self-healing.md",
-      "raw_ref": "skills/skill-maintenance",
-      "source": "file:docs/specs/skill-self-healing.md",
-      "target": "file:skills/skill-maintenance/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -6548,16 +7124,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/spec-first-execution-loop.md",
-      "raw_ref": "docs/specs",
+      "raw_ref": "tickets/archive/",
       "source": "file:docs/specs/spec-first-execution-loop.md",
-      "target": "file:docs/specs/README.md",
+      "target": "dir:tickets/archive",
       "type": "literal-path"
     },
     {
       "from_file": "docs/specs/spec-first-execution-loop.md",
-      "raw_ref": "tickets/archive/",
+      "raw_ref": "docs/specs",
       "source": "file:docs/specs/spec-first-execution-loop.md",
-      "target": "file:tickets/archive",
+      "target": "file:docs/specs/README.md",
       "type": "literal-path"
     },
     {
@@ -6639,16 +7215,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "tickets/README.md",
-      "raw_ref": "bin/farplane_boards.py",
+      "raw_ref": "docs/review/rubrics/",
       "source": "file:tickets/README.md",
-      "target": "file:bin/farplane_boards.py",
+      "target": "dir:docs/review/rubrics",
       "type": "literal-path"
     },
     {
       "from_file": "tickets/README.md",
-      "raw_ref": "docs/review/rubrics/",
+      "raw_ref": "tickets/archive/",
       "source": "file:tickets/README.md",
-      "target": "file:docs/review/rubrics",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "tickets/README.md",
+      "raw_ref": "bin/farplane_boards.py",
+      "source": "file:tickets/README.md",
+      "target": "file:bin/farplane_boards.py",
       "type": "literal-path"
     },
     {
@@ -6667,9 +7250,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "tickets/README.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/runtime-surface.md",
+      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md",
       "source": "file:tickets/README.md",
-      "target": "file:docs/specs/runtime-surface.md",
+      "target": "file:docs/specs/invocation-and-adapters.md",
       "type": "markdown-link"
     },
     {
@@ -6677,13 +7260,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "qa/cookbook/",
       "source": "file:tickets/README.md",
       "target": "file:qa/cookbook/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "tickets/archive/",
-      "source": "file:tickets/README.md",
-      "target": "file:tickets/archive",
       "type": "literal-path"
     },
     {
@@ -7131,14 +7707,14 @@ window.HARNESS_GRAPH = {
       "from_file": "skills/best-of-worlds/SKILL.md",
       "raw_ref": "experiments/best-of-worlds/",
       "source": "skill:best-of-worlds",
-      "target": "file:experiments/best-of-worlds",
+      "target": "dir:experiments/best-of-worlds",
       "type": "literal-path"
     },
     {
       "from_file": "skills/best-of-worlds/scripts/init_synthesis.py",
       "raw_ref": "experiments/best-of-worlds",
       "source": "skill:best-of-worlds",
-      "target": "file:experiments/best-of-worlds",
+      "target": "dir:experiments/best-of-worlds",
       "type": "literal-path"
     },
     {
@@ -7567,6 +8143,41 @@ window.HARNESS_GRAPH = {
       "source": "skill:data-viz",
       "target": "file:skills/visual-qa/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/deep-init-project/README.md",
+      "raw_ref": "tickets/archive",
+      "source": "skill:deep-init-project",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/deep-init-project/SKILL.md",
+      "raw_ref": "tickets/archive",
+      "source": "skill:deep-init-project",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/deep-init-project/references/AGENTS_TEMPLATE.md",
+      "raw_ref": "tickets/archive/",
+      "source": "skill:deep-init-project",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/deep-init-project/README.md",
+      "raw_ref": "tickets/templates",
+      "source": "skill:deep-init-project",
+      "target": "dir:tickets/templates",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/deep-init-project/SKILL.md",
+      "raw_ref": "tickets/templates",
+      "source": "skill:deep-init-project",
+      "target": "dir:tickets/templates",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/deep-init-project/README.md",
@@ -8179,41 +8790,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/deep-init-project/README.md",
-      "raw_ref": "tickets/archive",
-      "source": "skill:deep-init-project",
-      "target": "file:tickets/archive",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/deep-init-project/SKILL.md",
-      "raw_ref": "tickets/archive",
-      "source": "skill:deep-init-project",
-      "target": "file:tickets/archive",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/deep-init-project/references/AGENTS_TEMPLATE.md",
-      "raw_ref": "tickets/archive/",
-      "source": "skill:deep-init-project",
-      "target": "file:tickets/archive",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/deep-init-project/README.md",
-      "raw_ref": "tickets/templates",
-      "source": "skill:deep-init-project",
-      "target": "file:tickets/templates",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/deep-init-project/SKILL.md",
-      "raw_ref": "tickets/templates",
-      "source": "skill:deep-init-project",
-      "target": "file:tickets/templates",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/deep-init-project/README.md",
       "raw_ref": "tickets/templates/ticket.md",
       "source": "skill:deep-init-project",
       "target": "file:tickets/templates/ticket.md",
@@ -8224,6 +8800,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/templates/ticket.md",
       "source": "skill:deep-init-project",
       "target": "file:tickets/templates/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/deep-interview/SKILL.md",
+      "raw_ref": "docs/research/",
+      "source": "skill:deep-interview",
+      "target": "dir:docs/research",
       "type": "literal-path"
     },
     {
@@ -8231,13 +8814,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/prd.md",
       "source": "skill:deep-interview",
       "target": "file:docs/prd.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/deep-interview/SKILL.md",
-      "raw_ref": "docs/research/",
-      "source": "skill:deep-interview",
-      "target": "file:docs/research",
       "type": "literal-path"
     },
     {
@@ -8556,6 +9132,118 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
+      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-impl-plan.md",
+      "raw_ref": "skills/delegate-frontend/self-improve/runs/",
+      "source": "skill:delegate-frontend",
+      "target": "dir:skills/delegate-frontend/self-improve/runs",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/autoresearch.md",
+      "raw_ref": "templates/external-cli/profiles/frontend-pi-kimi",
+      "source": "skill:delegate-frontend",
+      "target": "dir:templates/external-cli/profiles/frontend-pi-kimi",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/delegate-frontend/README.md",
       "raw_ref": "bin/delegate_cli_agent.py",
       "source": "skill:delegate-frontend",
@@ -8767,30 +9455,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
       "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase/asset-manifest.json",
       "source": "skill:delegate-frontend",
       "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase/asset-manifest.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets",
       "type": "literal-path"
     },
     {
@@ -8802,37 +9469,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
       "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets/asset-manifest.json",
       "source": "skill:delegate-frontend",
       "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets/asset-manifest.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
       "type": "literal-path"
     },
     {
@@ -8851,23 +9490,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
       "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/SPEC.md",
       "source": "skill:delegate-frontend",
       "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/SPEC.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
       "type": "literal-path"
     },
     {
@@ -8879,20 +9504,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
       "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets/asset-manifest.json",
       "source": "skill:delegate-frontend",
       "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets/asset-manifest.json",
@@ -8900,30 +9511,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
       "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/SPEC.md",
       "source": "skill:delegate-frontend",
       "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/SPEC.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/results/candidate_outputs.jsonl",
-      "raw_ref": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
       "type": "literal-path"
     },
     {
@@ -8952,13 +9542,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/delegate-frontend/self-improve/results/latest_run.json",
       "source": "skill:delegate-frontend",
       "target": "file:skills/delegate-frontend/self-improve/results/latest_run.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-impl-plan.md",
-      "raw_ref": "skills/delegate-frontend/self-improve/runs/",
-      "source": "skill:delegate-frontend",
-      "target": "file:skills/delegate-frontend/self-improve/runs",
       "type": "literal-path"
     },
     {
@@ -9142,13 +9725,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:delegate-frontend",
       "target": "file:skills/visual-qa/SKILL.md",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/autoresearch.md",
-      "raw_ref": "templates/external-cli/profiles/frontend-pi-kimi",
-      "source": "skill:delegate-frontend",
-      "target": "file:templates/external-cli/profiles/frontend-pi-kimi",
-      "type": "literal-path"
     },
     {
       "from_file": "skills/delegate-frontend/self-improve/runs/20260507-0526-terminus-level-ui/next-hypotheses-impl-plan.md",
@@ -9445,6 +10021,20 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/eval/SKILL.md",
+      "raw_ref": "skills/eval/examples/",
+      "source": "skill:eval",
+      "target": "dir:skills/eval/examples",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/eval/references/eval-best-practices.md",
+      "raw_ref": "skills/eval/examples/",
+      "source": "skill:eval",
+      "target": "dir:skills/eval/examples",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/eval/examples/farplane-global-harness/tasks.json",
       "raw_ref": "AGENTS.md",
       "source": "skill:eval",
@@ -9589,20 +10179,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/eval/eval_task.json",
       "source": "skill:eval",
       "target": "file:skills/eval/eval_task.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/eval/SKILL.md",
-      "raw_ref": "skills/eval/examples/",
-      "source": "skill:eval",
-      "target": "file:skills/eval/examples",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/eval/references/eval-best-practices.md",
-      "raw_ref": "skills/eval/examples/",
-      "source": "skill:eval",
-      "target": "file:skills/eval/examples",
       "type": "literal-path"
     },
     {
@@ -9900,6 +10476,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/feed-scout/templates/proposal-db.md",
+      "raw_ref": "experiments/harness-scout/runs/",
+      "source": "skill:feed-scout",
+      "target": "dir:experiments/harness-scout/runs",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/feed-scout/AGENTS.md",
       "raw_ref": "docs/sources/registry.jsonl",
       "source": "skill:feed-scout",
@@ -9911,13 +10494,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/sources/registry.jsonl",
       "source": "skill:feed-scout",
       "target": "file:docs/sources/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/feed-scout/templates/proposal-db.md",
-      "raw_ref": "experiments/harness-scout/runs/",
-      "source": "skill:feed-scout",
-      "target": "file:experiments/harness-scout/runs",
       "type": "literal-path"
     },
     {
@@ -10552,6 +11128,27 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/harness-scout/SKILL.md",
+      "raw_ref": "experiments/harness-scout/runs/",
+      "source": "skill:harness-scout",
+      "target": "dir:experiments/harness-scout/runs",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/harness-scout/references/architecture.md",
+      "raw_ref": "experiments/harness-scout/runs/",
+      "source": "skill:harness-scout",
+      "target": "dir:experiments/harness-scout/runs",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/harness-scout/references/workflows.md",
+      "raw_ref": "experiments/harness-scout/runs/",
+      "source": "skill:harness-scout",
+      "target": "dir:experiments/harness-scout/runs",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/harness-scout/SKILL.md",
       "raw_ref": "AGENTS.md",
       "source": "skill:harness-scout",
       "target": "file:AGENTS.md",
@@ -10660,27 +11257,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/specs/harness-techniques.md",
       "source": "skill:harness-scout",
       "target": "file:docs/specs/harness-techniques.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/harness-scout/SKILL.md",
-      "raw_ref": "experiments/harness-scout/runs/",
-      "source": "skill:harness-scout",
-      "target": "file:experiments/harness-scout/runs",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/harness-scout/references/architecture.md",
-      "raw_ref": "experiments/harness-scout/runs/",
-      "source": "skill:harness-scout",
-      "target": "file:experiments/harness-scout/runs",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/harness-scout/references/workflows.md",
-      "raw_ref": "experiments/harness-scout/runs/",
-      "source": "skill:harness-scout",
-      "target": "file:experiments/harness-scout/runs",
       "type": "literal-path"
     },
     {
@@ -11384,6 +11960,34 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/landing-page/self-improve/runs/20260508-2115-video-generation-provenance/autoresearch.md",
+      "raw_ref": "skills/landing-page/references/",
+      "source": "skill:landing-page",
+      "target": "dir:skills/landing-page/references",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/landing-page/self-improve/runs/20260508-asset-evidence-gate/autoresearch.md",
+      "raw_ref": "skills/landing-page/references/",
+      "source": "skill:landing-page",
+      "target": "dir:skills/landing-page/references",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/landing-page/self-improve/runs/20260508-asset-evidence-gate/autoresearch.md",
+      "raw_ref": "skills/landing-page/scripts/",
+      "source": "skill:landing-page",
+      "target": "dir:skills/landing-page/scripts",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/landing-page/self-improve/runs/20260508-asset-evidence-gate/autoresearch.md",
+      "raw_ref": "skills/landing-page/self-improve/",
+      "source": "skill:landing-page",
+      "target": "dir:skills/landing-page/self-improve",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/landing-page/AGENTS.md",
       "raw_ref": "AGENTS.md",
       "source": "skill:landing-page",
@@ -11496,20 +12100,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/landing-page/self-improve/runs/20260508-2115-video-generation-provenance/autoresearch.md",
-      "raw_ref": "skills/landing-page/references/",
-      "source": "skill:landing-page",
-      "target": "file:skills/landing-page/references",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/landing-page/self-improve/runs/20260508-asset-evidence-gate/autoresearch.md",
-      "raw_ref": "skills/landing-page/references/",
-      "source": "skill:landing-page",
-      "target": "file:skills/landing-page/references",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/landing-page/SKILL.md",
       "raw_ref": "./references/asset-evidence.md",
       "source": "skill:landing-page",
@@ -11599,13 +12189,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:landing-page",
       "target": "file:skills/landing-page/references/taste-profiles.json",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/landing-page/self-improve/runs/20260508-asset-evidence-gate/autoresearch.md",
-      "raw_ref": "skills/landing-page/scripts/",
-      "source": "skill:landing-page",
-      "target": "file:skills/landing-page/scripts",
-      "type": "literal-path"
     },
     {
       "from_file": "skills/landing-page/references/asset-evidence.md",
@@ -11766,13 +12349,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/landing-page/scripts/test_landing_spec_lint.py",
       "source": "skill:landing-page",
       "target": "file:skills/landing-page/scripts/test_landing_spec_lint.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/landing-page/self-improve/runs/20260508-asset-evidence-gate/autoresearch.md",
-      "raw_ref": "skills/landing-page/self-improve/",
-      "source": "skill:landing-page",
-      "target": "file:skills/landing-page/self-improve",
       "type": "literal-path"
     },
     {
@@ -11965,11 +12541,25 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/plan/audits/2026-06-11-planning-composition-template.md",
+      "raw_ref": "bin/check_tier0_phase_protocol.py",
+      "source": "skill:plan",
+      "target": "file:bin/check_tier0_phase_protocol.py",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/plan/SKILL.md",
       "raw_ref": "../advise/SKILL.md",
       "source": "skill:plan",
       "target": "file:skills/advise/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/plan/audits/2026-06-11-planning-composition-template.md",
+      "raw_ref": "skills/plan/SKILL.md",
+      "source": "skill:plan",
+      "target": "file:skills/plan/SKILL.md",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/plan/SKILL.md",
@@ -11987,23 +12577,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/plan/SKILL.md",
-      "raw_ref": "../research/SKILL.md",
-      "source": "skill:plan",
-      "target": "file:skills/research/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/plan/SKILL.md",
       "raw_ref": "../review/SKILL.md",
       "source": "skill:plan",
       "target": "file:skills/review/SKILL.md",
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/plan/SKILL.md",
-      "raw_ref": "templates/global/AGENTS.md",
+      "from_file": "skills/plan/audits/2026-06-11-planning-composition-template.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:plan",
-      "target": "file:templates/global/AGENTS.md",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
       "type": "literal-path"
     },
     {
@@ -12414,6 +12997,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/ralph/SKILL.md",
+      "raw_ref": "tickets/archive/",
+      "source": "skill:ralph",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/ralph/scripts/select_next_ticket.py",
+      "raw_ref": "tickets/archive",
+      "source": "skill:ralph",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/ralph/SKILL.md",
       "raw_ref": "docs/LESSONS.md",
       "source": "skill:ralph",
       "target": "file:docs/LESSONS.md",
@@ -12466,20 +13063,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/README.md",
       "source": "skill:ralph",
       "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ralph/SKILL.md",
-      "raw_ref": "tickets/archive/",
-      "source": "skill:ralph",
-      "target": "file:tickets/archive",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ralph/scripts/select_next_ticket.py",
-      "raw_ref": "tickets/archive",
-      "source": "skill:ralph",
-      "target": "file:tickets/archive",
       "type": "literal-path"
     },
     {
@@ -12861,31 +13444,31 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/review/README.md",
-      "raw_ref": "agents/reviewer.toml",
-      "source": "skill:review",
-      "target": "file:agents/reviewer.toml",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/review/AGENTS.md",
       "raw_ref": "docs/review/rubrics/",
       "source": "skill:review",
-      "target": "file:docs/review/rubrics",
+      "target": "dir:docs/review/rubrics",
       "type": "literal-path"
     },
     {
       "from_file": "skills/review/README.md",
       "raw_ref": "docs/review/rubrics/",
       "source": "skill:review",
-      "target": "file:docs/review/rubrics",
+      "target": "dir:docs/review/rubrics",
       "type": "literal-path"
     },
     {
       "from_file": "skills/review/SKILL.md",
       "raw_ref": "docs/review/rubrics",
       "source": "skill:review",
-      "target": "file:docs/review/rubrics",
+      "target": "dir:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/review/README.md",
+      "raw_ref": "agents/reviewer.toml",
+      "source": "skill:review",
+      "target": "file:agents/reviewer.toml",
       "type": "literal-path"
     },
     {
@@ -13184,6 +13767,27 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/archive/",
+      "source": "skill:skill-maintenance",
+      "target": "dir:docs/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/research/",
+      "source": "skill:skill-maintenance",
+      "target": "dir:docs/research",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/review/rubrics",
+      "source": "skill:skill-maintenance",
+      "target": "dir:docs/review/rubrics",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
       "raw_ref": "AGENTS.md",
       "source": "skill:skill-maintenance",
       "target": "file:AGENTS.md",
@@ -13253,6 +13857,41 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/archive/specs/case-based-memory-context-graph.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/archive/specs/meta-harness-automation.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/archive/specs/meta-harness-automation.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/archive/specs/orchestrator-subagent-loop.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/archive/specs/orchestrator-subagent-loop.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/archive/specs/runtime-surface.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/archive/specs/runtime-surface.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/archive/specs/skill-self-healing.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/archive/specs/skill-self-healing.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/graph/README.md",
       "raw_ref": "docs/doc-audit/generated/doc-reference-report.md",
       "source": "skill:skill-maintenance",
@@ -13275,9 +13914,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
-      "raw_ref": "docs/research/",
+      "raw_ref": "docs/review/rubrics/review-rubric-index.md",
       "source": "skill:skill-maintenance",
-      "target": "file:docs/research",
+      "target": "file:docs/review/rubrics/review-rubric-index.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
+      "raw_ref": "docs/review/rubrics/reviewer-handoff.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/review/rubrics/reviewer-handoff.md",
       "type": "literal-path"
     },
     {
@@ -13387,13 +14033,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
-      "raw_ref": "docs/specs/case-based-memory-context-graph.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/specs/case-based-memory-context-graph.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
       "raw_ref": "docs/specs/filesystem-lifecycle.md",
       "source": "skill:skill-maintenance",
       "target": "file:docs/specs/filesystem-lifecycle.md",
@@ -13415,23 +14054,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
-      "raw_ref": "docs/specs/meta-harness-automation.md",
+      "raw_ref": "docs/specs/invocation-and-adapters.md",
       "source": "skill:skill-maintenance",
-      "target": "file:docs/specs/meta-harness-automation.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
-      "raw_ref": "docs/specs/orchestrator-subagent-loop.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/specs/orchestrator-subagent-loop.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
-      "raw_ref": "docs/specs/runtime-surface.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/specs/runtime-surface.md",
+      "target": "file:docs/specs/invocation-and-adapters.md",
       "type": "literal-path"
     },
     {
@@ -13439,13 +14064,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/specs/self-improvement-contracts.md",
       "source": "skill:skill-maintenance",
       "target": "file:docs/specs/self-improvement-contracts.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
-      "raw_ref": "docs/specs/skill-self-healing.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/specs/skill-self-healing.md",
       "type": "literal-path"
     },
     {
@@ -14443,7 +15061,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-06-11T08:01:39+00:00",
+  "generated_at": "2026-06-11T08:51:15+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -14584,6 +15202,36 @@ window.HARNESS_GRAPH = {
       "path": "docs/TROUBLES.md"
     },
     {
+      "id": "file:docs/archive/specs/case-based-memory-context-graph.md",
+      "kind": "doc",
+      "label": "docs/archive/specs/case-based-memory-context-graph.md",
+      "path": "docs/archive/specs/case-based-memory-context-graph.md"
+    },
+    {
+      "id": "file:docs/archive/specs/meta-harness-automation.md",
+      "kind": "doc",
+      "label": "docs/archive/specs/meta-harness-automation.md",
+      "path": "docs/archive/specs/meta-harness-automation.md"
+    },
+    {
+      "id": "file:docs/archive/specs/orchestrator-subagent-loop.md",
+      "kind": "doc",
+      "label": "docs/archive/specs/orchestrator-subagent-loop.md",
+      "path": "docs/archive/specs/orchestrator-subagent-loop.md"
+    },
+    {
+      "id": "file:docs/archive/specs/runtime-surface.md",
+      "kind": "doc",
+      "label": "docs/archive/specs/runtime-surface.md",
+      "path": "docs/archive/specs/runtime-surface.md"
+    },
+    {
+      "id": "file:docs/archive/specs/skill-self-healing.md",
+      "kind": "doc",
+      "label": "docs/archive/specs/skill-self-healing.md",
+      "path": "docs/archive/specs/skill-self-healing.md"
+    },
+    {
       "id": "file:docs/assets/farplane-hero.png",
       "kind": "doc",
       "label": "docs/assets/farplane-hero.png",
@@ -14620,12 +15268,6 @@ window.HARNESS_GRAPH = {
       "path": "docs/features/validate_features.py"
     },
     {
-      "id": "file:docs/policies",
-      "kind": "doc",
-      "label": "docs/policies",
-      "path": "docs/policies"
-    },
-    {
       "id": "file:docs/prd.md",
       "kind": "doc",
       "label": "docs/prd.md",
@@ -14636,144 +15278,6 @@ window.HARNESS_GRAPH = {
       "kind": "doc",
       "label": "docs/private-tool-context.md",
       "path": "docs/private-tool-context.md"
-    },
-    {
-      "id": "file:docs/research",
-      "kind": "doc",
-      "label": "docs/research",
-      "path": "docs/research"
-    },
-    {
-      "id": "file:docs/review/rubrics",
-      "kind": "doc",
-      "label": "docs/review/rubrics",
-      "path": "docs/review/rubrics"
-    },
-    {
-      "id": "file:docs/review/rubrics/architecture.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/architecture.md",
-      "path": "docs/review/rubrics/architecture.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/code-quality.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/code-quality.md",
-      "path": "docs/review/rubrics/code-quality.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/debloatability.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/debloatability.md",
-      "path": "docs/review/rubrics/debloatability.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/demo-quality.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/demo-quality.md",
-      "path": "docs/review/rubrics/demo-quality.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/desloppify.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/desloppify.md",
-      "path": "docs/review/rubrics/desloppify.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/eval-quality.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/eval-quality.md",
-      "path": "docs/review/rubrics/eval-quality.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/evidence-quality.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/evidence-quality.md",
-      "path": "docs/review/rubrics/evidence-quality.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/frontend-code-maintainability.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/frontend-code-maintainability.md",
-      "path": "docs/review/rubrics/frontend-code-maintainability.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/frontend-guidelines.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/frontend-guidelines.md",
-      "path": "docs/review/rubrics/frontend-guidelines.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/gotchas.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/gotchas.md",
-      "path": "docs/review/rubrics/gotchas.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/implementation-plan.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/implementation-plan.md",
-      "path": "docs/review/rubrics/implementation-plan.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/integration-readiness.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/integration-readiness.md",
-      "path": "docs/review/rubrics/integration-readiness.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/prompt-quality.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/prompt-quality.md",
-      "path": "docs/review/rubrics/prompt-quality.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/review-rubric-index.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/review-rubric-index.md",
-      "path": "docs/review/rubrics/review-rubric-index.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/reviewer-handoff.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/reviewer-handoff.md",
-      "path": "docs/review/rubrics/reviewer-handoff.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/skill-contract.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/skill-contract.md",
-      "path": "docs/review/rubrics/skill-contract.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/spec-contract.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/spec-contract.md",
-      "path": "docs/review/rubrics/spec-contract.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/ui-quality.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/ui-quality.md",
-      "path": "docs/review/rubrics/ui-quality.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/user-intent-satisfaction.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/user-intent-satisfaction.md",
-      "path": "docs/review/rubrics/user-intent-satisfaction.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/video-quality.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/video-quality.md",
-      "path": "docs/review/rubrics/video-quality.md"
-    },
-    {
-      "id": "file:docs/review/rubrics/workflows.md",
-      "kind": "doc",
-      "label": "docs/review/rubrics/workflows.md",
-      "path": "docs/review/rubrics/workflows.md"
     },
     {
       "id": "file:docs/sources/AGENTS.md",
@@ -14800,15 +15304,39 @@ window.HARNESS_GRAPH = {
       "path": "docs/sources/validate_sources.py"
     },
     {
+      "id": "dir:docs/archive",
+      "kind": "file",
+      "label": "docs/archive/",
+      "path": "docs/archive"
+    },
+    {
+      "id": "dir:docs/policies",
+      "kind": "file",
+      "label": "docs/policies/",
+      "path": "docs/policies"
+    },
+    {
+      "id": "dir:docs/research",
+      "kind": "file",
+      "label": "docs/research/",
+      "path": "docs/research"
+    },
+    {
+      "id": "dir:docs/research/web-research",
+      "kind": "file",
+      "label": "docs/research/web-research/",
+      "path": "docs/research/web-research"
+    },
+    {
       "id": "file:experiments/README.md",
       "kind": "file",
       "label": "experiments/README.md",
       "path": "experiments/README.md"
     },
     {
-      "id": "file:experiments/best-of-worlds",
+      "id": "dir:experiments/best-of-worlds",
       "kind": "file",
-      "label": "experiments/best-of-worlds",
+      "label": "experiments/best-of-worlds/",
       "path": "experiments/best-of-worlds"
     },
     {
@@ -14830,21 +15358,21 @@ window.HARNESS_GRAPH = {
       "path": "experiments/hardcases/README.md"
     },
     {
-      "id": "file:experiments/harness-scout",
+      "id": "dir:experiments/harness-scout",
       "kind": "file",
-      "label": "experiments/harness-scout",
+      "label": "experiments/harness-scout/",
       "path": "experiments/harness-scout"
     },
     {
-      "id": "file:experiments/harness-scout/runs",
+      "id": "dir:experiments/harness-scout/runs",
       "kind": "file",
-      "label": "experiments/harness-scout/runs",
+      "label": "experiments/harness-scout/runs/",
       "path": "experiments/harness-scout/runs"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "id": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/",
       "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents"
     },
     {
@@ -14860,10 +15388,22 @@ window.HARNESS_GRAPH = {
       "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md"
     },
     {
+      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
+      "kind": "file",
+      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
+      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md"
+    },
+    {
       "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
       "kind": "file",
       "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
       "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md"
+    },
+    {
+      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
+      "kind": "file",
+      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
+      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md"
     },
     {
       "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
@@ -14872,10 +15412,28 @@ window.HARNESS_GRAPH = {
       "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "id": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/",
       "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity"
+    },
+    {
+      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
+      "kind": "file",
+      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
+      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md"
+    },
+    {
+      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
+      "kind": "file",
+      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
+      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md"
+    },
+    {
+      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
+      "kind": "file",
+      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
+      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md"
     },
     {
       "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
@@ -14888,6 +15446,24 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
       "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md"
+    },
+    {
+      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
+      "kind": "file",
+      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
+      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md"
+    },
+    {
+      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
+      "kind": "file",
+      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
+      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md"
+    },
+    {
+      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
+      "kind": "file",
+      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
+      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md"
     },
     {
       "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
@@ -15334,9 +15910,9 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/evals/test_cases.jsonl"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase"
     },
     {
@@ -15346,15 +15922,21 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase/asset-manifest.json"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-missing-media-phase/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets",
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets"
     },
     {
@@ -15364,21 +15946,39 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/assets/asset-manifest.json"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/asset-unsafe-ref-phase/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/ASSET_PHASE_READY.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/ASSET_PHASE_READY.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/ASSET_PHASE_READY.md"
+    },
+    {
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/handoff.md",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-finalize-live-success/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets",
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets"
     },
     {
@@ -15388,9 +15988,15 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/assets/asset-manifest.json"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-assets-live-timeout/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success"
     },
     {
@@ -15406,9 +16012,15 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success/first_write.json"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-success/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout"
     },
     {
@@ -15418,9 +16030,15 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/SPEC.md"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/compiled-spec-live-timeout/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase"
     },
     {
@@ -15430,15 +16048,21 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase/SPEC.md"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/complete-spec-phase/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets",
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets"
     },
     {
@@ -15448,9 +16072,15 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/assets/asset-manifest.json"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/generated-frame-sequence-asset-phase/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write"
     },
     {
@@ -15460,16 +16090,40 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/SPEC.md"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/spec-stub-after-first-write/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session/handoff.md",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-no-session/handoff.md"
+    },
+    {
+      "id": "dir:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/",
       "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success"
+    },
+    {
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/PROBE.md",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/PROBE.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/PROBE.md"
+    },
+    {
+      "id": "file:skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/handoff.md",
+      "kind": "file",
+      "label": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/handoff.md",
+      "path": "skills/delegate-frontend/self-improve/fixtures/delegate-runs/startup-probe-success/handoff.md"
     },
     {
       "id": "file:skills/delegate-frontend/self-improve/program.md",
@@ -15490,9 +16144,9 @@ window.HARNESS_GRAPH = {
       "path": "skills/delegate-frontend/self-improve/results/latest_run.json"
     },
     {
-      "id": "file:skills/delegate-frontend/self-improve/runs",
+      "id": "dir:skills/delegate-frontend/self-improve/runs",
       "kind": "file",
-      "label": "skills/delegate-frontend/self-improve/runs",
+      "label": "skills/delegate-frontend/self-improve/runs/",
       "path": "skills/delegate-frontend/self-improve/runs"
     },
     {
@@ -15640,15 +16294,15 @@ window.HARNESS_GRAPH = {
       "path": "skills/eval/eval_task.json"
     },
     {
-      "id": "file:skills/eval/examples",
+      "id": "dir:skills/eval/examples",
       "kind": "file",
-      "label": "skills/eval/examples",
+      "label": "skills/eval/examples/",
       "path": "skills/eval/examples"
     },
     {
-      "id": "file:skills/eval/examples/farplane-global-harness",
+      "id": "dir:skills/eval/examples/farplane-global-harness",
       "kind": "file",
-      "label": "skills/eval/examples/farplane-global-harness",
+      "label": "skills/eval/examples/farplane-global-harness/",
       "path": "skills/eval/examples/farplane-global-harness"
     },
     {
@@ -16030,10 +16684,16 @@ window.HARNESS_GRAPH = {
       "path": "skills/landing-page/SKILL.md"
     },
     {
-      "id": "file:skills/landing-page/references",
+      "id": "dir:skills/landing-page/references",
       "kind": "file",
-      "label": "skills/landing-page/references",
+      "label": "skills/landing-page/references/",
       "path": "skills/landing-page/references"
+    },
+    {
+      "id": "file:skills/landing-page/references/architecture.md",
+      "kind": "file",
+      "label": "skills/landing-page/references/architecture.md",
+      "path": "skills/landing-page/references/architecture.md"
     },
     {
       "id": "file:skills/landing-page/references/asset-evidence.md",
@@ -16042,10 +16702,28 @@ window.HARNESS_GRAPH = {
       "path": "skills/landing-page/references/asset-evidence.md"
     },
     {
+      "id": "file:skills/landing-page/references/cinematic-scroll-site-guideline.md",
+      "kind": "file",
+      "label": "skills/landing-page/references/cinematic-scroll-site-guideline.md",
+      "path": "skills/landing-page/references/cinematic-scroll-site-guideline.md"
+    },
+    {
+      "id": "file:skills/landing-page/references/designer-judgment.md",
+      "kind": "file",
+      "label": "skills/landing-page/references/designer-judgment.md",
+      "path": "skills/landing-page/references/designer-judgment.md"
+    },
+    {
       "id": "file:skills/landing-page/references/effect-stacks.json",
       "kind": "file",
       "label": "skills/landing-page/references/effect-stacks.json",
       "path": "skills/landing-page/references/effect-stacks.json"
+    },
+    {
+      "id": "file:skills/landing-page/references/gotchas.md",
+      "kind": "file",
+      "label": "skills/landing-page/references/gotchas.md",
+      "path": "skills/landing-page/references/gotchas.md"
     },
     {
       "id": "file:skills/landing-page/references/landing-recipes.json",
@@ -16078,16 +16756,34 @@ window.HARNESS_GRAPH = {
       "path": "skills/landing-page/references/planner-executor.md"
     },
     {
+      "id": "file:skills/landing-page/references/product-demo-media.md",
+      "kind": "file",
+      "label": "skills/landing-page/references/product-demo-media.md",
+      "path": "skills/landing-page/references/product-demo-media.md"
+    },
+    {
       "id": "file:skills/landing-page/references/qa.md",
       "kind": "file",
       "label": "skills/landing-page/references/qa.md",
       "path": "skills/landing-page/references/qa.md"
     },
     {
+      "id": "file:skills/landing-page/references/registry-format.md",
+      "kind": "file",
+      "label": "skills/landing-page/references/registry-format.md",
+      "path": "skills/landing-page/references/registry-format.md"
+    },
+    {
       "id": "file:skills/landing-page/references/research-synthesis.md",
       "kind": "file",
       "label": "skills/landing-page/references/research-synthesis.md",
       "path": "skills/landing-page/references/research-synthesis.md"
+    },
+    {
+      "id": "file:skills/landing-page/references/scrolltelling.md",
+      "kind": "file",
+      "label": "skills/landing-page/references/scrolltelling.md",
+      "path": "skills/landing-page/references/scrolltelling.md"
     },
     {
       "id": "file:skills/landing-page/references/spec-first-cinematic-industrial.md",
@@ -16102,9 +16798,21 @@ window.HARNESS_GRAPH = {
       "path": "skills/landing-page/references/taste-profiles.json"
     },
     {
-      "id": "file:skills/landing-page/scripts",
+      "id": "file:skills/landing-page/references/terminal-scroll-review.md",
       "kind": "file",
-      "label": "skills/landing-page/scripts",
+      "label": "skills/landing-page/references/terminal-scroll-review.md",
+      "path": "skills/landing-page/references/terminal-scroll-review.md"
+    },
+    {
+      "id": "file:skills/landing-page/references/workflows.md",
+      "kind": "file",
+      "label": "skills/landing-page/references/workflows.md",
+      "path": "skills/landing-page/references/workflows.md"
+    },
+    {
+      "id": "dir:skills/landing-page/scripts",
+      "kind": "file",
+      "label": "skills/landing-page/scripts/",
       "path": "skills/landing-page/scripts"
     },
     {
@@ -16112,6 +16820,12 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/landing-page/scripts/asset_evidence_lint.py",
       "path": "skills/landing-page/scripts/asset_evidence_lint.py"
+    },
+    {
+      "id": "file:skills/landing-page/scripts/landing_spec_lint.py",
+      "kind": "file",
+      "label": "skills/landing-page/scripts/landing_spec_lint.py",
+      "path": "skills/landing-page/scripts/landing_spec_lint.py"
     },
     {
       "id": "file:skills/landing-page/scripts/scroll_scrub_qa.cjs",
@@ -16144,9 +16858,15 @@ window.HARNESS_GRAPH = {
       "path": "skills/landing-page/scripts/test_landing_spec_lint.py"
     },
     {
-      "id": "file:skills/landing-page/self-improve",
+      "id": "file:skills/landing-page/scripts/test_terminal_landing_score.py",
       "kind": "file",
-      "label": "skills/landing-page/self-improve",
+      "label": "skills/landing-page/scripts/test_terminal_landing_score.py",
+      "path": "skills/landing-page/scripts/test_terminal_landing_score.py"
+    },
+    {
+      "id": "dir:skills/landing-page/self-improve",
+      "kind": "file",
+      "label": "skills/landing-page/self-improve/",
       "path": "skills/landing-page/self-improve"
     },
     {
@@ -16870,6 +17590,24 @@ window.HARNESS_GRAPH = {
       "path": "skills/work/SKILL.md"
     },
     {
+      "id": "dir:templates/external-cli",
+      "kind": "file",
+      "label": "templates/external-cli/",
+      "path": "templates/external-cli"
+    },
+    {
+      "id": "dir:templates/external-cli/profiles/frontend-pi-kimi",
+      "kind": "file",
+      "label": "templates/external-cli/profiles/frontend-pi-kimi/",
+      "path": "templates/external-cli/profiles/frontend-pi-kimi"
+    },
+    {
+      "id": "dir:templates/global",
+      "kind": "file",
+      "label": "templates/global/",
+      "path": "templates/global"
+    },
+    {
       "id": "file:tickets/README.md",
       "kind": "file",
       "label": "tickets/README.md",
@@ -16900,9 +17638,9 @@ window.HARNESS_GRAPH = {
       "path": "tickets/TASK-0188/ticket.md"
     },
     {
-      "id": "file:tickets/archive",
+      "id": "dir:tickets/archive",
       "kind": "file",
-      "label": "tickets/archive",
+      "label": "tickets/archive/",
       "path": "tickets/archive"
     },
     {
@@ -16930,9 +17668,9 @@ window.HARNESS_GRAPH = {
       "path": "tickets/archive/TASK-0111/ticket.md"
     },
     {
-      "id": "file:tickets/archive/TASK-0112/artifacts/smoke",
+      "id": "dir:tickets/archive/TASK-0112/artifacts/smoke",
       "kind": "file",
-      "label": "tickets/archive/TASK-0112/artifacts/smoke",
+      "label": "tickets/archive/TASK-0112/artifacts/smoke/",
       "path": "tickets/archive/TASK-0112/artifacts/smoke"
     },
     {
@@ -16948,9 +17686,9 @@ window.HARNESS_GRAPH = {
       "path": "tickets/archive/TASK-0113/ticket.md"
     },
     {
-      "id": "file:tickets/archive/TASK-0114/artifacts/compute",
+      "id": "dir:tickets/archive/TASK-0114/artifacts/compute",
       "kind": "file",
-      "label": "tickets/archive/TASK-0114/artifacts/compute",
+      "label": "tickets/archive/TASK-0114/artifacts/compute/",
       "path": "tickets/archive/TASK-0114/artifacts/compute"
     },
     {
@@ -17002,9 +17740,9 @@ window.HARNESS_GRAPH = {
       "path": "tickets/scripts/check_ticket_metadata.py"
     },
     {
-      "id": "file:tickets/templates",
+      "id": "dir:tickets/templates",
       "kind": "file",
-      "label": "tickets/templates",
+      "label": "tickets/templates/",
       "path": "tickets/templates"
     },
     {
@@ -17024,12 +17762,6 @@ window.HARNESS_GRAPH = {
       "kind": "research",
       "label": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md",
       "path": "docs/research/code-reviews/2026-04-05_ralph-prototype_review.md"
-    },
-    {
-      "id": "file:docs/research/web-research",
-      "kind": "research",
-      "label": "docs/research/web-research",
-      "path": "docs/research/web-research"
     },
     {
       "id": "file:docs/research/web-research/2026-04-02_anthropic-harness-comparison.md",
@@ -17086,6 +17818,138 @@ window.HARNESS_GRAPH = {
       "path": "docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md"
     },
     {
+      "id": "dir:docs/review/rubrics",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/",
+      "path": "docs/review/rubrics"
+    },
+    {
+      "id": "file:docs/review/rubrics/architecture.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/architecture.md",
+      "path": "docs/review/rubrics/architecture.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/code-quality.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/code-quality.md",
+      "path": "docs/review/rubrics/code-quality.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/debloatability.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/debloatability.md",
+      "path": "docs/review/rubrics/debloatability.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/demo-quality.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/demo-quality.md",
+      "path": "docs/review/rubrics/demo-quality.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/desloppify.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/desloppify.md",
+      "path": "docs/review/rubrics/desloppify.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/eval-quality.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/eval-quality.md",
+      "path": "docs/review/rubrics/eval-quality.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/evidence-quality.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/evidence-quality.md",
+      "path": "docs/review/rubrics/evidence-quality.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/frontend-code-maintainability.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/frontend-code-maintainability.md",
+      "path": "docs/review/rubrics/frontend-code-maintainability.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/frontend-guidelines.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/frontend-guidelines.md",
+      "path": "docs/review/rubrics/frontend-guidelines.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/gotchas.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/gotchas.md",
+      "path": "docs/review/rubrics/gotchas.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/implementation-plan.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/implementation-plan.md",
+      "path": "docs/review/rubrics/implementation-plan.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/integration-readiness.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/integration-readiness.md",
+      "path": "docs/review/rubrics/integration-readiness.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/prompt-quality.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/prompt-quality.md",
+      "path": "docs/review/rubrics/prompt-quality.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/review-rubric-index.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/review-rubric-index.md",
+      "path": "docs/review/rubrics/review-rubric-index.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/reviewer-handoff.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/reviewer-handoff.md",
+      "path": "docs/review/rubrics/reviewer-handoff.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/skill-contract.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/skill-contract.md",
+      "path": "docs/review/rubrics/skill-contract.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/spec-contract.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/spec-contract.md",
+      "path": "docs/review/rubrics/spec-contract.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/ui-quality.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/ui-quality.md",
+      "path": "docs/review/rubrics/ui-quality.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/user-intent-satisfaction.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/user-intent-satisfaction.md",
+      "path": "docs/review/rubrics/user-intent-satisfaction.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/video-quality.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/video-quality.md",
+      "path": "docs/review/rubrics/video-quality.md"
+    },
+    {
+      "id": "file:docs/review/rubrics/workflows.md",
+      "kind": "review-rubric",
+      "label": "docs/review/rubrics/workflows.md",
+      "path": "docs/review/rubrics/workflows.md"
+    },
+    {
       "id": "file:AGENTS.md",
       "kind": "root-doc",
       "label": "AGENTS.md",
@@ -17110,9 +17974,9 @@ window.HARNESS_GRAPH = {
       "path": "README.md"
     },
     {
-      "id": "file:agents",
+      "id": "dir:agents",
       "kind": "root-doc",
-      "label": "agents",
+      "label": "agents/",
       "path": "agents"
     },
     {
@@ -17980,12 +18844,6 @@ window.HARNESS_GRAPH = {
       "path": "docs/specs/agent-testability-surfaces.md"
     },
     {
-      "id": "file:docs/specs/case-based-memory-context-graph.md",
-      "kind": "spec",
-      "label": "docs/specs/case-based-memory-context-graph.md",
-      "path": "docs/specs/case-based-memory-context-graph.md"
-    },
-    {
       "id": "file:docs/specs/context-and-handoff-policy.md",
       "kind": "spec",
       "label": "docs/specs/context-and-handoff-policy.md",
@@ -18040,40 +18898,16 @@ window.HARNESS_GRAPH = {
       "path": "docs/specs/invocation-and-adapters.md"
     },
     {
-      "id": "file:docs/specs/meta-harness-automation.md",
-      "kind": "spec",
-      "label": "docs/specs/meta-harness-automation.md",
-      "path": "docs/specs/meta-harness-automation.md"
-    },
-    {
-      "id": "file:docs/specs/orchestrator-subagent-loop.md",
-      "kind": "spec",
-      "label": "docs/specs/orchestrator-subagent-loop.md",
-      "path": "docs/specs/orchestrator-subagent-loop.md"
-    },
-    {
       "id": "file:docs/specs/review-gates.md",
       "kind": "spec",
       "label": "docs/specs/review-gates.md",
       "path": "docs/specs/review-gates.md"
     },
     {
-      "id": "file:docs/specs/runtime-surface.md",
-      "kind": "spec",
-      "label": "docs/specs/runtime-surface.md",
-      "path": "docs/specs/runtime-surface.md"
-    },
-    {
       "id": "file:docs/specs/self-improvement-contracts.md",
       "kind": "spec",
       "label": "docs/specs/self-improvement-contracts.md",
       "path": "docs/specs/self-improvement-contracts.md"
-    },
-    {
-      "id": "file:docs/specs/skill-self-healing.md",
-      "kind": "spec",
-      "label": "docs/specs/skill-self-healing.md",
-      "path": "docs/specs/skill-self-healing.md"
     },
     {
       "id": "file:docs/specs/spec-authoring-contract.md",
@@ -18088,22 +18922,10 @@ window.HARNESS_GRAPH = {
       "path": "docs/specs/spec-first-execution-loop.md"
     },
     {
-      "id": "file:templates/external-cli",
-      "kind": "template",
-      "label": "templates/external-cli",
-      "path": "templates/external-cli"
-    },
-    {
       "id": "file:templates/external-cli/adapters/pi/README.md",
       "kind": "template",
       "label": "templates/external-cli/adapters/pi/README.md",
       "path": "templates/external-cli/adapters/pi/README.md"
-    },
-    {
-      "id": "file:templates/external-cli/profiles/frontend-pi-kimi",
-      "kind": "template",
-      "label": "templates/external-cli/profiles/frontend-pi-kimi",
-      "path": "templates/external-cli/profiles/frontend-pi-kimi"
     },
     {
       "id": "file:templates/external-cli/profiles/frontend-pi-kimi/APPEND_SYSTEM.md",
@@ -18122,12 +18944,6 @@ window.HARNESS_GRAPH = {
       "kind": "template",
       "label": "templates/external-cli/profiles/frontend-pi-kimi/skill-bundle.json",
       "path": "templates/external-cli/profiles/frontend-pi-kimi/skill-bundle.json"
-    },
-    {
-      "id": "file:templates/global",
-      "kind": "template",
-      "label": "templates/global",
-      "path": "templates/global"
     },
     {
       "id": "file:templates/global/AGENTS.md",
@@ -18602,6 +19418,31 @@ window.HARNESS_GRAPH = {
       "candidate": "skills/loop",
       "raw_ref": "skills/loop",
       "source": "docs/TROUBLES.md"
+    },
+    {
+      "candidate": "docs/specs/case-based-memory-context-graph.md",
+      "raw_ref": "docs/specs/case-based-memory-context-graph.md",
+      "source": "docs/archive/specs/case-based-memory-context-graph.md"
+    },
+    {
+      "candidate": "docs/specs/skill-self-healing.md",
+      "raw_ref": "docs/specs/skill-self-healing.md",
+      "source": "docs/archive/specs/case-based-memory-context-graph.md"
+    },
+    {
+      "candidate": "experiments/context-graph",
+      "raw_ref": "experiments/context-graph/",
+      "source": "docs/archive/specs/case-based-memory-context-graph.md"
+    },
+    {
+      "candidate": "tickets/TASK-0164/ticket.md",
+      "raw_ref": "tickets/TASK-0164/ticket.md",
+      "source": "docs/archive/specs/case-based-memory-context-graph.md"
+    },
+    {
+      "candidate": "docs/progress.md",
+      "raw_ref": "docs/progress.md",
+      "source": "docs/archive/specs/runtime-surface.md"
     },
     {
       "candidate": "tickets/archive/TASK-0100/ticket.md",
@@ -19111,31 +19952,6 @@ window.HARNESS_GRAPH = {
     {
       "candidate": "docs/research/web-research/2026-05-04_symphony-farplane-benchmark.md",
       "raw_ref": "docs/research/web-research/2026-05-04_symphony-farplane-benchmark.md",
-      "source": "docs/sources/registry.jsonl"
-    },
-    {
-      "candidate": "docs/research/web-research/2026-05-04_symphony-farplane-benchmark.md",
-      "raw_ref": "docs/research/web-research/2026-05-04_symphony-farplane-benchmark.md",
-      "source": "docs/sources/registry.jsonl"
-    },
-    {
-      "candidate": "docs/research/web-research/2026-05-05_symphony-dagster-farplane-integration.md",
-      "raw_ref": "docs/research/web-research/2026-05-05_symphony-dagster-farplane-integration.md",
-      "source": "docs/sources/registry.jsonl"
-    },
-    {
-      "candidate": "experiments/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md",
-      "source": "docs/sources/registry.jsonl"
-    },
-    {
-      "candidate": "experiments/harness-scout/runs/2026-05-26-ai-jason-ralph-loop-2/decision-matrix.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-26-ai-jason-ralph-loop-2/decision-matrix.md",
-      "source": "docs/sources/registry.jsonl"
-    },
-    {
-      "candidate": "experiments/harness-scout/runs/2026-05-26-ai-jason-ralph-loop-2/feature-ledger.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-26-ai-jason-ralph-loop-2/feature-ledger.md",
       "source": "docs/sources/registry.jsonl"
     }
   ]

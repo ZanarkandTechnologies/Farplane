@@ -198,7 +198,7 @@ flowchart LR
 - Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 - Specs index: [docs/specs/README.md](docs/specs/README.md)
 - Harness algebra: [docs/specs/harness-algebra.md](docs/specs/harness-algebra.md)
-- Self-growing harness map: [docs/specs/meta-harness-automation.md](docs/specs/meta-harness-automation.md)
+- Self-growing harness map: [docs/specs/harness-techniques.md](docs/specs/harness-techniques.md#self-growing-harness-map)
 - Feature inventory: [harness-techniques.md](docs/specs/harness-techniques.md)
 - Structured feature registry: [docs/features/README.md](docs/features/README.md)
 - Feature registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)

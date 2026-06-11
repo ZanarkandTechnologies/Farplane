@@ -57,7 +57,7 @@ This inventory is grounded in:
 | External parity research before local scoping | Implemented | `skills/research#research:parity`, `skills/research#research:gap`, `skills/functional-ui` | Grounds "what do peers include?" questions in comparable products, official docs, standards, and open-source repos before the work collapses into repo-specific scope | depends on good source selection and on keeping parity targets proportional instead of importing every adjacent premium feature |
 | Best-of-worlds synthesis | Implemented | `skills/best-of-worlds`, `skills/advise` | Lets agents compare a provided set of projects/repos/blogs, extract transferable features, discover metrics, and make adopt/adapt/reject/defer calls before implementation | depends on source quality and on agents recording decisions instead of copying every attractive feature |
 | Structured feature registry and source scouting | Implemented | `docs/features/registry.jsonl`, `docs/features/README.md`, `skills/harness-scout`, `experiments/harness-scout` | Gives source-ingestion passes stable feature IDs, dedupe, provenance, local match evidence, decision matrices, and manual scorecards before opening tickets | manual scorecards are judgment aids, not scientific benchmarks; no cron, feed polling, or async Codex benchmark runner yet |
-| Meta-harness automation map | Implemented | `docs/specs/meta-harness-automation.md`, `docs/features/registry.jsonl`, `docs/skills/registry.jsonl`, `skills/skill-maintenance` | Shows how Farplane tracks supported harness features, skill package inventory, skill maintenance, source ingestion, behavior tests, failure capture, review, and durable memory as one self-growing loop | skill feature adoption is not yet a generated per-skill field; current support is cataloged through feature rows and maintenance checks |
+| Meta-harness automation map | Implemented | `docs/specs/harness-techniques.md`, `docs/specs/self-improvement-contracts.md`, `docs/features/registry.jsonl`, `docs/skills/registry.jsonl`, `skills/skill-maintenance` | Shows how Farplane tracks supported harness features, skill package inventory, skill maintenance, source ingestion, behavior tests, gap analysis, review, and durable memory as one self-growing loop | broad skill feature adoption remains manual/on-contact; current support is cataloged through feature rows and maintenance checks |
 | Filesystem lifecycle and drain routing | Implemented | `docs/specs/filesystem-lifecycle.md`, `ARCHITECTURE.md`, `docs/features/registry.jsonl` | Gives agents one router for which durable file to write, read, drain, archive, or delete without replacing owner docs | still relies on agents following owner docs for exact local rules |
 | Frontend skill topology | Implemented | `skills/frontend-craft`, `skills/functional-ui`, `skills/visual-design`, `skills/landing-page`, `skills/frontend-design` | Keeps frontend work routed by job: implementation orchestration, UX/workflow redesign, visual taste/system direction, one-page/scrolltelling planning, and app-UI implementation references | depends on agents respecting the wrapper-plus-granular routing instead of treating every UI ask as styling |
 | Generated asset skill topology | Implemented | `skills/image-generation`, `skills/video-generation`, `skills/remotion-render`, installed `imagegen` | Keeps image and video assets as category-level routers with provider details in references, separates Remotion code-to-video from model-native video, and ties frontend-bound media back to asset provenance plus QA | external CLI runs are spend-sensitive and model schemas can change, so agents must capability-gate with the owning skill |
@@ -69,7 +69,7 @@ This inventory is grounded in:
 | Validator-triggered hardcase capture | Implemented | `bin/check_skill_todo_tiers.py`, `skills/skill-maintenance/scripts/check_skills.py`, `experiments/hardcases/` | Makes deterministic skill-contract violations leave deduplicated hardcase seeds instead of disappearing after the local fix | writes data artifacts only; it does not auto-fix or create runnable eval rows |
 | Skill judgement questions | Implemented | `skills/skill-creator`, `skills/advise`, `skills/best-of-worlds` | Gives skills a declared list of ambiguity and metric-selection questions that should route through judgement instead of hidden intuition | existing skills adopt the pattern opportunistically; not every older skill has its own questions yet |
 | Skill `SKILL.md` checklists as default anti-forgetting scaffolds | Implemented | `templates/global/AGENTS.md`, `skills/*/SKILL.md checklists`, `docs/MEMORY.md` | Gives instruction-following models an explicit ordered checklist during repeated workflows instead of relying on implied steps or chat-local mini-plans | works only when the active skill package keeps its checklist aligned with the live contract |
-| Tiered skill dependency loading plus Tier 0 phases | Implemented | `templates/global/AGENTS.md`, `docs/skills/system.md`, `skills/reference-grounding`, `skills/research`, `skills/*/SKILL.md checklists` | Keeps lifecycle phases in the universal Tier 0 protocol while numeric skill tiers describe capability ownership; `plan` and `execute` remain compatibility wrappers rather than new skill dependencies | still depends on each skill maintaining accurate Markdown links, signatures, phase contracts, and method anchors |
+| Tiered skill dependency loading plus Tier 0 phases | Implemented | `templates/global/AGENTS.md`, `docs/skills/system.md`, `skills/plan`, `skills/reference-grounding`, `skills/research`, `skills/*/SKILL.md checklists` | Keeps lifecycle phases in the universal Tier 0 protocol while numeric skill tiers describe capability ownership; `plan` is a planning prompt-template for todo composition and proof-bearing handoff, while `execute` remains a compatibility wrapper rather than a new skill dependency | still depends on each skill maintaining accurate Markdown links, signatures, phase contracts, and method anchors |
 | Unified per-ticket planning via `impl-plan` | Implemented | `skills/impl-plan`, `docs/specs/spec-first-execution-loop.md` | Keeps planning bounded to one work package while keeping approval-first planning and consensus challenge in one public surface | default vs consensus mode still needs tight examples so richer detail does not become policy bloat |
 
 ### Execution and orchestration
@@ -77,14 +77,14 @@ This inventory is grounded in:
 | Technique | Status | Main surfaces | Why it matters | Current limit |
 | --- | --- | --- | --- | --- |
 | Ticket as durable task memory | Implemented | root `AGENTS.md`, `tickets/README.md`, ticket template | Reduces dependence on transcript memory | only as good as ticket writeback discipline |
-| Goal crafting for native `/goal` commands | Implemented | `skills/goal-crafter`, `docs/specs/runtime-surface.md` | Turns fuzzy operator intent into a paste-ready Goal with outcome, verification, constraints, boundaries, iteration policy, and blocked stop condition | skill-only preparation surface; native Goal mode owns lifecycle behavior |
-| Work Admission via `$work` | Implemented | `skills/work`, `skills/goal-crafter`, `docs/specs/spec-first-execution-loop.md`, `docs/specs/runtime-surface.md` | Classifies one request, ticket, ticket batch, board-selected unit, epic, or metric loop before choosing Goal, compute, planning, proof, testability, and downstream skill | admission and docs only; no daemon, true parallel Ralph, cloud launcher, or scheduler ships here |
+| Goal crafting for native `/goal` commands | Implemented | `skills/goal-crafter`, `docs/specs/invocation-and-adapters.md` | Turns fuzzy operator intent into a paste-ready Goal with outcome, verification, constraints, boundaries, iteration policy, and blocked stop condition | skill-only preparation surface; native Goal mode owns lifecycle behavior |
+| Work Admission via `$work` | Implemented | `skills/work`, `skills/goal-crafter`, `docs/specs/spec-first-execution-loop.md`, `docs/specs/invocation-and-adapters.md` | Classifies one request, ticket, ticket batch, board-selected unit, epic, or metric loop before choosing Goal, compute, planning, proof, testability, and downstream skill | admission and docs only; no daemon, true parallel Ralph, cloud launcher, or scheduler ships here |
 | Batch testability ledger | Implemented | `skills/work`, `skills/batch-work`, `skills/ralph`, `tickets/templates/ticket.md` | Lets solo-local batches share setup and regression checks while preserving per-ticket proof rows and blocker attribution | depends on agents maintaining the ledger and not batching unrelated/risky tickets |
-| Single-ticket orchestration via `$impl` | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md`, `README.md` | Makes one ticket the execution unit and keeps orchestration visible | no durable multi-ticket dispatcher yet |
-| Ticket-scoped isolated checkout workflow | Implemented | `skills/pr-runtime`, `bin/ticket_runtime.py`, `docs/specs/runtime-surface.md` | Gives PR follow-up and concurrent writers one explicit isolated-checkout, runtime-launch, and QA-target workflow instead of ad hoc worktree usage | remains local-first and intentionally avoids becoming a full dispatcher or cloud runtime |
+| Single-ticket orchestration via `$impl` | Implemented | `skills/impl`, `docs/specs/spec-first-execution-loop.md`, `README.md` | Makes one ticket the execution unit and keeps orchestration visible | no durable multi-ticket dispatcher yet |
+| Ticket-scoped isolated checkout workflow | Implemented | `skills/pr-runtime`, `bin/ticket_runtime.py`, `docs/specs/invocation-and-adapters.md` | Gives PR follow-up and concurrent writers one explicit isolated-checkout, runtime-launch, and QA-target workflow instead of ad hoc worktree usage | remains local-first and intentionally avoids becoming a full dispatcher or cloud runtime |
 | Farplane invocation contract | Implemented | `WORKFLOW.md`, `skills/farplane-invocation`, `bin/farplane_invocation.py`, `docs/specs/invocation-and-adapters.md` | Gives normal Codex and future external workers one shared request/result seam: envelope in, filesystem work item normalized, compute selected, existing skill route returned, proof packet out | filesystem adapter and local compute only; no daemon, polling, Linear adapter, or cloud execution |
-| Explicit worker-lane split | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Separates builder, reviewer, QA, and evidence-check responsibilities | actual staffing and reuse patterns are still evolving |
-| Ephemeral orchestrator, visible worker lanes | Implemented | `skills/impl`, `docs/specs/orchestrator-subagent-loop.md` | Avoids a hidden forever-orchestrator and keeps runs legible | tmux/runtime surfaces are still prototype-weight |
+| Explicit worker-lane split | Implemented | `skills/impl`, `docs/specs/spec-first-execution-loop.md` | Separates builder, reviewer, QA, and evidence-check responsibilities | actual staffing and reuse patterns are still evolving |
+| Ephemeral orchestrator, visible worker lanes | Implemented | `skills/impl`, `docs/specs/spec-first-execution-loop.md` | Avoids a hidden forever-orchestrator and keeps runs legible | tmux/runtime surfaces are still prototype-weight |
 | Same-ticket re-entry via `$impl` + Stop hook | Partial | `skills/impl`, `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps working on one selected ticket until proof exists instead of stopping on partial progress | runtime/code migration still has some compatibility aliases, but retired prototype specs are gone |
 | Goal-backed board context via `$ralph` | Implemented | `skills/ralph`, `skills/work`, `skills/ralph/scripts/select_next_ticket.py`, `tickets/README.md`, `docs/specs/spec-first-execution-loop.md` | Lets an operator drain prepared filesystem tickets by selecting eligible work units and handing them to `$work` while Goal owns the durable stop condition | intentionally serial; no worktree leases, merge queue, external board adapters, or parallel N-agent dispatch yet |
 
@@ -94,7 +94,7 @@ This inventory is grounded in:
 | --- | --- | --- | --- | --- |
 | Three-layer review gate: QA -> reviewer -> Stop hook | Implemented | `docs/specs/review-gates.md`, `skills/review`, `hooks.json`, `bin/stop_hook.py` | Makes evidence gathering, quality judgment, and continuation separate decisions | normalized scoring is specified more clearly than it is fully enforced |
 | QA separated from implementor | Implemented | `agents/qa-tester.toml`, `docs/specs/review-gates.md` | Reduces self-approval and gathers independent evidence | strongest for UI/browser work today |
-| Evidence-check as a separate skepticism lane | Implemented | `docs/specs/orchestrator-subagent-loop.md`, `skills/impl` | Catches overconfident QA and weak artifacts | dedicated evidence-check implementation is still light |
+| Evidence-check as a separate skepticism lane | Implemented | `docs/specs/spec-first-execution-loop.md`, `skills/impl` | Catches overconfident QA and weak artifacts | dedicated evidence-check implementation is still light |
 | Rubric-driven review | Implemented | `skills/review`, `docs/review/rubrics/*`, `docs/specs/review-gates.md` | Prevents “looks fine” review and pushes explicit pass/revise/block outputs | consistent write-back across all work types still needs more use |
 | Ticket artifact-first completion gate | Implemented | `tickets/templates/ticket.md`, `docs/specs/review-gates.md`, `docs/MEMORY.md` | Prevents checklist theater or stale evidence from counting as completion | depends on each active ticket linking fresh, traceable evidence artifacts |
 | Visual QA as a judgment-only layer | Implemented | `skills/visual-qa`, `agents/qa-tester.toml` | Keeps UI judgment separate from browser driving and implementation | depends on strong ticket contracts and good evidence capture |
@@ -107,13 +107,13 @@ This inventory is grounded in:
 | --- | --- | --- | --- | --- |
 | Durable memory split by purpose | Implemented | `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, `docs/LESSONS.md`, root `AGENTS.md` | Separates change log, invariants, raw repeated misses, and distilled lessons | relies on disciplined promotion/writeback |
 | Progressive disclosure of context | Implemented | short `AGENTS.md`, `ARCHITECTURE.md`, `docs/specs/*`, skill references, tickets | Starts agents from a small stable entry point and teaches where to look next | structural entrypoints are checked, but narrative doc quality still needs active audit |
-| Mechanical harness invariant checks | Implemented | `bin/check_harness_invariants.py`, `tickets/scripts/check_ticket_metadata.py`, `AGENTS.md`, `docs/specs/runtime-surface.md`, `tickets/README.md` | Backstops a few repeated repo-critical rules mechanically instead of relying only on prompt memory | intentionally narrow; it catches high-signal boundary drift, not every prose or architecture mistake |
+| Mechanical harness invariant checks | Implemented | `bin/check_harness_invariants.py`, `tickets/scripts/check_ticket_metadata.py`, `AGENTS.md`, `docs/specs/invocation-and-adapters.md`, `tickets/README.md` | Backstops a few repeated repo-critical rules mechanically instead of relying only on prompt memory | intentionally narrow; it catches high-signal boundary drift, not every prose or architecture mistake |
 | Mechanical knowledge-base entrypoint checks | Implemented | `bin/check_doc_parity.py`, `docs/specs/doc-governance.md`, `README.md`, `ARCHITECTURE.md`, `docs/specs/README.md`, `tickets/README.md` | Keeps the top-level knowledge-base entry surfaces linked and catches stale queue claims without over-linting all prose | intentionally narrow; it does not replace narrative document review |
 | Doc-governance workflow for narrative drift | Implemented | `docs/specs/doc-governance.md`, `docs/specs/README.md` | Gives flexible docs a repeatable audit path without requiring brittle substring validators for every story change | still depends on humans running the audit loop; no recurring maintainer agent yet |
 | Stop-hook continuation and judgment | Implemented | `hooks.json`, `bin/stop_hook.py`, `agents/orchestrator.toml`, `agents/completion-reviewer.toml` | Gives visible turn-boundary continuation logic instead of pure transcript intuition | continuation policy is still being simplified and hardened |
 | Current-turn intent relevance gate | Implemented | `bin/capture_user_turn.py`, `bin/stop_hook.py`, `docs/specs/context-and-handoff-policy.md`, `docs/MEMORY.md` | Keeps continuation and completion decisions anchored to the user's current ask instead of stale worker momentum | degraded fallback still exists when input-hook capture is missing |
 | Explicit ticket selectors outrank ambient state | Implemented | `docs/MEMORY.md`, `bin/stop_hook.py`, `docs/HISTORY.md` | Prevents stale run state from hijacking the wrong ticket | still mainly a runtime safety rule, not a full dispatcher model |
-| Lightweight runtime visibility | Partial | `skills/impl/scripts/tmux_helper.py`, `README.md`, `docs/specs/runtime-surface.md` | Exposes active lane/session/verdict without a heavyweight runtime plane | queue-wide runtime state remains minimal by design |
+| Lightweight runtime visibility | Partial | `skills/impl/scripts/tmux_helper.py`, `README.md`, `docs/specs/invocation-and-adapters.md` | Exposes active lane/session/verdict without a heavyweight runtime plane | queue-wide runtime state remains minimal by design |
 
 ### Skills, subagents, and tools
 
@@ -125,7 +125,7 @@ This inventory is grounded in:
 | CLI cleanup as a delegated worker workflow | Implemented | `skills/desloppify`, `README.md`, `.gitignore` | Gives agents one explicit anti-slop execution surface with a concrete main-agent to worker handoff | depends on local Python 3.11+ plus the external `desloppify` CLI |
 | External CLI delegation | Implemented | `skills/delegate-cli`, `skills/delegate-frontend`, `bin/delegate_cli_agent.py`, `templates/external-cli/*` | Lets Farplane route bounded builder work to another local coding-agent CLI while retaining ticket evidence, QA, review, and integration authority | v1 ships only the Pi/Kimi frontend profile; other CLI families need adapter/profile tickets before active use |
 | MCP/tool surfaces as capability extensions | Implemented | `config.toml.example`, tool-facing skills, README setup | Extends evidence collection, docs access, browser operation, and external research | tool wiring exists, but some tools are not yet codified into stable loops |
-| Tmux-backed visible lanes | Partial | `README.md`, `skills/impl/scripts/tmux_helper.py`, `docs/specs/runtime-surface.md` | Makes long-running worker sessions visible and reusable | still a prototype operational surface rather than a mature dispatcher |
+| Tmux-backed visible lanes | Partial | `README.md`, `skills/impl/scripts/tmux_helper.py`, `docs/specs/invocation-and-adapters.md` | Makes long-running worker sessions visible and reusable | still a prototype operational surface rather than a mature dispatcher |
 
 ## Proposed Techniques and Experiments
 
@@ -160,11 +160,50 @@ When deciding what to tune next:
 3. if proposed, ticket the smallest eval that can prove or kill it
 4. prefer review-loop and proof changes before broader generation changes
 
+## Self-Growing Harness Map
+
+Farplane grows through visible registries, skills, evals, review, and durable
+memory rather than one hidden autonomy loop:
+
+```text
+SelfGrowingHarness :=
+  FeatureRegistry
++ SkillRegistry
++ SkillMaintenance
++ SourceIngestion
++ EvaluationAndBehaviorTests
++ GapAnalysisAndOptimization
++ ReviewAndProof
++ DurableMemory
+```
+
+The owning surfaces are:
+
+- `docs/features/registry.jsonl`: supported harness feature catalog
+- `docs/skills/registry.jsonl`: generated skill package inventory
+- `skills/skill-maintenance`: bulk skill upkeep, registry sync, and
+  skill-system validation
+- `skills/harness-scout` and `docs/sources/registry.jsonl`: source ingestion
+  before local feature adoption
+- `skills/eval`, `skills/agent-behavior-test`, and `skills/agent-qa-test`:
+  behavior proof and regression capture
+- `skills/gap-analysis`, `skills/harness-advisor`, and
+  `skills/optimize-harness`: behavior gap to placement, eval plan, and proof
+  loop
+- `skills/review` plus ticket proof contracts: anti-self-approval gates
+- `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and
+  `docs/LESSONS.md`: durable timeline, invariants, pain logs, and distilled
+  learning
+
+Feature rows are provenance and support records, not a substitute for tests,
+tickets, or review evidence. Use `feature_refs` in skill frontmatter only for
+compact `FEAT-####` handles already present in `docs/features/registry.jsonl`.
+
 ## Canonical Companion Docs
 
 - `harness-engineering-doctrine.md` for how to decide which harness surface should own a change
-- `meta-harness-automation.md` for how feature rows, skill inventory, skill
-  maintenance, source ingestion, evals, failure capture, review, and durable
+- this file's Self-Growing Harness Map for how feature rows, skill inventory,
+  skill maintenance, source ingestion, evals, gap analysis, review, and durable
   memory make Farplane self-growing
 - `invocation-and-adapters.md` for BoardAdapter, ComputeSelector, local
   Farplane, Ralph, and future external-runner/shared-board ownership boundaries
@@ -173,4 +212,4 @@ When deciding what to tune next:
 - `doc-governance.md` for structural versus narrative doc-audit policy
 - `review-gates.md` for the QA/reviewer/Stop-hook split
 - `spec-first-execution-loop.md` for the end-to-end execution model
-- `orchestrator-subagent-loop.md` for `$impl` lane roles
+- `spec-first-execution-loop.md` for `$impl` lane roles

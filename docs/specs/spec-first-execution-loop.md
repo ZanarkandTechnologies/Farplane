@@ -172,6 +172,31 @@ subphases, but `$impl` remains the default public execution entrypoint.
 Worker lanes may vary by ticket, but the public build-phase entrypoint is
 `$impl`.
 
+The main agent orchestrates a work package; it does not personally do every
+step when separate lanes are available. The default lane split is:
+
+1. builder implements inside the declared scope
+2. reviewer scores the work against the ticket proof contract and selected
+   review rubrics
+3. QA gathers evidence such as logs, screenshots, repro steps, and observations
+4. evidence-check verifies whether the QA evidence supports the claimed verdict
+5. the main agent integrates outputs, writes next action, and owns the final
+   completion claim
+
+Ownership boundaries:
+
+- builder does not own final review, final QA judgment, or merge/integration
+  authority
+- reviewer does not gather screenshots or act as QA
+- QA does not decide code quality
+- evidence-check catches weak, contradictory, or low-context QA artifacts
+- integration remains singular with the coordinating lane
+
+Native Codex subagents are the default worker implementation when available.
+Tmux-backed lanes are only an optional visibility/runtime wrapper for long-lived
+visible workers; they are not the core QA delegation rule and not a hidden
+orchestrator.
+
 ### 5b. Optional Serial Board Drain
 
 `$ralph` may run after tickets are prepared, ideally inside a native Goal that

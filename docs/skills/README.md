@@ -82,7 +82,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Diagnose the gap between current and expected behavior | `gap-analysis` | It turns a repeated "what is missing here?" prompt into a grounded gap report with current contract, expected signature, missing inputs, outputs, proof, evals, owner surface, and verification. | You already know the exact edit; use the target surface or `skill-maintenance` directly. |
 | Prove a pattern before expanding scope, automation, data, file count, or research breadth | `prototyping` | It forces a representative `1 -> 10 -> 100` sample and a Prototype Note before scale. | The task is already small, one-off, or mechanically proven. |
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
-| Handle an explicit legacy `$plan` call | `plan` | It is a deprecated compatibility wrapper over the native Tier 0 planning phase. | A task merely has a planning phase; use the native phase or a domain skill such as `impl-plan`, `landing-page`, or `video-production`. |
+| Compose skill todos into a task-specific strategy and proof-bearing plan | `plan` | It is the Tier 2 planning prompt-template for binding context, choosing grounding/search budget, composing workflows, and producing executable todos. | A domain planner already owns the artifact and no cross-skill composition or strategy choice is needed. |
 | Handle an explicit legacy `$execute` call | `execute` | It is a deprecated compatibility wrapper over the native Tier 0 execution phase. | A task merely has an execution phase; use the native phase or a public domain execution skill such as `impl` or `frontend-craft`. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing `pr-runtime` and `coderabbit-review`. | You only need an isolated checkout (`pr-runtime`) or one explicit heavy CodeRabbit pass (`coderabbit-review`). |
 | Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
@@ -193,8 +193,11 @@ may be written as `## Phase Contract` in a skill when useful.
 - Tier 3 first-load todos do not link Tier 1 primitives such as `advise`,
   `reference-grounding`, or `prototyping` directly unless the skill owns that
   primitive step as part of its first-load contract.
-- `plan` and `execute` are deprecated compatibility wrappers for native Codex
-  phases and should not be introduced as new skill dependencies.
+- `plan` is a Tier 2 planning prompt-template for composing skill todos,
+  choosing grounding/search budget, and defining proof before costly work.
+  Do not introduce it as a mandatory dependency for every skill invocation.
+- `execute` is a deprecated compatibility wrapper for the native Codex
+  execution phase and should not be introduced as a new skill dependency.
 - `review` is a callable TAS wrapper over docs-owned rubrics in
   `docs/review/rubrics/*`.
 - `bin/sync_skill_registry.py --check` fails when a Tier 3 todo list direct-links
@@ -260,6 +263,20 @@ packages under `.farplane/import-backups/`, and strips generated
 review the `description`, `tier`, and `source` frontmatter, then run
 `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
 
+## Skill Self-Healing
+
+Skill repair starts from a grounded failure packet and then uses existing
+surfaces instead of creating hidden repair work. The canonical contract lives in
+[`docs/specs/self-improvement-contracts.md`](../specs/self-improvement-contracts.md).
+
+- repo-owned skill capability fixtures live under `skills/<skill>/tests/`
+- installed or external skill mirrors live under `tests/<skill>/`
+- deterministic fixture validation lives in `bin/check_skill_capabilities.py`
+- local repairs should target repo-owned wrappers, fixtures, registry rows,
+  docs, or visible repair tickets
+- installed or external skill bodies are not edited unless the operator
+  explicitly requests that exact external edit
+
 Project-type exploration belongs upstream of Tier 3 execution skills. Use
 `skills/deep-init-project/references/project-profiles.md` to seed
 `docs/bootstrap-brief.md`, `deep-interview`, `prd`, and `spec-to-ticket` with
@@ -273,8 +290,10 @@ top-level skill. Use
 `bootstrap -> interview -> PRD -> tickets -> native planning phase -> implement -> proof/review -> close`
 shape. Generated project `AGENTS.md` should carry the compact lifecycle rule;
 `PROJECT_RULES.md` should carry technical standards, commands, runtime, and QA
-paths. Treat `plan` and `execute` as deprecated compatibility wrappers over
-native phases, not base-class implementations with reusable domain logic.
+paths. Treat `plan` as a planning prompt-template and todo-composition
+interface, not as the Tier 0 planning phase itself. Treat `execute` as a
+deprecated compatibility wrapper over native execution, not a base-class
+implementation with reusable domain logic.
 
 ## Source Ownership
 
