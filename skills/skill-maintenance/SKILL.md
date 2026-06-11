@@ -67,6 +67,10 @@ fails: invents numeric health score; duplicates git last-edited state; claims ta
    - [ ] Identify source ownership, related skills, adopted `FEAT-####`
      records, first-load dependencies, proof surfaces, and files that may
      change.
+   - [ ] When the source change started in `~/.codex/skills`, preview the pull
+     into repo source with `python3 ../../bin/import_installed_skills.py --skills <name> --dry-run`
+     from this skill package, then import with explicit `--overwrite` only when
+     replacing an existing repo package is intentional.
 - [ ] 5. Prototype broad rewrites on a representative sample before scaling.
    - [ ] Include a mix of Tier 1, Tier 2, and complex Tier 3 packages when the
      migration will affect many skills.
@@ -190,7 +194,11 @@ hygiene, or consolidation planning.
 4. For broad migrations such as todo-list embedding or reference pruning, use
    [prototyping](../prototyping/SKILL.md) on a small representative set before
    running bulk commands.
-5. Update `SKILL.md` frontmatter only for manual fields: `tier`, `source`,
+5. Use `python3 ../../bin/import_installed_skills.py --skills <name> --dry-run`
+   when a desired skill change exists only in `~/.codex/skills`; import without
+   `--dry-run` only after confirming the package, and use `--overwrite` only for
+   intentional repo-source replacement.
+6. Update `SKILL.md` frontmatter only for manual fields: `tier`, `source`,
    `description`, optional `skill_template_version`, optional `feature_refs`,
    Tier 3 `group`, optional `methods`, optional `common_chains`, and optional
    `upstream_url`. Keep `description` as the functional routing definition, not
@@ -198,14 +206,14 @@ hygiene, or consolidation planning.
    `FEAT-####` handles already present in `docs/features/registry.jsonl`. Use
    `skill_template_version` only when the skill has been onboarded to a known
    structural template baseline; absence means not onboarded yet.
-6. Put the anti-forgetting todo list directly in `SKILL.md` under
+7. Put the anti-forgetting todo list directly in `SKILL.md` under
    `## Todo List`:
    - project/docs context first
    - required workflow and branch checks second
    - proof/writeback last
    - keep optional detail in references with clear read conditions
    - keep or create `todos.md` only as a temporary migration input
-7. Run the standard skill-system check:
+8. Run the standard skill-system check:
 
 ```bash
 python3 scripts/check_skills.py --write
@@ -224,9 +232,9 @@ python3 ../../bin/sync_skill_registry.py --check
 python3 ../../bin/check_skill_todo_tiers.py --allow-peer-tier3
 ```
 
-8. Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
+9. Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
    ticket evidence after skill changes.
-9. For material skill edits, write the skill-local audit record with
+10. For material skill edits, write the skill-local audit record with
    first-principles reasoning, before and after behavior, optional proof
    artifacts or explicit evidence gaps, binary rubric rows, and followups.
 

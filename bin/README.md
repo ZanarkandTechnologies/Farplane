@@ -40,6 +40,9 @@ orchestration story.
 - `install_selected_skills.py` - dependency-free selected-skill installer for
   listing, searching, dry-running, and symlinking only chosen skills into a
   Codex home without rendering full harness config
+- `import_installed_skills.py` - selected-skill importer for pulling useful
+  packages from an installed Codex skills directory into repo-owned
+  `skills/*` source
 - `sync_skill_plugins.py` - deterministic generator for on-demand Codex plugin
   packages and a local or personal marketplace from `skills/*`
 - `farplane_invocation.py` - contract helper for `WORKFLOW.md`,
@@ -127,6 +130,14 @@ success quiet and make failure output the thing that stands out.
   Use to discover shareable skills without rendering the full Farplane config.
 - `python3 bin/install_selected_skills.py --skills review,visual-qa --dry-run`
   Use to preview selected skill symlinks into `~/.codex/skills`.
+- `python3 bin/import_installed_skills.py --list`
+  Use to list installed Codex skills and see whether each already exists in
+  repo source.
+- `python3 bin/import_installed_skills.py --skills notion-task-field-fill,reel-collage --dry-run`
+  Use to preview importing installed skills into `skills/*` before writing.
+- `python3 bin/import_installed_skills.py --skills <name> --overwrite`
+  Use to replace an existing repo skill from the installed copy, with the old
+  repo package backed up under `.farplane/import-backups/`.
 - `python3 bin/sync_skill_plugins.py --check`
   Use after changing `skills/*` to prove plugin packages can still be generated.
 - `python3 bin/sync_skill_plugins.py --install-local --plugins farplane-core`

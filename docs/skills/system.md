@@ -107,6 +107,11 @@ instead of duplicating them in frontmatter.
   refreshable. Keep local Farplane wrapper policy in local caller skills.
 - Do not patch installed skill bodies such as `~/.codex/skills/*` as the source
   of truth. Edit the Farplane source package, then reinstall selected skills.
+- If a useful skill begins life in `~/.codex/skills`, pull it into repo source
+  with `python3 bin/import_installed_skills.py --skills <name> --dry-run` first,
+  then rerun without `--dry-run` after reviewing the package boundary. Existing
+  repo packages require explicit `--overwrite` and are backed up under
+  `.farplane/import-backups/`.
 - Put skill-specific eval tasks beside the source skill as `eval_task.json`.
   Keep broad working suites under `.farplane/evals` and reusable cross-skill
   examples under `skills/eval/examples`.

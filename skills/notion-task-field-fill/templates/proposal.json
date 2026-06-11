@@ -1,0 +1,64 @@
+{
+  "run": {
+    "id": "<run-id>",
+    "mode": "dry-run",
+    "window": {
+      "start": "<iso-datetime>",
+      "end": "<iso-datetime>",
+      "timezone": "Asia/Kuala_Lumpur"
+    },
+    "target_fields": [
+      "Act Time",
+      "Project",
+      "Areas",
+      "Attention Required",
+      "Tags"
+    ],
+    "connector_status": {
+      "notion": "ok|connector_unavailable|approximated",
+      "telegram": "ok|not_configured|not_attempted|failed"
+    }
+  },
+  "context": {
+    "source_refs": [],
+    "context_gaps": []
+  },
+  "candidates": [
+    {
+      "task": {
+        "name": "<task name>",
+        "url": "<private-url-or-placeholder>",
+        "status": "<status>"
+      },
+      "missing_fields": [],
+      "field_proposals": {},
+      "patch": {},
+      "telegram_required": false,
+      "abstentions": []
+    }
+  ],
+  "notifications": [
+    {
+      "task_name": "<task name>",
+      "fields": ["Project"],
+      "message_artifact": "<path>",
+      "telegram_status": "sent|not_configured|not_attempted|failed"
+    }
+  ],
+  "writes": [
+    {
+      "task_name": "<task name>",
+      "mode": "live-high-confidence",
+      "patch": {},
+      "readback_status": "verified|failed|not_attempted"
+    }
+  ],
+  "summary": {
+    "candidate_count": 0,
+    "high_confidence_patch_count": 0,
+    "medium_suggestion_count": 0,
+    "low_confidence_request_count": 0,
+    "abstention_count": 0,
+    "live_write_count": 0
+  }
+}

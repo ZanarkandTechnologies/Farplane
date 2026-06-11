@@ -1,0 +1,208 @@
+{
+  "skill": "notion-task-field-fill",
+  "operation": "proposal_model_fixture",
+  "kind": "file_contract",
+  "expected": "The skill has reusable fixtures proving per-field inference, high-confidence writes, low-confidence Telegram escalation, and project/area abstention behavior without live Notion IDs.",
+  "observed_failure": "",
+  "expected_recovery": ["continue"],
+  "forbidden_actions": [
+    "mutate_notion_status",
+    "publish",
+    "deploy",
+    "spend_money",
+    "destructive_cleanup"
+  ],
+  "priority_hint": "high",
+  "user_value_reason": "Recently created Notion Tasks become usable for planning only when missing fields are filled safely or escalated to Kenji.",
+  "evidence_refs": [
+    "tickets/TASK-0193/artifacts/notion-field-fill-dry-run-2026-06-03.md",
+    "skills/notion-task-field-fill/references/model.md",
+    "skills/notion-task-field-fill/references/confidence.md"
+  ],
+  "fixtures": [
+    {
+      "name": "vibecoding glasses inherits project area",
+      "task": {
+        "name": "Vibecoding glasses",
+        "status": "Not started",
+        "act_time": null,
+        "project": [],
+        "areas": [],
+        "description": "",
+        "attention_required": null,
+        "tags": []
+      },
+      "context": {
+        "today": "2026-06-03",
+        "projects": [
+          {
+            "name": "Yevon Glasses",
+            "area": "Zanarkand Technologies",
+            "context": "Smart glasses and vibecoding workflows."
+          }
+        ],
+        "plan_week_mentions": ["Yevon Glasses", "vibecoding glasses"]
+      },
+      "expected": {
+        "Project": {
+          "status": "proposed",
+          "confidence": "high"
+        },
+        "Areas": {
+          "status": "proposed",
+          "confidence": "high"
+        },
+        "Act Time": {
+          "status": "proposed",
+          "confidence": "high",
+          "value": "2026-06-03"
+        }
+      }
+    },
+    {
+      "name": "generic research escalates",
+      "task": {
+        "name": "Look into Nvidia's new vision model",
+        "status": "Not started",
+        "act_time": null,
+        "project": [],
+        "areas": [],
+        "description": "",
+        "attention_required": null,
+        "tags": []
+      },
+      "context": {
+        "today": "2026-06-03",
+        "projects": [
+          {
+            "name": "Yevon Glasses",
+            "area": "Zanarkand Technologies",
+            "context": "Smart glasses and computer vision."
+          },
+          {
+            "name": "AI Research Watch",
+            "area": "Research",
+            "context": "Track model releases."
+          }
+        ],
+        "plan_week_mentions": []
+      },
+      "expected": {
+        "Project": {
+          "status": "needs_kenji",
+          "confidence": "low",
+          "telegram_required": true
+        },
+        "Areas": {
+          "status": "needs_kenji",
+          "confidence": "low",
+          "telegram_required": true
+        },
+        "Tags": {
+          "status": "suggested",
+          "confidence": "medium"
+        }
+      }
+    },
+    {
+      "name": "project strong area conflict abstains",
+      "task": {
+        "name": "correction capture task",
+        "status": "Not started",
+        "act_time": null,
+        "project": ["Code Agent Cracked: Phase 3"],
+        "areas": [],
+        "description": "Capture a skill lesson for the correction workflow.",
+        "attention_required": null,
+        "tags": []
+      },
+      "context": {
+        "today": "2026-06-03",
+        "projects": [
+          {
+            "name": "Code Agent Cracked: Phase 3",
+            "area": "Farplane",
+            "context": "Improve coding-agent workflows."
+          }
+        ],
+        "conflicting_area_hint": "Personal Ops"
+      },
+      "expected": {
+        "Project": {
+          "status": "already_set",
+          "confidence": "high"
+        },
+        "Areas": {
+          "status": "abstain",
+          "reason": "project_area_conflict",
+          "telegram_required": true
+        },
+        "Attention Required": {
+          "status": "proposed",
+          "confidence": "high",
+          "value": "Delegateable"
+        }
+      }
+    },
+    {
+      "name": "reel task gets content tags",
+      "task": {
+        "name": "[Reel] Zap myself",
+        "status": "Not started",
+        "act_time": null,
+        "project": [],
+        "areas": [],
+        "description": "",
+        "attention_required": null,
+        "tags": []
+      },
+      "context": {
+        "today": "2026-06-03",
+        "projects": [],
+        "plan_week_mentions": []
+      },
+      "expected": {
+        "Attention Required": {
+          "status": "proposed",
+          "confidence": "high",
+          "value": "Foreground"
+        },
+        "Tags": {
+          "status": "proposed",
+          "confidence": "high",
+          "value": ["Reel", "Content"]
+        }
+      }
+    },
+    {
+      "name": "account setup foreground",
+      "task": {
+        "name": "Setup long running claw with account",
+        "status": "Not started",
+        "act_time": null,
+        "project": [],
+        "areas": [],
+        "description": "",
+        "attention_required": null,
+        "tags": []
+      },
+      "context": {
+        "today": "2026-06-03",
+        "projects": [],
+        "plan_week_mentions": []
+      },
+      "expected": {
+        "Attention Required": {
+          "status": "proposed",
+          "confidence": "high",
+          "value": "Foreground"
+        },
+        "Tags": {
+          "status": "suggested",
+          "confidence": "medium",
+          "value": ["Admin", "Technical"]
+        }
+      }
+    }
+  ]
+}

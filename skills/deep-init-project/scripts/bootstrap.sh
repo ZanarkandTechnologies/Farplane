@@ -89,7 +89,7 @@ write_file_if_missing "${TARGET_DIR}/docs/prd.md" "# PRD\n\n## Problem / Context
 write_file_if_missing "${TARGET_DIR}/docs/HISTORY.md" "# HISTORY\n\nAppend-only change log.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | summary\n\n"
 write_file_if_missing "${TARGET_DIR}/docs/MEMORY.md" "# MEMORY\n\nCurated durable constraints and invariants future work must obey.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | MEM-#### | tags | durable rule\n\n"
 write_file_if_missing "${TARGET_DIR}/docs/TROUBLES.md" "# TROUBLES\n\nAppend-only raw log for repeated failures, blockers, user corrections, and preventable misses.\n\nFormat:\nYYYY-MM-DD HH:mm Z | area,tags | request | miss | correction | prevention\n\nPromote only stable patterns from here into docs/LESSONS.md, docs/MEMORY.md, or the relevant skill/contract.\n\n"
-write_file_if_missing "${TARGET_DIR}/docs/LESSONS.md" "# LESSONS\n\nDistilled post-fix learning log for prompt, skill, eval, and policy improvements.\n\nFormat:\nYYYY-MM-DD HH:mm Z | area,tags | source | lesson | owner | next_prompt_or_skill_change\n\nUse docs/TROUBLES.md for raw pain; use this file for reusable lessons after a fix, repent pass, review, or drain.\n\n"
+write_file_if_missing "${TARGET_DIR}/docs/LESSONS.md" "# LESSONS\n\nDistilled post-fix learning log for prompt, skill, eval, and policy improvements.\n\nFormat:\nYYYY-MM-DD HH:mm Z | area,tags | source | lesson | owner | next_prompt_or_skill_change\n\nUse docs/TROUBLES.md for raw pain; use this file for reusable lessons after a fix, correction pass, review, or drain.\n\n"
 copy_file "${REF_DIR}/TASTE_TEMPLATE.md" "${TARGET_DIR}/docs/TASTE.md"
 
 mkdir -p "${TARGET_DIR}/tickets" "${TARGET_DIR}/tickets/archive" "${TARGET_DIR}/tickets/templates"

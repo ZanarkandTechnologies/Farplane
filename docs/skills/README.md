@@ -129,6 +129,8 @@ python3 bin/sync_skill_registry.py --check
 python3 bin/check_skill_todo_tiers.py
 python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
 python3 bin/check_skill_capabilities.py validate
+python3 bin/import_installed_skills.py --list
+python3 bin/import_installed_skills.py --skills <name> --dry-run
 python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0
 ```
@@ -206,6 +208,15 @@ This makes the first-load todo list visible on first skill load while avoiding a
 second todo file for local migrated skills. After editing a source skill or
 its first-load todo list, rerun install before judging the behavior of
 `~/.codex/skills/<name>/SKILL.md`.
+
+When a useful skill is created or edited first in live Codex home, import it
+back into repo source with `bin/import_installed_skills.py` instead of treating
+`~/.codex/skills/*` as canonical. The importer previews with `--dry-run`, skips
+existing repo packages unless `--overwrite` is explicit, backs up overwritten
+packages under `.farplane/import-backups/`, and strips generated
+`FARPLANE_EMBEDDED_TODOS` blocks from imported `SKILL.md` files. After import,
+review the `description`, `tier`, and `source` frontmatter, then run
+`python3 skills/skill-maintenance/scripts/check_skills.py --write`.
 
 Project-type exploration belongs upstream of Tier 3 execution skills. Use
 `skills/deep-init-project/references/project-profiles.md` to seed

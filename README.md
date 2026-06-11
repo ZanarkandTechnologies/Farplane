@@ -122,9 +122,10 @@ flowchart LR
   monitoring.
 - **Test-case memory.** The harness can preserve disliked outputs, misses, and
   benchmark cases so failures become reusable improvement pressure.
-- **Human-marked hard cases.** `repent lesson` and `repent hardcase` turn fixed
-  agent failures into local lessons, Notion improvement proposals, sanitized
-  hardcase artifacts, or narrow high-priority regression eval rows.
+- **Human-marked hard cases.** Corrections and high-priority misses flow into
+  local lessons, Notion improvement proposals, sanitized hardcase artifacts, or
+  narrow regression eval rows through `gap-analysis`, `optimize-harness`, and
+  `eval`.
 - **Ticket-first autonomy as one mode.** Tickets remain the durable execution
   surface for coding work, but they are not the whole product.
 
@@ -140,15 +141,15 @@ flowchart LR
 - **Skills render their own operating checklist.** Skill `SKILL.md` files own
   first-load todo lists, tiered dependency shape, references, and scripts so the
   agent can recursively compose workflows without stuffing the global prompt.
-- **Failures become pressure, not vibes.** Operator corrections flow through
-  `repent`: fix first, then capture a lesson, hardcase, or narrow regression
-  eval when the miss is high-priority.
+- **Failures become pressure, not vibes.** Operator corrections fix same-scope
+  misses first, then capture a lesson, hardcase, or narrow regression eval when
+  the miss is high-priority.
 - **Validators can create hardcase seeds.** Deterministic skill-contract checks
   such as todo-tier violations can write deduplicated hardcases automatically,
   so obvious process failures become future eval/self-improvement material.
 - **System-prompt behavior is evalable.** Repo-owned eval examples under
   `skills/eval/examples/` cover grounding, context gathering, advice routing,
-  proactive action, holdback on risky work, skill todo rendering, repent eval
+  proactive action, holdback on risky work, skill todo rendering, correction
   capture, multitopic focus, and validator-triggered hardcase capture.
 - **Long threads keep a whole-thread topic ledger.** In multitopic work,
   substantial replies name the root topic, tangents, and current focus, then

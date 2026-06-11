@@ -87,9 +87,10 @@ When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
 structured outputs, eval prompts, or agent instruction prompts, load
 `rules/prompt-engineering.md` as the shared prompt design reference.
 
-When the operator explicitly wants audit-then-fix recovery mode after a likely
-assistant miss, use the `repent` skill rather than inventing ad hoc recovery
-behavior.
+When the operator explicitly wants audit-then-fix recovery after a likely
+assistant miss, use the current correction surfaces: fix same-scope misses
+first, then route durable learning to `gap-analysis`, `optimize-harness`,
+`eval`, `docs/TROUBLES.md`, or `docs/LESSONS.md` as appropriate.
 
 When planning a missing or partially implemented feature depends on
 understanding what a production-grade version should include, use
@@ -239,7 +240,7 @@ For harness-design research and external patterns:
   summaries belong in git, not history. See `MEM-0071`.
 - `docs/MEMORY.md`: curated invariants and constraints that future work must obey
 - `docs/TROUBLES.md`: raw repeated misses, blockers, and correction pain points
-- `docs/LESSONS.md`: distilled lessons from repent, review, and trouble-drain passes
+- `docs/LESSONS.md`: distilled lessons from correction, review, and trouble-drain passes
 - `experiments/`: proof artifacts and smoke outputs
 
 Transient execution state stays outside this file. Keep this file short enough that an agent can use it as a map.
