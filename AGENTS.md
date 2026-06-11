@@ -56,8 +56,10 @@ is a planning prompt-template and todo-composition interface, not the Tier 0
 planning phase itself. `execute` is a deprecated compatibility wrapper for
 native Codex execution, not a normal dependency for new skill work. `review` is
 a callable TAS wrapper over docs-owned rubrics in `docs/review/rubrics/*`, not
-the owner of every review workflow. See `MEM-0098`, `MEM-0100`, `MEM-0125`, and the Tier 0 update
-in `docs/skills/system.md`.
+the owner of every review workflow. Call phase-like skills only when the phase
+needs its own artifact, budget, handoff, independent judgment, or proof
+surface, and never recurse through them at the same task scope. See `MEM-0098`,
+`MEM-0100`, `MEM-0125`, and the Tier 0 update in `docs/skills/system.md`.
 Create new Tier 1 primitives only when multiple Tier 2 interfaces need that
 move as a base dependency; otherwise keep common reusable work as a Tier 2
 interface or method. User research starts as `research:user-grounding`, not a

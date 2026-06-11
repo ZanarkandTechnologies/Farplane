@@ -505,6 +505,66 @@ Skill_s(input, state) -> output + evidence + state_delta
 Avoid pretending every skill is pure. Skills read files, call tools, delegate,
 and update state.
 
+## 7.1 Phase Functions And Recursion Boundaries
+
+Tier 0 phases are lifecycle functions available inside every skill invocation.
+They are not ordinary lower-tier skill dependencies:
+
+```text
+phase_protocol(task, skill, state)
+  -> grounded_inputs
+   + plan_or_direct_action
+   + execution
+   + guardrail_or_eval
+   + review_if_material
+   + state_delta
+```
+
+A phase can stay inline or become a separate skill call:
+
+```text
+inline_phase(skill, phase, task) -> local_decision
+external_phase(skill, phase, task, budget) -> artifact + evidence
+```
+
+Externalizing a phase is useful only when the separate artifact, independent
+judgment, explicit budget, handoff, or proof surface reduces expected loss more
+than it adds coordination cost:
+
+```text
+externalize_phase = true
+  iff value(phase_artifact_or_judgment) > coordination_cost
+```
+
+The anti-recursion invariant is scope shrinkage:
+
+```text
+valid_external_phase_call(parent_scope, child_scope)
+  -> child_scope < parent_scope
+```
+
+This resolves plan/review circularity. `plan` can produce a review request for
+a plan artifact, and `review` can plan its inspection inline. A same-scope loop
+such as `plan(epic) -> review(epic_plan) -> plan(epic_review) -> ...` is invalid
+because the child scope did not shrink or specialize.
+
+Budgets are the compute variable for phase calls:
+
+```text
+phase_budget = {
+  effort,
+  grounding_depth,
+  search_breadth,
+  compute_mode,
+  review_depth,
+  max_phase_depth
+}
+```
+
+All skills consume implicit budget, but only budget-sensitive skills should
+expose explicit budget parameters. Adding a budget schema to a tiny deterministic
+skill can increase prompt cost without improving task success.
+
 ## 8. Subagents As Functions
 
 A subagent is scoped execution with isolated context:

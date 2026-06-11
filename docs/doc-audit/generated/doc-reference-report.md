@@ -15,24 +15,24 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-11T08:51:15+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-11T16:52:43+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
 
 The harness math doc is `docs/specs/harness-algebra.md`.
 
-- All inbound refs: `8`
-- Skill-origin refs: `3`
+- All inbound refs: `9`
+- Skill-origin refs: `4`
 - Cleanup rule: keep this as the canonical equation/model surface and point
   workflow docs back to it instead of duplicating the algebra.
 
 ## Counts
 
-- Scanned files: `927`
-- Nodes: `648`
-- Edges: `2148`
-- Unresolved local-looking refs: `767`
+- Scanned files: `934`
+- Nodes: `649`
+- Edges: `2155`
+- Unresolved local-looking refs: `766`
 
 ## Most Referenced Docs
 
@@ -44,7 +44,7 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 | `docs/HISTORY.md` | 30 | 7 |
 | `docs/TROUBLES.md` | 28 | 12 |
 | `docs/features/registry.jsonl` | 25 | 8 |
-| `docs/skills/registry.jsonl` | 23 | 10 |
+| `docs/skills/registry.jsonl` | 24 | 11 |
 | `docs/skills/README.md` | 22 | 11 |
 | `docs/prd.md` | 19 | 17 |
 | `docs/specs/harness-techniques.md` | 18 | 2 |
@@ -52,9 +52,9 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 | `docs/specs/invocation-and-adapters.md` | 14 | 2 |
 | `docs/sources/registry.jsonl` | 14 | 5 |
 | `docs/specs/self-improvement-contracts.md` | 14 | 6 |
+| `docs/skills/system.md` | 13 | 8 |
 | `docs/skills/best-practices.md` | 13 | 10 |
 | `docs/review/rubrics/review-rubric-index.md` | 12 | 6 |
-| `docs/skills/system.md` | 12 | 7 |
 | `docs/specs/harness-engineering-doctrine.md` | 12 | 5 |
 | `docs/features/README.md` | 11 | 3 |
 | `docs/review/rubrics/reviewer-handoff.md` | 9 | 6 |
@@ -72,7 +72,7 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 | `docs/specs/doc-governance.md` | 6 | 0 | keep active |
 | `docs/specs/filesystem-lifecycle.md` | 6 | 1 | keep active |
 | `docs/specs/first-principles-planning.md` | 7 | 6 | keep active |
-| `docs/specs/harness-algebra.md` | 8 | 3 | keep active |
+| `docs/specs/harness-algebra.md` | 9 | 4 | keep active |
 | `docs/specs/harness-engineering-doctrine.md` | 12 | 5 | keep active |
 | `docs/specs/harness-techniques.md` | 18 | 2 | keep active |
 | `docs/specs/invocation-and-adapters.md` | 14 | 2 | keep active |

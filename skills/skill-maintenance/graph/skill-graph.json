@@ -2,9 +2,9 @@
   "counts": {
     "edge_types": {
       "common-chain": 16,
-      "markdown-ref": 249
+      "markdown-ref": 248
     },
-    "edges": 265,
+    "edges": 264,
     "nodes": 86,
     "sources": {
       "external": 3,
@@ -1210,13 +1210,6 @@
     {
       "label": "markdown-ref",
       "source": "plan",
-      "target": "research",
-      "target_ref": "research",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "plan",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
@@ -1873,7 +1866,7 @@
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-11T08:01:39+00:00",
+  "generated_at": "2026-06-11T16:52:43+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -2225,7 +2218,7 @@
       "tier": 2
     },
     {
-      "description": "Deprecated compatibility wrapper for native planning phase guidance when no domain planning skill owns the artifact.",
+      "description": "Turn a goal, context, invoked skills, and budget into composed todos, proof targets, and handoff when planning can reduce wasted work.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,

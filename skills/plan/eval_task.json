@@ -1,0 +1,56 @@
+[
+  {
+    "id": "plan_phase_recursion_boundary_01",
+    "title": "Plan emits a review request without same-scope recursion",
+    "query": "Plan a high-risk rewrite of AGI Toy Shop's agent skill system. The plan should be reviewed before implementation because the change affects planning, review, and eval workflows.",
+    "reference_points": [
+      "Returns an executable plan packet with composed todos and proof target",
+      "Emits a review request for the plan artifact instead of performing the review itself",
+      "Keeps the review request smaller or more specialized than the parent planning task",
+      "Does not create a same-scope loop such as plan -> review -> plan -> review",
+      "Names the stop condition or max phase depth for any externalized phase"
+    ],
+    "tags": [
+      "skill",
+      "plan",
+      "phase-recursion"
+    ],
+    "notes": "Protects the phase ownership rule: plan can request review, but review owns judgment and externalized phase calls must shrink scope."
+  },
+  {
+    "id": "plan_inline_review_for_small_scope_01",
+    "title": "Plan keeps small review inline",
+    "query": "Make a tiny plan for renaming one AGI Toy Shop support doc heading and checking the link still works. No need for a full ticket.",
+    "reference_points": [
+      "Uses a tiny or direct-binding planning mode",
+      "Keeps review as self-check or inline verification rather than invoking the review protocol",
+      "Avoids council, broad research, or delegated review for the small scope",
+      "Defines one concrete proof step such as checking the edited link or diff",
+      "Does not introduce budget schema ceremony beyond what the task needs"
+    ],
+    "tags": [
+      "skill",
+      "plan",
+      "inline-phase"
+    ],
+    "notes": "Catches over-externalization where every phase becomes a separate skill call even for tiny work."
+  },
+  {
+    "id": "plan_large_review_scope_externalizes_smaller_plan_01",
+    "title": "Plan allows smaller review planning for broad evidence review",
+    "query": "Plan how to review a large AGI Toy Shop release evidence bundle with code changes, browser QA, eval runs, and customer-support workflow docs. The goal is only the review plan, not the review verdict.",
+    "reference_points": [
+      "Recognizes the target artifact is a review plan rather than an implementation plan",
+      "Breaks the broad evidence review into smaller inspection lanes or rubric families",
+      "Uses review-planning language without claiming a TAS verdict",
+      "Externalizes only smaller or specialized review-planning work if needed",
+      "Names the evidence inputs, rubric families, sampling strategy, and stop condition"
+    ],
+    "tags": [
+      "skill",
+      "plan",
+      "review-plan"
+    ],
+    "notes": "Tests the allowed case where planning a review is valid because the review scope is broad and the child plan is more specialized."
+  }
+]

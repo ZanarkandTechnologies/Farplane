@@ -116,6 +116,9 @@ reference so it is loaded only after selection.
 - Treat the signature as a parameter contract. If the user invokes a skill
   without required inputs, the agent should resolve those inputs from files,
   state, setup workflows, or one narrow blocking question before execution.
+- Include a compact budget type only when effort, search breadth, review loops,
+  delegation, or external compute materially change the workflow. Do not add a
+  budget schema to tiny, deterministic, or single-path skills.
 - Put a compact `## Phase Contract` after `## Skill Signature` when the skill's
   material work needs explicit lifecycle shape:
 
@@ -133,6 +136,17 @@ reference so it is loaded only after selection.
   Tier 0 phases are not skill links and not frontmatter tiers. Use Codex native
   planning/execution phases unless a named skill package owns a specific
   artifact or workflow.
+- Add a compact `## Phase Boundary` when a skill may call phase-like skills
+  such as `plan`, `review`, `eval`, or `research`. The boundary should say
+  whether the phase stays inline or becomes an external skill call.
+
+  ```text
+  externalize_phase(parent_task, phase, child_scope, budget)
+    -> skill_call | inline_phase
+  ```
+
+  External phase calls must shrink or specialize the current scope. Do not
+  recurse through `plan` and `review` at the same task size.
 - `## Todo List` is the first-load todo list, not a generic checklist section.
 - Use visible sequential task-list items such as `- [ ] 1.`, `- [ ] 2.`, and
   `- [ ] 3.` for ordered work. Put the number after the checkbox marker so

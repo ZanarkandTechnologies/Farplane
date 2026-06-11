@@ -26,11 +26,21 @@ artifact writeback.
 ## Skill Signature
 
 ```text
-review_change(change_or_evidence, rubric_requirements?) -> review_receipt
+review_change(change_or_evidence, rubric_requirements?, budget?) -> review_receipt
 state: reads(task context, changed artifacts, evidence, docs/review/rubrics selected rubrics); writes(review artifact?)
 gates: evidence_inspected; rubric_family_named; TAS_supported; next_action_named
 routes: caller-owned
 fails: approves without evidence; silently changes rubrics; treats TAS-B as pass
+```
+
+Review budget is optional and should stay compact:
+
+```text
+ReviewBudget = {
+  effort?: "tiny" | "normal" | "deep",
+  planning?: "inline" | "external-if-smaller",
+  max_phase_depth?: 0 | 1
+}
 ```
 
 ## Contract
@@ -39,6 +49,16 @@ Apply the selected review families to provided task context, changed artifacts,
 and evidence. Each selected family returns one TAS verdict from modular binary
 checks, hard-gate failures, findings, and one concrete next action.
 
+## Phase Boundary
+
+`review` owns judgment of a supplied artifact against selected rubrics. It does
+not own upstream planning, implementation, QA, or ticket writeback.
+
+Review may plan its own inspection inline. Call `plan` only when the review
+work itself is large enough to deserve a separate review plan and that review
+plan is smaller or more specialized than the artifact being reviewed. Do not
+call `plan` to re-plan the same parent task scope.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
@@ -46,13 +66,18 @@ checks, hard-gate failures, findings, and one concrete next action.
   are available.
 - [ ] 2. Start from caller-declared rubric families and TAS gates; add only an
   obvious missing hard-gate family with explanation.
-- [ ] 3. Load only the selected docs/review/rubrics family files and apply their
+- [ ] 3. Choose review effort and phase boundary.
+  - [ ] Keep inspection planning inline unless the review scope is large enough
+    to need its own smaller review plan.
+  - [ ] Do not externalize same-scope planning or recurse through `plan` and
+    `review` at the same task size.
+- [ ] 4. Load only the selected docs/review/rubrics family files and apply their
   required, blocker, and evidence checklist modules.
-- [ ] 4. Apply one TAS verdict per selected family plus the overall verdict; do
+- [ ] 5. Apply one TAS verdict per selected family plus the overall verdict; do
   not use numeric scores or per-dimension TAS.
-- [ ] 5. Return failed checks, findings, blocking issues, and one concrete next
+- [ ] 6. Return failed checks, findings, blocking issues, and one concrete next
   action.
-- [ ] 6. Review that the verdict is supported by inspected evidence, not general
+- [ ] 7. Review that the verdict is supported by inspected evidence, not general
   confidence.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 ## Core Flow

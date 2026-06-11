@@ -47,6 +47,19 @@ routes: next-skill | next-skill:method | direct-answer
 fails: known bad behavior; overbroad behavior; misplaced ownership
 ```
 
+[TODO: Add a compact budget type only when effort, search breadth, review
+loops, delegation, or external compute materially changes the workflow. Delete
+this section for tiny or deterministic skills.]
+
+```text
+{SkillBudget} = {
+  grounding?: "none" | "skim" | "targeted" | "deep",
+  search?: "direct" | "limited" | "broad",
+  compute?: "single-agent" | "parallel-subagents" | "council",
+  review?: "none" | "self-check" | "review-protocol"
+}
+```
+
 When a caller invokes this skill without required inputs, the agent should
 resolve the missing parameters before execution:
 
@@ -78,6 +91,25 @@ phase_contract(task, bound_inputs, state)
 
 Tier 0 phases are not skill links. Use Codex native planning/execution behavior
 unless a named skill package owns a specific artifact or workflow.
+
+## Phase Boundary
+
+[TODO: Keep this section when the skill may call phase-like skills such as
+`plan`, `review`, `eval`, or `research`. Delete it for tiny skills where the
+rule is obvious.]
+
+This skill follows Tier 0 phases inline by default. Call `plan`, `review`,
+`eval`, or another workflow skill only when that phase needs its own artifact,
+explicit budget, handoff, independent judgment, or proof surface.
+
+Externalized phase calls must shrink or specialize the current scope:
+
+```text
+externalize_phase(parent_task, phase, child_scope, budget)
+  -> skill_call | inline_phase
+```
+
+Do not call phase-like skills recursively at the same scope.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List

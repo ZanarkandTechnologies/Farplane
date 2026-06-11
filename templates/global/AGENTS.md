@@ -85,6 +85,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
      completion claims before calling them done.
 - Collapse phases for tiny, reversible, low-risk tasks. Make phases explicit for
   material, ticketed, high-blast-radius, or proof-sensitive work.
+- Use `plan`, `review`, `eval`, or other phase-like skills only when that phase
+  needs a durable artifact, independent judgment, explicit budget, handoff, or
+  proof surface. Otherwise perform the phase inline.
+- Do not call phase-like skills recursively at the same scope. Each
+  externalized phase call must shrink or specialize the parent task.
 - Keep edits scoped to the requested behavior and nearby ownership boundary.
 - Prefer existing repo patterns, module boundaries, and helper APIs.
 - Add abstractions only when they remove real complexity or match a clear local
@@ -223,6 +228,8 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
     evidence.
   - `prototyping`: prove a representative sample before broad scale.
 - Common Tier 2 workflow skills:
+  - `plan`: compose active skill todos, grounding/search budget, proof target,
+    and handoff when planning can reduce wasted work.
   - `research:*`: gather parity, gap, official-docs, code-pattern, competitor,
     user-grounding, or source-synthesis evidence.
   - `review`: callable TAS wrapper over docs-owned review rubrics for material

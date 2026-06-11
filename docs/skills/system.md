@@ -46,6 +46,48 @@ behavior. Farplane uses Tier 0 to describe the expected phase shape in
 Do not create `tier: 0` skills for phases such as plan, execute, or review.
 Phases are inherited by skills; they are not lower-level skill dependencies.
 
+## Phase Ownership And Recursion
+
+Every skill invocation may perform Tier 0 phases inline. A skill should call a
+phase-like skill such as `plan`, `review`, or `eval` only when that phase needs
+its own durable artifact, independent judgment, explicit budget, handoff, or
+proof surface.
+
+```text
+inline_phase(skill, phase, task) -> local_decision
+external_phase(skill, phase, task, budget) -> artifact + evidence
+```
+
+`plan` does not own review. It owns task decomposition, selected workflows,
+proof target, handoff shape, and an optional review request for the plan
+artifact. `review` does not own planning. It owns judgment of an artifact
+against selected rubrics, and may plan its own review inline when the scope is
+small enough.
+
+Externalized phase calls must shrink or specialize the parent scope:
+
+```text
+externalize_phase(parent_task, phase, child_scope, budget)
+  -> skill_call | inline_phase
+
+valid_external_phase_call(parent_scope, child_scope)
+  -> child_scope < parent_scope
+```
+
+Same-scope recursion is invalid. For example, `plan(epic)` may produce a
+`review_request` for the epic plan, and `review(epic_plan)` may perform a small
+inline review plan. But `review(epic_plan)` should not call `plan` for another
+epic-sized review plan, and `plan(review_plan)` should not call `review` again
+at the same scope.
+
+Use phase skills when the expected value of a separate phase artifact exceeds
+its coordination cost:
+
+```text
+use_phase_skill(phase, task, risk, ambiguity, proof_gap, coordination_cost)
+  -> true when value(artifact_or_independent_judgment) > coordination_cost
+```
+
 When a skill's signature requires inputs that the user did not supply, the
 agent should backpropagate the missing parameters: inspect local state, load the
 right context, call a setup or planning workflow, or ask only if the missing
@@ -70,6 +112,7 @@ Tier 2 skills are generic workflow interfaces. They turn primitive obligations
 into reusable protocol surfaces such as:
 
 - `brainstorm`
+- `plan`
 - `research:*`
 - `harness-advisor`
 
@@ -88,9 +131,13 @@ for universal lifecycle phases.
 
 Reclassification candidates:
 
-- `plan` and `execute` duplicate Codex native modes and should be treated as
-  transitional skill packages unless a concrete Farplane workflow still calls
-  them as invocable contracts.
+- `plan` is a Tier 2 planning prompt-template and todo-composition interface.
+  It is not the Tier 0 planning phase itself; use it when planning can reduce
+  wasted search, compose skill todos, or set proof and handoff before a costly
+  phase.
+- `execute` duplicates Codex native execution mode and should be treated as a
+  transitional compatibility package unless a concrete Farplane workflow still
+  calls it as an invocable contract.
 - `review` is better understood as a review protocol and rubric/TAS contract.
   Keep the callable Tier 2 wrapper while it is useful; rubric bodies live in
   `docs/review/rubrics/*` and reviewer agents can read those docs directly.
@@ -219,6 +266,40 @@ skill, check the signature before execution:
    or a narrow blocking question.
 3. Use the listed gates as the proof and review obligations.
 4. Use the listed routes instead of inventing hidden downstream workflow.
+
+## Skill Budgets
+
+Budgets are optional parameters for skills where cost, depth, search breadth,
+review loops, delegation, or external compute materially change the best
+workflow. Do not add budget schema to every skill by default.
+
+Use budgets when they help the coordinator choose the right effort level:
+
+```text
+skill_budget(task, risk, ambiguity, cost)
+  -> grounding_depth + search_breadth + compute_mode + review_depth + stop_condition
+```
+
+Good budget-bearing skills expose a small set of parameters that alter behavior
+in meaningful ways. For tiny, deterministic, or single-path skills, normal todo
+binding is enough and a budget section is noise.
+
+All skills inherit an implicit effort budget from the coordinator. Only
+budget-sensitive skills should document explicit budget parameters. Phase
+budgets should include a recursion cap when a phase skill may externalize
+another phase:
+
+```text
+phase_budget = {
+  effort?: "tiny" | "normal" | "deep",
+  review?: "none" | "self-check" | "protocol" | "external",
+  max_phase_depth?: 0 | 1 | 2
+}
+```
+
+`max_phase_depth: 0` means inline phases only. `max_phase_depth: 1` permits one
+externalized phase. `max_phase_depth: 2` permits a phase of a phase only when
+the child scope is smaller or more specialized than the parent scope.
 
 ## Feature Tracking
 

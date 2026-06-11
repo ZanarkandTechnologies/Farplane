@@ -2,14 +2,14 @@ window.HARNESS_GRAPH = {
   "counts": {
     "edge_types": {
       "directory-contains": 89,
-      "literal-path": 1611,
+      "literal-path": 1618,
       "markdown-link": 448
     },
-    "edges": 2148,
+    "edges": 2155,
     "node_kinds": {
       "agent": 18,
       "doc": 22,
-      "file": 408,
+      "file": 409,
       "research": 11,
       "review-rubric": 22,
       "root-doc": 5,
@@ -19,9 +19,9 @@ window.HARNESS_GRAPH = {
       "spec": 17,
       "template": 5
     },
-    "nodes": 648,
-    "scanned_files": 927,
-    "unresolved_refs": 767
+    "nodes": 649,
+    "scanned_files": 934,
+    "unresolved_refs": 766
   },
   "edges": [
     {
@@ -10959,6 +10959,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/harness-advisor/eval_task.json",
+      "raw_ref": "AGENTS.md",
+      "source": "skill:harness-advisor",
+      "target": "file:AGENTS.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/harness-advisor/references/algebra-adapter.md",
       "raw_ref": "AGENTS.md",
       "source": "skill:harness-advisor",
@@ -12548,6 +12555,20 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/plan/audits/2026-06-12-phase-recursion-boundary.md",
+      "raw_ref": "docs/skills/system.md",
+      "source": "skill:plan",
+      "target": "file:docs/skills/system.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan/audits/2026-06-12-phase-recursion-boundary.md",
+      "raw_ref": "docs/specs/harness-algebra.md",
+      "source": "skill:plan",
+      "target": "file:docs/specs/harness-algebra.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/plan/SKILL.md",
       "raw_ref": "../advise/SKILL.md",
       "source": "skill:plan",
@@ -12559,6 +12580,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/plan/SKILL.md",
       "source": "skill:plan",
       "target": "file:skills/plan/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan/audits/2026-06-12-phase-recursion-boundary.md",
+      "raw_ref": "skills/plan/SKILL.md",
+      "source": "skill:plan",
+      "target": "file:skills/plan/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan/audits/2026-06-11-planning-composition-template.md",
+      "raw_ref": "skills/plan/eval_task.json",
+      "source": "skill:plan",
+      "target": "file:skills/plan/eval_task.json",
       "type": "literal-path"
     },
     {
@@ -12574,6 +12609,13 @@ window.HARNESS_GRAPH = {
       "source": "skill:plan",
       "target": "file:skills/reference-grounding/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/plan/audits/2026-06-12-phase-recursion-boundary.md",
+      "raw_ref": "skills/review/SKILL.md",
+      "source": "skill:plan",
+      "target": "file:skills/review/SKILL.md",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/plan/SKILL.md",
@@ -13983,6 +14025,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/skill-maintenance/eval_task.json",
+      "raw_ref": "docs/skills/registry.jsonl",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/skills/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/graph/README.md",
       "raw_ref": "docs/skills/registry.jsonl",
       "source": "skill:skill-maintenance",
@@ -15061,7 +15110,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-06-11T08:51:15+00:00",
+  "generated_at": "2026-06-11T16:52:43+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -16940,6 +16989,12 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/plan/SKILL.md",
       "path": "skills/plan/SKILL.md"
+    },
+    {
+      "id": "file:skills/plan/eval_task.json",
+      "kind": "file",
+      "label": "skills/plan/eval_task.json",
+      "path": "skills/plan/eval_task.json"
     },
     {
       "id": "file:skills/pr-review-watch/README.md",
