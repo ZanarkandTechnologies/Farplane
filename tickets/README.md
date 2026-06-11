@@ -229,7 +229,7 @@ work:
 4. optional autoresearch session path when repeated metric experiments are
    warranted
 
-Keep full rubric bodies in `skills/review/references/` and full autoresearch
+Keep full rubric bodies in `docs/review/rubrics/` and full autoresearch
 session files in the owning `autoresearch` artifacts. Tickets should carry the
 handles, thresholds, and artifact obligations, not duplicate the specialist
 contracts.

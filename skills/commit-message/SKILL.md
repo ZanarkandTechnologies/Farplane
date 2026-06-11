@@ -22,7 +22,7 @@ allowed-tools: Read, Glob, Grep
 - [ ] Avoid bundling unrelated changes into one message.
 - [ ] Use [advise](../advise/SKILL.md) when the diff has multiple plausible
   commit boundaries.
-- [ ] Use [review](../review/SKILL.md) when preparing a release- or PR-critical
+- [ ] Use the [review protocol](../review/SKILL.md) when preparing a release- or PR-critical
   commit message.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

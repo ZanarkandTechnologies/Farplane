@@ -26,7 +26,7 @@ source: local
 - [ ] Name the next owner in plain text: fuzzy directions go to
   `deep-interview`; coherent requirements-ready directions go to `prd`.
 - [ ] Do not create tickets or implement code from this skill.
-- [ ] Run [review](../review/SKILL.md) after meaningful brainstorm-skill,
+- [ ] Run the [review protocol](../review/SKILL.md) after meaningful brainstorm-skill,
   intake-contract, or public-doc changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

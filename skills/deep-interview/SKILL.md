@@ -25,7 +25,7 @@ argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea
   configured threshold and gates are satisfied.
 - [ ] Use [advise](../advise/SKILL.md) only when the interview exposes real
   tradeoff options that need a recommendation.
-- [ ] Use [review](../review/SKILL.md) before handing off a material interview
+- [ ] Use the [review protocol](../review/SKILL.md) before handing off a material interview
   summary as execution-ready.
 - [ ] Write the crystallized summary into the active ticket or the next
   canonical artifact owner; do not create hidden sidecar state.

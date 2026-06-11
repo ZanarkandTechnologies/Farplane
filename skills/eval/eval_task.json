@@ -16,5 +16,59 @@
       "modular-evals"
     ],
     "notes": "Reinforces the standard that skill-specific evals live beside the owning skill as eval_task.json."
+  },
+  {
+    "id": "eval_skill_bad_task_rejection_01",
+    "title": "Eval skill rejects vague task design",
+    "query": "I want an eval for our agent-run toy storefront. The task can just be: \"Make the company better.\" The only reference point can be: \"Gives a good answer.\" Please add that quickly.",
+    "reference_points": [
+      "Rejects or rewrites the vague eval instead of accepting it as-is",
+      "Narrows the task to one observable behavior with a realistic user request",
+      "Replaces subjective reference points with visible pass/fail reference_points",
+      "Keeps AGI Toy Shop context in shared fixture setup instead of stuffing it into the query",
+      "Adds narrow tags and notes that name the layer or failure mode"
+    ],
+    "tags": [
+      "skill",
+      "eval",
+      "task-quality"
+    ],
+    "notes": "Catches the common failure where evals optimize for vague usefulness instead of a behavior that can visibly pass or fail."
+  },
+  {
+    "id": "eval_skill_best_practices_branching_01",
+    "title": "Eval skill loads best practices only for authoring branches",
+    "query": "Run the existing eval suite and tell me the latest verdicts. Do not create or revise any tasks unless the run shows a concrete failure.",
+    "reference_points": [
+      "Treats this as a run-only eval job rather than an authoring task",
+      "Does not require loading the full eval best-practices reference before running",
+      "Uses the installed .farplane/evals runner or reports the missing setup clearly",
+      "Inspects summary and task detail artifacts before making behavior claims",
+      "Defers task-authoring guidance until a concrete failure or revision need exists"
+    ],
+    "tags": [
+      "skill",
+      "eval",
+      "reference-load-precision"
+    ],
+    "notes": "Tests that optional references stay branch-specific instead of becoming noisy first-load context."
+  },
+  {
+    "id": "eval_skill_structure_metric_01",
+    "title": "Eval skill reasons about SKILL.md versus reference placement",
+    "query": "For the eval skill, let's move all of eval-best-practices.md directly into SKILL.md so every agent sees everything on first load. Is that the right structure? If not, propose the better placement before editing.",
+    "reference_points": [
+      "Starts from first-load sufficiency, task success, prompt size, duplication, and noisy context tradeoffs",
+      "Keeps always-needed runtime rules in SKILL.md and branch-specific authoring detail in references",
+      "Names when an anchored section or full reference should be loaded",
+      "Avoids both extremes: hiding required behavior in deep references and overloading SKILL.md with rare detail",
+      "Recommends a concrete placement decision with the owner surface and proof path"
+    ],
+    "tags": [
+      "skill",
+      "eval",
+      "skill-structure"
+    ],
+    "notes": "Tests whether eval-skill maintenance follows the skill-structure metrics instead of treating modularity or first-load as a single absolute rule."
   }
 ]

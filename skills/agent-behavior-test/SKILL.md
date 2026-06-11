@@ -27,7 +27,7 @@ allowed-tools: Read, Glob, Grep, Bash
   checkpoint ledger, and final output.
 - [ ] Use [advise](../advise/SKILL.md) when runner choice, schema strictness, or
   pass threshold has real tradeoffs.
-- [ ] Use [review](../review/SKILL.md) before treating a new behavior-test
+- [ ] Use the [review protocol](../review/SKILL.md) before treating a new behavior-test
   fixture or repeated workflow as trustworthy.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

@@ -22,7 +22,7 @@ source: local
   research.
 - [ ] Use [advise](../advise/SKILL.md) when official docs leave multiple valid
   implementation choices.
-- [ ] Use [review](../review/SKILL.md) before writing durable docs or public
+- [ ] Use the [review protocol](../review/SKILL.md) before writing durable docs or public
   guidance based on the synthesis.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

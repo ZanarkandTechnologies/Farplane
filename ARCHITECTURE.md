@@ -246,7 +246,7 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: QA -> reviewer -> Stop-hook quality gate split
 - [skills/review/README.md](/Users/kenjipcx/coding-harness/Farplane/skills/review/README.md)
   Purpose: public entrypoint to the review system
-- [skills/review/references/review-rubric-index.md](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/review-rubric-index.md)
+- [docs/review/rubrics/review-rubric-index.md](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/review-rubric-index.md)
   Purpose: canonical scoring map, thresholds, and rubric family selection
 
 The review scoring model is canonical in `skills/review/*`, not in this file.

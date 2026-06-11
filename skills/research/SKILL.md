@@ -47,7 +47,7 @@ allowed-tools: Read, Glob, Grep
   [advise](../advise/SKILL.md) for judgment calls,
   `best-of-worlds` for adopt/adapt/reject/defer synthesis, or the relevant
   domain planning skill such as `impl-plan` for coding.
-- [ ] Run [review](../review/SKILL.md) after meaningful research-skill,
+- [ ] Run the [review protocol](../review/SKILL.md) after meaningful research-skill,
   registry, ticket-handoff, or public-doc changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

@@ -25,7 +25,7 @@ allowed-tools: Read, Glob, Grep, Bash
 - [ ] Capture reproducible commands and important output for the caller.
 - [ ] Use [advise](../advise/SKILL.md) when there is a real safety or runtime
   tradeoff.
-- [ ] Use [review](../review/SKILL.md) before treating command-heavy repo
+- [ ] Use the [review protocol](../review/SKILL.md) before treating command-heavy repo
   changes as complete.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

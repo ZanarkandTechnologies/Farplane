@@ -24,7 +24,8 @@ CHECKLIST_RE = re.compile(
     re.MULTILINE | re.DOTALL,
 )
 ALLOWED_COMMON_CHAIN_KEYS = {"after"}
-TIER1_PRIMITIVES = {"advise", "reference-grounding", "review"}
+TIER1_PRIMITIVES = {"advise", "reference-grounding", "prototyping"}
+PROTOCOL_WRAPPERS = {"review"}
 ALLOWED_SOURCES = {"local", "external"}
 FEATURE_ID_RE = re.compile(r"^FEAT-\d{4}$")
 DESCRIPTION_MAX_CHARS = 220
@@ -306,8 +307,11 @@ def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> Non
         direct_tier1_links = [
             link
             for link in checklist_links
-            if tier_by_name.get(skill_ref_name(link)) == 1
-            or skill_ref_name(link) in TIER1_PRIMITIVES
+            if skill_ref_name(link) not in PROTOCOL_WRAPPERS
+            and (
+                tier_by_name.get(skill_ref_name(link)) == 1
+                or skill_ref_name(link) in TIER1_PRIMITIVES
+            )
         ]
         if direct_tier1_links:
             refs = ", ".join(sorted(direct_tier1_links))

@@ -18,6 +18,7 @@ if SYNC_SPEC is None or SYNC_SPEC.loader is None:
     raise RuntimeError(f"failed to load {SYNC_SCRIPT}")
 sync_skill_registry = importlib.util.module_from_spec(SYNC_SPEC)
 SYNC_SPEC.loader.exec_module(sync_skill_registry)
+PROTOCOL_EXCEPTIONS = {"review"}
 
 
 @dataclass(frozen=True)
@@ -108,6 +109,8 @@ def collect_violations(repo_root: Path, allow_peer_tier3: bool) -> list[Checklis
 
             expected_tier = source_tier - 1
             if target_tier == expected_tier:
+                continue
+            if target in PROTOCOL_EXCEPTIONS:
                 continue
             if allow_peer_tier3 and source_tier == 3 and target_tier == 3:
                 continue

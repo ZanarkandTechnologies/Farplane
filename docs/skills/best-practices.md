@@ -67,6 +67,9 @@ Put these in `SKILL.md` for every non-trivial skill:
   and surrounding system shape needed every time.
 - Skill signature when composition would otherwise be implicit: inputs, outputs,
   state reads/writes, gates, routes, and failure modes.
+- Phase contract when the skill owns material work whose grounding, planning,
+  execution, guardrail, evidence review, or writeback phases would otherwise be
+  implicit.
 - Ordered todo path: default branch, important branches, proof, and final
   review.
 - Hard gates and stop conditions: safety, evidence, review, or setup checks that
@@ -110,6 +113,26 @@ reference so it is loaded only after selection.
   composition boundaries. Follow
   [`docs/specs/self-improvement-contracts.md`](../specs/self-improvement-contracts.md)
   and do not add a verbose schema when a compact signature is enough.
+- Treat the signature as a parameter contract. If the user invokes a skill
+  without required inputs, the agent should resolve those inputs from files,
+  state, setup workflows, or one narrow blocking question before execution.
+- Put a compact `## Phase Contract` after `## Skill Signature` when the skill's
+  material work needs explicit lifecycle shape:
+
+  ```text
+  phase_contract(task, bound_inputs, state)
+    -> grounded_context
+     + plan_or_direct_action
+     + plan_review_if_material
+     + execution
+     + guardrail_or_eval
+     + evidence_review_if_material
+     + writeback
+  ```
+
+  Tier 0 phases are not skill links and not frontmatter tiers. Use Codex native
+  planning/execution phases unless a named skill package owns a specific
+  artifact or workflow.
 - `## Todo List` is the first-load todo list, not a generic checklist section.
 - Use visible sequential task-list items such as `- [ ] 1.`, `- [ ] 2.`, and
   `- [ ] 3.` for ordered work. Put the number after the checkbox marker so
@@ -471,7 +494,7 @@ when one is available. The calling skill owns rubric routing: pass a reviewer
 handoff with the active ticket or task artifact, changed skill files, evidence
 artifacts, review focus, rubric families, required TAS gates, hard gates, and
 expected output path. Use
-`skills/review/references/reviewer-handoff.md` for the template.
+`docs/review/rubrics/reviewer-handoff.md` for the template.
 
 For skill work, the usual caller-declared families are `skill-contract`,
 `integration-readiness`, and `evidence-quality`. Add task-specific hard gates

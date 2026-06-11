@@ -47,7 +47,8 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      reusable workflow.
    - [ ] 2. Update an existing skill when the request is a branch, method,
      todo-list fix, reference, script, or prompt inside an existing contract.
-   - [ ] 3. Hand unclear ownership to [plan](../plan/SKILL.md).
+   - [ ] 3. Resolve unclear ownership through the native planning phase or
+     `harness-advisor` when the placement affects Farplane surfaces.
 - [ ] 3. Ground the skill design before drafting when external examples or peer
    skills could change the contract.
    - [ ] Use [research:parity](../research/SKILL.md#researchparity) or

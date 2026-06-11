@@ -15,7 +15,7 @@ cases for the `eval` skill. The general structure standard lives in
 
 Do not update `review` yet just because this idea is plausible. First write eval
 cases that expose bad skill structure. If those cases show repeated misses, add
-these checks to `skills/review/references/skill-contract.md`:
+these checks to `docs/review/rubrics/skill-contract.md`:
 
 - `first-load-sufficient`: required default behavior is present in `SKILL.md`.
 - `reference-load-precise`: branch-specific detail is in references and linked

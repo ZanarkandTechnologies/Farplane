@@ -10,5 +10,5 @@ It does not own product UX, visual taste, browser proof, or TAS judgment:
 - `visual-design` owns look, taste, and visual system.
 - `frontend-craft` owns implementation orchestration.
 - `visual-qa` owns rendered UI judgment.
-- `review/references/frontend-guidelines.md` owns conversion from findings to a
+- `docs/review/rubrics/frontend-guidelines.md` owns conversion from findings to a
   `frontend-guidelines` TAS verdict.

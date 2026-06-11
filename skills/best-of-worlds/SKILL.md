@@ -24,7 +24,7 @@ allowed-tools: Read, Glob, Grep
 - [ ] Name the synthesized recommendation and the tradeoff accepted.
 - [ ] Use [advise](../advise/SKILL.md) when several synthesized paths remain
   viable after scoring.
-- [ ] Use [review](../review/SKILL.md) before promoting decisions into tickets,
+- [ ] Use the [review protocol](../review/SKILL.md) before promoting decisions into tickets,
   docs, or skill changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

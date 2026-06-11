@@ -40,7 +40,7 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
     {
         "name": "farplane-core",
         "display_name": "Farplane Core",
-        "description": "Core reasoning, planning, execution, and review skills.",
+        "description": "Core reasoning skills plus compatibility phase wrappers and review protocol.",
         "skills": (
             "advise",
             "reference-grounding",
@@ -327,7 +327,18 @@ def copy_skill(skill: Skill, plugin_root: Path) -> None:
     shutil.copytree(skill.path, skill_dest, ignore=ignore_generated_copy)
 
 
-def write_plugin(plugin: SkillPlugin, plugins_dir: Path) -> None:
+def copy_review_rubrics(repo: Path, plugin_root: Path) -> None:
+    source = repo / "docs/review/rubrics"
+    if not source.exists():
+        return
+    dest = plugin_root / "docs/review/rubrics"
+    if dest.exists():
+        shutil.rmtree(dest)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(source, dest, ignore=ignore_generated_copy)
+
+
+def write_plugin(plugin: SkillPlugin, repo: Path, plugins_dir: Path) -> None:
     plugin_root = plugins_dir / plugin.name
     if plugin_root.exists():
         shutil.rmtree(plugin_root)
@@ -336,6 +347,8 @@ def write_plugin(plugin: SkillPlugin, plugins_dir: Path) -> None:
     write_json(plugin_root / ".codex-plugin/plugin.json", render_manifest(plugin))
     for skill in plugin.skills:
         copy_skill(skill, plugin_root)
+    if any(skill.name == "review" for skill in plugin.skills):
+        copy_review_rubrics(repo, plugin_root)
 
 
 def sync_skill_plugins(
@@ -382,7 +395,7 @@ def sync_skill_plugins(
     for plugin in selected_plugins:
         if (resolved_plugins_dir / plugin.name).exists():
             changed = True
-        write_plugin(plugin, resolved_plugins_dir)
+        write_plugin(plugin, repo, resolved_plugins_dir)
         changed = True
 
     before = (
@@ -451,6 +464,13 @@ class TemporarySync:
             self.tmp_root / "skills",
             ignore=ignore_generated_copy,
         )
+        review_rubrics = self.repo / "docs/review/rubrics"
+        if review_rubrics.exists():
+            shutil.copytree(
+                review_rubrics,
+                self.tmp_root / "docs/review/rubrics",
+                ignore=ignore_generated_copy,
+            )
         return self.tmp_root
 
     def __exit__(self, *_: object) -> None:

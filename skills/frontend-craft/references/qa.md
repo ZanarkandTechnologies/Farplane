@@ -36,7 +36,7 @@ Use this after frontend implementation.
 ## Review Metric
 
 When a review pass follows frontend implementation, attach the
-`frontend-guidelines` score from `review/references/frontend-guidelines.md`
+`frontend-guidelines` score from `docs/review/rubrics/frontend-guidelines.md`
 beside the normal `ui-quality` score. Use disagreement between the two scores to
 find agents that overvalue visual taste or miss standards fundamentals.
 

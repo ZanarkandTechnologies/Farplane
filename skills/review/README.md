@@ -15,25 +15,12 @@ and checks metric traceability against linked evidence.
 
 ## Public API or Entrypoints
 
-- [`SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/SKILL.md): main review workflow
+- [`SKILL.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/SKILL.md): thin callable TAS wrapper
 - `SKILL.md` Todo List: example natural-language todo template for review
-- [`references/review-rubric-index.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/review-rubric-index.md): family selection map, shared TAS contract, and hard-gate policy
-- [`references/reviewer-handoff.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/reviewer-handoff.md): reusable caller-to-reviewer handoff template
-- [`references/desloppify.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/desloppify.md): cross-cutting anti-slop search playbook for neighboring-surface consistency checks
-- [`references/spec-contract.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/spec-contract.md)
-- [`references/implementation-plan.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/implementation-plan.md)
-- [`references/code-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/code-quality.md)
-- [`references/frontend-code-maintainability.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/frontend-code-maintainability.md)
-- [`references/ui-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/ui-quality.md)
-- [`references/user-intent-satisfaction.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/user-intent-satisfaction.md)
-- [`references/evidence-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/evidence-quality.md)
-- [`references/demo-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/demo-quality.md)
-- [`references/video-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/video-quality.md)
-- [`references/integration-readiness.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/integration-readiness.md)
-- [`references/skill-contract.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/skill-contract.md)
-- [`references/prompt-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/prompt-quality.md)
-- [`references/eval-quality.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/eval-quality.md)
-- [`references/debloatability.md`](/Users/kenjipcx/coding-harness/Farplane/skills/review/references/debloatability.md)
+- [`docs/review/rubrics/review-rubric-index.md`](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/review-rubric-index.md): family selection map, shared TAS contract, and hard-gate policy
+- [`docs/review/rubrics/reviewer-handoff.md`](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/reviewer-handoff.md): reusable caller-to-reviewer handoff template
+- [`docs/review/rubrics/desloppify.md`](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/desloppify.md): cross-cutting anti-slop search playbook for neighboring-surface consistency checks
+- One family file per rubric under `docs/review/rubrics/`
 - [`/Users/kenjipcx/coding-harness/Farplane/agents/reviewer.toml`]: independent reviewer agent prompt
 
 ## Minimal Example
@@ -43,7 +30,7 @@ Use the `SKILL.md` Todo List when invoking the skill.
 Provide task context, changed files, evidence artifacts, and any declared
 metrics, rubric families, required TAS gates, or hard gates.
 Start from caller-declared families such as `code-quality`, `integration-readiness`, and `evidence-quality`.
-Load `references/desloppify.md` because consistency and integration trust are in scope.
+Load `docs/review/rubrics/desloppify.md` because consistency and integration trust are in scope.
 Search the changed files plus the smallest neighboring constants/docs/interfaces needed to test drift.
 Use the family skeptic questions and assign TAS for each selected family.
 Add `user-intent-satisfaction` when the ticket is clearly user-facing and the review needs to judge whether the delivered result actually satisfies the ask.
@@ -58,12 +45,13 @@ Return a clear `pass|revise|block|invalid` verdict grounded in the provided evid
 - `sed -n '1,120p' skills/review/SKILL.md`
   and expect a marker-delimited `## Todo List` with natural-language
   review steps
-- `rg -n "reviewer-handoff|rubric_families|desloppify|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md skills/review/references agents/reviewer.toml docs/specs/review-gates.md tickets/templates/ticket.md`
+- `rg -n "reviewer-handoff|rubric_families|desloppify|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md docs/review/rubrics agents/reviewer.toml docs/specs/review-gates.md tickets/templates/ticket.md`
   and expect live matches in the updated review surfaces
 - Run a stale numeric-review-contract scan over `skills/review`,
   `agents/reviewer.toml`, and `docs/specs/review-gates.md`; expect no live
   review-contract matches outside historical notes or unrelated schema versions.
 - Manually verify that examples and TAS gates in `SKILL.md`,
-  `references/review-rubric-index.md`, `references/desloppify.md`, and
+  `docs/review/rubrics/review-rubric-index.md`,
+  `docs/review/rubrics/desloppify.md`, and
   `docs/specs/review-gates.md` all use the same explicit TAS contract and
   search/output expectations

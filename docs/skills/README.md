@@ -32,6 +32,43 @@ into a second place to maintain skill truth.
   `category: "skills"`. This folder owns the generated skill inventory, not a
   second hand-authored skill feature registry.
 
+## Skill UI And Feature Progression
+
+Skill-owned UI is the incubation layer for Farplane AI product surfaces. Use it
+when a workflow benefits from a focused viewer, form, graph, dashboard, or URL
+binding before the workflow is stable enough to become a first-class product
+module.
+
+Progression:
+
+1. Skill has no UI: `SKILL.md`, references, scripts, evals, and proof artifacts
+   are enough.
+2. Skill gets a small UI binding: a local viewer, embedded panel, debug page, or
+   URL helps the operator run or inspect the workflow.
+3. Skill UI proves repeated value: the workflow is used often, clarifies
+   decisions, or exposes a product pattern.
+4. Farplane AI absorbs it: the main product shell owns the route, navigation,
+   shared state, and visual system.
+5. The skill keeps the binding: the route still points back to the owning skill,
+   proof surface, or workflow contract.
+
+Default ownership:
+
+- The skill owns workflow semantics, required data, proof expectations,
+  scripts, and any early UI binding metadata.
+- Farplane AI owns product navigation, shared components, global project/thread
+  context, and polished routes once the surface graduates.
+- `skill-maintenance` owns generated skill inventory and registry correctness.
+- A future harness map surface may own cross-skill or repo-wide UI discovery
+  when skill, docs, JSON, and backlink maps become product features.
+
+Use this rule of thumb:
+
+- unproven workflow -> skill-owned UI
+- repeated useful workflow -> Farplane AI route backed by the skill
+- core product workflow -> first-class Farplane AI module
+- niche or deprecated workflow -> keep as a skill UI or remove it
+
 ## Human Selection Guide
 
 Use this table when two skills look similar. It is intentionally prose-first;
@@ -45,13 +82,13 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Diagnose the gap between current and expected behavior | `gap-analysis` | It turns a repeated "what is missing here?" prompt into a grounded gap report with current contract, expected signature, missing inputs, outputs, proof, evals, owner surface, and verification. | You already know the exact edit; use the target surface or `skill-maintenance` directly. |
 | Prove a pattern before expanding scope, automation, data, file count, or research breadth | `prototyping` | It forces a representative `1 -> 10 -> 100` sample and a Prototype Note before scale. | The task is already small, one-off, or mechanically proven. |
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
-| Turn intent into executable shape without owning a domain | `plan` | It is the generic planning interface for proof, boundaries, and handoff. | A domain skill such as `impl-plan`, `landing-page`, or `video-production` already owns the workflow. |
-| Do the work, prove it, write back, and review without owning a domain | `execute` | It is the generic execution interface behind domain-specific build flows. | A public domain execution skill such as `impl` or `frontend-craft` should own the pass. |
+| Handle an explicit legacy `$plan` call | `plan` | It is a deprecated compatibility wrapper over the native Tier 0 planning phase. | A task merely has a planning phase; use the native phase or a domain skill such as `impl-plan`, `landing-page`, or `video-production`. |
+| Handle an explicit legacy `$execute` call | `execute` | It is a deprecated compatibility wrapper over the native Tier 0 execution phase. | A task merely has an execution phase; use the native phase or a public domain execution skill such as `impl` or `frontend-craft`. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing `pr-runtime` and `coderabbit-review`. | You only need an isolated checkout (`pr-runtime`) or one explicit heavy CodeRabbit pass (`coderabbit-review`). |
 | Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
 | Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.farplane/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, discovers modular `skills/*/eval_task.json` rows, judges with boolean/tier verdicts, and treats hardcase as eval metadata. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include `agent-behavior-test`-style run capture. | You only need one cheap conformance probe and no adversarial proof loop. |
-| Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It scores the work against anchored rubric families and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
+| Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It applies docs-owned rubric families through a callable TAS wrapper and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
 | Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
 | Fix a harness behavior end to end | `optimize-harness` | It orchestrates gap diagnosis, placement, eval/proof, optional metric experiment, implementation routing, and review without absorbing the lower-level skill jobs. | You only need a placement recommendation; use `harness-advisor` directly. |
 | Maintain skill frontmatter, checklists, registry metadata, or skill-system docs | `skill-maintenance` | It owns bulk skill upkeep, tier checks, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. |
@@ -147,14 +184,19 @@ fail missing or non-current skills.
 
 ## First-Load Todo Link Contract
 
-Tiered loading is enforced at the first-load todo boundary:
+Tiered loading is enforced at the first-load todo boundary. Tier 0 phase steps
+are not skill links; they are inherited from `templates/global/AGENTS.md` and
+may be written as `## Phase Contract` in a skill when useful.
 
-- Tier 3 first-load todos link Tier 2 surfaces such as `research:*`, `plan`,
-  and `execute`, plus peer Tier 3 execution skills when a domain handoff needs
-  one.
+- Tier 3 first-load todos link Tier 2 surfaces such as `research:*`, plus peer
+  Tier 3 execution skills when a domain handoff needs one.
 - Tier 3 first-load todos do not link Tier 1 primitives such as `advise`,
-  `reference-grounding`, or `review` directly. The Tier 2 surface carries those
-  obligations.
+  `reference-grounding`, or `prototyping` directly unless the skill owns that
+  primitive step as part of its first-load contract.
+- `plan` and `execute` are deprecated compatibility wrappers for native Codex
+  phases and should not be introduced as new skill dependencies.
+- `review` is a callable TAS wrapper over docs-owned rubrics in
+  `docs/review/rubrics/*`.
 - `bin/sync_skill_registry.py --check` fails when a Tier 3 todo list direct-links
   a Tier 1 primitive.
 - `bin/check_skill_todo_tiers.py` audits every first-load todo edge against strict
@@ -228,11 +270,11 @@ of rediscovering the whole project profile during implementation.
 Project lifecycle is currently a `deep-init-project` reference, not a public
 top-level skill. Use
 `skills/deep-init-project/references/project-lifecycle.md` for the shared
-`bootstrap -> interview -> PRD -> tickets -> plan -> implement -> proof/review -> close`
+`bootstrap -> interview -> PRD -> tickets -> native planning phase -> implement -> proof/review -> close`
 shape. Generated project `AGENTS.md` should carry the compact lifecycle rule;
 `PROJECT_RULES.md` should carry technical standards, commands, runtime, and QA
-paths. Treat `plan` and `execute` as protocol surfaces, not base-class
-implementations with reusable domain logic.
+paths. Treat `plan` and `execute` as deprecated compatibility wrappers over
+native phases, not base-class implementations with reusable domain logic.
 
 ## Source Ownership
 

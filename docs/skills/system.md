@@ -25,13 +25,43 @@ shape, reference placement, repeatability, and review gates.
 
 ## Tier Model
 
+Tier 0 is the universal phase protocol, not a skill tier and not a frontmatter
+value. It describes the lifecycle every material skill invocation should pass
+through at the right level of ceremony:
+
+```text
+phase_protocol(task, skill_signature?, state?)
+  -> grounded_inputs
+   + plan_or_direct_action
+   + plan_review_if_material
+   + execution
+   + guardrail_or_eval
+   + evidence_review_if_material
+   + writeback
+```
+
+Codex native planning and execution modes already own much of this runtime
+behavior. Farplane uses Tier 0 to describe the expected phase shape in
+`templates/global/AGENTS.md`, skill templates, tickets, and reviewer handoffs.
+Do not create `tier: 0` skills for phases such as plan, execute, or review.
+Phases are inherited by skills; they are not lower-level skill dependencies.
+
+When a skill's signature requires inputs that the user did not supply, the
+agent should backpropagate the missing parameters: inspect local state, load the
+right context, call a setup or planning workflow, or ask only if the missing
+input is truly blocking. In function form:
+
+```text
+resolve_skill_params(skill_signature, user_request, state)
+  -> bound_inputs | setup_workflow | blocking_question
+```
+
 Tier 1 skills are primitives. They are core thinking moves that multiple Tier 2
 interfaces need as base obligations. Farplane's current Tier 1 primitives are:
 
 - `advise`: choose among real options and name the recommendation.
 - `reference-grounding`: ground claims, plans, and recommendations in evidence.
 - `prototyping`: prove a pattern at the smallest honest scale before expanding.
-- `review`: challenge completion claims against evidence and rubric gates.
 
 Create a new Tier 1 primitive only when multiple Tier 2 interfaces need that
 move as a base dependency.
@@ -41,8 +71,6 @@ into reusable protocol surfaces such as:
 
 - `brainstorm`
 - `research:*`
-- `plan`
-- `execute`
 - `harness-advisor`
 
 Common reusable work that many Tier 3 skills need should usually start as a
@@ -53,18 +81,39 @@ interfaces for a concrete workflow, domain, package, or artifact type. Examples
 include coding pipeline skills, frontend/media/document skills, and meta skills
 such as `skill-creator` and `skill-maintenance`.
 
+Meta skills are not Tier 0. They are skills whose domain is the harness or skill
+system itself. Represent them with normal numeric `tier` plus `group: meta`,
+`group: skills`, `group: harness`, or another explicit group. Use Tier 0 only
+for universal lifecycle phases.
+
+Reclassification candidates:
+
+- `plan` and `execute` duplicate Codex native modes and should be treated as
+  transitional skill packages unless a concrete Farplane workflow still calls
+  them as invocable contracts.
+- `review` is better understood as a review protocol and rubric/TAS contract.
+  Keep the callable Tier 2 wrapper while it is useful; rubric bodies live in
+  `docs/review/rubrics/*` and reviewer agents can read those docs directly.
+
 ## Todo-Link Rules
 
 First-load todo links should follow the dependency hierarchy:
 
 - Tier 2 first-load todos may link Tier 1 primitives.
 - Tier 3 first-load todos should usually link Tier 2 surfaces such as
-  `research:*`, `plan`, and `execute`.
+  `research:*` and domain workflow interfaces when those are real invocable
+  contracts.
 - Tier 3 first-load todos may link peer Tier 3 skills when the domain flow has
   an intentional handoff.
 - Tier 3 first-load todos should not direct-link Tier 1 primitives such as
-  `advise`, `reference-grounding`, or `review`; the Tier 2 surface carries
-  those obligations.
+  `advise` or `reference-grounding` unless the skill owns that primitive step
+  as part of its first-load contract.
+- Tier 0 phase steps do not need skill links. Put the phase shape in the todo
+  template or skill `## Phase Contract` instead of linking to `plan` or
+  `execute`.
+- `review` is a protocol exception: skills may link to the review wrapper when
+  material evidence needs TAS judgment, regardless of normal one-level tier
+  dependency direction.
 
 Use `bin/check_skill_todo_tiers.py --allow-peer-tier3` to audit the current
 intentional hierarchy.
@@ -161,6 +210,15 @@ fails: known bad behavior
 
 Use `docs/specs/self-improvement-contracts.md` for the full grammar and the
 self-improvement workflow contracts.
+
+Agents should treat skill signatures like callable contracts. When invoking a
+skill, check the signature before execution:
+
+1. Bind the known user request and current state to the signature inputs.
+2. Resolve missing required inputs through context gathering, setup workflows,
+   or a narrow blocking question.
+3. Use the listed gates as the proof and review obligations.
+4. Use the listed routes instead of inventing hidden downstream workflow.
 
 ## Feature Tracking
 

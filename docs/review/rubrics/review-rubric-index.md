@@ -1,6 +1,7 @@
 # Review Rubric Index
 
-This is the primary rubric map for the `review` skill.
+This is the primary rubric map for the Farplane review protocol. The `review`
+skill is a thin callable wrapper over this docs-owned contract.
 
 Use it to:
 

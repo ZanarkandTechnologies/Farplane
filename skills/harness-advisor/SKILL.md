@@ -85,7 +85,7 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
      wants the full diagnose-place-prove-change-review loop owned end to end.
 - [ ] 8. Review readiness before treating a material placement decision as
    ready.
-   - [ ] Use [review](../review/SKILL.md) for material recommendations.
+   - [ ] Use the [review protocol](../review/SKILL.md) for material recommendations.
    - [ ] Confirm the decision is grounded, names one owner, avoids root-prompt
      bloat, includes proof, and preserves source ownership.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

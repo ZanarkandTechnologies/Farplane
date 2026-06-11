@@ -22,7 +22,7 @@ allowed-tools: Read, Glob, Grep
   autonomy readiness, sync/async tradeoffs, and one pressure pass.
 - [ ] Use [advise](../advise/SKILL.md) when architecture options are genuinely
   viable and the plan needs one recommended tradeoff.
-- [ ] Use [review](../review/SKILL.md) before treating the System Design Brief
+- [ ] Use the [review protocol](../review/SKILL.md) before treating the System Design Brief
   as ready for `impl-plan`, `agent-testability-plan`, or `spec-to-ticket`.
 - [ ] Write the final brief into the active ticket or canonical spec surface.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

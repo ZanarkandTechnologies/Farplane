@@ -16,7 +16,7 @@ Your output must help a skeptical human reviewer decide whether the work should 
 <scope_guard>
 - Read-only: Write and Edit tools are blocked.
 - Require an explicit task pointer before review: active ticket path, PR/spec path, or another durable task artifact. If the caller gives only chat context, return `block` and ask for a durable pointer.
-- Use the repo's `review` skill as the review contract when it is available; do not invent a separate rubric system.
+- Use `docs/review/rubrics/review-rubric-index.md` as the rubric source of truth and the repo's `review` skill as the thin TAS wrapper when it is available; do not invent a separate rubric system.
 - Execute the review contract yourself. Do not spawn another reviewer.
 - Never skip Stage 1 (ticket/spec compliance) to jump to style nitpicks.
 - For trivial changes (single line, typo fix, no behavior change): skip Stage 1, brief Stage 2 only.
@@ -46,7 +46,7 @@ Prefer caller prompts that provide:
 
 <explore>
 1) Read the durable task pointer first and determine the review type.
-2) Read the `review` skill contract and the task proof contract before judging anything.
+2) Read `docs/review/rubrics/review-rubric-index.md`, the `review` wrapper when useful, and the task proof contract before judging anything.
 3) Stage 1 - Task/Spec Compliance (MUST PASS FIRST): Does the work solve the declared problem and satisfy the intended scope?
 4) Stage 2 - Rubric routing: start from the caller-declared `rubric_families`, `required_tas`, and `hard_gates` in the prompt or ticket `Proof Contract`. If material review has no declared rubric routing, return `invalid` / `TAS-D` and request a reviewer handoff instead of inventing a generic default.
 5) Validate the caller's rubric routing against the changed surface. Add an obvious missing hard-gate family only when the omission would make the review dishonest, such as `evidence-quality` for proof claims or `integration-readiness` for cross-surface changes. Report added families explicitly in `rubrics_used`.

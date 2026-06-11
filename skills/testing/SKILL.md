@@ -22,7 +22,7 @@ source: local
   needs to survive handoff.
 - [ ] Use [advise](../advise/SKILL.md) when there are meaningful tradeoffs
   between speed, confidence, flake risk, and coverage.
-- [ ] Use [review](../review/SKILL.md) before changing durable test strategy or
+- [ ] Use the [review protocol](../review/SKILL.md) before changing durable test strategy or
   claiming high-risk work is validated.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

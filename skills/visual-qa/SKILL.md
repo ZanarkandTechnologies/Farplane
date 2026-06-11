@@ -19,7 +19,7 @@ source: local
 - [ ] Produce the required four-part visual QA report for each screen or state.
 - [ ] Include geometry and layout assertions, not just aesthetic commentary.
 - [ ] Identify the best user-facing evidence item for ticket writeback.
-- [ ] If the result needs a broader final verdict, hand the findings back through the [Review](../review/SKILL.md) skill.
+- [ ] If the result needs a broader final verdict, hand the findings back through the [review protocol](../review/SKILL.md).
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 <!--

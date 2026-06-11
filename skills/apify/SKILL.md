@@ -24,7 +24,7 @@ allowed-tools: apify, web_search, documentation-searcher
   provenance.
 - [ ] Use [advise](../advise/SKILL.md) when live scraping vs fixture/dry-run is
   a material tradeoff.
-- [ ] Use [review](../review/SKILL.md) before changing durable actor configs or
+- [ ] Use the [review protocol](../review/SKILL.md) before changing durable actor configs or
   public scraping recipes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

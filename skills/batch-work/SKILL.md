@@ -35,7 +35,7 @@ source: local
 - [ ] If still blocked, write the blocker to `blockers.md`, mark the ticket
   blocked in the batch todo file, and continue to the next ticket.
 - [ ] After the range is exhausted, run batch-level checks and
-  [review](../review/SKILL.md).
+  [review protocol](../review/SKILL.md).
 - [ ] Present completed tickets, blocked tickets, proof, and next actions.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -125,7 +125,7 @@ completed together.
    - continue with the next ticket
 11. Use [advise](../advise/SKILL.md) when stuck on a ticket and a bounded
    recommendation could unblock or classify the blocker.
-12. After the final ticket, run the batch-level checks and [review](../review/SKILL.md).
+12. After the final ticket, run the batch-level checks and [review protocol](../review/SKILL.md).
 13. Return a per-ticket summary: done, changed, proof, blocked, and follow-up.
 
 ## Batch Ledger

@@ -1,7 +1,7 @@
 ---
 name: review
 description: "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid."
-tier: 1
+tier: 2
 source: local
 skill_template_version: "0.2.0"
 ---
@@ -10,23 +10,24 @@ skill_template_version: "0.2.0"
 
 ## Context
 
-`review` is a Tier 1 primitive and reusable rubric contract. The caller or
-reviewer actor owns task routing, subagent use, and artifact writeback; this
-skill owns TAS meanings, hard gates, selected family checks, and review output.
+`review` is a thin callable wrapper for Farplane's review protocol. The caller
+or reviewer actor owns task routing, subagent use, and artifact writeback; this
+skill owns the TAS output contract and points to the review rubric docs.
 
 Use as the canonical review rubric contract before a plan, implementation,
 evidence bundle, skill, prompt, eval, doc, or completion claim is treated as
 ready.
 
-This skill is not an actor prompt. It does not decide whether to spawn a
-reviewer, how to route subagents, or how to write back to a ticket. The caller
-or reviewer actor supplies the task context and owns artifact writeback.
+This skill is not an actor prompt and no longer owns rubric bodies. It does not
+decide whether to spawn a reviewer, how to route subagents, or how to write back
+to a ticket. The caller or reviewer actor supplies the task context and owns
+artifact writeback.
 
 ## Skill Signature
 
 ```text
 review_change(change_or_evidence, rubric_requirements?) -> review_receipt
-state: reads(task context, changed artifacts, evidence, selected rubrics); writes(review artifact?)
+state: reads(task context, changed artifacts, evidence, docs/review/rubrics selected rubrics); writes(review artifact?)
 gates: evidence_inspected; rubric_family_named; TAS_supported; next_action_named
 routes: caller-owned
 fails: approves without evidence; silently changes rubrics; treats TAS-B as pass
@@ -45,8 +46,8 @@ checks, hard-gate failures, findings, and one concrete next action.
   are available.
 - [ ] 2. Start from caller-declared rubric families and TAS gates; add only an
   obvious missing hard-gate family with explanation.
-- [ ] 3. Load only the selected family references and apply their required,
-  blocker, and evidence checklist modules.
+- [ ] 3. Load only the selected docs/review/rubrics family files and apply their
+  required, blocker, and evidence checklist modules.
 - [ ] 4. Apply one TAS verdict per selected family plus the overall verdict; do
   not use numeric scores or per-dimension TAS.
 - [ ] 5. Return failed checks, findings, blocking issues, and one concrete next
@@ -62,10 +63,10 @@ checks, hard-gate failures, findings, and one concrete next action.
    handoff.
 3. Validate the declared families against the actual changed surface and add an
    obvious missing hard-gate family only when needed.
-4. Open `references/review-rubric-index.md` only when family choice or modular
-   checklist shape is not obvious from the handoff and this file.
-5. Open selected family references and apply only the checklist modules needed
-   for the review claim.
+4. Open `docs/review/rubrics/review-rubric-index.md` only when family choice or
+   modular checklist shape is not obvious from the handoff and this file.
+5. Open selected family docs and apply only the checklist modules needed for
+   the review claim.
 6. Inspect changed files, evidence, and the smallest neighboring surfaces that
    could falsify the claim.
 7. Assign one TAS per selected family from binary checks, then derive the
@@ -75,8 +76,9 @@ checks, hard-gate failures, findings, and one concrete next action.
 ## Rubric Family Catalog
 
 The calling skill, workflow, or ticket `Proof Contract` owns rubric routing.
-This review contract owns the available families, TAS meanings, and hard gates.
-Use `references/reviewer-handoff.md` when creating a durable reviewer handoff.
+The review docs own the available families, TAS meanings, and hard gates. Use
+`docs/review/rubrics/reviewer-handoff.md` when creating a durable reviewer
+handoff.
 
 Common families:
 
@@ -105,7 +107,7 @@ Reviewer sanity check:
 - Report any added family in `rubrics_used` and explain why.
 - Do not silently replace the caller's routing with a generic default.
 - For code, cleanup, integration, or evidence-heavy work, use
-  `references/desloppify.md` as the cross-cutting search playbook.
+  `docs/review/rubrics/desloppify.md` as the cross-cutting search playbook.
 
 ## TAS Verdicts
 
@@ -165,8 +167,8 @@ Return or write:
 
 ## Templates
 
-- [references/reviewer-handoff.md](references/reviewer-handoff.md) - use when
-  a caller needs a durable reviewer handoff.
+- [docs/review/rubrics/reviewer-handoff.md](../../docs/review/rubrics/reviewer-handoff.md) -
+  use when a caller needs a durable reviewer handoff.
 - `Completion Receipt` above - use only for Stop-hook nonce-backed completion
   review.
 
@@ -188,7 +190,7 @@ Return or write:
 
 ## Reference Map
 
-- [references/review-rubric-index.md](references/review-rubric-index.md) -
+- [docs/review/rubrics/review-rubric-index.md](../../docs/review/rubrics/review-rubric-index.md) -
   use when family choice or modular checklist shape is unclear.
-- [references/desloppify.md](references/desloppify.md) - use for cleanup,
+- [docs/review/rubrics/desloppify.md](../../docs/review/rubrics/desloppify.md) - use for cleanup,
   integration, or evidence-heavy search playbooks.

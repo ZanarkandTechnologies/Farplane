@@ -1,7 +1,7 @@
 ---
 name: plan
 version: 0.1.0
-description: "Turn intent into executable scope, ordered work, proof, boundaries, and handoff rules when no domain planning skill owns it."
+description: "Deprecated compatibility wrapper for native planning phase guidance when no domain planning skill owns the artifact."
 tier: 2
 source: local
 allowed-tools: Read, Glob, Grep
@@ -12,6 +12,8 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
+- [ ] Treat this as a compatibility wrapper; prefer the native Tier 0 planning
+  phase and domain-specific planning skills.
 - [ ] State the intent, expected artifact, and domain pipeline.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when scope
   depends on local baseline, examples, official behavior, peer norms, or
@@ -26,16 +28,16 @@ allowed-tools: Read, Glob, Grep
 - [ ] Write ordered executable steps, not only a strategy summary.
 - [ ] Define proof before execution starts.
 - [ ] Hand off to the domain execution skill with only the context it needs.
-- [ ] Use [review](../review/SKILL.md) before claiming a material plan is ready.
+- [ ] Use the [review protocol](../review/SKILL.md) before claiming a material plan is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use this as the Tier 2 planning interface. It defines the common shape every
-application pipeline can bind to: coding, frontend, presentations, documents,
-video, image, data, or future domains.
+Deprecated: use the Tier 0 planning phase from `templates/global/AGENTS.md` for
+ordinary planning. Keep this skill only as a temporary compatibility wrapper for
+older callers that explicitly invoke `$plan`.
 
-This is an interface skill, not the Farplane coding planner. For code work,
+This is not the Farplane coding planner. For code work,
 `spec-to-ticket` and `impl-plan` are Tier 3 coding-pipeline skills that
-implement this interface.
+own the concrete planning artifact.
 
 ## Job
 
@@ -49,7 +51,7 @@ implement this interface.
 7. Define proof before execution starts.
 8. Hand off to the domain execution skill with only the context it needs.
 
-## Tier Dependencies
+## Phase Dependencies
 
 - Use [reference-grounding](../reference-grounding/SKILL.md) for compact
   evidence checks.
@@ -57,7 +59,7 @@ implement this interface.
 - Use [advise](../advise/SKILL.md) for real option choice.
 - Use [prototyping](../prototyping/SKILL.md) for `1 -> 10 -> 100` proof
   before scaling scope, automation, data, or architecture.
-- Use [review](../review/SKILL.md) before claiming a material plan is ready.
+- Use the [review protocol](../review/SKILL.md) before claiming a material plan is ready.
 
 ## Domain Bindings
 

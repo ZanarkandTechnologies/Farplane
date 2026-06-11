@@ -34,7 +34,7 @@ allowed-tools: Read, Glob, Grep, Bash
   a final proof-bundle check through `review` or a dedicated reviewer lane.
 - [ ] Use [advise](../advise/SKILL.md) when runner choice, evidence threshold,
   artifact location, or rerun-vs-fix policy has real tradeoffs.
-- [ ] Use [review](../review/SKILL.md) before treating a new reusable test
+- [ ] Use the [review protocol](../review/SKILL.md) before treating a new reusable test
   template or repeated workflow as trustworthy.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

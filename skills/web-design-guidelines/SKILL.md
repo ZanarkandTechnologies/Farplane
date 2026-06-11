@@ -21,7 +21,7 @@ source: local
 - [ ] Report findings in terse `file:line` format with severity and actionable
   correction.
 - [ ] Keep raw guideline findings separate from any broader review TAS verdict.
-- [ ] Use [review](../review/SKILL.md) when the audit feeds a material quality
+- [ ] Use the [review protocol](../review/SKILL.md) when the audit feeds a material quality
   or completion claim.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -29,7 +29,7 @@ Review files for compliance with Web Interface Guidelines.
 
 This skill is the source-fresh standards audit lane for frontend work. It can be
 called directly by the user, by `frontend-craft` after UI implementation, or by
-`review/references/frontend-guidelines.md` when a frontend review needs a
+`docs/review/rubrics/frontend-guidelines.md` when a frontend review needs a
 separate TAS verdict for guideline compliance.
 
 ## How It Works

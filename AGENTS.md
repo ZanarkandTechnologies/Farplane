@@ -25,7 +25,7 @@ Prefer improving review loops, ticket contracts, skill packaging, and evidence s
 
 Ticketed work should use the ticket `Proof Contract` as the shared scoreboard
 for metrics, review TAS gates, and required evidence. Keep full rubric
-bodies in `skills/review/references/*` and full autoresearch session details in
+bodies in `docs/review/rubrics/*` and full autoresearch session details in
 the owning autoresearch artifacts; tickets carry handles, TAS gates, and
 artifact obligations. Use `Metrics: none mechanical` rather than inventing fake
 metrics for judgment-heavy work. See `MEM-0086`.
@@ -45,18 +45,18 @@ must not directly edit external or installed skill bodies such as
 external-skill edit. Prefer a local wrapper, fixture, registry row, or visible
 repair ticket. See `MEM-0107`.
 
-Keep skill dependencies tiered rather than hidden behind nested routers:
-Tier 1 primitives cover `advise`, `reference-grounding`, `prototyping`,
-`review`, and skill first-load todo-list loading; Tier 2 names generic
-workflow interfaces such as `brainstorm`, `research:*`, `plan`, and
-`execute`; Tier 3 application skills implement those interfaces for a domain.
-Tier 3 todo lists should usually link Tier 2 surfaces rather than direct Tier
-1 primitives, because Tier 2 carries the Tier 1 obligations. In Farplane
-today, `spec-to-ticket`, `impl-plan`, `$impl`, and `close-ticket` are coding
-workflow skills, not the generic Tier 2 interfaces themselves. Keep
-`skill:method` names as explicit addresses inside one owning skill surface.
-The skill registry check enforces this by failing when Tier 3 todo lists
-direct-link Tier 1 primitives. See `MEM-0098`, `MEM-0100`, and `MEM-0125`.
+Keep skill dependencies tiered rather than hidden behind nested routers, but do
+not confuse tiers with lifecycle phases. Tier 0 is the universal phase protocol
+from the global AGENTS template: ground, plan or direct action, execute,
+guardrail, review evidence, and write back. Tier 1 primitives cover `advise`,
+`reference-grounding`, `prototyping`, and skill first-load todo-list loading;
+Tier 2 names generic workflow surfaces such as `brainstorm`, `research:*`, and
+`harness-advisor`; Tier 3 application skills implement concrete domains. `plan`
+and `execute` are deprecated compatibility wrappers for native Codex phases,
+not normal dependencies for new skill work. `review` is a callable TAS wrapper
+over docs-owned rubrics in `docs/review/rubrics/*`, not the owner of every
+review workflow. See `MEM-0098`, `MEM-0100`, `MEM-0125`, and the Tier 0 update
+in `docs/skills/system.md`.
 Create new Tier 1 primitives only when multiple Tier 2 interfaces need that
 move as a base dependency; otherwise keep common reusable work as a Tier 2
 interface or method. User research starts as `research:user-grounding`, not a

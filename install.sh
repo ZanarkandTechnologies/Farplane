@@ -259,7 +259,7 @@ copy_path() {
 
 echo "Installing Codex harness from $REPO_DIR to $TARGET_DIR"
 
-mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin"
+mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin" "$TARGET_DIR/docs/review"
 
 if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   echo "Repo is already the live Codex home. Skipping symlink install."
@@ -272,6 +272,7 @@ fi
 
 copy_path "$REPO_DIR/templates/global/AGENTS.md" "$TARGET_DIR/AGENTS.md"
 link_path "$REPO_DIR/PROJECT_RULES.md" "$TARGET_DIR/PROJECT_RULES.md"
+link_path "$REPO_DIR/docs/review/rubrics" "$TARGET_DIR/docs/review/rubrics"
 if [ -f "$REPO_DIR/hooks.json" ]; then
   link_path "$REPO_DIR/hooks.json" "$TARGET_DIR/hooks.json"
 fi

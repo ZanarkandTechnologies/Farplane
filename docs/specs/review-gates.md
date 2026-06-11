@@ -32,8 +32,8 @@ The ticket answers before build starts:
 
 The calling skill or ticket owns rubric routing. The contract carries handles,
 reviewer handoff fields, and TAS gates, not full specialist bodies. Rubric
-details remain in `skills/review/references/*`; the reusable handoff template
-lives in `skills/review/references/reviewer-handoff.md`; autoresearch session
+details remain in `docs/review/rubrics/*`; the reusable handoff template
+lives in `docs/review/rubrics/reviewer-handoff.md`; autoresearch session
 details remain in `autoresearch.md`, `autoresearch.sh`, and
 `autoresearch.jsonl`.
 
@@ -144,7 +144,7 @@ Reviewer output should use one normalized shape:
     "changed_files": ["src/example.ts"],
     "related_files": ["src/exampleTypes.ts", "docs/specs/example.md"],
     "invariants_checked": ["MEM-0006"],
-    "docs_checked": ["skills/review/references/code-quality.md"]
+    "docs_checked": ["docs/review/rubrics/code-quality.md"]
   },
   "rubrics_used": ["ui-quality", "code-quality", "evidence-quality"],
   "summary": "short verdict summary",
@@ -245,7 +245,7 @@ TAS verdict and must not average or assign TAS per dimension.
 
 Detailed family anchors live in the per-family review references under:
 
-- `skills/review/references/*.md`
+- `docs/review/rubrics/*.md`
 
 ## Threshold Policy
 

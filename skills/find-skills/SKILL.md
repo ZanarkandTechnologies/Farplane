@@ -21,7 +21,7 @@ source: local
 - [ ] Use [advise](../advise/SKILL.md) when multiple candidate skills fit.
 - [ ] Do not install, update, or run external code unless the user explicitly
   asks and the environment policy allows it.
-- [ ] Use [review](../review/SKILL.md) before adding a discovered skill to
+- [ ] Use the [review protocol](../review/SKILL.md) before adding a discovered skill to
   Farplane-owned docs or registry guidance.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

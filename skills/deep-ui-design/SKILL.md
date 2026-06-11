@@ -20,7 +20,7 @@ allowed-tools: Read, Glob, Grep
   anti-references, anti-goals, taste boundaries, and one pressure pass.
 - [ ] Use [advise](../advise/SKILL.md) when competing visual directions need a
   recommended path.
-- [ ] Use [review](../review/SKILL.md) before handing off a Taste Brief as
+- [ ] Use the [review protocol](../review/SKILL.md) before handing off a Taste Brief as
   ready for visual or frontend implementation.
 - [ ] Write the Taste Brief into the active ticket, UI spec, or next canonical
   artifact owner.

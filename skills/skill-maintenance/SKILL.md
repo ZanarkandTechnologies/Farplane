@@ -57,8 +57,8 @@ fails: invents numeric health score; duplicates git last-edited state; claims ta
 - [ ] 3. Route non-mechanical choices before editing.
    - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
      when upstream or external skill examples should change the local contract.
-   - [ ] Use [plan](../plan/SKILL.md) when tier, source, group, method ownership,
-     or consolidation choices have real tradeoffs.
+   - [ ] Use the native planning phase or `harness-advisor` when tier, source,
+     group, method ownership, or consolidation choices have real tradeoffs.
    - [ ] Use
      [advice and proof routing](../../docs/skills/best-practices.md#advice-and-proof-routing)
      before changing shared standards, Tier 1 primitives, meta skills, `eval`,
@@ -117,8 +117,8 @@ fails: invents numeric health score; duplicates git last-edited state; claims ta
      high-blast-radius, cross-skill, or precedent-setting structure changes.
    - [ ] For material skill-system changes, delegate final review to the native
      `reviewer` subagent with a reviewer handoff.
-   - [ ] Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
-     ticket evidence when the pass needs durable closeout.
+   - [ ] Use the Tier 0 execution/writeback phase for final proof, docs
+     writeback, and ticket evidence when the pass needs durable closeout.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when working on the skill system itself: tier metadata, direct todo
@@ -189,8 +189,8 @@ hygiene, or consolidation planning.
    and the target skill files.
 2. Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
    when comparing external skill examples or upstream instructions.
-3. Use [plan](../plan/SKILL.md) when tier/source/consolidation choices have
-   real tradeoffs.
+3. Use the native planning phase or `harness-advisor` when
+   tier/source/consolidation choices have real tradeoffs.
 4. For broad migrations such as todo-list embedding or reference pruning, use
    [prototyping](../prototyping/SKILL.md) on a small representative set before
    running bulk commands.
@@ -232,8 +232,8 @@ python3 ../../bin/sync_skill_registry.py --check
 python3 ../../bin/check_skill_todo_tiers.py --allow-peer-tier3
 ```
 
-9. Use [execute](../execute/SKILL.md) for final proof, docs writeback, and
-   ticket evidence after skill changes.
+9. Use the Tier 0 execution/writeback phase for final proof, docs writeback,
+   and ticket evidence after skill changes.
 10. For material skill edits, write the skill-local audit record with
    first-principles reasoning, before and after behavior, optional proof
    artifacts or explicit evidence gaps, binary rubric rows, and followups.

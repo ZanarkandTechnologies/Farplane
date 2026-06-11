@@ -108,7 +108,7 @@ flowchart LR
   - `evidence:` proof artifacts, command outputs, QA reports, screenshots,
     traces, or logs
   - `rubric_families:` caller-owned rubric routing; see
-    `skills/review/references/reviewer-handoff.md`
+    `docs/review/rubrics/reviewer-handoff.md`
   - `required_tas:` required family gates, especially hard gates
   - `hard_gates:` task-specific constraints that force revise/block
   - `expected_output:` review artifact path when durable proof is required

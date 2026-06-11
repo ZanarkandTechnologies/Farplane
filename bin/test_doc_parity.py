@@ -31,7 +31,7 @@ ARCHITECTURE_TEXT = """\
 
 - `README.md`
 - `tickets/README.md`
-- `skills/review/references/review-rubric-index.md`
+- `docs/review/rubrics/review-rubric-index.md`
 """
 
 SPECS_README_TEXT = """\

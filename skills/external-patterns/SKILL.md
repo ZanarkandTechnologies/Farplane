@@ -22,7 +22,7 @@ source: local
 - [ ] Extract implementation shape, file map, constraints, and local adaptation
   notes.
 - [ ] Use [advise](../advise/SKILL.md) when several repo patterns are viable.
-- [ ] Use [review](../review/SKILL.md) before promoting an external pattern
+- [ ] Use the [review protocol](../review/SKILL.md) before promoting an external pattern
   into a plan, ticket, or skill.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

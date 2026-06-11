@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-10T17:29:45+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-11T07:02:27+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -29,42 +29,42 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 
 ## Counts
 
-- Scanned files: `904`
-- Nodes: `597`
-- Edges: `2055`
-- Unresolved local-looking refs: `730`
+- Scanned files: `926`
+- Nodes: `616`
+- Edges: `2105`
+- Unresolved local-looking refs: `758`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/specs/README.md` | 51 | 27 |
+| `docs/specs/README.md` | 50 | 27 |
 | `docs/MEMORY.md` | 45 | 20 |
-| `docs/LESSONS.md` | 36 | 19 |
+| `docs/LESSONS.md` | 36 | 18 |
 | `docs/HISTORY.md` | 29 | 7 |
 | `docs/TROUBLES.md` | 28 | 12 |
 | `docs/features/registry.jsonl` | 25 | 8 |
-| `docs/skills/registry.jsonl` | 22 | 11 |
-| `docs/skills/README.md` | 21 | 11 |
+| `docs/skills/registry.jsonl` | 23 | 10 |
+| `docs/skills/README.md` | 22 | 11 |
 | `docs/prd.md` | 19 | 17 |
 | `docs/TASTE.md` | 18 | 14 |
 | `docs/specs/harness-techniques.md` | 16 | 2 |
 | `docs/sources/registry.jsonl` | 13 | 5 |
+| `docs/skills/best-practices.md` | 13 | 10 |
+| `docs/skills/system.md` | 12 | 7 |
 | `docs/specs/harness-engineering-doctrine.md` | 12 | 5 |
 | `docs/features/README.md` | 11 | 3 |
+| `docs/review/rubrics/review-rubric-index.md` | 11 | 6 |
 | `docs/research` | 11 | 2 |
 | `docs/specs/self-improvement-contracts.md` | 11 | 6 |
-| `docs/skills/best-practices.md` | 10 | 8 |
-| `docs/skills/system.md` | 10 | 7 |
-| `docs/specs/invocation-and-adapters.md` | 9 | 1 |
-| `docs/specs/runtime-surface.md` | 9 | 1 |
+| `docs/review/rubrics` | 10 | 3 |
 
 ## Spec Status Preview
 
 | Spec | All refs | Skill refs | Suggested status |
 | --- | --- | --- | --- |
 | `docs/specs/AGENTS.md` | 1 | 0 | keep active |
-| `docs/specs/README.md` | 51 | 27 | keep active |
+| `docs/specs/README.md` | 50 | 27 | keep active |
 | `docs/specs/adaptive-backoff.md` | 7 | 6 | keep active |
 | `docs/specs/agent-testability-surfaces.md` | 4 | 3 | keep active |
 | `docs/specs/case-based-memory-context-graph.md` | 3 | 1 | merge into harness-algebra or filesystem-lifecycle if the context graph stays conceptual |
@@ -118,6 +118,18 @@ can still be worth keeping.
 | `docs/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md` | review before archive or merge |
 | `docs/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md` | review before archive or merge |
 | `docs/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md` | review before archive or merge |
+| `docs/review/rubrics/architecture.md` | review before archive or merge |
+| `docs/review/rubrics/debloatability.md` | review before archive or merge |
+| `docs/review/rubrics/demo-quality.md` | review before archive or merge |
+| `docs/review/rubrics/eval-quality.md` | review before archive or merge |
+| `docs/review/rubrics/frontend-code-maintainability.md` | review before archive or merge |
+| `docs/review/rubrics/gotchas.md` | review before archive or merge |
+| `docs/review/rubrics/prompt-quality.md` | review before archive or merge |
+| `docs/review/rubrics/spec-contract.md` | review before archive or merge |
+| `docs/review/rubrics/ui-quality.md` | review before archive or merge |
+| `docs/review/rubrics/user-intent-satisfaction.md` | review before archive or merge |
+| `docs/review/rubrics/video-quality.md` | review before archive or merge |
+| `docs/review/rubrics/workflows.md` | review before archive or merge |
 | `docs/skills/AGENTS.md` | keep if loaded by directory convention |
 | `docs/sources/AGENTS.md` | keep if loaded by directory convention |
 

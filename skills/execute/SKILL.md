@@ -1,7 +1,7 @@
 ---
 name: execute
 version: 0.1.0
-description: "Turn an approved workflow into implementation, proof, writeback, and review when no domain-specific execution skill owns it."
+description: "Deprecated compatibility wrapper for native execution phase guidance when no domain execution skill owns the artifact."
 tier: 2
 source: local
 allowed-tools: Read, Glob, Grep
@@ -12,9 +12,11 @@ allowed-tools: Read, Glob, Grep
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
+- [ ] Treat this as a compatibility wrapper; prefer the native Tier 0 execution
+  phase and domain-specific execution skills.
 - [ ] Read the plan, scope, acceptance criteria, and proof contract.
 - [ ] Confirm execution is ready; if scope or proof is still unclear, stop and
-  return the gap to the caller or the domain planning skill.
+  return the gap to the caller, native planning phase, or domain planning skill.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when execution
   depends on official behavior, local invariants, or examples.
 - [ ] Use [prototyping](../prototyping/SKILL.md) before broad batch edits,
@@ -25,18 +27,19 @@ allowed-tools: Read, Glob, Grep
   wrong.
 - [ ] Write results, blockers, evidence, and handoff state back to the durable
   artifact.
-- [ ] Use [review](../review/SKILL.md) before material completion claims;
+- [ ] Use the [review protocol](../review/SKILL.md) before material completion claims;
   delegate to the native `reviewer` lane with a reviewer handoff from the
   durable task pointer or proof contract when available.
 - [ ] End with a clear next state: done, revise, blocked, or closeout.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use this as the Tier 2 execution interface. It defines the common build/prove
-shape every application pipeline can bind to.
+Deprecated: use the Tier 0 execution phase from `templates/global/AGENTS.md` for
+ordinary execution. Keep this skill only as a temporary compatibility wrapper
+for older callers that explicitly invoke `$execute`.
 
-This is an interface skill, not the Farplane coding executor. For code work,
+This is not the Farplane coding executor. For code work,
 `$impl` and `close-ticket` are Tier 3 coding-pipeline skills that implement
-this interface.
+the concrete execution and closeout workflow.
 
 ## Job
 
@@ -54,17 +57,18 @@ this interface.
    families, required TAS gates, hard gates, and expected output path.
 8. Stop, revise, or close based on proof and review.
 
-## Tier Dependencies
+## Phase Dependencies
 
 - Use [reference-grounding](../reference-grounding/SKILL.md) when execution
   depends on official behavior, local invariants, or examples.
 - Use [prototyping](../prototyping/SKILL.md) before scaling an unproven
   pattern across files, records, users, or automation.
-- Use [review](../review/SKILL.md) before material completion claims; for
+- Use the [review protocol](../review/SKILL.md) before material completion claims; for
   material work, route review through the native `reviewer` lane when available
   instead of relying on coordinator self-review. The calling workflow owns the
   rubric routing and passes it through the reviewer handoff.
-- Use [plan](../plan/SKILL.md) when the work is not ready to execute.
+- Use the native planning phase or a domain planning skill when the work is not
+  ready to execute.
 
 ## Domain Bindings
 
@@ -88,8 +92,8 @@ Produce an execution result with:
 
 ## Guardrails
 
-- Do not execute vague intent. Route back to `plan` or the domain planning
-  skill when scope or proof is unclear.
+- Do not execute vague intent. Route back to native planning or the domain
+  planning skill when scope or proof is unclear.
 - Do not claim completion without durable evidence.
 - Do not treat `$impl` as the generic Tier 2 executor. It is the coding
   implementation of this interface.

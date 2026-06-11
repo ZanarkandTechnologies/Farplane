@@ -34,9 +34,10 @@ only when it adds non-duplicated durable shape.]
 
 ## Skill Signature
 
-[TODO: Keep this when it clarifies callable behavior, state, gates, routes, or
-failure modes. Delete it only for tiny skills where the todo list already makes
-composition obvious. See `docs/specs/self-improvement-contracts.md`.]
+[TODO: Keep this when it clarifies callable behavior, required inputs, state,
+gates, routes, or failure modes. Delete it only for tiny skills where the todo
+list already makes composition obvious. See
+`docs/specs/self-improvement-contracts.md`.]
 
 ```text
 {skill_function}(input_text, state?) -> primary_output + evidence?
@@ -46,18 +47,53 @@ routes: next-skill | next-skill:method | direct-answer
 fails: known bad behavior; overbroad behavior; misplaced ownership
 ```
 
+When a caller invokes this skill without required inputs, the agent should
+resolve the missing parameters before execution:
+
+```text
+resolve_skill_params(skill_signature, user_request, state)
+  -> bound_inputs | setup_workflow | blocking_question
+```
+
+Use local files, task artifacts, setup workflows, or a narrow blocking question
+to bind missing inputs. Do not run the skill against guessed parameters when the
+signature makes those parameters required for correctness.
+
+## Phase Contract
+
+[TODO: Keep this when the skill owns material work that should follow explicit
+phases. Collapse or delete for tiny primitive skills where the todo list is
+already enough.]
+
+```text
+phase_contract(task, bound_inputs, state)
+  -> grounded_context
+   + plan_or_direct_action
+   + plan_review_if_material
+   + execution
+   + guardrail_or_eval
+   + evidence_review_if_material
+   + writeback
+```
+
+Tier 0 phases are not skill links. Use Codex native planning/execution behavior
+unless a named skill package owns a specific artifact or workflow.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read required context and current artifacts.
-- [ ] 2. Choose the branch.
+- [ ] 1. Bind the skill signature inputs.
+   - [ ] Resolve missing required inputs from local state, setup workflows, or a
+     narrow blocking question.
+- [ ] 2. Read required context and current artifacts.
+- [ ] 3. Choose the branch.
    - [ ] 1. Default branch.
    - [ ] 2. Update/repair branch.
    - [ ] 3. Review branch.
-- [ ] 3. Execute the workflow for the selected branch.
-- [ ] 4. Produce or update the required artifact.
-- [ ] 5. Verify with the named proof command or evidence surface.
-- [ ] 6. Review against the gotchas before completion.
+- [ ] 4. Execute the workflow for the selected branch.
+- [ ] 5. Produce or update the required artifact.
+- [ ] 6. Verify with the named proof command or evidence surface.
+- [ ] 7. Review against the gotchas before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
    - [ ] Explicit proof command or blocker.

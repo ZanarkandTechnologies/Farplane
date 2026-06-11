@@ -40,7 +40,7 @@ metadata:
 - [ ] Keep long-source summaries concise and avoid over-quoting.
 - [ ] Use [advise](../advise/SKILL.md) only when the user wants a recommended
   implication from the summary.
-- [ ] Use [review](../review/SKILL.md) before promoting a summary into durable
+- [ ] Use the [review protocol](../review/SKILL.md) before promoting a summary into durable
   docs, tickets, or decisions.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

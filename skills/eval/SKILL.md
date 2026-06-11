@@ -59,8 +59,9 @@ or proof behavior without touching real files.
 - [ ] 2. Choose the eval job.
   - [ ] 1. If writing or revising tasks, load
     [eval best practices](references/eval-best-practices.md) and
-    [task-template.json](references/onboarding/task-template.json), then edit
-    task JSON and judge prompts.
+    [task-template.json](references/onboarding/task-template.json), use
+    [eval writing rubric](references/eval-writing-rubric.md) for quality
+    review, then edit task JSON and judge prompts.
   - [ ] 2. If designing a first eval or clean-room starter, load
     [onboarding](references/onboarding.md) and use AGI Toy Shop as the default
     context unless real repo files are the behavior under test.
@@ -73,6 +74,9 @@ or proof behavior without touching real files.
     [eval skill structure cases](references/eval-skill-structure-cases.md) and
     route Tier 1, meta, `eval`, cross-skill, or precedent-setting structure
     changes through `deliberative-advice` before final review.
+  - [ ] 6. If improving how the `eval` skill writes evals across iterations,
+    load [self-improve program](self-improve/program.md) and log ideas, tests,
+    Kenji feedback, and accepted lessons there.
 - [ ] 3. Write eval tasks with the core shape: realistic `query`, shared fixture
   in `config.json` plus `contexts/*`, visible `reference_points`, narrow tags,
   and no live side effects unless the runner owns a sandbox fixture.
@@ -220,6 +224,12 @@ The runner writes the proof surfaces this skill should summarize:
 - [references/eval-skill-structure-cases.md](references/eval-skill-structure-cases.md) -
   load when writing evals for skill-structure quality or reviewing the
   compounding impact of Tier 1, meta, `eval`, or cross-skill skill changes.
+- [references/eval-writing-rubric.md](references/eval-writing-rubric.md) -
+  load when judging eval-task quality, batch ROI, owner locality, breadth/depth,
+  and skill-local versus workflow-level placement.
+- [self-improve/program.md](self-improve/program.md) - Goal-backed HITL memory
+  for improving eval-writing patterns through ideas, tests, feedback, and
+  accepted lessons.
 - [examples/first-harness-eval/tasks.json](examples/first-harness-eval/tasks.json) -
   clean-room starter task set.
 

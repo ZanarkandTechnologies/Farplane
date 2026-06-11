@@ -73,7 +73,8 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 
 ## Work Loop
 
-- For serious work, use this default loop:
+- For serious work, use the Tier 0 phase protocol. These are native work
+  phases, not skill tiers:
   1. Ground the request and current state.
   2. Choose the path with `advise` when a material choice exists.
   3. Plan the work when the shape, risk, or handoff matters.
@@ -82,6 +83,8 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   6. Run tests, QA, checks, or manual verification.
   7. Review substantive implementations, evidence, prompts, skills, docs, or
      completion claims before calling them done.
+- Collapse phases for tiny, reversible, low-risk tasks. Make phases explicit for
+  material, ticketed, high-blast-radius, or proof-sensitive work.
 - Keep edits scoped to the requested behavior and nearby ownership boundary.
 - Prefer existing repo patterns, module boundaries, and helper APIs.
 - Add abstractions only when they remove real complexity or match a clear local
@@ -193,6 +196,15 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 
 - When a relevant skill is named or clearly applies, read its `SKILL.md` before
   using it.
+- Treat each skill as a callable mini harness:
+  `skill(task, state) -> artifact + evidence + state_delta`.
+- Pay attention to the skill's `## Skill Signature` when present. Bind the
+  user's request and current state to the required inputs before executing the
+  skill.
+- If the user calls a skill without supplying the required inputs, backpropagate
+  the missing parameters: inspect current files/state, load the right context,
+  run a setup or planning workflow, or ask one narrow blocking question only
+  when the missing parameter cannot be safely inferred.
 - Use skills compositionally. Follow linked skills and method addresses when
   they are relevant to the current task.
 - Render the active skill todo list compactly in commentary; recursively add
@@ -201,19 +213,21 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   keep Tier 1/Tier 2 checklist updates lighter unless they carry major scope.
 - Keep skill traversal bounded by the task, evidence need, and user's goal.
 - Do not paste full skill internals into this global file.
+- Do not treat `plan` or `execute` as mandatory skill calls just because a task
+  has planning or execution phases. Codex native work phases usually own that
+  behavior; use explicit planning or execution skills only when their package is
+  the best owner for the artifact or workflow.
 - Default Tier 1 behavior skills:
   - `advise`: choose among real options and recommend one path.
   - `reference-grounding`: ground claims in local, official, peer, or supplied
     evidence.
   - `prototyping`: prove a representative sample before broad scale.
-  - `review`: challenge plans, implementations, evidence, prompts, skills, docs,
-    and completion claims.
 - Common Tier 2 workflow skills:
   - `research:*`: gather parity, gap, official-docs, code-pattern, competitor,
     user-grounding, or source-synthesis evidence.
-  - `plan`: turn intent into executable shape, proof, boundaries, and handoff.
-  - `execute`: do the work, prove it, write back, and review without making one
-    domain pipeline universal.
+  - `review`: callable TAS wrapper over docs-owned review rubrics for material
+    plans, implementations, evidence, prompts, skills, docs, and completion
+    claims.
   - `bash-efficiency`: use shell-heavy workflows safely, quickly, and
     reproducibly.
 - Meta and harness skills:

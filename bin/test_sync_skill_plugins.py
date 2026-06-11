@@ -34,12 +34,19 @@ def write_skill(root: Path, name: str, description: str, source: str = "local") 
     (skill_dir / "references" / "notes.md").write_text("notes\n", encoding="utf-8")
 
 
+def write_review_rubric(root: Path) -> None:
+    rubric_dir = root / "docs/review/rubrics"
+    rubric_dir.mkdir(parents=True)
+    (rubric_dir / "notes.md").write_text("rubric notes\n", encoding="utf-8")
+
+
 class SyncSkillPluginsTests(unittest.TestCase):
     def test_sync_generates_one_plugin_per_skill(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             write_skill(repo, "review", "Run quality checks.")
             write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+            write_review_rubric(repo)
 
             result = syncer.sync_skill_plugins(repo)
 
@@ -63,7 +70,7 @@ class SyncSkillPluginsTests(unittest.TestCase):
             self.assertTrue(
                 (
                     repo
-                    / ".farplane/generated/skill-plugins/plugins/review/skills/review/references/notes.md"
+                    / ".farplane/generated/skill-plugins/plugins/review/docs/review/rubrics/notes.md"
                 ).exists()
             )
 
