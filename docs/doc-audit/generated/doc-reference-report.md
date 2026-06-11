@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-11T17:13:42+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-11T19:24:30+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -29,9 +29,9 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 
 ## Counts
 
-- Scanned files: `934`
-- Nodes: `650`
-- Edges: `2164`
+- Scanned files: `942`
+- Nodes: `662`
+- Edges: `2197`
 - Unresolved local-looking refs: `740`
 
 ## Most Referenced Docs
@@ -44,8 +44,8 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 | `docs/HISTORY.md` | 30 | 7 |
 | `docs/TROUBLES.md` | 29 | 12 |
 | `docs/features/registry.jsonl` | 28 | 8 |
+| `docs/skills/README.md` | 24 | 11 |
 | `docs/skills/registry.jsonl` | 24 | 11 |
-| `docs/skills/README.md` | 23 | 11 |
 | `docs/prd.md` | 19 | 17 |
 | `docs/sources/registry.jsonl` | 18 | 5 |
 | `docs/specs/harness-techniques.md` | 18 | 2 |
@@ -71,10 +71,12 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 | `docs/specs/doc-governance.md` | 7 | 0 | keep active |
 | `docs/specs/filesystem-lifecycle.md` | 6 | 1 | keep active |
 | `docs/specs/first-principles-planning.md` | 8 | 6 | keep active |
+| `docs/specs/goal-loop-contract.md` | 8 | 5 | keep active |
 | `docs/specs/harness-algebra.md` | 9 | 4 | keep active |
 | `docs/specs/harness-engineering-doctrine.md` | 12 | 5 | keep active |
 | `docs/specs/harness-techniques.md` | 18 | 2 | keep active |
 | `docs/specs/invocation-and-adapters.md` | 14 | 2 | keep active |
+| `docs/specs/product-convergence-plan.md` | 0 | 0 | keep active |
 | `docs/specs/review-gates.md` | 7 | 2 | keep active |
 | `docs/specs/self-improvement-contracts.md` | 14 | 6 | keep active |
 | `docs/specs/spec-authoring-contract.md` | 6 | 3 | keep active |
@@ -116,6 +118,7 @@ can still be worth keeping.
 | `docs/private-tool-context.md` | review before archive or merge |
 | `docs/skills/AGENTS.md` | keep if loaded by directory convention |
 | `docs/sources/AGENTS.md` | keep if loaded by directory convention |
+| `docs/specs/product-convergence-plan.md` | review before archive or merge |
 
 ## Next Cleanup Pass
 

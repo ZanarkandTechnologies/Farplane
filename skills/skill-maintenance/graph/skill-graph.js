@@ -2,9 +2,9 @@ window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
       "common-chain": 16,
-      "markdown-ref": 248
+      "markdown-ref": 249
     },
-    "edges": 264,
+    "edges": 265,
     "nodes": 86,
     "sources": {
       "external": 3,
@@ -901,16 +901,9 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
-      "source": "goal-crafter",
-      "target": "advise",
-      "target_ref": "advise",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "goal-crafter",
-      "target": "reference-grounding",
-      "target_ref": "reference-grounding",
+      "source": "goal-advisor",
+      "target": "with-human",
+      "target_ref": "with-human",
       "type": "markdown-ref"
     },
     {
@@ -1864,9 +1857,23 @@ window.SKILL_GRAPH = {
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "with-human",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "with-human",
+      "target": "telegram-message",
+      "target_ref": "telegram-message",
+      "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-11T17:13:42+00:00",
+  "generated_at": "2026-06-11T19:24:30+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -1905,7 +1912,7 @@ window.SKILL_GRAPH = {
       "tier": 1
     },
     {
-      "description": "Turn short HITL, automation, blocker, or artifact-review updates into Telegram notifications using configured environment variables.",
+      "description": "Turn short feedback, automation, blocker, or artifact-review updates into Telegram notifications using configured environment variables.",
       "group": "",
       "has_checklist": true,
       "has_todos": false,
@@ -2182,18 +2189,6 @@ window.SKILL_GRAPH = {
       "tier": 2
     },
     {
-      "description": "Turn fuzzy operator intent into a crisp Codex /goal command with outcome, verification, constraints, iteration policy, and stop condition.",
-      "group": "",
-      "has_checklist": true,
-      "has_todos": false,
-      "id": "goal-crafter",
-      "label": "goal-crafter",
-      "methods": [],
-      "path": "skills/goal-crafter/SKILL.md",
-      "source": "local",
-      "tier": 2
-    },
-    {
       "description": "Turn a Farplane improvement idea into a recommended owner surface across policy, templates, skills, agents, hooks, tickets, docs, or validators.",
       "group": "",
       "has_checklist": true,
@@ -2330,6 +2325,18 @@ window.SKILL_GRAPH = {
       "label": "web-design-guidelines",
       "methods": [],
       "path": "skills/web-design-guidelines/SKILL.md",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "description": "Turn a Goal loop's subjective quality need into a human feedback request, feedback file contract, and continuation signal.",
+      "group": "",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "with-human",
+      "label": "with-human",
+      "methods": [],
+      "path": "skills/with-human/SKILL.md",
       "source": "local",
       "tier": 2
     },
@@ -2554,6 +2561,18 @@ window.SKILL_GRAPH = {
       "tier": 3
     },
     {
+      "description": "Turn an ambitious request into Goal architecture, ticket-backed loop state, and a native Codex /goal prompt when warranted.",
+      "group": "harness",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "goal-advisor",
+      "label": "goal-advisor",
+      "methods": [],
+      "path": "skills/goal-advisor/SKILL.md",
+      "source": "local",
+      "tier": 3
+    },
+    {
       "description": "Turn an external source into deduped Farplane feature candidates, adopt/adapt/reject/defer scorecards, and ticket handoffs.",
       "group": "harness",
       "has_checklist": true,
@@ -2562,18 +2581,6 @@ window.SKILL_GRAPH = {
       "label": "harness-scout",
       "methods": [],
       "path": "skills/harness-scout/SKILL.md",
-      "source": "local",
-      "tier": 3
-    },
-    {
-      "description": "Turn subjective artifact goals into human-in-the-loop autoresearch sessions with feedback requests, scoring, and resumable review.",
-      "group": "self-improvement",
-      "has_checklist": true,
-      "has_todos": false,
-      "id": "hitl-autoresearch",
-      "label": "hitl-autoresearch",
-      "methods": [],
-      "path": "skills/hitl-autoresearch/SKILL.md",
       "source": "local",
       "tier": 3
     },

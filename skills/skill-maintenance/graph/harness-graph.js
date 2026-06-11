@@ -1,26 +1,26 @@
 window.HARNESS_GRAPH = {
   "counts": {
     "edge_types": {
-      "directory-contains": 86,
-      "literal-path": 1632,
-      "markdown-link": 446
+      "directory-contains": 89,
+      "literal-path": 1657,
+      "markdown-link": 451
     },
-    "edges": 2164,
+    "edges": 2197,
     "node_kinds": {
-      "agent": 18,
+      "agent": 19,
       "doc": 22,
-      "file": 411,
+      "file": 420,
       "research": 11,
       "review-rubric": 22,
       "root-doc": 5,
       "script": 49,
       "skill": 86,
       "skill-doc": 5,
-      "spec": 16,
+      "spec": 18,
       "template": 5
     },
-    "nodes": 650,
-    "scanned_files": 934,
+    "nodes": 662,
+    "scanned_files": 942,
     "unresolved_refs": 740
   },
   "edges": [
@@ -624,6 +624,27 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/templates",
       "source": "dir:tickets/templates",
       "target": "file:tickets/templates/ticket.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "tickets/templates/goal-loop",
+      "raw_ref": "tickets/templates/goal-loop",
+      "source": "dir:tickets/templates/goal-loop",
+      "target": "file:tickets/templates/goal-loop/drift-reviewer-handoff.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "tickets/templates/goal-loop",
+      "raw_ref": "tickets/templates/goal-loop",
+      "source": "dir:tickets/templates/goal-loop",
+      "target": "file:tickets/templates/goal-loop/program.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "tickets/templates/goal-loop",
+      "raw_ref": "tickets/templates/goal-loop",
+      "source": "dir:tickets/templates/goal-loop",
+      "target": "file:tickets/templates/goal-loop/progress.md",
       "type": "directory-contains"
     },
     {
@@ -3540,6 +3561,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "agents/goal-drift-reviewer.toml",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:agents/goal-drift-reviewer.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "agents/skill-opportunity-applier.toml",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:agents/skill-opportunity-applier.toml",
@@ -3816,6 +3844,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/specs/first-principles-planning.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/specs/first-principles-planning.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:docs/specs/goal-loop-contract.md",
       "type": "literal-path"
     },
     {
@@ -4219,16 +4254,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "skills/goal-crafter",
+      "raw_ref": "skills/goal-advisor",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:skills/goal-crafter/README.md",
+      "target": "file:skills/goal-advisor/README.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "skills/goal-crafter/SKILL.md",
+      "raw_ref": "skills/goal-advisor/SKILL.md",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:skills/goal-crafter/SKILL.md",
+      "target": "file:skills/goal-advisor/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -4257,13 +4292,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/harness-scout",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:skills/harness-scout/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "skills/hitl-autoresearch",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:skills/hitl-autoresearch/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -4464,6 +4492,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/with-human",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/with-human/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/with-human/SKILL.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/with-human/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "skills/work",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:skills/work/README.md",
@@ -4607,6 +4649,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/archive/TASK-0170/ticket.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:tickets/archive/TASK-0170/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "tickets/templates/goal-loop/program.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:tickets/templates/goal-loop/program.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "tickets/templates/goal-loop/progress.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:tickets/templates/goal-loop/progress.md",
       "type": "literal-path"
     },
     {
@@ -5241,9 +5297,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/registry.jsonl",
-      "raw_ref": "skills/goal-crafter/SKILL.md",
+      "raw_ref": "skills/goal-advisor/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
-      "target": "file:skills/goal-crafter/SKILL.md",
+      "target": "file:skills/goal-advisor/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -5258,13 +5314,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/harness-scout/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/harness-scout/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/registry.jsonl",
-      "raw_ref": "skills/hitl-autoresearch/SKILL.md",
-      "source": "file:docs/skills/registry.jsonl",
-      "target": "file:skills/hitl-autoresearch/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -5552,6 +5601,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/weekly-strategy-analysis/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/weekly-strategy-analysis/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/registry.jsonl",
+      "raw_ref": "skills/with-human/SKILL.md",
+      "source": "file:docs/skills/registry.jsonl",
+      "target": "file:skills/with-human/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -6438,6 +6494,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "tickets/templates/goal-loop/",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "dir:tickets/templates/goal-loop",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "AGENTS.md",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:AGENTS.md",
@@ -6462,6 +6525,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "agents/completion-reviewer.toml",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:agents/completion-reviewer.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "agents/goal-drift-reviewer.toml",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "file:agents/goal-drift-reviewer.toml",
       "type": "literal-path"
     },
     {
@@ -6665,6 +6735,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/specs/filesystem-lifecycle.md",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:docs/specs/filesystem-lifecycle.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/harness-techniques.md",
+      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "source": "file:docs/specs/harness-techniques.md",
+      "target": "file:docs/specs/goal-loop-contract.md",
       "type": "literal-path"
     },
     {
@@ -6879,9 +6956,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "skills/goal-crafter",
+      "raw_ref": "skills/goal-advisor",
       "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:skills/goal-crafter/README.md",
+      "target": "file:skills/goal-advisor/README.md",
       "type": "literal-path"
     },
     {
@@ -7193,6 +7270,20 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "docs/specs/product-convergence-plan.md",
+      "raw_ref": "README.md",
+      "source": "file:docs/specs/product-convergence-plan.md",
+      "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/product-convergence-plan.md",
+      "raw_ref": "docs/skills/README.md",
+      "source": "file:docs/specs/product-convergence-plan.md",
+      "target": "file:docs/skills/README.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "docs/specs/review-gates.md",
       "raw_ref": "docs/review/rubrics/",
       "source": "file:docs/specs/review-gates.md",
@@ -7355,6 +7446,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "tickets/README.md",
+      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "source": "file:tickets/README.md",
+      "target": "file:docs/specs/goal-loop-contract.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "tickets/README.md",
       "raw_ref": "docs/specs/invocation-and-adapters.md",
       "source": "file:tickets/README.md",
       "target": "file:docs/specs/invocation-and-adapters.md",
@@ -7379,6 +7477,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/scripts/check_ticket_metadata.py",
       "source": "file:tickets/README.md",
       "target": "file:tickets/scripts/check_ticket_metadata.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "tickets/README.md",
+      "raw_ref": "tickets/templates/goal-loop/program.md",
+      "source": "file:tickets/README.md",
+      "target": "file:tickets/templates/goal-loop/program.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "tickets/README.md",
+      "raw_ref": "tickets/templates/goal-loop/progress.md",
+      "source": "file:tickets/README.md",
+      "target": "file:tickets/templates/goal-loop/progress.md",
       "type": "literal-path"
     },
     {
@@ -10364,6 +10476,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/eval/self-improve/program.md",
+      "raw_ref": "skills/skill-maintenance/references/eval-fixture-sandbox.md",
+      "source": "skill:eval",
+      "target": "file:skills/skill-maintenance/references/eval-fixture-sandbox.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/eval/AGENTS.md",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:eval",
@@ -10375,6 +10494,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:eval",
       "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/eval/self-improve/program.md",
+      "raw_ref": "skills/skill-maintenance/tests/fixtures/bad-skill-repo/",
+      "source": "skill:eval",
+      "target": "file:skills/skill-maintenance/tests/fixtures/bad-skill-repo/README.md",
       "type": "literal-path"
     },
     {
@@ -11015,32 +11141,81 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/goal-crafter/SKILL.md",
-      "raw_ref": "../advise/SKILL.md",
-      "source": "skill:goal-crafter",
-      "target": "file:skills/advise/SKILL.md",
+      "from_file": "skills/goal-advisor/SKILL.md",
+      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "source": "skill:goal-advisor",
+      "target": "file:docs/specs/goal-loop-contract.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/goal-advisor/audits/2026-06-12-initial-goal-advisor.md",
+      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "source": "skill:goal-advisor",
+      "target": "file:docs/specs/goal-loop-contract.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/goal-advisor/SKILL.md",
+      "raw_ref": "../../docs/specs/goal-loop-contract.md",
+      "source": "skill:goal-advisor",
+      "target": "file:docs/specs/goal-loop-contract.md",
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/goal-crafter/SKILL.md",
-      "raw_ref": "../reference-grounding/SKILL.md",
-      "source": "skill:goal-crafter",
-      "target": "file:skills/reference-grounding/SKILL.md",
-      "type": "markdown-link"
+      "from_file": "skills/goal-advisor/audits/2026-06-12-initial-goal-advisor.md",
+      "raw_ref": "skills/goal-advisor/SKILL.md",
+      "source": "skill:goal-advisor",
+      "target": "file:skills/goal-advisor/SKILL.md",
+      "type": "literal-path"
     },
     {
-      "from_file": "skills/goal-crafter/README.md",
+      "from_file": "skills/goal-advisor/audits/2026-06-12-initial-goal-advisor.md",
+      "raw_ref": "skills/goal-advisor/eval_task.json",
+      "source": "skill:goal-advisor",
+      "target": "file:skills/goal-advisor/eval_task.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/goal-advisor/README.md",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
-      "source": "skill:goal-crafter",
+      "source": "skill:goal-advisor",
       "target": "file:skills/skill-maintenance/scripts/check_skills.py",
       "type": "literal-path"
     },
     {
-      "from_file": "skills/goal-crafter/README.md",
-      "raw_ref": "skills/skill-maintenance/scripts/generate_skill_graph.py",
-      "source": "skill:goal-crafter",
-      "target": "file:skills/skill-maintenance/scripts/generate_skill_graph.py",
+      "from_file": "skills/goal-advisor/SKILL.md",
+      "raw_ref": "../with-human/SKILL.md",
+      "source": "skill:goal-advisor",
+      "target": "file:skills/with-human/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/goal-advisor/SKILL.md",
+      "raw_ref": "tickets/templates/goal-loop/program.md",
+      "source": "skill:goal-advisor",
+      "target": "file:tickets/templates/goal-loop/program.md",
       "type": "literal-path"
+    },
+    {
+      "from_file": "skills/goal-advisor/SKILL.md",
+      "raw_ref": "../../tickets/templates/goal-loop/program.md",
+      "source": "skill:goal-advisor",
+      "target": "file:tickets/templates/goal-loop/program.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/goal-advisor/SKILL.md",
+      "raw_ref": "tickets/templates/goal-loop/progress.md",
+      "source": "skill:goal-advisor",
+      "target": "file:tickets/templates/goal-loop/progress.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/goal-advisor/SKILL.md",
+      "raw_ref": "../../tickets/templates/goal-loop/progress.md",
+      "source": "skill:goal-advisor",
+      "target": "file:tickets/templates/goal-loop/progress.md",
+      "type": "markdown-link"
     },
     {
       "from_file": "skills/harness-advisor/SKILL.md",
@@ -13899,6 +14074,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/skill-maintenance/references/eval-fixture-sandbox.md",
+      "raw_ref": "skills/skill-maintenance/tests",
+      "source": "skill:skill-maintenance",
+      "target": "dir:skills/skill-maintenance/tests",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
       "raw_ref": "AGENTS.md",
       "source": "skill:skill-maintenance",
@@ -14214,6 +14396,13 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/skill-maintenance/references/eval-fixture-sandbox.md",
+      "raw_ref": "skills/skill-maintenance",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/skill-maintenance/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/scripts/generate_harness_graph.py",
       "raw_ref": "skills/skill-maintenance/graph/harness-graph.js",
       "source": "skill:skill-maintenance",
@@ -14323,6 +14512,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/skill-maintenance/scripts/sync_skill_checklists.py",
       "source": "skill:skill-maintenance",
       "target": "file:skills/skill-maintenance/scripts/sync_skill_checklists.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/eval_task.json",
+      "raw_ref": "skills/skill-maintenance/tests/fixtures/bad-skill-repo",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/skill-maintenance/tests/fixtures/bad-skill-repo/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/references/eval-fixture-sandbox.md",
+      "raw_ref": "skills/skill-maintenance/tests/fixtures/bad-skill-repo/",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/skill-maintenance/tests/fixtures/bad-skill-repo/README.md",
       "type": "literal-path"
     },
     {
@@ -15159,6 +15362,34 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/with-human/SKILL.md",
+      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "source": "skill:with-human",
+      "target": "file:docs/specs/goal-loop-contract.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/with-human/SKILL.md",
+      "raw_ref": "../../docs/specs/goal-loop-contract.md",
+      "source": "skill:with-human",
+      "target": "file:docs/specs/goal-loop-contract.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/with-human/SKILL.md",
+      "raw_ref": "../goal-advisor/SKILL.md",
+      "source": "skill:with-human",
+      "target": "file:skills/goal-advisor/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/with-human/SKILL.md",
+      "raw_ref": "../telegram-message/SKILL.md",
+      "source": "skill:with-human",
+      "target": "file:skills/telegram-message/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
       "from_file": "skills/work/README.md",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:work",
@@ -15173,7 +15404,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-06-11T17:13:42+00:00",
+  "generated_at": "2026-06-11T19:24:30+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -15228,6 +15459,12 @@ window.HARNESS_GRAPH = {
       "kind": "agent",
       "label": "agents/frontend-designer.toml",
       "path": "agents/frontend-designer.toml"
+    },
+    {
+      "id": "file:agents/goal-drift-reviewer.toml",
+      "kind": "agent",
+      "label": "agents/goal-drift-reviewer.toml",
+      "path": "agents/goal-drift-reviewer.toml"
     },
     {
       "id": "file:agents/hardcase-curator.toml",
@@ -16676,16 +16913,22 @@ window.HARNESS_GRAPH = {
       "path": "skills/gap-analysis/SKILL.md"
     },
     {
-      "id": "file:skills/goal-crafter/README.md",
+      "id": "file:skills/goal-advisor/README.md",
       "kind": "file",
-      "label": "skills/goal-crafter/README.md",
-      "path": "skills/goal-crafter/README.md"
+      "label": "skills/goal-advisor/README.md",
+      "path": "skills/goal-advisor/README.md"
     },
     {
-      "id": "file:skills/goal-crafter/SKILL.md",
+      "id": "file:skills/goal-advisor/SKILL.md",
       "kind": "file",
-      "label": "skills/goal-crafter/SKILL.md",
-      "path": "skills/goal-crafter/SKILL.md"
+      "label": "skills/goal-advisor/SKILL.md",
+      "path": "skills/goal-advisor/SKILL.md"
+    },
+    {
+      "id": "file:skills/goal-advisor/eval_task.json",
+      "kind": "file",
+      "label": "skills/goal-advisor/eval_task.json",
+      "path": "skills/goal-advisor/eval_task.json"
     },
     {
       "id": "file:skills/harness-advisor/SKILL.md",
@@ -16716,12 +16959,6 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/harness-scout/references/video-to-skill.md",
       "path": "skills/harness-scout/references/video-to-skill.md"
-    },
-    {
-      "id": "file:skills/hitl-autoresearch/SKILL.md",
-      "kind": "file",
-      "label": "skills/hitl-autoresearch/SKILL.md",
-      "path": "skills/hitl-autoresearch/SKILL.md"
     },
     {
       "id": "file:skills/image-generation/README.md",
@@ -17486,6 +17723,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/skill-maintenance/graph/skill-graph.json"
     },
     {
+      "id": "file:skills/skill-maintenance/references/eval-fixture-sandbox.md",
+      "kind": "file",
+      "label": "skills/skill-maintenance/references/eval-fixture-sandbox.md",
+      "path": "skills/skill-maintenance/references/eval-fixture-sandbox.md"
+    },
+    {
       "id": "file:skills/skill-maintenance/scripts/check_skills.py",
       "kind": "file",
       "label": "skills/skill-maintenance/scripts/check_skills.py",
@@ -17514,6 +17757,18 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/skill-maintenance/templates/skill-audit.md",
       "path": "skills/skill-maintenance/templates/skill-audit.md"
+    },
+    {
+      "id": "dir:skills/skill-maintenance/tests",
+      "kind": "file",
+      "label": "skills/skill-maintenance/tests/",
+      "path": "skills/skill-maintenance/tests"
+    },
+    {
+      "id": "file:skills/skill-maintenance/tests/fixtures/bad-skill-repo/README.md",
+      "kind": "file",
+      "label": "skills/skill-maintenance/tests/fixtures/bad-skill-repo/README.md",
+      "path": "skills/skill-maintenance/tests/fixtures/bad-skill-repo/README.md"
     },
     {
       "id": "file:skills/skill-registry-ui/README.md",
@@ -17708,6 +17963,18 @@ window.HARNESS_GRAPH = {
       "path": "skills/weekly-strategy-analysis/SKILL.md"
     },
     {
+      "id": "file:skills/with-human/README.md",
+      "kind": "file",
+      "label": "skills/with-human/README.md",
+      "path": "skills/with-human/README.md"
+    },
+    {
+      "id": "file:skills/with-human/SKILL.md",
+      "kind": "file",
+      "label": "skills/with-human/SKILL.md",
+      "path": "skills/with-human/SKILL.md"
+    },
+    {
       "id": "file:skills/work/README.md",
       "kind": "file",
       "label": "skills/work/README.md",
@@ -17874,6 +18141,30 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "tickets/templates/",
       "path": "tickets/templates"
+    },
+    {
+      "id": "dir:tickets/templates/goal-loop",
+      "kind": "file",
+      "label": "tickets/templates/goal-loop/",
+      "path": "tickets/templates/goal-loop"
+    },
+    {
+      "id": "file:tickets/templates/goal-loop/drift-reviewer-handoff.md",
+      "kind": "file",
+      "label": "tickets/templates/goal-loop/drift-reviewer-handoff.md",
+      "path": "tickets/templates/goal-loop/drift-reviewer-handoff.md"
+    },
+    {
+      "id": "file:tickets/templates/goal-loop/program.md",
+      "kind": "file",
+      "label": "tickets/templates/goal-loop/program.md",
+      "path": "tickets/templates/goal-loop/program.md"
+    },
+    {
+      "id": "file:tickets/templates/goal-loop/progress.md",
+      "kind": "file",
+      "label": "tickets/templates/goal-loop/progress.md",
+      "path": "tickets/templates/goal-loop/progress.md"
     },
     {
       "id": "file:tickets/templates/ticket.md",
@@ -18644,10 +18935,10 @@ window.HARNESS_GRAPH = {
       "path": "skills/gap-analysis/SKILL.md"
     },
     {
-      "id": "skill:goal-crafter",
+      "id": "skill:goal-advisor",
       "kind": "skill",
-      "label": "goal-crafter",
-      "path": "skills/goal-crafter/SKILL.md"
+      "label": "goal-advisor",
+      "path": "skills/goal-advisor/SKILL.md"
     },
     {
       "id": "skill:harness-advisor",
@@ -18660,12 +18951,6 @@ window.HARNESS_GRAPH = {
       "kind": "skill",
       "label": "harness-scout",
       "path": "skills/harness-scout/SKILL.md"
-    },
-    {
-      "id": "skill:hitl-autoresearch",
-      "kind": "skill",
-      "label": "hitl-autoresearch",
-      "path": "skills/hitl-autoresearch/SKILL.md"
     },
     {
       "id": "skill:image-generation",
@@ -18914,6 +19199,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/weekly-strategy-analysis/SKILL.md"
     },
     {
+      "id": "skill:with-human",
+      "kind": "skill",
+      "label": "with-human",
+      "path": "skills/with-human/SKILL.md"
+    },
+    {
       "id": "skill:work",
       "kind": "skill",
       "label": "work",
@@ -18998,6 +19289,12 @@ window.HARNESS_GRAPH = {
       "path": "docs/specs/first-principles-planning.md"
     },
     {
+      "id": "file:docs/specs/goal-loop-contract.md",
+      "kind": "spec",
+      "label": "docs/specs/goal-loop-contract.md",
+      "path": "docs/specs/goal-loop-contract.md"
+    },
+    {
       "id": "file:docs/specs/harness-algebra.md",
       "kind": "spec",
       "label": "docs/specs/harness-algebra.md",
@@ -19020,6 +19317,12 @@ window.HARNESS_GRAPH = {
       "kind": "spec",
       "label": "docs/specs/invocation-and-adapters.md",
       "path": "docs/specs/invocation-and-adapters.md"
+    },
+    {
+      "id": "file:docs/specs/product-convergence-plan.md",
+      "kind": "spec",
+      "label": "docs/specs/product-convergence-plan.md",
+      "path": "docs/specs/product-convergence-plan.md"
     },
     {
       "id": "file:docs/specs/review-gates.md",
