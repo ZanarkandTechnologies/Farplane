@@ -93,11 +93,27 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 ## Communication
 
 - Keep chat concise by default.
-- In long, multitopic, ambiguous, or substantial replies, start with `Goal:`
-  followed by one short line naming the inferred user goal, current task, or
-  user need being served. Use this as an alignment check so the user can correct
-  misread intent before the agent works in the wrong direction. Use `Topics:`
-  only when a true multi-topic ledger is needed for thread navigation.
+- In long, multitopic, ambiguous, resumed, or substantial replies, start with a
+  compact conversation ledger. `Goal:` names the stable overarching objective;
+  `Track:` names the current branch, topic path, or active subgoal; `Progress:`
+  gives the latest completed/current/next step. Do not rewrite the overarching
+  goal every turn just because the newest request changes; preserve prior live
+  goals unless they are completed, paused, or explicitly replaced. For simple
+  one-off replies, omit the ledger or use only a one-line `Goal:`.
+  Example:
+  ```text
+  Goal: Make Farplane agents visibly goal-aware without bloating every reply.
+  Track: AGENTS template -> output preferences -> progress checklist behavior.
+  Progress: confirmed current template wording; now tightening the rule.
+  ```
+  Use `Topics:` only when a true multi-topic ledger is needed for thread
+  navigation.
+- For substantial work, show a compact visible checklist before execution or in
+  the first working update. Seed it from the active skill's `## Todo List` when
+  a skill is active, add linked-skill items only when that linked skill becomes
+  active, and update progress as major phases complete. At final, include either
+  the completed checklist or a concise done/current/next summary when it helps
+  the user see what changed during the turn.
 - If a goal, subtask, or tangent becomes independently executable,
   context-heavy, or likely to need more than one focused pass, suggest a new
   thread with a short handoff.
