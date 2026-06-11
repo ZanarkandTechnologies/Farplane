@@ -90,6 +90,7 @@ Expected feedback shape:
 | 2026-06-11 | batch-01 | Seed `eval` with a skill-local four-task eval batch covering modular authoring, bad-task rejection, best-practice load precision, and skill-structure placement. | Added `skills/eval/eval_task.json` rows and audit note; deterministic custom-harness smoke wrote `.farplane/evals/runs/20260611-052148-eval-skill-smoke/summary.json` with 4 loaded tasks. | Pending HITL review. | pending | A useful eval-for-eval batch should test how evals are written, not only whether a sample answer sounds good. |
 | 2026-06-11 | program-loop | Add `self-improve/program.md` so Goal loops have persistent memory for ideas, tests, feedback requests, and Kenji responses. | Created this program file. | Pending validation and feedback. | pending | Goal state is not enough; the skill needs local memory that future agents can read on first improvement pass. |
 | 2026-06-11 | rubric-first | Define a good-eval-writing rubric before adding more eval-for-eval cases. | Added `references/eval-writing-rubric.md` and linked it from `SKILL.md`. | Pending HITL review. | pending | The eval skill needs a quality function for eval design before it can reliably choose high-ROI breadth/depth cases. |
+| 2026-06-12 | core-self-improvement-batch | Add first eval coverage for core self-improvement skills after TASK-0190. | Added skill-local evals for `gap-analysis`, `harness-advisor`, `self-improve`, `optimize-harness`, and `skill-maintenance`; expanded `eval` hardcase/regression coverage; added one project-level workflow proof-surface canary. Validation pending. | Pending validation and HITL review. | pending | Split skill-local behavior quality from project-level workflow enforcement while covering the compounding self-improvement primitives. |
 
 ## Feedback Log
 
@@ -149,3 +150,5 @@ Expected feedback shape:
   LLM eval.
 - Add one eval for task-level context overrides after the AGI Toy Shop default
   fixture proves useful in practice.
+- Review the core self-improvement batch for ROI and overlap, then decide
+  whether to keep all cases or trim to the highest-signal seed suite.

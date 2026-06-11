@@ -1,0 +1,57 @@
+[
+  {
+    "id": "optimize_harness_full_loop_01",
+    "title": "Optimize harness runs diagnose-place-prove-change-review",
+    "query": "Farplane keeps accepting chat-only strategy dumps for AGI Toy Shop process changes. I expected it to create a durable artifact first and prove the behavior. Fix the harness.",
+    "reference_points": [
+      "Normalizes observed and expected behavior before changing anything",
+      "Runs or names gap-analysis to diagnose the gap",
+      "Runs or names harness-advisor to choose the primary owner and rejected surfaces",
+      "Creates or updates a proof surface such as an eval, hardcase metadata, validator, or review path",
+      "Chooses direct change versus self-improve based on whether a metric/search loop is needed",
+      "Ends with review, validation, or a blocked report instead of claiming improvement from prose"
+    ],
+    "tags": [
+      "skill",
+      "optimize-harness",
+      "full-loop"
+    ],
+    "notes": "Skill-local canary for the high-level harness improvement workflow owned by optimize-harness."
+  },
+  {
+    "id": "optimize_harness_no_vague_taste_01",
+    "title": "Optimize harness refuses vague taste optimization",
+    "query": "Make AGI Toy Shop's agent harness feel more elegant and higher ROI. I don't have a specific failure; just improve it.",
+    "reference_points": [
+      "Does not start mutating the harness from vague taste language",
+      "Asks for or derives a concrete observed behavior, expected behavior, metric, or evidence need",
+      "Marks unknown expected behavior when it cannot be inferred safely",
+      "Names a safe partial path such as gap clarification, prototype, or HITL review",
+      "Avoids creating evals or skill changes before the target behavior is testable"
+    ],
+    "tags": [
+      "skill",
+      "optimize-harness",
+      "clarification"
+    ],
+    "notes": "Protects the top-level optimizer from turning vague preferences into ungrounded harness edits."
+  },
+  {
+    "id": "optimize_harness_hardcase_to_eval_01",
+    "title": "Optimize harness turns hardcases into runnable evals",
+    "query": "This AGI Toy Shop failure was hard: the agent created a duplicate skill instead of extending the existing one. Capture it so it doesn't regress.",
+    "reference_points": [
+      "Treats hardcase capture as a runnable eval case when the behavior is testable",
+      "Adds or proposes hardcase metadata such as hardcase, difficulty, benchmark value, and sanitization notes",
+      "Routes diagnosis through gap-analysis or owner lookup before recommending remediation",
+      "Avoids a separate raw transcript backlog with private or unsanitized details",
+      "Names where the eval should live based on skill-local versus workflow ownership"
+    ],
+    "tags": [
+      "skill",
+      "optimize-harness",
+      "hardcase"
+    ],
+    "notes": "Tests the TASK-0190 direction that hardcase is eval metadata, not a separate capture backlog."
+  }
+]

@@ -70,5 +70,45 @@
       "skill-structure"
     ],
     "notes": "Tests whether eval-skill maintenance follows the skill-structure metrics instead of treating modularity or first-load as a single absolute rule."
+  },
+  {
+    "id": "eval_hardcase_metadata_01",
+    "title": "Eval skill captures hardcases as runnable evals",
+    "query": "This AGI Toy Shop agent failure was unusually hard and benchmark-worthy: it created a duplicate skill instead of extending the existing proof workflow. Save it as a hardcase so it does not regress.",
+    "reference_points": [
+      "Creates or proposes a normal runnable eval task instead of a separate raw hardcase backlog",
+      "Adds hardcase metadata such as hardcase, difficulty, benchmark value, and sanitization notes",
+      "Keeps the expected behavior visible through reference_points",
+      "Removes or avoids private transcript details and live user paths",
+      "Chooses skill-local or project-level placement based on the behavior owner"
+    ],
+    "tags": [
+      "skill",
+      "eval",
+      "hardcase"
+    ],
+    "hardcase": true,
+    "difficulty": "high",
+    "benchmark_value": "Tests whether eval hardcases remain runnable proof cases with sanitization and owner placement.",
+    "sanitization_notes": "Use clean-room AGI Toy Shop details; do not include raw private transcript text.",
+    "notes": "Protects the TASK-0190 direction that hardcase is eval metadata on a runnable case."
+  },
+  {
+    "id": "eval_no_delayed_backlog_01",
+    "title": "Eval skill does not delay obvious regression coverage",
+    "query": "The AGI Toy Shop harness keeps forgetting to ask for proof before changing skills. Can you just log this in Lessons or Troubles for later instead of writing an eval now?",
+    "reference_points": [
+      "Recognizes the behavior is testable now and should become a proof case rather than only a lesson",
+      "Creates or proposes the smallest relevant eval task before or alongside any lesson capture",
+      "Names the expected behavior and visible reference_points",
+      "Keeps the task clean-room and avoids raw private context",
+      "Explains when a lesson or trouble note would still be useful as secondary memory"
+    ],
+    "tags": [
+      "skill",
+      "eval",
+      "regression"
+    ],
+    "notes": "Catches delayed-proof drift where known behavior regressions are stored as prose memory instead of runnable evals."
   }
 ]

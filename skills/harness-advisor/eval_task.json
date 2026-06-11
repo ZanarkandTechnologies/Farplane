@@ -1,0 +1,56 @@
+[
+  {
+    "id": "harness_advisor_skill_vs_agents_01",
+    "title": "Harness advisor avoids root prompt bloat",
+    "query": "AGI Toy Shop agents keep forgetting to write durable artifacts before chat summaries. Should we put a new rule in global AGENTS.md, create a reusable skill, or add a hook?",
+    "reference_points": [
+      "States the concrete harness failure before choosing a surface",
+      "Compares global policy, skill contract, and hook or validator as distinct owner options",
+      "Recommends the smallest durable owner that fixes the failure without bloating root policy",
+      "Names rejected surfaces and why they should not own the change now",
+      "Names a proof path such as eval, review, validator, or ticket proof contract"
+    ],
+    "tags": [
+      "skill",
+      "harness-advisor",
+      "placement"
+    ],
+    "notes": "Tests placement discipline for behavior that could be over-promoted into global policy."
+  },
+  {
+    "id": "harness_advisor_eval_vs_hook_01",
+    "title": "Harness advisor routes judgment-heavy behavior away from hooks",
+    "query": "Can we add a hook that blocks any AGI Toy Shop improvement response unless it picked the highest-ROI eval cases?",
+    "reference_points": [
+      "Identifies highest-ROI eval selection as judgment-heavy rather than deterministic",
+      "Rejects a hook or validator as the primary owner when the rule cannot be checked mechanically",
+      "Routes the behavior toward eval, review, rubric, or skill guidance as appropriate",
+      "Names any deterministic subset that could still belong in a validator",
+      "Provides a proof or review path for the judgment-heavy behavior"
+    ],
+    "tags": [
+      "skill",
+      "harness-advisor",
+      "eval-vs-hook"
+    ],
+    "notes": "Protects against converting fuzzy judgment into brittle hook policy."
+  },
+  {
+    "id": "harness_advisor_registry_check_01",
+    "title": "Harness advisor checks registries before new owners",
+    "query": "Let's add a new AGI Toy Shop skill that chooses where harness improvements belong.",
+    "reference_points": [
+      "Checks or names the need to check existing skill and feature registries before proposing a new skill",
+      "Identifies likely existing owners such as harness-advisor, gap-analysis, optimize-harness, or skill-maintenance",
+      "Recommends editing or extending an existing owner when it fits",
+      "Only proposes a new owner if the gap remains after registry grounding",
+      "Names next proof or ticket owner for the placement decision"
+    ],
+    "tags": [
+      "skill",
+      "harness-advisor",
+      "registry-dedupe"
+    ],
+    "notes": "Tests the registry-dedupe gate before creating new harness surfaces."
+  }
+]

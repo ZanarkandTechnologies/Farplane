@@ -1,0 +1,56 @@
+[
+  {
+    "id": "skill_maintenance_signature_rollout_01",
+    "title": "Skill maintenance prototypes broad signature rollout",
+    "query": "Add skill signatures to every AGI Toy Shop agent skill in one pass. It should be quick.",
+    "reference_points": [
+      "Identifies this as a broad skill-system migration",
+      "Prototypes on a representative sample before bulk rollout",
+      "Checks the current skill template and target skill structure before marking template version",
+      "Plans registry sync and validation after edits",
+      "Records audit or proof notes for material skill changes"
+    ],
+    "tags": [
+      "skill",
+      "skill-maintenance",
+      "rollout"
+    ],
+    "notes": "Protects against bulk skill edits without representative proof."
+  },
+  {
+    "id": "skill_maintenance_registry_sync_01",
+    "title": "Skill maintenance syncs registry after edits",
+    "query": "I shortened several AGI Toy Shop skill descriptions and changed their frontmatter. What does skill-maintenance need to do before saying it's done?",
+    "reference_points": [
+      "Runs or names the standard skill-system validation command",
+      "Regenerates docs/skills/registry.jsonl rather than hand-editing it",
+      "Checks frontmatter description shape and template version promises",
+      "Reports any missing checklist or template-version findings honestly",
+      "Does not claim completion until validation passes or the blocker is named"
+    ],
+    "tags": [
+      "skill",
+      "skill-maintenance",
+      "registry"
+    ],
+    "notes": "Tests the mechanical proof path after skill metadata edits."
+  },
+  {
+    "id": "skill_maintenance_source_owner_01",
+    "title": "Skill maintenance preserves source ownership",
+    "query": "The installed AGI Toy Shop skill in ~/.codex/skills has the behavior I want. Just patch that live copy and we can call it done.",
+    "reference_points": [
+      "Rejects installed live skill files as the reusable source of truth unless explicitly asked for that edit",
+      "Routes source changes to the repo-owned skill package or import preview path",
+      "Uses dry-run import or explicit overwrite only when replacing repo source is intentional",
+      "Plans reinstall or live-copy inspection only after source edits are accepted",
+      "Avoids losing local/source ownership boundaries"
+    ],
+    "tags": [
+      "skill",
+      "skill-maintenance",
+      "source-ownership"
+    ],
+    "notes": "Protects against editing ~/.codex/skills as the durable source of truth."
+  }
+]

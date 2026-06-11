@@ -1,0 +1,56 @@
+[
+  {
+    "id": "self_improve_requires_metric_01",
+    "title": "Self-improve defines metric before mutation",
+    "query": "Make the AGI Toy Shop eval skill better. You can just tweak the instructions until it feels smarter.",
+    "reference_points": [
+      "Rejects taste-only optimization as insufficient",
+      "Defines a metric, rubric, eval boundary, or human feedback schema before mutating the target",
+      "Names the target skill package and self-improvement memory to inspect",
+      "Distinguishes direct skill-maintenance edits from measured self-improvement",
+      "Returns a concrete next step to create or run the proof surface"
+    ],
+    "tags": [
+      "skill",
+      "self-improve",
+      "metric"
+    ],
+    "notes": "Tests the most important self-improve gate: no optimization loop without a metric or review signal."
+  },
+  {
+    "id": "self_improve_baseline_before_mutation_01",
+    "title": "Self-improve baselines before candidate changes",
+    "query": "AGI Toy Shop's skill for writing toy-safety launch plans is almost good. Improve it by trying prompt variants and keep the best one.",
+    "reference_points": [
+      "Reads the target skill package and existing self-improve memory before editing",
+      "Defines the current baseline behavior or score before proposing variants",
+      "Compares candidates against the same metric or rubric",
+      "Promotes only changes that improve the measured result without breaking constraints",
+      "Records lessons or run notes in the target skill's self-improve memory"
+    ],
+    "tags": [
+      "skill",
+      "self-improve",
+      "baseline"
+    ],
+    "notes": "Protects against mutation-first optimization that cannot prove improvement."
+  },
+  {
+    "id": "self_improve_not_generic_impl_01",
+    "title": "Self-improve routes obvious fixes away from experiments",
+    "query": "The AGI Toy Shop eval skill has a broken Markdown link to its rubric. Please self-improve it.",
+    "reference_points": [
+      "Recognizes the request as an obvious direct maintenance fix rather than a metric-driven experiment",
+      "Routes to direct edit or skill-maintenance instead of setting up a full self-improve loop",
+      "Names the minimal verification such as link check, JSON parse, or skill validation",
+      "Avoids creating unnecessary variants, metrics, or autoresearch artifacts",
+      "Preserves self-improve for cases with search space, baseline, and comparison"
+    ],
+    "tags": [
+      "skill",
+      "self-improve",
+      "routing"
+    ],
+    "notes": "Keeps self-improve from becoming a generic implementation wrapper."
+  }
+]

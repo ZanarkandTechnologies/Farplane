@@ -1,0 +1,56 @@
+[
+  {
+    "id": "gap_analysis_observed_expected_01",
+    "title": "Gap analysis names current, expected, owner, and proof",
+    "query": "Our agent keeps writing long chat explanations when I ask it to improve AGI Toy Shop's support workflow. I expected it to write a reusable task artifact with owners and proof steps. Use the gap-analysis workflow before recommending fixes.",
+    "reference_points": [
+      "States the target surface and intended behavior before recommending fixes",
+      "Separates observed behavior from expected behavior",
+      "Names the current contract or says what evidence is needed to ground it",
+      "Classifies gaps across inputs, outputs, proof, composition, or owner boundary",
+      "Recommends one next owner surface with a verification path"
+    ],
+    "tags": [
+      "skill",
+      "gap-analysis",
+      "observed-expected"
+    ],
+    "notes": "Tests the core diagnostic path: current versus expected behavior becomes a grounded GapReport, not an immediate fix."
+  },
+  {
+    "id": "gap_analysis_unknown_expected_01",
+    "title": "Gap analysis preserves unknown expected behavior",
+    "query": "Something feels off about how AGI Toy Shop agents escalate toy-safety review work. Can you gap-analyze it?",
+    "reference_points": [
+      "Marks expected behavior as unknown or under-specified instead of inventing a target",
+      "Identifies the evidence needed to define the intended behavior",
+      "Grounds only the supplied observation and known current surfaces",
+      "Avoids recommending a concrete fix before the expected behavior is clarified",
+      "Returns a next step for gathering or defining the missing expectation"
+    ],
+    "tags": [
+      "skill",
+      "gap-analysis",
+      "uncertainty"
+    ],
+    "notes": "Protects against the skill hallucinating desired behavior when the operator only supplied an observation."
+  },
+  {
+    "id": "gap_analysis_no_duplicate_skill_01",
+    "title": "Gap analysis checks existing owners before new skills",
+    "query": "AGI Toy Shop needs a new reusable skill for figuring out why workflows are missing proof. Please propose the new skill.",
+    "reference_points": [
+      "Does not immediately create or recommend a new skill",
+      "Checks whether an existing owner such as gap-analysis, eval, harness-advisor, or optimize-harness already covers the behavior",
+      "Names the gap in the existing owner if a new surface might still be needed",
+      "Recommends consolidation, owner edit, or proof path before duplication",
+      "Keeps the decision inside clean-room AGI Toy Shop context without touching live repo files"
+    ],
+    "tags": [
+      "skill",
+      "gap-analysis",
+      "dedupe"
+    ],
+    "notes": "Catches duplicate-skill drift before remediation creates another owner for the same harness job."
+  }
+]
