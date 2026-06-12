@@ -12,6 +12,28 @@ surfaces. The ticket-first autonomous coding loop is one important feature, but
 Farplane Core is broader than tickets: it is a way to keep an AI harness
 learning without letting it silently sprawl, forget, or self-approve weak work.
 
+## Five Developer-Facing Differences
+
+Farplane is for developers who want Codex to do serious work without turning
+their repo into a haze of prompts, chat memory, and unverifiable claims.
+
+1. **A local control plane for agent work.** Farplane keeps plans, tickets,
+   runtime state, memories, specs, and proof in files that developers can diff,
+   review, and repair.
+2. **Goal loops that do not drift.** Goal Packets give long-running work a
+   `ticket.md`, `program.md`, and `progress.md`; Goal Portfolios add
+   `portfolio.md` when a business, product, or multi-agent loop needs a longer
+   horizon without becoming one giant prompt.
+3. **Completion that requires evidence.** QA, reviewer lanes, browser proof,
+   maintainability review, Stop-hook checks, and Done / Proof contracts make
+   "done" inspectable instead of self-reported.
+4. **Skills that improve like software.** Farplane skills carry checklists,
+   references, examples, evals, registries, validators, and maintenance scripts,
+   so repeated workflows get better without bloating the global prompt.
+5. **Harness health as a product surface.** Farplane Console and Mighty Guard
+   turn weak skills, stale docs, failing evals, drift, telemetry, nudges, and
+   maintenance findings into visible operator workflows.
+
 ## Product Shape
 
 Farplane OS is the parent product family. This repo is Farplane Core: skills,
@@ -128,66 +150,18 @@ flowchart LR
   work --> history
 ```
 
-## What Makes It Different
+## Operating Loop
 
-- **Drift-resistant by default.** Farplane keeps work grounded in visible docs,
-  tickets, memories, validators, and review artifacts instead of transcript
-  vibes.
-- **Evolve-first.** Skills, workflows, and prompt behavior are meant to be
-  benchmarked, revised, and re-tested as first-class harness surfaces.
-- **Structured skills.** Skills are not loose prompt snippets; they have
-  contracts, checklists, dependency shape, references, and on-demand plugin
-  packaging when users want Codex plugin installs.
-- **Function-defined harness.** Harness processes can be modeled as functions
-  over inputs, visible artifacts, outputs, evidence, and state transitions, so
-  skills, evals, hooks, memory drains, and tickets can compose without hidden
-  variables.
-- **Opinionated hooks.** Hooks track user intent, stop weak completion claims,
-  route review, and will grow into real-time benchmark and skill-health
-  monitoring.
-- **Test-case memory.** The harness can preserve disliked outputs, misses, and
-  benchmark cases so failures become reusable improvement pressure.
-- **Human-marked hard cases.** Corrections and high-priority misses flow into
-  local lessons, Notion improvement proposals, sanitized hardcase artifacts, or
-  narrow regression eval rows through `gap-analysis`, `optimize-harness`, and
-  `eval`.
-- **Ticket-first autonomy as one mode.** Tickets remain the durable execution
-  surface for coding work, but they are not the whole product.
-- **Goal Packets make long loops visible.** Native Codex Goal mode owns
-  continuation, while Farplane stores the transparent loop contract in
-  `ticket.md`, `program.md`, and `progress.md` so drift, feedback, heartbeat,
-  rollout, and completion decisions can be inspected.
+Farplane turns each material request into a visible loop:
 
-## Gamechanging Workflows
+```text
+ask -> ground -> choose the owner -> act -> prove -> learn
+```
 
-- **Ask -> ground -> decide -> act.** Material work starts by checking local
-  evidence, peer patterns, official/current docs when needed, and then uses
-  advice-shaped decisions before execution.
-- **Global prompt stays lean.** The installed AGENTS template carries only
-  every-turn behavior; project coding defaults, skill procedures, review rules,
-  and workflow detail live in owner files that can be tested and changed
-  independently.
-- **Skills render their own operating checklist.** Skill `SKILL.md` files own
-  first-load todo lists, tiered dependency shape, references, and scripts so the
-  agent can recursively compose workflows without stuffing the global prompt.
-- **Failures become pressure, not vibes.** Operator corrections fix same-scope
-  misses first, then capture a lesson, hardcase, or narrow regression eval when
-  the miss is high-priority.
-- **Validators can create hardcase seeds.** Deterministic skill-contract checks
-  such as todo-tier violations can write deduplicated hardcases automatically,
-  so obvious process failures become future eval/self-improvement material.
-- **System-prompt behavior is evalable.** Repo-owned eval examples under
-  `skills/eval/examples/` cover grounding, context gathering, advice routing,
-  proactive action, holdback on risky work, skill todo rendering, correction
-  capture, multitopic focus, and validator-triggered hardcase capture.
-- **Long threads keep a whole-thread topic ledger.** In multitopic work,
-  substantial replies name the root topic, tangents, and current focus, then
-  split independently executable follow-ups into new-thread handoffs when the
-  current chat is carrying too much.
-- **Goal Advisor chooses loop shape.** Ambitious work should use
-  `goal-advisor` to decide between active Goal, heartbeat, rollout, feedback
-  loop, skill improvement, business loop, or direct work, then compile the
-  selected Goal Packet into the native `/goal` prompt.
+The global prompt stays lean; durable behavior lives in skills, specs, tickets,
+validators, subagents, evals, and review gates. When work fails, the correction
+can become a lesson, hardcase, eval row, skill update, or harness-placement
+decision instead of disappearing into chat history.
 
 ## Improvement Loop
 
@@ -215,7 +189,8 @@ flowchart LR
 | `ARCHITECTURE.md` | Deeper system map, ownership boundaries, and read order. |
 | `agents/` | Bounded specialist role configs. |
 | `assets/` | Repo-level media and generated assets. |
-| `bin/` | Hooks, validators, runtime helpers, launchers, and sync scripts. |
+| `bin/` | Hooks, runtime helpers, compatibility validator wrappers, launchers, and sync scripts. |
+| `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, tiers, and registries. |
 | `docs/` | Specs, feature inventory, history, memory, troubles, lessons, and research. |
 | `docs/features/` | Structured feature registry and feature metadata. |
 | `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |
@@ -240,9 +215,12 @@ flowchart LR
 - Structured feature registry: [docs/features/README.md](docs/features/README.md)
 - Feature registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)
 - Skill guide: [docs/skills/README.md](docs/skills/README.md)
+- Skill best practices: [docs/skills/best-practices.md](docs/skills/best-practices.md)
 - Ticket contract: [tickets/README.md](tickets/README.md)
+- Goal loop contract: [docs/specs/goal-loop-contract.md](docs/specs/goal-loop-contract.md)
 - QA cookbook surface: [qa/README.md](qa/README.md)
 - Review scoring: [skills/review/README.md](skills/review/README.md)
+- Maintainability code review: [skills/code-review/README.md](skills/code-review/README.md)
 - Active queue: [tickets](tickets)
 
 ## Current Boundary
