@@ -145,7 +145,7 @@ Keep capability fixtures small and close to ownership:
 
 - repo-owned skill sanity fixtures live under `skills/<skill>/tests/`
 - installed or external skill mirrors live under `tests/<skill>/`
-- deterministic fixture validation lives in `bin/check_skill_capabilities.py`
+- deterministic fixture validation lives in `bin/validators/check_skill_capabilities.py`
 - repair execution still uses the normal ticket pipeline
 
 Opportunity triggers, such as a high-value missing capability inferred from

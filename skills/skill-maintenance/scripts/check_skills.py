@@ -14,7 +14,7 @@ from pathlib import Path
 
 def find_repo_root(start: Path) -> Path:
     for candidate in [start, *start.parents]:
-        if (candidate / "bin/sync_skill_registry.py").exists() and (candidate / "skills").exists():
+        if (candidate / "bin/validators/sync_skill_registry.py").exists() and (candidate / "skills").exists():
             return candidate
     raise RuntimeError("could not find Farplane repo root")
 
@@ -281,26 +281,28 @@ def main() -> int:
         run(checklist_command)
 
         if args.write:
-            run(["python3", "bin/sync_skill_registry.py", "--write"])
-        run(["python3", "bin/sync_skill_registry.py", "--check"])
+            run(["python3", "bin/validators/sync_skill_registry.py", "--write"])
+        run(["python3", "bin/validators/sync_skill_registry.py", "--check"])
 
-        tier_command = ["python3", "bin/check_skill_todo_tiers.py"]
+        tier_command = ["python3", "bin/validators/check_skill_todo_tiers.py"]
         if not args.strict_tier3:
             tier_command.append("--allow-peer-tier3")
         tier_command.append("--hardcase-on-failure")
         run(tier_command)
-        run(["python3", "bin/check_tier0_phase_protocol.py"])
-        run(["python3", "bin/check_skill_capabilities.py", "validate"])
+        run(["python3", "bin/validators/check_tier0_phase_protocol.py"])
+        run(["python3", "bin/validators/check_skill_capabilities.py", "validate"])
+        run(["python3", "bin/validators/check_doc_refs.py"])
 
         run(
             [
                 "python3",
                 "-m",
                 "py_compile",
-                "bin/sync_skill_registry.py",
-                "bin/check_skill_todo_tiers.py",
-                "bin/check_tier0_phase_protocol.py",
-                "bin/check_skill_capabilities.py",
+                "bin/validators/sync_skill_registry.py",
+                "bin/validators/check_doc_refs.py",
+                "bin/validators/check_skill_todo_tiers.py",
+                "bin/validators/check_tier0_phase_protocol.py",
+                "bin/validators/check_skill_capabilities.py",
                 "skills/skill-maintenance/scripts/check_skills.py",
                 "skills/skill-maintenance/scripts/sync_skill_checklists.py",
             ]

@@ -118,6 +118,20 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_ROOT="${TARGET_DIR}/.install-backups/${STAMP}"
 LOCAL_ENV_FILE="${TARGET_DIR}/config.local.env"
 LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
+INSTALL_BIN_FILES=(
+  capture_user_turn.py
+  farplane_boards.py
+  farplane_compute.py
+  farplane_invocation.py
+  notify.py
+  runtime_telemetry.py
+  self_improve_hook_probe.py
+  stop_hook.py
+  stop_hook_output.schema.json
+  ticket-runtime
+  ticket_runtime.py
+  user_turn.py
+)
 
 if [ "$SKILLS_ONLY" -eq 1 ]; then
   if [ "${#SKILL_INSTALL_ARGS[@]}" -eq 0 ]; then
@@ -277,8 +291,8 @@ if [ -f "$REPO_DIR/hooks.json" ]; then
   link_path "$REPO_DIR/hooks.json" "$TARGET_DIR/hooks.json"
 fi
 
-for bin_file in "$REPO_DIR"/bin/*; do
-  link_path "$bin_file" "$TARGET_DIR/bin/$(basename "$bin_file")"
+for bin_name in "${INSTALL_BIN_FILES[@]}"; do
+  link_path "$REPO_DIR/bin/$bin_name" "$TARGET_DIR/bin/$bin_name"
 done
 
 for agent_file in "$REPO_DIR"/agents/*.toml; do

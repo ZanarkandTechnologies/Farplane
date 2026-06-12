@@ -7,10 +7,10 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 SPEC = importlib.util.spec_from_file_location(
     "sync_skill_registry",
-    ROOT / "bin" / "sync_skill_registry.py",
+    ROOT / "bin" / "validators" / "sync_skill_registry.py",
 )
 assert SPEC and SPEC.loader
 sync_skill_registry = importlib.util.module_from_spec(SPEC)

@@ -227,9 +227,9 @@ specific failure:
 
 ```bash
 python3 scripts/sync_skill_checklists.py --write
-python3 ../../bin/sync_skill_registry.py --write
-python3 ../../bin/sync_skill_registry.py --check
-python3 ../../bin/check_skill_todo_tiers.py --allow-peer-tier3
+python3 ../../bin/validators/sync_skill_registry.py --write
+python3 ../../bin/validators/sync_skill_registry.py --check
+python3 ../../bin/validators/check_skill_todo_tiers.py --allow-peer-tier3
 ```
 
 9. Use the Tier 0 execution/writeback phase for final proof, docs writeback,

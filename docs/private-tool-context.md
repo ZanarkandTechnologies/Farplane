@@ -113,7 +113,7 @@ For refactors that move private handles out of tracked surfaces:
 ```bash
 rg -n "LIVE_ID_OR_PRIVATE_URL_PATTERN" . ~/.codex/skills/<skill-name>
 python3 tickets/scripts/check_ticket_metadata.py
-python3 bin/check_skill_capabilities.py validate
+python3 bin/validators/check_skill_capabilities.py validate
 ```
 
 The grep should return no tracked or reusable-skill matches for the live handle.

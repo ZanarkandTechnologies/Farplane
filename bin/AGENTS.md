@@ -5,6 +5,9 @@ Rules for executable helper scripts in `bin/`.
 ## Purpose
 
 Scripts here are small operational helpers for the live Codex harness.
+Top-level `bin/` is for runtime shims and intentionally shared commands.
+Repo-wide checks belong in `bin/validators/`; package-specific scripts belong
+under the owning package, such as `skills/<name>/scripts/`.
 
 ## Keep Scripts
 

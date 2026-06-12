@@ -162,7 +162,7 @@ First-load todo links should follow the dependency hierarchy:
   material evidence needs TAS judgment, regardless of normal one-level tier
   dependency direction.
 
-Use `bin/check_skill_todo_tiers.py --allow-peer-tier3` to audit the current
+Use `bin/validators/check_skill_todo_tiers.py --allow-peer-tier3` to audit the current
 intentional hierarchy.
 
 ## Frontmatter Contract

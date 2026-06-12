@@ -30,7 +30,7 @@ class ChecklistError(Exception):
 
 def find_repo_root(start: Path) -> Path:
     for candidate in [start, *start.parents]:
-        if (candidate / "bin/sync_skill_registry.py").exists() and (candidate / "skills").exists():
+        if (candidate / "bin/validators/sync_skill_registry.py").exists() and (candidate / "skills").exists():
             return candidate
     raise ChecklistError("could not find Farplane repo root")
 

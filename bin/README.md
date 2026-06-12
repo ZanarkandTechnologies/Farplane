@@ -4,8 +4,10 @@ Executable helpers for the Codex harness.
 
 ## Purpose
 
-This folder contains small scripts used by the live Codex config plus a few
-transitional runtime helpers from earlier prototype iterations.
+This folder contains small scripts used by the live Codex config plus shared
+repo commands that are intentionally broader than one skill package. Validators
+live under `bin/validators/`; package-specific scripts should live with their
+owning package, such as `skills/<name>/scripts/`.
 
 Primary control plane:
 
@@ -19,12 +21,22 @@ Stop-hook role instructions are canonical TOML configs under `agents/`.
 `developer_instructions` into `codex exec`.
 
 The `bin/` directory is now mostly shim/utility territory, not the main
-orchestration story.
+orchestration story. `install.sh` installs an explicit allowlist of live
+runtime helpers instead of symlinking every script, validator, and test.
 
 ## Entrypoints
 
-- `check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
-- `check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
+- `validators/check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
+- `validators/check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
+- `validators/check_doc_refs.py` - local reference validator for active docs and registries;
+  use `--all` for broader cleanup audits across tickets, experiments, and tests
+- `validators/sync_skill_registry.py` - deterministic generated-registry check
+  for `docs/skills/registry.jsonl`
+- `validators/check_skill_todo_tiers.py` - first-load skill todo dependency
+  validator
+- `validators/check_tier0_phase_protocol.py` - Tier 0 phase-protocol migration
+  guard
+- `validators/check_skill_capabilities.py` - skill capability fixture validator
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `self_improve_hook_probe.py` - deterministic probe for the hook-backed
   skill-opportunity sidecar; can seed rolling windows, force dry-run reviews,
@@ -143,6 +155,12 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/sync_skill_plugins.py --install-local --plugins farplane-core`
   Use to expose selected Farplane plugin bundles through your personal Codex
   marketplace under `~/.agents/plugins`.
+- `python3 bin/validators/check_doc_refs.py`
+  Use after moving docs or updating local references; the top-level
+  `bin/check_doc_refs.py` path remains as a compatibility wrapper.
+- `python3 bin/validators/sync_skill_registry.py --check`
+  Use after skill metadata changes when debugging the broader
+  `skills/skill-maintenance/scripts/check_skills.py --write` path.
 - `python3 -m unittest bin/test_farplane_boards.py`
   Use to prove the filesystem BoardAdapter path containment and ticket
   normalization contract before changing invocation or Ralph selection behavior
@@ -246,10 +264,11 @@ already advanced.
 
 ## How To Test
 
-- `python3 bin/check_harness_invariants.py`
-- `python3 bin/check_doc_parity.py`
-- `python3 -m unittest bin/test_harness_invariants.py`
-- `python3 -m unittest bin/test_doc_parity.py`
+- `python3 bin/validators/check_harness_invariants.py`
+- `python3 bin/validators/check_doc_parity.py`
+- `python3 bin/validators/check_doc_refs.py`
+- `python3 -m unittest bin/validators/test_harness_invariants.py`
+- `python3 -m unittest bin/validators/test_doc_parity.py`
 - `python3 -m unittest bin/test_delegate_cli_agent.py`
 - `python3 -m unittest bin/test_ticket_metadata.py`
 - `python3 -m unittest bin/test_ticket_runtime.py`
@@ -257,8 +276,9 @@ already advanced.
 - `python3 -m py_compile bin/ticket_runtime.py bin/test_ticket_runtime.py`
 - `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py`
 - `python3 -m py_compile bin/self_improve_hook_probe.py`
-- `python3 -m py_compile bin/check_harness_invariants.py bin/test_harness_invariants.py`
-- `python3 -m py_compile bin/check_doc_parity.py bin/test_doc_parity.py`
+- `python3 -m py_compile bin/validators/check_harness_invariants.py bin/validators/test_harness_invariants.py`
+- `python3 -m py_compile bin/validators/check_doc_parity.py bin/validators/test_doc_parity.py`
+- `python3 -m py_compile bin/validators/check_doc_refs.py bin/validators/test_check_doc_refs.py`
 - `python3 -m py_compile bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py`
 - `python3 -m py_compile skills/ralph/scripts/select_next_ticket.py`
 - `python3 skills/ralph/scripts/test_select_next_ticket.py`

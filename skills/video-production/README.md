@@ -40,5 +40,5 @@ For a product launch ad:
 ```bash
 python3 skills/skill-creator/scripts/quick_validate.py skills/video-production
 python3 skills/skill-maintenance/scripts/check_skills.py --write
-python3 bin/check_skill_todo_tiers.py --allow-peer-tier3
+python3 bin/validators/check_skill_todo_tiers.py --allow-peer-tier3
 ```

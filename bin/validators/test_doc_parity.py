@@ -10,8 +10,8 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "bin" / "check_doc_parity.py"
+ROOT = Path(__file__).resolve().parents[2]
+SCRIPT = ROOT / "bin" / "validators" / "check_doc_parity.py"
 SUBPROCESS_TIMEOUT_SECONDS = 5
 
 
@@ -44,7 +44,7 @@ SPECS_README_TEXT = """\
 ## Doc Gardening Loop
 
 1. Run `python3 tickets/scripts/check_ticket_metadata.py`.
-2. Run `python3 bin/check_doc_parity.py`.
+2. Run `python3 bin/validators/check_doc_parity.py`.
 3. Use `codex exec` for narrative doc audits.
 """
 
@@ -63,7 +63,7 @@ generic harness wishlist.
 
 | Technique | Status | Main surfaces | Why it matters | Current limit |
 | --- | --- | --- | --- | --- |
-| Mechanical knowledge-base entrypoint checks | Implemented | `bin/check_doc_parity.py`, `docs/specs/doc-governance.md`, `README.md`, `ARCHITECTURE.md`, `docs/specs/README.md`, `tickets/README.md` | Keeps the top-level knowledge-base entry surfaces linked and catches stale queue claims without over-linting all prose | intentionally narrow; it does not replace narrative document review |
+| Mechanical knowledge-base entrypoint checks | Implemented | `bin/validators/check_doc_parity.py`, `docs/specs/doc-governance.md`, `README.md`, `ARCHITECTURE.md`, `docs/specs/README.md`, `tickets/README.md` | Keeps the top-level knowledge-base entry surfaces linked and catches stale queue claims without over-linting all prose | intentionally narrow; it does not replace narrative document review |
 | Doc-governance workflow for narrative drift | Implemented | `docs/specs/doc-governance.md`, `docs/specs/README.md` | Gives flexible docs a repeatable audit path without requiring brittle substring validators for every story change | still depends on humans running the audit loop; no recurring maintainer agent yet |
 """
 
@@ -72,7 +72,7 @@ DOC_GOVERNANCE_TEXT = """\
 
 ## Structural Checks
 
-- `python3 bin/check_doc_parity.py`
+- `python3 bin/validators/check_doc_parity.py`
 
 ## Narrative Audit
 
@@ -93,6 +93,8 @@ python3 tickets/scripts/check_ticket_metadata.py
 ## Body Contract
 
 - The default `Plan` should answer four things:
+- task_program(vars, operations, proof) -> artifact + evidence + state_delta
+- `Done / Proof`
 - Store ticket artifacts under `tickets/TASK-XXXX/artifacts/`.
 
 ## Progress Surface Policy

@@ -10,8 +10,8 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "bin" / "check_harness_invariants.py"
+ROOT = Path(__file__).resolve().parents[2]
+SCRIPT = ROOT / "bin" / "validators" / "check_harness_invariants.py"
 SUBPROCESS_TIMEOUT_SECONDS = 5
 
 

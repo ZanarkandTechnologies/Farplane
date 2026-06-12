@@ -33,7 +33,7 @@ Current structural checks:
 
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Purpose: ticket frontmatter/body contract and lifecycle invariants
-- `python3 bin/check_doc_parity.py`
+- `python3 bin/validators/check_doc_parity.py`
   Purpose: narrow entrypoint parity for canonical docs and stale queue claims
 
 Rule of thumb:
@@ -71,7 +71,7 @@ than duplicating the same claim into more files.
 Run this loop when the public harness story changes:
 
 1. Run `python3 tickets/scripts/check_ticket_metadata.py`.
-2. Run `python3 bin/check_doc_parity.py`.
+2. Run `python3 bin/validators/check_doc_parity.py`.
 3. Re-read the canonical surfaces listed above against the active ticket plus
    `docs/HISTORY.md` and `docs/MEMORY.md`.
 4. Run the `codex exec` narrative audit when the change affects explanation,

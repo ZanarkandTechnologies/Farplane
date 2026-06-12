@@ -10,7 +10,7 @@ after_ref: skills/plan/SKILL.md
 reasoning_basis: first_principles
 proof_artifacts:
   - python3 skills/skill-maintenance/scripts/check_skills.py --write
-  - python3 bin/check_tier0_phase_protocol.py
+  - python3 bin/validators/check_tier0_phase_protocol.py
 eval_required: no
 ---
 
