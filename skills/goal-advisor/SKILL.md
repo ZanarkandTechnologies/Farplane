@@ -231,7 +231,7 @@ Question policy:
 
 - Ask when the answer changes safety, scope, verification, spend, destructive
   boundaries, or irreversible external side effects.
-- Do not ask for fields already present in the ticket body, Proof Contract,
+- Do not ask for fields already present in the ticket body, `Done / Proof`,
   linked plan, or operator message.
 - Do not ask broad interview questions just because the Goal could be richer.
 - If more than 3 fields are missing, ask the 3 that affect execution safety
@@ -286,7 +286,7 @@ Then generate the native `/goal` prompt from the same packet.
 
 ```text
 /goal Run <ticket path> as a Goal Packet.
-Task: <ticket objective, scope, proof contract, constraints, and current next_action>.
+Task: <ticket objective, scope, Done / Proof, constraints, and current next_action>.
 Logging: Before ending each turn, append a compact structured entry to <progress.md>
 with trigger, intent, actions, files/artifacts, metric or feedback sample, drift
 verdict, next_action, and blockers.

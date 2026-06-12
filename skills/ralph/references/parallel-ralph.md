@@ -148,7 +148,7 @@ For each leased ticket:
 
 Parallel Ralph still does not become a Codex launcher in v1. The future
 implementation may choose native Codex subagents, separate Codex CLI sessions,
-or an external runner, but the lease/proof contract must stay the same.
+or an external runner, but the lease and Done / Proof contract must stay the same.
 
 ## Merge Policy
 

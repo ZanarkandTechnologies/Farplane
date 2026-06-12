@@ -8,7 +8,7 @@
       "Compares global policy, skill contract, and hook or validator as distinct owner options",
       "Recommends the smallest durable owner that fixes the failure without bloating root policy",
       "Names rejected surfaces and why they should not own the change now",
-      "Names a proof path such as eval, review, validator, or ticket proof contract"
+      "Names a proof path such as eval, review, validator, or ticket Done / Proof contract"
     ],
     "tags": [
       "skill",

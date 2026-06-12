@@ -584,7 +584,13 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
     fallback_ticket_id = ticket_id_from_path(ticket_path) or extract_ticket_id(ticket_path.name) or ticket_path.stem
     ticket_id = extract_ticket_id(text) or fallback_ticket_id
     artifact_root = artifact_root_for_ticket(ticket_path, ticket_id).resolve()
-    linked_artifacts = extract_artifact_references(ticket_path, sections.get("Evidence", []))
+    proof_lines = sections.get("Done / Proof", [])
+    artifact_reference_lines = (
+        proof_lines
+        + sections.get("Links", [])
+        + sections.get("State", [])
+    )
+    linked_artifacts = extract_artifact_references(ticket_path, artifact_reference_lines)
     artifact_files = collect_artifact_files(artifact_root)
     missing_artifacts = [path for path in linked_artifacts if not Path(path).exists()]
     return {
@@ -603,8 +609,8 @@ def load_ticket(ticket_path: Path) -> dict[str, object]:
         "updated_at": str(frontmatter.get("updated_at", "")).strip(),
         "next_action": str(frontmatter.get("next_action", "")).strip(),
         "last_verification": str(frontmatter.get("last_verification", "")).strip(),
-        "acceptance_gaps": unchecked_items(sections.get("Acceptance Criteria", [])),
-        "evidence_gaps": unchecked_items(sections.get("Evidence", [])),
+        "done_gaps": unchecked_items(proof_lines),
+        "proof_gaps": [],
         "blockers": blocked_items(sections.get("Blockers", [])),
         "artifact_root": artifact_root,
         "linked_artifacts": linked_artifacts,
@@ -1195,7 +1201,7 @@ def build_completion_review_request_message(
         "- `review_artifact`: path to the main linked review artifact\n\n"
         "Artifacts this receipt should cover:\n"
         f"{artifact_block}\n\n"
-        "Link the receipt from the ticket `Evidence` section and finish your next final response with both:\n"
+        "Link the receipt from the ticket `Links` or `State` section and finish your next final response with both:\n"
         f"- `COMPLETION_PASSWORD: {nonce}`\n"
         "- `IMPL_RESULT: status=done next=building reason=completion review receipt written`"
     )
@@ -1493,8 +1499,8 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
 def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker_result: dict[str, str], current_run: dict[str, object] | None = None) -> dict[str, object]:
     ticket_id = str(ticket["ticket_id"])
     blockers = list(ticket["blockers"])
-    acceptance_gaps = list(ticket["acceptance_gaps"])
-    evidence_gaps = list(ticket["evidence_gaps"])
+    done_gaps = list(ticket["done_gaps"])
+    proof_gaps = list(ticket["proof_gaps"])
     status = worker_result["status"]
     next_value = worker_result["next"]
     reason_suffix = worker_result["reason"]
@@ -1547,7 +1553,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             next_phase="building",
             reason=reason_suffix or "plan is present",
             orchestrator_message=f"advance {ticket_id} to building",
-            evidence_ok=not evidence_gaps,
+            evidence_ok=not proof_gaps,
         )
 
     if current_phase == "building" and execution_phase == "impl" and status in {"build_complete", "done", "docs_complete"}:
@@ -1646,7 +1652,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
                 evidence_ok=False,
                 review_gate_failures=artifact_failures,
             )
-        missing = acceptance_gaps + evidence_gaps
+        missing = done_gaps + proof_gaps
         if missing:
             return impl_verdict(
                 ticket_id=ticket_id,
@@ -1681,7 +1687,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
                 evidence_ok=False,
                 review_gate_failures=artifact_failures,
             )
-        missing = acceptance_gaps + evidence_gaps
+        missing = done_gaps + proof_gaps
         if missing:
             return impl_verdict(
                 ticket_id=ticket_id,
@@ -1716,7 +1722,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
                 evidence_ok=False,
                 review_gate_failures=artifact_failures,
             )
-        missing = acceptance_gaps + evidence_gaps
+        missing = done_gaps + proof_gaps
         if missing:
             return impl_verdict(
                 ticket_id=ticket_id,
@@ -1747,7 +1753,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             next_phase="none",
             reason="unable to determine safe next phase",
             orchestrator_message=f"inspect {ticket_id} manually",
-            evidence_ok=not evidence_gaps,
+            evidence_ok=not proof_gaps,
         )
 
     return impl_verdict(
@@ -1757,7 +1763,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
         next_phase=next_phase,
         reason=reason_suffix or f"worker returned status {status}",
         orchestrator_message=f"advance {ticket_id} to {next_phase}",
-        evidence_ok=not evidence_gaps,
+        evidence_ok=not proof_gaps,
     )
 
 
@@ -1818,18 +1824,18 @@ def spawn_tmux_followup(
 
 
 def build_reason(ticket: dict[str, object]) -> str:
-    acceptance_gaps = list(ticket["acceptance_gaps"])
-    if acceptance_gaps:
+    done_gaps = list(ticket["done_gaps"])
+    if done_gaps:
         return (
-            "Continue the current ticket and finish the remaining acceptance criteria: "
-            + "; ".join(acceptance_gaps[:2])
+            "Continue the current ticket and finish the remaining done conditions: "
+            + "; ".join(done_gaps[:2])
         )
 
-    evidence_gaps = list(ticket["evidence_gaps"])
-    if evidence_gaps:
+    proof_gaps = list(ticket["proof_gaps"])
+    if proof_gaps:
         return (
-            "Continue the current ticket and finish the remaining verification/evidence: "
-            + "; ".join(evidence_gaps[:2])
+            "Continue the current ticket and finish the remaining proof: "
+            + "; ".join(proof_gaps[:2])
         )
 
     return "Continue the current ticket and finish the remaining same-ticket work."
@@ -2544,8 +2550,8 @@ def reviewer_prompt(
         "phase": ticket["phase"],
         "status": ticket["status"],
         "next_action": ticket["next_action"],
-        "acceptance_gaps": ticket["acceptance_gaps"],
-        "evidence_gaps": ticket["evidence_gaps"],
+        "done_gaps": ticket["done_gaps"],
+        "proof_gaps": ticket["proof_gaps"],
         "blockers": ticket["blockers"],
         "requires_qa": ticket["requires_qa"],
         "requires_demo": ticket["requires_demo"],

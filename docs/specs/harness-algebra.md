@@ -227,7 +227,7 @@ across tasks.
 ```text
 VerificationLayer = {
   evals,
-  proof_contracts,
+  done_proof_contracts,
   review_skills,
   review_subagents,
   completion_gates
@@ -235,14 +235,15 @@ VerificationLayer = {
 ```
 
 Review loops are not one primitive component. They are verification workflows
-implemented through skills, subagents, proof contracts, hooks, and evals.
+implemented through skills, subagents, Done / Proof contracts, hooks, and
+evals.
 
 Quality levers should be routed by proof type:
 
 ```text
 judgment-heavy quality claim -> review
 repeatable behavioral claim -> eval
-task-local evidence obligation -> proof_contract
+task-local evidence obligation -> done_proof
 deterministic structure/invariant -> validator
 deterministic boundary event -> hook
 self-review or context-drift risk -> reviewer subagent
@@ -258,7 +259,7 @@ harness-advisor = first-load decision procedure and recommendation output
 skills/review = TAS meanings, rubric families, and review hard gates
 skills/eval = eval setup, task cases, judge prompts, and run artifacts
 agents/reviewer.toml = reviewer execution identity
-tickets = task-local proof contracts and durable evidence handles
+tickets = task-local Done / Proof contracts and durable evidence handles
 hooks/validators = deterministic checks and boundary gates
 ```
 
@@ -404,6 +405,50 @@ GoalPacket :=
 + drift_check_contract
 ```
 
+Before a Goal Packet is needed, a normal Farplane ticket should still be
+readable as a small program over files, skills, and artifacts:
+
+```text
+TicketProgram :=
+  Summary
++ Scope
++ Delta
++ Program
++ Map
++ DoneProof
++ State
++ Links
+```
+
+Compactly:
+
+```text
+task_program(vars, operations, proof)
+  -> artifact + evidence + state_delta
+```
+
+Where:
+
+```text
+Delta = before + after + why_now + first_principles_basis
+Program = vars + operation(input) -> output
+Map = touched_files + inspected_files + signature_delta + type_sketch + typed_flow
+DoneProof = done_when + checks + manual_checks + review_gates + evidence_refs
+State = next_action + blocked + latest_verification
+Links = program.md? + progress.md? + artifacts + review + refs
+```
+
+This collapses the older duplicated ticket sections:
+
+```text
+AcceptanceCriteria + Verification + ProofContract
+  -> DoneProof
+```
+
+Use `program.md` only when the task program is long-running, Goal-backed,
+heartbeat-based, rollout-like, or needs durable iteration policy. Use
+`progress.md` for append-only execution logs and evidence pointers.
+
 Goal execution becomes:
 
 ```text
@@ -414,7 +459,7 @@ goal_loop(ticket, program, progress, trigger)
 Surface ownership:
 
 ```text
-ticket.md = task contract
+ticket.md = compact task contract + task program + Done / Proof
 program.md = loop configuration
 progress.md = observed execution
 generated_goal_prompt = runtime instruction
@@ -1393,7 +1438,7 @@ local skill bug
 
 judgment-heavy review failure
   -> wrong: hook
-  -> better: review rubric routing or proof contract
+  -> better: review rubric routing or Done / Proof
 
 eval added without baseline or heldout cases
   -> wrong: claim improvement from one case

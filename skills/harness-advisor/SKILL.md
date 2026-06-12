@@ -68,15 +68,15 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
    - [ ] When skills and subagents are candidates, separate actor-prompt
      ownership from reusable skill-contract ownership.
    - [ ] When material review behavior is a candidate, place rubric routing in
-     the calling skill or ticket `Proof Contract`, reviewer execution in
+     the calling skill or ticket `Done / Proof`, reviewer execution in
      `agents/reviewer.toml`, and TAS/rubric definitions in `skills/review`.
 - [ ] 5. Use [advise](../advise/SKILL.md) to compare exactly three viable
    placement options when three realistic options exist.
 - [ ] 6. Recommend one primary owner and secondary sync points.
    - [ ] Name rejected surfaces and why they should not own the change now.
    - [ ] Route proof by type: judgment to review, repeatable behavior to eval,
-     deterministic invariant to validator/hook, task-local evidence to proof
-     contract, and context-drift/self-review risk to reviewer subagent.
+     deterministic invariant to validator/hook, task-local evidence to
+     `Done / Proof`, and context-drift/self-review risk to reviewer subagent.
    - [ ] Define accept, hold, rollback, or follow-up conditions for material
      harness deltas.
 - [ ] 7. Hand implementation to the relevant Tier 3 workflow, ticket, or

@@ -3,9 +3,9 @@
 ## Purpose
 
 Guide agents to produce one clear per-ticket planning artifact, with a compact
-before/after delta, a visual map that can carry changed seams and typed flow,
-an ordered build plan, concrete verification, and optional consensus challenge
-for riskier work.
+before/after delta, a compact task program, a visual map that can carry changed
+seams and typed flow, concrete done/proof guidance, and optional consensus
+challenge for riskier work.
 This is the Tier 3 coding-pipeline implementation of the generic
 [`plan`](/Users/kenjipcx/coding-harness/Farplane/skills/plan/SKILL.md)
 interface.
@@ -32,8 +32,8 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 3. Treat the selected ticket as the planning boundary by default, and split
    only if a real boundary justifies it.
 4. Choose default mode or `--consensus`.
-5. Output one detailed ticket plan with `Summary`, `Scope`, `Delta`, `Map`,
-   `Build Plan`, `Verification`, and sparse `Notes`.
+5. Output one detailed ticket plan with `Summary`, `Scope`, `Delta`, `Program`,
+   `Map`, `Done / Proof`, `State`, `Links`, and sparse `Notes`.
 6. Put callable seams and typed data movement in the map first; add fallback
    signature or type-flow detail only when the map would become crowded.
 
@@ -42,7 +42,7 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 - Confirm the output matches the compact ticket-body shape.
 - Confirm the plan targets the full selected ticket instead of inventing a
   smaller internal "first slice" without a real boundary.
-- Confirm `Build Plan` makes the next build steps explicit when sequencing
+- Confirm `Program` makes the next build steps explicit when sequencing
   matters.
 - Confirm the map appears near the top when material work is easier to
   understand visually.

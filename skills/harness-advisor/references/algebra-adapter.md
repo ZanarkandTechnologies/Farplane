@@ -46,7 +46,7 @@ hook_policy -> bin/* hooks or validators
 memory_policy -> docs/MEMORY.md, docs/LESSONS.md, docs/TROUBLES.md, ledgers
 filesystem_policy -> specs, tickets, artifacts, registries, templates
 eval_policy -> skills/eval, .codex/evals, .claude/evals
-verification_policy -> skills/review, ticket Proof Contract, QA, completion gates
+verification_policy -> skills/review, ticket Done / Proof, QA, completion gates
 ```
 
 ## Quality Lever Routing
@@ -227,7 +227,7 @@ local skill bug
 
 judgment-heavy review failure
   -> wrong: hook
-  -> better: review rubric routing or proof contract
+  -> better: review rubric routing or Done / Proof contract
 
 eval added without baseline or heldout cases
   -> wrong: claim improvement from one case

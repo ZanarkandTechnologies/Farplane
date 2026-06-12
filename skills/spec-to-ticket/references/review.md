@@ -10,13 +10,13 @@ If any answer is weak, tighten the tickets first.
 - Is overflow scope split into follow-up tickets instead of hidden in prose?
 - Are dependencies explicit and ordered cleanly?
 - If a ticket uses a library, package, service, or tool, is that dependency named where relevant?
-- Do acceptance criteria explain the minimum necessary change clearly?
-- Does each material ticket include a `Proof Contract` that separates metrics,
-  caller-declared rubric families, required TAS gates, reviewer handoff fields,
-  and required evidence?
-- If no honest metric exists, does the ticket say `Metrics: none mechanical`
+- Does `Done / Proof` explain the minimum necessary done state clearly?
+- Does each material ticket include a `Done / Proof` block that separates done
+  conditions, metrics/checks, caller-declared rubric families, required TAS
+  gates, hard gates, and required evidence?
+- If no honest metric exists, does the ticket say `none mechanical`
   instead of inventing a proxy?
-- For UI-bearing tickets, do `Agent Contract` and `Evidence checklist` make QA realistic?
+- For UI-bearing tickets, do `Agent Contract` and `Done / Proof` evidence items make QA realistic?
 - Does each non-trivial ticket declare a usable `Test hook`, not just vague “verify manually” language?
 - If bootstrap testability defaults exist, did we actually carry them into the
   first UI-bearing or agentically hard ticket instead of making the operator
@@ -52,8 +52,8 @@ If any answer is weak, tighten the tickets first.
 - dependency order is implied instead of stated
 - a UI ticket says "verify in browser" without access/stabilization details
 - a non-trivial ticket needs deterministic setup but has no usable `Test hook`
-- acceptance criteria are generic, fluffy, or not observable
-- a material ticket omits the `Proof Contract`
+- `Done / Proof` is generic, fluffy, or not observable
+- a material ticket omits `Done / Proof`
 - a ticket invents subjective metrics instead of using rubric/evidence gates
 - important dependencies or packages are assumed but never named
 - delegated work is described only in prose without an exact ticket reference

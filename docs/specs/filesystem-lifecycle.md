@@ -30,7 +30,7 @@ summary plus pointer in chat.
 Write a file first for:
 
 - specs, standards, schemas, process definitions, and stable equations
-- tickets, plans, acceptance criteria, blockers, and proof contracts
+- tickets, plans, done conditions, blockers, and Done / Proof contracts
 - research syntheses, source decisions, comparison matrices, and gap notes
 - eval tasks, judge rubrics, run reports, and representative hardcases
 - reusable lessons, invariants, troubleshooting records, and closeout evidence

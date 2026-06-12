@@ -23,7 +23,7 @@ Use this template to convert `docs/prd.md` into `docs/specs/*.md`.
 ### US-001: [Story Title]
 **Description:** As a [user], I want [feature] so that [benefit].
 
-**Acceptance Criteria:**
+**Success Criteria:**
 - [ ] Criterion 1
 - [ ] Criterion 2
 - [ ] Typecheck passes
@@ -50,7 +50,7 @@ Too large:
 
 If a story cannot be explained in 2-3 sentences, split it.
 
-## Acceptance Criteria Quality
+## Success Criteria Quality
 
 Good (verifiable):
 - "Add `status` column defaulting to `pending`."

@@ -82,10 +82,14 @@ RULES: tuple[HarnessRule, ...] = (
         relative_path="tickets/templates/ticket.md",
         required_substrings=(
             "claimed_by:",
-            "Result summary:",
+            "## Summary",
+            "## Program",
+            "## Done / Proof",
+            "## State",
         ),
         remediation=(
-            "keep the ticket template aligned with the ticket/runtime identity split"
+            "keep the ticket template aligned with the ticket/runtime identity "
+            "split and compact ticket-as-program contract"
         ),
     ),
 )

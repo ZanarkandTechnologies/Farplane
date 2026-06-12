@@ -8,8 +8,8 @@ Define the canonical review-gate model for the spec-first execution loop.
 
 The system uses three distinct layers:
 
-1. **Ticket Proof Contract** declares metrics, reviewer handoff, rubric gates,
-   and required evidence
+1. **Ticket Done / Proof** declares done conditions, metrics/checks, reviewer
+   handoff, rubric gates, and required evidence
 2. **QA** collects evidence
 3. **Reviewer** judges the work against the declared and inferred rubrics
 4. **Stop hook** sanity-checks whether the evidence and review verdict justify
@@ -17,10 +17,11 @@ The system uses three distinct layers:
 
 ## Roles
 
-### Ticket Proof Contract
+### Ticket Done / Proof
 
 The ticket answers before build starts:
 
+- what concrete conditions define done
 - what mechanical metric, if any, should move or pass
 - which review rubric families and TAS gates are required
 - which rubric families are hard gates
@@ -37,8 +38,8 @@ lives in `docs/review/rubrics/reviewer-handoff.md`; autoresearch session
 details remain in `autoresearch.md`, `autoresearch.sh`, and
 `autoresearch.jsonl`.
 
-When no honest metric exists, the contract should say `Metrics: none
-mechanical` rather than rewarding a fake proxy.
+When no honest metric exists, the contract should say `none mechanical` rather
+than rewarding a fake proxy. Older tickets may still call this block
 
 ### QA
 
@@ -330,5 +331,5 @@ The next final assistant response must also include
 `COMPLETION_PASSWORD: <nonce>` matching that same receipt; password text alone
 is not sufficient without the linked receipt artifact.
 
-The ticket should link those artifacts from `Evidence`; it should not prefill an
-empty review-output stub in advance.
+The ticket should link those artifacts from `Links` or `State`; it should not
+prefill an empty review-output stub in advance.

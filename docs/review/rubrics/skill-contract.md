@@ -70,7 +70,7 @@ templates, or skill maintenance rules changed.
 - `docs/skills/best-practices.md`
 - `docs/skills/registry.jsonl` and generated graph/plugin sync outputs
 - Skill-system validator output
-- Ticket proof contract and review artifacts
+- Ticket `Done / Proof` and review artifacts
 
 ## Finding Cues
 

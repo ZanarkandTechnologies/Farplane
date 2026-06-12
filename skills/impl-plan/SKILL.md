@@ -35,15 +35,15 @@ allowed-tools: Read, Glob, Grep
 - [ ] Decide whether the whole selected ticket can stay whole or whether a
   real boundary forces a split first.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the proof and execution plan.
-- [ ] Write or refine the ticket `Proof Contract`: metrics or `none mechanical`,
-  caller-declared review rubric families, required TAS gates, hard gates,
-  reviewer handoff fields, required proof, and optional autoresearch session
-  path.
+- [ ] Write or refine the ticket `Done / Proof` block: done conditions,
+  concrete checks, manual checks, review rubric/TAS gates, hard gates, required
+  evidence, and optional autoresearch session path.
 - [ ] Compare 3 viable options only when a real material choice exists, then recommend one clearly.
 - [ ] Keep the output in the canonical ticket-body shape instead of inventing a `Human` / `Agent` split.
 - [ ] Make the `Map` section carry visual before/after flow, changed callable seams, and typed data movement when that improves trust.
 - [ ] Add separate `Signature delta`, `Type Sketch`, or `Typed flow example` detail only when the map cannot stay readable without it.
-- [ ] Add `Build Plan` whenever the build has more than one non-trivial step.
+- [ ] Add a compact `Program` whenever the build has more than one
+  non-trivial step.
 - [ ] Use decisive action language in the recommendation and ordered steps.
 - [ ] Make proof concrete and observable rather than generic.
 - [ ] Keep metrics and rubrics distinct: metrics are mechanical signals; rubrics are review judgment frames.
@@ -82,7 +82,7 @@ bypass `impl-plan`; vague epics should route back to PRD, system design, or
 <!-- MEM-0031 decision: impl-plan should stay compact and file-map-first: change, why, touched files, signature deltas, blast radius, and verification. -->
 <!-- MEM-0050 decision: impl-plan must align with the canonical single-surface ticket template and make typed data flow explicit when it materially affects trust. -->
 <!-- MEM-0062 decision: compact chat does not mean thin planning; impl-plan should be detailed and action-oriented enough that a builder can execute the ticket without inventing the missing order or tone. -->
-<!-- Local decision: impl-plan output should organize around Delta, Map, Build Plan, Verification, and Notes; diagrams may carry inline signatures and typed flow, while Evidence, Refs, Options, and Autonomy Readiness stay conditional or ticket-owned. -->
+<!-- Local decision: impl-plan output should organize around Delta, Program, Map, Done / Proof, State, Links, and sparse Notes; diagrams may carry inline signatures and typed flow, while bulky execution detail, review, and evidence move to sidecars or artifacts. -->
 
 When this skill needs diagram taste or pattern depth, reuse
 `skills/diagramming/SKILL.md` instead of inventing a second diagram style here.
@@ -111,9 +111,8 @@ The highest-signal plan answers:
 - for incomplete feature work: what production-grade capability looks like and
   what the repo is still missing
 - blast radius: callers, systems, workflows, or edges that could break
-- how to verify it: tests, checks, strongest proof, and the ticket-level
-  `Proof Contract` that names metrics, review rubric gates, hard gates, and
-  required artifacts
+- how to verify it: done conditions, tests, checks, strongest proof, review
+  rubric gates, hard gates, and required artifacts in `Done / Proof`
 
 If the plan leaves the builder inventing execution steps or the next concrete
 move, it is too thin.
@@ -164,17 +163,17 @@ Before finalizing the plan or handing off to execution:
     proof/falsification, tradeoffs, and non-goals. If the basis is missing for
     material work, tighten the ticket or route back to PRD/spec before
     execution.
-3. Preserve or create a ticket-level `Proof Contract` for material tickets:
-   honest mechanical metrics when available, `Metrics: none mechanical` when
-   not, caller-declared review rubric families, required TAS gates, hard gates,
-   reviewer handoff fields, required proof, and optional autoresearch
-   session path.
-4. Preserve any `Autonomy Readiness` fields from the ticket, PRD, bootstrap
-   brief, system design, taste brief, or agent-testability brief; for `$ralph`
-   or long-running execution, name missing inputs, permissions, compute, tools,
-   QA risks, and human gates before handoff.
-4a. Preserve any `Execution Profile Hints` from the ticket, but treat them as
-    advisory input for `$work`, not as proof that implementation should start.
+3. Preserve or create a ticket-level `Done / Proof` block for material tickets:
+   honest mechanical metrics when available, `none mechanical` when not,
+   caller-declared review rubric families, required TAS gates, hard gates,
+   reviewer handoff fields when durable review is needed, required proof, and
+   optional autoresearch session path.
+4. Preserve any `Run Hints` fields from the ticket, PRD, bootstrap brief,
+   system design, taste brief, or agent-testability brief; for `$ralph` or
+   long-running execution, name missing inputs, permissions, compute, tools, QA
+   risks, proof weight, and human gates before handoff.
+4a. Preserve only current `Run Hints` when a ticket needs `$work` admission
+    context; do not carry old readiness sections into rewritten tickets.
 5. Read enough nearby code to name real files, seams, signatures, and typed
    data shapes instead of inventing them.
 6. In Farplane itself, do **not** create hidden sidecar context snapshots; the
@@ -216,14 +215,15 @@ unknowns.
 5. **Gap check when needed:** for missing or partial feature work, define the
    current state, production expectation, missing gaps, grounding references,
    and recommended now/later boundary.
-6. **Proof contract:** for material tickets, write or refine the ticket's
-   compact `Proof Contract` with metrics, caller-declared rubric families,
-   required TAS gates, hard gates, and required proof. Use `Metrics: none
-   mechanical` when a number would be dishonest; use `autoresearch-plan` only
-   when repeated metric experiments are warranted.
-7. **Build one detailed plan:** use the compact ticket sections and make the
-   `Delta`, `Map`, `Build Plan`, and `Verification` explicit enough that the
-   builder does not have to invent the sequence.
+6. **Done / Proof:** for material tickets, write or refine the ticket's compact
+   `Done / Proof` block with done conditions, checks, manual proof, review
+   rubric/TAS gates, hard gates, and required evidence. Use `none mechanical`
+   when a numeric metric would be dishonest; use `autoresearch-plan` only when
+   repeated metric experiments are warranted.
+7. **Build one detailed task program:** use the compact ticket sections and
+   make `Delta`, `Program`, `Map`, and `Done / Proof` explicit enough that the
+   builder does not have to invent the sequence. Use a sidecar `plan.md` only
+   when the technical sequence is too long, volatile, or independently useful.
 8. **Review + handoff:** run the plan through the quality gate, fix weak spots
    before handoff, then end with a decisive readiness call and next move.
 
@@ -272,16 +272,16 @@ Use the compact ticket-body shape:
 - `Summary`
 - `Scope`
 - `Delta`
+- `Program`
 - `Map`
-- `Build Plan`
-- `Verification`
+- `Done / Proof`
+- `State`
+- `Links`
 - `Notes`
 - optional `Gap Analysis`
-- optional `Acceptance Criteria`
-- optional compact `Proof Contract`
-- optional `Autonomy Readiness`
+- optional `Agent Contract`
+- optional `Run Hints`
 - optional `Citations`
-- optional `Blockers`
 
 `Delta` is the approval core of the ticket and should include:
 
@@ -305,13 +305,27 @@ Use the compact ticket-body shape:
 5. separate `Signature delta`, `Type Sketch`, or `Typed flow example` blocks
    only when the map would become crowded or ambiguous
 
-`Build Plan` is the action core of the ticket and should include ordered
-implementation steps with concrete verbs plus any concise recommendation or
-real option choice that changes the build path.
+`Program` is the action core of the ticket. It should show variables, skill or
+operation calls, and outputs in compact pseudocode:
 
-`Verification` is the proof core of the plan and should include concrete tests,
-manual checks, review focus, and any human gate. The ticket stores execution
-evidence after the build; the plan should not preallocate an audit report.
+```text
+vars:
+  target =
+
+program:
+  ground(vars) -> current_state
+  change(current_state) -> artifact_delta
+  verify(done_when, proof) -> evidence
+```
+
+`Done / Proof` is the proof core of the plan and should include concrete done
+conditions, checks, manual checks, review focus, rubric/TAS gates, human gates,
+and required evidence. The ticket stores required evidence handles; execution
+outputs belong in artifacts or `progress.md`, not duplicated in the ticket.
+
+Create a sidecar `plan.md` only when the technical build plan is too long for a
+skimmable ticket, deeply implementation-specific, likely to change
+independently, or useful as a handoff artifact separate from the task contract.
 
 `Notes` should stay sparse: only real blast radius, risks, rollback,
 citations, blockers, or follow-up boundaries.
@@ -334,15 +348,16 @@ citations, blockers, or follow-up boundaries.
   than an already-clear local implementation.
 - **Options considered required only for real forks:** include options only
   when the planner chose among materially different viable paths.
-- **Autonomy Readiness belongs upstream:** preserve existing readiness fields
-  from the spec or ticket, but in the impl plan reduce them to testability,
-  human gates, or blockers unless the ticket is intended for `$ralph`,
-  unattended execution, external services, hard-to-QA UI/motion/simulation, or
-  deploy/spend/destructive boundaries.
-- **Proof Contract compact by default:** for material, review-sensitive,
-  agentically hard, or ticketed build work, name metric or `none mechanical`,
-  review rubrics/TAS gates, hard gates, and required proof. Keep detailed
-  execution evidence in the ticket after implementation, not in the plan.
+- **Run Hints belong upstream:** preserve existing readiness fields from the
+  spec or ticket, but in the impl plan reduce them to testability, human gates,
+  blockers, compute hints, and proof weight unless the ticket is intended for
+  `$ralph`, unattended execution, external services, hard-to-QA
+  UI/motion/simulation, or deploy/spend/destructive boundaries.
+- **Done / Proof compact by default:** for material, review-sensitive,
+  agentically hard, or ticketed build work, name done conditions, metric or
+  `none mechanical`, review rubrics/TAS gates, hard gates, and required proof.
+  Keep detailed execution evidence in artifacts or `progress.md`, not in the
+  ticket body.
 - **Citations inline by default:** cite sources only when they affect the plan.
   Use a `Citations` line or section only when multiple references matter.
 - **Evidence is ticket-owned:** do not include a planning `Evidence` section
@@ -365,11 +380,10 @@ citations, blockers, or follow-up boundaries.
 6. Do not leave the builder inferring the execution sequence when the ticket is
    material enough to need an explicit order of operations.
 7. Do not preallocate empty review output inside the input ticket.
-8. Do not make `Acceptance Criteria` and `Verification` say the same thing;
-   criteria define done, verification defines measurement. Omit criteria when
-   the ticket already owns clear ACs.
+8. Do not introduce separate done, verification, or proof sections when one
+   `Done / Proof` block can carry the same contract.
 9. Do not confuse metrics with rubrics: metrics are mechanical signals,
-   rubrics are review judgment frames. Put both in the `Proof Contract` when
+   rubrics are review judgment frames. Put both in `Done / Proof` when
    they matter.
 10. Do not include option comparison when there was no real material fork.
 11. Do not guess at "production-ready" scope from intuition alone when
@@ -378,10 +392,11 @@ citations, blockers, or follow-up boundaries.
     because that feels safer than planning the full ticket.
 13. Do not use timid language like "maybe", "might", or "could" where the plan
     should be making a recommendation or naming an execution step.
-14. Do not hand off a `$ralph`-eligible ticket with vague autonomy-readiness
-    fields; name the blockers or keep the ticket gated.
-15. Do not include `Evidence` as planning boilerplate; evidence belongs in the
-    ticket after execution unless audit detail is explicitly requested.
+14. Do not hand off a `$ralph`-eligible ticket with vague run-hint fields; name
+    the blockers or keep the ticket gated.
+15. Do not include `Evidence` as planning boilerplate; evidence belongs in
+    artifacts, `progress.md`, or concise `State`/`Links` pointers unless audit
+    detail is explicitly requested.
 
 ## Efficiency Rules
 
@@ -432,7 +447,7 @@ Before returning the plan, run these checks against the drafted output:
 7. **Proof quality**
    - Are the checks concrete and observable?
    - Would a reviewer know exactly how to tell success from failure?
-   - Does the compact `Proof Contract` name mechanical metrics or `none
+   - Does the compact `Done / Proof` block name mechanical metrics or `none
      mechanical`, review rubric gates, hard gates, and required proof without
      duplicating post-build evidence?
    - If no metric exists, does it honestly say `Metrics: none mechanical`

@@ -9,7 +9,7 @@ anti-slop search playbook for substantive review.
 Turn review into a repeatable TAS pass with explicit family verdicts, skeptic
 questions, and hard gates instead of generic questions, fake-precise scores, or
 optimistic prose. The caller owns rubric routing through a reviewer handoff or
-ticket `Proof Contract`; the actor using this contract starts from that routing,
+ticket `Done / Proof`; the actor using this contract starts from that routing,
 validates it against the changed surface, then loads the named rubric families
 and checks metric traceability against linked evidence.
 

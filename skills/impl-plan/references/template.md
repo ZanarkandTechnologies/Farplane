@@ -41,22 +41,56 @@ Optional fallback detail when the map would become crowded:
 - `Type sketch:` `TypeName { field: Type }`
 - `Typed flow:` one representative object or payload path
 
-## Build Plan
+## Program
 
-1. Ordered implementation step with a concrete verb.
-2. Next step.
-3. Final integration or cleanup step.
+```text
+signature:
+  task(input, state?) -> artifact + evidence + state_delta
 
-Include `Recommendation:` only when it changes the build path.
+vars:
+  target =
+  owner =
 
-Include `Options considered:` only when there is a real material fork.
+program:
+  ground(vars) -> current_state
+  change(current_state) -> artifact_delta
+  verify(done_when, proof) -> evidence
+```
 
-## Verification
+Include `Recommendation:` only when it changes the build path. Include
+`Options considered:` only when there is a real material fork.
 
-- `Tests:`
-- `Manual checks:`
-- `Review focus:`
-- `Human gate:`
+## Done / Proof
+
+```text
+done_when:
+  -
+
+proof:
+  checks:
+    -
+  manual:
+    -
+  review:
+    - rubric: none
+      required_tas: none
+  evidence:
+    -
+```
+
+## State
+
+- `next_action:`
+- `blocked:`
+- `latest_verification:`
+
+## Links
+
+- `program:`
+- `progress:`
+- `artifacts:`
+- `review:`
+- `refs:`
 
 ## Notes
 
@@ -76,26 +110,9 @@ Include `Options considered:` only when there is a real material fork.
 - `Comparable implementations:`
 - `Recommendation:`
 
-## Acceptance Criteria
-
-Optional when the ticket already owns clear acceptance criteria.
-
-- [ ] AC-1
-
-## Proof Contract
-
-Optional for tiny localized fixes; compact by default for material tickets.
-
-- `Metric:` numeric/boolean signal, or `none mechanical`
-- `Direction:` higher | lower | pass/fail | none
-- `Review rubrics / TAS gates:`
-- `Hard gates:`
-- `Required proof:`
-- `Autoresearch:` warranted yes/no, session path if applicable
-
-## Autonomy Readiness
+## Run Hints
 
 Use only when the ticket is intended for `$ralph`, unattended work, external
 services, hard-to-QA UI/motion/simulation, or deploy/spend/destructive
 boundaries. Otherwise keep readiness in the spec or ticket and reflect only the
-testability or human gate in `Verification`.
+testability or human gate in `Done / Proof`.

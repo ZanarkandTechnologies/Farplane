@@ -1,6 +1,6 @@
 ---
 name: qa
-description: "Turn one selected ticket into proof artifacts, reconciled acceptance criteria, and a structured QA result for Stop-hook gating."
+description: "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Stop-hook gating."
 tier: 3
 group: coding
 source: local
@@ -13,8 +13,8 @@ common_chains:
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] Read the selected ticket, Proof Contract, acceptance criteria, linked
-  specs/docs, and any runtime target handoff.
+- [ ] Read the selected ticket, `Done / Proof` block, linked specs/docs, and
+  any runtime target handoff.
 - [ ] Use the native execution phase proof/writeback shape, but
   keep `$qa` focused on ticket-scoped evidence collection.
 - [ ] If browser evidence is needed, use [agent-browser](../agent-browser/SKILL.md)
@@ -34,7 +34,8 @@ common_chains:
   rationale, and any gaps.
 - [ ] Write `result.json` with ticket id, phase, verdict, summary, and artifact
   paths.
-- [ ] Update the ticket Evidence section with the strongest QA artifacts.
+- [ ] Update the ticket `Links` or `State` section with the strongest QA
+  artifacts.
 - [ ] If the proof is weak, confusing, or incomplete, return a revise/blocker
   verdict instead of claiming QA passed.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -61,7 +62,8 @@ Do not use it when:
   policy lives in this skill, not in `agent-browser`.
 - Gather ticket-scoped proof under `tickets/TASK-XXXX/artifacts/qa/`.
 - For UI or user-visible work, use `visual-qa` as a separate judgment pass.
-- Update the ticket `Evidence` section with the strongest artifact links.
+- Update the ticket `Links` or `State` section with the strongest artifact
+  links.
 - Write `result.json` under the QA artifact root and finish with:
   - `IMPL_RESULT: status=qa_complete next=building reason=...`
 

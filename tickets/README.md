@@ -138,7 +138,8 @@ last_verification: none
 - `requires_demo`: whether `$impl` must also produce a passing demo phase after QA
 - `next_action`: the one authoritative next step
 - `last_verification`: the one-line authoritative verification summary; keep
-  detailed commands and artifacts in `Evidence`
+  detailed commands and artifacts in `Links`, `State`, `progress.md`, or
+  ticket-scoped artifacts
 
 For `$ralph`, the explicit invocation is the operator running `$ralph`. After
 that, a ticket is selectable only when `ready: true`,
@@ -148,7 +149,7 @@ dependency is complete, archived, or explicitly waived in the ticket body.
 For Farplane invocation, `bin/farplane_boards.py` is the canonical v1
 BoardAdapter surface for reading filesystem tickets into normalized `WorkItem`
 JSON. It is intentionally read-first: evidence links still belong in the
-ticket `Evidence` section until a later ticket ships traceable writeback.
+ticket `Links` or `State` section until a later ticket ships traceable writeback.
 Future board adapters must satisfy
 `docs/specs/invocation-and-adapters.md` before they become live ticket
 sources.
@@ -182,50 +183,77 @@ python3 tickets/scripts/check_ticket_metadata.py
 ```
 
 The validator treats `tickets/TASK-*/ticket.md` as canonical and still tolerates
-legacy flat `tickets/TASK-*.md` files during migration.
+flat `tickets/TASK-*.md` files only as archived pre-directory ticket history.
 
 ## Body Contract
 
 Keep the body short by default. The main job of a ticket body is to let a
-developer or subagent understand the code shape without opening files first.
+developer or subagent understand the task contract, variable files, operations,
+and proof without opening every file first.
 
 Default sections:
 
 - `Summary`
 - `Scope`
-- `Plan`
-- `Acceptance Criteria`
-- `Verification`
-- `Proof Contract`
-- `Refs`
-- `Evidence`
-- `Blockers`
+- `Delta`
+- `Program`
+- `Map`
+- `Done / Proof`
+- `State`
+- `Links`
+- `Notes`
 
 Optional sections only when they add signal:
 
 - `Gap Analysis`
-- `Diagram`
 - `Agent Contract`
-- `Autonomy Readiness`
-- `Evidence Checklist`
+- `Run Hints`
+- `Goal Packet`
 
-The default `Plan` should answer four things:
+The ticket is a compact task program over files and skills:
 
-1. what changes and why now
-2. where the change lives: touched files, inspected files, signature deltas,
-   and key type/data shapes when they matter
-3. blast radius: callers, workflows, or systems that could break
-4. how to verify: tests, checks, and strongest evidence to gather
+```text
+task_program(vars, operations, proof) -> artifact + evidence + state_delta
+```
 
-For material, stateful, interface-heavy, or cross-boundary work, the `Plan`
-should also show:
+Use `Delta` to answer:
 
-1. a compact `Type Sketch` naming the important structs, records, or payloads
-2. one `Typed flow example` showing a representative object or payload evolving
+1. what changes
+2. before versus after behavior
+3. why now
+4. first-principles basis: objective, need, assumptions, root cause,
+   constraints, first viable slice, proof/falsification, tradeoff, and
+   non-goals when material
+
+Use `Program` for the execution sketch:
+
+```text
+vars:
+  target =
+  owner =
+
+program:
+  ground(vars) -> current_state
+  change(current_state) -> artifact_delta
+  verify(done_when, proof) -> evidence
+```
+
+This replaces long prose build plans for normal tickets. Create a separate
+`plan.md` only when the build plan is long, deeply technical, likely to change
+independently, or too large to keep the ticket readable.
+
+Use `Map` for file grounding and examples:
+
+1. `Touch` and `Inspect` lists
+2. callable signature deltas when seams matter
+3. a compact `Type Sketch` when payloads or state matter
+4. one `Typed flow example` showing a representative object or payload moving
    through the main path
+5. one Mermaid delta map when the flow, ownership, or typed data path is easier
+   to skim visually
 
-Keep both compact. The point is to make typed data continuity legible in plain
-text, not to dump full schemas into the ticket.
+Keep map detail compact. The point is to make task shape legible in plain text,
+not to dump full schemas into the ticket.
 
 Use `Gap Analysis` when the work is about a missing, partial, parity-driven, or
 otherwise under-specified feature and the main planning question is "what does
@@ -238,33 +266,33 @@ That section should answer:
 3. which gaps matter for this ticket now versus later
 4. which comparable apps, repos, docs, or standards grounded that judgment
 
-`Acceptance Criteria` should define what "done now" means in concrete,
-measurable terms.
+Use `Done / Proof` as the single completion scoreboard:
 
-`Verification` should say how each criterion is measured: test passes, manual
-checks, and required evidence.
+```text
+done_when:
+  - concrete done condition
 
-`Proof Contract` should name the actual completion scoreboard for material
-work:
+proof:
+  checks:
+    - command or deterministic check
+  manual:
+    - direct inspection
+  review:
+    - rubric: skill-contract
+      required_tas: TAS-A
+  evidence:
+    - artifact path or required artifact kind
+```
 
-1. metrics that can be measured mechanically, or `Metrics: none mechanical`
-   when no honest metric exists
-2. review rubric families, thresholds, and hard gates that the `review` skill
-   must use
-3. evidence artifacts required before completion can pass
-4. optional autoresearch session path when repeated metric experiments are
-   warranted
-
-Keep full rubric bodies in `docs/review/rubrics/` and full autoresearch
-session files in the owning `autoresearch` artifacts. Tickets should carry the
-handles, thresholds, and artifact obligations, not duplicate the specialist
-contracts.
+For material work, `Done / Proof` is still the completion scoreboard. It should
+name honest mechanical metrics when they exist, `none mechanical` when they do
+not, reviewer rubric families, TAS gates, hard gates, and required artifacts.
+Keep full rubric bodies in `docs/review/rubrics/` and full autoresearch session
+files in the owning autoresearch artifacts. Tickets carry handles, thresholds,
+and artifact obligations, not duplicate specialist contracts.
 
 For UI-bearing, browser-driven, canvas/game, or otherwise agentically hard
-tickets, add:
-
-1. `Agent Contract`
-2. `Evidence Checklist`
+tickets, add `Agent Contract`.
 
 The `Agent Contract` should make QA fast and deterministic instead of leaving
 browser navigation to improvisation. It should name:
@@ -285,8 +313,8 @@ surfaces into the first relevant ticket instead of restating them from memory.
 When the repo has `qa/cookbook/`, point the ticket at the matching workflow doc
 or seed one during planning.
 
-For tickets that may be drained by `$ralph` or run unattended, add `Autonomy
-Readiness` and name:
+For tickets that may be drained by `$ralph`, run unattended, batched, or routed
+through external compute, add `Run Hints` and name:
 
 1. human inputs/assets
 2. credentials or external access
@@ -295,16 +323,18 @@ Readiness` and name:
 5. QA risks and which QA ring applies
 6. human gates for plan review, QA review, deploy, spend, or destructive work
 7. decisions the agent may make autonomously
+8. likely size, Goal recommendation, compute hint, proof weight, and
+   batchability when those affect `$work`
 
 If those answers are missing, keep the ticket gated instead of marking it ready
 for the board-draining loop.
 
-Do not duplicate the same idea across multiple headings. If a short summary and
-the plan already explain the change, do not add more ceremony.
+Do not duplicate the same idea across multiple headings. If `Delta`, `Program`,
+`Map`, and `Done / Proof` already explain the task, do not add more ceremony.
 
-Use `Refs` for durable source URLs, specs, issues, websites, or comparable
-examples instead of spreading links across extra note sections or duplicating
-them in frontmatter.
+Use `Links` for durable source URLs, specs, issues, websites, comparable
+examples, sidecar files, artifacts, and reviews instead of spreading links
+across extra note sections or duplicating them in frontmatter.
 
 ## Evidence Artifacts
 
@@ -318,9 +348,9 @@ Examples:
 - short clips
 - seed or fixture notes that help reproduce the proof surface
 
-Link those artifacts from the ticket `Evidence` section instead of preallocating
-empty review-output fields in the template or repeating the artifact path under
-`Verification`.
+Link those artifacts from `Links` or `State` instead of preallocating empty
+review-output fields in the template or repeating the artifact path under
+`Done / Proof`.
 
 Canonical policy references:
 

@@ -334,55 +334,66 @@ The observed failure was `{packet.observed}`.
 - `safe_local_fix_available`: `{packet.safe_local_fix_available}`
 - `marker`: `skill={packet.skill}; operation={packet.operation}; failure_class={packet.failure_class}`
 
-## Plan
+## Delta
 - `Change:` repair the skill behavior or wrapper path that produced the failure.
 - `Why:` users should not have to debug broken harness skills after invoking them.
-- `Before -> After:` before, the skill fails and leaves the caller blocked; after, the skill either works or returns an explicit fallback/escalation.
+- `Before:` the skill fails and leaves the caller blocked.
+- `After:` the skill either works or returns an explicit fallback/escalation.
+- `Recommendation:` use the existing ticket pipeline; do not patch hidden state.
+- `Blast radius:` skill callers and automations that depend on this operation.
+- `Risks:` masking external connector outages as local skill success.
+
+## Program
+
+```text
+vars:
+  packet = SkillFailurePacket({packet.skill}, {packet.operation})
+  verify = python3 bin/check_skill_capabilities.py score --skill {packet.skill} --operation {packet.operation}
+
+program:
+  ground(packet.refs) -> failing_behavior
+  repair(failing_behavior) -> skill_delta
+  verify(skill_delta, verify) -> capability_evidence
+  review(capability_evidence, integration-readiness + evidence-quality) -> verdict
+```
+
+## Map
 - `Touch:` owning skill files, matching tests, and registry/docs if needed.
 - `Inspect:` evidence refs below and the current skill implementation.
 - `Signature delta:` to be filled by `impl-plan`.
 - `Type Sketch:` to be filled by `impl-plan`.
 - `Typed flow example:` to be filled by `impl-plan`.
-- `Execution steps:` run `impl-plan`, implement the repair, run the capability checker, and run review.
-- `Recommendation:` use the existing ticket pipeline; do not patch hidden state.
-- `Blast radius:` skill callers and automations that depend on this operation.
-- `Risks:` masking external connector outages as local skill success.
 
-## Acceptance Criteria
-- [ ] The skill operation either succeeds or returns a documented fallback/escalation.
-- [ ] The matching skill capability fixture passes.
-- [ ] The repair does not perform forbidden actions.
-
-## Verification
-- `Tests:` `python3 bin/check_skill_capabilities.py score --skill {packet.skill} --operation {packet.operation}`
-- `Manual checks:` inspect fallback and forbidden-action handling.
-- `Evidence required:` checker output and review artifact.
-
-## Proof Contract
+## Done / Proof
+- `Done when:`
+  - [ ] The skill operation either succeeds or returns a documented fallback/escalation.
+  - [ ] The matching skill capability fixture passes.
+  - [ ] The repair does not perform forbidden actions.
+- `Checks:`
+  - `python3 bin/check_skill_capabilities.py score --skill {packet.skill} --operation {packet.operation}`
+  - inspect fallback and forbidden-action handling.
 - `Metrics:`
   - `Primary metric:` skill_capability_sanity_pass_rate
   - `Direction:` higher
-  - `Verify:` capability checker
-  - `Guard:` ticket metadata check
   - `Min acceptable result:` fixture passes for `{packet.skill}.{packet.operation}`
-  - `Autoresearch warranted:` no
-  - `Autoresearch session:` none
 - `Review Rubrics:`
   - `integration-readiness >= 4.0`
   - `evidence-quality >= 4.0`
 - `Required Evidence:`
   - capability checker output
   - review result
+- `Autoresearch warranted:` no
+- `Autoresearch session:` none
 
-## Refs
+## Links
 {refs}
 
-## Evidence
+## State
 - `Artifacts:`
 - `Commands:`
 - `Result summary:`
 
-## Blockers
+## Notes
 - none
 """
 

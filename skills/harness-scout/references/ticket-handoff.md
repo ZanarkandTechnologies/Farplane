@@ -9,13 +9,13 @@ as an [impl-plan](../../impl-plan/SKILL.md) ticket:
 ```text
 Summary:
 Scope:
-Gap Analysis:
-Plan:
-Acceptance Criteria:
-Verification:
-Proof Contract:
-Refs:
-Blockers:
+Delta:
+Program:
+Map:
+Done / Proof:
+State:
+Links:
+Notes:
 ```
 
 ## Required Fields

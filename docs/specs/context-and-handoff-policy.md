@@ -30,7 +30,7 @@ It must carry:
 - last verification
 
 `last_verification` should stay a one-line current verdict. Detailed proof
-belongs in the ticket `Evidence` section.
+belongs in the ticket `Links` or `State` section.
 
 ### Runtime State
 

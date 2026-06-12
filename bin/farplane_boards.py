@@ -287,7 +287,7 @@ class FileTicketAdapter:
             changed=False,
             message=(
                 "filesystem evidence writeback is manual in BoardAdapter v1; "
-                "link artifacts through the ticket Evidence section"
+                "link artifacts through the ticket Links or State section"
             ),
             path=item.local_ticket_path,
         )

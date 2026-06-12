@@ -30,7 +30,7 @@ Execution and proof specs:
 
 - `spec-first-execution-loop.md` - spec -> ticket -> plan -> build -> QA ->
   review execution model.
-- `review-gates.md` - ticket proof contract, QA, reviewer, and Stop-hook review
+- `review-gates.md` - ticket Done / Proof contract, QA, reviewer, and Stop-hook review
   gates.
 - `agent-testability-surfaces.md` - post-system-design control accelerators,
   state probes, coordination views, and proof-surface planning.

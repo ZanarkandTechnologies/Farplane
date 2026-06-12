@@ -188,7 +188,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 ## Tickets And Durable Artifacts
 
 - When a repo has a ticket workflow, treat the active ticket as the task-local
-  memory, plan, evidence, blocker, and handoff surface.
+  memory, compact task program, proof target, blocker, and handoff surface.
+- Keep ticket bodies compact and program-shaped when the repo supports it:
+  `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`, `State`,
+  `Links`, and sparse `Notes`.
 - When native Goal mode is used for material work, create or attach to a ticket
   and use a Goal Packet: `ticket.md` for the task contract, `program.md` for
   loop configuration, and `progress.md` for append-only turn logs. The Goal
@@ -197,10 +200,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   against the ticket and Goal program. Use a read-only drift reviewer when the
   work is high-stakes, long-running, rollout-like, or easy to self-approve.
 - Keep ticket metadata and body consistent with the current state.
-- Store detailed proof, blockers, and follow-up scope in the ticket or
-  ticket-scoped artifacts rather than in chat.
+- Store detailed proof, review reports, blockers, and follow-up scope in
+  ticket-scoped artifacts, `progress.md`, or concise ticket links rather than
+  in chat.
 - Use the repo's ticket template and ticket docs for the full state machine and
-  proof contract.
+  ticket-as-program contract.
 - Do not claim a workflow is shipped until the discoverable package, docs, and
   canonical inventory exist.
 

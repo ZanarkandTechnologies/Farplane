@@ -15,7 +15,7 @@ learning without letting it silently sprawl, forget, or self-approve weak work.
 ## Product Shape
 
 Farplane OS is the parent product family. This repo is Farplane Core: skills,
-hooks, evals, review, memory, runtime state, and proof contracts. Farplane
+hooks, evals, review, memory, runtime state, and Done / Proof contracts. Farplane
 Console is the practical dashboard for harness health and optimization.
 Farplane UI keeps its current name as the optional immersive office/game
 surface; Farplane Office is only an alias for that mode.
@@ -60,7 +60,7 @@ The product rule is:
 - **One product family:** Farplane OS owns the parent story while Core,
   Console, and UI keep clean surface boundaries.
 - **Core owns proof:** Farplane Core owns harness semantics, skills, hooks,
-  evals, tickets, review, memory, runtime state, and proof contracts.
+  evals, tickets, review, memory, runtime state, and Done / Proof contracts.
 - **Console owns operations:** Farplane Console owns the practical dashboard,
   activity telemetry, nudges, and Mighty Guard harness-health workflows.
 - **UI stays optional:** Farplane UI owns the immersive office/game mode and

@@ -21,11 +21,14 @@ common_chains:
 - [ ] Confirm the ticket is actually ready for build orchestration rather than still needing planning.
 - [ ] Use the relevant [research](../research/SKILL.md) method when execution
   depends on official behavior, local invariants, examples, or peer norms.
-- [ ] Read the ticket `Proof Contract` and carry its metrics, rubric gates, hard gates, and required evidence into lane prompts.
+- [ ] Read the ticket `Done / Proof` block and carry its metrics, rubric gates,
+  hard gates, and required evidence into lane prompts.
 - [ ] Aim the run at whole-ticket completion; do not voluntarily shrink a
   coherent ticket into an internal "part 1".
 - [ ] Decide which lanes are needed for this ticket: builder, reviewer, QA, and evidence-check.
-- [ ] If the `Proof Contract` links an autoresearch session, run `autoresearch-exec` as a bounded execution subphase; otherwise keep autoresearch out of the run.
+- [ ] If `Done / Proof` links an autoresearch session, run
+  `autoresearch-exec` as a bounded execution subphase; otherwise keep
+  autoresearch out of the run.
 - [ ] Make the delegated `worker_name`, `main_artifact_path`, and `grounding_summary` explicit before delegating.
 - [ ] Launch the visible lanes and keep their responsibilities distinct.
 - [ ] When review starts, use the native execution phase proof/review
@@ -69,9 +72,9 @@ Do not use it when:
   unless a blocker or explicit follow-up ticket makes narrower scope real.
 - An explicit ticket selector outranks ambient runtime state.
 - `$impl` reads the ticket plus linked specs/docs, launches the needed worker lanes, integrates their outputs, writes progress back to the ticket/progress surface, and exits.
-- `$impl` reads the ticket `Proof Contract` before execution. The contract
-  defines the metric targets, review rubric gates, hard gates, and required
-  evidence that the run must satisfy.
+- `$impl` reads the ticket `Done / Proof` block before execution. The block
+  defines the done conditions, metric targets, review rubric gates, hard gates,
+  and required evidence that the run must satisfy.
 - `$impl` is the public execution surface; `qa` and `demo` may run as internal subphases or explicit recovery surfaces.
 - Delegated lanes should expose a small shared contract: `worker_name`, `main_artifact_path`, and a short `grounding_summary`.
 - `$impl` does not require or create a permanent orchestrator pane.
@@ -85,7 +88,7 @@ For a selected build ticket, `$impl` should coordinate:
 2. reviewer lane for rubric-based review
 3. QA lane for evidence gathering
 4. optional `autoresearch-exec` lane when the ticket links an autoresearch
-   session in its `Proof Contract`
+   session in its `Done / Proof` block
 5. evidence-check lane for validating the QA evidence
 
 Default enforced runtime set today:
@@ -144,7 +147,7 @@ Reference:
 ## Guardrails
 
 - Keep the ticket as the canonical progress surface.
-- Keep the ticket `Proof Contract` as the run scoreboard. Do not invent new
+- Keep the ticket `Done / Proof` block as the run scoreboard. Do not invent new
   metrics, rubric gates, or evidence obligations in lane prompts when the
   ticket already declares them; update the ticket if the contract is wrong.
 - Aim to land the whole selected ticket; do not voluntarily turn a coherent
@@ -157,7 +160,7 @@ Reference:
 - Reuse existing hook verdicts instead of adding a parallel control plane.
 - Run `autoresearch-exec` only when the ticket points to an existing
   autoresearch session or the approved plan explicitly created one; ordinary
-  tickets should satisfy their Proof Contract through normal build, QA, and
+  tickets should satisfy their `Done / Proof` contract through normal build, QA, and
   review.
 - Leave Work Admission, board-wide dispatch, worktree orchestration, and
   binary/runtime cleanup to separate tickets or skills.

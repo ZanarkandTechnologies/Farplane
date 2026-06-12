@@ -67,9 +67,9 @@ flowchart LR
 
   subgraph Skills["Skill Layer"]
     primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>todos.md"]:::callout
-    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute<br/>goal-crafter"]:::callout
+    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute<br/>goal-advisor"]:::callout
     intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
-    readiness["agent-testability-plan<br/>Autonomy Readiness"]:::callout
+    readiness["agent-testability-plan<br/>Run Hints"]:::callout
     research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
@@ -125,7 +125,7 @@ flowchart LR
   template -. shapes .-> tickets
   ticketSkill --> cookbook
   tickets --> planSkill
-  cookbook -. proof contract .-> planSkill
+  cookbook -. "Done / Proof contract" .-> planSkill
   planSkill --> tickets
 
   tickets --> execSkill
@@ -244,7 +244,9 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: ticket lifecycle, frontmatter contract, invocation policy, and
   durable progress policy
 - [tickets/templates/ticket.md](/Users/kenjipcx/coding-harness/Farplane/tickets/templates/ticket.md)
-  Purpose: canonical ticket shape for planning, artifact-first evidence, and optional `Agent Contract`, `Autonomy Readiness`, and `Evidence Checklist` sections for UI-bearing or unattended work
+  Purpose: canonical compact ticket-as-program shape for task scope, delta,
+  program pseudocode, map, `Done / Proof`, state, links, and optional agent
+  contract/run hints for delegated or unattended work
 - [tickets](/Users/kenjipcx/coding-harness/Farplane/tickets)
   Purpose: active ticket board
 - [tickets/archive](/Users/kenjipcx/coding-harness/Farplane/tickets/archive)

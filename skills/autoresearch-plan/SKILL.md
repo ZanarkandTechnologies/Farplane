@@ -23,7 +23,7 @@ source: local
 - [ ] Dry-run the verify command and prove it emits one parseable metric.
 - [ ] Write or update the session artifacts without overwriting existing runs
   blindly.
-- [ ] Link ticket proof contract fields when the session supports ticketed
+- [ ] Link ticket `Done / Proof` fields when the session supports ticketed
   work.
 - [ ] Hand off to [autoresearch-exec](../autoresearch-exec/SKILL.md) only after
   the session contract is valid.
@@ -60,9 +60,9 @@ experiments; use `autoresearch-exec`.
 6. **Write session files:** create `autoresearch.md`, `autoresearch.sh`,
    optional `autoresearch.checks.sh`, and initialize `autoresearch.jsonl`.
 7. **Ticket bridge:** when this session supports ticketed work, update the
-   ticket `Proof Contract` with metric name, direction, verify command, guard
-   command, minimum acceptable result when known, `Autoresearch warranted: yes`,
-   and the session path.
+   ticket `Done / Proof` block with metric name, direction, verify command,
+   guard command, minimum acceptable result when known,
+   `Autoresearch warranted: yes`, and the session path.
 8. **Hand off:** tell the user to run `autoresearch-exec` for bounded or
    unbounded execution.
 
@@ -134,7 +134,7 @@ Guard commands protect correctness and should not be optimized directly.
   off to `autoresearch-exec`.
 - **Ticketed work:** keep the ticket as the shared scoreboard. Do not copy the
   full session contract into the ticket; link the session path from the ticket
-  `Proof Contract`.
+  `Done / Proof` block.
 
 ## Top Gotchas
 

@@ -9,8 +9,8 @@ If any answer is weak, tighten the plan first.
 - Did the plan actually use the right references: PRD, specs, ticket, memory, troubles, lessons, code?
 - Does the ticket stay in the canonical single-surface body shape instead of a
   parallel reviewer-versus-implementer document?
-- Does the plan organize around `Summary`, `Scope`, `Delta`, `Map`,
-  `Build Plan`, `Verification`, and sparse `Notes`?
+- Does the plan organize around `Summary`, `Scope`, `Delta`, `Program`, `Map`,
+  `Done / Proof`, `State`, `Links`, and sparse `Notes`?
 - Is the before/after delta clear enough to approve without reading an
   appendix?
 - When a visual map would make material work easier to understand, does the
@@ -21,8 +21,8 @@ If any answer is weak, tighten the plan first.
   in the map or a compact fallback flow?
 - Are proof points concrete and observable?
 - Are risk, rollback, and human gates clear enough for the size of the change?
-- Is the build plan detailed enough to execute without inventing missing steps
-  while still staying skimmable?
+- Is the task program detailed enough to execute without inventing missing
+  steps while still staying skimmable?
 - If optional sections are present, are they concrete and distinct rather than
   duplicated filler?
 - Is the recommendation phrased as a decision when a real decision exists?
@@ -38,7 +38,7 @@ If any answer is weak, tighten the plan first.
 - Are we saying too much for a straightforward change?
 - Are we saying too little for a risky or unfamiliar path?
 - Would a reviewer understand how the change happens from the delta map and
-  build plan without reading a separate execution brief?
+  task program without reading a separate execution brief?
 - Did we accidentally write an essay where one system map with inline seams and
   one numbered data-flow path would be clearer?
 - Did we bury the trust-building code understanding below the fold instead of
@@ -49,9 +49,8 @@ If any answer is weak, tighten the plan first.
   support deterministic proof before build starts?
 - Is the top approval surface still short enough to skim quickly?
 - If a split is proposed, is it because of proof, reuse, blocker risk, or runtime boundary rather than commit count?
-- Are `Options considered`, `Gap Analysis`, `Autonomy Readiness`,
-  `Acceptance Criteria`, or `Proof Contract` present because the ticket truly
-  needs them?
+- Are `Options considered`, `Gap Analysis`, `Run Hints`, `Agent Contract`, or
+  sidecar `plan.md` present because the ticket truly needs them?
 
 ## Fail If
 
@@ -68,7 +67,7 @@ If any answer is weak, tighten the plan first.
   map or a compact fallback `Signature delta`
 - the plan depends on typed payload continuity but never shows the state or
   payload path in the map or a compact fallback typed flow
-- the ticket needs sequencing but omits `Build Plan`
+- the ticket needs sequencing but omits `Program`
 - the plan depends on tricky setup but never checks whether the ticket's `Test hook` is sufficient
 - the plan explains everything except the actual delta
 - the plan hides behind tentative "maybe/could" language instead of making a

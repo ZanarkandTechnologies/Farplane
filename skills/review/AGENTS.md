@@ -13,14 +13,14 @@ Own the thin callable review wrapper for Farplane's docs-owned rubric contract.
   results. See `MEM-0131`.
 - `evidence-quality` and `integration-readiness` are hard gates: if either
   required family is below `TAS-A`, the overall verdict cannot be `pass`.
-- Caller skills or ticket `Proof Contract` own rubric routing.
+- Caller skills or ticket `Done / Proof` own rubric routing.
   `docs/review/rubrics/*` owns TAS meanings, family definitions, hard gates,
   and rubric bodies. This module owns the callable wrapper and output shape.
   See `MEM-0129`.
 - For code, cleanup, integration, or evidence-heavy review, the live review surface must use the anti-slop search playbook, return a compact `search_scope`, and express substantive findings with severity/confidence and concrete file refs. See `MEM-0020`.
 - Review output must contain concrete findings and next actions, not just questions or vibes.
 - The canonical live rubric references are `docs/review/rubrics/*`, not the
-  legacy review-skill reference directory or `skills/code-review/`.
+  retired review-skill reference directory or `skills/code-review/`.
 - Keep the `SKILL.md` Todo List as plain natural-language todo-list text with Markdown links rather than a custom mini-language. See `MEM-0028` and `MEM-0124`.
 
 ## Notes

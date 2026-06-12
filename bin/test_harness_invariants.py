@@ -57,7 +57,14 @@ TICKET_TEMPLATE_TEXT = """\
 claimed_by:
 ---
 
-- Result summary:
+## Summary
+
+## Program
+
+## Done / Proof
+
+## State
+
 - Do not store raw `session_id` values in ticket frontmatter.
 """
 
@@ -137,7 +144,13 @@ This file is generic instructions.
             write_file(
                 root / "tickets/templates/ticket.md",
                 """\
-- Result summary:
+## Summary
+
+## Program
+
+## Done / Proof
+
+## State
 """,
             )
             result = self.run_validator(root)

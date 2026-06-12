@@ -93,7 +93,7 @@ Use this routing:
   need, constraints, assumptions, first slice, proof, and non-goals.
 - Specs should preserve the same basis when they deepen architecture or
   behavior.
-- Tickets should carry the basis into `Plan`, `Gap Analysis`, `Verification`,
-  and `Proof Contract` without duplicating the whole PRD.
+- Tickets should carry the basis into `Delta`, `Gap Analysis`, `Program`, and
+  `Done / Proof` without duplicating the whole PRD.
 - Implementation plans should challenge whether the ticket's basis is still
   valid against local code, docs, and proof surfaces before execution.

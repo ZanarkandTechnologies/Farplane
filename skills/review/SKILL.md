@@ -100,7 +100,7 @@ call `plan` to re-plan the same parent task scope.
 
 ## Rubric Family Catalog
 
-The calling skill, workflow, or ticket `Proof Contract` owns rubric routing.
+The calling skill, workflow, or ticket `Done / Proof` owns rubric routing.
 The review docs own the available families, TAS meanings, and hard gates. Use
 `docs/review/rubrics/reviewer-handoff.md` when creating a durable reviewer
 handoff.
@@ -167,7 +167,8 @@ near miss, not a pass. `TAS-D` means review cannot proceed without more context.
 When the Stop hook requests visible completion review with a nonce, write a
 ticket-scoped completion receipt under
 `tickets/TASK-XXXX/artifacts/review/<timestamp>-completion-receipt.json`, link
-it from ticket `Evidence`, and tell the calling lane to echo the same nonce as:
+it from ticket `Links` or `State`, and tell the calling lane to echo the same
+nonce as:
 
 ```text
 COMPLETION_PASSWORD: <nonce>

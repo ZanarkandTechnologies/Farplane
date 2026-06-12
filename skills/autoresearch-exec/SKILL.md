@@ -75,9 +75,9 @@ Reference split:
    to risk unrelated user changes in the editable scope.
 2. **Resume state:** summarize baseline, best metric, last runs, open ideas, and
    the next run number from `autoresearch.jsonl`.
-3. **Ticket bridge:** when the session is linked from a ticket `Proof Contract`,
-   keep run summaries and final metric evidence linkable from that ticket's
-   `Evidence` section.
+3. **Ticket bridge:** when the session is linked from a ticket `Done / Proof`
+   block, keep run summaries and final metric evidence linkable from that
+   ticket's `Links` or `State` section.
 4. **Baseline if needed:** run `./autoresearch.sh`, parse the primary metric,
    run checks if configured, and log `baseline`.
 5. **Pick one hypothesis:** use `autoresearch.md`, JSONL ASI, ideas, and git log
@@ -122,7 +122,7 @@ python3 skills/autoresearch-exec/scripts/summarize_jsonl.py autoresearch.jsonl
 ## Core Decision Branches
 
 - **No session files:** stop execution and use `autoresearch-plan`.
-- **Ticket Proof Contract exists:** treat it as the scoreboard for expected
+- **Ticket Done / Proof exists:** treat it as the scoreboard for expected
   metric, direction, guard, and evidence link. If the session contradicts the
   ticket, stop and reconcile the contract before continuing.
 - **Dirty tree:** continue only when dirty files are unrelated to editable scope;

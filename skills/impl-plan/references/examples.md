@@ -14,15 +14,15 @@ sections.
   `references/template.md`, `references/review.md`, `references/examples.md`,
   `README.md`, `AGENTS.md`
 - `Out:` changing ticket storage, installing the edited skill into live
-  Codex home, or removing the ticket-level proof contract
+  Codex home, or removing ticket-level proof requirements
 
 ## Delta
 - `Before:` the template emits `Plan`, `Diagram`, `Signature delta`,
   `Type Sketch`, `Typed flow example`, `Refs`, and `Evidence` as mostly
   separate surfaces.
-- `After:` the template emits `Delta`, `Map`, `Build Plan`, `Verification`,
-  and sparse `Notes`; the map carries changed seams and typed flow when that is
-  clearer than prose.
+- `After:` the template emits `Delta`, `Program`, `Map`, `Done / Proof`,
+  `State`, `Links`, and sparse `Notes`; the map carries changed seams and
+  typed flow when that is clearer than prose.
 - `Why now:` verbose plan output makes approval slower and buries the actual
   before/after change.
 
@@ -43,34 +43,36 @@ flowchart LR
   old["old Plan section<br/>signature + type + evidence blocks"]:::remove
   delta["Delta<br/>before -> after"]:::add
   map["Map<br/>impl-plan / map(ticket): DeltaMap"]:::add
-  build["Build Plan<br/>ordered steps"]:::add
-  verify["Verification<br/>tests + review focus"]:::add
+  program["Program<br/>vars + operations"]:::add
+  proof["Done / Proof<br/>done_when + checks"]:::add
   audit["ticket evidence after execution"]:::keep
 
   ticket --> old
   ticket --> delta
-  delta --> map
-  map -- "1. seams: file / symbol(input): output" --> build
-  map -- "2. payload path: DraftPlan -> ReviewedPlan" --> verify
-  verify --> audit
+  delta --> program
+  program --> map
+  map -- "1. seams: file / symbol(input): output" --> proof
+  map -- "2. payload path: DraftPlan -> ReviewedPlan" --> proof
+  proof --> audit
 ```
 
-## Build Plan
-1. Rewrite the template around `Delta`, `Map`, `Build Plan`, `Verification`,
-   and sparse `Notes`.
+## Program
+1. Rewrite the template around `Delta`, `Program`, `Map`, `Done / Proof`,
+   `State`, `Links`, and sparse `Notes`.
 2. Update the prompt and `SKILL.md` rules so signatures and typed flow live in
    the map first, with fallback sections only when needed.
 3. Tighten the review checklist so default `Evidence`, citation dumps, and fake
    option comparisons fail.
 4. Refresh README, examples, and maintenance notes to match the new contract.
 
-## Verification
-- `Tests:` run `python3 skills/skill-maintenance/scripts/check_skills.py --write`
-- `Manual checks:` inspect the package for stale default `Evidence`, `Refs`,
-  and unconditional `Options considered`
-- `Review focus:` output compactness, map usefulness, concrete build steps,
-  proof clarity
-- `Human gate:` approval before using the updated planner for live ticket work
+## Done / Proof
+- `done_when:` planner emits the new compact ticket-as-program shape.
+- `checks:` run `python3 skills/skill-maintenance/scripts/check_skills.py --write`
+- `manual:` inspect the package for stale default `Evidence`, `Refs`, and
+  unconditional `Options considered`.
+- `review:` output compactness, map usefulness, concrete program steps, proof
+  clarity.
+- `human_gate:` approval before using the updated planner for live ticket work.
 
 ## Notes
 - `Blast radius:` future `impl-plan` outputs get shorter and more visual.
@@ -79,12 +81,9 @@ flowchart LR
 - `Citations:` `MEM-0030`, `MEM-0031`, `MEM-0050`, `MEM-0062`
 - `Blockers:` none
 
-## Proof Contract
-- `Metric:` none mechanical
-- `Review rubrics / TAS gates:` planning clarity, evidence discipline, skill
-  consistency
-- `Hard gates:` skill package surfaces agree on the same output shape
-- `Required proof:` skill-maintenance check plus manual drift scan
+## State
+- `next_action:` apply after approval.
+- `latest_verification:` not run yet.
 ````
 
 ## Bad
@@ -97,7 +96,7 @@ Why bad:
 
 - no before/after delta
 - no visual map or code seams
-- no ordered build plan
-- no concrete verification
+- no task program
+- no concrete done/proof
 - no rationale for optional sections
 - still sounds like hand-wavy prose instead of a believable ticket plan

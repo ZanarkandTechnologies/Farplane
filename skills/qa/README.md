@@ -2,7 +2,9 @@
 
 Proof-gathering execution phase for one selected ticket.
 
-Use `$qa` to collect evidence under `tickets/TASK-XXXX/artifacts/qa/`, update the ticket `Evidence` section, write `result.json`, and finish with `IMPL_RESULT: status=qa_complete ...`.
+Use `$qa` to collect evidence under `tickets/TASK-XXXX/artifacts/qa/`, update
+the ticket `Links` or `State` section, write `result.json`, and finish with
+`IMPL_RESULT: status=qa_complete ...`.
 
 When `$qa` is invoked from a live `$impl` coordinator lane, keep browser driving delegated to `qa-tester` instead of using `agent-browser` directly from the coordinator session.
 

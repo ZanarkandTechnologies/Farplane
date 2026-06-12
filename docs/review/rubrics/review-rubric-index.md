@@ -5,12 +5,14 @@ skill is a thin callable wrapper over this docs-owned contract.
 
 Use it to:
 
-- read the ticket `Proof Contract` for declared rubric gates and metric claims
+- read the ticket `Done / Proof` block for declared rubric gates and metric
+  claims
 - choose the right rubric families for the ticket
 - load the anti-slop search playbook when the review needs repo-grounded skepticism
 - locate the correct family reference files
 - assign one TAS to each family from modular binary checks
-- write one structured review result and link it from the ticket `Evidence` section
+- write one structured review result and link it from the ticket `Links`,
+  `State`, or artifact references
 
 ## Shared TAS Contract
 
@@ -116,7 +118,7 @@ Hard gates:
 
 Choose rubric families from the ticket context:
 
-- ticket `Proof Contract`:
+- ticket `Done / Proof`:
   - start with declared rubric families, TAS gates, and hard gates
   - add any missing families required by the actual changed surface
   - check declared metrics separately as traceability/evidence, not as a
@@ -328,7 +330,8 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
 
 ## Review Result
 
-Write the final review as a linked artifact and surface it from the ticket `Evidence` section.
+Write the final review as a linked artifact and surface it from ticket `Links`
+or `State`.
 
 Required fields:
 

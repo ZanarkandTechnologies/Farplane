@@ -25,7 +25,7 @@ Final completion review should be visible instead of hidden:
 - when mechanical phase and artifact gates pass, Stop hook should request one
   visible completion-review receipt keyed by a nonce
 - the live reviewer lane should run `review`, write the receipt under
-  `tickets/TASK-XXXX/artifacts/review/`, and link it from the ticket `Evidence`
+  `tickets/TASK-XXXX/artifacts/review/`, and link it from ticket `Links` or `State`
 - Stop hook should validate that receipt on the next Stop event before routing
   to orchestrator or completion
 

@@ -85,7 +85,7 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 
 | Source | Adopt | Adapt | Reject / defer |
 | --- | --- | --- | --- |
-| Symphony spec | Workspaces, claims, retry/reconcile vocabulary, `WORKFLOW.md` discipline, conformance matrix | Treat Symphony as a future caller through the envelope/proof contract | Do not copy the daemon or state-polling trigger model for local mode now |
+| Symphony spec | Workspaces, claims, retry/reconcile vocabulary, `WORKFLOW.md` discipline, conformance matrix | Treat Symphony as a future caller through the envelope and Done / Proof contract | Do not copy the daemon or state-polling trigger model for local mode now |
 | Codex app primitives | Skills, subagents, worktrees, automations, cloud/local execution as trusted runtime primitives | Route compute targets to these primitives when available | Do not pretend Farplane is a separate execution engine |
 | Farplane current system | Tickets, skills, Work Admission, Stop-hook proof, review gates, Ralph board context | Generalize ticket reading through `BoardAdapter`, explicit invocation, and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
 

@@ -58,7 +58,7 @@ prompts changed.
 - Prompt file diff
 - `rules/prompt-engineering.md`
 - Caller workflow or agent config
-- Ticket proof contract or expected output schema
+- Ticket `Done / Proof` or expected output schema
 - Prior failure notes in `docs/LESSONS.md` when relevant
 
 ## Finding Cues

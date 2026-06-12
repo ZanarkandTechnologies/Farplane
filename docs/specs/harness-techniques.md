@@ -48,7 +48,7 @@ This inventory is grounded in:
 | Repo docs as the system of record | Implemented | `docs/`, tickets, root `AGENTS.md`, `README.md` | Makes intent, plans, and constraints visible to agents instead of hiding them in chat | some knowledge still lives in research notes or discussion before promotion |
 | Discovery funnel before execution | Implemented | `skills/brainstorm`, `skills/deep-interview`, `skills/prd`, `README.md` | Pushes ambiguity reduction ahead of build work while keeping one public brainstorm surface that can branch into structured decomposition when needed | still depends on operator choosing the right intake skill |
 | Post-system-design agent testability planning | Implemented | `skills/agent-testability-plan`, `docs/specs/agent-testability-surfaces.md`, `skills/spec-to-ticket`, `skills/impl-plan` | Turns system design into reusable control accelerators, state probes, coordination views, and proof surfaces before later ticket/build planning has to guess them | still needs broader rollout and concrete follow-up tickets to prove the doctrine across more repos |
-| Autonomy Readiness surfaced before execution | Implemented | `skills/deep-init-project`, `skills/prd`, `skills/spec-to-ticket`, `tickets/templates/ticket.md`, `skills/review` | Forces missing inputs, permissions, compute, tools, QA risks, and human gates to be named before long-running or `$ralph` runs discover them late | useful only when tickets keep readiness concrete instead of decorative |
+| Compact ticket-as-program contract | Implemented | `tickets/README.md`, `tickets/templates/ticket.md`, `skills/impl-plan`, `skills/spec-to-ticket`, `skills/review` | Keeps task memory readable by composing scope, delta, pseudocode operations, map, state, links, and one `Done / Proof` scoreboard instead of duplicated acceptance / verification / proof sections | useful only when agents keep `Program`, `Done / Proof`, `State`, `Links`, progress logs, and artifacts current |
 | Spec-first before ticket execution | Implemented | `docs/specs/spec-first-execution-loop.md`, `README.md` | Keeps execution downstream of clarified specs | broad spec quality still determines downstream ticket quality |
 | Symphony-style spec authoring contract | Implemented | `docs/specs/spec-authoring-contract.md`, `skills/deep-system-design`, `skills/spec-to-ticket`, `skills/impl-plan` | Gives complex runtime/service specs explicit depth, domain model, state, config, failure, observability, and conformance sections while keeping PRDs and tickets lighter | useful only when applied selectively; small tickets should not inherit service-runtime ceremony |
 | Ticketization with proof/testability front-loaded | Implemented | `skills/spec-to-ticket`, `tickets/templates/ticket.md` | Converts intent into executable work with proof expectations early | ticket quality varies with planning rigor |
@@ -190,7 +190,7 @@ The owning surfaces are:
 - `skills/gap-analysis`, `skills/harness-advisor`, and
   `skills/optimize-harness`: behavior gap to placement, eval plan, and proof
   loop
-- `skills/review` plus ticket proof contracts: anti-self-approval gates
+- `skills/review` plus ticket `Done / Proof` contracts: anti-self-approval gates
 - `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/TROUBLES.md`, and
   `docs/LESSONS.md`: durable timeline, invariants, pain logs, and distilled
   learning

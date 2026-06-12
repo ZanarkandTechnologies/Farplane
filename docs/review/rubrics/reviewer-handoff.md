@@ -7,7 +7,8 @@ agent to run material review.
 
 - The calling skill or workflow owns rubric routing because it knows the domain
   intent.
-- The ticket `Proof Contract` stores the filled-in handoff for ticketed work.
+- The ticket `Done / Proof` block stores the filled-in handoff for ticketed
+  work.
 - The reviewer validates the declared routing and may add an obvious missing
   hard-gate family with a short explanation.
 - The `review` skill owns TAS semantics, family definitions, hard gates, and

@@ -23,12 +23,12 @@ The main surfaces are:
 
 Prefer improving review loops, ticket contracts, skill packaging, and evidence surfaces before inventing more hidden orchestration code.
 
-Ticketed work should use the ticket `Proof Contract` as the shared scoreboard
-for metrics, review TAS gates, and required evidence. Keep full rubric
-bodies in `docs/review/rubrics/*` and full autoresearch session details in
-the owning autoresearch artifacts; tickets carry handles, TAS gates, and
-artifact obligations. Use `Metrics: none mechanical` rather than inventing fake
-metrics for judgment-heavy work. See `MEM-0086`.
+Ticketed work should use the ticket `Done / Proof` block as the shared
+scoreboard for done conditions, checks, review TAS gates, and required
+evidence. Keep full rubric bodies in `docs/review/rubrics/*` and full
+autoresearch session details in the owning autoresearch artifacts; tickets
+carry handles, TAS gates, and artifact obligations. Use `none mechanical`
+rather than inventing fake metrics for judgment-heavy work. See `MEM-0086`.
 
 Do not describe a workflow as a shipped public capability until the repo
 actually contains the discoverable `skills/<name>/` package and the canonical
@@ -86,6 +86,10 @@ attach to a ticket and use a Goal Packet: `ticket.md` for the task contract,
 `program.md` for loop configuration, and `progress.md` for append-only turn
 logs. Use `goal-advisor` to choose Goal versus heartbeat, rollout, or feedback
 shape and to compile the final native `/goal` prompt.
+Ticket bodies should stay compact and program-shaped: `Summary`, `Scope`,
+`Delta`, `Program`, `Map`, `Done / Proof`, `State`, `Links`, and sparse
+`Notes`. Put loop configuration in `program.md`, append-only logs in
+`progress.md`, and bulky proof/review outputs under `artifacts/`.
 Use `harness-advisor` for Farplane improvement placement decisions before
 expanding root policy, global templates, skills, subagents, hooks/scripts,
 ticket contracts, docs/specs, validators, or registries. It reads the feature

@@ -30,7 +30,7 @@ The current repos should converge into this product model:
 
 | Current surface | Target name | Role |
 | --- | --- | --- |
-| `Farplane/` | Farplane Core | Harness, skills, tickets, hooks, evals, review gates, proof contracts, and lifecycle doctrine |
+| `Farplane/` | Farplane Core | Harness, skills, tickets, hooks, evals, review gates, Done / Proof contracts, and lifecycle doctrine |
 | `Farplane-Console/` | Farplane Console | Operational dashboard for harness health, evals, maintenance, usage telemetry, nudges, and self-improvement workflows |
 | `Farplane-UI/` | Farplane UI | Optional immersive office/game UI for Codex, skill objects, world interactions, and spatial workflows. Farplane Office is an alias for this mode, not a rename target now. |
 | archived health ideas | Mighty Guard | Farplane Console module for harness health, observability, evals, and maintenance |

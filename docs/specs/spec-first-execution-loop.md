@@ -35,8 +35,9 @@ Use these terms precisely:
 - **Claim**: which execution lane currently owns a work package
 - **Progress surface**: the visible file/state that says what is active, what is
   done, and what is next
-- **Autonomy Readiness**: the explicit inputs, permissions, compute, tools, QA
-  risks, and human gates an agent needs before running unattended
+- **Run Hints**: compact execution hints for inputs, permissions, compute,
+  tools, QA risks, human gates, and agent decision boundaries before
+  unattended or delegated work
 - **Work Admission**: `$work` classification of one request, ticket, batch,
   board-selected unit, epic, or metric loop into Goal, compute, planning,
   proof, testability, and downstream skill choices
@@ -95,12 +96,13 @@ unless there is a real:
 - brownfield integration boundary
 - execution-risk boundary
 
-Each work package that may be run unattended or drained by `$ralph` should carry
-`Autonomy Readiness`: required user inputs/assets, credentials, external
-services, compute, tooling gaps, QA risks, human gates, and agent decision
-boundaries.
+Each work package should use the compact ticket-as-program body: `Summary`,
+`Scope`, `Delta`, `Program`, `Map`, `Done / Proof`, `State`, `Links`, and
+sparse `Notes`.
 
-Material or unattended work packages may also carry `Execution Profile Hints`.
+Material, delegated, unattended, or `$ralph`-drained packages should also carry
+`Run Hints`: required user inputs/assets, credentials, external services,
+compute, tooling gaps, QA risks, human gates, and agent decision boundaries.
 Those hints help `$work` decide size, Goal policy, compute, planning, proof,
 and batchability, but they do not start execution.
 
@@ -176,7 +178,7 @@ The main agent orchestrates a work package; it does not personally do every
 step when separate lanes are available. The default lane split is:
 
 1. builder implements inside the declared scope
-2. reviewer scores the work against the ticket proof contract and selected
+2. reviewer scores the work against the ticket `Done / Proof` contract and selected
    review rubrics
 3. QA gathers evidence such as logs, screenshots, repro steps, and observations
 4. evidence-check verifies whether the QA evidence supports the claimed verdict

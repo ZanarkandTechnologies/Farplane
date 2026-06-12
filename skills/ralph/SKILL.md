@@ -39,8 +39,8 @@ parallel agents in v0.
   next ticket
 - the operator wants related tiny tickets grouped into a testable batch before
   handing them to `$work`
-- tickets already carry enough `Autonomy Readiness`, proof, and blocker detail
-  for unattended work to be safe
+- tickets already carry enough `Done / Proof`, run hints, state, and blocker
+  detail for unattended work to be safe
 
 Do not use this for vague requirements, new architecture discovery, Notion or
 Linear adapters, cloud runners, deploy/push/spend actions, or parallel
@@ -144,7 +144,7 @@ Stop instead of improvising when:
 - the loop reaches the operator-specified maximum iteration count
 - QA risk is too high for the available proof surfaces
 
-## Autonomy Readiness
+## Board Readiness
 
 Before a long run, check whether the board says what the agent will need:
 
@@ -202,7 +202,7 @@ Use `advise` before continuing when these choices are not mechanically clear:
 When done, the run must leave:
 
 - each attempted ticket updated by `$work` or the downstream owning phase skill
-- selector and phase evidence linked from ticket `Evidence` when meaningful
+- selector and phase evidence linked from ticket `Links` or `State` when meaningful
 - per-ticket proof rows and a batch regression row when Ralph selected a batch
 - a final `RALPH_RESULT` line with status, selected ticket or `none`, and stop
   reason

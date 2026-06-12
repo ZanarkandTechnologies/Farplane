@@ -14,9 +14,9 @@
 - Keep repo rules in root `AGENTS.md`; keep planning mechanics in this skill.
 - Keep the plan detailed enough that a builder can execute it without
   inventing missing steps, while still staying skimmable from the top.
-- Center the output on `Delta`, `Map`, `Build Plan`, `Verification`, and sparse
-  `Notes`; keep `Evidence`, `Refs`, `Options considered`, and
-  `Autonomy Readiness` conditional or ticket-owned.
+- Center the output on `Delta`, `Program`, `Map`, `Done / Proof`, `State`,
+  `Links`, and sparse `Notes`; keep bulky evidence, review reports,
+  `Options considered`, and `Run Hints` conditional or sidecar-owned.
 - Use the map as the primary visual approval surface for material work when it
   makes the before/after flow, changed seams, or typed data path easier to
   understand. See `MEM-0030`.
@@ -34,7 +34,7 @@
 
 - Lead with one top-level delta map when it makes flow, ownership, changed
   seams, or typed data path easier to understand.
-- Require an explicit `Build Plan` when the ticket is material enough that the
+- Require an explicit `Program` when the ticket is material enough that the
   builder should not have to infer sequencing.
 - Put compact callable seams in the map first when trust depends on seeing code
   seams, interfaces, ownership boundaries, or changed handlers.
@@ -67,7 +67,7 @@
   list when interface shape matters.
 - Typed flow is visible in the map or compact fallback flow when data movement
   matters.
-- `Build Plan` is present when sequencing is non-trivial.
+- `Program` is present when sequencing is non-trivial.
 - The recommendation is decisive and action-oriented when the ticket involves a
   material choice.
 - Split rule remains explicit.

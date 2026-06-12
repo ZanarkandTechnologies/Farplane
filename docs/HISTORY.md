@@ -308,3 +308,4 @@
 2026-06-12 16:30 +0800 | FEAT | add the Goal Packet contract for native Codex Goal loops, including `goal-advisor`, upgraded `goal-crafter`, `with-human`, ticket `program.md`/`progress.md` templates, and a read-only goal drift reviewer agent
 2026-06-12 17:05 +0800 | CLEANUP | remove the old session-shaped human-feedback autoresearch skill now that `with-human` is the Goal Packet feedback provider
 2026-06-12 10:40 +0800 | SKILL | rename the human-feedback Goal preset to `optimize-with-human`, keep `human_feedback` as the Goal Packet metric signal, and route Telegram-first optimization loops through `goal-advisor`
+2026-06-12 11:16 +0800 | DOCS | adopt the compact ticket-as-program standard with `Program` and `Done / Proof` replacing duplicated acceptance, verification, and proof-contract sections

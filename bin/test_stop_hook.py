@@ -682,8 +682,8 @@ class StopHookReviewerPromptTests(unittest.TestCase):
             "phase": "building",
             "status": "building",
             "next_action": "test",
-            "acceptance_gaps": [],
-            "evidence_gaps": [],
+            "done_gaps": [],
+            "proof_gaps": [],
             "blockers": [],
             "requires_qa": True,
             "requires_demo": False,
@@ -882,8 +882,8 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
             {
                 "ticket_id": "TASK-0042",
                 "blockers": [],
-                "acceptance_gaps": [],
-                "evidence_gaps": [],
+                "done_gaps": [],
+                "proof_gaps": [],
                 "requires_qa": True,
                 "requires_demo": False,
                 "artifact_root": ROOT / "tickets" / "TASK-0042" / "artifacts",
@@ -1253,8 +1253,8 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 "phase": "building",
                 "status": "building",
                 "next_action": "test",
-                "acceptance_gaps": [],
-                "evidence_gaps": [],
+                "done_gaps": [],
+                "proof_gaps": [],
                 "blockers": [],
                 "requires_qa": True,
                 "requires_demo": False,
@@ -1338,8 +1338,8 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 "phase": "building",
                 "status": "building",
                 "next_action": "test",
-                "acceptance_gaps": [],
-                "evidence_gaps": [],
+                "done_gaps": [],
+                "proof_gaps": [],
                 "blockers": [],
                 "requires_qa": True,
                 "requires_demo": False,
@@ -1410,8 +1410,8 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 "phase": "building",
                 "status": "building",
                 "next_action": "test",
-                "acceptance_gaps": [],
-                "evidence_gaps": [],
+                "done_gaps": [],
+                "proof_gaps": [],
                 "blockers": [],
                 "requires_qa": True,
                 "requires_demo": False,
@@ -1486,8 +1486,8 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 "phase": "building",
                 "status": "building",
                 "next_action": "test",
-                "acceptance_gaps": [],
-                "evidence_gaps": [],
+                "done_gaps": [],
+                "proof_gaps": [],
                 "blockers": [],
                 "requires_qa": True,
                 "requires_demo": False,
@@ -1585,7 +1585,7 @@ class StopHookGroundingSummaryTests(unittest.TestCase):
                 [
                     "GROUNDING_SUMMARY: initial summary",
                     "working notes",
-                    "GROUNDING_SUMMARY: reviewing TASK-0026 acceptance criteria",
+                    "GROUNDING_SUMMARY: reviewing TASK-0026 proof conditions",
                     "IMPL_RESULT: status=continue_impl next=building reason=test",
                 ]
             )
@@ -1728,10 +1728,11 @@ last_verification: none
 
 # TASK-9999: stale packet fixture
 
-## Acceptance Criteria
-- [x] AC-1
+## Done / Proof
+- `Done when:`
+  - [x] proof condition
 
-## Evidence
+## Links
 - [QA report](tickets/TASK-9999/artifacts/qa/report.md)
 
 ## Blockers
@@ -1777,10 +1778,11 @@ last_verification: none
 
 # TASK-9999: stale evidence fixture
 
-## Acceptance Criteria
-- [x] AC-1
+## Done / Proof
+- `Done when:`
+  - [x] proof condition
 
-## Evidence
+## Links
 - [QA report](tickets/TASK-9999/artifacts/qa/report.md)
 
 ## Blockers

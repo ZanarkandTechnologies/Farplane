@@ -28,7 +28,7 @@ Use these equations as the compact model:
 - `skill = reusable workflow + references + optional scripts/templates`
 - `specialist behavior = subagent + invoked skill`
 - `hook = control point that can inspect artifacts and route the next action`
-- `ticket = durable task memory + proof target + progress surface`
+- `ticket = durable task memory + compact task program + proof target + progress surface`
 
 Two consequences matter most:
 

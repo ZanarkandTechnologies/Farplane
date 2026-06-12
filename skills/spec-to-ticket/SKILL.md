@@ -30,7 +30,8 @@ common_chains:
 - [ ] Split only when a hard trigger applies: shared platform reuse, migration/backfill/rollout risk, external dependency/provisioning, unresolved feasibility, or a real service/runtime boundary.
 - [ ] For complex systems, make the first ticket leave behind a minimal end-to-end happy path plus a reusable proof surface instead of empty scaffolding.
 - [ ] Group later follow-up tickets by shared proof surface or adjacent operator value, not one internal pipeline stage per ticket.
-- [ ] Make acceptance criteria, evidence needs, and control fields concrete in each ticket.
+- [ ] Make `Done / Proof`, evidence needs, and control fields concrete in each
+  ticket.
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the ticket contract instead of re-deriving them.
 - [ ] If there is no richer testability brief yet but `docs/bootstrap-brief.md` has `Agent Experience / Testability`, use it as the fallback seed for the first UI-bearing or agentically hard ticket.
 - [ ] If `docs/bootstrap-brief.md` or `docs/prd.md` names a project profile,
@@ -43,7 +44,8 @@ common_chains:
 - [ ] If a profile prototype gate names a real unresolved risk, create the
   PoC/proof ticket before full production tickets; do not make PoC tickets
   mechanically when the risk is already resolved.
-- [ ] If a ticket includes UI, define the `Agent Contract`, `Evidence checklist`, and testability shape up front.
+- [ ] If a ticket includes UI, define the `Agent Contract` and testability
+  shape up front.
 - [ ] If the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update the matching workflow entry.
 - [ ] If determinism or agent access looks weak, turn that into explicit instrumentation work now instead of hoping QA can improvise later.
 - [ ] Write the raw tickets into `tickets/` with the correct state fields.
@@ -82,15 +84,15 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 13. When an `Agent Testability Brief` exists, carry its control accelerators, state probes, coordination views, and proof surfaces into the ticket contract instead of re-deriving them.
 14. When `docs/bootstrap-brief.md` includes `Agent Experience / Testability` defaults and there is no richer `Agent Testability Brief`, use those defaults as the fallback source for the first UI-bearing or agentically hard ticket.
 15. Carry mechanically meaningful metric candidates from the PRD or spec into
-    each ticket's `Proof Contract`, and write `Metrics: none mechanical` when a
-    metric would be fake or subjective.
-16. Carry `Autonomy Readiness` from the PRD, bootstrap brief, system design,
-    taste brief, or agent testability brief into any ticket expected to run
-    unattended or under `$ralph`.
-16d. Add `Execution Profile Hints` for material, unattended, `$ralph`, or
-    batchable work. These hints are advisory context for `$work`, not runtime
-    authority. Include likely size, goal recommendation, compute hint,
-    proof weight, batchability, and why.
+    each ticket's `Done / Proof`, and write `none mechanical` when a metric
+    would be fake or subjective.
+16. Carry run-readiness fields from the PRD, bootstrap brief, system design,
+    taste brief, or agent testability brief into `Run Hints` for any ticket
+    expected to run unattended, in a batch, or under `$ralph`.
+16d. Add `Run Hints` for material, unattended, `$ralph`, or batchable work.
+    These hints are advisory context for `$work`, not runtime authority.
+    Include likely size, Goal recommendation, compute hint, proof weight,
+    batchability, and why.
 16a. When the bootstrap brief or PRD carries a `ProjectProfile`, use its
     component matrix, selected directions, prototype gates, pipeline handoffs,
     and proof surfaces to shape ticket boundaries.
@@ -120,23 +122,22 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 ## Output
 
 - `tickets/*.md` ticket files with:
-  - goal
-  - diagram-first approval summary for material work
-  - acceptance criteria
+  - compact `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`,
+    `State`, `Links`, and sparse `Notes`
+  - map-first approval summary for material work
+  - done conditions
   - dependencies
   - assignee
   - required evidence/backpressure
-  - `Proof Contract` with metric handles, caller-declared rubric families,
-    required TAS gates, reviewer handoff fields, hard gates, and required
-    evidence obligations
-  - `Execution Profile Hints` for `$work` admission when useful
+  - `Done / Proof` with metric handles, caller-declared rubric families,
+    required TAS gates, hard gates, checks, and required evidence obligations
+  - `Run Hints` for `$work` admission when useful
   - control fields for state movement
-  - for UI-bearing tickets: `Agent Contract` + `Evidence checklist`
+  - for UI-bearing tickets: `Agent Contract`
   - when the repo has `qa/cookbook/` and the slice is UI-bearing or
     agentically hard: matching cookbook seed or update
-  - `Autonomy Readiness` for any ticket whose execution might be delegated,
-    looped, or drained by `$ralph`
-  - `User Evidence` placeholders
+  - `Run Hints` for any ticket whose execution might be delegated, looped, or
+    drained by `$ralph`
 
 ## UI-bearing Ticket Contract
 
@@ -165,14 +166,9 @@ Required fields:
 - `Expected artifacts`: screenshots, snapshots, traces, or other proof
 - `Delegate with`: ticket ID, ticket file path/section, recommended assignee, expected output artifact
 
-Add a compact `Evidence checklist` below the `Agent Contract` for UI-bearing tickets.
-
-<!--
-Evidence should be declared up front so QA knows which artifacts must exist before the ticket can close.
-Keep the list short; over-declaring proof makes the loop noisy.
--->
-
-Good checklist items are concrete proof artifacts, for example:
+Declare required UI evidence in `Done / Proof` so QA knows which artifacts must
+exist before the ticket can close. Keep the list short; over-declaring proof
+makes the loop noisy. Good items are concrete proof artifacts, for example:
 
 - `Screenshot: default screen`
 - `Screenshot: empty state`
@@ -180,7 +176,8 @@ Good checklist items are concrete proof artifacts, for example:
 - `Snapshot: interaction state`
 - `QA report linked`
 
-The checklist should stay short and only include proof the ticket actually needs.
+The evidence list should stay short and only include proof the ticket actually
+needs.
 
 If the UI is hard to test without extra controls, turn those controls into explicit ticket work. Typical examples:
 
@@ -219,19 +216,21 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
     tiny proof/PoC that removes the highest uncertainty and leaves a reusable
     proof surface behind.
 5. If that candidate no longer fits one build loop, justify the split with one of the hard triggers above and choose the boundary that removes the most future friction while preserving strong proof.
-6. For each ticket, write concrete acceptance criteria, control fields, evidence requirements, and a `Test hook`.
-7. For each material ticket, add a compact `Proof Contract` that names
+6. For each ticket, write concrete done conditions, control fields, evidence
+   requirements, and a `Test hook`.
+7. For each material ticket, add a compact `Done / Proof` block that names
    mechanical metrics or `none mechanical`, caller-declared rubric families,
-   required TAS gates, reviewer handoff fields, hard gates, and required
-   evidence artifacts.
-8. For each material ticket, write a compact `Diagram Summary` with one top-level delta map; use `diagramming` for inline-signature, color/legend, and anti-bloat patterns.
-9. For each UI-bearing or agentically hard ticket, add a compact `Agent Contract` block plus `Evidence checklist`, carrying forward the brief or bootstrap surfaces when relevant.
-10. For each `$ralph`-ready or long-running ticket, add `Autonomy Readiness`
-   with needed inputs/assets, credentials, compute, tools, QA risks, and human
-   gates.
-10a. For each material or unattended ticket, add `Execution Profile Hints`:
-    likely size, Goal recommendation, compute hint, planning hint, proof
-    weight, batchability, and batch reason or no-batch reason.
+   required TAS gates, hard gates, checks, and required evidence artifacts.
+8. For each material ticket, write a compact `Map` with one top-level delta
+   diagram when useful; use `diagramming` for inline-signature, color/legend,
+   and anti-bloat patterns.
+9. For each UI-bearing or agentically hard ticket, add a compact
+   `Agent Contract` block, carrying forward the brief or bootstrap surfaces
+   when relevant.
+10. For each `$ralph`-ready, batchable, or long-running ticket, add `Run Hints`
+   with needed inputs/assets, credentials, compute, tools, QA risks, human
+   gates, likely size, Goal recommendation, planning hint, proof weight,
+   batchability, and no-batch reason when relevant.
 11. If the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry from the same `Open`, `Stabilize`, `Inspect`, and proof assumptions.
 12. If agentic testing looks weak, add instrumentation work into the ticket now instead of hoping QA can discover a path later.
 13. Write the finished raw tickets into `tickets/` using the ticket template.
@@ -279,7 +278,7 @@ Split when one of the explicit hard triggers makes the work stop being one coher
 4. Do not write vague visual criteria like "looks good"; encode the key screens, states, and expected proof artifacts.
 5. Do not mark tickets `$ralph`-ready when credentials, compute, external
    access, hard-to-QA surfaces, or human gates are still unnamed.
-5a. Do not treat `Execution Profile Hints` as permission to start work.
+5a. Do not treat `Run Hints` as permission to start work.
     Tickets, cards, and `compute_target` remain context; explicit invocation
     starts execution.
 6. Do not split a coherent feature into schema/backend/UI tickets just because those layers differ.

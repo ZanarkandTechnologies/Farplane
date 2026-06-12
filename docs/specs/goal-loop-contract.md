@@ -66,15 +66,17 @@ Tiny one-turn work should not use native Goal mode.
 
 Owns the durable task contract:
 
-- objective
+- objective and summary
 - scope in and out
-- acceptance criteria
-- proof contract
+- before/after delta and first-principles basis
+- compact task program when the workflow fits in the ticket
+- Done / Proof scoreboard
 - current status and `next_action`
 - human gates and safety boundaries
-- evidence links
+- sidecar and artifact links
 
-Do not put long chronological logs or mutable loop strategy in `ticket.md`.
+Do not put long chronological logs, bulky evidence, or mutable loop strategy in
+`ticket.md`.
 
 ### `program.md`
 
@@ -92,7 +94,10 @@ Owns the loop configuration:
 - child-ticket or rollout policy when relevant
 
 `program.md` is not a second `SKILL.md`. It is the configuration for this one
-Goal loop.
+Goal loop. For short non-Goal work, the ticket `Program` section can hold the
+task pseudocode directly. Use `program.md` when the program is long-running,
+Goal-backed, heartbeat-based, rollout-like, skill-improvement oriented, or
+likely to need multiple resumptions.
 
 ### `progress.md`
 
@@ -116,7 +121,7 @@ Do not paste raw transcript. Keep each entry compact and reconstructable.
 The generated native Goal prompt should use four explicit sections:
 
 ```text
-Task: <ticket objective, scope, proof contract, and current next_action>
+Task: <ticket objective, scope, Done / Proof, and current next_action>
 Logging: <how to append progress.md before turn end>
 Metric: <metric_provider or feedback_provider from program.md>
 After each turn: <drift check, next-action choice, complete/blocked policy>

@@ -79,7 +79,7 @@ Use these as starting points, then let the owning skill tighten them.
 
 - Backoff does not create permission to launch Codex, own ticket queues, poll
   boards, retry failed phases, push code, merge PRs, deploy, or spend money.
-- Backoff does not replace workflow-specific limits, proof contracts, or
+- Backoff does not replace workflow-specific limits, Done / Proof contracts, or
   terminal-state notification rules.
 - Hooks and scripts may calculate the next wait, but broad autonomy decisions
   still belong to the visible workflow, ticket, skill, or external runner.

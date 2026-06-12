@@ -31,10 +31,9 @@ allowed-tools: Read, Glob, Grep
 - [ ] Use `goal-advisor` or native `/goal` when the work is ambitious,
   long-running, batch-oriented, board-draining, metric-driven, or likely to
   need durable unblock behavior.
-- [ ] When a ticket already has metrics, acceptance criteria, proof commands,
-  or blockers and Goal is recommended, route through `goal-advisor` for Goal
-  Packet shape and prompt compilation instead of restarting
-  discovery.
+- [ ] When a ticket already has `Done / Proof`, metrics, checks, scope, or
+  blockers and Goal is recommended, route through `goal-advisor` for Goal
+  Packet shape and prompt compilation instead of restarting discovery.
 - [ ] Record blockers with evidence instead of asking the operator when the
   ticket policy already gives a safe fallback.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -120,10 +119,10 @@ current work should run as an active Goal, heartbeat, rollout, feedback loop,
 or direct execution. For material Goal work, the result should attach to a
 Goal Packet with `ticket.md`, `program.md`, and `progress.md`.
 
-When the work unit already carries a ticket, plan, or Proof Contract with
-metrics, acceptance criteria, verification commands, blockers, or scope
-boundaries, `goal-advisor` should preserve the existing work contract and ask
-only missing execution-safety questions, not broad product-discovery questions.
+When the work unit already carries a ticket, plan, or `Done / Proof` with done
+conditions, metrics, checks, blockers, or scope boundaries, `goal-advisor`
+should preserve the existing work contract and ask only missing
+execution-safety questions, not broad product-discovery questions.
 
 Do not use Goal for:
 
@@ -227,7 +226,7 @@ Profile:
 unit=single_ticket
 ambition=normal
 goal=recommend only when long-running or ambiguous
-goalPrep=ticket_backed_state when the ticket has a Proof Contract or blockers
+goalPrep=ticket_backed_state when the ticket has `Done / Proof` or blockers
 planning=impl_plan when material
 proof=tests,qa,review
 ```
