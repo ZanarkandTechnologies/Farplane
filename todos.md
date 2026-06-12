@@ -6,8 +6,8 @@ Generic active todo surface for multi-ticket or `batch-work` passes.
 
 - [ ] `TASK-0159`: add Farplane local telemetry event ledger.
 - [ ] `TASK-0160`: instrument Farplane hooks and add telemetry status CLI.
-- [ ] `TASK-0161`: add Aikage Farplane event ingest.
-- [ ] `TASK-0162`: add Aikage Farplane telemetry dashboard panel.
+- [ ] `TASK-0161`: add Farplane Console event ingest.
+- [ ] `TASK-0162`: add Farplane telemetry panel in Farplane Console.
 - [ ] `TASK-0163`: add Farplane skill usage and prune candidate report.
 
 ## Notes

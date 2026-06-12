@@ -383,7 +383,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--token",
         default=os.environ.get("FARPLANE_TELEMETRY_API_TOKEN", ""),
-        help="Telemetry bearer token or Aikage ingest key.",
+        help="Telemetry bearer token or Farplane Console ingest key.",
     )
     args = parser.parse_args(argv)
 

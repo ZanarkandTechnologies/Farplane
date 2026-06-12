@@ -11,8 +11,8 @@
           },
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/aikage_ping.py\"",
-            "statusMessage": "Sending Aikage start heartbeat",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
+            "statusMessage": "Sending Farplane Console start heartbeat",
             "timeout": 5
           }
         ]
@@ -29,8 +29,8 @@
           },
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/aikage_ping.py\"",
-            "statusMessage": "Sending Aikage stop heartbeat",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
+            "statusMessage": "Sending Farplane Console stop heartbeat",
             "timeout": 5
           }
         ]

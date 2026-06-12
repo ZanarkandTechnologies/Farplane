@@ -1,4 +1,4 @@
-# PRD: Farplane Aikage Telemetry Sync
+# PRD: Farplane Console Telemetry Sync
 
 ## Problem / Context
 
@@ -6,8 +6,8 @@ Farplane now has generated skill registries, tier checks, graph views, runtime
 hooks, and a skill-opportunity learning loop, but the operator cannot easily
 see whether those surfaces are actually being used. The current hook telemetry
 path can POST a small lifecycle payload when `FARPLANE_TELEMETRY_API_URL` is
-set, and Aikage already stores agent activity pings in Convex, but there is no
-local-first Farplane event ledger, no skill usage diagnostics, and no Aikage
+set, and Farplane Console already stores agent activity pings in Convex, but there is no
+local-first Farplane event ledger, no skill usage diagnostics, and no Farplane Console
 view for hook health, skill routing, or self-improvement outcomes.
 
 This creates a trust gap: unused skills cannot be pruned confidently, learning
@@ -16,10 +16,10 @@ truth.
 
 ## Audience
 
-- Primary: the Farplane operator managing skills, hooks, tickets, and Aikage.
+- Primary: the Farplane operator managing skills, hooks, tickets, and Farplane Console.
 - Secondary: future agents maintaining Farplane runtime hooks and skill
   registry health.
-- Tertiary: Aikage dashboard users who want project/machine/session level
+- Tertiary: Farplane Console users who want project/machine/session level
   agent activity without reading local JSONL files.
 - Non-technical collaborators who need to review what the agent noticed,
   understand the message context, and approve or ignore created learning
@@ -28,16 +28,16 @@ truth.
 ## JTBD
 
 When Farplane runs turns, hooks, skills, tickets, validators, and learning
-loops, I want a local-first event ledger that can optionally sync to Aikage, so
+loops, I want a local-first event ledger that can optionally sync to Farplane Console, so
 I can see what actually happened, debug missing feedback, and decide which
 skills or hooks deserve maintenance.
 
 ## SLC Slice (Next Release)
 
-Ship a local-first Farplane telemetry event ledger plus optional Aikage Convex
-sync and a compact Aikage dashboard panel. The first slice tracks lifecycle,
+Ship a local-first Farplane telemetry event ledger plus optional Console Convex
+sync and a compact Farplane Console panel. The first slice tracks lifecycle,
 skill request/routing, hook result, ticket transition, validator, and
-self-improvement events. It must not require Aikage to be available for
+self-improvement events. It must not require Farplane Console to be available for
 Farplane to work.
 
 ## Goals
@@ -45,11 +45,11 @@ Farplane to work.
 - Farplane writes deterministic local JSONL events under `.farplane/events/`.
 - Existing hook telemetry calls reuse the local event writer before attempting
   network sync.
-- Aikage accepts a richer `farplane_event` ingest shape through Convex HTTP.
-- Aikage dashboard shows Farplane event health using the existing visual
+- Farplane Console accepts a richer `farplane_event` ingest shape through Convex HTTP.
+- Farplane Console shows Farplane event health using the existing visual
   system: square panels, JetBrains Mono headings, bento layout, dark/light
   theme variables, compact diagnostics.
-- Aikage exposes an Agent Learning Inbox that turns self-improvement runs into
+- Farplane Console exposes an Agent Learning Inbox that turns self-improvement runs into
   plain-language ticket cards with message context and approve/ignore/revisit
   actions.
 - The operator can run one local status command to see hook health,
@@ -65,7 +65,7 @@ Farplane to work.
 
 Secondary candidates:
 
-- Aikage ingest smoke pass: POST fixture event to local/Convex endpoint and
+- Farplane Console ingest smoke pass: POST fixture event to local/Convex endpoint and
   query it back.
 - Skill visibility pass: a fixture `$impl-plan` prompt produces a
   `skill_requested` or `control_surface_detected` event.
@@ -75,9 +75,9 @@ Secondary candidates:
 ## Non-Goals
 
 - Do not build a background Farplane daemon.
-- Do not make Aikage required for local Farplane operation.
+- Do not make Farplane Console required for local Farplane operation.
 - Do not sync raw transcripts, secrets, full prompts, raw assistant outputs, or
-  repo file contents to Aikage.
+  repo file contents to Farplane Console.
 - Do not infer "skill actually loaded" when only prompt/request routing is
   observable. Track `skill_requested`, `skill_routed`, and
   `control_surface_detected` honestly.
@@ -90,7 +90,7 @@ Secondary candidates:
 ### US-001: Local Event Ledger
 
 **Description:** As the operator, I want Farplane hooks to write local event
-JSONL before any cloud sync, so local proof exists even when Aikage is offline.
+JSONL before any cloud sync, so local proof exists even when Farplane Console is offline.
 
 **Acceptance Criteria:**
 
@@ -105,7 +105,7 @@ JSONL before any cloud sync, so local proof exists even when Aikage is offline.
 ### US-002: Skill And Hook Usage Diagnostics
 
 **Description:** As the operator, I want a local command that summarizes skill
-requests, hook runs, validator runs, self-improvement windows, and Aikage sync
+requests, hook runs, validator runs, self-improvement windows, and Console sync
 status, so I can see whether the harness is alive.
 
 **Acceptance Criteria:**
@@ -117,25 +117,25 @@ status, so I can see whether the harness is alive.
       counts.
 - [ ] The CLI flags zero learning application runs when windows exist.
 
-### US-003: Aikage Farplane Event Ingest
+### US-003: Farplane Console Event Ingest
 
-**Description:** As the operator, I want Aikage to accept Farplane event
+**Description:** As the operator, I want Farplane Console to accept Farplane event
 envelopes through its existing private ingest key model, so local agents can
 sync richer telemetry without a new auth system.
 
 **Acceptance Criteria:**
 
-- [ ] Aikage Convex schema stores Farplane events separately from existing
+- [ ] Console Convex schema stores Farplane events separately from existing
       activity pings.
 - [ ] HTTP ingest accepts a bounded event payload with the existing key lookup.
 - [ ] Sensitive fields are bounded, truncated, or omitted.
 - [ ] Queries can return dashboard-safe aggregate event counts without raw
       prompt contents.
 
-### US-004: Aikage Agent Learning Inbox
+### US-004: Farplane Console Agent Learning Inbox
 
 **Description:** As the operator or a non-technical collaborator, I want
-Farplane's learning tickets to appear as a plain-language inbox in Aikage, so I
+Farplane's learning tickets to appear as a plain-language inbox in Farplane Console, so I
 can see what the agent noticed, which messages caused it, and what action to
 take next without reading raw logs.
 
@@ -174,7 +174,7 @@ can tell whether the agent is actually learning from repeated corrections.
 - [ ] Each learning review can include bounded message context: who said it,
       when it happened, a short summary, and a redacted excerpt safe for a
       product UI.
-- [ ] Aikage shows a recent learning-hook log with filter chips for all,
+- [ ] Farplane Console shows a recent learning-hook log with filter chips for all,
       launched, skipped, no-signal, proposed, created, and failed.
 - [ ] The UI never shows raw prompt or transcript text by default; it shows
       sanitized summaries and local artifact handles.
@@ -210,14 +210,14 @@ duplicative, or worth turning into methods.
 - FR-3b: Learning-ticket payloads may include bounded message context for UI
   review: role, timestamp, short summary, and a redacted excerpt. Full raw
   prompts, full assistant responses, transcript paths, and secrets remain
-  excluded from Aikage sync by default.
+  excluded from Console sync by default.
 - FR-4: Keep cloud sync best-effort and non-blocking.
 - FR-5: Reuse existing `FARPLANE_TELEMETRY_API_URL`,
   `FARPLANE_TELEMETRY_API_TOKEN`, and timeout env vars unless a new endpoint
   path is required.
-- FR-6: Add Aikage Convex table and HTTP route for Farplane event ingest.
-- FR-7: Add Aikage dashboard-safe aggregate query fields.
-- FR-8: Add dashboard UI consistent with Aikage current design system.
+- FR-6: Add Console Convex table and HTTP route for Farplane event ingest.
+- FR-7: Add Console dashboard-safe aggregate query fields.
+- FR-8: Add dashboard UI consistent with Farplane Console current design system.
 - FR-9: Add local status/prune-report commands.
 
 ## Constraints
@@ -226,7 +226,7 @@ duplicative, or worth turning into methods.
   responses, secrets, env vars, local config, or repo file contents.
 - Performance: hook writes must be fast and must not block turn completion on
   network calls.
-- Platform: Farplane side must remain Python standard-library first. Aikage
+- Platform: Farplane side must remain Python standard-library first. Farplane Console
   side uses Convex, React, Vite, TypeScript, Tailwind, and existing shadcn
   primitives.
 - Budget/time: first implementation should be a small set of proofable tickets,
@@ -235,53 +235,53 @@ duplicative, or worth turning into methods.
 ## Autonomy Readiness
 
 - Human inputs/assets needed:
-  - Aikage branch name and whether implementation should happen in that branch.
-  - Aikage ingest key for live smoke, if live cloud sync is tested.
+  - Farplane Console branch name and whether implementation should happen in that repo.
+  - Farplane Console ingest key for live smoke, if live cloud sync is tested.
 - Credentials / external services:
-  - Convex dev/prod deployment configured for Aikage.
+  - Convex dev/prod deployment configured for Farplane Console.
   - Optional `FARPLANE_TELEMETRY_API_URL` and token.
 - Compute or runtime needs:
   - Local Python tests in Farplane.
-  - Aikage `pnpm lint`, `pnpm exec tsc -b`, `pnpm build`, and Convex tests or
+  - Farplane Console `pnpm lint`, `pnpm exec tsc -b`, `pnpm build`, and Convex tests or
     local dev smoke where available.
 - Tooling or testability gaps:
   - Current telemetry helper has no local event log.
-  - Current Aikage table models only coarse activity pings and posts.
+  - Current Console table models only coarse activity pings and posts.
 - Hard-to-QA surfaces:
   - Hook events are easy to miss unless fixture runners simulate payloads.
   - Cloud sync failures should be visible without failing local hooks.
 - Human gates:
   - Plan approval: required before implementation.
-  - QA approval: required for Aikage UI screenshots.
+  - QA approval: required for Farplane Console UI screenshots.
   - Deploy/publish: explicit user approval only.
   - Spend/billing: none expected.
   - Destructive/migration actions: no destructive migrations; Convex schema
     additions only.
 - Agent decision boundaries:
   - The agent may add local files, tests, schema additions, and dashboard UI.
-  - The agent must not deploy Aikage or mutate production Convex without
+  - The agent must not deploy Farplane Console or mutate production Convex without
     explicit approval.
 
 ## Risks / Unknowns
 
-- Aikage work is on another branch; implementation must verify the active
+- Farplane Console work is on another branch; implementation must verify the active
   branch before editing.
 - Codex hook payloads may not expose reliable skill-load events. The first
   version must track observable requested/routed events rather than claiming
   true runtime skill usage.
 - Existing unrelated dirty Farplane files are present; implementation must
   stage only this feature's files.
-- Convex schema changes may need generated types refreshed in Aikage.
+- Convex schema changes may need generated types refreshed in Farplane Console.
 
 ## Backpressure / Evidence to Ship
 
 - Tests:
   - Farplane Python telemetry unit tests.
   - Farplane hook fixture tests.
-  - Aikage TypeScript/lint/build.
+  - Farplane Console TypeScript, lint, and build.
 - QA:
   - Local CLI summary output.
-  - Aikage dashboard screenshot with Farplane telemetry panel.
+  - Farplane Console screenshot with Farplane telemetry panel.
 - Perf checks:
   - Hook telemetry emits local event and returns without network configured.
   - Network timeout remains bounded.
