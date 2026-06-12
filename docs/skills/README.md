@@ -34,7 +34,7 @@ into a second place to maintain skill truth.
 
 ## Skill UI And Feature Progression
 
-Skill-owned UI is the incubation layer for Farplane AI product surfaces. Use it
+Skill-owned UI is the incubation layer for Farplane UI product surfaces. Use it
 when a workflow benefits from a focused viewer, form, graph, dashboard, or URL
 binding before the workflow is stable enough to become a first-class product
 module.
@@ -47,7 +47,7 @@ Progression:
    URL helps the operator run or inspect the workflow.
 3. Skill UI proves repeated value: the workflow is used often, clarifies
    decisions, or exposes a product pattern.
-4. Farplane AI absorbs it: the main product shell owns the route, navigation,
+4. Farplane UI absorbs it: the main product shell owns the route, navigation,
    shared state, and visual system.
 5. The skill keeps the binding: the route still points back to the owning skill,
    proof surface, or workflow contract.
@@ -56,7 +56,7 @@ Default ownership:
 
 - The skill owns workflow semantics, required data, proof expectations,
   scripts, and any early UI binding metadata.
-- Farplane AI owns product navigation, shared components, global project/thread
+- Farplane UI owns product navigation, shared components, global project/thread
   context, and polished routes once the surface graduates.
 - `skill-maintenance` owns generated skill inventory and registry correctness.
 - A future harness map surface may own cross-skill or repo-wide UI discovery
@@ -65,8 +65,8 @@ Default ownership:
 Use this rule of thumb:
 
 - unproven workflow -> skill-owned UI
-- repeated useful workflow -> Farplane AI route backed by the skill
-- core product workflow -> first-class Farplane AI module
+- repeated useful workflow -> Farplane UI route backed by the skill
+- core product workflow -> first-class Farplane UI module
 - niche or deprecated workflow -> keep as a skill UI or remove it
 
 ## Human Selection Guide

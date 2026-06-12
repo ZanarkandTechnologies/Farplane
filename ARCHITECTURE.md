@@ -13,8 +13,18 @@ whole-system diagram changes.
 
 ## Purpose
 
-Farplane is a harness repo for running long-form engineering work through visible
-artifacts instead of hidden runtime state or transcript memory alone.
+Farplane is Farplane Core: the harness repo for running long-form engineering
+work through visible artifacts instead of hidden runtime state or transcript
+memory alone.
+
+Farplane Core now sits inside the Farplane OS product family:
+
+| Surface | Path | Owns |
+| --- | --- | --- |
+| Farplane Core | `Farplane/` | Harness contracts, skills, hooks, evals, tickets, review, proof, and repo memory |
+| Farplane Console | `../Farplane-Console/` | Operational dashboard, activity telemetry, nudges, eval views, and Mighty Guard health workflows |
+| Farplane UI | `../Farplane-UI/` | Optional immersive office/game experience and skill-object interactions |
+| Farplane Office | alias only | The office/game mode inside Farplane UI, not a repo rename |
 
 The repo is organized around five concerns:
 
