@@ -2,10 +2,10 @@
 
 Bootstrap or migrate a project into the docs-first, ticket-first harness model.
 This setup should start with a deep-interview-quality bootstrap intake, then
-scaffold optional `.githooks/` samples plus project-local `scripts/pre_*_check.sh`
-files for local quality gates, plus repo-owned runtime and `qa/` guidance so
-agents can launch the app and capture evidence without guessing, all without
-enabling hooks automatically.
+scaffold optional `.githooks` samples plus project-local `scripts/pre_*_check.sh`
+files for local quality gates, a Codex SDK pre-push diff-review loop, plus
+repo-owned runtime and `qa/` guidance so agents can launch the app and capture
+evidence without guessing, all without enabling hooks automatically.
 
 ## Use Cases
 
@@ -23,20 +23,23 @@ bash ~/.codex/skills/deep-init-project/scripts/bootstrap.sh
 Before finalizing the scaffold, run a bootstrap intake with the same discipline
 as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
 That intake should explicitly answer whether local hooks should be enabled, what
-belongs in `pre-push` or `pre-commit`, which heavy local checks such as
-`desloppify` or `CodeRabbit` are desired, and whether a separate CI/deployment
-gate exists. It should also name the canonical app-only run path, canonical
-full QA or evidence-capture path, required services such as DB or orchestration
-tools, and any port or environment-variable assumptions.
+belongs in `pre-push` or `pre-commit`, whether the Codex SDK diff reviewer
+should be advisory or strict, which heavy local checks such as `desloppify` or
+CodeRabbit are desired, and whether a separate CI/deployment gate exists. It
+should also name the canonical app-only run path, canonical full QA or
+evidence-capture path, required services such as DB or orchestration tools, and
+any port or environment-variable assumptions.
 
 That also writes `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
-and `scripts/pre_push_check.sh` as opt-in samples. The recommended default is
-to keep the large-file scan, fill in lint/typecheck/test/build commands, and
-activate only `pre-push` unless the repo wants an extra pre-commit gate. The
-other required follow-through is to fill `PROJECT_RULES.md` and `qa/` with the
-authoritative launch path agents should use for ordinary app work versus QA.
+`scripts/pre_push_check.sh`, review docs, and review-agent helper scripts as
+opt-in samples. The recommended default is to keep the large-file scan, fill in
+lint/typecheck/test/build commands, run advisory Codex SDK diff review during
+pre-push, and activate only `pre-push` unless the repo wants an extra
+pre-commit gate. The other required follow-through is to fill
+`PROJECT_RULES.md` and `qa/` with the authoritative launch path agents should
+use for ordinary app work versus QA.
 
 Then follow the funnel:
 
@@ -82,13 +85,25 @@ chmod +x .githooks/pre-push
 Leave `pre-commit` disabled unless the project explicitly wants the heavier
 local gate on every commit.
 
-If `coderabbit` is installed, the scaffolded `pre-push` hook will run it after
-local validators and only when authenticated. Override the review base branch if
-needed:
+For Node projects, add the Codex SDK reviewer dependencies and scripts:
 
 ```bash
-CODERABBIT_BASE_BRANCH=develop
+npm install --save-dev @openai/codex-sdk tsx
 ```
+
+Then add package scripts:
+
+```json
+{
+  "review:agent": "tsx scripts/codex_review_agent.ts",
+  "review:prepush": "bash scripts/run_pre_push_review.sh"
+}
+```
+
+The local diff reviewer reads the installed
+`~/.codex/skills/code-review/SKILL.md` contract when the Farplane install script
+has linked the skill package. CodeRabbit remains an optional heavier external
+review pass when installed and explicitly configured.
 
 ### 2. Do not ticketize the whole backlog
 
@@ -143,6 +158,7 @@ Those can come after one clean ticket run.
 
 - [ ] `docs/bootstrap-brief.md` exists and captures stack/topology/gate decisions
 - [ ] `docs/bootstrap-brief.md` captures local-hook, heavy-check, and CI/deploy-gate decisions
+- [ ] `docs/bootstrap-brief.md` captures Codex SDK diff-review policy and code-review skill linkage
 - [ ] `docs/bootstrap-brief.md` captures canonical app/QA run paths plus required services and port/env assumptions
 - [ ] `docs/bootstrap-brief.md` captures agent-experience/testability decisions
 - [ ] `PROJECT_RULES.md` exists
@@ -151,6 +167,7 @@ Those can come after one clean ticket run.
 - [ ] `ARCHITECTURE.md` exists
 - [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
+- [ ] `docs/code_review.md`, `docs/review-agent.md`, and review helper scripts exist
 - [ ] one QA cookbook page records the evidence-capture launch path and expected targets
 - [ ] `docs/specs/README.md` exists
 - [ ] `tickets/` structure exists

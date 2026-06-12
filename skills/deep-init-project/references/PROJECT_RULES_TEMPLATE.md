@@ -64,6 +64,23 @@ This file defines the project-specific technical rules, tech stack, and conventi
   - Desloppify: `[command or disabled]`
   - CodeRabbit: `coderabbit review --plain --type committed --base [branch]`
 
+## 🧑‍⚖️ Review Policy
+- **Canonical material reviewer**: Farplane reviewer lane from
+  `~/.codex/agents/reviewer.toml` plus the TAS `review` skill.
+- **Local pre-push reviewer**: `scripts/codex_review_agent.ts` reviews
+  deterministic check logs and git diff as a lightweight second pair of eyes
+  using `~/.codex/skills/code-review/SKILL.md` when installed.
+- **Pre-push default**: advisory Codex SDK diff review after local validators.
+- **Skip local diff review**: `FARPLANE_SKIP_AGENT_REVIEW=1`.
+- **Strict local diff review**: `STRICT_AGENT_REVIEW=1`.
+- **Required setup for Node projects**:
+  - dev dependencies: `@openai/codex-sdk`, `tsx`
+  - scripts: `review:agent`, `review:prepush`
+- **Review artifacts**: `.farplane/reviews/` (gitignored)
+- **When to route to canonical reviewer**: material ticket completion,
+  TAS-gated review, evidence-bundle review, prompt/skill/eval changes, or
+  completion receipts.
+
 ## ▶ Runtime / QA Commands
 - **Authoritative app-only run path**: [e.g., `pnpm dev`, `npm run dev`, `uv run fastapi dev app/main.py`]
 - **Authoritative QA / evidence run path**: [e.g., `pnpm run dev:qa`, `docker compose up app db`, `./scripts/qa_up.sh`]

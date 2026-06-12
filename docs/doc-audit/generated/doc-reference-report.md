@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-11T19:24:30+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-12T03:34:03+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -29,10 +29,10 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 
 ## Counts
 
-- Scanned files: `942`
-- Nodes: `662`
-- Edges: `2197`
-- Unresolved local-looking refs: `740`
+- Scanned files: `947`
+- Nodes: `665`
+- Edges: `2202`
+- Unresolved local-looking refs: `757`
 
 ## Most Referenced Docs
 

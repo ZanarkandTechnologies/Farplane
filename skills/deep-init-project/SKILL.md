@@ -56,6 +56,10 @@ agent-efficient verification guidance.
   local quality gates
 - optional `scripts/pre_commit_check.sh` and `scripts/pre_push_check.sh`
   templates for repo-local validators
+- optional local Codex SDK pre-push diff review loop:
+  `docs/code_review.md`, `docs/review-agent.md`,
+  `scripts/collect_review_context.sh`, `scripts/codex_review_agent.ts`, and
+  `scripts/run_pre_push_review.sh`
 - discovery-to-execution funnel:
   - `brainstorm`
   - `deep-interview`
@@ -124,6 +128,11 @@ bootstrap source of truth for:
 - which hook stages matter (`pre-push`, `pre-commit`, neither, or both)
 - whether CodeRabbit and `desloppify` belong in local hooks, separate manual
   workflows, CI, or nowhere for v1
+- whether the local Codex SDK diff reviewer should run in `pre-push`, and
+  whether it is advisory or strict
+- whether the project has run the Farplane install script so
+  `~/.codex/skills/code-review/SKILL.md` is installed for the local diff
+  reviewer
 - whether a separate CI or deployment gate exists beyond local git hooks
 - agent-experience/testability defaults such as shortcuts, seed/reset paths,
   probes, and browser proof strategy
@@ -148,12 +157,15 @@ Required gate questions:
    a static/throwaway artifact that is not becoming the app foundation.
 5. Should heavy local checks such as `desloppify` or `CodeRabbit` run in local
    hooks, manual workflows, CI, or not at all initially?
-6. What separate CI or deployment gate exists, and which checks belong there
+6. Should the local Codex SDK pre-push diff reviewer run by default, should it
+   stay advisory, and has the Farplane install script linked the canonical
+   `code-review` skill into `~/.codex/skills/`?
+7. What separate CI or deployment gate exists, and which checks belong there
    instead of local hooks?
-7. What should the scaffold leave manual versus auto-decided for the operator?
-8. What are the canonical app-only and QA/evidence run paths, which services do
+8. What should the scaffold leave manual versus auto-decided for the operator?
+9. What are the canonical app-only and QA/evidence run paths, which services do
    they require, and which ports or env vars must stay configurable?
-9. What must the agent ask for before attempting unattended work: credentials,
+10. What must the agent ask for before attempting unattended work: credentials,
    assets, external access, GPU/compute, missing tools, hard-to-QA surfaces, or
    human plan/QA/deploy/spend/destructive approvals?
 
@@ -203,7 +215,20 @@ repo.
      `build`, and optional `desloppify`
    - align hook activation, local heavy checks, and any separate CI/deploy gate
      with the brief instead of guessing
-10. Fill `PROJECT_RULES.md`, `docs/bootstrap-brief.md`, and the first relevant
+10. Create local Codex SDK review-loop surfaces:
+    - copy `CODE_REVIEW_TEMPLATE.md` -> `docs/code_review.md`
+    - copy `REVIEW_AGENT_TEMPLATE.md` -> `docs/review-agent.md`
+    - copy `COLLECT_REVIEW_CONTEXT_TEMPLATE.sh` ->
+      `scripts/collect_review_context.sh`
+    - copy `CODEX_REVIEW_AGENT_TEMPLATE.ts` -> `scripts/codex_review_agent.ts`
+    - copy `RUN_PRE_PUSH_REVIEW_TEMPLATE.sh` ->
+      `scripts/run_pre_push_review.sh`
+    - keep `.farplane/reviews/` gitignored
+    - for Node projects, add `@openai/codex-sdk` and `tsx` plus
+      `review:agent` / `review:prepush` package scripts
+    - run the Farplane install script when the project should use the installed
+      reusable review contract at `~/.codex/skills/code-review/SKILL.md`
+11. Fill `PROJECT_RULES.md`, `docs/bootstrap-brief.md`, and the first relevant
     `qa/` cookbook page with the canonical runtime contract:
     - app-only run path
     - QA/evidence run path
@@ -212,19 +237,19 @@ repo.
     - frontend UI initialization plan when the repo has UI: shadcn-capable stack
       setup, darkmatter command result, explicit exception when skipped,
       tooltip-over-explainer rule, and visual QA evidence path
-11. Select or record the project profile from
+12. Select or record the project profile from
     `references/project-profiles.md`; preserve its component set, advice axes,
     prototype gates, and downstream pipeline handoff in `docs/bootstrap-brief.md`.
-12. Fill the bootstrap brief's `Agent Experience / Testability` section so the
+13. Fill the bootstrap brief's `Agent Experience / Testability` section so the
     repo has an early answer for how agents should reach, inspect, stabilize,
     and verify important app states.
-13. Fill the bootstrap brief's `Autonomy Readiness` section so future
+14. Fill the bootstrap brief's `Autonomy Readiness` section so future
     `spec-to-ticket`, `impl-plan`, and `$ralph` runs know what the agent may do
     without stopping and what must remain a human gate.
-14. If the idea is still open-ended, use `brainstorm`.
-15. If the first slice or bootstrap shape is still vague, use `deep-interview`.
-16. Use `prd` skill for requirements and PRD authoring with human feedback when needed.
-17. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+15. If the idea is still open-ended, use `brainstorm`.
+16. If the first slice or bootstrap shape is still vague, use `deep-interview`.
+17. Use `prd` skill for requirements and PRD authoring with human feedback when needed.
+18. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration
 
@@ -263,6 +288,9 @@ Migration guide:
   without silently mutating git config during bootstrap.
 - repo-local `scripts/pre_push_check.sh` keeps the actual validation contract in
   the project instead of burying lint/typecheck/test commands in the git hook.
+- `docs/code_review.md` and `docs/review-agent.md` give each repo one local
+  review standard and one explanation of how the lightweight pre-push Codex SDK
+  reviewer relates to the canonical Farplane `reviewer` lane.
 - queue state should live in ticket frontmatter rather than folder lanes.
 - `brainstorm` and `deep-interview` keep weak ideas from reaching tickets too early.
 - `deep-interview` owns the interview loop quality. `deep-init-project` should reuse
@@ -317,8 +345,15 @@ The generated planning flow should follow these defaults:
   `qa/` cookbook page instead of leaving them in chat.
 - Put project-specific lint, typecheck, test, and optional build gates into
   `scripts/pre_push_check.sh`; keep the large-file scan intact and treat
-  CodeRabbit as optional after those local checks, not as the only pre-push
-  gate.
+  the Codex SDK diff reviewer as the default advisory second pair of eyes.
+  Treat CodeRabbit as an optional heavier external review after those local
+  checks, not as the only pre-push gate.
+- The local Codex SDK diff reviewer is not a replacement for
+  `~/.codex/agents/reviewer.toml` plus the `review` skill. It should load the
+  `code-review` skill for pre-push findings; use the canonical reviewer lane
+  for material TAS-gated review.
+- If `@openai/codex-sdk` or `tsx` are unavailable, the generated pre-push
+  review runner should skip with setup guidance instead of blocking the repo.
 - The default large-file policy is `500` raw lines = warn, `1000` raw lines =
   block for tracked source files. Keep duplicate-helper or shared-utility
   heuristics advisory unless the project explicitly tightens them.
@@ -350,4 +385,9 @@ The generated planning flow should follow these defaults:
 - [PRE_PUSH_HOOK_TEMPLATE.sh](references/PRE_PUSH_HOOK_TEMPLATE.sh) - Optional pre-push sample.
 - [PRE_COMMIT_CHECK_TEMPLATE.sh](references/PRE_COMMIT_CHECK_TEMPLATE.sh) - Repo-local pre-commit validator template.
 - [PRE_PUSH_CHECK_TEMPLATE.sh](references/PRE_PUSH_CHECK_TEMPLATE.sh) - Repo-local pre-push validator template.
+- [CODE_REVIEW_TEMPLATE.md](references/CODE_REVIEW_TEMPLATE.md) - Project code review guide template.
+- [REVIEW_AGENT_TEMPLATE.md](references/REVIEW_AGENT_TEMPLATE.md) - Local Codex SDK review loop guide.
+- [COLLECT_REVIEW_CONTEXT_TEMPLATE.sh](references/COLLECT_REVIEW_CONTEXT_TEMPLATE.sh) - Review context collector template.
+- [CODEX_REVIEW_AGENT_TEMPLATE.ts](references/CODEX_REVIEW_AGENT_TEMPLATE.ts) - Codex SDK diff reviewer template.
+- [RUN_PRE_PUSH_REVIEW_TEMPLATE.sh](references/RUN_PRE_PUSH_REVIEW_TEMPLATE.sh) - Pre-push review runner template.
 - `tickets/templates/ticket.md` - Filesystem ticket template.

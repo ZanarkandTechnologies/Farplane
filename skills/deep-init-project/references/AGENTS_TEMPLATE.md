@@ -26,6 +26,7 @@ This file is loaded every loop. Keep it operational and project-specific.
 - Troubles: `docs/TROUBLES.md`
 - Lessons: `docs/LESSONS.md`
 - Taste: `docs/TASTE.md`
+- Code review: `docs/code_review.md` and `docs/review-agent.md`
 - Tickets: active `tickets/TASK-*/ticket.md`, completed `tickets/archive/TASK-*/ticket.md`
 
 ## Project Lifecycle

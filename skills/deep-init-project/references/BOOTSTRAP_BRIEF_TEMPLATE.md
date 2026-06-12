@@ -73,6 +73,10 @@ finalizing the scaffold.
 - Hook policy:
 - Hook activation choice:
 - Preferred hook stages:
+- Codex SDK pre-push diff reviewer policy:
+- Codex SDK reviewer strictness:
+- Farplane install / code-review skill linked:
+- Canonical TAS reviewer route:
 - CodeRabbit policy:
 - Desloppify policy:
 - Separate CI / deployment gate:

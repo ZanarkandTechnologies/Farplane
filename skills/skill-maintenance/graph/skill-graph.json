@@ -1873,7 +1873,7 @@
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-12T02:40:06+00:00",
+  "generated_at": "2026-06-12T03:34:02+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -2724,7 +2724,7 @@
       "tier": 3
     },
     {
-      "description": "Turn one selected ticket into proof artifacts, reconciled acceptance criteria, and a structured QA result for Stop-hook gating.",
+      "description": "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Stop-hook gating.",
       "group": "coding",
       "has_checklist": true,
       "has_todos": false,

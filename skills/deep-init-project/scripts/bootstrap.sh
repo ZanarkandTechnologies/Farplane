@@ -74,6 +74,20 @@ write_file_if_missing() {
   echo "Wrote: $dest"
 }
 
+append_line_if_missing() {
+  local dest="$1"
+  local line="$2"
+
+  if [ -e "$dest" ] && grep -Fxq "$line" "$dest"; then
+    echo "Skip (line exists): $dest :: $line"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+  printf "%s\n" "$line" >> "$dest"
+  echo "Updated: $dest"
+}
+
 echo "Bootstrapping docs-first scaffold into: $TARGET_DIR"
 echo "Force overwrite: $FORCE"
 
@@ -84,6 +98,8 @@ copy_file "${REF_DIR}/ARCHITECTURE_TEMPLATE.md" "${TARGET_DIR}/ARCHITECTURE.md"
 mkdir -p "${TARGET_DIR}/docs/specs"
 copy_file "${REF_DIR}/SPECS_README_TEMPLATE.md" "${TARGET_DIR}/docs/specs/README.md"
 copy_file "${REF_DIR}/BOOTSTRAP_BRIEF_TEMPLATE.md" "${TARGET_DIR}/docs/bootstrap-brief.md"
+copy_file "${REF_DIR}/CODE_REVIEW_TEMPLATE.md" "${TARGET_DIR}/docs/code_review.md"
+copy_file "${REF_DIR}/REVIEW_AGENT_TEMPLATE.md" "${TARGET_DIR}/docs/review-agent.md"
 
 write_file_if_missing "${TARGET_DIR}/docs/prd.md" "# PRD\n\n## Problem / Context\n\n## Audience\n\n## JTBD\n\n## SLC Slice\n\n## Goals\n\n## Non-Goals\n\n## Constraints\n\n## Risks\n\n## Backpressure\n"
 write_file_if_missing "${TARGET_DIR}/docs/HISTORY.md" "# HISTORY\n\nAppend-only change log.\n\nFormat:\nYYYY-MM-DD HH:mm Z | TYPE | summary\n\n"
@@ -104,6 +120,10 @@ copy_file "${REF_DIR}/PRE_PUSH_HOOK_TEMPLATE.sh" "${TARGET_DIR}/.githooks/pre-pu
 mkdir -p "${TARGET_DIR}/scripts"
 copy_file "${REF_DIR}/PRE_COMMIT_CHECK_TEMPLATE.sh" "${TARGET_DIR}/scripts/pre_commit_check.sh"
 copy_file "${REF_DIR}/PRE_PUSH_CHECK_TEMPLATE.sh" "${TARGET_DIR}/scripts/pre_push_check.sh"
+copy_file "${REF_DIR}/COLLECT_REVIEW_CONTEXT_TEMPLATE.sh" "${TARGET_DIR}/scripts/collect_review_context.sh"
+copy_file "${REF_DIR}/CODEX_REVIEW_AGENT_TEMPLATE.ts" "${TARGET_DIR}/scripts/codex_review_agent.ts"
+copy_file "${REF_DIR}/RUN_PRE_PUSH_REVIEW_TEMPLATE.sh" "${TARGET_DIR}/scripts/run_pre_push_review.sh"
+append_line_if_missing "${TARGET_DIR}/.gitignore" ".farplane/reviews/"
 
 mkdir -p "${TARGET_DIR}/qa/cookbook"
 copy_file "${REF_DIR}/qa/AGENTS.md" "${TARGET_DIR}/qa/AGENTS.md"
@@ -124,8 +144,10 @@ echo "  - Use qa/cookbook/ to document evidence-capture launch paths, shortcuts,
 echo "  - Use docs/TROUBLES.md for repeated misses and blockers; distill recurring lessons into docs/LESSONS.md."
 echo "  - Fill in docs/bootstrap-brief.md with explicit local-hook, heavy-check, CI/deploy gate, runtime-command, and service-assumption decisions before finalizing the scaffold."
 echo "  - Fill in scripts/pre_push_check.sh with the repo's lint, typecheck, test, build, and optional desloppify commands."
+echo "  - For Node projects, add @openai/codex-sdk + tsx and package scripts review:agent / review:prepush to enable the default Codex SDK diff reviewer."
 echo "  - Optional: enable .githooks with 'git config core.hooksPath .githooks' and prefer pre-push over pre-commit."
-echo "  - Optional: install coderabbit so pre-push can add a second review pass after local validators."
+echo "  - Optional: run the Farplane install script so ~/.codex/skills/code-review/SKILL.md, reviewer agents, and review rubrics are linked."
+echo "  - Optional: install coderabbit when an external heavyweight PR/pre-push review is useful."
 echo "  - If the idea is still open-ended, start with brainstorm."
 echo "  - For bootstrap ambiguity, run deep-interview in bootstrap mode and keep the answers in docs/bootstrap-brief.md."
 echo "  - Then use prd + spec-to-ticket to author docs/specs and create tickets/*.md."

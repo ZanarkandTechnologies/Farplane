@@ -2,14 +2,14 @@
   "counts": {
     "edge_types": {
       "directory-contains": 89,
-      "literal-path": 1657,
+      "literal-path": 1662,
       "markdown-link": 451
     },
-    "edges": 2197,
+    "edges": 2202,
     "node_kinds": {
       "agent": 19,
       "doc": 22,
-      "file": 420,
+      "file": 423,
       "research": 11,
       "review-rubric": 22,
       "root-doc": 5,
@@ -19,9 +19,9 @@
       "spec": 18,
       "template": 5
     },
-    "nodes": 662,
-    "scanned_files": 942,
-    "unresolved_refs": 740
+    "nodes": 665,
+    "scanned_files": 947,
+    "unresolved_refs": 757
   },
   "edges": [
     {
@@ -4324,6 +4324,20 @@
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/optimize-with-human",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/optimize-with-human/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/optimize-with-human/SKILL.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/optimize-with-human/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "skills/plan",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:skills/plan/README.md",
@@ -4488,20 +4502,6 @@
       "raw_ref": "skills/visual-qa",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:skills/visual-qa/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "skills/with-human",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:skills/with-human/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "skills/with-human/SKILL.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:skills/with-human/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -5367,6 +5367,13 @@
     },
     {
       "from_file": "docs/skills/registry.jsonl",
+      "raw_ref": "skills/optimize-with-human/SKILL.md",
+      "source": "file:docs/skills/registry.jsonl",
+      "target": "file:skills/optimize-with-human/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/registry.jsonl",
       "raw_ref": "skills/plan/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/plan/SKILL.md",
@@ -5601,13 +5608,6 @@
       "raw_ref": "skills/weekly-strategy-analysis/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/weekly-strategy-analysis/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/registry.jsonl",
-      "raw_ref": "skills/with-human/SKILL.md",
-      "source": "file:docs/skills/registry.jsonl",
-      "target": "file:skills/with-human/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -6872,13 +6872,6 @@
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "skills/deep-init-project",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:skills/deep-init-project/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
       "raw_ref": "skills/deep-interview",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "file:skills/deep-interview/README.md",
@@ -7281,6 +7274,27 @@
       "raw_ref": "docs/skills/README.md",
       "source": "file:docs/specs/product-convergence-plan.md",
       "target": "file:docs/skills/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/product-convergence-plan.md",
+      "raw_ref": "tickets/TASK-0191/program.md",
+      "source": "file:docs/specs/product-convergence-plan.md",
+      "target": "file:tickets/TASK-0191/program.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/product-convergence-plan.md",
+      "raw_ref": "tickets/TASK-0191/progress.md",
+      "source": "file:docs/specs/product-convergence-plan.md",
+      "target": "file:tickets/TASK-0191/progress.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/product-convergence-plan.md",
+      "raw_ref": "tickets/TASK-0191/ticket.md",
+      "source": "file:docs/specs/product-convergence-plan.md",
+      "target": "file:tickets/TASK-0191/ticket.md",
       "type": "literal-path"
     },
     {
@@ -8446,6 +8460,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/deep-init-project/references/CODE_REVIEW_TEMPLATE.md",
+      "raw_ref": "AGENTS.md",
+      "source": "skill:deep-init-project",
+      "target": "file:AGENTS.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/deep-init-project/references/PROJECT_RULES_TEMPLATE.md",
       "raw_ref": "AGENTS.md",
       "source": "skill:deep-init-project",
@@ -8545,6 +8566,13 @@
     },
     {
       "from_file": "skills/deep-init-project/references/AGENTS_TEMPLATE.md",
+      "raw_ref": "PROJECT_RULES.md",
+      "source": "skill:deep-init-project",
+      "target": "file:PROJECT_RULES.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/deep-init-project/references/CODE_REVIEW_TEMPLATE.md",
       "raw_ref": "PROJECT_RULES.md",
       "source": "skill:deep-init-project",
       "target": "file:PROJECT_RULES.md",
@@ -11176,18 +11204,18 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/goal-advisor/SKILL.md",
+      "raw_ref": "../optimize-with-human/SKILL.md",
+      "source": "skill:goal-advisor",
+      "target": "file:skills/optimize-with-human/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
       "from_file": "skills/goal-advisor/README.md",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:goal-advisor",
       "target": "file:skills/skill-maintenance/scripts/check_skills.py",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/goal-advisor/SKILL.md",
-      "raw_ref": "../with-human/SKILL.md",
-      "source": "skill:goal-advisor",
-      "target": "file:skills/with-human/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/goal-advisor/SKILL.md",
@@ -12769,6 +12797,34 @@
       "raw_ref": "../skill-maintenance/SKILL.md",
       "source": "skill:optimize-harness",
       "target": "file:skills/skill-maintenance/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/optimize-with-human/SKILL.md",
+      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "source": "skill:optimize-with-human",
+      "target": "file:docs/specs/goal-loop-contract.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/optimize-with-human/SKILL.md",
+      "raw_ref": "../../docs/specs/goal-loop-contract.md",
+      "source": "skill:optimize-with-human",
+      "target": "file:docs/specs/goal-loop-contract.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/optimize-with-human/SKILL.md",
+      "raw_ref": "../goal-advisor/SKILL.md",
+      "source": "skill:optimize-with-human",
+      "target": "file:skills/goal-advisor/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/optimize-with-human/SKILL.md",
+      "raw_ref": "../telegram-message/SKILL.md",
+      "source": "skill:optimize-with-human",
+      "target": "file:skills/telegram-message/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -14851,6 +14907,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/spec-to-ticket/references/ticket-template.md",
+      "raw_ref": "tickets/templates/ticket.md",
+      "source": "skill:spec-to-ticket",
+      "target": "file:tickets/templates/ticket.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/summarize/README.md",
       "raw_ref": "AGENTS.md",
       "source": "skill:summarize",
@@ -15362,34 +15425,6 @@
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/with-human/SKILL.md",
-      "raw_ref": "docs/specs/goal-loop-contract.md",
-      "source": "skill:with-human",
-      "target": "file:docs/specs/goal-loop-contract.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/with-human/SKILL.md",
-      "raw_ref": "../../docs/specs/goal-loop-contract.md",
-      "source": "skill:with-human",
-      "target": "file:docs/specs/goal-loop-contract.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/with-human/SKILL.md",
-      "raw_ref": "../goal-advisor/SKILL.md",
-      "source": "skill:with-human",
-      "target": "file:skills/goal-advisor/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/with-human/SKILL.md",
-      "raw_ref": "../telegram-message/SKILL.md",
-      "source": "skill:with-human",
-      "target": "file:skills/telegram-message/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/work/README.md",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:work",
@@ -15404,7 +15439,7 @@
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-06-11T19:24:30+00:00",
+  "generated_at": "2026-06-12T03:34:03+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -17291,6 +17326,18 @@
       "path": "skills/optimize-harness/SKILL.md"
     },
     {
+      "id": "file:skills/optimize-with-human/README.md",
+      "kind": "file",
+      "label": "skills/optimize-with-human/README.md",
+      "path": "skills/optimize-with-human/README.md"
+    },
+    {
+      "id": "file:skills/optimize-with-human/SKILL.md",
+      "kind": "file",
+      "label": "skills/optimize-with-human/SKILL.md",
+      "path": "skills/optimize-with-human/SKILL.md"
+    },
+    {
       "id": "file:skills/plan/README.md",
       "kind": "file",
       "label": "skills/plan/README.md",
@@ -17963,18 +18010,6 @@
       "path": "skills/weekly-strategy-analysis/SKILL.md"
     },
     {
-      "id": "file:skills/with-human/README.md",
-      "kind": "file",
-      "label": "skills/with-human/README.md",
-      "path": "skills/with-human/README.md"
-    },
-    {
-      "id": "file:skills/with-human/SKILL.md",
-      "kind": "file",
-      "label": "skills/with-human/SKILL.md",
-      "path": "skills/with-human/SKILL.md"
-    },
-    {
       "id": "file:skills/work/README.md",
       "kind": "file",
       "label": "skills/work/README.md",
@@ -18033,6 +18068,24 @@
       "kind": "file",
       "label": "tickets/TASK-0188/ticket.md",
       "path": "tickets/TASK-0188/ticket.md"
+    },
+    {
+      "id": "file:tickets/TASK-0191/program.md",
+      "kind": "file",
+      "label": "tickets/TASK-0191/program.md",
+      "path": "tickets/TASK-0191/program.md"
+    },
+    {
+      "id": "file:tickets/TASK-0191/progress.md",
+      "kind": "file",
+      "label": "tickets/TASK-0191/progress.md",
+      "path": "tickets/TASK-0191/progress.md"
+    },
+    {
+      "id": "file:tickets/TASK-0191/ticket.md",
+      "kind": "file",
+      "label": "tickets/TASK-0191/ticket.md",
+      "path": "tickets/TASK-0191/ticket.md"
     },
     {
       "id": "dir:tickets/archive",
@@ -18995,6 +19048,12 @@
       "path": "skills/optimize-harness/SKILL.md"
     },
     {
+      "id": "skill:optimize-with-human",
+      "kind": "skill",
+      "label": "optimize-with-human",
+      "path": "skills/optimize-with-human/SKILL.md"
+    },
+    {
       "id": "skill:plan",
       "kind": "skill",
       "label": "plan",
@@ -19197,12 +19256,6 @@
       "kind": "skill",
       "label": "weekly-strategy-analysis",
       "path": "skills/weekly-strategy-analysis/SKILL.md"
-    },
-    {
-      "id": "skill:with-human",
-      "kind": "skill",
-      "label": "with-human",
-      "path": "skills/with-human/SKILL.md"
     },
     {
       "id": "skill:work",
