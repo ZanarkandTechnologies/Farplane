@@ -1,7 +1,7 @@
 # Harness Algebra Adapter
 
 Use this reference when a placement decision needs the compact algebra model
-without loading the full `docs/specs/harness-algebra.md`.
+without loading the full `docs/fundamentals/harness-algebra.md`.
 
 This file is packaged with the `harness-advisor` skill during install. It is a
 distilled adapter, not a second source of truth. Load the full spec only when

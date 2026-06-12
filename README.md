@@ -218,11 +218,12 @@ flowchart LR
 | `bin/` | Hooks, validators, runtime helpers, launchers, and sync scripts. |
 | `docs/` | Specs, feature inventory, history, memory, troubles, lessons, and research. |
 | `docs/features/` | Structured feature registry and feature metadata. |
-| `docs/specs/` | Canonical behavior specs, meta-harness automation, and doc-gardening loop. |
+| `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |
+| `docs/specs/` | Buildable behavior contracts, lifecycle specs, runtime adapters, and proof gates. |
 | `experiments/` | Smoke runs, eval artifacts, prototypes, and temporary proof. |
 | `.farplane/` | Ignored project-local runtime, generated, event, and product state. |
 | `qa/` | QA cookbook, browser proof paths, and reusable test-entry guidance. |
-| `rules/` | Shared policy fragments and prompt-engineering references. |
+| `rules/` | Machine-readable local rule files. Durable best-practice docs live under `docs/specs/`. |
 | `skills/` | Farplane skill packages, references, scripts, and templates. |
 | `templates/` | Install-time global Codex templates and config scaffolding. |
 | `tickets/` | Active task board, ticket template, artifacts, and archive. |
@@ -230,8 +231,10 @@ flowchart LR
 ## Start Here
 
 - Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
+- Fundamentals: [docs/fundamentals/README.md](docs/fundamentals/README.md)
 - Specs index: [docs/specs/README.md](docs/specs/README.md)
-- Harness algebra: [docs/specs/harness-algebra.md](docs/specs/harness-algebra.md)
+- Harness algebra: [docs/fundamentals/harness-algebra.md](docs/fundamentals/harness-algebra.md)
+- Prompt engineering: [docs/fundamentals/prompt-engineering.md](docs/fundamentals/prompt-engineering.md)
 - Self-growing harness map: [docs/specs/harness-techniques.md](docs/specs/harness-techniques.md#self-growing-harness-map)
 - Feature inventory: [harness-techniques.md](docs/specs/harness-techniques.md)
 - Structured feature registry: [docs/features/README.md](docs/features/README.md)

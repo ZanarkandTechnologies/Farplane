@@ -2103,7 +2103,7 @@ def skill_opportunity_review_input(
         "feature_options": "skills/advise/SKILL.md",
         "placement": "skills/harness-advisor/SKILL.md",
         "surface_map": "ARCHITECTURE.md",
-        "harness_doctrine": "docs/specs/harness-engineering-doctrine.md",
+        "harness_doctrine": "docs/fundamentals/harness-engineering-doctrine.md",
     }
     recent_windows = recent_conversation_windows(
         project_root,

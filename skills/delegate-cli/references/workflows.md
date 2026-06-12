@@ -4,7 +4,7 @@
 
 1. Run `doctor`.
 2. Run `setup`.
-3. Load `../../../rules/prompt-engineering.md` when the rendered prompt needs stronger role/task/constraint/output-format structure.
+3. Load `../../../docs/fundamentals/prompt-engineering.md` when the rendered prompt needs stronger role/task/constraint/output-format structure.
 4. Run `run --dry-run`.
 5. Inspect the rendered prompt and command.
 6. Run live only after human gates for credentials, spend, and filesystem

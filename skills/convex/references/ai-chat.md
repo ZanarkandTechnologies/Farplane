@@ -3,7 +3,7 @@
 ## When to Use
 Use these patterns when building AI-powered chat systems with Convex Agents. Based on production code from Zanarkand.
 
-When authoring system prompts, tool instructions, structured outputs, eval prompts, or subagent prompts, also load `../../../rules/prompt-engineering.md`.
+When authoring system prompts, tool instructions, structured outputs, eval prompts, or subagent prompts, also load `../../../docs/fundamentals/prompt-engineering.md`.
 
 ## Official Docs
 - [Agents Overview](https://docs.convex.dev/agents) - Full agent documentation

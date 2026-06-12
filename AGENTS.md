@@ -98,7 +98,7 @@ owning surface. See `MEM-0106`.
 
 When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
 structured outputs, eval prompts, or agent instruction prompts, load
-`rules/prompt-engineering.md` as the shared prompt design reference.
+`docs/fundamentals/prompt-engineering.md` as the shared prompt design reference.
 
 When the operator explicitly wants audit-then-fix recovery after a likely
 assistant miss, use the current correction surfaces: fix same-scope misses
@@ -136,11 +136,13 @@ See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
 
 - `README.md`: current product shape, setup, and canonical entry points
 - `agents/`: subagent role configs and prompt contracts
-- `bin/`: hook and runtime scripts
+- `bin/`: live hook/runtime shims and shared repo commands
+- `bin/validators/`: repo-wide validation and generated-registry checks
 - `docs/`: durable specs, history, memory, troubles, lessons, and research
+- `docs/fundamentals/`: harness theory, doctrine, and cross-surface best practices
 - `experiments/`: smoke runs, eval outputs, and prototype evidence
 - `qa/`: reusable browser-QA runbooks, shortcuts, and deterministic test-entry guides
-- `rules/`: reusable policy fragments
+- `rules/`: machine-readable local rule files, not reusable best-practice docs
 - `skills/`: operational playbooks, references, scripts, and templates
 - `templates/global/`: install-only template artifacts shipped into the live Codex home
 - `tickets/`: active task board and archived work history
@@ -161,8 +163,7 @@ For general repo orientation:
 
 For harness tuning and repo-shape changes:
 
-- `docs/specs/harness-engineering-doctrine.md`
-- `docs/specs/harness-engineering-doctrine.md`
+- `docs/fundamentals/harness-engineering-doctrine.md`
 - `docs/specs/harness-techniques.md`
 - `docs/specs/spec-first-execution-loop.md`
 - `docs/specs/review-gates.md`
@@ -186,6 +187,16 @@ For harness-design research and external patterns:
 
 - No blind edits. Read the relevant spec, ticket, and nearby module docs first.
 - Tickets and docs are the source of truth; do not hide state in chat.
+- Prefer modular ownership over artifact-type scattering. A high-level package
+  such as `skills/<name>/` should own its skill-local docs, scripts, templates,
+  tests, and examples when those files only matter to that package. Use
+  `docs/fundamentals/` for cross-surface theory and best practices,
+  `docs/specs/` for concrete system contracts, `bin/validators/` for shared
+  repo-wide checks, and top-level `bin/` only for live runtime shims or commands
+  intentionally shared across packages.
+- When moving a command to a clearer owner, leave a small compatibility wrapper
+  at the old public path until references, installers, and user habits have had
+  a safe migration window.
 - Keep chat concise and put deep detail into visible repo artifacts such as the active ticket and canonical docs.
 - Keep chat concise, but make planning artifacts detailed and action-oriented.
   A strong ticket plan should say what will be built, in what order, and how
@@ -232,7 +243,7 @@ For harness-design research and external patterns:
 - Prefer `.farplane/` for live runtime state.
 - Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.
 - For Farplane harness brainstorming, explicitly compare repo-local `AGENTS.md`, `templates/global/AGENTS.md`, `skills/*`, `agents/*.toml`, and hooks / `bin/*`, then explain why the chosen surface should change now and why the others should not be the primary change surface.
-- For harness-surface placement decisions, use `docs/specs/harness-engineering-doctrine.md` before expanding root policy, subagents, hooks, or validators.
+- For harness-surface placement decisions, use `docs/fundamentals/harness-engineering-doctrine.md` before expanding root policy, subagents, hooks, or validators.
 - When changing harness behavior, prefer the smallest lever that fixes the real failure:
   - review loop and proof requirements first
   - ticket/task-shaping contracts next

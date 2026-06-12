@@ -22,7 +22,7 @@ allowed-tools: Read, Grep, Glob, Bash
 - [ ] Choose the external profile and mounted skills deliberately; include only
   directly relevant skill context.
 - [ ] Run doctor/setup/dry-run before any live CLI run.
-- [ ] Use `rules/prompt-engineering.md` for the delegate prompt structure when
+- [ ] Use `docs/fundamentals/prompt-engineering.md` for the delegate prompt structure when
   role, constraints, output format, or examples matter.
 - [ ] Capture runtime logs, prompt artifact, handoff note, first-write or output
   proof, and optional diff into the ticket evidence surface.
@@ -53,7 +53,7 @@ without letting that CLI become Farplane's source of truth.
    to check the executable, templates, skills, and environment.
 4. Run `python3 bin/delegate_cli_agent.py setup --profile <profile> --json`
    when the profile needs a managed skill/prompt bundle.
-5. Load [prompt-engineering](../../rules/prompt-engineering.md) when the delegated prompt needs role, task, constraints, output format, examples, or structured-output discipline.
+5. Load [prompt-engineering](../../docs/fundamentals/prompt-engineering.md) when the delegated prompt needs role, task, constraints, output format, examples, or structured-output discipline.
 6. Run `python3 bin/delegate_cli_agent.py run --profile <profile> --ticket <ticket> --dry-run --json`
    first to inspect the rendered command and prompt.
    For tightly bounded phase work, prefer `--compact-prompt` and repeat
@@ -115,4 +115,4 @@ Return or write:
 - [architecture.md](references/architecture.md)
 - [workflows.md](references/workflows.md)
 - [gotchas.md](references/gotchas.md)
-- [prompt-engineering.md](../../rules/prompt-engineering.md)
+- [prompt-engineering.md](../../docs/fundamentals/prompt-engineering.md)

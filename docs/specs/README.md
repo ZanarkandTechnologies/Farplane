@@ -1,26 +1,26 @@
 # Specs
 
-Canonical harness and product specs live here once ideas move past exploration.
+Canonical harness and product specs live here once ideas move past exploration
+and become buildable behavior contracts.
 
 Top-level companion docs:
 
 - [`ARCHITECTURE.md`](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md) - top-level system map and canonical surface guide
 - [`README.md`](/Users/kenjipcx/coding-harness/Farplane/README.md) - product/setup story and public entrypoints
+- [`docs/fundamentals/README.md`](../fundamentals/README.md) - harness
+  theory, doctrine, and cross-surface best practices
 
 Documentation ownership:
 
 - `README.md` is the public documentation router.
 - `ARCHITECTURE.md` owns the whole-system diagram and surface ownership map.
 - this file indexes canonical specs and the doc-gardening loop.
+- `docs/fundamentals/README.md` indexes conceptual foundations that are not
+  themselves runtime/spec contracts.
 - `tickets/README.md` owns ticket metadata, lifecycle, and invocation policy.
 
-Canonical operating specs:
+Canonical inventory specs:
 
-- `harness-algebra.md` - canonical constrained-optimization model for context,
-  tools, skills, memory, delegation, verification, self-improvement, and
-  lower-level function contracts. This is the harness math doc.
-- `harness-engineering-doctrine.md` - routing doctrine for where harness
-  changes belong before editing the repo.
 - `harness-techniques.md` - current-state feature and technique inventory.
 - `filesystem-lifecycle.md` - lifecycle and drain rules for ledgers, tickets,
   registries, experiments, specs, and research.
@@ -72,7 +72,7 @@ Archived or superseded specs:
 - `../archive/specs/orchestrator-subagent-loop.md` - folded into
   `spec-first-execution-loop.md`.
 - `../archive/specs/case-based-memory-context-graph.md` - folded into
-  `harness-algebra.md`.
+  `../fundamentals/harness-algebra.md`.
 
 Generated audit:
 
@@ -92,7 +92,11 @@ Use this folder for:
 - artifact and schema specs
 - orchestration flow docs
 - `skill` / `subagent` / `hook` stories tied to buildable system behavior
-- reusable planning doctrine that later tickets and skills should consume
+- reusable contracts that later tickets and skills should consume
+
+Use `docs/fundamentals/` for reusable theory, doctrine, and best-practice
+contracts such as harness algebra, harness placement doctrine, and prompt
+engineering.
 
 Keep exploratory source comparison notes and one-off research in ticket or
 experiment artifacts. Historical research retained only for context belongs in
@@ -103,11 +107,12 @@ experiment artifacts. Historical research retained only for context belongs in
 Run this loop when the public harness story changes:
 
 1. Run `python3 tickets/scripts/check_ticket_metadata.py`.
-2. Run `python3 bin/check_harness_invariants.py`.
-3. Run `python3 bin/check_doc_parity.py`.
-4. Re-read `ARCHITECTURE.md`, `README.md`, `docs/specs/README.md`, `docs/specs/harness-techniques.md`, and `tickets/README.md` against the active ticket plus `docs/MEMORY.md` / `docs/HISTORY.md`.
-5. Use the `codex exec` narrative audit in `doc-governance.md` when the public story, implemented/proposed status, or canonical links changed.
-6. Patch only the canonical surfaces that drifted; keep README and
+2. Run `python3 bin/validators/check_harness_invariants.py`.
+3. Run `python3 bin/validators/check_doc_parity.py`.
+4. Run `python3 bin/validators/check_doc_refs.py`.
+5. Re-read `ARCHITECTURE.md`, `README.md`, `docs/specs/README.md`, `docs/specs/harness-techniques.md`, and `tickets/README.md` against the active ticket plus `docs/MEMORY.md` / `docs/HISTORY.md`.
+6. Use the `codex exec` narrative audit in `doc-governance.md` when the public story, implemented/proposed status, or canonical links changed.
+7. Patch only the canonical surfaces that drifted; keep README and
    ARCHITECTURE synchronized when the whole-system map, shipped capability
    list, or roadmap cap changes.
-7. Re-run `python3 tickets/scripts/check_ticket_metadata.py`, `python3 bin/check_harness_invariants.py`, and `python3 bin/check_doc_parity.py`.
+8. Re-run `python3 tickets/scripts/check_ticket_metadata.py`, `python3 bin/validators/check_harness_invariants.py`, `python3 bin/validators/check_doc_parity.py`, and `python3 bin/validators/check_doc_refs.py`.

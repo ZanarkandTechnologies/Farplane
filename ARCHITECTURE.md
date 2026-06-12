@@ -176,8 +176,8 @@ If a public harness claim changes, update the relevant row's surfaces in the
 same pass and run:
 
 ```bash
-python3 bin/check_doc_parity.py
-python3 bin/check_harness_invariants.py
+python3 bin/validators/check_doc_parity.py
+python3 bin/validators/check_harness_invariants.py
 python3 tickets/scripts/check_ticket_metadata.py
 ```
 
@@ -201,7 +201,7 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: completed capped Symphony-inspired follow-through: explicit
   invocation triggers, adapter conformance, external compute recipes, and clear
   deferrals
-- [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-engineering-doctrine.md)
+- [docs/fundamentals/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/fundamentals/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
 - [docs/specs/invocation-and-adapters.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md)
   Purpose: canonical ownership split for BoardAdapter, WorkItem, explicit
@@ -316,7 +316,7 @@ When orienting on the repo:
 2. Read [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md).
 3. Read [README.md](/Users/kenjipcx/coding-harness/Farplane/README.md) for product/setup context.
 4. Read [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md).
-5. Read [docs/specs/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-engineering-doctrine.md) when the task changes the harness itself.
+5. Read [docs/fundamentals/harness-engineering-doctrine.md](/Users/kenjipcx/coding-harness/Farplane/docs/fundamentals/harness-engineering-doctrine.md) when the task changes the harness itself.
 6. Read the active ticket and [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md).
 7. Follow links into the specific spec, skill, or runtime surface you actually need.
 

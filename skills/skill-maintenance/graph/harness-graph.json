@@ -880,16 +880,16 @@
     },
     {
       "from_file": "ARCHITECTURE.md",
-      "raw_ref": "bin/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
       "source": "file:ARCHITECTURE.md",
-      "target": "file:bin/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
       "from_file": "ARCHITECTURE.md",
-      "raw_ref": "bin/check_harness_invariants.py",
+      "raw_ref": "bin/validators/check_harness_invariants.py",
       "source": "file:ARCHITECTURE.md",
-      "target": "file:bin/check_harness_invariants.py",
+      "target": "file:bin/validators/check_harness_invariants.py",
       "type": "literal-path"
     },
     {
@@ -1769,16 +1769,16 @@
     },
     {
       "from_file": "bin/README.md",
-      "raw_ref": "bin/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
       "source": "file:bin/README.md",
-      "target": "file:bin/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
       "from_file": "bin/README.md",
-      "raw_ref": "bin/check_harness_invariants.py",
+      "raw_ref": "bin/validators/check_harness_invariants.py",
       "source": "file:bin/README.md",
-      "target": "file:bin/check_harness_invariants.py",
+      "target": "file:bin/validators/check_harness_invariants.py",
       "type": "literal-path"
     },
     {
@@ -1839,9 +1839,9 @@
     },
     {
       "from_file": "bin/README.md",
-      "raw_ref": "bin/test_doc_parity.py",
+      "raw_ref": "bin/validators/test_doc_parity.py",
       "source": "file:bin/README.md",
-      "target": "file:bin/test_doc_parity.py",
+      "target": "file:bin/validators/test_doc_parity.py",
       "type": "literal-path"
     },
     {
@@ -1860,9 +1860,9 @@
     },
     {
       "from_file": "bin/README.md",
-      "raw_ref": "bin/test_harness_invariants.py",
+      "raw_ref": "bin/validators/test_harness_invariants.py",
       "source": "file:bin/README.md",
-      "target": "file:bin/test_harness_invariants.py",
+      "target": "file:bin/validators/test_harness_invariants.py",
       "type": "literal-path"
     },
     {
@@ -1929,184 +1929,184 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "ARCHITECTURE.md",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:ARCHITECTURE.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "README.md",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
-      "raw_ref": "bin/check_doc_parity.py",
-      "source": "file:bin/check_doc_parity.py",
-      "target": "file:bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "docs/review/rubrics/review-rubric-index.md",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:docs/review/rubrics/review-rubric-index.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "docs/specs/README.md",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:docs/specs/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "docs/specs/doc-governance.md",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:docs/specs/doc-governance.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "docs/specs/harness-techniques.md",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:docs/specs/harness-techniques.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "skills/review/README.md",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:skills/review/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "tickets/README.md",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:tickets/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_doc_parity.py",
+      "from_file": "bin/validators/check_doc_parity.py",
       "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:bin/check_doc_parity.py",
+      "source": "file:bin/validators/check_doc_parity.py",
       "target": "file:tickets/scripts/check_ticket_metadata.py",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_harness_invariants.py",
+      "from_file": "bin/validators/check_harness_invariants.py",
       "raw_ref": "agents/",
-      "source": "file:bin/check_harness_invariants.py",
+      "source": "file:bin/validators/check_harness_invariants.py",
       "target": "dir:agents",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_harness_invariants.py",
+      "from_file": "bin/validators/check_harness_invariants.py",
       "raw_ref": "AGENTS.md",
-      "source": "file:bin/check_harness_invariants.py",
+      "source": "file:bin/validators/check_harness_invariants.py",
       "target": "file:AGENTS.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_harness_invariants.py",
+      "from_file": "bin/validators/check_harness_invariants.py",
       "raw_ref": "bin/README.md",
-      "source": "file:bin/check_harness_invariants.py",
+      "source": "file:bin/validators/check_harness_invariants.py",
       "target": "file:bin/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_harness_invariants.py",
+      "from_file": "bin/validators/check_harness_invariants.py",
       "raw_ref": "docs/specs/invocation-and-adapters.md",
-      "source": "file:bin/check_harness_invariants.py",
+      "source": "file:bin/validators/check_harness_invariants.py",
       "target": "file:docs/specs/invocation-and-adapters.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_harness_invariants.py",
+      "from_file": "bin/validators/check_harness_invariants.py",
       "raw_ref": "templates/global/AGENTS.md",
-      "source": "file:bin/check_harness_invariants.py",
+      "source": "file:bin/validators/check_harness_invariants.py",
       "target": "file:templates/global/AGENTS.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_harness_invariants.py",
+      "from_file": "bin/validators/check_harness_invariants.py",
       "raw_ref": "tickets/README.md",
-      "source": "file:bin/check_harness_invariants.py",
+      "source": "file:bin/validators/check_harness_invariants.py",
       "target": "file:tickets/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_harness_invariants.py",
+      "from_file": "bin/validators/check_harness_invariants.py",
       "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:bin/check_harness_invariants.py",
+      "source": "file:bin/validators/check_harness_invariants.py",
       "target": "file:tickets/templates/ticket.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_skill_capabilities.py",
-      "raw_ref": "bin/check_skill_capabilities.py",
-      "source": "file:bin/check_skill_capabilities.py",
-      "target": "file:bin/check_skill_capabilities.py",
+      "from_file": "bin/validators/check_skill_capabilities.py",
+      "raw_ref": "bin/validators/check_skill_capabilities.py",
+      "source": "file:bin/validators/check_skill_capabilities.py",
+      "target": "file:bin/validators/check_skill_capabilities.py",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_skill_capabilities.py",
+      "from_file": "bin/validators/check_skill_capabilities.py",
       "raw_ref": "docs/skills/README.md",
-      "source": "file:bin/check_skill_capabilities.py",
+      "source": "file:bin/validators/check_skill_capabilities.py",
       "target": "file:docs/skills/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_skill_todo_tiers.py",
+      "from_file": "bin/validators/check_skill_todo_tiers.py",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
-      "source": "file:bin/check_skill_todo_tiers.py",
+      "source": "file:bin/validators/check_skill_todo_tiers.py",
       "target": "file:skills/skill-maintenance/scripts/check_skills.py",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_tier0_phase_protocol.py",
+      "from_file": "bin/validators/check_tier0_phase_protocol.py",
       "raw_ref": "docs/review/rubrics/",
-      "source": "file:bin/check_tier0_phase_protocol.py",
+      "source": "file:bin/validators/check_tier0_phase_protocol.py",
       "target": "dir:docs/review/rubrics",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_tier0_phase_protocol.py",
+      "from_file": "bin/validators/check_tier0_phase_protocol.py",
       "raw_ref": "tickets/templates",
-      "source": "file:bin/check_tier0_phase_protocol.py",
+      "source": "file:bin/validators/check_tier0_phase_protocol.py",
       "target": "dir:tickets/templates",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_tier0_phase_protocol.py",
+      "from_file": "bin/validators/check_tier0_phase_protocol.py",
       "raw_ref": "AGENTS.md",
-      "source": "file:bin/check_tier0_phase_protocol.py",
+      "source": "file:bin/validators/check_tier0_phase_protocol.py",
       "target": "file:AGENTS.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_tier0_phase_protocol.py",
+      "from_file": "bin/validators/check_tier0_phase_protocol.py",
       "raw_ref": "docs/skills/registry.jsonl",
-      "source": "file:bin/check_tier0_phase_protocol.py",
+      "source": "file:bin/validators/check_tier0_phase_protocol.py",
       "target": "file:docs/skills/registry.jsonl",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_tier0_phase_protocol.py",
+      "from_file": "bin/validators/check_tier0_phase_protocol.py",
       "raw_ref": "skills/review",
-      "source": "file:bin/check_tier0_phase_protocol.py",
+      "source": "file:bin/validators/check_tier0_phase_protocol.py",
       "target": "file:skills/review/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/check_tier0_phase_protocol.py",
+      "from_file": "bin/validators/check_tier0_phase_protocol.py",
       "raw_ref": "tickets/README.md",
-      "source": "file:bin/check_tier0_phase_protocol.py",
+      "source": "file:bin/validators/check_tier0_phase_protocol.py",
       "target": "file:tickets/README.md",
       "type": "literal-path"
     },
@@ -2202,86 +2202,86 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/sync_skill_registry.py",
+      "from_file": "bin/validators/sync_skill_registry.py",
       "raw_ref": "docs/features/registry.jsonl",
-      "source": "file:bin/sync_skill_registry.py",
+      "source": "file:bin/validators/sync_skill_registry.py",
       "target": "file:docs/features/registry.jsonl",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/sync_skill_registry.py",
+      "from_file": "bin/validators/sync_skill_registry.py",
       "raw_ref": "docs/skills/registry.jsonl",
-      "source": "file:bin/sync_skill_registry.py",
+      "source": "file:bin/validators/sync_skill_registry.py",
       "target": "file:docs/skills/registry.jsonl",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "ARCHITECTURE.md",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:ARCHITECTURE.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "README.md",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
-      "raw_ref": "bin/check_doc_parity.py",
-      "source": "file:bin/test_doc_parity.py",
-      "target": "file:bin/check_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "docs/review/rubrics/review-rubric-index.md",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:docs/review/rubrics/review-rubric-index.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "docs/specs/README.md",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:docs/specs/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "docs/specs/doc-governance.md",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:docs/specs/doc-governance.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "docs/specs/harness-techniques.md",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:docs/specs/harness-techniques.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "skills/review/README.md",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:skills/review/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "tickets/README.md",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:tickets/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_doc_parity.py",
+      "from_file": "bin/validators/test_doc_parity.py",
       "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:bin/test_doc_parity.py",
+      "source": "file:bin/validators/test_doc_parity.py",
       "target": "file:tickets/scripts/check_ticket_metadata.py",
       "type": "literal-path"
     },
@@ -2293,51 +2293,51 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_harness_invariants.py",
+      "from_file": "bin/validators/test_harness_invariants.py",
       "raw_ref": "AGENTS.md",
-      "source": "file:bin/test_harness_invariants.py",
+      "source": "file:bin/validators/test_harness_invariants.py",
       "target": "file:AGENTS.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_harness_invariants.py",
+      "from_file": "bin/validators/test_harness_invariants.py",
       "raw_ref": "agents/completion-reviewer.toml",
-      "source": "file:bin/test_harness_invariants.py",
+      "source": "file:bin/validators/test_harness_invariants.py",
       "target": "file:agents/completion-reviewer.toml",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_harness_invariants.py",
+      "from_file": "bin/validators/test_harness_invariants.py",
       "raw_ref": "bin/README.md",
-      "source": "file:bin/test_harness_invariants.py",
+      "source": "file:bin/validators/test_harness_invariants.py",
       "target": "file:bin/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_harness_invariants.py",
+      "from_file": "bin/validators/test_harness_invariants.py",
       "raw_ref": "docs/specs/invocation-and-adapters.md",
-      "source": "file:bin/test_harness_invariants.py",
+      "source": "file:bin/validators/test_harness_invariants.py",
       "target": "file:docs/specs/invocation-and-adapters.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_harness_invariants.py",
+      "from_file": "bin/validators/test_harness_invariants.py",
       "raw_ref": "templates/global/AGENTS.md",
-      "source": "file:bin/test_harness_invariants.py",
+      "source": "file:bin/validators/test_harness_invariants.py",
       "target": "file:templates/global/AGENTS.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_harness_invariants.py",
+      "from_file": "bin/validators/test_harness_invariants.py",
       "raw_ref": "tickets/README.md",
-      "source": "file:bin/test_harness_invariants.py",
+      "source": "file:bin/validators/test_harness_invariants.py",
       "target": "file:tickets/README.md",
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_harness_invariants.py",
+      "from_file": "bin/validators/test_harness_invariants.py",
       "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:bin/test_harness_invariants.py",
+      "source": "file:bin/validators/test_harness_invariants.py",
       "target": "file:tickets/templates/ticket.md",
       "type": "literal-path"
     },
@@ -2384,9 +2384,9 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/test_sync_skill_registry.py",
+      "from_file": "bin/validators/test_sync_skill_registry.py",
       "raw_ref": "docs/features",
-      "source": "file:bin/test_sync_skill_registry.py",
+      "source": "file:bin/validators/test_sync_skill_registry.py",
       "target": "file:docs/features/README.md",
       "type": "literal-path"
     },
@@ -2497,9 +2497,9 @@
     },
     {
       "from_file": "docs/LESSONS.md",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "file:docs/LESSONS.md",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
@@ -2595,9 +2595,9 @@
     },
     {
       "from_file": "docs/MEMORY.md",
-      "raw_ref": "bin/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
       "source": "file:docs/MEMORY.md",
-      "target": "file:bin/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
@@ -2609,9 +2609,9 @@
     },
     {
       "from_file": "docs/MEMORY.md",
-      "raw_ref": "bin/sync_skill_registry.py",
+      "raw_ref": "bin/validators/sync_skill_registry.py",
       "source": "file:docs/MEMORY.md",
-      "target": "file:bin/sync_skill_registry.py",
+      "target": "file:bin/validators/sync_skill_registry.py",
       "type": "literal-path"
     },
     {
@@ -3106,30 +3106,30 @@
     },
     {
       "from_file": "docs/archive/specs/meta-harness-automation.md",
-      "raw_ref": "bin/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
       "source": "file:docs/archive/specs/meta-harness-automation.md",
-      "target": "file:bin/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/archive/specs/meta-harness-automation.md",
-      "raw_ref": "bin/check_harness_invariants.py",
+      "raw_ref": "bin/validators/check_harness_invariants.py",
       "source": "file:docs/archive/specs/meta-harness-automation.md",
-      "target": "file:bin/check_harness_invariants.py",
+      "target": "file:bin/validators/check_harness_invariants.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/archive/specs/meta-harness-automation.md",
-      "raw_ref": "bin/check_skill_capabilities.py",
+      "raw_ref": "bin/validators/check_skill_capabilities.py",
       "source": "file:docs/archive/specs/meta-harness-automation.md",
-      "target": "file:bin/check_skill_capabilities.py",
+      "target": "file:bin/validators/check_skill_capabilities.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/archive/specs/meta-harness-automation.md",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "file:docs/archive/specs/meta-harness-automation.md",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
@@ -3274,9 +3274,9 @@
     },
     {
       "from_file": "docs/archive/specs/skill-self-healing.md",
-      "raw_ref": "bin/check_skill_capabilities.py",
+      "raw_ref": "bin/validators/check_skill_capabilities.py",
       "source": "file:docs/archive/specs/skill-self-healing.md",
-      "target": "file:bin/check_skill_capabilities.py",
+      "target": "file:bin/validators/check_skill_capabilities.py",
       "type": "literal-path"
     },
     {
@@ -3582,23 +3582,23 @@
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "bin/check_skill_capabilities.py",
+      "raw_ref": "bin/validators/check_skill_capabilities.py",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:bin/check_skill_capabilities.py",
+      "target": "file:bin/validators/check_skill_capabilities.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "bin/check_tier0_phase_protocol.py",
+      "raw_ref": "bin/validators/check_tier0_phase_protocol.py",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:bin/check_tier0_phase_protocol.py",
+      "target": "file:bin/validators/check_tier0_phase_protocol.py",
       "type": "literal-path"
     },
     {
@@ -3659,9 +3659,9 @@
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "bin/sync_skill_registry.py",
+      "raw_ref": "bin/validators/sync_skill_registry.py",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:bin/sync_skill_registry.py",
+      "target": "file:bin/validators/sync_skill_registry.py",
       "type": "literal-path"
     },
     {
@@ -3722,9 +3722,9 @@
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "bin/test_sync_skill_registry.py",
+      "raw_ref": "bin/validators/test_sync_skill_registry.py",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:bin/test_sync_skill_registry.py",
+      "target": "file:bin/validators/test_sync_skill_registry.py",
       "type": "literal-path"
     },
     {
@@ -4695,9 +4695,9 @@
     },
     {
       "from_file": "docs/private-tool-context.md",
-      "raw_ref": "bin/check_skill_capabilities.py",
+      "raw_ref": "bin/validators/check_skill_capabilities.py",
       "source": "file:docs/private-tool-context.md",
-      "target": "file:bin/check_skill_capabilities.py",
+      "target": "file:bin/validators/check_skill_capabilities.py",
       "type": "literal-path"
     },
     {
@@ -4737,16 +4737,16 @@
     },
     {
       "from_file": "docs/skills/AGENTS.md",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "file:docs/skills/AGENTS.md",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/skills/AGENTS.md",
-      "raw_ref": "bin/sync_skill_registry.py",
+      "raw_ref": "bin/validators/sync_skill_registry.py",
       "source": "file:docs/skills/AGENTS.md",
-      "target": "file:bin/sync_skill_registry.py",
+      "target": "file:bin/validators/sync_skill_registry.py",
       "type": "literal-path"
     },
     {
@@ -4821,16 +4821,16 @@
     },
     {
       "from_file": "docs/skills/README.md",
-      "raw_ref": "bin/check_skill_capabilities.py",
+      "raw_ref": "bin/validators/check_skill_capabilities.py",
       "source": "file:docs/skills/README.md",
-      "target": "file:bin/check_skill_capabilities.py",
+      "target": "file:bin/validators/check_skill_capabilities.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/skills/README.md",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "file:docs/skills/README.md",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
@@ -4849,9 +4849,9 @@
     },
     {
       "from_file": "docs/skills/README.md",
-      "raw_ref": "bin/sync_skill_registry.py",
+      "raw_ref": "bin/validators/sync_skill_registry.py",
       "source": "file:docs/skills/README.md",
-      "target": "file:bin/sync_skill_registry.py",
+      "target": "file:bin/validators/sync_skill_registry.py",
       "type": "literal-path"
     },
     {
@@ -5633,9 +5633,9 @@
     },
     {
       "from_file": "docs/skills/system.md",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "file:docs/skills/system.md",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
@@ -5857,9 +5857,9 @@
     },
     {
       "from_file": "docs/specs/AGENTS.md",
-      "raw_ref": "bin/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
       "source": "file:docs/specs/AGENTS.md",
-      "target": "file:bin/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
@@ -5913,16 +5913,16 @@
     },
     {
       "from_file": "docs/specs/README.md",
-      "raw_ref": "bin/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
       "source": "file:docs/specs/README.md",
-      "target": "file:bin/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/specs/README.md",
-      "raw_ref": "bin/check_harness_invariants.py",
+      "raw_ref": "bin/validators/check_harness_invariants.py",
       "source": "file:docs/specs/README.md",
-      "target": "file:bin/check_harness_invariants.py",
+      "target": "file:bin/validators/check_harness_invariants.py",
       "type": "literal-path"
     },
     {
@@ -6095,9 +6095,9 @@
     },
     {
       "from_file": "docs/specs/doc-governance.md",
-      "raw_ref": "bin/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
       "source": "file:docs/specs/doc-governance.md",
-      "target": "file:bin/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
@@ -6564,23 +6564,23 @@
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "bin/check_doc_parity.py",
+      "raw_ref": "bin/validators/check_doc_parity.py",
       "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:bin/check_doc_parity.py",
+      "target": "file:bin/validators/check_doc_parity.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "bin/check_harness_invariants.py",
+      "raw_ref": "bin/validators/check_harness_invariants.py",
       "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:bin/check_harness_invariants.py",
+      "target": "file:bin/validators/check_harness_invariants.py",
       "type": "literal-path"
     },
     {
       "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
@@ -7327,9 +7327,9 @@
     },
     {
       "from_file": "docs/specs/self-improvement-contracts.md",
-      "raw_ref": "bin/check_skill_capabilities.py",
+      "raw_ref": "bin/validators/check_skill_capabilities.py",
       "source": "file:docs/specs/self-improvement-contracts.md",
-      "target": "file:bin/check_skill_capabilities.py",
+      "target": "file:bin/validators/check_skill_capabilities.py",
       "type": "literal-path"
     },
     {
@@ -12850,9 +12850,9 @@
     },
     {
       "from_file": "skills/plan/audits/2026-06-11-planning-composition-template.md",
-      "raw_ref": "bin/check_tier0_phase_protocol.py",
+      "raw_ref": "bin/validators/check_tier0_phase_protocol.py",
       "source": "skill:plan",
-      "target": "file:bin/check_tier0_phase_protocol.py",
+      "target": "file:bin/validators/check_tier0_phase_protocol.py",
       "type": "literal-path"
     },
     {
@@ -14173,37 +14173,37 @@
     },
     {
       "from_file": "skills/skill-maintenance/scripts/check_skills.py",
-      "raw_ref": "bin/check_skill_capabilities.py",
+      "raw_ref": "bin/validators/check_skill_capabilities.py",
       "source": "skill:skill-maintenance",
-      "target": "file:bin/check_skill_capabilities.py",
+      "target": "file:bin/validators/check_skill_capabilities.py",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/scripts/check_skills.py",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "skill:skill-maintenance",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/scripts/check_skills.py",
-      "raw_ref": "bin/check_tier0_phase_protocol.py",
+      "raw_ref": "bin/validators/check_tier0_phase_protocol.py",
       "source": "skill:skill-maintenance",
-      "target": "file:bin/check_tier0_phase_protocol.py",
+      "target": "file:bin/validators/check_tier0_phase_protocol.py",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/scripts/check_skills.py",
-      "raw_ref": "bin/sync_skill_registry.py",
+      "raw_ref": "bin/validators/sync_skill_registry.py",
       "source": "skill:skill-maintenance",
-      "target": "file:bin/sync_skill_registry.py",
+      "target": "file:bin/validators/sync_skill_registry.py",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/scripts/sync_skill_checklists.py",
-      "raw_ref": "bin/sync_skill_registry.py",
+      "raw_ref": "bin/validators/sync_skill_registry.py",
       "source": "skill:skill-maintenance",
-      "target": "file:bin/sync_skill_registry.py",
+      "target": "file:bin/validators/sync_skill_registry.py",
       "type": "literal-path"
     },
     {
@@ -15118,9 +15118,9 @@
     },
     {
       "from_file": "skills/video-production/README.md",
-      "raw_ref": "bin/check_skill_todo_tiers.py",
+      "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "skill:video-production",
-      "target": "file:bin/check_skill_todo_tiers.py",
+      "target": "file:bin/validators/check_skill_todo_tiers.py",
       "type": "literal-path"
     },
     {
@@ -18472,34 +18472,34 @@
       "path": "bin/capture_user_turn.py"
     },
     {
-      "id": "file:bin/check_doc_parity.py",
+      "id": "file:bin/validators/check_doc_parity.py",
       "kind": "script",
-      "label": "bin/check_doc_parity.py",
-      "path": "bin/check_doc_parity.py"
+      "label": "bin/validators/check_doc_parity.py",
+      "path": "bin/validators/check_doc_parity.py"
     },
     {
-      "id": "file:bin/check_harness_invariants.py",
+      "id": "file:bin/validators/check_harness_invariants.py",
       "kind": "script",
-      "label": "bin/check_harness_invariants.py",
-      "path": "bin/check_harness_invariants.py"
+      "label": "bin/validators/check_harness_invariants.py",
+      "path": "bin/validators/check_harness_invariants.py"
     },
     {
-      "id": "file:bin/check_skill_capabilities.py",
+      "id": "file:bin/validators/check_skill_capabilities.py",
       "kind": "script",
-      "label": "bin/check_skill_capabilities.py",
-      "path": "bin/check_skill_capabilities.py"
+      "label": "bin/validators/check_skill_capabilities.py",
+      "path": "bin/validators/check_skill_capabilities.py"
     },
     {
-      "id": "file:bin/check_skill_todo_tiers.py",
+      "id": "file:bin/validators/check_skill_todo_tiers.py",
       "kind": "script",
-      "label": "bin/check_skill_todo_tiers.py",
-      "path": "bin/check_skill_todo_tiers.py"
+      "label": "bin/validators/check_skill_todo_tiers.py",
+      "path": "bin/validators/check_skill_todo_tiers.py"
     },
     {
-      "id": "file:bin/check_tier0_phase_protocol.py",
+      "id": "file:bin/validators/check_tier0_phase_protocol.py",
       "kind": "script",
-      "label": "bin/check_tier0_phase_protocol.py",
-      "path": "bin/check_tier0_phase_protocol.py"
+      "label": "bin/validators/check_tier0_phase_protocol.py",
+      "path": "bin/validators/check_tier0_phase_protocol.py"
     },
     {
       "id": "file:bin/delegate_cli_agent.py",
@@ -18598,16 +18598,16 @@
       "path": "bin/sync_skill_plugins.py"
     },
     {
-      "id": "file:bin/sync_skill_registry.py",
+      "id": "file:bin/validators/sync_skill_registry.py",
       "kind": "script",
-      "label": "bin/sync_skill_registry.py",
-      "path": "bin/sync_skill_registry.py"
+      "label": "bin/validators/sync_skill_registry.py",
+      "path": "bin/validators/sync_skill_registry.py"
     },
     {
-      "id": "file:bin/test_check_skill_capabilities.py",
+      "id": "file:bin/validators/test_check_skill_capabilities.py",
       "kind": "script",
-      "label": "bin/test_check_skill_capabilities.py",
-      "path": "bin/test_check_skill_capabilities.py"
+      "label": "bin/validators/test_check_skill_capabilities.py",
+      "path": "bin/validators/test_check_skill_capabilities.py"
     },
     {
       "id": "file:bin/test_delegate_cli_agent.py",
@@ -18616,10 +18616,10 @@
       "path": "bin/test_delegate_cli_agent.py"
     },
     {
-      "id": "file:bin/test_doc_parity.py",
+      "id": "file:bin/validators/test_doc_parity.py",
       "kind": "script",
-      "label": "bin/test_doc_parity.py",
-      "path": "bin/test_doc_parity.py"
+      "label": "bin/validators/test_doc_parity.py",
+      "path": "bin/validators/test_doc_parity.py"
     },
     {
       "id": "file:bin/test_farplane_boards.py",
@@ -18646,10 +18646,10 @@
       "path": "bin/test_farplane_telemetry_status.py"
     },
     {
-      "id": "file:bin/test_harness_invariants.py",
+      "id": "file:bin/validators/test_harness_invariants.py",
       "kind": "script",
-      "label": "bin/test_harness_invariants.py",
-      "path": "bin/test_harness_invariants.py"
+      "label": "bin/validators/test_harness_invariants.py",
+      "path": "bin/validators/test_harness_invariants.py"
     },
     {
       "id": "file:bin/test_import_installed_skills.py",
@@ -18706,10 +18706,10 @@
       "path": "bin/test_sync_skill_plugins.py"
     },
     {
-      "id": "file:bin/test_sync_skill_registry.py",
+      "id": "file:bin/validators/test_sync_skill_registry.py",
       "kind": "script",
-      "label": "bin/test_sync_skill_registry.py",
-      "path": "bin/test_sync_skill_registry.py"
+      "label": "bin/validators/test_sync_skill_registry.py",
+      "path": "bin/validators/test_sync_skill_registry.py"
     },
     {
       "id": "file:bin/test_ticket_metadata.py",
@@ -19657,37 +19657,37 @@
     {
       "candidate": "tickets/TASK-0154/ticket.md",
       "raw_ref": "tickets/TASK-0154/ticket.md",
-      "source": "bin/test_check_skill_capabilities.py"
+      "source": "bin/validators/test_check_skill_capabilities.py"
     },
     {
       "candidate": "/abs/ARCHITECTURE.md",
       "raw_ref": "/abs/ARCHITECTURE.md",
-      "source": "bin/test_doc_parity.py"
+      "source": "bin/validators/test_doc_parity.py"
     },
     {
       "candidate": "/abs/ARCHITECTURE.md",
       "raw_ref": "/abs/ARCHITECTURE.md",
-      "source": "bin/test_doc_parity.py"
+      "source": "bin/validators/test_doc_parity.py"
     },
     {
       "candidate": "/abs/docs/specs/harness-techniques.md",
       "raw_ref": "/abs/docs/specs/harness-techniques.md",
-      "source": "bin/test_doc_parity.py"
+      "source": "bin/validators/test_doc_parity.py"
     },
     {
       "candidate": "/abs/skills/review/README.md",
       "raw_ref": "/abs/skills/review/README.md",
-      "source": "bin/test_doc_parity.py"
+      "source": "bin/validators/test_doc_parity.py"
     },
     {
       "candidate": "/abs/tickets",
       "raw_ref": "/abs/tickets",
-      "source": "bin/test_doc_parity.py"
+      "source": "bin/validators/test_doc_parity.py"
     },
     {
       "candidate": "/abs/tickets",
       "raw_ref": "/abs/tickets",
-      "source": "bin/test_doc_parity.py"
+      "source": "bin/validators/test_doc_parity.py"
     },
     {
       "candidate": "tickets/TASK-1234/artifacts",

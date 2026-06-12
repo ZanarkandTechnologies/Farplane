@@ -27,7 +27,7 @@
     "reference_points": [
       "Reads the nearest project AGENTS.md before editing",
       "Reads templates/global/AGENTS.md before editing",
-      "Checks at least one relevant ownership or skill-system source such as docs/skills/README.md, ARCHITECTURE.md, or docs/specs/harness-engineering-doctrine.md",
+      "Checks at least one relevant ownership or skill-system source such as docs/skills/README.md, ARCHITECTURE.md, or docs/fundamentals/harness-engineering-doctrine.md",
       "Decides whether the rule belongs in the always-loaded global template rather than blindly editing the requested file",
       "Keeps the global rule compact and operational instead of adding a long checklist procedure",
       "Updates durable project history or another appropriate artifact if the repo convention calls for it",

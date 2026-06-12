@@ -20,7 +20,7 @@ references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
 
-The harness math doc is `docs/specs/harness-algebra.md`.
+The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
 - All inbound refs: `9`
 - Skill-origin refs: `4`
@@ -55,7 +55,7 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 | `docs/skills/system.md` | 13 | 8 |
 | `docs/skills/best-practices.md` | 13 | 10 |
 | `docs/review/rubrics/review-rubric-index.md` | 12 | 6 |
-| `docs/specs/harness-engineering-doctrine.md` | 12 | 5 |
+| `docs/fundamentals/harness-engineering-doctrine.md` | 12 | 5 |
 | `docs/features/README.md` | 12 | 3 |
 | `docs/review/rubrics/reviewer-handoff.md` | 9 | 6 |
 
@@ -72,8 +72,8 @@ The harness math doc is `docs/specs/harness-algebra.md`.
 | `docs/specs/filesystem-lifecycle.md` | 6 | 1 | keep active |
 | `docs/specs/first-principles-planning.md` | 8 | 6 | keep active |
 | `docs/specs/goal-loop-contract.md` | 8 | 5 | keep active |
-| `docs/specs/harness-algebra.md` | 9 | 4 | keep active |
-| `docs/specs/harness-engineering-doctrine.md` | 12 | 5 | keep active |
+| `docs/fundamentals/harness-algebra.md` | 9 | 4 | keep active |
+| `docs/fundamentals/harness-engineering-doctrine.md` | 12 | 5 | keep active |
 | `docs/specs/harness-techniques.md` | 18 | 2 | keep active |
 | `docs/specs/invocation-and-adapters.md` | 14 | 2 | keep active |
 | `docs/specs/product-convergence-plan.md` | 0 | 0 | keep active |
@@ -89,8 +89,8 @@ needs local doc references outside its own package.
 
 | Doc | Why |
 | --- | --- |
-| `docs/specs/harness-algebra.md` | high leverage for installed skills or harness placement |
-| `docs/specs/harness-engineering-doctrine.md` | high leverage for installed skills or harness placement |
+| `docs/fundamentals/harness-algebra.md` | high leverage for installed skills or harness placement |
+| `docs/fundamentals/harness-engineering-doctrine.md` | high leverage for installed skills or harness placement |
 | `docs/specs/self-improvement-contracts.md` | high leverage for installed skills or harness placement |
 | `docs/specs/invocation-and-adapters.md` | high leverage for installed skills or harness placement |
 | `docs/skills/README.md` | high leverage for installed skills or harness placement |

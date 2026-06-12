@@ -18,10 +18,10 @@ Use this when the operator asks how to improve Farplane itself and the right
 surface is not obvious. This skill chooses where a harness improvement belongs;
 it does not implement hidden stateful work in chat.
 
-Default doctrine lives in `docs/specs/harness-engineering-doctrine.md`. Use
+Default doctrine lives in `docs/fundamentals/harness-engineering-doctrine.md`. Use
 `references/algebra-adapter.md` when the decision needs loss terms, quality
 levers, mini-harness decomposition, accept/hold/rollback gates, or generated
-harness-map reasoning. Load the full `docs/specs/harness-algebra.md` only for
+harness-map reasoning. Load the full `docs/fundamentals/harness-algebra.md` only for
 deep algebra, eval-design, decomposition, or manifest/schema decisions.
 
 This is a Tier 2 workflow surface. It may use Tier 1 primitives directly, then
@@ -47,7 +47,7 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
 - [ ] 2. Ground the current state with the smallest relevant evidence.
    - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for compact
      local evidence before recommending a surface.
-   - [ ] Read `docs/specs/harness-engineering-doctrine.md` for placement rules.
+   - [ ] Read `docs/fundamentals/harness-engineering-doctrine.md` for placement rules.
    - [ ] Check `docs/features/registry.jsonl` for an existing or partial
      harness feature before proposing a new feature.
    - [ ] Check `docs/skills/registry.jsonl` for an existing skill, method,
@@ -62,9 +62,13 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
      dependencies.
 - [ ] 4. Compare realistic owner surfaces.
    - [ ] Consider repo `AGENTS.md`, `templates/global/AGENTS.md`, generated
-     project templates, `docs/specs/*`, `skills/*`, `agents/*.toml`, hooks or
-     scripts under `bin/`, ticket contracts, validators, feature registry,
-     skill registry, and generated harness-map metadata.
+     project templates, `docs/fundamentals/*`, `docs/specs/*`, `skills/*`,
+     `agents/*.toml`, hooks or scripts under `bin/`, ticket contracts,
+     validators, feature registry, skill registry, and generated harness-map
+     metadata.
+   - [ ] Load `docs/fundamentals/prompt-engineering.md` when the recommendation creates or
+     changes any prompt-like template, subagent brief, skill contract, ticket
+     template, eval judge, delegated CLI prompt, or AI app behavior prompt.
    - [ ] When skills and subagents are candidates, separate actor-prompt
      ownership from reusable skill-contract ownership.
    - [ ] When material review behavior is a candidate, place rubric routing in
@@ -126,7 +130,7 @@ Next ticket or owner:
 - A good placement decision can still be wrong if it optimizes the wrong loss
   term. Name the failure mode before choosing surfaces.
 - Full-spec context can make normal advice slower and noisier. Load
-  `docs/specs/harness-algebra.md` only when the adapter is insufficient.
+  `docs/fundamentals/harness-algebra.md` only when the adapter is insufficient.
 - A generated harness map is navigation and evidence, not a new desired-state
   language.
 - `TAS-B` is not a pass. Hold or revise material changes until required review
@@ -140,14 +144,16 @@ Next ticket or owner:
 - [references/placement-axes.md](references/placement-axes.md) - material
   placement scoring across context budget, reuse, ownership, determinism,
   evidence, duplication, discoverability, and maintenance cost.
-- `docs/specs/harness-engineering-doctrine.md` - canonical Farplane placement
+- `docs/fundamentals/harness-engineering-doctrine.md` - canonical Farplane placement
   doctrine and smallest-lever rules.
-- `docs/specs/harness-algebra.md` - full research spec for deep algebra,
+- `docs/fundamentals/harness-algebra.md` - full research spec for deep algebra,
   decomposition, eval, or manifest/schema decisions.
 - `docs/features/README.md` and `docs/features/registry.jsonl` - feature
   dedupe, provenance, status, and evidence.
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` - generated skill
   inventory and skill selection guide.
+- `docs/fundamentals/prompt-engineering.md` - shared prompt contract for prompt-like
+  templates, examples, output shapes, and proof expectations.
 
 ## Output
 

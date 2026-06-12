@@ -348,7 +348,7 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
     unreferenced = [path for path in doc_paths if inbound[path] == 0]
     spec_paths = [path for path in doc_paths if path.startswith("docs/specs/") and path.endswith(".md")]
     generated_at = graph["generated_at"]
-    harness_math = "docs/specs/harness-algebra.md"
+    harness_math = "docs/fundamentals/harness-algebra.md"
 
     top_docs = [["Doc", "All refs", "Skill refs"]]
     for path, count in inbound.most_common(20):
@@ -368,8 +368,8 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
 
     global_bundle = [["Doc", "Why"]]
     for path in [
-        "docs/specs/harness-algebra.md",
-        "docs/specs/harness-engineering-doctrine.md",
+        "docs/fundamentals/harness-algebra.md",
+        "docs/fundamentals/harness-engineering-doctrine.md",
         "docs/specs/self-improvement-contracts.md",
         "docs/specs/invocation-and-adapters.md",
         "docs/skills/README.md",

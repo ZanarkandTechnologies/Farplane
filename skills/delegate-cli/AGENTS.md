@@ -6,4 +6,4 @@
 - Keep generated runtime bundles under `.farplane/external-cli/`.
 - Keep ticket evidence under `tickets/TASK-*/artifacts/external-cli/`.
 - Do not add a new adapter without a dry-run test.
-- Load `../../rules/prompt-engineering.md` when authoring or reviewing delegated CLI prompts.
+- Load `../../docs/fundamentals/prompt-engineering.md` when authoring or reviewing delegated CLI prompts.

@@ -113,7 +113,7 @@ Review gate:
   completion claims.
 - the native execution phase - final proof, writeback, and review routing
   for applied changes.
-- [docs/specs/harness-engineering-doctrine.md](../../docs/specs/harness-engineering-doctrine.md) -
+- [docs/fundamentals/harness-engineering-doctrine.md](../../docs/fundamentals/harness-engineering-doctrine.md) -
   Farplane placement doctrine.
 - [docs/specs/self-improvement-contracts.md](../../docs/specs/self-improvement-contracts.md) -
   compact signatures and target self-improvement workflow.

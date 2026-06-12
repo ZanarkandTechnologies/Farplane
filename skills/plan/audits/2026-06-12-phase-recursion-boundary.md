@@ -47,7 +47,7 @@ ceremony.
 
 - `docs/skills/system.md` now owns the formal phase ownership and recursion
   invariant.
-- `docs/specs/harness-algebra.md` now models phase calls as inline or
+- `docs/fundamentals/harness-algebra.md` now models phase calls as inline or
   externalized functions with a scope-shrink condition.
 - `skills/plan/SKILL.md` now returns `review_request?` instead of implying plan
   owns review.
