@@ -27,7 +27,7 @@ goal_human_feedback_eval_loop(idea, candidate_eval_batch, proof, kenji_feedback)
 
 Native Goal mode owns continuation. This program owns durable memory for the
 loop: ideas, tests, feedback requests, Kenji's responses, accepted lessons, and
-next hypotheses. `with-human` provides the human-feedback shape, but the loop
+next hypotheses. `optimize-with-human` provides the human-feedback shape, but the loop
 can stay lightweight until it needs a full feedback request.
 
 ## Current Skill Contract

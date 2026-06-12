@@ -167,8 +167,9 @@ flowchart LR
 - `Program:` `tickets/TASK-XXXX/program.md` or `none`
 - `Progress:` `tickets/TASK-XXXX/progress.md` or `none`
 - `Generated Goal prompt:` paste or link the current native `/goal` prompt
-- `Metric provider:` `mechanical` | `review` | `agent_qa` | `with-human` |
-  `market` | `hybrid` | `none`
+- `Metric provider:` `mechanical` | `review` | `agent_qa` |
+  `human_feedback` | `market` | `hybrid` | `none`
+- `Feedback preset:` `optimize-with-human` | `none`
 - `Drift reviewer:` `goal-drift-reviewer` | `reviewer` | `inline` | `none`
 - `Heartbeat:` cadence or `none`
 - `Stop condition:` complete, blocked, pause, or escalation condition

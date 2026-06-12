@@ -469,9 +469,10 @@ feedback_provider(request, rubric, context)
   -> observation | score | decision
 ```
 
-`with-human` is the human feedback provider. It asks Kenji for labels, scores,
-rankings, or keep/revise decisions when human judgment is the cheapest honest
-metric. It does not own the continuation loop.
+`human_feedback` is the provider signal. `optimize-with-human` is the callable
+preset that asks Kenji for labels, scores, rankings, or keep/revise decisions
+when human judgment is the cheapest honest metric. It does not own the
+continuation loop.
 
 Heartbeat and Goal are the same state transition with different triggers:
 

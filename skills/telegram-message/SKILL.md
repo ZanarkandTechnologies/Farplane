@@ -22,7 +22,7 @@ allowed-tools: Bash, Read
 
 Use this skill when a workflow needs to notify Kenji on Telegram.
 
-This is a small reusable primitive. Higher-level skills such as `with-human`
+This is a small reusable primitive. Higher-level skills such as `optimize-with-human`
 should write their own message body, then call this skill to send it.
 
 ## Requirements

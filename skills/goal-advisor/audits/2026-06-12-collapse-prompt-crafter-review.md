@@ -32,9 +32,9 @@ conditions. Keeping them together reduces inconsistent prompts.
 | Check | Verdict | Notes |
 | --- | --- | --- |
 | Single loop owner | pass | Native Goal remains the continuation engine; Goal Packet files are visible state. |
-| Human feedback boundary | pass | `with-human` is a provider, not a loop runtime. |
+| Human feedback boundary | pass | `optimize-with-human` is a preset/provider surface, not a loop runtime. |
 | Prompt/state coherence | pass | `goal-advisor` now owns both Goal architecture and prompt compilation. |
-| File write capability | fixed | Added `Write` to `goal-advisor` and `with-human` allowed tools because both may create packet or feedback files. |
+| File write capability | fixed | Added `Write` to `goal-advisor` and `optimize-with-human` allowed tools because both may create packet or feedback files. |
 | Drift control | pass | `goal-drift-reviewer` is read-only and compares ticket, program, progress, and current continuation claim. |
 | Auto-improve content use case | pass with pilot needed | Added a skill-local eval task for content-skill improvement with human feedback; still needs a live pilot ticket before claiming runtime reliability. |
 | Heartbeat automation | known limit | Heartbeat is documented as a trigger pattern, not an implemented scheduler. |
@@ -46,8 +46,8 @@ conditions. Keeping them together reduces inconsistent prompts.
 2. `program.md` names the loop mode, metric provider, feedback policy, drift
    policy, budget, and stop condition.
 3. `progress.md` receives one compact entry per turn.
-4. `with-human` creates `feedback-request.md` and a `feedback.json` schema when
-   Kenji is the quality signal.
+4. `optimize-with-human` creates `feedback-request.md` and a `feedback.json`
+   schema when Kenji is the quality signal.
 5. Native `/goal` runs from the generated prompt and resumes from the largest
    unresolved acceptance, evidence, blocker, or feedback gap.
 6. Drift review is inline for small loops and `goal-drift-reviewer` for

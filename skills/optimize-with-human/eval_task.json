@@ -1,0 +1,22 @@
+[
+  {
+    "id": "optimize_with_human_preset_01",
+    "title": "Optimize-with-human routes a content improvement loop through Goal Advisor",
+    "query": "AGI Toy Shop has 8 TikTok hook variants for a new toy drop. Set up a loop that uses Kenji's feedback to improve the content skill before market testing.",
+    "reference_points": [
+      "Treats optimize-with-human as a Goal Advisor preset, not a separate loop runtime",
+      "Binds target, objective, metric_provider=human_feedback, feedback_channel=telegram, and feedback_policy=ask_when_artifact_ready",
+      "Requires or points to a ticket-backed Goal Packet with ticket.md, program.md, and progress.md",
+      "Asks one short review question Kenji can answer quickly",
+      "Includes artifact references and a concrete feedback.json shape",
+      "Defines how the parent Goal should pause and resume from the feedback"
+    ],
+    "tags": [
+      "skill",
+      "optimize-with-human",
+      "goal-advisor",
+      "human-feedback"
+    ],
+    "notes": "Tests the human-feedback optimization preset abstraction for the intended content-skill rollout."
+  }
+]

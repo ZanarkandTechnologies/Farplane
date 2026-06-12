@@ -17,8 +17,9 @@ created_at: 2026-06-12
 
 ## Metric Provider
 
-- `provider:` `mechanical` | `review` | `agent_qa` | `with-human` |
+- `provider:` `mechanical` | `review` | `agent_qa` | `human_feedback` |
   `market` | `hybrid`
+- `feedback_preset:` `optimize-with-human` | `none`
 - `signal:` command, eval, review verdict, feedback file, market result, or
   artifact-presence check
 - `direction:` `higher` | `lower` | `pass/fail` | `accept/revise` | `none`

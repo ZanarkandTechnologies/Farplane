@@ -32,7 +32,7 @@ program.md = loop configuration
 progress.md = append-only observed execution
 Goal prompt = generated execution prompt
 heartbeat = delayed trigger
-with-human = human feedback provider
+optimize-with-human = human-feedback optimization preset
 skills = methods inside a turn
 rollout = meta ticket pattern
 drift checker = read-only alignment reviewer
@@ -156,11 +156,11 @@ Provider examples:
 - `mechanical`: command, test, script, benchmark, eval
 - `review`: reviewer TAS verdict
 - `agent_qa`: adversarial tester evidence
-- `with-human`: human score, qualitative feedback, or approval decision
+- `human_feedback`: human score, qualitative feedback, or approval decision
 - `market`: external result such as clicks, replies, sales, or retention
 
-Avoid fake numbers. Judgment-heavy work may use `review-verdict`,
-`human-feedback`, or `artifact-presence` instead of a numeric metric.
+Avoid fake numbers. Judgment-heavy work may use `review_verdict`,
+`human_feedback`, or `artifact_presence` instead of a numeric metric.
 
 ## Goal Versus Heartbeat
 
@@ -213,7 +213,7 @@ ticket.md:
 
 program.md:
   mode: heartbeat
-  metric_provider: hybrid(review-verdict, human-feedback, artifact-presence)
+  metric_provider: hybrid(review_verdict, human_feedback, artifact_presence)
   cadence: weekly
   after_each_turn: inspect sales/support artifacts, propose one highest-ROI
     ticket, append progress, request drift review.
@@ -228,7 +228,8 @@ Content-skill improvement loop:
 ```text
 program.md:
   mode: skill_improvement
-  metric_provider: with-human
+  metric_provider: human_feedback
+  feedback_preset: optimize-with-human
   feedback_request: show 10 TikTok hooks and ask Kenji to swipe keep/reject
   promotion_rule: update skill only when feedback finds a repeatable pattern
 ```

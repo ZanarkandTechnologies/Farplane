@@ -40,7 +40,7 @@ metric, drift policy, and prompt stay coherent.
 advise_goal_use(intent, state?, constraints?, budget?) -> goal_architecture + goal_packet + native_goal_prompt? + next_action
 state: reads(operator intent, tickets, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
 gates: material_goal_has_ticket; loop_owner_single; progress_surface_named; metric_provider_named; drift_policy_named; logging_policy_named
-routes: with-human | work | ralph | review | direct-answer
+routes: optimize-with-human | work | ralph | review | direct-answer
 fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal
 ```
 
@@ -59,7 +59,7 @@ goal_advice_phase(intent, state)
 
 ## Phase Boundary
 
-This skill may route to `with-human`, `work`, `ralph`, or `review` only after it
+This skill may route to `optimize-with-human`, `work`, `ralph`, or `review` only after it
 chooses the Goal architecture. It does not run the Goal loop itself.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -87,7 +87,7 @@ chooses the Goal architecture. It does not run the Goal loop itself.
    - [ ] `mechanical`: command, script, eval, benchmark, or artifact check.
    - [ ] `review`: TAS verdict from review.
    - [ ] `agent_qa`: adversarial QA evidence.
-   - [ ] `with-human`: human score, qualitative feedback, or approval decision.
+   - [ ] `human_feedback`: human score, qualitative feedback, or approval decision.
    - [ ] `market`: external result such as clicks, replies, sales, or retention.
    - [ ] `hybrid`: combine signals without inventing fake numbers.
 - [ ] 5. Define drift policy.
@@ -108,7 +108,8 @@ chooses the Goal architecture. It does not run the Goal loop itself.
    - [ ] Reject proxy-only completion evidence unless it satisfies the actual
      objective.
 - [ ] 7. Decide the next owner.
-   - [ ] Use `with-human` when the metric provider is human feedback.
+   - [ ] Use `optimize-with-human` when the metric provider is `human_feedback`
+     and the loop needs a Telegram-first feedback protocol.
    - [ ] Use `$work` or `$ralph` when execution routing or board selection is
      the next step.
    - [ ] Use direct ticket creation/update when the missing surface is state.
@@ -147,7 +148,8 @@ feedback_loop(ticket, program, progress, provider)
   -> feedback_request + observation_or_score_or_decision + next_turn
 ```
 
-Use `with-human` when Kenji's judgment is the fastest quality signal.
+Use `optimize-with-human` when Kenji's judgment is the fastest quality signal
+and the operator wants an optimization loop rather than one-off feedback.
 
 ### Rollout
 
@@ -212,7 +214,7 @@ Composition rules:
 
 - `agent-qa-test` fills the `agent_qa` metric provider and the fix-or-rerun
   policy.
-- `with-human` fills `MetricProvider.human_feedback` through
+- `optimize-with-human` fills `MetricProvider.human_feedback` through
   `feedback-request.md`, `feedback.json`, and `human_score` or `accepted`.
 - `review` fills the `review_verdict` provider for serious completion,
   skill-contract, or proof-bundle judgments.
@@ -334,8 +336,8 @@ safe options considered, the recommended next action, and the one missing input.
 
 - [docs/specs/goal-loop-contract.md](../../docs/specs/goal-loop-contract.md) -
   canonical Goal Packet, heartbeat, feedback, drift, and rollout model.
-- [with-human](../with-human/SKILL.md) - create human feedback requests and
-  feedback-file contracts for Goal loops.
+- [optimize-with-human](../optimize-with-human/SKILL.md) - route optimization
+  loops through human feedback and create feedback-file contracts.
 - [tickets/templates/goal-loop/program.md](../../tickets/templates/goal-loop/program.md) -
   program template.
 - [tickets/templates/goal-loop/progress.md](../../tickets/templates/goal-loop/progress.md) -

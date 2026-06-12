@@ -902,8 +902,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "goal-advisor",
-      "target": "with-human",
-      "target_ref": "with-human",
+      "target": "optimize-with-human",
+      "target_ref": "optimize-with-human",
       "type": "markdown-ref"
     },
     {
@@ -1177,6 +1177,20 @@ window.SKILL_GRAPH = {
       "source": "optimize-harness",
       "target": "skill-maintenance",
       "target_ref": "skill-maintenance",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-with-human",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-with-human",
+      "target": "telegram-message",
+      "target_ref": "telegram-message",
       "type": "markdown-ref"
     },
     {
@@ -1857,23 +1871,9 @@ window.SKILL_GRAPH = {
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "with-human",
-      "target": "goal-advisor",
-      "target_ref": "goal-advisor",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "with-human",
-      "target": "telegram-message",
-      "target_ref": "telegram-message",
-      "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-11T19:24:30+00:00",
+  "generated_at": "2026-06-12T02:40:06+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -2213,6 +2213,18 @@ window.SKILL_GRAPH = {
       "tier": 2
     },
     {
+      "description": "Route an optimization goal through Goal Advisor with human feedback as the metric and Telegram-first review requests.",
+      "group": "",
+      "has_checklist": true,
+      "has_todos": false,
+      "id": "optimize-with-human",
+      "label": "optimize-with-human",
+      "methods": [],
+      "path": "skills/optimize-with-human/SKILL.md",
+      "source": "local",
+      "tier": 2
+    },
+    {
       "description": "Turn a goal, context, invoked skills, and budget into composed todos, proof targets, and handoff when planning can reduce wasted work.",
       "group": "",
       "has_checklist": true,
@@ -2325,18 +2337,6 @@ window.SKILL_GRAPH = {
       "label": "web-design-guidelines",
       "methods": [],
       "path": "skills/web-design-guidelines/SKILL.md",
-      "source": "local",
-      "tier": 2
-    },
-    {
-      "description": "Turn a Goal loop's subjective quality need into a human feedback request, feedback file contract, and continuation signal.",
-      "group": "",
-      "has_checklist": true,
-      "has_todos": false,
-      "id": "with-human",
-      "label": "with-human",
-      "methods": [],
-      "path": "skills/with-human/SKILL.md",
       "source": "local",
       "tier": 2
     },
