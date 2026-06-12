@@ -215,6 +215,11 @@ For harness-design research and external patterns:
   review. See `MEM-0115`.
 - In live `$impl` loops, treat `$qa` as a delegated lane: the coordinating lane should hand browser driving and proof capture to `qa-tester` instead of using `agent-browser` directly. See `MEM-0069`.
 - Outside tmux or lane-specific runtime flows, keep the same ownership split: native `qa-tester` delegation is the default way to run meaningful QA or browser proof, and the main agent should not personally use `agent-browser` when that QA ownership can be isolated. See `MEM-0070`.
+- For browser proof inside Farplane, make the efficient path the default:
+  `qa-tester` should use `agent-browser` for page operation, screenshots,
+  snapshots, console logs, and page errors unless the ticket explicitly asks
+  for Playwright regression coverage or the flow is already codified in an
+  existing Playwright suite. See `MEM-0149`.
 - Treat `$impl` as the public execution surface, with internal `execution_phase` progression through `impl`, `qa`, and `demo` when required. Stop-hook should advance those phases mechanically before final completion review. See `MEM-0049`.
 - Treat `$work` as the Work Admission surface that classifies one request,
   ticket, ticket batch, board-selected unit, epic, or metric loop before

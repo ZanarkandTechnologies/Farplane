@@ -53,5 +53,26 @@
       "hardcase"
     ],
     "notes": "Tests the TASK-0190 direction that hardcase is eval metadata, not a separate capture backlog."
+  },
+  {
+    "id": "optimize_harness_browser_proof_tool_choice_01",
+    "title": "Optimize harness routes browser proof toward agent-browser first",
+    "query": "AGI Toy Shop agents keep spinning up Playwright scripts just to inspect a local storefront page and grab screenshots. The agent-browser workflow is much faster for this. Fix the harness behavior.",
+    "reference_points": [
+      "Names the observed-versus-expected gap before editing policy",
+      "Places the fix in browser-proof caller policy or QA guidance rather than the upstream external agent-browser stub",
+      "Makes agent-browser the default for page operation, screenshots, snapshots, console logs, and page errors",
+      "Keeps Playwright as the graduation path for explicit regression coverage, existing suites, or already-settled flows",
+      "Preserves QA ownership boundaries such as qa-tester delegation when available",
+      "Includes a proof or review path instead of claiming the behavior changed from explanation alone"
+    ],
+    "tags": [
+      "skill",
+      "optimize-harness",
+      "qa",
+      "browser-proof",
+      "agent-browser"
+    ],
+    "notes": "Guards against reverting browser proof policy back to Playwright-first for ordinary ticket QA."
   }
 ]

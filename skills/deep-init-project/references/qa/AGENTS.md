@@ -17,9 +17,11 @@ and humans reach important app states quickly and deterministically.
   `tickets/TASK-XXXX/artifacts/`
 - keep the canonical evidence-capture launch path, required services, and
   expected targets visible here rather than in chat memory
-- prefer Playwright for stable UX regression coverage
-- use `agent-browser` to discover flows quickly, capture proof while iterating,
-  and debug failing Playwright coverage
+- prefer `agent-browser` for browser proof: page operation, snapshots,
+  screenshots, console logs, and page-error capture
+- use Playwright only when stable UX regression coverage is explicitly needed,
+  when an existing suite is the acceptance surface, or when a settled flow is
+  ready to graduate into scripted coverage
 - when a workflow is hard to automate, document the missing shortcut,
   deterministic setup, or instrumentation helper here so later tickets can land
   the fix intentionally
@@ -36,5 +38,5 @@ Each cookbook page should stay short and answer:
 1. how QA reaches the target state quickly
 2. which shortcuts, deep links, seeds, or fixtures make it deterministic
 3. which launch path, services, targets, or ports QA should trust
-4. what Playwright should automate
-5. when to fall back to `agent-browser`
+4. what `agent-browser` should capture for the normal proof path
+5. when the flow is worth graduating to Playwright regression coverage

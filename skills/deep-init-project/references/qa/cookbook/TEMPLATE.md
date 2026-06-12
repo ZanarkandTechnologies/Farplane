@@ -21,17 +21,18 @@
 - Roles / labels:
 - Assertion targets:
 
-## Playwright Path
-1. Navigate using the fast entry path.
-2. Assert the screen or panel is ready.
-3. Perform the stable happy path.
-4. Assert the user-visible result.
-
 ## agent-browser Path
 1. Open the same fast entry path.
 2. Use the shortcut or debug control if needed.
 3. Capture `snapshot.json`, screenshots, console, and errors on failure.
-4. Record anything Playwright could not prove yet.
+4. Record the user-visible result and any unresolved instrumentation gap.
+
+## Playwright Path
+1. Use only when the workflow needs repeatable regression coverage.
+2. Navigate using the fast entry path.
+3. Assert the screen or panel is ready.
+4. Perform the stable happy path.
+5. Assert the user-visible result.
 
 ## Observability
 - Debug HUD:

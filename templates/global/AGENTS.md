@@ -264,6 +264,12 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   skill changes, and completion claims.
 - Use QA lanes for browser/user-visible proof, test runs, screenshots, traces,
   and artifact capture.
+- For browser/user-visible proof, prefer `agent-browser` or the repo's
+  `qa-tester` lane first because it operates the page directly and captures
+  screenshots, snapshots, console logs, and errors with less harness overhead.
+  Use Playwright when the flow is already understood and the task needs a
+  durable regression test, explicit scripted coverage, or an existing
+  Playwright suite repair.
 - Use agent testing lanes when the behavior of another agent, prompt, skill, or
   workflow is the thing being tested.
 - Give each delegated lane bounded inputs, the exact claim being tested,
