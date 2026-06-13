@@ -42,6 +42,9 @@ active.
   examples, or format rules matter.
 - [ ] Draft copy, hooks, CTAs, thread outline, slide sequence, prompts, or
   asset plans before generation or rendering.
+- [ ] For quality-sensitive creative work, load
+  [examples](references/examples.md) or a user-provided swipe/reference before
+  finalizing the first variant.
 - [ ] Route still visuals through `imagegen` or
   [image-generation](../image-generation/SKILL.md); route video through
   [video-generation](../video-generation/SKILL.md), [remotion](../remotion/SKILL.md),
@@ -144,4 +147,6 @@ thread progression, character limits, and CTA before drafting.
 
 - `references/model.md` - artifact matrix, method selection, execution packet,
   and proof rules.
+- `references/examples.md` - positive examples for quality-sensitive social
+  content, including a harness-engineering infographic carousel.
 - `references/method-selection-smoke.md` - smoke cases for method routing.
