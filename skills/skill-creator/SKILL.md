@@ -70,7 +70,8 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      abstracted into a reference.
    - [ ] Use
      [docs/skills/best-practices.md#placement-boundaries](../../docs/skills/best-practices.md#placement-boundaries)
-     to place content by access frequency, owner scope, depth, and length.
+     to place content by whether it is needed now on first load or later
+     through an explicit reference branch, plus owner scope, depth, and length.
    - [ ] Use the structure optimization metrics in
      [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization)
      to decide what belongs in first-load `SKILL.md` versus references,
@@ -153,6 +154,9 @@ starter file.
   script, ticket, or existing skill update.
 - Do not hide the default workflow in references. If skipping all references
   makes the skill fail, `SKILL.md` is too thin.
+- Put content in `SKILL.md` when it is needed now on first load; put it in
+  `references/*` when it is only needed later through an explicit branch,
+  deeper rationale, optional detail, or rare mode.
 - Do not teach the whole domain in `SKILL.md`. If it reads like onboarding,
   move the material to references.
 - Do not use frontmatter `description` as a trigger catalog or mini manual. It

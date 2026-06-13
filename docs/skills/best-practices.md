@@ -175,15 +175,16 @@ reference so it is loaded only after selection.
 
 ## Placement Boundaries
 
-Use access frequency and ownership before line count. Length is a pressure
-signal, not the source of truth.
+Use progressive disclosure, access frequency, and ownership before line count.
+Length is a pressure signal, not the source of truth.
 
 ```text
-place_skill_content(content, access_frequency, owner_scope, depth, line_count)
+place_skill_content(content, needed_now, needed_later, owner_scope, depth, line_count)
   -> SKILL.md | skill_reference | shared_doc | template | eval
 ```
 
-Put content directly in `SKILL.md` when it is needed for most invocations:
+Put content directly in `SKILL.md` when the agent needs it on first load to act
+correctly now. That includes content needed for most invocations:
 
 - Trigger and non-trigger boundaries.
 - Required context that changes the first action.
@@ -194,7 +195,8 @@ Put content directly in `SKILL.md` when it is needed for most invocations:
 - Exact reference-routing hints for conditional detail.
 
 Put content in a skill-local `references/*.md` file when it is owned by one
-skill but not needed every time:
+skill but only needed later through an explicit branch, deeper rationale,
+optional detail, or rare mode:
 
 - Onboarding walkthroughs, long examples, deep rubrics, model maps, provider
   maps, command recipes, or rare branches.

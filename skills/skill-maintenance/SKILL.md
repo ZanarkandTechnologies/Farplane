@@ -79,6 +79,9 @@ fails: invents numeric health score; duplicates git last-edited state; claims ta
      `Verb input/context into output/artifact when call-condition`.
    - [ ] Put required actions in the marker-delimited `## Todo List`.
    - [ ] Keep every-invocation rules in `SKILL.md`.
+   - [ ] Keep content in `SKILL.md` when it is needed now on first load; move it
+     to references when it is only needed later through an explicit branch,
+     deeper rationale, optional detail, or rare mode.
    - [ ] Move conditional branches, examples, templates, long rubric detail,
      model maps, delegated prompts, and rare-path recipes into references.
    - [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
@@ -148,7 +151,8 @@ hygiene, or consolidation planning.
   template, eval, or review check.
 - Use `docs/skills/best-practices.md#placement-boundaries` to decide between
   `SKILL.md`, skill-local references, shared docs, templates, and evals based
-  on access frequency, owner scope, depth, and length.
+  on whether content is needed now on first load or later through an explicit
+  reference branch, plus owner scope, depth, and length.
 - Route review depth from the same metrics: use `advise` for ordinary recent
   skills and `deliberative-advice` when the skill is Tier 1, meta, `eval`,
   stale, far from the current template, high-traffic, cross-skill, or
