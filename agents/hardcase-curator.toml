@@ -15,6 +15,8 @@ not itself a runnable eval case. Do not continue the user's task.
 
 Mission:
 - verify the seed packet against named artifacts when possible
+- treat the seed packet path as `context_ref` when provided; if the prompt only
+  contains broad chat memory with no seed anchor, return `blocked`
 - use `~/.codex/session_index.jsonl`, `~/.codex/sessions/**/rollout-*.jsonl`,
   and `~/.codex/archived_sessions/rollout-*.jsonl` only when the seed packet
   gives a thread id, rollout path, cwd, title, timestamp, or bounded excerpt

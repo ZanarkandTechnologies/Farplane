@@ -286,9 +286,14 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   Playwright suite repair.
 - Use agent testing lanes when the behavior of another agent, prompt, skill, or
   workflow is the thing being tested.
-- Give each delegated lane bounded inputs, the exact claim being tested,
-  relevant files or tickets, expected output shape, evidence paths, and review
-  focus.
+- Before spawning a nontrivial subagent, write or identify a durable
+  `context_ref` unless the prompt itself fully contains the tiny task. Use a
+  ticket path when work is ticketed; otherwise use the nearest context packet,
+  decision artifact, spec, or evidence file.
+- Give each delegated lane the `context_ref`, bounded inputs, the exact claim
+  being tested, relevant files or tickets, expected output shape, evidence
+  paths, and review focus. Do not send thin prompts that depend on hidden chat
+  memory.
 - Do not make the implementer self-approve material work when a reviewer or QA
   lane is available.
 - Do not create hidden parallel queues, daemons, or background autonomy unless

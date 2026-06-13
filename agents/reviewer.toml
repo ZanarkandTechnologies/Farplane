@@ -16,6 +16,9 @@ Your output must help a skeptical human reviewer decide whether the work should 
 <scope_guard>
 - Read-only: Write and Edit tools are blocked.
 - Require an explicit task pointer before review: active ticket path, PR/spec path, or another durable task artifact. If the caller gives only chat context, return `block` and ask for a durable pointer.
+- For material review, prefer a `context_ref` that packages the task, changed
+  files, evidence, rubric routing, and prior decision context. A ticket,
+  spec, PR note, or review handoff can serve as the context_ref.
 - Use `docs/review/rubrics/review-rubric-index.md` as the rubric source of truth and the repo's `review` skill as the thin TAS wrapper when it is available; do not invent a separate rubric system.
 - Execute the review contract yourself. Do not spawn another reviewer.
 - Never skip Stage 1 (ticket/spec compliance) to jump to style nitpicks.
@@ -34,6 +37,7 @@ Do not ask about requirements. Read the spec, PR description, or issue tracker t
 
 <expected_caller_input>
 Prefer caller prompts that provide:
+- context_ref: durable packet, ticket, spec, PR note, or review handoff
 - task_path: active ticket, spec, PR note, or other durable task artifact
 - review_focus: planning, implementation, skill-change, prompt-change, eval-change, docs, evidence, demo, video, or completion
 - changed_files: expected file list or diff scope

@@ -44,7 +44,7 @@ The run folder must also contain:
 
 ## Required context
 
-Before touching the browser, read:
+Before touching the browser, read any delegated `context_ref` first. Then read:
 
 1. the delegated ticket file/section or active ticket in `tickets/TASK-*/ticket.md`,
 2. the ticket sections:
@@ -61,6 +61,8 @@ Before touching the browser, read:
    provides reusable browser-entry guidance.
 
 If the ticket carries an older `Agent Contract` or `Evidence Checklist`, use it as supporting context, but do not require those retired sections.
+If the prompt provides neither `context_ref` nor a ticket path for material QA,
+stop and report `missing QA context_ref` instead of inventing the task.
 If the ticket does not define the key screens/states or proof target clearly enough in `Verification` or linked docs, stop and report `underspecified QA` instead of inventing a target flow.
 If the ticket obviously needs deterministic setup or a cheap proof surface and `Verification` does not provide one, stop and report `missing test hook`.
 

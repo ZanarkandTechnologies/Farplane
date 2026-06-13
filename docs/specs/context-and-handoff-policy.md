@@ -113,6 +113,79 @@ Before ending a ticket session that may need resume, update:
 If extra resume context is still needed after frontmatter plus evidence/blockers,
 add a short `Notes` entry instead of a dedicated handoff template.
 
+## Subagent Context Packets
+
+Subagents run in an isolated context. A nontrivial subagent handoff must start
+from a durable pointer instead of a thin chat prompt.
+
+```text
+subagent_handoff(task, lane, context)
+  -> context_ref + lane_prompt + expected_output
+```
+
+Use a `ticket_id` or `ticket_path` when the work is ticketed. Do not force a
+ticket for pure advice, council, review, research, or exploratory context
+gathering when no implementation work exists yet. In those cases, write or
+reuse a context packet.
+
+Create a context packet when any of these are true:
+
+- the subagent needs prior discussion, options, constraints, or user taste
+- the lane will make a judgment, review, QA claim, or recommendation
+- the task may be resumed, audited, or synthesized by another agent
+- more than one subagent needs the same decision frame
+
+Skip the packet only for tiny mechanical probes where the prompt itself fully
+contains the task, file path, and expected output.
+
+Default storage:
+
+```text
+ticketed work:
+  tickets/TASK-XXXX/artifacts/subagents/<YYYYMMDD-HHMM>-<lane>-context.md
+
+ticketed Goal work:
+  tickets/TASK-XXXX/progress.md links the latest context packet
+
+non-ticket decision or council:
+  .farplane/context/<YYYYMMDD-HHMM>-<slug>-context.md
+
+repo-worthy experiment or reusable decision:
+  experiments/decisions/<YYYY-MM-DD>-<slug>/context.md
+```
+
+Context packet shape:
+
+```text
+Decision or task:
+Why this matters:
+Current behavior:
+Expected behavior:
+Prior discussion summary:
+Options or hypotheses:
+Evidence refs:
+Relevant files:
+Constraints and non-goals:
+Lane assignments:
+Expected output:
+Proof or review gate:
+```
+
+Subagent prompts should be compact after the packet exists:
+
+```text
+Read context_ref: <path>.
+Lane: <role or perspective>.
+Task: <bounded ask>.
+Return: <output shape>.
+If context_ref is missing or insufficient for a material judgment, report that
+as blocked instead of guessing.
+```
+
+Receiver-side rule: reviewer, QA, planner, and other judgment-heavy lanes may
+reject a material handoff that lacks a durable `context_ref`, `ticket_path`,
+`spec_path`, or equivalent task artifact.
+
 ## Documenting Phase
 
 Use `phase: documenting` after implementation and verification are complete but

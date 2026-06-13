@@ -549,6 +549,9 @@ proof.
 - Actor prompts such as `agents/*.toml` own identity, responsibility,
   delegation boundaries, tool use, durable task loading, artifact writeback,
   and anti-recursion rules.
+- Material actor prompts should expect a durable `context_ref` such as a
+  ticket, spec, decision packet, evidence artifact, or handoff file when prior
+  discussion, options, constraints, or proof targets matter.
 - Skills own reusable domain contracts: trigger boundaries, rubric or workflow
   shape, templates, hard gates, and proof expectations.
 - Do not put subagent spawning, caller routing, or actor identity inside a

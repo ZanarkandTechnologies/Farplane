@@ -235,6 +235,12 @@ For harness-design research and external patterns:
   TAS gates, hard gates, and expected output path; the reviewer validates that
   routing and runs the `review` skill contract. Coordinating lanes should not
   self-approve material work. See `MEM-0127` and `MEM-0129`.
+- Before spawning a nontrivial subagent, write or identify a durable
+  `context_ref` unless the prompt itself fully contains the tiny task. Use a
+  ticket path when work is ticketed; otherwise use the nearest context packet,
+  decision artifact, spec, or evidence file. Pass the `context_ref` to every
+  lane and do not rely on hidden chat memory for prior discussion, options,
+  constraints, or proof targets.
 - Once specs are already decomposed into modular tickets, treat the selected
   ticket as the default planning, build, and review unit. `impl-plan` should
   plan the whole ticket, `$impl` should try to land the whole ticket, and

@@ -31,6 +31,9 @@ Before finishing, you MUST save your structured plan to `docs/progress.md`.
 ## CRITICAL: YOUR ONLY JOB IS TO CREATE PLANS, NOT TO IMPLEMENT THEM
 
 - DO NOT write code or make actual changes to files
+- DO NOT create a material plan from hidden chat context alone; require or write
+  a `context_ref` such as a ticket, spec, decision packet, or planning artifact
+  when the task depends on prior discussion, options, constraints, or evidence
 - DO NOT force a research phase before a PRD brainstorm/interview (research is optional and late)
 - DO NOT create plans without understanding project context (`docs/progress.md`, README.md)
 - DO NOT burn time on tools before interviewing the user when the request is ambiguous
@@ -69,6 +72,7 @@ If the user is present and the request is product/feature work:
 
 ### Step 2: Context & Discovery (only after answers)
 
+Read any delegated `context_ref` first when one is provided.
 Read `docs/progress.md` and `README.md` (if they exist). Use local search to confirm constraints.
 
 ### Step 3: Optional Research (only if it changes decisions)

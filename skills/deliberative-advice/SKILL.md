@@ -21,6 +21,16 @@ This skill adapts the council pattern: independent first-pass positions,
 blind or semi-blind critique, chair synthesis, and explicit dissent. Keep
 normal reversible choices in [advise](../advise/SKILL.md).
 
+## Skill Signature
+
+```text
+deliberative_advice(decision, stakes?, context_ref?, mode?) -> recommendation + dissent + next_owner
+state: reads(context packet?, evidence refs, relevant files); writes(council context packet? or decision note?)
+gates: decision_named; context_packet_for_council; independent_first_passes; dissent_preserved; next_owner_named
+routes: advise | reference-grounding | research | review
+fails: thin council prompts; shared hidden context; majority vote; recommendation without proof owner
+```
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
@@ -36,33 +46,44 @@ normal reversible choices in [advise](../advise/SKILL.md).
      external facts, local baseline, cost, safety, or current behavior.
    - [ ] Include an operator-value perspective for decisions that affect the
      user's taste, time, money, reputation, or workflow.
-- [ ] 4. Spawn native subagents or isolated lanes for the perspective briefs
+- [ ] 4. For `advise:council`, create or identify a Council Context Packet
+  before spawning lanes.
+   - [ ] If a ticket exists, link or write the packet under that ticket's
+     artifacts or progress surface.
+   - [ ] If no ticket exists, write the packet under `.farplane/context/` for
+     ephemeral decisions or `experiments/decisions/` for reusable decisions.
+   - [ ] Include decision, stakes, prior discussion summary, options, evidence
+     refs, relevant files, constraints, lane briefs, output shape, and proof or
+     next-owner expectations.
+- [ ] 5. Spawn native subagents or isolated lanes for the perspective briefs
   when the runtime supports them.
-   - [ ] Give each lane the same decision, criteria, evidence packet, and output
-     shape.
+   - [ ] Give each lane the Council Context Packet path, lane-specific
+     perspective, criteria, and output shape.
    - [ ] Keep each lane independent until its first-pass recommendation is
      captured.
    - [ ] If native subagents are unavailable, run clearly separated isolated
      perspective passes and state that limitation in the output.
-- [ ] 5. Collect independent first-pass recommendations before showing any
+- [ ] 6. Collect independent first-pass recommendations before showing any
   perspective the others' answers.
-- [ ] 6. Run critique and ranking.
+- [ ] 7. Run critique and ranking.
    - [ ] Use blind or semi-blind labels when feasible so the critique scores the
      argument rather than the author, model, or role.
    - [ ] Ask each perspective to name the strongest opposing point and the
      evidence that would change its mind.
-- [ ] 7. Produce chair synthesis.
+- [ ] 8. Produce chair synthesis.
    - [ ] Compare exactly 3 viable final options unless fewer than 3 are real.
    - [ ] Recommend one option clearly.
    - [ ] Name dissent, uncertainty, and the tradeoff accepted.
-- [ ] 8. Define the next owner and proof surface.
+- [ ] 9. Define the next owner and proof surface.
    - [ ] Route implementation to the owning skill, ticket, spec, or direct next
      action.
    - [ ] Record the evidence gap instead of overstating confidence when the
      council lacks the needed facts.
-- [ ] 9. Review before completion.
+- [ ] 10. Review before completion.
    - [ ] The council used independent perspectives rather than one simulated
      monologue.
+   - [ ] Council lanes received a durable context packet path rather than thin
+     prompts that rely on hidden chat memory.
    - [ ] Native subagents or isolated lanes were used for first-pass
      recommendations, or the runtime limitation is explicit.
    - [ ] The final answer preserved meaningful dissent.
@@ -87,6 +108,21 @@ Use this default set unless the decision clearly needs different lenses:
 
 ## Templates
 
+Council context packet:
+
+- `Decision`
+- `Why this matters`
+- `Prior discussion summary`
+- `Current behavior`
+- `Expected behavior`
+- `Options under consideration`
+- `Evidence refs`
+- `Relevant files`
+- `Constraints / non-goals`
+- `Lane briefs`
+- `Output shape`
+- `Proof / next owner`
+
 Council decision note:
 
 - `Decision`
@@ -106,6 +142,9 @@ Council decision note:
 - Do not use this to delay a simple reversible action.
 - Do not let all perspectives share one hidden chain of reasoning; collect
   independent answers before critique.
+- Do not spawn council lanes from thin prompts when prior discussion, options,
+  evidence, or constraints matter. Write or reuse a Council Context Packet and
+  pass its path to every lane.
 - Do not create role theater. Each perspective must have a distinct failure
   mode or decision criterion.
 - Do not convert ranked disagreement into majority vote. The chair must judge

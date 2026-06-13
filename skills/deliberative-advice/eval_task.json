@@ -1,0 +1,21 @@
+[
+  {
+    "id": "deliberative_council_context_packet_01",
+    "title": "Council mode writes a context packet before spawning lanes",
+    "query": "After a long AGI Toy Shop architecture discussion, the operator asks for full council advice on whether to refactor the skill-maintenance workflow. The prior thread contains options, dissent, file evidence, and constraints. How should deliberative-advice prepare the council lanes?",
+    "reference_points": [
+      "States the decision and why prior discussion matters before spawning lanes",
+      "Creates or identifies a durable Council Context Packet instead of relying on chat memory",
+      "Includes decision, stakes, prior discussion summary, options, evidence refs, relevant files, constraints, lane briefs, output shape, and proof or next owner in the packet",
+      "Passes the same context_ref or packet path to every perspective lane with only lane-specific instructions added",
+      "Allows a ticket path when the decision is ticketed but does not force a ticket for pure advice or council decisions"
+    ],
+    "tags": [
+      "skill",
+      "deliberative-advice",
+      "council",
+      "subagent-context"
+    ],
+    "notes": "Regression guard for thin council subagent prompts that lose rich prior discussion."
+  }
+]

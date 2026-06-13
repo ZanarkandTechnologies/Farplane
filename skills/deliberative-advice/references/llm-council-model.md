@@ -27,6 +27,9 @@ Additional architecture summary:
 Farplane usually has specialized skills and subagents rather than a fixed pool
 of external LLM providers. Adapt the council as a workflow pattern:
 
+- `context packet`: write or identify one durable decision packet before
+  spawning council lanes when prior discussion, options, evidence, or
+  constraints matter
 - `independent answers`: perspective briefs are collected before cross-reading
 - `anonymized critique`: use neutral labels where feasible to reduce status,
   model, author, or role bias
@@ -49,6 +52,65 @@ Use council mechanics when one of these is true:
 
 Use plain `advise` when the decision is local, reversible, already grounded, or
 only needs a concise 3-option recommendation.
+
+## Council Context Packet
+
+Use a context packet to prevent thin prompts from losing the real decision
+frame.
+
+```text
+council_context_packet(decision, prior_discussion, evidence_refs, options)
+  -> context_ref + lane_briefs
+```
+
+Default location:
+
+```text
+ticketed decision:
+  tickets/TASK-XXXX/artifacts/subagents/<YYYYMMDD-HHMM>-council-context.md
+
+non-ticket ephemeral decision:
+  .farplane/context/<YYYYMMDD-HHMM>-<slug>-council-context.md
+
+repo-worthy reusable decision:
+  experiments/decisions/<YYYY-MM-DD>-<slug>/context.md
+```
+
+Default packet fields:
+
+```text
+Decision:
+Why this matters:
+Prior discussion summary:
+Current behavior:
+Expected behavior:
+Options under consideration:
+Known evidence:
+Relevant files:
+Constraints and non-goals:
+Lane briefs:
+Output shape:
+Critique and ranking plan:
+Proof or next owner:
+```
+
+Lane prompt template:
+
+```text
+Read context_ref: <path>.
+
+Perspective:
+Decision focus:
+Criteria to apply:
+Return:
+- recommendation
+- strongest opposing point
+- evidence that would change your mind
+- concrete implementation constraints
+
+If the context_ref is missing or insufficient for this material judgment, say
+so instead of guessing.
+```
 
 ## Perspective Brief Shape
 
