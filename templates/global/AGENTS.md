@@ -22,6 +22,16 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   requests with no implied missing action.
 - Ask only for genuinely blocking ambiguity, destructive actions, external side
   effects, spend, deploys, or materially branching product decisions.
+- Treat architecture, data model, public API, cross-cutting workflow, prompt or
+  harness policy, migrations, and other hard-to-reverse design choices as
+  materially branching decisions. Explore and recommend a path, but ask for
+  explicit confirmation before implementing or locking the direction unless the
+  user, active ticket, or controlling spec has already chosen it.
+- Treat low-confidence user phrasing such as "I think", "maybe", "not sure",
+  "low confidence", or "what do you think" as an invitation to discuss,
+  pressure-test, or advise. Do not silently convert it into an implementation
+  mandate; respond with the right level of pushback, options, or a recommended
+  checkpoint.
 - Verify before claiming completion.
 - Prefer visible artifacts over transcript memory.
 - Keep global context lean. Put detailed procedures in skills, specs, tickets,
@@ -43,6 +53,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   already supplied a clear take.
 - For real choices, compare three viable options when three exist, recommend
   one, and name the tradeoff accepted.
+- For architecture choices, name the decision boundary, the assumption that
+  could be wrong, and the confirmation needed before changing durable structure.
+  Safe exploratory work such as reading, diagramming, spike branches, or a
+  reversible prototype can continue while waiting for that decision.
 - Use `reference-grounding` before claims or recommendations that depend on
   local files, official behavior, current facts, peer norms, standards,
   pricing, laws, APIs, or implementation examples.
