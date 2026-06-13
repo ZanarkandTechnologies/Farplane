@@ -1,11 +1,11 @@
 ---
 name: research
 version: 0.1.0
-description: "Turn evidence needs into method-addressed research passes for parity, gaps, competitors, official docs, code patterns, users, or sources."
+description: "Turn current external evidence needs into method-addressed research briefs for parity, gaps, competitors, official docs, code patterns, users, or sources."
 tier: 2
 source: local
 methods: ["research:parity", "research:gap", "research:competitor", "research:official-docs", "research:code-patterns", "research:user-grounding", "research:source-synthesis"]
-allowed-tools: Read, Glob, Grep
+allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
 ---
 
 # Research
@@ -58,6 +58,13 @@ This is a method-addressed surface, not a sequential checklist: choose one
 primary method, add a supporting method only when the primary brief exposes a
 real gap, and stop when the downstream skill has enough evidence.
 
+For implementation planning, use this skill when the approach should be shaped
+by the latest external practice: current official docs, maintained code
+examples, credible peer products, standards, or production-grade feature
+expectations. The default pattern is external-first, local-fit second: learn the
+current high-quality approaches, then adapt the smallest useful version to the
+repo's existing code and proof surface.
+
 This skill absorbs the former public `parity-research` and `gap-analysis`
 packages. Use method addresses instead of nested research routers.
 
@@ -77,10 +84,13 @@ Methods:
 2. Use [reference-grounding](../reference-grounding/SKILL.md) as the Tier 1
    evidence discipline: local baseline first when repo scope matters, primary
    sources over commentary, and explicit source confidence.
-3. Use [prototyping](../prototyping/SKILL.md) when a large source set should be
+3. For implementation features, search current external sources before locking
+   the approach unless the user explicitly asks for local-only work or the
+   change is a tiny same-scope fix.
+4. Use [prototyping](../prototyping/SKILL.md) when a large source set should be
    sampled before expanding the research pass.
-4. Separate common must-haves from optional extras and outliers.
-5. End with one recommendation and the next skill or artifact that should use
+5. Separate common must-haves from optional extras and outliers.
+6. End with one recommendation and the next skill or artifact that should use
    the brief.
 
 ## research:parity
@@ -174,7 +184,8 @@ actually implement a pattern, API, state flow, file layout, or test strategy.
 
 1. Convert the question into literal code patterns, filenames, package names,
    or exported symbols.
-2. Search broadly across maintained repos or the requested repo set.
+2. Search current maintained repos, official examples, or the requested repo set
+   before inventing an implementation pattern locally.
 3. Deep-dive the most relevant `1-3` examples and inspect surrounding tests,
    docs, and failure handling.
 4. Separate copied syntax from transferable design constraints.
