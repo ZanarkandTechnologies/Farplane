@@ -1,0 +1,58 @@
+[
+  {
+    "id": "learning_drain_dedupes_processed_rows_01",
+    "title": "Learning drain skips already processed rows",
+    "query": "Run the weekly AGI Toy Shop learning drain. docs/TROUBLES.md has one old correction row whose content hash already appears in .farplane/state/learning-drain/processed.jsonl, and docs/LESSONS.md has no new rows.",
+    "reference_points": [
+      "Reads TROUBLES, LESSONS, and processed state before proposing follow-ups",
+      "Recognizes the old trouble row is already processed",
+      "Does not call optimize-harness or create a duplicate ticket/thread",
+      "Returns a no-change or skipped report with the processed-state path",
+      "Preserves the original TROUBLES/LESSONS ledger rows"
+    ],
+    "tags": ["skill", "learning-drain", "dedupe"],
+    "notes": "Protects the weekly drain from reprocessing old learning-log rows."
+  },
+  {
+    "id": "learning_drain_pairs_trouble_lesson_01",
+    "title": "Learning drain pairs a resolved trouble with its lesson",
+    "query": "AGI Toy Shop has a TROUBLES row saying agents kept writing Notion tasks instead of local learning files, and a LESSONS row that references that trouble and says local docs are the canonical writer. Run learning-drain with cap=5.",
+    "reference_points": [
+      "Pairs the related trouble and lesson before selecting follow-ups",
+      "Creates at most one follow-up for the paired issue",
+      "Routes the follow-up to optimize-harness only if an actual harness/process fix remains",
+      "Records both source refs or hashes in processed state",
+      "Does not delete or rewrite the paired ledger rows"
+    ],
+    "tags": ["skill", "learning-drain", "pairing"],
+    "notes": "Tests the trouble-to-lesson pairing contract from the learning logger revamp."
+  },
+  {
+    "id": "learning_drain_respects_cap_01",
+    "title": "Learning drain respects follow-up caps",
+    "query": "Run learning-drain for AGI Toy Shop with cap=2. TROUBLES and LESSONS contain six new actionable behavior gaps.",
+    "reference_points": [
+      "Selects no more than two actionable follow-ups",
+      "Marks remaining actionable rows as deferred or reports overflow clearly",
+      "Does not spawn unbounded optimizer threads or tickets",
+      "Writes processed-state rows only for processed or intentionally deferred items",
+      "Reports the cap and next action in the drain summary"
+    ],
+    "tags": ["skill", "learning-drain", "cap"],
+    "notes": "Prevents weekly automation from flooding the workspace."
+  },
+  {
+    "id": "learning_drain_automation_is_pointer_01",
+    "title": "Learning drain keeps automation as a pointer",
+    "query": "Set up the weekly AGI Toy Shop learning drain automation. The automation prompt currently includes custom dedupe and optimizer-routing instructions inline.",
+    "reference_points": [
+      "States that automation should invoke learning-drain rather than own the drain behavior",
+      "Moves or points behavioral logic to the learning-drain skill contract",
+      "Keeps the automation prompt thin: project root, mode, cap, and skill invocation",
+      "Preserves eval coverage and processed-state rules in the skill package",
+      "Avoids adding hidden scheduler or daemon logic to the skill"
+    ],
+    "tags": ["skill", "learning-drain", "automation"],
+    "notes": "Locks in the operator's framing that automation is a scheduler pointer to a skill."
+  }
+]
