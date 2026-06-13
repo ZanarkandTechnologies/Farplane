@@ -12,8 +12,6 @@ from pathlib import Path
 from typing import Sequence
 
 from install_selected_skills import (
-    EMBEDDED_TODOS_BEGIN,
-    EMBEDDED_TODOS_END,
     Skill,
     discover_skills,
     filter_skills,
@@ -22,10 +20,13 @@ from install_selected_skills import (
 
 
 DESCRIPTION_MAX_CHARS = 220
+EMBEDDED_TODOS_BEGIN = "<!-- BEGIN FARPLANE_EMBEDDED_TODOS -->"
+EMBEDDED_TODOS_END = "<!-- END FARPLANE_EMBEDDED_TODOS -->"
 IGNORE_NAMES = {
     ".DS_Store",
     "__pycache__",
     ".pytest_cache",
+    "todos.md",
 }
 
 

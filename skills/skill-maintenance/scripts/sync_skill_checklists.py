@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and prune migrated skill todo lists."""
+"""Validate direct skill todo lists."""
 
 from __future__ import annotations
 
@@ -52,15 +52,6 @@ def parse_frontmatter(path: Path) -> dict[str, str]:
         key, value = raw_line.split(":", 1)
         metadata[key.strip()] = value.strip().strip("\"'")
     return metadata
-
-
-def strip_todos_heading(todos_text: str) -> str:
-    lines = todos_text.strip().splitlines()
-    if lines and lines[0].strip() == "# Todos":
-        lines = lines[1:]
-        if lines and not lines[0].strip():
-            lines = lines[1:]
-    return "\n".join(lines).strip()
 
 
 def strip_source_line(checklist_text: str) -> str:
@@ -134,19 +125,6 @@ def insert_section(skill_text: str, section: str) -> str:
     return f"{before}\n\n{section}\n{after}\n"
 
 
-def sync_skill_text(skill_text: str, todos_text: str) -> str:
-    section = render_section(strip_todos_heading(todos_text))
-    stripped = skill_text.rstrip()
-    if MARKED_SECTION_RE.search(stripped):
-        return MARKED_SECTION_RE.sub(section.rstrip() + "\n", stripped, count=1).rstrip() + "\n"
-    if SECTION_RE.search(stripped):
-        raise ChecklistError(
-            f"unmarked {TODO_HEADING!r} section; remove it or wrap it in "
-            f"{CHECKLIST_BEGIN} / {CHECKLIST_END} markers before syncing"
-        )
-    return insert_section(stripped, section)
-
-
 def normalize_skill_text(skill_text: str) -> str:
     checklist = extract_marked_checklist(skill_text)
     if checklist is None:
@@ -171,9 +149,8 @@ def iter_skill_dirs(repo_root: Path) -> list[Path]:
 def sync_repo(repo_root: Path, write: bool) -> int:
     stale: list[str] = []
     missing: list[str] = []
-    divergent: list[str] = []
+    legacy: list[str] = []
     updated: list[str] = []
-    removed: list[str] = []
     skipped_external: list[str] = []
 
     for skill_dir in iter_skill_dirs(repo_root):
@@ -184,52 +161,32 @@ def sync_repo(repo_root: Path, write: bool) -> int:
 
         current = skill_path.read_text(encoding="utf-8")
 
-        if not todos_path.exists():
-            if source == "external" and extract_marked_checklist(current) is None:
-                skipped_external.append(skill_dir.name)
-                continue
-            try:
-                expected = normalize_skill_text(current)
-            except ChecklistError as exc:
-                missing.append(f"{skill_path.relative_to(repo_root)}: {exc}")
-                continue
-            if current != expected:
-                stale.append(str(skill_path.relative_to(repo_root)))
-                if write:
-                    skill_path.write_text(expected, encoding="utf-8")
-                    updated.append(str(skill_path.relative_to(repo_root)))
+        if todos_path.exists():
+            legacy.append(str(todos_path.relative_to(repo_root)))
+            continue
+
+        if source == "external" and extract_marked_checklist(current) is None:
+            skipped_external.append(skill_dir.name)
             continue
 
         try:
-            todos_body = strip_todos_heading(todos_path.read_text(encoding="utf-8"))
-            direct_body = extract_marked_checklist(current)
-            if direct_body is None:
-                expected = sync_skill_text(current, todos_body)
-            elif normalize_checklist(direct_body) != normalize_checklist(todos_body):
-                divergent.append(str(skill_dir.relative_to(repo_root)))
-                continue
-            else:
-                expected = normalize_skill_text(current)
+            expected = normalize_skill_text(current)
         except ChecklistError as exc:
             missing.append(f"{skill_path.relative_to(repo_root)}: {exc}")
             continue
-
         if current != expected:
             stale.append(str(skill_path.relative_to(repo_root)))
             if write:
                 skill_path.write_text(expected, encoding="utf-8")
                 updated.append(str(skill_path.relative_to(repo_root)))
-        if write and direct_body is not None:
-            todos_path.unlink()
-            removed.append(str(todos_path.relative_to(repo_root)))
 
     if missing:
         print("skills missing required direct todo lists:", file=sys.stderr)
         for item in missing:
             print(f"- {item}", file=sys.stderr)
-    if divergent:
-        print("skills have divergent SKILL.md and todos.md todo lists:", file=sys.stderr)
-        for item in divergent:
+    if legacy:
+        print("skill-local todos.md files are no longer supported:", file=sys.stderr)
+        for item in legacy:
             print(f"- {item}", file=sys.stderr)
     if stale and not write:
         print("skill todo lists need normalization; run with --write:", file=sys.stderr)
@@ -239,13 +196,11 @@ def sync_repo(repo_root: Path, write: bool) -> int:
         print(f"synced {len(updated)} skill todo list section(s)")
     else:
         print("skill todo list sections OK")
-    if removed:
-        print(f"removed {len(removed)} redundant todos.md file(s)")
     if skipped_external:
         names = ", ".join(skipped_external)
         print(f"external skills without direct todo lists skipped: {names}")
 
-    return 1 if missing or divergent or (stale and not write) else 0
+    return 1 if missing or legacy or (stale and not write) else 0
 
 
 def main() -> int:

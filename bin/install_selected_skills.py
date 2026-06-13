@@ -12,11 +12,6 @@ from pathlib import Path
 from typing import Sequence
 
 
-EMBEDDED_TODOS_BEGIN = "<!-- BEGIN FARPLANE_EMBEDDED_TODOS -->"
-EMBEDDED_TODOS_END = "<!-- END FARPLANE_EMBEDDED_TODOS -->"
-DIRECT_CHECKLIST_HEADINGS = ("## Todo List", "## Checklist")
-
-
 @dataclass(frozen=True)
 class Skill:
     name: str
@@ -123,41 +118,16 @@ def backup_existing(dest: Path, backup_root: Path, dry_run: bool) -> None:
     shutil.move(str(dest), str(backup_dest))
 
 
-def render_skill_markdown(
-    skill_md: str, todos_md: str | None, source_label: str
-) -> str:
-    """Return installed SKILL.md text with todos embedded for first-load context."""
-    stripped = skill_md.rstrip()
-    if has_direct_checklist(stripped):
-        return stripped + "\n"
-    if not todos_md or not todos_md.strip():
-        return stripped + "\n"
-
-    return (
-        stripped
-        + "\n\n"
-        + EMBEDDED_TODOS_BEGIN
-        + "\n"
-        + "## Embedded Skill Todo List\n\n"
-        + "This generated section is copied from the skill package todo list so "
-        + "agents see required steps on first skill load.\n\n"
-        + f"Source: `{source_label}`\n\n"
-        + todos_md.strip()
-        + "\n"
-        + EMBEDDED_TODOS_END
-        + "\n"
-    )
-
-
-def has_direct_checklist(skill_md: str) -> bool:
-    return any(line.strip() in DIRECT_CHECKLIST_HEADINGS for line in skill_md.splitlines())
+def render_skill_markdown(skill_md: str) -> str:
+    """Return installed SKILL.md text exactly as the source first-load contract."""
+    return skill_md.rstrip() + "\n"
 
 
 def package_files(root: Path) -> dict[Path, Path]:
     return {
         path.relative_to(root): path
         for path in root.rglob("*")
-        if path.is_file() or path.is_symlink()
+        if (path.is_file() or path.is_symlink()) and path.name != "todos.md"
     }
 
 
@@ -179,12 +149,7 @@ def rendered_skill_matches(src: Path, dest: Path) -> bool:
         return False
 
     source_skill = src / "SKILL.md"
-    source_todos = src / "todos.md"
-    rendered_skill = render_skill_markdown(
-        source_skill.read_text(encoding="utf-8"),
-        source_todos.read_text(encoding="utf-8") if source_todos.exists() else None,
-        f"{src.name}/todos.md",
-    )
+    rendered_skill = render_skill_markdown(source_skill.read_text(encoding="utf-8"))
     installed_skill = dest / "SKILL.md"
     if not installed_skill.exists():
         return False
@@ -209,14 +174,14 @@ def render_skill_package(src: Path, dest: Path, backup_root: Path, dry_run: bool
     if dry_run:
         return "installed"
 
-    shutil.copytree(src, dest, symlinks=True)
-    skill_file = dest / "SKILL.md"
-    todos_file = src / "todos.md"
-    rendered = render_skill_markdown(
-        (src / "SKILL.md").read_text(encoding="utf-8"),
-        todos_file.read_text(encoding="utf-8") if todos_file.exists() else None,
-        f"{src.name}/todos.md",
+    shutil.copytree(
+        src,
+        dest,
+        symlinks=True,
+        ignore=lambda _directory, names: {"todos.md"} if "todos.md" in names else set(),
     )
+    skill_file = dest / "SKILL.md"
+    rendered = render_skill_markdown((src / "SKILL.md").read_text(encoding="utf-8"))
     skill_file.write_text(rendered, encoding="utf-8")
     return "installed"
 

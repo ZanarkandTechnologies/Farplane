@@ -69,10 +69,6 @@ def checklist_text_and_start(skill_dir: Path) -> tuple[str, Path, int]:
     if match:
         return match.group(1).strip(), skill_path, skill_text[: match.start(1)].count("\n") + 1
 
-    todos_path = skill_dir / "todos.md"
-    if todos_path.exists():
-        return sync_skill_registry.checklist_source_text(skill_dir), todos_path, 1
-
     return "", skill_path, 1
 
 

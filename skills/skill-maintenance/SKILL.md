@@ -97,8 +97,8 @@ fails:
     contract in `SKILL.md`.
   - [ ] Move long examples, rare recipes, templates, detailed rubrics, and
     conditional branches to references only when the todo names when to load them.
-  - [ ] Treat `todos.md` as legacy input; delete it once it matches the direct
-    marker-delimited `## Todo List`.
+  - [ ] Reject skill-local `todos.md`; first-load todo truth lives only in the
+    marker-delimited `## Todo List` inside `SKILL.md`.
 - [ ] 6. Sync eval reference points into runtime guardrails when warranted.
   - [ ] `if edited_skill/eval_task.json changed: compare changed reference_points against edited_skill.qa_checklist/reference`.
   - [ ] `if reference_point is reusable_runtime_guardrail: promote it into checklist, QA wording, validator candidate, or SKILL.md hard gate`.

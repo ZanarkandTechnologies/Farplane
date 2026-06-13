@@ -49,9 +49,6 @@ def registry_summary() -> dict[str, object]:
                 Counter("has" if row.get("has_checklist") else "missing" for row in rows).items()
             )
         ),
-        "todos_files": dict(
-            sorted(Counter("has" if row.get("has_todos") else "missing" for row in rows).items())
-        ),
         "skill_template_versions": dict(
             sorted(Counter(str(row.get("skill_template_version") or "missing") for row in rows).items())
         ),

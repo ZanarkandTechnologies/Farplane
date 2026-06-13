@@ -66,7 +66,7 @@ flowchart LR
   end
 
   subgraph Skills["Skill Layer"]
-    primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>todos.md"]:::callout
+    primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
     interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute"]:::callout
     intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout

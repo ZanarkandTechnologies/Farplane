@@ -95,7 +95,7 @@ class ImportInstalledSkillsTests(unittest.TestCase):
             self.assertEqual(result.imported, ["review-plus"])
             dest = repo / "skills" / "review-plus"
             self.assertTrue((dest / "references" / "note.md").exists())
-            self.assertTrue((dest / "todos.md").exists())
+            self.assertFalse((dest / "todos.md").exists())
             skill_text = (dest / "SKILL.md").read_text(encoding="utf-8")
             self.assertNotIn(importer.EMBEDDED_TODOS_BEGIN, skill_text)
             self.assertNotIn("Generated installed-only todo", skill_text)

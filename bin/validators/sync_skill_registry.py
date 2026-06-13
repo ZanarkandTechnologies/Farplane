@@ -224,15 +224,7 @@ def extract_direct_checklist(skill_path: Path) -> str:
 
 def checklist_source_text(skill_dir: Path) -> str:
     direct_checklist = extract_direct_checklist(skill_dir / "SKILL.md")
-    if direct_checklist:
-        return direct_checklist
-    todos_path = skill_dir / "todos.md"
-    if todos_path.exists():
-        text = todos_path.read_text().strip()
-        if text.startswith("# Todos\n"):
-            return text.split("\n", 1)[1].strip()
-        return text
-    return ""
+    return direct_checklist
 
 
 def collect_checklist_links(skill_dir: Path, skill_name: str) -> list[str]:
@@ -241,7 +233,7 @@ def collect_checklist_links(skill_dir: Path, skill_name: str) -> list[str]:
 
 def collect_skill_links(skill_dir: Path, skill_name: str) -> list[str]:
     return collect_skill_links_from_paths(
-        [skill_dir / "SKILL.md", skill_dir / "todos.md"],
+        [skill_dir / "SKILL.md"],
         skill_name,
     )
 
@@ -355,7 +347,6 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if tier != 3 and group not in (None, ""):
             raise RegistryError(f"{skill_path}: group is only allowed on tier 3 skills")
 
-        has_todos = (skill_dir / "todos.md").exists()
         has_checklist = bool(checklist_source_text(skill_dir))
         row: dict[str, Any] = {
             "name": name,
@@ -364,7 +355,6 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
             "path": str(skill_path.relative_to(repo_root)),
             "description": description,
             "has_checklist": has_checklist,
-            "has_todos": has_todos,
             "skill_links": collect_skill_links(skill_dir, name),
         }
         if tier == 3:

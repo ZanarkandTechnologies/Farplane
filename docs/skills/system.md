@@ -190,8 +190,8 @@ Manual fields:
 - `upstream_url`: optional for `source: external`.
 
 Generated registry fields include `path`, `description`, `has_checklist`,
-`has_todos`, `version`, `allowed_tools`, `skill_links`, and the manual fields
-above. `feature_refs` values are validated against
+`version`, `allowed_tools`, `skill_links`, and the manual fields above.
+`feature_refs` values are validated against
 `docs/features/registry.jsonl`. Derive generated fields from source files
 instead of duplicating them in frontmatter.
 

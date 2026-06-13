@@ -30,7 +30,6 @@ def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "group": row.get("group", ""),
             "methods": row.get("methods", []),
             "has_checklist": bool(row.get("has_checklist")),
-            "has_todos": bool(row.get("has_todos")),
             "path": row.get("path", ""),
             "description": row.get("description", ""),
         }

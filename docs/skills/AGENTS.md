@@ -23,10 +23,10 @@ Rules:
   operational todo list belongs in a caller skill. Prefer `upstream_url` over inventing
   command-shaped refresh metadata until a second source proves it is needed.
 - Installed skill packages are rendered artifacts: source `SKILL.md` direct
-  first-load todo lists stay visible in installed `SKILL.md`. Legacy `todos.md`
-  files may still be embedded during migration, but redundant duplicates should
-  be removed. Update `bin/test_install_selected_skills.py` when changing this
-  contract.
+  first-load todo lists stay visible in installed `SKILL.md`. Skill-local
+  `todos.md` sidecars are unsupported and must not be copied, embedded, or used
+  as registry input. Update `bin/test_install_selected_skills.py` when changing
+  this contract.
 - Use `skills/skill-maintenance/` for bulk skill tier/source/todo/registry
   upkeep instead of expanding global prompt rules.
 - Use `skills/harness-advisor/` first when the operator is deciding where a
@@ -47,7 +47,7 @@ Rules:
 - Do not maintain a second hand-authored sequence registry. Generate flow or
   graph views from Tier 3 `group` plus `common_chains` when a view is needed.
 - If a field can be derived from file paths, existing frontmatter, direct todo
-  lists, optional legacy `todos.md`, or Markdown links, derive it in the sync
-  script rather than duplicating it in frontmatter. `feature_refs` is the compact
+  lists, or Markdown links, derive it in the sync script rather than duplicating
+  it in frontmatter. `feature_refs` is the compact
   exception for deliberate `FEAT-####` adoption; the feature registry owns the
   details.

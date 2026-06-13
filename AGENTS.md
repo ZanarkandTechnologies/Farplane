@@ -73,11 +73,10 @@ belongs in callers. Run
 `python3 skills/skill-maintenance/scripts/check_skills.py --write` after skill
 metadata, Markdown links, or todo-list changes. See `MEM-0104`.
 Local Farplane skills keep required todo items directly in `SKILL.md`
-under a marker-delimited `## Todo List` section. Redundant
-`todos.md` files should be pruned once their content matches the direct
-checklist, and future divergent duplicates must be reconciled manually. External
-skills may omit local first-load todo lists when wrapper logic belongs in
-callers. Run
+under a marker-delimited `## Todo List` section. Skill-local `todos.md`
+sidecars are no longer an active source and should be deleted rather than
+reconciled. External skills may omit local first-load todo lists when wrapper
+logic belongs in callers. Run
 `check_skills.py --write` and reinstall after source skill edits before judging
 live installed behavior. See `MEM-0117` and `MEM-0124`.
 Native Codex Goal mode is the continuation engine for material Goal loops, but

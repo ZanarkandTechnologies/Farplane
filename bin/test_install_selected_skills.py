@@ -19,7 +19,8 @@ def write_skill(
     name: str,
     description: str,
     source: str = "local",
-    todos: str | None = "- [ ] Follow the checklist.",
+    checklist: str | None = "- [ ] Follow the checklist.",
+    todos: str | None = None,
 ) -> None:
     skill_dir = root / "skills" / name
     skill_dir.mkdir(parents=True)
@@ -38,6 +39,16 @@ def write_skill(
         ),
         encoding="utf-8",
     )
+    if checklist is not None:
+        skill_file = skill_dir / "SKILL.md"
+        skill_file.write_text(
+            skill_file.read_text(encoding="utf-8")
+            + "\n<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->\n"
+            + "## Todo List\n\n"
+            + checklist
+            + "\n<!-- END FARPLANE_IMPORTANT_CHECKLIST -->\n",
+            encoding="utf-8",
+        )
     if todos is not None:
         (skill_dir / "todos.md").write_text(todos + "\n", encoding="utf-8")
     (skill_dir / "references").mkdir()
@@ -61,7 +72,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"
             target = Path(tmp) / "codex"
-            write_skill(repo, "review", "Run quality checks.", todos="- [ ] Read proof.")
+            write_skill(repo, "review", "Run quality checks.", checklist="- [ ] Read proof.")
             write_skill(repo, "visual-qa", "Inspect browser screenshots.")
 
             result = installer.install_skills(repo, target, ["review"], False, False)
@@ -71,40 +82,36 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             self.assertTrue(installed.is_dir())
             self.assertFalse(installed.is_symlink())
             skill_text = (installed / "SKILL.md").read_text(encoding="utf-8")
-            self.assertIn(installer.EMBEDDED_TODOS_BEGIN, skill_text)
-            self.assertIn("## Embedded Skill Todo List", skill_text)
+            self.assertIn("## Todo List", skill_text)
             self.assertIn("- [ ] Read proof.", skill_text)
-            self.assertEqual(
-                (installed / "todos.md").read_text(encoding="utf-8"),
-                "- [ ] Read proof.\n",
-            )
+            self.assertFalse((installed / "todos.md").exists())
             self.assertTrue((installed / "references" / "note.md").exists())
             self.assertFalse((target / "skills" / "visual-qa").exists())
 
-    def test_install_without_todos_keeps_skill_body_unembedded(self) -> None:
+    def test_install_without_checklist_keeps_skill_body(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"
             target = Path(tmp) / "codex"
-            write_skill(repo, "review", "Run quality checks.", todos=None)
+            write_skill(repo, "review", "Run quality checks.", checklist=None)
 
             installer.install_skills(repo, target, ["review"], False, False)
 
             skill_text = (target / "skills" / "review" / "SKILL.md").read_text(
                 encoding="utf-8"
             )
-            self.assertNotIn(installer.EMBEDDED_TODOS_BEGIN, skill_text)
+            self.assertNotIn("## Todo List", skill_text)
             self.assertFalse((target / "skills" / "review" / "todos.md").exists())
 
-    def test_install_with_direct_checklist_skips_generated_embedding(self) -> None:
+    def test_install_ignores_stale_todos_sidecar(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"
             target = Path(tmp) / "codex"
-            write_skill(repo, "review", "Run quality checks.", todos="- [ ] Legacy proof.")
-            skill_file = repo / "skills" / "review" / "SKILL.md"
-            skill_file.write_text(
-                skill_file.read_text(encoding="utf-8")
-                + "\n## Todo List\n\n- [ ] Direct proof.\n",
-                encoding="utf-8",
+            write_skill(
+                repo,
+                "review",
+                "Run quality checks.",
+                checklist="- [ ] Direct proof.",
+                todos="- [ ] Stale sidecar proof.",
             )
 
             installer.install_skills(repo, target, ["review"], False, False)
@@ -113,29 +120,8 @@ class InstallSelectedSkillsTests(unittest.TestCase):
                 encoding="utf-8"
             )
             self.assertIn("- [ ] Direct proof.", skill_text)
-            self.assertNotIn(installer.EMBEDDED_TODOS_BEGIN, skill_text)
-            self.assertNotIn("- [ ] Legacy proof.", skill_text)
-            self.assertTrue((target / "skills" / "review" / "todos.md").exists())
-
-    def test_mentioning_direct_checklist_heading_still_embeds_legacy_todos(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            repo = Path(tmp) / "repo"
-            target = Path(tmp) / "codex"
-            write_skill(repo, "review", "Run quality checks.", todos="- [ ] Legacy proof.")
-            skill_file = repo / "skills" / "review" / "SKILL.md"
-            skill_file.write_text(
-                skill_file.read_text(encoding="utf-8")
-                + "\nMention `## Todo List` in prose.\n",
-                encoding="utf-8",
-            )
-
-            installer.install_skills(repo, target, ["review"], False, False)
-
-            skill_text = (target / "skills" / "review" / "SKILL.md").read_text(
-                encoding="utf-8"
-            )
-            self.assertIn(installer.EMBEDDED_TODOS_BEGIN, skill_text)
-            self.assertIn("- [ ] Legacy proof.", skill_text)
+            self.assertNotIn("- [ ] Stale sidecar proof.", skill_text)
+            self.assertFalse((target / "skills" / "review" / "todos.md").exists())
 
     def test_reinstall_skips_existing_matching_rendered_package(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
