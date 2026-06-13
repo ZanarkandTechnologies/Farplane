@@ -84,9 +84,12 @@ or proof behavior without touching real files.
   `skills/<skill-name>/eval_task.json`; use `.farplane/evals/tasks/*` for
   active working suites and `skills/eval/examples/*` for reusable cross-skill
   examples.
-- [ ] 5. Summarize findings from `summary.json` and task detail artifacts: verdict
+- [ ] 5. When skill eval `reference_points` become reusable runtime guardrails,
+  route writeback through `skill-maintenance` to update the owning skill's
+  checklist reference, final QA checklist, or validator/hook candidate.
+- [ ] 6. Summarize findings from `summary.json` and task detail artifacts: verdict
   counts, important failures, likely cause, and the next concrete fix.
-- [ ] 6. Review before completion.
+- [ ] 7. Review before completion.
   - [ ] If the eval task changes a Tier 1, meta, `eval`, cross-skill, or
     precedent-setting behavior, record the `deliberative-advice` recommendation
     or the explicit reason it was not needed.

@@ -394,6 +394,7 @@ Use this routing:
 | Repeatable agent, prompt, or skill behavior. | `eval` | `eval_task.json` or eval suite artifact. |
 | Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
 | Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality checklist | Skill-local reference such as `references/doc-quality-checklist.md`. |
+| Skill structure, first-load size, progressive disclosure, reference routing, or compaction risk. | structure checklist | `skills/skill-maintenance/references/skill-structure-checklist.md`, plus a skill-local audit for material changes. |
 | Generated asset or public deliverable presentation. | demo or QA proof | Demo checklist, render artifact, screenshot, or playback proof. |
 | Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |
 | Tiny deterministic edit. | self-check | One inline final todo or command. |
@@ -420,6 +421,26 @@ user-visible artifact and the checks are domain-specific. Examples:
   previews, and copy/asset consistency.
 - agent-testing skills: case coverage, tester evidence, evidence-review
   critique, rerun policy, and final proof bundle.
+
+For skill creation or material skill restructuring, load and run
+`skills/skill-maintenance/references/skill-structure-checklist.md`. Its key
+threshold is:
+
+```text
+place_skill_detail(detail)
+  -> SKILL.md when defer_loading_risk > context_rot_risk + compaction_loss_risk
+  -> reference when defer_loading_risk <= context_rot_risk + compaction_loss_risk
+```
+
+This treats oversized first-load context as a reliability risk, not just a style
+issue. If loading everything early increases context rot or forces compaction
+before the task state stabilizes, keep a precise first-load pointer and defer
+the branch detail to a reference.
+
+Treat each checklist item as a violation scan over the actual changed files,
+not as a passive reminder. Record any violation in the skill-local audit or
+final proof notes, then fix or explicitly defer it. Use the checklist's
+subagent prompt when independent structure review is useful.
 
 Do not put long QA checklists directly in `## Todo List` unless those checks
 are needed before execution. Prefer a compact final todo:

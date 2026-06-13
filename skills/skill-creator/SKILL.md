@@ -76,6 +76,12 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization)
      to decide what belongs in first-load `SKILL.md` versus references,
      templates, evals, or review checks.
+   - [ ] Load and run the
+     [Skill Structure Checklist](../skill-maintenance/references/skill-structure-checklist.md)
+     when first-load size, progressive disclosure, or reference placement is
+     material.
+   - [ ] For quality-dependent skills, add or link one good positive example
+     before optimizing checklist prose.
 - [ ] 5. Move non-first-load material to the right supporting surface.
    - [ ] Keep every-invocation rules in `SKILL.md`.
    - [ ] Move conditional branches, examples, templates, long rubrics, model
@@ -92,12 +98,10 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      [skill-maintenance/templates/skill-audit.md](../skill-maintenance/templates/skill-audit.md),
      or state why the change is mechanical enough to skip an audit record.
    - [ ] Repeatability from files alone.
-   - [ ] Structure metrics checked:
-     `first_load_sufficiency`, `reference_load_precision`,
-     `missing_context_rate`, `noisy_context_rate`,
-     `duplicated_instruction_count`, `prompt_size_tokens`,
-     `task_success_rate`, `review_tas_rate`, `maintenance_locality`, and
-     `composition_clarity`.
+   - [ ] Run each item in
+     [Skill Structure Checklist](../skill-maintenance/references/skill-structure-checklist.md)
+     against the actual changed files; fix or record every violation before
+     completion.
    - [ ] Review depth chosen with
      [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization):
      direct self-check for tiny mechanical edits, `advise` for normal recent
@@ -106,6 +110,8 @@ fails: creates duplicate skills; hides required logic in references; omits proof
    - [ ] No duplicated first-load logic.
    - [ ] Actor-prompt versus skill-contract boundaries are clean.
    - [ ] Explicit proof commands or blockers are recorded.
+   - [ ] Quality-dependent skills have at least one transferable example, or an
+     explicit blocker explains why the example cannot be produced yet.
    - [ ] Native `reviewer` subagent used for material skill-system changes when
      available.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -165,6 +171,9 @@ starter file.
   prompts, and README-style docs.
 - Do not put actor identity, delegation routing, tool-use policy, or artifact
   writeback in a reusable skill contract.
+- Do not spend a full pass polishing structure for a quality-dependent skill
+  that has no representative example; make the example first unless the skill
+  is too broken to run.
 
 ## Reference Map
 
@@ -177,6 +186,9 @@ starter file.
   first-load todo shape, reference placement, actor-prompt boundaries,
   structure optimization metrics, duplication control, repeatability, and
   review gates.
+- [../skill-maintenance/references/skill-structure-checklist.md](../skill-maintenance/references/skill-structure-checklist.md)
+  - executable structure checklist for first-load size, progressive disclosure,
+  reference routing, and compaction risk.
 - [references/SKILL_TEMPLATE.md](references/SKILL_TEMPLATE.md) - minimal starter
   template for new skill packages.
 - [references/workflows.md](references/workflows.md) - branch and

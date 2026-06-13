@@ -732,6 +732,111 @@ Use the cheapest layer that can falsify the claim. If a skill eval fails, fix
 the skill before blaming the e2e workflow. If a primitive skill fails, fix the
 primitive before patching every caller.
 
+### Todo, Eval, QA, And Benchmark Symmetry
+
+Todos, evals, QA checklists, reviews, and benchmarks are different projections
+of one latent behavior contract. They feel like separate systems because the
+contract is usually incomplete, disputed, or easier to see from examples than
+from procedure.
+
+```text
+BehaviorContract :=
+  reference_points
++ procedure
++ evidence_shape
++ verdict_rule
++ owner_surface
+
+todo(BehaviorContract)
+  -> ordered actions expected to produce the behavior
+
+eval(BehaviorContract)
+  -> repeatable input/context whose answer should satisfy reference_points
+
+qa_checklist(BehaviorContract)
+  -> runtime or final checks applied to one concrete artifact or run
+
+review(BehaviorContract, evidence)
+  -> judgment over whether the evidence satisfies the contract
+
+benchmark(eval_cases[])
+  -> aggregate comparison signal across cases, variants, or agents
+```
+
+At the fixed point, the projections converge:
+
+```text
+perfect_contract:
+  todo_list.reference_points
+  == eval.reference_points
+  == qa_checklist.items
+  == review.rubric.required_points
+
+qa_check =
+  apply(todo_list)
+  AND verify(todo_list_executed_against_evidence)
+```
+
+In that perfect world, an eval is just an executable todo list, and QA is the
+same todo list checking its own execution. The distinction exists because real
+harness work starts before the best todo shape is known.
+
+Discovery loop:
+
+```text
+unknown_contract
+  -> write expected answers or failure cases faster than full procedure
+  -> eval.reference_points reveal missing or noisy todos
+  -> todo_list becomes a better production procedure
+  -> qa_checklist derives the reusable runtime guardrails
+  -> review handles judgment that is still too contextual for a validator
+  -> benchmark aggregates enough evals to compare variants
+```
+
+This is why evals and checklists should compete until they converge. When the
+reference points are easier to state as expected outputs, start with evals.
+When the procedure is clearer than the examples, start with todos. When the
+same reference point becomes reusable during real execution, promote it into a
+QA checklist, validator, review rubric, or hook depending on its determinism and
+cost.
+
+Ownership:
+
+```text
+eval owns:
+  eval_task.json, example cases, reference_points, run artifacts
+
+skill-maintenance owns:
+  skill-local checklist references, first-load todo shape, skill audit writeback
+
+agent-qa-test or reviewer owns:
+  adversarial or independent application of the checklist to real behavior
+
+qa owns:
+  ticket-scoped proof artifacts and Done / Proof reconciliation
+
+benchmark owns:
+  aggregate comparison across eval cases, agents, variants, or releases
+```
+
+Sync rule:
+
+```text
+after_update(eval_task.json):
+  for each new_or_changed reference_point:
+    if reusable_runtime_guardrail(reference_point):
+      update owning skill checklist/reference through skill-maintenance
+    if deterministic_invariant(reference_point):
+      consider validator or hook fixture
+    if judgment_heavy(reference_point):
+      keep review or QA checklist wording explicit
+```
+
+Do not force every eval reference point into a checklist. Some reference points
+exist only to preserve a hardcase, compare variants, or test a boundary that is
+too rare to load on every invocation. The useful move is convergence, not
+duplication.
+
 Do not use hooks for judgment-heavy work. Do not use review prose for
 deterministic invariants that a validator can check. Do not invent numeric
 metrics when the honest signal is a review verdict, human decision, or artifact

@@ -1,6 +1,6 @@
 ---
 name: skill-maintenance
-description: "Turn bulk skill-system changes into updated frontmatter, finish gates, registry sync, audits, and validation proof."
+description: "Turn a desired skill behavior delta into owner-local skill edits, registry sync, audit proof, and review when updating Farplane skills."
 tier: 3
 group: skills
 source: local
@@ -15,291 +15,157 @@ feature_refs:
 
 ## Context
 
-Skill maintenance is the owner for bulk Farplane skill upkeep: template
-onboarding, tier/source metadata, generated registry sync, todo-list shape,
-finish gates, link hygiene, source ownership, and consolidation planning. Use
-this skill to make skill-system work repeatable instead of hiding rollout state
-in chat.
+Use this as the entrypoint whenever the operator wants to update, audit,
+repair, consolidate, or roll out changes to Farplane skills. Treat the task as
+a behavior delta over one or more `edited_skill` packages, then update the
+owner-local skill surface and prove the skill system still holds together.
+
+`skill-maintenance` owns skill-package mechanics after the owner surface is
+known: `SKILL.md` shape, references, eval/checklist sync, source ownership,
+frontmatter, registry sync, audit records, reinstall checks, and review routing.
+It does not replace `optimize-harness`, `gap-analysis`, `skill-creator`, `eval`,
+or `review`.
 
 ## Skill Signature
 
 ```text
-maintain_skills(accepted_change, targets?, rollout_scope?) -> applied_change + registry_checks + audit_records?
-state: reads(skill-system docs, target skills, registries, active ticket, prior audits); writes(SKILL.md, references?, registry, audits?, proof notes)
-gates: template_structure_valid; source_owner_preserved; registry_synced; audit_recorded_or_skipped; review_or_blocker_recorded
-routes: gap-analysis | skill-creator | eval | advise | deliberative-advice | review | execute
-fails: bulk-edits without prototype; marks version without structure; edits installed copies as source of truth
-```
+skill_maintenance(expected_behavior, current_behavior, edited_skill, mode?, evidence?)
+  -> updated_skill | audit_record | blocked_report
 
-```text
-audit_skill_structure(skill, change, reasoning, evidence?) -> audits/YYYY-MM-DD-<short-change>.md + binary_rubric + followups
-state: reads(SKILL.md, references, eval_task.json?, prior audits, reasoning notes, run artifacts?, reviewer receipts?); writes(skill-local audit record)
-gates: first_principles_recorded; pass_fail_not_score; before_after_named; evidence_unknown_not_guessed
-routes: advise | deliberative-advice | eval | review
-fails: invents numeric health score; duplicates git last-edited state; claims task_success_rate without run artifacts
+state:
+  reads(edited_skill.SKILL.md, edited_skill.references?, edited_skill.eval_task?,
+        edited_skill.qa_checklist?, docs/skills/registry.jsonl, prior_audits?,
+        run_artifacts?, reviewer_receipts?)
+  writes(edited_skill.SKILL.md?, edited_skill.references?, edited_skill.eval_task?,
+         edited_skill.qa_checklist?, skill-local audit?, docs/skills/registry.jsonl)
+
+modes:
+  structure_update | metadata_update | eval_to_qa_sync | audit |
+  bulk_rollout | registry_validation | installed_copy_import
+
+gates:
+  behavior_delta_named; owner_surface_clear; source_owner_preserved;
+  first_load_executable; template_version_truthful; registry_synced;
+  eval_guardrails_synced_or_skipped; audit_or_skip_recorded;
+  check_skills_passed; reviewer_routed_when_material
+
+routes:
+  skill-creator | eval | advise | deliberative-advice | review |
+  gap-analysis | harness-advisor
+
+fails:
+  vague update; hidden installed-copy edit; bulk edit without prototype;
+  eval changed without QA-sync check; bloated first-load contract;
+  template version claim without structure proof; audit skipped for material change
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Load the current skill-system baseline before editing.
-   - [ ] Read `docs/skills/system.md`, `docs/skills/README.md`,
-     the relevant anchored section of `docs/skills/best-practices.md`,
-     `docs/skills/registry.jsonl`, active tickets, and the target skill files.
-     Load the full best-practices file only for broad skill-system audits or
-     standard-setting changes.
-- [ ] 2. Classify the maintenance operation for each target skill.
-   - [ ] 1. Template onboarding, signature rollout, or version audit.
-   - [ ] 2. Todo-list or reference cleanup.
-   - [ ] 3. Tier, source, group, feature-ref, method, or common-chain metadata
-     update.
-   - [ ] 4. Consolidation, split, or external-source ownership change.
-   - [ ] 5. Structure audit or before/after behavior audit.
-- [ ] 3. Route non-mechanical choices before editing.
-   - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-     when upstream or external skill examples should change the local contract.
-   - [ ] Use the native planning phase or `harness-advisor` when tier, source,
-     group, method ownership, or consolidation choices have real tradeoffs.
-   - [ ] Use
-     [advice and proof routing](../../docs/skills/best-practices.md#advice-and-proof-routing)
-     before changing shared standards, Tier 1 primitives, meta skills, `eval`,
-     templates, reviewer rubrics, or cross-skill policy.
-- [ ] 4. Record the edit boundary for each target skill.
-   - [ ] Identify source ownership, related skills, adopted `FEAT-####`
-     records, first-load dependencies, proof surfaces, and files that may
-     change.
-   - [ ] When the source change started in `~/.codex/skills`, preview the pull
-     into repo source with `python3 ../../bin/import_installed_skills.py --skills <name> --dry-run`
-     from this skill package, then import with explicit `--overwrite` only when
-     replacing an existing repo package is intentional.
-- [ ] 5. Prototype broad rewrites on a representative sample before scaling.
-   - [ ] Include a mix of Tier 1, Tier 2, and complex Tier 3 packages when the
-     migration will affect many skills.
-- [ ] 6. Edit each target `SKILL.md` so first-load work is executable.
-   - [ ] Keep `description` as one sentence under 220 characters using
-     `Verb input/context into output/artifact when call-condition`.
-   - [ ] Put required actions in the marker-delimited `## Todo List`.
-   - [ ] Keep every-invocation rules in `SKILL.md`.
-   - [ ] Keep content in `SKILL.md` when it is needed now on first load; move it
-     to references when it is only needed later through an explicit branch,
-     deeper rationale, optional detail, or rare mode.
-   - [ ] Move conditional branches, examples, templates, long rubric detail,
-     model maps, delegated prompts, and rare-path recipes into references.
-   - [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
-     and artifact writeback out of reusable skills unless the skill is explicitly
-     an orchestration skill.
-   - [ ] For quality-dependent skills, add or link one positive example before
-     broad structure cleanup when no good example exists.
-- [ ] 7. Verify template structure before marking a skill onboarded.
-   - [ ] Check the actual `SKILL.md` headings, todo shape, and `## Skill
-     Signature` against the current template before setting or keeping
-     `skill_template_version`.
-   - [ ] Prune redundant `todos.md` once direct todo-list content matches.
-- [ ] 8. Validate the skill system with `python3 scripts/check_skills.py --write`
-   from this skill package.
-- [ ] 9. Reinstall touched local skills and inspect the live copy before judging
-   Codex behavior.
-   - [ ] Use `bash ../../install.sh --skills-only --skills <names> --target ~/.codex`
-     from this skill package when the user is checking installed behavior.
-   - [ ] Re-read `~/.codex/skills/<name>/SKILL.md` for at least one touched skill
-     before claiming the visible checklist changed.
-- [ ] 10. Review readiness before completion.
-   - [ ] For material skill changes, write or update
-     `skills/<skill-name>/audits/YYYY-MM-DD-<short-change>.md` using
-     [skill-audit.md](templates/skill-audit.md), or explicitly record why the
-     change is tiny enough to skip an audit record.
-   - [ ] Record first-principles reasoning first: objective, placement logic,
-     expected before/after behavior, tradeoff accepted, and proof needed.
-   - [ ] Check structure metrics for each material target:
-     `first_load_sufficiency`, `reference_load_precision`,
-     `missing_context_rate`, `noisy_context_rate`,
-     `duplicated_instruction_count`, `prompt_size_tokens`,
-     `task_success_rate`, `review_tas_rate`, `maintenance_locality`, and
-     `composition_clarity`.
-   - [ ] Check example coverage for quality-dependent skills: at least one
-     transferable positive example exists, or the audit names the blocker.
-   - [ ] Choose review depth with
-     [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization):
-     direct self-check for tiny mechanical edits, `advise` for normal recent
-     skills, and `deliberative-advice` for Tier 1, meta, `eval`, stale,
-     high-blast-radius, cross-skill, or precedent-setting structure changes.
-   - [ ] For material skill-system changes, delegate final review to the native
-     `reviewer` subagent with a reviewer handoff.
-   - [ ] Use the Tier 0 execution/writeback phase for final proof, docs
-     writeback, and ticket evidence when the pass needs durable closeout.
+- [ ] 1. Bind variables before editing.
+  - [ ] `edited_skill := target skill package(s)`.
+  - [ ] `expected_behavior := desired operator-visible behavior`.
+  - [ ] `current_behavior := observed or file-backed current behavior`.
+  - [ ] `mode := structure_update | metadata_update | eval_to_qa_sync | audit | bulk_rollout | registry_validation | installed_copy_import`.
+  - [ ] `evidence := user request + target files + ticket/council/eval/review artifacts`.
+- [ ] 2. Read the minimum authoritative context.
+  - [ ] Always read `edited_skill/SKILL.md`, `docs/skills/registry.jsonl`, and
+    the relevant anchored skill-system docs or active ticket.
+  - [ ] If `mode in [structure_update, audit]`, read
+    [Skill Structure Checklist](references/skill-structure-checklist.md).
+  - [ ] If `mode == eval_to_qa_sync` or `edited_skill/eval_task.json` changed,
+    read `edited_skill/eval_task.json` and the relevant checklist/QA reference.
+  - [ ] If `mode == installed_copy_import`, preview the import path with
+    `python3 ../../bin/import_installed_skills.py --skills <name> --dry-run`
+    from this skill package before any overwrite.
+- [ ] 3. Compute `behavior_delta := expected_behavior - current_behavior`.
+  - [ ] If the delta is vague, first use `gap-analysis`, `harness-advisor`, or
+    `advise`; do not patch a skill until the owner surface is clear.
+  - [ ] If the delta is broad or repeated across many skills, prototype on a
+    representative sample before bulk rollout.
+- [ ] 4. Choose the owner surface with explicit branch routing.
+  - [ ] `if first_load_behavior_changed: edit edited_skill/SKILL.md`.
+  - [ ] `else if conditional_detail_or_template_changed: edit edited_skill/references/*`.
+  - [ ] `else if repeatable_behavior_proof_changed: edit edited_skill/eval_task.json`.
+  - [ ] `else if runtime_guardrail_changed: edit edited_skill qa_checklist/reference or validator candidate`.
+  - [ ] `if registry_or_frontmatter_changed: regenerate docs/skills/registry.jsonl; never hand-edit generated rows`.
+  - [ ] `if template_version_changed: prove the actual headings/todo/signature match the promised template`.
+  - [ ] `if installed_copy_differs: import or patch repo source first; reinstall/live-inspect only after source edits are accepted`.
+  - [ ] `if bulk_rollout: use sandbox/sample proof before scaling and keep one audit/proof row per affected class`.
+- [ ] 5. Apply the smallest owner-local edit.
+  - [ ] Keep every-invocation gates, routing, proof, stop conditions, and output
+    contract in `SKILL.md`.
+  - [ ] Move long examples, rare recipes, templates, detailed rubrics, and
+    conditional branches to references only when the todo names when to load them.
+  - [ ] Treat `todos.md` as legacy input; delete it once it matches the direct
+    marker-delimited `## Todo List`.
+- [ ] 6. Sync eval reference points into runtime guardrails when warranted.
+  - [ ] `if edited_skill/eval_task.json changed: compare changed reference_points against edited_skill.qa_checklist/reference`.
+  - [ ] `if reference_point is reusable_runtime_guardrail: promote it into checklist, QA wording, validator candidate, or SKILL.md hard gate`.
+  - [ ] `else: record skipped rare, hardcase, benchmark-only, or judgment-heavy points in the audit`.
+- [ ] 7. Validate and prove the skill-system state.
+  - [ ] Run `python3 scripts/check_skills.py --write` from this skill package.
+  - [ ] Run focused JSON, link, template-version, fixture, eval, or import
+    checks required by `mode` and the active ticket.
+  - [ ] Reinstall touched local skills and inspect the live copy only when the
+    user is judging installed behavior.
+- [ ] 8. Finish with audit/review/writeback.
+  - [ ] For material skill changes, write or update
+    `skills/<skill-name>/audits/YYYY-MM-DD-<short-change>.md` from
+    [skill-audit.md](templates/skill-audit.md); otherwise record a skip reason.
+  - [ ] Use binary `pass | fail | unknown` evidence; do not invent numeric
+    health scores or claim task/review improvement without run artifacts.
+  - [ ] Route final review through `reviewer` for Tier 1, meta, `eval`, stale,
+    high-blast-radius, cross-skill, or precedent-setting changes.
+  - [ ] Update ticket/progress evidence before claiming completion.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
-
-Use this when working on the skill system itself: tier metadata, direct todo
-lists, legacy `todos.md` cleanup, source ownership, registry sync, link
-hygiene, or consolidation planning.
-
-## Core Rules
-
-- Follow `docs/skills/system.md` for the tier model, source ownership,
-  frontmatter contract, template versioning, feature tracking, and todo-link
-  rules.
-- Follow the relevant anchored section of `docs/skills/best-practices.md` for
-  first-load todo-list shape, structure optimization metrics, reference
-  placement, repeatability, and finish gates. Do not load the full file for
-  ordinary one-skill edits unless the placement or standard is broad enough to
-  need it.
-- `SKILL.md` is the first-load source of truth. Required todo items belong in a
-  direct marker-delimited `## Todo List` section.
-- First-load sufficiency has priority over modular neatness. Do not move required
-  every-invocation context, gates, routing, proof, or output contracts into
-  references just to make `SKILL.md` shorter.
-- Keep logic in `SKILL.md` when it affects every invocation: trigger boundary,
-  required order, decision routing, escalation, stop conditions, hard gates,
-  output contract, and high-risk guardrails.
-- Use the `docs/skills/best-practices.md#structure-optimization` metrics to
-  decide whether a rule belongs in first-load `SKILL.md`, a reference,
-  template, eval, review, QA checklist, validator, or other finish gate.
-- Use `docs/skills/best-practices.md#placement-boundaries` to decide between
-  `SKILL.md`, skill-local references, shared docs, templates, and evals based
-  on whether content is needed now on first load or later through an explicit
-  reference branch, plus owner scope, depth, and length.
-- Route review depth from the same metrics: use `advise` for ordinary recent
-  skills and `deliberative-advice` when the skill is Tier 1, meta, `eval`,
-  stale, far from the current template, high-traffic, cross-skill, or
-  precedent-setting.
-- Route advice and proof before editing: first-principles for obvious local
-  choices, `advise` for ordinary local tradeoffs, `deliberative-advice` for
-  standards or compounding surfaces, `research` for missing evidence, `eval` for
-  behavioral claims, and reviewer for final readiness.
-- Use `references/*` for conditional branches, examples, templates, long rubric
-  detail, model maps, delegated prompts, and rare-path recipes.
-- If a reference must be read every time, promote the needed logic into
-  `SKILL.md`.
-- For quality-dependent skills, missing examples are a first-order maintenance
-  issue. Add a representative example before broad structural rewrites unless
-  the missing structure prevents the skill from running at all.
-- Treat `todos.md` as a legacy/transitional input only. Delete it once it
-  matches the direct `SKILL.md` todo list; reconcile divergent duplicates
-  manually.
-- External skills should carry `source: external` and usually `upstream_url`;
-  local Farplane policy belongs in local callers.
-- Router-style todos choose methods conditionally. They do not run every method
-  in sequence.
-- Complex Tier 3 pipeline skills should expose their domain as
-  `Model + MethodRegistry + TodoRecipe + Templates + Proof` when that makes the
-  workflow easier to scan. Keep the algebra in `SKILL.md` or a targeted
-  `references/model.md`; do not add per-skill `README.md` files for this.
-- Material skill changes should create a skill-local audit record at
-  `skills/<skill-name>/audits/YYYY-MM-DD-<short-change>.md`. Use binary
-  `pass` / `fail` / `unknown` rubric rows rather than numeric health scores.
-  Do not add `health_score` or `last_edited` to `SKILL.md` front matter; derive
-  freshness from git history and audit records.
-- First-principles review is the default skill-structure review engine. Use evals,
-  variant tournaments, or reviewer receipts only when reasoning cannot settle a
-  choice, reviewers disagree, a regression guard is needed, or a claim depends
-  on measured behavior.
-
-## Workflow
-
-1. Read `docs/skills/system.md`, `docs/skills/README.md`, the relevant anchored
-   section of `docs/skills/best-practices.md`, `docs/skills/registry.jsonl`,
-   and the target skill files.
-2. Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-   when comparing external skill examples or upstream instructions.
-3. Use the native planning phase or `harness-advisor` when
-   tier/source/consolidation choices have real tradeoffs.
-4. For broad migrations such as todo-list embedding or reference pruning, use
-   [prototyping](../prototyping/SKILL.md) on a small representative set before
-   running bulk commands.
-5. Use `python3 ../../bin/import_installed_skills.py --skills <name> --dry-run`
-   when a desired skill change exists only in `~/.codex/skills`; import without
-   `--dry-run` only after confirming the package, and use `--overwrite` only for
-   intentional repo-source replacement.
-6. Update `SKILL.md` frontmatter only for manual fields: `tier`, `source`,
-   `description`, optional `skill_template_version`, optional `feature_refs`,
-   Tier 3 `group`, optional `methods`, optional `common_chains`, and optional
-   `upstream_url`. Keep `description` as the functional routing definition, not
-   a trigger catalog or mini manual. Use `feature_refs` only for compact
-   `FEAT-####` handles already present in `docs/features/registry.jsonl`. Use
-   `skill_template_version` only when the skill has been onboarded to a known
-   structural template baseline; absence means not onboarded yet.
-7. Put the anti-forgetting todo list directly in `SKILL.md` under
-   `## Todo List`:
-   - project/docs context first
-   - required workflow and branch checks second
-   - proof/writeback and finish gate last
-   - keep optional detail in references with clear read conditions
-   - keep or create `todos.md` only as a temporary migration input
-   - add or link one positive example for quality-dependent skills before
-     marking the skill ready for creative or judgment-heavy use
-8. Run the standard skill-system check:
-
-```bash
-python3 scripts/check_skills.py --write
-```
-
-This command normalizes direct `## Todo List` sections, prunes
-redundant `todos.md` files, regenerates the registry, verifies registry
-metadata, checks todo-list tier edges, compiles the registry/check scripts, and
-prints a compact summary. Use the lower-level commands only when debugging a
-specific failure:
-
-```bash
-python3 scripts/sync_skill_checklists.py --write
-python3 ../../bin/validators/sync_skill_registry.py --write
-python3 ../../bin/validators/sync_skill_registry.py --check
-python3 ../../bin/validators/check_skill_todo_tiers.py --allow-peer-tier3
-```
-
-9. Use the Tier 0 execution/writeback phase for final proof, docs writeback,
-   and ticket evidence after skill changes.
-10. For material skill edits, write the skill-local audit record with
-   first-principles reasoning, before and after behavior, optional proof
-   artifacts or explicit evidence gaps, binary rubric rows, and followups.
-
-## Outcome Contract
-
-- Skill frontmatter remains minimal and valid. Skills may carry `feature_refs`
-  for adopted harness feature handles. Onboarded skills may carry
-  `skill_template_version`; missing values remain visible in the generated
-  registry and `check_skills.py --template-version <version>` report.
-  Versioned skills fail the check when their structure no longer matches the
-  template promise.
-- Skill `description` fields are one-sentence functional routing definitions
-  under 220 characters and name the input/context, output/artifact, and call
-  condition when those are not obvious.
-- Broad skill migrations include a representative `Prototype Note` before full
-  batch application.
-- `SKILL.md` contains the required first-load todo list and high-signal logic.
-- Transitional `todos.md` files are removed when redundant or left only when a
-  human must reconcile divergent content.
-- Complex Tier 3 skills keep any algebraic project/component/method model
-  concise, discoverable, and subordinate to the `SKILL.md` first-load contract.
-- Quality-dependent skills have at least one positive example in `SKILL.md`,
-  `references/examples.md`, `templates/*`, or `prompts/*`, or the maintenance
-  record names why that example is blocked.
-- `docs/skills/registry.jsonl` is regenerated, not hand-edited.
-- External-source skills remain easy to refresh.
-- Consolidation candidates are ticketed or documented before hard migration.
-- Material skill changes leave a skill-local audit record, or state why the
-  change was mechanical enough to skip one.
-- `python3 scripts/check_skills.py --write` passes
-  before completion is claimed.
 
 ## Templates
 
-Use `skills/skill-creator/references/SKILL_TEMPLATE.md` as the structural
-baseline when onboarding a skill to `skill_template_version: "0.2.0"`.
+Behavior-delta handoff:
 
-Use `templates/skill-audit.md` for skill-local audit records.
+```text
+edited_skill:
+expected_behavior:
+current_behavior:
+mode:
+behavior_delta:
+owner_surface:
+proof_required:
+```
+
+Audit skip reason:
+
+```text
+audit_skipped:
+  reason: tiny mechanical edit | no behavior delta | validation-only
+  evidence:
+  remaining_risk:
+```
+
+Review handoff:
+
+```text
+Review changed skill files for skill-contract, integration-readiness, and
+evidence-quality. Check source ownership, first-load sufficiency, registry sync,
+template-version truth, eval-to-QA sync, audit evidence, and reviewer routing.
+Return TAS verdicts, blockers, and smallest required fixes.
+```
 
 ## Gotchas
 
-- Do not mark a skill as onboarded to a template version unless its structure
-  actually follows that template.
-- Do not add a verbose type schema when a compact `## Skill Signature` captures
-  callable behavior, state, gates, routes, and failure modes.
-- Do not bypass the template-structure validator by treating
-  `skill_template_version` as metadata-only.
-- Do not let generated registry rows become a hand-edited source of truth.
-- Do not bulk-edit every skill before proving the pattern on a representative
-  sample.
-- Do not move Farplane wrapper behavior into external-source skills.
+- Do not treat installed `~/.codex/skills/*` files as the durable source of
+  truth unless the operator explicitly asks for that exact installed-copy edit.
+- Do not mark a skill as onboarded or versioned unless its actual structure
+  matches the template promise.
+- Do not use brevity as proof. A shorter `SKILL.md` is worse if it hides
+  required routing, gates, proof, or output contract.
+- Do not let `skill-maintenance` become a second `optimize-harness`; this skill
+  changes skill packages after the owner surface is known.
+- Do not auto-promote every eval reference point into a checklist. Promote only
+  reusable runtime guardrails.
+- Do not bypass `check_skills.py --write`, hand-edit generated registry rows,
+  bulk-edit without sample proof, or skip audit/review for material changes.
 
 ## Reference Map
 
@@ -310,22 +176,26 @@ Use `templates/skill-audit.md` for skill-local audit records.
   guide, generated registry surface, and maintenance commands.
 - [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
   first-load shape, structure optimization metrics, reference placement,
-  repeatability, and finish gates.
+  repeatability, advice/proof routing, and finish gates.
+- [references/skill-structure-checklist.md](references/skill-structure-checklist.md) -
+  load for material structure changes, first-load size, progressive disclosure,
+  reference routing, or compaction-risk review.
 - [../skill-creator/references/SKILL_TEMPLATE.md](../skill-creator/references/SKILL_TEMPLATE.md)
   - current baseline skill template.
 - [templates/skill-audit.md](templates/skill-audit.md) - binary before/after
   audit record template for material skill changes.
 - [references/eval-fixture-sandbox.md](references/eval-fixture-sandbox.md) -
-  bad-skill fixture and sandbox pattern for skill-maintenance evals that must
-  not mutate the real skill tree.
-- [scripts/check_skills.py](scripts/check_skills.py) - standard validation and
-  template-version report.
+  load when writing or running evals/fixtures that must not mutate the real
+  skill tree.
+- [scripts/check_skills.py](scripts/check_skills.py) - standard validation,
+  registry sync, todo checks, doc refs, and template-version report.
 
 ## Output
 
-- Updated `skills/*/SKILL.md` files.
-- Regenerated `docs/skills/registry.jsonl`.
-- Skill-local audit records for material skill changes, or an explicit skip
-  reason for mechanical edits.
-- A passing `python3 scripts/check_skills.py --write`
-  result, or an explicit blocker with the exact failing command.
+- Updated owner-local skill files: `SKILL.md`, references, evals, or checklist
+  surfaces as selected by `behavior_delta`.
+- Regenerated `docs/skills/registry.jsonl` when metadata or skill shape changes.
+- Skill-local audit record for material changes, or explicit audit skip reason.
+- Validation output from `python3 scripts/check_skills.py --write` plus any
+  focused fixture/eval/template checks required by the active mode.
+- Reviewer result or recorded blocker when the change is material.

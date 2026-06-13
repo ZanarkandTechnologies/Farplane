@@ -25,6 +25,11 @@ only conditional detail to references.]
 `SKILL.md`, one-skill conditional detail in `references/*`, and cross-skill
 standards in `docs/*`.]
 
+[TODO: For long or complex skills, use
+`../skill-maintenance/references/skill-structure-checklist.md`: keep detail in
+first load only when defer_loading_risk is greater than context_rot_risk plus
+compaction_loss_risk.]
+
 [TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` as
 visible task labels like `- [ ] 1. ...`, and use a specific contract section
 only when it adds non-duplicated durable shape.]
@@ -128,6 +133,8 @@ Do not call phase-like skills recursively at the same scope.
 - [ ] 7. Run the named finish gate before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
+   - [ ] Structure checklist scanned against changed files for long templates,
+     examples, rare branches, missing reference routing, and first-load bloat.
    - [ ] Explicit proof command or blocker.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
