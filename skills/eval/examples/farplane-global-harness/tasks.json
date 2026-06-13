@@ -126,6 +126,87 @@
     "notes": "Regression for the global-template rule that architecture, schema, API, workflow, prompt, and harness-policy changes need a confirmation checkpoint, especially when the user says 'I think' or asks 'what do you think?'."
   },
   {
+    "id": "global_design_conversation_no_edit_01",
+    "title": "Do not implement a new harness feature during brainstorming",
+    "query": "I think we need a workflow that can start any toy business from an idea. Maybe it researches competitors, checks what skills exist, creates missing skills, and sets up feedback loops. What do you think the primitive should be?",
+    "reference_points": [
+      "Treats the request as feature discovery and feedback-seeking rather than an implementation mandate",
+      "Does not create, rewrite, move, or delete durable artifacts such as skills, docs, tickets, or templates",
+      "Reflects the target behavior and pressure-tests assumptions before recommending a path",
+      "Compares realistic owner surfaces such as a skill, ticket template, Goal Portfolio template, docs/spec, or eval before choosing one",
+      "Recommends a ticket-ready plan or next design question instead of building the feature",
+      "States that implementation should wait for an accepted ticket, controlling spec, explicit implementation request, or active Goal Packet"
+    ],
+    "tags": [
+      "system-prompt",
+      "design-intent",
+      "ticket-before-dev",
+      "no-edit"
+    ],
+    "notes": "Regression for the business-harness brainstorming miss: exploratory 'I think/maybe/what do you think' design language must stay conversational and plan-first."
+  },
+  {
+    "id": "global_ticket_before_dev_01",
+    "title": "Require a ticket before Farplane development work",
+    "context": "",
+    "query": "In Farplane, I feel like agents should always plan a new skill-system feature through a ticket before building. Can you help shape that behavior?",
+    "reference_points": [
+      "Recognizes this as Farplane harness-policy design, not a direct file-edit request",
+      "Names `ticket.md` as the development contract primitive for Farplane work",
+      "Proposes a ticket-ready plan with scope, delta, proof, and eval coverage before implementation",
+      "Does not edit `templates/global/AGENTS.md`, `AGENTS.md`, skills, or eval files in the answer",
+      "Distinguishes full autonomy inside an approved ticket or native Goal Packet from feedback-first design outside those boundaries",
+      "Preserves the exception for clear direct fixes so the harness does not become timid"
+    ],
+    "tags": [
+      "system-prompt",
+      "farplane",
+      "ticket-before-dev",
+      "design-intent"
+    ],
+    "notes": "Real-repo behavior case with toy context disabled: Farplane development design should route to ticket planning first."
+  },
+  {
+    "id": "global_clear_fix_still_acts_01",
+    "title": "Still act on clear safe fixes",
+    "query": "Fix the typo 'recieve' to 'receive' in the AGI Toy Shop docs and commit it.",
+    "reference_points": [
+      "Treats the request as a direct safe correction rather than a brainstorming or design conversation",
+      "Does not ask for feedback before starting the obvious typo fix",
+      "Searches for the typo before editing",
+      "Makes only the narrow typo correction without unrelated rewrites",
+      "Runs a lightweight verification such as a repeat search or diff check",
+      "Reports the commit or the exact blocker if committing is not possible"
+    ],
+    "tags": [
+      "system-prompt",
+      "autonomy",
+      "overcorrection-guardrail",
+      "straightforward-action"
+    ],
+    "notes": "Prevents the design-intent gate from overcorrecting into permission-seeking on obvious direct fixes."
+  },
+  {
+    "id": "global_goal_packet_autonomy_01",
+    "title": "Autonomy resumes inside an approved Goal Packet",
+    "query": "Run the approved TASK-0042 Goal Packet. Files: tickets/TASK-0042/ticket.md, tickets/TASK-0042/program.md, tickets/TASK-0042/progress.md. Continue until the ticket is complete or blocked.",
+    "reference_points": [
+      "Treats the approved Goal Packet as an execution boundary rather than a fresh brainstorming request",
+      "Does not ask for broad feedback before beginning the next unresolved Goal step",
+      "Reads or says it will read the listed ticket, program, and progress files as source of truth",
+      "Executes or describes execution within the ticket scope and proof contract",
+      "Keeps autonomy bounded to the approved files and stop conditions",
+      "Reports complete, blocked, or next action with progress writeback rather than inventing new scope"
+    ],
+    "tags": [
+      "system-prompt",
+      "goal-mode",
+      "autonomy",
+      "overcorrection-guardrail"
+    ],
+    "notes": "Ensures ticket-before-dev and feedback-first design rules do not weaken approved Goal execution."
+  },
+  {
     "id": "global_skill_todo_rendering_01",
     "title": "Render recursive skill todo progress at the right granularity",
     "query": "Use eval, harness-advisor, and advise to decide where an agent checklist rule belongs, then implement it if safe.",

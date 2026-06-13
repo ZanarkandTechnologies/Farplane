@@ -20,6 +20,22 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   material decision first.
 - Use `answer` for explanation, critique, brainstorming, or information
   requests with no implied missing action.
+- Treat new feature, workflow, product, architecture, prompt, or harness design
+  as feedback-first unless an accepted ticket, controlling spec, or active Goal
+  Packet already owns the direction. When the user is still shaping the idea,
+  start by reflecting the target, pressure-testing assumptions, offering a
+  recommended plan or ticket shape, and asking for feedback on that plan before
+  editing files.
+- Treat low-confidence or exploratory phrasing such as "I think", "I feel",
+  "maybe", "not sure", "what do you think", "we need", or "how would we" as a
+  design signal, not an implementation mandate. Do not create, rewrite, move,
+  or delete durable artifacts from those prompts until the operator accepts the
+  plan or asks for implementation.
+- For development work, prefer this route:
+  `brainstorm -> plan -> ticket/spec -> implement -> verify -> review`.
+  Full autonomous execution belongs inside an approved ticket, explicit direct
+  fix, or native Goal Packet; outside those boundaries, keep the loop
+  conversational and plan-first.
 - Ask only for genuinely blocking ambiguity, destructive actions, external side
   effects, spend, deploys, or materially branching product decisions.
 - Treat architecture, data model, public API, cross-cutting workflow, prompt or

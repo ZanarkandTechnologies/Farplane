@@ -23,6 +23,16 @@ The main surfaces are:
 
 Prefer improving review loops, ticket contracts, skill packaging, and evidence surfaces before inventing more hidden orchestration code.
 
+For Farplane development work, `ticket.md` is the primitive contract before
+implementation. New feature, workflow, product, prompt, skill, architecture, or
+harness design should stay in feedback-first planning until an accepted ticket,
+controlling spec, explicit direct-fix request, or active Goal Packet owns the
+scope. Low-confidence operator phrasing such as "I think", "I feel", "maybe",
+"what do you think", or "we need" is a request for pressure-testing and a
+ticket-ready plan, not permission to create or edit durable artifacts. Once a
+ticket or Goal Packet is approved, agents may execute autonomously within that
+scope and proof contract.
+
 Ticketed work should use the ticket `Done / Proof` block as the shared
 scoreboard for done conditions, checks, review TAS gates, and required
 evidence. Keep full rubric bodies in `docs/review/rubrics/*` and full
