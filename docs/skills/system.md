@@ -18,6 +18,9 @@ fields, and todo-link rules stay in one place.
 - `docs/skills/registry.jsonl` is generated inventory, not hand-authored truth.
 - `skills/<skill-name>/eval_task.json` owns focused modular eval tasks for one
   skill's behavior when a runnable eval is the right proof surface.
+- `skills/<skill-name>/qa_checklist.md` owns first-class skill-local QA checks
+  for settled runtime guardrails when a Markdown checklist is the right
+  real-time review surface.
 
 Keep this file focused on stable system rules. Do not duplicate first-load
 authoring detail here; link `docs/skills/best-practices.md` for checklist
@@ -211,6 +214,36 @@ instead of duplicating them in frontmatter.
 - Put skill-specific eval tasks beside the source skill as `eval_task.json`.
   Keep broad working suites under `.farplane/evals` and reusable cross-skill
   examples under `skills/eval/examples`.
+- Put skill-specific runtime QA guardrails beside the source skill as
+  `qa_checklist.md` when the skill repeatedly needs the same final checks,
+  reviewer prompts, or eval-derived guardrails. Keep the file Markdown until a
+  runner or renderer needs stricter structure.
+
+## Skill-Local QA Checklists
+
+`qa_checklist.md` is an optional special file at the skill package root, not a
+generic reference. Use it when a skill has reusable real-time checks that
+should be applied after material changes or before claiming an output is ready.
+
+```text
+skill_qa_checklist(skill_package, changed_files, claim, budget?)
+  -> checklist_verdicts + fixes_or_deferrals + evidence_note
+```
+
+Do not create a checklist just to mirror a todo list. The todo list says what
+the invoking agent should do on first load; `qa_checklist.md` says how a
+finished or changed artifact is checked. The eval file and QA checklist should
+converge over time:
+
+```text
+eval_task.json discovers and pressures expected behavior
+qa_checklist.md applies settled reusable guardrails during real work
+```
+
+When `eval_task.json` changes, `skill-maintenance` should decide whether any
+new `reference_points` deserve promotion into `qa_checklist.md`, `SKILL.md`, a
+reference, or a validator. Rare hard cases and benchmark-only examples can stay
+in evals with an audit note.
 
 ## Template Versioning
 

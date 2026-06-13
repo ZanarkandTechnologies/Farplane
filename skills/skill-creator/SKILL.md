@@ -7,6 +7,7 @@ source: local
 skill_template_version: "0.2.0"
 feature_refs:
   - FEAT-0048
+  - FEAT-0057
 license: Complete terms in LICENSE.txt
 allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, Glob
 ---
@@ -41,7 +42,9 @@ fails: creates duplicate skills; hides required logic in references; omits proof
    [docs/skills/system.md](../../docs/skills/system.md),
    [docs/skills/README.md](../../docs/skills/README.md), and
    the relevant anchored section of
-   [docs/skills/best-practices.md](../../docs/skills/best-practices.md).
+   [docs/skills/best-practices.md](../../docs/skills/best-practices.md), and
+   any target skill-local `qa_checklist.md` when updating an existing skill
+   with runtime QA guardrails.
 - [ ] 2. Decide the owning surface and write the decision into the edit.
    - [ ] 1. Create a new skill only when the capability has a stable trigger and
      reusable workflow.
@@ -77,7 +80,7 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      to decide what belongs in first-load `SKILL.md` versus references,
      templates, evals, or review checks.
    - [ ] Load and run the
-     [Skill Structure Checklist](../skill-maintenance/references/skill-structure-checklist.md)
+     [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md)
      when first-load size, progressive disclosure, or reference placement is
      material.
    - [ ] For quality-dependent skills, add or link one good positive example
@@ -99,7 +102,7 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      or state why the change is mechanical enough to skip an audit record.
    - [ ] Repeatability from files alone.
    - [ ] Run each item in
-     [Skill Structure Checklist](../skill-maintenance/references/skill-structure-checklist.md)
+     [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md)
      against the actual changed files; fix or record every violation before
      completion.
    - [ ] Review depth chosen with
@@ -186,9 +189,9 @@ starter file.
   first-load todo shape, reference placement, actor-prompt boundaries,
   structure optimization metrics, duplication control, repeatability, and
   review gates.
-- [../skill-maintenance/references/skill-structure-checklist.md](../skill-maintenance/references/skill-structure-checklist.md)
-  - executable structure checklist for first-load size, progressive disclosure,
-  reference routing, and compaction risk.
+- [../skill-maintenance/qa_checklist.md](../skill-maintenance/qa_checklist.md)
+  - first-class skill-local QA checklist for first-load size, progressive
+  disclosure, reference routing, and compaction risk.
 - [references/SKILL_TEMPLATE.md](references/SKILL_TEMPLATE.md) - minimal starter
   template for new skill packages.
 - [references/workflows.md](references/workflows.md) - branch and

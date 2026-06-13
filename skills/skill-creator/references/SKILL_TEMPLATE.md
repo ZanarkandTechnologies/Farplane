@@ -26,9 +26,13 @@ only conditional detail to references.]
 standards in `docs/*`.]
 
 [TODO: For long or complex skills, use
-`../skill-maintenance/references/skill-structure-checklist.md`: keep detail in
-first load only when defer_loading_risk is greater than context_rot_risk plus
+`../skill-maintenance/qa_checklist.md`: keep detail in first load only when
+defer_loading_risk is greater than context_rot_risk plus
 compaction_loss_risk.]
+
+[TODO: Add `qa_checklist.md` at the skill package root only when the skill has
+repeatable runtime guardrails that should be applied after material changes.
+Keep it Markdown until a runner or renderer needs stricter structure.]
 
 [TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` as
 visible task labels like `- [ ] 1. ...`, and use a specific contract section

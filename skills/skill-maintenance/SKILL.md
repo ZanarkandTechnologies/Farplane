@@ -9,6 +9,7 @@ feature_refs:
   - FEAT-0037
   - FEAT-0040
   - FEAT-0044
+  - FEAT-0057
 ---
 
 # Skill Maintenance
@@ -72,9 +73,10 @@ fails:
   - [ ] Always read `edited_skill/SKILL.md`, `docs/skills/registry.jsonl`, and
     the relevant anchored skill-system docs or active ticket.
   - [ ] If `mode in [structure_update, audit]`, read
-    [Skill Structure Checklist](references/skill-structure-checklist.md).
+    [Skill Structure QA Checklist](qa_checklist.md).
   - [ ] If `mode == eval_to_qa_sync` or `edited_skill/eval_task.json` changed,
-    read `edited_skill/eval_task.json` and the relevant checklist/QA reference.
+    read `edited_skill/eval_task.json` and `edited_skill/qa_checklist.md` when
+    it exists.
   - [ ] If `mode == installed_copy_import`, preview the import path with
     `python3 ../../bin/import_installed_skills.py --skills <name> --dry-run`
     from this skill package before any overwrite.
@@ -87,7 +89,7 @@ fails:
   - [ ] `if first_load_behavior_changed: edit edited_skill/SKILL.md`.
   - [ ] `else if conditional_detail_or_template_changed: edit edited_skill/references/*`.
   - [ ] `else if repeatable_behavior_proof_changed: edit edited_skill/eval_task.json`.
-  - [ ] `else if runtime_guardrail_changed: edit edited_skill qa_checklist/reference or validator candidate`.
+  - [ ] `else if runtime_guardrail_changed: edit edited_skill/qa_checklist.md, a reference, or a validator candidate`.
   - [ ] `if registry_or_frontmatter_changed: regenerate docs/skills/registry.jsonl; never hand-edit generated rows`.
   - [ ] `if template_version_changed: prove the actual headings/todo/signature match the promised template`.
   - [ ] `if installed_copy_differs: import or patch repo source first; reinstall/live-inspect only after source edits are accepted`.
@@ -100,7 +102,7 @@ fails:
   - [ ] Reject skill-local `todos.md`; first-load todo truth lives only in the
     marker-delimited `## Todo List` inside `SKILL.md`.
 - [ ] 6. Sync eval reference points into runtime guardrails when warranted.
-  - [ ] `if edited_skill/eval_task.json changed: compare changed reference_points against edited_skill.qa_checklist/reference`.
+  - [ ] `if edited_skill/eval_task.json changed: compare changed reference_points against edited_skill/qa_checklist.md when present, otherwise decide whether to create one`.
   - [ ] `if reference_point is reusable_runtime_guardrail: promote it into checklist, QA wording, validator candidate, or SKILL.md hard gate`.
   - [ ] `else: record skipped rare, hardcase, benchmark-only, or judgment-heavy points in the audit`.
 - [ ] 7. Validate and prove the skill-system state.
@@ -177,8 +179,8 @@ Return TAS verdicts, blockers, and smallest required fixes.
 - [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
   first-load shape, structure optimization metrics, reference placement,
   repeatability, advice/proof routing, and finish gates.
-- [references/skill-structure-checklist.md](references/skill-structure-checklist.md) -
-  load for material structure changes, first-load size, progressive disclosure,
+- [qa_checklist.md](qa_checklist.md) - first-class skill-local QA checklist for
+  material skill structure changes, first-load size, progressive disclosure,
   reference routing, or compaction-risk review.
 - [../skill-creator/references/SKILL_TEMPLATE.md](../skill-creator/references/SKILL_TEMPLATE.md)
   - current baseline skill template.

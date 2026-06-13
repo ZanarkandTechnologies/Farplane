@@ -125,7 +125,7 @@ Additional proof:
 - run or review all existing `skills/skill-maintenance/eval_task.json` cases
 - perform a sandbox fixture repair against
   `skills/skill-maintenance/tests/fixtures/bad-skill-repo`
-- run `skills/skill-maintenance/references/skill-structure-checklist.md`
+- run `skills/skill-maintenance/qa_checklist.md`
   against the draft
 - obtain reviewer pass for `skill-contract`, `integration-readiness`, and
   `evidence-quality`

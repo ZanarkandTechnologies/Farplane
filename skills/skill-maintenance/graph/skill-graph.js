@@ -1929,7 +1929,7 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-13T10:04:19+00:00",
+  "generated_at": "2026-06-13T10:12:57+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",

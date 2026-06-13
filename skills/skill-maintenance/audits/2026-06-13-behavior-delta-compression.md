@@ -61,7 +61,7 @@ eval_required: yes
 
 - Skill-local evals, when needed: `skills/skill-maintenance/eval_task.json`
   reviewed in `tickets/TASK-0197/artifacts/proof.md`.
-- Structure evals, when needed: `skills/skill-maintenance/references/skill-structure-checklist.md`
+- Structure QA, when needed: `skills/skill-maintenance/qa_checklist.md`
   applied in `tickets/TASK-0197/artifacts/proof.md`.
 - Reviewer receipt: `reviewer` returned overall `TAS-A`; `skill-contract`,
   `integration-readiness`, and `evidence-quality` all passed with no blocking

@@ -2,15 +2,28 @@
 title: Skill Structure Checklist
 owner: skill-maintenance
 status: active
+kind: qa-checklist
 created_at: 2026-06-13
+updated_at: 2026-06-13
+feature_refs:
+  - FEAT-0057
+applies_to:
+  - skills
 ---
 
-# Skill Structure Checklist
+# Skill Structure QA Checklist
 
-Use this checklist after creating or materially restructuring a skill. Run each
-check against the actual changed files. Do not treat the checklist as a passive
-reminder; write down violations, then fix or explicitly defer them in the
-skill-local audit or final proof notes.
+This is the first-class skill-local QA checklist for skill structure changes.
+Use it after creating or materially restructuring a skill, and use the target
+skill's own `qa_checklist.md` when a skill has domain-specific runtime checks.
+Run each check against the actual changed files. Do not treat the checklist as a
+passive reminder; write down violations, then fix or explicitly defer them in
+the skill-local audit or final proof notes.
+
+```text
+skill_qa_checklist(skill_package, changed_files, claim, budget?)
+  -> checklist_verdicts + fixes_or_deferrals + evidence_note
+```
 
 ## Threshold
 
@@ -79,7 +92,7 @@ coordination cost:
 
 ```text
 Review the changed skill files against
-skills/skill-maintenance/references/skill-structure-checklist.md.
+skills/skill-maintenance/qa_checklist.md.
 
 For each checklist item, return:
 - verdict: pass | violation | not_applicable

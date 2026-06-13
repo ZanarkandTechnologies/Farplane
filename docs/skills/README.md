@@ -31,6 +31,10 @@ into a second place to maintain skill truth.
   [`docs/features/registry.jsonl`](../features/registry.jsonl) with
   `category: "skills"`. This folder owns the generated skill inventory, not a
   second hand-authored skill feature registry.
+- `skills/<skill-name>/qa_checklist.md` is the optional first-class
+  skill-local QA checklist for settled runtime guardrails. Keep it at the skill
+  package root, not under `references/`, when agents or reviewer lanes should
+  apply it directly after material skill changes.
 
 ## Skill UI And Feature Progression
 
@@ -89,6 +93,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
 | Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.farplane/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, discovers modular `skills/*/eval_task.json` rows, judges with boolean/tier verdicts, and treats hardcase as eval metadata. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include `agent-behavior-test`-style run capture. | You only need one cheap conformance probe and no adversarial proof loop. |
+| Apply settled skill-local runtime guardrails | `qa_checklist.md` beside the skill | It is the real-time checklist surface for reusable checks that should run after material skill edits or before output readiness claims. | You need to discover expected behavior or compare variants; use `eval_task.json` or an eval suite. |
 | Review local diffs before commit or push | `code-review` | It owns lightweight diff review from deterministic check logs, changed files, and project review overlays, then escalates material claims to `review`. | The work needs a TAS verdict, completion receipt, or evidence-bundle judgment; use `review`. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It applies docs-owned rubric families through a callable TAS wrapper and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
 | Prove a user-visible or operated workflow | QA checklist, `qa`, `visual-qa`, or `agent-qa-test` | QA owns operated evidence, screenshots, browser/media behavior, case coverage, and proof bundles that review can later judge. | The claim is purely judgment-heavy, deterministic, or behavioral-regression oriented; use `review`, a validator, or `eval`. |

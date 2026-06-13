@@ -14,7 +14,7 @@ refs:
   - skills/optimize-harness/SKILL.md
   - docs/specs/self-improvement-contracts.md
   - docs/skills/best-practices.md
-  - skills/skill-maintenance/references/skill-structure-checklist.md
+  - skills/skill-maintenance/qa_checklist.md
 ---
 
 # Skill Maintenance Rewrite Council Context
@@ -202,7 +202,7 @@ Relevant files:
 
 - `skills/skill-maintenance/SKILL.md`
 - `skills/skill-maintenance/eval_task.json`
-- `skills/skill-maintenance/references/skill-structure-checklist.md`
+- `skills/skill-maintenance/qa_checklist.md`
 - `skills/optimize-harness/SKILL.md`
 - `docs/specs/self-improvement-contracts.md`
 - `docs/skills/best-practices.md`
@@ -231,7 +231,7 @@ Each lane should read at least:
 Lanes focused on evidence or safety should also read:
 
 - `skills/skill-maintenance/eval_task.json`
-- `skills/skill-maintenance/references/skill-structure-checklist.md`
+- `skills/skill-maintenance/qa_checklist.md`
 - `skills/skill-maintenance/scripts/check_skills.py`
 
 ## Constraints And Non-Goals

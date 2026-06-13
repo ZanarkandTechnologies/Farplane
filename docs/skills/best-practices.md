@@ -394,7 +394,7 @@ Use this routing:
 | Repeatable agent, prompt, or skill behavior. | `eval` | `eval_task.json` or eval suite artifact. |
 | Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
 | Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality checklist | Skill-local reference such as `references/doc-quality-checklist.md`. |
-| Skill structure, first-load size, progressive disclosure, reference routing, or compaction risk. | structure checklist | `skills/skill-maintenance/references/skill-structure-checklist.md`, plus a skill-local audit for material changes. |
+| Skill structure, first-load size, progressive disclosure, reference routing, or compaction risk. | structure checklist | `skills/skill-maintenance/qa_checklist.md`, plus a skill-local audit for material changes. |
 | Generated asset or public deliverable presentation. | demo or QA proof | Demo checklist, render artifact, screenshot, or playback proof. |
 | Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |
 | Tiny deterministic edit. | self-check | One inline final todo or command. |
@@ -406,12 +406,15 @@ the draft, implementation, render, or evidence bundle exists.
 ```text
 place_finish_checklist(checklist, needed_before_execution, owner_scope)
   -> SKILL.md when needed_before_execution
-  -> references/*-checklist.md when owned_by_one_skill
+  -> qa_checklist.md when owned_by_one_skill and applied as a runtime guardrail
+  -> references/*-checklist.md when owned_by_one_skill but only used as branch detail
   -> docs/* when shared_across_many_skills
 ```
 
-Add a skill-local QA checklist when the skill repeatedly produces or verifies a
-user-visible artifact and the checks are domain-specific. Examples:
+Add a skill-local `qa_checklist.md` when the skill repeatedly produces,
+changes, or verifies artifacts and the checks are domain-specific runtime
+guardrails. Keep it at the skill package root so agents and future tooling can
+discover it without treating it as ordinary reference prose. Examples:
 
 - frontend and UI skills: layout, console errors, responsive behavior,
   accessibility, primary workflow, screenshots, and visual regressions.
@@ -421,10 +424,11 @@ user-visible artifact and the checks are domain-specific. Examples:
   previews, and copy/asset consistency.
 - agent-testing skills: case coverage, tester evidence, evidence-review
   critique, rerun policy, and final proof bundle.
+- skill-system skills: first-load sufficiency, reference routing, eval-to-QA
+  sync, template-version truth, and reviewer handoff.
 
 For skill creation or material skill restructuring, load and run
-`skills/skill-maintenance/references/skill-structure-checklist.md`. Its key
-threshold is:
+`skills/skill-maintenance/qa_checklist.md`. Its key threshold is:
 
 ```text
 place_skill_detail(detail)
@@ -450,6 +454,19 @@ are needed before execution. Prefer a compact final todo:
 ```
 
 Then link the reference from `## Reference Map`.
+
+When a skill has both `eval_task.json` and `qa_checklist.md`, treat them as
+competing representations that should converge:
+
+```text
+eval_task.json -> finds expected behavior and hard cases
+qa_checklist.md -> applies the settled checks in real time
+```
+
+After editing an eval, check whether changed `reference_points` should promote
+into `qa_checklist.md`, `SKILL.md`, a reference, or a validator. Do not
+promote rare hard cases, benchmark-only examples, or judgment-heavy examples
+unless they become reusable runtime guardrails.
 
 Always review skill creation and maintenance against the structure metrics. Vary
 the review depth:
