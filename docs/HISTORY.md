@@ -1,3 +1,6 @@
+2026-06-13 21:42 +0800 | FIX | install Farplane Console lifecycle hook from repo source and configure it through the Farplane UI Convex site URL instead of a stale hardcoded deployment endpoint
+2026-06-13 22:24 +0800 | FEAT | add Core-owned farplane CLI for install/hooks/doctor/ui-link/ui-start and delegated Farplane-UI module commands
+
 2026-03-26 11:20 -0700 | CHORE | bootstrap Codex harness repo scaffold with safe git boundaries, install flow, and docs/ticket board
 2026-04-03 03:10 +0100 | FEAT | add opt-in stop-hook continuation with ticket-aware same-scope follow-up and local audio announcements
 2026-04-03 03:24 +0100 | FIX | require explicit ticket resolution for assisted continuation and resolve stop-hook path via installed Codex home

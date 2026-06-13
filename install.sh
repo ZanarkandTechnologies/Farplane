@@ -120,9 +120,11 @@ LOCAL_ENV_FILE="${TARGET_DIR}/config.local.env"
 LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
 INSTALL_BIN_FILES=(
   capture_user_turn.py
+  farplane
   farplane_boards.py
   farplane_compute.py
   farplane_invocation.py
+  farplane.py
   notify.py
   runtime_telemetry.py
   self_improve_hook_probe.py
@@ -131,6 +133,9 @@ INSTALL_BIN_FILES=(
   ticket-runtime
   ticket_runtime.py
   user_turn.py
+)
+INSTALL_HOOK_FILES=(
+  farplane_console_ping.py
 )
 
 if [ "$SKILLS_ONLY" -eq 1 ]; then
@@ -207,6 +212,8 @@ replacements = {
     "__CODEX_HOME__": env["CODEX_HOME"],
     "__REF_API_KEY__": env["REF_API_KEY"],
     "__NOTION_TOKEN__": env["NOTION_TOKEN"],
+    "__FARPLANE_CONVEX_SITE_URL__": env.get("FARPLANE_CONVEX_SITE_URL", ""),
+    "__FARPLANE_TELEMETRY_TOKEN__": env.get("FARPLANE_TELEMETRY_TOKEN", ""),
 }
 for needle, value in replacements.items():
     text = text.replace(needle, value)
@@ -271,13 +278,47 @@ copy_path() {
   cp "$src" "$dest"
 }
 
+link_global_cli() {
+  local src="$1"
+  local link_dir="${FARPLANE_CLI_LINK_DIR:-$HOME/.local/bin}"
+  local dest="$link_dir/farplane"
+  local backup_dest
+
+  if [ "${FARPLANE_SKIP_GLOBAL_CLI:-0}" = "1" ]; then
+    echo "Skipped global farplane CLI link because FARPLANE_SKIP_GLOBAL_CLI=1"
+    return 0
+  fi
+
+  mkdir -p "$link_dir"
+
+  if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
+    echo "Global farplane CLI already linked at $dest"
+    return 0
+  fi
+
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    backup_dest="$BACKUP_ROOT/global-bin/farplane"
+    mkdir -p "$(dirname "$backup_dest")"
+    mv "$dest" "$backup_dest"
+    echo "Backed up existing global farplane CLI to $backup_dest"
+  fi
+
+  ln -s "$src" "$dest"
+  echo "Linked global farplane CLI at $dest"
+  case ":$PATH:" in
+    *":$link_dir:"*) ;;
+    *) echo "Note: add $link_dir to PATH to run farplane from any shell." ;;
+  esac
+}
+
 echo "Installing Codex harness from $REPO_DIR to $TARGET_DIR"
 
-mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin" "$TARGET_DIR/docs/review"
+mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin" "$TARGET_DIR/hooks" "$TARGET_DIR/docs/review"
 
 if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   echo "Repo is already the live Codex home. Skipping symlink install."
   render_config
+  link_global_cli "$TARGET_DIR/bin/farplane"
 
   echo "Done."
   echo "Next: keep secrets in $LOCAL_ENV_FILE and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
@@ -293,6 +334,12 @@ fi
 
 for bin_name in "${INSTALL_BIN_FILES[@]}"; do
   link_path "$REPO_DIR/bin/$bin_name" "$TARGET_DIR/bin/$bin_name"
+done
+
+link_global_cli "$TARGET_DIR/bin/farplane"
+
+for hook_name in "${INSTALL_HOOK_FILES[@]}"; do
+  link_path "$REPO_DIR/hooks/$hook_name" "$TARGET_DIR/hooks/$hook_name"
 done
 
 for agent_file in "$REPO_DIR"/agents/*.toml; do

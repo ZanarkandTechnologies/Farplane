@@ -42,6 +42,10 @@ Console is the practical dashboard for harness health and optimization.
 Farplane UI keeps its current name as the optional immersive office/game
 surface; Farplane Office is only an alias for that mode.
 
+Farplane Core also owns the global `farplane` CLI. App-specific commands stay
+with their owning module repos, but install, hooks, doctor checks, UI linking,
+UI start, and local delegation all route through this Core-owned command.
+
 Current sibling shape:
 
 | Surface | Path | Owns |
@@ -206,6 +210,7 @@ flowchart LR
 
 ## Start Here
 
+- Install / onboarding: [Local CLI Onboarding](#local-cli-onboarding)
 - Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 - Fundamentals: [docs/fundamentals/README.md](docs/fundamentals/README.md)
 - Specs index: [docs/specs/README.md](docs/specs/README.md)
@@ -223,6 +228,40 @@ flowchart LR
 - Review scoring: [skills/review/README.md](skills/review/README.md)
 - Maintainability code review: [skills/code-review/README.md](skills/code-review/README.md)
 - Active queue: [tickets](tickets)
+
+## Local CLI Onboarding
+
+Use this path when Farplane Core is already installed locally and you want to
+attach the optional Farplane-UI office checkout.
+
+```bash
+cd /path/to/Farplane
+bash install.sh
+farplane doctor
+farplane hooks doctor
+farplane ui link /path/to/Farplane-UI
+farplane ui start
+```
+
+What Core owns:
+
+- `farplane install`: reruns this repo's install flow, renders Codex config,
+  links hooks, and refreshes the global CLI link.
+- `farplane doctor`: checks Core install, hook links, rendered config, and the
+  linked UI repo.
+- `farplane hooks install`: refreshes the hook install through Core.
+- `farplane hooks doctor`: verifies the Core-owned hook links and rendered
+  telemetry config.
+- `farplane ui link /path/to/Farplane-UI`: stores the UI checkout in
+  `~/.farplane/farplane-cli.json`.
+- `farplane ui start`: starts the linked UI checkout.
+- `farplane office ...`, `farplane team ...`, `farplane agent ...`,
+  `farplane onboarding`, `farplane status`, and `farplane whoami`: delegate to
+  the linked Farplane-UI module CLI while that implementation still lives there.
+
+Override the linked UI checkout for one shell with `FARPLANE_UI_REPO=/path/to/Farplane-UI`.
+Use `FARPLANE_CLI_LINK_DIR=/custom/bin bash install.sh` if your preferred
+global executable directory is not `~/.local/bin`.
 
 ## Current Boundary
 

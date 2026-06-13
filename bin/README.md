@@ -27,6 +27,9 @@ runtime helpers instead of symlinking every script, validator, and test.
 ## Entrypoints
 
 - `validators/check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
+- `farplane` / `farplane.py` - Core-owned global CLI for install, hooks,
+  doctor checks, UI linking/start, and delegation into the linked Farplane-UI
+  module checkout
 - `validators/check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
 - `validators/check_doc_refs.py` - local reference validator for active docs and registries;
   use `--all` for broader cleanup audits across tickets, experiments, and tests
