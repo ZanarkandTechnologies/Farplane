@@ -23,8 +23,8 @@ themselves implementation specs, schemas, runtime contracts, or ticket flows.
 
 ## Current Docs
 
-- `harness-algebra.md` - constrained-optimization model for context, tools,
-  skills, memory, delegation, verification, and self-improvement.
+- `harness-algebra.md` - operational model for optimizing harness behavior:
+  loss terms, coordinates, proof signals, and accept/hold/rollback rules.
 - `harness-engineering-doctrine.md` - placement doctrine for deciding where a
   harness change belongs.
 - `prompt-engineering.md` - shared prompt contract for prompt-like templates,

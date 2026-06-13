@@ -269,7 +269,10 @@ Migration guide:
 - `PROJECT_RULES.md` centralizes stack details and backpressure commands.
 - `PROJECT_RULES.md` is also the canonical agent-facing runtime command surface,
   so repos do not rely on remembered shell snippets for app launch or QA.
-- `AGENTS.md` stays operational and lightweight because it is loaded every loop.
+- `AGENTS.md` stays operational and lightweight because it is loaded every loop,
+  but it should still inline the small always-on edit checklist that agents
+  must obey on nearly every code change; put expanded examples and exact
+  commands in `PROJECT_RULES.md`.
 - `ARCHITECTURE.md` gives the repo one top-level system map instead of pushing all orientation into `README.md` or `AGENTS.md`.
 - `docs/` is the canonical project state for planning and execution.
 - `docs/bootstrap-brief.md` keeps bootstrap decisions on a visible project
@@ -327,6 +330,9 @@ The generated planning flow should follow these defaults:
 ## Gotchas
 
 - Do not hardcode stack specifics into `AGENTS.md`; put them in `PROJECT_RULES.md`.
+  Keep only the short always-on edit rules inline, such as orientation comments
+  for non-obvious logic files, module-local helper defaults, large-file split
+  triggers, and UI browser-evidence expectations.
 - Do not satisfy UI-bearing app bootstrap with plain HTML/CSS/JS unless the
   user explicitly asked for a static/throwaway artifact or disabled shadcn.
   Default app UI should initialize shadcn and apply darkmatter.

@@ -46,10 +46,25 @@ Work flows through:
 ## Context First (Always)
 
 - Read relevant specs/PRD before proposing edits.
+- Before code edits, read `PROJECT_RULES.md`; do not rely on this file to
+  carry every technical rule.
 - Read nearest module `README.md` + `AGENTS.md`.
 - Search for existing patterns and inspect related files.
 - Identify affected interfaces first.
 - No blind edits.
+
+## Always-On Code Rules
+
+- New non-obvious logic files need a concise top-of-file orientation comment
+  that names ownership, inputs/outputs, side effects, and key invariants.
+- Keep helpers module-local until a second real caller exists; avoid catch-all
+  `utils.ts` files for domain behavior.
+- New source files over 500 raw lines need a ticket note or split plan; do not
+  add unrelated responsibility to existing oversized files.
+- For UI-bearing changes, capture browser evidence and check the relevant
+  `qa/` cookbook instead of relying only on compile/build.
+- Use `PROJECT_RULES.md` for exact technical standards, commands, shared
+  utility placement, and review policy.
 
 ## Code Ownership Defaults
 
