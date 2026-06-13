@@ -1,8 +1,8 @@
 ---
 ticket_id: TASK-0197
 title: Rewrite skill-maintenance as behavior-delta compression
-phase: building
-status: building
+phase: done
+status: done
 owner: codex
 claimed_by:
 priority: high
@@ -13,9 +13,9 @@ approval_required: false
 requires_qa: false
 requires_demo: false
 created_at: 2026-06-13T00:00:00+08:00
-updated_at: 2026-06-13T00:00:00+08:00
-next_action: rewrite skill-maintenance SKILL.md around one behavior-delta signature and run the proof stack
-last_verification: "2026-06-13: council synthesis selected Option B; ticket packet created."
+updated_at: 2026-06-13T17:56:00+08:00
+next_action: complete; optional follow-up only for unrelated global template-version cleanup
+last_verification: "2026-06-13 17:56 +0800: proof stack rerun; reviewer returned TAS-A for skill-contract, integration-readiness, and evidence-quality; drift review aligned with reviewer gate satisfied."
 ---
 
 # TASK-0197: Rewrite skill-maintenance as behavior-delta compression
@@ -246,12 +246,13 @@ proof:
 
 ## State
 
-- `next_action:` rewrite `skills/skill-maintenance/SKILL.md` around one
-  behavior-delta signature and run the proof stack.
+- `next_action:` complete; optional follow-up only for unrelated global
+  `--template-version 0.2.0` cleanup if that becomes a release gate.
 - `blocked:` false
-- `latest_verification:` ticket packet created from council synthesis; proof
-  stack not yet run.
-- `result:` active Goal Packet ready.
+- `latest_verification:` proof stack rerun 2026-06-13 17:54 +0800; reviewer
+  returned TAS-A for `skill-contract`, `integration-readiness`, and
+  `evidence-quality`; drift review found no scope drift after reviewer pass.
+- `result:` complete.
 
 ## Links
 

@@ -1,7 +1,7 @@
 ---
 title: TASK-0197 Proof Notes
 ticket_id: TASK-0197
-status: in_progress
+status: complete
 created_at: 2026-06-13
 ---
 
@@ -11,10 +11,10 @@ created_at: 2026-06-13
 
 | Check | Result | Evidence |
 | --- | --- | --- |
-| `python3 skills/skill-maintenance/scripts/check_skills.py --write` | pass | Todo sections, registry check, tier check, Tier 0 protocol, capability fixtures, doc refs, py_compile all passed; registry regenerated. |
-| `python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0` | blocked by unrelated global errors | `skill-maintenance` is not listed in template structure errors. The command fails on pre-existing unrelated skills: `code-review`, `goal-advisor`, `learning-drain`, and `plan`. |
-| `python3 -m json.tool skills/skill-maintenance/eval_task.json` | pass | JSON parsed successfully. |
-| `git diff --check` | pass | No whitespace errors. |
+| `python3 skills/skill-maintenance/scripts/check_skills.py --write` | pass | Rerun 2026-06-13 17:54 +0800. Todo sections, registry check, tier check, Tier 0 protocol, capability fixtures, doc refs, and py_compile all passed; registry regenerated with 86 skill rows. |
+| `python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0` | blocked by unrelated global errors | Rerun 2026-06-13 17:54 +0800. `skill-maintenance` is not listed in template structure errors. The command fails on unrelated skills: `code-review`, `goal-advisor`, `learning-drain`, and `plan`. |
+| `python3 -m json.tool skills/skill-maintenance/eval_task.json` | pass | Rerun 2026-06-13 17:54 +0800; JSON parsed successfully. |
+| `git diff --check` | pass | Rerun 2026-06-13 17:54 +0800; no whitespace errors. |
 
 ## Existing Eval Case Review
 
@@ -38,9 +38,10 @@ rg -n "sandbox|source|installed|template|registry|audit|bulk|prototype|dry-run|o
   skills/skill-maintenance/tests/fixtures/bad-skill-repo
 ```
 
-Result:
+Result, rerun 2026-06-13 17:54 +0800:
 
-- The fixture was copied to a temp sandbox path.
+- The fixture was copied to a temp sandbox path:
+  `/var/folders/98/ht394qw529jbzxvzl7ldp1040000gn/T/tmp.b7b7ljqXtQ/bad-skill-repo`.
 - `bad-signature-rollout` and `installed-copy-only` fixture files were present
   in the sandbox copy.
 - Search evidence showed the rewritten skill explicitly carries the sandbox,
@@ -62,11 +63,20 @@ Result:
 | `maintenance_locality` | pass | Future edits have one owner-local path: decide `behavior_delta`, choose owner surface, edit `edited_skill`, validate, audit. |
 | `composition_clarity` | pass | Signature exposes inputs, outputs, state reads/writes, modes, gates, routes, and failure modes. |
 
-## Evidence Gaps
+## Reviewer And Drift
+
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Goal drift review | pass with reviewer gate dependency | `goal-drift-reviewer` returned aligned on the target rewrite and proof, with completion blocked only until reviewer TAS-A pass and scoped template-version disposition. |
+| Reviewer pass for `skill-contract`, `integration-readiness`, `evidence-quality` | pass | `reviewer` returned overall `TAS-A`, with `skill-contract: TAS-A`, `integration-readiness: TAS-A`, `evidence-quality: TAS-A`, no blocking findings, and no rerun required. |
+
+## Evidence Gaps / Disposition
 
 - The global template-version command currently fails because unrelated skills
   with `skill_template_version: 0.2.0` are missing template headings. This
-  ticket does not broaden into those skills. Completion needs either a scoped
-  reviewer acceptance of this known unrelated blocker or a follow-up/global fix.
-- Reviewer pass for `skill-contract`, `integration-readiness`, and
-  `evidence-quality` is still pending.
+  ticket does not broaden into those skills. `reviewer` accepted this as an
+  allowed scoped exception because the failures are on `code-review`,
+  `goal-advisor`, `learning-drain`, and `plan`, not `skill-maintenance`.
+- Optional follow-up: create a separate cleanup ticket for unrelated global
+  `--template-version 0.2.0` failures if template cleanliness becomes a release
+  gate.

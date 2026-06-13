@@ -3,7 +3,7 @@ skill: skill-maintenance
 date: 2026-06-13
 change_type: structure
 owner: skill-maintenance
-status: in_review
+status: complete
 review_route: reviewer
 before_ref: skills/skill-maintenance/SKILL.md
 after_ref: skills/skill-maintenance/SKILL.md
@@ -63,12 +63,16 @@ eval_required: yes
   reviewed in `tickets/TASK-0197/artifacts/proof.md`.
 - Structure evals, when needed: `skills/skill-maintenance/references/skill-structure-checklist.md`
   applied in `tickets/TASK-0197/artifacts/proof.md`.
-- Reviewer receipt: pending.
+- Reviewer receipt: `reviewer` returned overall `TAS-A`; `skill-contract`,
+  `integration-readiness`, and `evidence-quality` all passed with no blocking
+  findings and no rerun required.
 - Validator: `python3 skills/skill-maintenance/scripts/check_skills.py --write`
   passed; `--template-version 0.2.0` failed on unrelated skills, not
   `skill-maintenance`.
 - Eval required: yes, via existing eval-case review and fixture dry-run.
-- Evidence gaps: reviewer pass and global template-version blocker disposition.
+- Evidence gaps: global template-version command still fails on unrelated
+  skills (`code-review`, `goal-advisor`, `learning-drain`, `plan`), accepted as
+  out of scope by reviewer for TASK-0197.
 
 ## Before Behavior
 

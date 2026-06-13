@@ -59,6 +59,38 @@ Keep entries compact. Link artifacts instead of pasting raw transcripts.
   (`code-review`, `goal-advisor`, `learning-drain`, `plan`), outside this
   ticket's declared scope.
 
+## 2026-06-13 17:56 +0800 - completion
+
+- `trigger:` native_goal
+- `intent:` finish TASK-0197 only if current evidence proves the behavior-delta
+  rewrite, proof stack, drift review, and reviewer gates.
+- `actions:` reread ticket/program/progress, council context/synthesis, current
+  `SKILL.md`, eval cases, checklist, proof notes, and audit; reran required
+  mechanical checks; reran sandbox fixture dry-run; requested
+  `goal-drift-reviewer` and `reviewer`; updated proof, audit, and ticket state.
+- `files_changed:` `tickets/TASK-0197/ticket.md`,
+  `tickets/TASK-0197/progress.md`,
+  `tickets/TASK-0197/artifacts/proof.md`,
+  `skills/skill-maintenance/audits/2026-06-13-behavior-delta-compression.md`
+- `artifacts:` `tickets/TASK-0197/artifacts/proof.md`,
+  `skills/skill-maintenance/audits/2026-06-13-behavior-delta-compression.md`
+- `metric_sample:` `check_skills.py --write` passed; `eval_task.json` parsed;
+  `git diff --check` passed; `--template-version 0.2.0` failed only on
+  unrelated skills (`code-review`, `goal-advisor`, `learning-drain`, `plan`);
+  fixture sandbox proof and structure checklist are recorded.
+- `feedback_sample:` reviewer returned overall `TAS-A`, with `skill-contract`,
+  `integration-readiness`, and `evidence-quality` all `TAS-A`, no blocking
+  findings, and no rerun required.
+- `drift_verdict:` complete_candidate
+- `drift_evidence:` `goal-drift-reviewer` found the rewrite aligned with
+  TASK-0197 and blocked completion only until reviewer pass; reviewer then
+  accepted the scoped template-version exception as unrelated to
+  `skill-maintenance`.
+- `next_action:` complete Goal; optional separate follow-up for unrelated
+  global template-version cleanup if template cleanliness becomes a release
+  gate.
+- `blocker:` none for TASK-0197.
+
 ## Entry Template
 
 ```markdown
