@@ -102,3 +102,7 @@ slice, proof/falsification, tradeoffs, and non-goals.
 - Update ticket status, phase, blockers, and spawned follow-ups in the ticket file as work progresses. When a ticket is complete and its writeback is done, move it into `tickets/archive/`.
 - If the same failure or user correction happens more than once, append a short raw entry to `docs/TROUBLES.md` with the miss, correction, and prevention idea.
 - If that raw entry produces a reusable prompt, skill, eval, or policy improvement, distill it into `docs/LESSONS.md`.
+- During weekly learning drains, read recent `docs/TROUBLES.md` and
+  `docs/LESSONS.md`, route actionable rows to the owning optimizer workflow,
+  ticket, eval, or skill update, and record processed rows in runtime state
+  rather than deleting ledger history.

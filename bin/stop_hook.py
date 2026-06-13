@@ -1980,7 +1980,7 @@ def skill_opportunity_recent_window_limit() -> int:
     return value if value > 0 else 5
 
 
-def skill_opportunity_proof_hops(*, notion_task_creation: str, notion_evidence: str) -> list[dict[str, str]]:
+def skill_opportunity_proof_hops(*, learning_docs_write: str, docs_evidence: str) -> list[dict[str, str]]:
     return [
         {
             "name": "user_capture",
@@ -1995,17 +1995,17 @@ def skill_opportunity_proof_hops(*, notion_task_creation: str, notion_evidence: 
         {
             "name": "rolling_window_write",
             "status": "present",
-            "evidence": "self-improve window state was written before review",
+            "evidence": "message-window state was written before review",
         },
         {
             "name": "background_codex_launch",
             "status": "present",
-            "evidence": "skill opportunity review run directory was created",
+            "evidence": "learning review run directory was created",
         },
         {
-            "name": "notion_task_creation",
-            "status": notion_task_creation,
-            "evidence": notion_evidence,
+            "name": "learning_docs_write",
+            "status": learning_docs_write,
+            "evidence": docs_evidence,
         },
     ]
 
@@ -2096,12 +2096,10 @@ def skill_opportunity_review_input(
         "recent_tickets": recent_ticket_paths,
         "source_project_skills": source_project_skill_paths,
         "source_project_recent_tickets": source_project_ticket_paths,
-        "notion_context": "/Users/kenjipcx/.codex/skills/notion-context/SKILL.md",
     }
     workflow_refs = {
-        "source_to_feature": "skills/harness-scout/SKILL.md",
-        "feature_options": "skills/advise/SKILL.md",
-        "placement": "skills/harness-advisor/SKILL.md",
+        "learning_docs": "docs/TROUBLES.md and docs/LESSONS.md",
+        "weekly_drain": "skills/optimize-harness/SKILL.md",
         "surface_map": "ARCHITECTURE.md",
         "harness_doctrine": "docs/fundamentals/harness-engineering-doctrine.md",
     }
@@ -2114,26 +2112,22 @@ def skill_opportunity_review_input(
         recent_windows.insert(0, dict(window))
     raw_cwd = payload.get("cwd") or payload.get("workdir") or payload.get("current_working_directory")
     invocation_cwd = str(raw_cwd).strip() if isinstance(raw_cwd, str) and raw_cwd.strip() else ""
-    status_context_cache = project_root / ".farplane" / "state" / "notion-context" / "latest-status-context.md"
+    troubles_path = project_root / "docs" / "TROUBLES.md"
+    lessons_path = project_root / "docs" / "LESSONS.md"
     workspace_context = {
         "current_project_name": project_root.name,
         "current_project_root": str(project_root),
         "hook_invocation_cwd": invocation_cwd,
         "farplane_home": str(base),
-        "status_context_cache": str(status_context_cache),
-        "status_context_cache_exists": status_context_cache.is_file(),
-        "task_scope_default": "harness_self_improvement",
+        "task_scope_default": "learning_docs_review",
         "routing_hint": (
-            "Use the current project as evidence for tagging and prioritization, "
-            "but create tasks for reusable Farplane harness improvements unless "
-            "the issue is purely project-local."
+            "Write compact local learning rows for this project. Broader fixes "
+            "belong to the weekly drain, tickets, or optimize-harness later."
         ),
     }
-    notion_tasks_data_source = os.environ.get("FARPLANE_SKILL_OPPORTUNITY_NOTION_TASKS_DATA_SOURCE")
-    notion_tasks_configured = bool(notion_tasks_data_source and notion_tasks_data_source.strip())
     return {
         "schema_version": 1,
-        "review_type": "skill_opportunity",
+        "review_type": "learning_docs_review",
         "project_root": str(project_root),
         "session_id": session_id,
         "created_at": now_iso(),
@@ -2143,11 +2137,12 @@ def skill_opportunity_review_input(
         "dedupe_refs": dedupe_refs,
         "workflow_refs": workflow_refs,
         "workspace_context": workspace_context,
-        "notion_task_target": {
-            "data_source_url": notion_tasks_data_source.strip() if notion_tasks_configured else None,
-            "configured": notion_tasks_configured,
-            "tag": os.environ.get("FARPLANE_SKILL_OPPORTUNITY_NOTION_TAG", "agent self improvement"),
-            "default_status": os.environ.get("FARPLANE_SKILL_OPPORTUNITY_NOTION_STATUS", "Review"),
+        "docs_targets": {
+            "troubles_path": str(troubles_path),
+            "troubles_exists": troubles_path.is_file(),
+            "lessons_path": str(lessons_path),
+            "lessons_exists": lessons_path.is_file(),
+            "allowed_writes": ["docs/TROUBLES.md", "docs/LESSONS.md"],
         },
         "payload_context": {
             "hook_event_name": payload.get("hook_event_name"),
@@ -2155,17 +2150,17 @@ def skill_opportunity_review_input(
         },
         "instructions": [
             "Return JSON only.",
-            "Create Notion approval tasks when the signal is clearly useful and specific enough.",
-            "Do not update or create skill files directly.",
-            "Do not write local files except the final JSON report emitted by the Codex CLI.",
-            "Include proof_hops with exactly user_capture, assistant_capture, rolling_window_write, background_codex_launch, and notion_task_creation in that order.",
-            "For each proof_hop, set status to present or missing and include a short evidence string; dry-run or failed Notion writes must mark notion_task_creation as missing.",
-            "If notion_task_target.configured is false, do not attempt Notion task creation; mark the notion_task_creation proof hop missing with evidence 'notion_task_target_unconfigured'.",
-            "Look for skill create/update opportunities, formula mentions, cheatsheets, recipes, and one unconventional speedup, but turn them into Notion task proposals.",
-            "Use workflow_refs as the required local routing model: harness-scout for source-to-feature extraction, advise for comparing feature directions, and harness-advisor for placement.",
-            "Use workspace_context to understand which project produced the signal and to tag/relate the Notion task when safe; default every clear signal to a reusable Farplane harness improvement.",
+            "Review the bounded message window for clear troubles, corrections, resolved misses, and reusable lessons.",
+            "Write only compact sanitized rows to docs/TROUBLES.md and docs/LESSONS.md when the signal is strong.",
+            "Do not update or create skill files, tickets, AGENTS.md, templates, evals, or other docs.",
+            "Do not dump raw transcripts. Summarize the issue, evidence, prevention idea, and pairing in one compact row.",
+            "Dedupe against recent TROUBLES.md and LESSONS.md content before writing.",
+            "Pair a lesson to a trouble when a recent trouble appears resolved in the same window.",
+            "Return no_change when the signal is weak, duplicate, private, or ambiguous.",
+            "Include proof_hops with exactly user_capture, assistant_capture, rolling_window_write, background_codex_launch, and learning_docs_write in that order.",
+            "For each proof_hop, set status to present or missing and include a short evidence string; dry-run must mark learning_docs_write as missing.",
             "Review the current window first, then use recent_windows for cross-session complaints and repeated pain.",
-            "Dedupe against existing skills, feature registry, memory, troubles, lessons, and recent tickets.",
+            "The weekly drain may later call optimize-harness for actual fixes; this reviewer only logs local learning rows.",
         ],
     }
 
@@ -2179,7 +2174,7 @@ def skill_opportunity_apply_command(base: Path, report_path: Path, role_config: 
         "-C",
         str(base),
         "--sandbox",
-        "read-only",
+        "workspace-write",
         "--disable",
         "codex_hooks",
         "--color",
@@ -2274,16 +2269,17 @@ def maybe_launch_skill_opportunity_review(
                     "status": "dry_run",
                     "source_window": str(input_path.relative_to(project_root)),
                     "proof_hops": skill_opportunity_proof_hops(
-                        notion_task_creation="missing",
-                        notion_evidence="dry-run mode did not create a live Notion task",
+                        learning_docs_write="missing",
+                        docs_evidence="dry-run mode did not edit learning docs",
                     ),
-                    "notion_tasks": [],
+                    "docs_delta": {
+                        "troubles_appended": [],
+                        "lessons_appended": [],
+                        "pairings": [],
+                    },
                     "decisions": [],
                     "formula_mentions": [],
-                    "unconventional_speedup": {
-                        "title": "dry run",
-                        "rationale": "Notion task creation launch was intentionally not executed",
-                    },
+                    "no_change_reason": "dry run did not invoke learning reviewer",
                     "dedupe_refs": input_payload["dedupe_refs"],
                     "risks": [],
                 },
@@ -2358,7 +2354,7 @@ def maybe_launch_skill_opportunity_review(
     )
     return skill_opportunity_hooklet_result(
         status="launched",
-        reason="started detached skill opportunity proposer",
+        reason="started detached learning docs reviewer",
         project_root=project_root,
         session_id=session_id,
         trigger=trigger,

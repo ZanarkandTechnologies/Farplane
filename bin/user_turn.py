@@ -114,15 +114,29 @@ def session_state_path(project_root: Path, session_id: str) -> Path:
 
 
 def self_improvement_state_dir(project_root: Path) -> Path:
+    # Backward-compatible name for callers; new state lives under flatter
+    # message-window / learning-review directories.
+    return runtime_dir(project_root) / "state"
+
+
+def legacy_self_improvement_state_dir(project_root: Path) -> Path:
     return runtime_dir(project_root) / "state" / "self-improve"
 
 
 def conversation_window_dir(project_root: Path) -> Path:
-    return self_improvement_state_dir(project_root) / "windows"
+    return runtime_dir(project_root) / "state" / "message-windows"
+
+
+def legacy_conversation_window_dir(project_root: Path) -> Path:
+    return legacy_self_improvement_state_dir(project_root) / "windows"
 
 
 def skill_opportunity_application_dir(project_root: Path) -> Path:
-    return self_improvement_state_dir(project_root) / "applications"
+    return runtime_dir(project_root) / "state" / "learning-reviews"
+
+
+def legacy_skill_opportunity_application_dir(project_root: Path) -> Path:
+    return legacy_self_improvement_state_dir(project_root) / "applications"
 
 
 def ensure_self_improvement_state_setup(project_root: Path) -> None:
@@ -132,6 +146,10 @@ def ensure_self_improvement_state_setup(project_root: Path) -> None:
 
 def conversation_window_path(project_root: Path, session_id: str) -> Path:
     return conversation_window_dir(project_root) / session_state_filename(session_id)
+
+
+def legacy_conversation_window_path(project_root: Path, session_id: str) -> Path:
+    return legacy_conversation_window_dir(project_root) / session_state_filename(session_id)
 
 
 def load_json_dict(path: Path) -> dict[str, object]:
@@ -165,6 +183,8 @@ def load_conversation_window(project_root: Path, session_id: str) -> dict[str, o
     normalized_session_id = normalize_session_id(session_id)
     ensure_self_improvement_state_setup(project_root)
     payload = load_json_dict(conversation_window_path(project_root, normalized_session_id))
+    if not payload:
+        payload = load_json_dict(legacy_conversation_window_path(project_root, normalized_session_id))
     if not payload:
         return {
             "schema_version": SELF_IMPROVEMENT_WINDOW_SCHEMA_VERSION,
@@ -217,18 +237,25 @@ def recent_conversation_windows(
     ensure_self_improvement_state_setup(project_root)
     normalized_current = normalize_session_id(current_session_id)
     windows: list[dict[str, object]] = []
-    for path in conversation_window_dir(project_root).glob("*.json"):
-        payload = load_json_dict(path)
-        if not payload:
+    seen_paths: set[Path] = set()
+    for directory in (conversation_window_dir(project_root), legacy_conversation_window_dir(project_root)):
+        if not directory.exists():
             continue
-        session_id = normalize_session_id(str(payload.get("session_id") or path.stem))
-        if not session_id:
-            continue
-        payload["session_id"] = session_id
-        payload.setdefault("updated_at", "")
-        payload.setdefault("rolling_exchanges", [])
-        payload.setdefault("pending_user_turn", {})
-        windows.append(payload)
+        for path in directory.glob("*.json"):
+            if path in seen_paths:
+                continue
+            seen_paths.add(path)
+            payload = load_json_dict(path)
+            if not payload:
+                continue
+            session_id = normalize_session_id(str(payload.get("session_id") or path.stem))
+            if not session_id:
+                continue
+            payload["session_id"] = session_id
+            payload.setdefault("updated_at", "")
+            payload.setdefault("rolling_exchanges", [])
+            payload.setdefault("pending_user_turn", {})
+            windows.append(payload)
 
     windows.sort(
         key=lambda item: (

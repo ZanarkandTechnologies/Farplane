@@ -283,6 +283,11 @@ Migration guide:
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
 - `docs/TROUBLES.md` is the append-only raw feedback log for repeated misses, failed attempts, blockers, and correction pain points.
 - `docs/LESSONS.md` is the distilled learning log for prompt, skill, eval, and policy improvements after a fix, review pass, eval pass, or trouble drain.
+- New projects should have a weekly learning drain habit: read recent
+  `docs/TROUBLES.md` and `docs/LESSONS.md`, select rows that imply an actual
+  harness/process fix, call the owning optimizer workflow such as
+  `optimize-harness`, and record processed rows in runtime state instead of
+  deleting ledger history.
 - `tickets/` is the canonical execution surface, so planning, build, and QA work from one file per active ticket, with completed tickets moved into `tickets/archive/`.
 - `.githooks/` gives each repo one visible place for optional local gates
   without silently mutating git config during bootstrap.
@@ -327,6 +332,10 @@ The generated planning flow should follow these defaults:
   Default app UI should initialize shadcn and apply darkmatter.
 - Keep progress notes out of `AGENTS.md`; put them in the active ticket file.
 - Keep repeated failure feedback out of `docs/MEMORY.md`; log raw pain in `docs/TROUBLES.md` first, distill reusable lessons into `docs/LESSONS.md`, then promote only durable rules into `docs/MEMORY.md` or the relevant skill/contract.
+- Do not delete rows from `docs/TROUBLES.md` or `docs/LESSONS.md` to dedupe
+  weekly drains. Keep a processed-state ledger under `.farplane/state/` or the
+  project-equivalent runtime state, with source refs and follow-up ticket/thread
+  refs.
 - First Convex cloud setup is interactive; stop and ask the human to run it.
 - Do not skip from a fuzzy idea directly to `prd`; use `brainstorm` or `deep-interview` first when the first slice is not obvious.
 - Do not put full domain pipelines in `deep-init-project`; use

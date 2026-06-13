@@ -176,17 +176,18 @@ success quiet and make failure output the thing that stands out.
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
 - `python3 bin/self_improve_hook_probe.py simulate --session-id self-improve-probe --turns 10`
-  Use to prove the self-learning hook path writes a rolling window and dry-run
-  review report under `.farplane/state/self-improve/`. Add `--live` only when
-  you intentionally want to spawn the real Codex sidecar. The generated input
-  includes `workspace_context` so the sidecar can see the originating project,
-  invocation cwd, and weekly Notion status cache path while still defaulting
-  clear findings to reusable Farplane harness-improvement tasks. The `simulate`
-  and `force-review` outputs include `hooklet_result`, the same named result
-  shape logged to `.farplane/logs/stop-hook.jsonl` by the live Stop hook. Sidecar
-  reports include a five-hop `proof_hops` checklist for `user_capture`,
+  Use to prove the learning hook path writes a rolling message window and dry-run
+  review report under `.farplane/state/message-windows/` and
+  `.farplane/state/learning-reviews/`. Add `--live` only when you intentionally
+  want to spawn the real Codex sidecar that can append compact rows to
+  `docs/TROUBLES.md` and `docs/LESSONS.md`. The generated input includes
+  `workspace_context` so the sidecar can see the originating project and
+  invocation cwd. The `simulate` and `force-review` outputs include
+  `hooklet_result`, the same named result shape logged to
+  `.farplane/logs/stop-hook.jsonl` by the live Stop hook. Sidecar reports
+  include a five-hop `proof_hops` checklist for `user_capture`,
   `assistant_capture`, `rolling_window_write`, `background_codex_launch`, and
-  `notion_task_creation`; dry-run reports mark the live Notion hop as
+  `learning_docs_write`; dry-run reports mark the live docs-write hop as
   `missing`.
 - `python3 bin/self_improve_hook_probe.py status --session-id self-improve-probe`
   Use to inspect the current rolling window, due state, and recent sidecar runs.

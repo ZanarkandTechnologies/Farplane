@@ -302,11 +302,9 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-") as td:
             project_root = Path(td)
             (project_root / ".farplane" / "state").mkdir(parents=True)
-            (project_root / ".farplane" / "state" / "notion-context").mkdir(parents=True)
-            (project_root / ".farplane" / "state" / "notion-context" / "latest-status-context.md").write_text(
-                "# status\n",
-                encoding="utf-8",
-            )
+            (project_root / "docs").mkdir(parents=True)
+            (project_root / "docs" / "TROUBLES.md").write_text("# Troubles\n", encoding="utf-8")
+            (project_root / "docs" / "LESSONS.md").write_text("# Lessons\n", encoding="utf-8")
             cwd = project_root / "packages" / "app"
             cwd.mkdir(parents=True)
             window = {
@@ -337,7 +335,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
             report = json.loads((run_path / "report.json").read_text(encoding="utf-8"))
             input_payload = json.loads((run_path / "input.json").read_text(encoding="utf-8"))
             saved_window = json.loads(
-                (project_root / ".farplane" / "state" / "self-improve" / "windows" / "sess-123.json").read_text(
+                (project_root / ".farplane" / "state" / "message-windows" / "sess-123.json").read_text(
                     encoding="utf-8"
                 )
             )
@@ -356,7 +354,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 "assistant_capture",
                 "rolling_window_write",
                 "background_codex_launch",
-                "notion_task_creation",
+                "learning_docs_write",
             ],
         )
         self.assertTrue(all(hop["status"] in {"present", "missing"} for hop in report["proof_hops"]))
@@ -364,22 +362,17 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertIn("dry-run", report["proof_hops"][-1]["evidence"])
         self.assertIn(
             "Include proof_hops with exactly user_capture, assistant_capture, rolling_window_write, "
-            "background_codex_launch, and notion_task_creation in that order.",
+            "background_codex_launch, and learning_docs_write in that order.",
             input_payload["instructions"],
         )
         self.assertEqual(input_payload["recent_windows"][0]["session_id"], "sess-123")
-        self.assertEqual(input_payload["workflow_refs"]["source_to_feature"], "skills/harness-scout/SKILL.md")
-        self.assertEqual(input_payload["workflow_refs"]["feature_options"], "skills/advise/SKILL.md")
-        self.assertEqual(input_payload["workflow_refs"]["placement"], "skills/harness-advisor/SKILL.md")
+        self.assertEqual(input_payload["workflow_refs"]["learning_docs"], "docs/TROUBLES.md and docs/LESSONS.md")
         self.assertEqual(input_payload["workspace_context"]["current_project_name"], project_root.name)
         self.assertEqual(input_payload["workspace_context"]["current_project_root"], str(project_root))
         self.assertEqual(input_payload["workspace_context"]["hook_invocation_cwd"], str(cwd))
-        self.assertEqual(
-            input_payload["workspace_context"]["status_context_cache"],
-            str(project_root / ".farplane" / "state" / "notion-context" / "latest-status-context.md"),
-        )
-        self.assertTrue(input_payload["workspace_context"]["status_context_cache_exists"])
-        self.assertEqual(input_payload["workspace_context"]["task_scope_default"], "harness_self_improvement")
+        self.assertTrue(input_payload["docs_targets"]["troubles_exists"])
+        self.assertTrue(input_payload["docs_targets"]["lessons_exists"])
+        self.assertEqual(input_payload["workspace_context"]["task_scope_default"], "learning_docs_review")
         self.assertEqual(saved_window["last_review_turn_count"], 10)
 
     def test_skill_opportunity_review_uses_farplane_refs_for_cross_project_dedupe(self) -> None:
@@ -391,11 +384,9 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 (base / "skills" / "harness-advisor" / "SKILL.md").write_text("# Harness Advisor\n", encoding="utf-8")
                 (base / "tickets" / "TASK-0001").mkdir(parents=True)
                 (base / "tickets" / "TASK-0001" / "ticket.md").write_text("# TASK-0001\n", encoding="utf-8")
-                (project_root / ".farplane" / "state" / "notion-context").mkdir(parents=True)
-                project_status_context = (
-                    project_root / ".farplane" / "state" / "notion-context" / "latest-status-context.md"
-                )
-                project_status_context.write_text("# Project status\n", encoding="utf-8")
+                (project_root / "docs").mkdir(parents=True)
+                (project_root / "docs" / "TROUBLES.md").write_text("# Troubles\n", encoding="utf-8")
+                (project_root / "docs" / "LESSONS.md").write_text("# Lessons\n", encoding="utf-8")
                 window = {
                     "schema_version": 1,
                     "session_id": "sess-123",
@@ -422,8 +413,8 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(input_payload["dedupe_refs"]["recent_tickets"], ["tickets/TASK-0001/ticket.md"])
         self.assertEqual(input_payload["workspace_context"]["current_project_root"], str(project_root))
         self.assertEqual(input_payload["workspace_context"]["farplane_home"], str(base))
-        self.assertEqual(input_payload["workspace_context"]["status_context_cache"], str(project_status_context))
-        self.assertTrue(input_payload["workspace_context"]["status_context_cache_exists"])
+        self.assertEqual(input_payload["docs_targets"]["troubles_path"], str(project_root / "docs" / "TROUBLES.md"))
+        self.assertEqual(input_payload["docs_targets"]["lessons_path"], str(project_root / "docs" / "LESSONS.md"))
 
     def test_maybe_launch_skill_opportunity_review_reports_missing_role_config(self) -> None:
         with tempfile.TemporaryDirectory(prefix="skill-opportunity-") as td:
@@ -482,9 +473,9 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
     def test_stop_hook_launches_learning_review_without_persisted_runtime_turn(self) -> None:
         with tempfile.TemporaryDirectory(prefix="stop-hook-learning-main-") as td:
             project_root = Path(td)
-            (project_root / ".farplane" / "state" / "self-improve" / "windows").mkdir(parents=True)
+            (project_root / ".farplane" / "state" / "message-windows").mkdir(parents=True)
             (project_root / "tickets").mkdir(parents=True)
-            window_path = project_root / ".farplane" / "state" / "self-improve" / "windows" / "sess-main.json"
+            window_path = project_root / ".farplane" / "state" / "message-windows" / "sess-main.json"
             window_path.write_text(
                 json.dumps(
                     {
@@ -545,7 +536,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
                 result = self.stop_hook.main()
 
             saved_window = json.loads(window_path.read_text(encoding="utf-8"))
-            reports = sorted((project_root / ".farplane" / "state" / "self-improve" / "applications").glob("*/report.json"))
+            reports = sorted((project_root / ".farplane" / "state" / "learning-reviews").glob("*/report.json"))
 
         self.assertEqual(result, 0)
         self.assertTrue(json.loads(stdout_buffer.getvalue())["continue"])
@@ -553,7 +544,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         self.assertEqual(saved_window["rolling_exchanges"][0]["assistant_text"], "ordinary assistant response")
         self.assertEqual(len(reports), 1)
 
-    def test_skill_opportunity_apply_command_is_read_only_and_disables_hooks(self) -> None:
+    def test_skill_opportunity_apply_command_is_workspace_write_and_disables_hooks(self) -> None:
         cmd = self.stop_hook.skill_opportunity_apply_command(
             Path("/tmp/farplane"),
             Path("/tmp/report.json"),
@@ -565,7 +556,7 @@ class StopHookSkillOpportunityReviewTests(unittest.TestCase):
         )
 
         self.assertIn("--sandbox", cmd)
-        self.assertIn("read-only", cmd)
+        self.assertIn("workspace-write", cmd)
         self.assertIn("--disable", cmd)
         self.assertIn("codex_hooks", cmd)
         self.assertIn("--output-last-message", cmd)

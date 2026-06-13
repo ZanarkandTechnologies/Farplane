@@ -28,6 +28,21 @@ This file defines the project-specific technical rules, tech stack, and conventi
 - Project profile, lifecycle route, prototype gates, and pipeline handoff live
   in `docs/bootstrap-brief.md`.
 
+## 🧠 Learning Drain
+- **Raw feedback log**: `docs/TROUBLES.md`
+- **Distilled lesson log**: `docs/LESSONS.md`
+- **Cadence**: weekly review of recent troubles and lessons
+- **Drain action**: route actionable rows into the owning optimizer workflow
+  such as `optimize-harness`, a repair ticket, an eval, or an owning skill
+  update.
+- **Processed state**: `.farplane/state/self-improve/weekly-drain-processed.jsonl`
+  or the project-equivalent runtime path.
+- **Dedupe rule**: do not delete ledger rows from `docs/TROUBLES.md` or
+  `docs/LESSONS.md`; mark rows processed in runtime state with source refs and
+  follow-up ticket/thread refs.
+- **Spawn cap**: cap optimizer follow-ups per weekly run to avoid thread or
+  ticket floods.
+
 ## 🎨 Frontend UI Initialization
 - **UI applies to this repo**: [yes/no]
 - **Component system**: [default `shadcn/ui` for app UI; existing design system only when already present; n/a only when no UI]

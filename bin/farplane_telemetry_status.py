@@ -102,11 +102,11 @@ def summarize_events(project_root: Path) -> dict[str, object]:
 
 
 def self_improve_root(project_root: Path) -> Path:
-    return project_root / ".farplane" / "state" / "self-improve"
+    return project_root / ".farplane" / "state"
 
 
 def _windows(project_root: Path) -> list[dict[str, object]]:
-    windows_dir = self_improve_root(project_root) / "windows"
+    windows_dir = self_improve_root(project_root) / "message-windows"
     if not windows_dir.exists():
         return []
     windows = [_load_json_dict(path) for path in sorted(windows_dir.glob("*.json"))]
@@ -180,8 +180,8 @@ def _first_mapping(raw: object) -> Mapping[str, object]:
 
 def _learning_status(report: Mapping[str, object], run_dir: Path) -> str:
     raw_status = _safe_str(report.get("status"))
-    if raw_status == "task_created":
-        return "task_created"
+    if raw_status == "docs_updated":
+        return "docs_updated"
     if raw_status == "no_change":
         return "no_signal"
     if raw_status == "dry_run":
@@ -197,16 +197,19 @@ def _run_summary(run_dir: Path) -> dict[str, object]:
     input_payload = _load_json_dict(run_dir / "input.json")
     report = _load_json_dict(run_dir / "report.json")
     trigger = input_payload.get("trigger") if isinstance(input_payload.get("trigger"), Mapping) else {}
-    task = _first_mapping(report.get("notion_tasks"))
     decision = _first_mapping(report.get("decisions"))
+    docs_delta = report.get("docs_delta") if isinstance(report.get("docs_delta"), Mapping) else {}
+    first_trouble = _first_mapping(docs_delta.get("troubles_appended")) if isinstance(docs_delta, Mapping) else {}
+    first_lesson = _first_mapping(docs_delta.get("lessons_appended")) if isinstance(docs_delta, Mapping) else {}
     proof = _proof_hop_summary(report)
     title = (
-        _safe_str(task.get("title"))
+        _safe_str(first_trouble.get("line"))
+        or _safe_str(first_lesson.get("line"))
         or _safe_str(decision.get("summary"))
         or _safe_str(report.get("summary"))
-        or "No learning suggestion recorded"
+        or "No learning docs change recorded"
     )
-    owner = _safe_str(decision.get("target")) or _safe_str(task.get("target")) or _safe_str(task.get("owner"))
+    owner = _safe_str(decision.get("target")) or _safe_str(report.get("owner"))
     status = _learning_status(report, run_dir)
     return {
         "run_path": str(run_dir),
@@ -218,7 +221,7 @@ def _run_summary(run_dir: Path) -> dict[str, object]:
         "candidate_title": title,
         "plain_summary": _safe_str(report.get("speak")) or title,
         "recommended_owner": owner or "unassigned",
-        "confidence": _safe_str(decision.get("confidence")) or _safe_str(task.get("confidence")),
+        "confidence": _safe_str(decision.get("confidence")),
         "message_count": len(_messages_from_input(input_payload)),
         "messages": _messages_from_input(input_payload),
         "proof_hops_present": proof["present"],
@@ -235,7 +238,7 @@ def _run_summary(run_dir: Path) -> dict[str, object]:
 
 
 def load_learning_runs(project_root: Path) -> list[dict[str, object]]:
-    applications_dir = self_improve_root(project_root) / "applications"
+    applications_dir = self_improve_root(project_root) / "learning-reviews"
     if not applications_dir.exists():
         return []
     run_dirs = [path for path in applications_dir.iterdir() if path.is_dir()]

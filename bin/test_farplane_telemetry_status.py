@@ -45,13 +45,13 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                 + "\n",
                 encoding="utf-8",
             )
-            windows_dir = project_root / ".farplane" / "state" / "self-improve" / "windows"
+            windows_dir = project_root / ".farplane" / "state" / "message-windows"
             windows_dir.mkdir(parents=True)
             (windows_dir / "sess-123.json").write_text(
                 json.dumps({"session_id": "sess-123", "turn_count": 10, "last_review_turn_count": 10}),
                 encoding="utf-8",
             )
-            run_dir = project_root / ".farplane" / "state" / "self-improve" / "applications" / "20260526-sess-123"
+            run_dir = project_root / ".farplane" / "state" / "learning-reviews" / "20260526-sess-123"
             run_dir.mkdir(parents=True)
             (run_dir / "input.json").write_text(
                 json.dumps(
@@ -79,14 +79,17 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
             (run_dir / "report.json").write_text(
                 json.dumps(
                     {
-                        "status": "task_created",
-                        "speak": "Created a ticket to improve impl proof.",
-                        "notion_tasks": [{"title": "Improve impl proof", "target": "skills/impl"}],
-                        "decisions": [{"summary": "Improve impl proof", "target": "skills/impl", "confidence": "medium"}],
+                        "status": "docs_updated",
+                        "speak": "Logged a lesson to improve impl proof.",
+                        "docs_delta": {
+                            "lessons_appended": [{"line": "2026-05-26 00:00 Z | impl,proof | source | Improve impl proof | skills/impl | tighten proof"}],
+                            "troubles_appended": [],
+                        },
+                        "decisions": [{"summary": "Improve impl proof", "target": "docs/LESSONS.md", "confidence": "medium"}],
                         "proof_hops": [
                             {"name": "user_capture", "status": "present"},
                             {"name": "assistant_capture", "status": "present"},
-                            {"name": "notion_task_creation", "status": "missing"},
+                            {"name": "learning_docs_write", "status": "present"},
                         ],
                     }
                 ),
@@ -102,12 +105,12 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
         self.assertEqual(status["learning"]["turn_count"], 10)
         self.assertEqual(status["learning"]["run_count"], 1)
         run = status["learning"]["latest_runs"][0]
-        self.assertEqual(run["status"], "task_created")
-        self.assertEqual(run["candidate_title"], "Improve impl proof")
-        self.assertEqual(run["recommended_owner"], "skills/impl")
-        self.assertEqual(run["proof_hops_present"], 2)
+        self.assertEqual(run["status"], "docs_updated")
+        self.assertIn("Improve impl proof", run["candidate_title"])
+        self.assertEqual(run["recommended_owner"], "docs/LESSONS.md")
+        self.assertEqual(run["proof_hops_present"], 3)
         self.assertEqual(run["proof_hops_total"], 3)
-        self.assertEqual(run["proof_hops_missing"], ["notion_task_creation"])
+        self.assertEqual(run["proof_hops_missing"], [])
         self.assertEqual(run["message_count"], 2)
         self.assertIn("[local path]", run["messages"][0]["redacted_excerpt"])
 
@@ -137,7 +140,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
             "learning": {
                 "latest_runs": [
                     {
-                        "run_path": "/Users/example/private/Farplane/.farplane/state/self-improve/applications/run-1",
+                        "run_path": "/Users/example/private/Farplane/.farplane/state/learning-reviews/run-1",
                         "candidate_title": "Improve proof",
                         "messages": [{"role": "user", "summary": "hello", "redacted_excerpt": "[local path]"}],
                         "artifacts": {
