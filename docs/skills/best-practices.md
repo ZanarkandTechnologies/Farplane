@@ -39,8 +39,10 @@ Use anchored sections instead of the full file when the task is narrow:
 - `#first-load-shape` for first-load contract and todo-list shape.
 - `#placement-boundaries` for `SKILL.md` versus references versus docs.
 - `#structure-optimization` for metric tradeoffs.
-- `#advice-and-proof-routing` for advice tier, research, eval, and review
-  routing.
+- `#advice-and-proof-routing` for advice tier, research, eval, review, QA, and
+  proof routing.
+- `#finish-gates-and-checklists` for choosing review, QA, eval, validator, or
+  skill-local checklist gates.
 - `#skill-audit-records` for audit artifacts.
 
 If this file grows past roughly 500 lines, or any one section grows past roughly
@@ -71,11 +73,14 @@ Put these in `SKILL.md` for every non-trivial skill:
   execution, guardrail, evidence review, or writeback phases would otherwise be
   implicit.
 - Ordered todo path: default branch, important branches, proof, and final
-  review.
+  finish gate.
 - Hard gates and stop conditions: safety, evidence, review, or setup checks that
   cannot be optional.
 - Output contract: artifacts, response shape, proof paths, or handoff shape.
 - Reference routing: exactly which reference to load for conditional detail.
+- At least one short positive example when output quality depends on style,
+  taste, persuasion, explanation, generated media, creative direction, or
+  other non-deterministic judgment.
 
 Only move material out of `SKILL.md` when the remaining first-load contract is
 still executable without hidden chat context.
@@ -116,9 +121,10 @@ reference so it is loaded only after selection.
 - Treat the signature as a parameter contract. If the user invokes a skill
   without required inputs, the agent should resolve those inputs from files,
   state, setup workflows, or one narrow blocking question before execution.
-- Include a compact budget type only when effort, search breadth, review loops,
-  delegation, or external compute materially change the workflow. Do not add a
-  budget schema to tiny, deterministic, or single-path skills.
+- Include a compact budget type only when effort, search breadth,
+  finish-gate depth, delegation, or external compute materially change the
+  workflow. Do not add a budget schema to tiny, deterministic, or single-path
+  skills.
 - Put a compact `## Phase Contract` after `## Skill Signature` when the skill's
   material work needs explicit lifecycle shape:
 
@@ -167,8 +173,10 @@ reference so it is loaded only after selection.
 - Do not add a generic `## Job` section when `## Context` plus `## Todo List`
   already state the work. Use a specific section name such as `## Contract` only
   when it adds a durable contract that is not just a repeat of the todo list.
-- Put final review as the last numbered todo. Embedded plain todo checks are
-  allowed under that final todo; avoid deep checkbox trees elsewhere.
+- Put the final finish gate as the last numbered todo. The gate may be review,
+  QA, eval, validator, doc-quality checklist, demo proof, human feedback, or a
+  small self-check. Embedded plain todo checks are allowed under that final
+  todo; avoid deep checkbox trees elsewhere.
 - Move onboarding, examples, rubric detail, and long rationale to references.
 - A good first-load todo list should tell the next agent what to do now, not
   teach the whole domain.
@@ -198,8 +206,9 @@ Put content in a skill-local `references/*.md` file when it is owned by one
 skill but only needed later through an explicit branch, deeper rationale,
 optional detail, or rare mode:
 
-- Onboarding walkthroughs, long examples, deep rubrics, model maps, provider
-  maps, command recipes, or rare branches.
+- Onboarding walkthroughs, long examples, deep rubrics, QA checklists,
+  doc-quality checklists, model maps, provider maps, command recipes, or rare
+  branches.
 - Detail that is loaded by one explicit todo branch.
 - Material that would make `SKILL.md` harder to scan while not changing the
   default action.
@@ -209,7 +218,7 @@ cross-skill policy:
 
 - Rules used by multiple skills, templates, reviewers, validators, or agents.
 - Concepts that need one canonical owner, such as tiering, file lifecycle,
-  review gates, skill structure, or harness algebra.
+  finish gates, skill structure, or harness algebra.
 - Decisions that should not drift across multiple skill-local references.
 
 Use these thresholds as review triggers:
@@ -227,6 +236,41 @@ Use these thresholds as review triggers:
 Prefer duplication of a short first-load rule over hiding required behavior in a
 deep reference. Prefer a shared doc over duplicated long policy. Prefer a
 skill-local reference over a shared doc when only one skill owns the detail.
+
+## Example Standard
+
+Examples are mandatory for quality-dependent skills. A skill is
+quality-dependent when the main output is judged by taste, persuasion,
+explanatory clarity, brand fit, narrative structure, visual composition,
+creative direction, or human preference rather than a deterministic command.
+
+```text
+example_required(skill) -> true when quality_depends_on_style_or_judgment
+good_example(input, output, why_it_works?) -> repeatable_pattern
+```
+
+For those skills, include at least one positive example before trying to
+optimize the checklist. The example can be:
+
+- inline in `SKILL.md` when it is short enough to improve first-load behavior;
+- a linked `references/examples.md` when the example is longer than a few
+  paragraphs, includes artifacts, or has several variants;
+- a `templates/*` or `prompts/*` example when the reusable asset is a prompt,
+  output packet, or generated artifact shape.
+
+A good example should show:
+
+- the input brief or starting context;
+- the final output or artifact shape;
+- the style, quality bar, or "why this works" note that makes the example
+  transferable;
+- any boundary the agent must preserve, such as publish limits, source
+  provenance, or human review.
+
+When maintaining a quality-dependent skill with no good example, prioritize a
+representative example before broad structural rewrites. Structure improves
+reliability, but examples often provide the fastest lift from "valid workflow"
+to "usable output."
 
 ## Structure Optimization
 
@@ -330,6 +374,61 @@ structure placement.
 Use the native `reviewer` lane before calling material skill-system work ready.
 The reviewer judges the final artifact and evidence; it does not replace
 `deliberative-advice` for important pre-edit decisions.
+
+## Finish Gates And Checklists
+
+Do not make `review` the default name for every finish step. A skill's last
+todo should name the finish gate that matches the claim being made.
+
+```text
+finish_gate(skill, output, claim, risk)
+  -> self_check | checklist | validator | eval | QA | review | demo | human_feedback
+```
+
+Use this routing:
+
+| Claim | Finish Gate | Where Detail Belongs |
+| --- | --- | --- |
+| Human judgment, sufficiency, taste, readiness, or evidence quality. | `review` / reviewer lane | Review rubric or reviewer handoff. |
+| User-visible workflow, browser operation, UI state, generated media playback, or demo realism. | QA checklist or `qa` / `visual-qa` / `agent-qa-test` | Skill-local `references/*-qa-checklist.md` or QA artifact contract. |
+| Repeatable agent, prompt, or skill behavior. | `eval` | `eval_task.json` or eval suite artifact. |
+| Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
+| Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality checklist | Skill-local reference such as `references/doc-quality-checklist.md`. |
+| Generated asset or public deliverable presentation. | demo or QA proof | Demo checklist, render artifact, screenshot, or playback proof. |
+| Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |
+| Tiny deterministic edit. | self-check | One inline final todo or command. |
+
+First-load `SKILL.md` should usually say which gate to run and when to load the
+detail. Keep the detailed checklist in a reference when it is only needed after
+the draft, implementation, render, or evidence bundle exists.
+
+```text
+place_finish_checklist(checklist, needed_before_execution, owner_scope)
+  -> SKILL.md when needed_before_execution
+  -> references/*-checklist.md when owned_by_one_skill
+  -> docs/* when shared_across_many_skills
+```
+
+Add a skill-local QA checklist when the skill repeatedly produces or verifies a
+user-visible artifact and the checks are domain-specific. Examples:
+
+- frontend and UI skills: layout, console errors, responsive behavior,
+  accessibility, primary workflow, screenshots, and visual regressions.
+- media skills: duration, resolution, playback, audio sync, captions, artifact
+  paths, and platform constraints.
+- content/social skills: platform fit, required variants, links, rendered
+  previews, and copy/asset consistency.
+- agent-testing skills: case coverage, tester evidence, evidence-review
+  critique, rerun policy, and final proof bundle.
+
+Do not put long QA checklists directly in `## Todo List` unless those checks
+are needed before execution. Prefer a compact final todo:
+
+```text
+- [ ] Finalize with the skill-local QA checklist when the artifact exists.
+```
+
+Then link the reference from `## Reference Map`.
 
 Always review skill creation and maintenance against the structure metrics. Vary
 the review depth:
@@ -494,9 +593,11 @@ the smallest useful upgrade in the same pass:
 - Reinstall and inspect the live installed skill when visible Codex behavior is
   part of the claim.
 
-## Review Gate
+## Finish Gate
 
-Before calling skill work complete, run a review pass that checks:
+Before calling skill work complete, run the finish gate that matches the
+artifact and claim. For ordinary skill-system work, the default gate is still a
+review pass that checks:
 
 - concise first-load todo list
 - branch-aware workflow shape
@@ -505,14 +606,14 @@ Before calling skill work complete, run a review pass that checks:
 - explicit proof commands and artifacts
 - repeatability from files alone
 
-For nontrivial skill work, delegate review to the native `reviewer` subagent
+For nontrivial skill-system work, delegate review to the native `reviewer` subagent
 when one is available. The calling skill owns rubric routing: pass a reviewer
 handoff with the active ticket or task artifact, changed skill files, evidence
 artifacts, review focus, rubric families, required TAS gates, hard gates, and
 expected output path. Use
 `docs/review/rubrics/reviewer-handoff.md` for the template.
 
-For skill work, the usual caller-declared families are `skill-contract`,
+For skill-system review, the usual caller-declared families are `skill-contract`,
 `integration-readiness`, and `evidence-quality`. Add task-specific hard gates
 for repeatability, duplicated first-load logic, actor-prompt versus
 skill-contract boundaries, and explicit proof commands. Self-review is

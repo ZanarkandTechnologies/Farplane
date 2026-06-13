@@ -1,6 +1,6 @@
 ---
 name: skill-maintenance
-description: "Turn bulk skill-system changes into updated frontmatter, checklists, registry sync, audits, and validation proof."
+description: "Turn bulk skill-system changes into updated frontmatter, finish gates, registry sync, audits, and validation proof."
 tier: 3
 group: skills
 source: local
@@ -17,8 +17,9 @@ feature_refs:
 
 Skill maintenance is the owner for bulk Farplane skill upkeep: template
 onboarding, tier/source metadata, generated registry sync, todo-list shape,
-link hygiene, source ownership, and consolidation planning. Use this skill to
-make skill-system work repeatable instead of hiding rollout state in chat.
+finish gates, link hygiene, source ownership, and consolidation planning. Use
+this skill to make skill-system work repeatable instead of hiding rollout state
+in chat.
 
 ## Skill Signature
 
@@ -87,6 +88,8 @@ fails: invents numeric health score; duplicates git last-edited state; claims ta
    - [ ] Move actor identity, subagent spawning, caller routing, tool-use policy,
      and artifact writeback out of reusable skills unless the skill is explicitly
      an orchestration skill.
+   - [ ] For quality-dependent skills, add or link one positive example before
+     broad structure cleanup when no good example exists.
 - [ ] 7. Verify template structure before marking a skill onboarded.
    - [ ] Check the actual `SKILL.md` headings, todo shape, and `## Skill
      Signature` against the current template before setting or keeping
@@ -113,6 +116,8 @@ fails: invents numeric health score; duplicates git last-edited state; claims ta
      `duplicated_instruction_count`, `prompt_size_tokens`,
      `task_success_rate`, `review_tas_rate`, `maintenance_locality`, and
      `composition_clarity`.
+   - [ ] Check example coverage for quality-dependent skills: at least one
+     transferable positive example exists, or the audit names the blocker.
    - [ ] Choose review depth with
      [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization):
      direct self-check for tiny mechanical edits, `advise` for normal recent
@@ -135,7 +140,7 @@ hygiene, or consolidation planning.
   rules.
 - Follow the relevant anchored section of `docs/skills/best-practices.md` for
   first-load todo-list shape, structure optimization metrics, reference
-  placement, repeatability, and review gates. Do not load the full file for
+  placement, repeatability, and finish gates. Do not load the full file for
   ordinary one-skill edits unless the placement or standard is broad enough to
   need it.
 - `SKILL.md` is the first-load source of truth. Required todo items belong in a
@@ -148,7 +153,7 @@ hygiene, or consolidation planning.
   output contract, and high-risk guardrails.
 - Use the `docs/skills/best-practices.md#structure-optimization` metrics to
   decide whether a rule belongs in first-load `SKILL.md`, a reference,
-  template, eval, or review check.
+  template, eval, review, QA checklist, validator, or other finish gate.
 - Use `docs/skills/best-practices.md#placement-boundaries` to decide between
   `SKILL.md`, skill-local references, shared docs, templates, and evals based
   on whether content is needed now on first load or later through an explicit
@@ -165,6 +170,9 @@ hygiene, or consolidation planning.
   detail, model maps, delegated prompts, and rare-path recipes.
 - If a reference must be read every time, promote the needed logic into
   `SKILL.md`.
+- For quality-dependent skills, missing examples are a first-order maintenance
+  issue. Add a representative example before broad structural rewrites unless
+  the missing structure prevents the skill from running at all.
 - Treat `todos.md` as a legacy/transitional input only. Delete it once it
   matches the direct `SKILL.md` todo list; reconcile divergent duplicates
   manually.
@@ -214,9 +222,11 @@ hygiene, or consolidation planning.
    `## Todo List`:
    - project/docs context first
    - required workflow and branch checks second
-   - proof/writeback last
+   - proof/writeback and finish gate last
    - keep optional detail in references with clear read conditions
    - keep or create `todos.md` only as a temporary migration input
+   - add or link one positive example for quality-dependent skills before
+     marking the skill ready for creative or judgment-heavy use
 8. Run the standard skill-system check:
 
 ```bash
@@ -260,6 +270,9 @@ python3 ../../bin/validators/check_skill_todo_tiers.py --allow-peer-tier3
   human must reconcile divergent content.
 - Complex Tier 3 skills keep any algebraic project/component/method model
   concise, discoverable, and subordinate to the `SKILL.md` first-load contract.
+- Quality-dependent skills have at least one positive example in `SKILL.md`,
+  `references/examples.md`, `templates/*`, or `prompts/*`, or the maintenance
+  record names why that example is blocked.
 - `docs/skills/registry.jsonl` is regenerated, not hand-edited.
 - External-source skills remain easy to refresh.
 - Consolidation candidates are ticketed or documented before hard migration.
@@ -297,7 +310,7 @@ Use `templates/skill-audit.md` for skill-local audit records.
   guide, generated registry surface, and maintenance commands.
 - [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
   first-load shape, structure optimization metrics, reference placement,
-  repeatability, and review gates.
+  repeatability, and finish gates.
 - [../skill-creator/references/SKILL_TEMPLATE.md](../skill-creator/references/SKILL_TEMPLATE.md)
   - current baseline skill template.
 - [templates/skill-audit.md](templates/skill-audit.md) - binary before/after

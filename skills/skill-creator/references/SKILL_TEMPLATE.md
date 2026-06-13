@@ -42,21 +42,21 @@ list already makes composition obvious. See
 ```text
 {skill_function}(input_text, state?) -> primary_output + evidence?
 state: reads(...); writes(...); remembers(...)
-gates: proof_or_review_condition; blocker_condition
+gates: proof_condition; finish_gate; blocker_condition
 routes: next-skill | next-skill:method | direct-answer
 fails: known bad behavior; overbroad behavior; misplaced ownership
 ```
 
-[TODO: Add a compact budget type only when effort, search breadth, review
-loops, delegation, or external compute materially changes the workflow. Delete
-this section for tiny or deterministic skills.]
+[TODO: Add a compact budget type only when effort, search breadth,
+finish-gate depth, delegation, or external compute materially changes the
+workflow. Delete this section for tiny or deterministic skills.]
 
 ```text
 {SkillBudget} = {
   grounding?: "none" | "skim" | "targeted" | "deep",
   search?: "direct" | "limited" | "broad",
   compute?: "single-agent" | "parallel-subagents" | "council",
-  review?: "none" | "self-check" | "review-protocol"
+  finish_gate?: "self-check" | "checklist" | "validator" | "eval" | "QA" | "review" | "demo" | "human-feedback"
 }
 ```
 
@@ -121,11 +121,11 @@ Do not call phase-like skills recursively at the same scope.
 - [ ] 3. Choose the branch.
    - [ ] 1. Default branch.
    - [ ] 2. Update/repair branch.
-   - [ ] 3. Review branch.
+   - [ ] 3. Finish/review branch.
 - [ ] 4. Execute the workflow for the selected branch.
 - [ ] 5. Produce or update the required artifact.
 - [ ] 6. Verify with the named proof command or evidence surface.
-- [ ] 7. Review against the gotchas before completion.
+- [ ] 7. Run the named finish gate before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
    - [ ] Explicit proof command or blocker.
@@ -142,6 +142,8 @@ Do not call phase-like skills recursively at the same scope.
   record under `audits/YYYY-MM-DD-<short-change>.md` using
   `../skill-maintenance/templates/skill-audit.md`. Do not add numeric
   `health_score` or `last_edited` frontmatter to `SKILL.md`.]
+- [TODO: For skills with a long finish checklist, put it in
+  `references/*-checklist.md` and load it only at the finish gate.]
 
 ## Gotchas
 

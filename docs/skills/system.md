@@ -21,7 +21,7 @@ fields, and todo-link rules stay in one place.
 
 Keep this file focused on stable system rules. Do not duplicate first-load
 authoring detail here; link `docs/skills/best-practices.md` for checklist
-shape, reference placement, repeatability, and review gates.
+shape, reference placement, repeatability, and finish gates.
 
 ## Tier Model
 
@@ -270,14 +270,14 @@ skill, check the signature before execution:
 ## Skill Budgets
 
 Budgets are optional parameters for skills where cost, depth, search breadth,
-review loops, delegation, or external compute materially change the best
+finish-gate depth, delegation, or external compute materially change the best
 workflow. Do not add budget schema to every skill by default.
 
 Use budgets when they help the coordinator choose the right effort level:
 
 ```text
 skill_budget(task, risk, ambiguity, cost)
-  -> grounding_depth + search_breadth + compute_mode + review_depth + stop_condition
+  -> grounding_depth + search_breadth + compute_mode + finish_gate_depth + stop_condition
 ```
 
 Good budget-bearing skills expose a small set of parameters that alter behavior
@@ -292,7 +292,7 @@ another phase:
 ```text
 phase_budget = {
   effort?: "tiny" | "normal" | "deep",
-  review?: "none" | "self-check" | "protocol" | "external",
+  finish_gate?: "none" | "self-check" | "checklist" | "validator" | "eval" | "QA" | "review" | "external",
   max_phase_depth?: 0 | 1 | 2
 }
 ```
