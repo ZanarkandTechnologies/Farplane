@@ -1,563 +1,339 @@
+---
+title: Harness Algebra
+status: active
+owner: harness-advisor
+created_at: 2026-06-09
+updated_at: 2026-06-13
+refs:
+  - docs/fundamentals/harness-engineering-doctrine.md
+  - docs/fundamentals/prompt-engineering.md
+  - docs/specs/filesystem-lifecycle.md
+  - docs/specs/goal-loop-contract.md
+  - docs/skills/README.md
+  - templates/global/AGENTS.md
+  - agents/skill-opportunity-applier.toml
+  - skills/optimize-harness/SKILL.md
+  - skills/goal-advisor/SKILL.md
+---
+
 # Harness Algebra
 
-Status: draft research spec
+## Purpose
 
-Date: 2026-06-09
+This is Farplane's quick guide to harness engineering. It defines the core
+objects, functions, and levers for making agents more reliable without turning
+every fix into more always-loaded prompt.
 
-## Abstract
-
-Harness engineering is the problem of choosing and optimizing the variables
-around an agent so it can complete a class of tasks reliably.
-
-The central object is:
+The guide is structured like a course:
 
 ```text
-H_theta(task, state) -> output + evidence + state_delta
+model -> levers -> prompt -> skills -> phases/budget -> context/state
+      -> verification -> hooks/goals -> optimization
 ```
 
-Where `theta` is the harness configuration: system prompts, skills, subagents,
-hooks, MCP tools, memory, filesystem variables, evals, automations, routing,
-verification, and budgets.
+Use `docs/fundamentals/harness-engineering-doctrine.md` as the concise field
+guide for deciding which concrete lever to pull.
 
-The purpose of this document is not to describe how an LLM works internally.
-The purpose is to define the harness variables well enough that
-`harness-advisor` can recommend what to change and future evals can measure
-whether the change improved the harness.
+## 1. Harness Engineering
 
-## 1. Optimization Problem
+Traditional prompt algebra treats the next model call as a constructed input
+prompt plus history. That is context engineering. It matters for retrieval,
+packing, and prompt construction, but it is not the harness-engineering model
+Farplane needs here.
 
-A harness turn is:
+Harness engineering asks which system surface owns behavior, budget, proof,
+lane responsibility, control, and writeback. It starts from grounded context:
+local source search for repo truth, and web/source search when real-world,
+current, or comparable-product context changes the answer.
+
+The useful harness model is:
 
 ```text
-context = GatherContext(task, state, theta)
-controls = SelectControls(task, context, state, theta)
-output = Execute(task, context, controls)
-evidence = Verify(output, task, controls)
-state_delta = Update(state, output, evidence)
+H(task, state) -> output + evidence + state_delta
 ```
 
-Composed:
+Use one standard harness vector. Do not introduce alternate symbols,
+`Harness`, or prompt-input decompositions elsewhere in this doc.
 
 ```text
-H_theta(task, state) -> output + evidence + state_delta
+H = {
+  policy_surfaces,
+  project_instructions,
+  skill_contracts,
+  subagent_prompts,
+  tool_surfaces,
+  memory_and_lesson_files,
+  ticket_or_goal_state,
+  verification_surfaces,
+  hooks_and_automations,
+  phase_and_ensemble_budget
+}
 ```
 
-Harness engineering is choosing `theta`:
+The canonical term is `H`.
+
+A harness turn:
 
 ```text
-theta =
-  system_prompt_policy
-+ skill_policy
-+ subagent_policy
-+ hook_policy
-+ mcp_policy
-+ memory_policy
-+ filesystem_policy
-+ eval_policy
-+ automation_policy
-+ routing_policy
-+ verification_policy
-+ budget_policy
+context = gather_context(task, state, H)
+controls = select_controls(task, context, H)
+output = execute(task, context, controls)
+evidence = verify(output, task, controls)
+state_delta = write_back(state, output, evidence)
 ```
 
-Optimization requires a task distribution:
+Harness engineering changes one or more levers:
 
 ```text
-D = { task_i, expected_properties_i, constraints_i, eval_i }
+Delta H -> changed_behavior + evidence
 ```
 
-Without `D`, an agent can overfit one anecdote and call it improvement.
-
-## 2. Reward And Loss
-
-The main research question is:
+The core DNA is priority-ordered constrained optimization over quality targets
+and costs:
 
 ```text
-Find the best harness configuration theta
-that maximizes task success, reliability, reuse, and auditability
-while minimizing cost, latency, turns, duplication, failures, and regressions.
-```
-
-Reward form:
-
-```text
-S(H_theta, D) =
-  task_success
+choose context, tools, skills, agents, state, and verification
+to minimize:
+  incorrectness
++ hallucination_or_ungrounded_claims
++ unusable_output
++ unnecessary_response_length
++ tokens
++ latency
++ turns
++ duplicated_instruction
++ coordination_cost
++ failure_rate
+while maximizing:
+  groundedness
++ correctness
++ usability
++ appropriate_detail
++ task_success
 + reliability
 + reusable_behavior
-+ downstream_transfer
 + auditability
-- token_cost
-- latency
-- turn_count
-- duplicated_instruction
-- failure_rate
-- regression_rate
 ```
 
-Loss form:
+Hard constraints come first:
 
 ```text
-L(H_theta, D) =
-  bad_outputs
-+ regressions
-+ token_cost
-+ latency
-+ turn_count
-+ duplicated_instruction
-+ noisy_context
-+ missing_context
-+ weak_verification
-+ drift
+user_goal_satisfied == true
+groundedness_sufficient == true
+correctness_regression == false
+safety_regression == false
+proof_exists == true
+operator_control_preserved == true
 ```
 
-Optimization target:
+Then optimize in priority order:
 
 ```text
-maximize S(H_theta, D)
-```
-
-Or equivalently:
-
-```text
-minimize L(H_theta, D)
-```
-
-Subject to constraints:
-
-```text
-quality >= threshold
-safety == acceptable
-tests == pass
-user_goal == satisfied
-cost <= budget
-prompt_size <= limit
-operator_control_is_preserved = true
+1. Preserve correctness, safety, proof, and operator control.
+2. Ground the answer in local repo evidence and real-world/current context when
+   that context changes the decision.
+3. Make the output usable for the operator's actual next action.
+4. Match response length to the task: complete enough to act, no padding.
+5. Load always-needed constraints where they are cheapest to retrieve.
+6. Minimize irrelevant always-loaded prompt.
+7. Minimize turns and coordination cost.
+8. Add control loops only when the failure mode justifies them.
 ```
 
 Prompt size is only one cost term:
 
 ```text
-cost + latency ~= prompt_size + tool_calls + turns
+total_cost ~= prompt_tokens + tool_calls + turns + coordination_cost
 
 error_risk ~= missing_context
            + noisy_context
            + contradictory_context
            + weak_verification
+           + unclear_owner
+           + missing_real_world_context
 ```
 
-So the goal is not simply `min(prompt_size)`. The goal is:
+Promotion rules:
 
 ```text
-minimize irrelevant_context
-maximize useful_constraints
-minimize turns + coordination_cost
-subject to acceptable_output_quality
+promote_to_system_prompt(context)
+  iff always_needed(D, context) is high
+  AND omission_cost(context) is high
+  AND contradiction_or_bloat_risk(context) is low
+
+promote_to_skill(context)
+  iff needed_for_task_family(D_i, context)
+  AND not globally_needed(context)
+
+keep_in_file_or_memory(context)
+  iff durable(context)
+  AND not always_needed(context)
+
+use_tool_or_search(context)
+  iff freshness_required(context)
+  OR context_too_large_to_preload(context)
+  OR real_world_or_comparable_context_changes_the_decision(context)
 ```
 
-## 3. Harness Feature Tree
+## 2. Harness Decomposition
 
-Use a tree, not a flat list. Flat lists hide ownership and make placement
-decisions harder.
+Use the same `H` vector when decomposing a harness. A decomposed harness is not
+a new definition; it is the same vector restricted to a task family, skill, or
+workflow.
+
+For a task family `A`:
 
 ```text
-Harness H = {
-  InterfaceLayer,
-  CapabilityLayer,
-  ControlLayer,
-  StateLayer,
-  VerificationLayer
-}
+H_A =
+  policy_surfaces_A
++ project_instructions_A
++ skill_contracts_A
++ tools_A
++ subagents_A
++ memory_A
++ ticket_or_goal_state_A
++ verification_A
++ hooks_A
++ budget_A
 ```
 
-### Interface Layer
+A skill is the default mini-harness:
 
 ```text
-InterfaceLayer = {
-  system_prompt,
-  user_task,
-  conversation_slice
-}
+SkillHarness_s =
+  skill_contract_s
++ required_references_s
++ allowed_tools_s
++ optional_subagent_lanes_s
++ state_reads_s
++ state_writes_s
++ proof_contract_s
++ budget_s
 ```
 
-`instructions` is not a separate component. Instructions are represented by
-`system_prompt` and selected `skills`.
+This is why skills compose. Each skill works toward one task family or outcome,
+has its own proof surface, and can be optimized independently before being
+tested inside larger workflows.
 
-### Capability Layer
+For two task families:
 
 ```text
-CapabilityLayer = {
-  skills,
+D = A + B
+H_D ~= H_A + H_B + Compose(H_A, H_B)
+```
+
+Composition must be tested:
+
+```text
+local_score = Score(H_A, D_A)
+workflow_score = Score(Compose(H_A, H_B), D_workflow)
+```
+
+Harness composition is not perfectly associative because context windows,
+side effects, and tools are finite. A good harness tries to make composition
+behave as if it were associative across explicit contracts:
+
+```text
+(H_C . H_B) . H_A ~= H_C . (H_B . H_A)
+```
+
+This works when each component has:
+
+```text
+input_contract
+output_contract
+state_reads
+state_writes
+proof_contract
+owner_boundary
+```
+
+If contracts are vague:
+
+```text
+ambiguous_output + hidden_state + weak_proof
+  -> brittle_workflow
+```
+
+Mini-harnesses make decomposition concrete. Most mini-harnesses should be
+skills; use a ticket, goal packet, or workflow mini-harness only when the unit
+is task-local, long-running, or crosses several skills.
+
+```text
+MiniHarness = {
+  id,
+  owner,
+  task_family,
+  skill_contract?,
+  skill_budget,
+  ensemble_budget,
+  tools,
   subagents,
-  mcp_tools
+  state_files,
+  proof_contract,
+  eval_cases,
+  composition_edges
 }
 ```
 
-### Control Layer
+## 3. Prompt Engineering Is All We Need
+
+The slogan is intentionally provocative. Farplane has skills, tickets,
+subagents, evals, hooks, automations, and Goal Packets, but most of those
+surfaces are prompt-shaped contracts.
 
 ```text
-ControlLayer = {
-  hooks,
-  automations,
-  routing_policy,
-  budget_policy
-}
+prompt_contract(job, context, rules, examples, output, proof)
+  -> reliable_model_behavior
 ```
 
-### State Layer
+Every reusable harness surface answers the same questions:
 
 ```text
-StateLayer = {
-  memory,
-  filesystem,
-  runtime_state,
-  conversation_state
-}
+job: what should the model do?
+context: what facts and files does it need?
+rules: what constraints and procedures matter?
+examples: what does good or bad look like?
+output: what artifact or response should exist?
+proof: how do we know it worked?
 ```
 
-`memory` is the broad retrieval/state interface. It may include vector stores,
-databases, ledgers, summaries, or other retrieval systems.
-
-`filesystem` is a separate first-class state store because it is addressable,
-searchable, reviewable, easy for humans and agents to update, and durable
-across tasks.
-
-### Verification Layer
+Mapping:
 
 ```text
-VerificationLayer = {
-  evals,
-  done_proof_contracts,
-  review_skills,
-  review_subagents,
-  completion_gates
-}
+SKILL.md              ~= reusable prompt contract
+ticket.md             ~= task-local prompt and proof contract
+subagent prompt       ~= role and ownership contract
+reviewer handoff      ~= judgment prompt with rubric and evidence
+eval judge            ~= scoring prompt
+Goal prompt           ~= runtime prompt derived from state files
+hook message          ~= deterministic control prompt or event contract
 ```
 
-Review loops are not one primitive component. They are verification workflows
-implemented through skills, subagents, Done / Proof contracts, hooks, and
-evals.
-
-Quality levers should be routed by proof type:
+Good prompt contracts reduce variance:
 
 ```text
-judgment-heavy quality claim -> review
-repeatable behavioral claim -> eval
-task-local evidence obligation -> done_proof
-deterministic structure/invariant -> validator
-deterministic boundary event -> hook
-self-review or context-drift risk -> reviewer subagent
-final sufficiency claim -> completion gate
+clear_job + relevant_context + sharp_output + proof
+  -> lower_ambiguity + lower_turn_count + higher_reliability
 ```
 
-Ownership boundaries:
+Bad prompt contracts create hidden loss:
 
 ```text
-harness-algebra = coordinates, loss terms, score model, proof routing
-harness-engineering-doctrine = placement doctrine and surface tradeoffs
-harness-advisor = first-load decision procedure and recommendation output
-skills/review = TAS meanings, rubric families, and review hard gates
-skills/eval = eval setup, task cases, judge prompts, and run artifacts
-agents/reviewer.toml = reviewer execution identity
-tickets = task-local Done / Proof contracts and durable evidence handles
-hooks/validators = deterministic checks and boundary gates
+vague_job + noisy_context + missing_examples + no_proof
+  -> drift + false_completion + repeated_corrections
 ```
 
-This keeps the algebra spec useful to `harness-advisor` without making it a
-second review, eval, or placement manual.
+Prompt engineering is not only prose quality. It is the discipline of making
+model behavior inspectable, reusable, and testable.
 
-## 4. Feature Functions
+## 4. Skill Engineering
 
-Each harness feature should have an input/output shape. These definitions are
-the useful part for `harness-advisor`.
-
-```text
-system_prompt(task, state) -> global_constraints
-Skill(input, context, artifacts) -> output + evidence + write_set
-Subagent(task, context, controls) -> output + evidence
-Hook(event, state, artifacts) -> gate_decision + evidence
-McpTool(args) -> observation_or_side_effect
-Memory(task, state) -> retrieved_context
-Filesystem(query, state) -> typed_file_variables
-Eval(candidate, cases, judge) -> score + verdict + evidence
-Automation(trigger, schedule, state) -> task | no_op
-ProofContract(task, state) -> required_evidence
-ReviewWorkflow(claim, evidence) -> pass | revise | block
-```
-
-The placement distinction:
+A skill is a packaged reusable workflow. It moves procedure out of
+always-loaded prompt text and into just-in-time context.
 
 ```text
-system_prompt = always-loaded global constraint
-skill = reusable workflow guidance
-subagent = isolated execution ownership
-hook = deterministic boundary decision
-mcp_tool = external capability
-filesystem = durable typed state
-eval = scoring function
-automation = trigger that creates or resumes work
-```
-
-Optimization effect matrix:
-
-```text
-feature                  improves                         can hurt
-system_prompt_policy      global consistency               prompt_size, contradiction risk
-skill_policy              reuse, progressive disclosure     stale or wrong skill routing
-subagent_policy           context isolation, parallelism    coordination cost
-hook_policy               deterministic boundary control    false blocks or false passes
-mcp_policy                capability, fresh observation     latency, side effects
-memory_policy             context reuse                     stale or noisy retrieval
-filesystem_policy         resumability, auditability        stale files, context clutter
-eval_policy               measurable accept/reject          overfit, eval burden
-automation_policy         recurring updates and drains      hidden autonomy, noisy work
-verification_policy       trust, reliability                latency, review overhead
-```
-
-The advisor surface is therefore:
-
-```text
-improvement_request
-  -> failing_reward_or_loss_term
-  -> candidate_feature_coordinate
-  -> proof_plan
-  -> accept_or_reject
-```
-
-## 5. Meta Processes As Harness Update Functions
-
-Meta processes change the harness itself. They are higher-order functions over
-`theta`, not normal task execution.
-
-```text
-MetaProcess(request, state, theta) -> Delta theta + evidence
-```
-
-Important meta processes:
-
-```text
-HarnessAdvisor(improvement_request, state) -> target_variable
-                                             + rationale
-                                             + proof_plan
-
-SkillCreator(capability_gap, context) -> Skill_s + registry_delta
-
-SkillMaintenance(skill_graph, rule) -> skill_delta
-                                     + registry_delta
-                                     + validation_evidence
-
-EvalWriter(claim, target_variable, cases) -> eval_suite
-                                           + judge
-                                           + baseline_result
-
-MemoryDrain(source_files, promotion_rule) -> memory_delta
-                                            + possible_theta_delta
-```
-
-These processes matter because they compound. A normal Tier 3 skill improves
-one workflow. A meta skill improves the machinery that creates, maintains, or
-evaluates many workflows.
-
-Tier leverage:
-
-```text
-ROI(Tier1_delta) >= ROI(Tier2_delta) >= ROI(Tier3_delta)
-```
-
-This is not always true for one urgent task, but it is a useful default prior.
-Tier 1 primitives compound because Tier 2 and Tier 3 skills call them. Tier 2
-interfaces compound because many Tier 3 skills inherit their planning,
-execution, research, or review shape. Tier 3 skills compound inside their
-domain, but usually have narrower blast radius.
-
-Practical examples:
-
-```text
-update(review) -> improves every workflow that uses review gates
-update(advise) -> improves every placement or tradeoff decision using options
-update(skill-creator) -> improves future skill quality
-update(skill-maintenance) -> improves skill graph health and registry accuracy
-write_eval(skill_policy) -> makes future skill extraction safer
-write_eval(harness-advisor) -> makes placement recommendations measurable
-```
-
-The high-ROI rule for `harness-advisor`:
-
-```text
-If a failure repeats across many skills or workflows,
-prefer a meta-skill, Tier 1, Tier 2, validator, or template update.
-
-If a failure is local to one domain,
-prefer the owning Tier 3 skill, ticket contract, or reference.
-```
-
-## 6. Goals As Functions
-
-A native Codex Goal is the continuation engine. Farplane represents material
-Goal use with a Goal Packet:
-
-```text
-GoalPacket :=
-  ticket.md
-+ program.md
-+ progress.md
-+ generated_goal_prompt
-+ drift_check_contract
-```
-
-Before a Goal Packet is needed, a normal Farplane ticket should still be
-readable as a small program over files, skills, and artifacts:
-
-```text
-TicketProgram :=
-  Summary
-+ Scope
-+ Delta
-+ Program
-+ Map
-+ DoneProof
-+ State
-+ Links
-```
-
-Compactly:
-
-```text
-task_program(vars, operations, proof)
-  -> artifact + evidence + state_delta
-```
-
-Where:
-
-```text
-Delta = before + after + why_now + first_principles_basis
-Program = vars + operation(input) -> output
-Map = touched_files + inspected_files + signature_delta + type_sketch + typed_flow
-DoneProof = done_when + checks + manual_checks + review_gates + evidence_refs
-State = next_action + blocked + latest_verification
-Links = program.md? + progress.md? + artifacts + review + refs
-```
-
-This collapses the older duplicated ticket sections:
-
-```text
-AcceptanceCriteria + Verification + ProofContract
-  -> DoneProof
-```
-
-Use `program.md` only when the task program is long-running, Goal-backed,
-heartbeat-based, rollout-like, or needs durable iteration policy. Use
-`progress.md` for append-only execution logs and evidence pointers.
-
-Goal execution becomes:
-
-```text
-goal_loop(ticket, program, progress, trigger)
-  -> next_turn + evidence + drift_verdict + state_delta
-```
-
-Surface ownership:
-
-```text
-ticket.md = compact task contract + task program + Done / Proof
-program.md = loop configuration
-progress.md = observed execution
-generated_goal_prompt = runtime instruction
-drift_check_contract = read-only alignment check
-```
-
-Goal-advisor compiles a chosen Goal Packet into:
-
-```text
-advise_goal_use(goal_packet, context)
-  -> task_section
-   + logging_policy
-   + metric_provider
-   + after_each_turn_policy
-   + blocked_stop
-```
-
-Goal-advisor chooses the Goal architecture first:
-
-```text
-advise_goal_use(intent, state)
-  -> direct_work
-   | active_goal_packet
-   | heartbeat_packet
-   | feedback_loop_packet
-   | rollout_packet
-```
-
-Goals optimize the harness by making the reward, feedback provider, or loss
-explicit before work starts:
-
-```text
-goal -> metric_provider -> accept_condition -> update_rule
-```
-
-Examples:
-
-```text
-goal: improve skill reliability
-metric: skill_eval_pass_rate
-accept: pass_rate improves and prompt_size does not exceed limit
-
-goal: reduce prompt bloat
-metric: duplicated_instruction_count + context_tokens
-accept: duplication decreases and task_success does not regress
-```
-
-Feedback providers are signals consumed by the Goal program:
-
-```text
-feedback_provider(request, rubric, context)
-  -> observation | score | decision
-```
-
-`human_feedback` is the provider signal. `optimize-with-human` is the callable
-preset that asks Kenji for labels, scores, rankings, or keep/revise decisions
-when human judgment is the cheapest honest metric. It does not own the
-continuation loop.
-
-Heartbeat and Goal are the same state transition with different triggers:
-
-```text
-trigger =
-  immediate_goal_continuation
-| scheduled_heartbeat
-| human_feedback_received
-| external_event
-```
-
-Drift review is a comparison function:
-
-```text
-drift_check(ticket, program, progress_tail, current_claim)
-  -> aligned | drifting | blocked | complete_candidate
-   + evidence_refs
-   + recovery_action
-```
-
-The drift checker is read-only and does not choose implementation strategy.
-
-## 7. Skills As Functions
-
-A skill is a reusable function package:
-
-```text
-Skill = {
-  SKILL.md,
-  references?,
-  scripts?,
-  templates?,
-  evals?
-}
-```
-
-A skill is most useful when it has a function signature:
-
-```text
-Skill_s(input, context, artifacts) -> output + evidence + write_set
+Skill_s(input, state) -> output + evidence + state_delta
 ```
 
 Minimum useful skill contract:
@@ -575,431 +351,240 @@ Skill_s = {
 }
 ```
 
-Skills optimize the harness by moving workflow detail out of always-loaded
-system prompts and into progressive disclosure:
+Skill package:
 
 ```text
-system_prompt_size decreases
-reusable_behavior increases
-duplicated_instruction decreases
+SkillPackage = {
+  SKILL.md,
+  references?,
+  scripts?,
+  templates?,
+  eval_task?,
+  audits?,
+  self_improve?
+}
 ```
 
-Skills compose when output contracts match input contracts:
+Standard `SKILL.md` shape:
+
+```text
+frontmatter
+Context
+Skill Signature
+Phase Contract?
+Phase Boundary?
+Todo List
+Templates
+Gotchas
+Reference Map
+Output
+```
+
+Skill tier system:
+
+```text
+Tier 0 = native phase protocol, inherited by every skill invocation
+Tier 1 = primitive behavior moves such as advise, grounding, prototyping
+Tier 2 = workflow interfaces such as plan, research, review, eval
+Tier 3 = domain/application skills such as goal-advisor or optimize-harness
+```
+
+Tiered first-load rule:
+
+```text
+Tier3.todo -> Tier2 or peer Tier3
+Tier2.todo -> Tier1 or local references
+Tier1.todo -> direct primitive procedure
+```
+
+Tier 0 phases are not skill links. They are the native lifecycle that can stay
+inline or become separate artifacts when needed.
+
+Skill frontmatter makes the package discoverable:
+
+```text
+frontmatter -> registry_row -> generated_skill_graph -> selection_context
+```
+
+Skill todo lists make invocation inspectable:
+
+```text
+skill_first_load(skill, task)
+  -> active_todo_list + required_references + proof_target
+```
+
+Skill composition:
 
 ```text
 (Skill_b . Skill_a)(x) = Skill_b(Skill_a(x))
 ```
 
-Skills are also the most practical way to represent decomposed harnesses. A
-task-specific harness can often be written as:
+Composition is valid when:
 
 ```text
-H_A =
-  system_prompt_global
-+ selected_skills_A
-+ tools_A
-+ memory_A
-+ proof_A
+Skill_a.output_contract compatible_with Skill_b.input_contract
+AND Skill_a.state_delta does_not_violate Skill_b.assumptions
+AND proof_handoff is explicit
 ```
 
-If `selected_skills_A` carries most of the reusable behavior, then optimizing
-the skill is the highest-leverage way to optimize `H_A`.
-
-For harness engineering, the practical point is stronger than the algebra:
-skills should name their inputs, outputs, files, proof, and side effects so
-other skills and subagents can reuse them without guessing.
-
-Model skills as stateful functions:
+Skill optimization:
 
 ```text
-Skill_s(input, state) -> output + evidence + state_delta
+Delta Skill_s
+  -> less_root_prompt
+   + more_reusable_behavior
+   + lower_turn_count
+   + fewer_repeated_misses
 ```
 
-Avoid pretending every skill is pure. Skills read files, call tools, delegate,
-and update state.
-
-## 7.1 Phase Functions And Recursion Boundaries
-
-Tier 0 phases are lifecycle functions available inside every skill invocation.
-They are not ordinary lower-tier skill dependencies:
+Skill losses:
 
 ```text
-phase_protocol(task, skill, state)
+stale_trigger
+wrong_skill_selection
+missing_input_contract
+hidden_side_effects
+too_much_ceremony
+no_eval_or_review_path
+```
+
+Skill eval target:
+
+```text
+SkillEval(skill, task_cases, judge)
+  -> score + verdict + evidence
+```
+
+Skill evals compound from lower tiers:
+
+```text
+improve(Tier1 primitive)
+  -> improves Tier2 workflows that call it
+  -> improves Tier3 domain skills that depend on those workflows
+  -> improves e2e workflows that compose the domain skills
+```
+
+Default optimization direction:
+
+```text
+primitive behavior -> workflow skill -> domain skill -> e2e workflow
+```
+
+Climb upward only when the lower-tier contract is already sharp and the
+remaining failure is genuinely compositional.
+
+Use skill engineering when behavior should repeat across tasks. Use a ticket or
+one-off prompt when the workflow is local, unstable, or not worth packaging.
+
+## 5. Phase And Budget Engineering
+
+Every serious skill invocation inherits the Tier 0 phase protocol:
+
+```text
+phase_protocol(task, state)
   -> grounded_inputs
+   + path_choice
    + plan_or_direct_action
    + execution
-   + guardrail_or_eval
+   + proof
    + review_if_material
    + state_delta
 ```
 
-A phase can stay inline or become a separate skill call:
+Typical phase order:
 
 ```text
-inline_phase(skill, phase, task) -> local_decision
-external_phase(skill, phase, task, budget) -> artifact + evidence
+ground -> choose_path -> plan? -> execute -> verify -> review? -> write_back
 ```
 
-Externalizing a phase is useful only when the separate artifact, independent
-judgment, explicit budget, handoff, or proof surface reduces expected loss more
-than it adds coordination cost:
+Externalize a phase only when the extra artifact or independent judgment is
+worth the coordination cost:
 
 ```text
+external_phase(phase, task, scope, budget)
+  -> artifact + evidence
+
 externalize_phase = true
-  iff value(phase_artifact_or_judgment) > coordination_cost
+  iff value(artifact_or_independent_judgment) > coordination_cost
 ```
 
-The anti-recursion invariant is scope shrinkage:
+The anti-recursion rule:
 
 ```text
 valid_external_phase_call(parent_scope, child_scope)
-  -> child_scope < parent_scope
+  iff child_scope < parent_scope
 ```
 
-This resolves plan/review circularity. `plan` can produce a review request for
-a plan artifact, and `review` can plan its inspection inline. A same-scope loop
-such as `plan(epic) -> review(epic_plan) -> plan(epic_review) -> ...` is invalid
-because the child scope did not shrink or specialize.
-
-Budgets are the compute variable for phase calls:
+Budget is compute allocation across phases:
 
 ```text
-phase_budget = {
+PhaseBudget = {
   effort,
-  grounding_depth,
+  context_depth,
   search_breadth,
-  compute_mode,
+  tool_call_limit,
+  subagent_count,
   review_depth,
-  max_phase_depth
+  eval_depth,
+  time_limit,
+  token_limit
 }
 ```
 
-All skills consume implicit budget, but only budget-sensitive skills should
-expose explicit budget parameters. Adding a budget schema to a tiny deterministic
-skill can increase prompt cost without improving task success.
+Phase budget belongs inside the skill or workflow that spends it. Do not make a
+global phase-budget table when only a few skills need the knob.
 
-## 8. Subagents As Functions
+Budgeted skills include:
 
-A subagent is scoped execution with isolated context:
+| Skill family | Budget fields |
+| --- | --- |
+| `plan`, `impl-plan`, `goal-advisor` | planning depth, ambiguity gates, decomposition depth |
+| `research`, `reference-grounding` | source count, search breadth, recency/currentness, citation depth |
+| `advise`, `deliberative-advice` | option count, independent lanes, critique depth |
+| `review`, `visual-qa`, `agent-qa-test` | rubric depth, evidence depth, reviewer/QA lanes |
+| `eval`, `eval-onboarding` | case count, fixture depth, judge strictness, heldout coverage |
+| `optimize-harness`, `self-improve` | candidate count, iteration count, metric budget, rollback gate |
+| `impl`, `work`, `batch-work` | execution scope, proof rows, QA/review depth |
 
-```text
-run_subagent(task, config) -> output + evidence
-
-config = {
-  subagent_prompt,
-  skills,
-  mcp_tools,
-  allowed_files,
-  output_contract,
-  evidence_contract
-}
-```
-
-Subagents optimize the harness by reducing context drift and ownership blur:
+Budget is not a standalone lever. It modulates the other levers:
 
 ```text
-context_drift decreases
-parallelism increases
-owned_output_clarity increases
-coordination_cost may increase
+budget(task, risk)
+  -> plan_depth
+   + research_depth
+   + execution_depth
+   + verification_depth
+   + review_depth
+   + ensemble_depth
 ```
 
-Subagents can equip skills:
+Example:
 
 ```text
-run_subagent(task, {
-  subagent_prompt: reviewer_prompt,
-  skills: [review],
-  mcp_tools: [],
-  output_contract: review_verdict
-})
+tiny_fix -> inline_ground + direct_execute + narrow_check
+material_doc_change -> ground + plan + edit + validators + review
+ticketed_impl -> ground + plan + implement + QA + review + closeout
+goal_loop -> ground + execute_leaf + progress_write + drift_check
 ```
 
-The clean pattern is for subagents to write reusable outputs to files:
+## 6. Context, Memory, And Tickets
+
+Context engineering chooses what state the model sees, what it does not see,
+and how new state is written back.
 
 ```text
-subagent(task) -> artifact_path + evidence_path
+select_context(task, state, budget) -> selected_context
 ```
 
-That keeps the result inspectable, reusable, and available to later harness
-updates.
-
-## 9. Hooks And Automations As Update Functions
-
-Hooks are deterministic boundary functions:
+The goal:
 
 ```text
-Hook(event, state, artifacts) -> gate_decision + evidence
+maximize useful_context
+minimize irrelevant_context + stale_context + missing_context
 ```
 
-Hooks optimize by reducing hidden judgment and catching boundary failures:
-
-```text
-false_completion decreases
-missing_evidence decreases
-operator_control increases
-```
-
-Automations are scheduled or event-triggered update functions:
-
-```text
-Automation(trigger, schedule, state) -> task | no_op
-```
-
-Memory drains are automation-style update functions:
-
-```text
-Drain(source_file, target_file, rule) -> target_delta + evidence
-```
-
-Examples:
-
-```text
-behavior_gap -> gap_analysis -> optimize_harness
-hardcase_signal -> eval_task[hardcase=true]
-trouble_signal -> docs/TROUBLES.md -> docs/LESSONS.md
-docs/LESSONS.md -> docs/MEMORY.md
-docs/MEMORY.md -> project AGENTS.md
-source_observation -> docs/features/registry.jsonl
-skill_eval_failure -> skill_update_ticket
-```
-
-More generally:
-
-```text
-UpdateHarness(memory_signal, theta) -> Delta theta | reject
-```
-
-This is how file variables become harness configuration changes.
-
-## 10. Evals As Scoring Functions
-
-Evals are scoring functions over harness candidates:
-
-```text
-Eval(candidate, cases, judge) -> score + verdict + evidence
-```
-
-Important eval types:
-
-```text
-SystemPromptEval(system_prompt, tasks) -> score
-SkillEval(skill, tasks) -> score
-WorkflowEval(workflow, tasks) -> score
-HarnessAdvisorEval(placement_decision, cases) -> score
-```
-
-For many practical improvements, do not optimize the whole harness at once.
-Decompose the task distribution, then decompose the harness.
-
-If:
-
-```text
-D = A + B
-```
-
-Then a useful approximation is:
-
-```text
-H_D ~= H_A + H_B + Compose(H_A, H_B)
-```
-
-Where:
-
-```text
-H_A =
-  system_prompt_global
-+ selected_skills_A
-+ tools_A
-+ memory_A
-+ proof_A
-
-H_B =
-  system_prompt_global
-+ selected_skills_B
-+ tools_B
-+ memory_B
-+ proof_B
-```
-
-So the score also decomposes:
-
-```text
-Score(H_theta, D) ~=
-  Score(system_prompt_policy, D_global)
-+ Sum_i route_weight_i * Score(skill_i, D_skill_i)
-+ Score(composition, D_workflow)
-```
-
-Where:
-
-```text
-SkillEval(skill_i, D_skill_i) -> skill_score_i
-```
-
-And each skill task distribution is a smaller task family:
-
-```text
-D_skill_i = {
-  task_cases_requiring_skill_i,
-  expected_outputs_i,
-  required_evidence_i,
-  failure_modes_i
-}
-```
-
-Mini-harnesses make the decomposition testable:
-
-```text
-MiniHarness = {
-  id,
-  owner,
-  task_family,
-  task_slice,
-  selected_skills,
-  tools,
-  state_files,
-  proof_contract,
-  eval_cases,
-  review_families,
-  composition_edges
-}
-```
-
-The local test target is:
-
-```text
-MiniHarness(H_A, D_A) -> local_score + evidence
-```
-
-The composition test target is:
-
-```text
-Compose(H_A, H_B) -> workflow_score + integration_evidence
-```
-
-This decouples optimization. Instead of asking one huge question:
-
-```text
-How do we optimize H over A, B, C, and D all at once?
-```
-
-Ask smaller questions:
-
-```text
-How do we optimize H_A for task family A?
-How do we optimize H_B for task family B?
-How do we optimize theta_skill_i for the tasks skill_i owns?
-How do we optimize system_prompt_policy for global constraints only?
-How do we test Compose(H_A, H_B)?
-```
-
-The result is a cleaner coordinate:
-
-```text
-theta_skill_i
-  -> SkillEval(skill_i, D_skill_i)
-  -> score_delta
-```
-
-This is usually easier to improve than:
-
-```text
-theta_all -> HarnessEval(H_theta, D_all) -> score_delta
-```
-
-The caveat is interaction. A skill can pass its local eval and still fail in a
-workflow if routing, composition, evidence handoff, or global constraints are
-wrong. That is why skill evals should be paired with a smaller number of
-workflow evals.
-
-Do not decompose when the task is one-off, low-risk, or already fits in a
-single context without pollution. Decomposition has coordination cost.
-
-The leverage claim:
-
-```text
-If most harness behavior is represented through skills,
-then optimizing skill contracts and skill evals is the dominant practical path
-for optimizing decomposed harnesses.
-```
-
-Evals optimize the harness by making accept/reject decisions measurable:
-
-```text
-regression_rate decreases
-overfitting risk becomes visible
-heldout_score constrains self-improvement
-```
-
-Skill evals are especially powerful because they justify progressive
-disclosure. If a skill eval passes, behavior can move out of the system prompt
-and into a just-in-time skill:
-
-```text
-system_prompt_policy decreases
-skill_policy increases
-task_success is preserved
-context_cost decreases
-```
-
-Automatic eval writing is itself a meta process:
-
-```text
-WriteEval(claim, target_variable, failure_examples) -> task_cases
-                                                    + judge_prompt
-                                                    + baseline_result
-```
-
-Use it when a harness change has a repeatable claim:
-
-```text
-"this skill reduces turns"
-"this subagent prevents context drift"
-"this hook blocks false completion"
-"this memory drain reduces repeated mistakes"
-```
-
-No eval means the harness can still improve, but the improvement remains a
-judgment call rather than a measured update.
-
-`HarnessAdvisorEval` should use placement cases:
-
-```text
-HarnessAdvisorEvalCase = {
-  improvement_request,
-  local_evidence,
-  expected_primary_surface,
-  acceptable_alternatives,
-  rejected_surfaces,
-  required_proof_plan,
-  known_trap,
-  heldout_group
-}
-```
-
-Scoring dimensions:
-
-```text
-primary_owner_correct
-secondary_sync_points_valid
-proof_plan_adequate
-root_prompt_overreach_avoided
-nondeterministic_hook_misuse_avoided
-heldout_case_generalization
-```
-
-Seed cases should include review/evidence failures, eval/skill-contract
-failures, deterministic guardrail failures, prompt bloat, stale memory, and
-over-broad migrations.
-
-## 11. Filesystem Variables As State
-
-The filesystem is a first-class harness state store, not just storage.
-
-Good filesystem structure mirrors good human project structure: searchable,
-modular, purpose-driven, easy to update, easy to validate, and reusable across
-future tasks.
+A file is a state variable when future agents are expected to read, trust,
+update, validate, archive, or drain it.
 
 ```text
 FileVariable(path) -> {
@@ -1007,198 +592,87 @@ FileVariable(path) -> {
   owner,
   allowed_writers,
   expected_readers,
-  schema_or_shape,
-  retrieval_keys,
+  shape,
   freshness_rule,
   validation_command,
   archive_or_drain_rule
 }
 ```
 
-Typed filesystem variables:
+Core Farplane state variables:
 
 ```text
-filesystem = {
-  docs_specs,
-  tickets,
-  registries,
-  artifacts,
-  eval_runs,
-  templates,
-  ledgers,
-  scripts
-}
+README.md                  = public routing variable
+ARCHITECTURE.md            = whole-system map
+docs/fundamentals/*.md     = conceptual model and doctrine
+docs/specs/*.md            = buildable contracts
+docs/MEMORY.md             = durable invariants
+docs/TROUBLES.md           = repeated raw misses
+docs/LESSONS.md            = distilled prevention rules
+docs/features/registry     = feature inventory
+docs/skills/registry       = skill inventory
+tickets/TASK-*/ticket.md   = task contract and proof target
+tickets/TASK-*/program.md  = loop configuration when needed
+tickets/TASK-*/progress.md = append-only observed progress
+tickets/TASK-*/artifacts   = evidence
 ```
 
-Examples:
-
-- `README.md` is a public routing variable.
-- `docs/specs/*.md` are durable contract variables.
-- `tickets/TASK-*/ticket.md` is a work-state and proof-target variable.
-- `docs/features/registry.jsonl` is a feature-state variable.
-- `docs/skills/registry.jsonl` is a generated skill-inventory variable.
-- `tickets/TASK-*/artifacts/*` are evidence variables.
-- eval run JSON is reward/evidence state.
-
-To minimize mistakes, file variables should be:
-
-- easy to search
-- easy to route to the right reader
-- compartmentalized enough to fit context
-- purpose-driven rather than a junk drawer
-- appendable or patchable without rewriting unrelated state
-- reusable by future tasks
-- validated mechanically when possible
-
-Weak harness behavior often comes from implicit variables: files that agents
-write but later agents do not know to read, trust, update, drain, or delete.
-
-The simplest memory system is one file:
+Ticket as task memory:
 
 ```text
-memory_file = memory.md
-
-Agent(task, memory_file) -> output + memory_delta
-
-memory_file_{t+1} =
-  update(memory_file_t, memory_delta)
+TicketProgram :=
+  Summary
++ Scope
++ Delta
++ Program
++ Map
++ DoneProof
++ State
++ Links
 ```
 
-This is enough when the task family is narrow and context pollution is low.
-For example:
+Ticket execution:
 
 ```text
-autoresearch_state = program.md
-
-AutoresearchAgent(program.md) -> experiment_log
-                              + metric_update
-                              + next_iteration
+ticket.md + skill_contract + implementation_files
+  -> artifact + evidence + ticket_state_delta
 ```
 
-Here `program.md` can hold the goal, metric, current hypothesis, experiment
-log, and next action. The agent is iterating over one state file that already
-contains the reward signal.
-
-Another simple loop:
+Context pollution:
 
 ```text
-ralph_state = progress.md + spec.md
-
-RalphLoop(spec.md, progress.md) -> selected_work
-                                + progress_delta
+context_pollution =
+  irrelevant_files
++ stale_memory
++ duplicated_rules
++ contradictory_instructions
++ unowned_artifacts
 ```
 
-Here `spec.md` defines the target and `progress.md` tracks what has been done
-or still needs doing.
-
-One-file memory is good for bootstrapping:
+Context starvation:
 
 ```text
-low_setup_cost increases
-iteration_speed increases
-coordination_cost decreases
+context_starvation =
+  missing_ticket
++ missing_spec
++ missing_examples
++ missing_current_state
++ missing_proof_contract
 ```
 
-But as the task family broadens, one file becomes noisy:
+Hook-backed learning:
 
 ```text
-context_pollution increases
-retrieval_precision decreases
-stale_state risk increases
-specialized_task_focus decreases
+message_window(session)
+  -> skill_opportunity_applier
+  -> docs/TROUBLES.md? + docs/LESSONS.md?
 ```
 
-That is when the harness should split state into modular files:
+The learning reviewer writes only strong, compact local rows. It does not run
+`optimize-harness`. Later drains decide whether those rows should become skill,
+prompt, ticket, eval, or doctrine changes.
 
-```text
-memory.md -> {
-  program.md,
-  progress.md,
-  spec.md,
-  lessons.md,
-  troubles.md,
-  eval_results.json,
-  artifacts/
-}
-```
-
-The rule:
-
-```text
-Start with one state file when the loop is simple.
-Split into typed variables when specialized tasks need cleaner context.
-```
-
-The RL-style view is:
-
-```text
-state_t = {
-  task,
-  ticket_file,
-  progress_file,
-  research_file,
-  plan_file,
-  implementation_files,
-  review_file,
-  eval_results,
-  memory_files
-}
-```
-
-An agent action reads a state slice and writes new state:
-
-```text
-action_t =
-  run_agent(role, prompt, inputs=state_slice_t)
-
-observation_t =
-  read(action_t.output_files)
-
-state_{t+1} =
-  update(state_t, observation_t)
-```
-
-Example research-to-plan flow:
-
-```text
-state_0 = {
-  task,
-  ticket_file,
-  progress_file
-}
-
-research_file =
-  run_agent("researcher", research_prompt, inputs=[
-    state_0.task,
-    state_0.ticket_file,
-    state_0.progress_file
-  ])
-
-state_1 =
-  update(state_0, { research_file })
-
-plan_file =
-  run_agent("planner", plan_prompt, inputs=[
-    state_1.task,
-    state_1.research_file,
-    state_1.ticket_file
-  ])
-
-state_2 =
-  update(state_1, { plan_file })
-
-review_file =
-  run_agent("reviewer", review_prompt, inputs=[
-    state_2.plan_file,
-    state_2.research_file,
-    state_2.ticket_file
-  ])
-
-state_3 =
-  update(state_2, { review_file })
-```
-
-Example memory-drain flow:
+Drain flow:
 
 ```text
 trouble_delta =
@@ -1210,116 +684,304 @@ lesson_delta =
 memory_delta =
   promote(lesson_delta, target=docs/MEMORY.md)
 
-theta_delta =
+h_delta =
   propose_harness_update(memory_delta, target=[
-    system_prompt_policy,
-    skill_policy,
-    filesystem_policy
+    policy_surfaces,
+    skill_contracts,
+    memory_files,
+    verification_surfaces
   ])
 ```
 
-Reward can be evaluated over state:
+If a lesson stays only in chat, it is not part of the harness.
+
+## 7. Verification Engineering
+
+Verification engineering chooses the right proof signal for a claim.
 
 ```text
-reward(state_t) =
-  task_success
-+ evidence_completeness
-+ context_reuse
-+ searchability
-- duplicated_work
-- stale_state
-- coordination_cost
-- missing_file_updates
+verify(output, claim, proof_surface) -> pass | revise | block + evidence
 ```
 
-This framing makes files more than artifacts. Files are the state representation
-that lets the harness plan, resume, delegate, verify, drain memory, and update
-its own configuration.
-
-## 12. Coordinate Descent Over Harness Variables
-
-A bounded harness improvement loop:
+Proof routing:
 
 ```text
-theta_{t+1} =
-  theta_t + Delta theta  if Accept(Delta theta)
-  theta_t                otherwise
+judgment-heavy quality claim -> review
+repeatable behavior claim -> eval
+user-visible workflow claim -> QA or browser proof
+deterministic invariant -> validator or hook fixture
+state drift claim -> drift review
+human taste or ranking -> human_feedback
+market result -> market_signal
+artifact presence claim -> file/path check plus review when judgment matters
 ```
 
-Operational acceptance rule:
+Eval layers:
 
 ```text
-Accept(Delta theta) :=
-  score_improves
-  AND required_review_families_are_TAS_A
-  AND eval_or_regression_evidence_supports_claim
-  AND integration_readiness_is_TAS_A
-  AND cost <= budget
-  AND prompt_size <= limit
+agent_or_policy_eval -> checks always-loaded instructions, AGENTS.md behavior,
+                        and native phase protocol
+
+skill_eval -> checks one SkillHarness in isolation
+
+e2e_workflow_eval -> checks composed skills, tickets, tools, subagents,
+                     state, and review gates together
+```
+
+Use the cheapest layer that can falsify the claim. If a skill eval fails, fix
+the skill before blaming the e2e workflow. If a primitive skill fails, fix the
+primitive before patching every caller.
+
+Do not use hooks for judgment-heavy work. Do not use review prose for
+deterministic invariants that a validator can check. Do not invent numeric
+metrics when the honest signal is a review verdict, human decision, or artifact
+presence.
+
+Acceptance:
+
+```text
+Accept(Delta H) :=
+  named_loss_reduced
+  AND proof_signal_supports_claim
+  AND required_review_gates_pass
   AND no_safety_regression
   AND no_test_regression
-  AND heldout_score_does_not_regress
   AND no_scope_overreach
+  AND cost <= budget
 ```
 
-Lifecycle rule:
+Hold:
 
 ```text
-promote:
-  repeated pass
-  AND no hard-gate failures
-  AND integration proof exists
-
 hold:
-  local pass
+  local proof passes
   AND workflow_or_composition_proof_missing
+```
 
+Rollback:
+
+```text
 rollback:
   regression
   OR weak evidence
   OR composition failure
   OR safety regression
+  OR owner_surface_was_wrong
 ```
 
-The harness search space is discrete. Practical optimization is usually
-coordinate descent:
+For review-gated work, `TAS-B` is not accepted. Revise or hold until the
+required gate passes.
+
+## 8. Hooks, Automations, And Goal Control
+
+Control decides when work starts, pauses, resumes, blocks, or completes.
 
 ```text
-choose one coordinate
-change it
-measure the relevant reward/loss terms
-keep, revise, or revert
-record the lesson
+control(event, state, artifacts)
+  -> continue | block | complete | wait | start_child_work
 ```
 
-Useful coordinates:
+Real control levers:
 
 ```text
-system_prompt_policy
-skill_policy
-skill_function_contract
-subagent_policy
-hook_policy
-mcp_policy
-memory_policy
-filesystem_policy
-eval_policy
-automation_policy
-verification_policy
-ticket_contract
-feature_registry
-skill_registry
-filesystem_lifecycle_rule
+Stop hook          = end-of-turn gate and continuation/completion control
+UserPrompt hook    = turn-start intent capture
+learning sidecar   = bounded-window trouble/lesson writer
+validators         = mechanical invariants
+automations/cron   = scheduled or event-triggered checks
+heartbeat          = delayed inspection of existing state
+native Goal        = continuation for one executable leaf
+drift reviewer     = read-only alignment check
 ```
 
-The repeated failure rule:
+Hook:
 
 ```text
-If the same loss appears in many places, move up the tier graph.
-If the loss is local, fix the local owner.
+Hook(event, state, artifacts) -> gate_decision + evidence
 ```
 
-Escalate up the tier graph only when:
+Automation:
+
+```text
+Automation(trigger, schedule, state) -> task | no_op
+```
+
+Heartbeat:
+
+```text
+heartbeat(ticket, program, progress, trigger)
+  -> inspect_state + action | no_op + progress_entry
+```
+
+Cron can call `goal-advisor` to prepare a Goal Packet for a ticket:
+
+```text
+cron_goal_run(schedule, ticket)
+  -> goal_advisor(ticket, state)
+  -> GoalPacket?
+  -> native_goal_prompt?
+```
+
+Goal Packet:
+
+```text
+GoalPacket :=
+  ticket.md
++ program.md
++ progress.md
++ generated_goal_prompt
++ drift_check_contract
+
+goal_loop(ticket.md, program.md, progress.md, trigger)
+  -> next_turn + evidence + drift_verdict + state_delta
+```
+
+Goal prompt:
+
+```text
+native_goal_prompt(ticket.md, program.md)
+  -> Task + Logging + Metric + AfterEachTurn + Budget?
+```
+
+The prompt is generated runtime text. `ticket.md`, `program.md`, and
+`progress.md` are the state.
+
+After each Goal turn:
+
+```text
+after_goal_turn(ticket, program, progress, current_claim)
+  -> append_progress
+   + drift_check?
+   + continue | wait | complete | blocked
+```
+
+Material or self-approval-prone Goal loops use a read-only drift reviewer:
+
+```text
+drift_check(ticket, program, progress_tail, current_claim)
+  -> aligned | drifting | blocked | complete_candidate
+   + reason
+   + evidence_refs
+   + recovery_action
+```
+
+Long-term goal hierarchy:
+
+```text
+goal -> project[] -> task[]
+
+portfolio.md = long-horizon goal graph + current_frontier
+ticket.md = executable leaf contract + Done / Proof
+program.md = loop configuration + metric + stop policy
+progress.md = append-only observed execution
+artifacts/ = evidence
+```
+
+Portfolio heartbeat:
+
+```text
+portfolio_heartbeat(portfolio.md, program.md, progress.md)
+  -> no_op | start_child_goal | resume_child_goal | request_feedback | replan
+```
+
+Leaf execution:
+
+```text
+leaf_native_goal(ticket.md, program.md, progress.md)
+  -> artifact + evidence + completion_entry
+```
+
+Completion transition:
+
+```text
+complete_child_goal(child_packet, portfolio, parent_program)
+  -> progress_entry + portfolio_state_delta + next_trigger
+```
+
+Rollout:
+
+```text
+rollout_goal(pattern, sample_results, target_set)
+  -> child_ticket[] | staged_checkpoints + rollout_progress
+```
+
+The parent portfolio chooses the next frontier. Native Goal mode executes one
+leaf. Completion updates portfolio memory before the next heartbeat or replan.
+
+Control improves reliability only when trigger, state, stop condition, and
+proof are explicit:
+
+```text
+control_lever improves reliability
+  iff trigger + state + stop_condition + proof are explicit
+
+control_lever becomes hidden_autonomy
+  iff trigger or state or stop_condition is implicit
+```
+
+## 9. Harness Optimization
+
+Optimization turns observed behavior gaps into accepted harness changes.
+
+```text
+ObservedFailure -> LossTerm -> HarnessLever
+                -> Intervention -> Evidence -> AcceptRule
+```
+
+Farplane's applied operator is `optimize-harness`:
+
+```text
+optimize_harness(observed_behavior, expected_behavior?, metric?, evidence?)
+  -> accepted_change | experiment_plan | blocked_report
+```
+
+Expanded:
+
+```text
+observed_behavior
+  -> expected_behavior
+  -> gap
+  -> loss_term
+  -> candidate_lever
+  -> owner_surface
+  -> proof_signal
+  -> Delta H
+  -> accept | hold | rollback
+```
+
+Decision record:
+
+```text
+HarnessDelta = {
+  observed_behavior,
+  expected_behavior,
+  loss_term,
+  lever,
+  owner_surface,
+  rejected_surfaces,
+  proof_signal,
+  delta_H,
+  accept_rule,
+  rollback_rule
+}
+```
+
+Loss map:
+
+| Observed Loss | Likely Lever | First Proof |
+| --- | --- | --- |
+| Agent ignores a reusable workflow. | Skill or skill contract | Skill eval or transcript replay. |
+| Agent asks broad unnecessary questions. | Prompt, skill contract, or ticket contract | Behavior test on correction cases. |
+| Agent completes without evidence. | Verification, ticket contract, hook, or review | Review receipt, hook fixture, done-proof check. |
+| Agent bloats every reply with policy. | System prompt or skill | Prompt/token diff plus regression check. |
+| Agent loses long-running state. | Ticket/program/progress or Goal Packet | Resume from files without transcript context. |
+| Agent self-approves material work. | Subagent or review gate | Reviewer-lane proof. |
+| Agent misses repeated lessons. | Learning sidecar, drain, memory, or skill update | Retrieval/drain test. |
+| Deterministic invariant keeps breaking. | Validator or hook | Validator or fixture. |
+| Skill changes regress workflows. | Skill eval or skill-maintenance | Heldout skill/workflow eval. |
+| Goal loops drift or become prompt-only. | Goal Packet or drift review | Drift review over ticket/program/progress. |
+
+Escalate scope only when:
 
 ```text
 repeated_failures_across_multiple_owners
@@ -1328,201 +990,20 @@ OR local_fix_failed_and_failure_is_structural
 OR one_high_severity_global_failure_requires_always_loaded_policy
 ```
 
-Otherwise, keep the fix local. The `ROI(Tier1) >= ROI(Tier2) >= ROI(Tier3)`
-prior is a leverage prior, not permission to expand blast radius.
+Otherwise, fix the local owner.
 
-## 13. Harness Advisor Use
-
-`harness-advisor` should use this spec as a placement model.
-
-Given:
+Use a direct patch when the gap, owner, proof, and accept rule are clear:
 
 ```text
-HarnessAdvisor(improvement_request, state, registries, specs)
+direct_patch(gap, lever, owner, proof)
+  -> Delta H + verification
 ```
 
-Return:
+Use `self-improve` or an experiment when there is a real search space:
 
 ```text
-target_variable + rationale + proof_plan
+self_improve(target_surface, metric, baseline, candidates)
+  -> best_candidate | no_improvement | blocked
 ```
 
-Decision schema:
-
-```text
-HarnessAdvisorDecision = {
-  improvement_request,
-  failure_mode,
-  loss_term,
-  task_slice,
-  candidate_coordinates,
-  owner_surface,
-  rejected_surfaces,
-  quality_lever,
-  proof_plan,
-  accept_rule,
-  rollback_rule,
-  secondary_sync_points
-}
-```
-
-Decision recipe:
-
-```text
-operator_complaint
-  -> failure_mode
-  -> loss_term
-  -> task_slice_or_mini_harness
-  -> candidate_coordinate
-  -> owner_surface
-  -> quality_lever
-  -> proof_surface
-  -> accept_or_hold_or_rollback
-```
-
-Advisor procedure:
-
-```text
-1. Translate the request into a failing reward or loss term.
-2. Identify candidate coordinates in theta.
-3. Check whether the problem is local, workflow-wide, or graph-wide.
-4. Prefer the smallest coordinate change that can improve the objective.
-5. Increase scope only when compounding leverage justifies the blast radius.
-6. Define proof: eval, validator, review gate, representative tasks, or artifact check.
-7. Accept only if the metric improves and constraints do not regress.
-```
-
-Placement examples:
-
-```text
-root-policy bloat
-  -> skill_policy or system_prompt_policy
-  -> proof: prompt_size decreases and task_success does not regress
-
-skill contract gap repeated across many skills
-  -> skill-creator or skill-maintenance
-  -> proof: template/check_skills/eval cases improve future skill quality
-
-bad placement recommendations
-  -> harness-advisor
-  -> proof: HarnessAdvisorEval improves on heldout placement cases
-
-repeated false completion
-  -> verification_policy, proof_contract, hook_policy
-  -> proof: completion evidence gate catches representative misses
-
-recurring lesson not being reused
-  -> automation_policy, memory_policy, filesystem_lifecycle_rule
-  -> proof: drain writes the right file and future tasks retrieve it
-```
-
-The advisor should be especially alert for compounding levers:
-
-```text
-Tier 1 primitive update
-Tier 2 workflow-interface update
-skill-creator template or standards update
-skill-maintenance validation or registry update
-eval-writer pattern
-harness-advisor placement rubric update
-global template update only when every project needs it
-system prompt update only when the rule must be active every turn
-```
-
-Counterexamples to avoid:
-
-```text
-local skill bug
-  -> wrong: root prompt update
-  -> better: owning skill contract or skill eval
-
-judgment-heavy review failure
-  -> wrong: hook
-  -> better: review rubric routing or Done / Proof
-
-eval added without baseline or heldout cases
-  -> wrong: claim improvement from one case
-  -> better: baseline + representative cases + heldout split
-
-local skill eval passes but workflow fails
-  -> wrong: promote skill change globally
-  -> better: hold until composition eval or integration review passes
-
-reviewer returns TAS-B
-  -> wrong: treat as pass
-  -> better: revise or hold until required TAS gates pass
-
-mini-harness split adds coordination cost without clearer proof
-  -> wrong: over-decompose
-  -> better: keep one state file or one workflow eval
-```
-
-That is the core thesis in operational form:
-
-```text
-A harness is a constrained optimizer over its own context, capability, control,
-state, and verification variables.
-```
-
-## 20. Case-Based Memory Graph
-
-Case-based memory is a generated retrieval layer over existing records, not a
-new manual registry and not a replacement for the ledgers. It helps the harness
-ask whether a proposed change resembles an older decision, correction, feature,
-ticket, or invariant before editing the system.
-
-Source nodes:
-
-```text
-MEM-*      := durable invariant from docs/MEMORY.md
-HISTORY    := timeline event from docs/HISTORY.md
-TROUBLE    := raw miss, blocker, or correction from docs/TROUBLES.md
-LESSON     := distilled prevention rule from docs/LESSONS.md
-FEAT-*     := feature row from docs/features/registry.jsonl
-SRC-*      := source row from docs/sources/registry.jsonl
-TASK-*     := ticket node from tickets/**/ticket.md
-SKILL      := skill package from docs/skills/registry.jsonl
-SPEC       := active contract under docs/specs/*.md
-```
-
-Derived edges:
-
-```text
-introduced_by(feature, ticket_or_source)
-constrained_by(feature_or_skill_or_spec, memory)
-corrected_by(policy, trouble_or_lesson)
-implemented_in(feature, surface)
-proved_by(feature_or_ticket, evidence)
-routes_to(skill_or_spec, owner_workflow)
-contradicts_candidate(candidate_change, invariant_or_known_limit)
-```
-
-Minimal case shape:
-
-```json
-{
-  "case_id": "CASE-0001",
-  "summary": "External skill self-healing should not edit installed skill bodies",
-  "trigger": "A repair path tried to patch an installed external skill directly",
-  "decision": "Mirror, ticket, or wrap external skills unless the operator explicitly approves direct edit",
-  "nodes": ["MEM-0107", "FEAT-0024", "docs/specs/self-improvement-contracts.md"],
-  "evidence": ["docs/TROUBLES.md", "docs/LESSONS.md", "tickets/TASK-0164/ticket.md"],
-  "reuse_when": ["skill self-healing", "external skill maintenance"],
-  "avoid_when": ["operator explicitly requests a specific external skill edit"]
-}
-```
-
-Use cases:
-
-- `policy_consistency`: retrieve related memories, features, trouble cases,
-  lessons, and owner specs before changing policy.
-- `feature_duplicate_check`: retrieve matching feature rows and source
-  decisions before adding a new feature.
-- `correction_pattern_check`: retrieve similar trouble rows and promoted
-  lessons when the operator reports a repeated miss.
-- `skill_boundary_check`: retrieve source ownership rules before broad skill
-  maintenance.
-
-First implementation should be a generated local JSON graph and query helper.
-No hosted database, no hidden daemon, no giant hand-maintained graph file, and
-no autonomy decisions from graph similarity alone.
+Do not use `self-improve` for ordinary implementation or doc cleanup.

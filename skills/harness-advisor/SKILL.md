@@ -18,11 +18,10 @@ Use this when the operator asks how to improve Farplane itself and the right
 surface is not obvious. This skill chooses where a harness improvement belongs;
 it does not implement hidden stateful work in chat.
 
-Default doctrine lives in `docs/fundamentals/harness-engineering-doctrine.md`. Use
-`references/algebra-adapter.md` when the decision needs loss terms, quality
-levers, mini-harness decomposition, accept/hold/rollback gates, or generated
-harness-map reasoning. Load the full `docs/fundamentals/harness-algebra.md` only for
-deep algebra, eval-design, decomposition, or manifest/schema decisions.
+Default doctrine lives in `docs/fundamentals/harness-engineering-doctrine.md`.
+Load `docs/fundamentals/harness-algebra.md` when the decision needs the
+operational optimization model: loss terms, levers, budget, ensembles, proof
+signals, accept/hold/rollback rules, or research framing.
 
 This is a Tier 2 workflow surface. It may use Tier 1 primitives directly, then
 hand implementation to a Tier 3 skill such as `skill-maintenance`, `impl-plan`,
@@ -55,8 +54,8 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
 - [ ] 3. Choose the decision depth.
    - [ ] 1. Normal placement: use doctrine, registries, and
      [placement axes](references/placement-axes.md).
-   - [ ] 2. Algebraic or high-blast-radius placement: also use
-     [algebra adapter](references/algebra-adapter.md).
+   - [ ] 2. Algebraic or high-blast-radius placement: also read
+     `docs/fundamentals/harness-algebra.md`.
    - [ ] 3. Graph-wide or dependency placement: inspect the generated skill
      graph or future harness map for backlinks, owner clusters, and surprising
      dependencies.
@@ -116,8 +115,9 @@ Next ticket or owner:
 
 - Do not default to root `AGENTS.md`; prefer the smallest surface that fixes
   the failure.
-- Do not read the full harness algebra spec every invocation. Use the packaged
-  adapter first, then load the full spec only when the decision needs it.
+- Do not read the full harness algebra spec every invocation. Read the doctrine
+  first, then load `docs/fundamentals/harness-algebra.md` only when the
+  decision needs deeper optimization, budget, ensemble, or proof modeling.
 - Do not create a new skill before checking the existing skill registry.
 - Do not create a new feature row before checking the feature registry.
 - Do not use a hook or validator for judgment-heavy work that is not
@@ -130,7 +130,8 @@ Next ticket or owner:
 - A good placement decision can still be wrong if it optimizes the wrong loss
   term. Name the failure mode before choosing surfaces.
 - Full-spec context can make normal advice slower and noisier. Load
-  `docs/fundamentals/harness-algebra.md` only when the adapter is insufficient.
+  `docs/fundamentals/harness-algebra.md` only when doctrine and placement axes
+  are insufficient.
 - A generated harness map is navigation and evidence, not a new desired-state
   language.
 - `TAS-B` is not a pass. Hold or revise material changes until required review
@@ -138,16 +139,14 @@ Next ticket or owner:
 
 ## Reference Map
 
-- [references/algebra-adapter.md](references/algebra-adapter.md) - packaged
-  distilled harness algebra for placement decisions, quality levers,
-  mini-harnesses, and harness-map reasoning.
 - [references/placement-axes.md](references/placement-axes.md) - material
   placement scoring across context budget, reuse, ownership, determinism,
   evidence, duplication, discoverability, and maintenance cost.
 - `docs/fundamentals/harness-engineering-doctrine.md` - canonical Farplane placement
   doctrine and smallest-lever rules.
-- `docs/fundamentals/harness-algebra.md` - full research spec for deep algebra,
-  decomposition, eval, or manifest/schema decisions.
+- `docs/fundamentals/harness-algebra.md` - operational harness-optimization
+  model for loss terms, coordinates, proof signals, and accept/hold/rollback
+  rules.
 - `docs/features/README.md` and `docs/features/registry.jsonl` - feature
   dedupe, provenance, status, and evidence.
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` - generated skill
