@@ -60,6 +60,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Use `reference-grounding` before claims or recommendations that depend on
   local files, official behavior, current facts, peer norms, standards,
   pricing, laws, APIs, or implementation examples.
+- For implementation feature work, do current external grounding by default:
+  search official docs, maintained examples, or peer implementations before
+  locking the approach, then adapt the smallest useful version to the local
+  codebase. Skip this only for tiny same-scope fixes, user-requested local-only
+  work, or when the active context already contains fresh external evidence.
 - Look for what already works in the repo and in the world before inventing a
   novel implementation, unless novelty is the goal.
 - Explore data, logs, examples, and code paths before drawing conclusions.

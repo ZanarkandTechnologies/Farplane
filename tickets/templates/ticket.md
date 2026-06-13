@@ -135,13 +135,15 @@ proof:
 - `Delegate with:` ticket path/section, recommended assignee, expected artifact
 
 ## Run Hints
-- Optional for trivial/manual tickets. Add when `$work`, `$ralph`, `batch-work`,
+- Optional for trivial/manual tickets. Add when `goal-advisor`, heartbeat,
   remote kanban, Codex Cloud, Symphony, or another unattended runner may use
   this ticket.
 - These hints are advisory context, not runtime authority. Explicit invocation
   still starts work.
 - `Likely size:` `tiny` | `normal` | `large` | `epic`
 - `Goal recommendation:` `none` | `recommend` | `required`
+- `Budget hint:` time/token/model/compute/subagent/review/QA/feedback/spend, or
+  `none`
 - `Compute hint:` `local_shared` | `local_worktree` | `codex_cloud` |
   `symphony` | `none`
 - `Planning hint:` `none` | `light` | `impl_plan` | `reslice`
@@ -165,6 +167,9 @@ proof:
 - `Goal packet:` `none` | `required` | `active`
 - `Program:` `tickets/TASK-XXXX/program.md` or `none`
 - `Progress:` `tickets/TASK-XXXX/progress.md` or `none`
+- `Files:` inline list for the generated Goal prompt, usually this
+  `ticket.md`, `program.md`, and `progress.md`, plus any sibling ticket,
+  board, spec, or artifact files the Goal must read
 - `Generated Goal prompt:` paste or link the current native `/goal` prompt
 - `Metric provider:` `mechanical` | `review` | `agent_qa` |
   `human_feedback` | `market` | `hybrid` | `none`

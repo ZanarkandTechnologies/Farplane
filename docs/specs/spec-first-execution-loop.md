@@ -11,10 +11,10 @@ Define the current canonical execution model for Farplane:
 - post-system-design agent testability planning when the system will be hard for agents to reach, inspect, or coordinate
 - autonomy-readiness capture before long-running or board-draining execution
 - feature-sized work packages
-- Work Admission before planning/building
+- Goal Advisor execution compilation before planning/building
 - per-work-package `impl-plan`
 - per-work-package `$impl` orchestration
-- optional serial `$ralph` dispatch over ready filesystem tickets
+- heartbeat board drain over ready filesystem tickets when needed
 - worker lanes launched by `$impl` where appropriate
 - separate QA and review roles
 - native Goal for semantic continuation and Stop hook for mechanical
@@ -38,9 +38,9 @@ Use these terms precisely:
 - **Run Hints**: compact execution hints for inputs, permissions, compute,
   tools, QA risks, human gates, and agent decision boundaries before
   unattended or delegated work
-- **Work Admission**: `$work` classification of one request, ticket, batch,
-  board-selected unit, epic, or metric loop into Goal, compute, planning,
-  proof, testability, and downstream skill choices
+- **Goal execution compilation**: `goal-advisor` classification of one request,
+  ticket, batch, board-selected unit, epic, or metric loop into listed files,
+  trigger mode, budget, proof, testability, and downstream skill choices
 
 Avoid using bare `lane` when you mean board state.
 
@@ -100,16 +100,16 @@ Each work package should use the compact ticket-as-program body: `Summary`,
 `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`, `State`, `Links`, and
 sparse `Notes`.
 
-Material, delegated, unattended, or `$ralph`-drained packages should also carry
+Material, delegated, unattended, or board-drained packages should also carry
 `Run Hints`: required user inputs/assets, credentials, external services,
 compute, tooling gaps, QA risks, human gates, and agent decision boundaries.
-Those hints help `$work` decide size, Goal policy, compute, planning, proof,
-and batchability, but they do not start execution.
+Those hints help `goal-advisor` decide file lists, trigger mode, budget,
+planning, proof, and batchability, but they do not start execution.
 
-### 3b. Work Admission
+### 3b. Goal Execution Compilation
 
-`$work` runs before planning/building when the right execution mode is not
-obvious.
+`goal-advisor` runs before planning/building when the right execution mode is
+not obvious.
 
 It should classify the unit as:
 
@@ -122,20 +122,22 @@ It should classify the unit as:
 
 It should then choose:
 
-- whether native Goal is unnecessary, recommended, or required
-- whether to use current checkout, local worktree, Codex Cloud, or Symphony
+- whether direct work, native Goal, heartbeat, rollout, feedback, or batch Goal
+  is appropriate
+- which files must be listed inline in the generated prompt
+- the time/token/model/compute/subagent/review/QA/feedback budget
 - whether to bypass planning, use a light plan, run `impl-plan`, or reslice
 - whether proof is smoke, tests, QA, visual QA, review, demo, or a batch ledger
 - whether blockers should be handled by fallback, recorded, or returned to the
   operator
 
-For ticket batches, `$work` requires one proof row per ticket plus one
+For ticket batches, `goal-advisor` requires one proof row per ticket plus any
 batch-level regression row before completion.
 
 ### 4. Planning
 
-`impl-plan` plans one selected work package after `$work` or the operator
-decides material planning is warranted.
+`impl-plan` plans one selected work package after `goal-advisor` or the
+operator decides material planning is warranted.
 
 It should:
 
@@ -199,23 +201,24 @@ Tmux-backed lanes are only an optional visibility/runtime wrapper for long-lived
 visible workers; they are not the core QA delegation rule and not a hidden
 orchestrator.
 
-### 5b. Optional Serial Board Drain
+### 5b. Optional Board-Drain Heartbeat
 
-`$ralph` may run after tickets are prepared, ideally inside a native Goal that
-states the board-drain stopping condition.
+Board drain may run after tickets are prepared as a `goal-advisor` heartbeat
+that states the board-drain stopping condition.
 
 It should:
 
 - read active filesystem tickets
 - select one ready, unblocked, dependency-safe, unclaimed, approval-free ticket
   or a safe related tiny-ticket batch
-- hand the selected work unit to `$work`
+- emit or resume a native Goal prompt with an inline `Files:` list for the
+  selected file set
 - preserve per-ticket proof rows plus a batch regression row for batches
 - reread the board after each work unit
 - stop on no ready work, human gates, blockers, failed handoff, or loop limit
 
-`$ralph` does not replace `$work` or `$impl` and does not own parallel dispatch
-in the current system.
+Board-drain heartbeat does not replace `$impl` and does not own hidden parallel
+dispatch in the current system.
 
 ### 6. QA + Review
 
@@ -325,14 +328,14 @@ Why:
 - logs are still useful supporting evidence
 - video generation is deferred for now
 
-For `$ralph` board drains, use three QA rings:
+For board-drain heartbeats, use three QA rings:
 
 1. cheap per-ticket checks every time
 2. targeted heavy QA only for risky tickets
 3. batch or release QA after a declared milestone when multiple related tickets
    were drained
 
-For `$work` or `batch-work` ticket batches, use a batch ledger:
+For batch Goals, use a batch ledger:
 
 | Ticket | Change | Local proof | Result | Blocker |
 | --- | --- | --- | --- | --- |

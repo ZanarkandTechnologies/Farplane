@@ -67,13 +67,14 @@ flowchart LR
 
   subgraph Skills["Skill Layer"]
     primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>todos.md"]:::callout
-    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute<br/>goal-advisor"]:::callout
+    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute"]:::callout
     intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout
     research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
-    execSkill["farplane-invocation<br/>$work<br/>$impl<br/>$ralph<br/>batch-work"]:::callout
+    goalSkill["goal-advisor<br/>native Goal<br/>heartbeat<br/>batch"]:::callout
+    execSkill["farplane-invocation<br/>$impl"]:::callout
     assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
     externalCli["delegate-cli<br/>delegate-frontend"]:::skill
     closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
@@ -99,7 +100,7 @@ flowchart LR
   end
 
   subgraph Scale["Explicit Future Boundary"]
-    parallel["Parallel Ralph later<br/>leases, worktrees, merge queue,<br/>stale-worker recovery, batch QA"]:::future
+    parallel["Parallel board drain later<br/>leases, worktrees, merge queue,<br/>stale-worker recovery, batch QA"]:::future
   end
 
   request --> localAgents
@@ -205,8 +206,8 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
 - [docs/specs/invocation-and-adapters.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md)
   Purpose: canonical ownership split for BoardAdapter, WorkItem, explicit
-  ticket invocation, ComputeSelector, local Farplane, operator-invoked serial
-  Ralph, and future Symphony/shared board compute modes
+  ticket invocation, ComputeSelector, local Farplane, Goal heartbeat board
+  drain, and future Symphony/shared board compute modes
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
@@ -269,13 +270,10 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   Purpose: end-to-end execution model, lane roles, and orchestration boundaries
 - [docs/specs/invocation-and-adapters.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md)
   Purpose: invocation, adapter, compute, runtime state, and operator-visible surfaces, with `.farplane/` as the canonical live root
-- [skills/ralph/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/ralph/SKILL.md)
-  Purpose: public board context surface that selects one eligible filesystem
-  ticket or safe tiny-ticket batch and hands the work unit to `$work`
-- [skills/work/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/work/SKILL.md)
-  Purpose: Work Admission surface that classifies one request, ticket, batch,
-  board-selected unit, epic, or metric loop before choosing Goal, compute,
-  planning, proof, and downstream skills
+- [skills/goal-advisor/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/goal-advisor/SKILL.md)
+  Purpose: canonical execution compiler that turns listed files, trigger mode,
+  budget, and proof policy into native Goal, heartbeat, batch, rollout,
+  feedback, or direct-route prompts
 - [skills/farplane-invocation/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/farplane-invocation/SKILL.md)
   Purpose: normal-Codex invocation contract that loads `WORKFLOW.md`,
   validates one explicit `FarplaneRunEnvelope`, selects local compute, routes
@@ -326,8 +324,8 @@ When orienting on the repo:
   a second encyclopedia.
 - README is the documentation router; ARCHITECTURE is the ownership map. Update
   both together when the public harness story changes.
-- Farplane has strong single-ticket orchestration and a guarded serial
-  filesystem-ticket dispatcher, but not parallel N-agent dispatch with leases,
-  worktrees, merge policy, stale-worker recovery, and batch QA yet.
+- Farplane has strong single-ticket orchestration and Goal-backed file-list
+  execution, but not parallel N-agent board drain with leases, worktrees, merge
+  policy, stale-worker recovery, and batch QA yet.
 - Doc governance is hybrid by design: structural entrypoint checks are
   mechanical, while narrative drift is audited with a prompt-driven workflow.

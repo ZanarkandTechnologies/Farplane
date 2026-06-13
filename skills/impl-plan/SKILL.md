@@ -71,8 +71,8 @@ interface for every application domain.
 Discovery still belongs to `brainstorm`, `deep-interview`, `prd`, and
 `spec-to-ticket`. `impl-plan` is not the broad intake surface.
 
-`$work` may call `impl-plan` after Work Admission decides that a selected work
-unit is material enough to need file-map-first planning. Tiny direct work can
+`goal-advisor`, `$impl`, or the operator may call `impl-plan` after a selected
+ticket is material enough to need file-map-first planning. Tiny direct work can
 bypass `impl-plan`; vague epics should route back to PRD, system design, or
 `spec-to-ticket` before this skill runs.
 

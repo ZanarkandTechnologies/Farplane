@@ -17,22 +17,23 @@ Farplane should be the work-contract, skill-routing, QA/review, and proof layer
 inside normal Codex. Symphony, Codex cloud, local worktrees, or future services
 may be compute substrates.
 
-Farplane is a ticket invocation layer, not a board daemon. A ticket existing,
+Farplane is a Goal-file invocation layer, not a board daemon. A ticket existing,
 becoming ready, or moving state is not by itself permission to start an agent.
 Execution starts only when a human or external runner makes an explicit
-invocation, such as a local Codex request, an operator-invoked `$ralph` run, a
+invocation, such as a local Codex request, an operator-invoked Goal request, a
 recognized ticket comment, a Codex Cloud task payload, or a Symphony worker
 payload.
 
 The user's current priority is local, conversational execution:
 
 1. The user talks to Codex.
-2. Codex reads a board item, usually a filesystem ticket.
-3. `$work` classifies the work unit and chooses Goal policy, compute,
-   planning, proof, and route.
+2. Codex reads the listed files, usually filesystem tickets plus program and
+   progress files.
+3. `goal-advisor` compiles the work into direct execution, native Goal,
+   heartbeat, rollout, feedback, or batch Goal with an explicit budget.
 4. Farplane policy selects where the accepted work should run.
-5. Codex routes through existing skills such as `impl-plan`, `impl`, `qa`,
-   `review`, `batch-work`, `$ralph`, and `close-ticket`.
+5. Codex routes through existing leaf skills such as `impl-plan`, `impl`, `qa`,
+   `review`, and `close-ticket`.
 6. Farplane writes ticket evidence and a machine-readable `ProofPacket`.
 
 The future Symphony path is intentionally compatible with that same contract:
@@ -51,11 +52,12 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 - Keep local filesystem tickets as the first coding-ticket board.
 - Define a `BoardAdapter` contract that can later support Linear, Notion,
   GitHub, or other boards without changing Farplane's skill/proof layer.
-- Define a `ComputeSelector` that makes target choice explicit per work unit
-  after Work Admission.
+- Define a `ComputeSelector` that makes target choice explicit per Goal file set
+  after Goal execution compilation.
 - Preserve the boundary between Codex, Farplane, and Symphony.
-- Make local conversational execution, serial Ralph, and future Symphony-worker
-  execution share the same `FarplaneRunEnvelope` and `ProofPacket` contracts.
+- Make local conversational execution, Goal heartbeat board drain, and future
+  Symphony-worker execution share the same `FarplaneRunEnvelope` and
+  `ProofPacket` contracts.
 - Keep PRD user-story oriented while system specs carry state, config, failure,
   observability, and conformance detail.
 
@@ -66,8 +68,8 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 - No hidden board listener that auto-spawns agents when a ticket state changes.
 - No automatic execution from ticket creation, readiness, or status movement
   alone.
-- No parallel Ralph implementation here.
-- No replacement for `$work`, `impl-plan`, `impl`, `qa`, `review`, or
+- No parallel board-drain implementation here.
+- No replacement for `goal-advisor`, `impl-plan`, `impl`, `qa`, `review`, or
   `close-ticket`.
 - No standalone `farplane run` product claim. Farplane remains normal Codex
   with installed skills, hooks, templates, and repo-owned rules.
@@ -87,7 +89,7 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 | --- | --- | --- | --- |
 | Symphony spec | Workspaces, claims, retry/reconcile vocabulary, `WORKFLOW.md` discipline, conformance matrix | Treat Symphony as a future caller through the envelope and Done / Proof contract | Do not copy the daemon or state-polling trigger model for local mode now |
 | Codex app primitives | Skills, subagents, worktrees, automations, cloud/local execution as trusted runtime primitives | Route compute targets to these primitives when available | Do not pretend Farplane is a separate execution engine |
-| Farplane current system | Tickets, skills, Work Admission, Stop-hook proof, review gates, Ralph board context | Generalize ticket reading through `BoardAdapter`, explicit invocation, and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
+| Farplane current system | Tickets, skills, Goal Advisor execution compilation, Stop-hook proof, review gates, heartbeat board drain | Generalize ticket reading through `BoardAdapter`, explicit invocation, and compute choice through `ComputeSelector` | Do not put all workflow logic into one giant prompt |
 
 ### Advise Decision
 
@@ -117,14 +119,14 @@ flowchart LR
   classDef proof fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
   classDef future fill:#f5f3ff,stroke:#8b5cf6,color:#111827,stroke-dasharray: 5 3
 
-  User["Local user asks Codex<br/>to run one ticket"]:::local --> Invoke["Explicit invocation<br/>intent to execute"]:::policy
-  Ralph["Operator invokes serial Ralph"]:::local --> Invoke
+  User["Local user asks Codex<br/>to run files or a ticket"]:::local --> Invoke["Explicit invocation<br/>intent to execute"]:::policy
+  Heartbeat["Operator or automation invokes<br/>Goal heartbeat"]:::local --> Invoke
   Symphony["Symphony worker later"]:::future --> Invoke
   Invoke --> Envelope["FarplaneRunEnvelope"]:::policy
   Envelope --> Adapter["BoardAdapter"]:::board
   Adapter --> Item["WorkItem"]:::policy
-  Item --> Work["$work<br/>ExecutionProfile"]:::policy
-  Work --> Selector["ComputeSelector"]:::policy
+  Item --> GoalAdvisor["goal-advisor<br/>files + trigger + budget"]:::policy
+  GoalAdvisor --> Selector["ComputeSelector"]:::policy
   Selector --> Codex["Normal Codex + Farplane skills"]:::compute
   Codex --> Proof["ProofPacket + ticket evidence"]:::proof
 ```
@@ -134,12 +136,12 @@ flowchart LR
 The user explicitly asks Codex to run or prepare one ticket. This is the default
 mode for solo coding work.
 
-### `local_ralph`
+### `local_goal_heartbeat`
 
-Ralph selects one eligible filesystem ticket or a safe related tiny-ticket
-batch only after the operator invokes `$ralph`. It then hands the selected work
-unit to `$work`, which chooses `impl-plan`, `impl`, `close-ticket`, direct
-work, reslicing, or autoresearch. Ralph remains serial until a later parallel
+Goal heartbeat reads listed board or ticket files only after an operator,
+automation, or external runner invokes it. It selects a proceedable file set,
+then `goal-advisor` emits or resumes a native Goal prompt with an inline
+`Files:` list. Board drain remains serial until a later parallel
 lease/worktree/merge policy lands.
 
 ### `shared_board_adapter`
@@ -188,7 +190,7 @@ Trigger examples:
 | Kind | Example | Who converts it to an envelope |
 | --- | --- | --- |
 | `local_chat` | "Run `TASK-0123` locally" | the current Codex session |
-| `local_ralph` | operator invokes `$ralph` | Ralph serial selector |
+| `local_goal_heartbeat` | operator or automation invokes a Goal heartbeat | current Codex session or automation |
 | `ticket_comment` | `@farplane implement` | future board adapter or external runner |
 | `codex_cloud_task` | Codex Cloud task prompt includes the ticket and envelope | operator or future cloud adapter |
 | `symphony_worker` | Symphony claims a work item and writes an envelope file | Symphony worker |
@@ -383,12 +385,12 @@ invocation.
 
 The active runtime surface is intentionally narrow:
 
-- `$work` admits one request, ticket, batch, board-selected unit, epic, or
-  metric loop before choosing Goal, compute, planning, proof, and route.
+- `goal-advisor` compiles one request, ticket, batch, board-selected unit, epic,
+  or metric loop into listed files, trigger mode, budget, proof, and route.
 - `impl-plan` plans one selected work package when material planning is needed.
 - `$impl` is the public build-phase orchestrator for one selected ticket.
-- `$ralph` is an operator-invoked serial board context selector that hands one
-  eligible ticket or safe tiny-ticket batch to `$work`.
+- board drain is a heartbeat Goal mode that selects a proceedable file set and
+  emits or resumes a native Goal prompt.
 - native `/goal` owns semantic continuation when outcome, verification surface,
   constraints, iteration policy, and blocked stop condition can be expressed as
   a Goal.
@@ -396,8 +398,8 @@ The active runtime surface is intentionally narrow:
   and nonce gate.
 
 There is no separate public retired execution surface anymore. Same-ticket
-repeats re-enter `$impl`; serial board drains enter through `$ralph` and then
-`$work`; future external runners enter through an explicit invocation envelope.
+repeats re-enter `$impl`; board drains enter through `goal-advisor` heartbeat;
+future external runners enter through an explicit invocation envelope.
 
 Public docs should describe `.farplane/` as the canonical live runtime root.
 Runtime-only records may live under `.farplane/state/**`, including ticket
@@ -441,22 +443,22 @@ stateDiagram-v2
   Blocked --> ProofPacketWritten
 ```
 
-### Local Ralph
+### Local Goal Heartbeat
 
-Ralph is an operator-invoked selector and board-context loop, not an executor
-replacement and not a background queue runner.
+Goal heartbeat is an operator- or automation-invoked board-context loop, not an
+executor replacement and not a background queue runner.
 
 ```mermaid
 stateDiagram-v2
-  [*] --> RalphInvoked
-  RalphInvoked --> ReadBoard
-  ReadBoard --> SelectTicket
-  SelectTicket --> Stop: none eligible or human gate
-  SelectTicket --> WorkAdmission: eligible ticket or batch
-  WorkAdmission --> BuildEnvelope
-  BuildEnvelope --> WorkOrPhaseSkill
-  WorkOrPhaseSkill --> RereadBoard
-  RereadBoard --> SelectTicket
+  [*] --> HeartbeatInvoked
+  HeartbeatInvoked --> ReadListedFiles
+  ReadListedFiles --> SelectFileSet
+  SelectFileSet --> Stop: none proceedable or human gate
+  SelectFileSet --> GoalAdvisor: ticket/program/progress files
+  GoalAdvisor --> NativeGoalPrompt
+  NativeGoalPrompt --> LeafExecution
+  LeafExecution --> RereadFiles
+  RereadFiles --> SelectFileSet
   Stop --> [*]
 ```
 
@@ -488,7 +490,7 @@ keep proof and ticket evidence valid no matter which runner initiated the run.
 | No explicit invocation | do not run | runner should not create envelope | no proof required unless a prepare attempt already started |
 | Unsupported compute target | block, do not fall back | runner may requeue or mark unsupported | blocker names target and required adapter |
 | Skill route missing | block | worker failure | route error and next action |
-| Work Admission cannot classify | block or reslice | worker records blocked proof | blocker names missing scope, proof, or decision |
+| Goal execution compilation cannot classify | block or reslice | worker records blocked proof | blocker names missing files, trigger, budget, proof, or decision |
 | QA/review fails | verdict `revise` or `block` | Symphony observes non-pass proof | linked review/QA artifact |
 | Runner crashes | local transcript/error | Symphony retry policy | stale/partial proof if available |
 | External board write fails | keep local proof, report write failure | retry or operator-visible error | evidence write failure included |
@@ -519,7 +521,7 @@ Future runner observability:
 - External board adapters must not expose raw credentials to Codex prompts.
 - Compute selection must never silently downgrade from a requested remote/cloud
   target to local.
-- Parallel Ralph must not ship until leases, isolated checkouts, merge policy,
+- Parallel board drain must not ship until leases, isolated checkouts, merge policy,
   stale recovery, and batch QA exist.
 - PRD remains user-story and product-intent oriented; system specs carry
   models, state, failure, and tests; tickets carry execution proof.
@@ -531,20 +533,20 @@ Future runner observability:
 | Workflow loading | `WORKFLOW.md` parses and exposes board, compute, routing, and quality policy | core | invocation helper tests |
 | Board adapter | filesystem tickets normalize into `WorkItem` and satisfy the conformance scaffold | core | `TASK-0123` conformance doc plus board tests |
 | Compute selection | precedence is envelope, ticket, workflow, default | core | `TASK-0114` tests |
-| Work Admission | request, ticket, batch, board unit, epic, or metric loop is classified before compute-heavy execution | core | `$work` skill contract plus skill registry checks |
-| Explicit invocation | tickets and board states are context until local Codex, Ralph, Codex Cloud, Symphony, or another runner passes an invocation envelope | core | `TASK-0121` trigger docs plus invocation tests |
+| Goal execution compilation | request, ticket, batch, board unit, epic, or metric loop is compiled into files, trigger, budget, proof, and route before compute-heavy execution | core | `goal-advisor` skill contract plus skill registry checks |
+| Explicit invocation | tickets and board states are context until local Codex, Goal heartbeat, Codex Cloud, Symphony, or another runner passes an invocation envelope | core | `TASK-0121` trigger docs plus invocation tests |
 | Unsupported compute | `symphony` and `codex_cloud` block locally until adapters exist | core | prepare JSON fixtures |
 | Local conversational | one envelope routes to the expected skill and proof path | core | invocation prepare/write-proof tests |
-| Ralph | serial selector hands one eligible ticket or safe batch to `$work` and stops on human gates | core | Ralph selector tests |
+| Board drain heartbeat | heartbeat selects one proceedable file set or safe batch and stops on human gates | core | Goal Advisor board-drain examples and Goal contract review |
 | Symphony shim | example workflow/prompt shows Symphony launching normal Codex with Farplane installed | extension | `skills/farplane-invocation/templates/symphony-run-envelope.json` and `TASK-0112` smoke |
-| Parallel Ralph | leases, worktrees, merge policy, stale recovery, batch QA specified before implementation | extension | `skills/ralph/references/parallel-ralph.md` and `TASK-0115` design review |
+| Parallel board drain | leases, worktrees, merge policy, stale recovery, batch QA specified before implementation | extension | future Goal heartbeat design review |
 | Spec discipline | complex specs include domain model, state, config, failures, observability, and tests | governance | `TASK-0116` template |
 
 ## 13. Completed V2 Ticket Map
 
 | Ticket | Purpose | Depends on | Expected output |
 | --- | --- | --- | --- |
-| `TASK-0121` | Define explicit invocation triggers | `TASK-0120` | local chat, `$ralph`, comment convention, Codex Cloud, and Symphony trigger vocabulary |
+| `TASK-0121` | Define explicit invocation triggers | `TASK-0120` | local chat, Goal heartbeat, comment convention, Codex Cloud, and Symphony trigger vocabulary |
 | `TASK-0123` | Add board adapter conformance scaffolding | `TASK-0120` | checklist/fixtures that prove adapters normalize work and preserve invocation semantics |
 | `TASK-0122` | Add external compute handoff recipes | `TASK-0121` | Codex Cloud and Symphony handoff recipes with diff/evidence/ProofPacket expectations |
 
@@ -560,7 +562,7 @@ Completed foundation tickets are archived: `TASK-0112`, `TASK-0113`,
 - Add external board clients only after their conformance scaffolding exists.
 - Add Symphony and Codex Cloud examples only as handoff recipes, not as local
   daemons.
-- Add parallel Ralph only after a fresh ticket proves leases, worktrees, merge
+- Add parallel board drain only after a fresh ticket proves leases, worktrees, merge
   policy, stale recovery, and batch QA are worth the cost.
 - Review each implementation against the user story groups:
   - solo local operator,
@@ -573,6 +575,6 @@ Completed foundation tickets are archived: `TASK-0112`, `TASK-0113`,
 - `WORKFLOW.md`
 - `docs/specs/invocation-and-adapters.md`
 - `skills/farplane-invocation/SKILL.md`
-- `skills/ralph/SKILL.md`
+- `skills/goal-advisor/SKILL.md`
 - `skills/farplane-invocation/references/codex-cloud.md`
 - `docs/sources/registry.jsonl`

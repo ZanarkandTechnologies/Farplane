@@ -27,3 +27,16 @@ Keep entries compact. Link artifacts instead of pasting raw transcripts.
 - `next_action:`
 - `blocker:`
 ```
+
+## Completion Entry Template
+
+```markdown
+## 2026-06-12 HH:MM +0800 - completion
+
+- `completed_goal:`
+- `proof:`
+- `review_or_drift:`
+- `portfolio_update:`
+- `next_trigger:` start_child_goal | parent_heartbeat | manual_replan | complete
+- `next_action:`
+```

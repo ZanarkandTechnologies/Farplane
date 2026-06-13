@@ -53,7 +53,8 @@ Use it when:
 - one ticket should move through implementation and, when required, internal `qa` and `demo` subphases
 - the same ticket may need repeated build/review/fix passes until proof is good enough
 - the operator wants visible worker lanes instead of a hidden forever-running orchestrator
-- `$work` has admitted the selected work package for build execution
+- `goal-advisor`, an explicit ticket selector, or the operator has identified
+  the selected work package for build execution
 
 Do not use it when:
 
@@ -64,9 +65,9 @@ Do not use it when:
 ## Contract
 
 - `$impl` owns one selected ticket/work package at a time.
-- `$impl` does not own Work Admission. `$work` decides whether the unit should
-  be direct work, resliced, planned, batched, Goal-backed, metric-driven, or
-  sent to `$impl`.
+- `$impl` does not own Goal architecture. `goal-advisor` decides whether the
+  work should run as direct work, a native Goal, heartbeat, rollout, batch, or
+  feedback loop before a coding leaf is sent to `$impl`.
 - `$impl` treats the selected ticket as the execution unit for the run. Builder,
   review, and QA passes may iterate, but the target is whole-ticket completion
   unless a blocker or explicit follow-up ticket makes narrower scope real.
@@ -162,5 +163,5 @@ Reference:
   autoresearch session or the approved plan explicitly created one; ordinary
   tickets should satisfy their `Done / Proof` contract through normal build, QA, and
   review.
-- Leave Work Admission, board-wide dispatch, worktree orchestration, and
-  binary/runtime cleanup to separate tickets or skills.
+- Leave Goal architecture, heartbeat/board drain, batch compilation, worktree
+  orchestration, and binary/runtime cleanup to separate tickets or skills.

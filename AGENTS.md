@@ -220,14 +220,16 @@ For harness-design research and external patterns:
   snapshots, console logs, and page errors unless the ticket explicitly asks
   for Playwright regression coverage or the flow is already codified in an
   existing Playwright suite. See `MEM-0149`.
-- Treat `$impl` as the public execution surface, with internal `execution_phase` progression through `impl`, `qa`, and `demo` when required. Stop-hook should advance those phases mechanically before final completion review. See `MEM-0049`.
-- Treat `$work` as the Work Admission surface that classifies one request,
-  ticket, ticket batch, board-selected unit, epic, or metric loop before
-  choosing Goal, compute, planning, proof, and downstream skills.
-- Treat `$ralph` as the public Goal-backed board context and serial selection
-  surface. It selects ready filesystem tickets or safe related tiny-ticket
-  batches and hands work units to `$work`; parallel dispatch, leases, merge
-  policy, and batch-QA orchestration remain future work. See `MEM-0074`.
+- Treat `goal-advisor` as the canonical execution compiler for material
+  Farplane work: it turns listed ticket/program/progress/spec/board files,
+  trigger mode, and budget into native Goal, heartbeat, rollout, feedback, or
+  direct-route prompts. `$work`, `$ralph`, and `batch-work` are retired public
+  orchestration surfaces; their remaining useful policies live in Goal
+  standards.
+- Treat `$impl` as the coding-ticket leaf execution surface, with internal
+  `execution_phase` progression through `impl`, `qa`, and `demo` when required.
+  Stop-hook should advance those phases mechanically before final completion
+  review. See `MEM-0049`.
 - Final Stop-hook completion in Farplane should remain mechanical and visible: after impl/qa/demo gates pass, request one linked nonce-backed completion-review receipt from the visible reviewer lane instead of hiding the final judgment in a background review pass. Only active ticket-backed `impl` loops should receive that nonce, and the next final response must echo it as `COMPLETION_PASSWORD: <nonce>` alongside the matching receipt. See `MEM-0064`, `MEM-0067`.
 - Material review should run through the native `reviewer` subagent when
   available. Pass the active ticket or task artifact path, changed files,

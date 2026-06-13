@@ -10,10 +10,16 @@ created_at: 2026-06-12
 ## Goal Mode
 
 - `mode:` `active_goal` | `heartbeat` | `rollout` | `skill_improvement` |
-  `feedback_loop`
+  `feedback_loop` | `batch_goal`
 - `trigger:` `native_goal` | `scheduled_heartbeat` |
   `human_feedback_received` | `manual_resume`
-- `budget:` turn/time/spend/compute limits, or `none`
+- `files:` inline list of ticket/program/progress/spec/board/artifact files the
+  generated Goal prompt must name under `Files:`
+- `budget:` time/token/model/compute/subagent/review/QA/feedback/spend limits,
+  or `none`
+- `time_window:` uninterrupted native Goal window, heartbeat cadence, or `none`
+- `portfolio_boundary:` optional; use only when a longer planning graph is
+  needed beyond the listed files
 
 ## Metric Provider
 
@@ -34,13 +40,24 @@ created_at: 2026-06-12
 
 ## After Each Turn
 
-1. Read `ticket.md`, this `program.md`, and the tail of `progress.md`.
+1. Read every file listed in `files`, including each relevant `progress.md`
+   tail.
 2. Choose the next action from the largest unresolved acceptance, evidence, or
    blocker gap.
 3. Execute one bounded step.
-4. Append a structured entry to `progress.md`.
+4. Append a structured entry to every `progress.md` whose ticket state changed.
 5. Run or request drift check when required by `Drift Policy`.
 6. Continue, stop complete, stop blocked, or wait for heartbeat/feedback.
+
+## After Completion
+
+- `on_goal_window_complete:` append completion progress to changed files, run
+  proof/review, then start/resume the next eligible file set or wait for
+  heartbeat
+- `on_frontier_complete:` run parent heartbeat or replan routine before
+  expanding the next branch
+- `manual_replan_allowed:` yes/no
+- `automatic_replan:` none or cadence/checkpoint
 
 ## Drift Policy
 
@@ -55,6 +72,21 @@ created_at: 2026-06-12
 - `heartbeat_prompt:` path or inline summary
 - `no_op_policy:` log no-op when no useful action exists
 - `wake_condition:` time, feedback file, external event, or manual resume
+- `heartbeat_action:` no_op | start_child_goal | resume_child_goal |
+  request_feedback | replan
+- `selected_file_policy:` output/resume one time/budget-bounded Goal prompt
+  with an inline `Files:` list
+
+## Batch / Board Policy
+
+- `target_set:` none or list/path/query
+- `board_source:` none or ticket index/board path
+- `proceedable_filter:` ready, unblocked, unclaimed, dependencies satisfied,
+  no human gate, required tools available
+- `proof_rows:` one per ticket plus optional batch/integration row
+- `split_when:` attribution unclear, conflicting write scope, separate human
+  gate, unsupported compute, or missing tool
+- `no_op_policy:` log no-op when no proceedable work exists
 
 ## Stop Conditions
 

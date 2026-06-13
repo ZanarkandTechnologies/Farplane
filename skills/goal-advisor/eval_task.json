@@ -1,14 +1,14 @@
 [
   {
     "id": "goal_advisor_material_goal_packet_01",
-    "title": "Goal advisor creates a ticket-backed Goal Packet for material work",
+    "title": "Goal advisor creates a file-list Goal Packet for material work",
     "query": "I want AGI Toy Shop to keep improving its autonomous storefront until the checkout and support workflow are clearly better. How should we use Goal mode?",
     "reference_points": [
-      "Recommends native Goal mode only with a ticket-backed Goal Packet",
-      "Names ticket.md, program.md, and progress.md with distinct ownership",
+      "Recommends native Goal or heartbeat only with durable listed files",
+      "Names ticket.md, program.md, and progress.md under an inline Files list",
       "Chooses a metric or feedback provider without inventing fake numbers",
       "Defines a drift policy and when to use goal-drift-reviewer",
-      "Includes or promises a native /goal prompt after choosing the Goal Packet shape"
+      "Includes or promises a native /goal prompt with Files, Task, Logging, Metric, and After each turn sections"
     ],
     "tags": [
       "skill",
@@ -23,7 +23,7 @@
     "query": "Run a weekly AGI Toy Shop strategy loop that checks store performance, proposes the highest-ROI next task, and asks me for feedback when needed.",
     "reference_points": [
       "Classifies the loop as heartbeat or scheduled continuation rather than an always-active Goal",
-      "Uses the same ticket.md, program.md, and progress.md contract as active Goals",
+      "Uses the same inline Files contract as active Goals",
       "Explains that heartbeat is a trigger, not a separate loop runtime",
       "Includes human feedback as a provider only when useful",
       "Names no-op, blocked, and resume behavior"
@@ -41,9 +41,9 @@
     "query": "I want AGI Toy Shop's social-content skill to keep improving short-form toy launch posts by showing me variants for feedback before we try market tests. How should we use Goal mode?",
     "reference_points": [
       "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime",
-      "Requires a ticket-backed Goal Packet with ticket.md, program.md, and progress.md",
+      "Requires a Goal Packet with an inline Files list that names ticket.md, program.md, and progress.md",
       "Uses optimize-with-human as the human-feedback optimization preset and defines the feedback artifact shape",
-      "Includes a native /goal prompt or prompt plan with Task, Logging, Metric, and After each turn sections",
+      "Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections",
       "Names drift review or inline drift checks before continuing after feedback"
     ],
     "tags": [
@@ -53,5 +53,79 @@
       "optimize-with-human"
     ],
     "notes": "Guards the first intended rollout: content-skill self-improvement with Kenji feedback before market exposure."
+  },
+  {
+    "id": "goal_advisor_portfolio_parent_heartbeat_01",
+    "title": "Goal advisor uses heartbeat for a parent portfolio instead of one giant native Goal",
+    "query": "I want to run AGI Toy Shop as a five-year portfolio with year, quarter, month, week, and task levels. The parent should keep deciding what to do next after leaf tasks finish. Create the Goal setup.",
+    "reference_points": [
+      "Classifies the request as goal_portfolio or parent portfolio work",
+      "Creates or requires a portfolio.md plus ticket.md, program.md, and progress.md",
+      "Uses heartbeat or manual resume for the parent portfolio controller",
+      "Explains that native Goal is for an uninterrupted time/budget window and heartbeat is for paused or recurring parent work",
+      "Defines heartbeat actions such as start_goal, resume_goal, request_feedback, replan, or no_op"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "goal-portfolio",
+      "heartbeat"
+    ],
+    "notes": "Guards the parent orchestration boundary."
+  },
+  {
+    "id": "goal_advisor_portfolio_leaf_native_goal_01",
+    "title": "Goal advisor generates native Goal for the selected timeboxed file set",
+    "query": "Given this portfolio frontier: W1 has TASK-0001 define offer, TASK-0002 landing page, and TASK-0003 tracking. TASK-0001 is the first eligible child. Write the Goal prompt.",
+    "reference_points": [
+      "Generates or recommends a native /goal prompt with an inline Files list for the selected file set",
+      "Uses portfolio files as context only when they are listed and needed",
+      "Requires progress.md logging and completion entries for every changed ticket",
+      "Says completion should return control to the parent heartbeat",
+      "Does not tell the native Goal to expand future portfolio branches"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "leaf-goal"
+    ],
+    "notes": "Guards leaf-only native Goal execution."
+  },
+  {
+    "id": "goal_advisor_portfolio_completion_handoff_01",
+    "title": "Goal advisor handles child completion by updating portfolio and choosing next trigger",
+    "query": "TASK-0001 finished and wrote its artifact. What should the Goal Portfolio do now?",
+    "reference_points": [
+      "Requires appending a child completion entry to progress.md",
+      "Updates the child node in portfolio.md to complete or complete_candidate",
+      "Runs or requests proof/review before treating the child as done",
+      "Starts or resumes the next eligible sibling when one exists",
+      "Runs parent heartbeat or replan when the current frontier is complete"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "completion-handoff"
+    ],
+    "notes": "Guards continuation after leaf completion."
+  },
+  {
+    "id": "goal_advisor_portfolio_noop_heartbeat_01",
+    "title": "Goal advisor logs no-op heartbeat when nothing useful can happen",
+    "query": "The AGI Toy Shop portfolio is waiting for Kenji's content labels before W2 can be planned. What should the heartbeat do?",
+    "reference_points": [
+      "Chooses no_op or request_feedback instead of inventing unrelated work",
+      "Logs the heartbeat/no-op in progress.md",
+      "Preserves the current frontier and hold conditions",
+      "Does not expand W2 before the required evidence arrives",
+      "Does not create hidden automation or Notion sync"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "heartbeat",
+      "no-op"
+    ],
+    "notes": "Guards waiting behavior for long-running portfolios."
   }
 ]

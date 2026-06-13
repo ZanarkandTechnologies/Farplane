@@ -55,6 +55,12 @@ Invocation and runtime specs:
   compute selection, local execution, runtime surface boundaries, and future
   external-runner contract.
 
+Product feature specs:
+
+- `inspiration-vault.md` - skill-backed inspiration capture, LocalPinterest
+  storage, Farplane UI browsing/graph/recall surface, and creative grounding
+  contract.
+
 Meta-harness specs:
 
 - `self-improvement-contracts.md` - canonical signatures for gap analysis,
