@@ -39,6 +39,10 @@ Execution and proof specs:
 - `goal-loop-contract.md` - Goal Packet model for native Codex Goals backed by
   tickets, `program.md`, `progress.md`, drift review, human feedback, heartbeat
   triggers, and rollout patterns.
+- `program-notation.md` - draft shared vocabulary for params, steps, skill
+  bindings, gates, metrics, evidence, automation previews, and surface-specific
+  program projections across skills, tickets, Goal Packets, portfolios, and
+  harness programs.
 
 Planning and authoring specs:
 
