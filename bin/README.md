@@ -40,6 +40,9 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `validators/check_tier0_phase_protocol.py` - Tier 0 phase-protocol migration
   guard
 - `validators/check_skill_capabilities.py` - skill capability fixture validator
+- `validators/check_template_version_metadata.py` - staged metadata and
+  version-bump guard for template files listed in
+  `rules/template-version-watch.toml`
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `self_improve_hook_probe.py` - deterministic probe for the hook-backed
   skill-opportunity sidecar; can seed rolling windows, force dry-run reviews,
@@ -283,6 +286,7 @@ already advanced.
 - `python3 -m py_compile bin/validators/check_harness_invariants.py bin/validators/test_harness_invariants.py`
 - `python3 -m py_compile bin/validators/check_doc_parity.py bin/validators/test_doc_parity.py`
 - `python3 -m py_compile bin/validators/check_doc_refs.py bin/validators/test_check_doc_refs.py`
+- `python3 -m unittest bin/validators/test_check_template_version_metadata.py`
 - `python3 -m py_compile bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py`
 - `python3 -m py_compile skills/ralph/scripts/select_next_ticket.py`
 - `python3 skills/ralph/scripts/test_select_next_ticket.py`

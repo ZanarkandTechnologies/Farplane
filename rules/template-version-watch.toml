@@ -1,0 +1,29 @@
+[template_version_watch]
+# Humans own this watchlist. Add exact paths or globs here when a template
+# should require metadata and a version bump on content edits.
+paths = [
+  "skills/skill-creator/references/SKILL_TEMPLATE.md",
+  "templates/global/AGENTS.md",
+  "tickets/templates/ticket.md",
+]
+
+globs = [
+  "templates/*.md",
+  "templates/**/*.md",
+  "templates/*.tpl",
+  "templates/**/*.tpl",
+  "skills/*/templates/*",
+  "skills/*/templates/**/*",
+  "tickets/templates/*",
+  "tickets/templates/**/*",
+]
+
+exclude_globs = [
+  "skills/skill-maintenance/templates/archive/*",
+  "skills/skill-maintenance/templates/archive/**/*",
+  "tickets/archive/*",
+  "tickets/archive/**/*",
+  "**/__pycache__/**/*",
+  "**/*.pyc",
+  "**/*lock.yaml",
+]
