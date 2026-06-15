@@ -9,6 +9,7 @@ feature_refs:
   - FEAT-0054
 methods:
   - eval:onboarding
+  - eval:consolidate
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -16,18 +17,18 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill when the user wants to run, create, or repair a first real eval
-for an agent harness, prompt, skill, or workflow. It is intentionally
-harness-native: project working evals live under `.farplane/evals` for Codex
-or Claude runs. Repo-owned reusable task suites live under
-`skills/eval/examples/`. Skill-specific evals live next to their owning skill
-as `skills/<skill-name>/eval_task.json`.
+Use this skill when the user wants to run, create, repair, or consolidate a
+real eval for an agent harness, prompt, skill, or workflow. It is intentionally
+harness-native: project working evals live under `.farplane/evals` for Codex or
+Claude runs. Repo-owned reusable task suites live under `skills/eval/examples/`.
+Skill-specific evals live next to their owning skill as
+`skills/<skill-name>/eval_task.json`.
 
 ## Skill Signature
 
 ```text
-eval(task_intent, harness?, target_root?, mode?) -> eval_case? + run_summary? + next_fix
-state: reads(existing evals, skill eval_task.json files, fixtures, task context, expected behavior); writes(eval tasks, hardcase metadata, run artifacts)
+eval(task_intent, harness?, target_root?, mode?) -> eval_case? + run_summary? + consolidation_report? + next_fix
+state: reads(existing evals, skill eval_task.json files, fixtures, task context, expected behavior, eval-drain processed state); writes(eval tasks, hardcase metadata, run artifacts, consolidation reports, processed state)
 gates: expected_behavior:testable; baseline_before_mutation; hardcase:sanitized_and_reusable
 routes: optimize-harness | self-improve | skill-maintenance | deliberative-advice | agent-behavior-test | agent-qa-test | review
 fails: wording-only eval; stores raw private transcript; delays obvious regression coverage; marks hardcase without benchmark value
@@ -40,6 +41,10 @@ Common modes:
 - `hardcase`: mark an eval case as unusually difficult, reusable,
   benchmark-worthy, or saleable after sanitization. A hardcase is still a
   runnable eval case, not a separate capture backlog.
+- `consolidate`: run the eval drain. Fetch skill eval files edited since the
+  last drain, spawn one bounded `consolidate_eval` lane per changed file, and
+  apply only changes that make evals less noisy without losing distinct
+  coverage.
 
 ## Default Fixture
 
@@ -77,6 +82,10 @@ or proof behavior without touching real files.
   - [ ] 6. If improving how the `eval` skill writes evals across iterations,
     load [self-improve program](self-improve/program.md) and log ideas, tests,
     Kenji feedback, and accepted lessons there.
+  - [ ] 7. If consolidating evals, load
+    [eval consolidation](references/eval-consolidation.md), run
+    `fetch_evals_edited_since_last_run`, and hand each changed eval file to a
+    bounded `consolidate_eval` subagent or equivalent isolated review lane.
 - [ ] 3. Write eval tasks with the core shape: realistic `query`, shared fixture
   in `config.json` plus `contexts/*`, visible `reference_points`, narrow tags,
   and no live side effects unless the runner owns a sandbox fixture.
@@ -87,9 +96,13 @@ or proof behavior without touching real files.
 - [ ] 5. When skill eval `reference_points` become reusable runtime guardrails,
   route writeback through `skill-maintenance` to update the owning skill's
   checklist reference, final QA checklist, or validator/hook candidate.
-- [ ] 6. Summarize findings from `summary.json` and task detail artifacts: verdict
-  counts, important failures, likely cause, and the next concrete fix.
-- [ ] 7. Review before completion.
+- [ ] 6. For eval drain work, keep immediate lesson/trouble-derived evals in
+  `eval_task.json`; the drain may merge, rewrite, or archive already-landed rows
+  only when the consolidation report preserves every distinct failure mode.
+- [ ] 7. Summarize findings from `summary.json`, task detail artifacts, or eval
+  drain reports: verdict counts or changed files, important failures or coverage
+  risks, likely cause, and the next concrete fix.
+- [ ] 8. Review before completion.
   - [ ] If the eval task changes a Tier 1, meta, `eval`, cross-skill, or
     precedent-setting behavior, record the `deliberative-advice` recommendation
     or the explicit reason it was not needed.
@@ -103,6 +116,11 @@ or proof behavior without touching real files.
 Use method address `eval:onboarding` when the user needs a clean-room first
 eval shape, starter JSON tasks, judge prompt guidance, or a minimal smoke
 workflow before a full eval suite exists.
+
+Use method address `eval:consolidate` when the user needs the weekly eval drain:
+fetch eval files edited since the last run, dispatch one `consolidate_eval`
+subagent per changed file, and produce less noisy eval rows without delaying
+fresh regression coverage.
 
 ## Good Eval Shape
 
@@ -199,6 +217,15 @@ Run installed evals:
 python3 .farplane/evals/run_evals.py run --harness codex --label baseline --limit 1
 ```
 
+Fetch skill eval files edited since the last eval drain:
+
+```bash
+python3 skills/eval/scripts/fetch_evals_edited_since_last_run.py \
+  --project-root . \
+  --state .farplane/state/eval-drain/processed.jsonl \
+  --pretty
+```
+
 For Claude, use the same `.farplane/evals/run_evals.py` path with
 `--harness claude`. For custom harnesses, pass `--eval-dir` plus command
 templates.
@@ -230,6 +257,11 @@ The runner writes the proof surfaces this skill should summarize:
 - [references/eval-writing-rubric.md](references/eval-writing-rubric.md) -
   load when judging eval-task quality, batch ROI, owner locality, breadth/depth,
   and skill-local versus workflow-level placement.
+- [references/eval-consolidation.md](references/eval-consolidation.md) - load
+  when running the weekly eval drain, writing the automation prompt, or
+  dispatching per-file `consolidate_eval` lanes.
+- [references/automation-prompt.md](references/automation-prompt.md) - use when
+  installing or updating a weekly automation that invokes eval consolidation.
 - [self-improve/program.md](self-improve/program.md) - Goal-backed human-feedback memory
   for improving eval-writing patterns through ideas, tests, feedback, and
   accepted lessons.
@@ -251,6 +283,8 @@ The runner writes the proof surfaces this skill should summarize:
 - Do not store raw private transcripts, secrets, local handles, or unsanitized
   user context inside a hardcase eval.
 - Do not delay obvious regression coverage into a future drain process.
+- Do not consolidate evals by count alone. Preserve hardcases and distinct
+  failure modes unless a stronger replacement explicitly covers them.
 
 ## Output
 
@@ -260,5 +294,6 @@ Return or write:
 - `mode`
 - `hardcase_metadata` when applicable
 - `run_artifacts`
+- `consolidation_report` and `processed_state_delta` when applicable
 - `summary`
 - `next_fix`

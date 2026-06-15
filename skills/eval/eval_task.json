@@ -110,5 +110,23 @@
       "regression"
     ],
     "notes": "Catches delayed-proof drift where known behavior regressions are stored as prose memory instead of runnable evals."
+  },
+  {
+    "id": "eval_consolidation_preserves_immediate_coverage_01",
+    "title": "Eval consolidation preserves immediate regression coverage",
+    "query": "The AGI Toy Shop learning drain is creating a bunch of overlapping evals after real harness misses. Can we hold those in a temporary queue and only move the best ones into eval_task.json during the weekly cleanup?",
+    "reference_points": [
+      "Rejects delaying testable lesson/trouble-derived evals until the weekly drain",
+      "Keeps fresh regression coverage in the owning skills/<skill>/eval_task.json file first",
+      "Defines the weekly drain as a later consolidation pass over already-landed evals",
+      "Uses fetch_evals_edited_since_last_run or equivalent content-hash discovery for changed eval files",
+      "Routes each changed eval file to a bounded consolidate_eval subagent or isolated review lane"
+    ],
+    "tags": [
+      "skill",
+      "eval",
+      "consolidation"
+    ],
+    "notes": "Protects the TASK-0200 lifecycle: immediate eval rows are the safety net; weekly eval drain reduces noise afterward."
   }
 ]
