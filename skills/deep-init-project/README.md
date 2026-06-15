@@ -1,11 +1,15 @@
 # Deep Init Project
 
-Bootstrap or migrate a project into the docs-first, ticket-first harness model.
+Bootstrap or migrate a project into the Farplane docs-first, ticket-first
+harness model.
 This setup should start with a deep-interview-quality bootstrap intake, then
 scaffold optional `.githooks` samples plus project-local `scripts/pre_*_check.sh`
 files for local quality gates, a Codex SDK pre-push diff-review loop, plus
 repo-owned runtime and `qa/` guidance so agents can launch the app and capture
 evidence without guessing, all without enabling hooks automatically.
+
+Every initialized project is a Farplane project by default. Use
+`harness_depth=none` only for substrate-only migrations.
 
 ## Use Cases
 
@@ -30,7 +34,9 @@ should also name the canonical app-only run path, canonical full QA or
 evidence-capture path, required services such as DB or orchestration tools, and
 any port or environment-variable assumptions.
 
-That also writes `docs/bootstrap-brief.md`, `qa/README.md`,
+That also writes `farplane/README.md`, `farplane/harness.md`,
+`farplane/goals.md`, `farplane/automations.md`, `farplane/bindings.md`,
+`farplane/evals.md`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
 `scripts/pre_push_check.sh`, review docs, and review-agent helper scripts as
@@ -63,6 +69,12 @@ Then copy in:
 - `PROJECT_RULES.md`
 - `AGENTS.md`
 - `ARCHITECTURE.md`
+- `farplane/README.md`
+- `farplane/harness.md`
+- `farplane/goals.md`
+- `farplane/automations.md`
+- `farplane/bindings.md`
+- `farplane/evals.md`
 - `docs/TASTE.md`
 - `qa/`
 - `tickets/templates/ticket.md`
@@ -165,6 +177,13 @@ Those can come after one clean ticket run.
 - [ ] `PROJECT_RULES.md` names the authoritative app-only and QA/evidence launch commands
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists
+- [ ] `farplane/README.md` exists
+- [ ] `farplane/harness.md` exists or `harness_depth=none` is recorded
+- [ ] `farplane/goals.md` exists or `harness_depth=none` is recorded
+- [ ] `farplane/automations.md` exists and names ticket sources, schedules, grouped jobs, report paths, and ledger path
+- [ ] `farplane/bindings.md` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
+- [ ] `farplane/evals.md` exists or `harness_depth=none` is recorded
+- [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
 - [ ] `docs/code_review.md`, `docs/review-agent.md`, and review helper scripts exist

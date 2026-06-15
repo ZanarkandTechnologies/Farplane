@@ -1,7 +1,7 @@
 ---
 name: deep-init-project
 version: 3.0.0
-description: "Turn a new-project intake into docs-first operating files, runtime commands, QA gates, and reusable planning/build prompts."
+description: "Turn a new-project intake into a Farplane project with docs, tickets, runtime commands, QA gates, harness config, and reusable planning/build prompts."
 tier: 3
 group: coding
 source: local
@@ -34,17 +34,56 @@ source: local
   scaffold changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-One-time setup for new projects. This skill should not feel like a shallow
-scaffold dump. Start with a deep-interview-quality bootstrap intake, capture a
-visible `docs/bootstrap-brief.md`, then scaffold a docs-first workflow and the
-project's initial quality gates plus a repo-owned `qa/` cookbook surface for
-agent-efficient verification guidance.
+One-time setup for new projects. Every initialized project is a Farplane
+project by default: it gets visible files, tickets, docs, bindings,
+automations, and a lightweight harness surface. This skill should not feel like
+a shallow scaffold dump. Start with a deep-interview-quality bootstrap intake,
+capture a visible `docs/bootstrap-brief.md`, then scaffold a docs-first
+workflow and the project's initial quality gates plus a repo-owned `qa/`
+cookbook surface for agent-efficient verification guidance.
+
+## Skill Signature
+
+```text
+deep_init_project(project_root?, project_idea?, repo_shape?, profile?, harness_depth?)
+  -> project_substrate
+   + farplane_config
+   + initial_harness_program?
+   + ticket_system
+   + qa_surface
+   + runtime_contract
+   + next_handoff
+state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds and proposed next tickets
+gates: existing_files_preserved; human_gates_named; secrets_not_written; harness_depth_named; no_hidden_automation
+routes: deep-interview | harness-creator | prd | spec-to-ticket | goal-advisor | review
+fails: creates only code scaffolding with no Farplane project config; asks for mode=farplane; hides harness setup from the operator; overwrites existing project state silently
+```
+
+`harness_depth` is the only project-harness knob:
+
+```text
+none      # substrate only; no harness/goals/evals beyond existing files
+light     # minimal farplane/*.md files
+standard  # default Farplane project setup
+full      # richer business/product/content operating program
+```
+
+When `harness_depth != none`, use `harness-creator` as the internal
+operating-program phase after substrate setup.
 
 ## What This Sets Up
 
 - `PROJECT_RULES.md` (project-specific stack, canonical runtime/QA commands, and conventions)
 - `AGENTS.md` (operational contract loaded every loop)
 - `ARCHITECTURE.md` (top-level system map for the repo)
+- `farplane/README.md` (tracked project framework index)
+- `farplane/harness.md` (tracked mission, values, modes, systems, feedback loops)
+- `farplane/goals.md` (tracked north star, KPIs, current milestone, holds)
+- `farplane/automations.md` (tracked automation manifest for ticket drainer,
+  weekly PM, grouped jobs, ticket sources, report paths, and ledger path)
+- `farplane/bindings.md` (tracked non-secret project coordinates that bind
+  generic skills to this project)
+- `farplane/evals.md` (tracked project proof and eval policy)
 - `docs/` state (`bootstrap-brief.md`, `prd.md`, `specs/README.md`, `specs/`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`, `LESSONS.md`)
 - `qa/` state (`README.md`, `AGENTS.md`, `cookbook/README.md`, `cookbook/TEMPLATE.md`)
 - `tickets/` state (`*.md`, `archive/`, `templates/`, optional `README.md`)
@@ -189,25 +228,34 @@ repo.
    package-manager-native scripts under the hood.
 3. Copy `references/AGENTS_TEMPLATE.md` -> `AGENTS.md`.
 4. Copy `references/ARCHITECTURE_TEMPLATE.md` -> `ARCHITECTURE.md`.
-5. Create docs state:
+5. Create Farplane framework config:
+   - `mkdir -p farplane`
+   - copy `references/FARPLANE_README_TEMPLATE.md` -> `farplane/README.md`
+   - copy `references/HARNESS_TEMPLATE.md` -> `farplane/harness.md`
+   - copy `references/GOALS_TEMPLATE.md` -> `farplane/goals.md`
+   - copy `references/AUTOMATION_TEMPLATE.md` -> `farplane/automations.md`
+   - copy `references/BINDINGS_TEMPLATE.md` -> `farplane/bindings.md`
+   - copy `references/EVALS_TEMPLATE.md` -> `farplane/evals.md`
+   - keep `.farplane/` for ignored local runtime state, not tracked config
+6. Create docs state:
    - `mkdir -p docs/specs`
    - copy `references/BOOTSTRAP_BRIEF_TEMPLATE.md` -> `docs/bootstrap-brief.md`
    - copy `references/SPECS_README_TEMPLATE.md` -> `docs/specs/README.md`
    - `touch docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TASTE.md docs/TROUBLES.md docs/LESSONS.md`
-6. Create QA state:
+7. Create QA state:
    - `mkdir -p qa/cookbook`
    - copy `references/qa/AGENTS.md` -> `qa/AGENTS.md`
    - copy `references/qa/README.md` -> `qa/README.md`
    - copy `references/qa/cookbook/README.md` -> `qa/cookbook/README.md`
    - copy `references/qa/cookbook/TEMPLATE.md` -> `qa/cookbook/TEMPLATE.md`
-7. Create tickets state:
+8. Create tickets state:
    - `mkdir -p tickets tickets/archive tickets/templates`
    - copy the ticket template into `tickets/templates/`
-8. Create optional git hook samples:
+9. Create optional git hook samples:
    - `mkdir -p .githooks`
    - copy the hook README and the sample `pre-commit` / `pre-push` scripts
    - do **not** activate them automatically
-9. Create optional repo-local validation scripts:
+10. Create optional repo-local validation scripts:
    - `mkdir -p scripts`
    - copy `pre_commit_check.sh` and `pre_push_check.sh`
    - keep the file-size scan as-is
@@ -215,7 +263,7 @@ repo.
      `build`, and optional `desloppify`
    - align hook activation, local heavy checks, and any separate CI/deploy gate
      with the brief instead of guessing
-10. Create local Codex SDK review-loop surfaces:
+11. Create local Codex SDK review-loop surfaces:
     - copy `CODE_REVIEW_TEMPLATE.md` -> `docs/code_review.md`
     - copy `REVIEW_AGENT_TEMPLATE.md` -> `docs/review-agent.md`
     - copy `COLLECT_REVIEW_CONTEXT_TEMPLATE.sh` ->
@@ -228,7 +276,9 @@ repo.
       `review:agent` / `review:prepush` package scripts
     - run the Farplane install script when the project should use the installed
       reusable review contract at `~/.codex/skills/code-review/SKILL.md`
-11. Fill `PROJECT_RULES.md`, `docs/bootstrap-brief.md`, and the first relevant
+12. Fill `PROJECT_RULES.md`, `docs/bootstrap-brief.md`, `farplane/harness.md`,
+    `farplane/goals.md`, `farplane/bindings.md`, `farplane/automations.md`,
+    `farplane/evals.md`, and the first relevant
     `qa/` cookbook page with the canonical runtime contract:
     - app-only run path
     - QA/evidence run path
@@ -237,19 +287,19 @@ repo.
     - frontend UI initialization plan when the repo has UI: shadcn-capable stack
       setup, darkmatter command result, explicit exception when skipped,
       tooltip-over-explainer rule, and visual QA evidence path
-12. Select or record the project profile from
+13. Select or record the project profile from
     `references/project-profiles.md`; preserve its component set, advice axes,
     prototype gates, and downstream pipeline handoff in `docs/bootstrap-brief.md`.
-13. Fill the bootstrap brief's `Agent Experience / Testability` section so the
+14. Fill the bootstrap brief's `Agent Experience / Testability` section so the
     repo has an early answer for how agents should reach, inspect, stabilize,
     and verify important app states.
-14. Fill the bootstrap brief's `Autonomy Readiness` section so future
+15. Fill the bootstrap brief's `Autonomy Readiness` section so future
     `spec-to-ticket`, `impl-plan`, and `$ralph` runs know what the agent may do
     without stopping and what must remain a human gate.
-15. If the idea is still open-ended, use `brainstorm`.
-16. If the first slice or bootstrap shape is still vague, use `deep-interview`.
-17. Use `prd` skill for requirements and PRD authoring with human feedback when needed.
-18. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
+16. If the idea is still open-ended, use `brainstorm`.
+17. If the first slice or bootstrap shape is still vague, use `deep-interview`.
+18. Use `prd` skill for requirements and PRD authoring with human feedback when needed.
+19. Use `spec-to-ticket` skill to convert one SLC slice into raw tickets in `tickets/`.
 
 ### Existing-project migration
 
@@ -274,6 +324,14 @@ Migration guide:
   must obey on nearly every code change; put expanded examples and exact
   commands in `PROJECT_RULES.md`.
 - `ARCHITECTURE.md` gives the repo one top-level system map instead of pushing all orientation into `README.md` or `AGENTS.md`.
+- `farplane/harness.md` and `farplane/goals.md` make the project visible to the
+  AI office as an operating harness, not just a code repo.
+- `farplane/automations.md` isolates recurring job config so it can compile
+  into live Codex automations without giving those automations broad control
+  over the whole harness.
+- `farplane/bindings.md` isolates project-specific external coordinates from
+  skill behavior so generic skills can be reused across projects without
+  duplicating provider config files.
 - `docs/` is the canonical project state for planning and execution.
 - `docs/bootstrap-brief.md` keeps bootstrap decisions on a visible project
   surface instead of burying them in chat.
@@ -286,11 +344,11 @@ Migration guide:
 - `docs/TASTE.md` is the canonical visual doctrine, so tickets and QA can reference one shared style source.
 - `docs/TROUBLES.md` is the append-only raw feedback log for repeated misses, failed attempts, blockers, and correction pain points.
 - `docs/LESSONS.md` is the distilled learning log for prompt, skill, eval, and policy improvements after a fix, review pass, eval pass, or trouble drain.
-- New projects should have a weekly learning drain habit: read recent
+- New projects should have a weekly skill-hardening habit: read recent
   `docs/TROUBLES.md` and `docs/LESSONS.md`, select rows that imply an actual
-  harness/process fix, call the owning optimizer workflow such as
-  `optimize-harness`, and record processed rows in runtime state instead of
-  deleting ledger history.
+  eval, gotcha, skill, or harness/process fix, call `skill-maintenance(mode:
+  harden_skill)` or the owning optimizer workflow, and record processed rows in
+  runtime state instead of deleting ledger history.
 - `tickets/` is the canonical execution surface, so planning, build, and QA work from one file per active ticket, with completed tickets moved into `tickets/archive/`.
 - `.githooks/` gives each repo one visible place for optional local gates
   without silently mutating git config during bootstrap.
