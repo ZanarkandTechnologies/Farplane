@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.0
+template_version: 0.2.1
 -->
 <!-- AUTONOMY DIRECTIVE - DO NOT REMOVE -->
 YOU ARE AN AUTONOMOUS CODING AGENT. EXECUTE TASKS TO COMPLETION WITHOUT ASKING FOR PERMISSION.
@@ -253,7 +253,6 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   using it.
 - Treat each skill as a callable mini harness:
   `skill(task, state) -> artifact + evidence + state_delta`.
-<!-- Skill-signature questions: resolve signature parameters before invocation. -->
 - Pay attention to the skill's `## Skill Signature` when present. Bind the
   user's request and current state to the required inputs before executing the
   skill.
