@@ -2,8 +2,12 @@
 kind: project-harness
 status: draft
 created_at: TODO
+updated_at: TODO
+template_id: project-harness
+template_version: "0.1.0"
 project_id: TODO
 automation_status: preview
+framework_template_version: "0.1.0"
 ---
 
 # Project Harness
@@ -12,13 +16,22 @@ automation_status: preview
 
 ```harness-program
 project "TODO" {
-  values: [
-    impact.medium,
-    loyal_users.medium,
-    trust.high,
-    money.medium,
-    efficiency.medium
-  ]
+  values {
+    mission: "TODO: why this project or business exists"
+    operating_principles: [
+      "TODO: principle that should guide repeated decisions"
+    ]
+    priorities: [
+      impact.medium,
+      loyal_users.medium,
+      trust.high,
+      money.medium,
+      efficiency.medium
+    ]
+    non_tradeoffs: [
+      "TODO: what cannot be sacrificed for local wins"
+    ]
+  }
 
   modes: [business]
 
@@ -32,28 +45,28 @@ project "TODO" {
     bet: "TODO: who finds this first?"
     kpi: missing_instrumentation("reach/acquisition baseline")
     evidence: ref("TODO")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   axis activate_first_value {
     bet: "TODO: what is first value?"
     kpi: review_metric("first-value clarity")
     evidence: ref("TODO")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   axis retain_loyalty {
     bet: "TODO: why would they return?"
     kpi: human_feedback("would return / would not return")
     evidence: ref("TODO")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   axis efficiency_capability {
     bet: "TODO: what can be made easier or more repeatable?"
     kpi: learning_metric("cycle-time or effort baseline")
     evidence: ref("TODO")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   system ticket_loop {
@@ -65,18 +78,18 @@ project "TODO" {
   system feedback_collection {
     status: missing_instrumentation
     evidence: ref("TODO")
-    action: create_ticket("define first feedback loop")
+    action: ticket(first_feedback_signal_access)
   }
 
   system analytics {
     status: missing_instrumentation
     evidence: ref("TODO")
-    action: create_ticket("define first analytics baseline")
+    action: ticket(metrics_source_access)
   }
 
   skill goal_advisor {
     status: ready
-    use: "compile the current frontier or heartbeat"
+    use: "compile the current milestone or heartbeat"
   }
 
   skill deep_init_project {
@@ -84,38 +97,88 @@ project "TODO" {
     use: "create standard project systems only if missing"
   }
 
-  heartbeat hourly_board_drain {
-    trigger: "hourly or when operator is inactive"
-    first: drain_proceedable_tickets
-    else: idle_gap_audit
-    skills: [goal_advisor, review]
+  skill notion_memory_sync {
+    status: needs_operator_setup
+    requires: [notion_project_access]
+    use: "sync shared project memory and ticket state"
+    action: ticket(notion_project_access)
+  }
+
+  skill telegram_notifications {
+    status: needs_operator_setup
+    requires: [telegram_notification_target]
+    use: "send review, blocker, and feedback requests"
+    action: ticket(telegram_notification_target)
+  }
+
+  skill metrics_ingest {
+    status: needs_access
+    requires: [metrics_source_access]
+    use: "read product, content, or business metrics"
+    action: ticket(metrics_source_access)
+  }
+
+  skill first_feedback_signal {
+    status: needs_access
+    requires: [first_feedback_signal_access]
+    use: "TODO: read the first concrete feedback signal, such as Instagram attention graph, YouTube retention, PostHog activation funnel, sales-call objections, customer interviews, or operator usefulness labels"
+    action: ticket(first_feedback_signal_access)
+  }
+
+  ticket notion_project_access {
+    type: unblock
+    human_step: "Grant access or provide the shared Notion project/database link"
+    why: "Shared team memory and ticket state cannot sync without access"
+    enables: [notion_memory_sync]
+    fallback: use_existing("local filesystem memory only")
+    gates: [no_account_changes]
+  }
+
+  ticket metrics_source_access {
+    type: unblock
+    human_step: "Connect read-only analytics access or provide a recurring export"
+    why: "The harness cannot optimize KPIs from metrics that do not exist"
+    enables: [metrics_ingest]
+    fallback: human_feedback("operator labels examples until metrics exist")
+    gates: [no_account_changes, no_private_scraping]
+  }
+
+  ticket first_feedback_signal_access {
+    type: unblock
+    human_step: "TODO: connect read-only access, provide recurring export, approve connector setup, or define operator labels for the first feedback signal"
+    why: "The project cannot refine strategy until at least one honest feedback loop exists"
+    enables: [first_feedback_signal, weekly_pm_update]
+    fallback: human_feedback("operator labels outputs manually until the concrete signal exists")
+    gates: [no_account_changes, no_private_scraping]
+  }
+
+  heartbeat ticket_update {
+    trigger: "compiled from farplane/automations.md settings.ticket_drainer"
+    bindings: "farplane/bindings.md"
+    first: ticket_drainer
+    skills: [impl_plan, goal_advisor, review]
     gates: [no_external_side_effects, ticket_or_goal_required_for_edits]
-    output: "artifacts/heartbeat/hourly-board-drain.md"
+    output: ".farplane/reports/ticket-update/latest.md"
   }
 
-  heartbeat daily_chief_of_staff {
-    trigger: "daily"
-    first: summarize_opportunities_risks_blockers
-    skills: [weekly_strategy_analysis, goal_advisor, review]
-    gates: [no_external_side_effects]
-    output: "artifacts/strategy/daily-chief-of-staff.md"
-  }
-
-  heartbeat weekly_strategy_refresh {
-    trigger: "weekly"
-    first: refresh_strategy_from_findings_metrics_feedback
-    skills: [weekly_strategy_analysis, goal_advisor, review]
+  heartbeat weekly_pm_update {
+    trigger: "compiled from farplane/automations.md settings.weekly_pm"
+    bindings: "farplane/bindings.md"
+    first: grouped_jobs
+    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy]
+    skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
+    delegate: delegate(ref("project-harness.md"), "refresh strategy, memory, and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
     gates: [review_before_external_side_effects]
-    output: "artifacts/strategy/weekly-strategy-refresh.md"
+    output: ".farplane/reports/weekly-pm/latest.md"
   }
 
-  frontier {
-    task: "TODO: first evidence-producing frontier"
+  milestone first_evidence_loop {
+    task: "TODO: first evidence-producing milestone"
     route: goal_advisor
-    metric: review_metric("frontier produces useful evidence")
+    metric: review_metric("milestone produces useful evidence")
     files: ["project-harness.md"]
     gates: [no_publish, no_spend, no_account_changes]
-    stop_when: "frontier handoff is ready or blocked by missing approval/data"
+    done_when: "milestone handoff is ready or blocked by missing approval/data"
   }
 }
 ```
@@ -142,6 +205,15 @@ project "TODO" {
 - `budgets:`
 - `taste_or_strategy_questions:`
 
+## Unblock Tickets
+
+Create tickets for each unblock/setup task that blocks the milestone,
+instrumentation, memory sync, notifications, or feedback loops.
+
+| Ticket | Type | Human Step | Enables | Fallback |
+| --- | --- | --- | --- | --- |
+| `tickets/TASK-XXXX-unblock-*.md` | unblock |  |  |  |
+
 ## Goal Advisor Handoff
 
 - `files:`
@@ -160,9 +232,9 @@ Use these only when the program becomes hard to audit.
 
 ### Capability Map
 
-| Capability | Program Node | Existing Skill / Tool | Status | Decision |
-| --- | --- | --- | --- | --- |
-|  |  |  | ready / needs_config / needs_reference / needs_eval / needs_wrapper / missing / defer |  |
+| Capability | Program Node | Existing Skill / Tool | Required Input | Status | Decision |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  | ready / needs_config / needs_access / needs_operator_setup / needs_reference / needs_eval / needs_wrapper / missing / defer |  |
 
 ### Missing Systems
 

@@ -31,28 +31,60 @@ notes, and review.
 
 ```harness-program
 project "Name" {
-  values: [impact.high, loyal_users.high, trust.high, money.low]
+  values {
+    mission: "Help a specific audience reach a meaningful outcome"
+    operating_principles: [
+      "teach from real work, not recycled theory",
+      "make claims auditable"
+    ]
+    priorities: [impact.high, loyal_users.high, trust.high, money.low]
+    non_tradeoffs: [
+      "do not publish unreviewed claims",
+      "do not optimize revenue before usefulness"
+    ]
+  }
+
   modes: [channel, academy]
 
   axis reach_acquire {
     bet: "Who should find this first?"
     kpi: review_metric("hook/title clarity")
     evidence: ref("research/channel-examples.md")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   system analytics {
     status: missing_instrumentation
-    action: create_ticket("define first metrics")
+    action: ticket(instagram_insights_export)
   }
 
-  heartbeat hourly_board_drain {
-    first: drain_proceedable_tickets
-    else: idle_gap_audit
+  skill instagram_attention_graph {
+    status: needs_access
+    requires: [instagram_insights_export]
+    use: "read attention graph, retention, replay, save, share, and comment signals"
+  }
+
+  ticket instagram_insights_export {
+    type: unblock
+    human_step: "Connect read-only metrics access or provide a CSV export"
+    enables: [instagram_attention_graph]
+    fallback: human_feedback("rank recent posts manually")
+  }
+
+  heartbeat daily_ticket_drainer {
+    first: update_tasks
+    else: update_system_gaps
     gates: [no_external_side_effects]
   }
 
-  frontier {
+  heartbeat weekly_pm_update {
+    first: update_strategy
+    skills: [weekly_strategy_analysis, skill_maintenance, goal_advisor, review]
+    delegate: delegate(ref("project-harness.md"), "refresh strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
+    output: "artifacts/strategy/weekly-pm-update.md"
+  }
+
+  milestone first_episode_selection {
     task: "Choose first pilot episode"
     route: goal_advisor
     metric: review_metric
@@ -81,17 +113,24 @@ project_block :=
   project string "{" project_stmt* "}"
 
 project_stmt :=
-  values_stmt
+  values_block
 | modes_stmt
 | goal_stmt
 | axis_block
 | system_block
 | skill_block
+| ticket_block
 | heartbeat_block
-| frontier_block
+| milestone_block
 | gate_stmt
 
-values_stmt := values ":" "[" weighted_value* "]"
+values_block :=
+  values "{"
+    mission
+    operating_principles?
+    priorities
+    non_tradeoffs?
+  "}"
 modes_stmt := modes ":" "[" mode* "]"
 goal_stmt := goal ident "{" outcome metric? horizon? "}"
 
@@ -116,8 +155,21 @@ system_block :=
 skill_block :=
   skill ident "{"
     status
+    requires?
     use?
     action?
+  "}"
+
+ticket_block :=
+  ticket ident "{"
+    type
+    task?
+    human_step?
+    why?
+    enables?
+    acceptable_alternatives?
+    fallback?
+    gates?
   "}"
 
 heartbeat_block :=
@@ -126,12 +178,13 @@ heartbeat_block :=
     first?
     else?
     skills?
+    delegate?
     gates?
     output?
   "}"
 
-frontier_block :=
-  frontier "{"
+milestone_block :=
+  milestone ident "{"
     task
     route
     metric
@@ -145,6 +198,19 @@ frontier_block :=
 
 ### Values
 
+Values are the project constitution. They sit above goals, KPIs, tickets, and
+heartbeats. Use them to encode why the project exists, how it should behave,
+what it optimizes for, and what it refuses to trade away.
+
+```text
+mission: string
+operating_principles: string[]
+priorities: weighted_value[]
+non_tradeoffs: string[]
+```
+
+Priority atoms:
+
 ```text
 impact.high
 money.high
@@ -155,6 +221,21 @@ trust.high
 quality.high
 efficiency.medium
 ```
+
+### Feedback-Sized Projects
+
+When a harness produces or updates a Goal Portfolio, use projects as the
+default durable unit.
+
+```text
+feedback_sized_project(goal, available_feedback)
+  -> smallest durable project whose output can be reviewed, measured, shown, or
+     exposed to user/market feedback
+```
+
+Use `starting_tasks` for obvious local moves inside the project. Create child
+tickets only when a real boundary needs durable state: execution, unblock,
+human approval, review, dependency, external access/setup, or proof.
 
 ### Modes
 
@@ -193,6 +274,41 @@ missing_instrumentation("system_needed")
 Do not analyze data that does not exist. Use `missing_instrumentation(...)`
 and create a system action.
 
+### Feedback Loops
+
+Every initialized project needs at least one honest feedback loop before it can
+claim refinement. Model feedback loops as concrete skills, not vague tasks.
+
+```harness-program
+skill instagram_attention_graph {
+  status: needs_access
+  requires: [instagram_insights_export]
+  use: "read attention graph, retention, replay, save, share, and comment signals"
+}
+
+ticket instagram_insights_export {
+  type: unblock
+  human_step: "Connect read-only metrics access or provide a CSV export"
+  why: "Strategy cannot improve against Instagram feedback until the signal exists"
+  enables: [instagram_attention_graph]
+  fallback: human_feedback("operator ranks recent posts manually")
+  gates: [no_account_changes]
+}
+```
+
+Rule:
+
+```text
+feedback_needed
+  -> skill(specific_feedback_capability, requires)
+  -> ticket(type: unblock | type: build_skill | type: configure)
+```
+
+Good feedback skills are concrete: `instagram_attention_graph`,
+`youtube_retention_metrics`, `posthog_activation_funnel`,
+`operator_usefulness_labels`, `customer_interview_pattern_reader`, or
+`sales_call_objection_miner`.
+
 ### System Status
 
 ```text
@@ -201,6 +317,8 @@ partial
 missing
 missing_instrumentation
 needs_config
+needs_access
+needs_operator_setup
 needs_reference
 needs_eval
 defer
@@ -212,7 +330,9 @@ defer
 use_existing("skill_or_system")
 deep_init_project("missing_standard_systems")
 create_ticket("task")
-goal_advisor_handoff("frontier")
+ticket(identifier)
+delegate(context_ref, task_prompt, skills?, output?)
+goal_advisor_handoff("milestone")
 create_skill_candidate("stable_repeated_trigger")
 add_reference("path_or_topic")
 add_eval("claim")
@@ -220,23 +340,109 @@ defer_until_pilot("reason")
 no_op("reason")
 ```
 
+### Skills As Capability Bindings
+
+Use `skill` for capabilities, including access to external tools or data. Do
+not add a separate external-IO block unless pilots prove a real need.
+
+```harness-program
+skill notion_memory_sync {
+  status: needs_operator_setup
+  requires: [notion_database_access]
+  use: "sync shared project memory and ticket state"
+}
+```
+
+The required input may be a credential, export, account connection, permission,
+approval, data file, or human feedback source.
+
+### Tickets
+
+Use `ticket` for one-time work, setup, access, approval, and unblock tasks.
+The program should propose tickets rather than inventing extra sidecar files.
+
+```harness-program
+ticket notion_database_access {
+  type: unblock
+  human_step: "Kenji grants access or links the shared Notion database"
+  why: "The project PM cannot sync shared memory or ticket state without it"
+  enables: [notion_memory_sync]
+  acceptable_alternatives: ["manual export", "local-only memory until setup"]
+  gates: [no_account_changes]
+}
+```
+
+Default rule:
+
+```text
+blocker
+  -> ticket(type: unblock)
+   + fallback_until_unblocked
+```
+
 ### Heartbeats
 
 ```text
-hourly_board_drain
-idle_gap_audit
+daily_ticket_drainer
+update_system_gaps
 daily_chief_of_staff
-weekly_strategy_refresh
+weekly_pm_update
+update_strategy
+update_memory
+skill_maintenance.harden_skill
+skill_maintenance.refine_skill
+delegate
 ```
 
 Default policy:
 
 ```text
-heartbeat hourly_board_drain {
-  first: drain_proceedable_tickets
-  else: idle_gap_audit
+heartbeat daily_ticket_drainer {
+  first: fetch_local_tickets
+  bindings: "farplane/bindings.md"
+  optional: fetch_notion_when_enabled_bound_and_local_empty
+  then: rank_one_ticket -> impl-plan -> goal-advisor
+}
+
+heartbeat weekly_pm_update {
+  first: grouped_jobs_with_report_cache
+  bindings: "farplane/bindings.md"
+  skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
+  delegate: delegate(ref("project-harness.md"), "refresh strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
 }
 ```
+
+Default project automation standard:
+
+```text
+daily_ticket_drainer(ticket_sources, gates, ranking_policy)
+  -> selected_ticket | no_op_report
+  -> impl_plan_result + goal_advisor_execution + evidence_or_blocker
+
+weekly_pm_update(grouped_jobs, reports, ledger, goals, tickets, metrics, memory)
+  -> weekly_pm_report + ticket_board_delta + memory_delta
+   + skill_improvement_delta + blockers
+
+update_strategy(goal_portfolio, tickets, progress, metrics_or_feedback)
+  -> strategy_delta + system_gaps + experiments + ticket_deltas
+
+update_memory(history, memory, readme, docs, recent_progress)
+  -> consolidated_memory + readme_delta + docs_delta
+   + docs_consolidation_plan? + stale_context_notes
+
+skill_maintenance.harden_skill(skill, lessons, troubles)
+  -> new_evals + gotchas + regression_cases + improvement_tickets
+
+skill_maintenance.refine_skill(skill, evals, gotchas, usage_results)
+  -> skill_delta + consolidated_evals + consolidated_gotchas + review_notes
+
+delegate(context_ref, task_prompt, skills?, output?)
+  -> subagent_handoff + evidence_ref
+```
+
+Use `delegate(...)` when a heartbeat can safely split bounded work into a
+subagent lane. The `context_ref` must be a file or ticket path, not hidden chat
+memory; the task prompt names required skills and expected output.
 
 ### Gates
 
@@ -256,11 +462,18 @@ ticket_or_goal_required_for_edits
 - Put facts in `evidence: ref("path")`, not free-floating claims.
 - Mark guesses as assumptions in the Markdown evidence wrapper.
 - Use `missing_instrumentation(...)` for absent metrics.
+- Define one concrete feedback skill at init time. If it cannot run yet, add
+  the precise unblock/configure/build ticket that would make it usable.
+- Use `skill` nodes for external systems and data access requirements; the
+  skill describes the capability, and `requires` names the missing human or
+  environment input.
+- Use `ticket { type: unblock }` for human setup, credentials, data exports,
+  approval, account linking, and shared-system access.
 - Use `deep_init_project(...)` for standard project systems instead of
   rediscovering docs, tickets, QA, runtime commands, feedback loops, or
   bootstrap files.
 - Use `research:*` only when domain truth is uncertain and the research changes
-  the first frontier.
+  the current milestone.
 - Keep publishing, spend, account edits, customer contact, gated scraping, and
   brand/legal-sensitive actions behind explicit gates.
 

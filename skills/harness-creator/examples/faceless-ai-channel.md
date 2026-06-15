@@ -14,14 +14,28 @@ compact Harness Program can reduce handholding and produce a useful first
 
 ```harness-program
 project "Faceless AI Engineering Channel" {
-  values: [
-    impact.high,
-    loyal_users.high,
-    learning.high,
-    trust.high,
-    money.low,
-    efficiency.medium
-  ]
+  values {
+    mission: "Teach practical AI and harness engineering so serious builders become more capable"
+    operating_principles: [
+      "teach from real work, not recycled theory",
+      "prefer depth and trust over shallow reach",
+      "make claims auditable",
+      "turn repeated failures into system improvements"
+    ]
+    priorities: [
+      impact.high,
+      loyal_users.high,
+      learning.high,
+      trust.high,
+      money.low,
+      efficiency.medium
+    ]
+    non_tradeoffs: [
+      "do not publish unreviewed claims",
+      "do not chase virality by lowering technical honesty",
+      "do not optimize revenue before usefulness"
+    ]
+  }
 
   modes: [channel, academy, lab]
 
@@ -35,35 +49,35 @@ project "Faceless AI Engineering Channel" {
     bet: "Find high-signal AI engineering learners with sharp topic and hook choices"
     kpi: review_metric("hook/title clarity and audience fit")
     evidence: ref("research-baseline.md")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   axis activate_first_value {
     bet: "Each video teaches one useful harness engineering move"
     kpi: human_feedback("viewer learned a useful move")
     evidence: ref("operator_feedback")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   axis retain_loyalty {
     bet: "A coherent episode ladder gives viewers a reason to return"
     kpi: review_metric("series promise and next-video pull")
     evidence: ref("harness-portfolio.md")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   axis efficiency_capability {
     bet: "Reuse Farplane docs, tickets, and video templates to reduce cycle time"
     kpi: learning_metric("time from idea to reviewed draft")
     evidence: ref("local Farplane corpus")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   axis risk_trust {
     bet: "No fake authority, no misleading claims, no unreviewed publishing"
     kpi: review_metric("trust and claim accuracy")
     evidence: ref("review")
-    heartbeat: weekly_strategy_refresh
+    heartbeat: weekly_pm_update
   }
 
   system publishing_gate {
@@ -75,7 +89,22 @@ project "Faceless AI Engineering Channel" {
   system analytics {
     status: missing_instrumentation
     evidence: ref("no YouTube metrics before publish")
-    action: create_ticket("define first content metrics after publish approval")
+    action: ticket(youtube_analytics_export)
+  }
+
+  skill youtube_retention_metrics {
+    status: needs_access
+    requires: [youtube_analytics_export]
+    use: "read retention, watch time, CTR, saves, comments, and returning viewer signals"
+  }
+
+  ticket youtube_analytics_export {
+    type: unblock
+    human_step: "Connect read-only analytics access or provide a recurring export after publishing is approved"
+    why: "Market metrics cannot guide content strategy before a data source exists"
+    enables: [youtube_retention_metrics]
+    fallback: human_feedback("Kenji labels pilot scripts and drafts until market metrics exist")
+    gates: [no_account_changes, no_publish]
   }
 
   skill video_production {
@@ -85,22 +114,24 @@ project "Faceless AI Engineering Channel" {
 
   skill goal_advisor {
     status: ready
-    use: "compile the first research/episode-selection frontier"
+    use: "compile the first research/episode-selection milestone"
   }
 
-  heartbeat hourly_board_drain {
-    first: drain_proceedable_tickets
-    else: idle_gap_audit
+  heartbeat daily_ticket_drainer {
+    first: fetch_local_tickets
+    then: rank_one_ticket -> impl-plan -> goal-advisor
     gates: [no_publish, no_spend, no_account_changes]
   }
 
-  heartbeat weekly_strategy_refresh {
-    first: refresh_strategy_from_findings_metrics_feedback
-    skills: [weekly_strategy_analysis, goal_advisor, review]
+  heartbeat weekly_pm_update {
+    first: grouped_jobs_with_report_cache
+    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy]
+    skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
+    delegate: delegate(ref("project-harness.md"), "refresh channel strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
     gates: [review_before_external_side_effects]
   }
 
-  frontier {
+  milestone first_episode_selection {
     task: "Research and choose the first pilot episode"
     route: goal_advisor
     metric: review_metric("episode choice is useful, differentiated, and produceable")
@@ -129,6 +160,8 @@ project "Faceless AI Engineering Channel" {
   analytics setup stay gated until approved.
 - Market metrics are unavailable before publishing, so early metrics use review
   and human feedback.
+- Analytics access is represented as a skill capability plus a `ticket` with
+  `type: unblock`, not as a separate external-IO abstraction.
 
 ## Goal Advisor Handoff
 

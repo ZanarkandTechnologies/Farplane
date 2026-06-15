@@ -2,6 +2,8 @@
 kind: harness-portfolio
 status: draft
 created_at: TODO
+template_id: harness-portfolio
+template_version: "0.1.0"
 goal_id: TODO
 ---
 
@@ -94,9 +96,9 @@ research_or_grounding
 - `scraping/private_data:`
 - `legal/brand/likeness/attribution:`
 
-## Current Frontier
+## Current Milestone
 
-- `frontier:`
+- `milestone:`
 - `why_now:`
 - `depends_on:`
 - `parallel:`
