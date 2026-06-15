@@ -1,6 +1,6 @@
 ---
 name: skill-maintenance
-description: "Turn a desired skill behavior delta into owner-local skill edits, registry sync, audit proof, and review when updating Farplane skills."
+description: "Turn skill behavior deltas, lesson hardening, or skill compaction into owner-local skill edits, eval/gotcha updates, registry sync, audit proof, and review."
 tier: 3
 group: skills
 source: local
@@ -17,15 +17,24 @@ feature_refs:
 ## Context
 
 Use this as the entrypoint whenever the operator wants to update, audit,
-repair, consolidate, or roll out changes to Farplane skills. Treat the task as
-a behavior delta over one or more `edited_skill` packages, then update the
-owner-local skill surface and prove the skill system still holds together.
+repair, harden, refine, consolidate, or roll out changes to Farplane skills.
+Treat the task as a behavior delta over one or more `edited_skill` packages,
+then update the owner-local skill surface and prove the skill system still
+holds together.
 
 `skill-maintenance` owns skill-package mechanics after the owner surface is
 known: `SKILL.md` shape, references, eval/checklist sync, source ownership,
-frontmatter, registry sync, audit records, reinstall checks, and review routing.
-It does not replace `optimize-harness`, `gap-analysis`, `skill-creator`, `eval`,
-or `review`.
+frontmatter, registry sync, audit records, reinstall checks, and review
+routing. It also owns the weekly skill upkeep interface:
+
+```text
+harden_skill = turn fresh lessons/troubles into evals, gotchas, and blockers now
+refine_skill = consolidate older evals/gotchas and shorten the skill later
+```
+
+It does not replace `optimize-harness`, `gap-analysis`, `skill-creator`,
+`eval`, `self-improve`, or `review`. Use `self-improve` only for measured
+variant/search loops with a program, metric, progress, and promotion rule.
 
 ## Skill Signature
 
@@ -41,6 +50,7 @@ state:
          edited_skill.qa_checklist?, skill-local audit?, docs/skills/registry.jsonl)
 
 modes:
+  harden_skill | refine_skill |
   structure_update | metadata_update | eval_to_qa_sync | audit |
   bulk_rollout | registry_validation | installed_copy_import
 
@@ -51,14 +61,43 @@ gates:
   check_skills_passed; reviewer_routed_when_material
 
 routes:
-  skill-creator | eval | advise | deliberative-advice | review |
-  gap-analysis | harness-advisor
+  skill-creator | eval | self-improve | advise | deliberative-advice |
+  review | gap-analysis | harness-advisor
 
 fails:
   vague update; hidden installed-copy edit; bulk edit without prototype;
   eval changed without QA-sync check; bloated first-load contract;
-  template version claim without structure proof; audit skipped for material change
+  template version claim without structure proof; audit skipped for material change;
+  treats hardening as optional cleanup after a known repeated failure;
+  uses self-improve when immediate eval/gotcha hardening is enough
 ```
+
+## Upkeep Modes
+
+```text
+harden_skill(edited_skill, lessons?, troubles?, usage_evidence?, cap?)
+  -> eval_candidates + gotchas + regression_cases + improvement_tickets
+   + processed_state_delta?
+
+refine_skill(edited_skill, evals?, gotchas?, usage_results?, target_size?)
+  -> consolidated_evals + consolidated_gotchas + skill_delta
+   + deleted_or_moved_detail + review_notes
+```
+
+Use `harden_skill` for fresh prevention: take new `docs/LESSONS.md` and
+`docs/TROUBLES.md` rows, dedupe them, and add the smallest durable blockers
+against recurrence: eval cases, gotchas, QA/checklist guardrails, or tickets.
+Legacy `learning-drain` automations should migrate to this mode; the
+`learning-drain` skill remains a compatibility wrapper around this intake.
+
+Use `refine_skill` for compaction after hardening has accumulated material:
+merge duplicate evals, collapse overlapping gotchas, move long examples into
+references, shorten first-load text, and preserve behavior with eval/review
+proof.
+
+Use `self-improve` only when `harden_skill` or `refine_skill` finds a measured
+search problem: multiple candidate variants, a metric, an experiment program,
+or a Goal/autoresearch loop.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -67,7 +106,7 @@ fails:
   - [ ] `edited_skill := target skill package(s)`.
   - [ ] `expected_behavior := desired operator-visible behavior`.
   - [ ] `current_behavior := observed or file-backed current behavior`.
-  - [ ] `mode := structure_update | metadata_update | eval_to_qa_sync | audit | bulk_rollout | registry_validation | installed_copy_import`.
+  - [ ] `mode := harden_skill | refine_skill | structure_update | metadata_update | eval_to_qa_sync | audit | bulk_rollout | registry_validation | installed_copy_import`.
   - [ ] `evidence := user request + target files + ticket/council/eval/review artifacts`.
 - [ ] 2. Read the minimum authoritative context.
   - [ ] Always read `edited_skill/SKILL.md`, `docs/skills/registry.jsonl`, and
@@ -77,6 +116,11 @@ fails:
   - [ ] If `mode == eval_to_qa_sync` or `edited_skill/eval_task.json` changed,
     read `edited_skill/eval_task.json` and `edited_skill/qa_checklist.md` when
     it exists.
+  - [ ] If `mode == harden_skill`, read the relevant `docs/TROUBLES.md`,
+    `docs/LESSONS.md`, processed-state refs, and target `eval_task.json`.
+  - [ ] If `mode == refine_skill`, read target `SKILL.md`, references,
+    `eval_task.json`, `qa_checklist.md`, skill-local audits, and recent usage
+    or eval results.
   - [ ] If `mode == installed_copy_import`, preview the import path with
     `python3 ../../bin/import_installed_skills.py --skills <name> --dry-run`
     from this skill package before any overwrite.
@@ -95,6 +139,11 @@ fails:
   - [ ] `if installed_copy_differs: import or patch repo source first; reinstall/live-inspect only after source edits are accepted`.
   - [ ] `if bulk_rollout: use sandbox/sample proof before scaling and keep one audit/proof row per affected class`.
 - [ ] 5. Apply the smallest owner-local edit.
+  - [ ] `if mode == harden_skill: add or propose the smallest immediate evals,
+    gotchas, checklist guardrails, or improvement tickets that block repeated
+    failures before optimizing prose length`.
+  - [ ] `if mode == refine_skill: consolidate duplicate evals/gotchas and
+    shorten first-load text only after preserving the behavioral guardrails`.
   - [ ] Keep every-invocation gates, routing, proof, stop conditions, and output
     contract in `SKILL.md`.
   - [ ] Move long examples, rare recipes, templates, detailed rubrics, and
@@ -105,6 +154,11 @@ fails:
   - [ ] `if edited_skill/eval_task.json changed: compare changed reference_points against edited_skill/qa_checklist.md when present, otherwise decide whether to create one`.
   - [ ] `if reference_point is reusable_runtime_guardrail: promote it into checklist, QA wording, validator candidate, or SKILL.md hard gate`.
   - [ ] `else: record skipped rare, hardcase, benchmark-only, or judgment-heavy points in the audit`.
+  - [ ] For `harden_skill`, call [eval](../eval/SKILL.md) when the lesson or
+    trouble can become a runnable regression case.
+  - [ ] For `refine_skill`, call [eval](../eval/SKILL.md) when consolidation
+    might weaken coverage, and call [self-improve](../self-improve/SKILL.md)
+    only for measured search over variants.
 - [ ] 7. Validate and prove the skill-system state.
   - [ ] Run `python3 scripts/check_skills.py --write` from this skill package.
   - [ ] Run focused JSON, link, template-version, fixture, eval, or import
@@ -136,6 +190,40 @@ owner_surface:
 proof_required:
 ```
 
+Hardening handoff:
+
+```text
+mode: harden_skill
+edited_skill:
+source_rows:
+  - docs/TROUBLES.md:
+  - docs/LESSONS.md:
+immediate_blockers:
+  eval_candidates:
+  gotchas:
+  checklist_guardrails:
+  tickets:
+processed_state:
+proof_required:
+```
+
+Refinement handoff:
+
+```text
+mode: refine_skill
+edited_skill:
+inputs:
+  evals:
+  gotchas:
+  usage_results:
+compaction_plan:
+  keep:
+  merge:
+  move_to_references:
+  delete_as_duplicate:
+proof_required:
+```
+
 Audit skip reason:
 
 ```text
@@ -164,6 +252,10 @@ Return TAS verdicts, blockers, and smallest required fixes.
   required routing, gates, proof, or output contract.
 - Do not let `skill-maintenance` become a second `optimize-harness`; this skill
   changes skill packages after the owner surface is known.
+- Do not use `refine_skill` to delay urgent hardening. Fresh repeated failures
+  get evals/gotchas first; compaction can happen in the later weekly pass.
+- Do not use `self-improve` for every skill update. It is for measured search
+  or variants, not ordinary lesson/trouble hardening.
 - Do not auto-promote every eval reference point into a checklist. Promote only
   reusable runtime guardrails.
 - Do not bypass `check_skills.py --write`, hand-edit generated registry rows,
@@ -184,6 +276,10 @@ Return TAS verdicts, blockers, and smallest required fixes.
   reference routing, or compaction-risk review.
 - [../skill-creator/references/SKILL_TEMPLATE.md](../skill-creator/references/SKILL_TEMPLATE.md)
   - current baseline skill template.
+- [../eval/SKILL.md](../eval/SKILL.md) - create or consolidate runnable
+  regression proof when hardening or refinement touches behavior.
+- [../self-improve/SKILL.md](../self-improve/SKILL.md) - use only for measured
+  variant/search loops, not default weekly hardening.
 - [templates/skill-audit.md](templates/skill-audit.md) - binary before/after
   audit record template for material skill changes.
 - [references/eval-fixture-sandbox.md](references/eval-fixture-sandbox.md) -
@@ -196,6 +292,10 @@ Return TAS verdicts, blockers, and smallest required fixes.
 
 - Updated owner-local skill files: `SKILL.md`, references, evals, or checklist
   surfaces as selected by `behavior_delta`.
+- Hardening outputs when `mode == harden_skill`: eval candidates, gotchas,
+  regression cases, improvement tickets, and processed-state notes.
+- Refinement outputs when `mode == refine_skill`: consolidated evals/gotchas,
+  shortened skill text, moved reference detail, and review notes.
 - Regenerated `docs/skills/registry.jsonl` when metadata or skill shape changes.
 - Skill-local audit record for material changes, or explicit audit skip reason.
 - Validation output from `python3 scripts/check_skills.py --write` plus any

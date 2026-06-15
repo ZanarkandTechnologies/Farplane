@@ -1,3 +1,7 @@
+<!--
+template_id: global-agents-template
+template_version: 0.2.0
+-->
 <!-- AUTONOMY DIRECTIVE - DO NOT REMOVE -->
 YOU ARE AN AUTONOMOUS CODING AGENT. EXECUTE TASKS TO COMPLETION WITHOUT ASKING FOR PERMISSION.
 DO NOT STOP TO ASK "SHOULD I PROCEED?" - PROCEED. DO NOT WAIT FOR CONFIRMATION ON OBVIOUS NEXT STEPS.
@@ -249,13 +253,17 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   using it.
 - Treat each skill as a callable mini harness:
   `skill(task, state) -> artifact + evidence + state_delta`.
+<!-- Skill-signature questions: resolve signature parameters before invocation. -->
 - Pay attention to the skill's `## Skill Signature` when present. Bind the
   user's request and current state to the required inputs before executing the
   skill.
 - If the user calls a skill without supplying the required inputs, backpropagate
-  the missing parameters: inspect current files/state, load the right context,
-  run a setup or planning workflow, or ask one narrow blocking question only
-  when the missing parameter cannot be safely inferred.
+  the missing parameters from the skill signature before execution: inspect
+  current files/state, load the right context, run a setup or planning workflow,
+  and when inputs still cannot be safely inferred, ask for the information
+  needed to fill those signature parameters across every skill you intend to
+  call. The missing parameters are the question inventory; ask a compact set of
+  questions rather than inventing a separate checklist.
 - Use skills compositionally. Follow linked skills and method addresses when
   they are relevant to the current task.
 - Render the active skill todo list compactly in commentary; recursively add

@@ -1,6 +1,6 @@
 ---
 name: learning-drain
-description: "Turn recent TROUBLES/LESSONS rows into deduped optimizer follow-ups and processed-state records when a weekly learning drain is due."
+description: "Compatibility wrapper that turns recent TROUBLES/LESSONS rows into a skill-maintenance harden_skill handoff with dedupe and processed-state records."
 tier: 3
 group: harness
 source: local
@@ -15,26 +15,34 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill for the weekly layer after the every-N-turn learning logger has
-already written compact rows into `docs/TROUBLES.md` and `docs/LESSONS.md`.
+Use this skill only for legacy automations or direct requests that still say
+`learning-drain`. The canonical weekly skill-upkeep interface is now
+`skill-maintenance(mode: harden_skill)`.
+
+This wrapper exists because older automations already call `learning-drain`.
+It still owns the source-intake mechanics for `docs/TROUBLES.md` and
+`docs/LESSONS.md`: dedupe, processed state, row pairing, caps, and safe
+handoff. It should then route actionable skill-package work to
+`skill-maintenance:harden_skill`.
 
 The hot-path hook only logs. This skill drains the logs into action: it reads
 recent trouble/lesson rows, dedupes against processed state, pairs related rows,
-and creates bounded follow-ups for `optimize-harness`, tickets, evals, or skill
-updates when a real harness/process fix is implied.
+and creates a bounded hardening handoff for evals, gotchas, checklist
+guardrails, tickets, or skill updates when a real harness/process fix is
+implied.
 
-Automations should be thin pointers to this skill. They should not contain the
-drain logic themselves.
+New automations should call `skill-maintenance(mode: harden_skill)` directly
+unless they need this legacy source-intake wrapper.
 
 ## Skill Signature
 
 ```text
 learning_drain(project_root, since?, cap?, mode?)
-  -> optimizer_followups[] + processed_state_delta + no_change_reason?
+  -> harden_skill_handoff? + processed_state_delta + no_change_reason?
 state: reads(docs/TROUBLES.md, docs/LESSONS.md, .farplane/state/**/processed*.jsonl)
        writes(.farplane/state/learning-drain/processed.jsonl, ticket/thread refs when explicitly created)
 gates: docs_present; rows_deduped; cap_respected; no_raw_transcripts; processed_state_written
-routes: optimize-harness | eval | skill-maintenance | gap-analysis | direct-summary
+routes: skill-maintenance:harden_skill | eval | optimize-harness | gap-analysis | direct-summary
 fails: reprocesses old rows; deletes ledger history; spawns unbounded work; hides logic in automation prompt
 ```
 
@@ -49,6 +57,8 @@ fails: reprocesses old rows; deletes ledger history; spawns unbounded work; hide
 - Default cap is 5 actionable follow-ups per run.
 - A follow-up is actionable only when the row implies a concrete change,
   regression eval, ticket, skill update, prompt/policy fix, or optimizer issue.
+- Skill-package follow-ups should become `skill-maintenance(mode:
+  harden_skill)` handoffs. `learning-drain` does not own final skill edits.
 - Weak rows, duplicate rows, already-fixed rows, private/raw transcript risk, or
   rows with no clear owner produce `no_change` or `deferred`, not work.
 - Pair a lesson with a trouble when the lesson source references the trouble or
@@ -82,7 +92,8 @@ fails: reprocesses old rows; deletes ledger history; spawns unbounded work; hide
      [optimize-harness](../optimize-harness/SKILL.md).
    - [ ] Route durable regression behavior to [eval](../eval/SKILL.md).
    - [ ] Route skill-template or registry changes to
-     [skill-maintenance](../skill-maintenance/SKILL.md).
+     [skill-maintenance](../skill-maintenance/SKILL.md) with
+     `mode: harden_skill`.
    - [ ] Create at most `cap` follow-ups; mark overflow as `deferred`.
 - [ ] 5. Write processed-state.
    - [ ] In `dry-run`, print the would-write state rows without mutating files.
@@ -113,7 +124,8 @@ Learning Drain Report
 - candidate rows:
 - skipped rows:
 - paired rows:
-- follow-ups:
+- harden_skill_handoff:
+- other follow-ups:
 - deferred rows:
 - processed-state path:
 - no-change reason:
@@ -128,8 +140,8 @@ Processed-state JSONL row shape:
   "doc_ref": "docs/TROUBLES.md:42",
   "content_hash": "sha256:...",
   "drained_at": "2026-06-13T00:00:00Z",
-  "disposition": "optimizer-followup|eval-followup|ticket-created|deferred|duplicate|no-change",
-  "followup_ref": "optimize-harness:<short-id>",
+  "disposition": "harden-skill-handoff|optimizer-followup|eval-followup|ticket-created|deferred|duplicate|no-change",
+  "followup_ref": "skill-maintenance:harden_skill:<short-id>",
   "ticket_ref": "tickets/TASK-0000/ticket.md",
   "thread_ref": "",
   "notes": "compact sanitized reason"
@@ -140,9 +152,12 @@ Processed-state JSONL row shape:
 
 - Do not make this a scheduler. Weekly cadence belongs to automation or Goal;
   this skill owns the drain behavior.
+- Do not treat this wrapper as the skill-improvement brain. New weekly skill
+  upkeep should call `skill-maintenance(mode: harden_skill)`.
 - Do not reprocess every row every week. Processed state is the idempotence
   surface.
-- Do not let one noisy logger run spawn a flood of optimizer threads.
+- Do not let one noisy logger run spawn a flood of hardening or optimizer
+  threads.
 - Do not call `optimize-harness` for weak rows that only need ordinary memory.
 - Do not edit `docs/TROUBLES.md` or `docs/LESSONS.md` except through the
   separate learning logger path.
@@ -150,15 +165,16 @@ Processed-state JSONL row shape:
 
 ## Reference Map
 
-- [automation prompt](references/automation-prompt.md) - use when installing or
-  updating a weekly automation that invokes this skill.
+- [automation prompt](references/automation-prompt.md) - legacy prompt for
+  automations that still invoke this wrapper.
 - [processed-state rules](references/processed-state.md) - JSONL idempotence,
   hashing, and compatibility details.
 - [optimize-harness](../optimize-harness/SKILL.md) - route concrete harness
   behavior gaps into fix/proof/review loops.
 - [eval](../eval/SKILL.md) - create durable regression cases when the expected
   behavior is testable.
-- [skill-maintenance](../skill-maintenance/SKILL.md) - apply skill-system and
-  registry changes.
+- [skill-maintenance](../skill-maintenance/SKILL.md) - canonical
+  `harden_skill` owner for turning lessons/troubles into evals, gotchas, and
+  skill-package changes.
 - [docs/TROUBLES.md](../../docs/TROUBLES.md) - raw correction and pain log.
 - [docs/LESSONS.md](../../docs/LESSONS.md) - distilled prevention lessons.

@@ -6,7 +6,7 @@
     "reference_points": [
       "Reads TROUBLES, LESSONS, and processed state before proposing follow-ups",
       "Recognizes the old trouble row is already processed",
-      "Does not call optimize-harness or create a duplicate ticket/thread",
+      "Does not call skill-maintenance, optimize-harness, or create a duplicate ticket/thread",
       "Returns a no-change or skipped report with the processed-state path",
       "Preserves the original TROUBLES/LESSONS ledger rows"
     ],
@@ -20,7 +20,8 @@
     "reference_points": [
       "Pairs the related trouble and lesson before selecting follow-ups",
       "Creates at most one follow-up for the paired issue",
-      "Routes the follow-up to optimize-harness only if an actual harness/process fix remains",
+      "Routes skill/package prevention work to skill-maintenance mode harden_skill",
+      "Routes to optimize-harness only if a non-skill harness/process fix remains",
       "Records both source refs or hashes in processed state",
       "Does not delete or rewrite the paired ledger rows"
     ],
@@ -34,7 +35,7 @@
     "reference_points": [
       "Selects no more than two actionable follow-ups",
       "Marks remaining actionable rows as deferred or reports overflow clearly",
-      "Does not spawn unbounded optimizer threads or tickets",
+      "Does not spawn unbounded hardening, optimizer, or ticket threads",
       "Writes processed-state rows only for processed or intentionally deferred items",
       "Reports the cap and next action in the drain summary"
     ],
@@ -46,9 +47,9 @@
     "title": "Learning drain keeps automation as a pointer",
     "query": "Set up the weekly AGI Toy Shop learning drain automation. The automation prompt currently includes custom dedupe and optimizer-routing instructions inline.",
     "reference_points": [
-      "States that automation should invoke learning-drain rather than own the drain behavior",
-      "Moves or points behavioral logic to the learning-drain skill contract",
-      "Keeps the automation prompt thin: project root, mode, cap, and skill invocation",
+      "States that new weekly skill upkeep should invoke skill-maintenance mode harden_skill directly",
+      "Keeps learning-drain as a compatibility wrapper for TROUBLES/LESSONS intake and processed state",
+      "Keeps the automation prompt thin: project root, mode, cap, skill invocation, and harden_skill handoff",
       "Preserves eval coverage and processed-state rules in the skill package",
       "Avoids adding hidden scheduler or daemon logic to the skill"
     ],

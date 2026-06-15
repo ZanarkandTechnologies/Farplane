@@ -91,5 +91,7 @@ Before completion, confirm:
 - The doc is written for its human reader.
 - Stale sections were deleted instead of preserved.
 - Touched links, refs, registries, or metadata were refreshed.
-- Material docs have the requested review route or an explicit reason review
-  was skipped.
+- Ordinary durable doc edits stop at this checklist unless the task requests
+  more.
+- Material canonical docs, public guidance, cross-surface policy, or completion
+  claims have a budgeted review route or an explicit reason review was skipped.

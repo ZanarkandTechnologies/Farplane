@@ -20,6 +20,8 @@ FARPLANE_HOME = "__CODEX_HOME__"
 FARPLANE_IMPL_HOOK = "1"
 FARPLANE_CONVEX_SITE_URL = "__FARPLANE_CONVEX_SITE_URL__"
 FARPLANE_TELEMETRY_TOKEN = "__FARPLANE_TELEMETRY_TOKEN__"
+FARPLANE_CONSOLE_KEY = "__FARPLANE_CONSOLE_KEY__"
+FARPLANE_ACTIVITY_RECENT_URL = "__FARPLANE_ACTIVITY_RECENT_URL__"
 # Optional hosted telemetry for hook activity. Leave unset until your backend exists.
 # FARPLANE_TELEMETRY_API_URL = "https://your-backend.example.com/api/codex/activity"
 # FARPLANE_TELEMETRY_API_TOKEN = "replace-me"

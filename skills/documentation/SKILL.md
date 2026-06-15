@@ -41,8 +41,10 @@ contract, then load the detailed quality checklist only for the finish pass.
   doc, then fix issues before completion.
 - [ ] 6. Use [advise](../advise/SKILL.md) when the doc has multiple valid
   framing, placement, or term choices.
-- [ ] 7. Use the [review protocol](../review/SKILL.md) before claiming material
-  durable docs or public guidance are ready.
+- [ ] 7. Use [review](../review/SKILL.md) only when the touched doc is
+  material, canonical, public guidance, cross-surface policy, or a completion
+  claim; route it with an explicit review budget instead of repeating the
+  doc-quality checklist as a generic axes review.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Workflow: Write -> Review
@@ -87,6 +89,28 @@ Avoid:
 Load [references/doc-quality-checklist.md](references/doc-quality-checklist.md)
 for the finish pass. Run the relevant searches and validators from that file,
 then fix issues before completion.
+
+The doc-quality checklist is the default QA pass for documentation work. Do not
+add a second generic review pass for ordinary durable doc edits.
+
+### 4. Material Review Gate
+
+Use [review](../review/SKILL.md) only when the change needs independent
+readiness judgment: material canonical docs, public guidance, cross-surface
+policy, or completion claims. Pick the smallest honest review budget:
+
+```text
+DocReviewBudget = {
+  effort?: "tiny" | "normal" | "deep",
+  rubric_families?: ["evidence-quality", "integration-readiness", "..."]
+}
+```
+
+- `tiny`: sanity-check the doc-quality evidence and changed file only.
+- `normal`: apply selected rubric families, usually `evidence-quality` and
+  `integration-readiness` when claims cross files or proof matters.
+- `deep`: reserve for risky canonical policy, doctrine, or public guidance
+  that could change future work behavior.
 
 ## Output
 
@@ -138,7 +162,9 @@ Use this shape when a durable review note is useful:
   local policy or grounded synthesis.
 - Do not turn a writing task into broad research when compact grounding is
   enough.
-- Do not claim material docs are ready without a check pass or review route.
+- Do not repeat the doc-quality checklist as a generic review pass.
+- Do not claim material docs are ready without a check pass and either a
+  budgeted review route or an explicit reason review was skipped.
 
 ## Reference Map
 
@@ -146,8 +172,9 @@ Use this shape when a durable review note is useful:
   compact local, official-doc, current-source, or peer evidence before writing.
 - [../advise/SKILL.md](../advise/SKILL.md) - use when term, frame, placement, or
   structure choices have real tradeoffs.
-- [../review/SKILL.md](../review/SKILL.md) - use for material durable docs or
-  public guidance.
+- [../review/SKILL.md](../review/SKILL.md) - use only for material durable docs,
+  public guidance, cross-surface policy, or completion claims that need
+  independent readiness judgment.
 - [references/doc-quality-checklist.md](references/doc-quality-checklist.md) -
   load for the finish pass before claiming durable docs are ready.
 - Ref source: `toss/technical-writing` overview - technical writing should help

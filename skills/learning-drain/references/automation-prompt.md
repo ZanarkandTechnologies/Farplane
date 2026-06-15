@@ -5,12 +5,16 @@ purpose: weekly automation prompt wrapper
 
 # Learning Drain Automation Prompt
 
-Use this as the automation body when a scheduler should run the weekly learning
-drain. The automation is only a pointer. The skill owns behavior, caps, dedupe,
-processed state, and follow-up routing.
+Use this as the legacy automation body when a scheduler still calls
+`learning-drain`. New weekly skill upkeep should call
+`skill-maintenance(mode: harden_skill)` directly. This wrapper remains a thin
+pointer for source intake: caps, dedupe, processed state, and hardening handoff
+routing.
 
 ```text
-Run the Farplane learning-drain skill for this project.
+Run the Farplane learning-drain compatibility wrapper for this project, then
+return a skill-maintenance harden_skill handoff for actionable skill/package
+issues.
 
 Project root:
 /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
@@ -30,11 +34,13 @@ Policy:
 - Do not delete or rewrite TROUBLES/LESSONS rows.
 - Do not reprocess rows already present in processed state.
 - Pair related trouble and lesson rows before creating follow-ups.
-- Route concrete harness/process behavior gaps to optimize-harness.
+- Route concrete skill/package prevention work to skill-maintenance mode
+  harden_skill.
+- Route non-skill harness/process behavior gaps to optimize-harness.
 - Route testable durable regressions to eval.
-- Route skill-system maintenance to skill-maintenance.
 - Write processed rows to .farplane/state/learning-drain/processed.jsonl.
-- Return a Learning Drain Report with follow-up refs and deferred rows.
+- Return a Learning Drain Report with harden_skill handoff refs, other
+  follow-up refs, and deferred rows.
 ```
 
 If the automation surface supports a direct skill invocation, use the skill
@@ -45,4 +51,5 @@ skill=learning-drain
 mode=automation
 project_root=/Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 cap=5
+canonical_next=skill-maintenance:harden_skill
 ```
