@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-labelledby="title desc">
+  <title id="title">Harness Algebra Infographic</title>
+  <desc id="desc">An educational infographic explaining Farplane's harness algebra model for reliable AI agents.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f1e7; }
+      .ink { fill: #202124; }
+      .muted { fill: #5d625f; }
+      .panel { fill: #fffaf0; stroke: #202124; stroke-width: 3; }
+      .soft { fill: #fff4d6; stroke: #202124; stroke-width: 3; }
+      .cyan { fill: #00a7b5; }
+      .coral { fill: #ef5b4c; }
+      .green { fill: #22a06b; }
+      .yellow { fill: #f2b705; }
+      .line { stroke: #202124; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .thin { stroke: #202124; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .accent-line { stroke: #00a7b5; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .label { font: 700 28px Arial, Helvetica, sans-serif; fill: #202124; }
+      .small-label { font: 700 22px Arial, Helvetica, sans-serif; fill: #202124; }
+      .tiny { font: 500 20px Arial, Helvetica, sans-serif; fill: #5d625f; }
+      .micro { font: 700 16px Arial, Helvetica, sans-serif; fill: #202124; }
+      .code { font: 700 24px "SFMono-Regular", Consolas, Menlo, monospace; fill: #202124; }
+      .code-small { font: 700 18px "SFMono-Regular", Consolas, Menlo, monospace; fill: #202124; }
+      .headline { font: 900 70px Arial, Helvetica, sans-serif; fill: #202124; }
+      .subhead { font: 700 34px Arial, Helvetica, sans-serif; fill: #202124; }
+      .foot { font: 700 24px Arial, Helvetica, sans-serif; fill: #202124; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#202124"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1080" height="1350"/>
+
+  <g transform="translate(70 70)">
+    <rect class="cyan" x="0" y="0" width="160" height="16"/>
+    <text class="headline" x="0" y="106">Stop only</text>
+    <text class="headline" x="0" y="194">tuning prompts.</text>
+    <text class="subhead" x="0" y="266">Tune the harness that owns behavior.</text>
+    <text class="tiny" x="0" y="318">Farplane's useful model for reliable agents is not just context engineering.</text>
+    <text class="tiny" x="0" y="348">It is deciding where behavior, proof, memory, tools, and state should live.</text>
+  </g>
+
+  <g transform="translate(70 430)">
+    <rect class="panel" x="0" y="0" width="940" height="138" rx="8"/>
+    <text class="small-label" x="38" y="46">The harness turn</text>
+    <text class="code" x="38" y="92">H(task, state) -> output + evidence + state_delta</text>
+    <circle class="coral" cx="830" cy="68" r="34"/>
+    <text class="micro" x="807" y="74">proof</text>
+  </g>
+
+  <g transform="translate(90 646)">
+    <rect class="soft" x="0" y="0" width="270" height="170" rx="8"/>
+    <text class="label" x="26" y="46">1. Gather</text>
+    <text class="tiny" x="26" y="86">local truth</text>
+    <text class="tiny" x="26" y="116">current context</text>
+    <text class="tiny" x="26" y="146">task state</text>
+
+    <rect class="soft" x="335" y="0" width="270" height="170" rx="8"/>
+    <text class="label" x="361" y="46">2. Control</text>
+    <text class="tiny" x="361" y="86">skills</text>
+    <text class="tiny" x="361" y="116">tools</text>
+    <text class="tiny" x="361" y="146">subagents</text>
+
+    <rect class="soft" x="670" y="0" width="270" height="170" rx="8"/>
+    <text class="label" x="696" y="46">3. Prove</text>
+    <text class="tiny" x="696" y="86">tests</text>
+    <text class="tiny" x="696" y="116">review</text>
+    <text class="tiny" x="696" y="146">writeback</text>
+
+    <path class="line" d="M 275 85 H 326" marker-end="url(#arrow)"/>
+    <path class="line" d="M 610 85 H 661" marker-end="url(#arrow)"/>
+  </g>
+
+  <g transform="translate(70 878)">
+    <text class="subhead" x="0" y="0">The optimization target</text>
+    <rect class="panel" x="0" y="36" width="940" height="238" rx="8"/>
+
+    <g transform="translate(34 72)">
+      <rect class="green" x="0" y="0" width="18" height="126"/>
+      <text class="small-label" x="42" y="24">Minimize hidden loss</text>
+      <text class="tiny" x="42" y="62">incorrectness + hallucination + weak proof</text>
+      <text class="tiny" x="42" y="94">latency + duplicated instruction</text>
+      <text class="tiny" x="42" y="126">unclear owner + repeated corrections</text>
+    </g>
+
+    <g transform="translate(528 72)">
+      <rect class="yellow" x="0" y="0" width="18" height="126"/>
+      <text class="small-label" x="42" y="24">Maximize useful reliability</text>
+      <text class="tiny" x="42" y="62">groundedness + correctness</text>
+      <text class="tiny" x="42" y="94">usability + auditability</text>
+      <text class="tiny" x="42" y="126">reusable behavior</text>
+    </g>
+  </g>
+
+  <g transform="translate(70 1195)">
+    <path class="accent-line" d="M 0 0 H 940"/>
+    <text class="foot" x="0" y="56">Rule of thumb:</text>
+    <text class="foot" x="196" y="56">put context where it is cheapest to retrieve and easiest to verify.</text>
+    <text class="tiny" x="0" y="96">System prompt for universal rules. Skills for repeated workflows. Files for durable state. Tools for current truth.</text>
+  </g>
+</svg>
