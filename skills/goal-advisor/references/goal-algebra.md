@@ -49,7 +49,7 @@ Progress :=
 GoalPortfolio :=
   north_star
 + portfolio_map
-+ current_frontier
++ current_milestone
 + metric_discovery
 + child_goal_packets
 + parent_heartbeat_policy

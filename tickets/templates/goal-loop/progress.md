@@ -3,6 +3,8 @@ kind: goal-progress
 ticket_id: TASK-XXXX
 status: active
 created_at: 2026-06-12
+template_id: goal-loop-progress
+template_version: "0.1.0"
 ---
 
 # TASK-XXXX Goal Progress

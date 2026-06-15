@@ -3,6 +3,8 @@ kind: goal-program
 ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
+template_id: goal-loop-program
+template_version: "0.1.0"
 ---
 
 # TASK-XXXX Goal Program
@@ -54,7 +56,7 @@ created_at: 2026-06-12
 - `on_goal_window_complete:` append completion progress to changed files, run
   proof/review, then start/resume the next eligible file set or wait for
   heartbeat
-- `on_frontier_complete:` run parent heartbeat or replan routine before
+- `on_milestone_complete:` run parent heartbeat or replan routine before
   expanding the next branch
 - `manual_replan_allowed:` yes/no
 - `automatic_replan:` none or cadence/checkpoint

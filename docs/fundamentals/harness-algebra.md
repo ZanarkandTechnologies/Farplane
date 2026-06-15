@@ -975,7 +975,7 @@ Long-term goal hierarchy:
 ```text
 goal -> project[] -> task[]
 
-portfolio.md = long-horizon goal graph + current_frontier
+portfolio.md = long-horizon goal graph + current_milestone
 ticket.md = executable leaf contract + Done / Proof
 program.md = loop configuration + metric + stop policy
 progress.md = append-only observed execution
@@ -1010,7 +1010,7 @@ rollout_goal(pattern, sample_results, target_set)
   -> child_ticket[] | staged_checkpoints + rollout_progress
 ```
 
-The parent portfolio chooses the next frontier. Native Goal mode executes one
+The parent portfolio chooses the next milestone. Native Goal mode executes one
 leaf. Completion updates portfolio memory before the next heartbeat or replan.
 
 Control improves reliability only when trigger, state, stop condition, and

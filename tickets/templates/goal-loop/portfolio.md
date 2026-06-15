@@ -3,6 +3,8 @@ kind: goal-portfolio
 ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
+template_id: goal-loop-portfolio
+template_version: "0.1.0"
 ---
 
 # TASK-XXXX Goal Portfolio
@@ -31,6 +33,10 @@ good_goal(intent, horizon, evidence_state)
 
 Only expand the first evidence-producing branch deeply. Keep future branches as
 trajectory placeholders until the current timeframe review produces evidence.
+The default smallest durable unit is a feedback-producing project. Use
+`starting_tasks` inside a project for obvious first moves; create child tickets
+only for real execution, unblock, approval, review, dependency, or proof
+boundaries.
 
 ## Portfolio Map
 
@@ -41,12 +47,17 @@ trajectory placeholders until the current timeframe review produces evidence.
     - [ ] Q1:
       - `metric:`
       - [ ] M1:
-        - `type:` project
+        - `type:` feedback_sized_project
+        - `feedback_surface:`
+        - `starting_tasks:`
         - [ ] W1:
-          - `type:` project_slice
+          - `type:` feedback_sized_project
+          - `feedback_surface:`
+          - `starting_tasks:`
           - [ ] TASK-XXXX:
             - `trigger:`
             - `metric:`
+            - `boundary_reason:`
             - `depends_on:`
             - `parallel:`
             - `amplifies:`
@@ -61,7 +72,7 @@ Define early metrics before starting the loop.
 | --- | --- | --- | --- | --- | --- |
 |  |  | artifact_presence / mechanical / review / human_feedback / market / learning |  | higher / lower / pass-fail / accept-revise / learn |  |
 
-## Current Frontier
+## Current Milestone
 
 Expand only the branch that can produce useful evidence now.
 
@@ -96,7 +107,7 @@ Use only when inline map annotations become too noisy.
 
 - `child_goal_complete:` update this map, append child completion progress, run
   proof/review, then start the next eligible sibling or wait for heartbeat
-- `frontier_complete:` run heartbeat/replan before expanding the next branch
+- `milestone_complete:` run heartbeat/replan before expanding the next branch
 - `manual_replan:` allowed / not_allowed
 - `heartbeat_replan:` cadence or none
 - `no_op_policy:` log no-op when no useful action exists
@@ -118,7 +129,7 @@ Inspect this portfolio as the parent heartbeat.
 Task: Choose exactly one next action: start_child_goal, resume_child_goal,
 request_feedback, replan, or no_op.
 Logging: Append a heartbeat entry to progress.md.
-Metric: Preserve this portfolio's current frontier, holds, and proof policy.
+Metric: Preserve this portfolio's current milestone, holds, and proof policy.
 After each turn: If a leaf is selected, output/create its child Goal Packet and
 native /goal prompt. Do not run the whole portfolio as a native Goal.
 ```

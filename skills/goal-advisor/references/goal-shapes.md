@@ -90,12 +90,13 @@ For a board-drain heartbeat:
 
 ```text
 goal_portfolio(north_star, horizon, resources, constraints)
-  -> portfolio.md + parent_program.md + current_frontier + child_goal_packets?
+  -> portfolio_state + parent_program.md + current_milestone + child_goal_packets?
 ```
 
 Use when the operator wants to coordinate a business, product line, autonomous
 store, skill-improvement program, or other multi-goal system. Load
-`goal-portfolio.md` before designing this shape.
+`references/goal-portfolio.md` before designing this shape. For Farplane
+framework projects, the live portfolio state is usually `farplane/goals.md`.
 
 Portfolio orchestration boundary:
 

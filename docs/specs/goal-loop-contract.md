@@ -28,7 +28,7 @@ portfolio layer above file-list Goal Packets:
 
 ```text
 goal_portfolio(portfolio.md, goal_packet[], child_ticket[])
-  -> current_frontier + trigger_plan + conflict_checks + state_delta
+  -> current_milestone + trigger_plan + conflict_checks + state_delta
 ```
 
 ## Ownership Model
@@ -110,7 +110,7 @@ The portfolio should show:
   modes, metrics, holds, dependencies, parallel branches, and amplification
   edges
 - metric discovery for early leading indicators when the map needs more detail
-- current frontier, meaning the first branch expanded deeply enough to run now
+- current milestone, meaning the first branch expanded deeply enough to run now
 - cadence for daily, weekly, monthly, quarterly, and yearly replanning
 
 Do not expand the entire long-horizon tree into low-level tasks. Expand only the
@@ -158,7 +158,7 @@ Owns the long-horizon planning graph when one ticket coordinates multiple goals:
 - goal-writing standard
 - portfolio map
 - metric discovery
-- current decomposition frontier
+- current decomposition milestone
 - dependencies and holds
 - parallelizable branches
 - amplification edges
@@ -309,7 +309,7 @@ When a Goal window completes:
 3. Run the configured review, drift check, QA, or proof gate.
 4. If a heartbeat policy still has proceedable work, start or resume the next
    eligible file set.
-5. If the frontier is complete, run the heartbeat or replan routine.
+5. If the milestone is complete, run the heartbeat or replan routine.
 6. Expand only the next evidence-justified branch.
 
 Use this split:
@@ -318,7 +318,7 @@ Use this split:
 - heartbeat = periodically inspect evidence and decide whether to start,
   resume, wait, or replan
 - ticket/program/progress files = task contract, loop policy, and observed state
-- portfolio = optional longer trajectory and current frontier
+- portfolio = optional longer trajectory and current milestone
 - replan = update the map after evidence, completion, blockers, or elapsed time
 
 The operator may manually trigger a replan, but long-running portfolios should
@@ -394,7 +394,7 @@ Portfolio-level autonomous-store plan:
 ```text
 portfolio.md:
   North Star: Build AGI Toy Shop into a profitable autonomous toy storefront.
-  Current Frontier: Y1 > Q1 > W1.
+  Current Milestone: Y1 > Q1 > W1.
   Portfolio Map:
     - Prove first offer: native_goal, review + artifact, parallel with content
       loop and analytics.

@@ -14,7 +14,7 @@ compound through the harness.
 
 ```text
 goal_portfolio(north_star, horizon, resources, constraints)
-  -> portfolio.md + goal_graph + current_frontier + child_goal_packets?
+  -> portfolio.md + goal_graph + current_milestone + child_goal_packets?
 ```
 
 ## First Principles
@@ -30,9 +30,11 @@ operating graph:
 - parallelizable goals in the same timeframe
 - dependencies where one goal must finish before another starts
 - amplification edges where one goal improves another goal's return
-- a decomposition frontier so only the first useful branch is expanded deeply
+- a current milestone so only the first useful branch is expanded deeply
 - a cadence for replanning at each timeframe boundary
-- projects and tasks once the horizon becomes concrete enough to execute
+- feedback-sized projects once the horizon becomes concrete enough to execute
+- tickets only when execution, unblock, approval, review, or proof state needs a
+  durable leaf
 - early metric candidates before the first loop starts
 
 Keep the source of truth in the repo where the Goal starts. Sync to Notion or
@@ -48,8 +50,7 @@ GoalPortfolio :=
 + program.md
 + progress.md
 + project[]
-+ task[]
-+ child_ticket[]
++ child_ticket[]?
 + notion_sync?
 ```
 
@@ -108,7 +109,7 @@ Build AGI Toy Shop into a profitable autonomous toy storefront.
 
 ## Replan Cadence
 
-- Weekly: update W-level tickets and current frontier.
+- Weekly: update project milestones, proceedable tickets, and holds.
 - Quarterly: compare Q goal against evidence, create the next quarter branch.
 - Yearly: revise annual strategy from market and capability evidence.
 ```
@@ -202,17 +203,23 @@ Examples:
 Do not fake precision. If the true goal is learning, use a learning metric and
 state the next decision that the evidence will unlock.
 
-## Projects And Tasks
+## Projects And Tickets
 
-Goals describe desired outcomes. Projects group work. Tasks are concrete
-actions or tickets. Around the month level, the portfolio should usually start
-introducing projects; around the week/day level, it should introduce tasks or
-child tickets.
+Goals describe desired outcomes. Projects group work. A project is the default
+smallest durable unit: it should produce something that can be shown to a human,
+reviewed by an agent, measured by a metric provider, or exposed to market/user
+feedback. Starting tasks may live as hints inside a project, but they are not
+the main portfolio structure.
+
+Only create child tickets below a project when the boundary is real: different
+owner or agent, external access/setup, human approval, feedback collection,
+blocking dependency, risky change, or durable proof/review state.
 
 ```text
-goal -> project[] -> task[]
-project(goal, timeframe, owner, deliverables) -> task[] + evidence
-task(project, action, proof) -> artifact + state_delta
+goal -> project[]
+project(goal, timeframe, owner, deliverables, feedback_surface)
+  -> milestone + starting_tasks? + evidence + child_ticket[]?
+ticket(project, action, proof, boundary_reason) -> artifact + state_delta
 ```
 
 Suggested boundary:
@@ -221,11 +228,15 @@ Suggested boundary:
 - `1Y`: operating outcome.
 - `Q`: measurable bet or capability package.
 - `M`: project or campaign theme.
-- `W`: project slice, active Goal Packet, or child-ticket batch.
-- `D`: concrete task, feedback sample, review, or implementation ticket.
+- `W`: feedback-producing project slice, active Goal Packet, or child-ticket
+  batch.
+- `D`: only when needed: concrete ticket, feedback sample, review, or
+  implementation step.
 
 Projects can vary in size. A project may last a month, a week, or a few days,
-but it should own a coherent bundle of tasks and one proof surface.
+but it should own a coherent bundle of work and one proof surface. In fast
+agent loops, do not pre-split below project level just because a human planner
+can imagine many tasks; let the executing Goal or ticket create local steps.
 
 ## Map Annotation Rules
 
@@ -253,11 +264,31 @@ Expand only the first branch that can produce useful evidence now.
 
 ```text
 decompose(goal, horizon, evidence_state)
-  -> current_frontier + child_goals + hold_list
+  -> current_milestone + child_goals + hold_list
 ```
 
 Do not expand the entire five-year tree into tasks. Strategy farther away from
 evidence should stay abstract.
+
+Default rule:
+
+```text
+feedback_sized_project(goal, available_feedback)
+  -> smallest project whose output can receive real feedback
+```
+
+Split below that project only when one of these is true:
+
+- a human, reviewer, external account, or market signal must unblock the next
+  move
+- a different agent or owner can work independently
+- a dependency or risky migration needs its own proof surface
+- the work is blocked and needs a setup or access ticket
+- the project is ready for an executable Goal Packet and needs ticket-backed
+  `ticket.md`, `program.md`, and `progress.md`
+
+Use `starting_tasks:` inside the project for obvious first moves. Treat those as
+execution hints, not durable child nodes.
 
 Suggested horizons:
 
@@ -358,7 +389,7 @@ Default continuation rules:
 - If a child Goal finishes, update its node in `portfolio.md`, append completion
   progress, and run the proof/review gate.
 - If unfinished sibling nodes are eligible, start or resume the next child Goal.
-- If the current frontier is complete, run the parent heartbeat or replan
+- If the current milestone is complete, run the parent heartbeat or replan
   routine.
 - If no useful action exists yet, log a no-op rather than silently forgetting
   the portfolio.
@@ -408,7 +439,7 @@ Portfolio:
 North Star:
 Horizon:
 Portfolio Map:
-Current Frontier:
+Current Milestone:
 Overflow Edges:
 State Surfaces:
 Next Goal Packet:

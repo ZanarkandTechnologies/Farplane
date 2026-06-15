@@ -82,7 +82,7 @@ recover later.
 | Ticket contract | Task boundary, Done / Proof, current state, and handoff. | Work size or proof target is unclear. | Ticket bureaucracy or fragmented work. | Ticket metadata/checks plus reviewer or QA proof. |
 | `program.md` | Loop config, metric, drift policy, heartbeat, and stop conditions. | A ticket is Goal-backed, heartbeat-based, rollout-like, or long-running. | Second-ticket confusion. | Goal Packet drift review. |
 | `progress.md` | Append-only observed execution memory. | Future turns must reconstruct state without transcript memory. | Transcript dumping, noisy logs. | Resume from files alone. |
-| Portfolio | Long-horizon goal graph and current frontier. | Work spans multiple tickets, goals, and projects. | Overplanning future branches. | Parent heartbeat selects one executable leaf. |
+| Portfolio | Long-horizon goal graph and current milestone. | Work spans multiple tickets, goals, and projects. | Overplanning future branches. | Parent heartbeat selects one executable leaf. |
 | File/memory policy | What state is durable, searchable, drained, or archived. | Lessons are lost or context is stale/noisy. | Artifact graveyard, stale retrieval. | Drain/retrieval test. |
 | Subagent | Independent context and owned output. | Self-approval, role separation, or parallel evidence matters. | Coordination cost, duplicated work. | Subagent artifact plus integration review. |
 | Tool/MCP | External capability or source of truth. | The agent cannot inspect, operate, or verify ground truth. | Latency, side effects, unused tools. | Tool-backed evidence artifact. |
@@ -198,7 +198,7 @@ Use this hierarchy for long-running work:
 ```text
 goal -> project[] -> task[]
 
-portfolio.md = long-horizon map + current frontier
+portfolio.md = long-horizon map + current milestone
 ticket.md = executable leaf contract + Done / Proof
 program.md = loop policy + metric + stop condition
 progress.md = observed execution memory

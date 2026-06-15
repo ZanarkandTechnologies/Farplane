@@ -124,7 +124,7 @@ AGI Toy Shop/
 | Content hooks | W1 | human_feedback | Kenji labels 10 hooks keep/reject | learn | request Telegram feedback |
 | First offer review | W1 end | hybrid | review verdict + collected evidence | accept-revise | CEO heartbeat summarizes W1 |
 
-## Current Frontier
+## Current Milestone
 
 Expand only:
 
@@ -158,7 +158,7 @@ enough to keep edges inline in the Portfolio Map.
 
 - `child_goal_complete:` update the task node in this map, append child
   completion progress, run review/proof, then start the next eligible W1 task
-- `frontier_complete:` run the weekly CEO heartbeat before expanding W2
+- `milestone_complete:` run the weekly CEO heartbeat before expanding W2
 - `manual_replan:` allowed
 - `heartbeat_replan:` weekly CEO heartbeat
 - `no_op_policy:` append a heartbeat no-op when feedback or market evidence has
@@ -171,7 +171,7 @@ Inspect the AGI Toy Shop portfolio as a parent heartbeat.
 
 Task: Read this portfolio, the parent program.md, and parent progress.md. Choose
 exactly one next action: start_child_goal, resume_child_goal, request_feedback,
-replan, or no_op. The current frontier is 5Y > Y1 > Q1 > M1 > W1.
+replan, or no_op. The current milestone is 5Y > Y1 > Q1 > M1 > W1.
 
 Logging: Before ending, append a heartbeat entry to parent progress.md with the
 chosen action, reason, evidence checked, and next child Goal Packet if any.
@@ -189,7 +189,7 @@ portfolio as a native Goal and do not create hidden automation.
 ```text
 /goal Run the child Goal Packet for TASK-0001 Define first toy offer.
 
-Task: Define the first toy offer for the AGI Toy Shop W1 frontier. Use the
+Task: Define the first toy offer for the AGI Toy Shop W1 milestone. Use the
 parent portfolio only as context; execute this leaf task to artifact, blocker,
 or review-ready completion.
 
