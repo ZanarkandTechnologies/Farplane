@@ -280,6 +280,8 @@ def main() -> int:
         if args.write:
             run(["python3", "bin/validators/sync_skill_registry.py", "--write"])
         run(["python3", "bin/validators/sync_skill_registry.py", "--check"])
+        if args.write:
+            run(["python3", "skills/skill-maintenance/scripts/generate_template_intelligence.py"])
 
         tier_command = ["python3", "bin/validators/check_skill_todo_tiers.py"]
         if not args.strict_tier3:
@@ -302,6 +304,7 @@ def main() -> int:
                 "bin/validators/check_skill_capabilities.py",
                 "skills/skill-maintenance/scripts/check_skills.py",
                 "skills/skill-maintenance/scripts/sync_skill_checklists.py",
+                "skills/skill-maintenance/scripts/generate_template_intelligence.py",
             ]
         )
     except subprocess.CalledProcessError as exc:

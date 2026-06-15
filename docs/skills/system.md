@@ -251,6 +251,21 @@ in evals with an audit note.
 applied. A versioned skill promises that its `SKILL.md` follows the current
 template spine and todo-list shape for that version.
 
+Template source edits are release events. When
+`skills/skill-creator/references/SKILL_TEMPLATE.md` changes, refresh the
+generated release metadata and archive snapshots through the normal
+skill-maintenance write path:
+
+```bash
+python3 skills/skill-maintenance/scripts/check_skills.py --write
+```
+
+That command regenerates the skill registry and the template intelligence
+artifact used by Skill OS. Do not hand-edit
+`skills/skill-maintenance/graph/skill-template-intelligence.json`,
+`skills/skill-maintenance/graph/skill-template-intelligence.js`, or generated
+archive snapshots.
+
 Use:
 
 ```bash
