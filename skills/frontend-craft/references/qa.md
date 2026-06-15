@@ -10,11 +10,20 @@ Use this after frontend implementation.
 - Browser smoke for user-visible changes.
 - Screenshot proof for visual changes.
 - `visual-qa` judgment for UI layout, taste, overlap, and responsive issues.
+- `qa_checklist.md` when UI copy, help text, onboarding, settings/status
+  panels, tooltips, or developer/operator-facing surfaces changed.
 - Small-phone proof around 375px width when the surface is responsive.
 - Landscape or short-height proof when fixed headers, pinned scenes, sidebars,
   bottom bars, or large heroes are present.
 - Text-fit proof for dynamic content, long labels, and increased text size where
   the platform/browser supports it.
+- Audience-copy proof that normal product screens do not show developer-facing
+  explainer paragraphs, commands, env-var requirements, bridge/runtime plumbing,
+  or feature rationale unless the surface is explicitly settings, setup,
+  diagnostics, logs, docs, or a developer console.
+- Help-affordance proof that optional explanation is in tooltips, info popovers,
+  docs links, empty states, setup panels, validation messages, or copyable
+  command blocks rather than always-visible README-like prose.
 - Reduced-motion proof for animation-heavy surfaces.
 - Touch target, focus-visible, contrast, and keyboard reachability checks for
   interactive UI.
