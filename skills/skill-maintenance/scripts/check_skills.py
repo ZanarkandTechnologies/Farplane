@@ -281,6 +281,9 @@ def main() -> int:
             run(["python3", "bin/validators/sync_skill_registry.py", "--write"])
         run(["python3", "bin/validators/sync_skill_registry.py", "--check"])
         if args.write:
+            run(["python3", "bin/validators/sync_template_registry.py", "--write"])
+        run(["python3", "bin/validators/sync_template_registry.py", "--check"])
+        if args.write:
             run(["python3", "skills/skill-maintenance/scripts/generate_template_intelligence.py"])
 
         tier_command = ["python3", "bin/validators/check_skill_todo_tiers.py"]
@@ -298,6 +301,7 @@ def main() -> int:
                 "-m",
                 "py_compile",
                 "bin/validators/sync_skill_registry.py",
+                "bin/validators/sync_template_registry.py",
                 "bin/validators/check_doc_refs.py",
                 "bin/validators/check_skill_todo_tiers.py",
                 "bin/validators/check_tier0_phase_protocol.py",

@@ -1,0 +1,10 @@
+[template_registry]
+# Focused registry of the highest-impact unstructured prompt templates. Broader
+# document/version tracking is intentionally deferred.
+paths = [
+  "templates/global/AGENTS.md",
+  "skills/skill-creator/references/SKILL_TEMPLATE.md",
+  "tickets/templates/ticket.md",
+  "tickets/templates/goal-loop/program.md",
+  "skills/harness-creator/templates/project-harness.md",
+]

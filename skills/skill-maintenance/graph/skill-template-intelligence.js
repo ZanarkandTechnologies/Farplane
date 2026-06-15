@@ -400,9 +400,29 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-19426e390ef8.md",
-      "source_commit": "19426e390ef8",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-22eabf0fc1e1.md",
+      "source_commit": "22eabf0fc1e1",
       "summary": "working tree current template",
+      "version": "0.3.0"
+    },
+    {
+      "changed_sections": [],
+      "introduced_at": "2026-06-16",
+      "section_count": 9,
+      "sections": [
+        "Context",
+        "Skill Signature",
+        "Phase Contract",
+        "Phase Boundary",
+        "Todo List",
+        "Templates",
+        "Gotchas",
+        "Reference Map",
+        "Output"
+      ],
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-22eabf0fc1e1.md",
+      "source_commit": "22eabf0fc1e1",
+      "summary": "feat(skills): track template-owned feature metadata",
       "version": "0.3.0"
     }
   ],
@@ -1868,7 +1888,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "19426e390ef8",
+      "source_commit": "22eabf0fc1e1",
       "template_version": "0.3.0",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -1882,7 +1902,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "19426e390ef8",
+      "source_commit": "22eabf0fc1e1",
       "template_version": "0.3.0",
       "title": "Todo executability",
       "verdict": "pass"
@@ -1896,7 +1916,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "19426e390ef8",
+      "source_commit": "22eabf0fc1e1",
       "template_version": "0.3.0",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -1910,7 +1930,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "19426e390ef8",
+      "source_commit": "22eabf0fc1e1",
       "template_version": "0.3.0",
       "title": "Proof contract",
       "verdict": "pass"
@@ -1924,7 +1944,77 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "19426e390ef8",
+      "source_commit": "22eabf0fc1e1",
+      "template_version": "0.3.0",
+      "title": "Eval / QA sync",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "routing",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "routing_clarity",
+      "expected_signals": [
+        "description uses verb/input/output/call-condition guidance",
+        "trigger catalogs stay out of frontmatter"
+      ],
+      "missing_signals": [],
+      "source_commit": "22eabf0fc1e1",
+      "template_version": "0.3.0",
+      "title": "Routing clarity",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "todo_executability",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "todo_executability",
+      "expected_signals": [
+        "top-level todos use visible numbered checkbox actions",
+        "policy prose is not treated as a top-level todo"
+      ],
+      "missing_signals": [],
+      "source_commit": "22eabf0fc1e1",
+      "template_version": "0.3.0",
+      "title": "Todo executability",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "phase_boundary",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "phase_boundary",
+      "expected_signals": [
+        "phase-like skills are externalized only when their artifact is needed",
+        "same-scope recursion is forbidden"
+      ],
+      "missing_signals": [],
+      "source_commit": "22eabf0fc1e1",
+      "template_version": "0.3.0",
+      "title": "Phase boundary",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "proof_contract",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "proof_contract",
+      "expected_signals": [
+        "the finish gate names proof, blockers, or evidence",
+        "output contract is explicit"
+      ],
+      "missing_signals": [],
+      "source_commit": "22eabf0fc1e1",
+      "template_version": "0.3.0",
+      "title": "Proof contract",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "eval_qa_sync",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "eval_qa_sync",
+      "expected_signals": [
+        "eval_task.json is a first-class special file",
+        "qa_checklist.md is a repeatable runtime guardrail only when warranted"
+      ],
+      "missing_signals": [],
+      "source_commit": "22eabf0fc1e1",
       "template_version": "0.3.0",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -2180,7 +2270,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-06-15T15:51:20+00:00",
+  "generated_at": "2026-06-15T16:23:41+00:00",
   "rollout": [
     {
       "eval": "",
@@ -3462,10 +3552,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "introduced_at": "2026-06-15",
-      "latest_at": "2026-06-15",
-      "latest_commit": "19426e390ef8",
-      "latest_summary": "working tree current template",
-      "release_count": 1,
+      "latest_at": "2026-06-16",
+      "latest_commit": "22eabf0fc1e1",
+      "latest_summary": "feat(skills): track template-owned feature metadata",
+      "release_count": 2,
       "sections": [
         "Context",
         "Skill Signature",
@@ -3477,16 +3567,22 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-19426e390ef8.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-22eabf0fc1e1.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-15",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-19426e390ef8.md",
-          "source_commit": "19426e390ef8",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-22eabf0fc1e1.md",
+          "source_commit": "22eabf0fc1e1",
           "summary": "working tree current template"
+        },
+        {
+          "introduced_at": "2026-06-16",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-22eabf0fc1e1.md",
+          "source_commit": "22eabf0fc1e1",
+          "summary": "feat(skills): track template-owned feature metadata"
         }
       ],
-      "source_commit": "19426e390ef8",
+      "source_commit": "22eabf0fc1e1",
       "summary": "working tree current template",
       "template_metadata": {
         "feature_refs": [

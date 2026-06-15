@@ -1,4 +1,11 @@
 ---
+template_id: ticket-template
+template_version: "0.1.0"
+feature_refs:
+  - FEAT-0002
+  - FEAT-0007
+  - FEAT-0008
+  - FEAT-0028
 ticket_id: TASK-XXXX
 title: short title
 phase: planning

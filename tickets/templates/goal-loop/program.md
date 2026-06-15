@@ -4,7 +4,11 @@ ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
 template_id: goal-loop-program
-template_version: "0.1.0"
+template_version: "0.1.1"
+feature_refs:
+  - FEAT-0029
+  - FEAT-0032
+  - FEAT-0046
 ---
 
 # TASK-XXXX Goal Program
