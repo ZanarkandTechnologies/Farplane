@@ -4,10 +4,8 @@ description: "Turn a Farplane improvement idea into a recommended owner surface 
 tier: 2
 source: local
 skill_template_version: "0.2.0"
-feature_refs:
-  - FEAT-0023
-  - FEAT-0040
-  - FEAT-0048
+eval: eval_task.json
+skill_ui: skills/harness-advisor
 ---
 
 # Harness Advisor

@@ -29,8 +29,10 @@ into a second place to maintain skill truth.
   generator or UI.
 - Skill-applicable harness features live in
   [`docs/features/registry.jsonl`](../features/registry.jsonl) with
-  `category: "skills"`. This folder owns the generated skill inventory, not a
-  second hand-authored skill feature registry.
+  `category: "skills"`. Versioned skill templates declare structural feature
+  IDs; individual skills declare local eval, QA checklist, and skill UI
+  surfaces. This folder owns the generated skill inventory, not a second
+  hand-authored skill feature registry.
 - `skills/<skill-name>/qa_checklist.md` is the optional first-class
   skill-local QA checklist for settled runtime guardrails. Keep it at the skill
   package root, not under `references/`, when agents or reviewer lanes should
@@ -138,8 +140,12 @@ Manual fields:
 - `skill_template_version`: optional structural baseline for skills onboarded
   to a known Farplane skill template version; absence means the skill has not
   been onboarded yet
-- `feature_refs`: optional list of `FEAT-####` handles for harness features the
-  skill package implements, depends on, or deliberately adopts
+- `eval`: optional path to a skill-local eval task file, usually
+  `eval_task.json`
+- `qa_checklist`: optional path to a skill-local runtime checklist, usually
+  `qa_checklist.md`
+- `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
+  debug page, or UI binding
 - `group`: required for Tier 3 only
 - `methods`: optional list for method addresses owned by the skill
 - `common_chains`: optional Tier 3 one-way adjacency hints
@@ -152,7 +158,9 @@ Generated fields:
 - `has_checklist`
 - `version`
 - `skill_template_version`
-- `feature_refs`
+- `eval`
+- `qa_checklist`
+- `skill_ui`
 - `allowed_tools`
 - `source`
 - `upstream_url`
@@ -331,10 +339,11 @@ step-by-step maintenance workflow in that skill.
 
 When skill standards or optional skill capabilities change, use
 [`docs/features/registry.jsonl`](../features/registry.jsonl) as the supported
-feature catalog. Skill packages may carry compact `feature_refs` frontmatter
-handles for adopted `FEAT-####` records. `skill-maintenance` should report stale
-or missing adoption from the generated skill inventory, `feature_refs`, and
-feature rows rather than requiring long per-skill migration histories.
+feature catalog. Skill template versions carry structural `FEAT-####` handles;
+skill packages carry only local surface fields for eval, QA checklist, and skill
+UI. `skill-maintenance` should report stale or missing adoption from template
+version rollout, generated skill inventory, local surface fields, and feature
+rows rather than requiring long per-skill migration histories.
 
 Use `skills/harness-advisor/` before skill maintenance when the question is
 broader than skills: it compares root policy, global templates, docs/specs,

@@ -6,9 +6,7 @@ group: harness
 source: local
 version: 0.2.0
 skill_template_version: "0.2.0"
-feature_refs:
-  - FEAT-0029
-  - FEAT-0046
+eval: eval_task.json
 allowed-tools: Read, Write, Glob, Grep, Bash
 ---
 

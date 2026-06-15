@@ -4,8 +4,7 @@ description: "Turn current-vs-expected behavior evidence into a grounded GapRepo
 tier: 2
 source: local
 skill_template_version: "0.2.0"
-feature_refs:
-  - FEAT-0053
+eval: eval_task.json
 methods:
   - gap-analysis:skill
   - gap-analysis:harness

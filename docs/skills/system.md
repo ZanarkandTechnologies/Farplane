@@ -184,9 +184,12 @@ Manual fields:
 - `source`: required, `local` or `external`.
 - `skill_template_version`: optional structural baseline for skills onboarded
   to a known Farplane skill template version; absence means not onboarded yet.
-- `feature_refs`: optional compact list of `FEAT-####` records this skill
-  package implements, depends on, or deliberately adopts. The feature registry
-  owns the feature details, evidence, limits, and metrics.
+- `eval`: optional path to a skill-local eval task file, usually
+  `eval_task.json`.
+- `qa_checklist`: optional path to a skill-local runtime checklist, usually
+  `qa_checklist.md`.
+- `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
+  debug page, or UI binding.
 - `group`: required for Tier 3 only.
 - `methods`: optional method addresses owned by the skill.
 - `common_chains`: optional one-way Tier 3 adjacency hints.
@@ -194,9 +197,9 @@ Manual fields:
 
 Generated registry fields include `path`, `description`, `has_checklist`,
 `version`, `allowed_tools`, `skill_links`, and the manual fields above.
-`feature_refs` values are validated against
-`docs/features/registry.jsonl`. Derive generated fields from source files
-instead of duplicating them in frontmatter.
+Structural feature IDs belong to the versioned skill template metadata, not
+per-skill frontmatter. Derive generated fields from source files instead of
+duplicating them in frontmatter.
 
 ## Source Ownership
 
@@ -358,14 +361,15 @@ Skill-applicable capabilities belong in the harness-wide feature registry:
 ```
 
 Use feature rows for supported optional capabilities such as eval support,
-skill capability fixtures, or autoresearchability. Use `feature_refs` in skill
-frontmatter only to record compact `FEAT-####` adoption handles for the skill
-package. Use `skill_template_version` for structural template onboarding.
+skill capability fixtures, template-owned metadata, or autoresearchability.
+Use versioned template metadata for structural `FEAT-####` adoption handles,
+and use skill frontmatter only for local eval, QA checklist, and skill UI
+surface paths. Use `skill_template_version` for structural template onboarding.
 
 Do not store long applied-migration histories in skill frontmatter. If a
 migration needs rollout tracking, let `skill-maintenance` compare the generated
-skill inventory, template version report, `feature_refs`, and relevant feature
-rows.
+skill inventory, template version report, local surface fields, template
+metadata, and relevant feature rows.
 
 ## Installed Rendering
 

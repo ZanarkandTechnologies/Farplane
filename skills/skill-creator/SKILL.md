@@ -5,9 +5,6 @@ tier: 3
 group: skills
 source: local
 skill_template_version: "0.2.0"
-feature_refs:
-  - FEAT-0048
-  - FEAT-0057
 license: Complete terms in LICENSE.txt
 allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, Glob
 ---

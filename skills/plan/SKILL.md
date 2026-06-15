@@ -5,6 +5,7 @@ description: "Turn a goal, context, invoked skills, and budget into composed tod
 tier: 2
 source: local
 skill_template_version: "0.2.0"
+eval: eval_task.json
 allowed-tools: Read, Glob, Grep
 ---
 

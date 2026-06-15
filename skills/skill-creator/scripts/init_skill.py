@@ -20,7 +20,7 @@ name: {skill_name}
 description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
 tier: [TODO: 1 | 2 | 3]
 source: local
-skill_template_version: "0.1.0"
+skill_template_version: "0.3.0"
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---
@@ -140,6 +140,16 @@ def title_case_skill_name(skill_name):
     """Convert hyphenated skill name to Title Case for display."""
     return ' '.join(word.capitalize() for word in skill_name.split('-'))
 
+def strip_template_metadata(template_text):
+    """Return the literal SKILL.md template body from a versioned template file."""
+    if not template_text.startswith('---\n'):
+        return template_text
+    first_end = template_text.find('\n---\n', 4)
+    if first_end == -1:
+        return template_text
+    body = template_text[first_end + len('\n---\n'):].lstrip('\n')
+    return body if body.startswith('---\n') else template_text
+
 def init_skill(skill_name, path, version="1.0.0", tools="Read, Write, Grep, LS"):
     """
     Initialize a new skill directory with template SKILL.md and reference files.
@@ -160,7 +170,7 @@ def init_skill(skill_name, path, version="1.0.0", tools="Read, Write, Grep, LS")
     # Try to read template from references/SKILL_TEMPLATE.md
     template_path = Path(__file__).parent.parent / 'references' / 'SKILL_TEMPLATE.md'
     if template_path.exists():
-        skill_template = template_path.read_text()
+        skill_template = strip_template_metadata(template_path.read_text())
         print("📖 Loaded SKILL.md template from file")
     else:
         skill_template = FALLBACK_SKILL_TEMPLATE

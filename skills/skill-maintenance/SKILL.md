@@ -5,11 +5,9 @@ tier: 3
 group: skills
 source: local
 skill_template_version: "0.2.0"
-feature_refs:
-  - FEAT-0037
-  - FEAT-0040
-  - FEAT-0044
-  - FEAT-0057
+eval: eval_task.json
+qa_checklist: qa_checklist.md
+skill_ui: skills/skill-maintenance/graph/index.html
 ---
 
 # Skill Maintenance

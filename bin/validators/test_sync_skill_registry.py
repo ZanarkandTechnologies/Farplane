@@ -17,21 +17,15 @@ sync_skill_registry = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(sync_skill_registry)
 
 
-def write_feature_registry(repo: Path, *feature_ids: str) -> None:
-    registry = repo / "docs" / "features" / "registry.jsonl"
-    registry.parent.mkdir(parents=True)
-    registry.write_text(
-        "".join(f'{{"id":"{feature_id}"}}\n' for feature_id in feature_ids),
-        encoding="utf-8",
-    )
-
-
 def write_skill(
     repo: Path,
     name: str,
     *,
     template_version: str | None = None,
     feature_refs: list[str] | None = None,
+    eval_surface: str | None = None,
+    qa_checklist: str | None = None,
+    skill_ui: str | None = None,
 ) -> None:
     skill_dir = repo / "skills" / name
     skill_dir.mkdir(parents=True)
@@ -55,6 +49,9 @@ def write_skill(
                 "source: local",
                 template_line.rstrip(),
                 feature_lines.rstrip(),
+                f"eval: {eval_surface}" if eval_surface else "",
+                f"qa_checklist: {qa_checklist}" if qa_checklist else "",
+                f"skill_ui: {skill_ui}" if skill_ui else "",
                 "---",
                 "",
                 f"# {name}",
@@ -92,37 +89,30 @@ class SyncSkillRegistryTests(unittest.TestCase):
 
             self.assertNotIn("skill_template_version", rows[0])
 
-    def test_copies_known_feature_refs_when_present(self) -> None:
+    def test_rejects_skill_level_feature_refs(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
-            write_feature_registry(repo, "FEAT-0001", "FEAT-0002")
+            write_skill(repo, "example", feature_refs=["FEAT-0001"])
+
+            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "template metadata"):
+                sync_skill_registry.build_registry(repo)
+
+    def test_copies_skill_surface_fields_when_present(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
             write_skill(
                 repo,
                 "example",
-                feature_refs=["FEAT-0002", "FEAT-0001", "FEAT-0002"],
+                eval_surface="eval_task.json",
+                qa_checklist="qa_checklist.md",
+                skill_ui="skills/example/ui/index.html",
             )
 
             rows = sync_skill_registry.build_registry(repo)
 
-            self.assertEqual(rows[0]["feature_refs"], ["FEAT-0001", "FEAT-0002"])
-
-    def test_rejects_malformed_feature_refs(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            repo = Path(tmp)
-            write_feature_registry(repo, "FEAT-0001")
-            write_skill(repo, "example", feature_refs=["feature-1"])
-
-            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "FEAT-####"):
-                sync_skill_registry.build_registry(repo)
-
-    def test_rejects_unknown_feature_refs(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            repo = Path(tmp)
-            write_feature_registry(repo, "FEAT-0001")
-            write_skill(repo, "example", feature_refs=["FEAT-9999"])
-
-            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "not in docs/features"):
-                sync_skill_registry.build_registry(repo)
+            self.assertEqual(rows[0]["eval"], "eval_task.json")
+            self.assertEqual(rows[0]["qa_checklist"], "qa_checklist.md")
+            self.assertEqual(rows[0]["skill_ui"], "skills/example/ui/index.html")
 
 
 if __name__ == "__main__":

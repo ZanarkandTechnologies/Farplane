@@ -5,9 +5,7 @@ tier: 3
 group: harness
 source: local
 skill_template_version: "0.2.0"
-feature_refs:
-  - FEAT-0039
-  - FEAT-0041
+eval: eval_task.json
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

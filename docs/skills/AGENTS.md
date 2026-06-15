@@ -15,8 +15,9 @@ Rules:
   registry.
 - Package-local metadata lives in `skills/*/SKILL.md` frontmatter. Keep it
   minimal: `tier`, `source`, optional `skill_template_version`, Tier 3 `group`,
-  optional `feature_refs`, optional `methods`, optional `upstream_url`, and
-  optional one-way Tier 3 `common_chains`.
+  optional local surface fields (`eval`, `qa_checklist`, `skill_ui`), optional
+  `methods`, optional `upstream_url`, and optional one-way Tier 3
+  `common_chains`.
 - For `source: external` skills, keep Farplane-specific wrapper policy in the
   local caller skill instead of editing upstream-owned command/reference bodies.
 - External skills may intentionally omit direct todo lists when the local
@@ -54,6 +55,6 @@ Rules:
   graph views from Tier 3 `group` plus `common_chains` when a view is needed.
 - If a field can be derived from file paths, existing frontmatter, direct todo
   lists, or Markdown links, derive it in the sync script rather than duplicating
-  it in frontmatter. `feature_refs` is the compact
-  exception for deliberate `FEAT-####` adoption; the feature registry owns the
-  details.
+  it in frontmatter. Structural `FEAT-####` adoption belongs to versioned
+  template metadata; skills declare only local eval, QA checklist, and skill UI
+  surfaces when those surfaces exist.

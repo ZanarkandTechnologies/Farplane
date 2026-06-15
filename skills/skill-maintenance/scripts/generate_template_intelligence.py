@@ -22,7 +22,7 @@ from typing import Any
 
 SCRIPT_PATH = Path(__file__).resolve()
 REPO_ROOT = SCRIPT_PATH.parents[3]
-CURRENT_TEMPLATE_VERSION = "0.2.0"
+CURRENT_TEMPLATE_VERSION = "0.3.0"
 TEMPLATE_PATH = Path("skills/skill-creator/references/SKILL_TEMPLATE.md")
 DEFAULT_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.json")
 DEFAULT_JS_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.js")
@@ -36,6 +36,68 @@ class TemplateSnapshot:
     introduced_at: str
     subject: str
     text: str
+
+
+def parse_scalar(value: str) -> Any:
+    value = value.strip()
+    if not value:
+        return ""
+    if value in {"true", "false"}:
+        return value == "true"
+    if value.startswith(("\"", "'")) and value.endswith(("\"", "'")):
+        return value[1:-1]
+    return value
+
+
+def parse_simple_yaml(raw: str) -> dict[str, Any]:
+    parsed: dict[str, Any] = {}
+    current_key: str | None = None
+    current_subkey: str | None = None
+    for line in raw.splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if not line.startswith(" "):
+            current_subkey = None
+            key, _, value = line.partition(":")
+            key = key.strip()
+            parsed[key] = {} if not value.strip() else parse_scalar(value)
+            current_key = key
+            continue
+        if current_key is None:
+            continue
+        current_value = parsed.get(current_key)
+        stripped = line.strip()
+        if stripped.startswith("- "):
+            item = parse_scalar(stripped[2:].strip())
+            if current_subkey and isinstance(current_value, dict):
+                current_value.setdefault(current_subkey, []).append(item)
+            else:
+                if not isinstance(current_value, list):
+                    current_value = []
+                    parsed[current_key] = current_value
+                current_value.append(item)
+            continue
+        if ":" in stripped:
+            subkey, _, value = stripped.partition(":")
+            if not isinstance(current_value, dict):
+                current_value = {}
+                parsed[current_key] = current_value
+            current_value[subkey.strip()] = [] if not value.strip() else parse_scalar(value)
+            current_subkey = subkey.strip()
+    return parsed
+
+
+def split_template_metadata(text: str) -> tuple[dict[str, Any], str]:
+    if not text.startswith("---\n"):
+        return {}, text
+    first_end = text.find("\n---\n", 4)
+    if first_end == -1:
+        return {}, text
+    raw = text[4:first_end]
+    body = text[first_end + len("\n---\n") :].lstrip("\n")
+    if body.startswith("---\n"):
+        return parse_simple_yaml(raw), body
+    return {}, text
 
 
 def run_git(args: list[str], repo_root: Path = REPO_ROOT) -> str:
@@ -61,8 +123,22 @@ def load_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def parse_template_version(text: str) -> str:
-    match = re.search(r"skill_template_version:\s*[\"']?([^\"'\n]+)", text)
+    metadata, body = split_template_metadata(text)
+    template_version = metadata.get("template_version")
+    if isinstance(template_version, str) and template_version:
+        return template_version
+    match = re.search(r"skill_template_version:\s*[\"']?([^\"'\n]+)", body)
     return match.group(1).strip() if match else "unknown"
+
+
+def template_metadata_summary(text: str) -> dict[str, Any]:
+    metadata, _body = split_template_metadata(text)
+    return {
+        "template_id": metadata.get("template_id", ""),
+        "template_version": metadata.get("template_version", ""),
+        "feature_refs": metadata.get("feature_refs", []),
+        "surface_fields": metadata.get("surface_fields", {}),
+    }
 
 
 def section_names(markdown: str) -> list[str]:
@@ -204,6 +280,7 @@ def summarize_template_versions(
                 "latest_summary": latest.subject,
                 "sections": section_names(latest.text),
                 "snapshot_path": archive_paths.get(latest.source_commit, ""),
+                "template_metadata": template_metadata_summary(latest.text),
                 "snapshots": [
                     {
                         "source_commit": snapshot.source_commit[:12],
@@ -258,7 +335,9 @@ def rollout_rows(skill_rows: list[dict[str, Any]], current_version: str) -> list
                 "source": source,
                 "tier": row.get("tier"),
                 "template_version": version,
-                "feature_refs": row.get("feature_refs", []),
+                "eval": row.get("eval", ""),
+                "qa_checklist": row.get("qa_checklist", ""),
+                "skill_ui": row.get("skill_ui", ""),
                 "has_checklist": bool(row.get("has_checklist")),
                 "status": status,
             }
@@ -384,6 +463,7 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
             "Template evals are hidden research signals until real eval-run artifacts can be joined to template release windows.",
             "Git mining is a recovery path; future template changes should archive snapshots at change time.",
             "Skill-applicable features remain owned by docs/features/registry.jsonl.",
+            "Template-level features are declared by the versioned skill template; skill rows expose local eval, QA checklist, and UI surfaces.",
         ],
         "epochs": summarize_epochs(snapshots, archive_paths),
         "template_versions": summarize_template_versions(snapshots, archive_paths),

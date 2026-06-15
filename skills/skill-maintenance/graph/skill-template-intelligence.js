@@ -2,9 +2,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
   "caveats": [
     "Template evals are hidden research signals until real eval-run artifacts can be joined to template release windows.",
     "Git mining is a recovery path; future template changes should archive snapshots at change time.",
-    "Skill-applicable features remain owned by docs/features/registry.jsonl."
+    "Skill-applicable features remain owned by docs/features/registry.jsonl.",
+    "Template-level features are declared by the versioned skill template; skill rows expose local eval, QA checklist, and UI surfaces."
   ],
-  "current_template_version": "0.2.0",
+  "current_template_version": "0.3.0",
   "epochs": [
     {
       "changed_sections": [
@@ -399,10 +400,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-f0aaf00ae3f7.md",
-      "source_commit": "f0aaf00ae3f7",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-19426e390ef8.md",
+      "source_commit": "19426e390ef8",
       "summary": "working tree current template",
-      "version": "0.2.0"
+      "version": "0.3.0"
     }
   ],
   "eval_definitions": [
@@ -1867,8 +1868,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "f0aaf00ae3f7",
-      "template_version": "0.2.0",
+      "source_commit": "19426e390ef8",
+      "template_version": "0.3.0",
       "title": "Routing clarity",
       "verdict": "pass"
     },
@@ -1881,8 +1882,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "f0aaf00ae3f7",
-      "template_version": "0.2.0",
+      "source_commit": "19426e390ef8",
+      "template_version": "0.3.0",
       "title": "Todo executability",
       "verdict": "pass"
     },
@@ -1895,8 +1896,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "f0aaf00ae3f7",
-      "template_version": "0.2.0",
+      "source_commit": "19426e390ef8",
+      "template_version": "0.3.0",
       "title": "Phase boundary",
       "verdict": "pass"
     },
@@ -1909,8 +1910,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "f0aaf00ae3f7",
-      "template_version": "0.2.0",
+      "source_commit": "19426e390ef8",
+      "template_version": "0.3.0",
       "title": "Proof contract",
       "verdict": "pass"
     },
@@ -1923,8 +1924,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "f0aaf00ae3f7",
-      "template_version": "0.2.0",
+      "source_commit": "19426e390ef8",
+      "template_version": "0.3.0",
       "title": "Eval / QA sync",
       "verdict": "pass"
     }
@@ -2154,957 +2155,1136 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skills/skill-maintenance/templates/archive",
         "skills/skill-creator/references/SKILL_TEMPLATE.md"
       ]
+    },
+    {
+      "evidence_refs": [
+        "bin/validators/test_sync_skill_registry.py",
+        "skills/skill-maintenance/scripts/test_generate_template_intelligence.py"
+      ],
+      "id": "FEAT-0059",
+      "known_limits": "Template-level feature metadata is authoritative for structural template features; skill rows declare only local eval, QA checklist, and skill UI surfaces. Existing skills are not automatically marked current for a new template version unless their structure is verified.",
+      "last_verified": "2026-06-15",
+      "metrics": [
+        "skill_surface_metadata_coverage",
+        "template_feature_inference_pass"
+      ],
+      "name": "Template-owned skill feature metadata",
+      "status": "implemented",
+      "surfaces": [
+        "skills/skill-creator/references/SKILL_TEMPLATE.md",
+        "skills/skill-maintenance/scripts/migrate_skill_surfaces.py",
+        "bin/validators/sync_skill_registry.py",
+        "skills/skill-maintenance/scripts/generate_template_intelligence.py",
+        "docs/skills/system.md",
+        "docs/skills/README.md"
+      ]
     }
   ],
-  "generated_at": "2026-06-15T15:40:07+00:00",
+  "generated_at": "2026-06-15T15:51:20+00:00",
   "rollout": [
     {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/board-drain/SKILL.md",
-      "skill_id": "board-drain",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/code-review/SKILL.md",
-      "skill_id": "code-review",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 2
-    },
-    {
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "has_checklist": true,
-      "path": "skills/eval/SKILL.md",
-      "skill_id": "eval",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/frontend-craft/SKILL.md",
-      "skill_id": "frontend-craft",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [
-        "FEAT-0053"
-      ],
-      "has_checklist": true,
-      "path": "skills/gap-analysis/SKILL.md",
-      "skill_id": "gap-analysis",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 2
-    },
-    {
-      "feature_refs": [
-        "FEAT-0029",
-        "FEAT-0046"
-      ],
-      "has_checklist": true,
-      "path": "skills/goal-advisor/SKILL.md",
-      "skill_id": "goal-advisor",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [
-        "FEAT-0023",
-        "FEAT-0040",
-        "FEAT-0048"
-      ],
-      "has_checklist": true,
-      "path": "skills/harness-advisor/SKILL.md",
-      "skill_id": "harness-advisor",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 2
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/harness-creator/SKILL.md",
-      "skill_id": "harness-creator",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [
-        "FEAT-0056"
-      ],
-      "has_checklist": true,
-      "path": "skills/ingest-content/SKILL.md",
-      "skill_id": "ingest-content",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [
-        "FEAT-0039",
-        "FEAT-0041"
-      ],
-      "has_checklist": true,
-      "path": "skills/learning-drain/SKILL.md",
-      "skill_id": "learning-drain",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/leverage-advisor/SKILL.md",
-      "skill_id": "leverage-advisor",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 2
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/leverage-rollout/SKILL.md",
-      "skill_id": "leverage-rollout",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [
-        "FEAT-0053"
-      ],
-      "has_checklist": true,
-      "path": "skills/optimize-harness/SKILL.md",
-      "skill_id": "optimize-harness",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [
-        "FEAT-0046"
-      ],
-      "has_checklist": true,
-      "path": "skills/optimize-with-human/SKILL.md",
-      "skill_id": "optimize-with-human",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 2
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/plan/SKILL.md",
-      "skill_id": "plan",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 2
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/review/SKILL.md",
-      "skill_id": "review",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 2
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/self-improve/SKILL.md",
-      "skill_id": "self-improve",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0057"
-      ],
-      "has_checklist": true,
-      "path": "skills/skill-creator/SKILL.md",
-      "skill_id": "skill-creator",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [
-        "FEAT-0037",
-        "FEAT-0040",
-        "FEAT-0044",
-        "FEAT-0057"
-      ],
-      "has_checklist": true,
-      "path": "skills/skill-maintenance/SKILL.md",
-      "skill_id": "skill-maintenance",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/update-memory/SKILL.md",
-      "skill_id": "update-memory",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/update-strategy/SKILL.md",
-      "skill_id": "update-strategy",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": false,
       "path": "skills/agent-browser/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "agent-browser",
+      "skill_ui": "",
       "source": "external",
       "status": "external",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": false,
       "path": "skills/convex/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "convex",
+      "skill_ui": "",
       "source": "external",
       "status": "external",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": false,
       "path": "skills/vercel-react-best-practices/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "vercel-react-best-practices",
+      "skill_ui": "",
       "source": "external",
       "status": "external",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/agent-behavior-test/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "agent-behavior-test",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/agent-qa-test/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "agent-qa-test",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/agent-testability-plan/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "agent-testability-plan",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/apify/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "apify",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/autoresearch-exec/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "autoresearch-exec",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/autoresearch-plan/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "autoresearch-plan",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/bash-efficiency/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "bash-efficiency",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/best-of-worlds/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "best-of-worlds",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/brainstorm/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "brainstorm",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/close-ticket/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "close-ticket",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/codebase-analysis/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "codebase-analysis",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/coderabbit-review/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "coderabbit-review",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/commit-message/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "commit-message",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/data-viz/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "data-viz",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/deep-init-project/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "deep-init-project",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/deep-interview/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "deep-interview",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/deep-system-design/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "deep-system-design",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/deep-ui-design/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "deep-ui-design",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/delegate-cli/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "delegate-cli",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/delegate-frontend/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "delegate-frontend",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/demo/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "demo",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/demo-realism/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "demo-realism",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/desloppify/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "desloppify",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/diagramming/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "diagramming",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/documentation/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "documentation",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/execute/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "execute",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/external-patterns/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "external-patterns",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/farplane-invocation/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "farplane-invocation",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/feed-scout/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "feed-scout",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/find-skills/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "find-skills",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/frontend-design/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "frontend-design",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/functional-ui/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "functional-ui",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/harness-scout/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "harness-scout",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/image-generation/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "image-generation",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/impl/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "impl",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/impl-plan/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "impl-plan",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/landing-page/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "landing-page",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/media-ingest/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "media-ingest",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/notion-task-field-fill/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "notion-task-field-fill",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/pr-review-watch/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "pr-review-watch",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/pr-runtime/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "pr-runtime",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/pr-splitting/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "pr-splitting",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/prd/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "prd",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/product-photography/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "product-photography",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/qa/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "qa",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/react-flow/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "react-flow",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/reel-collage/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "reel-collage",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/remotion/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "remotion",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/remotion-render/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "remotion-render",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/research/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "research",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/runtime-debugging/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "runtime-debugging",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/skill-registry-ui/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "skill-registry-ui",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/social-content/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "social-content",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/spec-to-ticket/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "spec-to-ticket",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/summarize/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "summarize",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/telegram-message/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "telegram-message",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 1
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/testing/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "testing",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/video-generation/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "video-generation",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/video-production/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "video-production",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/video-understanding/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "video-understanding",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/visual-design/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "visual-design",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/visual-qa/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "visual-qa",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/web-design-guidelines/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "web-design-guidelines",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/weekly-strategy-analysis/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "weekly-strategy-analysis",
+      "skill_ui": "",
       "source": "local",
       "status": "missing",
       "template_version": "missing",
       "tier": 3
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/advise/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "advise",
+      "skill_ui": "",
       "source": "local",
       "status": "stale",
       "template_version": "0.1.0",
       "tier": 1
     },
     {
-      "feature_refs": [],
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/board-drain/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "board-drain",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/code-review/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "code-review",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 2
+    },
+    {
+      "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/deliberative-advice/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "deliberative-advice",
+      "skill_ui": "",
       "source": "local",
       "status": "stale",
       "template_version": "0.1.0",
       "tier": 2
     },
     {
-      "feature_refs": [],
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/eval/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "eval",
+      "skill_ui": "skills/eval/templates/viewer-react",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/frontend-craft/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "frontend-craft",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/gap-analysis/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "gap-analysis",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 2
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/goal-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "goal-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/harness-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "harness-advisor",
+      "skill_ui": "skills/harness-advisor",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 2
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/harness-creator/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "harness-creator",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/ingest-content/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "ingest-content",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/learning-drain/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "learning-drain",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/leverage-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "leverage-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 2
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/leverage-rollout/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "leverage-rollout",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/optimize-harness/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "optimize-harness",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/optimize-with-human/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "optimize-with-human",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 2
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/plan/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "plan",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 2
+    },
+    {
+      "eval": "",
       "has_checklist": true,
       "path": "skills/prototyping/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "prototyping",
+      "skill_ui": "",
       "source": "local",
       "status": "stale",
       "template_version": "0.1.0",
       "tier": 1
     },
     {
-      "feature_refs": [],
+      "eval": "",
       "has_checklist": true,
       "path": "skills/reference-grounding/SKILL.md",
+      "qa_checklist": "",
       "skill_id": "reference-grounding",
+      "skill_ui": "",
       "source": "local",
       "status": "stale",
       "template_version": "0.1.0",
       "tier": 1
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/review/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "review",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 2
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/self-improve/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "self-improve",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/skill-creator/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "skill-creator",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/skill-maintenance/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "skill-maintenance",
+      "skill_ui": "skills/skill-maintenance/graph/index.html",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/update-memory/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "update-memory",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/update-strategy/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "update-strategy",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
     }
   ],
   "rollout_summary": {
@@ -3113,10 +3293,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "local": 89
     },
     "by_status": {
-      "current": 21,
       "external": 3,
       "missing": 64,
-      "stale": 4
+      "stale": 25
     },
     "by_template_version": {
       "0.1.0": 4,
@@ -3195,14 +3374,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ],
       "source_commit": "1bd582dad454",
       "summary": "refactor(skills): simplify template todo shape",
+      "template_metadata": {
+        "feature_refs": [],
+        "surface_fields": {},
+        "template_id": "",
+        "template_version": ""
+      },
       "version": "0.1.0"
     },
     {
       "introduced_at": "2026-06-11",
-      "latest_at": "2026-06-15",
-      "latest_commit": "f0aaf00ae3f7",
-      "latest_summary": "working tree current template",
-      "release_count": 9,
+      "latest_at": "2026-06-13",
+      "latest_commit": "b869218c2463",
+      "latest_summary": "Refactor skill maintenance around behavior deltas",
+      "release_count": 8,
       "sections": [
         "Context",
         "Skill Signature",
@@ -3214,7 +3399,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-f0aaf00ae3f7.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-b869218c2463.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-11",
@@ -3263,17 +3448,63 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
           "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-b869218c2463.md",
           "source_commit": "b869218c2463",
           "summary": "Refactor skill maintenance around behavior deltas"
-        },
-        {
-          "introduced_at": "2026-06-15",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-f0aaf00ae3f7.md",
-          "source_commit": "f0aaf00ae3f7",
-          "summary": "working tree current template"
         }
       ],
       "source_commit": "00faed3596c1",
       "summary": "feat(eval): add modular skill task suite",
+      "template_metadata": {
+        "feature_refs": [],
+        "surface_fields": {},
+        "template_id": "",
+        "template_version": ""
+      },
       "version": "0.2.0"
+    },
+    {
+      "introduced_at": "2026-06-15",
+      "latest_at": "2026-06-15",
+      "latest_commit": "19426e390ef8",
+      "latest_summary": "working tree current template",
+      "release_count": 1,
+      "sections": [
+        "Context",
+        "Skill Signature",
+        "Phase Contract",
+        "Phase Boundary",
+        "Todo List",
+        "Templates",
+        "Gotchas",
+        "Reference Map",
+        "Output"
+      ],
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-19426e390ef8.md",
+      "snapshots": [
+        {
+          "introduced_at": "2026-06-15",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-19426e390ef8.md",
+          "source_commit": "19426e390ef8",
+          "summary": "working tree current template"
+        }
+      ],
+      "source_commit": "19426e390ef8",
+      "summary": "working tree current template",
+      "template_metadata": {
+        "feature_refs": [
+          "FEAT-0048",
+          "FEAT-0054",
+          "FEAT-0057",
+          "FEAT-0058",
+          "FEAT-0059"
+        ],
+        "surface_fields": {
+          "eval": "supported",
+          "qa_checklist": "supported",
+          "skill_ui": "supported"
+        },
+        "template_id": "skill-template",
+        "template_version": "0.3.0"
+      },
+      "version": "0.3.0"
     },
     {
       "introduced_at": "2026-03-26",
@@ -3312,6 +3543,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ],
       "source_commit": "51adf234fb6f",
       "summary": "init(codex): bootstrap harness repo",
+      "template_metadata": {
+        "feature_refs": [],
+        "surface_fields": {},
+        "template_id": "",
+        "template_version": ""
+      },
       "version": "unknown"
     }
   ]

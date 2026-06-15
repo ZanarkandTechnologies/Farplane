@@ -5,6 +5,7 @@ tier: 3
 group: self-improvement
 source: local
 skill_template_version: "0.2.0"
+eval: eval_task.json
 ---
 
 # Self Improve

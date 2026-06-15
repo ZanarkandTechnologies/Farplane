@@ -6,6 +6,7 @@ tier: 3
 group: frontend
 source: local
 skill_template_version: "0.2.0"
+qa_checklist: qa_checklist.md
 methods:
   - frontend-craft:composed-scroll-animation
 common_chains:

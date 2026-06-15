@@ -5,8 +5,8 @@ tier: 3
 group: harness
 source: local
 skill_template_version: "0.2.0"
-feature_refs:
-  - FEAT-0054
+eval: eval_task.json
+skill_ui: skills/eval/templates/viewer-react
 methods:
   - eval:onboarding
   - eval:consolidate

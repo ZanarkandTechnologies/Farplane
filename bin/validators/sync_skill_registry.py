@@ -27,8 +27,8 @@ ALLOWED_COMMON_CHAIN_KEYS = {"after"}
 TIER1_PRIMITIVES = {"advise", "reference-grounding", "prototyping"}
 PROTOCOL_WRAPPERS = {"review"}
 ALLOWED_SOURCES = {"local", "external"}
-FEATURE_ID_RE = re.compile(r"^FEAT-\d{4}$")
 DESCRIPTION_MAX_CHARS = 220
+SURFACE_FIELDS = {"eval", "qa_checklist", "skill_ui"}
 
 
 class RegistryError(Exception):
@@ -131,53 +131,6 @@ def normalize_string_list(value: Any, field: str, path: Path) -> list[str]:
     raise RegistryError(f"{path}: {field} must be a string or list of strings")
 
 
-def load_feature_ids(repo_root: Path) -> set[str]:
-    registry_path = repo_root / "docs" / "features" / "registry.jsonl"
-    if not registry_path.exists():
-        return set()
-
-    feature_ids: set[str] = set()
-    for line_number, line in enumerate(registry_path.read_text(encoding="utf-8").splitlines(), 1):
-        if not line.strip():
-            continue
-        try:
-            record = json.loads(line)
-        except json.JSONDecodeError as exc:
-            raise RegistryError(
-                f"{registry_path.relative_to(repo_root)}:{line_number}: invalid JSON: {exc}"
-            ) from exc
-        feature_id = record.get("id")
-        if isinstance(feature_id, str):
-            feature_ids.add(feature_id)
-    return feature_ids
-
-
-def normalize_feature_refs(value: Any, path: Path, feature_ids: set[str]) -> list[str]:
-    refs = normalize_string_list(value, "feature_refs", path)
-    if not refs:
-        return []
-    if not feature_ids:
-        raise RegistryError(
-            f"{path}: feature_refs require docs/features/registry.jsonl with FEAT-#### records"
-        )
-
-    unknown: list[str] = []
-    malformed: list[str] = []
-    for ref in refs:
-        if not FEATURE_ID_RE.match(ref):
-            malformed.append(ref)
-        elif feature_ids and ref not in feature_ids:
-            unknown.append(ref)
-
-    if malformed:
-        names = ", ".join(sorted(malformed))
-        raise RegistryError(f"{path}: feature_refs entries must match FEAT-####: {names}")
-    if unknown:
-        names = ", ".join(sorted(unknown))
-        raise RegistryError(f"{path}: feature_refs entries are not in docs/features/registry.jsonl: {names}")
-    return sorted(dict.fromkeys(refs))
-
-
 def normalize_allowed_tools(value: Any, path: Path) -> list[str]:
     if value is None or value == "":
         return []
@@ -186,6 +139,20 @@ def normalize_allowed_tools(value: Any, path: Path) -> list[str]:
     if isinstance(value, list) and all(isinstance(item, str) for item in value):
         return value
     raise RegistryError(f"{path}: allowed-tools must be a comma string or list")
+
+
+def normalize_surface_field(value: Any, field: str, path: Path) -> str | dict[str, Any]:
+    if value in (None, ""):
+        return ""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, dict):
+        if "path" in value and not isinstance(value["path"], str):
+            raise RegistryError(f"{path}: {field}.path must be a string")
+        if "status" in value and not isinstance(value["status"], str):
+            raise RegistryError(f"{path}: {field}.status must be a string")
+        return value
+    raise RegistryError(f"{path}: {field} must be a string path or mapping")
 
 
 def collect_skill_links_from_paths(paths: list[Path], skill_name: str) -> list[str]:
@@ -317,7 +284,6 @@ def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> Non
 def build_registry(repo_root: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     skill_paths = sorted((repo_root / "skills").glob("*/SKILL.md"))
-    feature_ids = load_feature_ids(repo_root)
 
     for skill_path in skill_paths:
         skill_dir = skill_path.parent
@@ -346,6 +312,11 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
             raise RegistryError(f"{skill_path}: tier 3 skills must set group")
         if tier != 3 and group not in (None, ""):
             raise RegistryError(f"{skill_path}: group is only allowed on tier 3 skills")
+        if metadata.get("feature_refs") not in (None, "", []):
+            raise RegistryError(
+                f"{skill_path}: feature_refs moved to versioned skill template metadata; "
+                "use eval, qa_checklist, or skill_ui for skill-local surfaces"
+            )
 
         has_checklist = bool(checklist_source_text(skill_dir))
         row: dict[str, Any] = {
@@ -376,13 +347,14 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if skill_template_version not in (None, ""):
             row["skill_template_version"] = str(skill_template_version)
 
-        feature_refs = normalize_feature_refs(metadata.get("feature_refs"), skill_path, feature_ids)
-        if feature_refs:
-            row["feature_refs"] = feature_refs
-
         allowed_tools = normalize_allowed_tools(metadata.get("allowed-tools"), skill_path)
         if allowed_tools:
             row["allowed_tools"] = allowed_tools
+
+        for field in sorted(SURFACE_FIELDS):
+            normalized_surface = normalize_surface_field(metadata.get(field), field, skill_path)
+            if normalized_surface:
+                row[field] = normalized_surface
 
         upstream_url = metadata.get("upstream_url")
         if upstream_url not in (None, ""):
