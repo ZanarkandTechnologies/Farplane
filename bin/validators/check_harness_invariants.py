@@ -14,6 +14,11 @@ import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
+try:
+    from check_farplane_project_files import validate as validate_project_files
+except ImportError:  # pragma: no cover - package import path for tests
+    from bin.validators.check_farplane_project_files import validate as validate_project_files
+
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -119,6 +124,7 @@ def validate_root(root: Path) -> list[str]:
                     f"remediation: {rule.remediation}"
                 )
     errors.extend(validate_agent_roles(root))
+    errors.extend(validate_project_files(root))
     return errors
 
 
@@ -189,7 +195,7 @@ def main() -> int:
     agent_count = len(list((root / "agents").glob("*.toml")))
     print(
         f"harness invariants OK ({len(RULES)} files checked, {agent_count} agents, "
-        f"{rule_count} rules)"
+        f"{rule_count} rules, project files checked)"
     )
     return 0
 
