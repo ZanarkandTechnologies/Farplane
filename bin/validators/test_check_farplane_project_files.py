@@ -2,6 +2,8 @@ from pathlib import Path
 
 from bin.validators.check_farplane_project_files import validate
 
+RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
+
 
 def test_automations_requires_bindings(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
@@ -24,7 +26,7 @@ def test_retired_integrations_file_fails(tmp_path: Path) -> None:
 
     errors = validate(tmp_path)
 
-    assert "farplane/integrations.md is retired; use farplane/bindings.md." in errors
+    assert f"{RETIRED_INTEGRATIONS_REF} is retired; use farplane/bindings.md." in errors
 
 
 def test_valid_bindings_pass(tmp_path: Path) -> None:

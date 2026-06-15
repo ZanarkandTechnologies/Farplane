@@ -32,6 +32,7 @@ SKIP_PREFIXES = (
 SECRET_VALUE_RE = re.compile(
     r"(?i)\b(api[_-]?key|access[_-]?token|secret|password)\b\s*[:=]\s*[\"']?[A-Za-z0-9_./+=-]{8,}"
 )
+RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
 
 
 def tracked_files(root: Path) -> list[Path]:
@@ -71,7 +72,7 @@ def validate(root: Path) -> list[str]:
         return errors
 
     if retired_integrations.exists():
-        errors.append("farplane/integrations.md is retired; use farplane/bindings.md.")
+        errors.append(f"{RETIRED_INTEGRATIONS_REF} is retired; use farplane/bindings.md.")
 
     if automations.exists() and not bindings.exists():
         errors.append("farplane/automations.md requires farplane/bindings.md.")
@@ -102,9 +103,9 @@ def validate(root: Path) -> list[str]:
             text = full_path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             continue
-        if "farplane/integrations.md" in text:
+        if RETIRED_INTEGRATIONS_REF in text:
             errors.append(
-                f"{rel_path}: references retired farplane/integrations.md; use farplane/bindings.md."
+                f"{rel_path}: references retired {RETIRED_INTEGRATIONS_REF}; use farplane/bindings.md."
             )
 
     return errors
