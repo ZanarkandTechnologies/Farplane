@@ -399,8 +399,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-ed6656d58385.md",
-      "source_commit": "ed6656d58385",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-441425e44d04.md",
+      "source_commit": "441425e44d04",
       "summary": "working tree current template",
       "version": "0.2.0"
     }
@@ -1867,7 +1867,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "ed6656d58385",
+      "source_commit": "441425e44d04",
       "template_version": "0.2.0",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -1881,7 +1881,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "ed6656d58385",
+      "source_commit": "441425e44d04",
       "template_version": "0.2.0",
       "title": "Todo executability",
       "verdict": "pass"
@@ -1895,7 +1895,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "ed6656d58385",
+      "source_commit": "441425e44d04",
       "template_version": "0.2.0",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -1909,7 +1909,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "ed6656d58385",
+      "source_commit": "441425e44d04",
       "template_version": "0.2.0",
       "title": "Proof contract",
       "verdict": "pass"
@@ -1923,7 +1923,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "ed6656d58385",
+      "source_commit": "441425e44d04",
       "template_version": "0.2.0",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -2156,8 +2156,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-06-15T10:46:08+00:00",
+  "generated_at": "2026-06-15T15:38:47+00:00",
   "rollout": [
+    {
+      "feature_refs": [],
+      "has_checklist": true,
+      "path": "skills/board-drain/SKILL.md",
+      "skill_id": "board-drain",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
     {
       "feature_refs": [],
       "has_checklist": true,
@@ -2175,6 +2185,16 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "has_checklist": true,
       "path": "skills/eval/SKILL.md",
       "skill_id": "eval",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "feature_refs": [],
+      "has_checklist": true,
+      "path": "skills/frontend-craft/SKILL.md",
+      "skill_id": "frontend-craft",
       "source": "local",
       "status": "current",
       "template_version": "0.2.0",
@@ -2351,6 +2371,26 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "has_checklist": true,
       "path": "skills/skill-maintenance/SKILL.md",
       "skill_id": "skill-maintenance",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "feature_refs": [],
+      "has_checklist": true,
+      "path": "skills/update-memory/SKILL.md",
+      "skill_id": "update-memory",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "feature_refs": [],
+      "has_checklist": true,
+      "path": "skills/update-strategy/SKILL.md",
+      "skill_id": "update-strategy",
       "source": "local",
       "status": "current",
       "template_version": "0.2.0",
@@ -2685,16 +2725,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "missing",
       "template_version": "missing",
       "tier": 2
-    },
-    {
-      "feature_refs": [],
-      "has_checklist": true,
-      "path": "skills/frontend-craft/SKILL.md",
-      "skill_id": "frontend-craft",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 3
     },
     {
       "feature_refs": [],
@@ -3080,25 +3110,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 86
+      "local": 89
     },
     "by_status": {
-      "current": 17,
+      "current": 21,
       "external": 3,
-      "missing": 65,
+      "missing": 64,
       "stale": 4
     },
     "by_template_version": {
       "0.1.0": 4,
-      "0.2.0": 17,
-      "missing": 68
+      "0.2.0": 21,
+      "missing": 67
     },
-    "total_skills": 89
+    "total_skills": 92
   },
   "schema_version": "1.0.0",
   "source": {
     "feature_registry_path": "docs/features/registry.jsonl",
-    "repo": "/private/tmp/farplane-template-clean",
+    "repo": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane",
     "skill_registry_path": "docs/skills/registry.jsonl",
     "template_path": "skills/skill-creator/references/SKILL_TEMPLATE.md"
   },
@@ -3170,7 +3200,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "introduced_at": "2026-06-11",
       "latest_at": "2026-06-15",
-      "latest_commit": "ed6656d58385",
+      "latest_commit": "441425e44d04",
       "latest_summary": "working tree current template",
       "release_count": 9,
       "sections": [
@@ -3184,7 +3214,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-ed6656d58385.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-441425e44d04.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-11",
@@ -3236,8 +3266,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         },
         {
           "introduced_at": "2026-06-15",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-ed6656d58385.md",
-          "source_commit": "ed6656d58385",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.2.0-441425e44d04.md",
+          "source_commit": "441425e44d04",
           "summary": "working tree current template"
         }
       ],
