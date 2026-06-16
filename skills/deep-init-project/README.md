@@ -194,7 +194,7 @@ Those can come after one clean ticket run.
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists
 - [ ] `farplane/README.md` exists
-- [ ] `farplane/manifest.json` records the Farplane project spec version and surface list
+- [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
 - [ ] `farplane/harness.md` exists or `harness_depth=none` is recorded
 - [ ] `farplane/goals.md` exists or `harness_depth=none` is recorded
 - [ ] `farplane/automations.md` exists and names ticket sources, schedules, grouped jobs, report paths, and ledger path

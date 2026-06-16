@@ -132,42 +132,51 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
     if not isinstance(data.get("spec_version"), str) or not data.get("spec_version", "").strip():
         errors.append(f"{rel_path} spec_version must be a non-empty string.")
 
-    version_history = data.get("version_history")
-    if not isinstance(version_history, list) or not version_history:
-        errors.append(f"{rel_path} version_history must be a non-empty list.")
-
-    surfaces = data.get("surfaces")
-    if not isinstance(surfaces, list) or not surfaces:
-        errors.append(f"{rel_path} surfaces must be a non-empty list.")
-        return errors
-
-    paths: set[str] = set()
-    for index, surface in enumerate(surfaces):
-        if not isinstance(surface, dict):
-            errors.append(f"{rel_path} surfaces[{index}] must be an object.")
+    for key in ("standard", "optional"):
+        section = data.get(key)
+        if not isinstance(section, dict):
+            errors.append(f"{rel_path} {key} must be an object.")
             continue
-        path = surface.get("path")
-        if not isinstance(path, str) or not path.strip():
-            errors.append(f"{rel_path} surfaces[{index}].path must be a non-empty string.")
-            continue
-        paths.add(path)
-        for key in ("kind", "introduced_in"):
-            if not isinstance(surface.get(key), str) or not surface.get(key, "").strip():
-                errors.append(f"{rel_path} surface {path} must declare {key}.")
-        for key in ("tracked", "required"):
-            if not isinstance(surface.get(key), bool):
-                errors.append(f"{rel_path} surface {path} must declare boolean {key}.")
+        for list_key in ("tracked", "ignored"):
+            values = section.get(list_key)
+            if not isinstance(values, list):
+                errors.append(f"{rel_path} {key}.{list_key} must be a list.")
+                continue
+            bad_values = [value for value in values if not isinstance(value, str) or not value.strip()]
+            if bad_values:
+                errors.append(f"{rel_path} {key}.{list_key} must contain only non-empty strings.")
+            if len(values) != len(set(values)):
+                errors.append(f"{rel_path} {key}.{list_key} must not contain duplicate paths.")
 
     required_paths = {
-        "farplane/",
+        "AGENTS.md",
+        "PROJECT_RULES.md",
+        "ARCHITECTURE.md",
+        "farplane/README.md",
         "farplane/manifest.json",
-        ".farplane/",
+        "farplane/harness.md",
+        "farplane/goals.md",
+        "farplane/automations.md",
+        "farplane/bindings.md",
+        "farplane/evals.md",
+        "tickets/templates/ticket.md",
         ".farplane/state/run-ledger.json",
-        "tickets/",
     }
+    standard = data.get("standard") if isinstance(data.get("standard"), dict) else {}
+    paths = set()
+    for list_key in ("tracked", "ignored"):
+        values = standard.get(list_key)
+        if isinstance(values, list):
+            paths.update(value for value in values if isinstance(value, str))
     missing_paths = sorted(required_paths - paths)
     if missing_paths:
-        errors.append(f"{rel_path} missing required surface paths: {', '.join(missing_paths)}.")
+        errors.append(f"{rel_path} missing required standard paths: {', '.join(missing_paths)}.")
+
+    tracked = set(standard.get("tracked", [])) if isinstance(standard.get("tracked"), list) else set()
+    ignored = set(standard.get("ignored", [])) if isinstance(standard.get("ignored"), list) else set()
+    overlap = sorted(tracked & ignored)
+    if overlap:
+        errors.append(f"{rel_path} paths cannot be both tracked and ignored: {', '.join(overlap)}.")
 
     return errors
 

@@ -72,7 +72,7 @@ ticketed handoff, not the default init phase.
     config, ignored `.farplane/` runtime state, `tickets/`, docs, QA, optional
     hooks, validation scripts, and review helper surfaces.
   - [ ] Ensure `farplane/manifest.json` records the Farplane project
-    `spec_version` and surface list.
+    `spec_version` and standard tracked/ignored paths.
   - [ ] Preserve existing files unless `force == true` or explicit overwrite
     intent is present.
   - [ ] Keep `.farplane/` ignored runtime state and `farplane/` tracked project

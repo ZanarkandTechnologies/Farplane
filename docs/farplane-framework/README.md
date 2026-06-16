@@ -524,9 +524,10 @@ merging transcripts. Missing file means legacy behavior.
 ### `farplane/manifest.json`
 
 The versioned Farplane project spec manifest for this project instance. Use it
-to answer which spec version the repo instantiated and which surfaces that
-version includes. Keep this file JSON and small; keep semantics, examples, and
-migration guidance in Markdown docs.
+to answer which spec version the repo instantiated and which paths are standard
+tracked or ignored files. Keep this file JSON and small; archive old manifest
+snapshots when the spec bumps, and keep semantics, examples, and migration
+guidance in Markdown docs.
 
 ### `tickets/`
 
@@ -553,7 +554,7 @@ The project-file validator enforces:
 - `farplane/automations.md` has `farplane/bindings.md`
 - tracked `farplane/*.md` files declare `framework_template_version`
 - `farplane/manifest.json` declares `schema: farplane_project`,
-  `spec_version`, `version_history`, and `surfaces`
+  `spec_version`, and standard/optional tracked or ignored paths
 - retired integration-manifest names are not used
 - `farplane/bindings.md` declares `kind: project-bindings`
 - `farplane/pm.json`, when present, matches the version 1 manifest shape

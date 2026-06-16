@@ -12,47 +12,26 @@ def write_framework_manifest(farplane: Path) -> None:
             {
                 "schema": "farplane_project",
                 "spec_version": "1.1.0",
-                "version_history": [
-                    {"version": "1.0.0", "adds": ["farplane/", ".farplane/", "tickets/"]},
-                    {"version": "1.1.0", "adds": ["farplane/pm.json"]},
-                ],
-                "surfaces": [
-                    {
-                        "path": "farplane/",
-                        "kind": "tracked_config_dir",
-                        "tracked": True,
-                        "required": True,
-                        "introduced_in": "1.0.0",
-                    },
-                    {
-                        "path": "farplane/manifest.json",
-                        "kind": "framework_manifest",
-                        "tracked": True,
-                        "required": True,
-                        "introduced_in": "1.0.0",
-                    },
-                    {
-                        "path": ".farplane/",
-                        "kind": "ignored_runtime_dir",
-                        "tracked": False,
-                        "required": True,
-                        "introduced_in": "1.0.0",
-                    },
-                    {
-                        "path": ".farplane/state/run-ledger.json",
-                        "kind": "runtime_run_ledger",
-                        "tracked": False,
-                        "required": True,
-                        "introduced_in": "1.0.0",
-                    },
-                    {
-                        "path": "tickets/",
-                        "kind": "ticket_queue",
-                        "tracked": True,
-                        "required": True,
-                        "introduced_in": "1.0.0",
-                    },
-                ],
+                "standard": {
+                    "tracked": [
+                        "AGENTS.md",
+                        "PROJECT_RULES.md",
+                        "ARCHITECTURE.md",
+                        "farplane/README.md",
+                        "farplane/manifest.json",
+                        "farplane/harness.md",
+                        "farplane/goals.md",
+                        "farplane/automations.md",
+                        "farplane/bindings.md",
+                        "farplane/evals.md",
+                        "tickets/templates/ticket.md",
+                    ],
+                    "ignored": [".farplane/state/run-ledger.json"],
+                },
+                "optional": {
+                    "tracked": ["farplane/pm.json"],
+                    "ignored": [".farplane/reviews/"],
+                },
             }
         ),
         encoding="utf-8",
@@ -139,16 +118,14 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
             {
                 "schema": "other",
                 "spec_version": "",
-                "version_history": [],
-                "surfaces": [
-                    {
-                        "path": "",
-                        "kind": "",
-                        "tracked": "yes",
-                        "required": "yes",
-                        "introduced_in": "",
-                    }
-                ],
+                "standard": {
+                    "tracked": ["farplane/manifest.json", "farplane/manifest.json", ".farplane/state/run-ledger.json"],
+                    "ignored": [".farplane/state/run-ledger.json"],
+                },
+                "optional": {
+                    "tracked": "farplane/pm.json",
+                    "ignored": [""],
+                },
             }
         ),
         encoding="utf-8",
@@ -158,12 +135,14 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
 
     assert "farplane/manifest.json schema must be farplane_project." in errors
     assert "farplane/manifest.json spec_version must be a non-empty string." in errors
-    assert "farplane/manifest.json version_history must be a non-empty list." in errors
-    assert "farplane/manifest.json surfaces[0].path must be a non-empty string." in errors
+    assert "farplane/manifest.json standard.tracked must not contain duplicate paths." in errors
+    assert "farplane/manifest.json optional.tracked must be a list." in errors
+    assert "farplane/manifest.json optional.ignored must contain only non-empty strings." in errors
+    assert "farplane/manifest.json paths cannot be both tracked and ignored: .farplane/state/run-ledger.json." in errors
     missing_surface_error = next(
-        error for error in errors if error.startswith("farplane/manifest.json missing required surface paths:")
+        error for error in errors if error.startswith("farplane/manifest.json missing required standard paths:")
     )
-    for path in [".farplane/", ".farplane/state/run-ledger.json", "farplane/", "farplane/manifest.json", "tickets/"]:
+    for path in ["AGENTS.md", "PROJECT_RULES.md", "ARCHITECTURE.md", "farplane/README.md", "tickets/templates/ticket.md"]:
         assert path in missing_surface_error
 
 

@@ -97,4 +97,5 @@ eval_required: no
 ## Followups
 
 - Use `spec_version` as the semver release line for Farplane project scaffold
-  changes and update `version_history` when migrations add surfaces.
+  changes. Archive old manifest snapshots when the spec bumps; keep the current
+  manifest focused on the current standard tracked/ignored paths.

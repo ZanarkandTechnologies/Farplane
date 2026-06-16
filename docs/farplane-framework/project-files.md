@@ -47,7 +47,7 @@ filesystem state instead of transcript memory.
 - `ARCHITECTURE.md` gives software projects one top-level map for modules,
   data, boundaries, and runtime shape.
 - `farplane/manifest.json` records which Farplane project spec this repo
-  instantiated and which surfaces belong to that spec version.
+  instantiated and which standard files should be tracked or ignored.
 - `farplane/*.md` files carry tracked project config: harness identity, goals,
   automations, bindings, eval policy, and optional PM thread grouping.
 - `.farplane/` carries ignored local runtime state such as reports, logs, eval
@@ -97,28 +97,29 @@ python3 bin/validators/check_farplane_project_files.py
 
 The versioned Farplane project spec manifest for this project instance.
 
-Use JSON because the primary job is version tracking, validation, and future
-migration checks:
+Use JSON because the primary job is simple validation: for this framework
+version, which paths are standard, and should they be pushed or ignored?
 
 ```json
 {
   "schema": "farplane_project",
   "spec_version": "1.1.0",
-  "version_history": [
-    {"version": "1.0.0", "adds": ["farplane/", ".farplane/", "tickets/"]},
-    {"version": "1.1.0", "adds": ["farplane/pm.json"]}
-  ],
-  "surfaces": [
-    {"path": "farplane/", "introduced_in": "1.0.0"},
-    {"path": ".farplane/", "introduced_in": "1.0.0"},
-    {"path": "tickets/", "introduced_in": "1.0.0"},
-    {"path": "farplane/pm.json", "introduced_in": "1.1.0"}
-  ]
+  "standard": {
+    "tracked": ["AGENTS.md", "PROJECT_RULES.md", "farplane/manifest.json"],
+    "ignored": [".farplane/state/run-ledger.json"]
+  },
+  "optional": {
+    "tracked": ["farplane/pm.json"],
+    "ignored": [".farplane/reviews/"]
+  }
 }
 ```
 
-Keep this file concise. It records what this repo instantiated. Put semantics,
-examples, and migration guidance in this doc or `farplane/README.md`.
+Keep this file concise. It is not a changelog. When the framework shape changes,
+bump `spec_version`, archive the old manifest snapshot in the framework docs or
+release notes, and make the current manifest describe only the current standard.
+Put semantics, examples, and migration guidance in this doc or
+`farplane/README.md`.
 
 ### `farplane/harness.md`
 
