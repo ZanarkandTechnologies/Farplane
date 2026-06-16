@@ -1,12 +1,15 @@
 # Deep Init Project
 
 Bootstrap or migrate a project into the Farplane docs-first, ticket-first
-harness model.
-This setup should start with a deep-interview-quality bootstrap intake, then
-scaffold optional `.githooks` samples plus project-local `scripts/pre_*_check.sh`
-files for local quality gates, a Codex SDK pre-push diff-review loop, plus
-repo-owned runtime and `qa/` guidance so agents can launch the app and capture
-evidence without guessing, all without enabling hooks automatically.
+harness model. Init sets up the project substrate first, can optionally run a
+code/app scaffold such as Next.js, React, or Convex, and then leaves a starter
+PRD ticket for the next phase.
+
+This setup should scaffold optional `.githooks` samples plus project-local
+`scripts/pre_*_check.sh` files for local quality gates, a Codex SDK pre-push
+diff-review loop, plus repo-owned runtime and `qa/` guidance so agents can
+launch the app and capture evidence without guessing, all without enabling
+hooks automatically.
 
 Every initialized project is a Farplane project by default. Use
 `harness_depth=none` only for substrate-only migrations.
@@ -32,11 +35,12 @@ should be advisory or strict, which heavy local checks such as `desloppify` or
 CodeRabbit are desired, and whether a separate CI/deployment gate exists. It
 should also name the canonical app-only run path, canonical full QA or
 evidence-capture path, required services such as DB or orchestration tools, and
-any port or environment-variable assumptions.
+any port or environment-variable assumptions. When the user wants app code
+created during init, select the stack scaffold before running commands.
 
-That also writes `farplane/README.md`, `farplane/harness.md`,
+That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.md`,
 `farplane/goals.md`, `farplane/automations.md`, `farplane/bindings.md`,
-`farplane/evals.md`, `docs/bootstrap-brief.md`, `qa/README.md`,
+`farplane/evals.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
 `scripts/pre_push_check.sh`, review docs, and review-agent helper scripts as
@@ -45,9 +49,19 @@ lint/typecheck/test/build commands, run advisory Codex SDK diff review during
 pre-push, and activate only `pre-push` unless the repo wants an extra
 pre-commit gate. The other required follow-through is to fill
 `PROJECT_RULES.md` and `qa/` with the authoritative launch path agents should
-use for ordinary app work versus QA.
+use for ordinary app work versus QA. It also creates
+`tickets/TASK-0001/ticket.md` as the starter PRD handoff.
 
-Then follow the funnel:
+The script also creates ignored `.farplane/` runtime folders:
+`.farplane/state/run-ledger.json`, `.farplane/reports/`,
+`.farplane/evals/runs/`, and `.farplane/logs/`. Keep canonical framework
+config in tracked `farplane/`; use `.farplane/` for generated local state only.
+
+Optional code scaffold recipes live in `SKILL.md` under `Code Scaffold Recipes`.
+Use the selected recipe during init when requested, but stop for interactive
+cloud setup, credentials, billing, deploys, and destructive actions.
+
+After init, follow the planning funnel:
 
 ```text
 brainstorm -> deep-interview -> prd -> spec-to-ticket -> impl-plan -> impl
@@ -70,11 +84,13 @@ Then copy in:
 - `AGENTS.md`
 - `ARCHITECTURE.md`
 - `farplane/README.md`
+- `farplane/manifest.json`
 - `farplane/harness.md`
 - `farplane/goals.md`
 - `farplane/automations.md`
 - `farplane/bindings.md`
 - `farplane/evals.md`
+- `farplane/pm.json`
 - `docs/TASTE.md`
 - `qa/`
 - `tickets/templates/ticket.md`
@@ -178,11 +194,14 @@ Those can come after one clean ticket run.
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists
 - [ ] `farplane/README.md` exists
+- [ ] `farplane/manifest.json` records the Farplane project spec version and surface list
 - [ ] `farplane/harness.md` exists or `harness_depth=none` is recorded
 - [ ] `farplane/goals.md` exists or `harness_depth=none` is recorded
 - [ ] `farplane/automations.md` exists and names ticket sources, schedules, grouped jobs, report paths, and ledger path
 - [ ] `farplane/bindings.md` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `farplane/evals.md` exists or `harness_depth=none` is recorded
+- [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
+- [ ] `.farplane/state/run-ledger.json`, `.farplane/reports/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local runtime state
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
@@ -191,6 +210,7 @@ Those can come after one clean ticket run.
 - [ ] `docs/specs/README.md` exists
 - [ ] `tickets/` structure exists
 - [ ] `tickets/archive/` exists for completed tickets
+- [ ] `tickets/TASK-0001/ticket.md` exists as the initial PRD handoff
 - [ ] one first ticket exists
 - [ ] one first `impl-plan` run is successful
 - [ ] one first `impl` run is successful

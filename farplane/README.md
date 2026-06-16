@@ -13,13 +13,24 @@ Tracked project framework config lives here.
 ```text
 farplane/
   README.md        # this index
+  manifest.json    # versioned Farplane project spec for this project
   harness.md       # mission, values, modes, systems, feedback loops
   goals.md         # north star, KPIs, current milestone, holds
   automations.md   # recurring jobs, schedules, reports, ticket source policy
   bindings.md      # non-secret project IDs, URLs, labels, aliases
   evals.md         # project-level proof and eval policy
+  pm.json          # optional UI thread manifest for one visual project PM
 ```
 
 Runtime state lives under `.farplane/` and is intentionally ignored by git.
+
+```text
+.farplane/
+  README.md
+  state/run-ledger.json
+  reports/
+  evals/runs/
+  logs/
+```
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).

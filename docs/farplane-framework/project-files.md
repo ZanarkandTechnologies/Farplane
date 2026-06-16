@@ -3,12 +3,14 @@ title: Project Files
 status: draft
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-15
+updated_at: 2026-06-17
 framework_template_version: "0.1.0"
 source_of_truth:
   - docs/farplane-framework/README.md
+  - farplane/manifest.json
   - farplane/automations.md
   - farplane/bindings.md
+  - farplane/pm.json
   - .gitignore
 ---
 
@@ -31,18 +33,53 @@ The dot matters.
 Do not put canonical project config in `.farplane/` unless the project has
 changed `.gitignore` on purpose.
 
+## Why This Shape
+
+Farplane project files exist so an agent can understand the project from durable
+filesystem state instead of transcript memory.
+
+- `AGENTS.md` is the always-loaded operating policy. Keep it short and
+  navigational so every loop gets the current repo rules without swallowing the
+  whole project history.
+- `PROJECT_RULES.md` owns stack-specific runtime commands, QA commands,
+  services, ports, environment assumptions, and local conventions. This keeps
+  executable project facts out of chat and out of generic skills.
+- `ARCHITECTURE.md` gives software projects one top-level map for modules,
+  data, boundaries, and runtime shape.
+- `farplane/manifest.json` records which Farplane project spec this repo
+  instantiated and which surfaces belong to that spec version.
+- `farplane/*.md` files carry tracked project config: harness identity, goals,
+  automations, bindings, eval policy, and optional PM thread grouping.
+- `.farplane/` carries ignored local runtime state such as reports, logs, eval
+  runs, and continuation ledgers. It is useful to agents, but it is not the
+  canonical project contract.
+- `docs/` carries durable human-readable memory: specs, history, lessons,
+  troubles, taste, and other long-lived narrative.
+- `tickets/` carries executable work state. Tickets are the shared task memory,
+  proof target, and handoff surface for implementation.
+- `qa/` carries reusable proof shortcuts, deep links, seed/reset paths, and
+  cookbook entries so user-visible checks are not rediscovered from scratch.
+- Optional `.githooks/` and repo-local `scripts/` make quality gates visible
+  without silently mutating local git config.
+
+Skills such as `deep-init-project` should create or update this shape, not
+explain it at length. The rationale belongs here so the project spec can evolve
+without bloating first-load skill instructions.
+
 ## Tracked Framework Config
 
 Recommended folder:
 
 ```text
 farplane/
+  manifest.json
   README.md
   harness.md
   goals.md
   automations.md
   bindings.md
   evals.md
+  pm.json
 ```
 
 Create the files when they have real content.
@@ -55,6 +92,33 @@ Validate the convention with:
 ```bash
 python3 bin/validators/check_farplane_project_files.py
 ```
+
+### `farplane/manifest.json`
+
+The versioned Farplane project spec manifest for this project instance.
+
+Use JSON because the primary job is version tracking, validation, and future
+migration checks:
+
+```json
+{
+  "schema": "farplane_project",
+  "spec_version": "1.1.0",
+  "version_history": [
+    {"version": "1.0.0", "adds": ["farplane/", ".farplane/", "tickets/"]},
+    {"version": "1.1.0", "adds": ["farplane/pm.json"]}
+  ],
+  "surfaces": [
+    {"path": "farplane/", "introduced_in": "1.0.0"},
+    {"path": ".farplane/", "introduced_in": "1.0.0"},
+    {"path": "tickets/", "introduced_in": "1.0.0"},
+    {"path": "farplane/pm.json", "introduced_in": "1.1.0"}
+  ]
+}
+```
+
+Keep this file concise. It records what this repo instantiated. Put semantics,
+examples, and migration guidance in this doc or `farplane/README.md`.
 
 ### `farplane/harness.md`
 
@@ -141,6 +205,31 @@ Project-level eval and QA policy:
 Use `.farplane/evals/runs/` for generated eval outputs.
 Keep the eval definitions tracked in `farplane/evals.md`.
 
+### `farplane/pm.json`
+
+Optional project PM thread manifest for Farplane UI.
+
+Shape:
+
+```json
+{
+  "version": 1,
+  "name": "Project PM",
+  "role": "founder_operator",
+  "threads": {
+    "chats": [],
+    "automations": []
+  }
+}
+```
+
+Use `threads.chats` for ordinary Codex chat thread IDs and
+`threads.automations` for Codex automation thread IDs. Farplane UI folds the
+listed IDs into one visual project PM without merging transcripts.
+
+Missing file means legacy UI behavior. Empty arrays are valid while the project
+has no PM thread IDs to group.
+
 ## Local Runtime State
 
 Recommended ignored folder:
@@ -211,5 +300,6 @@ farplane/goals.md
 farplane/automations.md
 farplane/bindings.md
 farplane/evals.md
+farplane/pm.json
 .farplane/state/run-ledger.json
 ```

@@ -387,7 +387,7 @@
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-06-15",
+      "introduced_at": "2026-06-16",
       "section_count": 9,
       "sections": [
         "Context",
@@ -400,8 +400,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-22eabf0fc1e1.md",
-      "source_commit": "22eabf0fc1e1",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-13395750a17f.md",
+      "source_commit": "13395750a17f",
       "summary": "working tree current template",
       "version": "0.3.0"
     },
@@ -1888,7 +1888,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "22eabf0fc1e1",
+      "source_commit": "13395750a17f",
       "template_version": "0.3.0",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -1902,7 +1902,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "22eabf0fc1e1",
+      "source_commit": "13395750a17f",
       "template_version": "0.3.0",
       "title": "Todo executability",
       "verdict": "pass"
@@ -1916,7 +1916,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "22eabf0fc1e1",
+      "source_commit": "13395750a17f",
       "template_version": "0.3.0",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -1930,7 +1930,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "22eabf0fc1e1",
+      "source_commit": "13395750a17f",
       "template_version": "0.3.0",
       "title": "Proof contract",
       "verdict": "pass"
@@ -1944,7 +1944,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "22eabf0fc1e1",
+      "source_commit": "13395750a17f",
       "template_version": "0.3.0",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -2270,7 +2270,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-15T16:23:41+00:00",
+  "generated_at": "2026-06-16T17:56:23+00:00",
   "rollout": [
     {
       "eval": "",
@@ -3551,7 +3551,7 @@
       "version": "0.2.0"
     },
     {
-      "introduced_at": "2026-06-15",
+      "introduced_at": "2026-06-16",
       "latest_at": "2026-06-16",
       "latest_commit": "22eabf0fc1e1",
       "latest_summary": "feat(skills): track template-owned feature metadata",
@@ -3570,9 +3570,9 @@
       "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-22eabf0fc1e1.md",
       "snapshots": [
         {
-          "introduced_at": "2026-06-15",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-22eabf0fc1e1.md",
-          "source_commit": "22eabf0fc1e1",
+          "introduced_at": "2026-06-16",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-13395750a17f.md",
+          "source_commit": "13395750a17f",
           "summary": "working tree current template"
         },
         {
@@ -3582,7 +3582,7 @@
           "summary": "feat(skills): track template-owned feature metadata"
         }
       ],
-      "source_commit": "22eabf0fc1e1",
+      "source_commit": "13395750a17f",
       "summary": "working tree current template",
       "template_metadata": {
         "feature_refs": [

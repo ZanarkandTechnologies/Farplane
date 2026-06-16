@@ -109,7 +109,7 @@ or a Goal/autoresearch loop.
 - [ ] 2. Read the minimum authoritative context.
   - [ ] Always read `edited_skill/SKILL.md`, `docs/skills/registry.jsonl`, and
     the relevant anchored skill-system docs or active ticket.
-  - [ ] If `mode in [structure_update, audit]`, read
+  - [ ] If `mode in [structure_update, refine_skill, audit]`, read
     [Skill Structure QA Checklist](qa_checklist.md).
   - [ ] If `mode == eval_to_qa_sync` or `edited_skill/eval_task.json` changed,
     read `edited_skill/eval_task.json` and `edited_skill/qa_checklist.md` when
@@ -144,8 +144,18 @@ or a Goal/autoresearch loop.
     shorten first-load text only after preserving the behavioral guardrails`.
   - [ ] Keep every-invocation gates, routing, proof, stop conditions, and output
     contract in `SKILL.md`.
+  - [ ] Fold operational gotchas into todos, gates, fails, or concise stop
+    conditions before adding or preserving a standalone gotcha catalog.
   - [ ] Move long examples, rare recipes, templates, detailed rubrics, and
     conditional branches to references only when the todo names when to load them.
+  - [ ] Move or delete rationale, history, philosophy, tutorial prose, duplicated
+    workflow explanation, and template inventories unless they satisfy the
+    `qa_checklist.md` First-Load Required Set.
+  - [ ] Convert long intake question lists into function signatures, parameter
+    lists, or schemas when normal agent behavior can ask for missing params.
+  - [ ] Compare top-level sections against the current skill template; fold,
+    move, or delete extra sections unless they add substantial unique first-load
+    value that core sections cannot preserve.
   - [ ] Reject skill-local `todos.md`; first-load todo truth lives only in the
     marker-delimited `## Todo List` inside `SKILL.md`.
 - [ ] 6. Sync eval reference points into runtime guardrails when warranted.
@@ -161,6 +171,10 @@ or a Goal/autoresearch loop.
   - [ ] Run `python3 scripts/check_skills.py --write` from this skill package.
   - [ ] Run focused JSON, link, template-version, fixture, eval, or import
     checks required by `mode` and the active ticket.
+  - [ ] If `SKILL.md` changed, run `qa_checklist.md` against the changed skill and
+    record `line_count_before`, `line_count_after`, `kept_in_skill`,
+    `moved_to_reference`, `deleted_as_duplicate_or_rationale`,
+    `extra_sections_kept_with_reason`, and verdict.
   - [ ] Reinstall touched local skills and inspect the live copy only when the
     user is judging installed behavior.
 - [ ] 8. Finish with audit/review/writeback.

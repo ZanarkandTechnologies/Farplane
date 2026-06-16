@@ -3,15 +3,17 @@ title: Farplane Framework
 status: draft
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-15
+updated_at: 2026-06-17
 framework_template_version: "0.1.0"
 source_of_truth:
   - farplane/README.md
+  - farplane/manifest.json
   - farplane/harness.md
   - farplane/goals.md
   - farplane/automations.md
   - farplane/bindings.md
   - farplane/evals.md
+  - farplane/pm.json
   - docs/specs/program-notation.md
   - skills/deep-init-project/SKILL.md
   - skills/harness-creator/SKILL.md
@@ -26,7 +28,7 @@ PM-style automations.
 The point is simple:
 
 ```text
-project = files + tickets + skills + goals + bindings + automations + runtime reports
+project = files + tickets + skills + goals + bindings + automations + PM threads + runtime reports
 ```
 
 ## Project Tree
@@ -44,11 +46,13 @@ PROJECT_ROOT/
 
   farplane/                    # tracked project framework config
     README.md                  # local index for the framework files
+    manifest.json              # versioned Farplane project spec manifest
     harness.md                 # mission, values, modes, operating principles, systems
     goals.md                   # north star, current milestone, KPIs, strategy axes
     automations.md             # recurring jobs, schedules, grouped cadences, report paths
     bindings.md                # non-secret project IDs, URLs, labels, aliases
     evals.md                   # project evals, smoke checks, proof and review policy
+    pm.json                    # optional UI manifest for chat and automation thread IDs
 
   tickets/                     # local visible work queue
     README.md                  # ticket state machine and ticket-as-program rules
@@ -82,6 +86,9 @@ Use `farplane/` for tracked config.
 Use `.farplane/` for generated state.
 The dot is the boundary between project contract and runtime cache.
 
+See [Project Files](project-files.md) for the file-by-file spec and rationale
+behind each surface.
+
 ## Template Version
 
 This draft standard uses:
@@ -109,11 +116,13 @@ deep_init_project(project_root?, project_idea?, repo_shape?, profile?, harness_d
    + tickets/*
    + qa/*
    + farplane/README.md
+   + farplane/manifest.json
    + farplane/harness.md
    + farplane/goals.md
    + farplane/automations.md
    + farplane/bindings.md
    + farplane/evals.md
+   + farplane/pm.json
    + .farplane/ ignored runtime root
 ```
 
@@ -506,6 +515,19 @@ lookup handles that skills need.
 The project proof policy: smoke checks, end-to-end evals, review gates, and
 acceptance examples.
 
+### `farplane/pm.json`
+
+The optional project PM thread manifest. Farplane UI reads it to fold listed
+chat and automation Codex thread IDs into one visual project PM without
+merging transcripts. Missing file means legacy behavior.
+
+### `farplane/manifest.json`
+
+The versioned Farplane project spec manifest for this project instance. Use it
+to answer which spec version the repo instantiated and which surfaces that
+version includes. Keep this file JSON and small; keep semantics, examples, and
+migration guidance in Markdown docs.
+
 ### `tickets/`
 
 The visible work queue.
@@ -530,8 +552,11 @@ The project-file validator enforces:
 
 - `farplane/automations.md` has `farplane/bindings.md`
 - tracked `farplane/*.md` files declare `framework_template_version`
+- `farplane/manifest.json` declares `schema: farplane_project`,
+  `spec_version`, `version_history`, and `surfaces`
 - retired integration-manifest names are not used
 - `farplane/bindings.md` declares `kind: project-bindings`
+- `farplane/pm.json`, when present, matches the version 1 manifest shape
 - obvious credential values are not stored in bindings
 
 ## Related Docs

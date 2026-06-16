@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -61,21 +62,141 @@ def should_scan(path: Path) -> bool:
     return path.suffix in TEXT_SUFFIXES
 
 
+def validate_pm_manifest(root: Path, pm_manifest: Path) -> list[str]:
+    errors: list[str] = []
+    rel_path = pm_manifest.relative_to(root).as_posix()
+
+    try:
+        data = json.loads(pm_manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"{rel_path} must be valid JSON: {exc.msg}."]
+
+    if not isinstance(data, dict):
+        return [f"{rel_path} must be a JSON object."]
+
+    expected_top_level = {"version", "name", "role", "threads"}
+    missing = sorted(expected_top_level - set(data))
+    extra = sorted(set(data) - expected_top_level)
+    if missing:
+        errors.append(f"{rel_path} missing required keys: {', '.join(missing)}.")
+    if extra:
+        errors.append(f"{rel_path} has unsupported keys: {', '.join(extra)}.")
+
+    if data.get("version") != 1:
+        errors.append(f"{rel_path} version must be 1.")
+    if not isinstance(data.get("name"), str) or not data.get("name", "").strip():
+        errors.append(f"{rel_path} name must be a non-empty string.")
+    if data.get("role") != "founder_operator":
+        errors.append(f"{rel_path} role must be founder_operator.")
+
+    threads = data.get("threads")
+    if not isinstance(threads, dict):
+        errors.append(f"{rel_path} threads must be an object.")
+        return errors
+
+    expected_thread_keys = {"chats", "automations"}
+    missing_thread_keys = sorted(expected_thread_keys - set(threads))
+    extra_thread_keys = sorted(set(threads) - expected_thread_keys)
+    if missing_thread_keys:
+        errors.append(f"{rel_path} threads missing required keys: {', '.join(missing_thread_keys)}.")
+    if extra_thread_keys:
+        errors.append(f"{rel_path} threads has unsupported keys: {', '.join(extra_thread_keys)}.")
+
+    for key in sorted(expected_thread_keys):
+        values = threads.get(key)
+        if not isinstance(values, list):
+            errors.append(f"{rel_path} threads.{key} must be a list of thread ID strings.")
+            continue
+        if any(not isinstance(value, str) or not value.strip() for value in values):
+            errors.append(f"{rel_path} threads.{key} must contain only non-empty strings.")
+        if len(values) != len(set(values)):
+            errors.append(f"{rel_path} threads.{key} must not contain duplicate thread IDs.")
+
+    return errors
+
+
+def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[str]:
+    rel_path = framework_manifest.relative_to(root).as_posix()
+    errors: list[str] = []
+
+    try:
+        data = json.loads(framework_manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"{rel_path} must be valid JSON: {exc.msg}."]
+
+    if not isinstance(data, dict):
+        return [f"{rel_path} must be a JSON object."]
+
+    if data.get("schema") != "farplane_project":
+        errors.append(f"{rel_path} schema must be farplane_project.")
+    if not isinstance(data.get("spec_version"), str) or not data.get("spec_version", "").strip():
+        errors.append(f"{rel_path} spec_version must be a non-empty string.")
+
+    version_history = data.get("version_history")
+    if not isinstance(version_history, list) or not version_history:
+        errors.append(f"{rel_path} version_history must be a non-empty list.")
+
+    surfaces = data.get("surfaces")
+    if not isinstance(surfaces, list) or not surfaces:
+        errors.append(f"{rel_path} surfaces must be a non-empty list.")
+        return errors
+
+    paths: set[str] = set()
+    for index, surface in enumerate(surfaces):
+        if not isinstance(surface, dict):
+            errors.append(f"{rel_path} surfaces[{index}] must be an object.")
+            continue
+        path = surface.get("path")
+        if not isinstance(path, str) or not path.strip():
+            errors.append(f"{rel_path} surfaces[{index}].path must be a non-empty string.")
+            continue
+        paths.add(path)
+        for key in ("kind", "introduced_in"):
+            if not isinstance(surface.get(key), str) or not surface.get(key, "").strip():
+                errors.append(f"{rel_path} surface {path} must declare {key}.")
+        for key in ("tracked", "required"):
+            if not isinstance(surface.get(key), bool):
+                errors.append(f"{rel_path} surface {path} must declare boolean {key}.")
+
+    required_paths = {
+        "farplane/",
+        "farplane/manifest.json",
+        ".farplane/",
+        ".farplane/state/run-ledger.json",
+        "tickets/",
+    }
+    missing_paths = sorted(required_paths - paths)
+    if missing_paths:
+        errors.append(f"{rel_path} missing required surface paths: {', '.join(missing_paths)}.")
+
+    return errors
+
+
 def validate(root: Path) -> list[str]:
     errors: list[str] = []
     framework_dir = root / "farplane"
+    framework_manifest = framework_dir / "manifest.json"
     automations = framework_dir / "automations.md"
     bindings = framework_dir / "bindings.md"
+    pm_manifest = framework_dir / "pm.json"
     retired_integrations = framework_dir / "integrations.md"
 
     if not framework_dir.exists():
         return errors
+
+    if not framework_manifest.exists():
+        errors.append("farplane/manifest.json is required for Farplane project manifests.")
+    else:
+        errors.extend(validate_framework_manifest(root, framework_manifest))
 
     if retired_integrations.exists():
         errors.append(f"{RETIRED_INTEGRATIONS_REF} is retired; use farplane/bindings.md.")
 
     if automations.exists() and not bindings.exists():
         errors.append("farplane/automations.md requires farplane/bindings.md.")
+
+    if pm_manifest.exists():
+        errors.extend(validate_pm_manifest(root, pm_manifest))
 
     if bindings.exists():
         text = bindings.read_text(encoding="utf-8")
