@@ -453,7 +453,7 @@ automation daily_ticket_drainer {
   schedule: configurable
   first: fetch_local_tickets
   optional: fetch_notion_when_enabled_bound_and_local_empty
-  then: rank_one_ticket -> impl-plan -> goal-advisor
+  then: rank_one_ticket -> rename_current_thread -> impl-plan -> goal-advisor
 }
 
 automation weekly_pm_update {

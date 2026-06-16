@@ -232,6 +232,7 @@ cadence daily_ticket_drainer {
     "filter ready, unblocked, direct, autonomous tickets",
     "rank by priority, compounding ROI, project value, and low need for Kenji judgment",
     "select one ticket",
+    "rename the current Codex automation thread to `[Farplane] <ticket-id> <ticket name>` using the thread title tool when available",
     "run impl-plan if planning is missing or stale",
     "call goal-advisor to create or activate the execution goal",
     "execute as far as possible until done, blocked, or ready for review",

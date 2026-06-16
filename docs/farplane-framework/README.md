@@ -260,10 +260,13 @@ Order:
 4. Rank by priority, compounding ROI, project value, autonomy, and likelihood
    of reaching Done or Review.
 5. Select one ticket.
-6. Run `impl-plan` when planning is missing or stale.
-7. Use `goal-advisor` to create or activate the execution goal.
-8. Execute as far as possible.
-9. Write the ticket report and ledger row.
+6. Rename the current Codex automation thread to
+   `[Farplane] <ticket-id> <ticket name>` when the thread-title tool is
+   available.
+7. Run `impl-plan` when planning is missing or stale.
+8. Use `goal-advisor` to create or activate the execution goal.
+9. Execute as far as possible.
+10. Write the ticket report and ledger row.
 
 The ticket drainer must not run feed scout, memory updates, strategy updates,
 registry drift, or skill maintenance.
