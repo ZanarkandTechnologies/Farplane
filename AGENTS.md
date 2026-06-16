@@ -252,6 +252,15 @@ For harness-design research and external patterns:
   decision artifact, spec, or evidence file. Pass the `context_ref` to every
   lane and do not rely on hidden chat memory for prior discussion, options,
   constraints, or proof targets.
+- Treat persistent Codex threads and native subagents as different delegation
+  primitives. Use `create_thread(prompt, target) -> thread_id` when work should
+  fork into a user-visible Codex app thread, keep its own durable title, survive
+  as a followable conversation, or own a ticket/Goal execution lane over time.
+  After creating the thread, call `set_thread_title(thread_id, title)` when
+  available and write the child thread ID back to the parent ticket, report, or
+  progress artifact. Use native subagents for bounded specialist work whose
+  output should collapse back into the current thread, such as review, QA,
+  research, or focused implementation evidence.
 - Once specs are already decomposed into modular tickets, treat the selected
   ticket as the default planning, build, and review unit. `impl-plan` should
   plan the whole ticket, `$impl` should try to land the whole ticket, and
