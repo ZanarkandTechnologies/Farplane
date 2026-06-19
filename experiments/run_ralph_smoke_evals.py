@@ -5,7 +5,6 @@ Run local Ralph smoke evals against the current prototype.
 This script avoids live Codex sessions where possible and focuses on:
 - hook payload replay behavior
 - state-first active-ticket selection
-- tmux follow-up lane spawning in bounded dry-run mode
 - judge edge cases across completion, blocking, and retry paths
 """
 
@@ -85,32 +84,6 @@ def wait_for_json(path: Path, *, timeout_secs: float = 20.0) -> dict[str, object
                 return payload
         time.sleep(0.2)
     return None
-
-
-def wait_for_lane_tail(run_state: Path, *, timeout_secs: float = 20.0) -> str:
-    deadline = time.time() + timeout_secs
-    latest = ""
-    while time.time() < deadline:
-        captured = run(
-            [
-                "python3",
-                "skills/impl/scripts/tmux_helper.py",
-                "tail",
-                "--run-state",
-                str(run_state),
-                "--lines",
-                "120",
-            ],
-            cwd=ROOT,
-        )
-        if captured.returncode == 0:
-            latest = captured.stdout.strip()
-            if "[impl tmux dry run] followup" in latest:
-                return latest
-        elif captured.stderr.strip():
-            latest = captured.stderr.strip()
-        time.sleep(0.2)
-    return latest
 
 
 def fixture_review_packet(
@@ -312,7 +285,7 @@ def main() -> int:
                     "hook_event_name": "UserPromptSubmit",
                     "cwd": str(ROOT),
                     "turn_id": "turn-capture-build",
-                    "prompt": "Continue working on TASK-9998 with $impl and keep it ticket-local.",
+                    "prompt": "Continue working on TASK-9998 with $goal-advisor and keep it ticket-local.",
                 }
             )
             capture_hook = subprocess.run(
@@ -435,7 +408,7 @@ def main() -> int:
                     "hook_event_name": "UserPromptSubmit",
                     "cwd": str(ROOT),
                     "turn_id": "turn-capture-hard-mismatch",
-                    "prompt": "Continue working on TASK-9997 with $impl.",
+                    "prompt": "Continue working on TASK-9997 with $goal-advisor.",
                 }
             )
             subprocess.run(
@@ -738,84 +711,6 @@ def main() -> int:
             )
             results.append({"name": "judge_docs_complete", "ok": docs_complete.returncode == 0, "stdout": docs_complete.stdout.strip(), "stderr": docs_complete.stderr.strip()})
 
-            # 12. stop hook: auto-continue spawns a visible tmux follow-up lane
-            session_name = f"farplane-smoke-{os.getpid()}-{time.time_ns()}"
-            tmux_session = run(["tmux", "new-session", "-d", "-s", session_name], cwd=ROOT)
-            if tmux_session.returncode != 0:
-                raise RuntimeError(tmux_session.stderr.strip() or tmux_session.stdout.strip() or "failed to create tmux session")
-            try:
-                current_run_path.parent.mkdir(parents=True, exist_ok=True)
-                current_run_path.write_text(
-                    json.dumps(
-                        {
-                            "schema_version": "1.0",
-                            "run_id": "run-task-9998-building-tmux-fixture",
-                            "ticket_id": "TASK-9998",
-                            "ticket_path": str(hook_missing_ticket),
-                            "phase": "building",
-                            "status": "waiting_for_worker",
-                            "prompt_file": "prompts/ralph.md",
-                            "tmux_session": session_name,
-                            "auto_continue": True,
-                            "updated_at": "2026-04-05T00:00:00Z",
-                        },
-                        indent=2,
-                    )
-                    + "\n",
-                    encoding="utf-8",
-                )
-                followup_payload = json.dumps(
-                    {
-                        "hook_event_name": "Stop",
-                        "cwd": str(ROOT),
-                        "last_assistant_message": "RALPH_RESULT: status=build_complete next=building reason=eval_tmux_followup",
-                    }
-                )
-                followup_hook = subprocess.run(
-                    ["python3", "bin/stop_hook.py"],
-                    cwd=ROOT,
-                    env={
-                        **os.environ,
-                        "FARPLANE_RALPH_HOOK": "1",
-                        "FARPLANE_RALPH_TMUX_DRY_RUN": "1",
-                        "FARPLANE_HOME": str(Path.home() / ".codex"),
-                        "RALPH_TICKET": str(hook_missing_ticket),
-                    },
-                    input=followup_payload,
-                    text=True,
-                    capture_output=True,
-                    check=False,
-                )
-                followup_event = next(
-                    (
-                        item
-                        for item in reversed(read_jsonl(hook_log_path))
-                        if item.get("event") == "spawn_followup" and item.get("ticket_id") == "TASK-9998"
-                    ),
-                    None,
-                )
-                followup = followup_event.get("followup") if isinstance(followup_event, dict) else None
-                run_state_payload: dict[str, object] | None = None
-                lane_tail = ""
-                if isinstance(followup, dict):
-                    run_state_value = followup.get("run_state")
-                    if isinstance(run_state_value, str) and run_state_value:
-                        run_state_payload = wait_for_json(Path(run_state_value))
-                        lane_tail = wait_for_lane_tail(Path(run_state_value))
-                results.append(
-                    {
-                        "name": "hook_tmux_followup",
-                        "ok": followup_hook.returncode == 0,
-                        "stdout": followup_hook.stdout.strip(),
-                        "stderr": followup_hook.stderr.strip(),
-                        "session_name": session_name,
-                        "followup": followup,
-                        "run_state_json": run_state_payload,
-                        "lane_tail": lane_tail,
-                    }
-                )
-            finally:
-                run(["tmux", "kill-session", "-t", session_name], cwd=ROOT)
         finally:
             if had_current_run and original_current_run is not None:
                 current_run_path.write_text(original_current_run, encoding="utf-8")
@@ -963,23 +858,6 @@ def main() -> int:
         predicate=lambda c: c["ok"] and '"decision": "complete_ticket"' in str(c["stdout"]),
         message="docs_complete should complete when no proof gaps remain",
     )
-    assert_case(
-        results,
-        name="hook_tmux_followup",
-        predicate=lambda c: c["ok"]
-        and isinstance(c.get("followup"), dict)
-        and c["followup"].get("tmux_session") == c["session_name"]
-        and isinstance(c.get("run_state_json"), dict)
-        and c["run_state_json"].get("tmux_session") == c["session_name"]
-        and c["run_state_json"].get("auto_continue") is True
-        and c["run_state_json"].get("tmux_window")
-        and c["run_state_json"].get("tmux_pane")
-        and "[impl tmux dry run] followup" in str(c.get("lane_tail", ""))
-        and "phase=building" in str(c.get("lane_tail", ""))
-        and "TASK-9998-hook-missing.md" in str(c.get("lane_tail", "")),
-        message="auto-continue should spawn a visible dry-run tmux follow-up lane and record its location in run state",
-    )
-
     out_path = ROOT / "experiments" / "latest-runs.json"
     out_path.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(results, indent=2))

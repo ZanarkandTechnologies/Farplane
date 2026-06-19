@@ -237,9 +237,11 @@ Observed sequence:
 ```
 
 Interpretation:
-- the hook can now hand off to a fresh visible tmux lane using `skills/impl/scripts/tmux_helper.py`
-- the new lane is inspectable with the helper's `tail` command or raw `tmux capture-pane`
-- the smoke suite now matches the current supported runtime surface
+- historical note: this smoke once covered tmux follow-up lanes, but `$impl`
+  has since moved to native Goal-backed execution and the helper path was
+  removed.
+- the current supported runtime surface is Goal Packet state plus Stop-hook
+  block/continue behavior.
 
 ## Next Step
 

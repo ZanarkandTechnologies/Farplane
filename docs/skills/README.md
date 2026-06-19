@@ -90,7 +90,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Prove a pattern before expanding scope, automation, data, file count, or research breadth | `prototyping` | It forces a representative `1 -> 10 -> 100` sample and a Prototype Note before scale. | The task is already small, one-off, or mechanically proven. |
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
 | Compose skill todos into a task-specific strategy and proof-bearing plan | `plan` | It is the Tier 2 planning prompt-template for binding context, choosing grounding/search budget, composing workflows, and producing executable todos. | A domain planner already owns the artifact and no cross-skill composition or strategy choice is needed. |
-| Handle an explicit legacy `$execute` call | `execute` | It is a deprecated compatibility wrapper over the native Tier 0 execution phase. | A task merely has an execution phase; use the native phase or a public domain execution skill such as `impl` or `frontend-craft`. |
+| Handle an explicit legacy `$execute` call | `execute` | It is a deprecated compatibility wrapper over the native Tier 0 execution phase. | A task merely has an execution phase; use the native phase or a public domain execution skill such as `goal-advisor` or `frontend-craft`. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing `pr-runtime` and `coderabbit-review`. | You only need an isolated checkout (`pr-runtime`) or one explicit heavy CodeRabbit pass (`coderabbit-review`). |
 | Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
 | Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.farplane/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, discovers modular `skills/*/eval_task.json` rows, judges with boolean/tier verdicts, and treats hardcase as eval metadata. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
@@ -172,7 +172,7 @@ Use `common_chains` only for local forward handoffs:
 tier: 3
 group: coding
 common_chains:
-  after: ["impl"]
+  after: ["goal-advisor"]
 ```
 
 Do not add `before`; reverse lookups should be derived by tooling.

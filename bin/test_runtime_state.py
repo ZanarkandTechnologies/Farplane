@@ -19,7 +19,7 @@ from user_turn import (
     current_run_state_path,
     extract_control_surfaces,
     extract_skill_mentions,
-    has_explicit_impl_invocation,
+    has_explicit_goal_execution_invocation,
     is_internal_user_prompt,
     load_current_run,
     load_runtime_claim,
@@ -32,13 +32,13 @@ from user_turn import (
 
 
 class RuntimeClaimTests(unittest.TestCase):
-    def test_has_explicit_impl_invocation_requires_exact_impl_token(self) -> None:
-        self.assertTrue(has_explicit_impl_invocation("$impl TASK-0061"))
-        self.assertTrue(has_explicit_impl_invocation("please $impl TASK-0061"))
-        self.assertTrue(has_explicit_impl_invocation("please $impl, continue TASK-0061"))
-        self.assertFalse(has_explicit_impl_invocation("$impl-plan TASK-0061"))
-        self.assertFalse(has_explicit_impl_invocation("$impl-plan-extra TASK-0061"))
-        self.assertFalse(has_explicit_impl_invocation("impl TASK-0061"))
+    def test_has_explicit_goal_execution_invocation_requires_exact_goal_advisor_token(self) -> None:
+        self.assertTrue(has_explicit_goal_execution_invocation("$goal-advisor TASK-0061"))
+        self.assertTrue(has_explicit_goal_execution_invocation("please $goal-advisor TASK-0061"))
+        self.assertTrue(has_explicit_goal_execution_invocation("please $goal-advisor, continue TASK-0061"))
+        self.assertFalse(has_explicit_goal_execution_invocation("$impl-plan TASK-0061"))
+        self.assertFalse(has_explicit_goal_execution_invocation("$impl-plan-extra TASK-0061"))
+        self.assertFalse(has_explicit_goal_execution_invocation("impl TASK-0061"))
 
     def test_normalize_user_turn_detects_qa_and_demo_execution_phases(self) -> None:
         qa = normalize_user_turn(
@@ -61,7 +61,7 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(demo["requested_execution_phase"], "demo")
         self.assertEqual(demo["requested_outcome"], "demo_pass")
 
-    def test_normalize_user_turn_keeps_impl_plan_out_of_impl_loop(self) -> None:
+    def test_normalize_user_turn_keeps_impl_plan_out_of_goal_execution_loop(self) -> None:
         normalized = normalize_user_turn(
             "$impl-plan TASK-0061",
             turn_id="turn-plan",
@@ -70,7 +70,7 @@ class RuntimeClaimTests(unittest.TestCase):
         )
 
         self.assertEqual(normalized["control_surface"], "impl-plan")
-        self.assertFalse(normalized["explicit_impl_requested"])
+        self.assertFalse(normalized["explicit_goal_execution_requested"])
         self.assertEqual(normalized["intent_mode"], "planning")
         self.assertEqual(normalized["requested_outcome"], "ticket_plan")
 
@@ -83,7 +83,7 @@ class RuntimeClaimTests(unittest.TestCase):
         )
 
         self.assertEqual(normalized["control_surface"], "")
-        self.assertFalse(normalized["explicit_impl_requested"])
+        self.assertFalse(normalized["explicit_goal_execution_requested"])
         self.assertEqual(normalized["intent_mode"], "unknown")
 
     def test_normalize_user_turn_uses_close_ticket_as_canonical_closeout_name(self) -> None:
@@ -110,7 +110,7 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(normalized["intent_mode"], "documenting")
         self.assertEqual(normalized["requested_outcome"], "docs_update")
 
-    def test_normalize_user_turn_detects_ralph_control_surface_without_impl_loop(self) -> None:
+    def test_normalize_user_turn_detects_ralph_control_surface_without_goal_execution_loop(self) -> None:
         normalized = normalize_user_turn(
             "$ralph max_loops=5",
             turn_id="turn-ralph",
@@ -122,9 +122,9 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(normalized["intent_mode"], "building")
         self.assertEqual(normalized["requested_outcome"], "code_change")
         self.assertEqual(normalized["requested_execution_phase"], "")
-        self.assertFalse(normalized["explicit_impl_requested"])
+        self.assertFalse(normalized["explicit_goal_execution_requested"])
 
-    def test_normalize_user_turn_detects_work_control_surface_without_impl_loop(self) -> None:
+    def test_normalize_user_turn_detects_work_control_surface_without_goal_execution_loop(self) -> None:
         normalized = normalize_user_turn(
             "$work TASK-0178",
             turn_id="turn-work",
@@ -136,7 +136,7 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(normalized["intent_mode"], "building")
         self.assertEqual(normalized["requested_outcome"], "code_change")
         self.assertEqual(normalized["requested_execution_phase"], "")
-        self.assertFalse(normalized["explicit_impl_requested"])
+        self.assertFalse(normalized["explicit_goal_execution_requested"])
 
     def test_extract_control_surfaces_lists_unique_skill_mentions(self) -> None:
         text = "First $impl-plan TASK-0160, then $qa and $docs-closeout. Please do not double count $qa."
@@ -152,7 +152,7 @@ class RuntimeClaimTests(unittest.TestCase):
                 "run_id": "run-task-0035-building-01",
                 "phase": "building",
                 "status": "running",
-                "skill_name": "impl",
+                "skill_name": "goal-advisor",
                 "worker_name": "builder",
                 "main_artifact_path": "/tmp/TASK-0035.md",
                 "grounding_summary": "reviewing TASK-0035 acceptance criteria",
@@ -160,9 +160,6 @@ class RuntimeClaimTests(unittest.TestCase):
                 "last_checkpoint_at": "2026-04-08T15:00:00Z",
                 "checkpoint_summary": "worker launched",
                 "session_id": "sess-123",
-                "tmux_session": "main",
-                "tmux_window": "@5",
-                "tmux_pane": "%9",
                 "updated_at": "2026-04-08T15:00:00Z",
             }
         )
@@ -176,7 +173,7 @@ class RuntimeClaimTests(unittest.TestCase):
                 "claimed_at": "2026-04-08T15:00:00Z",
                 "phase": "building",
                 "status": "running",
-                "skill_name": "impl",
+                "skill_name": "goal-advisor",
                 "worker_name": "builder",
                 "main_artifact_path": "/tmp/TASK-0035.md",
                 "grounding_summary": "reviewing TASK-0035 acceptance criteria",
@@ -184,9 +181,6 @@ class RuntimeClaimTests(unittest.TestCase):
                 "last_checkpoint_at": "2026-04-08T15:00:00Z",
                 "checkpoint_summary": "worker launched",
                 "session_id": "sess-123",
-                "tmux_session": "main",
-                "tmux_window": "@5",
-                "tmux_pane": "%9",
             },
         )
 
@@ -312,9 +306,9 @@ class RuntimeClaimTests(unittest.TestCase):
                         "run_id": "run-task-0016-building-01",
                         "phase": "building",
                         "status": "running",
-                        "skill_name": "impl",
+                        "skill_name": "goal-advisor",
                         "session_id": "sess-123",
-                        "impl_loop_active": True,
+                        "execution_loop_active": True,
                     }
                 ),
                 encoding="utf-8",
@@ -328,11 +322,11 @@ class RuntimeClaimTests(unittest.TestCase):
                         "session_origin": "control",
                         "last_user_turn": {
                             "turn_id": "turn-a",
-                            "raw_text": "please $impl this",
-                            "control_surface": "impl",
-                            "explicit_impl_requested": True,
+                            "raw_text": "please $goal-advisor this",
+                            "control_surface": "goal-advisor",
+                            "explicit_goal_execution_requested": True,
                         },
-                        "impl_loop_active": True,
+                        "execution_loop_active": True,
                     }
                 ),
                 encoding="utf-8",
@@ -345,10 +339,10 @@ class RuntimeClaimTests(unittest.TestCase):
                         "run_id": "run-task-0016-building-01",
                         "phase": "building",
                         "status": "running",
-                        "skill_name": "impl",
+                        "skill_name": "goal-advisor",
                         "session_id": "sess-123",
                         "run_state": str(run_state.relative_to(project_root)),
-                        "impl_loop_active": True,
+                        "execution_loop_active": True,
                     }
                 ),
                 encoding="utf-8",
@@ -360,7 +354,7 @@ class RuntimeClaimTests(unittest.TestCase):
         assert current is not None
         self.assertEqual(current["ticket_id"], "TASK-0016")
         self.assertEqual(current["run_state"], str(run_state.relative_to(project_root)))
-        self.assertEqual(current["skill_name"], "impl")
+        self.assertEqual(current["skill_name"], "goal-advisor")
 
     def test_load_current_run_explicit_run_state_outranks_session_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -432,7 +426,7 @@ class RuntimeClaimTests(unittest.TestCase):
 
             captured = capture_user_turn(
                 project_root=project_root,
-                raw_text="okay please $impl",
+                raw_text="okay please $goal-advisor",
                 turn_id="turn-init",
                 source="test",
                 session_id="sess-init",
@@ -531,7 +525,7 @@ class RuntimeClaimTests(unittest.TestCase):
 
         self.assertEqual([window["session_id"] for window in windows], ["sess-current", "sess-c"])
 
-    def test_capture_user_turn_impl_plan_stays_control_but_does_not_activate_impl_loop(self) -> None:
+    def test_capture_user_turn_impl_plan_stays_control_but_does_not_activate_goal_execution_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
@@ -550,12 +544,12 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertIsNotNone(captured)
         assert captured is not None
         self.assertEqual(captured["control_surface"], "impl-plan")
-        self.assertFalse(captured["explicit_impl_requested"])
+        self.assertFalse(captured["explicit_goal_execution_requested"])
         self.assertEqual(captured["intent_mode"], "planning")
-        self.assertFalse(session_payload["impl_loop_active"])
-        self.assertFalse(current_run["impl_loop_active"])
+        self.assertFalse(session_payload["execution_loop_active"])
+        self.assertFalse(current_run["execution_loop_active"])
 
-    def test_capture_user_turn_explicit_impl_seeds_unambiguous_active_ticket_runtime(self) -> None:
+    def test_capture_user_turn_explicit_goal_advisor_seeds_unambiguous_active_ticket_runtime(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             state_dir = project_root / ".farplane" / "state"
@@ -588,8 +582,8 @@ linked_docs: []
 
             captured = capture_user_turn(
                 project_root=project_root,
-                raw_text="please $impl this",
-                turn_id="turn-impl-seed",
+                raw_text="please $goal-advisor this",
+                turn_id="turn-execution-seed",
                 source="test",
                 session_id="sess-seed",
             )
@@ -599,22 +593,22 @@ linked_docs: []
 
         self.assertIsNotNone(captured)
         assert captured is not None
-        self.assertTrue(captured["explicit_impl_requested"])
+        self.assertTrue(captured["explicit_goal_execution_requested"])
         self.assertEqual(session_payload["ticket_id"], "TASK-0016")
         self.assertEqual(session_payload["current_ticket_id"], "TASK-0016")
         self.assertEqual(session_payload["phase"], "building")
         self.assertEqual(session_payload["status"], "running")
-        self.assertEqual(session_payload["skill_name"], "impl")
-        self.assertEqual(session_payload["execution_phase"], "impl")
+        self.assertEqual(session_payload["skill_name"], "goal-advisor")
+        self.assertEqual(session_payload["execution_phase"], "build")
         self.assertTrue(session_payload["requires_qa"])
         self.assertFalse(session_payload["requires_demo"])
         self.assertIn("qa", session_payload["phase_requirements"])
-        self.assertTrue(session_payload["impl_loop_active"])
+        self.assertTrue(session_payload["execution_loop_active"])
         self.assertEqual(current_run["ticket_id"], "TASK-0016")
         self.assertEqual(current_run["claim"]["ticket_id"], "TASK-0016")
         self.assertEqual(current_run["claim"]["session_id"], "sess-seed")
 
-    def test_capture_user_turn_ralph_stays_control_without_activating_impl_loop(self) -> None:
+    def test_capture_user_turn_ralph_stays_control_without_activating_goal_execution_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
@@ -634,11 +628,11 @@ linked_docs: []
         assert captured is not None
         self.assertEqual(captured["control_surface"], "ralph")
         self.assertEqual(session_payload["session_origin"], "control")
-        self.assertFalse(session_payload["impl_loop_active"])
-        self.assertFalse(current_run["impl_loop_active"])
+        self.assertFalse(session_payload["execution_loop_active"])
+        self.assertFalse(current_run["execution_loop_active"])
         self.assertNotIn("claim", current_run)
 
-    def test_capture_user_turn_work_stays_control_without_activating_impl_loop(self) -> None:
+    def test_capture_user_turn_work_stays_control_without_activating_goal_execution_loop(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
@@ -658,8 +652,8 @@ linked_docs: []
         assert captured is not None
         self.assertEqual(captured["control_surface"], "work")
         self.assertEqual(session_payload["session_origin"], "control")
-        self.assertFalse(session_payload["impl_loop_active"])
-        self.assertFalse(current_run["impl_loop_active"])
+        self.assertFalse(session_payload["execution_loop_active"])
+        self.assertFalse(current_run["execution_loop_active"])
         self.assertNotIn("claim", current_run)
 
     def test_capture_user_turn_ignores_non_control_session_without_existing_origin(self) -> None:
@@ -808,9 +802,9 @@ linked_docs: []
                         "session_id": "sess-a",
                         "last_user_turn": {
                             "turn_id": "turn-a0",
-                            "raw_text": "$impl TASK-0042",
-                            "control_surface": "impl",
-                            "explicit_impl_requested": True,
+                            "raw_text": "$goal-advisor TASK-0042",
+                            "control_surface": "goal-advisor",
+                            "explicit_goal_execution_requested": True,
                         },
                     }
                 ),
@@ -843,9 +837,9 @@ linked_docs: []
                         "run_state": str(run_state_a.relative_to(project_root)),
                         "last_user_turn": {
                             "turn_id": "turn-a0",
-                            "raw_text": "$impl TASK-0042",
-                            "control_surface": "impl",
-                            "explicit_impl_requested": True,
+                            "raw_text": "$goal-advisor TASK-0042",
+                            "control_surface": "goal-advisor",
+                            "explicit_goal_execution_requested": True,
                         },
                     }
                 ),
@@ -897,14 +891,14 @@ linked_docs: []
         self.assertEqual(session_a["last_user_turn"]["turn_id"], "turn-a")
         self.assertEqual(session_a["last_user_turn"]["raw_text"], "Implement TASK-0042 in this session only.")
         self.assertEqual(session_a["session_origin"], "control")
-        self.assertFalse(session_a["impl_loop_active"])
+        self.assertFalse(session_a["execution_loop_active"])
         self.assertEqual(session_a["session_name"], "agent-01")
         self.assertEqual(session_b["last_user_turn"]["turn_id"], "turn-b")
-        self.assertNotIn("impl_loop_active", session_b)
-        self.assertFalse(persisted_run_state_a["impl_loop_active"])
+        self.assertNotIn("execution_loop_active", session_b)
+        self.assertFalse(persisted_run_state_a["execution_loop_active"])
         self.assertEqual(persisted_run_state_a["last_user_turn"]["turn_id"], "turn-a")
 
-    def test_capture_user_turn_explicit_impl_activates_only_resolved_session_lane(self) -> None:
+    def test_capture_user_turn_explicit_goal_advisor_activates_only_resolved_session_lane(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             state_dir = project_root / ".farplane" / "state"
@@ -921,7 +915,7 @@ linked_docs: []
                         "phase": "building",
                         "status": "running",
                         "session_id": "sess-a",
-                        "skill_name": "impl",
+                        "skill_name": "goal-advisor",
                     }
                 ),
                 encoding="utf-8",
@@ -949,7 +943,7 @@ linked_docs: []
                         "run_id": "run-task-0042-building-01",
                         "phase": "building",
                         "status": "running",
-                        "skill_name": "impl",
+                        "skill_name": "goal-advisor",
                         "session_id": "sess-a",
                         "run_state": str(run_state_a.relative_to(project_root)),
                     }
@@ -986,8 +980,8 @@ linked_docs: []
 
             captured = capture_user_turn(
                 project_root=project_root,
-                raw_text="$impl TASK-0042 in this session only.",
-                turn_id="turn-impl",
+                raw_text="$goal-advisor TASK-0042 in this session only.",
+                turn_id="turn-execution",
                 source="test",
                 session_id="sess-a",
             )
@@ -998,12 +992,12 @@ linked_docs: []
 
         self.assertIsNotNone(captured)
         assert captured is not None
-        self.assertTrue(captured["explicit_impl_requested"])
-        self.assertTrue(session_a["impl_loop_active"])
-        self.assertEqual(session_a["last_user_turn"]["turn_id"], "turn-impl")
+        self.assertTrue(captured["explicit_goal_execution_requested"])
+        self.assertTrue(session_a["execution_loop_active"])
+        self.assertEqual(session_a["last_user_turn"]["turn_id"], "turn-execution")
         self.assertEqual(session_a["session_origin"], "control")
-        self.assertNotIn("impl_loop_active", session_b)
-        self.assertTrue(persisted_run_state_a["impl_loop_active"])
+        self.assertNotIn("execution_loop_active", session_b)
+        self.assertTrue(persisted_run_state_a["execution_loop_active"])
 
     def test_capture_user_turn_explicit_qa_seeds_execution_phase(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

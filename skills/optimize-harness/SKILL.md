@@ -30,7 +30,7 @@ judges readiness.
 optimize_harness(observed_behavior, expected_behavior?, metric?, evidence?) -> accepted_change | experiment_plan | blocked_report
 state: reads(gap reports, harness doctrine, registries, evals, target surfaces); writes(ticket?, eval_case?, experiment_artifact?, applied_change?, review_receipt?)
 gates: gap_named; owner_surface_named; proof_exists; review_passes_or_blocked
-routes: gap-analysis | harness-advisor | eval | self-improve | skill-maintenance | impl | review
+routes: gap-analysis | harness-advisor | eval | self-improve | skill-maintenance | goal-advisor | review
 fails: changes without proof; optimizes vague taste; creates new skill before checking registry; hides blocked state
 ```
 

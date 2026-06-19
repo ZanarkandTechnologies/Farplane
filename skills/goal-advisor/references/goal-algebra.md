@@ -64,8 +64,8 @@ GoalPortfolio :=
   `feedback-request.md`, `feedback.json`, and `human_score` or `accepted`.
 - `review` fills the `review_verdict` provider for serious completion,
   skill-contract, or proof-bundle judgments.
-- `$impl` fills coding-ticket execution only after this skill has compiled the
-  Goal files, mode, budget, metric, and stop policy.
+- `goal-advisor` fills coding-ticket execution by compiling the Goal files,
+  mode, budget, metric, and stop policy for native Goal.
 - Retired public surfaces map into Goal standards:
   - `$work` -> admission/profile fields in `program.md`
   - `$ralph` -> heartbeat board-drain pattern

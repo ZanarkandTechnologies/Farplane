@@ -25,16 +25,16 @@ class RuntimeTelemetryTests(unittest.TestCase):
                 source="test",
                 project_root=project_root,
                 payload={"session_id": "sess-123", "turn_id": "turn-1"},
-                runtime_claim={"ticket_id": "TASK-0160", "skill_name": "impl"},
-                summary="requested $impl",
+                runtime_claim={"ticket_id": "TASK-0160", "skill_name": "goal-advisor"},
+                summary="requested $goal-advisor",
                 counts={"skill_mention_count": 1, "ignored": "nope"},
-                metadata={"prompt": "secret prompt", "skill_name": "impl", "raw_text": "secret raw"},
+                metadata={"prompt": "secret prompt", "skill_name": "goal-advisor", "raw_text": "secret raw"},
             )
 
         self.assertEqual(event["event_type"], "skill_requested")
         self.assertEqual(event["session_id"], "sess-123")
         self.assertEqual(event["ticket_id"], "TASK-0160")
-        self.assertEqual(event["skill_name"], "impl")
+        self.assertEqual(event["skill_name"], "goal-advisor")
         self.assertEqual(event["counts"], {"skill_mention_count": 1})
         self.assertNotIn("prompt", event["metadata"])
         self.assertNotIn("raw_text", event["metadata"])
@@ -68,7 +68,7 @@ class RuntimeTelemetryTests(unittest.TestCase):
                     hook_event_name="Stop",
                     payload={"session_id": "sess-123", "cwd": str(project_root)},
                     project_root=project_root,
-                    runtime_claim={"ticket_id": "TASK-0160", "skill_name": "impl"},
+                    runtime_claim={"ticket_id": "TASK-0160", "skill_name": "goal-advisor"},
                     extra={
                         "source": "test",
                         "summary": "learning window updated",

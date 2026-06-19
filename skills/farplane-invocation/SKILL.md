@@ -82,7 +82,7 @@ an external caller converts it into a `FarplaneRunEnvelope`.
 ## Boundaries
 
 - `planning` routes to `impl-plan`.
-- `building` routes to `impl`.
+- `building` routes to `goal-advisor`.
 - `qa` routes to `qa`.
 - `review` routes to `review`.
 - `documenting` routes to `close-ticket`.

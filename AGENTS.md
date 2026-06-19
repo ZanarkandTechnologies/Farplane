@@ -222,7 +222,9 @@ For harness-design research and external patterns:
   primitive. Serious readiness claims should include tester evidence,
   evidence-review critique, captured logs when useful, and a final proof-bundle
   review. See `MEM-0115`.
-- In live `$impl` loops, treat `$qa` as a delegated lane: the coordinating lane should hand browser driving and proof capture to `qa-tester` instead of using `agent-browser` directly. See `MEM-0069`.
+- In Goal-backed ticket execution, treat `$qa` as a delegated proof surface:
+  the coordinating lane should hand browser driving and proof capture to
+  `qa-tester` instead of using `agent-browser` directly. See `MEM-0069`.
 - Outside tmux or lane-specific runtime flows, keep the same ownership split: native `qa-tester` delegation is the default way to run meaningful QA or browser proof, and the main agent should not personally use `agent-browser` when that QA ownership can be isolated. See `MEM-0070`.
 - For browser proof inside Farplane, make the efficient path the default:
   `qa-tester` should use `agent-browser` for page operation, screenshots,
@@ -235,11 +237,17 @@ For harness-design research and external patterns:
   direct-route prompts. `$work`, `$ralph`, and `batch-work` are retired public
   orchestration surfaces; their remaining useful policies live in Goal
   standards.
-- Treat `$impl` as the coding-ticket leaf execution surface, with internal
-  `execution_phase` progression through `impl`, `qa`, and `demo` when required.
-  Stop-hook should advance those phases mechanically before final completion
-  review. See `MEM-0049`.
-- Final Stop-hook completion in Farplane should remain mechanical and visible: after impl/qa/demo gates pass, request one linked nonce-backed completion-review receipt from the visible reviewer lane instead of hiding the final judgment in a background review pass. Only active ticket-backed `impl` loops should receive that nonce, and the next final response must echo it as `COMPLETION_PASSWORD: <nonce>` alongside the matching receipt. See `MEM-0064`, `MEM-0067`.
+- Treat `goal-advisor` as the coding-ticket leaf execution surface once a
+  ticket is ready, with internal `execution_phase` progression through `build`,
+  `qa`, and `demo` when required. Stop-hook should advance those phases
+  mechanically before final completion review. See `MEM-0049`.
+- Final Stop-hook completion in Farplane should remain mechanical and visible:
+  after impl/qa/demo gates pass, request one linked nonce-backed
+  completion-review receipt from the visible reviewer lane instead of hiding
+  the final judgment in a background review pass. Only active ticket-backed
+  Goal loops should receive that nonce, and the next final response must echo
+  it as `COMPLETION_PASSWORD: <nonce>` alongside the matching receipt. See
+  `MEM-0064`, `MEM-0067`.
 - Material review should run through the native `reviewer` subagent when
   available. Pass the active ticket or task artifact path, changed files,
   evidence artifacts, review focus, caller-declared rubric families, required
@@ -253,23 +261,29 @@ For harness-design research and external patterns:
   lane and do not rely on hidden chat memory for prior discussion, options,
   constraints, or proof targets.
 - Treat persistent Codex threads and native subagents as different delegation
-  primitives. Use `create_thread(prompt, target) -> thread_id` when work should
-  fork into a user-visible Codex app thread, keep its own durable title, survive
-  as a followable conversation, or own a ticket/Goal execution lane over time.
-  After creating the thread, call `set_thread_title(thread_id, title)` when
-  available and write the child thread ID back to the parent ticket, report, or
-  progress artifact. Use native subagents for bounded specialist work whose
-  output should collapse back into the current thread, such as review, QA,
-  research, or focused implementation evidence.
+  primitives. Use `create_thread(prompt, target) -> thread_id` when a
+  standalone task should become a user-visible Codex app thread without
+  inheriting full conversation history; include the minimal context packet,
+  ticket, memory file, or prompt needed to start cleanly. Use
+  `fork_thread(thread_id?, environment?) -> thread_id` when the existing
+  conversation history is material to the next branch, such as splitting
+  multiple task paths, preserving decisions, or continuing a context-heavy
+  investigation. After creating or forking a persistent thread, call
+  `set_thread_title(thread_id, title)` when available and write the child
+  thread ID plus parent/source thread ID back to the parent ticket, report,
+  progress artifact, or thread-handoff ledger. Use native subagents for bounded
+  specialist work whose output should collapse back into the current thread,
+  such as review, QA, research, or focused implementation evidence.
 - Once specs are already decomposed into modular tickets, treat the selected
   ticket as the default planning, build, and review unit. `impl-plan` should
-  plan the whole ticket, `$impl` should try to land the whole ticket, and
-  `review` should judge the whole ticket unless a real blocker, proof
+  plan the whole ticket, `goal-advisor` should try to land the whole ticket,
+  and `review` should judge the whole ticket unless a real blocker, proof
   boundary, safety issue, or explicit follow-up ticket makes narrower scope
   real. See `MEM-0061`.
-- Auto-run `review` at the end of `impl-plan` and at the end of `impl` when
-  working inside Farplane, using the `reviewer` lane for material review when
-  native subagents are available. See `MEM-0127` and `MEM-0129`.
+- Auto-run `review` at the end of `impl-plan` and before completion of
+  Goal-backed ticket execution when working inside Farplane, using the
+  `reviewer` lane for material review when native subagents are available. See
+  `MEM-0127` and `MEM-0129`.
 - Keep live repo-owned skills and docs Farplane-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
 - Prefer `.farplane/` for live runtime state.
 - Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.

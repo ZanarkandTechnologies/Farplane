@@ -544,7 +544,7 @@ Budgeted skills include:
 | `review`, `visual-qa`, `agent-qa-test` | rubric depth, evidence depth, reviewer/QA lanes |
 | `eval`, `eval-onboarding` | case count, fixture depth, judge strictness, heldout coverage |
 | `optimize-harness`, `self-improve` | candidate count, iteration count, metric budget, rollback gate |
-| `impl`, `work`, `batch-work` | execution scope, proof rows, QA/review depth |
+| `goal-advisor`, `work`, `batch-work` | execution scope, proof rows, QA/review depth |
 
 Budget is not a standalone lever. It modulates the other levers:
 

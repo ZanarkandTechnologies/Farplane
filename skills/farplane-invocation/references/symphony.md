@@ -19,7 +19,7 @@ flowchart LR
   Symphony["Symphony<br/>poll / claim / retry"] --> Workspace["workspace<br/>Farplane installed"]
   Workspace --> Envelope["FarplaneRunEnvelope file"]
   Envelope --> Codex["normal Codex<br/>farplane-invocation"]
-  Codex --> Skills["impl-plan / impl / qa / review"]
+  Codex --> Skills["impl-plan / goal-advisor / qa / review"]
   Skills --> Proof["ProofPacket"]
   Proof --> Symphony
 ```
@@ -48,7 +48,7 @@ flowchart LR
 | Run request | Symphony | Provide `FarplaneRunEnvelope` as a file or prompt block | Missing/invalid envelope blocks the run |
 | Work item normalization | Farplane | V1 reads filesystem tickets through `FileTicketAdapter` | Proof/error if possible; otherwise clear stderr |
 | Compute admission | Farplane | `local_shared` means inside the current Symphony workspace | Unsupported targets return blockers, not fallback |
-| Skill routing | Farplane | Route to `impl-plan`, `impl`, `qa`, `review`, or `close-ticket` | Block when no route exists |
+| Skill routing | Farplane | Route to `impl-plan`, `goal-advisor`, `qa`, `review`, or `close-ticket` | Block when no route exists |
 | Ticket evidence | Farplane | Link artifacts in the ticket when filesystem ticket exists | Missing evidence lowers review/proof quality |
 | Proof packet | Farplane | Write JSON to `proofPacketPath` | Symphony treats missing proof as worker failure |
 | Tracker comments/state transitions | Symphony or agent tools | Farplane does not own tracker writeback in v1 | External caller decides comment/retry/handoff |

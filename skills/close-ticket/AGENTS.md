@@ -34,6 +34,5 @@
 ## Testing
 
 - Re-read `SKILL.md` once and confirm it is executable without opening other files.
-- Compare the canonical name and alias wording against `bin/user_turn.py`,
-  `bin/stop_hook.py`, and `skills/impl/scripts/tmux_helper.py` when the runtime
-  control-skill contract changes.
+- Compare the canonical name and alias wording against `bin/user_turn.py` and
+  `bin/stop_hook.py` when the runtime control-skill contract changes.

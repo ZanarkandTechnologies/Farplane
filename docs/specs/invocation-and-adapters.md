@@ -32,7 +32,7 @@ The user's current priority is local, conversational execution:
 3. `goal-advisor` compiles the work into direct execution, native Goal,
    heartbeat, rollout, feedback, or batch Goal with an explicit budget.
 4. Farplane policy selects where the accepted work should run.
-5. Codex routes through existing leaf skills such as `impl-plan`, `impl`, `qa`,
+5. Codex routes through existing leaf skills such as `impl-plan`, `goal-advisor`, `qa`,
    `review`, and `close-ticket`.
 6. Farplane writes ticket evidence and a machine-readable `ProofPacket`.
 
@@ -69,7 +69,7 @@ Symphony's polling/retry/workspace daemon unless a later ticket proves the need.
 - No automatic execution from ticket creation, readiness, or status movement
   alone.
 - No parallel board-drain implementation here.
-- No replacement for `goal-advisor`, `impl-plan`, `impl`, `qa`, `review`, or
+- No replacement for `goal-advisor`, `impl-plan`, `qa`, `review`, or
   `close-ticket`.
 - No standalone `farplane run` product claim. Farplane remains normal Codex
   with installed skills, hooks, templates, and repo-owned rules.
@@ -388,7 +388,8 @@ The active runtime surface is intentionally narrow:
 - `goal-advisor` compiles one request, ticket, batch, board-selected unit, epic,
   or metric loop into listed files, trigger mode, budget, proof, and route.
 - `impl-plan` plans one selected work package when material planning is needed.
-- `$impl` is the public build-phase orchestrator for one selected ticket.
+- `goal-advisor` is the public build-phase compiler for one selected ticket,
+  producing the native Goal prompt over its ticket/program/progress files.
 - board drain is a heartbeat Goal mode that selects a proceedable file set and
   emits or resumes a native Goal prompt.
 - native `/goal` owns semantic continuation when outcome, verification surface,
@@ -398,8 +399,9 @@ The active runtime surface is intentionally narrow:
   and nonce gate.
 
 There is no separate public retired execution surface anymore. Same-ticket
-repeats re-enter `$impl`; board drains enter through `goal-advisor` heartbeat;
-future external runners enter through an explicit invocation envelope.
+repeats re-enter the `goal-advisor`-compiled native Goal; board drains enter
+through `goal-advisor` heartbeat; future external runners enter through an
+explicit invocation envelope.
 
 Public docs should describe `.farplane/` as the canonical live runtime root.
 Runtime-only records may live under `.farplane/state/**`, including ticket
@@ -409,14 +411,14 @@ branch, target, port, command, launch, and owner-session metadata.
 
 Runtime docs should preserve these boundaries:
 
-- `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and
-  `stop_hook.py` are operator/runtime shims, not a public control plane.
+- `capture_user_turn.py`, `ticket_runtime.py`, and `stop_hook.py` are
+  operator/runtime shims, not a public control plane.
 - `ticket_runtime.py` is a narrow ticket-runtime shim for isolated checkout,
   declared runtime launch/stop, and live QA target setup.
 - `current-run.json` is control-session-owned state, not a generic sink for
   every prompt-bearing session.
-- tmux `auto_continue` is lane-follow-up plumbing, not the source of truth for
-  whether a `$impl` loop is active.
+- native Goal mode and the Goal Packet are the source of truth for whether a
+  durable ticket execution loop is active.
 - Stop hook is a mechanical protocol/artifact gate, not the autonomy brain for
   Goal-backed work.
 - retired prototype dot-directories and old wrappers such as

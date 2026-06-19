@@ -142,7 +142,7 @@ flowchart LR
   subgraph work["Work Execution"]
     plan["plan / spec / ticket"]:::surface
     goal["goal-advisor<br/>native Goal / heartbeat / batch"]:::core
-    impl["impl<br/>build / QA / review"]:::surface
+    execute["goal-advisor<br/>build Goal / QA / review"]:::surface
     close["docs / memory / closeout"]:::surface
   end
 

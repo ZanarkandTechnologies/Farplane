@@ -68,7 +68,7 @@ PrototypeGates :=
 | hard-to-QA surface
 
 PipelineHandoff :=
-  prd -> spec-to-ticket -> impl-plan -> impl
+  prd -> spec-to-ticket -> impl-plan -> goal-advisor
 ```
 
 ## Landing Page

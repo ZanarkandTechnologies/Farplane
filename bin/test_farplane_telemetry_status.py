@@ -25,7 +25,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                         json.dumps(
                             {
                                 "event_type": "skill_requested",
-                                "skill_name": "impl",
+                                "skill_name": "goal-advisor",
                                 "hook_name": "UserPromptSubmit",
                                 "ticket_id": "TASK-0160",
                                 "status": "",
@@ -34,7 +34,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                         json.dumps(
                             {
                                 "event_type": "learning_review_launched",
-                                "skill_name": "impl",
+                                "skill_name": "goal-advisor",
                                 "hook_name": "Stop",
                                 "ticket_id": "TASK-0160",
                                 "status": "launched",
@@ -64,8 +64,8 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                                     "user_turn": {
                                         "turn_id": "turn-1",
                                         "captured_at": "2026-05-26T00:00:00Z",
-                                        "summary": "asked for $impl",
-                                        "raw_text": "please $impl /Users/example/secret/file",
+                                        "summary": "asked for $goal-advisor",
+                                        "raw_text": "please $goal-advisor /Users/example/secret/file",
                                     },
                                     "assistant_text": "I will run the implementation plan and capture proof.",
                                     "assistant_captured_at": "2026-05-26T00:00:01Z",
@@ -82,10 +82,10 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                         "status": "docs_updated",
                         "speak": "Logged a lesson to improve impl proof.",
                         "docs_delta": {
-                            "lessons_appended": [{"line": "2026-05-26 00:00 Z | impl,proof | source | Improve impl proof | skills/impl | tighten proof"}],
+                            "lessons_appended": [{"line": "2026-05-26 00:00 Z | goal-advisor,proof | source | Improve goal proof | skills/goal-advisor | tighten proof"}],
                             "troubles_appended": [],
                         },
-                        "decisions": [{"summary": "Improve impl proof", "target": "docs/LESSONS.md", "confidence": "medium"}],
+                        "decisions": [{"summary": "Improve goal proof", "target": "docs/LESSONS.md", "confidence": "medium"}],
                         "proof_hops": [
                             {"name": "user_capture", "status": "present"},
                             {"name": "assistant_capture", "status": "present"},
@@ -106,7 +106,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
         self.assertEqual(status["learning"]["run_count"], 1)
         run = status["learning"]["latest_runs"][0]
         self.assertEqual(run["status"], "docs_updated")
-        self.assertIn("Improve impl proof", run["candidate_title"])
+        self.assertIn("Improve goal proof", run["candidate_title"])
         self.assertEqual(run["recommended_owner"], "docs/LESSONS.md")
         self.assertEqual(run["proof_hops_present"], 3)
         self.assertEqual(run["proof_hops_total"], 3)

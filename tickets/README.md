@@ -134,8 +134,8 @@ last_verification: none
 - `blocked_by`: concrete ticket-ID blockers only
 - `ready`: whether `next_action` can be executed now
 - `approval_required`: explicit approval gate
-- `requires_qa`: whether `$impl` must produce a passing QA phase before completion
-- `requires_demo`: whether `$impl` must also produce a passing demo phase after QA
+- `requires_qa`: whether `$goal-advisor` must produce a passing QA phase before completion
+- `requires_demo`: whether `$goal-advisor` must also produce a passing demo phase after QA
 - `next_action`: the one authoritative next step
 - `last_verification`: the one-line authoritative verification summary; keep
   detailed commands and artifacts in `Links`, `State`, `progress.md`, or

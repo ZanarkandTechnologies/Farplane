@@ -33,7 +33,7 @@ compute:
 
 routing:
   planning: impl-plan
-  building: impl
+  building: goal-advisor
   qa: qa
   review: review
   documenting: close-ticket

@@ -26,8 +26,9 @@ allowed-tools: Read, Grep, Glob, Bash
   role, constraints, output format, or examples matter.
 - [ ] Capture runtime logs, prompt artifact, handoff note, first-write or output
   proof, and optional diff into the ticket evidence surface.
-- [ ] Hand the result back to [qa](../qa/SKILL.md), [demo](../demo/SKILL.md), or
-  [impl](../impl/SKILL.md) instead of letting the delegate approve itself.
+- [ ] Hand the result back to [goal-advisor](../goal-advisor/SKILL.md),
+  [qa](../qa/SKILL.md), or [demo](../demo/SKILL.md) instead of letting the
+  delegate approve itself.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill to run an external coding-agent CLI as a bounded builder lane

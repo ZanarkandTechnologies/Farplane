@@ -31,7 +31,7 @@ DeepInterview := deep-interview
 PRD := prd
 TicketBreakdown := spec-to-ticket
 PlanTicket<CodingTicket> := impl-plan
-ExecuteTicket<CodingTicket> := impl
+ExecuteTicket<CodingTicket> := goal-advisor
 VerifyTicket := qa | visual-qa | review | domain proof skill
 CloseTicket<CodingTicket> := close-ticket
 ```

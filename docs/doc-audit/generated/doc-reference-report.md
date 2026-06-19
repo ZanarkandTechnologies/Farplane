@@ -15,70 +15,70 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-12T03:34:03+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-19T18:20:44+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
 
 The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
-- All inbound refs: `9`
-- Skill-origin refs: `4`
+- All inbound refs: `13`
+- Skill-origin refs: `5`
 - Cleanup rule: keep this as the canonical equation/model surface and point
   workflow docs back to it instead of duplicating the algebra.
 
 ## Counts
 
-- Scanned files: `947`
-- Nodes: `665`
-- Edges: `2202`
-- Unresolved local-looking refs: `757`
+- Scanned files: `1075`
+- Nodes: `790`
+- Edges: `3078`
+- Unresolved local-looking refs: `866`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/specs/README.md` | 51 | 27 |
-| `docs/MEMORY.md` | 45 | 20 |
-| `docs/LESSONS.md` | 37 | 18 |
-| `docs/HISTORY.md` | 30 | 7 |
-| `docs/TROUBLES.md` | 29 | 12 |
-| `docs/features/registry.jsonl` | 28 | 8 |
-| `docs/skills/README.md` | 24 | 11 |
-| `docs/skills/registry.jsonl` | 24 | 11 |
-| `docs/prd.md` | 19 | 17 |
-| `docs/sources/registry.jsonl` | 18 | 5 |
+| `docs/LESSONS.md` | 54 | 25 |
+| `docs/specs/README.md` | 53 | 26 |
+| `docs/MEMORY.md` | 47 | 18 |
+| `docs/TROUBLES.md` | 45 | 20 |
+| `docs/HISTORY.md` | 37 | 11 |
+| `docs/specs/self-improvement-contracts.md` | 32 | 25 |
+| `docs/skills/README.md` | 30 | 13 |
+| `docs/skills/registry.jsonl` | 29 | 15 |
+| `docs/features/registry.jsonl` | 27 | 9 |
+| `docs/prd.md` | 23 | 20 |
+| `docs/skills/best-practices.md` | 21 | 15 |
+| `docs/skills/system.md` | 19 | 13 |
+| `docs/sources/registry.jsonl` | 18 | 6 |
 | `docs/specs/harness-techniques.md` | 18 | 2 |
 | `docs/TASTE.md` | 18 | 14 |
-| `docs/specs/invocation-and-adapters.md` | 14 | 2 |
-| `docs/specs/self-improvement-contracts.md` | 14 | 6 |
-| `docs/skills/system.md` | 13 | 8 |
-| `docs/skills/best-practices.md` | 13 | 10 |
+| `docs/specs/goal-loop-contract.md` | 18 | 9 |
+| `docs/specs/invocation-and-adapters.md` | 15 | 2 |
+| `docs/fundamentals/harness-engineering-doctrine.md` | 13 | 5 |
+| `docs/fundamentals/harness-algebra.md` | 13 | 5 |
 | `docs/review/rubrics/review-rubric-index.md` | 12 | 6 |
-| `docs/fundamentals/harness-engineering-doctrine.md` | 12 | 5 |
-| `docs/features/README.md` | 12 | 3 |
-| `docs/review/rubrics/reviewer-handoff.md` | 9 | 6 |
 
 ## Spec Status Preview
 
 | Spec | All refs | Skill refs | Suggested status |
 | --- | --- | --- | --- |
 | `docs/specs/AGENTS.md` | 1 | 0 | keep active |
-| `docs/specs/README.md` | 51 | 27 | keep active |
+| `docs/specs/README.md` | 53 | 26 | keep active |
 | `docs/specs/adaptive-backoff.md` | 7 | 6 | keep active |
 | `docs/specs/agent-testability-surfaces.md` | 4 | 3 | keep active |
-| `docs/specs/context-and-handoff-policy.md` | 4 | 1 | keep active |
-| `docs/specs/doc-governance.md` | 7 | 0 | keep active |
-| `docs/specs/filesystem-lifecycle.md` | 6 | 1 | keep active |
+| `docs/specs/context-and-handoff-policy.md` | 7 | 4 | keep active |
+| `docs/specs/doc-governance.md` | 8 | 0 | keep active |
+| `docs/specs/filesystem-lifecycle.md` | 8 | 1 | keep active |
 | `docs/specs/first-principles-planning.md` | 8 | 6 | keep active |
-| `docs/specs/goal-loop-contract.md` | 8 | 5 | keep active |
-| `docs/fundamentals/harness-algebra.md` | 9 | 4 | keep active |
-| `docs/fundamentals/harness-engineering-doctrine.md` | 12 | 5 | keep active |
+| `docs/specs/goal-loop-contract.md` | 18 | 9 | keep active |
 | `docs/specs/harness-techniques.md` | 18 | 2 | keep active |
-| `docs/specs/invocation-and-adapters.md` | 14 | 2 | keep active |
+| `docs/specs/inspiration-vault.md` | 1 | 0 | keep active |
+| `docs/specs/invocation-and-adapters.md` | 15 | 2 | keep active |
 | `docs/specs/product-convergence-plan.md` | 0 | 0 | keep active |
+| `docs/specs/program-notation.md` | 11 | 7 | keep active |
 | `docs/specs/review-gates.md` | 7 | 2 | keep active |
-| `docs/specs/self-improvement-contracts.md` | 14 | 6 | keep active |
+| `docs/specs/self-improvement-contracts.md` | 32 | 25 | keep active |
 | `docs/specs/spec-authoring-contract.md` | 6 | 3 | keep active |
 | `docs/specs/spec-first-execution-loop.md` | 5 | 0 | keep active |
 
@@ -114,9 +114,10 @@ can still be worth keeping.
 | `docs/archive/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md` | review before archive or merge |
 | `docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md` | review before archive or merge |
 | `docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md` | review before archive or merge |
+| `docs/automation-previews/2026-06-15-pm-ticket-update-automation-preview.md` | review before archive or merge |
 | `docs/features/AGENTS.md` | keep if loaded by directory convention |
+| `docs/futureideas/autonomous-unit-filesystem.md` | review before archive or merge |
 | `docs/private-tool-context.md` | review before archive or merge |
-| `docs/skills/AGENTS.md` | keep if loaded by directory convention |
 | `docs/sources/AGENTS.md` | keep if loaded by directory convention |
 | `docs/specs/product-convergence-plan.md` | review before archive or merge |
 

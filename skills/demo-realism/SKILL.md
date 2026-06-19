@@ -47,7 +47,7 @@ context?"
 4. Derive realistic entities, records, timelines, edge cases, and empty/error states.
 5. Produce a demo-realism pack the next skill can build from.
 6. Score the result with a realism and presentation-worthiness rubric.
-7. Hand off to `functional-ui`, `visual-design`, `frontend-craft`, `impl-plan`, or `impl`.
+7. Hand off to `functional-ui`, `visual-design`, `frontend-craft`, `impl-plan`, or `goal-advisor`.
 
 ## Use When
 
@@ -141,7 +141,7 @@ Produce one compact realism pack with:
    - `visual-design` if realism is settled and visual direction should start
    - `frontend-craft` if realism is settled and implementation should start
    - `impl-plan` if the realism pack should become a scoped execution plan
-   - `impl` if a ticket already exists and build can start directly
+   - `goal-advisor` if a ticket already exists and build can start directly
 
 ## Decision Branches
 

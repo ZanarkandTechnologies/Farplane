@@ -64,7 +64,7 @@ cloud setup, credentials, billing, deploys, and destructive actions.
 After init, follow the planning funnel:
 
 ```text
-brainstorm -> deep-interview -> prd -> spec-to-ticket -> impl-plan -> impl
+brainstorm -> deep-interview -> prd -> spec-to-ticket -> impl-plan -> goal-advisor
 ```
 
 ## Brownfield Migration
@@ -139,7 +139,7 @@ Start with:
 
 - one PRD/spec
 - one real ticket
-- one `impl-plan -> impl` cycle
+- one `impl-plan -> goal-advisor` cycle
 
 Do not migrate every old issue into ticket files at once.
 
@@ -159,7 +159,7 @@ Then:
 - set the chosen ticket to `status: review`
 - run `impl-plan`
 - set it to `status: building`
-- run `impl`
+- run `goal-advisor`
 
 ### 4. Keep migration scope small
 
@@ -213,6 +213,6 @@ Those can come after one clean ticket run.
 - [ ] `tickets/TASK-0001/ticket.md` exists as the initial PRD handoff
 - [ ] one first ticket exists
 - [ ] one first `impl-plan` run is successful
-- [ ] one first `impl` run is successful
+- [ ] one first `goal-advisor` run is successful
 - [ ] repeated failures get logged to `docs/TROUBLES.md`
 - [ ] reusable post-fix lessons get distilled into `docs/LESSONS.md`

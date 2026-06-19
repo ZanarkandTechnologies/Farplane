@@ -21,5 +21,5 @@ conventions.
 - introduce a public `farplane run` product
 - launch Codex from this skill or from `bin/farplane_invocation.py`
 - add polling, leases, cloud execution, or remote board adapters here
-- duplicate the detailed contracts for `impl-plan`, `$impl`, `qa`, `review`, or
+- duplicate the detailed contracts for `impl-plan`, `goal-advisor`, `qa`, `review`, or
   `close-ticket`

@@ -12,7 +12,7 @@ owning package, such as `skills/<name>/scripts/`.
 Primary control plane:
 
 - `impl-plan`
-- `$impl`
+- `goal-advisor`
 - persistent builder lanes
 - `stop_hook.py`
 
@@ -120,12 +120,6 @@ See [the invocation and adapters spec](/Users/kenjipcx/coding-harness/Farplane/d
 Use the existing helpers directly, but prefer output modes that keep routine
 success quiet and make failure output the thing that stands out.
 
-- `python3 skills/impl/scripts/tmux_helper.py followup ...`
-  Default mode: one-line success summary for operator/agent scans
-- `python3 skills/impl/scripts/tmux_helper.py followup ... --json`
-  Use when a script or hook needs the structured payload
-- `python3 skills/impl/scripts/tmux_helper.py status`
-  Current mode: full JSON because this is still primarily a machine/state read surface
 - `python3 bin/ticket_runtime.py ensure ...`
   Use when a skill or operator needs a ticket-scoped runtime record, optional
   isolated checkout path, declared commands, and QA targets without launching yet
@@ -204,32 +198,9 @@ Examples:
 followup ok: TASK-0033 -> building pane=%42 session=main run=.farplane/runs/task-0033-building-20260410T091500000000Z.json dry-run
 ```
 
-```text
-followup failed: TASK-0033 -> building | tmux send-keys failed | pane=%42
-no current client
-```
-
 ## Minimal Example
 
 ```bash
-python3 skills/impl/scripts/tmux_helper.py launch \
-  --ticket tickets/TASK-0014/ticket.md \
-  --phase building \
-  --dry-run
-
-python3 skills/impl/scripts/tmux_helper.py followup \
-  --ticket tickets/TASK-0014/ticket.md \
-  --phase documenting \
-  --reason "hook-driven follow-up"
-
-python3 skills/impl/scripts/tmux_helper.py followup \
-  --ticket tickets/TASK-0014/ticket.md \
-  --phase documenting \
-  --reason "hook-driven follow-up" \
-  --json
-
-python3 skills/impl/scripts/tmux_helper.py status
-
 python3 bin/ticket_runtime.py up \
   --ticket TASK-0014 \
   --branch pr-123 \
@@ -261,13 +232,9 @@ python3 bin/self_improve_hook_probe.py status \
 
 ```
 
-In the live interactive path, `$impl` is the orchestrator contract and
-`skills/impl/scripts/tmux_helper.py` is only a visibility/recovery helper.
-Same-lane continuations come from the normal Stop-hook block/continue flow.
-`followup` is the fallback path when a lane must be recreated or resumed from
-stored session metadata. `status` centralizes the active lane plus the latest
-hook verdict, falling back to the Stop-hook log when the live run state has
-already advanced.
+In the live interactive path, `goal-advisor` compiles the Goal-backed ticket
+execution contract. Native Goal mode owns persistence, while Stop-hook remains
+a mechanical block/continue gate for the active session.
 
 ## How To Test
 
@@ -290,9 +257,4 @@ already advanced.
 - `python3 -m py_compile bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py`
 - `python3 -m py_compile skills/ralph/scripts/select_next_ticket.py`
 - `python3 skills/ralph/scripts/test_select_next_ticket.py`
-- `python3 -m py_compile skills/impl/scripts/tmux_helper.py`
 - `python3 -m unittest discover -s bin -p 'test_*.py'`
-- `python3 skills/impl/scripts/tmux_helper.py launch --ticket <ticket> --phase building --tmux-session <session> --dry-run`
-- `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run`
-- `python3 skills/impl/scripts/tmux_helper.py followup --ticket <ticket> --phase documenting --run-state <run-state> --dry-run --json`
-- `python3 skills/impl/scripts/tmux_helper.py status`

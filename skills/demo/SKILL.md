@@ -39,7 +39,7 @@ Use it when:
 
 - the ticket requires demo output
 - QA has already passed and produced reusable artifacts
-- `$impl` or the operator needs to rerun demo generation without redoing QA
+- `goal-advisor` or the operator needs to rerun demo generation without redoing QA
 
 Do not use it when:
 
@@ -56,7 +56,7 @@ Do not use it when:
 - Write demo outputs under `tickets/TASK-XXXX/artifacts/demo/`.
 - Update the ticket `Evidence` section with demo artifact links.
 - Write `result.json` under the demo artifact root and finish with:
-  - `IMPL_RESULT: status=demo_complete next=building reason=...`
+  - `EXECUTION_RESULT: status=demo_complete next=building reason=...`
 
 ## Required artifacts
 

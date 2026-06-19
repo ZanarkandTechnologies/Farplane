@@ -102,13 +102,13 @@ Stop hook answers:
 Stop hook should consume QA + reviewer outputs, not replace them.
 It should not depend on a separate evidence-review-only role.
 On build paths, it should first check the active execution phase contract
-mechanically: `impl`, `qa`, and `demo` may each require distinct artifacts
+mechanically: `build`, `qa`, and `demo` may each require distinct artifacts
 before completion review is even eligible.
 On completion paths, it should keep the final sufficiency gate inspectable:
 when mechanical artifact gates pass, Stop hook should request one visible
 completion-review receipt keyed by a nonce, then validate that linked receipt
 instead of hiding the final judgment in another background review pass.
-That nonce should be issued only inside an active ticket-backed `impl` loop,
+That nonce should be issued only inside an active ticket-backed execution loop,
 returned to the live lane through the Stop-hook continuation message, and
 echoed back in the next final assistant response as
 `COMPLETION_PASSWORD: <nonce>` before completion may pass.

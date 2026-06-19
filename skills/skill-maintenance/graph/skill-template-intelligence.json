@@ -407,7 +407,7 @@
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-06-16",
+      "introduced_at": "2026-06-19",
       "section_count": 9,
       "sections": [
         "Context",
@@ -420,8 +420,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-6aa121eab2cb.md",
-      "source_commit": "6aa121eab2cb",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-a29b6f49aab8.md",
+      "source_commit": "a29b6f49aab8",
       "summary": "working tree current template",
       "version": "0.3.0"
     }
@@ -1958,7 +1958,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "6aa121eab2cb",
+      "source_commit": "a29b6f49aab8",
       "template_version": "0.3.0",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -1972,7 +1972,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "6aa121eab2cb",
+      "source_commit": "a29b6f49aab8",
       "template_version": "0.3.0",
       "title": "Todo executability",
       "verdict": "pass"
@@ -1986,7 +1986,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "6aa121eab2cb",
+      "source_commit": "a29b6f49aab8",
       "template_version": "0.3.0",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -2000,7 +2000,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "6aa121eab2cb",
+      "source_commit": "a29b6f49aab8",
       "template_version": "0.3.0",
       "title": "Proof contract",
       "verdict": "pass"
@@ -2014,7 +2014,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "6aa121eab2cb",
+      "source_commit": "a29b6f49aab8",
       "template_version": "0.3.0",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -2026,7 +2026,7 @@
         "docs/HISTORY.md"
       ],
       "id": "FEAT-0022",
-      "known_limits": "Depends on skill maintainers keeping Markdown links accurate; Tier 0 is a universal phase protocol rather than a skill tier, plan is a planning prompt-template rather than the phase itself, execute remains a deprecated compatibility wrapper, and concrete coding skills such as spec-to-ticket, impl-plan, impl, and close-ticket must not be treated as universal generic workflows.",
+      "known_limits": "Depends on skill maintainers keeping Markdown links accurate; Tier 0 is a universal phase protocol rather than a skill tier, plan is a planning prompt-template rather than the phase itself, execute remains a deprecated compatibility wrapper, and concrete coding skills such as spec-to-ticket, impl-plan, goal-advisor, and close-ticket must not be treated as universal generic workflows.",
       "last_verified": "2026-06-11",
       "metrics": [],
       "name": "Tiered skill dependency loading",
@@ -2270,7 +2270,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-16T18:07:07+00:00",
+  "generated_at": "2026-06-19T18:20:43+00:00",
   "rollout": [
     {
       "eval": "",
@@ -2710,18 +2710,6 @@
       "path": "skills/image-generation/SKILL.md",
       "qa_checklist": "",
       "skill_id": "image-generation",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 3
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/impl/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "impl",
       "skill_ui": "",
       "source": "local",
       "status": "missing",
@@ -3380,19 +3368,19 @@
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 89
+      "local": 88
     },
     "by_status": {
       "external": 3,
-      "missing": 64,
+      "missing": 63,
       "stale": 25
     },
     "by_template_version": {
       "0.1.0": 4,
       "0.2.0": 21,
-      "missing": 67
+      "missing": 66
     },
-    "total_skills": 92
+    "total_skills": 91
   },
   "schema_version": "1.0.0",
   "source": {
@@ -3552,8 +3540,8 @@
     },
     {
       "introduced_at": "2026-06-16",
-      "latest_at": "2026-06-16",
-      "latest_commit": "6aa121eab2cb",
+      "latest_at": "2026-06-19",
+      "latest_commit": "a29b6f49aab8",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -3567,7 +3555,7 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-6aa121eab2cb.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-a29b6f49aab8.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-16",
@@ -3576,9 +3564,9 @@
           "summary": "feat(skills): track template-owned feature metadata"
         },
         {
-          "introduced_at": "2026-06-16",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-6aa121eab2cb.md",
-          "source_commit": "6aa121eab2cb",
+          "introduced_at": "2026-06-19",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.0-a29b6f49aab8.md",
+          "source_commit": "a29b6f49aab8",
           "summary": "working tree current template"
         }
       ],

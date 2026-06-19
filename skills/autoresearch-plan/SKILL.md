@@ -145,7 +145,8 @@ Guard commands protect correctness and should not be optimized directly.
 4. Do not overwrite an existing session without reading `autoresearch.md` and
    `autoresearch.jsonl` first.
 5. Do not use `autoresearch` for ticketed multi-lane implementation; use
-   `impl-plan` and `$impl` when the work needs a ticket, QA, and review lanes.
+   `impl-plan` and `goal-advisor` when the work needs a ticket, QA, and review
+   lanes.
 6. Do not create skill-local memory for every scratch run; use it only when the
    target skill should carry durable evals and experiment lessons.
 

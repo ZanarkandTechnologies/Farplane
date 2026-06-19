@@ -74,7 +74,7 @@ flowchart LR
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     goalSkill["goal-advisor<br/>native Goal<br/>heartbeat<br/>batch"]:::callout
-    execSkill["farplane-invocation<br/>$impl"]:::callout
+    execSkill["farplane-invocation<br/>goal-advisor"]:::callout
     assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
     externalCli["delegate-cli<br/>delegate-frontend"]:::skill
     closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout

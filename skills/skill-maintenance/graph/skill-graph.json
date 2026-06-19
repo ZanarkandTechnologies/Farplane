@@ -1,19 +1,19 @@
 {
   "counts": {
     "edge_types": {
-      "common-chain": 22,
-      "markdown-ref": 288
+      "common-chain": 21,
+      "markdown-ref": 286
     },
-    "edges": 310,
-    "nodes": 92,
+    "edges": 307,
+    "nodes": 91,
     "sources": {
       "external": 3,
-      "local": 89
+      "local": 88
     },
     "tiers": {
       "1": 4,
       "2": 34,
-      "3": 54
+      "3": 53
     }
   },
   "edges": [
@@ -426,8 +426,8 @@
     {
       "label": "markdown-ref",
       "source": "delegate-cli",
-      "target": "impl",
-      "target_ref": "impl",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
       "type": "markdown-ref"
     },
     {
@@ -1167,30 +1167,9 @@
     },
     {
       "label": "common_chains.after",
-      "source": "impl",
-      "target": "qa",
-      "target_ref": "qa",
-      "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "impl",
-      "target": "research",
-      "target_ref": "research",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "impl",
-      "target": "visual-qa",
-      "target_ref": "visual-qa",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "common_chains.after",
       "source": "impl-plan",
-      "target": "impl",
-      "target_ref": "impl",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
       "type": "common-chain"
     },
     {
@@ -2188,7 +2167,7 @@
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-15T15:51:36+00:00",
+  "generated_at": "2026-06-19T18:20:44+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -3067,20 +3046,6 @@
       "label": "image-generation",
       "methods": [],
       "path": "skills/image-generation/SKILL.md",
-      "qa_checklist": "",
-      "skill_ui": "",
-      "source": "local",
-      "tier": 3
-    },
-    {
-      "description": "Turn one selected ticket into coordinated build, review, QA, evidence-check, and Stop-hook handoff artifacts.",
-      "eval": "",
-      "group": "coding",
-      "has_checklist": true,
-      "id": "impl",
-      "label": "impl",
-      "methods": [],
-      "path": "skills/impl/SKILL.md",
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",

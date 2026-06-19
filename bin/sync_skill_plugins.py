@@ -64,7 +64,6 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
             "prd",
             "spec-to-ticket",
             "impl-plan",
-            "impl",
             "qa",
             "demo",
             "close-ticket",

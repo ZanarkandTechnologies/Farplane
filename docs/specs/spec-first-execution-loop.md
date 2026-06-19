@@ -13,9 +13,9 @@ Define the current canonical execution model for Farplane:
 - feature-sized work packages
 - Goal Advisor execution compilation before planning/building
 - per-work-package `impl-plan`
-- per-work-package `$impl` orchestration
+- per-work-package Goal-backed execution
 - heartbeat board drain over ready filesystem tickets when needed
-- worker lanes launched by `$impl` where appropriate
+- worker lanes launched by the Goal-backed execution loop where appropriate
 - separate QA and review roles
 - native Goal for semantic continuation and Stop hook for mechanical
   active-ticket gates
@@ -153,9 +153,9 @@ epic discovery that belongs in PRD, system design, or `spec-to-ticket`.
 
 ### 5. Build Loop
 
-`$impl` orchestrates one selected work package.
+`goal-advisor` compiles the native Goal for one selected work package.
 
-It should:
+The resulting Goal-backed execution loop should:
 
 - read the selected ticket plus linked docs/specs
 - prefer an explicit ticket selector over ambient runtime state
@@ -166,15 +166,15 @@ It should:
 Inside `status: building`, runtime may progress through internal execution
 subphases:
 
-- `impl`
+- `build`
 - `qa`
 - `demo`
 
 `$qa` and `$demo` may also be used as explicit recovery surfaces for those
-subphases, but `$impl` remains the default public execution entrypoint.
+subphases, but `goal-advisor` remains the default public execution compiler.
 
-Worker lanes may vary by ticket, but the public build-phase entrypoint is
-`$impl`.
+Worker lanes may vary by ticket, but the public build-phase entrypoint is the
+native Goal prompt compiled by `goal-advisor`.
 
 The main agent orchestrates a work package; it does not personally do every
 step when separate lanes are available. The default lane split is:
@@ -217,8 +217,8 @@ It should:
 - reread the board after each work unit
 - stop on no ready work, human gates, blockers, failed handoff, or loop limit
 
-Board-drain heartbeat does not replace `$impl` and does not own hidden parallel
-dispatch in the current system.
+Board-drain heartbeat uses the same `goal-advisor` Goal model and does not own
+hidden parallel dispatch in the current system.
 
 ### 6. QA + Review
 
@@ -261,9 +261,9 @@ It should decide:
 - block for human review
 - mark complete
 
-When it continues the same work package, it should re-enter the same `$impl`
-contract using the existing verdict fields and follow-up/orchestrator message,
-not a parallel hidden control plane.
+When it continues the same work package, it should re-enter the same
+Goal-backed ticket execution contract using the existing verdict fields and
+follow-up/orchestrator message, not a parallel hidden control plane.
 
 It should not become:
 

@@ -21,6 +21,6 @@ Define the Tier 2 execution interface that domain-specific skills implement.
 ## How To Test
 
 - Confirm the skill stays domain-neutral.
-- Confirm coding-specific execution still belongs to `$impl` and closeout to
+- Confirm coding-specific execution still belongs to `goal-advisor` and closeout to
   `close-ticket`.
 - Confirm completion claims require durable evidence.

@@ -161,7 +161,7 @@ summary are stale.
 
 Emit exactly one final line:
 
-`IMPL_RESULT: status=<enum> next=<enum> reason=<optional>`
+`EXECUTION_RESULT: status=<enum> next=<enum> reason=<optional>`
 
 Allowed statuses:
 

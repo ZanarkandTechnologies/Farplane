@@ -39,7 +39,8 @@ Use when the user asks to:
 - keep improving until a metric plateau or iteration limit
 - summarize or finalize an existing autoresearch run
 
-Do not use for ticketed build work requiring QA/review lanes; use `$impl`.
+Do not use for ticketed build work requiring QA/review lanes; use
+`goal-advisor`.
 Do not use for short one-off retries; use a normal prompt, explicit command, or
 native `/goal` when continuation needs evidence.
 

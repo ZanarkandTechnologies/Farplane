@@ -19,4 +19,4 @@
 
 - The skill requires proof and durable writeback.
 - `SKILL.md` Todo List links Tier 1 primitives using Markdown links.
-- Examples do not imply `$impl` is universal outside coding.
+- Examples do not imply `goal-advisor` is universal outside coding.

@@ -122,5 +122,5 @@ Descriptions say what changed. ASI says what was learned.
   `program.md` memory format.
 - Use native `/goal` for evidence-based continuation without git experiment
   memory.
-- Use `impl-plan` and `$impl` for ticketed work needing QA, review, and evidence
+- Use `impl-plan` and `goal-advisor` for ticketed work needing QA, review, and evidence
   lanes.

@@ -10,7 +10,7 @@ from typing import Mapping
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|impl|qa|demo|work|ralph|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
+    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|goal-advisor|qa|demo|work|ralph|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
     re.IGNORECASE,
 )
 CONTROL_SURFACE_ALIASES = {
@@ -54,7 +54,7 @@ HARD_CONSTRAINTS = {
 }
 SESSION_ORIGINS = {"control", "internal", "non_owning"}
 SESSION_ALIAS_POOL = tuple(f"agent-{index:02d}" for index in range(1, 11))
-EXECUTION_PHASES = {"impl", "qa", "demo"}
+EXECUTION_PHASES = {"build", "qa", "demo"}
 TICKET_PATH_ID_PATTERN = re.compile(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)")
 SELF_IMPROVEMENT_WINDOW_SCHEMA_VERSION = 1
 
@@ -636,7 +636,7 @@ def explicit_run_state_selector(payload: Mapping[str, object] | None = None) -> 
             value = payload.get(key)
             if isinstance(value, str) and value.strip():
                 return value.strip()
-    raw = os.environ.get("IMPL_RUN_STATE", "").strip()
+    raw = os.environ.get("FARPLANE_RUN_STATE", "").strip()
     if raw:
         return raw
     return ""
@@ -789,9 +789,6 @@ def build_runtime_claim(payload: Mapping[str, object]) -> dict[str, object] | No
         "last_checkpoint_at",
         "checkpoint_summary",
         "session_id",
-        "tmux_session",
-        "tmux_window",
-        "tmux_pane",
     ):
         value = claim_value(key)
         if value:
@@ -832,7 +829,7 @@ def ticket_frontmatter_bool(text: str, key: str, *, default: bool = False) -> bo
 def build_phase_requirements(project_root: Path, ticket_id: str, *, requires_qa: bool, requires_demo: bool) -> dict[str, object]:
     artifact_root = canonical_active_ticket_path(project_root, ticket_id).parent / "artifacts"
     requirements: dict[str, object] = {
-        "impl": {
+        "build": {
             "completion_statuses": ["build_complete", "done"],
             "artifact_root": str(artifact_root),
         }
@@ -878,6 +875,8 @@ def load_ticket_execution_contract(project_root: Path, ticket_path: str, *, cont
 
 
 def requested_execution_phase(control_surface: str) -> str:
+    if control_surface == "goal-advisor":
+        return "build"
     if control_surface in EXECUTION_PHASES:
         return control_surface
     return ""
@@ -926,10 +925,9 @@ def maybe_seed_impl_runtime(
     else:
         seeded_existing = dict(current_run) if isinstance(current_run, Mapping) else {}
     control_surface = str(last_user_turn.get("control_surface") or "").strip().lower()
-    if control_surface not in EXECUTION_PHASES:
+    if control_surface not in EXECUTION_PHASES and control_surface != "goal-advisor":
         return seeded_existing if seeded_existing else None
-    if control_surface == "impl" and not bool(last_user_turn.get("explicit_impl_requested")):
-        return seeded_existing if seeded_existing else None
+    execution_phase = control_surface if control_surface in EXECUTION_PHASES else "build"
     ticket_id = str((current_run or {}).get("ticket_id") or "").strip()
     ticket_path = str((current_run or {}).get("ticket_path") or "").strip()
     if not ticket_id or not ticket_path:
@@ -938,7 +936,7 @@ def maybe_seed_impl_runtime(
         if selection is None:
             return seeded_existing if seeded_existing else None
         ticket_id, ticket_path = selection
-    execution_contract = load_ticket_execution_contract(project_root, ticket_path, control_surface=control_surface)
+    execution_contract = load_ticket_execution_contract(project_root, ticket_path, control_surface=execution_phase)
     seeded = dict(current_run) if isinstance(current_run, Mapping) else {}
     seeded["ticket_id"] = ticket_id
     seeded["current_ticket_id"] = ticket_id
@@ -947,13 +945,13 @@ def maybe_seed_impl_runtime(
     seeded["phase"] = "building"
     seeded["status"] = "running"
     seeded["skill_name"] = control_surface
-    seeded["execution_phase"] = control_surface if control_surface in EXECUTION_PHASES else "impl"
+    seeded["execution_phase"] = execution_phase
     seeded["requires_qa"] = bool(execution_contract["requires_qa"])
     seeded["requires_demo"] = bool(execution_contract["requires_demo"])
     seeded["phase_requirements"] = dict(execution_contract["phase_requirements"])
     if session_id:
         seeded["session_id"] = session_id
-    seeded["impl_loop_active"] = True
+    seeded["execution_loop_active"] = True
     if "next_phase" not in seeded:
         seeded["next_phase"] = "building"
     return seeded
@@ -1007,11 +1005,7 @@ def persist_runtime_update(
             "last_checkpoint_at",
             "checkpoint_summary",
             "session_id",
-            "tmux_session",
-            "tmux_window",
-            "tmux_pane",
-            "auto_continue",
-            "impl_loop_active",
+            "execution_loop_active",
             "session_origin",
             "session_origin_source",
             "session_origin_reason",
@@ -1101,8 +1095,8 @@ def initialize_session_state(
         session_payload["phase"] = phase
     if status:
         session_payload["status"] = status
-    if isinstance(current_run, Mapping) and isinstance(current_run.get("impl_loop_active"), bool):
-        session_payload["impl_loop_active"] = bool(current_run.get("impl_loop_active"))
+    if isinstance(current_run, Mapping) and isinstance(current_run.get("execution_loop_active"), bool):
+        session_payload["execution_loop_active"] = bool(current_run.get("execution_loop_active"))
     for key in ("execution_phase",):
         value = (current_run or {}).get(key) if isinstance(current_run, Mapping) else None
         if isinstance(value, str) and value.strip():
@@ -1130,8 +1124,8 @@ def extract_ticket_id(text: str) -> str | None:
     return match.group(0) if match else None
 
 
-def has_explicit_impl_invocation(text: str) -> bool:
-    return extract_control_surface(text) == "impl"
+def has_explicit_goal_execution_invocation(text: str) -> bool:
+    return extract_control_surface(text) == "goal-advisor"
 
 
 def infer_session_origin_from_state(payload: Mapping[str, object] | None) -> tuple[str, str, str]:
@@ -1160,8 +1154,8 @@ def infer_session_origin_from_state(payload: Mapping[str, object] | None) -> tup
         if persisted_control_surface:
             return "control", "persisted_last_user_turn", f"persisted raw_text invoked ${persisted_control_surface}"
 
-    if bool(last_user_turn.get("explicit_impl_requested")):
-        return "control", "persisted_last_user_turn", "persisted explicit impl request implies a control session"
+    if bool(last_user_turn.get("explicit_goal_execution_requested")):
+        return "control", "persisted_last_user_turn", "persisted explicit goal execution request implies a control session"
 
     return "", "", ""
 
@@ -1202,7 +1196,7 @@ def is_internal_user_prompt(raw_text: str) -> bool:
         return True
     if text.startswith("Continue the current Codex lane."):
         return True
-    if text.startswith("Run the `impl` skill on ticket "):
+    if text.startswith("Run the `goal-advisor` skill on ticket "):
         return True
     if text.startswith("Run the `qa` skill on ticket "):
         return True
@@ -1229,7 +1223,7 @@ def classify_intent_mode(raw_text: str) -> str:
     if control_surface == "impl-plan":
         return "planning"
 
-    if control_surface == "impl":
+    if control_surface == "goal-advisor":
         return "building"
 
     if control_surface == "qa":
@@ -1394,7 +1388,7 @@ def classify_hard_constraints(raw_text: str, explicit_ticket_id: str | None) -> 
         if _contains_any(
             lowered,
             (
-                "$impl",
+                "$goal-advisor",
                 "continue working",
                 "work on this ticket",
                 "ticket-local",
@@ -1418,7 +1412,7 @@ def normalize_user_turn(
     explicit_ticket_id = extract_ticket_id(raw_text)
     control_surface = extract_control_surface(raw_text)
     execution_phase = requested_execution_phase(control_surface)
-    explicit_impl_requested = has_explicit_impl_invocation(raw_text)
+    explicit_goal_execution_requested = has_explicit_goal_execution_invocation(raw_text)
     intent_mode = classify_intent_mode(raw_text)
     requested_outcome = classify_requested_outcome(raw_text, intent_mode)
     hard_constraints = classify_hard_constraints(raw_text, explicit_ticket_id)
@@ -1435,7 +1429,7 @@ def normalize_user_turn(
         "explicit_ticket_id": explicit_ticket_id or "",
         "control_surface": control_surface,
         "requested_execution_phase": execution_phase,
-        "explicit_impl_requested": explicit_impl_requested,
+        "explicit_goal_execution_requested": explicit_goal_execution_requested,
         "hard_constraints": hard_constraints,
         "summary": summary,
     }
@@ -1504,7 +1498,7 @@ def capture_user_turn(
     if current_run is not None:
         updates: dict[str, object] = {
             "last_user_turn": last_user_turn,
-            "impl_loop_active": execution_loop_requested,
+            "execution_loop_active": execution_loop_requested,
             "session_origin": session_origin,
             "session_origin_source": session_origin_source,
             "session_origin_reason": session_origin_reason,
@@ -1538,7 +1532,7 @@ def capture_user_turn(
         session_path = session_state_path(project_root, normalized_session_id)
         payload = dict(session_state)
         payload["last_user_turn"] = last_user_turn
-        payload["impl_loop_active"] = execution_loop_requested
+        payload["execution_loop_active"] = execution_loop_requested
         if isinstance(current_run, Mapping):
             if isinstance(current_run.get("skill_name"), str) and str(current_run.get("skill_name") or "").strip():
                 payload["skill_name"] = str(current_run.get("skill_name") or "").strip()

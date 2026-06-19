@@ -23,7 +23,7 @@ signals, accept/hold/rollback rules, or research framing.
 
 This is a Tier 2 workflow surface. It may use Tier 1 primitives directly, then
 hand implementation to a Tier 3 skill such as `skill-maintenance`, `impl-plan`,
-`impl`, `qa`, `demo`, or another Farplane application skill.
+`goal-advisor`, `qa`, `demo`, or another Farplane application skill.
 
 ## Skill Signature
 

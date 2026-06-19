@@ -64,9 +64,9 @@ MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 ARTIFACT_PATH_PATTERN = re.compile(
     r"(?P<path>(?:^|[\s(])(?:/?(?:[^)\s`]*?/)?tickets/(?:artifacts/[^)\s`]+|TASK-\d{4}/artifacts/[^)\s`]+|archive/TASK-\d{4}/artifacts/[^)\s`]+)))"
 )
-IMPL_RESULT_PATTERN = re.compile(r"^IMPL_RESULT:\s+status=.*$", re.MULTILINE)
-PARSED_IMPL_RESULT_PATTERN = re.compile(
-    r"^IMPL_RESULT:\s+status=(?P<status>[A-Za-z0-9_-]+)\s+next=(?P<next>[A-Za-z0-9_-]+)(?:\s+reason=(?P<reason>.*))?$"
+EXECUTION_RESULT_PATTERN = re.compile(r"^EXECUTION_RESULT:\s+status=.*$", re.MULTILINE)
+PARSED_EXECUTION_RESULT_PATTERN = re.compile(
+    r"^EXECUTION_RESULT:\s+status=(?P<status>[A-Za-z0-9_-]+)\s+next=(?P<next>[A-Za-z0-9_-]+)(?:\s+reason=(?P<reason>.*))?$"
 )
 COMPLETION_PASSWORD_PATTERN = re.compile(
     r"^COMPLETION_PASSWORD:\s*(?P<password>CR-[0-9A-Z]+)\s*$",
@@ -82,12 +82,12 @@ ROLE_ACTIONS = {
 }
 PASS_FAIL_VALUES = {"pass", "fail"}
 INTENT_ALIGNMENT_STATES = {"aligned", "soft_mismatch", "hard_mismatch", "unknown"}
-IMPL_LOOPABLE_PHASES = {"building"}
+EXECUTION_LOOPABLE_PHASES = {"building"}
 COMPLETION_REVIEW_VERDICTS = {"pass", "revise", "block"}
 
 
 def env_enabled() -> bool:
-    return os.environ.get("FARPLANE_IMPL_HOOK", "").lower() in {
+    return os.environ.get("FARPLANE_EXECUTION_HOOK", "").lower() in {
         "1",
         "true",
         "yes",
@@ -103,39 +103,38 @@ def has_project_runtime_context(project_root: Path | None) -> bool:
 
 def has_explicit_ticket_selector() -> bool:
     return bool(
-        os.environ.get("IMPL_TICKET", "").strip()
-        or os.environ.get("FARPLANE_ACTIVE_TICKET", "").strip()
+        os.environ.get("FARPLANE_ACTIVE_TICKET", "").strip()
     )
 
 
 def hook_enabled_for_context(
     project_root: Path | None,
     current_run: dict[str, object] | None,
-    impl_result: str | None,
+    execution_result: str | None,
 ) -> bool:
     # Keep the env flag as an explicit override, but auto-activate when the
-    # hook is clearly running inside a Farplane/impl context.
+    # hook is clearly running inside a Farplane execution context.
     return (
         env_enabled()
         or current_run is not None
-        or impl_result is not None
+        or execution_result is not None
         or has_explicit_ticket_selector()
         or has_project_runtime_context(project_root)
     )
 
 
-def impl_loop_flag_active(
+def execution_loop_flag_active(
     current_run: dict[str, object] | None,
     runtime_claim: dict[str, object] | None,
     session_id: str | None,
 ) -> bool:
-    # MEM-0025: same-ticket impl continuation needs a dedicated session gate
-    # in addition to claim ownership; tmux auto_continue is not enough.
-    if current_run is None or not bool(current_run.get("impl_loop_active")):
+    # MEM-0025: same-ticket continuation needs a dedicated session gate
+    # in addition to claim ownership.
+    if current_run is None or not bool(current_run.get("execution_loop_active")):
         return False
     claim = runtime_claim if isinstance(runtime_claim, dict) else {}
     skill_name = str(claim.get("skill_name") or current_run.get("skill_name") or "").strip()
-    if skill_name and skill_name not in {"impl", "qa", "demo"}:
+    if skill_name and skill_name not in {"goal-advisor", "qa", "demo"}:
         return False
     if session_id:
         claim_session_id = str(claim.get("session_id") or current_run.get("session_id") or "").strip()
@@ -144,13 +143,13 @@ def impl_loop_flag_active(
     return True
 
 
-def ticket_is_impl_loopable(ticket: dict[str, object], current_run: dict[str, object] | None) -> bool:
+def ticket_is_execution_loopable(ticket: dict[str, object], current_run: dict[str, object] | None) -> bool:
     phase = str((current_run or {}).get("phase") or ticket.get("phase") or "").strip()
     status = str(ticket.get("status") or "").strip()
-    return phase in IMPL_LOOPABLE_PHASES and status not in {"blocked", "done", "failed"}
+    return phase in EXECUTION_LOOPABLE_PHASES and status not in {"blocked", "done", "failed"}
 
 
-def impl_loop_matches_ticket(
+def execution_loop_matches_ticket(
     ticket: dict[str, object],
     current_run: dict[str, object] | None,
     runtime_claim: dict[str, object] | None,
@@ -170,21 +169,21 @@ def impl_loop_matches_ticket(
     return True
 
 
-def impl_loop_continuation_allowed(
+def execution_loop_continuation_allowed(
     ticket: dict[str, object],
     current_run: dict[str, object] | None,
     runtime_claim: dict[str, object] | None,
     session_id: str | None,
 ) -> bool:
     return (
-        impl_loop_flag_active(current_run, runtime_claim, session_id)
-        and ticket_is_impl_loopable(ticket, current_run)
-        and impl_loop_matches_ticket(ticket, current_run, runtime_claim, session_id)
+        execution_loop_flag_active(current_run, runtime_claim, session_id)
+        and ticket_is_execution_loopable(ticket, current_run)
+        and execution_loop_matches_ticket(ticket, current_run, runtime_claim, session_id)
     )
 
 
-def next_impl_loop_active_for_action(action: str, *, next_phase: str = "", current_phase: str = "") -> bool:
-    if action == "repeat_impl":
+def next_execution_loop_active_for_action(action: str, *, next_phase: str = "", current_phase: str = "") -> bool:
+    if action == "repeat_execution":
         return True
     if action == "advance_execution_phase":
         return True
@@ -313,28 +312,14 @@ def persist_runtime_update(
     return persist_selected_runtime_update(project_root, current_run, updates)
 
 
-def persist_impl_loop_active(
+def persist_execution_loop_active(
     project_root: Path | None,
     current_run: dict[str, object] | None,
     active: bool,
 ) -> dict[str, object] | None:
     if project_root is None or current_run is None:
         return current_run
-    return persist_runtime_update(project_root, current_run, {"impl_loop_active": active})
-
-
-def show_tmux_verdict(current_run: dict[str, object] | None, summary: str) -> None:
-    if current_run is None:
-        return
-    target = current_run.get("tmux_pane") or current_run.get("tmux_session")
-    if not isinstance(target, str) or not target.strip():
-        return
-    subprocess.run(
-        ["tmux", "display-message", "-t", target, summary],
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    return persist_runtime_update(project_root, current_run, {"execution_loop_active": active})
 
 
 def publish_hook_status(
@@ -344,7 +329,6 @@ def publish_hook_status(
     decision: str,
     summary: str,
 ) -> dict[str, object] | None:
-    show_tmux_verdict(current_run, summary)
     if project_root is None or current_run is None:
         return current_run
     return persist_runtime_update(
@@ -654,7 +638,7 @@ def board_snapshot(home: Path, project_root: Path | None) -> list[dict[str, obje
 def resolve_ticket(home: Path, project_root: Path | None, message: str) -> dict[str, object] | None:
     # An explicit per-run selector must outrank ambient state so callers can
     # safely override stale current-run metadata. MEM-0004.
-    explicit_path = os.environ.get("IMPL_TICKET", "").strip()
+    explicit_path = os.environ.get("FARPLANE_ACTIVE_TICKET", "").strip()
     if explicit_path:
         candidate = Path(explicit_path).expanduser()
         if not candidate.is_absolute() and project_root is not None:
@@ -713,8 +697,8 @@ def resolve_ticket(home: Path, project_root: Path | None, message: str) -> dict[
     return None
 
 
-def extract_impl_result(message: str) -> str | None:
-    matches = IMPL_RESULT_PATTERN.findall(message)
+def extract_execution_result(message: str) -> str | None:
+    matches = EXECUTION_RESULT_PATTERN.findall(message)
     return matches[-1].strip() if matches else None
 
 
@@ -730,10 +714,10 @@ def extract_grounding_summary(message: str) -> str | None:
     return None
 
 
-def parse_impl_result(line: str) -> dict[str, str]:
-    match = PARSED_IMPL_RESULT_PATTERN.match(line.strip())
+def parse_execution_result(line: str) -> dict[str, str]:
+    match = PARSED_EXECUTION_RESULT_PATTERN.match(line.strip())
     if not match:
-        raise ValueError("invalid IMPL_RESULT line")
+        raise ValueError("invalid EXECUTION_RESULT line")
     return {
         "status": match.group("status"),
         "next": match.group("next"),
@@ -748,23 +732,23 @@ def summarize_intent_alignment(ticket_id: str, alignment: dict[str, object]) -> 
 
 
 def observed_phase_from_result(
-    impl_result: str | None,
+    execution_result: str | None,
     *,
     current_phase: str,
 ) -> tuple[str | None, dict[str, str] | None]:
-    if not impl_result:
+    if not execution_result:
         return None, None
     try:
-        parsed = parse_impl_result(impl_result)
+        parsed = parse_execution_result(execution_result)
     except ValueError:
         return None, None
 
     status = parsed["status"]
-    if status in {"continue_impl_plan", "plan_ready"}:
+    if status in {"continue_plan", "plan_ready"}:
         return "planning", parsed
     if status == "docs_complete":
         return "documenting", parsed
-    if status in {"continue_impl", "build_complete", "done", "qa_complete", "demo_complete"}:
+    if status in {"continue_execution", "build_complete", "done", "qa_complete", "demo_complete"}:
         return "building", parsed
     if status == "blocked":
         return current_phase, parsed
@@ -778,7 +762,7 @@ def classify_intent_alignment(
     last_user_turn: dict[str, object] | None,
     ticket: dict[str, object],
     message: str,
-    impl_result: str | None,
+    execution_result: str | None,
     current_run: dict[str, object] | None,
 ) -> dict[str, object]:
     ticket_id = str(ticket["ticket_id"])
@@ -832,7 +816,7 @@ def classify_intent_alignment(
 
     current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
     observed_phase, parsed_result = observed_phase_from_result(
-        impl_result,
+        execution_result,
         current_phase=current_phase,
     )
     observed_execution_phase = current_execution_phase(current_run) if observed_phase == "building" else ""
@@ -845,7 +829,7 @@ def classify_intent_alignment(
     if "no_edits" in hard_constraints and parsed_result is not None:
         return {
             "state": "hard_mismatch",
-            "reason": "the captured turn explicitly forbids edits, but the assistant produced an impl worker result",
+            "reason": "the captured turn explicitly forbids edits, but the assistant produced an execution worker result",
             "turn_id": turn_id,
             "summary": summary,
             "expected_phase": "",
@@ -878,7 +862,7 @@ def classify_intent_alignment(
     elif intent_mode in {"question", "backlog"} and parsed_result is not None:
         return {
             "state": "hard_mismatch",
-            "reason": f"the captured turn is {intent_mode}, but the assistant produced an impl worker result",
+            "reason": f"the captured turn is {intent_mode}, but the assistant produced an execution worker result",
             "turn_id": turn_id,
             "summary": summary,
             "expected_phase": intent_mode,
@@ -892,7 +876,7 @@ def classify_intent_alignment(
         continuation_message = (
             f"Continue {ticket_id} and satisfy the current-turn intent captured at start of turn: {summary}. "
             f"The assistant ended with `{observed_status}` for `{observed_phase}`, but this turn requested `{expected_phase}` work. "
-            f"Stay on the same ticket, produce the requested artifact, update the ticket state, and finish with a `IMPL_RESULT` aligned to `{expected_phase}`."
+            f"Stay on the same ticket, produce the requested artifact, update the ticket state, and finish with a `EXECUTION_RESULT` aligned to `{expected_phase}`."
         )
         return {
             "state": "soft_mismatch",
@@ -907,7 +891,7 @@ def classify_intent_alignment(
 
     if (
         expected_phase == "building"
-        and requested_execution_phase in {"impl", "qa", "demo"}
+        and requested_execution_phase in {"build", "qa", "demo"}
         and observed_execution_phase
         and requested_execution_phase != observed_execution_phase
     ):
@@ -915,7 +899,7 @@ def classify_intent_alignment(
         continuation_message = (
             f"Continue {ticket_id} and satisfy the current-turn execution phase captured at start of turn: {summary}. "
             f"The assistant ended with `{observed_status}` for `{observed_execution_phase}`, but this turn requested `{requested_execution_phase}`. "
-            f"Stay on the same ticket, run the `{requested_execution_phase}` phase, update artifacts, and finish with a matching `IMPL_RESULT`."
+            f"Stay on the same ticket, run the `{requested_execution_phase}` phase, update artifacts, and finish with a matching `EXECUTION_RESULT`."
         )
         return {
             "state": "soft_mismatch",
@@ -940,7 +924,7 @@ def classify_intent_alignment(
     }
 
 
-def impl_verdict(
+def execution_verdict(
     *,
     ticket_id: str,
     current_phase: str,
@@ -1012,7 +996,7 @@ def evidence_artifact_gate(ticket: dict[str, object]) -> tuple[bool, str, list[s
 
 def current_execution_phase(current_run: dict[str, object] | None) -> str:
     phase = str((current_run or {}).get("execution_phase") or "").strip().lower()
-    return phase if phase in {"impl", "qa", "demo"} else "impl"
+    return phase if phase in {"build", "qa", "demo"} else "build"
 
 
 def execution_requirements(ticket: dict[str, object], current_run: dict[str, object] | None) -> dict[str, object]:
@@ -1022,7 +1006,7 @@ def execution_requirements(ticket: dict[str, object], current_run: dict[str, obj
     artifact_root = ticket.get("artifact_root")
     artifact_root_str = str(artifact_root) if isinstance(artifact_root, Path) else ""
     requirements: dict[str, object] = {
-        "impl": {
+        "build": {
             "completion_statuses": ["build_complete", "done"],
             "artifact_root": artifact_root_str,
         }
@@ -1203,7 +1187,7 @@ def build_completion_review_request_message(
         f"{artifact_block}\n\n"
         "Link the receipt from the ticket `Links` or `State` section and finish your next final response with both:\n"
         f"- `COMPLETION_PASSWORD: {nonce}`\n"
-        "- `IMPL_RESULT: status=done next=building reason=completion review receipt written`"
+        "- `EXECUTION_RESULT: status=done next=building reason=completion review receipt written`"
     )
 
 
@@ -1219,7 +1203,7 @@ def build_completion_password_retry_message(
         f"Stop hook validated the linked completion review receipt, but {password_failure_reason.strip()}.\n\n"
         "Do not rerun completion review. Keep the existing linked receipt and resend your next final response with both:\n"
         f"- `COMPLETION_PASSWORD: {nonce}`\n"
-        "- `IMPL_RESULT: status=done next=building reason=completion review receipt written`"
+        "- `EXECUTION_RESULT: status=done next=building reason=completion review receipt written`"
     )
 
 
@@ -1496,7 +1480,7 @@ def validate_reviewer_gate(review: dict[str, object]) -> tuple[bool, str, list[s
     return True, "", []
 
 
-def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker_result: dict[str, str], current_run: dict[str, object] | None = None) -> dict[str, object]:
+def decide_execution_transition(current_phase: str, ticket: dict[str, object], worker_result: dict[str, str], current_run: dict[str, object] | None = None) -> dict[str, object]:
     ticket_id = str(ticket["ticket_id"])
     blockers = list(ticket["blockers"])
     done_gaps = list(ticket["done_gaps"])
@@ -1510,7 +1494,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
     demo_required = "demo" in phase_requirements
 
     if blockers:
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="block_ticket",
@@ -1523,7 +1507,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
 
     if status == "blocked":
         reason = reason_suffix or "worker reported blocked"
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="block_ticket",
@@ -1533,12 +1517,12 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             evidence_ok=False,
         )
 
-    if status in {"continue_impl_plan", "continue_impl"}:
+    if status in {"continue_plan", "continue_execution"}:
         next_phase = current_phase if next_value in {"planning", "building", "none"} else next_value
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
-            decision="repeat_impl_plan" if current_phase == "planning" else "repeat_impl",
+            decision="repeat_plan" if current_phase == "planning" else "repeat_execution",
             next_phase=next_phase,
             reason=reason_suffix or "skill requires another bounded pass",
             orchestrator_message=f"rerun {ticket_id} in {next_phase}",
@@ -1546,7 +1530,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
         )
 
     if status == "plan_ready":
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="advance_ticket",
@@ -1556,9 +1540,9 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             evidence_ok=not proof_gaps,
         )
 
-    if current_phase == "building" and execution_phase == "impl" and status in {"build_complete", "done", "docs_complete"}:
+    if current_phase == "building" and execution_phase == "build" and status in {"build_complete", "done", "docs_complete"}:
         if qa_required:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
                 decision="advance_execution_phase",
@@ -1569,7 +1553,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
                 evidence_ok=False,
             )
         if demo_required:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
                 decision="advance_execution_phase",
@@ -1583,10 +1567,10 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
     if current_phase == "building" and execution_phase == "qa" and status in {"qa_complete", "build_complete", "done"}:
         qa_ok, qa_reason, qa_failures, _ = phase_result_gate(ticket, current_run, "qa")
         if not qa_ok:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_impl",
+                decision="repeat_execution",
                 next_phase="building",
                 next_execution_phase="qa",
                 reason=qa_reason,
@@ -1595,7 +1579,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
                 review_gate_failures=qa_failures,
             )
         if demo_required:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
                 decision="advance_execution_phase",
@@ -1605,7 +1589,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
                 orchestrator_message=f"continue {ticket_id} in demo and produce demo artifacts",
                 evidence_ok=False,
             )
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="complete_ticket",
@@ -1618,10 +1602,10 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
     if current_phase == "building" and execution_phase == "demo" and status in {"demo_complete", "build_complete", "done"}:
         demo_ok, demo_reason, demo_failures, _ = phase_result_gate(ticket, current_run, "demo")
         if not demo_ok:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_impl",
+                decision="repeat_execution",
                 next_phase="building",
                 next_execution_phase="demo",
                 reason=demo_reason,
@@ -1629,7 +1613,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
                 evidence_ok=False,
                 review_gate_failures=demo_failures,
             )
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="complete_ticket",
@@ -1642,10 +1626,10 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
     if status == "done":
         artifact_ok, artifact_reason, artifact_failures = evidence_artifact_gate(ticket)
         if not artifact_ok:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_impl",
+                decision="repeat_execution",
                 next_phase="building",
                 reason=artifact_reason,
                 orchestrator_message=f"rerun {ticket_id} in building and resolve evidence artifact failures",
@@ -1654,17 +1638,17 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             )
         missing = done_gaps + proof_gaps
         if missing:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_impl",
+                decision="repeat_execution",
                 next_phase="building",
                 reason="ticket marked done but required proof remains incomplete",
                 orchestrator_message=f"rerun {ticket_id} in building and resolve missing proof",
                 evidence_ok=False,
                 missing_evidence=missing,
             )
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="complete_ticket",
@@ -1677,10 +1661,10 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
     if status == "build_complete":
         artifact_ok, artifact_reason, artifact_failures = evidence_artifact_gate(ticket)
         if not artifact_ok:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_impl",
+                decision="repeat_execution",
                 next_phase="building",
                 reason=artifact_reason,
                 orchestrator_message=f"rerun {ticket_id} in building and resolve evidence artifact failures",
@@ -1689,17 +1673,17 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             )
         missing = done_gaps + proof_gaps
         if missing:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_impl",
+                decision="repeat_execution",
                 next_phase="building",
                 reason=reason_suffix or "evidence is incomplete",
                 orchestrator_message=f"rerun {ticket_id} in building with explicit missing evidence coverage",
                 evidence_ok=False,
                 missing_evidence=missing,
             )
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="complete_ticket",
@@ -1712,10 +1696,10 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
     if status == "docs_complete":
         artifact_ok, artifact_reason, artifact_failures = evidence_artifact_gate(ticket)
         if not artifact_ok:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_impl",
+                decision="repeat_execution",
                 next_phase="building",
                 reason=artifact_reason,
                 orchestrator_message=f"rerun {ticket_id} in building and resolve evidence artifact failures",
@@ -1724,17 +1708,17 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             )
         missing = done_gaps + proof_gaps
         if missing:
-            return impl_verdict(
+            return execution_verdict(
                 ticket_id=ticket_id,
                 current_phase=current_phase,
-                decision="repeat_impl",
+                decision="repeat_execution",
                 next_phase="building",
                 reason="documentation completed but required proof remains incomplete",
                 orchestrator_message=f"rerun {ticket_id} in building and resolve missing proof",
                 evidence_ok=False,
                 missing_evidence=missing,
             )
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="complete_ticket",
@@ -1746,7 +1730,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
 
     next_phase = next_value if next_value in ALLOWED_PHASES or next_value in {"done", "none"} else "none"
     if next_phase == "none":
-        return impl_verdict(
+        return execution_verdict(
             ticket_id=ticket_id,
             current_phase=current_phase,
             decision="escalate_to_operator",
@@ -1756,7 +1740,7 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
             evidence_ok=not proof_gaps,
         )
 
-    return impl_verdict(
+    return execution_verdict(
         ticket_id=ticket_id,
         current_phase=current_phase,
         decision="advance_ticket",
@@ -1767,60 +1751,13 @@ def decide_impl_transition(current_phase: str, ticket: dict[str, object], worker
     )
 
 
-def run_impl_judge(ticket: dict[str, object], worker_result: str, current_run: dict[str, object] | None = None) -> dict[str, object] | None:
+def run_execution_judge(ticket: dict[str, object], worker_result: str, current_run: dict[str, object] | None = None) -> dict[str, object] | None:
     current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
     try:
-        parsed = parse_impl_result(worker_result)
+        parsed = parse_execution_result(worker_result)
     except ValueError:
         return None
-    return decide_impl_transition(current_phase, ticket, parsed, current_run)
-
-
-def spawn_tmux_followup(
-    base: Path,
-    ticket: dict[str, object],
-    next_phase: str,
-    current_run: dict[str, object] | None,
-    reason: str,
-    execution_phase: str = "",
-) -> dict[str, object] | None:
-    if current_run is None:
-        return None
-    session = current_run.get("tmux_session")
-    auto_continue = bool(current_run.get("auto_continue"))
-    if not auto_continue or not isinstance(session, str) or not session:
-        return None
-    run_state = current_run.get("run_state")
-    cmd = [
-        sys.executable,
-        str(base / "skills" / "impl" / "scripts" / "tmux_helper.py"),
-        "followup",
-        "--json",
-        "--ticket",
-        str(ticket["path"]),
-        "--phase",
-        next_phase,
-        "--auto-continue",
-    ]
-    if execution_phase:
-        cmd.extend(["--execution-phase", execution_phase])
-    if isinstance(session, str) and session:
-        cmd.extend(["--tmux-session", session])
-    if isinstance(run_state, str) and run_state:
-        cmd.extend(["--run-state", run_state])
-    if reason:
-        cmd.extend(["--reason", reason])
-    # Bounded smoke evals can ask the follow-up launcher to stay in dry-run mode
-    # so we can validate the tmux handoff without spawning a live Codex worker.
-    if os.environ.get("FARPLANE_IMPL_TMUX_DRY_RUN", "").lower() in {"1", "true", "yes", "on"}:
-        cmd.append("--dry-run")
-    completed = subprocess.run(cmd, text=True, capture_output=True, check=False, cwd=base)
-    if completed.returncode != 0:
-        return None
-    try:
-        return json.loads(completed.stdout)
-    except json.JSONDecodeError:
-        return None
+    return decide_execution_transition(current_phase, ticket, parsed, current_run)
 
 
 def build_reason(ticket: dict[str, object]) -> str:
@@ -1841,13 +1778,13 @@ def build_reason(ticket: dict[str, object]) -> str:
     return "Continue the current ticket and finish the remaining same-ticket work."
 
 
-def build_missing_impl_result_reason(ticket: dict[str, object], current_run: dict[str, object] | None) -> str:
+def build_missing_execution_result_reason(ticket: dict[str, object], current_run: dict[str, object] | None) -> str:
     ticket_id = str(ticket["ticket_id"])
     current_phase = str(ticket["phase"] or (current_run or {}).get("phase") or "building")
     return (
         f"Continue {ticket_id} in {current_phase}. The last assistant message implied more same-ticket work "
-        "but ended without an explicit IMPL_RESULT line. Continue the same ticket, update repo/ticket state, "
-        "and finish with a IMPL_RESULT."
+        "but ended without an explicit EXECUTION_RESULT line. Continue the same ticket, update repo/ticket state, "
+        "and finish with a EXECUTION_RESULT."
     )
 
 
@@ -1856,10 +1793,10 @@ def skill_name_for_phase(phase: str, execution_phase: str = "") -> str:
         return execution_phase
     mapping = {
         "planning": "impl-plan",
-        "building": "impl",
+        "building": "goal-advisor",
         "documenting": "close-ticket",
     }
-    return mapping.get(phase, "impl")
+    return mapping.get(phase, "goal-advisor")
 
 
 def build_live_followup_reason(phase: str, orchestrator_message: str, ticket: dict[str, object], execution_phase: str = "") -> str:
@@ -1881,20 +1818,20 @@ def build_live_followup_reason(phase: str, orchestrator_message: str, ticket: di
     )
 
 
-def summarize_impl_hook(ticket_id: str, decision: str, next_phase: str, reason: str) -> str:
-    if decision in {"repeat_impl_plan", "repeat_impl"}:
+def summarize_execution_hook(ticket_id: str, decision: str, next_phase: str, reason: str) -> str:
+    if decision in {"repeat_plan", "repeat_execution"}:
         target = next_phase or "same-phase"
-        return f"Impl repeat: {ticket_id} -> {target} ({reason})"
+        return f"Execution repeat: {ticket_id} -> {target} ({reason})"
     if decision == "advance_execution_phase":
         target = next_phase or "building"
-        return f"Impl advance execution: {ticket_id} -> {target} ({reason})"
+        return f"Execution phase advance: {ticket_id} -> {target} ({reason})"
     if decision == "advance_ticket":
         target = next_phase or "next-phase"
-        return f"Impl advance: {ticket_id} -> {target} ({reason})"
+        return f"Execution advance: {ticket_id} -> {target} ({reason})"
     if decision == "complete_ticket":
-        return f"Impl complete: {ticket_id} ({reason})"
+        return f"Execution complete: {ticket_id} ({reason})"
     if decision == "block_ticket":
-        return f"Impl blocked: {ticket_id} ({reason})"
+        return f"Execution blocked: {ticket_id} ({reason})"
     return f"Impl review: {ticket_id} ({reason})"
 
 
@@ -2606,10 +2543,10 @@ def continue_hook_response(
     announce: str,
 ) -> int:
     if payload.get("stop_hook_active"):
-        announce_message("Stopping after one impl-assisted continuation pass")
+        announce_message("Stopping after one execution-assisted continuation pass")
         return emit_stop_payload(
             continue_value=False,
-            stop_reason="Stopping after one impl-assisted continuation pass",
+            stop_reason="Stopping after one execution-assisted continuation pass",
             system_message=f"Stop hook: {hook_summary}. Already continued once.",
         )
     announce_message(announce)
@@ -2686,29 +2623,6 @@ def run_orchestrator_decision(
         f"and continue from its current state."
     )
 
-    followup = spawn_tmux_followup(
-        base,
-        next_ticket,
-        next_phase,
-        current_run,
-        continuation_message,
-    )
-    if followup is not None:
-        append_hook_log(
-            base,
-            {
-                "timestamp": now_iso(),
-                "mode": "orchestrator",
-                "ticket_id": str(ticket["ticket_id"]),
-                "event": "spawn_followup",
-                "followup": followup,
-                "next_ticket_id": next_ticket_id,
-                "next_phase": next_phase,
-            },
-        )
-        announce_message(f"queued next ticket {next_ticket_id} in {followup.get('tmux_pane') or followup.get('tmux_window')}")
-        return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
-
     return continue_hook_response(
         payload=payload,
         ticket=next_ticket,
@@ -2765,9 +2679,9 @@ def main() -> int:
         )
     raw_message = payload.get("last_assistant_message") or ""
     message = raw_message if isinstance(raw_message, str) else ""
-    impl_result = extract_impl_result(message or raw_payload)
+    execution_result = extract_execution_result(message or raw_payload)
 
-    if not hook_enabled_for_context(project_root, current_run, impl_result):
+    if not hook_enabled_for_context(project_root, current_run, execution_result):
         if hook_event_name == "Stop":
             return emit_stop_passthrough(
                 system_message="Stop hook: no Farplane runtime context; allowing stop."
@@ -2921,29 +2835,26 @@ def main() -> int:
             system_message="Stop hook: no active ticket resolved; allowing stop."
         )
 
-    impl_mode_enabled = os.environ.get("FARPLANE_IMPL_HOOK", "").lower() in {
+    execution_mode_enabled = os.environ.get("FARPLANE_EXECUTION_HOOK", "").lower() in {
         "1",
         "true",
         "yes",
         "on",
     }
-    impl_loop_flag = impl_loop_flag_active(current_run, runtime_claim, resolved_session_id)
-    impl_runtime_active = (
-        impl_mode_enabled
-        or impl_loop_flag
-        or impl_result is not None
+    execution_loop_flag = execution_loop_flag_active(current_run, runtime_claim, resolved_session_id)
+    execution_runtime_active = (
+        execution_mode_enabled
+        or execution_loop_flag
+        or execution_result is not None
         or has_explicit_ticket_selector()
     )
-    live_interactive_lane = (
-        resolved_session_id is not None
-        and os.environ.get("FARPLANE_IMPL_TMUX_DRY_RUN", "").lower() not in {"1", "true", "yes", "on"}
-    )
-    if not impl_runtime_active:
+    live_interactive_session = resolved_session_id is not None
+    if not execution_runtime_active:
         return emit_stop_passthrough(
-            system_message="Stop hook: impl runtime inactive; allowing stop."
+            system_message="Stop hook: execution runtime inactive; allowing stop."
         )
 
-    impl_loop_allowed = impl_loop_continuation_allowed(
+    execution_loop_allowed = execution_loop_continuation_allowed(
         ticket,
         current_run,
         runtime_claim,
@@ -2953,7 +2864,7 @@ def main() -> int:
         last_user_turn=last_user_turn,
         ticket=ticket,
         message=message,
-        impl_result=impl_result,
+        execution_result=execution_result,
         current_run=current_run,
     )
     current_run = persist_intent_alignment(project_root, current_run, alignment)
@@ -2977,7 +2888,7 @@ def main() -> int:
     )
 
     if alignment.get("state") == "hard_mismatch":
-        current_run = persist_impl_loop_active(project_root, current_run, False)
+        current_run = persist_execution_loop_active(project_root, current_run, False)
         current_run = publish_hook_status(project_root, current_run, decision="block_for_user", summary=hook_summary)
         announce_message(str(alignment.get("announce") or alignment.get("reason") or "Stopping for user review."))
         return emit_stop_payload(
@@ -2987,12 +2898,12 @@ def main() -> int:
         )
 
     if alignment.get("state") == "soft_mismatch":
-        if not impl_loop_allowed:
-            current_run = persist_impl_loop_active(project_root, current_run, False)
-            announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
+        if not execution_loop_allowed:
+            current_run = persist_execution_loop_active(project_root, current_run, False)
+            announce_message("Stopping safely. Same-ticket execution continuation is not active for this session.")
             return emit_stop_payload(
                 continue_value=False,
-                stop_reason="impl loop continuation requested without an active session claim",
+                stop_reason="execution loop continuation requested without an active session claim",
                 system_message=f"Stop hook: {hook_summary}",
             )
         current_run = publish_hook_status(project_root, current_run, decision="continue_same_ticket", summary=hook_summary)
@@ -3005,18 +2916,18 @@ def main() -> int:
             announce=str(alignment.get("announce") or alignment.get("reason") or "Continuing the same ticket."),
         )
 
-    if impl_runtime_active and impl_result:
-        verdict = run_impl_judge(ticket, impl_result, current_run)
+    if execution_runtime_active and execution_result:
+        verdict = run_execution_judge(ticket, execution_result, current_run)
         if verdict is None:
-            current_run = persist_impl_loop_active(project_root, current_run, False)
+            current_run = persist_execution_loop_active(project_root, current_run, False)
             append_hook_log(
                 base,
                 {
                     "timestamp": now_iso(),
-                    "mode": "impl",
+                    "mode": "execution",
                     "ticket_id": str(ticket["ticket_id"]),
                     "phase": str(ticket["phase"] or ""),
-                    "worker_result": impl_result,
+                    "worker_result": execution_result,
                     "outcome": "judge_unavailable",
                 },
             )
@@ -3025,12 +2936,12 @@ def main() -> int:
         decision = str(verdict.get("decision", ""))
         next_phase = str(verdict.get("next_phase", ""))
         next_execution_phase = str(verdict.get("next_execution_phase", "")).strip()
-        reason = str(verdict.get("reason", "")).strip() or "impl verdict available"
+        reason = str(verdict.get("reason", "")).strip() or "execution verdict available"
         orchestrator_message = str(verdict.get("orchestrator_message", "")).strip() or reason
-        hook_summary = summarize_impl_hook(str(ticket["ticket_id"]), decision, next_phase, reason)
+        hook_summary = summarize_execution_hook(str(ticket["ticket_id"]), decision, next_phase, reason)
         if project_root is not None and current_run is not None:
             state_updates: dict[str, object] = {
-                "last_worker_result": impl_result,
+                "last_worker_result": execution_result,
                 "last_judge_verdict": decision,
                 "status": (
                     "complete"
@@ -3049,10 +2960,10 @@ def main() -> int:
             base,
             {
                 "timestamp": now_iso(),
-                "mode": "impl",
+                "mode": "execution",
                 "ticket_id": str(ticket["ticket_id"]),
                 "phase": str(ticket["phase"] or ""),
-                "worker_result": impl_result,
+                "worker_result": execution_result,
                 "decision": decision,
                 "next_phase": next_phase,
                 "next_execution_phase": next_execution_phase,
@@ -3061,19 +2972,19 @@ def main() -> int:
         )
         current_phase = str((current_run or {}).get("phase") or ticket["phase"] or "building")
         execution_phase = str((current_run or {}).get("execution_phase") or current_execution_phase(current_run))
-        if decision in {"repeat_impl_plan", "repeat_impl", "advance_execution_phase"}:
-            if decision == "repeat_impl" and not impl_loop_allowed:
-                current_run = persist_impl_loop_active(project_root, current_run, False)
-                announce_message("Stopping safely. Repeat impl work is not active for this session.")
+        if decision in {"repeat_plan", "repeat_execution", "advance_execution_phase"}:
+            if decision == "repeat_execution" and not execution_loop_allowed:
+                current_run = persist_execution_loop_active(project_root, current_run, False)
+                announce_message("Stopping safely. Repeat execution work is not active for this session.")
                 return emit_stop_payload(
                     continue_value=False,
-                    stop_reason="repeat_impl requested without an active impl session claim",
+                    stop_reason="repeat_execution requested without an active execution session claim",
                     system_message=f"Stop hook: {hook_summary}",
                 )
-            current_run = persist_impl_loop_active(
+            current_run = persist_execution_loop_active(
                 project_root,
                 current_run,
-                next_impl_loop_active_for_action(
+                next_execution_loop_active_for_action(
                     decision,
                     next_phase=next_phase,
                     current_phase=current_phase,
@@ -3081,61 +2992,15 @@ def main() -> int:
             )
             target_phase = next_phase if next_phase in {"planning", "building", "documenting"} else str(ticket["phase"] or "building")
             target_execution_phase = next_execution_phase or execution_phase
-            # Prefer a dedicated QA lane over reusing the live coordinator lane. See MEM-0069.
-            if target_execution_phase == "qa":
-                followup = spawn_tmux_followup(
-                    base,
-                    ticket,
-                    target_phase,
-                    current_run,
-                    orchestrator_message,
-                    target_execution_phase,
-                )
-                if followup is not None:
-                    append_hook_log(
-                        base,
-                        {
-                            "timestamp": now_iso(),
-                            "mode": "impl",
-                            "ticket_id": str(ticket["ticket_id"]),
-                            "event": "spawn_followup",
-                            "followup": followup,
-                        },
-                    )
-                    announce_message(
-                        f"spawned delegated QA follow-up in {followup.get('tmux_pane') or followup.get('tmux_window')}"
-                    )
-                    return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
-            if live_interactive_lane:
+            if live_interactive_session:
                 continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket, target_execution_phase)
                 return continue_hook_response(
                     payload=payload,
                     ticket=ticket,
                     continuation_message=continuation_message,
                     hook_summary=hook_summary,
-                    announce=f"Continuing {ticket['ticket_id']} in the live impl lane.",
+                    announce=f"Continuing {ticket['ticket_id']} in the active execution session.",
                 )
-            followup = spawn_tmux_followup(
-                base,
-                ticket,
-                target_phase,
-                current_run,
-                orchestrator_message,
-                target_execution_phase,
-            )
-            if followup is not None:
-                append_hook_log(
-                    base,
-                    {
-                        "timestamp": now_iso(),
-                        "mode": "impl",
-                        "ticket_id": str(ticket["ticket_id"]),
-                        "event": "spawn_followup",
-                        "followup": followup,
-                    },
-                )
-                announce_message(f"spawned next impl pass in {followup.get('tmux_pane') or followup.get('tmux_window')}")
-                return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
             return continue_hook_response(
                 payload=payload,
                 ticket=ticket,
@@ -3144,44 +3009,23 @@ def main() -> int:
                 announce=orchestrator_message,
             )
         if decision == "block_ticket":
-            current_run = persist_impl_loop_active(project_root, current_run, False)
+            current_run = persist_execution_loop_active(project_root, current_run, False)
             announce_message(f"Stopping for review. {reason}")
             return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
         if decision in {"advance_ticket", "complete_ticket"}:
             if decision == "advance_ticket" and current_phase == "planning" and next_phase == "building":
-                current_run = persist_impl_loop_active(project_root, current_run, True)
+                current_run = persist_execution_loop_active(project_root, current_run, True)
                 target_phase = next_phase if next_phase in {"planning", "building", "documenting"} else str(ticket["phase"] or "building")
                 target_execution_phase = next_execution_phase or current_execution_phase(current_run)
-                if live_interactive_lane:
+                if live_interactive_session:
                     continuation_message = build_live_followup_reason(target_phase, orchestrator_message, ticket, target_execution_phase)
                     return continue_hook_response(
                         payload=payload,
                         ticket=ticket,
                         continuation_message=continuation_message,
                         hook_summary=hook_summary,
-                        announce=f"Advancing {ticket['ticket_id']} inside the live impl lane.",
+                        announce=f"Advancing {ticket['ticket_id']} inside the active execution session.",
                     )
-                followup = spawn_tmux_followup(
-                    base,
-                    ticket,
-                    target_phase,
-                    current_run,
-                    orchestrator_message,
-                    target_execution_phase,
-                )
-                if followup is not None:
-                    append_hook_log(
-                        base,
-                        {
-                            "timestamp": now_iso(),
-                            "mode": "impl",
-                            "ticket_id": str(ticket["ticket_id"]),
-                            "event": "spawn_followup",
-                            "followup": followup,
-                        },
-                    )
-                    announce_message(f"advanced to {next_phase} in {followup.get('tmux_pane') or followup.get('tmux_window')}")
-                    return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
                 return continue_hook_response(
                     payload=payload,
                     ticket=ticket,
@@ -3200,7 +3044,7 @@ def main() -> int:
                         "outcome": "runtime_state_missing",
                     },
                 )
-                current_run = persist_impl_loop_active(project_root, current_run, False)
+                current_run = persist_execution_loop_active(project_root, current_run, False)
                 announce_message("Completion review requires active runtime state. Stopping safely.")
                 return emit_stop_payload(system_message=f"Stop hook: {hook_summary}. Completion review runtime state missing.")
 
@@ -3208,7 +3052,7 @@ def main() -> int:
             if not pending_nonce:
                 request = build_completion_review_request(ticket, current_run, last_user_turn)
                 request_summary = f"completion-review-request: {ticket['ticket_id']} -> {request['nonce']}"
-                current_run = persist_impl_loop_active(project_root, current_run, True)
+                current_run = persist_execution_loop_active(project_root, current_run, True)
                 current_run = persist_runtime_update(
                     project_root,
                     current_run,
@@ -3254,15 +3098,15 @@ def main() -> int:
             if not password_ok:
                 password_receipt_ok, _, _, password_receipt = completion_review_receipt_gate(ticket, current_run)
                 password_receipt_path = str((password_receipt or {}).get("_path") or "").strip()
-                if not impl_loop_allowed:
-                    current_run = persist_impl_loop_active(project_root, current_run, False)
-                    announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
+                if not execution_loop_allowed:
+                    current_run = persist_execution_loop_active(project_root, current_run, False)
+                    announce_message("Stopping safely. Same-ticket execution continuation is not active for this session.")
                     return emit_stop_payload(
                         continue_value=False,
-                        stop_reason="completion review password requested without an active impl loop",
+                        stop_reason="completion review password requested without an active execution loop",
                         system_message=f"Stop hook: completion-review-password: {ticket['ticket_id']} -> continue_same_ticket ({password_reason})",
                     )
-                current_run = persist_impl_loop_active(project_root, current_run, True)
+                current_run = persist_execution_loop_active(project_root, current_run, True)
                 current_run = persist_runtime_update(
                     project_root,
                     current_run,
@@ -3346,15 +3190,15 @@ def main() -> int:
                 },
             )
             if not receipt_ok:
-                if not impl_loop_allowed:
-                    current_run = persist_impl_loop_active(project_root, current_run, False)
-                    announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
+                if not execution_loop_allowed:
+                    current_run = persist_execution_loop_active(project_root, current_run, False)
+                    announce_message("Stopping safely. Same-ticket execution continuation is not active for this session.")
                     return emit_stop_payload(
                         continue_value=False,
-                        stop_reason="completion review receipt requested without an active impl loop",
+                        stop_reason="completion review receipt requested without an active execution loop",
                         system_message=f"Stop hook: {receipt_summary}",
                     )
-                current_run = persist_impl_loop_active(project_root, current_run, True)
+                current_run = persist_execution_loop_active(project_root, current_run, True)
                 current_run = persist_runtime_update(
                     project_root,
                     current_run,
@@ -3397,7 +3241,7 @@ def main() -> int:
                     announce=receipt_reason,
                 )
 
-            current_run = persist_impl_loop_active(project_root, current_run, False)
+            current_run = persist_execution_loop_active(project_root, current_run, False)
             current_run = persist_runtime_update(
                 project_root,
                 current_run,
@@ -3426,11 +3270,11 @@ def main() -> int:
                 ticket=ticket,
                 verdict=verdict,
             )
-        current_run = persist_impl_loop_active(project_root, current_run, False)
+        current_run = persist_execution_loop_active(project_root, current_run, False)
         announce_message(f"Stopping for operator review. {reason}")
         return emit_stop_payload(system_message=f"Stop hook: {hook_summary}")
 
-    if impl_runtime_active and not impl_result:
+    if execution_runtime_active and not execution_result:
         review = run_role(
             base,
                 "completion-reviewer",
@@ -3443,15 +3287,15 @@ def main() -> int:
             ),
         )
         if review is None:
-            if not impl_loop_allowed:
-                current_run = persist_impl_loop_active(project_root, current_run, False)
-                announce_message("Stopping safely. Missing IMPL_RESULT and no active impl loop is owned by this session.")
+            if not execution_loop_allowed:
+                current_run = persist_execution_loop_active(project_root, current_run, False)
+                announce_message("Stopping safely. Missing EXECUTION_RESULT and no active execution loop is owned by this session.")
                 return emit_stop_payload(
                     continue_value=False,
-                    stop_reason="missing IMPL_RESULT without an active impl loop",
+                    stop_reason="missing EXECUTION_RESULT without an active execution loop",
                     system_message=f"Stop hook: completion-reviewer unavailable for {ticket['ticket_id']}",
                 )
-            current_run = persist_impl_loop_active(project_root, current_run, True)
+            current_run = persist_execution_loop_active(project_root, current_run, True)
             append_hook_log(
                 base,
                 {
@@ -3461,13 +3305,13 @@ def main() -> int:
                     "outcome": "role_unavailable",
                 },
             )
-            continuation_message = build_missing_impl_result_reason(ticket, current_run)
+            continuation_message = build_missing_execution_result_reason(ticket, current_run)
             return continue_hook_response(
                 payload=payload,
                 ticket=ticket,
                 continuation_message=continuation_message,
                 hook_summary=f"completion-reviewer: {ticket['ticket_id']} -> continue_same_ticket (completion-reviewer unavailable)",
-                announce=f"Continuing {ticket['ticket_id']}. Missing IMPL_RESULT in impl mode.",
+                announce=f"Continuing {ticket['ticket_id']}. Missing EXECUTION_RESULT in execution mode.",
             )
 
         proposal_action = review["action"]
@@ -3486,26 +3330,26 @@ def main() -> int:
         current_run = publish_hook_status(project_root, current_run, decision=proposal_action, summary=proposal_summary)
 
         if proposal_action == "continue_same_ticket":
-            if not impl_loop_allowed:
-                current_run = persist_impl_loop_active(project_root, current_run, False)
-                announce_message("Stopping safely. Same-ticket impl continuation is not active for this session.")
+            if not execution_loop_allowed:
+                current_run = persist_execution_loop_active(project_root, current_run, False)
+                announce_message("Stopping safely. Same-ticket execution continuation is not active for this session.")
                 return emit_stop_payload(
                     continue_value=False,
-                    stop_reason="missing-result continuation requested without an active impl loop",
+                    stop_reason="missing-result continuation requested without an active execution loop",
                     system_message=f"Stop hook: {proposal_summary}",
                 )
-            current_run = persist_impl_loop_active(project_root, current_run, True)
-            continuation_message = review["continuation_message"] or build_missing_impl_result_reason(ticket, current_run)
+            current_run = persist_execution_loop_active(project_root, current_run, True)
+            continuation_message = review["continuation_message"] or build_missing_execution_result_reason(ticket, current_run)
             return continue_hook_response(
                 payload=payload,
                 ticket=ticket,
                 continuation_message=continuation_message,
                 hook_summary=proposal_summary,
-                announce=review["speak"] or f"Continuing {ticket['ticket_id']}. Missing IMPL_RESULT in impl mode.",
+                announce=review["speak"] or f"Continuing {ticket['ticket_id']}. Missing EXECUTION_RESULT in execution mode.",
             )
 
         if proposal_action == "route_to_orchestrator":
-            current_run = persist_impl_loop_active(project_root, current_run, False)
+            current_run = persist_execution_loop_active(project_root, current_run, False)
             return run_orchestrator_decision(
                 base=base,
                 home=home,
@@ -3516,7 +3360,7 @@ def main() -> int:
                 verdict=None,
             )
 
-        current_run = persist_impl_loop_active(project_root, current_run, False)
+        current_run = persist_execution_loop_active(project_root, current_run, False)
         announce_message(review["speak"] or proposal_reason)
         return emit_stop_payload(system_message=f"Stop hook: {proposal_summary}")
 

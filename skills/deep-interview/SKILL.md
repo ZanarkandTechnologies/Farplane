@@ -39,7 +39,7 @@ Deep Interview is an intent-first Socratic clarification loop before planning or
 - The request is broad, ambiguous, or missing concrete acceptance criteria
 - The user says "deep interview", "interview me", "ask me everything", "don't assume", or "ouroboros"
 - The user wants to avoid misaligned implementation from underspecified requirements
-- You need a requirements artifact before handing off to `impl-plan`, `autopilot`, `impl`, or `team`
+- You need a requirements artifact before handing off to `impl-plan`, `autopilot`, `goal-advisor`, or `team`
 - You are bootstrapping a new or migrated project and need stack, topology, and
   quality-gate decisions clarified before `deep-init-project` scaffolds files
 </Use_When>
@@ -338,7 +338,7 @@ Present execution options after artifact generation using explicit handoff contr
 - **Skipped / Already-Satisfied Stages:** Requirements discovery, ambiguity clarification, and early intent-boundary elicitation
 - **Expected Output:** an updated ticket plan or other approved Farplane planning artifact that preserves the clarified requirements
 - **Best When:** Requirements are clear enough to stop interviewing, but architectural validation / consensus planning is still desirable
-- **Next Recommended Step:** Use the approved planning artifacts with `$autopilot`, `$impl`, or `$team` depending on the desired execution style
+- **Next Recommended Step:** Use the approved planning artifacts with `$autopilot`, `goal-advisor`, or `$team` depending on the desired execution style
 
 ### 2. **`$autopilot`**
 - **Input Artifact:** the current deep-interview summary / requirements brief
@@ -347,25 +347,25 @@ Present execution options after artifact generation using explicit handoff contr
 - **Skipped / Already-Satisfied Stages:** Initial requirement discovery and ambiguity reduction
 - **Expected Output:** Planning/execution progress, QA evidence, and validation artifacts produced by autopilot
 - **Best When:** The clarified spec is already strong enough for direct planning + execution without an additional consensus gate
-- **Next Recommended Step:** Continue through autopilot's execution/QA/validation flow; if coordination-heavy execution emerges, prefer a follow-up `$team` or `$impl` pass as appropriate
+- **Next Recommended Step:** Continue through autopilot's execution/QA/validation flow; if coordination-heavy execution emerges, prefer a follow-up `$team` or `goal-advisor` pass as appropriate
 
-### 3. **`$impl`**
+### 3. **`goal-advisor`**
 - **Input Artifact:** the selected ticket plus the current deep-interview summary / requirements brief
-- **Invocation:** `$impl <ticket>`
+- **Invocation:** `goal-advisor <ticket>`
 - **Consumer Behavior:** Use the ticket's acceptance criteria and boundary constraints as the execution target. Do not reopen requirements discovery unless the user explicitly asks to refine further.
 - **Skipped / Already-Satisfied Stages:** Requirement interview, ambiguity clarification, and initial scope-definition work
 - **Expected Output:** iterative execution progress plus QA/review evidence tracked against the clarified criteria
 - **Best When:** The task is ready for one selected-ticket build loop with implementation, QA, review, and evidence collection
-- **Next Recommended Step:** Continue re-entering the same `$impl` contract until the criteria are satisfied or a real blocker exists
+- **Next Recommended Step:** Continue the same Goal-backed ticket execution contract until the criteria are satisfied or a real blocker exists
 
 ### 4. **`$team`**
 - **Input Artifact:** the current deep-interview summary / requirements brief
 - **Invocation:** `$team <brief>`
 - **Consumer Behavior:** Treat the spec as shared execution context for coordinated parallel work. Preserve the clarified intent, non-goals, decision boundaries, and acceptance criteria as common lane constraints.
 - **Skipped / Already-Satisfied Stages:** Requirement clarification and early ambiguity reduction
-- **Expected Output:** Coordinated multi-agent execution against the shared spec, with evidence that can later feed an `$impl` verification pass when appropriate
+- **Expected Output:** Coordinated multi-agent execution against the shared spec, with evidence that can later feed a Goal-backed verification pass when appropriate
 - **Best When:** The task is large, multi-lane, or blocker-sensitive enough to justify coordinated parallel execution instead of a single persistent loop
-- **Next Recommended Step:** Follow the team verification path when the coordinated execution phase finishes; escalate to a separate `$impl` re-entry loop only when a later persistent verification/fix owner is still needed
+- **Next Recommended Step:** Follow the team verification path when the coordinated execution phase finishes; escalate to a separate `goal-advisor` run only when a later persistent verification/fix owner is still needed
 
 ### 5. **Refine further**
 - **Input Artifact:** existing ticket context, current interview summary, and the current requirements brief
@@ -409,7 +409,7 @@ Present execution options after artifact generation using explicit handoff contr
 - [ ] Interview summary written to the active ticket or the current response handoff
 - [ ] Requirements brief written to the active ticket or the selected Farplane handoff artifact
 - [ ] Brownfield questions use evidence-backed confirmation when applicable
-- [ ] Handoff options provided (`$deep-init-project`, `$impl-plan`, `$autopilot`, `$impl`, `$team`)
+- [ ] Handoff options provided (`$deep-init-project`, `$impl-plan`, `$autopilot`, `goal-advisor`, `$team`)
 - [ ] No direct implementation performed in this mode
 </Final_Checklist>
 

@@ -38,7 +38,7 @@ ordinary execution. Keep this skill only as a temporary compatibility wrapper
 for older callers that explicitly invoke `$execute`.
 
 This is not the Farplane coding executor. For code work,
-`$impl` and `close-ticket` are Tier 3 coding-pipeline skills that implement
+`goal-advisor` and `close-ticket` are Tier 3 coding-pipeline skills that implement
 the concrete execution and closeout workflow.
 
 ## Job
@@ -72,7 +72,7 @@ the concrete execution and closeout workflow.
 
 ## Domain Bindings
 
-- Coding: `$impl`, `close-ticket`
+- Coding: `goal-advisor`, `close-ticket`
 - Frontend: implementation plus visual QA
 - Presentations: build deck, render, review
 - Documents: draft, revise, render, review
@@ -95,5 +95,5 @@ Produce an execution result with:
 - Do not execute vague intent. Route back to native planning or the domain
   planning skill when scope or proof is unclear.
 - Do not claim completion without durable evidence.
-- Do not treat `$impl` as the generic Tier 2 executor. It is the coding
-  implementation of this interface.
+- Do not treat the retired impl skill as the generic Tier 2 executor. Coding-ticket
+  execution now routes through `goal-advisor`.

@@ -22,8 +22,8 @@ and Notion boards, and hand the selected work to Goal Advisor without creating
 a hidden scheduler.
 
 This skill is a selector and handoff contract. It does not replace
-`goal-advisor` as the execution compiler, `impl` as the coding-ticket executor,
-or `weekly-strategy-analysis` as the no-ticket planning fallback. Live hourly
+`goal-advisor` as the execution compiler and coding-ticket executor, or
+`weekly-strategy-analysis` as the no-ticket planning fallback. Live hourly
 scheduling must be provided by an explicit automation surface; until then, this
 skill emits a ready-to-run heartbeat packet or no-op report.
 
@@ -48,7 +48,7 @@ gates:
   human_gates_respected; goal_advisor_handoff_ready
 
 routes:
-  notion-context | goal-advisor | impl-plan | impl |
+  notion-context | goal-advisor | impl-plan |
   weekly-strategy-analysis | telegram-message | review
 
 fails:
@@ -112,7 +112,7 @@ This skill performs board normalization and selection inline. Call
   - [ ] Use `advise` when the shortlist has real tradeoffs, and record the accepted tradeoff in the handoff.
   - [ ] Prefer well-defined tickets over speculative high-leverage ideas when both can compound.
 - [ ] 6. Route the result.
-  - [ ] If a ticket is selected, emit a `goal-advisor` handoff that lists the ticket, program/progress files if present, budget, proof target, and recommended path such as `impl-plan -> impl`.
+  - [ ] If a ticket is selected, emit a `goal-advisor` handoff that lists the ticket, program/progress files if present, budget, proof target, and recommended path such as `impl-plan -> goal-advisor`.
   - [ ] If a promising ticket is unclear, emit a clarification request or `telegram-message` draft with the exact missing human input.
   - [ ] If no proceedable tickets exist, emit a `weekly-strategy-analysis` handoff to create or refresh tickets.
 - [ ] 7. Finish with an operator-readable report.
@@ -160,7 +160,7 @@ Files:
 Trigger mode: heartbeat-selected ticket
 Budget: <bounded time/compute/review limits>
 Metric: ticket Done / Proof plus review or mechanical checks
-Recommended path: impl-plan -> impl -> QA/review as required
+Recommended path: impl-plan -> goal-advisor -> QA/review as required
 No-op policy: if the ticket is no longer proceedable, re-run board-drain selection
 ```
 

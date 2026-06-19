@@ -45,7 +45,7 @@ optimize-with-human = human-feedback optimization preset
 skills = methods inside a turn
 rollout = meta ticket pattern
 drift checker = read-only alignment reviewer
-impl = coding-ticket leaf executor
+build = coding-ticket build phase inside Goal-backed execution
 ```
 
 Do not make tickets, skills, human feedback, heartbeat automations, or rollout
@@ -384,8 +384,8 @@ For a board-drain heartbeat:
 `$work`, `$ralph`, and `batch-work` are retired as public orchestration
 surfaces. Their remaining useful contracts are represented here as
 Goal-advisor admission/profile, heartbeat board-drain, and batch proof policy.
-`$impl` remains the coding-ticket leaf executor when the selected files describe
-a build-ready coding ticket.
+`goal-advisor` compiles the coding-ticket native Goal when the selected files
+describe a build-ready coding ticket.
 
 ## AGI Toy Shop Example
 

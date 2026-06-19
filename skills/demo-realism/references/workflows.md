@@ -72,5 +72,5 @@ ad hoc spreadsheets?
 - use `frontend-craft` when the workflow and data feel believable and
   implementation should start
 - use `impl-plan` when the realism pack should turn into a scoped build plan
-- use `impl` only when a ticket already exists and the realism pack is good
+- use `goal-advisor` only when a ticket already exists and the realism pack is good
   enough to build directly

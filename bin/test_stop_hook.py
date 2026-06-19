@@ -224,7 +224,7 @@ class StopHookMainOutputTests(unittest.TestCase):
         self.assertIn("no active ticket resolved", payload["systemMessage"])
         self.assertEqual(stderr_output, "")
 
-    def test_main_emits_continue_json_when_impl_runtime_is_inactive(self) -> None:
+    def test_main_emits_continue_json_when_execution_runtime_is_inactive(self) -> None:
         with (
             patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
             patch.object(
@@ -236,19 +236,19 @@ class StopHookMainOutputTests(unittest.TestCase):
                     "status": "building",
                 },
             ),
-            patch.object(self.stop_hook, "impl_loop_flag_active", return_value=False),
+            patch.object(self.stop_hook, "execution_loop_flag_active", return_value=False),
             patch.object(self.stop_hook, "has_explicit_ticket_selector", return_value=False),
         ):
             result, payload, stderr_output = self.run_main_with_payload(
                 {
                     "hook_event_name": "Stop",
-                    "last_assistant_message": "Finished TASK-9999 without impl loop metadata.",
+                    "last_assistant_message": "Finished TASK-9999 without execution loop metadata.",
                 }
             )
 
         self.assertEqual(result, 0)
         self.assertTrue(payload["continue"])
-        self.assertIn("impl runtime inactive", payload["systemMessage"])
+        self.assertIn("execution runtime inactive", payload["systemMessage"])
         self.assertEqual(stderr_output, "")
 
 
@@ -867,8 +867,8 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
         self.assertIn("Spawn the `qa-tester` subagent or lane", prompt)
         self.assertIn("do not use `agent-browser` directly", prompt)
 
-    def test_decide_impl_transition_advances_impl_to_qa_when_required(self) -> None:
-        verdict = self.stop_hook.decide_impl_transition(
+    def test_decide_execution_transition_advances_impl_to_qa_when_required(self) -> None:
+        verdict = self.stop_hook.decide_execution_transition(
             "building",
             {
                 "ticket_id": "TASK-0042",
@@ -883,7 +883,7 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
                 "artifact_files": [],
             },
             {"status": "build_complete", "next": "building", "reason": "builder finished"},
-            {"execution_phase": "impl", "requires_qa": True, "requires_demo": False},
+            {"execution_phase": "build", "requires_qa": True, "requires_demo": False},
         )
 
         self.assertEqual(verdict["decision"], "advance_execution_phase")
@@ -920,7 +920,7 @@ class StopHookExecutionPhaseTests(unittest.TestCase):
             current_run = {
                 "execution_phase": "qa",
                 "phase_requirements": {
-                    "impl": {"completion_statuses": ["build_complete", "done"], "artifact_root": str(ticket["artifact_root"])},
+                    "build": {"completion_statuses": ["build_complete", "done"], "artifact_root": str(ticket["artifact_root"])},
                     "qa": {
                         "artifact_root": str((ticket["artifact_root"] / "qa").resolve()),
                         "result_glob": "**/result.json",
@@ -944,7 +944,7 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
 
     def test_extract_completion_password_reads_explicit_line(self) -> None:
         password = self.stop_hook.extract_completion_password(
-            "work complete\nCOMPLETION_PASSWORD: CR-ABC123\nIMPL_RESULT: status=done next=building reason=ready"
+            "work complete\nCOMPLETION_PASSWORD: CR-ABC123\nEXECUTION_RESULT: status=done next=building reason=ready"
         )
 
         self.assertEqual(password, "CR-ABC123")
@@ -1227,16 +1227,16 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
             payload = {
                 "hook_event_name": "Stop",
                 "session_id": "sess-123",
-                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nIMPL_RESULT: status=done next=building reason=ready for completion gate",
+                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nEXECUTION_RESULT: status=done next=building reason=ready for completion gate",
             }
             current_run = {
                 "ticket_id": "TASK-0042",
                 "phase": "building",
                 "status": "waiting_for_worker",
-                "skill_name": "impl",
+                "skill_name": "goal-advisor",
                 "session_id": "sess-123",
-                "impl_loop_active": True,
-                "execution_phase": "impl",
+                "execution_loop_active": True,
+                "execution_phase": "build",
             }
             ticket = {
                 "ticket_id": "TASK-0042",
@@ -1267,11 +1267,11 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 patch.object(self.stop_hook, "project_root_from_payload", return_value=root),
                 patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
                 patch.object(self.stop_hook, "load_current_run", return_value=current_run),
-                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "impl"}),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "goal-advisor"}),
                 patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value={"summary": "finish the ticket", "intent_mode": "building", "requested_outcome": "done"}),
                 patch.object(self.stop_hook, "resolve_ticket", return_value=ticket),
                 patch.object(self.stop_hook, "classify_intent_alignment", return_value={"state": "aligned", "reason": "aligned", "turn_id": "turn-1", "summary": "finish the ticket", "expected_phase": "building", "observed_phase": "building", "continuation_message": "", "announce": ""}),
-                patch.object(self.stop_hook, "run_impl_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
+                patch.object(self.stop_hook, "run_execution_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
                 patch.object(self.stop_hook, "emit_hook_telemetry"),
                 patch.object(self.stop_hook, "announce_message"),
                 patch.object(self.stop_hook, "persist_runtime_update", wraps=self.stop_hook.persist_runtime_update) as persist_runtime_update_mock,
@@ -1306,16 +1306,16 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
             payload = {
                 "hook_event_name": "Stop",
                 "session_id": "sess-123",
-                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nIMPL_RESULT: status=done next=building reason=ready for completion gate",
+                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nEXECUTION_RESULT: status=done next=building reason=ready for completion gate",
             }
             current_run = {
                 "ticket_id": "TASK-0042",
                 "phase": "building",
                 "status": "waiting_for_worker",
-                "skill_name": "impl",
+                "skill_name": "goal-advisor",
                 "session_id": "sess-123",
-                "impl_loop_active": True,
-                "execution_phase": "impl",
+                "execution_loop_active": True,
+                "execution_phase": "build",
                 "completion_review_requested": True,
                 "completion_review_nonce": "CR-123ABC",
                 "completion_review_requested_at": "2026-04-25T01:58:00Z",
@@ -1352,11 +1352,11 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 patch.object(self.stop_hook, "project_root_from_payload", return_value=root),
                 patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
                 patch.object(self.stop_hook, "load_current_run", return_value=current_run),
-                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "impl"}),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "goal-advisor"}),
                 patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value={"summary": "finish the ticket", "intent_mode": "building", "requested_outcome": "done"}),
                 patch.object(self.stop_hook, "resolve_ticket", return_value=ticket),
                 patch.object(self.stop_hook, "classify_intent_alignment", return_value={"state": "aligned", "reason": "aligned", "turn_id": "turn-1", "summary": "finish the ticket", "expected_phase": "building", "observed_phase": "building", "continuation_message": "", "announce": ""}),
-                patch.object(self.stop_hook, "run_impl_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
+                patch.object(self.stop_hook, "run_execution_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
                 patch.object(self.stop_hook, "emit_hook_telemetry"),
                 patch.object(self.stop_hook, "announce_message"),
                 patch.object(self.stop_hook, "completion_review_receipt_gate", return_value=(True, "", [], {"_path": str(receipt_path)})) as receipt_gate_mock,
@@ -1378,16 +1378,16 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
             payload = {
                 "hook_event_name": "Stop",
                 "session_id": "sess-123",
-                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nIMPL_RESULT: status=done next=building reason=ready for completion gate",
+                "last_assistant_message": "GROUNDING_SUMMARY: reviewer receipt requested\nEXECUTION_RESULT: status=done next=building reason=ready for completion gate",
             }
             current_run = {
                 "ticket_id": "TASK-0042",
                 "phase": "building",
                 "status": "waiting_for_worker",
-                "skill_name": "impl",
+                "skill_name": "goal-advisor",
                 "session_id": "sess-123",
-                "impl_loop_active": True,
-                "execution_phase": "impl",
+                "execution_loop_active": True,
+                "execution_phase": "build",
                 "completion_review_requested": True,
                 "completion_review_nonce": "CR-123ABC",
                 "completion_review_requested_at": "2026-04-25T01:58:00Z",
@@ -1424,11 +1424,11 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 patch.object(self.stop_hook, "project_root_from_payload", return_value=root),
                 patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
                 patch.object(self.stop_hook, "load_current_run", return_value=current_run),
-                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "impl"}),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "goal-advisor"}),
                 patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value={"summary": "finish the ticket", "intent_mode": "building", "requested_outcome": "done"}),
                 patch.object(self.stop_hook, "resolve_ticket", return_value=ticket),
                 patch.object(self.stop_hook, "classify_intent_alignment", return_value={"state": "aligned", "reason": "aligned", "turn_id": "turn-1", "summary": "finish the ticket", "expected_phase": "building", "observed_phase": "building", "continuation_message": "", "announce": ""}),
-                patch.object(self.stop_hook, "run_impl_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
+                patch.object(self.stop_hook, "run_execution_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
                 patch.object(self.stop_hook, "emit_hook_telemetry"),
                 patch.object(self.stop_hook, "announce_message"),
                 patch.object(self.stop_hook, "completion_review_receipt_gate", return_value=(False, "completion review receipt gates are not passing", ["completion_review_receipt=missing"], None)) as receipt_gate_mock,
@@ -1453,17 +1453,17 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 "last_assistant_message": (
                     "GROUNDING_SUMMARY: reviewer receipt requested\n"
                     "COMPLETION_PASSWORD: CR-123ABC\n"
-                    "IMPL_RESULT: status=done next=building reason=ready for completion gate"
+                    "EXECUTION_RESULT: status=done next=building reason=ready for completion gate"
                 ),
             }
             current_run = {
                 "ticket_id": "TASK-0042",
                 "phase": "building",
                 "status": "waiting_for_worker",
-                "skill_name": "impl",
+                "skill_name": "goal-advisor",
                 "session_id": "sess-123",
-                "impl_loop_active": True,
-                "execution_phase": "impl",
+                "execution_loop_active": True,
+                "execution_phase": "build",
                 "completion_review_requested": True,
                 "completion_review_nonce": "CR-123ABC",
                 "completion_review_requested_at": "2026-04-25T01:58:00Z",
@@ -1503,11 +1503,11 @@ class StopHookCompletionReviewReceiptTests(unittest.TestCase):
                 patch.object(self.stop_hook, "project_root_from_payload", return_value=root),
                 patch.object(self.stop_hook, "hook_enabled_for_context", return_value=True),
                 patch.object(self.stop_hook, "load_current_run", return_value=current_run),
-                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "impl"}),
+                patch.object(self.stop_hook, "load_persisted_runtime_claim", return_value={"ticket_id": "TASK-0042", "session_id": "sess-123", "skill_name": "goal-advisor"}),
                 patch.object(self.stop_hook, "load_persisted_last_user_turn", return_value={"summary": "finish the ticket", "intent_mode": "building", "requested_outcome": "done"}),
                 patch.object(self.stop_hook, "resolve_ticket", return_value=ticket),
                 patch.object(self.stop_hook, "classify_intent_alignment", return_value={"state": "aligned", "reason": "aligned", "turn_id": "turn-1", "summary": "finish the ticket", "expected_phase": "building", "observed_phase": "building", "continuation_message": "", "announce": ""}),
-                patch.object(self.stop_hook, "run_impl_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
+                patch.object(self.stop_hook, "run_execution_judge", return_value={"decision": "complete_ticket", "next_phase": "documenting", "reason": "builder finished", "orchestrator_message": "mark TASK-0042 complete", "evidence_ok": True}),
                 patch.object(self.stop_hook, "completion_review_receipt_gate", return_value=(True, "", [], {"_path": str(receipt_path)})) as receipt_gate_mock,
                 patch.object(self.stop_hook, "run_orchestrator_decision", side_effect=fake_orchestrator) as orchestrator_mock,
                 patch.object(self.stop_hook, "emit_hook_telemetry"),
@@ -1530,42 +1530,6 @@ class StopHookSkillRoutingTests(unittest.TestCase):
         self.assertEqual(self.stop_hook.skill_name_for_phase("documenting"), "close-ticket")
 
 
-class StopHookTmuxFollowupTests(unittest.TestCase):
-    def setUp(self) -> None:
-        self.stop_hook = load_stop_hook_module()
-
-    def test_spawn_tmux_followup_requests_json_output(self) -> None:
-        ticket = {"path": "tickets/TASK-0033/ticket.md"}
-        current_run = {
-            "tmux_session": "main",
-            "auto_continue": True,
-            "run_state": ".farplane/runs/task-0033-building.json",
-        }
-        captured: dict[str, object] = {}
-
-        def fake_run(cmd, text, capture_output, check, cwd):
-            captured["cmd"] = cmd
-            captured["cwd"] = cwd
-            return self.stop_hook.subprocess.CompletedProcess(
-                cmd,
-                0,
-                stdout=json.dumps({"action": "followup", "tmux_pane": "%42"}),
-                stderr="",
-            )
-
-        with patch.object(self.stop_hook.subprocess, "run", side_effect=fake_run):
-            result = self.stop_hook.spawn_tmux_followup(
-                ROOT,
-                ticket,
-                "building",
-                current_run,
-                "hook-driven follow-up",
-            )
-
-        self.assertEqual(result, {"action": "followup", "tmux_pane": "%42"})
-        self.assertIn("--json", captured["cmd"])
-
-
 class StopHookGroundingSummaryTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stop_hook = load_stop_hook_module()
@@ -1577,7 +1541,7 @@ class StopHookGroundingSummaryTests(unittest.TestCase):
                     "GROUNDING_SUMMARY: initial summary",
                     "working notes",
                     "GROUNDING_SUMMARY: reviewing TASK-0026 proof conditions",
-                    "IMPL_RESULT: status=continue_impl next=building reason=test",
+                    "EXECUTION_RESULT: status=continue_execution next=building reason=test",
                 ]
             )
         )
@@ -1590,7 +1554,7 @@ class StopHookImplLoopGateTests(unittest.TestCase):
         self.stop_hook = load_stop_hook_module()
         self.ticket = {
             "ticket_id": "TASK-0053",
-            "title": "define impl session activation and stop-hook loop gating",
+            "title": "define execution session activation and stop-hook loop gating",
             "phase": "building",
             "status": "building",
         }
@@ -1598,21 +1562,21 @@ class StopHookImplLoopGateTests(unittest.TestCase):
             "ticket_id": "TASK-0053",
             "phase": "building",
             "status": "waiting_for_worker",
-            "skill_name": "impl",
+            "skill_name": "goal-advisor",
             "session_id": "sess-123",
-            "impl_loop_active": True,
+            "execution_loop_active": True,
         }
         self.runtime_claim = {
             "ticket_id": "TASK-0053",
             "phase": "building",
             "status": "running",
-            "skill_name": "impl",
+            "skill_name": "goal-advisor",
             "session_id": "sess-123",
         }
 
-    def test_impl_loop_continuation_allowed_requires_flag_ticket_and_session_match(self) -> None:
+    def test_execution_loop_continuation_allowed_requires_flag_ticket_and_session_match(self) -> None:
         self.assertTrue(
-            self.stop_hook.impl_loop_continuation_allowed(
+            self.stop_hook.execution_loop_continuation_allowed(
                 self.ticket,
                 self.current_run,
                 self.runtime_claim,
@@ -1620,13 +1584,13 @@ class StopHookImplLoopGateTests(unittest.TestCase):
             )
         )
 
-    def test_impl_loop_continuation_rejects_auto_continue_without_activation_flag(self) -> None:
+    def test_execution_loop_continuation_ignores_legacy_auto_continue_without_activation_flag(self) -> None:
         current_run = dict(self.current_run)
-        current_run["impl_loop_active"] = False
+        current_run["execution_loop_active"] = False
         current_run["auto_continue"] = True
 
         self.assertFalse(
-            self.stop_hook.impl_loop_continuation_allowed(
+            self.stop_hook.execution_loop_continuation_allowed(
                 self.ticket,
                 current_run,
                 self.runtime_claim,
@@ -1634,12 +1598,12 @@ class StopHookImplLoopGateTests(unittest.TestCase):
             )
         )
 
-    def test_impl_loop_continuation_rejects_mismatched_session_claim(self) -> None:
+    def test_execution_loop_continuation_rejects_mismatched_session_claim(self) -> None:
         runtime_claim = dict(self.runtime_claim)
         runtime_claim["session_id"] = "sess-other"
 
         self.assertFalse(
-            self.stop_hook.impl_loop_continuation_allowed(
+            self.stop_hook.execution_loop_continuation_allowed(
                 self.ticket,
                 self.current_run,
                 runtime_claim,
@@ -1647,12 +1611,12 @@ class StopHookImplLoopGateTests(unittest.TestCase):
             )
         )
 
-    def test_impl_loop_continuation_rejects_ralph_dispatcher_claim(self) -> None:
+    def test_execution_loop_continuation_rejects_ralph_dispatcher_claim(self) -> None:
         runtime_claim = dict(self.runtime_claim)
         runtime_claim["skill_name"] = "ralph"
 
         self.assertFalse(
-            self.stop_hook.impl_loop_continuation_allowed(
+            self.stop_hook.execution_loop_continuation_allowed(
                 self.ticket,
                 self.current_run,
                 runtime_claim,
@@ -1660,28 +1624,28 @@ class StopHookImplLoopGateTests(unittest.TestCase):
             )
         )
 
-    def test_next_impl_loop_active_for_action_clears_terminal_paths(self) -> None:
+    def test_next_execution_loop_active_for_action_clears_terminal_paths(self) -> None:
         self.assertTrue(
-            self.stop_hook.next_impl_loop_active_for_action(
-                "repeat_impl",
+            self.stop_hook.next_execution_loop_active_for_action(
+                "repeat_execution",
                 next_phase="building",
                 current_phase="building",
             )
         )
         self.assertTrue(
-            self.stop_hook.next_impl_loop_active_for_action(
+            self.stop_hook.next_execution_loop_active_for_action(
                 "continue_same_ticket",
                 current_phase="building",
             )
         )
         self.assertFalse(
-            self.stop_hook.next_impl_loop_active_for_action(
+            self.stop_hook.next_execution_loop_active_for_action(
                 "block_ticket",
                 current_phase="building",
             )
         )
         self.assertFalse(
-            self.stop_hook.next_impl_loop_active_for_action(
+            self.stop_hook.next_execution_loop_active_for_action(
                 "route_to_orchestrator",
                 current_phase="building",
             )

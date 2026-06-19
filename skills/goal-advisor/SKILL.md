@@ -39,10 +39,10 @@ This skill owns both architecture choice and final native `/goal` or heartbeat
 prompt compilation. Keep templates with this skill, but load full template
 references only after the branch requires prompt emission.
 
-`$work`, `$ralph`, and `batch-work` are retired public orchestration surfaces.
-Their useful policies live here as admission/profile, heartbeat board-drain,
-batch proof rows, compute/budget, and blocker handling. `$impl` remains the
-coding-ticket leaf executor when the selected file set is build-ready.
+`$work`, `$ralph`, `batch-work`, and the legacy impl skill are retired public
+orchestration surfaces. Their useful policies live here as admission/profile,
+heartbeat board-drain, batch proof rows, coding-ticket Goal execution,
+compute/budget, and blocker handling.
 
 ## Skill Signature
 
@@ -50,7 +50,7 @@ coding-ticket leaf executor when the selected file set is build-ready.
 advise_goal_use(intent, files?, trigger?, budget?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
 state: reads(operator intent, listed files, tickets, board files?, portfolio.md?, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? portfolio? generated goal prompt? or recommendation)
 gates: material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; budget_named; drift_policy_named; logging_policy_named
-routes: optimize-with-human | impl | review | direct-answer
+routes: optimize-with-human | review | direct-answer
 fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; routes public work through retired work/ralph/batch-work surfaces
 ```
 
@@ -71,9 +71,10 @@ goal_advice_phase(intent, state)
 
 ## Phase Boundary
 
-This skill may route to `optimize-with-human`, `$impl`, or `review` only after
-it chooses the Goal architecture. It does not run the Goal loop itself, launch
-hidden schedulers, or preserve retired public orchestration skills as peers.
+This skill may route to `optimize-with-human` or `review` only after it chooses
+the Goal architecture. It may also emit the native Goal prompt for direct
+coding-ticket execution. It does not launch hidden schedulers or preserve
+retired public orchestration skills as peers.
 
 ## Progressive Load Rule
 
@@ -140,8 +141,8 @@ only after the branch is selected:
      any batch/integration proof.
    - [ ] For board drain, compile a heartbeat prompt that fetches proceedable
      tickets, skips blocked/gated work, and logs no-op when nothing can advance.
-   - [ ] For coding leaves, route execution through `$impl` only after the Goal
-     architecture and file list are set.
+   - [ ] For coding leaves, compile an `active_goal` prompt over the ticket,
+     program, progress, and proof files.
    - [ ] Load `references/goal-shapes.md` for batch, board-drain, rollout, or
      portfolio details.
 - [ ] 7. Define drift policy.
@@ -163,7 +164,6 @@ only after the branch is selected:
 - [ ] 9. Decide the next owner.
    - [ ] Use `optimize-with-human` when the metric provider is `human_feedback`
      and the loop needs a Telegram-first feedback protocol.
-   - [ ] Use `$impl` when a coding-ticket file set is ready for leaf execution.
    - [ ] Use direct ticket creation/update when the missing surface is state.
 - [ ] 10. Return a Goal Architecture note, create Goal Packet scaffolding, or
    output the final native `/goal` prompt.

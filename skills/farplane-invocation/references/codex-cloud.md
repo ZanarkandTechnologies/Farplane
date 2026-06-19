@@ -59,7 +59,7 @@ The task prompt should tell remote Codex to:
 
 - use normal Codex with Farplane installed;
 - read the ticket and the embedded `FarplaneRunEnvelope`;
-- route through the selected Farplane skill such as `impl-plan`, `impl`, `qa`,
+- route through the selected Farplane skill such as `impl-plan`, `goal-advisor`, `qa`,
   `review`, or `close-ticket`;
 - update ticket evidence when the filesystem ticket exists;
 - write the requested `ProofPacket`;

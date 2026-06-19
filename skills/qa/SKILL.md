@@ -46,12 +46,12 @@ Use it when:
 
 - implementation is ready for proof
 - a ticket in `status: building` needs evidence before completion
-- `$impl` or the operator needs to rerun QA without redoing implementation
+- `goal-advisor` or the operator needs to rerun QA without redoing implementation
 
 Do not use it when:
 
 - the ticket still needs planning; use `impl-plan`
-- the work is not yet implementation-ready; use `$impl`
+- the work is not yet implementation-ready; use `goal-advisor`
 
 ## Contract
 
@@ -65,7 +65,7 @@ Do not use it when:
 - Update the ticket `Links` or `State` section with the strongest artifact
   links.
 - Write `result.json` under the QA artifact root and finish with:
-  - `IMPL_RESULT: status=qa_complete next=building reason=...`
+  - `EXECUTION_RESULT: status=qa_complete next=building reason=...`
 
 ## Required artifacts
 

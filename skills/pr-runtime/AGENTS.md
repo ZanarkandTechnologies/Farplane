@@ -12,7 +12,8 @@
 - Keep the helper contract narrow: runtime record persistence, optional
   worktree creation, port reservation, explicit local runtime launch/stop, and
   QA target publication.
-- Do not turn this skill into a second public execution surface beside `$impl`.
+- Do not turn this skill into a second public execution surface beside
+  `goal-advisor`.
 
 ## Conventions
 
