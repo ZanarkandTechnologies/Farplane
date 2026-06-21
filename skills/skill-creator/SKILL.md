@@ -77,9 +77,10 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      to decide what belongs in first-load `SKILL.md` versus references,
      templates, evals, or review checks.
    - [ ] Load and run the
-     [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md)
-     when first-load size, progressive disclosure, or reference placement is
-     material.
+     [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md) for
+     every skill create/update invocation; use a compact pass for tiny
+     mechanical edits, but still record pass, violation, or not-applicable for
+     changed surfaces.
    - [ ] For quality-dependent skills, add or link one good positive example
      before optimizing checklist prose.
 - [ ] 5. Move non-first-load material to the right supporting surface.
@@ -102,6 +103,14 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md)
      against the actual changed files; fix or record every violation before
      completion.
+   - [ ] For new skills, prompt/program skills, budget-bearing skills,
+     multi-agent/router skills, eval-facing skills, or any change where agent
+     comprehension is the claim, create or update `skills/<skill-name>/eval_task.json`
+     or record the stronger owner of behavior proof.
+   - [ ] Run at least one behavior proof for behavior-sensitive skill work:
+     an `eval` smoke case, `agent-behavior-test`, or a target skill-local QA
+     scenario. If the proof fails, patch the skill and rerun the smallest
+     failing case before claiming readiness.
    - [ ] Review depth chosen with
      [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization):
      direct self-check for tiny mechanical edits, `advise` for normal recent
@@ -174,6 +183,11 @@ starter file.
 - Do not spend a full pass polishing structure for a quality-dependent skill
   that has no representative example; make the example first unless the skill
   is too broken to run.
+- Do not treat `check_skills.py` or the structure checklist as behavior proof.
+  Prompt-like, budget-bearing, router, multi-agent, and eval-facing skills need
+  at least one agent-comprehension proof or an explicit blocker.
+- Do not summarize QA as "looks good." Name the checklist verdicts and proof
+  artifact path so the next maintainer can see what actually ran.
 
 ## Reference Map
 
@@ -234,3 +248,6 @@ After this skill runs:
   execution.
 - Registry validation passes, or the remaining blocker is recorded with the
   exact failing command.
+- The Skill Structure QA Checklist has been applied to the changed surfaces.
+- Behavior-sensitive skill changes have an eval, behavior-test, or skill-local
+  QA proof artifact, or an explicit blocker naming why that proof could not run.

@@ -17,6 +17,11 @@ Codex automation TOML files are compiled entrypoints from the cadences below.
 They may read this file for config values, but each live automation prompt
 should carry its exact program and todo list.
 
+This file is a cadence manifest, not a copy of every skill runbook. Skill
+presets own their default reads, writes, output contract, and eval surface.
+This manifest owns schedules, target threads, side-effect gates, grouped jobs,
+freshness policy, report handles, and local overrides.
+
 ```project-automation
 project {
   id: farplane
@@ -51,21 +56,105 @@ project {
 }
 
 settings {
-  weekly_pm {
+  pm_heartbeat {
+    automation_id: farplane-pm-heartbeat
+    kind: heartbeat
+    schedule: "FREQ=MINUTELY;INTERVAL=30"
+    target_thread_id: null
+    enabled: false
+    max_child_threads_per_beat: 1
+    action_authority: "spawn_one_bounded_action"
+  }
+  daily_pm_plan {
+    automation_id: farplane-daily-pm-plan
+    kind: heartbeat
+    schedule: "FREQ=DAILY;BYHOUR=5;BYMINUTE=33;BYSECOND=0"
+    target_thread_id: "019ed47a-3182-73f3-879f-a53797759b2a"
+    action_authority: "plan_and_rank"
+  }
+  weekly_pm_plan {
     automation_id: farplane-weekly-pm-update
     kind: heartbeat
     schedule: "FREQ=WEEKLY;BYDAY=MO;BYHOUR=9;BYMINUTE=0;BYSECOND=0"
     target_thread_id: "019eca0d-d392-7db1-9b10-8916021a86d0"
+    action_authority: "strategy_and_memory"
   }
   ticket_drainer {
     automation_id: farplane-ticket-update
-    kind: cron
+    kind: heartbeat
     schedule: "FREQ=DAILY;BYHOUR=5;BYMINUTE=33;BYSECOND=0"
+    target_thread_id: "019ed47a-3182-73f3-879f-a53797759b2a"
+    enabled: true
     execution_limit: 1
   }
 }
 
+cadence_thread_contract {
+  principle: "separate planning horizons into separate heartbeat threads; use files as shared memory and threads as working memory"
+  shared_memory: [
+    "farplane/goals.md",
+    "farplane/automations.md",
+    ".farplane/state/run-ledger.json",
+    ".farplane/reports/**/latest.md",
+    "tickets/**/ticket.md",
+    "tickets/**/progress.md",
+    "docs/MEMORY.md",
+    "docs/LESSONS.md",
+    "docs/TROUBLES.md"
+  ]
+  cadence_layers: [
+    {
+      id: weekly_pm_plan,
+      horizon: weekly,
+      skill: weekly-pm-plan,
+      role: "set strategy, memory, external context, roadmap, and weekly priorities",
+      reads_from: ["daily plan reports", "heartbeat outcomes", "ticket evidence", "shared memory"],
+      writes_to: ["weekly_pm report", "strategy report", "goals and ticket deltas"]
+    },
+    {
+      id: daily_pm_plan,
+      horizon: daily,
+      skill: daily-pm-plan,
+      role: "translate weekly strategy into today's priorities, action lanes, blockers, and optional drainer handoffs",
+      reads_from: ["weekly_pm report", "ticket board", "heartbeat outcomes", "run ledger", "shared memory"],
+      writes_to: ["daily plan report", "ticket_update report when it invokes ticket-drainer", "run ledger"]
+    },
+    {
+      id: pm_heartbeat,
+      horizon: "30m configurable",
+      skill: pm-heartbeat,
+      role: "choose one bounded action using policy, forced maintenance, and bandit state",
+      reads_from: ["daily plan report", "weekly_pm report", "bandit state", "spawned thread outcomes", "shared memory"],
+      writes_to: ["heartbeat decision", "spawned thread row", "reward/outcome ledger"]
+    }
+  ]
+  child_thread_spawning {
+    owner: "parent cadence heartbeat"
+    rule: "parent names and spawns child threads; child threads do not rely on title tools to rename themselves"
+    name_template: "[Farplane] <ticket-id> <ticket name>"
+    prompt_requires: [
+      "project root",
+      "parent cadence id",
+      "ticket path",
+      "context refs",
+      "expected outputs",
+      "side-effect gates",
+      "lineage writeback path"
+    ]
+    lineage_writeback: [
+      ".farplane/state/run-ledger.json",
+      ".farplane/reports/ticket-update/latest.md",
+      "selected ticket Links or Notes when a ticket file exists"
+    ]
+    fallback: "if child thread creation is unavailable, write a handoff-ready prompt and report blocker instead of executing leaf work inside the parent cadence"
+  }
+}
+
 reports {
+  pm_heartbeat.latest: ".farplane/reports/pm-heartbeat/latest.md"
+  pm_heartbeat.runs: ".farplane/reports/pm-heartbeat/runs/"
+  daily_pm_plan.latest: ".farplane/reports/daily-pm-plan/latest.md"
+  daily_pm_plan.runs: ".farplane/reports/daily-pm-plan/runs/"
   update_external_context.latest: ".farplane/reports/external-context/latest.md"
   update_external_context.runs: ".farplane/reports/external-context/runs/"
   update_memory.latest: ".farplane/reports/memory/latest.md"
@@ -82,191 +171,161 @@ reports {
   ticket_update.runs: ".farplane/reports/ticket-update/runs/"
   weekly_pm.latest: ".farplane/reports/weekly-pm/latest.md"
   weekly_pm.runs: ".farplane/reports/weekly-pm/runs/"
+  weekly_pm.context: ".farplane/reports/weekly-pm/context/"
 }
 
-job update_external_context {
-  intent: "ground Farplane planning in new external harness patterns, creator/source changes, and scoutable ideas"
-  skill: feed-scout
-  freshness: 24h
-  reads: [
-    "skills/feed-scout/config/tracked-profiles.jsonl",
-    "skills/feed-scout/config/tracked-entities.jsonl",
-    "skills/feed-scout/config/tracked-harness-resources.jsonl",
-    "docs/sources/registry.jsonl",
-    "docs/features/registry.jsonl"
-  ]
-  writes: [
-    ".farplane/reports/external-context/latest.md",
-    ".farplane/reports/external-context/runs/YYYY-MM-DD.md"
-  ]
-  output: "external context report with checked sources, new items, scout decisions, proposal candidates, evidence paths, and blockers"
+job_catalog {
+  rule: "job entries point to skill-owned presets; add local_overrides only when this project differs from the preset"
+
+  pm_heartbeat: pm-heartbeat.bandit @30m -> reports.pm_heartbeat
+  daily_pm_plan: daily-pm-plan.operating_plan @1d -> reports.daily_pm_plan
+  weekly_pm_plan: weekly-pm-plan.strategy @7d -> reports.weekly_pm
+  update_external_context: feed-scout.project_context @24h -> reports.update_external_context
+  update_memory: update-memory.project_context @7d -> reports.update_memory
+  skill_hardening: skill-maintenance.harden_skill @7d -> reports.skill_hardening
+  skill_refinement: skill-maintenance.refine_skill @7d -> reports.skill_refinement
+  registry_drift: skill-maintenance.registry_drift @7d -> reports.registry_drift
+  update_strategy: update-strategy.weekly_pm @7d -> reports.update_strategy
+  ticket_update: ticket-drainer.daily @none -> reports.ticket_update
+
+  depends_on {
+    update_strategy: [
+      "update_external_context:max_age=24h",
+      "update_memory:max_age=7d",
+      "skill_hardening:max_age=7d",
+      "registry_drift:max_age=7d"
+    ],
+    daily_pm_plan: [
+      "weekly_pm_plan:max_age=7d"
+    ],
+    pm_heartbeat: [
+      "daily_pm_plan:max_age=24h"
+    ]
+  }
+
+  local_overrides {
+    update_external_context.sources: [
+      "skills/feed-scout/config/tracked-profiles.jsonl",
+      "skills/feed-scout/config/tracked-entities.jsonl",
+      "skills/feed-scout/config/tracked-harness-resources.jsonl",
+      "docs/sources/registry.jsonl",
+      "docs/features/registry.jsonl"
+    ]
+    pm_heartbeat.action_arms: [
+      ticket_execution,
+      planning,
+      growth_research,
+      product_quality,
+      skill_hardening,
+      eval_writing,
+      automation_building,
+      reward_update,
+      metric_snapshot,
+      weekly_reflection
+    ]
+    ticket_update.skills: [impl-plan, goal-advisor]
+  }
 }
 
-job update_memory {
-  intent: "consolidate durable project context and docs without mixing in skill hardening"
-  skill: update-memory
-  freshness: 7d
-  reads: [
-    "docs/HISTORY.md",
-    "docs/MEMORY.md",
-    "docs/LESSONS.md",
-    "docs/TROUBLES.md",
-    "relevant docs/**/*.md",
-    "README.md",
-    "recent tickets and artifacts"
-  ]
-  writes: [
-    ".farplane/reports/memory/latest.md",
-    ".farplane/reports/memory/runs/YYYY-MM-DD.md",
-    "proposed README/docs/MEMORY/HISTORY/LESSONS/TROUBLES deltas when justified",
-    "docs consolidation tickets when justified"
-  ]
-  output: "context report with accepted deltas, proposed doc deltas, docs consolidation plan, stale context, and blockers"
-}
+cadences {
+  weekly_pm_plan {
+    config_ref: settings.weekly_pm_plan
+    preset: weekly-pm-plan.strategy
+    reports: reports.weekly_pm
+    depends_on: job_catalog.depends_on.update_strategy
+    template_refs: [
+      "skills/weekly-pm-plan/templates/report.md",
+      "skills/weekly-pm-plan/templates/context-bundle.md"
+    ]
+    grouped_jobs: [
+      update_external_context,
+      update_memory,
+      skill_hardening,
+      skill_refinement,
+      registry_drift,
+      update_strategy
+    ]
+    context_refs {
+      project_root: project.root
+      review_window: "previous weekly cadence window"
+      goals_ref: "farplane/goals.md"
+      automation_ref: "farplane/automations.md"
+      ledger_ref: project.ledger
+      ticket_refs: ["tickets/"]
+      memory_refs: ["docs/MEMORY.md", "docs/LESSONS.md", "docs/TROUBLES.md"]
+      report_refs: [".farplane/reports/**/latest.md"]
+      opportunity_sources: job_catalog.local_overrides.update_external_context.sources
+      output_bundle_dir: reports.weekly_pm.context
+    }
+    authority: "strategy and proposed goals/ticket deltas; no leaf execution"
+    goals_delta_policy: "auto_apply minor evidence/current-signal updates; approval_required for north-star, KPI, axis, priority, hold, quarterly, or yearly changes"
+  }
 
-job skill_hardening {
-  intent: "turn fresh lessons and troubles into immediate evals, gotchas, QA guardrails, or tickets"
-  skill: "skill-maintenance(mode: harden_skill)"
-  freshness: 7d
-  reads: [
-    "docs/LESSONS.md",
-    "docs/TROUBLES.md",
-    "skills/*/SKILL.md",
-    "docs/skills/registry.jsonl"
-  ]
-  writes: [
-    ".farplane/reports/skill-maintenance/harden-latest.md",
-    ".farplane/reports/skill-maintenance/runs/YYYY-MM-DD-harden.md",
-    "skill evals/gotchas/checklists or local tickets when justified"
-  ]
-  output: "hardening report with touched skills, new protections, skipped items, and blockers"
-}
+  daily_pm_plan {
+    config_ref: settings.daily_pm_plan
+    preset: daily-pm-plan.operating_plan
+    reports: reports.daily_pm_plan
+    depends_on: job_catalog.depends_on.daily_pm_plan
+    context_refs: [
+      ".farplane/reports/weekly-pm/latest.md",
+      ".farplane/reports/pm-heartbeat/latest.md",
+      ".farplane/state/run-ledger.json",
+      "farplane/goals.md",
+      "tickets/"
+    ]
+    authority: "rank today's lanes and optionally call ticket-drainer by policy"
+  }
 
-job skill_refinement {
-  intent: "compact older accumulated evals and gotchas after hardening exists"
-  skill: "skill-maintenance(mode: refine_skill)"
-  freshness: 7d
-  reads: [
-    "skills/*/SKILL.md",
-    "skill evals",
-    "skill gotchas",
-    ".farplane/reports/skill-maintenance/harden-latest.md"
-  ]
-  writes: [
-    ".farplane/reports/skill-maintenance/refine-latest.md",
-    ".farplane/reports/skill-maintenance/runs/YYYY-MM-DD-refine.md",
-    "skill compaction patches or local tickets when justified"
-  ]
-  output: "refinement report with consolidations, rejected compactions, and review notes"
-}
+  pm_heartbeat {
+    config_ref: settings.pm_heartbeat
+    preset: pm-heartbeat.bandit
+    reports: reports.pm_heartbeat
+    depends_on: job_catalog.depends_on.pm_heartbeat
+    context_refs: [
+      ".farplane/reports/daily-pm-plan/latest.md",
+      ".farplane/reports/weekly-pm/latest.md",
+      ".farplane/automation/bandit-state.json",
+      ".farplane/automation/spawned-threads.jsonl",
+      ".farplane/automation/action-outcomes.jsonl"
+    ]
+    authority: "spawn at most one bounded child action per beat"
+  }
 
-job registry_drift {
-  intent: "keep skill/source/feature registries aligned with current repo state"
-  skill: skill-maintenance
-  freshness: 7d
-  reads: [
-    "docs/skills/registry.jsonl",
-    "docs/features/registry.jsonl",
-    "docs/sources/registry.jsonl",
-    "skills/*/SKILL.md"
-  ]
-  writes: [
-    ".farplane/reports/registry-drift/latest.md",
-    ".farplane/reports/registry-drift/runs/YYYY-MM-DD.md",
-    "registry patches or follow-up tickets"
-  ]
-  output: "registry drift report with validation commands, fixes, and ambiguous gaps"
-}
-
-job update_strategy {
-  intent: "refresh Farplane strategy, current milestone, tickets, and system gaps"
-  skill: update-strategy
-  freshness: 7d
-  depends_on: [
-    "update_external_context:max_age=24h",
-    "update_memory:max_age=7d",
-    "skill_hardening:max_age=7d",
-    "registry_drift:max_age=7d"
-  ]
-  reads: [
-    "AGENTS.md",
-    "farplane/automations.md",
-    "farplane/bindings.md",
-    "docs/MEMORY.md",
-    "docs/HISTORY.md",
-    "active tickets",
-    ".farplane/reports/*/latest.md"
-  ]
-  writes: [
-    ".farplane/reports/strategy/latest.md",
-    ".farplane/reports/strategy/runs/YYYY-MM-DD.md",
-    "local ticket deltas"
-  ]
-  output: "strategy report with priorities, depriorities, system gaps, ticket changes, and Goal Advisor handoffs"
-}
-
-job ticket_update {
-  intent: "pick and advance the highest-value autonomous ticket"
-  skills: [impl-plan, goal-advisor]
-  freshness: none
-  reads: [
-    "tickets/README.md",
-    "tickets/TASK-*/ticket.md",
-    "notion tasks only when ticket_sources.notion.enabled is true, local has no proceedable ticket, and farplane/bindings.md has a usable notion binding"
-  ]
-  writes: [
-    ".farplane/reports/ticket-update/latest.md",
-    ".farplane/reports/ticket-update/runs/YYYY-MM-DD-HHMM.md",
-    "selected ticket progress/evidence/blockers"
-  ]
-  output: "selected ticket, ranking reason, impl-plan result, Goal Advisor execution handoff, evidence paths, or blocker"
-}
-
-cadence daily_ticket_drainer {
-  automation_id: farplane-ticket-update
-  config_ref: settings.ticket_drainer
-  thread_context: "daily Farplane ticket execution"
-  todo: [
-    "fetch local tickets from ticket_sources.local.path",
-    "if no proceedable local tickets and ticket_sources.notion.enabled, fetch Notion using farplane/bindings.md notion coordinates",
-    "filter ready, unblocked, direct, autonomous tickets",
-    "rank by priority, compounding ROI, project value, and low need for Kenji judgment",
-    "select one ticket",
-    "rename the current Codex automation thread to `[Farplane] <ticket-id> <ticket name>` using the thread title tool when available",
-    "run impl-plan if planning is missing or stale",
-    "call goal-advisor to create or activate the execution goal",
-    "execute as far as possible until done, blocked, or ready for review",
-    "write ticket_update report",
-    "update ledger"
-  ]
-  fallback: "if no safe ticket can advance, write a no-op ticket_update report with blocker categories"
-}
-
-cadence weekly_pm_update {
-  automation_id: farplane-weekly-pm-update
-  config_ref: settings.weekly_pm
-  thread_context: "weekly Farplane PM strategy, context, memory, and maintenance"
-  grouped_jobs: [
-    update_external_context,
-    update_memory,
-    skill_hardening,
-    skill_refinement,
-    registry_drift,
-    update_strategy
-  ]
-  todo: [
-    "ensure update_external_context max_age=24h reuse_report_if_fresh",
-    "ensure update_memory max_age=7d reuse_report_if_fresh",
-    "ensure skill_hardening max_age=7d reuse_report_if_fresh",
-    "ensure skill_refinement max_age=7d reuse_report_if_fresh",
-    "ensure registry_drift max_age=7d reuse_report_if_fresh",
-    "run update_strategy using all report refs",
-    "create_or_update_local_tickets",
-    "write weekly_pm report",
-    "update ledger"
-  ]
+  daily_ticket_drainer {
+    config_ref: settings.ticket_drainer
+    preset: ticket-drainer.daily
+    reports: reports.ticket_update
+    context_refs: [
+      ".farplane/reports/weekly-pm/latest.md",
+      ".farplane/reports/ticket-update/latest.md",
+      ".farplane/state/run-ledger.json",
+      "farplane/goals.md",
+      "tickets/"
+    ]
+    authority: "select one safe ticket and create a named child-thread handoff"
+  }
 }
 ```
+
+## Compile Rule
+
+Compile a live Codex automation by expanding:
+
+```text
+compile_automation(cadence, job_catalog, reports, gates)
+  -> prompt(program, ordered_todo, side_effect_gates, final_output_fields)
+```
+
+Rules:
+
+1. `automations.md` supplies cadence, freshness, reports, dependencies, target
+   thread, and local overrides.
+2. The referenced skill preset supplies default reads, writes, output contract,
+   proof expectations, and eval surface.
+3. The compiled prompt must inline enough ordered steps to run without guessing;
+   it must not say only "read the manifest and decide."
+4. Local overrides are explicit and project-specific; do not copy the entire
+   skill runbook back into this file.
 
 ## Run Ledger Contract
 

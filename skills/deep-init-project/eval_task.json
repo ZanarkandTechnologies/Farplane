@@ -1,0 +1,28 @@
+[
+  {
+    "id": "deep_init_project_compact_automations_01",
+    "title": "Deep init emits compact automation manifest",
+    "query": "A new Farplane project is being initialized with a PM heartbeat, daily PM plan, weekly PM plan, and optional ticket drainer. What should the generated farplane/automations.md contain versus leave to skills?",
+    "reference_points": [
+      "Keeps schedules, target threads, gates, grouped jobs, freshness, reports, and local overrides in farplane/automations.md",
+      "Uses a compact job_catalog or equivalent skill-preset references instead of duplicating every job's reads/writes/output runbook",
+      "Names separate skill-owned presets such as pm-heartbeat.bandit, daily-pm-plan.operating_plan, weekly-pm-plan.strategy, and ticket-drainer.daily",
+      "Includes a compile rule requiring live Codex prompts to inline enough ordered steps to run safely",
+      "Does not collapse the cadence skills into one router or leave live automation prompts as vague 'read the manifest and decide' instructions"
+    ],
+    "tags": ["deep-init-project", "automations", "compact-manifest"]
+  },
+  {
+    "id": "deep_init_project_ticket_drainer_child_thread_01",
+    "title": "Deep init ticket drainer uses parent-spawned child threads",
+    "query": "The generated daily ticket drainer is kept as a separate execution selector that may be invoked by the daily plan or short heartbeat. What thread contract should the template encode?",
+    "reference_points": [
+      "Ticket drainer remains a separate skill rather than being hidden inside a PM router",
+      "Parent cadence names or creates the child thread using a ticket-based title template",
+      "Child prompt includes project root, parent cadence id, ticket path, context refs, expected outputs, side-effect gates, and lineage writeback",
+      "The template records child thread id or handoff blocker in reports and run ledger",
+      "It does not ask the child worker to rename itself"
+    ],
+    "tags": ["deep-init-project", "ticket-drainer", "child-thread"]
+  }
+]

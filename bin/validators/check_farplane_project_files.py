@@ -178,6 +178,22 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
     if overlap:
         errors.append(f"{rel_path} paths cannot be both tracked and ignored: {', '.join(overlap)}.")
 
+    for path_ref in sorted(tracked):
+        path = root / path_ref
+        if path_ref.endswith("/"):
+            if not path.is_dir():
+                errors.append(f"{rel_path} standard.tracked path is missing or not a directory: {path_ref}.")
+        elif not path.exists():
+            errors.append(f"{rel_path} standard.tracked path is missing: {path_ref}.")
+
+    for path_ref in sorted(ignored):
+        path = root / path_ref
+        if path_ref.endswith("/"):
+            if not path.is_dir():
+                errors.append(f"{rel_path} standard.ignored path is missing or not a directory: {path_ref}.")
+        elif not path.exists():
+            errors.append(f"{rel_path} standard.ignored path is missing: {path_ref}.")
+
     return errors
 
 

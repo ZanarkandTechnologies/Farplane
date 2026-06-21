@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.3
+template_version: 0.2.4
 feature_refs:
   - FEAT-0042
   - FEAT-0043
@@ -312,14 +312,19 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Delegate when independent judgment, context isolation, or parallel evidence
   materially improves the outcome.
 - Treat persistent Codex threads and native subagents as different delegation
-  primitives. Use `create_thread(prompt, target) -> thread_id` when work should
-  fork into a user-visible Codex app thread, keep its own durable title, survive
-  as a followable conversation, or own a ticket/Goal execution lane over time.
-  After creating the thread, call `set_thread_title(thread_id, title)` when
-  available and write the child thread ID back to the parent ticket, report, or
-  progress artifact. Use native subagents for bounded specialist work whose
-  output should collapse back into the current thread, such as review, QA,
-  research, or focused implementation evidence.
+  primitives. Use `create_thread(prompt, target) -> thread_id` when a
+  standalone task should become a user-visible Codex app thread without
+  inheriting full conversation history; include the minimal context packet,
+  ticket, memory file, or prompt needed to start cleanly. Use
+  `fork_thread(thread_id?, environment?) -> thread_id` when the existing
+  conversation history is material to the next branch, such as splitting
+  multiple task paths, preserving decisions, or continuing a context-heavy
+  investigation. After creating or forking a persistent thread, call
+  `set_thread_title(thread_id, title)` when available and write the child
+  thread ID plus parent/source thread ID back to the parent ticket, report,
+  progress artifact, or thread-handoff ledger. Use native subagents for bounded
+  specialist work whose output should collapse back into the current thread,
+  such as review, QA, research, or focused implementation evidence.
 - Use reviewer lanes for plans, implementations, prompts, evidence bundles,
   skill changes, and completion claims.
 - Use QA lanes for browser/user-visible proof, test runs, screenshots, traces,

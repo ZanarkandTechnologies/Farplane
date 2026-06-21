@@ -81,6 +81,19 @@ future dependency tooling can discover the graph:
 - `feed-scout:status`: report profile count, last run, unseen content count,
   proposal count, blockers, and credential gaps.
 
+## Automation Presets
+
+`feed-scout.project_context @24h -> reports.update_external_context`
+
+Use when a project PM heartbeat needs fresh external harness context before
+strategy planning. The caller supplies report paths, freshness, gates, and
+project-local source overrides from `farplane/automations.md`; this skill owns
+profile/resource reads, dedupe, scout routing, proposal thresholds, and the
+report contract.
+
+Eval surface: profile validation, item normalization, dedupe behavior, and
+proposal routing fixtures under this skill package.
+
 ## Minimal Configuration
 
 The operator should only need to provide profiles or harness resources, not

@@ -34,6 +34,30 @@ It does not replace `optimize-harness`, `gap-analysis`, `skill-creator`,
 `eval`, `self-improve`, or `review`. Use `self-improve` only for measured
 variant/search loops with a program, metric, progress, and promotion rule.
 
+## Automation Presets
+
+`skill-maintenance.harden_skill @7d -> reports.skill_hardening`
+
+Turns fresh lesson/trouble rows into immediate evals, gotchas, checklist
+guardrails, or tickets. The automation manifest supplies cadence, report paths,
+freshness, and gates; this skill owns dedupe, source ownership, eval handoff,
+audit/proof, registry sync, and blocker reporting.
+
+`skill-maintenance.refine_skill @7d -> reports.skill_refinement`
+
+Compacts older accumulated evals/gotchas only after hardening exists. This skill
+owns behavior-preserving consolidation, reference moves, audit evidence, and
+review routing.
+
+`skill-maintenance.registry_drift @7d -> reports.registry_drift`
+
+Checks skill/source/feature registries against the current repo state. This
+skill owns registry validation, generated-file sync, ambiguous-gap reporting,
+and follow-up ticket suggestions.
+
+Eval surface: `eval_task.json`, `qa_checklist.md`, fixture skill repos under
+`tests/fixtures/`, and `scripts/check_skills.py --write`.
+
 ## Skill Signature
 
 ```text

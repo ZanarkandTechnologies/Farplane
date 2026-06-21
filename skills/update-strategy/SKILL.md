@@ -21,6 +21,19 @@ private context, report shape, and cadence. For example,
 `weekly-strategy-analysis` is a Kenji/life-specific wrapper, not the generic
 strategy interface.
 
+## Automation Presets
+
+`update-strategy.weekly_pm @7d -> reports.update_strategy`
+
+Use when a weekly PM heartbeat needs to refresh project strategy after required
+context reports are fresh. The automation manifest supplies dependencies,
+freshness, reports, gates, and cadence. This skill owns goal/ticket/progress
+evidence review, system-gap detection, ticket deltas, Goal Advisor handoffs,
+and the operator report.
+
+Eval surface: missing-feedback handling, evidence-tied strategy deltas,
+metric-honesty checks, and "strategy does not execute leaf tickets" guardrails.
+
 ## Skill Signature
 
 ```text

@@ -131,7 +131,7 @@ Those records are runtime-only and may carry:
 | `ticket_runtime.py` | `keep` | narrow local helper for ticket runtime records, optional isolated checkout creation, local runtime launch/stop, port reservation, and QA target publication |
 | `tickets/scripts/check_ticket_metadata.py` | `keep` | canonical validator for the ticket surface and lives with the ticket system it validates |
 | `stop_hook.py` | `keep` | thin runtime shim that evaluates active-ticket stop events, validates mechanical gates, and handles `$impl` re-entry decisions |
-| `skills/impl/scripts/tmux_helper.py` | `keep` | skill-local operator visibility and lane recovery helper, not the control plane; it also writes the active runtime claim used by stop-hook consumers |
+| `skills/impl` tmux helper | `retired` | superseded by native Goal-backed `$impl` execution and Goal Packet state |
 | `ralph_orchestrate.py` | `retired` | superseded by `$impl`; removed from `bin/` once no live surfaces depended on it |
 | `ralph_worker.sh` | `retired` | old phase-launch wrapper removed in favor of direct prompt/`codex exec` worker lanes |
 | `export_omx_team_input.py` | `retired` | removed with the OMX bridge path because it is not part of the current skill-first runtime |
@@ -144,7 +144,8 @@ Those records are runtime-only and may carry:
 - Public docs should describe `batch-work` as a standalone explicit range/list
   skill that shares `$work` batch proof policy.
 - Public docs should describe `.farplane/` as the canonical live runtime root.
-- `capture_user_turn.py`, `skills/impl/scripts/tmux_helper.py`, and `stop_hook.py` may be documented as operator/runtime shims.
+- `capture_user_turn.py`, `ticket_runtime.py`, and `stop_hook.py` may be
+  documented as operator/runtime shims.
 - `ticket_runtime.py` may be documented as the narrow ticket-runtime shim for
   isolated checkout, declared runtime launch/stop, and live QA target setup.
 - Public docs should describe `current-run.json` as control-session-owned state, not a generic sink for every prompt-bearing session.

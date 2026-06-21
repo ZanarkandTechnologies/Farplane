@@ -25,6 +25,19 @@ Route substantial prose cleanup through `documentation`, but keep the weekly PM
 job as one context upkeep pass unless the docs have become large enough to need
 a dedicated ticket or cadence.
 
+## Automation Presets
+
+`update-memory.project_context @7d -> reports.update_memory`
+
+Use when a project PM heartbeat needs durable memory, README, docs, history,
+lesson, and trouble consolidation. The automation manifest supplies cadence,
+freshness, reports, gates, and project-local overrides; this skill owns default
+source reads, candidate classification, hardening handoffs, output fields, and
+review routing.
+
+Eval surface: missing-source labeling, one-off observation rejection,
+skill-hardening handoff routing, and append-only ledger preservation.
+
 ## Skill Signature
 
 ```text

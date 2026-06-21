@@ -5,6 +5,7 @@ description: "Turn a new-project intake into a Farplane project with docs, ticke
 tier: 3
 group: coding
 source: local
+eval: eval_task.json
 ---
 
 # Deep Init Project Skill
@@ -24,6 +25,12 @@ This skill also owns the place where reusable stack setup recipes live for
 common repo types such as Convex, Next.js, Clerk, shadcn, and React apps. Keep
 those recipes in this skill or its references; do not delete the code-repo
 scaffolding branch while simplifying project initialization.
+
+Reusable project automation templates live in
+[AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md). Keep generated
+`farplane/automations.md` files compact: schedules, gates, cadence grouping,
+freshness, reports, target threads, and local overrides stay in the manifest;
+job reads/writes/output defaults stay in the referenced skills and presets.
 
 ## Skill Signature
 
@@ -71,6 +78,8 @@ ticketed handoff, not the default init phase.
   - [ ] Run or mirror `scripts/bootstrap.sh` to create tracked `farplane/`
     config, ignored `.farplane/` runtime state, `tickets/`, docs, QA, optional
     hooks, validation scripts, and review helper surfaces.
+  - [ ] Keep `farplane/automations.md` as a compact cadence manifest that
+    references skill presets instead of duplicating skill runbooks.
   - [ ] Ensure `farplane/manifest.json` records the Farplane project
     `spec_version` and standard tracked/ignored paths.
   - [ ] Preserve existing files unless `force == true` or explicit overwrite
