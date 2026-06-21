@@ -35,9 +35,11 @@ job reads/writes/output defaults stay in the referenced skills and presets.
 ## Skill Signature
 
 ```text
-deep_init_project(project_root?, project_idea?, repo_shape?, stack_profile?, force?)
+deep_init_project(project_root?, project_idea?, repo_shape?, stack_profile?, init_mode?, force?)
   -> project_substrate
    + farplane_config
+   + readiness_audit
+   + goals_delta?
    + optional_code_scaffold?
    + ticket_system
    + qa_surface
@@ -47,7 +49,7 @@ deep_init_project(project_root?, project_idea?, repo_shape?, stack_profile?, for
 state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and starter PRD ticket
 gates: existing_files_preserved; spec_version_recorded; human_gates_named; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
 routes: deep-interview | prd | spec-to-ticket | research:official-docs | research:code-patterns
-fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; deletes stack setup recipes; overwrites existing project state silently
+fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when goals, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
 ```
 
 ## Phase Boundary
@@ -56,12 +58,38 @@ This skill follows Tier 0 phases inline. Use external research only when a stack
 command or framework convention may be stale. PRD authoring is a downstream
 ticketed handoff, not the default init phase.
 
+`init_mode` controls completion semantics:
+
+- `substrate`: create or preserve the Farplane project files, write any missing
+  readiness gaps into `docs/bootstrap-brief.md`, and report
+  `substrate_complete`.
+- `full`: after substrate setup, run a goal-portfolio readiness pass. Ask the
+  first missing operator-owned goal question when the North Star, 3-month
+  outcome, success criteria, non-goals, or decision boundaries are absent.
+  Update or propose a `farplane/goals.md` delta before handing executable
+  milestones to `goal-advisor`.
+
+Do not treat `farplane/goals.md` existing as proof that goal setup is complete.
+If it is placeholder, stale, or not grounded in the operator's stated intent,
+the result is `needs_goal_intake`, not `project_initialized`.
+
+```text
+setup_goal_portfolio(bootstrap_brief, project_context, existing_goals?)
+  -> readiness_status
+   + first_missing_question?
+   + goals_delta?
+   + current_milestone_candidate?
+   + goal_advisor_handoff?
+```
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. Bind the init target.
   - [ ] Resolve `project_root`, greenfield vs brownfield state, `force?`, and
     whether the user wants only Farplane substrate or also code/app scaffolding.
+  - [ ] Resolve `init_mode := substrate | full`; use `full` only when the
+    operator wants goal-portfolio setup during initialization.
   - [ ] Inspect existing README, AGENTS, docs, tickets, package files, and app
     structure before writing.
 - [ ] 2. Select the project and stack profile.
@@ -87,7 +115,21 @@ ticketed handoff, not the default init phase.
   - [ ] Keep `.farplane/` ignored runtime state and `farplane/` tracked project
     spec.
   - [ ] Do not auto-enable scaffolded git hooks.
-- [ ] 4. Initialize the optional code scaffold.
+- [ ] 4. Run readiness audit and full-mode goal portfolio setup.
+  - [ ] Audit `docs/bootstrap-brief.md`, `farplane/harness.md`,
+    `farplane/goals.md`, `farplane/automations.md`, `farplane/bindings.md`,
+    `farplane/pm.json`, `PROJECT_RULES.md`, and QA surfaces for missing,
+    placeholder, stale, or disabled state.
+  - [ ] Write the audit result into `docs/bootstrap-brief.md` under
+    Goal Intake Status and Initialization Readiness when those sections exist.
+  - [ ] In `substrate` mode, report missing goal/setup questions as next
+    handoff rather than asking the full interview now.
+  - [ ] In `full` mode, ask the first missing goal-portfolio question before
+    claiming `project_initialized`: "What should this project reliably do for
+    you over the next 3 months that it does not yet do reliably today?"
+  - [ ] Use `goal-advisor` only after `farplane/goals.md` has a current
+    milestone concrete enough to compile into a ticket-backed Goal Packet.
+- [ ] 5. Initialize the optional code scaffold.
   - [ ] Bind `code_scaffold(...)`; ask only for missing params needed to choose
     or skip the stack profile.
   - [ ] Run the selected stack command only when `include_code_scaffold == true`.
@@ -96,18 +138,21 @@ ticketed handoff, not the default init phase.
   - [ ] Record canonical app-only and QA/evidence run commands in
     `PROJECT_RULES.md`, `docs/bootstrap-brief.md`, and the relevant `qa/`
     cookbook surface.
-- [ ] 5. Create the starter planning handoff.
+- [ ] 6. Create the starter planning handoff.
   - [ ] Create or preserve `tickets/TASK-0001/ticket.md` for drafting the
     initial PRD.
   - [ ] Leave `docs/prd.md` as a draft placeholder unless PRD work is
     explicitly requested now.
   - [ ] Route to the next planning skill after init; do not conduct the planning
     phase inside this skill.
-- [ ] 6. Verify and finish init.
+- [ ] 7. Verify and finish init.
   - [ ] Run focused scaffold checks such as
     `python3 bin/validators/check_farplane_project_files.py` when available.
   - [ ] Confirm the expected `farplane/`, `.farplane/`, and `tickets/` surfaces
     exist.
+  - [ ] Report `substrate_complete`, `needs_goal_intake`, `needs_runtime_setup`,
+    `needs_automation_setup`, or `project_initialized`; do not collapse these
+    into a generic "done".
   - [ ] Report the initialized stack profile, any skipped human-gated steps,
     the starter PRD ticket, and the next command or skill.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -122,6 +167,9 @@ ticketed handoff, not the default init phase.
   scripts, and optional local Codex SDK review-loop files.
 - Starter handoff: `tickets/TASK-0001/ticket.md` for the post-init
   `deep-interview -> prd` phase.
+- Full-mode portfolio setup: goal-intake readiness in
+  `docs/bootstrap-brief.md`, a proposed or applied `farplane/goals.md` delta,
+  and a `goal-advisor` handoff only after the current milestone is concrete.
 - Optional code scaffold selected from the stack recipes below.
 
 ## Code Scaffold Recipes
@@ -170,6 +218,9 @@ pnpm dlx convex@latest dev
   - copied to `PROJECT_RULES.md` for project stack, runtime, and QA commands.
 - [references/qa/](references/qa/) - copied when creating the QA cookbook
   surface.
+- [../goal-advisor/references/goal-portfolio.md](../goal-advisor/references/goal-portfolio.md)
+  - load in full mode when shaping or validating `farplane/goals.md` as a
+  portfolio before compiling execution with `goal-advisor`.
 - [../../docs/farplane-framework/project-files.md](../../docs/farplane-framework/project-files.md)
   - load when the user asks why a Farplane project has these files or how the
   spec should evolve.

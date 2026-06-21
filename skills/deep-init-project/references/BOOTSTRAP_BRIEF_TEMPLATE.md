@@ -13,6 +13,17 @@ finalizing the scaffold.
 - What good looks like:
 - What this scaffold should optimize for first:
 
+## Goal Intake Status
+- Current state:
+- Missing setup:
+- Operator goal captured:
+- 3-month outcome captured:
+- Success criteria captured:
+- Non-goals captured:
+- Decision boundaries captured:
+- Ready to update `farplane/goals.md`:
+- First missing question:
+
 ## Recommended Shape
 - Project profile:
 - Lifecycle route:
@@ -123,3 +134,15 @@ finalizing the scaffold.
 ## Defaults Chosen
 - Recommended defaults accepted:
 - Explicit overrides:
+
+## Initialization Readiness
+- Substrate:
+- Goals:
+- Harness:
+- Runtime commands:
+- QA commands:
+- Bindings:
+- Automations:
+- PM thread grouping:
+- Human gates:
+- Overall status: [substrate_complete / needs_goal_intake / needs_runtime_setup / needs_automation_setup / project_initialized]

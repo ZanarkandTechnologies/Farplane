@@ -31,6 +31,18 @@ source:
 - Optimize for first: visible state, safe autonomous execution, focused review,
   and low-friction continuation.
 
+## Goal Intake Status
+
+- Current state: `farplane/goals.md` exists and captures the latest inferred
+  Farplane operating portfolio.
+- Missing setup: the operator has not yet completed a fresh goal-intake pass
+  for this project bootstrap.
+- Rule: do not treat the bootstrap as fully initialized until the operator's
+  desired outcome, success criteria, non-goals, and decision boundaries have
+  been captured and reconciled into `farplane/goals.md`.
+- Next route: run `deep-interview --bootstrap` and then update
+  `farplane/goals.md` through an explicit goals delta.
+
 ## Recommended Shape
 
 - Project profile: harness repo / project operating system.

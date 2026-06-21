@@ -24,5 +24,18 @@
       "It does not ask the child worker to rename itself"
     ],
     "tags": ["deep-init-project", "ticket-drainer", "child-thread"]
+  },
+  {
+    "id": "deep_init_project_full_mode_goal_intake_01",
+    "title": "Deep init full mode requires goal portfolio intake before project initialization",
+    "query": "A brownfield repo already has farplane/goals.md, but it is placeholder, stale, or not grounded in the operator's current intent. The operator asks to initialize the repo as a full Farplane project. What should deep-init-project do before claiming the project is initialized?",
+    "reference_points": [
+      "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough",
+      "Audits docs/bootstrap-brief.md and farplane/goals.md for missing North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
+      "In full mode, asks the first missing goal-portfolio question, starting with what the project should reliably do over the next 3 months",
+      "Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies a farplane/goals.md delta only after operator intent is known",
+      "Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet"
+    ],
+    "tags": ["deep-init-project", "full-mode", "goal-portfolio", "readiness-gate"]
   }
 ]

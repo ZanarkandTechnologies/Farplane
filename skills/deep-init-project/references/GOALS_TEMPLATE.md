@@ -10,6 +10,18 @@ owner: project-pm-automation
 
 # Project Goals
 
+## Intake Required
+
+This file is not ready until the operator has answered:
+
+- What should this project reliably do over the next 3 months?
+- What would prove that it is working?
+- What should agents not do autonomously?
+- What is the first milestone worth executing?
+
+Until those answers are captured, report `needs_goal_intake` rather than
+`project_initialized`.
+
 ## North Star
 
 TODO
