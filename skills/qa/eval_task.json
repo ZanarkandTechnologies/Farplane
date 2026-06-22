@@ -1,0 +1,20 @@
+[
+  {
+    "id": "qa_ui_requires_best_evidence_01",
+    "title": "QA blocks UI proof without screenshots or best evidence",
+    "query": "Run QA for a UI ticket whose report has command logs but no screenshots, no snapshot, and no best_evidence path.",
+    "reference_points": [
+      "Reads the selected ticket and proof policy before judging",
+      "Requires concrete UI artifacts such as screenshots/snapshots/logs",
+      "Returns revise, fail, blocked, or NOT PROVABLE instead of pass",
+      "Names the missing best_evidence image path as the blocker",
+      "Does not treat command logs alone as enough for UI proof"
+    ],
+    "tags": [
+      "skill",
+      "qa",
+      "visual-proof"
+    ],
+    "notes": "Guards against QA passing user-visible work without image evidence."
+  }
+]

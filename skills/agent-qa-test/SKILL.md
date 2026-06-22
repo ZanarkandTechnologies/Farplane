@@ -3,6 +3,8 @@ name: agent-qa-test
 description: "Turn an app, skill, prompt, or workflow claim into adversarial QA cases, tester evidence, critique, and rerun guidance."
 tier: 2
 source: local
+eval: eval_task.json
+qa_checklist: qa_checklist.md
 methods:
   - agent-qa-test:prompt
   - agent-qa-test:app
@@ -13,11 +15,40 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Agent QA Test
 
+## Context
+
+`agent-qa-test` is the adversarial proof surface for app, skill, prompt, or
+workflow claims. It is not normal ticket QA. Use it when a proof policy or
+operator request needs a user-like tester plus a separate evidence-review lane
+that attacks whether the artifacts prove the claim.
+
+## Skill Signature
+
+```text
+agent_qa_test(claim, target, evidence_policy?) -> tester_report + evidence_review + verdict
+state: reads(ticket/spec/skill/prompt/workflow, prior QA evidence, optional design.md); writes tester/evidence-review reports or prompt template
+gates: claim_under_test_written; tester_lane_collects_artifacts; evidence_review_lane_independent; pass_requires_strong_artifacts
+routes: agent-behavior-test | qa | visual-qa | review
+fails: replaces normal ticket QA; lets tester self-approve; reports narrow proof as broad pass; treats missing screenshots/logs as harmless
+```
+
+## Phase Boundary
+
+This skill designs and reconciles adversarial proof. It may compose
+`agent-behavior-test` for instrumented child-agent capture and hand final proof
+bundles to `review`, but Goal mode remains the continuation owner.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] Identify the target behavior and whether the operator wants run mode or
   `agent-qa-test:prompt`.
+- [ ] Confirm this is adversarial claim proof, not ordinary ticket QA. If the
+  ticket only needs artifact collection, route to `qa`; if it only needs visual
+  judgment over screenshots, route to `visual-qa`.
+  - [ ] For ordinary UI proof, explicitly say `qa / qa-tester` owns artifacts,
+    `visual-qa` owns screenshot judgment, and `agent-qa-test` is not the
+    default.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the
   smallest relevant ticket, spec, skill, prompt, app files, or prior QA evidence.
 - [ ] Design 2-4 focused test cases with explicit required evidence for each.
@@ -27,6 +58,11 @@ allowed-tools: Read, Glob, Grep, Bash
   conformance.
 - [ ] Draft or run a tester lane that gathers concrete artifacts instead of
   self-certifying in prose.
+- [ ] When `agent-qa-test` is used, state that the tester lane cannot
+  self-approve proof; keep tester evidence and evidence-review critique
+  separate.
+- [ ] When answering a routing question about ordinary UI QA, include this
+  literal rule: `The tester lane cannot self-approve proof.`
 - [ ] Draft or run an evidence-review lane that attacks unsupported claims,
   scope mismatch, missing screenshots/logs/states, and weak artifacts.
 - [ ] Reconcile both lane reports into pass, fail, blocked, fix, or rerun.
@@ -54,6 +90,20 @@ Use it when the operator says things like:
 This skill is not a replacement for normal tests. It is for behavior proof that
 needs a user-like tester, screenshots/logs/artifacts, and a skeptical
 evidence-review pass.
+
+Inside a ticket proof route, use `agent-qa-test` only when `Proof weight` or
+`Metric provider` says `agent_qa`, or when the operator asks for adversarial
+agent testing. Normal UI tickets should run `qa` plus `visual-qa` first.
+
+For ordinary UI ticket proof, say the default route explicitly:
+
+```text
+qa / qa-tester collects ticket artifacts, screenshots, logs, and result.json.
+visual-qa judges screenshots against the ticket or design.md.
+agent-qa-test is reserved for adversarial claim proof or an operator `$test`.
+When agent-qa-test is used, keep tester and evidence-review lanes separate; the
+tester lane cannot self-approve proof.
+```
 
 ## Mental Model
 

@@ -4,7 +4,7 @@ ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
 template_id: goal-loop-program
-template_version: "0.1.1"
+template_version: "0.1.2"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
@@ -37,6 +37,20 @@ feature_refs:
 - `direction:` `higher` | `lower` | `pass/fail` | `accept/revise` | `none`
 - `minimum:` pass threshold, TAS gate, human decision, or `none`
 
+## Proof Policy
+
+- `proof_weight:` `smoke` | `tests` | `qa` | `visual_qa` | `agent_qa` |
+  `review` | `demo`
+- `delegated_lanes:` `none` or list of `qa-tester`, `visual-qa`,
+  `agent-qa-test`, `reviewer`, `demo`
+- `drift_check_owner:` `inline` | `reviewer` | `goal-drift-reviewer` |
+  `qa-tester`
+- `design_baseline:` `tickets/TASK-XXXX/design.md` or `none`
+- `final_evidence:` command output, report link, review receipt, screenshot
+  Markdown image link, demo artifact, or blocker report
+- `self_certification:` allowed only for tiny mechanical checks; prohibited for
+  QA, visual QA, adversarial QA, review, demo, or completion claims
+
 ## Feedback Policy
 
 - `human_feedback:` `none` | `optional` | `required`
@@ -52,14 +66,15 @@ feature_refs:
    blocker gap.
 3. Execute one bounded step.
 4. Append a structured entry to every `progress.md` whose ticket state changed.
-5. Run or request drift check when required by `Drift Policy`.
+5. Run or request drift check when required by `Drift Policy`; delegate the
+   check when proof policy forbids self-certification.
 6. Continue, stop complete, stop blocked, or wait for heartbeat/feedback.
 
 ## After Completion
 
 - `on_goal_window_complete:` append completion progress to changed files, run
-  proof/review, then start/resume the next eligible file set or wait for
-  heartbeat
+  proof/review, surface final evidence required by `Proof Policy`, then
+  start/resume the next eligible file set or wait for heartbeat
 - `on_milestone_complete:` run parent heartbeat or replan routine before
   expanding the next branch
 - `manual_replan_allowed:` yes/no

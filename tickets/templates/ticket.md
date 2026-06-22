@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.0"
+template_version: "0.1.1"
 feature_refs:
   - FEAT-0002
   - FEAT-0007
@@ -135,6 +135,8 @@ proof:
 - `Stabilize:` reset/seed path plus shortcuts/debug controls if determinism matters
 - `Inspect:` selectors, overlays, DOM mirrors, HUDs, or logs the agent should rely on
 - `Key screens/states:` important surfaces QA must reach and compare
+- `Design baseline:` `tickets/TASK-XXXX/design.md` when layout, interaction,
+  visual design, or taste are part of proof; otherwise `none needed`
 - `QA cookbook:` matching `qa/cookbook/<workflow>.md` path when the repo keeps
   reusable QA workflows, otherwise `none yet`
 - `Taste refs:` relevant visual doctrine and any local exception
@@ -155,7 +157,11 @@ proof:
   `symphony` | `none`
 - `Planning hint:` `none` | `light` | `impl_plan` | `reslice`
 - `Proof weight:` `smoke` | `tests` | `qa` | `visual_qa` | `review` |
-  `demo`
+  `agent_qa` | `demo`
+- `Proof route:` delegated lanes required before completion, such as
+  `qa-tester`, `visual-qa`, `agent-qa-test`, `reviewer`, or `none`
+- `Final evidence:` report link, command output, review receipt, screenshot
+  Markdown image link, demo artifact, or blocker report
 - `Batchability:` `batchable` | `single-ticket` | `unknown`
 - `Batch reason:` shared module/workflow/setup/proof surface, or no-batch
   reason
@@ -184,6 +190,9 @@ proof:
 - `Drift reviewer:` `goal-drift-reviewer` | `reviewer` | `inline` | `none`
 - `Heartbeat:` cadence or `none`
 - `Stop condition:` complete, blocked, pause, or escalation condition
+- `Final report:` for UI/user-visible work, include best screenshot/image
+  evidence as a Markdown image link plus artifact links, or block/revise with a
+  clear missing-evidence reason
 - `Refs:` `docs/specs/goal-loop-contract.md`,
   `tickets/templates/goal-loop/program.md`,
   `tickets/templates/goal-loop/progress.md`

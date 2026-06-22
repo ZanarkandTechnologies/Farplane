@@ -7,6 +7,7 @@ source: local
 version: 0.2.0
 skill_template_version: "0.2.0"
 eval: eval_task.json
+qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash
 ---
 
@@ -47,11 +48,11 @@ compute/budget, and blocker handling.
 ## Skill Signature
 
 ```text
-advise_goal_use(intent, files?, trigger?, budget?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
+advise_goal_use(intent, files?, trigger?, budget?, proof_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
 state: reads(operator intent, listed files, tickets, board files?, portfolio.md?, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? portfolio? generated goal prompt? or recommendation)
-gates: material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; budget_named; drift_policy_named; logging_policy_named
-routes: optimize-with-human | review | direct-answer
-fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; routes public work through retired work/ralph/batch-work surfaces
+gates: material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named
+routes: optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
+fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion
 ```
 
 ## Phase Contract
@@ -119,10 +120,10 @@ only after the branch is selected:
    - [ ] Load `references/goal-shapes.md` when the chosen shape needs more than
      the one-line classifier above.
 - [ ] 3. Choose the state surfaces.
-   - [ ] `Files:` in the generated prompt names every ticket, program,
-     progress, board, spec, or artifact file the Goal must read.
-   - [ ] Use `portfolio.md` only when a longer planning graph is needed beyond
-     the listed files.
+  - [ ] `Files:` in the generated prompt names every ticket, program,
+    progress, board, spec, or artifact file the Goal must read.
+  - [ ] Use `portfolio.md` only when a longer planning graph is needed beyond
+    the listed files.
 - [ ] 4. Choose the time/budget policy.
    - [ ] Treat the unit as a time/budget window, not ticket size.
    - [ ] Name time, token/model/compute, subagent, review, QA, feedback, and
@@ -136,6 +137,9 @@ only after the branch is selected:
    - [ ] `human_feedback`: human score, qualitative feedback, or approval.
    - [ ] `market`: external result such as clicks, replies, sales, or retention.
    - [ ] `hybrid`: combine signals without inventing fake numbers.
+   - [ ] If proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
+     `demo`, require delegated proof and reject self-certification as the
+     metric.
 - [ ] 6. Define batch, board-drain, or leaf execution policy when relevant.
    - [ ] For multi-ticket file lists, preserve one proof row per ticket plus
      any batch/integration proof.
@@ -149,6 +153,8 @@ only after the branch is selected:
    - [ ] Use inline drift checks for small normal goals.
    - [ ] Use `goal-drift-reviewer` for material, long-running, strategic,
      rollout, or self-approval-prone loops.
+   - [ ] Use delegated reviewer or QA lanes for material coding leaves when
+     the ticket proof route is judgment-heavy, user-visible, or UI-affecting.
    - [ ] Drift review is read-only and compares the listed files plus recent
      progress; it does not plan or implement.
 - [ ] 8. Craft the native `/goal` or heartbeat prompt when Goal mode is warranted.
@@ -157,6 +163,14 @@ only after the branch is selected:
      `After each turn`.
    - [ ] Bind the prompt to the listed files, honest metric provider, logging
      files, drift policy, budget, and completion/blocked policy.
+   - [ ] Keep the Goal prompt compact: cite ticket/program/design/progress files
+     as source of truth instead of restating their full contents.
+   - [ ] Include final evidence policy. For UI/user-visible work, completion
+     must return best screenshot/image evidence or block with the missing proof.
+   - [ ] For UI/user-visible work, include literal Markdown image syntax in the
+     prompt's final evidence rule:
+     `Final evidence: include ![best evidence](ABSOLUTE_SCREENSHOT_PATH), or
+     block/revise with the missing screenshot proof.`
    - [ ] Ask only missing execution-safety questions that materially affect the
      Goal contract; cap questions at 3.
    - [ ] Reject proxy-only completion evidence unless it satisfies the actual
@@ -181,6 +195,20 @@ A strong Goal contract includes:
 - `Metric`: how progress is judged, from `program.md`
 - `After each turn`: how to drift-check, continue, wait, complete, or block
 - `Budget`: optional time/token/model/compute/subagent/review/QA/spend limit
+- `Proof route`: which delegated lane owns QA, visual QA, adversarial QA,
+  review, demo, or human feedback
+- `Final evidence`: what must be shown to the operator before completion,
+  including rendered image links for UI/user-visible work when screenshots
+  exist
+
+For UI or user-visible work with `visual_qa` proof weight, the Goal prompt must
+spell out the concrete lane chain instead of generic "visual proof" language:
+
+```text
+Proof route: qa-tester captures screenshots/logs/result.json -> visual-qa judges screenshots against design.md -> reviewer judges final evidence sufficiency.
+Self-certification: forbidden for QA, visual judgment, and final completion.
+Final evidence: final response includes ![best evidence](ABSOLUTE_SCREENSHOT_PATH), or blocks/revises with the exact missing screenshot proof.
+```
 
 ## Output
 
@@ -197,6 +225,8 @@ Trigger:
 Budget:
 Metric / Feedback Provider:
 Drift Policy:
+Proof Route:
+Final Evidence:
 Heartbeat Prompt:
 Native Goal Prompt:
 Next Action:
@@ -222,6 +252,14 @@ Or create/update the Goal Packet files and then report their paths.
   setup path.
 - Do not route new public execution through `$work`, `$ralph`, or `batch-work`.
   Use Goal Advisor modes instead.
+- Do not produce bloated native Goal prompts. The Goal prompt should be a
+  compact execution contract over listed files, not a rewritten ticket.
+- Do not allow Goal completion to self-certify proof-heavy work. Delegate drift,
+  QA, visual judgment, adversarial evidence review, and final readiness when the
+  ticket proof route requires those lanes.
+- Do not call UI/user-visible work complete unless the final response includes
+  the strongest screenshot/image evidence or a clear blocker explaining why no
+  such evidence exists.
 
 ## Reference Map
 

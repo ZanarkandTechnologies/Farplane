@@ -89,6 +89,13 @@ or proof behavior without touching real files.
 - [ ] 3. Write eval tasks with the core shape: realistic `query`, shared fixture
   in `config.json` plus `contexts/*`, visible `reference_points`, narrow tags,
   and no live side effects unless the runner owns a sandbox fixture.
+  - [ ] Do not put the target skill's expected answer, routing policy, or
+    business logic into the user `query`. For skill-local evals, keep the query
+    natural and rely on the runner-provided owner `SKILL.md` context plus
+    reference points to judge behavior.
+  - [ ] Run `python3 skills/eval/scripts/check_eval_queries.py --root .` after
+    editing skill-local evals; query spoiler lint failures mean the eval is
+    teaching the answer instead of testing the skill.
 - [ ] 4. For skill-specific behavior, prefer the modular owner file
   `skills/<skill-name>/eval_task.json`; use `.farplane/evals/tasks/*` for
   active working suites and `skills/eval/examples/*` for reusable cross-skill
@@ -191,6 +198,11 @@ Skill-local eval files use the same JSON-list schema:
 skills/advise/eval_task.json
 ```
 
+When a task file is located at `skills/<skill-name>/eval_task.json`, the local
+runner injects the owning `skills/<skill-name>/SKILL.md` into the eval context.
+That means the query should sound like a normal operator request; the skill
+contract, not the query wording, must carry the business logic.
+
 Run all skill-local evals with:
 
 ```bash
@@ -209,6 +221,12 @@ Check setup:
 
 ```bash
 python3 skills/eval/scripts/run_evals.py status --harness codex --target-root .
+```
+
+Check skill-local eval queries for answer leakage:
+
+```bash
+python3 skills/eval/scripts/check_eval_queries.py --root .
 ```
 
 Initialize only when setup is missing:
@@ -284,6 +302,9 @@ The runner writes the proof surfaces this skill should summarize:
 
 - Do not keep hardcase samples outside the eval system when the expected
   behavior is testable now.
+- Do not "fix" a failing skill eval by adding the answer to the query. If the
+  generic query fails with the owning `SKILL.md` in context, harden the skill,
+  checklist, fixture, or runner context instead.
 - Do not mark a case as `hardcase` just because it was annoying. It needs
   difficulty, reuse, benchmark, or saleable-data value.
 - Do not store raw private transcripts, secrets, local handles, or unsanitized

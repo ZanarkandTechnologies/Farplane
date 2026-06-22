@@ -293,6 +293,7 @@ def main() -> int:
         run(tier_command)
         run(["python3", "bin/validators/check_tier0_phase_protocol.py"])
         run(["python3", "bin/validators/check_skill_capabilities.py", "validate"])
+        run(["python3", "skills/eval/scripts/check_eval_queries.py", "--root", "."])
         run(["python3", "bin/validators/check_doc_refs.py"])
 
         run(
@@ -309,6 +310,7 @@ def main() -> int:
                 "skills/skill-maintenance/scripts/check_skills.py",
                 "skills/skill-maintenance/scripts/sync_skill_checklists.py",
                 "skills/skill-maintenance/scripts/generate_template_intelligence.py",
+                "skills/eval/scripts/check_eval_queries.py",
             ]
         )
     except subprocess.CalledProcessError as exc:

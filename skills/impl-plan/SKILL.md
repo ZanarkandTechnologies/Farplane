@@ -5,6 +5,8 @@ description: "Turn one ticket into a before/after implementation plan with code 
 tier: 3
 group: coding
 source: local
+eval: eval_task.json
+qa_checklist: qa_checklist.md
 common_chains:
   after: ["goal-advisor"]
 allowed-tools: Read, Glob, Grep
@@ -12,9 +14,37 @@ allowed-tools: Read, Glob, Grep
 
 # Impl Plan
 
+## Context
+
+`impl-plan` is ticket-first. For material implementation work, the durable
+output is a selected or newly created `tickets/TASK-XXXX/ticket.md`, not a
+chat-only plan. Tiny, reversible fixes may bypass this skill; vague work should
+route to discovery or ticket creation before planning.
+
+## Skill Signature
+
+```text
+impl_plan(ticket_or_request, proof_weight?) -> ticket_plan + test_strategy + proof_contract
+state: reads(active ticket, linked specs/docs, relevant code, memory/troubles/lessons, optional design.md); writes(ticket.md updates, optional design.md recommendation, proof route)
+gates: ticket_surface_exists; done_proof_concrete; test_strategy_named; subagent_proof_route_named_when_material; approval_before_build
+routes: goal-advisor | qa | visual-qa | agent-qa-test | review
+fails: chat-only material plan; vague "run tests" proof; UI plan without screens/states/evidence; self-certified QA/review path for material work
+```
+
+## Phase Boundary
+
+This skill owns planning only. It may shape `Done / Proof`, `Agent Contract`,
+`Run Hints`, and `Goal Packet`, but implementation, QA, visual judgment,
+adversarial testing, and final review are delegated to their owner surfaces.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
+- [ ] Bind or create the ticket surface first.
+  - [ ] If a material implementation request has no selected ticket, create or
+    update `tickets/TASK-XXXX/ticket.md` before returning the plan.
+  - [ ] For tiny one-turn fixes, explicitly state why ticket-backed planning is
+    not needed.
 - [ ] Read the active ticket first, then read the relevant PRD, specs, memory, troubles, lessons, and nearby code.
 - [ ] Treat this skill as `PlanTicket<CodingTicket>` inside the
   [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
@@ -38,6 +68,28 @@ allowed-tools: Read, Glob, Grep
 - [ ] Write or refine the ticket `Done / Proof` block: done conditions,
   concrete checks, manual checks, review rubric/TAS gates, hard gates, required
   evidence, and optional autoresearch session path.
+- [ ] Write a concrete how-to-test path in the ticket.
+  - [ ] Name mechanical checks, manual checks, delegated lanes, and artifacts.
+  - [ ] For UI/user-visible work, require key screens/states, expected
+    screenshots, and final image evidence.
+  - [ ] For UI/user-visible work, include this exact completion-report rule:
+    `Final report must include the best screenshot/image evidence as a Markdown
+    image link, or block/revise with the missing-proof reason.`
+  - [ ] Add or reference `tickets/TASK-XXXX/design.md` when layout, visual
+    design, interaction states, or taste are part of the proof.
+- [ ] Route proof weight explicitly.
+  - [ ] Write an explicit `Proof weight:` line in the ticket or plan for
+    material work, especially `qa`, `visual_qa`, `agent_qa`, `review`, or
+    `demo`.
+  - [ ] Write an explicit `Delegated lanes:` line naming lane owners such as
+    `qa-tester`, `visual-qa`, `agent-qa-test`, and `reviewer` when those proof
+    weights apply.
+  - [ ] Use `qa` for ticket-scoped artifact collection.
+  - [ ] Use `visual-qa` to judge captured screenshots against ticket/design
+    expectations.
+  - [ ] Use `agent-qa-test` only when adversarial app, skill, prompt, or
+    workflow claim proof is required.
+  - [ ] Use `review` for material sufficiency and evidence-quality judgment.
 - [ ] Compare 3 viable options only when a real material choice exists, then recommend one clearly.
 - [ ] Keep the output in the canonical ticket-body shape instead of inventing a `Human` / `Agent` split.
 - [ ] Make the `Map` section carry visual before/after flow, changed callable seams, and typed data movement when that improves trust.
@@ -322,6 +374,29 @@ program:
 conditions, checks, manual checks, review focus, rubric/TAS gates, human gates,
 and required evidence. The ticket stores required evidence handles; execution
 outputs belong in artifacts or `progress.md`, not duplicated in the ticket.
+
+For UI/user-visible changes, the proof plan must name:
+
+- the design baseline: `tickets/TASK-XXXX/design.md` or a documented
+  no-design-needed reason
+- key screens/states and expected screenshots
+- the browser/runtime entry path and deterministic test hook when available
+- the delegated lanes: `qa-tester` for capture, `visual-qa` for judgment,
+  `agent-qa-test` for adversarial claim proof only when needed, and `reviewer`
+  for final evidence sufficiency
+- the final evidence rule: the final response embeds the strongest screenshot
+  with Markdown image syntax or blocks/revises when image evidence is missing
+- the completion report rule: a UI/user-visible completion report must include
+  the best image evidence path and render it as a Markdown image link when the
+  screenshot exists
+
+Use this exact line when drafting UI/user-visible proof:
+
+```text
+Final report: include the best screenshot/image evidence as
+![best evidence](ABSOLUTE_SCREENSHOT_PATH), or block/revise with the missing
+proof reason.
+```
 
 Create a sidecar `plan.md` only when the technical build plan is too long for a
 skimmable ticket, deeply implementation-specific, likely to change

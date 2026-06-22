@@ -289,6 +289,27 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [skill_eval.resolve()])
             self.assertEqual(summary["verdict_counts"], {"A": 1})
 
+    def test_skill_eval_loads_owner_skill_context_without_query_spoiling(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill_dir = root / "skills" / "qa"
+            skill_eval = skill_dir / "eval_task.json"
+            skill_dir.mkdir(parents=True)
+            (skill_dir / "SKILL.md").write_text("# QA\n\nThe QA skill requires best_evidence for UI proof.\n")
+            write_tasks(skill_eval)
+
+            tasks = runner.load_task_suite(
+                [skill_eval],
+                default_context="AGI Toy Shop fixture context.",
+                target_root=root,
+            )
+
+        self.assertEqual(tasks[0].query, "Explain proof discipline.")
+        self.assertIn("AGI Toy Shop fixture context.", tasks[0].context)
+        self.assertIn("Skill under evaluation: qa", tasks[0].context)
+        self.assertIn("The QA skill requires best_evidence", tasks[0].context)
+        self.assertIn("Skill context:", tasks[0].context)
+
     def test_skills_suite_filters_selected_skill(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -345,6 +366,33 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual(summary["task_count"], 1)
             self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [qa_eval.resolve()])
             self.assertEqual(summary["tasks"][0]["task_id"], "proof_01")
+
+    def test_load_task_suite_filters_task_ids(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / "tasks.json"
+            path.write_text(
+                json.dumps(
+                    [
+                        {
+                            "id": "keep_01",
+                            "title": "Keep",
+                            "query": "Keep this.",
+                            "reference_points": ["Kept"],
+                        },
+                        {
+                            "id": "drop_01",
+                            "title": "Drop",
+                            "query": "Drop this.",
+                            "reference_points": ["Dropped"],
+                        },
+                    ]
+                )
+            )
+
+            tasks = runner.load_task_suite([path], target_root=root, task_ids={"keep_01"})
+
+        self.assertEqual([task.id for task in tasks], ["keep_01"])
 
     def test_status_reports_missing_and_ready_layout(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

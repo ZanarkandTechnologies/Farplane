@@ -127,5 +127,24 @@
       "no-op"
     ],
     "notes": "Guards waiting behavior for long-running portfolios."
+  },
+  {
+    "id": "goal_advisor_ui_goal_delegated_proof_01",
+    "title": "Goal advisor requires delegated visual proof for UI Goal completion",
+    "query": "Create a native Goal prompt for TASK-1234, a UI ticket with Proof weight: visual_qa, a design.md baseline, and required final screenshot evidence. Keep the prompt compact.",
+    "reference_points": [
+      "Uses an inline Files list that includes ticket.md, program.md, progress.md, and design.md without restating their full contents",
+      "Names delegated proof lanes such as qa-tester, visual-qa, and reviewer instead of self-certification",
+      "Requires drift/proof checks against the ticket before completion",
+      "Requires final UI completion to include best screenshot/image evidence as a Markdown image link or block with the missing proof",
+      "Keeps the native Goal prompt concise and file-list based"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "visual-qa",
+      "proof"
+    ],
+    "notes": "Regression guard for Goal prompts that claimed UI completion without image evidence."
   }
 ]

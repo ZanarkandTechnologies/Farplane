@@ -1,0 +1,39 @@
+[
+  {
+    "id": "impl_plan_material_ticket_first_01",
+    "title": "Impl plan creates or selects a ticket before material planning",
+    "query": "Plan a material UI change for AGI Toy Shop's checkout flow. No ticket is selected yet.",
+    "reference_points": [
+      "Does not return a chat-only material implementation plan",
+      "Creates or requests a selected tickets/TASK-XXXX/ticket.md surface before treating the plan as ready",
+      "Writes or proposes Done / Proof with concrete checks and evidence",
+      "Names proof weight and delegated proof lanes",
+      "Leaves implementation gated until the ticket plan is approved"
+    ],
+    "tags": [
+      "skill",
+      "impl-plan",
+      "ticket-first"
+    ],
+    "notes": "Guards the ticket-first planning behavior requested in TASK-0207."
+  },
+  {
+    "id": "impl_plan_ui_design_and_test_path_01",
+    "title": "Impl plan gives UI work a design baseline and how-to-test path",
+    "query": "Plan a dashboard visual refresh where layout, spacing, and interactions must be proved by screenshots.",
+    "reference_points": [
+      "Adds or references tickets/TASK-XXXX/design.md when design/layout is part of proof",
+      "Names key screens or states that QA must capture",
+      "Specifies qa-tester for screenshot/log capture and visual-qa for screen judgment",
+      "Requires final image evidence in the completion report",
+      "Avoids treating route completion or tests alone as enough visual proof"
+    ],
+    "tags": [
+      "skill",
+      "impl-plan",
+      "visual-qa",
+      "design-baseline"
+    ],
+    "notes": "Protects against UI plans with vague 'test manually' proof."
+  }
+]

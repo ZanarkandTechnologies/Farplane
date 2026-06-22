@@ -40,7 +40,7 @@ unless the skill itself owns that workflow.
 | `behavior_focus` | Tests one visible behavior or decision. | Tests a related bundle but cause of failure would be blurry. | Tests vague goodness, style, or "make better." |
 | `roi_guardrail` | Protects a high-value behavior likely to regress silently or compound across future work. | Useful but low priority or already mostly covered. | Only checks wording, taste, or unlikely edge behavior. |
 | `breadth_depth_balance` | Batch covers a small breadth of distinct failure modes and at least one deep edge/regression case. | Covers breadth or depth, but not both. | Many near-duplicate tasks or one giant mega-task. |
-| `realistic_query` | Query sounds like a real operator request under pressure, with fixture context kept outside the query. | Query is plausible but too artificial, overexplained, or too clean. | Query is toy wording that would never occur or hides the behavior being tested. |
+| `realistic_query` | Query sounds like a real operator request under pressure, with fixture context kept outside the query and no expected answer leaked into the wording. | Query is plausible but too artificial, overexplained, too clean, or lightly hints at the target behavior. | Query is toy wording that would never occur, hides the behavior being tested, or gives away the required skill policy. |
 | `judgeability` | Reference points are visible, boolean-ish, and inspectable in answer/artifact. | Some points need interpretation or combine multiple checks. | Reference points say "good answer" or require hidden intent. |
 | `fixture_safety` | Uses AGI Toy Shop or an inspect-only/sandboxed real fixture without live side effects. | Needs clearer fixture boundary or context override. | Touches real config, secrets, deploys, pushes, or private paths unnecessarily. |
 | `owner_locality` | Lives at the correct owner surface and can run without chat context. | Correct owner is plausible but needs a note or split. | Skill eval and workflow eval are mixed together. |
@@ -90,6 +90,8 @@ Reject or rewrite evals that:
 
 - ask the agent to be "good", "comprehensive", or "better" without a visible
   behavior;
+- include phrases such as "using the <skill> contract" or spell out the exact
+  routing/policy answer that the target skill is supposed to supply;
 - mix skill-local quality with project-level workflow enforcement;
 - repeat the AGI Toy Shop context in every query instead of using fixture
   context;

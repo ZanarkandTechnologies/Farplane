@@ -51,7 +51,8 @@ Files:
 Task: Complete the desired outcomes defined across the listed files. Preserve
 each ticket's scope, constraints, Done / Proof, budget, blocker policy, and stop
 conditions. Do not flatten or rewrite requirements; treat the listed files as
-the source of truth.
+the source of truth. Keep this Goal prompt compact: do not restate long ticket,
+program, design, or progress content that is already in the listed files.
 
 Logging: Before ending each turn, append a compact structured entry to every
 listed `progress.md` whose ticket state changed. If the work coordinates
@@ -59,12 +60,18 @@ multiple files, also append a coordination note to the primary progress file.
 
 Metric: Satisfy the Done / Proof and metric provider declared in the listed
 `ticket.md` and `program.md` files. For multi-ticket goals, each ticket must
-have its own proof result; batch or integration proof is additional.
+have its own proof result; batch or integration proof is additional. If a
+ticket's proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
+`demo`, use the delegated lane named by the ticket/program and do not count
+self-certification as proof.
 
 After each turn: Compare progress against the listed files, request <drift
-reviewer> when required, continue within the current time/budget window if
-useful, otherwise stop complete, stop blocked, or emit the next heartbeat
-action with attempted paths and one missing input.
+reviewer> or the delegated QA/review lane when required, continue within the
+current time/budget window if useful, otherwise stop complete, stop blocked, or
+emit the next heartbeat action with attempted paths and one missing input. For
+UI or user-visible changes, stop complete only after the final response can
+include the strongest screenshot/image evidence as a Markdown image link plus
+artifact links, or after recording a clear blocker for missing visual proof.
 ```
 
 ## Parent Heartbeat Prompt

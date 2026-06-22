@@ -221,10 +221,50 @@ def resolve_task_paths(eval_dir: Path, tasks: str | None, suite: str, target_roo
     return [eval_dir / "tasks" / SUITE_FILES[suite]]
 
 
-def load_task_suite(paths: Sequence[Path], limit: int | None = None, default_context: str = "") -> list[EvalTask]:
+def skill_context_for_task_file(path: Path, target_root: Path) -> str:
+    """Return the owning SKILL.md context for skills/<name>/eval_task.json."""
+    resolved_path = path.resolve()
+    resolved_root = target_root.resolve()
+    try:
+        relative = resolved_path.relative_to(resolved_root)
+    except ValueError:
+        return ""
+    parts = relative.parts
+    if len(parts) != 3 or parts[0] != "skills" or parts[2] != SKILL_EVAL_TASK_FILE:
+        return ""
+    skill_path = resolved_root / "skills" / parts[1] / "SKILL.md"
+    if not skill_path.exists():
+        return ""
+    return (
+        f"Skill under evaluation: {parts[1]}\n"
+        f"Source file: {skill_path.relative_to(resolved_root)}\n\n"
+        "Skill context:\n\n"
+        f"{read_text(skill_path).strip()}"
+    )
+
+
+def compose_task_context(default_context: str, skill_context: str) -> str:
+    parts = [part.strip() for part in (default_context, skill_context) if part and part.strip()]
+    return "\n\n---\n\n".join(parts)
+
+
+def load_task_suite(
+    paths: Sequence[Path],
+    limit: int | None = None,
+    default_context: str = "",
+    target_root: Path | None = None,
+    task_ids: set[str] | None = None,
+) -> list[EvalTask]:
     loaded: list[EvalTask] = []
+    resolved_root = target_root.resolve() if target_root else Path.cwd().resolve()
     for path in paths:
-        loaded.extend(load_tasks(path, default_context=default_context))
+        skill_context = skill_context_for_task_file(path, resolved_root)
+        loaded.extend(load_tasks(path, default_context=compose_task_context(default_context, skill_context)))
+    if task_ids:
+        loaded = [task for task in loaded if task.id in task_ids]
+        missing = sorted(task_ids - {task.id for task in loaded})
+        if missing:
+            raise EvalError(f"requested task ids not found: {', '.join(missing)}")
     return loaded[:limit] if limit else loaded
 
 
@@ -498,7 +538,13 @@ def command_run(args: argparse.Namespace) -> int:
     eval_config = load_eval_config(eval_dir)
     task_paths = resolve_task_paths(eval_dir, args.tasks, args.suite, target_root)
     task_paths = filter_skill_task_paths(task_paths, target_root, args.skill)
-    tasks = load_task_suite(task_paths, args.limit, default_context=eval_config.default_context)
+    tasks = load_task_suite(
+        task_paths,
+        args.limit,
+        default_context=eval_config.default_context,
+        target_root=target_root,
+        task_ids=set(args.task_id),
+    )
     if args.max_parallel_tasks < 1:
         raise EvalError("--max-parallel-tasks must be at least 1")
     agent_template = read_text(Path(args.agent_prompt or eval_dir / "prompts" / "agent.md"))
@@ -629,6 +675,12 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--judge-command-template")
     run_parser.add_argument("--agent-extra-arg", action="append", default=[])
     run_parser.add_argument("--judge-extra-arg", action="append", default=[])
+    run_parser.add_argument(
+        "--task-id",
+        action="append",
+        default=[],
+        help="Run only the selected task id. May be passed multiple times.",
+    )
     run_parser.set_defaults(func=command_run)
     return parser
 

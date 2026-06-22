@@ -4,14 +4,43 @@ version: 0.2.0
 description: "Turn expected UI specs and screenshots into observed reports, layout assertions, diffs, fix plans, and evidence artifacts."
 tier: 2
 source: local
+eval: eval_task.json
+qa_checklist: qa_checklist.md
 ---
 
 # Visual QA Skill
+
+## Context
+
+`visual-qa` is the screenshot judgment layer. It does not operate the browser,
+write ticket state, or replace `qa`; it compares captured UI evidence against a
+ticket's `Agent Contract`, optional `design.md`, `docs/TASTE.md`, and declared
+screens/states.
+
+## Skill Signature
+
+```text
+visual_qa(ticket, design_or_ui_spec, screenshots) -> visual_verdict + best_image + fix_plan
+state: reads(ticket.md, optional design.md, docs/TASTE.md, screenshots/snapshots/logs); writes(visual-qa.md or report section under ticket QA artifacts)
+gates: expected_screens_named; screenshots_present; geometry_assertions_present; best_image_named
+routes: qa | review
+fails: drives browser; judges route completion as visual pass; passes without screenshots; omits best evidence image
+```
+
+## Phase Boundary
+
+This skill owns judgment of already captured evidence. Use `qa`/`qa-tester` for
+capture and ticket writeback, then use `review` when the broader proof bundle
+needs TAS judgment.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] Read the active ticket, its declared screens/states, and its evidence checklist before judging the UI.
+- [ ] Read `tickets/TASK-XXXX/design.md` when present; otherwise use the
+  ticket `Agent Contract` and declared screens/states as the design baseline.
+- [ ] Start the verdict by naming the expected baseline:
+  `Expected baseline: design.md | Agent Contract | ticket state | missing`.
 - [ ] Read `docs/TASTE.md` when taste, density, or layout quality is in scope.
 - [ ] If the ticket is too vague to judge honestly, fail it as underspecified instead of reward-hacking a route completion.
 - [ ] Compare one declared screen or state at a time rather than treating the happy path as enough.
@@ -19,6 +48,8 @@ source: local
 - [ ] Produce the required four-part visual QA report for each screen or state.
 - [ ] Include geometry and layout assertions, not just aesthetic commentary.
 - [ ] Identify the best user-facing evidence item for ticket writeback.
+- [ ] Return `FAIL` or incomplete when no screenshot/image proves the declared
+  UI state; do not pass from prose, route completion, or logs alone.
 - [ ] If the result needs a broader final verdict, hand the findings back through the [review protocol](../review/SKILL.md).
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -50,11 +81,31 @@ If the ticket is underspecified, fail early instead of reward-hacking a route.
 Before judging any screen, read:
 
 1. the active ticket in `tickets/TASK-*/ticket.md` or the delegated ticket file/section,
-2. the ticket's UI contract (`Key screens/states`, `Taste refs`, `Expected artifacts`),
-3. the ticket `Evidence checklist`, if present,
-4. `docs/TASTE.md` when UI taste or layout quality is in scope.
+2. `tickets/TASK-XXXX/design.md` when present,
+3. the ticket's UI contract (`Key screens/states`, `Taste refs`, `Expected artifacts`),
+4. the ticket `Evidence checklist`, if present,
+5. `docs/TASTE.md` when UI taste or layout quality is in scope.
 
 If the ticket does not define the expected screens/states well enough to compare against reality, stop and mark QA as underspecified instead of improvising a vague check.
+
+## Verdict Start
+
+Every visual QA verdict starts with:
+
+```text
+Expected baseline: <design.md path | Agent Contract | ticket state | missing>
+Best image: <path or missing>
+Verdict: pass | revise | fail | blocked
+```
+
+If screenshots are missing, set `Best image: missing` or name the concrete
+missing screenshot artifact path and return `fail`, `revise`, or `blocked`.
+Prefer the concrete blocker form:
+
+```text
+Best image: missing expected artifact
+tickets/TASK-XXXX/artifacts/qa/<timestamp>/screens/<declared-state>.png
+```
 
 ## Non-negotiable output contract
 
