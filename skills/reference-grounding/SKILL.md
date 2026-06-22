@@ -49,10 +49,13 @@ codebase instead of inventing from memory.
 - [ ] 5. Prefer primary sources and real implementations over commentary.
 - [ ] 6. Write a compact grounding note with evidence, confidence, and local
   impact.
-- [ ] 7. If compact grounding is not enough, route the exact evidence gap to the
+- [ ] 7. When the caller will answer the user directly, include a visible
+  `Grounding:` line that names the source class used or why grounding was
+  intentionally skipped.
+- [ ] 8. If compact grounding is not enough, route the exact evidence gap to the
   caller's next step, usually `research:official-docs`, `research:code-patterns`,
   `research:parity`, `research:gap`, or `research:source-synthesis`.
-- [ ] 8. Review before completion.
+- [ ] 9. Review before completion.
   - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -78,6 +81,7 @@ decision. Do not keep gathering sources for completeness.
 
 Return a short `Grounding Note`:
 
+- `Grounding`
 - `Question / claim`
 - `Local baseline`
 - `Source need`
@@ -91,11 +95,27 @@ Return a short `Grounding Note`:
 
 Use the `Grounding Note` fields above as the default output template.
 
+For direct chat answers that do not need the full note, keep the visible proof
+compact:
+
+```text
+Grounding: official docs + local files checked.
+```
+
+or:
+
+```text
+Grounding: skipped because this is a tiny local-only same-scope fix.
+```
+
 ## Guardrails
 
 - Do not turn every task into a full research project; do perform compact
   current-source grounding for implementation choices.
 - Do not claim evidence was checked unless it was actually read.
+- Do not bury required grounding in private reasoning. If the answer depends on
+  external practice, current docs, peer norms, or "how things are done", surface
+  the evidence class with `Grounding:`.
 - Do not treat local files as sufficient evidence for "best practice",
   "current", "latest", "state of the art", external API behavior, or peer
   implementation expectations.

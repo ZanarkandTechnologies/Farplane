@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.4
+template_version: 0.2.5
 feature_refs:
   - FEAT-0042
   - FEAT-0043
@@ -89,6 +89,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Use `reference-grounding` before claims or recommendations that depend on
   local files, official behavior, current facts, peer norms, standards,
   pricing, laws, APIs, or implementation examples.
+- When a response depends on real-world practice, current docs, peer norms,
+  APIs, standards, or "how X is usually done", make the grounding visible:
+  include a compact `Grounding:` line naming the source class used, such as
+  local files, official docs, maintained examples, peer implementations, or web
+  sources. If grounding is intentionally skipped, state why in that line.
 - For implementation feature work, do current external grounding by default:
   search official docs, maintained examples, or peer implementations before
   locking the approach, then adapt the smallest useful version to the local
