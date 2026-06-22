@@ -289,6 +289,63 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [skill_eval.resolve()])
             self.assertEqual(summary["verdict_counts"], {"A": 1})
 
+    def test_skills_suite_filters_selected_skill(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "fake_cli.py"
+            qa_eval = root / "skills" / "qa" / "eval_task.json"
+            advise_eval = root / "skills" / "advise" / "eval_task.json"
+            (eval_dir / "prompts").mkdir(parents=True)
+            qa_eval.parent.mkdir(parents=True)
+            advise_eval.parent.mkdir(parents=True)
+            write_fake_cli(fake_cli)
+            write_tasks(qa_eval)
+            advise_eval.write_text(
+                json.dumps(
+                    [
+                        {
+                            "id": "advise_01",
+                            "title": "Advise task",
+                            "query": "Give advice.",
+                            "reference_points": ["Gives advice"],
+                        }
+                    ]
+                )
+            )
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+
+            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            code = runner.main(
+                [
+                    "run",
+                    "--harness",
+                    "custom",
+                    "--eval-dir",
+                    str(eval_dir),
+                    "--target-root",
+                    str(root),
+                    "--suite",
+                    "skills",
+                    "--skill",
+                    "qa",
+                    "--label",
+                    "selected-skill",
+                    "--agent-command-template",
+                    template,
+                    "--judge-command-template",
+                    template,
+                ]
+            )
+
+            self.assertEqual(code, 0)
+            run_dir = next((eval_dir / "runs").glob("*-selected-skill"))
+            summary = json.loads((run_dir / "summary.json").read_text())
+            self.assertEqual(summary["task_count"], 1)
+            self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [qa_eval.resolve()])
+            self.assertEqual(summary["tasks"][0]["task_id"], "proof_01")
+
     def test_status_reports_missing_and_ready_layout(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

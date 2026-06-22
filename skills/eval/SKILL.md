@@ -197,6 +197,12 @@ Run all skill-local evals with:
 python3 .farplane/evals/run_evals.py run --harness codex --suite skills --label skill-baseline
 ```
 
+Run selected skill-local evals with:
+
+```bash
+python3 .farplane/evals/run_evals.py run --harness codex --suite skills --skill qa --skill eval --label selected-skills
+```
+
 ## Commands
 
 Check setup:

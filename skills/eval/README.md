@@ -36,6 +36,7 @@ python3 skills/eval/scripts/run_evals.py status --harness codex --target-root .
 python3 skills/eval/scripts/run_evals.py init --harness codex --target-root .
 python3 .farplane/evals/run_evals.py run --harness codex --label baseline --limit 1
 python3 .farplane/evals/run_evals.py run --harness codex --suite skills --label skill-baseline
+python3 .farplane/evals/run_evals.py run --harness codex --suite skills --skill qa --label qa-skill
 ```
 
 Then open `.farplane/evals/viewer.html`, or run the shadcn React viewer:

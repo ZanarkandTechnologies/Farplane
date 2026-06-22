@@ -164,6 +164,52 @@ def resolve_skill_task_paths(target_root: Path) -> list[Path]:
     return sorted(path for path in skills_dir.glob(f"*/{SKILL_EVAL_TASK_FILE}") if path.is_file())
 
 
+def normalize_skill_selector(selector: str) -> str:
+    value = selector.strip().strip("/")
+    if not value:
+        raise EvalError("--skill values must be non-empty")
+    parts = Path(value).parts
+    if len(parts) >= 3 and parts[-1] == SKILL_EVAL_TASK_FILE and parts[-3] == "skills":
+        return parts[-2]
+    if len(parts) >= 2 and parts[-2] == "skills":
+        return parts[-1]
+    return value
+
+
+def expand_skill_selectors(selectors: Sequence[str]) -> set[str]:
+    expanded: set[str] = set()
+    for selector in selectors:
+        expanded.update(normalize_skill_selector(part) for part in selector.split(",") if part.strip())
+    return expanded
+
+
+def skill_name_for_task_path(path: Path, target_root: Path) -> str | None:
+    try:
+        relative = path.resolve().relative_to(target_root.resolve())
+    except ValueError:
+        return None
+    parts = relative.parts
+    if len(parts) == 3 and parts[0] == "skills" and parts[2] == SKILL_EVAL_TASK_FILE:
+        return parts[1]
+    return None
+
+
+def filter_skill_task_paths(paths: Sequence[Path], target_root: Path, selectors: Sequence[str]) -> list[Path]:
+    wanted = expand_skill_selectors(selectors)
+    if not wanted:
+        return list(paths)
+    available: dict[str, Path] = {}
+    for path in paths:
+        skill_name = skill_name_for_task_path(path, target_root)
+        if skill_name:
+            available[skill_name] = path
+    missing = sorted(wanted - set(available))
+    if missing:
+        available_text = ", ".join(sorted(available)) or "none"
+        raise EvalError(f"requested skill evals not found: {', '.join(missing)}; available: {available_text}")
+    return [available[name] for name in sorted(wanted)]
+
+
 def resolve_task_paths(eval_dir: Path, tasks: str | None, suite: str, target_root: Path) -> list[Path]:
     if tasks:
         return [Path(tasks)]
@@ -447,9 +493,11 @@ def command_status(args: argparse.Namespace) -> int:
 
 
 def command_run(args: argparse.Namespace) -> int:
-    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, Path(args.target_root).resolve())
+    target_root = Path(args.target_root).resolve()
+    eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, target_root)
     eval_config = load_eval_config(eval_dir)
-    task_paths = resolve_task_paths(eval_dir, args.tasks, args.suite, Path(args.target_root).resolve())
+    task_paths = resolve_task_paths(eval_dir, args.tasks, args.suite, target_root)
+    task_paths = filter_skill_task_paths(task_paths, target_root, args.skill)
     tasks = load_task_suite(task_paths, args.limit, default_context=eval_config.default_context)
     if args.max_parallel_tasks < 1:
         raise EvalError("--max-parallel-tasks must be at least 1")
@@ -564,6 +612,12 @@ def build_parser() -> argparse.ArgumentParser:
         choices=["harness", "skills"],
         default="harness",
         help="Built-in task suite to run when --tasks is not provided. Use 'skills' to discover skills/*/eval_task.json.",
+    )
+    run_parser.add_argument(
+        "--skill",
+        action="append",
+        default=[],
+        help="Run only selected skill-local eval files. Use with --suite skills; accepts a skill name, skills/name, or skills/name/eval_task.json. May be passed multiple times or comma-separated.",
     )
     run_parser.add_argument("--agent-prompt")
     run_parser.add_argument("--judge-prompt")
