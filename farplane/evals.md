@@ -14,7 +14,7 @@ owner: harness
 
 ```text
 check_farplane_project_files()
-  -> validates farplane/manifest.json, farplane/automations.json,
+  -> validates farplane/manifest.json, farplane/steer.config.json,
      farplane/bindings.md, optional farplane/pm.json, retired names, and
      obvious secret leakage
 
@@ -37,12 +37,13 @@ python3 skills/skill-maintenance/scripts/check_skills.py --write
 
 - A new project bootstrap produces `farplane/README.md`,
   `farplane/manifest.json`, `farplane/harness.md`, `farplane/goals.md`,
-  `farplane/automations.md`, `farplane/bindings.md`, and `farplane/evals.md`,
+  `farplane/steer.config.json`, `farplane/bindings.md`, and `farplane/evals.md`,
   plus optional `farplane/pm.json` for UI thread grouping and ignored
   `.farplane/` runtime state.
 - `deep-init-project` with `harness_depth != none` calls the harness phase and
   produces concrete unblock tickets for missing bindings or feedback loops.
-- Ticket drainer ignores Notion when local tickets are proceedable.
-- Horizon update reuses fresh reports from the run ledger instead of
-  duplicating jobs, while quarterly/yearly actions stay scheduled inside the
-  horizon lane.
+- Pulse chooses at most one bounded action per beat and embeds simple local
+  ticket selection instead of calling a separate ticket drainer.
+- Steer compares current time to cached `next_due_at` values, runs due planning
+  jobs, writes date-stamped reports, and updates scheduler state without
+  mutating tracked config.

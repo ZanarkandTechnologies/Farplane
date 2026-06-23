@@ -1,0 +1,18 @@
+{
+  "schema": "farplane_steer_config",
+  "version": "2026-06-23.2",
+  "timezone": "Asia/Kuala_Lumpur",
+  "state_ref": ".farplane/state/steer-scheduler.json",
+  "jobs": [
+    {
+      "id": "daily_report",
+      "cadence": "FREQ=DAILY;INTERVAL=1",
+      "prompt": "Run the Steer daily report workflow. Gather tickets, Pulse reports, worker-thread outcomes, and reports created since the previous daily interval; summarize what changed; label blockers or stale context; and write lightweight Pulse guidance. Do not perform strategy replanning unless a weekly steering job is also due. Use skills/steer-update/templates/daily-report.md as the workflow reference."
+    },
+    {
+      "id": "weekly_steer",
+      "cadence": "FREQ=WEEKLY;INTERVAL=1",
+      "prompt": "Run the Steer weekly scrum steering workflow. Gather tickets created, started, completed, blocked, or spawned since the last weekly interval; reflect on outcomes; check drift against farplane/goals.md; plan the next week; preserve the report-before-goals-mutation rule; propose goals deltas with approval gates when needed; and route executable changes to tickets or Goal Advisor handoffs. Use skills/steer-update/templates/strategy-review.md as the workflow reference."
+    }
+  ]
+}

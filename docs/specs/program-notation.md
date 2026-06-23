@@ -240,12 +240,13 @@ business, content engine, funnel, project, research program, or recurring
 strategy loop.
 
 Default harness storage is one Markdown file with YAML front matter and one
-fenced `harness-program` block. Recurring automation config belongs in tracked
-`farplane/automations.md`; generated runtime state, reports, eval runs, and
-logs belong in ignored `.farplane/`. Use Markdown around the block for
-evidence, assumptions, open questions, review, and optional inventory tables.
-Split to Goal Packet files only when a current milestone is ready to run.
-Project-specific non-secret skill coordinates belong in `farplane/bindings.md`.
+fenced `harness-program` block. Recurring Steer job prompts and cadence belong
+in tracked `farplane/steer.config.json`; generated runtime state, reports,
+eval runs, and logs belong in ignored `.farplane/`. Use Markdown around the
+block for evidence, assumptions, open questions, review, and optional inventory
+tables. Split to Goal Packet files only when a current milestone is ready to
+run. Project-specific non-secret skill coordinates belong in
+`farplane/bindings.md`.
 
 `HarnessIL` and `Harness DSL` are internal aliases. Prefer **Harness Program**
 in operator-facing docs.

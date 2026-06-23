@@ -61,6 +61,8 @@ Invocation and runtime specs:
 - `invocation-and-adapters.md` - explicit Farplane invocation, board adapter,
   compute selection, local execution, runtime surface boundaries, and future
   external-runner contract.
+- `../farplane-framework/deep-init-critical-path.md` - end-to-end project
+  bootstrap and Steer/Pulse activation story for new Farplane projects.
 
 Product feature specs:
 

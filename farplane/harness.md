@@ -50,8 +50,8 @@ project "Farplane" {
 
   system recurring_pm {
     status: ready
-    evidence: ref("farplane/automations.json")
-    action: use_existing("pulse, rhythm, and horizon lane updates")
+    evidence: ref("farplane/steer.config.json")
+    action: use_existing("Steer and Pulse automation loops")
   }
 
   skill update_strategy {
@@ -75,26 +75,20 @@ project "Farplane" {
   }
 
   heartbeat pulse_update {
-    trigger: "compiled from farplane/automations.json lanes.pulse"
+    trigger: "Codex automation every 30 minutes"
     bindings: "farplane/bindings.md"
     first: pulse_update
-    output: ".farplane/reports/pulse/latest.md"
+    output: ".farplane/reports/pulse/<timestamp>.md"
   }
 
-  heartbeat rhythm_update {
-    trigger: "compiled from farplane/automations.json lanes.rhythm"
+  heartbeat steer_update {
+    trigger: "Codex automation at the minimum planning cadence"
     bindings: "farplane/bindings.md"
-    first: rhythm_update
-    jobs: [ticket_update]
-    output: ".farplane/reports/rhythm/latest.md"
-  }
-
-  heartbeat horizon_update {
-    trigger: "compiled from farplane/automations.json lanes.horizon"
-    bindings: "farplane/bindings.md"
-    first: grouped_jobs
-    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, registry_drift, update_strategy, quarterly_plan, annual_review]
-    output: ".farplane/reports/horizon/latest.md"
+    first: steer_update
+    config: "farplane/steer.config.json"
+    state: ".farplane/state/steer-scheduler.json"
+    jobs: [daily_report, weekly_steer]
+    output: ".farplane/reports/steer/<job>/<timestamp>.md"
   }
 }
 ```

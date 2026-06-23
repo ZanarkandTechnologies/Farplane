@@ -50,8 +50,9 @@ The parent PM does not inspect every child transcript by default.
 It reads child project surfaces:
 
 - `farplane/goals.md` for child strategy and current milestone.
-- `farplane/automations.json` or `farplane/automations.md` for child PM lanes.
-- `.farplane/reports/*/latest.md` for child PM status.
+- `farplane/steer.config.json` for child scheduled planning jobs.
+- Date-stamped `.farplane/reports/**` records and scheduler pointers for child
+  PM status.
 - `tickets/` for executable child work and blockers.
 - `docs/MEMORY.md`, `docs/LESSONS.md`, and `docs/TROUBLES.md` for durable
   child learning when topic-relevant.
@@ -75,8 +76,8 @@ Interpretation:
 
 - `independent_strategy`: the loop has goals, KPIs, holds, or milestones that
   are not just one parent milestone.
-- `independent_cadence`: the loop needs recurring pulse, rhythm, horizon, or
-  scheduled actions that would clutter the parent project automation config.
+- `independent_cadence`: the loop needs its own Pulse/Steer cadence or
+  scheduled planning actions that would clutter the parent project config.
 - `independent_memory`: the loop accumulates local lessons, troubles, or
   invariants that should not all roll up into parent memory.
 - `independent_ticket_board`: the loop has multiple active tickets whose state

@@ -1,15 +1,15 @@
 ---
 title: Project Files
-status: draft
+status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-17
-framework_template_version: "0.1.0"
+updated_at: 2026-06-23
+framework_template_version: "0.2.0"
 source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
-  - farplane/automations.json
   - farplane/automations.md
+  - farplane/steer.config.json
   - farplane/bindings.md
   - farplane/pm.json
   - .gitignore
@@ -19,57 +19,15 @@ source_of_truth:
 
 Farplane projects separate tracked control files from local runtime state.
 
-Use this rule:
-
 ```text
 farplane/   = tracked project framework config
-.farplane/  = ignored local runtime state, cache, reports, and logs
+.farplane/  = ignored local runtime state, reports, eval runs, and logs
 docs/       = tracked human-readable project memory and durable narrative
-tickets/    = visible work queue
+tickets/    = visible work queue and proof surface
 skills/     = tracked reusable project or repo skills
-.codex/     = installed user/runtime Codex state outside the repo
 ```
 
-The dot matters.
-Do not put canonical project config in `.farplane/` unless the project has
-changed `.gitignore` on purpose.
-
-## Why This Shape
-
-Farplane project files exist so an agent can understand the project from durable
-filesystem state instead of transcript memory.
-
-- `AGENTS.md` is the always-loaded operating policy. Keep it short and
-  navigational so every loop gets the current repo rules without swallowing the
-  whole project history.
-- `PROJECT_RULES.md` owns stack-specific runtime commands, QA commands,
-  services, ports, environment assumptions, and local conventions. This keeps
-  executable project facts out of chat and out of generic skills.
-- `ARCHITECTURE.md` gives software projects one top-level map for modules,
-  data, boundaries, and runtime shape.
-- `farplane/manifest.json` records which Farplane project spec this repo
-  instantiated and which standard files should be tracked or ignored.
-- `farplane/*.md` files carry tracked project config: harness identity, goals,
-  automations, bindings, eval policy, and optional PM thread grouping.
-- `.farplane/` carries ignored local runtime state such as reports, logs, eval
-  runs, and continuation ledgers. It is useful to agents, but it is not the
-  canonical project contract.
-- `docs/` carries durable human-readable memory: specs, history, lessons,
-  troubles, taste, and other long-lived narrative.
-- `tickets/` carries executable work state. Tickets are the shared task memory,
-  proof target, and handoff surface for implementation.
-- `qa/` carries reusable proof shortcuts, deep links, seed/reset paths, and
-  cookbook entries so user-visible checks are not rediscovered from scratch.
-- Optional `.githooks/` and repo-local `scripts/` make quality gates visible
-  without silently mutating local git config.
-
-Skills such as `deep-init-project` should create or update this shape, not
-explain it at length. The rationale belongs here so the project spec can evolve
-without bloating first-load skill instructions.
-
 ## Tracked Framework Config
-
-Recommended folder:
 
 ```text
 farplane/
@@ -78,146 +36,69 @@ farplane/
   harness.md
   goals.md
   automations.md
+  steer.config.json
   bindings.md
   evals.md
   pm.json
 ```
 
-Create the files when they have real content.
-Deep init creates the standard set by default; use `harness_depth=none` only
-for substrate-only migrations.
-Do not expand a tiny project beyond the template until it has real content.
-
-Validate the convention with:
-
-```bash
-python3 bin/validators/check_farplane_project_files.py
-```
-
 ### `farplane/manifest.json`
 
-The versioned Farplane project spec manifest for this project instance.
-
-Use JSON because the primary job is simple validation: for this framework
-version, which paths are standard, and should they be pushed or ignored?
-
-```json
-{
-  "schema": "farplane_project",
-  "spec_version": "1.1.0",
-  "standard": {
-    "tracked": ["AGENTS.md", "PROJECT_RULES.md", "farplane/manifest.json"],
-    "ignored": [".farplane/state/run-ledger.json"]
-  },
-  "optional": {
-    "tracked": ["farplane/pm.json"],
-    "ignored": [".farplane/reviews/"]
-  }
-}
-```
-
-Keep this file concise. It is not a changelog. When the framework shape changes,
-bump `spec_version`, archive the old manifest snapshot in the framework docs or
-release notes, and make the current manifest describe only the current standard.
-Put semantics, examples, and migration guidance in this doc or
-`farplane/README.md`.
+Versioned project spec manifest. It records which files are standard tracked
+project config and which ignored runtime paths should exist locally.
 
 ### `farplane/harness.md`
 
-The project constitution and operating model:
-
-- mission
-- values and non-tradeoffs
-- modes such as business, lab, channel, academy, product, or internal ops
-- feedback loops
-- systems and skill bindings by name
-- project-level operating principles
-
-Use this for stable project identity and why the harness exists.
+Project constitution and operating model: mission, values, non-tradeoffs,
+systems, modes, feedback loops, and skill bindings.
 
 ### `farplane/goals.md`
 
-The goal portfolio:
-
-- north star
-- current milestone
-- KPIs
-- strategy axes
-- holds and stop conditions
-- Goal Advisor handoffs
-
-Use this for values -> goals -> KPIs -> current milestone.
-Do not make ticket microtasks the default goal structure.
-
-### `farplane/automations.json`
-
-The structured automation manifest:
-
-- pulse/rhythm/horizon lane intervals
-- live automation IDs
-- scheduled actions
-- drift policy
-- ticket source policy
-- Notion use policy
-- report paths
-- run ledger path
-- side-effect gates
-
-Use this because it can compile into live Codex automation prompts. This file
-should be isolated from the broader harness so the automation compiler can read
-the lane program without inheriting every strategic note.
+Project strategy context: north star, current milestone, KPIs, strategy axes,
+holds, stop conditions, and Goal Advisor handoffs.
 
 ### `farplane/automations.md`
 
-The human automation index and compatibility pointer for older docs, prompts,
-or agents that still load the Markdown path.
+Human-reviewable Codex automation prompt source. It stores the exact Pulse and
+Steer prompt blocks copied into the Codex app automation records.
+
+Skills stay generic and parameterized. Project-specific cadence, paths,
+policies, thread IDs, and schedule choices live in the prompts here. This file
+is not generated runtime state and does not store `last_run_at`, `next_due_at`,
+or automation execution logs.
+
+### `farplane/steer.config.json`
+
+Human-owned Steer job config:
+
+- config version and timezone
+- scheduler state ref
+- scheduled planning jobs
+- job cadence strings
+- job prompts
+
+Keep this file easy to edit. If a job should not run, remove it from the list.
+Do not duplicate workflow inputs, outputs, drift checks, report paths, or gates
+that the job prompt or skill already owns. Mutable fields such as
+`last_run_at`, `next_due_at`, and `last_report` belong in
+`.farplane/state/steer-scheduler.json`.
 
 ### `farplane/bindings.md`
 
-The non-secret project binding manifest.
-
-Skills define reusable capabilities such as `posthog_metrics`,
-`notion_task_source`, `github_repo_context`, or `telegram_notify`.
-`farplane/bindings.md` gives those skills the project-specific coordinates
-they need:
-
-- Notion project/page/database aliases
-- GitHub repo mapping
-- analytics project identifiers and dashboard links
-- deploy/project links such as Vercel project URLs
-- auth/provider tenant aliases such as WorkOS org or app labels
-- notification channel labels
-- safe data-source names
-
-Use bindings for IDs, URLs, labels, aliases, and lookup handles that are safe
-to track.
-Do not store API keys, access tokens, passwords, raw private credentials, or
-anything that grants account access.
-Those belong in the user's secure runtime environment.
-
-When a binding is missing, create a ticket to add the binding or build the
-skill that can fetch it.
-Do not turn a missing binding into a vague markdown blocker.
+Non-secret project coordinates: URLs, handles, safe IDs, labels, aliases,
+database names, dashboard links, and notification channel labels. Do not store
+secrets or credentials here.
 
 ### `farplane/evals.md`
 
-Project-level eval and QA policy:
-
-- end-to-end eval scenarios
-- smoke checks
-- acceptance examples
-- regression cases
-- proof paths
-- review rubrics or links to rubrics
-
-Use `.farplane/evals/runs/` for generated eval outputs.
-Keep the eval definitions tracked in `farplane/evals.md`.
+Project-level proof and eval policy: smoke checks, acceptance examples,
+regression cases, review rubrics, and evidence routes.
 
 ### `farplane/pm.json`
 
-Optional project PM thread manifest for Farplane UI.
-
-Shape:
+Optional UI glue for grouping multiple Codex threads under one persistent
+employee/PM agent in the Farplane UI. It is not loop state, scheduler state, or
+an automation registry.
 
 ```json
 {
@@ -231,84 +112,54 @@ Shape:
 }
 ```
 
-Use `threads.chats` for ordinary Codex chat thread IDs and
-`threads.automations` for Codex automation thread IDs. Farplane UI folds the
-listed IDs into one visual project PM without merging transcripts.
+Use `threads.chats` for persistent chat or worker threads that should render
+under the same employee agent. Use `threads.automations` for automation-owned
+threads that should also render under that employee. Threads not listed here
+may appear as ephemeral agents in the UI.
 
-Missing file means legacy UI behavior. Empty arrays are valid while the project
-has no PM thread IDs to group.
-
-## Local Runtime State
-
-Recommended ignored folder:
+## Ignored Runtime State
 
 ```text
 .farplane/
-  state/
-    run-ledger.json
+  README.md
+  state/run-ledger.json
+  state/steer-scheduler.json
   reports/
-    <job>/latest.md
-    <job>/runs/YYYY-MM-DD.md
-  evals/
-    runs/
+  evals/runs/
   logs/
 ```
 
-Use `.farplane/` for generated state that helps agents continue work but should
-not become the canonical project contract.
+### `.farplane/state/steer-scheduler.json`
 
-## Durable Project Memory
+Mutable Steer scheduler cache:
 
-Keep these in `docs/`, not `.farplane/`:
+- config version used to generate state
+- per-job `last_run_at`
+- per-job `next_due_at`
+- per-job `last_report`
+- per-job `last_status`
 
-```text
-docs/MEMORY.md
-docs/HISTORY.md
-docs/TROUBLES.md
-docs/LESSONS.md
-```
+Steer reads this file first after loading config. The normal hot path is simple
+timestamp comparison against cached `next_due_at` values.
 
-They are project memory, not runtime cache.
-They should be reviewable and portable with the project.
+### `.farplane/reports/`
 
-## Tickets
-
-Keep tickets in `tickets/`.
-
-Tickets are the visible work queue and should remain outside `.farplane/`.
-The ticket drainer reads local tickets first, then optional external sources
-only when `farplane/automations.json` enables them.
-
-## Skills And Agents
-
-Use repo-owned `skills/` for reusable project skills that should travel with
-the repo.
-Use installed `~/.codex/skills/` only as the user's runtime installation
-surface.
-
-Use `AGENTS.md` for Codex operating policy loaded every loop.
-Do not bury durable project strategy or recurring automation config inside
-`AGENTS.md`.
-
-## Recommended Minimal Project
-
-For a small project, start with:
+Generated reports. New framework reports should be date-stamped:
 
 ```text
-AGENTS.md
-README.md
-docs/MEMORY.md
-docs/HISTORY.md
-docs/TROUBLES.md
-docs/LESSONS.md
-tickets/
-farplane/README.md
-farplane/harness.md
-farplane/goals.md
-farplane/automations.json
-farplane/automations.md
-farplane/bindings.md
-farplane/evals.md
-farplane/pm.json
-.farplane/state/run-ledger.json
+.farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/steer/<job>/<YYYY-MM-DDTHHMMSSZ>.md
 ```
+
+State files store newest-report pointers when needed.
+
+## Validation
+
+Run:
+
+```bash
+python3 bin/validators/check_farplane_project_files.py
+```
+
+The validator checks the current manifest shape, retired file names, Steer
+config JSON, bindings front matter, and obvious secret leakage.
