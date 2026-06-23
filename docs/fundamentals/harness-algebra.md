@@ -384,9 +384,19 @@ Skill tier system:
 
 ```text
 Tier 0 = native phase protocol, inherited by every skill invocation
-Tier 1 = primitive behavior moves such as advise, grounding, prototyping
-Tier 2 = workflow interfaces such as plan, research, review, eval
-Tier 3 = domain/application skills such as goal-advisor or optimize-harness
+Tier 1 = highest-compounding primitives such as advise, grounding, prototyping
+Tier 2 = medium-compounding workflow interfaces such as plan, research, review, eval
+Tier 3 = narrow-compounding domain/application skills such as goal-advisor or optimize-harness
+```
+
+Numeric tiers primarily classify where upgrades compound. The first-load todo
+rules below are the loading contract derived from that classification, not the
+entire meaning of the tier.
+
+```text
+tier(skill) -> compound_leverage_class
+todo_link_rules(skill) -> first_load_loading_boundary
+upgrade_priority(skill, evidence) -> rollout_order
 ```
 
 Tiered first-load rule:
@@ -455,7 +465,7 @@ SkillEval(skill, task_cases, judge)
   -> score + verdict + evidence
 ```
 
-Skill evals compound from lower tiers:
+Skill evals compound from lower numeric tiers:
 
 ```text
 improve(Tier1 primitive)
@@ -470,7 +480,7 @@ Default optimization direction:
 primitive behavior -> workflow skill -> domain skill -> e2e workflow
 ```
 
-Climb upward only when the lower-tier contract is already sharp and the
+Climb upward only when the lower numeric tier contract is already sharp and the
 remaining failure is genuinely compositional.
 
 Use skill engineering when behavior should repeat across tasks. Use a ticket or

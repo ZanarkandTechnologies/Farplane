@@ -49,6 +49,19 @@ behavior. Farplane uses Tier 0 to describe the expected phase shape in
 Do not create `tier: 0` skills for phases such as plan, execute, or review.
 Phases are inherited by skills; they are not lower-level skill dependencies.
 
+Numeric skill tiers are compound leverage classes. A lower numeric tier means
+that improvements to the skill tend to propagate through more downstream
+workflows, so those packages should be kept sharper and upgraded earlier. The
+same tier metadata also informs first-load todo-link rules, but the link rules
+are the loading contract; the tier itself is the skill's compounding upgrade
+class.
+
+```text
+tier(skill) -> compound_leverage_class
+todo_link_rules(skill) -> first_load_loading_boundary
+upgrade_priority(skill, evidence) -> rollout_order
+```
+
 ## Phase Ownership And Recursion
 
 Every skill invocation may perform Tier 0 phases inline. A skill should call a
@@ -101,18 +114,21 @@ resolve_skill_params(skill_signature, user_request, state)
   -> bound_inputs | setup_workflow | blocking_question
 ```
 
-Tier 1 skills are primitives. They are core thinking moves that multiple Tier 2
-interfaces need as base obligations. Farplane's current Tier 1 primitives are:
+Tier 1 skills are highest-compounding primitives. They are core moves or small
+provider contracts that multiple higher-tier workflows need as base obligations.
+Farplane's current core behavior primitives are:
 
 - `advise`: choose among real options and name the recommendation.
 - `reference-grounding`: ground claims, plans, and recommendations in evidence.
 - `prototyping`: prove a pattern at the smallest honest scale before expanding.
 
 Create a new Tier 1 primitive only when multiple Tier 2 interfaces need that
-move as a base dependency.
+move as a base dependency. Small provider primitives, such as notification
+senders, may also be Tier 1 when they are intentionally reused by multiple
+higher-tier workflows and have a narrow, stable contract.
 
-Tier 2 skills are generic workflow interfaces. They turn primitive obligations
-into reusable protocol surfaces such as:
+Tier 2 skills are medium-compounding workflow interfaces. They turn primitive
+obligations into reusable protocol surfaces such as:
 
 - `brainstorm`
 - `plan`
@@ -122,10 +138,11 @@ into reusable protocol surfaces such as:
 Common reusable work that many Tier 3 skills need should usually start as a
 Tier 2 interface or method, not a new Tier 1 primitive.
 
-Tier 3 skills are application or domain skills. They implement Tier 2
-interfaces for a concrete workflow, domain, package, or artifact type. Examples
-include coding pipeline skills, frontend/media/document skills, and meta skills
-such as `skill-creator` and `skill-maintenance`.
+Tier 3 skills are application or domain skills. They have the narrowest normal
+compounding radius and implement Tier 2 interfaces for a concrete workflow,
+domain, package, or artifact type. Examples include coding pipeline skills,
+frontend/media/document skills, and meta skills such as `skill-creator` and
+`skill-maintenance`.
 
 Meta skills are not Tier 0. They are skills whose domain is the harness or skill
 system itself. Represent them with normal numeric `tier` plus `group: meta`,
@@ -147,7 +164,9 @@ Reclassification candidates:
 
 ## Todo-Link Rules
 
-First-load todo links should follow the dependency hierarchy:
+First-load todo links should follow the loading boundary derived from the tier
+model. This preserves progressive disclosure and avoids making every domain
+skill import every primitive directly:
 
 - Tier 2 first-load todos may link Tier 1 primitives.
 - Tier 3 first-load todos should usually link Tier 2 surfaces such as
@@ -166,7 +185,7 @@ First-load todo links should follow the dependency hierarchy:
   dependency direction.
 
 Use `bin/validators/check_skill_todo_tiers.py --allow-peer-tier3` to audit the current
-intentional hierarchy.
+intentional first-load loading contract.
 
 ## Frontmatter Contract
 
@@ -291,7 +310,8 @@ fail missing or non-current skills.
 
 ## Rollout Policy
 
-Roll out skill-system standards from the most compound surfaces first:
+Roll out skill-system standards from the most compound surfaces first. This is
+the operational meaning of the numeric tiers:
 
 1. Meta skills and Tier 1 primitives stay current by default.
 2. Core Tier 2 interfaces are updated when standards change.

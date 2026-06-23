@@ -312,3 +312,4 @@
 2026-06-12 17:05 +0800 | CLEANUP | remove the old session-shaped human-feedback autoresearch skill now that `with-human` is the Goal Packet feedback provider
 2026-06-12 10:40 +0800 | SKILL | rename the human-feedback Goal preset to `optimize-with-human`, keep `human_feedback` as the Goal Packet metric signal, and route Telegram-first optimization loops through `goal-advisor`
 2026-06-12 11:16 +0800 | DOCS | adopt the compact ticket-as-program standard with `Program` and `Done / Proof` replacing duplicated acceptance, verification, and proof-contract sections
+2026-06-23 16:35 +0800 | DOCS | clarify numeric skill tiers as compounding leverage classes for upgrade priority while keeping first-load todo links as the tier-derived loading contract

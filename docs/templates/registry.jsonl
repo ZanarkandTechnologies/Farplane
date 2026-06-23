@@ -1,4 +1,4 @@
-{"feature_refs":["FEAT-0042","FEAT-0043","FEAT-0045","FEAT-0047","FEAT-0049","FEAT-0050","FEAT-0051","FEAT-0052"],"path":"templates/global/AGENTS.md","template_id":"global-agents-template","template_version":"0.2.5"}
+{"feature_refs":["FEAT-0022","FEAT-0042","FEAT-0043","FEAT-0045","FEAT-0047","FEAT-0049","FEAT-0050","FEAT-0051","FEAT-0052"],"path":"templates/global/AGENTS.md","template_id":"global-agents-template","template_version":"0.2.6"}
 {"feature_refs":["FEAT-0029","FEAT-0032","FEAT-0046"],"kind":"goal-program","path":"tickets/templates/goal-loop/program.md","template_id":"goal-loop-program","template_version":"0.1.1"}
 {"feature_refs":["FEAT-0027","FEAT-0048"],"kind":"project-harness","path":"skills/harness-creator/templates/project-harness.md","template_id":"project-harness","template_version":"0.1.2"}
 {"feature_refs":["FEAT-0048","FEAT-0054","FEAT-0057","FEAT-0058","FEAT-0059"],"path":"skills/skill-creator/references/SKILL_TEMPLATE.md","template_id":"skill-template","template_version":"0.3.1"}

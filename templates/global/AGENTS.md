@@ -1,7 +1,8 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.5
+template_version: 0.2.6
 feature_refs:
+  - FEAT-0022
   - FEAT-0042
   - FEAT-0043
   - FEAT-0045
@@ -289,6 +290,9 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   has planning or execution phases. Codex native work phases usually own that
   behavior; use explicit planning or execution skills only when their package is
   the best owner for the artifact or workflow.
+- Treat numeric skill tiers as compounding leverage classes for upgrade
+  priority. Treat first-load todo links as the separate loading contract derived
+  from those classes.
 - Default Tier 1 behavior skills:
   - `advise`: choose among real options and recommend one path.
   - `reference-grounding`: ground claims in local, official, peer, or supplied

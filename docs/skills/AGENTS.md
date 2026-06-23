@@ -41,11 +41,14 @@ Rules:
   `skills/skill-maintenance/graph/skill-template-intelligence.json` and
   `skills/skill-maintenance/templates/archive/` refresh with the template
   metadata. Do not hand-edit generated template intelligence files.
+- Treat numeric skill tiers as compounding leverage classes for upgrade
+  priority. Treat first-load todo links as the loading contract derived from
+  those classes.
 - Tier 3 first-load todos must not direct-link Tier 1 primitives such as
   `advise`, `reference-grounding`, or `review`; link the relevant Tier 2 surface
   instead and let that surface carry Tier 1 obligations.
 - Use `bin/validators/check_skill_todo_tiers.py` to audit all first-load todo edges
-  against the strict one-level-down hierarchy. Use `--allow-peer-tier3` only
+  against the one-level loading boundary. Use `--allow-peer-tier3` only
   when checking the current intentional Tier 3 application handoff graph.
 - Use `--hardcase-on-failure` during normal skill-maintenance checks so clear
   todo-tier contract violations leave a deduplicated hardcase artifact for

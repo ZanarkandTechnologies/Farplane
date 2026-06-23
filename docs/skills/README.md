@@ -207,9 +207,12 @@ fail missing or non-current skills.
 
 ## First-Load Todo Link Contract
 
-Tiered loading is enforced at the first-load todo boundary. Tier 0 phase steps
-are not skill links; they are inherited from `templates/global/AGENTS.md` and
-may be written as `## Phase Contract` in a skill when useful.
+Numeric tiers are compound leverage classes: lower numeric tiers are upgraded
+first because improvements there propagate through more workflows. Tiered
+loading is the separate first-load todo-link contract derived from those
+classes. Tier 0 phase steps are not skill links; they are inherited from
+`templates/global/AGENTS.md` and may be written as `## Phase Contract` in a
+skill when useful.
 
 - Tier 3 first-load todos link Tier 2 surfaces such as `research:*`, plus peer
   Tier 3 execution skills when a domain handoff needs one.
@@ -225,8 +228,8 @@ may be written as `## Phase Contract` in a skill when useful.
   `docs/review/rubrics/*`.
 - `bin/validators/sync_skill_registry.py --check` fails when a Tier 3 todo list direct-links
   a Tier 1 primitive.
-- `bin/validators/check_skill_todo_tiers.py` audits every first-load todo edge against strict
-  one-level-down loading. Use `--allow-peer-tier3` while Tier 3 application
+- `bin/validators/check_skill_todo_tiers.py` audits every first-load todo edge against the
+  one-level loading boundary. Use `--allow-peer-tier3` while Tier 3 application
   handoffs such as content skill -> media execution skill remain intentional.
 - `bin/validators/check_skill_todo_tiers.py --hardcase-on-failure` writes a deduplicated
   sanitized hardcase under `experiments/hardcases/` when the validator catches
