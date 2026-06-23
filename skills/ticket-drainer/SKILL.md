@@ -4,9 +4,12 @@ description: "Turn a lane-invoked ticket-drainer action into one selected local 
 tier: 3
 group: harness
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
+  skill-eval-task: "0.1.0"
 eval: eval_task.json
 allowed-tools: Read, Glob, Grep, Bash
+
 ---
 
 # Ticket Drainer

@@ -223,6 +223,12 @@ def build_registry(root: Path = ROOT, config_path: Path | None = None) -> list[d
         kind = metadata.get("kind")
         if isinstance(kind, str) and kind:
             row["kind"] = kind
+        consumer_scope = metadata.get("consumer_scope")
+        if isinstance(consumer_scope, str) and consumer_scope:
+            row["consumer_scope"] = consumer_scope
+        applies_to = metadata.get("applies_to")
+        if applies_to not in (None, "", []):
+            row["applies_to"] = normalize_string_list(applies_to, "applies_to", path)
         rows.append(row)
 
     return sorted(rows, key=lambda row: row["template_id"])

@@ -54,6 +54,45 @@ Externalized phase calls must shrink or specialize the current scope.
         self.assertEqual(by_id["stale"]["status"], "stale")
         self.assertEqual(by_id["external"]["status"], "external")
 
+    def test_template_rollout_rows_classify_consumers_by_template_uses(self) -> None:
+        rows = generator.template_rollout_rows(
+            [
+                {
+                    "template_id": "skill-template",
+                    "template_version": "0.3.1",
+                    "feature_refs": ["FEAT-0001"],
+                    "consumer_scope": "skill",
+                },
+                {
+                    "template_id": "farplane-framework",
+                    "template_version": "1.2.0",
+                    "feature_refs": ["FEAT-0002"],
+                    "consumer_scope": "project",
+                },
+            ],
+            [
+                {
+                    "consumer_id": "advise",
+                    "consumer_scope": "skill",
+                    "path": "skills/advise/SKILL.md",
+                    "template_uses": {"skill-template": "0.3.1"},
+                    "surfaces": {"skill": True},
+                },
+                {
+                    "consumer_id": "Farplane-UI",
+                    "consumer_scope": "project",
+                    "path": "../Farplane-UI/farplane/manifest.json",
+                    "template_uses": {"farplane-framework": "1.1.0"},
+                    "surfaces": {"project": True},
+                },
+            ],
+        )
+
+        by_template = {row["template_id"]: row for row in rows}
+
+        self.assertEqual(by_template["skill-template"]["status"], "current")
+        self.assertEqual(by_template["farplane-framework"]["status"], "stale")
+
     def test_feature_summaries_only_include_skill_category(self) -> None:
         features = generator.feature_summaries(
             [

@@ -4,9 +4,12 @@ version: 0.2.0
 description: "Turn a goal, context, invoked skills, and budget into composed todos, proof targets, and handoff when planning can reduce wasted work."
 tier: 2
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
+  skill-eval-task: "0.1.0"
 eval: eval_task.json
 allowed-tools: Read, Glob, Grep
+
 ---
 
 # Plan

@@ -3,10 +3,13 @@ name: deliberative-advice
 description: "Turn a high-stakes or expensive decision into independent perspectives, critique, synthesis, dissent, and one recommended path."
 tier: 2
 source: local
-skill_template_version: "0.1.0"
+template_uses:
+  skill-template: "0.1.0"
+  skill-eval-task: "0.1.0"
 eval: eval_task.json
 methods: ["advise:complex", "advise:council"]
 allowed-tools: Read, Glob, Grep
+
 ---
 
 # Deliberative Advice

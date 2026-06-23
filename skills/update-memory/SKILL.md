@@ -4,8 +4,10 @@ description: "Turn project history, memory, README, docs, lessons, troubles, and
 tier: 3
 group: project-ops
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
+
 ---
 
 # Update Memory

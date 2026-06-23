@@ -4,8 +4,10 @@ description: "Turn ambiguous long-horizon intent into goals.md, KPI trees, feedb
 tier: 3
 group: harness
 source: local
-skill_template_version: "0.3.0"
+template_uses:
+  skill-template: "0.3.0"
 allowed-tools: Read, Write, Glob, Grep
+
 ---
 
 # Horizon Advisor

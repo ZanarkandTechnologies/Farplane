@@ -4,8 +4,10 @@ description: "Turn a selected leverage play into exemplar proof, extracted rollo
 tier: 3
 group: harness
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
+
 ---
 
 # Leverage Rollout

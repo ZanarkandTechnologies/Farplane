@@ -4,7 +4,10 @@ description: "Turn agent, prompt, or skill behavior into local eval tasks, boole
 tier: 3
 group: harness
 source: local
-skill_template_version: "0.3.0"
+template_uses:
+  skill-template: "0.3.0"
+  skill-eval-task: "0.1.0"
+  skill-qa-checklist: "0.1.0"
 eval: eval_task.json
 qa_checklist: qa_checklist.md
 skill_ui: skills/eval/templates/viewer-react
@@ -12,6 +15,7 @@ methods:
   - eval:onboarding
   - eval:consolidate
 allowed-tools: Read, Glob, Grep, Bash
+
 ---
 
 # Eval

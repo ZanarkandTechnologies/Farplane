@@ -3,8 +3,10 @@ name: leverage-advisor
 description: "Turn an existing feature or capability into ranked leverage plays, a rollout roadmap, and the next executable proof step."
 tier: 2
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep
+
 ---
 
 # Leverage Advisor

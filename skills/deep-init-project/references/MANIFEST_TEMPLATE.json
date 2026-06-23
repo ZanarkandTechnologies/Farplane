@@ -1,6 +1,16 @@
 {
+  "_template_metadata": {
+    "template_id": "farplane-framework",
+    "template_version": "1.2.0",
+    "feature_refs": ["FEAT-0060"],
+    "consumer_scope": "project",
+    "applies_to": ["farplane/manifest.json"]
+  },
   "schema": "farplane_project",
   "spec_version": "1.2.0",
+  "template_uses": {
+    "farplane-framework": "1.2.0"
+  },
   "standard": {
     "tracked": [
       "AGENTS.md",

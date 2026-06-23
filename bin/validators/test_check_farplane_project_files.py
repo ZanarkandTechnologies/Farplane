@@ -12,6 +12,9 @@ def write_framework_manifest(farplane: Path) -> None:
             {
                 "schema": "farplane_project",
                 "spec_version": "1.1.0",
+                "template_uses": {
+                    "farplane-framework": "1.2.0",
+                },
                 "standard": {
                     "tracked": [
                         "AGENTS.md",
@@ -45,6 +48,9 @@ def write_steer_config(farplane: Path) -> None:
             {
                 "schema": "farplane_steer_config",
                 "version": "2026-06-23.1",
+                "template_uses": {
+                    "farplane-steer-config": "0.1.0",
+                },
                 "timezone": "UTC",
                 "state_ref": ".farplane/state/steer-scheduler.json",
                 "jobs": [
@@ -130,6 +136,7 @@ def test_invalid_steer_config_fails(tmp_path: Path) -> None:
 
     assert "farplane/steer.config.json schema must be farplane_steer_config." in errors
     assert "farplane/steer.config.json version must be a non-empty string." in errors
+    assert "farplane/steer.config.json template_uses.farplane-steer-config must be a non-empty string." in errors
     assert "farplane/steer.config.json jobs[0].id must be a non-empty string." in errors
     assert "farplane/steer.config.json jobs[0].cadence must be a non-empty string." in errors
     assert "farplane/steer.config.json jobs[0].prompt must be a non-empty string." in errors
@@ -187,6 +194,7 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
 
     assert "farplane/manifest.json schema must be farplane_project." in errors
     assert "farplane/manifest.json spec_version must be a non-empty string." in errors
+    assert "farplane/manifest.json template_uses.farplane-framework must be a non-empty string." in errors
     assert "farplane/manifest.json standard.tracked must not contain duplicate paths." in errors
     assert "farplane/manifest.json optional.tracked must be a list." in errors
     assert "farplane/manifest.json optional.ignored must contain only non-empty strings." in errors

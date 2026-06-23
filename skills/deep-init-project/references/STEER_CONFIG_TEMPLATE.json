@@ -1,6 +1,16 @@
 {
+  "_template_metadata": {
+    "template_id": "farplane-steer-config",
+    "template_version": "0.1.0",
+    "feature_refs": ["FEAT-0060"],
+    "consumer_scope": "project",
+    "applies_to": ["farplane/steer.config.json"]
+  },
   "schema": "farplane_steer_config",
   "version": "YYYY-MM-DD.0",
+  "template_uses": {
+    "farplane-steer-config": "0.1.0"
+  },
   "timezone": "UTC",
   "state_ref": ".farplane/state/steer-scheduler.json",
   "jobs": [

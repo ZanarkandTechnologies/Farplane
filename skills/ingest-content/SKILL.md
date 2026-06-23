@@ -4,10 +4,12 @@ description: "Route liked links, images, videos, files, or notes into analyzed, 
 tier: 3
 group: content-social
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
 common_chains:
   after: ["media-ingest", "video-understanding", "summarize", "visual-design"]
 allowed-tools: Read, Glob, Grep, Bash, mcp__convex__status, mcp__convex__functionSpec, mcp__convex__run
+
 ---
 
 # Ingest Content

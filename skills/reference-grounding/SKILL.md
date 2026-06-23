@@ -4,9 +4,12 @@ version: 0.2.0
 description: "Turn claims, plans, or implementation choices into compact evidence notes with the right local, current-web, official, peer, or provided sources."
 tier: 1
 source: local
-skill_template_version: "0.1.0"
+template_uses:
+  skill-template: "0.1.0"
+  skill-qa-checklist: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
 qa_checklist: qa_checklist.md
+
 ---
 
 # Reference Grounding

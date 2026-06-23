@@ -10,8 +10,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
+
+
 TEXT_SUFFIXES = {
     ".json",
     ".jsonl",
@@ -131,6 +136,13 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         errors.append(f"{rel_path} schema must be farplane_project.")
     if not isinstance(data.get("spec_version"), str) or not data.get("spec_version", "").strip():
         errors.append(f"{rel_path} spec_version must be a non-empty string.")
+    try:
+        template_uses = normalize_template_uses(data, rel_path, include_legacy=False)
+    except TemplateUsageError as exc:
+        errors.append(str(exc))
+        template_uses = {}
+    if not template_uses.get("farplane-framework"):
+        errors.append(f"{rel_path} template_uses.farplane-framework must be a non-empty string.")
 
     for key in ("standard", "optional"):
         section = data.get(key)
@@ -235,6 +247,17 @@ def validate(root: Path) -> list[str]:
                 errors.append("farplane/steer.config.json schema must be farplane_steer_config.")
             if not isinstance(data.get("version"), str) or not data.get("version", "").strip():
                 errors.append("farplane/steer.config.json version must be a non-empty string.")
+            try:
+                template_uses = normalize_template_uses(
+                    data, "farplane/steer.config.json", include_legacy=False
+                )
+            except TemplateUsageError as exc:
+                errors.append(str(exc))
+                template_uses = {}
+            if not template_uses.get("farplane-steer-config"):
+                errors.append(
+                    "farplane/steer.config.json template_uses.farplane-steer-config must be a non-empty string."
+                )
             if not isinstance(data.get("jobs"), list):
                 errors.append("farplane/steer.config.json jobs must be a list.")
             else:

@@ -4,12 +4,14 @@ description: "Turn idle project time and local/Notion task boards into a selecte
 tier: 3
 group: harness
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
 common_chains:
   after:
     - goal-advisor
     - weekly-strategy-analysis
 allowed-tools: Read, Grep, Glob, Bash
+
 ---
 
 # Board Drain

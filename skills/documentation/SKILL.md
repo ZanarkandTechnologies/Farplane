@@ -3,9 +3,12 @@ name: documentation
 description: "Turn durable doc-writing or doc-revision work into grounded, metadata-aware, human-usable docs with doc-quality checks."
 tier: 2
 source: local
-skill_template_version: "0.3.0"
+template_uses:
+  skill-template: "0.3.0"
+  skill-qa-checklist: "0.1.0"
 methods: ["documentation:doc-quality"]
 qa_checklist: qa_checklist.md
+
 ---
 
 # Documentation Skill

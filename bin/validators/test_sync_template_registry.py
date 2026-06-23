@@ -51,6 +51,9 @@ class TemplateRegistryTests(unittest.TestCase):
                     template_version: "1.2.3"
                     feature_refs:
                       - FEAT-0001
+                    consumer_scope: skill
+                    applies_to:
+                      - skills/*/SKILL.md
                     ---
 
                     Body
@@ -65,6 +68,8 @@ class TemplateRegistryTests(unittest.TestCase):
         self.assertEqual(rows[0]["template_id"], "prompt-template")
         self.assertEqual(rows[0]["template_version"], "1.2.3")
         self.assertEqual(rows[0]["feature_refs"], ["FEAT-0001"])
+        self.assertEqual(rows[0]["consumer_scope"], "skill")
+        self.assertEqual(rows[0]["applies_to"], ["skills/*/SKILL.md"])
 
     def test_builds_registry_from_html_comment_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

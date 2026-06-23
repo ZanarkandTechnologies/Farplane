@@ -13,6 +13,7 @@ import argparse
 import json
 import re
 import subprocess
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -22,11 +23,19 @@ from typing import Any
 
 SCRIPT_PATH = Path(__file__).resolve()
 REPO_ROOT = SCRIPT_PATH.parents[3]
-CURRENT_TEMPLATE_VERSION = "0.3.0"
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from bin.validators.template_usage import normalize_template_uses, template_target_basis
+CURRENT_TEMPLATE_VERSION = "0.3.2"
 TEMPLATE_PATH = Path("skills/skill-creator/references/SKILL_TEMPLATE.md")
 DEFAULT_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.json")
 DEFAULT_JS_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.js")
 DEFAULT_ARCHIVE_DIR = Path("skills/skill-maintenance/templates/archive")
+PROJECT_ROOTS = (
+    Path("."),
+    Path("../Farplane-UI"),
+)
 
 
 @dataclass(frozen=True)
@@ -345,6 +354,158 @@ def rollout_rows(skill_rows: list[dict[str, Any]], current_version: str) -> list
     return sorted(rows, key=lambda row: (str(row["status"]), str(row["skill_id"])))
 
 
+def template_uses_from_row(row: dict[str, Any]) -> dict[str, str]:
+    return normalize_template_uses(row, row.get("path", "<row>"))
+
+
+def skill_template_consumers(skill_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    consumers: list[dict[str, Any]] = []
+    for row in skill_rows:
+        if row.get("source") == "external":
+            continue
+        template_uses = template_uses_from_row(row)
+        consumers.append(
+            {
+                "consumer_id": row.get("name", ""),
+                "consumer_scope": "skill",
+                "path": row.get("path", ""),
+                "template_uses": template_uses,
+                "surfaces": {
+                    "skill": bool(template_uses.get("skill-template")),
+                    "eval": bool(row.get("eval")),
+                    "qa_checklist": bool(row.get("qa_checklist")),
+                },
+            }
+        )
+    return consumers
+
+
+def load_json_template_uses(path: Path, display_path: str) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    return normalize_template_uses(data, display_path, include_legacy=False)
+
+
+def project_template_consumers(repo_root: Path) -> list[dict[str, Any]]:
+    consumers: list[dict[str, Any]] = []
+    for project_root_ref in PROJECT_ROOTS:
+        project_root = (repo_root / project_root_ref).resolve()
+        manifest_path = project_root / "farplane" / "manifest.json"
+        if not manifest_path.exists():
+            continue
+        try:
+            display_path = manifest_path.relative_to(repo_root).as_posix()
+        except ValueError:
+            display_path = project_root_ref.joinpath("farplane/manifest.json").as_posix()
+        project_name = project_root.name
+        template_uses = load_json_template_uses(manifest_path, display_path)
+        steer_path = project_root / "farplane" / "steer.config.json"
+        try:
+            steer_display_path = steer_path.relative_to(repo_root).as_posix()
+        except ValueError:
+            steer_display_path = project_root_ref.joinpath("farplane/steer.config.json").as_posix()
+        template_uses.update(load_json_template_uses(steer_path, steer_display_path))
+        consumers.append(
+            {
+                "consumer_id": project_name,
+                "consumer_scope": "project",
+                "path": display_path,
+                "template_uses": template_uses,
+                "surfaces": {"project": True},
+            }
+        )
+    return consumers
+
+
+def template_applies_to_consumer(template_row: dict[str, Any], consumer: dict[str, Any]) -> bool:
+    scope = template_row.get("consumer_scope")
+    if scope in {"skill", "project"} and consumer.get("consumer_scope") != scope:
+        return False
+    template_id = str(template_row.get("template_id") or "")
+    surfaces = consumer.get("surfaces", {})
+    if template_id == "skill-eval-task":
+        return bool(isinstance(surfaces, dict) and surfaces.get("eval"))
+    if template_id == "skill-qa-checklist":
+        return bool(isinstance(surfaces, dict) and surfaces.get("qa_checklist"))
+    if template_id == "skill-template":
+        return bool(isinstance(surfaces, dict) and surfaces.get("skill"))
+    return True
+
+
+def template_rollout_rows(
+    template_rows: list[dict[str, Any]], consumers: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for template in template_rows:
+        if template.get("consumer_scope") not in {"skill", "project", "mixed"}:
+            continue
+        template_id = str(template.get("template_id") or "")
+        current_version = str(template.get("template_version") or "")
+        if not template_id or not current_version:
+            continue
+        for consumer in consumers:
+            if not template_applies_to_consumer(template, consumer):
+                continue
+            template_uses = consumer.get("template_uses", {})
+            used_version = template_uses.get(template_id) if isinstance(template_uses, dict) else None
+            if used_version == current_version:
+                status = "current"
+            elif used_version:
+                status = "stale"
+            else:
+                status = "missing"
+            rows.append(
+                {
+                    "template_id": template_id,
+                    "current_version": current_version,
+                    "feature_refs": template.get("feature_refs", []),
+                    "target_basis": template_target_basis(template_id),
+                    "consumer_id": consumer.get("consumer_id", ""),
+                    "consumer_scope": consumer.get("consumer_scope", ""),
+                    "path": consumer.get("path", ""),
+                    "used_version": used_version or "",
+                    "status": status,
+                }
+            )
+    return sorted(
+        rows,
+        key=lambda row: (
+            str(row["template_id"]),
+            str(row["status"]),
+            str(row["consumer_scope"]),
+            str(row["consumer_id"]),
+        ),
+    )
+
+
+def template_rollout_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    summary: dict[str, Any] = {}
+    for row in rows:
+        template_id = str(row["template_id"])
+        current = summary.setdefault(
+            template_id,
+            {
+                "current_version": row["current_version"],
+                "feature_refs": row["feature_refs"],
+                "target_basis": row["target_basis"],
+                "total_consumers": 0,
+                "by_status": {},
+                "by_scope": {},
+            },
+        )
+        current["total_consumers"] += 1
+        current["by_status"][row["status"]] = current["by_status"].get(row["status"], 0) + 1
+        scope = row["consumer_scope"]
+        current["by_scope"][scope] = current["by_scope"].get(scope, 0) + 1
+    return summary
+
+
 def rollout_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
     by_status = Counter(str(row["status"]) for row in rows)
     by_version = Counter(str(row["template_version"]) for row in rows)
@@ -444,7 +605,13 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
     )
     skill_rows = load_jsonl(repo_root / "docs/skills/registry.jsonl")
     feature_rows = load_jsonl(repo_root / "docs/features/registry.jsonl")
+    template_rows = load_jsonl(repo_root / "docs/templates/registry.jsonl")
     rollout = rollout_rows(skill_rows, CURRENT_TEMPLATE_VERSION)
+    template_consumers = [
+        *skill_template_consumers(skill_rows),
+        *project_template_consumers(repo_root),
+    ]
+    template_rollout = template_rollout_rows(template_rows, template_consumers)
     eval_results: list[dict[str, Any]] = []
     for snapshot in snapshots:
         eval_results.extend(evaluate_template(snapshot))
@@ -470,6 +637,9 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
         "features": feature_summaries(feature_rows),
         "rollout_summary": rollout_summary(rollout),
         "rollout": rollout,
+        "template_consumers": template_consumers,
+        "template_rollout_summary": template_rollout_summary(template_rollout),
+        "template_rollout": template_rollout,
         "eval_definitions": [
             {
                 "id": definition["id"],

@@ -4,8 +4,10 @@ description: "Turn project goals, tickets, progress, and feedback into strategy 
 tier: 3
 group: project-ops
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
+
 ---
 
 # Update Strategy

@@ -4,9 +4,12 @@ description: "Route an optimization goal through Goal Advisor with human feedbac
 tier: 2
 source: local
 version: 0.1.0
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
+  skill-eval-task: "0.1.0"
 eval: eval_task.json
 allowed-tools: Read, Write, Glob, Grep, Bash
+
 ---
 
 # Optimize With Human

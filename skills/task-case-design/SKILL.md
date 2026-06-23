@@ -3,10 +3,14 @@ name: task-case-design
 description: "Turn behavior risks, failures, and contracts into high-quality test or eval task cases with coverage, oracle, and proof-surface decisions."
 tier: 2
 source: local
-skill_template_version: "0.3.0"
+template_uses:
+  skill-template: "0.3.0"
+  skill-eval-task: "0.1.0"
+  skill-qa-checklist: "0.1.0"
 eval: eval_task.json
 qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
+
 ---
 
 # Task Case Design

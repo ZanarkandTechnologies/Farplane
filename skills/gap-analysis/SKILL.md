@@ -3,7 +3,9 @@ name: gap-analysis
 description: "Turn current-vs-expected behavior evidence into a grounded GapReport with missing pieces, owner surface, and proof path."
 tier: 2
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
+  skill-eval-task: "0.1.0"
 eval: eval_task.json
 methods:
   - gap-analysis:skill
@@ -11,6 +13,7 @@ methods:
   - gap-analysis:ui
   - gap-analysis:feature
 allowed-tools: Read, Glob, Grep, Bash
+
 ---
 
 # Gap Analysis

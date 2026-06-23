@@ -1,6 +1,9 @@
 {
   "schema": "farplane_steer_config",
   "version": "2026-06-23.2",
+  "template_uses": {
+    "farplane-steer-config": "0.1.0"
+  },
   "timezone": "Asia/Kuala_Lumpur",
   "state_ref": ".farplane/state/steer-scheduler.json",
   "jobs": [

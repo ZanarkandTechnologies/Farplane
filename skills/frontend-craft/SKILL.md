@@ -5,13 +5,16 @@ description: "Route frontend build or improvement work through UX, visual design
 tier: 3
 group: frontend
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
+  skill-qa-checklist: "0.1.0"
 qa_checklist: qa_checklist.md
 methods:
   - frontend-craft:composed-scroll-animation
 common_chains:
   after: ["visual-qa"]
 allowed-tools: Read, Grep, Glob, Bash
+
 ---
 
 # Frontend Craft

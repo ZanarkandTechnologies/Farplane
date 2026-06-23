@@ -11,6 +11,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
+
 
 SKILL_LINK_RE = re.compile(r"\]\((?:\.\./)?([^/\)\s]+)/SKILL\.md(?:#([^)]+))?\)")
 LOCAL_METHOD_RE = re.compile(r"\]\(SKILL\.md#([^)]+)\)")
@@ -343,9 +349,14 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if version not in (None, ""):
             row["version"] = str(version)
 
-        skill_template_version = metadata.get("skill_template_version")
-        if skill_template_version not in (None, ""):
-            row["skill_template_version"] = str(skill_template_version)
+        try:
+            template_uses = normalize_template_uses(metadata, skill_path)
+        except TemplateUsageError as exc:
+            raise RegistryError(str(exc)) from exc
+        if template_uses:
+            row["template_uses"] = template_uses
+            if "skill-template" in template_uses:
+                row["skill_template_version"] = template_uses["skill-template"]
 
         allowed_tools = normalize_allowed_tools(metadata.get("allowed-tools"), skill_path)
         if allowed_tools:

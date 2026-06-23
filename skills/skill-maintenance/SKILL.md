@@ -4,10 +4,14 @@ description: "Turn skill behavior deltas, lesson hardening, or skill compaction 
 tier: 3
 group: skills
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
+  skill-eval-task: "0.1.0"
+  skill-qa-checklist: "0.1.0"
 eval: eval_task.json
 qa_checklist: qa_checklist.md
 skill_ui: skills/skill-maintenance/graph/index.html
+
 ---
 
 # Skill Maintenance

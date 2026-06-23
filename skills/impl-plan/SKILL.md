@@ -3,13 +3,17 @@ name: impl-plan
 description: "Turn one selected coding ticket or material implementation request into an approval-ready ticket plan, test strategy, and proof contract."
 tier: 3
 source: local
-skill_template_version: "0.3.0"
+template_uses:
+  skill-template: "0.3.0"
+  skill-eval-task: "0.1.0"
+  skill-qa-checklist: "0.1.0"
 group: coding
 eval: eval_task.json
 qa_checklist: qa_checklist.md
 common_chains:
   after: ["goal-advisor"]
 allowed-tools: Read, Glob, Grep
+
 ---
 
 # Impl Plan

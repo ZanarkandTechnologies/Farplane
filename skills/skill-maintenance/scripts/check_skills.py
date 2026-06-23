@@ -20,6 +20,11 @@ def find_repo_root(start: Path) -> Path:
 
 
 REPO_ROOT = find_repo_root(Path(__file__).resolve())
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from bin.validators.template_usage import template_target_basis
+
 REQUIRED_TEMPLATE_HEADINGS = ("Context", "Todo List", "Templates", "Gotchas", "Reference Map", "Output")
 HEADING_RE = re.compile(r"^## (?P<heading>.+?)\s*$")
 TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^- \[ \] \d+\. ")
@@ -51,6 +56,15 @@ def registry_summary() -> dict[str, object]:
         ),
         "skill_template_versions": dict(
             sorted(Counter(str(row.get("skill_template_version") or "missing") for row in rows).items())
+        ),
+        "template_uses": dict(
+            sorted(
+                Counter(
+                    template_id
+                    for row in rows
+                    for template_id in (row.get("template_uses") or {}).keys()
+                ).items()
+            )
         ),
         "missing_skill_template_version": [
             {
@@ -246,6 +260,70 @@ def validate_template_version(current_version: str, require: bool) -> int:
     return 0
 
 
+def skill_template_target_rows(rows: list[dict[str, object]], template_id: str) -> list[dict[str, object]]:
+    if template_id == "skill-template":
+        return [
+            row
+            for row in rows
+            if (row.get("template_uses") or {}).get("skill-template") or row.get("skill_template_version")
+        ]
+    if template_id == "skill-eval-task":
+        return [row for row in rows if row.get("eval")]
+    if template_id == "skill-qa-checklist":
+        return [row for row in rows if row.get("qa_checklist")]
+    return [row for row in rows if template_id in (row.get("template_uses") or {})]
+
+
+def validate_skill_template_rollout(template_id: str, current_version: str, require: bool) -> int:
+    rows = [
+        json.loads(line)
+        for line in (REPO_ROOT / "docs/skills/registry.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    targets = skill_template_target_rows(rows, template_id)
+    missing = [
+        row
+        for row in targets
+        if not (row.get("template_uses") or {}).get(template_id)
+    ]
+    not_current = [
+        row
+        for row in targets
+        if (row.get("template_uses") or {}).get(template_id)
+        and (row.get("template_uses") or {}).get(template_id) != current_version
+    ]
+
+    report = {
+        "template_id": template_id,
+        "current_version": current_version,
+        "target_basis": template_target_basis(template_id),
+        "target_count": len(targets),
+        "current_count": len(targets) - len(missing) - len(not_current),
+        "missing": [row["name"] for row in missing],
+        "not_current": [
+            {
+                "name": row["name"],
+                "used_version": (row.get("template_uses") or {}).get(template_id),
+            }
+            for row in not_current
+        ],
+    }
+    print("skill template rollout report:")
+    print(json.dumps(report, indent=2, sort_keys=True))
+
+    if template_id == "skill-template":
+        structure_errors = template_structure_errors(current_version)
+        if structure_errors:
+            print("skill template structure errors:")
+            for error in structure_errors:
+                print(f"- {error}")
+            return 1
+
+    if require and (missing or not_current):
+        return 1
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -261,6 +339,11 @@ def main() -> int:
     parser.add_argument(
         "--template-version",
         help="report skills missing or differing from this current skill template version",
+    )
+    parser.add_argument(
+        "--template-id",
+        default="skill-template",
+        help="template id to report with --template-version",
     )
     parser.add_argument(
         "--require-template-version",
@@ -303,6 +386,7 @@ def main() -> int:
                 "py_compile",
                 "bin/validators/sync_skill_registry.py",
                 "bin/validators/sync_template_registry.py",
+                "bin/validators/template_usage.py",
                 "bin/validators/check_doc_refs.py",
                 "bin/validators/check_skill_todo_tiers.py",
                 "bin/validators/check_tier0_phase_protocol.py",
@@ -319,7 +403,9 @@ def main() -> int:
     print("skill system summary:")
     print(json.dumps(registry_summary(), indent=2, sort_keys=True))
     if args.template_version:
-        return validate_template_version(args.template_version, args.require_template_version)
+        return validate_skill_template_rollout(
+            args.template_id, args.template_version, args.require_template_version
+        )
     return 0
 
 

@@ -4,9 +4,12 @@ version: 0.1.0
 description: "Turn an unproven pattern into the smallest representative proof before expanding scope, automation, volume, or implementation depth."
 tier: 1
 source: local
-skill_template_version: "0.1.0"
+template_uses:
+  skill-template: "0.1.0"
+  skill-qa-checklist: "0.1.0"
 allowed-tools: Read, Glob, Grep
 qa_checklist: qa_checklist.md
+
 ---
 
 # Prototyping

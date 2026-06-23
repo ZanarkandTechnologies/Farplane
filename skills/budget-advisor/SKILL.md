@@ -3,9 +3,12 @@ name: budget-advisor
 description: "Resolve a budget-aware skill call into concrete execution template refs, parameters, and guardrails when effort changes workflow shape."
 tier: 2
 source: local
-skill_template_version: "0.3.0"
+template_uses:
+  skill-template: "0.3.0"
+  skill-eval-task: "0.1.0"
 eval: eval_task.json
 allowed-tools: Read, Glob, Grep
+
 ---
 
 # Budget Advisor

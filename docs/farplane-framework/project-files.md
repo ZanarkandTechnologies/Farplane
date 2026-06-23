@@ -47,6 +47,9 @@ farplane/
 Versioned project spec manifest. It records which files are standard tracked
 project config and which ignored runtime paths should exist locally.
 
+Use `template_uses.farplane-framework` in this JSON file so Farplane can count
+which projects are current, stale, or missing for the framework template.
+
 ### `farplane/harness.md`
 
 Project constitution and operating model: mission, values, non-tradeoffs,
@@ -76,6 +79,9 @@ Human-owned Steer job config:
 - scheduled planning jobs
 - job cadence strings
 - job prompts
+
+Use `template_uses.farplane-steer-config` so project rollout reporting can tell
+which projects have adopted the current Steer config template.
 
 Keep this file easy to edit. If a job should not run, remove it from the list.
 Do not duplicate workflow inputs, outputs, drift checks, report paths, or gates

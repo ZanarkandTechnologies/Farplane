@@ -3,8 +3,11 @@ name: advise
 description: "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice."
 tier: 1
 source: local
-skill_template_version: "0.1.0"
+template_uses:
+  skill-template: "0.1.0"
+  skill-qa-checklist: "0.1.0"
 qa_checklist: qa_checklist.md
+
 ---
 
 # Advise

@@ -4,7 +4,11 @@
 paths = [
   "templates/global/AGENTS.md",
   "skills/skill-creator/references/SKILL_TEMPLATE.md",
+  "skills/skill-creator/references/EVAL_TASK_TEMPLATE.json",
+  "skills/skill-creator/references/QA_CHECKLIST_TEMPLATE.md",
   "tickets/templates/ticket.md",
   "tickets/templates/goal-loop/program.md",
   "skills/harness-creator/templates/project-harness.md",
+  "skills/deep-init-project/references/MANIFEST_TEMPLATE.json",
+  "skills/deep-init-project/references/STEER_CONFIG_TEMPLATE.json",
 ]

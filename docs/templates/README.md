@@ -7,27 +7,55 @@ updated_at: 2026-06-16
 
 # Template Registry
 
-`docs/templates/registry.jsonl` tracks the highest-impact prompt-shaped
-templates whose structure can materially change harness behavior.
+`docs/templates/registry.jsonl` tracks high-impact templates whose structure can
+materially change harness behavior or framework rollout.
 
 ## Current Scope
 
-The registry is deliberately focused on five surfaces:
+The registry is deliberately focused on high-leverage surfaces:
 
 - `templates/global/AGENTS.md`
 - `skills/skill-creator/references/SKILL_TEMPLATE.md`
+- `skills/skill-creator/references/EVAL_TASK_TEMPLATE.json`
+- `skills/skill-creator/references/QA_CHECKLIST_TEMPLATE.md`
 - `tickets/templates/ticket.md`
 - `tickets/templates/goal-loop/program.md`
 - `skills/harness-creator/templates/project-harness.md`
+- `skills/deep-init-project/references/MANIFEST_TEMPLATE.json`
+- `skills/deep-init-project/references/STEER_CONFIG_TEMPLATE.json`
 
 Each tracked template declares:
 
 - `template_id`
 - `template_version`
 - `feature_refs`
+- optional `consumer_scope`
+- optional `applies_to`
 
 `path` is added by the generator so the UI and validators can resolve the
 template row back to source.
+
+Consumers declare template adoption with one field:
+
+```yaml
+template_uses:
+  skill-template: "0.3.2"
+  skill-eval-task: "0.1.0"
+```
+
+JSON consumers use the same shape:
+
+```json
+{
+  "template_uses": {
+    "farplane-framework": "1.2.0"
+  }
+}
+```
+
+The rollout report lives in
+`skills/skill-maintenance/graph/skill-template-intelligence.json` under
+`template_rollout_summary` and `template_rollout`.
 
 ## Commands
 
@@ -39,7 +67,6 @@ python3 bin/validators/check_template_version_metadata.py --all
 
 ## Boundary
 
-This is not broad document versioning yet. Scaffold templates, UI app starter
-files, and low-impact helper templates stay out until they have a clear
-consumer or optimization loop. Document versioning can use a separate registry
-once its owner and UI are known.
+This is not broad document versioning. Add a template only when there is a real
+consumer set and the rollout answer matters, such as current/stale/missing
+skills or projects.

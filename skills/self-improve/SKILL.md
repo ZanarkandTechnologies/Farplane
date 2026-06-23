@@ -4,8 +4,11 @@ description: "Turn an existing skill improvement goal into evals, variant compar
 tier: 3
 group: self-improvement
 source: local
-skill_template_version: "0.2.0"
+template_uses:
+  skill-template: "0.2.0"
+  skill-eval-task: "0.1.0"
 eval: eval_task.json
+
 ---
 
 # Self Improve
