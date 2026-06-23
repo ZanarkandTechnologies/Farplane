@@ -393,7 +393,7 @@ Use this routing:
 | User-visible workflow, browser operation, UI state, generated media playback, or demo realism. | QA checklist or `qa` / `visual-qa` / `agent-qa-test` | Skill-local `references/*-qa-checklist.md` or QA artifact contract. |
 | Repeatable agent, prompt, or skill behavior. | `eval` | `eval_task.json` or eval suite artifact. |
 | Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
-| Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality checklist | Skill-local reference such as `references/doc-quality-checklist.md`. |
+| Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality checklist | Skill-local `qa_checklist.md`. |
 | Skill structure, first-load size, progressive disclosure, reference routing, or compaction risk. | structure checklist | `skills/skill-maintenance/qa_checklist.md`, plus a skill-local audit for material changes. |
 | Generated asset or public deliverable presentation. | demo or QA proof | Demo checklist, render artifact, screenshot, or playback proof. |
 | Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |

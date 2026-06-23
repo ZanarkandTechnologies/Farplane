@@ -188,8 +188,6 @@ Use local schemas when they exist, for example `template_version`,
   public guidance, cross-surface policy, or completion claims.
 - `close-ticket` - owns final ticket writeback and routine closeout; do not
   invoke it from this Tier 2 checklist path.
-- [references/doc-quality-checklist.md](references/doc-quality-checklist.md) -
-  compatibility pointer to the root checklist.
 
 ## Output
 

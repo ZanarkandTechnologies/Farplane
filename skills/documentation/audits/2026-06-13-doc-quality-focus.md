@@ -10,7 +10,7 @@ after_ref: skills/documentation/SKILL.md
 reasoning_basis: advise
 proof_artifacts:
   - skills/documentation/SKILL.md
-  - skills/documentation/references/doc-quality-checklist.md
+  - skills/documentation/qa_checklist.md
   - docs/skills/README.md
   - docs/skills/registry.jsonl
 eval_required: no
@@ -50,7 +50,7 @@ eval_required: no
 | Check | Verdict | Evidence |
 | --- | --- | --- |
 | `first_load_sufficiency` | pass | Todo list names reader contract, grounding, draft pass, finish-pass checklist, advice, and review. |
-| `reference_load_precision` | pass | Detailed checks are in `references/doc-quality-checklist.md`, loaded only for the finish pass. |
+| `reference_load_precision` | pass | Detailed checks moved to `qa_checklist.md`, loaded only for the finish pass. |
 | `missing_context_rate` | pass | Skill states doc search boundary and durable-doc owner surface. |
 | `noisy_context_rate` | pass | Removed API-doc template, tool examples, and bulky review checklist from first-load body. |
 | `duplicated_instruction_count` | pass | Official-doc lookup no longer duplicates `reference-grounding` as a full workflow. |

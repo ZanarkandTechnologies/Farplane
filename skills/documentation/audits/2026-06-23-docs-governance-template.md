@@ -57,7 +57,8 @@ review routing.
 - Added a documentation architecture policy to `docs/specs/doc-governance.md`
   for new-file decisions, merge decisions, split triggers, density by surface,
   and task-evidence cleanup.
-- Left `references/doc-quality-checklist.md` as a compatibility pointer.
+- Removed the old reference checklist path so `qa_checklist.md` is the single
+  active checklist surface.
 
 ## Proof
 
