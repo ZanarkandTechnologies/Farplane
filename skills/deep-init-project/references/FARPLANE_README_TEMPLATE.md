@@ -17,7 +17,7 @@ farplane/
   harness.md       # mission, values, modes, systems, feedback loops
   goals.md         # north star, KPIs, current milestone, holds
   automations.md   # exact Codex automation prompt blocks for Pulse and Steer
-  steer.config.json # versioned Steer job config for scheduled planning
+  steer.config.toml # versioned Steer job config for scheduled planning
   bindings.md      # non-secret project IDs, URLs, labels, aliases
   evals.md         # project-level proof and eval policy
   pm.json          # optional UI thread manifest for one visual project PM

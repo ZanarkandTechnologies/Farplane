@@ -50,7 +50,7 @@ The parent PM does not inspect every child transcript by default.
 It reads child project surfaces:
 
 - `farplane/goals.md` for child strategy and current milestone.
-- `farplane/steer.config.json` for child scheduled planning jobs.
+- `farplane/steer.config.toml` for child scheduled planning jobs.
 - Date-stamped `.farplane/reports/**` records and scheduler pointers for child
   PM status.
 - `tickets/` for executable child work and blockers.

@@ -81,6 +81,24 @@ class TemplateVersionMetadataTests(unittest.TestCase):
         self.assertEqual(metadata.template_id, "sample-prompt")
         self.assertEqual(metadata.version, "1.2.3")
 
+    def test_extracts_toml_template_metadata(self) -> None:
+        metadata = validator.extract_metadata(
+            textwrap.dedent(
+                """\
+                schema = "farplane_steer_config"
+
+                [_template_metadata]
+                template_id = "farplane-steer-config"
+                template_version = "0.2.0"
+                """
+            )
+        )
+
+        self.assertIsNotNone(metadata)
+        assert metadata is not None
+        self.assertEqual(metadata.template_id, "farplane-steer-config")
+        self.assertEqual(metadata.version, "0.2.0")
+
     def test_staged_template_change_requires_version_bump(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

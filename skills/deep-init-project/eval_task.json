@@ -4,7 +4,7 @@
     "title": "Deep init emits Steer/Pulse framework config",
     "query": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
     "reference_points": [
-      "Creates farplane/automations.md as the reviewable prompt source and keeps farplane/steer.config.json only as an optional compact schedule helper",
+      "Creates farplane/automations.md as the reviewable prompt source and keeps farplane/steer.config.toml only as an optional compact schedule helper",
       "Keeps each Steer job to id, cadence, and prompt rather than duplicating workflow inputs and outputs",
       "Uses Pulse for fast bounded action selection",
       "Uses Steer for scheduled planning jobs and drift checks",

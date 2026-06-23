@@ -25,7 +25,7 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/harness.md",
                         "farplane/goals.md",
                         "farplane/automations.md",
-                        "farplane/steer.config.json",
+                        "farplane/steer.config.toml",
                         "farplane/bindings.md",
                         "farplane/evals.md",
                         "tickets/templates/ticket.md",
@@ -43,25 +43,21 @@ def write_framework_manifest(farplane: Path) -> None:
 
 
 def write_steer_config(farplane: Path) -> None:
-    (farplane / "steer.config.json").write_text(
-        json.dumps(
-            {
-                "schema": "farplane_steer_config",
-                "version": "2026-06-23.1",
-                "template_uses": {
-                    "farplane-steer-config": "0.1.0",
-                },
-                "timezone": "UTC",
-                "state_ref": ".farplane/state/steer-scheduler.json",
-                "jobs": [
-                    {
-                        "id": "daily_plan",
-                        "cadence": "FREQ=DAILY;INTERVAL=1",
-                        "prompt": "Run the daily Steer plan.",
-                    }
-                ],
-            }
-        ),
+    (farplane / "steer.config.toml").write_text(
+        """
+schema = "farplane_steer_config"
+version = "2026-06-23.1"
+timezone = "UTC"
+state_ref = ".farplane/state/steer-scheduler.json"
+
+[template_uses]
+farplane-steer-config = "0.1.0"
+
+[[jobs]]
+id = "daily_plan"
+cadence = "FREQ=DAILY;INTERVAL=1"
+prompt = "Run the daily Steer plan."
+""".lstrip(),
         encoding="utf-8",
     )
 
@@ -130,16 +126,19 @@ def test_invalid_steer_config_fails(tmp_path: Path) -> None:
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_automations_md(farplane)
-    (farplane / "steer.config.json").write_text(json.dumps({"schema": "wrong", "version": "", "jobs": [{}]}), encoding="utf-8")
+    (farplane / "steer.config.toml").write_text(
+        'schema = "wrong"\nversion = ""\n\n[[jobs]]\n',
+        encoding="utf-8",
+    )
 
     errors = validate(tmp_path)
 
-    assert "farplane/steer.config.json schema must be farplane_steer_config." in errors
-    assert "farplane/steer.config.json version must be a non-empty string." in errors
-    assert "farplane/steer.config.json template_uses.farplane-steer-config must be a non-empty string." in errors
-    assert "farplane/steer.config.json jobs[0].id must be a non-empty string." in errors
-    assert "farplane/steer.config.json jobs[0].cadence must be a non-empty string." in errors
-    assert "farplane/steer.config.json jobs[0].prompt must be a non-empty string." in errors
+    assert "farplane/steer.config.toml schema must be farplane_steer_config." in errors
+    assert "farplane/steer.config.toml version must be a non-empty string." in errors
+    assert "farplane/steer.config.toml template_uses.farplane-steer-config must be a non-empty string." in errors
+    assert "farplane/steer.config.toml jobs[0].id must be a non-empty string." in errors
+    assert "farplane/steer.config.toml jobs[0].cadence must be a non-empty string." in errors
+    assert "farplane/steer.config.toml jobs[0].prompt must be a non-empty string." in errors
 
 
 def test_valid_versioned_files_pass(tmp_path: Path) -> None:

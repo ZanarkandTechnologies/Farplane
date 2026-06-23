@@ -405,11 +405,11 @@ def project_template_consumers(repo_root: Path) -> list[dict[str, Any]]:
             display_path = project_root_ref.joinpath("farplane/manifest.json").as_posix()
         project_name = project_root.name
         template_uses = load_json_template_uses(manifest_path, display_path)
-        steer_path = project_root / "farplane" / "steer.config.json"
+        steer_path = project_root / "farplane" / "steer.config.toml"
         try:
             steer_display_path = steer_path.relative_to(repo_root).as_posix()
         except ValueError:
-            steer_display_path = project_root_ref.joinpath("farplane/steer.config.json").as_posix()
+            steer_display_path = project_root_ref.joinpath("farplane/steer.config.toml").as_posix()
         template_uses.update(load_json_template_uses(steer_path, steer_display_path))
         consumers.append(
             {

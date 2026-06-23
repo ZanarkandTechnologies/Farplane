@@ -22,7 +22,7 @@ The registry is deliberately focused on high-leverage surfaces:
 - `tickets/templates/goal-loop/program.md`
 - `skills/harness-creator/templates/project-harness.md`
 - `skills/deep-init-project/references/MANIFEST_TEMPLATE.json`
-- `skills/deep-init-project/references/STEER_CONFIG_TEMPLATE.json`
+- `skills/deep-init-project/references/STEER_CONFIG_TEMPLATE.toml`
 
 Each tracked template declares:
 

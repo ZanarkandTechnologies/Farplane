@@ -57,7 +57,7 @@ chooses that external system as the source of truth.
 ProjectGoals :=
   farplane/goals.md
 + farplane/harness.md
-+ farplane/steer.config.json
++ farplane/steer.config.toml
 + farplane/evals.md
 + tickets/
 + memory_docs

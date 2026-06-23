@@ -6,7 +6,7 @@
     "reference_points": [
       "Selects jobs by comparing now to cached next_due_at",
       "Initializes or migrates state when config_version changed",
-      "Does not mutate farplane/steer.config.json during a normal run",
+      "Does not mutate farplane/steer.config.toml during a normal run",
       "Runs only due jobs",
       "Updates next_due_at after a job runs"
     ],

@@ -35,7 +35,7 @@ horizon_advice(project_root?, intent?, current_goals?, evidence?, constraints?)
    + project_goal_map
    + current_milestone
    + goal_advisor_handoff?
-state: reads(farplane/goals.md, farplane/harness.md, farplane/steer.config.json?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.md delta or strategy artifact when explicitly in scope)
+state: reads(farplane/goals.md, farplane/harness.md, farplane/steer.config.toml?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.md delta or strategy artifact when explicitly in scope)
 gates: north_star_named; value_function_named; metrics_have_proof_surfaces; anti_metrics_named; current_frontier_expanded_only; execution_handoff_goes_to_goal_advisor
 routes: goal-advisor | update-strategy | deep-interview | review
 fails: vague goals; fake precision; turning all goals into tasks; compiling native Goal prompts; hiding strategy in chat; optimizing proxy metrics without a shared value function

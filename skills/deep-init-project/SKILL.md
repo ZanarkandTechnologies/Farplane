@@ -119,7 +119,7 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   - [ ] Do not auto-enable scaffolded git hooks.
 - [ ] 4. Run readiness audit and full-mode project-goals setup.
   - [ ] Audit `docs/bootstrap-brief.md`, `farplane/harness.md`,
-    `farplane/goals.md`, `farplane/automations.md`, `farplane/steer.config.json`,
+    `farplane/goals.md`, `farplane/automations.md`, `farplane/steer.config.toml`,
     `farplane/bindings.md`,
     `farplane/pm.json`, `PROJECT_RULES.md`, and QA surfaces for missing,
     placeholder, stale, or disabled state.
@@ -235,8 +235,8 @@ pnpm dlx convex@latest dev
   copied to `farplane/manifest.json` for the Farplane project spec instance.
 - [references/AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md) -
   copied to `farplane/automations.md` for reviewable Codex automation prompts.
-- [references/STEER_CONFIG_TEMPLATE.json](references/STEER_CONFIG_TEMPLATE.json)
-  - copied to `farplane/steer.config.json` for scheduled planning jobs.
+- [references/STEER_CONFIG_TEMPLATE.toml](references/STEER_CONFIG_TEMPLATE.toml)
+  - copied to `farplane/steer.config.toml` for scheduled planning jobs.
 - [references/PRD_TICKET_TEMPLATE.md](references/PRD_TICKET_TEMPLATE.md) -
   copied to `tickets/TASK-0001/ticket.md` as the post-init PRD handoff.
 - [references/PROJECT_RULES_TEMPLATE.md](references/PROJECT_RULES_TEMPLATE.md)

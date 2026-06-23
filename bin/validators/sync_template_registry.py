@@ -126,12 +126,24 @@ def extract_json_metadata(text: str) -> dict[str, Any] | None:
     return None
 
 
+def extract_toml_metadata(text: str) -> dict[str, Any] | None:
+    try:
+        payload = tomllib.loads(text)
+    except tomllib.TOMLDecodeError:
+        return None
+    raw_meta = payload.get("_template_metadata") or payload.get("template_metadata")
+    if isinstance(raw_meta, dict):
+        return raw_meta
+    return None
+
+
 def extract_metadata(path: Path) -> dict[str, Any]:
     text = path.read_text(encoding="utf-8")
     try:
         metadata = (
             extract_frontmatter(text)
             or extract_json_metadata(text)
+            or extract_toml_metadata(text)
             or extract_html_comment_metadata(text)
         )
     except TemplateRegistryError as exc:

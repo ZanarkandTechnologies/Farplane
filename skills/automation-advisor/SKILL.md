@@ -45,7 +45,7 @@ automation_advisor(intent, project_refs, current_automation?, steer_config?, act
 
 state:
   reads(docs/specs/steer-pulse-automation.md,
-        farplane/steer.config.json?,
+        farplane/steer.config.toml?,
         farplane/automations.md?,
         farplane/pm.json?,
         skills/automation-advisor/templates/*,
@@ -179,5 +179,5 @@ Risk guards:
 
 - [templates/steer-automation.md](templates/steer-automation.md)
 - [templates/pulse-automation.md](templates/pulse-automation.md)
-- [templates/steer.config.json](templates/steer.config.json)
+- [templates/steer.config.toml](templates/steer.config.toml)
 - [../../docs/specs/steer-pulse-automation.md](../../docs/specs/steer-pulse-automation.md)

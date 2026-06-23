@@ -24,13 +24,13 @@ Cadence:
 Load first:
 - docs/specs/steer-pulse-automation.md
 - skills/steer-update/SKILL.md
-- farplane/steer.config.json
+- farplane/steer.config.toml
 - .farplane/state/steer-scheduler.json when present
 
 Run:
 1. Get the current date/time with timezone.
 2. Load the Steer schedule from the automation prompt or
-   `farplane/steer.config.json` when the project uses that helper file.
+   `farplane/steer.config.toml` when the project uses that helper file.
 3. Load or initialize `.farplane/state/steer-scheduler.json`.
 4. If state is missing or the schedule version changed, initialize or migrate
    scheduler state without mutating tracked config.

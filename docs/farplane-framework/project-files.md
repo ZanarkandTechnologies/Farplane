@@ -9,7 +9,7 @@ source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
   - farplane/automations.md
-  - farplane/steer.config.json
+  - farplane/steer.config.toml
   - farplane/bindings.md
   - farplane/pm.json
   - .gitignore
@@ -36,7 +36,7 @@ farplane/
   harness.md
   goals.md
   automations.md
-  steer.config.json
+  steer.config.toml
   bindings.md
   evals.md
   pm.json
@@ -70,7 +70,7 @@ policies, thread IDs, and schedule choices live in the prompts here. This file
 is not generated runtime state and does not store `last_run_at`, `next_due_at`,
 or automation execution logs.
 
-### `farplane/steer.config.json`
+### `farplane/steer.config.toml`
 
 Human-owned Steer job config:
 

@@ -10,7 +10,7 @@ tags:
   - steer
   - pulse
 refs:
-  - farplane/steer.config.json
+  - farplane/steer.config.toml
   - skills/steer-update/SKILL.md
   - skills/pulse-update/SKILL.md
   - skills/automation-advisor/SKILL.md
@@ -188,7 +188,7 @@ plan_triggers = empty_board | repeated_failure | major_blocker |
 Tracked config, when present, is human-owned and intentionally small:
 
 ```text
-farplane/steer.config.json
+farplane/steer.config.toml
   -> version, timezone, report_interval, plan_interval, plan_triggers,
      and any project-specific prompt overrides
 ```
@@ -211,7 +211,7 @@ side-effect gates.
 
 ```text
 now = current_time()
-load schedule from automation prompt or farplane/steer.config.json
+load schedule from automation prompt or farplane/steer.config.toml
 load .farplane/state/steer-scheduler.json
 
 if state.config_version != config.version:

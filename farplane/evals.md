@@ -14,7 +14,7 @@ owner: harness
 
 ```text
 check_farplane_project_files()
-  -> validates farplane/manifest.json, farplane/steer.config.json,
+  -> validates farplane/manifest.json, farplane/steer.config.toml,
      farplane/bindings.md, optional farplane/pm.json, retired names, and
      obvious secret leakage
 
@@ -37,7 +37,7 @@ python3 skills/skill-maintenance/scripts/check_skills.py --write
 
 - A new project bootstrap produces `farplane/README.md`,
   `farplane/manifest.json`, `farplane/harness.md`, `farplane/goals.md`,
-  `farplane/steer.config.json`, `farplane/bindings.md`, and `farplane/evals.md`,
+  `farplane/steer.config.toml`, `farplane/bindings.md`, and `farplane/evals.md`,
   plus optional `farplane/pm.json` for UI thread grouping and ignored
   `.farplane/` runtime state.
 - `deep-init-project` with `harness_depth != none` calls the harness phase and

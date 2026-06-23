@@ -50,7 +50,7 @@ project "Farplane" {
 
   system recurring_pm {
     status: ready
-    evidence: ref("farplane/steer.config.json")
+    evidence: ref("farplane/steer.config.toml")
     action: use_existing("Steer and Pulse automation loops")
   }
 
@@ -85,7 +85,7 @@ project "Farplane" {
     trigger: "Codex automation at the minimum planning cadence"
     bindings: "farplane/bindings.md"
     first: steer_update
-    config: "farplane/steer.config.json"
+    config: "farplane/steer.config.toml"
     state: ".farplane/state/steer-scheduler.json"
     jobs: [daily_report, weekly_steer]
     output: ".farplane/reports/steer/<job>/<timestamp>.md"

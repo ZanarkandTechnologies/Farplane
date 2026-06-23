@@ -127,7 +127,7 @@ farplane/README.md
 farplane/manifest.json
 farplane/harness.md
 farplane/goals.md
-farplane/steer.config.json
+farplane/steer.config.toml
 farplane/bindings.md
 farplane/evals.md
 farplane/pm.json
@@ -151,7 +151,7 @@ Key contracts:
 - `farplane/goals.md` is project strategy context.
 - `farplane/automations.md` is the human-reviewable source for the exact Pulse
   and Steer prompts copied into Codex automations.
-- `farplane/steer.config.json` is an optional compact schedule helper for Steer
+- `farplane/steer.config.toml` is an optional compact schedule helper for Steer
   jobs when a project wants machine-readable job rows.
 - `.farplane/state/steer-scheduler.json` stores mutable `next_due_at`,
   `last_run_at`, `last_report`, and job status.
@@ -162,9 +162,9 @@ Guardrails:
 
 - Do not recreate `farplane/automations.json` or a hidden automation compiler.
 - Do not put `last_run_at`, `next_due_at`, or automation IDs in
-  `steer.config.json`.
+  `steer.config.toml`.
 - Do not duplicate workflow inputs, outputs, drift checks, report paths, or
-  gates in `steer.config.json`; put those in the job prompt or owning skill.
+  gates in `steer.config.toml`; put those in the job prompt or owning skill.
 
 ### 4. Run Readiness Audit
 
@@ -175,7 +175,7 @@ Audit:
 - `docs/bootstrap-brief.md`
 - `farplane/harness.md`
 - `farplane/goals.md`
-- `farplane/steer.config.json`
+- `farplane/steer.config.toml`
 - `farplane/bindings.md`
 - `farplane/pm.json`
 - `PROJECT_RULES.md`
@@ -396,7 +396,7 @@ Guardrails:
 | `farplane/manifest.json` | `deep-init-project` | framework migrations | expected tracked/ignored paths |
 | `farplane/harness.md` | `deep-init-project` / `harness-creator` | harness planning | mission, values, systems |
 | `farplane/goals.md` | `deep-init-project` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
-| `farplane/steer.config.json` | `deep-init-project` | operator / `automation-advisor` | Steer job prompts and cadence |
+| `farplane/steer.config.toml` | `deep-init-project` | operator / `automation-advisor` | Steer job prompts and cadence |
 | `.farplane/state/steer-scheduler.json` | `deep-init-project` / Steer | Steer runtime | next due and last run state |
 | `farplane/pm.json` | `deep-init-project` | `automation-advisor` / PM-visible threads | UI grouping for persistent chat and automation threads |
 | `tickets/TASK-0001/ticket.md` | `deep-init-project` | planning flow | starter PRD/discovery handoff |
@@ -420,7 +420,7 @@ first executable frontier.
 
 The repo has exactly two live recurring automation loops, Pulse and Steer.
 Pulse handles frequent bounded action. Steer handles scheduled planning jobs
-from `farplane/steer.config.json`. PM-visible threads are grouped in
+from `farplane/steer.config.toml`. PM-visible threads are grouped in
 `farplane/pm.json`.
 
 ## Common Failure Modes
@@ -431,7 +431,7 @@ from `farplane/steer.config.json`. PM-visible threads are grouped in
   intent. Do not do this; route activation through `automation-advisor`.
 - `loop_duplication:` Daily/weekly/quarterly jobs become separate threads.
   Keep them as Steer jobs.
-- `config_bloat:` `steer.config.json` starts duplicating skill runbooks. Keep it
+- `config_bloat:` `steer.config.toml` starts duplicating skill runbooks. Keep it
   to job `id`, `cadence`, and `prompt`.
 - `state_mixup:` runtime timestamps or automation IDs enter tracked Steer
   config. Store schedule runtime in `.farplane/state/steer-scheduler.json`;

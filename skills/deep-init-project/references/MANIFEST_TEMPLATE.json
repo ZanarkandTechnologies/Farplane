@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "1.2.0",
+    "template_version": "1.2.1",
     "feature_refs": ["FEAT-0060"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "1.2.0",
+  "spec_version": "1.2.1",
   "template_uses": {
-    "farplane-framework": "1.2.0"
+    "farplane-framework": "1.2.1"
   },
   "standard": {
     "tracked": [
@@ -21,7 +21,7 @@
       "farplane/harness.md",
       "farplane/goals.md",
       "farplane/automations.md",
-      "farplane/steer.config.json",
+      "farplane/steer.config.toml",
       "farplane/bindings.md",
       "farplane/evals.md",
       "docs/bootstrap-brief.md",

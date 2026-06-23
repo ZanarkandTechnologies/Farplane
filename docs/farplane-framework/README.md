@@ -11,7 +11,7 @@ source_of_truth:
   - farplane/harness.md
   - farplane/goals.md
   - farplane/automations.md
-  - farplane/steer.config.json
+  - farplane/steer.config.toml
   - farplane/bindings.md
   - farplane/evals.md
   - farplane/pm.json
@@ -46,7 +46,7 @@ PROJECT_ROOT/
     harness.md
     goals.md
     automations.md
-    steer.config.json
+    steer.config.toml
     bindings.md
     evals.md
     pm.json
@@ -110,7 +110,7 @@ deep_init_project(project_root?, project_idea?, repo_shape?, profile?, harness_d
    + farplane/harness.md
    + farplane/goals.md
    + farplane/automations.md
-   + farplane/steer.config.json
+   + farplane/steer.config.toml
    + farplane/bindings.md
    + farplane/evals.md
    + farplane/pm.json?
@@ -136,7 +136,7 @@ bounded action, optionally hands off work, and records decision/reward state.
 
 Steer is the planning loop. Its live Codex prompt is reviewed in
 `farplane/automations.md`. When the project uses the optional helper config,
-it reads `farplane/steer.config.json`, checks cached `next_due_at` values in
+it reads `farplane/steer.config.toml`, checks cached `next_due_at` values in
 `.farplane/state/steer-scheduler.json`, runs due jobs, writes date-stamped
 reports, and advances scheduler state.
 

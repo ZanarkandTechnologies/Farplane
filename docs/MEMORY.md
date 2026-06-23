@@ -125,7 +125,7 @@ MEM-0035, MEM-0036, MEM-0056, MEM-0130, MEM-0151.
 - Current Farplane framework automations are two-loop: `pulse-update` for
   frequent one-action idle/actor decisions and `steer-update` for scheduled
   planning jobs. Tracked scheduling config belongs in
-  `farplane/steer.config.json`; mutable run state belongs under
+  `farplane/steer.config.toml`; mutable run state belongs under
   `.farplane/state/`.
 
 ### Review, QA, And Evidence
@@ -251,6 +251,6 @@ archive.
 
 2026-06-13 00:00 +0800 | farplane,skills,qa,evals,checklists | Skill-local runtime QA guardrails should live as optional first-class `skills/<skill-name>/qa_checklist.md` files at the skill package root, not as ordinary `references/` prose. `eval_task.json` discovers and pressures expected behavior; `qa_checklist.md` applies settled reusable guardrails during real work. After editing a skill eval, skill-maintenance should decide whether changed reference points promote into `qa_checklist.md`, `SKILL.md`, a reference, or a validator, and record skipped rare or benchmark-only points in the audit.
 
-2026-06-23 00:00 +0800 | farplane,automations,steer,pulse | Farplane projects use two framework automation loops for autonomous operation: `pulse-update` for frequent one-action idle/actor decisions and `steer-update` for scheduled planning jobs. Tracked scheduling config belongs in `farplane/steer.config.json`; mutable `last_run_at`, `next_due_at`, `last_report`, and job status belong in `.farplane/state/steer-scheduler.json`. Old daily/weekly/rhythm/horizon/ticket-drainer skills are migration-source context until their useful practices are extracted, not active framework primitives.
+2026-06-23 00:00 +0800 | farplane,automations,steer,pulse | Farplane projects use two framework automation loops for autonomous operation: `pulse-update` for frequent one-action idle/actor decisions and `steer-update` for scheduled planning jobs. Tracked scheduling config belongs in `farplane/steer.config.toml`; mutable `last_run_at`, `next_due_at`, `last_report`, and job status belong in `.farplane/state/steer-scheduler.json`. Old daily/weekly/rhythm/horizon/ticket-drainer skills are migration-source context until their useful practices are extracted, not active framework primitives.
 
 2026-06-23 00:00 +0800 | farplane,knowledge,tidying | Live project memory and other knowledge artifacts should be ranked by importance, recency, factuality, and remembrance value. Keep only important, factual, current-enough knowledge that the target file is the best owner for; route generic policy to `AGENTS.md`, specs, skills, validators, or ticket templates, and preserve exact historical rows in archives before compacting semi-append-only sources.

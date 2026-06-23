@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.1.3"
+template_version: "0.1.4"
 feature_refs:
   - FEAT-0027
   - FEAT-0048
@@ -168,7 +168,7 @@ project "TODO" {
     trigger: "Codex automation at the minimum planning cadence"
     bindings: "farplane/bindings.md"
     first: steer_update
-    config: "farplane/steer.config.json"
+    config: "farplane/steer.config.toml"
     state: ".farplane/state/steer-scheduler.json"
     jobs: [daily_report, weekly_steer]
     skills: [steer_update, feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]

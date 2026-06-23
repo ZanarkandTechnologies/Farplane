@@ -9,7 +9,7 @@ owner: project-pm-automation
 source: horizon-advisor
 refs:
   - farplane/harness.md
-  - farplane/steer.config.json
+  - farplane/steer.config.toml
   - farplane/bindings.md
   - docs/farplane-framework/README.md
   - docs/specs/program-notation.md
@@ -26,14 +26,14 @@ holds, and Goal Advisor handoffs.
 
 It does not own schedules, grouped jobs, report paths, ticket source policy, or
 run-ledger rules. Scheduled planning mechanics live in
-[steer.config.json](steer.config.json), while Pulse behavior lives in the
+[steer.config.toml](steer.config.toml), while Pulse behavior lives in the
 `pulse-update` skill and its runtime state.
 
 ## Goal Program
 
 ```goal-program
 values_ref: farplane/harness.md
-steer_config_ref: farplane/steer.config.json
+steer_config_ref: farplane/steer.config.toml
 bindings_ref: farplane/bindings.md
 
 goal farplane_os {
@@ -138,7 +138,7 @@ project framework_standardization {
   gates: [no_hidden_automation, no_secret_in_tracked_config, no_duplicate_goal_sources]
   starting_tasks: [
     "keep farplane/goals.md canonical for strategy",
-    "keep farplane/steer.config.json canonical for Steer scheduled planning jobs",
+    "keep farplane/steer.config.toml canonical for Steer scheduled planning jobs",
     "verify no duplicate strategy source exists outside farplane/goals.md",
     "run framework and doc validators"
   ]
@@ -194,7 +194,7 @@ project steer_pulse_framework_standard {
   route: deep_init_project
   gates: [automation_preview_before_scheduling, local_files_source_of_truth]
   starting_tasks: [
-    "keep Steer job config in farplane/steer.config.json",
+    "keep Steer job config in farplane/steer.config.toml",
     "keep simple ticket selection inside pulse-update",
     "migrate useful daily/weekly PM practices into Steer before deleting old skill packages",
     "write unblock tickets for missing Notion, Telegram, metrics, or binding access"
@@ -230,7 +230,7 @@ project console_feedback_visibility {
 }
 
 milestone framework_strategy_split {
-  task: "Make farplane/goals.md the canonical dynamic strategy file and keep scheduled automation mechanics in farplane/steer.config.json."
+  task: "Make farplane/goals.md the canonical dynamic strategy file and keep scheduled automation mechanics in farplane/steer.config.toml."
   metric: artifact_presence("farplane/goals.md active") + review_metric("no duplicate root strategy file")
   route: one_turn
   gates: [no_commit_without_request]
@@ -262,7 +262,7 @@ update_strategy(farplane/goals.md, steer_reports, tickets, memory)
 
 Steer should not move schedule, grouped-job, report-path, or run-ledger
 configuration into this file. It should update
-[steer.config.json](steer.config.json) only when the scheduled planning config
+[steer.config.toml](steer.config.toml) only when the scheduled planning config
 itself changes.
 Use `horizon-advisor` when the update needs to rewrite the North Star, value
 function, KPI tree, project goal map, or current frontier.
@@ -290,7 +290,7 @@ Next eligible handoff:
 
 ```text
 goal_advisor(
-  files=[farplane/goals.md, farplane/steer.config.json, farplane/harness.md, docs/fundamentals/harness-algebra.md, tickets/],
+  files=[farplane/goals.md, farplane/steer.config.toml, farplane/harness.md, docs/fundamentals/harness-algebra.md, tickets/],
   task="compile the current low-intervention improvement frontier into one concrete ticket-backed Goal Packet",
   metric_provider=hybrid_metric(learning, review, mechanical),
   trigger=active_goal | heartbeat,

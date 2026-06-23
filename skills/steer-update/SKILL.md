@@ -41,7 +41,7 @@ steer_update(project_root, report_interval, plan_interval, plan_triggers, schedu
    + scheduler_state_delta
 
 state:
-  reads(schedule params from caller or farplane/steer.config.json?,
+  reads(schedule params from caller or farplane/steer.config.toml?,
         .farplane/state/steer-scheduler.json?,
         farplane/goals.md?,
         tickets/,
@@ -74,7 +74,7 @@ fails:
 
 - [ ] 1. Load config and state.
   - [ ] Read the report interval, plan interval, plan triggers, and schedule
-        passed by the caller, or `farplane/steer.config.json` only when the
+        passed by the caller, or `farplane/steer.config.toml` only when the
         caller uses that helper file.
   - [ ] Read `.farplane/state/steer-scheduler.json` if present.
   - [ ] If state is missing or schedule version changed, initialize/migrate

@@ -176,6 +176,23 @@ def json_metadata(text: str) -> TemplateMetadata | None:
     )
 
 
+def toml_metadata(text: str) -> TemplateMetadata | None:
+    try:
+        payload = tomllib.loads(text)
+    except tomllib.TOMLDecodeError:
+        return None
+    raw_meta = payload.get("_template_metadata") or payload.get("template_metadata")
+    if not isinstance(raw_meta, dict):
+        return None
+    template_id = raw_meta.get("template_id") or raw_meta.get("template_name")
+    version = raw_meta.get("template_version") or raw_meta.get("version")
+    return TemplateMetadata(
+        template_id=str(template_id) if template_id is not None else None,
+        version=str(version) if version is not None else None,
+        source="TOML template metadata",
+    )
+
+
 def comment_metadata(text: str) -> TemplateMetadata | None:
     head = "\n".join(text.splitlines()[:40])
     values: dict[str, str] = {}
@@ -191,7 +208,7 @@ def comment_metadata(text: str) -> TemplateMetadata | None:
 
 
 def extract_metadata(text: str) -> TemplateMetadata | None:
-    return frontmatter_metadata(text) or json_metadata(text) or comment_metadata(text)
+    return frontmatter_metadata(text) or json_metadata(text) or toml_metadata(text) or comment_metadata(text)
 
 
 def validate_metadata(path: str, metadata: TemplateMetadata | None) -> list[str]:

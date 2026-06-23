@@ -241,7 +241,7 @@ strategy loop.
 
 Default harness storage is one Markdown file with YAML front matter and one
 fenced `harness-program` block. Recurring Steer job prompts and cadence belong
-in tracked `farplane/steer.config.json`; generated runtime state, reports,
+in tracked `farplane/steer.config.toml`; generated runtime state, reports,
 eval runs, and logs belong in ignored `.farplane/`. Use Markdown around the
 block for evidence, assumptions, open questions, review, and optional inventory
 tables. Split to Goal Packet files only when a current milestone is ready to
