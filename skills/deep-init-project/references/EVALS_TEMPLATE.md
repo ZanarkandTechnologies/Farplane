@@ -4,7 +4,7 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.1.0"
+framework_template_version: "0.2.0"
 owner: harness
 ---
 
@@ -26,3 +26,6 @@ Use the project-specific validator, test, build, or QA commands recorded in
 - TODO: first smoke check
 - TODO: first end-to-end acceptance example
 - TODO: first review or QA proof path
+- TODO: Pulse selects one bounded action and writes a date-stamped report
+- TODO: Steer runs due jobs from cached next_due_at state and writes
+  date-stamped reports

@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.1.2"
+template_version: "0.1.3"
 feature_refs:
   - FEAT-0027
   - FEAT-0048
@@ -156,32 +156,25 @@ project "TODO" {
   }
 
   heartbeat pulse_update {
-    trigger: "compiled from farplane/automations.json lanes.pulse"
+    trigger: "Codex automation every 30 minutes"
     bindings: "farplane/bindings.md"
     first: pulse_update
-    skills: [pulse_update, ticket_drainer, goal_advisor, review]
+    skills: [pulse_update, goal_advisor, review]
     gates: [no_external_side_effects, ticket_or_goal_required_for_edits]
-    output: ".farplane/reports/pulse/latest.md"
+    output: ".farplane/reports/pulse/<timestamp>.md"
   }
 
-  heartbeat rhythm_update {
-    trigger: "compiled from farplane/automations.json lanes.rhythm"
+  heartbeat steer_update {
+    trigger: "Codex automation at the minimum planning cadence"
     bindings: "farplane/bindings.md"
-    first: rhythm_update
-    skills: [impl_plan, goal_advisor, review]
-    gates: [no_external_side_effects, ticket_or_goal_required_for_edits]
-    output: ".farplane/reports/rhythm/latest.md"
-  }
-
-  heartbeat horizon_update {
-    trigger: "compiled from farplane/automations.json lanes.horizon"
-    bindings: "farplane/bindings.md"
-    first: grouped_jobs
-    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy, quarterly_plan, annual_review]
-    skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
-    delegate: delegate(ref("project-harness.md"), "refresh strategy, memory, and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
+    first: steer_update
+    config: "farplane/steer.config.json"
+    state: ".farplane/state/steer-scheduler.json"
+    jobs: [daily_report, weekly_steer]
+    skills: [steer_update, feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
+    delegate: delegate(ref("project-harness.md"), "refresh planning, strategy, memory, and skill upkeep", skills=[steer_update, skill_maintenance])
     gates: [review_before_external_side_effects]
-    output: ".farplane/reports/horizon/latest.md"
+    output: ".farplane/reports/steer/<job>/<timestamp>.md"
   }
 
   milestone first_evidence_loop {

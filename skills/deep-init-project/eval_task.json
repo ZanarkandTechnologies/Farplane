@@ -1,29 +1,43 @@
 [
   {
-    "id": "deep_init_project_compact_automations_01",
-    "title": "Deep init emits compact automation manifest",
-    "query": "A new Farplane project is being initialized with pulse, rhythm, horizon, and optional ticket drainer. What should the generated farplane/automations.json contain versus leave to skills?",
+    "id": "deep_init_project_steer_pulse_01",
+    "title": "Deep init emits Steer/Pulse framework config",
+    "query": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
     "reference_points": [
-      "Keeps lane intervals, target threads, gates, scheduled actions, drift policy, freshness, reports, and local overrides in farplane/automations.json",
-      "Uses a compact job_catalog or equivalent skill-preset references instead of duplicating every job's reads/writes/output runbook",
-      "Names separate skill-owned presets such as pulse-update.bandit, rhythm-update.operating_plan, horizon-update.strategy, and ticket-drainer.daily",
-      "Includes a compile rule requiring live Codex prompts to inline enough ordered steps to run safely",
-      "Does not collapse the lane skills into one router or leave live automation prompts as vague 'read the manifest and decide' instructions"
+      "Creates farplane/automations.md as the reviewable prompt source and keeps farplane/steer.config.json only as an optional compact schedule helper",
+      "Keeps each Steer job to id, cadence, and prompt rather than duplicating workflow inputs and outputs",
+      "Uses Pulse for fast bounded action selection",
+      "Uses Steer for scheduled planning jobs and drift checks",
+      "Keeps mutable next_due_at, last_run_at, and last_report in .farplane/state/steer-scheduler.json",
+      "Uses date-stamped reports rather than latest.md as the canonical report path"
     ],
-    "tags": ["deep-init-project", "automations", "compact-manifest"]
+    "tags": ["deep-init-project", "steer", "pulse"]
   },
   {
-    "id": "deep_init_project_ticket_drainer_child_thread_01",
-    "title": "Deep init ticket drainer uses parent-spawned child threads",
-    "query": "The generated ticket drainer is kept as a separate execution selector that may be invoked by rhythm-update or pulse-update. What thread contract should the template encode?",
+    "id": "deep_init_project_ticket_selection_inside_pulse_01",
+    "title": "Deep init keeps ticket selection inside Pulse",
+    "query": "The initialized project has local tickets and a Pulse automation. What should the template say about selecting work?",
     "reference_points": [
-      "Ticket drainer remains a separate skill rather than being hidden inside a PM router",
-      "Parent lane names or creates the child thread using a ticket-based title template",
-      "Child prompt includes project root, parent lane id, ticket path, context refs, expected outputs, side-effect gates, and lineage writeback",
-      "The template records child thread id or handoff blocker in reports and run ledger",
-      "It does not ask the child worker to rename itself"
+      "Pulse selects at most one bounded action per beat",
+      "Local ready and unblocked tickets are preferred over blocked or approval-required work",
+      "Substantial implementation routes through goal-advisor or an implementation handoff",
+      "No separate ticket-drainer automation is required"
     ],
-    "tags": ["deep-init-project", "ticket-drainer", "child-thread"]
+    "tags": ["deep-init-project", "pulse", "ticket-selection"]
+  },
+  {
+    "id": "deep_init_project_automation_activation_path_01",
+    "title": "Deep init routes live automation activation to automation-advisor",
+    "query": "A user initializes a new Farplane project and asks whether it creates two threads and two automations. What should deep-init-project do end-to-end?",
+    "reference_points": [
+      "Bootstrap creates files, steer config, scheduler state, tickets, and pm manifest",
+      "Does not create live Codex threads or automations unless activation is requested",
+      "Routes activation to automation-advisor",
+      "Activation creates or reuses exactly two loops: Pulse and Steer",
+      "Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store",
+      "Reports needs_goal_intake or needs_automation_setup when blocked"
+    ],
+    "tags": ["deep-init-project", "automation-advisor", "activation"]
   },
   {
     "id": "deep_init_project_full_mode_goal_intake_01",

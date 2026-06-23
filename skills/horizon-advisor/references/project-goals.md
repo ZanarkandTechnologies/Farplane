@@ -57,7 +57,7 @@ chooses that external system as the source of truth.
 ProjectGoals :=
   farplane/goals.md
 + farplane/harness.md
-+ farplane/automations.json
++ farplane/steer.config.json
 + farplane/evals.md
 + tickets/
 + memory_docs
@@ -204,4 +204,3 @@ goal_advisor(files=[farplane/goals.md, ticket.md, program.md, progress.md])
 Do not generate a native Goal prompt that tries to run the whole goal graph
 indefinitely. The project goals file selects and explains the frontier; native
 Goal mode executes one uninterrupted window over listed files.
-

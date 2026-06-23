@@ -26,11 +26,12 @@ common repo types such as Convex, Next.js, Clerk, shadcn, and React apps. Keep
 those recipes in this skill or its references; do not delete the code-repo
 scaffolding branch while simplifying project initialization.
 
-Reusable project automation templates live in
-[AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md). Keep generated
-`farplane/automations.json` files compact: lane intervals, gates, scheduled actions,
-freshness, reports, target threads, and local overrides stay in the manifest;
-job reads/writes/output defaults stay in the referenced skills and presets.
+Reusable project automation prompt templates live in
+[AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md). New projects use
+the Farplane Framework's two recurring loops: `pulse-update` for frequent
+bounded action selection and `steer-update` for scheduled planning jobs.
+Generated project config should include `farplane/automations.md` as the
+reviewable prompt source copied into Codex automations.
 
 ## Skill Signature
 
@@ -45,10 +46,11 @@ deep_init_project(project_root?, project_idea?, repo_shape?, stack_profile?, ini
    + qa_surface
    + runtime_contract
    + starter_prd_ticket
+   + automation_setup_handoff?
    + next_planning_handoff
 state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and starter PRD ticket
 gates: existing_files_preserved; spec_version_recorded; human_gates_named; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
-routes: deep-interview | prd | spec-to-ticket | research:official-docs | research:code-patterns
+routes: horizon-advisor | goal-advisor | deep-interview | prd | spec-to-ticket | research:official-docs | research:code-patterns | automation-advisor
 fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when goals, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
 ```
 
@@ -106,8 +108,8 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   - [ ] Run or mirror `scripts/bootstrap.sh` to create tracked `farplane/`
     config, ignored `.farplane/` runtime state, `tickets/`, docs, QA, optional
     hooks, validation scripts, and review helper surfaces.
-  - [ ] Keep `farplane/automations.json` as a compact structured lane manifest
-    that references skill presets instead of duplicating skill runbooks.
+  - [ ] Keep `farplane/automations.md` as the exact prompt source that calls
+    generic skills in plain project-specific operational language.
   - [ ] Ensure `farplane/manifest.json` records the Farplane project
     `spec_version` and standard tracked/ignored paths.
   - [ ] Preserve existing files unless `force == true` or explicit overwrite
@@ -117,7 +119,7 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   - [ ] Do not auto-enable scaffolded git hooks.
 - [ ] 4. Run readiness audit and full-mode project-goals setup.
   - [ ] Audit `docs/bootstrap-brief.md`, `farplane/harness.md`,
-    `farplane/goals.md`, `farplane/automations.json`, `farplane/automations.md`,
+    `farplane/goals.md`, `farplane/automations.md`, `farplane/steer.config.json`,
     `farplane/bindings.md`,
     `farplane/pm.json`, `PROJECT_RULES.md`, and QA surfaces for missing,
     placeholder, stale, or disabled state.
@@ -128,6 +130,8 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   - [ ] In `full` mode, ask the first missing project-goals question before
     claiming `project_initialized`: "What should this project reliably do for
     you over the next 3 months that it does not yet do reliably today?"
+  - [ ] Use `horizon-advisor` when project goals, KPI tree, value function, or
+    current milestone need to be written or improved.
   - [ ] Use `goal-advisor` only after `farplane/goals.md` has a current
     milestone concrete enough to compile into a ticket-backed Goal Packet.
 - [ ] 5. Initialize the optional code scaffold.
@@ -146,7 +150,20 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
     explicitly requested now.
   - [ ] Route to the next planning skill after init; do not conduct the planning
     phase inside this skill.
-- [ ] 7. Verify and finish init.
+- [ ] 7. Prepare automation activation.
+  - [ ] Create `farplane/pm.json` as UI grouping glue with `threads.chats` and
+        `threads.automations`.
+  - [ ] Do not create live threads or automations unless the operator asked for
+        live automation activation.
+  - [ ] When live activation is requested, call `automation-advisor` after the
+        substrate exists so it can create or update exactly two Codex loops:
+        Pulse and Steer.
+  - [ ] Record PM-visible thread IDs in `farplane/pm.json`; do not store
+        automation runtime IDs there.
+  - [ ] If activation is skipped or unavailable, report
+        `needs_automation_setup` with the exact next owner:
+        `automation-advisor`.
+- [ ] 8. Verify and finish init.
   - [ ] Run focused scaffold checks such as
     `python3 bin/validators/check_farplane_project_files.py` when available.
   - [ ] Confirm the expected `farplane/`, `.farplane/`, and `tickets/` surfaces
@@ -168,9 +185,12 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   scripts, and optional local Codex SDK review-loop files.
 - Starter handoff: `tickets/TASK-0001/ticket.md` for the post-init
   `deep-interview -> prd` phase.
+- Automation setup handoff: `automation-advisor` creates or updates the two
+  live Codex loops only when activation is requested.
 - Full-mode project-goals setup: goal-intake readiness in
   `docs/bootstrap-brief.md`, a proposed or applied `farplane/goals.md` delta,
-  and a `goal-advisor` handoff only after the current milestone is concrete.
+  a `horizon-advisor` pass when strategy needs shaping, and a `goal-advisor`
+  handoff only after the current milestone is concrete.
 - Optional code scaffold selected from the stack recipes below.
 
 ## Code Scaffold Recipes
@@ -213,6 +233,10 @@ pnpm dlx convex@latest dev
   when recording the bootstrap route and next lifecycle phase.
 - [references/MANIFEST_TEMPLATE.json](references/MANIFEST_TEMPLATE.json) -
   copied to `farplane/manifest.json` for the Farplane project spec instance.
+- [references/AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md) -
+  copied to `farplane/automations.md` for reviewable Codex automation prompts.
+- [references/STEER_CONFIG_TEMPLATE.json](references/STEER_CONFIG_TEMPLATE.json)
+  - copied to `farplane/steer.config.json` for scheduled planning jobs.
 - [references/PRD_TICKET_TEMPLATE.md](references/PRD_TICKET_TEMPLATE.md) -
   copied to `tickets/TASK-0001/ticket.md` as the post-init PRD handoff.
 - [references/PROJECT_RULES_TEMPLATE.md](references/PROJECT_RULES_TEMPLATE.md)

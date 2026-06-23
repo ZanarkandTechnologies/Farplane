@@ -3,7 +3,7 @@ kind: farplane-config-index
 status: draft
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.1.0"
+framework_template_version: "0.2.0"
 ---
 
 # Farplane Config
@@ -16,7 +16,8 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.md       # mission, values, modes, systems, feedback loops
   goals.md         # north star, KPIs, current milestone, holds
-  automations.md   # recurring jobs, schedules, reports, ticket source policy
+  automations.md   # exact Codex automation prompt blocks for Pulse and Steer
+  steer.config.json # versioned Steer job config for scheduled planning
   bindings.md      # non-secret project IDs, URLs, labels, aliases
   evals.md         # project-level proof and eval policy
   pm.json          # optional UI thread manifest for one visual project PM
@@ -28,6 +29,7 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 .farplane/
   README.md
   state/run-ledger.json
+  state/steer-scheduler.json
   reports/
   evals/runs/
   logs/

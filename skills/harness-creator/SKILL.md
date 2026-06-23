@@ -57,7 +57,7 @@ project_harness_creator(project_idea, values?, priorities?, mode_presets?, conte
    + proposed_tickets
    + current_milestone
    + goal_advisor_handoff
-state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, farplane/goals.md, farplane/automations.json, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(project-harness.md, proposed tickets, farplane/automations.json, farplane/automations.md, and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
+state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, farplane/goals.md, farplane/steer.config.json, and farplane/bindings.md when present, current external research only when domain truth matters); writes(project-harness.md, proposed tickets, farplane/steer.config.json, and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
 gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_providers_honest; existing_tickets_checked_first; missing_systems_named; blockers_ticketed; side_effect_gates_named; current_milestone_named; goal_advisor_handoff_ready
 routes: deep-init-project | research:* | ingest-content | harness-advisor | skill-creator | goal-advisor | optimize-with-human | weekly-strategy-analysis | review | relevant domain skill
 fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates skills before checking existing systems; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
@@ -170,23 +170,20 @@ the current milestone is selected, and `review` for material readiness.
      `ticket` node with `type: unblock` instead of expanding the harness
      Markdown.
 - [ ] 6. Define the Scrum-style operating cadence.
-   - [ ] Create or update tracked `farplane/automations.json` plus the
-     `farplane/automations.md` human index; keep ignored `.farplane/` for
-     runtime state, reports, eval runs, and logs.
+   - [ ] Create or update tracked `farplane/steer.config.json`; keep ignored
+     `.farplane/` for runtime state, reports, eval runs, and logs.
    - [ ] Create or update tracked `farplane/bindings.md` for project-specific
      external coordinates needed by skills.
-   - [ ] Default to three compiled project lanes first: `pulse-update` for
-     bounded immediate actions, `rhythm-update` for day-range operating plans,
-     and `horizon-update` for strategy/backlog/memory/skill maintenance.
-   - [ ] `ticket-drainer`: keep as a separate execution selector that
-     `pulse-update` or `rhythm-update` may call by policy; fetch local tickets
-     first, optionally fetch Notion only when enabled in
-     `farplane/automations.json` and configured in `farplane/bindings.md`, rank
-     for priority and compounding ROI, run `impl-plan` if needed, then use
-     `goal-advisor` to execute one ticket as far as possible.
-   - [ ] `horizon-update`: group due scheduled actions into the horizon lane,
-     reuse fresh reports via `.farplane/state/run-ledger.json`, and produce a
-     horizon report plus local ticket deltas.
+   - [ ] Default to two project loops first: `pulse-update` for bounded
+     immediate actions and `steer-update` for scheduled planning, drift checks,
+     strategy/backlog/memory/skill maintenance, and long-horizon rollups.
+   - [ ] Keep ticket selection inside `pulse-update`: fetch local tickets
+     first, skip blocked or approval-required work, rank for priority and
+     compounding ROI, run `impl-plan` if needed, then use `goal-advisor` to
+     execute one ticket as far as possible.
+   - [ ] `steer-update`: group due scheduled planning actions through
+     `farplane/steer.config.json`, reuse fresh reports when state points at
+     them, and produce dated Steer reports plus local ticket deltas.
    - [ ] When horizon work can split safely, express subagent lanes as
      `delegate(context_ref, task_prompt, skills?, output?)`; `context_ref` must
      be a file, ticket, Goal Packet, or artifact path.
@@ -282,8 +279,8 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 - Smallest lever first: check existing skills/tickets/systems before creating
   new skills, external-IO abstractions, hidden automations, or root-prompt rules.
 - Leaf execution first: parent harnesses coordinate; native Goal runs selected
-  milestones or tickets, and `ticket-drainer` drains proceedable work by lane
-  policy before proactive gap work.
+  milestones or tickets, and `pulse-update` selects one proceedable bounded
+  action per beat before proactive gap work.
 - Human gates first: publishing, spend, accounts, customer contact, private
   data, credentials, and feedback access become explicit gates or
   `ticket { type: unblock }` nodes.
