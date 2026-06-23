@@ -1,6 +1,6 @@
 ---
 name: weekly-pm-plan
-description: "Turn weekly reports, outcomes, external context, memory, and tickets into strategy, roadmap, and next-week operating priorities."
+description: "Compatibility alias for horizon-update: turn reports, outcomes, memory, and tickets into n-week strategy and rhythm guidance."
 tier: 3
 group: harness
 source: local
@@ -13,11 +13,16 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill for weekly strategy. It sets direction for daily planning and the
-short PM heartbeat. It may refresh memory, external context, skill upkeep, and
-strategy reports, but it should not execute leaf tickets.
+Compatibility alias: new automation contracts should call
+[horizon-update](../horizon-update/SKILL.md). Keep this package so existing
+automation prompts, evals, and report paths that still name `weekly-pm-plan` do
+not break during the migration.
 
-This skill is intentionally separate from `daily-pm-plan` and `pm-heartbeat` so
+Use this skill for weekly strategy. It sets direction for rhythm planning and
+the short pulse lane. It may refresh memory, external context, skill upkeep,
+and strategy reports, but it should not execute leaf tickets.
+
+This skill is intentionally separate from `rhythm-update` and `pulse-update` so
 each cadence can be tested and customized by editing its own `SKILL.md`.
 
 This is the generic project-PM shape behind specialized weekly strategy
@@ -29,6 +34,8 @@ hard-coding personal paths or private tools.
 ## Automation Presets
 
 `weekly-pm-plan.strategy @7d -> reports.weekly_pm`
+
+Canonical lane preset: `horizon-update.strategy @1w -> reports.horizon`.
 
 The automation manifest supplies cadence, grouped jobs, freshness policy,
 report handles, gates, and local overrides. This skill owns weekly synthesis,

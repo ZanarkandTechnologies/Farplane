@@ -7,7 +7,7 @@ owner: harness-creator
 refs:
   - ../SKILL.md
   - ../references/harness-il.md
-  - ../../goal-advisor/references/goal-portfolio.md
+  - ../../horizon-advisor/references/project-goals.md
   - ../../../farplane/goals.md
 ---
 

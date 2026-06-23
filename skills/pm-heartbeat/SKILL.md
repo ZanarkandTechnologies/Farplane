@@ -1,6 +1,6 @@
 ---
 name: pm-heartbeat
-description: "Turn a short configurable PM heartbeat into reward reconciliation, one action-arm decision, child-thread handoff, and outcome ledger updates."
+description: "Compatibility alias for pulse-update: turn the fast pulse lane into one bounded action decision and ledger update."
 tier: 3
 group: harness
 source: local
@@ -13,8 +13,13 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill for the short-cadence PM idle loop. It does not own weekly
-strategy or daily planning. It consumes those higher-level reports, reconciles
+Compatibility alias: new automation contracts should call
+[pulse-update](../pulse-update/SKILL.md). Keep this package so existing
+automation prompts, evals, and report paths that still name `pm-heartbeat` do
+not break during the migration.
+
+Use this skill for the short-cadence PM idle loop. It does not own horizon
+strategy or rhythm planning. It consumes those higher-level reports, reconciles
 recent child-thread outcomes, chooses one bounded action, and records the
 decision.
 
@@ -25,6 +30,8 @@ controls what it may do.
 ## Automation Presets
 
 `pm-heartbeat.bandit @30m -> reports.pm_heartbeat`
+
+Canonical lane preset: `pulse-update.bandit @30m -> reports.pulse`.
 
 The automation manifest supplies cadence, enabled flag, action authority,
 allowed arms, child-thread budget, gates, reports, and project overrides. This

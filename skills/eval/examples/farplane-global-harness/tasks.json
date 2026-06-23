@@ -133,7 +133,7 @@
       "Treats the request as feature discovery and feedback-seeking rather than an implementation mandate",
       "Does not create, rewrite, move, or delete durable artifacts such as skills, docs, tickets, or templates",
       "Reflects the target behavior and pressure-tests assumptions before recommending a path",
-      "Compares realistic owner surfaces such as a skill, ticket template, Goal Portfolio template, docs/spec, or eval before choosing one",
+      "Compares realistic owner surfaces such as a skill, ticket template, project-goals file, docs/spec, or eval before choosing one",
       "Recommends a ticket-ready plan or next design question instead of building the feature",
       "States that implementation should wait for an accepted ticket, controlling spec, explicit implementation request, or active Goal Packet"
     ],

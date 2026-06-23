@@ -22,6 +22,7 @@ Trigger:
 Budget:
 Metric / Feedback Provider:
 Drift Policy:
+Approval:
 Heartbeat Prompt:
 Native Goal Prompt:
 Next Action:
@@ -36,6 +37,8 @@ Create or update:
 - tickets/TASK-XXXX/progress.md from tickets/templates/goal-loop/progress.md
 
 Then generate the native `/goal` prompt from the same packet.
+Set `approval: pending` for material packets unless the operator explicitly
+pre-approved auto-run. Do not run the native Goal until the packet is approved.
 ```
 
 ## Native Goal Prompt
@@ -72,6 +75,10 @@ emit the next heartbeat action with attempted paths and one missing input. For
 UI or user-visible changes, stop complete only after the final response can
 include the strongest screenshot/image evidence as a Markdown image link plus
 artifact links, or after recording a clear blocker for missing visual proof.
+
+Approval: This prompt may be run only after the human has approved the current
+Goal Packet. If the ticket plan changed after this packet was compiled, return
+to `goal-advisor`, regenerate the packet, and ask for approval again.
 ```
 
 ## Parent Heartbeat Prompt

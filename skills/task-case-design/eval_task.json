@@ -1,0 +1,28 @@
+[
+  {
+    "id": "task-case-design-proof-surface-fit",
+    "title": "Separate shared case design from proof surface execution",
+    "query": "I need cases for a skill that sometimes gives generic plans instead of concrete proof. I keep calling them unit tests, but some of the behavior is agent judgment. Help me design the cases.",
+    "reference_points": [
+      "Explains that case design is shared while unit tests, validators, evals, and agent QA are different proof surfaces.",
+      "Defines concrete case dimensions before producing examples.",
+      "Includes at least one deterministic/mechanical case and one variable/judgment case with explicit criteria.",
+      "Avoids labeling every AI behavior check as a unit test."
+    ],
+    "tags": ["skill", "proof-surface", "case-design"],
+    "notes": "Skill-local eval for the core routing distinction."
+  },
+  {
+    "id": "task-case-design-query-not-spoiled",
+    "title": "Generate skill eval cases without leaking the answer",
+    "query": "Make a few eval task ideas for a skill that should push back when a requested workflow has unclear ownership. I want the cases to be realistic and not too repetitive.",
+    "reference_points": [
+      "Keeps user-facing case queries natural rather than instructing the target agent to invoke a named skill contract.",
+      "Separates realistic input wording from reference points or judge criteria.",
+      "Rejects near-duplicate cases and selects a small high-signal batch.",
+      "Includes an anti-cheat or negative-control case when appropriate."
+    ],
+    "tags": ["skill", "eval-writing", "anti-cheat"],
+    "notes": "Covers common eval-authoring failure where expected behavior leaks into the query."
+  }
+]

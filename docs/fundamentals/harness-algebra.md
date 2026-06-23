@@ -975,17 +975,17 @@ Long-term goal hierarchy:
 ```text
 goal -> project[] -> task[]
 
-portfolio.md = long-horizon goal graph + current_milestone
+farplane/goals.md = long-horizon goal graph + current_milestone
 ticket.md = executable leaf contract + Done / Proof
 program.md = loop configuration + metric + stop policy
 progress.md = append-only observed execution
 artifacts/ = evidence
 ```
 
-Portfolio heartbeat:
+Horizon heartbeat:
 
 ```text
-portfolio_heartbeat(portfolio.md, program.md, progress.md)
+horizon_heartbeat(farplane/goals.md, program.md, progress.md)
   -> no_op | start_child_goal | resume_child_goal | request_feedback | replan
 ```
 
@@ -999,8 +999,8 @@ leaf_native_goal(ticket.md, program.md, progress.md)
 Completion transition:
 
 ```text
-complete_child_goal(child_packet, portfolio, parent_program)
-  -> progress_entry + portfolio_state_delta + next_trigger
+complete_child_goal(child_packet, project_goals, parent_program)
+  -> progress_entry + project_goals_delta + next_trigger
 ```
 
 Rollout:
@@ -1010,8 +1010,9 @@ rollout_goal(pattern, sample_results, target_set)
   -> child_ticket[] | staged_checkpoints + rollout_progress
 ```
 
-The parent portfolio chooses the next milestone. Native Goal mode executes one
-leaf. Completion updates portfolio memory before the next heartbeat or replan.
+The project goals layer chooses the next milestone. Native Goal mode executes
+one leaf. Completion updates `farplane/goals.md` or a project report before the
+next heartbeat or replan.
 
 Control improves reliability only when trigger, state, stop condition, and
 proof are explicit:

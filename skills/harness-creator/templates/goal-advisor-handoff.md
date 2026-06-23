@@ -11,7 +11,7 @@ created_at: TODO
 - `ticket.md:`
 - `program.md:`
 - `progress.md:`
-- `portfolio_or_harness_packet:`
+- `project_goals_or_harness_packet:`
 - `other_source_files:`
 
 ## Task

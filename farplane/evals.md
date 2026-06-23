@@ -14,7 +14,7 @@ owner: harness
 
 ```text
 check_farplane_project_files()
-  -> validates farplane/manifest.json, farplane/automations.md,
+  -> validates farplane/manifest.json, farplane/automations.json,
      farplane/bindings.md, optional farplane/pm.json, retired names, and
      obvious secret leakage
 
@@ -43,5 +43,6 @@ python3 skills/skill-maintenance/scripts/check_skills.py --write
 - `deep-init-project` with `harness_depth != none` calls the harness phase and
   produces concrete unblock tickets for missing bindings or feedback loops.
 - Ticket drainer ignores Notion when local tickets are proceedable.
-- Weekly PM reuses fresh reports from the run ledger instead of duplicating
-  jobs.
+- Horizon update reuses fresh reports from the run ledger instead of
+  duplicating jobs, while quarterly/yearly actions stay scheduled inside the
+  horizon lane.

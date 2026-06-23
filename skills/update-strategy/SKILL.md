@@ -37,14 +37,14 @@ metric-honesty checks, and "strategy does not execute leaf tickets" guardrails.
 ## Skill Signature
 
 ```text
-update_strategy(project_harness?, goal_portfolio?, tickets?, progress?, metrics_or_feedback?, constraints?)
+update_strategy(project_harness?, project_goals?, tickets?, progress?, metrics_or_feedback?, constraints?)
   -> strategy_delta
    + system_gaps
    + experiments
    + ticket_deltas
-   + goal_portfolio_delta
+   + project_goals_delta
    + operator_report
-state: reads(project harness, goal portfolio, tickets, progress, metrics, feedback, recent PM reports); writes(strategy artifact or ticket deltas only when an owning project path is explicit)
+state: reads(project harness, project goals, tickets, progress, metrics, feedback, recent PM reports); writes(strategy artifact or ticket deltas only when an owning project path is explicit)
 gates: goals_read; tickets_read; feedback_loop_status_named; metric_honesty_preserved; ticket_deltas_actionable; side_effect_gates_respected
 routes: goal-advisor | weekly-strategy-analysis | review | ticket/spec owner
 fails: updates strategy without evidence; invents metrics; skips proceedable tickets; turns PM strategy into hidden execution
@@ -54,7 +54,7 @@ fails: updates strategy without evidence; invents metrics; skips proceedable tic
 ## Todo List
 
 - [ ] 1. Bind the project state.
-  - [ ] Resolve project root and read the project harness, goal portfolio, and
+  - [ ] Resolve project root and read the project harness, project goals, and
     current tickets when present.
   - [ ] Read progress, PM reports, metrics, feedback, or label exports supplied
     by the caller.
@@ -96,7 +96,7 @@ Strategy Update
 - system gaps:
 - experiments:
 - ticket deltas:
-- goal portfolio delta:
+- project goals delta:
 - side-effect gates:
 - next route:
 ```
@@ -131,5 +131,5 @@ Strategy Update
 - `system_gaps`
 - `experiments`
 - `ticket_deltas`
-- `goal_portfolio_delta`
+- `project_goals_delta`
 - `operator_report`

@@ -126,9 +126,9 @@ and Goal Advisor handoff without needing payments or customer operations first.
 ## Dissent
 
 The strongest dissent is template-first: we might not need a full skill yet.
-If a richer `harness-portfolio.md` template alone guides agents to useful
-Goal Packets with less ceremony, then `harness-creator` should stay a thin
-wrapper or collapse into template guidance.
+If a richer `farplane/goals.md` plus `project-harness.md` template pair guides
+agents to useful Goal Packets with less ceremony, then `harness-creator` should
+stay a thin wrapper or collapse into template guidance.
 
 ## Tradeoff Accepted
 
@@ -149,7 +149,7 @@ until the pilot proves where agents need more or less guidance.
 
 - generic high-level goal trigger;
 - business/channel as examples, not the core abstraction;
-- `templates/harness-portfolio.md`;
+- `farplane/goals.md` project-goals guidance;
 - `templates/capability-map.md`;
 - `templates/missing-primitive-plan.md`;
 - `templates/goal-advisor-handoff.md`;

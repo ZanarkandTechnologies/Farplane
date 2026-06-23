@@ -50,7 +50,7 @@ project "Name" {
     bet: "Who should find this first?"
     kpi: review_metric("hook/title clarity")
     evidence: ref("research/channel-examples.md")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   system analytics {
@@ -71,17 +71,23 @@ project "Name" {
     fallback: human_feedback("rank recent posts manually")
   }
 
-  heartbeat daily_ticket_drainer {
-    first: update_tasks
-    else: update_system_gaps
+  heartbeat pulse_update {
+    first: reconcile_outcomes
+    else: select_one_bounded_action
     gates: [no_external_side_effects]
   }
 
-  heartbeat weekly_pm_update {
+  heartbeat rhythm_update {
+    first: update_day_range_plan
+    else: ticket_drainer
+    gates: [no_external_side_effects]
+  }
+
+  heartbeat horizon_update {
     first: update_strategy
     skills: [weekly_strategy_analysis, skill_maintenance, goal_advisor, review]
     delegate: delegate(ref("project-harness.md"), "refresh strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
-    output: "artifacts/strategy/weekly-pm-update.md"
+    output: "artifacts/strategy/horizon-update.md"
   }
 
   milestone first_episode_selection {
@@ -224,7 +230,7 @@ efficiency.medium
 
 ### Feedback-Sized Projects
 
-When a harness produces or updates a Goal Portfolio, use projects as the
+When a harness produces or updates project goals, use projects as the
 default durable unit.
 
 ```text
@@ -383,10 +389,11 @@ blocker
 ### Heartbeats
 
 ```text
-daily_ticket_drainer
+pulse_update
+rhythm_update
+horizon_update
+ticket_drainer
 update_system_gaps
-daily_chief_of_staff
-weekly_pm_update
 update_strategy
 update_memory
 skill_maintenance.harden_skill
@@ -397,14 +404,26 @@ delegate
 Default policy:
 
 ```text
-heartbeat daily_ticket_drainer {
+heartbeat pulse_update {
+  first: reconcile_outcomes
+  then: check_drift_against_active_task_and_rhythm_plan
+  then: select_one_bounded_action
+}
+
+heartbeat rhythm_update {
+  first: check_drift_against_horizon_plan
+  then: rank_day_range_lanes
+  optional: ticket_drainer
+}
+
+heartbeat ticket_drainer {
   first: fetch_local_tickets
   bindings: "farplane/bindings.md"
   optional: fetch_notion_when_enabled_bound_and_local_empty
   then: rank_one_ticket -> impl-plan -> goal-advisor
 }
 
-heartbeat weekly_pm_update {
+heartbeat horizon_update {
   first: grouped_jobs_with_report_cache
   bindings: "farplane/bindings.md"
   skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
@@ -415,15 +434,15 @@ heartbeat weekly_pm_update {
 Default project automation standard:
 
 ```text
-daily_ticket_drainer(ticket_sources, gates, ranking_policy)
+ticket_drainer(ticket_sources, gates, ranking_policy)
   -> selected_ticket | no_op_report
   -> impl_plan_result + goal_advisor_execution + evidence_or_blocker
 
-weekly_pm_update(grouped_jobs, reports, ledger, goals, tickets, metrics, memory)
-  -> weekly_pm_report + ticket_board_delta + memory_delta
+horizon_update(grouped_jobs, reports, ledger, goals, tickets, metrics, memory)
+  -> drift_check + horizon_report + scheduled_action_results + ticket_board_delta + memory_delta
    + skill_improvement_delta + blockers
 
-update_strategy(goal_portfolio, tickets, progress, metrics_or_feedback)
+update_strategy(project_goals, tickets, progress, metrics_or_feedback)
   -> strategy_delta + system_gaps + experiments + ticket_deltas
 
 update_memory(history, memory, readme, docs, recent_progress)

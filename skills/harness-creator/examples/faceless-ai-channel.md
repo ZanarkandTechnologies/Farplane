@@ -49,35 +49,35 @@ project "Faceless AI Engineering Channel" {
     bet: "Find high-signal AI engineering learners with sharp topic and hook choices"
     kpi: review_metric("hook/title clarity and audience fit")
     evidence: ref("research-baseline.md")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   axis activate_first_value {
     bet: "Each video teaches one useful harness engineering move"
     kpi: human_feedback("viewer learned a useful move")
     evidence: ref("operator_feedback")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   axis retain_loyalty {
     bet: "A coherent episode ladder gives viewers a reason to return"
     kpi: review_metric("series promise and next-video pull")
-    evidence: ref("harness-portfolio.md")
-    heartbeat: weekly_pm_update
+    evidence: ref("farplane/goals.md")
+    heartbeat: horizon_update
   }
 
   axis efficiency_capability {
     bet: "Reuse Farplane docs, tickets, and video templates to reduce cycle time"
     kpi: learning_metric("time from idea to reviewed draft")
     evidence: ref("local Farplane corpus")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   axis risk_trust {
     bet: "No fake authority, no misleading claims, no unreviewed publishing"
     kpi: review_metric("trust and claim accuracy")
     evidence: ref("review")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   system publishing_gate {
@@ -117,15 +117,15 @@ project "Faceless AI Engineering Channel" {
     use: "compile the first research/episode-selection milestone"
   }
 
-  heartbeat daily_ticket_drainer {
-    first: fetch_local_tickets
-    then: rank_one_ticket -> impl-plan -> goal-advisor
+  heartbeat rhythm_update {
+    first: rank_day_range_lanes
+    optional: ticket_drainer
     gates: [no_publish, no_spend, no_account_changes]
   }
 
-  heartbeat weekly_pm_update {
+  heartbeat horizon_update {
     first: grouped_jobs_with_report_cache
-    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy]
+    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy, quarterly_plan, annual_review]
     skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
     delegate: delegate(ref("project-harness.md"), "refresh channel strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
     gates: [review_before_external_side_effects]

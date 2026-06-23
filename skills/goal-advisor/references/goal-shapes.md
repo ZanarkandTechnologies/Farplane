@@ -86,28 +86,29 @@ For a board-drain heartbeat:
 - output or resume a native Goal prompt for that file set;
 - log no-op when nothing useful can advance.
 
-## Goal Portfolio
+## Project Goals
 
 ```text
-goal_portfolio(north_star, horizon, resources, constraints)
-  -> portfolio_state + parent_program.md + current_milestone + child_goal_packets?
+project_goals(north_star, horizon, resources, constraints)
+  -> farplane/goals.md + current_milestone + child_goal_packets?
 ```
 
 Use when the operator wants to coordinate a business, product line, autonomous
-store, skill-improvement program, or other multi-goal system. Load
-`references/goal-portfolio.md` before designing this shape. For Farplane
-framework projects, the live portfolio state is usually `farplane/goals.md`.
+store, skill-improvement program, or other multi-goal system. Use
+`horizon-advisor` to author or materially change project goals. Goal Advisor
+only compiles a selected frontier into parent heartbeat or leaf Goal execution.
+The live strategy state is `farplane/goals.md`.
 
-Portfolio orchestration boundary:
+Project orchestration boundary:
 
 ```text
-parent_heartbeat(portfolio.md, program.md, progress.md)
+horizon_heartbeat(farplane/goals.md, automation_or_program, reports_or_progress)
   -> start_child_goal | resume_child_goal | request_feedback | replan | no_op
 
 leaf_native_goal(ticket.md, program.md, progress.md)
   -> artifact + evidence + completion_entry
 ```
 
-Do not generate a native `/goal` prompt that tries to run the whole portfolio
+Do not generate a native `/goal` prompt that tries to run the whole goal graph
 indefinitely. Generate a heartbeat prompt for the parent and a native Goal
 prompt only for the current executable leaf.

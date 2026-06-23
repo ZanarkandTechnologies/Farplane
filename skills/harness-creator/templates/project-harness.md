@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.1.1"
+template_version: "0.1.2"
 feature_refs:
   - FEAT-0027
   - FEAT-0048
@@ -48,28 +48,28 @@ project "TODO" {
     bet: "TODO: who finds this first?"
     kpi: missing_instrumentation("reach/acquisition baseline")
     evidence: ref("TODO")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   axis activate_first_value {
     bet: "TODO: what is first value?"
     kpi: review_metric("first-value clarity")
     evidence: ref("TODO")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   axis retain_loyalty {
     bet: "TODO: why would they return?"
     kpi: human_feedback("would return / would not return")
     evidence: ref("TODO")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   axis efficiency_capability {
     bet: "TODO: what can be made easier or more repeatable?"
     kpi: learning_metric("cycle-time or effort baseline")
     evidence: ref("TODO")
-    heartbeat: weekly_pm_update
+    heartbeat: horizon_update
   }
 
   system ticket_loop {
@@ -150,29 +150,38 @@ project "TODO" {
     type: unblock
     human_step: "TODO: connect read-only access, provide recurring export, approve connector setup, or define operator labels for the first feedback signal"
     why: "The project cannot refine strategy until at least one honest feedback loop exists"
-    enables: [first_feedback_signal, weekly_pm_update]
+    enables: [first_feedback_signal, horizon_update]
     fallback: human_feedback("operator labels outputs manually until the concrete signal exists")
     gates: [no_account_changes, no_private_scraping]
   }
 
-  heartbeat ticket_update {
-    trigger: "compiled from farplane/automations.md settings.ticket_drainer"
+  heartbeat pulse_update {
+    trigger: "compiled from farplane/automations.json lanes.pulse"
     bindings: "farplane/bindings.md"
-    first: ticket_drainer
-    skills: [impl_plan, goal_advisor, review]
+    first: pulse_update
+    skills: [pulse_update, ticket_drainer, goal_advisor, review]
     gates: [no_external_side_effects, ticket_or_goal_required_for_edits]
-    output: ".farplane/reports/ticket-update/latest.md"
+    output: ".farplane/reports/pulse/latest.md"
   }
 
-  heartbeat weekly_pm_update {
-    trigger: "compiled from farplane/automations.md settings.weekly_pm"
+  heartbeat rhythm_update {
+    trigger: "compiled from farplane/automations.json lanes.rhythm"
+    bindings: "farplane/bindings.md"
+    first: rhythm_update
+    skills: [impl_plan, goal_advisor, review]
+    gates: [no_external_side_effects, ticket_or_goal_required_for_edits]
+    output: ".farplane/reports/rhythm/latest.md"
+  }
+
+  heartbeat horizon_update {
+    trigger: "compiled from farplane/automations.json lanes.horizon"
     bindings: "farplane/bindings.md"
     first: grouped_jobs
-    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy]
+    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy, quarterly_plan, annual_review]
     skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
     delegate: delegate(ref("project-harness.md"), "refresh strategy, memory, and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
     gates: [review_before_external_side_effects]
-    output: ".farplane/reports/weekly-pm/latest.md"
+    output: ".farplane/reports/horizon/latest.md"
   }
 
   milestone first_evidence_loop {

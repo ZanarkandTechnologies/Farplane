@@ -41,11 +41,11 @@ The first version is experimental. Do not claim this can bootstrap arbitrary
 domains until pilot evidence proves the loop. Start with the smallest
 evidence-producing harness and expand only after review or feedback.
 
-When the harness includes a Goal Portfolio, default to feedback-sized projects:
-the smallest durable project whose output can be reviewed, measured, shown, or
-exposed to user/market feedback. Put obvious next moves in `starting_tasks`.
-Create child tickets only for real execution, unblock, approval, review,
-dependency, or proof boundaries.
+When the harness includes long-horizon project goals, default to feedback-sized
+projects: the smallest durable project whose output can be reviewed, measured,
+shown, or exposed to user/market feedback. Put obvious next moves in
+`starting_tasks`. Create child tickets only for real execution, unblock,
+approval, review, dependency, or proof boundaries.
 
 ## Skill Signature
 
@@ -57,7 +57,7 @@ project_harness_creator(project_idea, values?, priorities?, mode_presets?, conte
    + proposed_tickets
    + current_milestone
    + goal_advisor_handoff
-state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, Goal Portfolio templates, farplane/automations.md and farplane/bindings.md when present, current external research only when domain truth matters); writes(project-harness.md, proposed tickets, farplane/automations.md and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
+state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, farplane/goals.md, farplane/automations.json, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(project-harness.md, proposed tickets, farplane/automations.json, farplane/automations.md, and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
 gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_providers_honest; existing_tickets_checked_first; missing_systems_named; blockers_ticketed; side_effect_gates_named; current_milestone_named; goal_advisor_handoff_ready
 routes: deep-init-project | research:* | ingest-content | harness-advisor | skill-creator | goal-advisor | optimize-with-human | weekly-strategy-analysis | review | relevant domain skill
 fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates skills before checking existing systems; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
@@ -127,7 +127,7 @@ the current milestone is selected, and `review` for material readiness.
      research refs, and open questions in the Markdown evidence wrapper.
    - [ ] Define values, modes, goals, axes, systems, skill bindings, operator
      tickets, heartbeats, gates, current milestone, and Goal Advisor handoff.
-   - [ ] For portfolio-shaped harnesses, keep `project` as the default durable
+   - [ ] For project-goal-shaped harnesses, keep `project` as the default durable
      planning unit and use `starting_tasks` only as hints unless a child ticket
      has a real boundary reason.
 - [ ] 4. Define strategy axes, KPIs, and metric honesty.
@@ -170,22 +170,24 @@ the current milestone is selected, and `review` for material readiness.
      `ticket` node with `type: unblock` instead of expanding the harness
      Markdown.
 - [ ] 6. Define the Scrum-style operating cadence.
-   - [ ] Create or update tracked `farplane/automations.md`; keep ignored
-     `.farplane/` for runtime state, reports, eval runs, and logs.
+   - [ ] Create or update tracked `farplane/automations.json` plus the
+     `farplane/automations.md` human index; keep ignored `.farplane/` for
+     runtime state, reports, eval runs, and logs.
    - [ ] Create or update tracked `farplane/bindings.md` for project-specific
      external coordinates needed by skills.
-   - [ ] Default to two compiled project automations first:
-     `daily_ticket_drainer` for frequent leaf execution and `weekly_pm_update`
-     for strategy/backlog/memory/skill maintenance.
-   - [ ] `daily_ticket_drainer`: fetch local tickets first, optionally fetch
-     Notion only when enabled in `farplane/automations.md` and configured in
-     `farplane/bindings.md`, rank for priority and compounding ROI, run
-     `impl-plan` if needed, then use `goal-advisor` to execute one ticket as
-     far as possible.
-   - [ ] `weekly_pm_update`: group jobs with the same cadence into one PM
-     thread, reuse fresh reports via `.farplane/state/run-ledger.json`, and
-     produce a weekly report plus local ticket deltas.
-   - [ ] When weekly PM work can split safely, express subagent lanes as
+   - [ ] Default to three compiled project lanes first: `pulse-update` for
+     bounded immediate actions, `rhythm-update` for day-range operating plans,
+     and `horizon-update` for strategy/backlog/memory/skill maintenance.
+   - [ ] `ticket-drainer`: keep as a separate execution selector that
+     `pulse-update` or `rhythm-update` may call by policy; fetch local tickets
+     first, optionally fetch Notion only when enabled in
+     `farplane/automations.json` and configured in `farplane/bindings.md`, rank
+     for priority and compounding ROI, run `impl-plan` if needed, then use
+     `goal-advisor` to execute one ticket as far as possible.
+   - [ ] `horizon-update`: group due scheduled actions into the horizon lane,
+     reuse fresh reports via `.farplane/state/run-ledger.json`, and produce a
+     horizon report plus local ticket deltas.
+   - [ ] When horizon work can split safely, express subagent lanes as
      `delegate(context_ref, task_prompt, skills?, output?)`; `context_ref` must
      be a file, ticket, Goal Packet, or artifact path.
    - [ ] Use [update-strategy](../update-strategy/SKILL.md) for new strategy,
@@ -198,8 +200,8 @@ the current milestone is selected, and `review` for material readiness.
      evals/gotchas and shorten skill surfaces after hardening exists.
    - [ ] `update_system_gaps`: when no ticket can advance, inspect missing systems,
      weak metrics, stale assumptions, and safe preparation work.
-   - [ ] Treat `daily_chief_of_staff` and extra metric or memory automations as
-     optional escalations after the two default compiled automations prove
+   - [ ] Treat extra metric, memory, or chief-of-staff automations as optional
+     escalations after the three default compiled lanes prove
      insufficient.
    - [ ] Keep all automations as `preview` or `ready_for_goal_advisor` until a
      real scheduler/automation is explicitly approved.
@@ -280,8 +282,8 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 - Smallest lever first: check existing skills/tickets/systems before creating
   new skills, external-IO abstractions, hidden automations, or root-prompt rules.
 - Leaf execution first: parent harnesses coordinate; native Goal runs selected
-  milestones or tickets, and `daily_ticket_drainer` drains proceedable work
-  before proactive gap work.
+  milestones or tickets, and `ticket-drainer` drains proceedable work by lane
+  policy before proactive gap work.
 - Human gates first: publishing, spend, accounts, customer contact, private
   data, credentials, and feedback access become explicit gates or
   `ticket { type: unblock }` nodes.
@@ -292,8 +294,6 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
   the compact Harness Program notation.
 - [templates/project-harness.md](templates/project-harness.md) - copy first
   when writing the primary one-file project or business operating harness.
-- [templates/harness-portfolio.md](templates/harness-portfolio.md) - copy when
-  a legacy or smaller portfolio sidecar is needed.
 - [templates/capability-map.md](templates/capability-map.md) - copy when the
   skill/tool/asset inventory needs its own artifact.
 - [templates/missing-primitive-plan.md](templates/missing-primitive-plan.md) -
@@ -303,10 +303,10 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 - [deep-init-project](../deep-init-project/SKILL.md) - use when a project lacks
   standard repo, ticket, QA, feedback, or bootstrap systems.
 - [weekly-strategy-analysis](../weekly-strategy-analysis/SKILL.md) - use when a
-  weekly strategy refresh needs existing Farplane project signals.
+  horizon strategy refresh needs Kenji-specific Farplane project signals.
 - [update-strategy](../update-strategy/SKILL.md) - generic project strategy
-  refresh primitive for PM heartbeats.
+  refresh primitive for horizon updates.
 - [update-memory](../update-memory/SKILL.md) - generic project memory refresh
-  primitive for PM heartbeats.
+  primitive for horizon updates.
 - [examples/faceless-ai-channel.md](examples/faceless-ai-channel.md) - pilot
   example for the first proof case.

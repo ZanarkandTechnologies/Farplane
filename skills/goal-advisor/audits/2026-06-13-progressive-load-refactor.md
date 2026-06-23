@@ -85,5 +85,5 @@ questions.
 
 ## Followups
 
-- Consider splitting `references/goal-portfolio.md` if portfolio work becomes
+- Consider splitting `horizon-advisor/references/project-goals.md` if project-goals work becomes
   common enough that its 400+ line reference causes branch-local bloat.

@@ -14,11 +14,12 @@ applies_to:
 # Skill Structure QA Checklist
 
 This is the first-class skill-local QA checklist for skill structure changes.
-Use it after creating or materially restructuring a skill, and use the target
-skill's own `qa_checklist.md` when a skill has domain-specific runtime checks.
-Run each check against the actual changed files. Do not treat the checklist as a
-passive reminder; write down violations, then fix or explicitly defer them in
-the skill-local audit or final proof notes.
+Use it before creating or materially restructuring a skill as preflight
+guardrails, then use it again before claiming the change is ready. Use the
+target skill's own `qa_checklist.md` when a skill has domain-specific runtime
+checks. Run each check against the actual changed files. Do not treat the
+checklist as a passive reminder; write down violations, then fix or explicitly
+defer them in the skill-local audit or final proof notes.
 
 ```text
 skill_qa_checklist(skill_package, changed_files, claim, budget?)
@@ -52,6 +53,31 @@ prove the normal path:
 - reference map with precise load conditions
 - final result/proof contract, usually in the signature or todo list
 - short command examples that are normally run
+
+## Checklist Placement
+
+For skills with domain-specific runtime guardrails, prefer one discoverable
+checklist file at the skill package root:
+
+```text
+skill_invocation_with_checklist(skill_package, task)
+  -> read(SKILL.md)
+   + read(qa_checklist.md when present)
+   + execute_with_preflight_guardrails
+   + final_checklist_verdict
+   + independent_review_when_material
+```
+
+Use this placement rule:
+
+- Put a short warning in `SKILL.md` only when the agent is likely to fail unless
+  it knows the warning before execution.
+- Put detailed, reusable checks in `qa_checklist.md` when they should be read
+  at skill start and applied to the finished work.
+- Keep rare examples, long rubrics, and branch-specific checklists in
+  `references/*` only when `SKILL.md` states exactly when to load them.
+- Do not mirror all checklist items into `## Gotchas`; duplicate truth creates
+  stale prevention rules.
 
 The baseline `SKILL.md` section set comes from
 `../skill-creator/references/SKILL_TEMPLATE.md`. Extra top-level sections are
@@ -164,6 +190,50 @@ they are needed on every invocation:
       insufficient, what behavior would be lost by folding it, and why a
       reference file would create too much defer-loading risk.
 
+16. `proof_surface_fit`
+    - Question: Does the skill choose the right proof surface for its behavior:
+      deterministic test or validator for mechanically checkable behavior,
+      eval for variable AI behavior, agent QA or behavior capture for multi-turn
+      tool/artifact proof, and manual/review only when judgment is explicit?
+    - Violation: The skill calls every proof a unit test, routes parseable
+      outputs to an LLM judge, skips evals for prompt-like behavior, or treats
+      reviewer prose as behavior proof without a case, artifact, or command.
+
+17. `task_case_quality`
+    - Question: When a skill adds tests, evals, examples, or QA scenarios, are
+      the cases realistic, distinct, traceable to a risk/source, judgeable, and
+      small enough to maintain?
+    - Violation: The skill adds happy-path-only examples, near-duplicate eval
+      rows, synthetic cases with no stated coverage gap, or cases whose failure
+      would not identify what to fix.
+
+18. `anti_cheat_case_design`
+    - Question: For skill evals and agent behavior cases, does the user-facing
+      query avoid leaking the skill name, expected routing, checklist, reference
+      points, or desired answer?
+   - Violation: The test prompt teaches the behavior it claims to measure,
+     making the case a memory test of the eval author's wording instead of a
+     behavior test of the skill.
+
+19. `qa_preflight_loaded`
+   - Question: When a skill has `qa_checklist.md`, does `SKILL.md` tell the
+     invoking agent to read it before execution as preflight guardrails?
+   - Violation: The checklist is only mentioned as a final cleanup step, so the
+     agent may discover the gotchas after making the mistake.
+
+20. `qa_finish_independence`
+   - Question: For material work, does the finish path apply the checklist
+     again and route independent reviewer/subagent verification when useful?
+   - Violation: The author self-certifies material checklist conformance without
+     a reviewer lane or a recorded reason to keep review inline.
+
+21. `qa_gotcha_deduplication`
+   - Question: Are `## Gotchas` and `qa_checklist.md` separated by job rather
+     than mirrored?
+   - Violation: `SKILL.md` repeats the full checklist as gotchas, or
+     `qa_checklist.md` merely copies gotchas without structured evidence,
+     violation, fix, or deferral checks.
+
 ## Finish Gate
 
 For material `SKILL.md` changes, record this in the audit or final proof notes:
@@ -177,6 +247,12 @@ first_load_review:
   deleted_as_duplicate_or_rationale:
   extra_sections_kept_with_reason:
   remaining_sections_over_budget:
+  proof_surface_fit:
+  task_case_quality:
+  anti_cheat_case_design:
+  qa_preflight_loaded:
+  qa_finish_independence:
+  qa_gotcha_deduplication:
   verdict: pass | fail | unknown
 ```
 
@@ -188,6 +264,10 @@ coordination cost:
 ```text
 Review the changed skill files against
 skills/skill-maintenance/qa_checklist.md.
+
+If the target skill has its own qa_checklist.md, read that file independently
+too. Verify that the author used it as preflight prevention and final
+verification, then apply it against the finished work.
 
 For each checklist item, return:
 - verdict: pass | violation | not_applicable

@@ -9,6 +9,11 @@
 0d. Study `@docs/MEMORY.md`.
 0e. Study `@docs/TROUBLES.md` and `@docs/LESSONS.md` if present.
 0f. Search the codebase first.
+0g. Before drafting, identify missing objective, acceptance criteria,
+constraints, target files, proof weight, permissions, human gates, and
+destructive/deploy/spend boundaries. Ask up to 3 clarifying questions only when
+the missing input is blocking or materially changes the plan or Goal Packet;
+otherwise record the assumption and continue.
 
 Plan only. Target one selected ticket.
 If `spec-to-ticket` or equivalent planning already produced modular tickets,
@@ -32,6 +37,14 @@ Rules:
      block when the plan fails minimal required version, reuse before new
      surface, least parameters, function/file necessity, split boundary, or
      proof-route checks.
+11b. For Goal-backed work, call `goal-advisor` to compile the Goal Packet
+     preview before asking for approval. The human approves the plan and Goal
+     Packet together; if the plan changes, rerun `goal-advisor` and refresh the
+     packet before execution.
+11c. Include `Documentation / Closeout` near the end of material plans. Use
+     `close-ticket` for final writeback and durable docs that changed; route to
+     `documentation` only when the ticket includes substantive durable doc
+     writing or revision.
 12. For material, cross-module, or architecture-facing work, add one Mermaid
     delta map when it makes flow, ownership, changed seams, or typed data path
     easier to understand visually.
@@ -72,6 +85,18 @@ Output shape:
   - `signature`
   - `vars`
   - `program` operations in `operation(input) -> output` form
+- `Goal Packet Preview` when Goal-backed
+  - `ticket`
+  - `program`
+  - `progress`
+  - `files`
+  - `budget`
+  - `metric`
+  - `proof_route`
+  - `drift_policy`
+  - `final_evidence`
+  - `native_goal_prompt`
+  - `approval`
 - `Map`
   - Mermaid delta map when visually useful
   - `Touch` / `Inspect`
@@ -84,6 +109,12 @@ Output shape:
   - `proof.manual`
   - `proof.review`
   - `proof.evidence`
+- `Documentation / Closeout`
+  - `close_ticket`
+  - `documentation_skill`
+  - `docs_changed`
+  - `documentation_reason`
+  - `final_writeback`
 - `State`
 - `Links`
 - `Notes`
@@ -101,6 +132,12 @@ Requirements:
   scope.
 - `Program` should give a builder an explicit ordered path, not just a list of
   topics.
+- Goal-backed plans should expose the Goal Packet before execution so approval
+  covers the ticket plan, `program.md`, `progress.md`, and native `/goal`
+  prompt together.
+- Material plans should name the final docs/closeout route so the Goal does not
+  silently skip documentation or call `documentation` when `close-ticket`
+  writeback is sufficient.
 - The recommendation must name the chosen path directly when a real decision
   exists.
 - The recommendation and build steps should use strong action language, not

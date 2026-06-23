@@ -8,6 +8,7 @@ framework_template_version: "0.1.0"
 source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
+  - farplane/automations.json
   - farplane/automations.md
   - farplane/bindings.md
   - farplane/pm.json
@@ -148,22 +149,28 @@ The goal portfolio:
 Use this for values -> goals -> KPIs -> current milestone.
 Do not make ticket microtasks the default goal structure.
 
-### `farplane/automations.md`
+### `farplane/automations.json`
 
-The automation manifest:
+The structured automation manifest:
 
-- schedules
+- pulse/rhythm/horizon lane intervals
 - live automation IDs
-- grouped jobs
+- scheduled actions
+- drift policy
 - ticket source policy
 - Notion use policy
 - report paths
 - run ledger path
 - side-effect gates
 
-Use this because it can compile into live Codex automation TOML prompts.
-This file should be isolated from the broader harness so the scheduler layer
-can read the automation program without inheriting every strategic note.
+Use this because it can compile into live Codex automation prompts. This file
+should be isolated from the broader harness so the automation compiler can read
+the lane program without inheriting every strategic note.
+
+### `farplane/automations.md`
+
+The human automation index and compatibility pointer for older docs, prompts,
+or agents that still load the Markdown path.
 
 ### `farplane/bindings.md`
 
@@ -270,7 +277,7 @@ Keep tickets in `tickets/`.
 
 Tickets are the visible work queue and should remain outside `.farplane/`.
 The ticket drainer reads local tickets first, then optional external sources
-only when `farplane/automations.md` enables them.
+only when `farplane/automations.json` enables them.
 
 ## Skills And Agents
 
@@ -298,6 +305,7 @@ tickets/
 farplane/README.md
 farplane/harness.md
 farplane/goals.md
+farplane/automations.json
 farplane/automations.md
 farplane/bindings.md
 farplane/evals.md

@@ -245,6 +245,8 @@ def validate(root: Path) -> list[str]:
         if not should_scan(rel_path):
             continue
         full_path = root / rel_path
+        if not full_path.exists():
+            continue
         try:
             text = full_path.read_text(encoding="utf-8")
         except UnicodeDecodeError:

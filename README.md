@@ -20,10 +20,11 @@ their repo into a haze of prompts, chat memory, and unverifiable claims.
 1. **A local control plane for agent work.** Farplane keeps plans, tickets,
    runtime state, memories, specs, and proof in files that developers can diff,
    review, and repair.
-2. **Goal loops that do not drift.** Goal Packets give long-running work a
-   `ticket.md`, `program.md`, and `progress.md`; Goal Portfolios add
-   `portfolio.md` when a business, product, or multi-agent loop needs a longer
-   horizon without becoming one giant prompt.
+2. **Goal loops that do not drift.** Project goals live in
+   `farplane/goals.md`; Goal Packets give selected long-running work a
+   `ticket.md`, `program.md`, and `progress.md` so a business, product, or
+   multi-agent loop can keep a longer horizon without becoming one giant
+   prompt.
 3. **Completion that requires evidence.** QA, reviewer lanes, browser proof,
    maintainability review, Stop-hook checks, and Done / Proof contracts make
    "done" inspectable instead of self-reported.

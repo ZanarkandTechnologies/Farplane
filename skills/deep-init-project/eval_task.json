@@ -2,24 +2,24 @@
   {
     "id": "deep_init_project_compact_automations_01",
     "title": "Deep init emits compact automation manifest",
-    "query": "A new Farplane project is being initialized with a PM heartbeat, daily PM plan, weekly PM plan, and optional ticket drainer. What should the generated farplane/automations.md contain versus leave to skills?",
+    "query": "A new Farplane project is being initialized with pulse, rhythm, horizon, and optional ticket drainer. What should the generated farplane/automations.json contain versus leave to skills?",
     "reference_points": [
-      "Keeps schedules, target threads, gates, grouped jobs, freshness, reports, and local overrides in farplane/automations.md",
+      "Keeps lane intervals, target threads, gates, scheduled actions, drift policy, freshness, reports, and local overrides in farplane/automations.json",
       "Uses a compact job_catalog or equivalent skill-preset references instead of duplicating every job's reads/writes/output runbook",
-      "Names separate skill-owned presets such as pm-heartbeat.bandit, daily-pm-plan.operating_plan, weekly-pm-plan.strategy, and ticket-drainer.daily",
+      "Names separate skill-owned presets such as pulse-update.bandit, rhythm-update.operating_plan, horizon-update.strategy, and ticket-drainer.daily",
       "Includes a compile rule requiring live Codex prompts to inline enough ordered steps to run safely",
-      "Does not collapse the cadence skills into one router or leave live automation prompts as vague 'read the manifest and decide' instructions"
+      "Does not collapse the lane skills into one router or leave live automation prompts as vague 'read the manifest and decide' instructions"
     ],
     "tags": ["deep-init-project", "automations", "compact-manifest"]
   },
   {
     "id": "deep_init_project_ticket_drainer_child_thread_01",
     "title": "Deep init ticket drainer uses parent-spawned child threads",
-    "query": "The generated daily ticket drainer is kept as a separate execution selector that may be invoked by the daily plan or short heartbeat. What thread contract should the template encode?",
+    "query": "The generated ticket drainer is kept as a separate execution selector that may be invoked by rhythm-update or pulse-update. What thread contract should the template encode?",
     "reference_points": [
       "Ticket drainer remains a separate skill rather than being hidden inside a PM router",
-      "Parent cadence names or creates the child thread using a ticket-based title template",
-      "Child prompt includes project root, parent cadence id, ticket path, context refs, expected outputs, side-effect gates, and lineage writeback",
+      "Parent lane names or creates the child thread using a ticket-based title template",
+      "Child prompt includes project root, parent lane id, ticket path, context refs, expected outputs, side-effect gates, and lineage writeback",
       "The template records child thread id or handoff blocker in reports and run ledger",
       "It does not ask the child worker to rename itself"
     ],
@@ -27,15 +27,15 @@
   },
   {
     "id": "deep_init_project_full_mode_goal_intake_01",
-    "title": "Deep init full mode requires goal portfolio intake before project initialization",
+    "title": "Deep init full mode requires project-goals intake before project initialization",
     "query": "A brownfield repo already has farplane/goals.md, but it is placeholder, stale, or not grounded in the operator's current intent. The operator asks to initialize the repo as a full Farplane project. What should deep-init-project do before claiming the project is initialized?",
     "reference_points": [
       "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough",
       "Audits docs/bootstrap-brief.md and farplane/goals.md for missing North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
-      "In full mode, asks the first missing goal-portfolio question, starting with what the project should reliably do over the next 3 months",
+      "In full mode, asks the first missing project-goals question, starting with what the project should reliably do over the next 3 months",
       "Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies a farplane/goals.md delta only after operator intent is known",
       "Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet"
     ],
-    "tags": ["deep-init-project", "full-mode", "goal-portfolio", "readiness-gate"]
+    "tags": ["deep-init-project", "full-mode", "project-goals", "readiness-gate"]
   }
 ]

@@ -12,7 +12,7 @@ refs:
   - docs/specs/goal-loop-contract.md
   - tickets/templates/ticket.md
   - tickets/templates/goal-loop/program.md
-  - tickets/templates/goal-loop/portfolio.md
+  - farplane/goals.md
   - skills/harness-creator/SKILL.md
 ---
 
@@ -21,7 +21,7 @@ refs:
 ## Purpose
 
 Standardize the vocabulary Farplane uses for executable plans, skill workflows,
-Goal loop configs, portfolio maps, and project harness programs.
+Goal loop configs, project goal maps, and project harness programs.
 
 This spec does not require every surface to use the same Markdown shape. It
 defines a common intermediate notation that each surface projects into its own
@@ -39,7 +39,7 @@ Farplane currently has several related program dialects:
 - `SKILL.md` uses a checklist-driven `Todo List`.
 - ticket `Program` uses compact function/pseudocode.
 - Goal Packet `program.md` uses loop configuration.
-- Goal Portfolio `portfolio.md` uses horizon and milestone maps.
+- Project `farplane/goals.md` uses horizon and milestone maps.
 - harness-creator `project-harness.md` combines values, goals, KPIs, strategy
   axes, heartbeat previews, skill gaps, and Goal Advisor handoffs.
 
@@ -56,13 +56,13 @@ Use these field names when a program needs structured clarity.
 | `id` | Stable program, workflow, step, or automation identifier | all reusable programs |
 | `intent` | Why this program exists | material programs |
 | `outcome` | Desired end state | material programs |
-| `milestone` | Current concrete outcome expanded enough to run | portfolio and harness programs |
+| `milestone` | Current concrete outcome expanded enough to run | project-goals and harness programs |
 | `params` | Operator, environment, data, budget, or account variables required | intake, harness, automation, Goal launch |
 | `steps` | Ordered actions or workflow blocks | skills, tickets, harness programs |
 | `bindings` | Skills, tools, subagents, files, and state surfaces used | all agentic programs |
-| `state` | Durable files read or written | ticket, Goal, portfolio, harness |
+| `state` | Durable files read or written | ticket, Goal, project goals, harness |
 | `gates` | Approval, safety, human, legal, spend, data, and brand boundaries | all external-facing programs |
-| `metrics` | Mechanical, review, human, market, learning, or hybrid signals | Goal, portfolio, experiment programs |
+| `metrics` | Mechanical, review, human, market, learning, or hybrid signals | Goal, project-goals, experiment programs |
 | `evidence` | Source refs, confidence, validation method, proof artifacts | research, review, business programs |
 | `automation` | Trigger, schedule, status, prompt program, delegate, and output | heartbeat, business, recurring programs |
 | `review` | QA, reviewer, drift, or human feedback policy | material programs |
@@ -194,20 +194,20 @@ GoalProgram := mode + files + budget + metric_provider + after_each_turn
 Use this when native Goal, heartbeat, rollout, feedback, or long-running work
 needs resumable loop state.
 
-### Goal Portfolio `portfolio.md`
+### Project `farplane/goals.md`
 
-Portfolio remains the long-horizon planning graph.
+Project goals remain the long-horizon planning graph.
 
 Projection:
 
 ```text
-PortfolioProgram := north_star + horizon_map + metrics + current_milestone
-                  + holds + replan_cadence + next_goal_packet
+ProjectGoalsProgram := north_star + horizon_map + metrics + current_milestone
+                     + holds + replan_cadence + next_goal_packet
 ```
 
 Use this above Goal Packets, not as a native Goal execution loop.
 
-Portfolio projects should be feedback-sized by default:
+Project goal branches should be feedback-sized by default:
 
 ```text
 feedback_sized_project(goal, available_feedback)
@@ -218,7 +218,7 @@ feedback_sized_project(goal, available_feedback)
 Use `starting_tasks` inside a project for obvious first moves. Create child
 tickets only for real boundaries: external access/setup, human approval,
 feedback collection, different owner/agent, dependency risk, proof/review state,
-or an executable Goal Packet. Do not pre-split a portfolio into day-level tasks
+or an executable Goal Packet. Do not pre-split a goal map into day-level tasks
 just because the next steps are imaginable.
 
 ### Harness Program
@@ -423,7 +423,7 @@ weekly_pm_update(grouped_jobs, reports, ledger, goals, tickets, metrics, memory)
   -> weekly_pm_report + ticket_board_delta + memory_delta
    + skill_improvement_delta + blockers
 
-update_strategy(goal_portfolio, tickets, progress, metrics_or_feedback)
+update_strategy(project_goals, tickets, progress, metrics_or_feedback)
   -> strategy_delta + system_gaps + experiments + ticket_deltas
 
 update_memory(history, memory, readme, docs, recent_progress)
@@ -565,8 +565,8 @@ Standardizing notation affects these surfaces:
 | `skills/*/SKILL.md` | checklist plus signatures | Add optional params/state/gate clarity to relevant skills only | Low if optional |
 | `tickets/templates/ticket.md` | compact task program | Rename `vars` guidance toward `params` and align field names | Medium; many tickets follow this |
 | `tickets/templates/goal-loop/program.md` | loop config | Add cross-reference to this spec; keep field shape | Low |
-| `tickets/templates/goal-loop/portfolio.md` | horizon map | Add cross-reference and field vocabulary | Low |
-| `skills/harness-creator/templates/*` | portfolio/capability/handoff templates | Add `project-harness.md` with a fenced `harness-program` block | Medium; direct user-facing impact |
+| `farplane/goals.md` | horizon map | Add cross-reference and field vocabulary | Low |
+| `skills/harness-creator/templates/*` | harness/capability/handoff templates | Add `project-harness.md` with a fenced `harness-program` block | Medium; direct user-facing impact |
 | `impl-plan` skill | ticket planning guidance | Reference common notation but keep coding-ticket projection | Low |
 | `goal-advisor` skill | Goal architecture guidance | Clarify that it compiles selected blocks, not whole parent programs | Low |
 | validators | mostly unrelated today | Optional future check for required sections in templates | Medium if enforced |

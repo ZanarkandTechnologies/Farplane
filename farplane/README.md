@@ -16,7 +16,8 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.md       # mission, values, modes, systems, feedback loops
   goals.md         # north star, KPIs, current milestone, holds
-  automations.md   # recurring jobs, schedules, reports, ticket source policy
+  automations.json # structured recurring lane config, schedules, reports, ticket source policy
+  automations.md   # human index and compatibility pointer for automations.json
   bindings.md      # non-secret project IDs, URLs, labels, aliases
   evals.md         # project-level proof and eval policy
   pm.json          # optional UI thread manifest for one visual project PM

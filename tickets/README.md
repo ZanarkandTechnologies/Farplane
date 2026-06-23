@@ -46,6 +46,9 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 - for material native Goal work, the ticket should carry or point to a Goal
   Packet: `ticket.md` for the task contract, `program.md` for loop
   configuration, and `progress.md` for append-only turn logs
+- durable proof defaults to ticket-local artifacts under
+  `tickets/TASK-XXXX/artifacts/`; global `.farplane/results/` is runtime
+  scratch or explicit adapter output, not the preferred durable evidence home
 - `.farplane/state/` is runtime-only and may track active claim/lane/session/verdict state
 - transcripts are useful evidence but are not the canonical resume surface
 - deliberate reset/resume requires the ticket to carry a clear `next_action`,
@@ -66,7 +69,10 @@ goal_loop(ticket.md, program.md, progress.md, trigger)
 - `program.md` owns trigger mode, metric or feedback provider, budget,
   after-each-turn routine, drift policy, heartbeat policy, and stop conditions.
 - `progress.md` owns compact append-only turn logs, evidence pointers,
-  feedback samples, drift verdicts, blockers, and next actions.
+  feedback samples, reflection, compact decision entries, drift verdicts,
+  blockers, and next actions.
+- `artifacts/` owns durable proof, bulky evidence, QA, review, evals,
+  screenshots, reports, and generated prompts.
 
 Use `tickets/templates/goal-loop/program.md` and
 `tickets/templates/goal-loop/progress.md` when scaffolding these files. See
@@ -140,6 +146,8 @@ last_verification: none
 - `last_verification`: the one-line authoritative verification summary; keep
   detailed commands and artifacts in `Links`, `State`, `progress.md`, or
   ticket-scoped artifacts
+- `decision_refs`: optional references to `progress.md` entries or
+  `decisions.md` headings; do not put decision bodies in frontmatter
 
 For `$ralph`, the explicit invocation is the operator running `$ralph`. After
 that, a ticket is selectable only when `ready: true`,
@@ -241,6 +249,12 @@ program:
 This replaces long prose build plans for normal tickets. Create a separate
 `plan.md` only when the build plan is long, deeply technical, likely to change
 independently, or too large to keep the ticket readable.
+
+For Goal-backed tickets, use `progress.md` as the default reflection and
+decision log. Add `decisions.md` only when a ticket has material branching
+decisions, council notes, architecture/API/data-model tradeoffs, or reusable
+rationale that would become hard to recover from a chronological log. Do not
+create empty `decisions.md` files.
 
 Use `Map` for file grounding and examples:
 

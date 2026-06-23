@@ -39,7 +39,8 @@ any port or environment-variable assumptions. When the user wants app code
 created during init, select the stack scaffold before running commands.
 
 That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.md`,
-`farplane/goals.md`, `farplane/automations.md`, `farplane/bindings.md`,
+`farplane/goals.md`, `farplane/automations.json`, `farplane/automations.md`,
+`farplane/bindings.md`,
 `farplane/evals.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
@@ -87,6 +88,7 @@ Then copy in:
 - `farplane/manifest.json`
 - `farplane/harness.md`
 - `farplane/goals.md`
+- `farplane/automations.json`
 - `farplane/automations.md`
 - `farplane/bindings.md`
 - `farplane/evals.md`
@@ -197,7 +199,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
 - [ ] `farplane/harness.md` exists or `harness_depth=none` is recorded
 - [ ] `farplane/goals.md` exists or `harness_depth=none` is recorded
-- [ ] `farplane/automations.md` exists and names ticket sources, schedules, grouped jobs, report paths, and ledger path
+- [ ] `farplane/automations.json` exists and names ticket sources, lane intervals, scheduled actions, report paths, and ledger path
 - [ ] `farplane/bindings.md` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `farplane/evals.md` exists or `harness_depth=none` is recorded
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM

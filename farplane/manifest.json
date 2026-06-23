@@ -10,6 +10,7 @@
       "farplane/manifest.json",
       "farplane/harness.md",
       "farplane/goals.md",
+      "farplane/automations.json",
       "farplane/automations.md",
       "farplane/bindings.md",
       "farplane/evals.md",

@@ -143,7 +143,8 @@ project_harness_creator(project_idea, values?, priorities?, mode_presets?, conte
   -> farplane/harness.md
    + farplane/goals.md
    + farplane/evals.md?
-   + farplane/automations.md delta
+   + farplane/automations.json delta
+   + farplane/automations.md compatibility note
    + farplane/bindings.md delta
    + unblock tickets
    + Goal Advisor handoff
@@ -163,72 +164,82 @@ Lifecycle:
 2. harness_creator_phase(...)
    -> fills or refines the operating program and proposed tickets
 
-3. compile_automations(farplane/automations.md)
-   -> one ticket-drainer automation
-   -> one weekly PM automation
-   -> optional extra cadences only when they need their own schedule
+3. compile_lane_automations(farplane/automations.json)
+   -> pulse lane automation
+   -> rhythm lane automation
+   -> horizon lane automation
+   -> optional due scheduled actions inside the owning lane
 
-4. weekly_pm_update(...)
+4. horizon_update(...)
    -> refreshes reports, strategy, memory/docs, skills, goals, and tickets
 
-5. daily_ticket_drainer(...)
-   -> advances one high-value ticket
+5. rhythm_update(...) and pulse_update(...)
+   -> translate strategy into day-range lanes and bounded actions
 ```
 
-Live Codex automation prompts may read `farplane/automations.md`, but they
+Live Codex automation prompts may read `farplane/automations.json`, but they
 should still carry a compiled program and exact todo list.
 The manifest configures the prompt; it does not replace the prompt.
 
 ## Automation Model
 
-Each recurring job is a function with inputs, outputs, freshness, reports, and
-gates.
-Jobs that share a cadence are grouped into one live automation so the PM thread
-has one context.
+Each recurring lane is a function with inputs, outputs, freshness, reports,
+drift checks, scheduled actions, and gates. Schedules are configuration on a
+lane, not the identity of the lane.
 
 ```text
-automation(schedule, grouped_jobs, ledger, gates)
-  -> run_or_reuse_each_job
+compile_lane_automation(lane_json, skill_catalog, reports, gates)
+  -> prompt(program, ordered_todo, side_effect_gates, final_output_fields)
+
+lane_update(lane_policy, shared_memory, reports, ledger)
+  -> drift_check
+   + run_or_reuse_due_actions
    + reports
    + state_delta
 ```
 
-`farplane/automations.md` owns:
+`farplane/automations.json` owns:
 
 - project identity and mission
 - ticket sources
 - binding references
 - side-effect gates
-- schedules
-- grouped recurring jobs
+- lane intervals
+- lane drift policy
+- lane scheduled actions
 - report paths
 - run-ledger path
 
+`farplane/automations.md` remains a human index and compatibility pointer.
+
 `.farplane/state/run-ledger.json` records whether a job is fresh, running,
 blocked, failed, or stale.
-If a daily feed scout already ran and the weekly PM needs the same report, the
-weekly PM reuses the fresh report instead of doing duplicate work.
+If feed scout already ran and the horizon lane needs the same report, the
+horizon update reuses the fresh report instead of doing duplicate work.
 
-## Scrum Cadence
+## Lane Model
 
-The default operating model is intentionally close to Scrum:
+The default operating model is context-isolated by planning altitude:
 
 ```text
-weekly_pm_update(...)  # plan, inspect, update strategy, shape tickets
-daily_ticket_drainer(...)  # execute one ready ticket
+pulse_update(...)    # minutes/hours: notice, triage, act
+rhythm_update(...)   # days: operating plan, priority lanes, drainer placement
+horizon_update(...)  # n weeks, default 1: strategy, goal drift, scheduled actions
 ```
 
-The PM heartbeat owns planning and system upkeep.
-The ticket drainer owns leaf execution.
-Do not mix these by default.
+The lanes share files, not transcript context. Keep `ticket-drainer` separate:
+lanes may call or hand off to it by policy, but leaf execution does not become
+the horizon strategy loop.
 
-### Weekly PM Update
+### Horizon Update
 
 ```text
-weekly_pm_update(project, config, bindings, ledger, grouped_jobs)
-  -> weekly_pm_report
+horizon_update(project, lane_policy, goals, reports, tickets, memory, interval_policy)
+  -> drift_check
+   + horizon_report
    + strategy_delta
    + goal_delta
+   + scheduled_action_results
    + ticket_board_delta
    + memory_docs_delta
    + skill_improvement_delta
@@ -244,11 +255,42 @@ skill_hardening(skill-maintenance.harden_skill, max_age=7d)
 skill_refinement(skill-maintenance.refine_skill, max_age=7d)
 registry_drift(skill-maintenance, max_age=7d)
 update_strategy(update-strategy, max_age=7d)
+quarterly_plan(horizon-update.scheduled_action, max_age=13w)
+annual_review(horizon-update.scheduled_action, max_age=52w)
 ```
 
-The weekly PM may create or update local tickets.
+The horizon update may create or update local tickets.
 It should not execute leaf tickets unless the project explicitly chooses a
-combined cadence.
+combined lane policy.
+
+### Rhythm Update
+
+```text
+rhythm_update(project, lane_policy, horizon_plan, recent_pulse_reports, tickets, ledger)
+  -> drift_check
+   + day_range_plan
+   + priority_lanes
+   + ticket_drainer_handoff?
+   + blockers
+```
+
+The rhythm lane turns horizon direction into a day-scale operating plan. It may
+place ticket execution with `ticket-drainer` when policy says the drainer
+belongs at the rhythm lane.
+
+### Pulse Update
+
+```text
+pulse_update(project, lane_policy, rhythm_plan, horizon_plan, action_state)
+  -> drift_check
+   + reward_update
+   + selected_action
+   + child_thread_handoff?
+   + decision_row
+```
+
+The pulse lane chooses one bounded action and records reward/outcome state. It
+must not rediscover horizon strategy every beat.
 
 ### Ticket Drainer
 
@@ -264,7 +306,7 @@ Order:
 
 1. Fetch local tickets first.
 2. If no local ticket is proceedable, fetch Notion only when enabled in
-   `farplane/automations.md` and configured in `farplane/bindings.md`.
+   `farplane/automations.json` and configured in `farplane/bindings.md`.
 3. Filter for tickets that are ready, unblocked, direct, autonomous, and safe.
 4. Rank by priority, compounding ROI, project value, autonomy, and likelihood
    of reaching Done or Review.
@@ -380,7 +422,7 @@ update_external_context(feeds, sources, tracked_entities, freshness=24h)
 ```
 
 This is the feed-scout pattern.
-It grounds planning in new external signals before the weekly PM updates
+It grounds planning in new external signals before `horizon-update` updates
 strategy.
 
 Reports live under:
@@ -408,10 +450,10 @@ values -> goals -> KPIs -> strategy axes -> current milestone -> tickets
 - holds and stop conditions
 - Goal Advisor handoffs
 
-The weekly strategy update reads the current goals and all fresh reports:
+The horizon strategy update reads the current goals and all fresh reports:
 
 ```text
-update_strategy(goal_portfolio, tickets, progress, metrics_or_feedback, reports)
+update_strategy(project_goals, tickets, progress, metrics_or_feedback, reports)
   -> strategy_delta
    + system_gaps
    + experiments
@@ -447,13 +489,16 @@ feedback skills:
   operator_usefulness_labels(status: ready)
   comment_objection_miner(status: missing)
 
-weekly PM:
+horizon update:
   update_external_context -> inspect creators, methods, trend gaps
   update_memory -> consolidate lessons from published tests into README/docs
   update_strategy -> choose next content bet and tickets
 
+rhythm / pulse:
+  turn the horizon plan into day-range lanes and one bounded next action
+
 ticket drainer:
-  pick one ready ticket, such as "draft first episode outline"
+  when lane policy selects execution, pick one ready ticket such as "draft first episode outline"
   run impl-plan
   use goal-advisor to execute until done, blocked, or review-ready
 ```
@@ -500,10 +545,16 @@ systems, feedback loops, and capability map.
 The strategy object: north star, priorities, KPIs, current milestone, and Goal
 Advisor handoffs.
 
+### `farplane/automations.json`
+
+The structured recurring lane manifest: pulse/rhythm/horizon intervals,
+scheduled actions, drift policy, ticket source policy, report paths, ledger
+path, compatibility aliases, and side-effect gates.
+
 ### `farplane/automations.md`
 
-The recurring job manifest: schedules, grouped jobs, ticket source policy,
-report paths, ledger path, and side-effect gates.
+Human index and compatibility pointer for older agents or docs that still open
+the Markdown automation surface.
 
 ### `farplane/bindings.md`
 
@@ -551,7 +602,7 @@ python3 skills/skill-maintenance/scripts/check_skills.py --write
 
 The project-file validator enforces:
 
-- `farplane/automations.md` has `farplane/bindings.md`
+- `farplane/automations.json` has `farplane/bindings.md`
 - tracked `farplane/*.md` files declare `framework_template_version`
 - `farplane/manifest.json` declares `schema: farplane_project`,
   `spec_version`, and standard/optional tracked or ignored paths
@@ -565,7 +616,9 @@ The project-file validator enforces:
 - [project-files.md](project-files.md): compact file reference.
 - [../specs/program-notation.md](../specs/program-notation.md): shared program
   vocabulary for skills, tickets, harness programs, and automations.
-- [../../farplane/automations.md](../../farplane/automations.md): current
+- [../../farplane/automations.json](../../farplane/automations.json): current
   Farplane automation manifest.
+- [../../farplane/automations.md](../../farplane/automations.md): human index
+  and compatibility pointer.
 - [../../farplane/bindings.md](../../farplane/bindings.md): current Farplane
   binding manifest.

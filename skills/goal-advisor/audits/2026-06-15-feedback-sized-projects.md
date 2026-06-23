@@ -5,8 +5,8 @@ status: pass
 created_at: 2026-06-15
 owner: goal-advisor
 refs:
-  - ../references/goal-portfolio.md
-  - ../../../tickets/templates/goal-loop/portfolio.md
+  - ../../horizon-advisor/references/project-goals.md
+  - ../../../farplane/goals.md
   - ../../../docs/specs/program-notation.md
   - ../../../farplane/goals.md
 ---

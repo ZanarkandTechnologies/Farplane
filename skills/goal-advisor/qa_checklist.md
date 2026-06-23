@@ -4,7 +4,7 @@ owner: goal-advisor
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-06-22
+updated_at: 2026-06-23
 applies_to:
   - goals
   - goal-prompts
@@ -48,12 +48,31 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
      image link to best screenshot evidence or a blocker for missing proof?
    - Violation: The final answer can claim UI completion with prose only.
 
+6. `packet-approval-before-run`
+   - Question: For material Goal-backed work, is the Goal Packet marked
+     `approval: pending` until the human approves the ticket plan, `program.md`,
+     `progress.md`, and native `/goal` prompt together?
+   - Violation: The packet can be run after plan approval without showing the
+     compiled execution contract.
+
+7. `packet-regenerated-after-plan-change`
+   - Question: If the ticket plan changed after the packet was compiled, does
+     the workflow rerun `goal-advisor` and replace the packet before execution?
+   - Violation: The native `/goal` prompt still reflects an older plan.
+
+8. `blocking-questions-resolved`
+   - Question: Were missing files, budget, metric, proof route, drift policy,
+     human gates, or destructive/deploy/spend boundaries resolved or asked
+     before compiling the packet?
+   - Violation: The Goal Packet guesses at execution-safety inputs.
+
 ## Evidence Note Template
 
 ```text
 goal_advisor_qa:
   prompt_under_review:
   files_listed:
+  approval_state:
   delegated_lanes:
   final_evidence_rule:
   violations:

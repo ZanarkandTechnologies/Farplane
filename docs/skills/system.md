@@ -218,15 +218,16 @@ duplicating them in frontmatter.
   Keep broad working suites under `.farplane/evals` and reusable cross-skill
   examples under `skills/eval/examples`.
 - Put skill-specific runtime QA guardrails beside the source skill as
-  `qa_checklist.md` when the skill repeatedly needs the same final checks,
-  reviewer prompts, or eval-derived guardrails. Keep the file Markdown until a
-  runner or renderer needs stricter structure.
+  `qa_checklist.md` when the skill repeatedly needs the same preflight checks,
+  final checks, reviewer prompts, or eval-derived guardrails. Keep the file
+  Markdown until a runner or renderer needs stricter structure.
 
 ## Skill-Local QA Checklists
 
 `qa_checklist.md` is an optional special file at the skill package root, not a
 generic reference. Use it when a skill has reusable real-time checks that
-should be applied after material changes or before claiming an output is ready.
+should be read before execution as preflight guardrails, applied after material
+changes, and applied again before claiming an output is ready.
 
 ```text
 skill_qa_checklist(skill_package, changed_files, claim, budget?)
@@ -234,13 +235,23 @@ skill_qa_checklist(skill_package, changed_files, claim, budget?)
 ```
 
 Do not create a checklist just to mirror a todo list. The todo list says what
-the invoking agent should do on first load; `qa_checklist.md` says how a
-finished or changed artifact is checked. The eval file and QA checklist should
-converge over time:
+the invoking agent should do on first load; `qa_checklist.md` says what
+failure modes to prevent while executing and how a finished or changed artifact
+is checked. The eval file and QA checklist should converge over time:
 
 ```text
 eval_task.json discovers and pressures expected behavior
-qa_checklist.md applies settled reusable guardrails during real work
+qa_checklist.md applies settled reusable guardrails before and after real work
+```
+
+When a skill has `qa_checklist.md`, the normal invocation pattern is:
+
+```text
+read SKILL.md
+read qa_checklist.md as preflight guardrails
+execute the selected workflow
+apply qa_checklist.md again before completion
+delegate final checklist review for material changes
 ```
 
 When `eval_task.json` changes, `skill-maintenance` should decide whether any

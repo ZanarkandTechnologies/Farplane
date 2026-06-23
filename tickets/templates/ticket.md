@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.1"
+template_version: "0.1.0"
 feature_refs:
   - FEAT-0002
   - FEAT-0007
@@ -23,6 +23,7 @@ created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
 next_action: define the one current step and keep it in this field
 last_verification: none
+# Optional: decision_refs: []
 ---
 
 # TASK-XXXX: title
@@ -108,7 +109,9 @@ flowchart LR
 ## Done / Proof
 Collapse done conditions, tests, review gates, and required evidence here.
 Move bulky command output, screenshots, review reports, and logs to
-`artifacts/`, then link them from `State` or `Links`.
+`artifacts/`, then link them from `State`, `Links`, or `progress.md`.
+Durable proof defaults to `tickets/TASK-XXXX/artifacts/`; global
+`.farplane/results/` is runtime scratch or explicit adapter output.
 
 ```text
 done_when:
@@ -193,6 +196,10 @@ proof:
 - `Final report:` for UI/user-visible work, include best screenshot/image
   evidence as a Markdown image link plus artifact links, or block/revise with a
   clear missing-evidence reason
+- `Reflection:` use `progress.md` for after-turn reflection, compact decisions,
+  drift notes, evidence links, and completion entries. Create `decisions.md`
+  only for material branching decisions or council-grade rationale that would
+  be hard to recover from chronology.
 - `Refs:` `docs/specs/goal-loop-contract.md`,
   `tickets/templates/goal-loop/program.md`,
   `tickets/templates/goal-loop/progress.md`

@@ -413,8 +413,10 @@ place_finish_checklist(checklist, needed_before_execution, owner_scope)
 
 Add a skill-local `qa_checklist.md` when the skill repeatedly produces,
 changes, or verifies artifacts and the checks are domain-specific runtime
-guardrails. Keep it at the skill package root so agents and future tooling can
-discover it without treating it as ordinary reference prose. Examples:
+guardrails. The invoking agent should read it before execution as preflight
+constraints, then apply it again before completion. Keep it at the skill
+package root so agents and future tooling can discover it without treating it
+as ordinary reference prose. Examples:
 
 - frontend and UI skills: layout, console errors, responsive behavior,
   accessibility, primary workflow, screenshots, and visual regressions.
@@ -444,13 +446,18 @@ the branch detail to a reference.
 Treat each checklist item as a violation scan over the actual changed files,
 not as a passive reminder. Record any violation in the skill-local audit or
 final proof notes, then fix or explicitly defer it. Use the checklist's
-subagent prompt when independent structure review is useful.
+subagent prompt when independent structure review is useful, and use an
+independent reviewer/subagent for material changes so the author and reviewer
+load the same checklist separately.
 
-Do not put long QA checklists directly in `## Todo List` unless those checks
-are needed before execution. Prefer a compact final todo:
+Do not put long QA checklists directly in `## Todo List`. Prefer compact
+first-load pointers:
 
 ```text
-- [ ] Finalize with the skill-local QA checklist when the artifact exists.
+- [ ] If `qa_checklist.md` exists, read it before execution as preflight
+  guardrails.
+- [ ] Before completion, apply `qa_checklist.md` again and delegate checklist
+  review for material changes.
 ```
 
 Then link the reference from `## Reference Map`.

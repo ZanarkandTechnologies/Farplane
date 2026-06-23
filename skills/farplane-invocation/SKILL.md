@@ -4,6 +4,7 @@ description: "Turn a FarplaneRunEnvelope into policy validation, compute selecti
 tier: 3
 group: harness
 source: local
+eval: eval_task.json
 ---
 
 # Farplane Invocation
@@ -76,8 +77,11 @@ an external caller converts it into a `FarplaneRunEnvelope`.
    - `compute.requiredSetup` is an operator/agent setup hint, not permission for
      this helper to launch worktrees, Symphony, or cloud tasks.
 6. Invoke the existing phase skill named by `route.skill_name`.
-7. Keep the ticket evidence updated.
+7. Keep the ticket evidence updated by linking durable proof from the ticket
+   `Links`, `State`, `progress.md`, or ticket-local `artifacts/` index.
 8. Write or validate a `ProofPacket` at the requested `proofPacketPath`.
+   For local ticket invocations, omit `--proof` to use the default durable
+   ticket-local path under `tickets/TASK-XXXX/artifacts/proof/`.
 
 ## Boundaries
 
@@ -127,12 +131,13 @@ filesystem adapter is the only live adapter today.
 ```bash
 python3 bin/farplane_invocation.py prepare \
   --ticket TASK-0107 \
-  --phase planning \
-  --proof .farplane/results/task-0107-plan.proof.json
+  --phase planning
 ```
 
 If the result routes to `impl-plan`, use the `impl-plan` skill against the
-selected ticket and keep the ticket in `review` until approval exists.
+selected ticket and keep the ticket in `review` until approval exists. The
+default local proof path resolves to
+`tickets/TASK-0107/artifacts/proof/planning.proof.json`.
 
 ## Proof Example
 
@@ -140,13 +145,15 @@ selected ticket and keep the ticket in `review` until approval exists.
 python3 bin/farplane_invocation.py write-proof \
   --ticket TASK-0107 \
   --phase planning \
-  --proof .farplane/results/task-0107-plan.proof.json \
   --verdict pass \
   --next-action "ready for build"
 ```
 
-Link proof artifacts from the ticket `Evidence` section. Keep detailed result
-state in JSON, not in transcript memory.
+Link proof artifacts from the ticket `Links`, `State`, or `progress.md`.
+Keep detailed result state in JSON, not in transcript memory. Use explicit
+`.farplane/results/*.json` paths only for runtime scratch, diagnostics, or
+external adapter payloads that should not be treated as ticket-local durable
+proof.
 
 ## AI Misread Checks
 

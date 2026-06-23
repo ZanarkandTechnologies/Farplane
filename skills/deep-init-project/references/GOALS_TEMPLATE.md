@@ -1,5 +1,5 @@
 ---
-kind: goal-portfolio
+kind: project-goals
 status: draft
 project: TODO
 created_at: TODO

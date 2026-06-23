@@ -13,7 +13,7 @@ proof_artifacts:
   - tickets/TASK-0201/ticket.md
   - skills/harness-creator/SKILL.md
   - skills/harness-creator/references/harness-il.md
-  - skills/harness-creator/templates/harness-portfolio.md
+  - farplane/goals.md
 eval_required: no
 ---
 

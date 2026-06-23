@@ -506,6 +506,9 @@ Minimum local observability:
 - command outputs summarized in the ticket.
 - blockers captured in ticket `## Blockers` and, for this ticket train,
   `blockers.md`.
+- local ticket invocations default durable proof under
+  `tickets/TASK-XXXX/artifacts/proof/`; `.farplane/results/` remains allowed for
+  runtime scratch, diagnostics, and explicit external-adapter payloads.
 
 Future runner observability:
 

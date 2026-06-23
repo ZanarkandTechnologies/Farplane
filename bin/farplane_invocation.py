@@ -383,6 +383,12 @@ def build_run_id(item: WorkItem, phase: str) -> str:
     return f"{item.identifier.lower()}-{phase}-{stamp}"
 
 
+def default_proof_path(ticket_id: str | None, phase: str) -> str:
+    if ticket_id:
+        return f"tickets/{ticket_id}/artifacts/proof/{phase}.proof.json"
+    return f".farplane/results/farplane-{phase}.proof.json"
+
+
 def resolve_proof_path(path: str, item: WorkItem, root: Path) -> Path:
     resolved = resolve_path(path, root)
     allowed_roots = [
@@ -521,7 +527,7 @@ def print_json(payload: Any) -> None:
 
 def build_envelope_from_args(args: argparse.Namespace) -> FarplaneRunEnvelope:
     ticket_id = normalize_ticket_id(args.ticket) if args.ticket else None
-    proof_path = args.proof or f".farplane/results/{(ticket_id or 'farplane').lower()}-{args.phase}.proof.json"
+    proof_path = args.proof or default_proof_path(ticket_id, args.phase)
     return FarplaneRunEnvelope(
         workflow_path=args.workflow,
         work_item_id=ticket_id,

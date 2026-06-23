@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.3.0"
+template_version: "0.3.1"
 feature_refs:
   - FEAT-0048
   - FEAT-0054
@@ -44,8 +44,9 @@ defer_loading_risk is greater than context_rot_risk plus
 compaction_loss_risk.]
 
 [TODO: Add `qa_checklist.md` at the skill package root only when the skill has
-repeatable runtime guardrails that should be applied after material changes.
-Keep it Markdown until a runner or renderer needs stricter structure.]
+repeatable runtime guardrails that should be read before execution as
+preflight constraints and applied again at finish. Keep it Markdown until a
+runner or renderer needs stricter structure.]
 
 [TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` as
 visible task labels like `- [ ] 1. ...`, and use a specific contract section
@@ -140,6 +141,8 @@ Do not call phase-like skills recursively at the same scope.
    - [ ] Resolve missing required inputs from local state, setup workflows, or a
      narrow blocking question.
 - [ ] 2. Read required context and current artifacts.
+   - [ ] If `qa_checklist.md` exists, read it now and use it as preflight
+     guardrails while executing this skill.
 - [ ] 3. Choose the branch.
    - [ ] 1. Default branch.
    - [ ] 2. Update/repair branch.
@@ -148,6 +151,8 @@ Do not call phase-like skills recursively at the same scope.
 - [ ] 5. Produce or update the required artifact.
 - [ ] 6. Verify with the named proof command or evidence surface.
 - [ ] 7. Run the named finish gate before completion.
+   - [ ] If `qa_checklist.md` exists, apply it again to the finished work; use
+     an independent reviewer/subagent for material changes.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
    - [ ] Structure checklist scanned against changed files for long templates,

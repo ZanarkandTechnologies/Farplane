@@ -46,12 +46,12 @@ Progress :=
 + drift_verdicts
 + next_action
 
-GoalPortfolio :=
+ProjectGoals :=
   north_star
-+ portfolio_map
-+ current_milestone
-+ metric_discovery
-+ child_goal_packets
++ goal_map
+  + current_milestone
+  + metric_discovery
+  + child_goal_packets
 + parent_heartbeat_policy
 + sync_targets
 ```

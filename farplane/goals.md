@@ -1,83 +1,132 @@
 ---
-kind: goal-portfolio
+kind: project-goals
 status: active
 project: Farplane
 created_at: 2026-06-15
 updated_at: 2026-06-15
 framework_template_version: "0.1.0"
 owner: project-pm-automation
-source: migrated-from-root-goal-portfolio
+source: horizon-advisor
 refs:
   - farplane/harness.md
+  - farplane/automations.json
   - farplane/automations.md
   - farplane/bindings.md
   - docs/farplane-framework/README.md
   - docs/specs/program-notation.md
-  - skills/goal-advisor/references/goal-portfolio.md
+  - docs/fundamentals/harness-algebra.md
+  - skills/horizon-advisor/SKILL.md
+  - skills/horizon-advisor/references/project-goals.md
 ---
 
 # Farplane Goals
 
 This file is Farplane's dynamic strategy object. It owns the North Star,
-strategy axes, current bets, current milestone, holds, and Goal Advisor
-handoffs.
+value function, KPI tree, strategy axes, current bets, current milestone,
+holds, and Goal Advisor handoffs.
 
 It does not own schedules, grouped jobs, report paths, ticket source policy, or
-run-ledger rules. Those live in [automations.md](automations.md).
+run-ledger rules. Those live in [automations.json](automations.json), with
+[automations.md](automations.md) kept as the human index.
 
 ## Goal Program
 
 ```goal-program
 values_ref: farplane/harness.md
-automation_ref: farplane/automations.md
+automation_ref: farplane/automations.json
 bindings_ref: farplane/bindings.md
 
 goal farplane_os {
   horizon: "1y"
-  outcome: "Farplane is the dependable local harness for autonomous Codex work across Core, Console, UI, and project-local agent systems."
+  outcome: "Farplane is the standard way researchers and builders create harnesses that run longer, improve from evidence, and produce higher-quality results with less human intervention."
   metric: hybrid(
-    review_metric("operators can turn ideas into artifact-backed Goal loops"),
-    artifact_presence("skills, tickets, docs, validators, proof surfaces, and framework files stay discoverable")
+    learning_metric("validated meaningful improvement cycles per human intervention hour increases"),
+    review_metric("quality, proof, auditability, and operator control are preserved"),
+    artifact_presence("goals, tickets, automations, evals, reports, and memory stay discoverable")
   )
-  proof: [README.md, ARCHITECTURE.md, docs/MEMORY.md, docs/specs/README.md, farplane/]
+  anti_metric: "more agent activity without accepted evidence-backed improvement"
+  proof: [README.md, ARCHITECTURE.md, docs/fundamentals/harness-algebra.md, docs/MEMORY.md, docs/specs/README.md, farplane/]
 }
 
 goal q3_harness_operating_system {
   parent: farplane_os
   horizon: "quarter"
-  outcome: "Make high-level intents compile into compact projects, Goal Packets, automations, and skill gaps without transcript-only reasoning."
-  metric: review_metric("portfolio, harness, automation, and ticket examples are readable enough to run")
-  anti_metric: "more notation than adoption"
+  outcome: "Prove Farplane can coordinate researcher-led, agent-run harness improvement across multiple projects through explicit goals, metrics, experiments, reports, and Goal Packets."
+  metric: review_metric("project goals, harness, automation, and ticket examples are readable enough to run")
+  anti_metric: "self-improvement claims without intervention budget, ablation/eval evidence, or accepted quality deltas"
 }
 
-axis acquire_use {
-  question: "Can more project types initialize into the framework?"
-  kpi: review_metric("new project can produce farplane/ config, tickets, and first Goal Advisor handoff")
-  current_signal: ref("skills/deep-init-project/SKILL.md") + ref("docs/farplane-framework/")
+value_function harness_autonomy_quality {
+  maximize: [
+    meaningful_long_running_output,
+    quality,
+    validated_improvement,
+    reliability,
+    reusable_behavior,
+    auditability
+  ]
+  minimize: [
+    human_intervention,
+    false_completion,
+    agent_churn,
+    coordination_cost,
+    ungrounded_claims,
+    brittle_state_loss
+  ]
+  constraints: [
+    user_goal_satisfied,
+    groundedness_sufficient,
+    correctness_regression_false,
+    safety_regression_false,
+    proof_exists,
+    operator_control_preserved
+  ]
 }
 
-axis activate_next_action {
-  question: "Can an agent understand the project and pick the right next action?"
-  kpi: review_metric("agent can select between weekly PM, ticket drainer, direct answer, or Goal Packet")
-  current_signal: ref("AGENTS.md") + ref("farplane/README.md") + ref("tickets/")
+axis validated_self_improvement {
+  question: "Can Farplane create and complete meaningful improvement cycles with less human intervention?"
+  kpi: hybrid(
+    learning_metric("validated_improvement_cycles_completed"),
+    learning_metric("accepted_harness_improvements"),
+    learning_metric("human_intervention_minutes_per_cycle trends down")
+  )
+  current_signal: ref("docs/fundamentals/harness-algebra.md") + ref("skills/optimize-harness/SKILL.md") + ref("skills/horizon-advisor/SKILL.md")
 }
 
-axis retain_trust {
-  question: "Do repeated loops become safer and clearer over time?"
-  kpi: learning_metric("fresh lessons/troubles produce skill hardening, evals, or ticket deltas")
-  current_signal: ref("docs/LESSONS.md") + ref("docs/TROUBLES.md")
+axis quality_and_proof {
+  question: "Do long-running agents preserve quality, proof, and operator control instead of just doing more work?"
+  kpi: hybrid(
+    review_metric("completion claims include sufficient proof and no self-certified QA/review where prohibited"),
+    mechanical("framework, doc, harness, and skill validators pass"),
+    learning_metric("false_completion and brittle_state_loss incidents trend down")
+  )
+  current_signal: ref("bin/validators/") + ref("farplane/evals.md") + ref("docs/TROUBLES.md")
 }
 
-axis efficiency_pm {
-  question: "Does PM automation reduce manual planning and cleanup?"
-  kpi: artifact_presence(".farplane/reports/weekly-pm/latest.md") + artifact_presence(".farplane/reports/ticket-update/latest.md")
-  current_signal: ref("farplane/automations.md")
+axis project_control {
+  question: "Can Farplane control a dynamic list of projects with their own completion criteria and intervention budgets?"
+  kpi: hybrid(
+    artifact_presence("each active project has goals/metrics/proof state"),
+    review_metric("horizon can select the current frontier without expanding every branch"),
+    learning_metric("projects advanced without human unblock")
+  )
+  current_signal: ref("farplane/goals.md") + ref("tickets/") + ref(".farplane/reports/horizon/latest.md")
 }
 
-axis quality_checks {
-  question: "Are standards enforced by checks instead of memory?"
-  kpi: mechanical("framework, doc, harness, and skill validators pass")
-  current_signal: ref("bin/validators/") + ref("farplane/evals.md")
+axis distribution_from_evidence {
+  question: "Can Farplane turn real harness evidence into audience, users, and research authority?"
+  kpi: hybrid(
+    market_metric("qualified subscribers, serious conversations, and pilot users increase"),
+    artifact_presence("evidence-backed content/research artifacts ship from experiment reports"),
+    learning_metric("content/user feedback changes the next horizon plan")
+  )
+  current_signal: ref(".farplane/reports/horizon/latest.md") + ref("tickets/") + ref("docs/LESSONS.md")
+}
+
+axis framework_adoption {
+  question: "Can more project types initialize into Farplane and run a first measured improvement loop?"
+  kpi: review_metric("new project can produce farplane/ config, goals, evals, tickets, and first Goal Advisor handoff")
+  current_signal: ref("skills/deep-init-project/SKILL.md") + ref("docs/farplane-framework/") + ref("skills/horizon-advisor/SKILL.md")
 }
 
 project framework_standardization {
@@ -89,7 +138,7 @@ project framework_standardization {
   gates: [no_hidden_automation, no_secret_in_tracked_config, no_duplicate_goal_sources]
   starting_tasks: [
     "keep farplane/goals.md canonical for strategy",
-    "keep farplane/automations.md canonical for schedules and grouped jobs",
+    "keep farplane/automations.json canonical for lane intervals and scheduled actions",
     "verify no duplicate strategy source exists outside farplane/goals.md",
     "run framework and doc validators"
   ]
@@ -97,28 +146,56 @@ project framework_standardization {
 
 project goal_advisor_program_grammar {
   parent: q3_harness_operating_system
-  output: "Goal Advisor compiles values -> goals -> feedback-sized projects -> milestones -> tickets only when a real boundary exists."
-  feedback_surface: review_metric("Goal Advisor reference and templates produce compact, executable portfolios")
+  output: "Horizon Advisor authors values -> goals -> KPI trees -> feedback-sized projects; Goal Advisor compiles selected frontiers into executable Goal Packets."
+  feedback_surface: review_metric("Horizon Advisor and Goal Advisor boundaries are clear enough that agents do not duplicate strategy and execution roles")
   budget: time_budget("1 week")
-  route: goal_advisor
+  route: horizon_advisor_then_goal_advisor
   gates: [preserve_goal_packet_contract, no_task_explosion]
   starting_tasks: [
-    "keep feedback-sized project rule in Goal Advisor",
-    "add example before/after portfolio when needed",
-    "decide whether Goal Program gets a fenced block template"
+    "keep project-goals authoring in horizon-advisor",
+    "keep execution compilation in goal-advisor",
+    "add evals after the first two horizon-advisor uses reveal failure modes"
   ]
 }
 
-project project_pm_heartbeat_preset {
+project low_intervention_experiment_engine {
   parent: q3_harness_operating_system
-  output: "A reusable project PM heartbeat preset: weekly strategy refresh, daily ticket update, weekly memory update, and weekly skill self-improvement."
+  output: "Farplane can propose, run, evaluate, and accept/reject harness improvement experiments with explicit human-intervention accounting."
+  feedback_surface: hybrid_metric("validated cycles", "accepted improvements", "human intervention minutes", "quality/proof review")
+  budget: time_budget("quarter")
+  route: optimize_harness + eval + horizon_advisor
+  gates: [no_fake_precision, no_unreviewed_self_improvement_claims, operator_control_preserved]
+  starting_tasks: [
+    "define validated improvement cycle report format",
+    "select first 3 project contexts for low-intervention improvement loops",
+    "run ablations only where baseline and proof surface are clear"
+  ]
+}
+
+project evidence_distribution_engine {
+  parent: q3_harness_operating_system
+  output: "Farplane turns accepted experiments, ablations, and lessons into research notes, educational content, subscriber growth, and pilot conversations."
+  feedback_surface: hybrid_metric("content shipped", "qualified attention", "serious conversations", "pilot users")
+  budget: time_budget("quarter")
+  route: horizon_advisor + social_content + research
+  gates: [claims_backed_by_artifacts, no_generic_ai_content, privacy_review]
+  starting_tasks: [
+    "create content backlog from accepted experiment reports and lessons",
+    "ship evidence-backed posts/research notes on a weekly cadence",
+    "track replies, subscribers, conversations, and pilot conversions"
+  ]
+}
+
+project project_pm_lane_preset {
+  parent: q3_harness_operating_system
+  output: "A reusable project PM lane preset: pulse action, rhythm operating plan, horizon strategy refresh, memory update, and skill self-improvement."
   feedback_surface: review_metric("one project can initialize the preset without inventing custom files")
   budget: time_budget("2 weeks")
   route: deep_init_project
   gates: [automation_preview_before_scheduling, local_files_source_of_truth]
   starting_tasks: [
-    "keep weekly PM update in automations.md",
-    "keep daily ticket drainer separate from weekly PM",
+    "keep pulse/rhythm/horizon lane config in automations.json",
+    "keep ticket drainer separate from lane planning skills",
     "write unblock tickets for missing Notion, Telegram, metrics, or binding access"
   ]
 }
@@ -152,8 +229,8 @@ project console_feedback_visibility {
 }
 
 milestone framework_strategy_split {
-  task: "Make farplane/goals.md the canonical dynamic strategy file and keep automation mechanics in farplane/automations.md."
-  metric: artifact_presence("farplane/goals.md active") + review_metric("no root goal portfolio duplicate")
+  task: "Make farplane/goals.md the canonical dynamic strategy file and keep automation mechanics in farplane/automations.json."
+  metric: artifact_presence("farplane/goals.md active") + review_metric("no duplicate root strategy file")
   route: one_turn
   gates: [no_commit_without_request]
 }
@@ -161,40 +238,45 @@ milestone framework_strategy_split {
 
 ## Current Milestone
 
-Make the Farplane framework standard usable enough that a new project can be
-set up with a clear split between:
+Make Farplane's horizon layer explicit enough to optimize the harness algebra
+value function instead of vague growth or vague self-improvement claims:
 
-- tracked `farplane/` config
-- ignored `.farplane/` runtime state
-- local tickets
-- weekly PM update
-- daily ticket drainer
-- bindings
-- context/docs update
-- skill harden/refine loop
+- North Star = meaningful long-running autonomous improvement per human
+  intervention hour
+- Horizon Advisor owns goal/KPI/project-goals authoring
+- Goal Advisor owns execution compilation for selected frontiers
+- first validated improvement cycles define intervention budget, quality
+  metric, proof surface, and accept/reject decision
+- distribution work is downstream of evidence, not detached marketing
 
 ## Strategy Update Rule
 
-Weekly PM may update this file when fresh reports or tickets change strategy:
+Horizon update may update this file when fresh reports or tickets change strategy:
 
 ```text
 update_strategy(farplane/goals.md, reports, tickets, memory)
   -> goal_delta + milestone_delta + holds_delta + ticket_delta
 ```
 
-The weekly PM should not move schedule, grouped-job, report-path, or run-ledger
-configuration into this file. It should update [automations.md](automations.md)
-only when the cadence itself changes.
+The horizon update should not move schedule, grouped-job, report-path, or
+run-ledger configuration into this file. It should update
+[automations.json](automations.json) only when lane config itself changes.
+Use `horizon-advisor` when the update needs to rewrite the North Star, value
+function, KPI tree, project goal map, or current frontier.
 
 ## Holds
 
 - Do not add hidden daemon behavior.
 - Do not store secrets in tracked config.
 - Do not make Notion canonical until the project explicitly opts in.
-- Do not execute leaf tickets from weekly PM unless the project chooses a
-  combined cadence.
+- Do not execute leaf tickets from horizon update unless the project chooses a
+  combined lane policy.
 - Do not split projects into child tickets unless there is a real execution,
   unblock, review, dependency, approval, or proof boundary.
+- Do not claim self-improvement without baseline, metric provider, proof
+  surface, intervention accounting, and accept/reject decision.
+- Do not optimize distribution metrics independently from evidence-backed
+  harness improvement.
 
 ## Goal Advisor Handoff
 
@@ -205,10 +287,10 @@ Next eligible handoff:
 
 ```text
 goal_advisor(
-  files=[farplane/goals.md, farplane/automations.md, farplane/harness.md, tickets/],
-  task="turn the current milestone into one concrete ticket-backed Goal Packet",
-  metric_provider=review_metric,
+  files=[farplane/goals.md, farplane/automations.json, farplane/harness.md, docs/fundamentals/harness-algebra.md, tickets/],
+  task="compile the current low-intervention improvement frontier into one concrete ticket-backed Goal Packet",
+  metric_provider=hybrid_metric(learning, review, mechanical),
   trigger=active_goal | heartbeat,
-  gates=[no_hidden_automation, no_external_side_effects_without_approval]
+  gates=[no_hidden_automation, no_external_side_effects_without_approval, proof_exists, operator_control_preserved]
 ) -> ticket.md + program.md + progress.md + native_goal_prompt
 ```

@@ -1,0 +1,271 @@
+{
+  "schema": "farplane_project_automations",
+  "spec_version": "0.2.0",
+  "status": "active",
+  "project": {
+    "id": "farplane",
+    "name": "Farplane",
+    "root": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane",
+    "mission": "compound Farplane's harness, skills, tickets, docs, feedback loops, and proof surfaces",
+    "default_board_policy": "local_first",
+    "ledger": ".farplane/state/run-ledger.json",
+    "bindings": "farplane/bindings.md"
+  },
+  "ticket_sources": {
+    "local": {
+      "enabled": true,
+      "path": "tickets/",
+      "priority": "first"
+    },
+    "notion": {
+      "enabled": false,
+      "binding_ref": "notion",
+      "project_id": null,
+      "project_name": "Farplane",
+      "statuses": ["Not started", "In Progress"],
+      "use_when": "local has no proceedable ticket and notion.enabled is true"
+    }
+  },
+  "gates": [
+    "no_push",
+    "no_deploy",
+    "no_publish",
+    "no_spend",
+    "no_account_changes",
+    "no_destructive_cleanup"
+  ],
+  "lane_contract": {
+    "principle": "separate planning altitude into separate automation lanes; use files as shared memory and threads as working memory",
+    "shared_memory": [
+      "farplane/goals.md",
+      "farplane/automations.json",
+      "farplane/automations.md",
+      ".farplane/state/run-ledger.json",
+      ".farplane/reports/**/latest.md",
+      "tickets/**/ticket.md",
+      "tickets/**/progress.md",
+      "docs/MEMORY.md",
+      "docs/LESSONS.md",
+      "docs/TROUBLES.md"
+    ],
+    "compatibility_aliases": {
+      "pm_heartbeat": "pulse",
+      "daily_pm_plan": "rhythm",
+      "weekly_pm_plan": "horizon",
+      "pm-heartbeat": "pulse-update",
+      "daily-pm-plan": "rhythm-update",
+      "weekly-pm-plan": "horizon-update"
+    }
+  },
+  "lanes": {
+    "pulse": {
+      "automation_id": "farplane-pulse-lane",
+      "legacy_automation_ids": ["farplane-pm-heartbeat"],
+      "kind": "lane_update",
+      "enabled": false,
+      "interval": "FREQ=MINUTELY;INTERVAL=30",
+      "horizon": "minutes_to_hours",
+      "skill": "pulse-update",
+      "preset": "pulse-update.bandit",
+      "target_thread_id": null,
+      "max_child_threads_per_beat": 1,
+      "action_authority": "spawn_one_bounded_action",
+      "drift_against": ["active_task", "rhythm_plan"],
+      "reads_from": [
+        ".farplane/reports/rhythm/latest.md",
+        ".farplane/reports/horizon/latest.md",
+        ".farplane/automation/bandit-state.json",
+        ".farplane/automation/spawned-threads.jsonl",
+        ".farplane/automation/action-outcomes.jsonl"
+      ],
+      "writes_to": [
+        ".farplane/reports/pulse/latest.md",
+        ".farplane/automation/decisions.jsonl",
+        ".farplane/automation/rewards.jsonl"
+      ],
+      "reports": {
+        "latest": ".farplane/reports/pulse/latest.md",
+        "runs": ".farplane/reports/pulse/runs/",
+        "aliases": [
+          ".farplane/reports/pm-heartbeat/latest.md",
+          ".farplane/reports/pm-heartbeat/runs/"
+        ]
+      },
+      "scheduled_actions": [],
+      "depends_on": ["rhythm:max_age=24h"],
+      "authority": "spawn at most one bounded child action per beat"
+    },
+    "rhythm": {
+      "automation_id": "farplane-rhythm-lane",
+      "legacy_automation_ids": ["farplane-daily-pm-plan"],
+      "kind": "lane_update",
+      "enabled": true,
+      "interval": "FREQ=DAILY;INTERVAL=1;BYHOUR=5;BYMINUTE=33;BYSECOND=0",
+      "horizon": "days",
+      "skill": "rhythm-update",
+      "preset": "rhythm-update.operating_plan",
+      "target_thread_id": "019ed47a-3182-73f3-879f-a53797759b2a",
+      "action_authority": "plan_and_rank",
+      "drift_against": ["horizon_plan", "current_milestone"],
+      "reads_from": [
+        ".farplane/reports/horizon/latest.md",
+        ".farplane/reports/pulse/latest.md",
+        ".farplane/state/run-ledger.json",
+        "farplane/goals.md",
+        "tickets/"
+      ],
+      "writes_to": [
+        ".farplane/reports/rhythm/latest.md",
+        ".farplane/state/run-ledger.json"
+      ],
+      "reports": {
+        "latest": ".farplane/reports/rhythm/latest.md",
+        "runs": ".farplane/reports/rhythm/runs/",
+        "aliases": [
+          ".farplane/reports/daily-pm-plan/latest.md",
+          ".farplane/reports/daily-pm-plan/runs/"
+        ]
+      },
+      "scheduled_actions": ["ticket_update"],
+      "depends_on": ["horizon:max_age=7d"],
+      "authority": "rank the next day-range lanes and optionally call ticket-drainer by policy"
+    },
+    "horizon": {
+      "automation_id": "farplane-horizon-lane",
+      "legacy_automation_ids": ["farplane-weekly-pm-update"],
+      "kind": "lane_update",
+      "enabled": true,
+      "interval": "FREQ=WEEKLY;INTERVAL=1;BYDAY=MO;BYHOUR=9;BYMINUTE=0;BYSECOND=0",
+      "horizon": "n_weeks",
+      "skill": "horizon-update",
+      "preset": "horizon-update.strategy",
+      "target_thread_id": "019eca0d-d392-7db1-9b10-8916021a86d0",
+      "action_authority": "strategy_and_memory",
+      "drift_against": ["original_goals", "mission", "current_milestone"],
+      "reads_from": [
+        "farplane/goals.md",
+        "farplane/automations.json",
+        ".farplane/state/run-ledger.json",
+        "tickets/",
+        "docs/MEMORY.md",
+        "docs/LESSONS.md",
+        "docs/TROUBLES.md",
+        ".farplane/reports/**/latest.md"
+      ],
+      "writes_to": [
+        ".farplane/reports/horizon/latest.md",
+        ".farplane/reports/horizon/context/",
+        "strategy and ticket deltas when safe"
+      ],
+      "reports": {
+        "latest": ".farplane/reports/horizon/latest.md",
+        "runs": ".farplane/reports/horizon/runs/",
+        "context": ".farplane/reports/horizon/context/",
+        "aliases": [
+          ".farplane/reports/weekly-pm/latest.md",
+          ".farplane/reports/weekly-pm/runs/",
+          ".farplane/reports/weekly-pm/context/"
+        ]
+      },
+      "scheduled_actions": [
+        "update_external_context",
+        "update_memory",
+        "skill_hardening",
+        "skill_refinement",
+        "registry_drift",
+        "update_strategy",
+        "quarterly_plan",
+        "annual_review"
+      ],
+      "depends_on": [
+        "update_external_context:max_age=24h",
+        "update_memory:max_age=7d",
+        "skill_hardening:max_age=7d",
+        "registry_drift:max_age=7d"
+      ],
+      "authority": "strategy and proposed goals/ticket deltas; no leaf execution",
+      "goals_delta_policy": "auto_apply minor evidence/current-signal updates; approval_required for north-star, KPI, axis, priority, hold, quarterly, or yearly changes"
+    }
+  },
+  "job_catalog": {
+    "pulse": "pulse-update.bandit @30m -> reports.pulse",
+    "rhythm": "rhythm-update.operating_plan @1d -> reports.rhythm",
+    "horizon": "horizon-update.strategy @1w -> reports.horizon",
+    "ticket_update": "ticket-drainer.daily @none -> reports.ticket_update",
+    "update_external_context": "feed-scout.project_context @24h -> reports.update_external_context",
+    "update_memory": "update-memory.project_context @7d -> reports.update_memory",
+    "skill_hardening": "skill-maintenance.harden_skill @7d -> reports.skill_hardening",
+    "skill_refinement": "skill-maintenance.refine_skill @7d -> reports.skill_refinement",
+    "registry_drift": "skill-maintenance.registry_drift @7d -> reports.registry_drift",
+    "update_strategy": "update-strategy.weekly_pm @7d -> reports.update_strategy",
+    "quarterly_plan": "horizon-update.scheduled_action @13w -> reports.horizon",
+    "annual_review": "horizon-update.scheduled_action @52w -> reports.horizon"
+  },
+  "reports": {
+    "pulse": {
+      "latest": ".farplane/reports/pulse/latest.md",
+      "runs": ".farplane/reports/pulse/runs/"
+    },
+    "rhythm": {
+      "latest": ".farplane/reports/rhythm/latest.md",
+      "runs": ".farplane/reports/rhythm/runs/"
+    },
+    "horizon": {
+      "latest": ".farplane/reports/horizon/latest.md",
+      "runs": ".farplane/reports/horizon/runs/",
+      "context": ".farplane/reports/horizon/context/"
+    },
+    "ticket_update": {
+      "latest": ".farplane/reports/ticket-update/latest.md",
+      "runs": ".farplane/reports/ticket-update/runs/"
+    },
+    "update_external_context": {
+      "latest": ".farplane/reports/external-context/latest.md",
+      "runs": ".farplane/reports/external-context/runs/"
+    },
+    "update_memory": {
+      "latest": ".farplane/reports/memory/latest.md",
+      "runs": ".farplane/reports/memory/runs/"
+    },
+    "skill_hardening": {
+      "latest": ".farplane/reports/skill-maintenance/harden-latest.md",
+      "runs": ".farplane/reports/skill-maintenance/runs/"
+    },
+    "skill_refinement": {
+      "latest": ".farplane/reports/skill-maintenance/refine-latest.md",
+      "runs": ".farplane/reports/skill-maintenance/runs/"
+    },
+    "registry_drift": {
+      "latest": ".farplane/reports/registry-drift/latest.md",
+      "runs": ".farplane/reports/registry-drift/runs/"
+    },
+    "update_strategy": {
+      "latest": ".farplane/reports/strategy/latest.md",
+      "runs": ".farplane/reports/strategy/runs/"
+    }
+  },
+  "compiler": {
+    "name": "compile_lane_automation",
+    "signature": "compile_lane_automation(lane_json, skill_catalog, reports, gates) -> prompt(program, ordered_todo, side_effect_gates, final_output_fields)",
+    "purpose": "Compile structured lane configuration into exact live Codex automation prompts. This is not a scheduler or hidden runtime.",
+    "rules": [
+      "The JSON manifest supplies interval, freshness, reports, dependencies, target thread, scheduled actions, gates, and local overrides.",
+      "The referenced skill preset supplies default reads, writes, output contract, proof expectations, and eval surface.",
+      "The compiled prompt must inline enough ordered steps to run without guessing.",
+      "Scheduled actions with intervals greater than one week remain due-action entries inside the horizon lane unless a future ticket proves a separate context is needed."
+    ]
+  },
+  "run_ledger_contract": {
+    "path": ".farplane/state/run-ledger.json",
+    "statuses": ["fresh", "running", "blocked", "failed", "stale"],
+    "required_fields": [
+      "status",
+      "started_at",
+      "finished_at",
+      "freshness_until",
+      "latest_report",
+      "latest_error",
+      "owner_lane"
+    ]
+  }
+}

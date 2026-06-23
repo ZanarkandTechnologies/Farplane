@@ -85,9 +85,9 @@ future dependency tooling can discover the graph:
 
 `feed-scout.project_context @24h -> reports.update_external_context`
 
-Use when a project PM heartbeat needs fresh external harness context before
+Use when a project horizon update needs fresh external harness context before
 strategy planning. The caller supplies report paths, freshness, gates, and
-project-local source overrides from `farplane/automations.md`; this skill owns
+project-local source overrides from `farplane/automations.json`; this skill owns
 profile/resource reads, dedupe, scout routing, proposal thresholds, and the
 report contract.
 

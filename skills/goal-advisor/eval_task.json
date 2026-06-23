@@ -55,34 +55,34 @@
     "notes": "Guards the first intended rollout: content-skill self-improvement with Kenji feedback before market exposure."
   },
   {
-    "id": "goal_advisor_portfolio_parent_heartbeat_01",
-    "title": "Goal advisor uses heartbeat for a parent portfolio instead of one giant native Goal",
-    "query": "I want to run AGI Toy Shop as a five-year portfolio with year, quarter, month, week, and task levels. The parent should keep deciding what to do next after leaf tasks finish. Create the Goal setup.",
+    "id": "goal_advisor_project_goals_parent_heartbeat_01",
+    "title": "Goal advisor uses heartbeat for parent project goals instead of one giant native Goal",
+    "query": "I want to run AGI Toy Shop as a five-year Farplane project with year, quarter, month, week, and task levels. The parent should keep deciding what to do next after leaf tasks finish. Create the Goal setup.",
     "reference_points": [
-      "Classifies the request as goal_portfolio or parent portfolio work",
-      "Creates or requires a portfolio.md plus ticket.md, program.md, and progress.md",
-      "Uses heartbeat or manual resume for the parent portfolio controller",
+      "Classifies the request as project_goals or parent project work",
+      "Uses or requires farplane/goals.md plus ticket.md, program.md, and progress.md",
+      "Uses heartbeat or manual resume for the parent project controller",
       "Explains that native Goal is for an uninterrupted time/budget window and heartbeat is for paused or recurring parent work",
       "Defines heartbeat actions such as start_goal, resume_goal, request_feedback, replan, or no_op"
     ],
     "tags": [
       "skill",
       "goal-advisor",
-      "goal-portfolio",
+      "project-goals",
       "heartbeat"
     ],
     "notes": "Guards the parent orchestration boundary."
   },
   {
-    "id": "goal_advisor_portfolio_leaf_native_goal_01",
+    "id": "goal_advisor_project_goals_leaf_native_goal_01",
     "title": "Goal advisor generates native Goal for the selected timeboxed file set",
-    "query": "Given this portfolio frontier: W1 has TASK-0001 define offer, TASK-0002 landing page, and TASK-0003 tracking. TASK-0001 is the first eligible child. Write the Goal prompt.",
+    "query": "Given this project-goals frontier: W1 has TASK-0001 define offer, TASK-0002 landing page, and TASK-0003 tracking. TASK-0001 is the first eligible child. Write the Goal prompt.",
     "reference_points": [
       "Generates or recommends a native /goal prompt with an inline Files list for the selected file set",
-      "Uses portfolio files as context only when they are listed and needed",
+      "Uses farplane/goals.md as context only when it is listed and needed",
       "Requires progress.md logging and completion entries for every changed ticket",
       "Says completion should return control to the parent heartbeat",
-      "Does not tell the native Goal to expand future portfolio branches"
+      "Does not tell the native Goal to expand future project-goal branches"
     ],
     "tags": [
       "skill",
@@ -92,12 +92,12 @@
     "notes": "Guards leaf-only native Goal execution."
   },
   {
-    "id": "goal_advisor_portfolio_completion_handoff_01",
-    "title": "Goal advisor handles child completion by updating portfolio and choosing next trigger",
-    "query": "TASK-0001 finished and wrote its artifact. What should the Goal Portfolio do now?",
+    "id": "goal_advisor_project_goals_completion_handoff_01",
+    "title": "Goal advisor handles child completion by updating project goals and choosing next trigger",
+    "query": "TASK-0001 finished and wrote its artifact. What should the Farplane project goals layer do now?",
     "reference_points": [
       "Requires appending a child completion entry to progress.md",
-      "Updates the child node in portfolio.md to complete or complete_candidate",
+      "Updates the child node in farplane/goals.md or a linked project report to complete or complete_candidate",
       "Runs or requests proof/review before treating the child as done",
       "Starts or resumes the next eligible sibling when one exists",
       "Runs parent heartbeat or replan when the current frontier is complete"
@@ -110,9 +110,9 @@
     "notes": "Guards continuation after leaf completion."
   },
   {
-    "id": "goal_advisor_portfolio_noop_heartbeat_01",
+    "id": "goal_advisor_project_goals_noop_heartbeat_01",
     "title": "Goal advisor logs no-op heartbeat when nothing useful can happen",
-    "query": "The AGI Toy Shop portfolio is waiting for Kenji's content labels before W2 can be planned. What should the heartbeat do?",
+    "query": "The AGI Toy Shop project goals are waiting for Kenji's content labels before W2 can be planned. What should the heartbeat do?",
     "reference_points": [
       "Chooses no_op or request_feedback instead of inventing unrelated work",
       "Logs the heartbeat/no-op in progress.md",
@@ -126,7 +126,7 @@
       "heartbeat",
       "no-op"
     ],
-    "notes": "Guards waiting behavior for long-running portfolios."
+    "notes": "Guards waiting behavior for long-running project goals."
   },
   {
     "id": "goal_advisor_ui_goal_delegated_proof_01",

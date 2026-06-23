@@ -2,16 +2,16 @@
 kind: skill-maintenance-audit
 skill: deep-init-project
 created_at: 2026-06-22
-change: full-mode-goal-portfolio-readiness
+change: full-mode-project-goals-readiness
 status: complete
 ---
 
-# Full-Mode Goal Portfolio Readiness Audit
+# Full-Mode Project Goals Readiness Audit
 
 ## Behavior Delta
 
 `deep-init-project` now distinguishes substrate setup from full project
-initialization. Full mode must run a goal-portfolio readiness pass, ask the
+initialization. Full mode must run a project-goals readiness pass, ask the
 first missing operator-owned goal question, and avoid claiming
 `project_initialized` while goals, success criteria, non-goals, or decision
 boundaries are missing.

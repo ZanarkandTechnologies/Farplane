@@ -73,8 +73,9 @@ state:
 
 modes:
   harden_skill | refine_skill |
-  structure_update | metadata_update | eval_to_qa_sync | audit |
-  bulk_rollout | registry_validation | installed_copy_import
+  structure_update | metadata_update | qa_checklist_design |
+  eval_to_qa_sync | audit | bulk_rollout | registry_validation |
+  installed_copy_import
 
 gates:
   behavior_delta_named; owner_surface_clear; source_owner_preserved;
@@ -128,13 +129,18 @@ or a Goal/autoresearch loop.
   - [ ] `edited_skill := target skill package(s)`.
   - [ ] `expected_behavior := desired operator-visible behavior`.
   - [ ] `current_behavior := observed or file-backed current behavior`.
-  - [ ] `mode := harden_skill | refine_skill | structure_update | metadata_update | eval_to_qa_sync | audit | bulk_rollout | registry_validation | installed_copy_import`.
+  - [ ] `mode := harden_skill | refine_skill | structure_update |
+    metadata_update | qa_checklist_design | eval_to_qa_sync | audit |
+    bulk_rollout | registry_validation | installed_copy_import`.
   - [ ] `evidence := user request + target files + ticket/council/eval/review artifacts`.
 - [ ] 2. Read the minimum authoritative context.
   - [ ] Always read `edited_skill/SKILL.md`, `docs/skills/registry.jsonl`, and
     the relevant anchored skill-system docs or active ticket.
   - [ ] If `mode in [structure_update, refine_skill, audit]`, read
     [Skill Structure QA Checklist](qa_checklist.md).
+  - [ ] If `mode == qa_checklist_design`, read target `SKILL.md`, existing
+    target `qa_checklist.md` when present, `eval_task.json` when present,
+    `## Gotchas`, recent audits, and [Skill Structure QA Checklist](qa_checklist.md).
   - [ ] If `mode == eval_to_qa_sync` or `edited_skill/eval_task.json` changed,
     read `edited_skill/eval_task.json` and `edited_skill/qa_checklist.md` when
     it exists.
@@ -166,6 +172,10 @@ or a Goal/autoresearch loop.
     failures before optimizing prose length`.
   - [ ] `if mode == refine_skill: consolidate duplicate evals/gotchas and
     shorten first-load text only after preserving the behavioral guardrails`.
+  - [ ] `if mode == qa_checklist_design: create or update
+    edited_skill/qa_checklist.md as a preflight plus final-review contract;
+    add only a compact first-load pointer in SKILL.md unless a gotcha must be
+    known before execution`.
   - [ ] Keep every-invocation gates, routing, proof, stop conditions, and output
     contract in `SKILL.md`.
   - [ ] Fold operational gotchas into todos, gates, fails, or concise stop
@@ -199,6 +209,9 @@ or a Goal/autoresearch loop.
     record `line_count_before`, `line_count_after`, `kept_in_skill`,
     `moved_to_reference`, `deleted_as_duplicate_or_rationale`,
     `extra_sections_kept_with_reason`, and verdict.
+  - [ ] If `qa_checklist.md` changed, verify it has prevention value before
+    execution and final-review value after execution; do not keep checklist
+    items that only restate the todo list or duplicate `## Gotchas`.
   - [ ] Reinstall touched local skills and inspect the live copy only when the
     user is judging installed behavior.
 - [ ] 8. Finish with audit/review/writeback.
@@ -209,6 +222,9 @@ or a Goal/autoresearch loop.
     health scores or claim task/review improvement without run artifacts.
   - [ ] Route final review through `reviewer` for Tier 1, meta, `eval`, stale,
     high-blast-radius, cross-skill, or precedent-setting changes.
+  - [ ] For material `qa_checklist.md` changes, hand reviewer both
+    `edited_skill/SKILL.md` and `edited_skill/qa_checklist.md`; reviewer should
+    independently apply the target checklist and this skill's structure checklist.
   - [ ] Update ticket/progress evidence before claiming completion.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

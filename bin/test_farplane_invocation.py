@@ -115,6 +115,23 @@ class FarplaneInvocationTests(unittest.TestCase):
             self.assertEqual(plan.work_item.identifier, "TASK-1234")
             self.assertTrue(plan.compute.allowed)
 
+    def test_default_ticket_proof_path_uses_ticket_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write(root / "WORKFLOW.md", WORKFLOW_TEXT)
+            write(root / "tickets" / "TASK-1234" / "ticket.md", TICKET_TEXT)
+            args = farplane_invocation.build_parser().parse_args(
+                ["prepare", "--root", str(root), "--ticket", "TASK-1234", "--phase", "planning"]
+            )
+            envelope = farplane_invocation.build_envelope_from_args(args)
+            plan = farplane_invocation.prepare_invocation(envelope, root)
+            expected = (
+                root / "tickets" / "TASK-1234" / "artifacts" / "proof" / "planning.proof.json"
+            ).resolve()
+
+            self.assertEqual(plan.proof_packet_path, str(expected))
+            self.assertEqual(plan.envelope.proof_packet_path, "tickets/TASK-1234/artifacts/proof/planning.proof.json")
+
     def test_prepare_uses_configured_board_source(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

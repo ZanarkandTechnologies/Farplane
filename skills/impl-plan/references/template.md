@@ -60,6 +60,33 @@ program:
 Include `Recommendation:` only when it changes the build path. Include
 `Options considered:` only when there is a real material fork.
 
+## Goal Packet Preview
+
+Include this for material Goal-backed work. This preview is compiled through
+`goal-advisor` and is reviewed with the plan before native Goal execution.
+
+```text
+goal_packet:
+  ticket: tickets/TASK-XXXX/ticket.md
+  program: tickets/TASK-XXXX/program.md
+  progress: tickets/TASK-XXXX/progress.md
+  files:
+    -
+  budget:
+  metric:
+  proof_route:
+  drift_policy:
+  final_evidence:
+  native_goal_prompt: |
+    /goal ...
+  approval:
+    status: pending | approved | revise | blocked
+    rule: approve plan and Goal Packet together before run
+```
+
+If the ticket plan changes after review, rerun `goal-advisor` and replace this
+preview before asking for approval again.
+
 ## Done / Proof
 
 ```text
@@ -77,6 +104,26 @@ proof:
   evidence:
     -
 ```
+
+## Documentation / Closeout
+
+```text
+docs_closeout:
+  close_ticket: required
+  documentation_skill: not_required | required
+  docs_changed:
+    -
+  documentation_reason: substantive durable doc writing/revision | none
+  final_writeback:
+    - ticket evidence and linked docs
+    - durable docs changed in final pass
+    - validators/checks matched to touched surfaces
+```
+
+Use `close-ticket` for final ticket writeback and durable-doc consistency.
+Use `documentation` only when the ticket itself includes substantive durable doc
+writing or revision that needs reader contract, grounding, and doc-quality
+checks.
 
 ## State
 

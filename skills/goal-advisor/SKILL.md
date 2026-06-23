@@ -17,8 +17,13 @@ allowed-tools: Read, Write, Glob, Grep, Bash
 
 `goal-advisor` is the canonical execution compiler for durable Farplane work.
 Use it when the operator wants to turn an intent, ticket, board, batch, rollout,
-portfolio, skill-improvement loop, or feedback loop into a native Goal,
-heartbeat, or direct-route recommendation.
+selected project-goal frontier, skill-improvement loop, or feedback loop into a
+native Goal, heartbeat, or direct-route recommendation.
+
+Use `horizon-advisor` before this skill when the work is still about deciding
+the North Star, KPI tree, project goal map, current milestone, or `goals.md`
+strategy delta. `goal-advisor` starts once a frontier is selected enough to
+compile into files and execution policy.
 
 Native Goal mode is the only formal continuation loop. Farplane adds visible
 state around it through a Goal Packet:
@@ -33,8 +38,8 @@ new abstraction such as `refs[]` to the operator.
 
 `ticket.md` owns the task contract and proof. `program.md` owns loop config,
 metric, budget, heartbeat, drift, and stop policy. `progress.md` owns compact
-append-only observations. `portfolio.md` is optional parent state for
-long-horizon graphs; it is not required for normal multi-file Goals.
+append-only observations. `farplane/goals.md` is project-level strategy context
+when a selected frontier comes from a long-horizon goal graph.
 
 This skill owns both architecture choice and final native `/goal` or heartbeat
 prompt compilation. Keep templates with this skill, but load full template
@@ -48,11 +53,11 @@ compute/budget, and blocker handling.
 ## Skill Signature
 
 ```text
-advise_goal_use(intent, files?, trigger?, budget?, proof_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
-state: reads(operator intent, listed files, tickets, board files?, portfolio.md?, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? portfolio? generated goal prompt? or recommendation)
-gates: material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named
-routes: optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
-fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion
+advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
+state: reads(operator intent, listed files, tickets, board files?, farplane/goals.md?, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
+gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
+routes: impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
+fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
 ```
 
 ## Phase Contract
@@ -77,6 +82,13 @@ the Goal architecture. It may also emit the native Goal prompt for direct
 coding-ticket execution. It does not launch hidden schedulers or preserve
 retired public orchestration skills as peers.
 
+When called from `impl-plan`, this skill compiles a Goal Packet preview for the
+same approval surface as the ticket plan. It should create or update
+`program.md`, `progress.md`, and the native `/goal` prompt preview, then pause
+for human approval unless an explicit approved auto-run policy already exists.
+If the ticket plan changes, rerun this skill and replace the preview before
+execution.
+
 ## Progressive Load Rule
 
 Use this placement test before loading or adding detail:
@@ -91,17 +103,20 @@ Keep first load limited to rules that affect the next decision. Load references
 only after the branch is selected:
 
 - prompt emission -> `references/prompt-templates.md`
-- loop-shape nuance, batch, board drain, rollout, or portfolio boundary ->
+- loop-shape nuance, batch, board drain, rollout, or project-goals boundary ->
   `references/goal-shapes.md`
 - workflow-skill composition or retired-surface migration detail ->
   `references/goal-algebra.md`
-- portfolio design depth -> `references/goal-portfolio.md`
+- project-goals authoring or strategy design -> `../horizon-advisor/SKILL.md`
 - worked examples -> `examples/`
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. Bind the intent and decide whether this is material enough for Goal.
+   - [ ] Ask up to 3 clarifying questions only when missing execution inputs
+     are blocking or materially change files, budget, metric, proof route,
+     drift policy, human gates, or destructive/deploy/spend boundaries.
    - [ ] If the task is tiny or one-turn, recommend direct work instead of Goal.
    - [ ] If native Goal or heartbeat is warranted, require listed source files
      or a create/update step for `ticket.md`, `program.md`, and `progress.md`.
@@ -115,15 +130,15 @@ only after the branch is selected:
    - [ ] `rollout`: applies a proven pattern across a target set.
    - [ ] `batch_goal`: executes a listed file set inside one time/budget window
      while preserving per-ticket proof.
-   - [ ] `business_loop` or `goal_portfolio`: coordinates recurring or
-     long-horizon work through parent heartbeat/manual resume and leaf Goals.
+   - [ ] `business_loop` or `project_goals`: coordinates recurring or
+     long-horizon project work through heartbeat/manual resume and leaf Goals.
    - [ ] Load `references/goal-shapes.md` when the chosen shape needs more than
      the one-line classifier above.
 - [ ] 3. Choose the state surfaces.
   - [ ] `Files:` in the generated prompt names every ticket, program,
     progress, board, spec, or artifact file the Goal must read.
-  - [ ] Use `portfolio.md` only when a longer planning graph is needed beyond
-    the listed files.
+  - [ ] Include `farplane/goals.md` only when the selected frontier needs
+    project-level strategy context.
 - [ ] 4. Choose the time/budget policy.
    - [ ] Treat the unit as a time/budget window, not ticket size.
    - [ ] Name time, token/model/compute, subagent, review, QA, feedback, and
@@ -148,7 +163,7 @@ only after the branch is selected:
    - [ ] For coding leaves, compile an `active_goal` prompt over the ticket,
      program, progress, and proof files.
    - [ ] Load `references/goal-shapes.md` for batch, board-drain, rollout, or
-     portfolio details.
+     project-goals details.
 - [ ] 7. Define drift policy.
    - [ ] Use inline drift checks for small normal goals.
    - [ ] Use `goal-drift-reviewer` for material, long-running, strategic,
@@ -176,6 +191,11 @@ only after the branch is selected:
    - [ ] Reject proxy-only completion evidence unless it satisfies the actual
      objective.
 - [ ] 9. Decide the next owner.
+   - [ ] When called from `impl-plan`, return a Goal Packet preview with
+     `approval: pending` and `Next Action: human approves plan + Goal Packet`
+     unless explicit auto-run approval already exists.
+   - [ ] If the ticket plan changed since the packet was compiled, regenerate
+     `program.md`, `progress.md`, and the native `/goal` prompt before approval.
    - [ ] Use `optimize-with-human` when the metric provider is `human_feedback`
      and the loop needs a Telegram-first feedback protocol.
    - [ ] Use direct ticket creation/update when the missing surface is state.
@@ -200,6 +220,9 @@ A strong Goal contract includes:
 - `Final evidence`: what must be shown to the operator before completion,
   including rendered image links for UI/user-visible work when screenshots
   exist
+- `Approval`: whether the packet is `pending`, `approved`, `revise`, or
+  `blocked`; material packets pause before native Goal execution unless
+  explicitly pre-approved
 
 For UI or user-visible work with `visual_qa` proof weight, the Goal prompt must
 spell out the concrete lane chain instead of generic "visual proof" language:
@@ -216,7 +239,7 @@ Return either:
 
 ```text
 Goal Architecture:
-Portfolio:
+Project Goals:
 Ticket:
 Program:
 Progress:
@@ -227,6 +250,7 @@ Metric / Feedback Provider:
 Drift Policy:
 Proof Route:
 Final Evidence:
+Approval:
 Heartbeat Prompt:
 Native Goal Prompt:
 Next Action:
@@ -241,7 +265,8 @@ Or create/update the Goal Packet files and then report their paths.
 - Do not treat `progress.md` as transcript storage. It is compact observed
   state.
 - Do not make parent tickets mandatory. Use an inline file list for normal
-  multi-file Goals; add `portfolio.md` only when the planning graph needs it.
+  multi-file Goals; add `farplane/goals.md` only when project strategy context
+  is needed.
 - Do not hide required files behind transcript memory. If the Goal depends on a
   ticket, program, progress log, board, spec, or artifact, list it in `Files:`.
 - Do not make heartbeat automations into hidden autonomy. They are delayed
@@ -268,18 +293,15 @@ Or create/update the Goal Packet files and then report their paths.
 - [references/prompt-templates.md](references/prompt-templates.md) - load only
   when emitting native Goal, heartbeat, setup, or skill-improvement prompt text.
 - [references/goal-shapes.md](references/goal-shapes.md) - load when loop-shape
-  nuance, batch proof, board drain, rollout, or portfolio boundaries matter.
+  nuance, batch proof, board drain, rollout, or project-goals boundaries matter.
 - [references/goal-algebra.md](references/goal-algebra.md) - load when several
   workflow skills compose into one Goal contract or retired-surface migration
   detail matters.
-- [references/goal-portfolio.md](references/goal-portfolio.md) - load before
-  designing portfolio-level goal graphs.
-- [examples/agi-toy-shop-portfolio.md](examples/agi-toy-shop-portfolio.md) -
-  worked long-horizon portfolio example.
+- [../horizon-advisor/SKILL.md](../horizon-advisor/SKILL.md) - use before this
+  skill when project-level goal graphs or `goals.md` strategy deltas still
+  need to be authored.
 - [optimize-with-human](../optimize-with-human/SKILL.md) - route optimization
   loops through human feedback and feedback-file contracts.
-- [tickets/templates/goal-loop/portfolio.md](../../tickets/templates/goal-loop/portfolio.md) -
-  optional portfolio template.
 - [tickets/templates/goal-loop/program.md](../../tickets/templates/goal-loop/program.md) -
   program template.
 - [tickets/templates/goal-loop/progress.md](../../tickets/templates/goal-loop/progress.md) -

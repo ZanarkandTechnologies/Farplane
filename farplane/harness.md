@@ -50,8 +50,8 @@ project "Farplane" {
 
   system recurring_pm {
     status: ready
-    evidence: ref("farplane/automations.md")
-    action: use_existing("weekly PM and daily ticket drainer automations")
+    evidence: ref("farplane/automations.json")
+    action: use_existing("pulse, rhythm, and horizon lane updates")
   }
 
   skill update_strategy {
@@ -74,19 +74,27 @@ project "Farplane" {
     use: "compile milestone or ticket execution into Goal, heartbeat, or direct route"
   }
 
-  heartbeat ticket_update {
-    trigger: "compiled from farplane/automations.md settings.ticket_drainer"
+  heartbeat pulse_update {
+    trigger: "compiled from farplane/automations.json lanes.pulse"
     bindings: "farplane/bindings.md"
-    first: daily_ticket_drainer
-    output: ".farplane/reports/ticket-update/latest.md"
+    first: pulse_update
+    output: ".farplane/reports/pulse/latest.md"
   }
 
-  heartbeat weekly_pm_update {
-    trigger: "compiled from farplane/automations.md settings.weekly_pm"
+  heartbeat rhythm_update {
+    trigger: "compiled from farplane/automations.json lanes.rhythm"
+    bindings: "farplane/bindings.md"
+    first: rhythm_update
+    jobs: [ticket_update]
+    output: ".farplane/reports/rhythm/latest.md"
+  }
+
+  heartbeat horizon_update {
+    trigger: "compiled from farplane/automations.json lanes.horizon"
     bindings: "farplane/bindings.md"
     first: grouped_jobs
-    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, registry_drift, update_strategy]
-    output: ".farplane/reports/weekly-pm/latest.md"
+    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, registry_drift, update_strategy, quarterly_plan, annual_review]
+    output: ".farplane/reports/horizon/latest.md"
   }
 }
 ```

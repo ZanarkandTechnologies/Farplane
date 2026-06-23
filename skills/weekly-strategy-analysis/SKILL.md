@@ -15,7 +15,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 Use this skill for Kenji's weekly strategy and opportunity planning automation.
 It is a Kenji/life-specific wrapper over the generic
-[weekly-pm-plan](../weekly-pm-plan/SKILL.md) shape. The generic weekly PM skill
+[horizon-update](../horizon-update/SKILL.md) shape. The generic horizon skill
 owns the reusable strategy/report/goals-delta contract; this skill owns Kenji's
 source collection, private context lookup, lane handoffs, and chat-ready report
 order.
@@ -53,7 +53,7 @@ gates:
   private_data_redacted; no_notion_mutation; no_publish_deploy_spend
 
 routes:
-  weekly-pm-plan | notion-context | feed-scout | summarize |
+  horizon-update | notion-context | feed-scout | summarize |
   review
 
 fails:
@@ -194,7 +194,7 @@ source gaps, concrete next actions, and claims rejected for lack of evidence.
 - [templates/context-bundle.md](templates/context-bundle.md) - use for the
   weekly context bundle shape.
 - [references/weekly-pm-plan-instance.md](references/weekly-pm-plan-instance.md)
-  - compile this wrapper as a `weekly_pm_plan(...)` call with phase hooks.
+  - compile this wrapper as a `horizon_update(...)` call with phase hooks.
 - [references/lane-plan-progress.md](references/lane-plan-progress.md) - read
   before spawning the `plan-progress` lane.
 - [references/lane-meeting-people.md](references/lane-meeting-people.md) -
@@ -203,5 +203,5 @@ source gaps, concrete next actions, and claims rejected for lack of evidence.
   before spawning the `codex-drift` lane.
 - [references/lane-opportunity-scan.md](references/lane-opportunity-scan.md) -
   read before spawning the `opportunity-scan` lane.
-- [../weekly-pm-plan/SKILL.md](../weekly-pm-plan/SKILL.md) - generic weekly PM
+- [../horizon-update/SKILL.md](../horizon-update/SKILL.md) - generic horizon
   contract this wrapper configures.

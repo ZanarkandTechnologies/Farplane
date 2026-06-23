@@ -1,6 +1,6 @@
 ---
 name: daily-pm-plan
-description: "Turn weekly PM strategy, recent outcomes, tickets, and fresh signals into today's ranked operating plan for PM heartbeats."
+description: "Compatibility alias for rhythm-update: turn horizon strategy and pulse outcomes into a day-scale operating plan."
 tier: 3
 group: harness
 source: local
@@ -13,9 +13,14 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill for daily planning. It translates weekly direction into today's
+Compatibility alias: new automation contracts should call
+[rhythm-update](../rhythm-update/SKILL.md). Keep this package so existing
+automation prompts, evals, and report paths that still name `daily-pm-plan` do
+not break during the migration.
+
+Use this skill for daily planning. It translates horizon direction into today's
 priority lanes, blockers, action constraints, and optional execution handoffs.
-It should guide the shorter `pm-heartbeat` loop rather than execute broad work
+It should guide the shorter `pulse-update` loop rather than execute broad work
 itself.
 
 `ticket-drainer` remains a separate skill. Daily planning may invoke or schedule
@@ -24,6 +29,8 @@ it when policy says ticket execution belongs at the daily cadence.
 ## Automation Presets
 
 `daily-pm-plan.operating_plan @1d -> reports.daily_pm_plan`
+
+Canonical lane preset: `rhythm-update.operating_plan @1d -> reports.rhythm`.
 
 The automation manifest supplies cadence, gates, reports, freshness, and local
 overrides. This skill owns daily synthesis, ticket/blocked-work triage,

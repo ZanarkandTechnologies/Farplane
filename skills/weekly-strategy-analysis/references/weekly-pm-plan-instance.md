@@ -1,25 +1,29 @@
 ---
-title: Weekly Strategy Analysis As Weekly PM Plan Instance
+title: Weekly Strategy Analysis As Horizon Update Instance
 owner: weekly-strategy-analysis
 kind: reference
 ---
 
-# Weekly PM Plan Instance
+# Horizon Update Instance
 
 Represent Kenji's weekly strategy automation as:
 
 ```text
-weekly_pm_plan(
+horizon_update(
   project_root = "/Users/kenjipcx/life",
-  context_refs = kenji_weekly_context_refs,
-  window = monday_to_sunday_or_run_timestamp,
+  lane_policy = weekly_horizon_lane_policy,
+  goals = kenji_weekly_context_refs.goals_ref,
+  reports = kenji_weekly_context_refs.report_refs,
+  tickets = kenji_weekly_context_refs.task_refs,
+  memory = kenji_weekly_context_refs.memory_refs,
+  interval_policy = monday_to_sunday_or_run_timestamp,
   phase_hooks = {
     init_prompt,
     context_gathering_prompt,
     synthesis_prompt,
     reporting_prompt
   }
-) -> weekly_report + daily_guidance + memory_update_candidates
+) -> horizon_report + rhythm_guidance + memory_update_candidates
 ```
 
 ## Context Refs

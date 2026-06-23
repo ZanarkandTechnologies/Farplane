@@ -1,0 +1,113 @@
+{
+  "schema": "farplane_project_automations",
+  "spec_version": "0.2.0",
+  "status": "draft",
+  "project": {
+    "id": "TODO",
+    "name": "TODO",
+    "root": "TODO",
+    "mission": "TODO",
+    "default_board_policy": "local_first",
+    "ledger": ".farplane/state/run-ledger.json",
+    "bindings": "farplane/bindings.md"
+  },
+  "ticket_sources": {
+    "local": {
+      "enabled": true,
+      "path": "tickets/",
+      "priority": "first"
+    },
+    "notion": {
+      "enabled": false,
+      "binding_ref": "notion",
+      "project_id": null,
+      "project_name": "TODO",
+      "statuses": ["Not started", "In Progress"],
+      "use_when": "local has no proceedable ticket and notion.enabled is true"
+    }
+  },
+  "gates": [
+    "no_push",
+    "no_deploy",
+    "no_publish",
+    "no_spend",
+    "no_account_changes",
+    "no_destructive_cleanup"
+  ],
+  "lanes": {
+    "pulse": {
+      "automation_id": "TODO-pulse-lane",
+      "kind": "lane_update",
+      "enabled": false,
+      "interval": "FREQ=MINUTELY;INTERVAL=30",
+      "horizon": "minutes_to_hours",
+      "skill": "pulse-update",
+      "preset": "pulse-update.bandit",
+      "target_thread_id": null,
+      "drift_against": ["active_task", "rhythm_plan"],
+      "scheduled_actions": [],
+      "reports": {
+        "latest": ".farplane/reports/pulse/latest.md",
+        "runs": ".farplane/reports/pulse/runs/",
+        "aliases": [".farplane/reports/pm-heartbeat/latest.md"]
+      }
+    },
+    "rhythm": {
+      "automation_id": "TODO-rhythm-lane",
+      "kind": "lane_update",
+      "enabled": false,
+      "interval": "FREQ=DAILY;INTERVAL=1",
+      "horizon": "days",
+      "skill": "rhythm-update",
+      "preset": "rhythm-update.operating_plan",
+      "target_thread_id": null,
+      "drift_against": ["horizon_plan", "current_milestone"],
+      "scheduled_actions": ["ticket_update"],
+      "reports": {
+        "latest": ".farplane/reports/rhythm/latest.md",
+        "runs": ".farplane/reports/rhythm/runs/",
+        "aliases": [".farplane/reports/daily-pm-plan/latest.md"]
+      }
+    },
+    "horizon": {
+      "automation_id": "TODO-horizon-lane",
+      "kind": "lane_update",
+      "enabled": false,
+      "interval": "FREQ=WEEKLY;INTERVAL=1",
+      "horizon": "n_weeks",
+      "skill": "horizon-update",
+      "preset": "horizon-update.strategy",
+      "target_thread_id": null,
+      "drift_against": ["original_goals", "mission", "current_milestone"],
+      "scheduled_actions": [
+        "update_external_context",
+        "update_memory",
+        "skill_hardening",
+        "skill_refinement",
+        "registry_drift",
+        "update_strategy",
+        "quarterly_plan",
+        "annual_review"
+      ],
+      "reports": {
+        "latest": ".farplane/reports/horizon/latest.md",
+        "runs": ".farplane/reports/horizon/runs/",
+        "context": ".farplane/reports/horizon/context/",
+        "aliases": [".farplane/reports/weekly-pm/latest.md"]
+      }
+    }
+  },
+  "job_catalog": {
+    "pulse": "pulse-update.bandit @30m -> reports.pulse",
+    "rhythm": "rhythm-update.operating_plan @1d -> reports.rhythm",
+    "horizon": "horizon-update.strategy @1w -> reports.horizon",
+    "ticket_update": "ticket-drainer.daily @none -> reports.ticket_update",
+    "quarterly_plan": "horizon-update.scheduled_action @13w -> reports.horizon",
+    "annual_review": "horizon-update.scheduled_action @52w -> reports.horizon"
+  },
+  "compiler": {
+    "name": "compile_lane_automation",
+    "signature": "compile_lane_automation(lane_json, skill_catalog, reports, gates) -> prompt(program, ordered_todo, side_effect_gates, final_output_fields)",
+    "purpose": "Compile structured lane configuration into exact live Codex automation prompts. This is not a scheduler or hidden runtime."
+  }
+}

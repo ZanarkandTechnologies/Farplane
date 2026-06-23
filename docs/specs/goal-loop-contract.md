@@ -23,11 +23,12 @@ goal_loop(files[], trigger, budget?)
   -> next_turn + evidence + drift_verdict + state_delta
 ```
 
-Long-running business, strategy, or multi-agent operating loops may add a
-portfolio layer above file-list Goal Packets:
+Long-running business, strategy, or multi-agent operating loops keep their
+strategy layer in project-local `farplane/goals.md` above file-list Goal
+Packets:
 
 ```text
-goal_portfolio(portfolio.md, goal_packet[], child_ticket[])
+project_goals(farplane/goals.md, goal_packet[], child_ticket[])
   -> current_milestone + trigger_plan + conflict_checks + state_delta
 ```
 
@@ -35,7 +36,7 @@ goal_portfolio(portfolio.md, goal_packet[], child_ticket[])
 
 ```text
 Goal = native continuation engine for one uninterrupted execution window
-portfolio.md = long-horizon goal graph and planning view
+farplane/goals.md = project-level long-horizon goal graph and planning view
 ticket.md = task contract
 program.md = loop configuration
 progress.md = append-only observed execution
@@ -52,8 +53,8 @@ Do not make tickets, skills, human feedback, heartbeat automations, or rollout
 patterns into alternate continuation runtimes.
 
 Do not make Notion, a dashboard, or a generated prompt the canonical source of
-truth for a Farplane Goal Portfolio unless the operator explicitly chooses that
-external system. The repo-owned portfolio file should be the durable
+truth for Farplane project goals unless the operator explicitly chooses that
+external system. The repo-owned `farplane/goals.md` file should be the durable
 intermediate language for agents; external tools are sync views by default.
 
 ## Goal Packet
@@ -73,40 +74,47 @@ GoalPacket :=
 triples. It may also include specs, board indexes, QA artifacts, or other local
 files the Goal must treat as source of truth.
 
+Durable proof for a ticket-backed Goal should live under that ticket's
+`artifacts/` directory by default. Global `.farplane/results/` may hold
+runtime scratch, diagnostics, or explicit adapter output, but should not become
+the preferred durable proof surface for normal ticket work.
+
 Use a Goal Packet for work that is ambitious, long-running, likely to resume,
 agentically hard, proof-sensitive, human-feedback-driven, heartbeat-driven, or
 rollout-like.
 
 Tiny one-turn work should not use native Goal mode.
 
-## Goal Portfolio
+## Project Goals
 
-Use a Goal Portfolio when the work is bigger than one Goal Packet, such as
+Use project goals when the work is bigger than one Goal Packet, such as
 running an autonomous store, coordinating multiple agents, decomposing a
 multi-year objective, or deciding which skill and harness improvements compound
 through downstream work.
 
 ```text
-GoalPortfolio :=
-  portfolio.md
-+ parent GoalPacket
+ProjectGoals :=
+  farplane/goals.md
 + child GoalPacket[]
 + child_ticket[]
 + sync_targets
 ```
 
-`portfolio.md` is a Markdown planning UI. It can be synced to Notion, but the
-repo file remains the canonical state unless explicitly overridden.
+For Farplane framework projects, `farplane/goals.md` is the canonical
+project-level strategy surface. If a business loop, rollout, or long-horizon
+parent needs its own strategy layer, make it a Farplane project with its own
+`farplane/goals.md`. It can be synced to Notion, but the repo file remains the
+canonical state unless explicitly overridden.
 
-Portfolio orchestration is a heartbeat/manual-resume workflow. Native Goal mode
-is for the selected uninterrupted execution window, which may be one ticket or
-a bounded batch of listed files.
+Project-goal orchestration is a heartbeat/manual-resume workflow. Native Goal
+mode is for the selected uninterrupted execution window, which may be one ticket
+or a bounded batch of listed files.
 
-The portfolio should show:
+The project goals file should show:
 
 - North Star or strategic intent
 - goal-writing standard with outcome, metric, timeframe, scope, and proof
-- one portfolio map that combines horizon tree, project/task tree, trigger
+- one goal map that combines horizon tree, project/task tree, trigger
   modes, metrics, holds, dependencies, parallel branches, and amplification
   edges
 - metric discovery for early leading indicators when the map needs more detail
@@ -150,13 +158,13 @@ Owns the durable task contract:
 Do not put long chronological logs, bulky evidence, or mutable loop strategy in
 `ticket.md`.
 
-### `portfolio.md`
+### `farplane/goals.md`
 
-Owns the long-horizon planning graph when one ticket coordinates multiple goals:
+Owns the project-level long-horizon planning graph:
 
 - North Star
 - goal-writing standard
-- portfolio map
+- goal map
 - metric discovery
 - current decomposition milestone
 - dependencies and holds
@@ -166,9 +174,10 @@ Owns the long-horizon planning graph when one ticket coordinates multiple goals:
 - sync targets such as Notion
 - replan cadence
 
-Do not put turn logs or execution transcripts in `portfolio.md`; use
-`progress.md`. Do not put every speculative future task in `portfolio.md`;
-future horizons should stay abstract until evidence justifies expansion.
+Do not put turn logs or execution transcripts in `farplane/goals.md`; use
+`progress.md` or project reports. Do not put every speculative future task in
+`farplane/goals.md`; future horizons should stay abstract until evidence
+justifies expansion.
 
 ### `program.md`
 
@@ -203,11 +212,18 @@ Owns append-only observed execution:
 - files or artifacts changed
 - evidence collected
 - metric or feedback sample
+- reflection and compact decision entries
 - drift verdict
 - next action
 - blocker or stop reason
 
 Do not paste raw transcript. Keep each entry compact and reconstructable.
+
+Use `progress.md` as the default Native Goal reflection surface. Add a
+ticket-local `decisions.md` only when material branching decisions, council
+notes, architecture/API/data-model choices, or reusable rationale would become
+hard to recover from chronological progress entries. `program.md` remains loop
+configuration and must not become a decision journal.
 
 ## Goal Prompt Shape
 
@@ -282,7 +298,7 @@ Use native Goal when work should continue inside the current uninterrupted
 time/budget window. Use a heartbeat when the next useful check depends on time,
 external state, human feedback, board drain, or periodic operations.
 
-For portfolios or board drains, use heartbeat or manual resume at the parent
+For project goals or board drains, use heartbeat or manual resume at the parent
 level. The heartbeat chooses the next file set; that file set may then run under
 native Goal.
 
@@ -304,7 +320,7 @@ complete_goal_window(files[], program)
 When a Goal window completes:
 
 1. Append completion entries to every changed `progress.md`.
-2. Update the relevant ticket, board, or portfolio state to `complete`,
+2. Update the relevant ticket, board, or project-goals state to `complete`,
    `complete_candidate`, `blocked`, or `waiting`.
 3. Run the configured review, drift check, QA, or proof gate.
 4. If a heartbeat policy still has proceedable work, start or resume the next
@@ -318,15 +334,15 @@ Use this split:
 - heartbeat = periodically inspect evidence and decide whether to start,
   resume, wait, or replan
 - ticket/program/progress files = task contract, loop policy, and observed state
-- portfolio = optional longer trajectory and current milestone
+- project goals = longer trajectory and current milestone
 - replan = update the map after evidence, completion, blockers, or elapsed time
 
-The operator may manually trigger a replan, but long-running portfolios should
-not depend on memory or chat nudges alone. Their `program.md` should define a
-heartbeat cadence and a replan routine.
+The operator may manually trigger a replan, but long-running project goals
+should not depend on memory or chat nudges alone. Their heartbeat program should
+define a cadence and a replan routine.
 
 ```text
-portfolio_heartbeat(portfolio, parent_program, progress)
+horizon_heartbeat(farplane/goals.md, parent_program, progress_or_report)
   -> no_op | start_child_goal | resume_child_goal | request_feedback | replan
 ```
 
@@ -369,7 +385,8 @@ For a batch Goal:
 
 1. list every ticket/program/progress file inline in the generated prompt;
 2. preserve each ticket's `Done / Proof`, blockers, and stop conditions;
-3. require one proof row per ticket;
+3. require one proof row per ticket, linked to that ticket's `artifacts/`
+   directory by default;
 4. treat batch/integration proof as additional, not a replacement;
 5. stop or split when attribution becomes unclear.
 
@@ -389,13 +406,13 @@ describe a build-ready coding ticket.
 
 ## AGI Toy Shop Example
 
-Portfolio-level autonomous-store plan:
+Project-level autonomous-store plan:
 
 ```text
-portfolio.md:
+farplane/goals.md:
   North Star: Build AGI Toy Shop into a profitable autonomous toy storefront.
   Current Milestone: Y1 > Q1 > W1.
-  Portfolio Map:
+  Goal Map:
     - Prove first offer: native_goal, review + artifact, parallel with content
       loop and analytics.
     - Improve short-form content skill: native_goal + human feedback, amplifies

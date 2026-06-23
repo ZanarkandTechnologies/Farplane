@@ -1,6 +1,6 @@
 ---
 name: ticket-drainer
-description: "Turn a daily ticket-drainer heartbeat into one selected local ticket, named child-thread handoff, report, and ledger update."
+description: "Turn a lane-invoked ticket-drainer action into one selected local ticket, named child-thread handoff, report, and ledger update."
 tier: 3
 group: harness
 source: local
@@ -13,25 +13,26 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill for the daily parent cadence that selects one proceedable ticket
-and offloads leaf work to a named Codex child thread. It is not the executor.
-It should preserve daily context by writing reports and lineage, then letting
-the child thread handle implementation or closeout.
+Use this skill when a pulse or rhythm lane policy selects ticket execution. It
+selects one proceedable ticket and offloads leaf work to a named Codex child
+thread. It is not the executor. It should preserve lane context by writing
+reports and lineage, then letting the child thread handle implementation or
+closeout.
 
 This skill differs from `board-drain`: `board-drain` is the idle selector that
-may produce a Goal Advisor handoff; `ticket-drainer` is the scheduled project
-cadence parent that owns report/ledger writeback and child-thread spawning.
+may produce a Goal Advisor handoff; `ticket-drainer` is the lane-invoked
+project selector that owns report/ledger writeback and child-thread spawning.
 
-Keep this skill separate from `pm-heartbeat`, `daily-pm-plan`, and
-`weekly-pm-plan`. Those skills decide planning cadence and action policy; this
-skill owns ticket-selection execution handoff when a cadence chooses the
-`ticket_execution` lane.
+Keep this skill separate from `pulse-update`, `rhythm-update`, and
+`horizon-update`. Those skills decide lane planning and action policy; this
+skill owns ticket-selection execution handoff when a lane chooses the
+`ticket_execution` action.
 
 ## Automation Presets
 
 `ticket-drainer.daily @none -> reports.ticket_update`
 
-The automation manifest supplies schedule, target thread, ticket sources,
+The automation manifest supplies lane policy, target thread, ticket sources,
 side-effect gates, report handles, and local overrides. This skill owns
 candidate filtering, ranking, child-thread prompt shape, lineage writeback,
 fallback blocker reporting, and the ticket-update output contract.
@@ -46,7 +47,7 @@ ticket_drainer_daily(project_root, ticket_sources, gates, report_paths, ledger)
    + ledger_delta
 
 state:
-  reads(farplane/automations.md, farplane/goals.md, latest PM reports,
+  reads(farplane/automations.json, farplane/goals.md, latest lane reports,
         .farplane/state/run-ledger.json, tickets/TASK-*/ticket.md,
         tickets/README.md, optional Notion read source)
   writes(.farplane/reports/ticket-update/latest.md,
@@ -63,7 +64,7 @@ routes:
   impl-plan | goal-advisor | board-drain | review | close-ticket
 
 fails:
-  executing broad leaf work in the parent cadence; asking the child to rename
+  executing broad leaf work in the parent lane; asking the child to rename
   itself; selecting blocked/human-gated tickets; skipping ledger/report
   writeback; mutating Notion when disabled
 ```
@@ -72,10 +73,10 @@ fails:
 ## Todo List
 
 - [ ] 1. Bind project inputs from the automation manifest.
-  - [ ] Read `farplane/automations.md`, especially ticket sources, gates,
-        reports, `cadence_thread_contract`, and `cadence daily_ticket_drainer`.
-  - [ ] Read shared memory refs requested by the cadence: goals, latest weekly
-        PM report, latest ticket update report, run ledger, and local tickets.
+  - [ ] Read `farplane/automations.json`, especially ticket sources, gates,
+        reports, lane policy, and `job_catalog.ticket_update`.
+  - [ ] Read shared memory refs requested by the lane: goals, latest horizon or
+        rhythm report, latest ticket update report, run ledger, and local tickets.
 - [ ] 2. Normalize candidate tickets.
   - [ ] Load active `tickets/TASK-*/ticket.md`; exclude archive and templates.
   - [ ] If no local ticket is proceedable and Notion is enabled, read Notion

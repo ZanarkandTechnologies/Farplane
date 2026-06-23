@@ -80,22 +80,45 @@ accept_plan(plan)
    - Violation: The plan splits only because the work feels large, spans
      multiple commits, or a smaller slice feels more comfortable.
 
-8. `proof-route-explicit`
+8. `goal-packet-preview`
+   - Question: For Goal-backed work, does the approval surface include the
+     Goal Packet preview: `ticket.md`, `program.md`, `progress.md`, `Files`,
+     `Budget`, `Metric`, `Proof Route`, `Drift Policy`, `Final Evidence`, and
+     native `/goal` prompt?
+   - Violation: The human approves only the ticket plan, while the Goal Packet
+     is compiled later without review.
+
+9. `clarifying-questions`
+   - Question: Did the planner ask up to 3 blocking clarifying questions when
+     objective, acceptance criteria, constraints, target files, proof weight,
+     permissions, human gates, or destructive/deploy/spend boundaries were
+     missing?
+   - Violation: The plan guesses at a materially branching input without
+     asking or recording a safe assumption.
+
+10. `proof-route-explicit`
    - Question: Does `Done / Proof` name checks, manual evidence, delegated
      lanes, review gates, and final artifacts?
    - Violation: The plan says only "run tests" or "verify manually".
 
-9. `ui-design-baseline`
+11. `documentation-closeout-route`
+   - Question: Does the plan name the final docs/closeout route: `close-ticket`
+     for ticket writeback and durable docs changed, plus `documentation` only
+     when substantive durable doc writing or revision is in scope?
+   - Violation: The plan omits docs closeout entirely, or calls
+     `documentation` for routine ticket writeback that `close-ticket` owns.
+
+12. `ui-design-baseline`
    - Question: For UI/design work, does the ticket reference `design.md` or a
      clear no-design-needed reason?
    - Violation: Visual proof depends on unstated taste or layout assumptions.
 
-10. `subagent-proof`
+13. `subagent-proof`
    - Question: Are QA, visual judgment, adversarial proof, and review assigned
      to their owner lanes when material?
    - Violation: The implementation executor can self-approve those claims.
 
-11. `final-evidence`
+14. `final-evidence`
    - Question: Does UI/user-visible proof require final image evidence or an
      explicit blocker?
    - Violation: The final report can pass without showing the UI state.
@@ -111,7 +134,10 @@ plan_qa:
   reuse_before_new_surface: pass | revise | block
   least_parameters: pass | revise | block
   new_files_functions_justified: pass | revise | block
+  goal_packet_preview: pass | revise | block | not_applicable
+  clarifying_questions: pass | revise | block
   proof_route_explicit: pass | revise | block
+  documentation_closeout_route: pass | revise | block
   highest_risk:
   fix_or_deferral:
 ```

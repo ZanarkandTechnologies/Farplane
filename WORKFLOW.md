@@ -34,6 +34,9 @@ Use this file as the repo-local invocation policy for Farplane-equipped Codex.
 Do not duplicate detailed skill contracts here. A run should load one
 `FarplaneRunEnvelope`, normalize one work item, select allowed compute, route to
 the existing phase skill, and write the requested `ProofPacket`.
+For local ticket invocations, durable proof defaults to the ticket workspace
+under `tickets/TASK-XXXX/artifacts/proof/`; `.farplane/results/` is reserved for
+runtime scratch, diagnostics, or explicit external-adapter payloads.
 
 Farplane is normal Codex with this repository's installed skills, hooks,
 templates, and proof conventions. This workflow is not a daemon and not a

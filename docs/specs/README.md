@@ -43,6 +43,9 @@ Execution and proof specs:
   bindings, gates, metrics, evidence, automation previews, and surface-specific
   program projections across skills, tickets, Goal Packets, portfolios, and
   harness programs.
+- `nested-pm-projects.md` - designed contract for parent/child PM projects,
+  promotion gates, skill-system PM pilots, and the boundary between child
+  projects, per-skill Goal Packets, and one-PM-per-skill overreach.
 
 Planning and authoring specs:
 
