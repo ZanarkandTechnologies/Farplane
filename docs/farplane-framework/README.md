@@ -6,6 +6,9 @@ created_at: 2026-06-15
 updated_at: 2026-06-23
 framework_template_version: "0.2.0"
 source_of_truth:
+  - docs/farplane-framework/lifecycle.md
+  - docs/farplane-framework/graph-contract.md
+  - docs/farplane-framework/hooks-and-runtime.md
   - farplane/README.md
   - farplane/manifest.json
   - farplane/harness.md
@@ -30,6 +33,20 @@ and two recurring Codex automation loops.
 ```text
 project = files + tickets + skills + goals + bindings + Steer/Pulse + runtime reports
 ```
+
+## Start Here
+
+Use [Lifecycle](lifecycle.md) as the friendly end-to-end surface. It explains
+how a project moves from initialization into Horizon, Goal Advisor, ticketed
+Goal execution, Pulse/Steer automations, hooks, drains, and memory compression.
+
+Use [Graph Contract](graph-contract.md) when the lifecycle needs to be consumed
+by tools or the Farplane UI. It defines the node, edge, confidence, and finite
+state projection model used by the generated lifecycle graph.
+
+Use [Hooks and Runtime](hooks-and-runtime.md) when you need the concrete hook
+and runtime-state boundaries. Hooks observe and gate; skills and tickets own
+judgment-heavy work.
 
 ## Project Tree
 

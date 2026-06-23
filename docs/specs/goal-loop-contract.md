@@ -1,6 +1,6 @@
 ---
 title: Goal Loop Contract
-status: draft
+status: active
 owner: goal-advisor
 created_at: 2026-06-12
 feature_refs:

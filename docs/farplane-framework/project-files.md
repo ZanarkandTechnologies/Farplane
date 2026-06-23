@@ -168,4 +168,4 @@ python3 bin/validators/check_farplane_project_files.py
 ```
 
 The validator checks the current manifest shape, retired file names, Steer
-config JSON, bindings front matter, and obvious secret leakage.
+config TOML shape, bindings front matter, and obvious secret leakage.

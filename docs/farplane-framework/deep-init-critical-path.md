@@ -1,6 +1,6 @@
 ---
 title: "Deep Init Critical Path"
-status: draft
+status: active
 owner: farplane-framework
 created_at: 2026-06-23
 updated_at: 2026-06-23
@@ -127,6 +127,7 @@ farplane/README.md
 farplane/manifest.json
 farplane/harness.md
 farplane/goals.md
+farplane/automations.md
 farplane/steer.config.toml
 farplane/bindings.md
 farplane/evals.md
@@ -374,8 +375,8 @@ Activation steps:
 Guardrails:
 
 - Create exactly two live loops: Pulse and Steer.
-- Do not create daily, weekly, quarterly, yearly, strategy-review, or
-  ticket-drainer threads.
+- Do not create separate daily, weekly, quarterly, yearly, strategy-review, or
+  ticket-drainer threads; daily and weekly are Steer interval jobs.
 - Do not activate autonomous loops when goals are placeholder or stale.
 - If Codex thread/automation tools are unavailable, write prepared prompts and
   report `needs_automation_setup`.
@@ -396,6 +397,7 @@ Guardrails:
 | `farplane/manifest.json` | `deep-init-project` | framework migrations | expected tracked/ignored paths |
 | `farplane/harness.md` | `deep-init-project` / `harness-creator` | harness planning | mission, values, systems |
 | `farplane/goals.md` | `deep-init-project` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
+| `farplane/automations.md` | `deep-init-project` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Steer prompt source |
 | `farplane/steer.config.toml` | `deep-init-project` | operator / `automation-advisor` | Steer job prompts and cadence |
 | `.farplane/state/steer-scheduler.json` | `deep-init-project` / Steer | Steer runtime | next due and last run state |
 | `farplane/pm.json` | `deep-init-project` | `automation-advisor` / PM-visible threads | UI grouping for persistent chat and automation threads |

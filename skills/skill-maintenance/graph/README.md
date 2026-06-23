@@ -11,6 +11,10 @@ Generated visual inspection surface for Farplane skills and harness docs.
 - `harness-graph.json`: generated repo-wide local-reference graph for docs,
   skills, templates, agents, scripts, and root docs
 - `harness-graph.js`: generated local-file wrapper for the same harness graph
+- `farplane-lifecycle-graph.json`: generated semantic Farplane lifecycle graph
+  with skill reads/writes/routes, framework files, hooks, and FSA projections
+- `farplane-lifecycle-graph.js`: generated local-file wrapper for the same
+  lifecycle graph
 - `index.html`: static graph viewer
 - `docs/doc-audit/generated/doc-reference-report.md`: generated Markdown audit
   report for docs cleanup, global-docs bundling, and archive candidates
@@ -20,6 +24,7 @@ Generated visual inspection surface for Farplane skills and harness docs.
 ```bash
 python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 python3 skills/skill-maintenance/scripts/generate_harness_graph.py
+python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py
 ```
 
 ## Open
@@ -37,3 +42,12 @@ The harness graph is currently a data/report surface rather than a rendered UI
 view. It detects local Markdown links and literal repo paths, resolves them to
 repo files when possible, and keeps unresolved local-looking references visible
 for cleanup.
+
+The lifecycle graph is a semantic framework surface. It combines conservative
+`SKILL.md` signature parsing, `hooks.json` commands, curated framework-critical
+edges, and finite state projections described in
+`docs/farplane-framework/graph-contract.md`.
+
+The default output is the compact core graph for UI and agent context use. Run
+with `--full` when reviewing parser internals such as gates, FSA state nodes,
+and abstract prose-derived state.
