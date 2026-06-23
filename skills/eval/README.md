@@ -16,7 +16,8 @@ Purpose: scaffold and run harness-native evals for Codex and Claude.
 │   ├── agent.md
 │   └── judge.md
 ├── tasks/
-│   └── harness_tasks.json
+│   ├── harness_tasks.json
+│   └── agents_md_tasks.json
 └── runs/
 ```
 
@@ -35,9 +36,16 @@ skills/<skill-name>/eval_task.json
 python3 skills/eval/scripts/run_evals.py status --harness codex --target-root .
 python3 skills/eval/scripts/run_evals.py init --harness codex --target-root .
 python3 .farplane/evals/run_evals.py run --harness codex --label baseline --limit 1
-python3 .farplane/evals/run_evals.py run --harness codex --suite skills --label skill-baseline
-python3 .farplane/evals/run_evals.py run --harness codex --suite skills --skill qa --label qa-skill
+python3 .farplane/evals/run_evals.py run --harness codex --harness-evals --label harness-only
+python3 .farplane/evals/run_evals.py run --harness codex --agents-md --label agents-md
+python3 .farplane/evals/run_evals.py run --harness codex --skills --label skill-baseline
+python3 .farplane/evals/run_evals.py run --harness codex --skill qa --label qa-skill
 ```
+
+No-scope `run` executes every known available family: harness tasks,
+AGENTS.md/system-prompt tasks, and skill-local evals. Scope flags narrow the
+run. File location defines the eval family; task JSON stays intentionally
+small and does not carry `surface`, `target`, budget, or isolation fields.
 
 Then open `.farplane/evals/viewer.html`, or run the shadcn React viewer:
 

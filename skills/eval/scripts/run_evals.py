@@ -20,9 +20,11 @@ from typing import Any, Sequence
 
 
 DEFAULT_MAX_PARALLEL_TASKS = 2
-SUITE_FILES = {
+TASK_FILES = {
     "harness": "harness_tasks.json",
+    "agents-md": "agents_md_tasks.json",
 }
+ALL_SCOPES = ("harness", "agents-md", "skills")
 SKILL_EVAL_TASK_FILE = "eval_task.json"
 REQUIRED_EVAL_FILES = (
     "run_evals.py",
@@ -34,6 +36,7 @@ REQUIRED_EVAL_FILES = (
     "prompts/agent.md",
     "prompts/judge.md",
     "tasks/harness_tasks.json",
+    "tasks/agents_md_tasks.json",
 )
 
 
@@ -210,15 +213,48 @@ def filter_skill_task_paths(paths: Sequence[Path], target_root: Path, selectors:
     return [available[name] for name in sorted(wanted)]
 
 
-def resolve_task_paths(eval_dir: Path, tasks: str | None, suite: str, target_root: Path) -> list[Path]:
+def selected_scopes(args: argparse.Namespace) -> tuple[tuple[str, ...], bool]:
+    scopes: list[str] = []
+    if args.harness_evals:
+        scopes.append("harness")
+    if args.agents_md:
+        scopes.append("agents-md")
+    if args.skills or args.skill:
+        scopes.append("skills")
+    if scopes:
+        return tuple(dict.fromkeys(scopes)), True
+    return ALL_SCOPES, False
+
+
+def resolve_task_paths(
+    eval_dir: Path,
+    tasks: str | None,
+    scopes: Sequence[str],
+    target_root: Path,
+    require_scopes: bool = False,
+) -> list[Path]:
     if tasks:
         return [Path(tasks)]
-    if suite == "skills":
-        paths = resolve_skill_task_paths(target_root)
-        if not paths:
-            raise EvalError(f"no skill eval task files found under {target_root / 'skills'}/*/{SKILL_EVAL_TASK_FILE}")
-        return paths
-    return [eval_dir / "tasks" / SUITE_FILES[suite]]
+    paths: list[Path] = []
+    for scope in scopes:
+        if scope == "skills":
+            skill_paths = resolve_skill_task_paths(target_root)
+            if skill_paths:
+                paths.extend(skill_paths)
+            elif require_scopes:
+                raise EvalError(f"no skill eval task files found under {target_root / 'skills'}/*/{SKILL_EVAL_TASK_FILE}")
+            continue
+        if scope not in TASK_FILES:
+            raise EvalError(f"unknown eval scope: {scope}")
+        path = eval_dir / "tasks" / TASK_FILES[scope]
+        if path.exists():
+            paths.append(path)
+        elif require_scopes:
+            raise EvalError(f"requested eval scope {scope} is missing task file: {path}")
+    if not paths:
+        scope_text = ", ".join(scopes) or "none"
+        raise EvalError(f"no eval task files found for scopes: {scope_text}")
+    return paths
 
 
 def skill_context_for_task_file(path: Path, target_root: Path) -> str:
@@ -565,8 +601,8 @@ def command_run(args: argparse.Namespace) -> int:
     target_root = Path(args.target_root).resolve()
     eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, target_root)
     eval_config = load_eval_config(eval_dir)
-    suite = "skills" if args.skill and not args.tasks else args.suite
-    task_paths = resolve_task_paths(eval_dir, args.tasks, suite, target_root)
+    scopes, explicit_scopes = selected_scopes(args)
+    task_paths = resolve_task_paths(eval_dir, args.tasks, scopes, target_root, require_scopes=explicit_scopes)
     task_paths = filter_skill_task_paths(task_paths, target_root, args.skill)
     native_skill_context = uses_native_skill_context(args.harness, args.agent_profile)
     tasks = load_task_suite(
@@ -608,7 +644,7 @@ def command_run(args: argparse.Namespace) -> int:
         "created_at": created_at,
         "harness": args.harness,
         "judge_harness": args.judge_harness or args.harness,
-        "suite": suite if not args.tasks else "custom",
+        "scopes": ["custom"] if args.tasks else list(scopes),
         "default_context_file": eval_config.default_context_file,
         "skill_context": "native" if native_skill_context else "inline",
         "task_files": [str(path) for path in task_paths],
@@ -645,6 +681,7 @@ def command_init(args: argparse.Namespace) -> int:
     copy_template(templates / "config.json", eval_dir / "config.json", args.force)
     copy_template(templates / "contexts" / "agi-toy-shop.md", eval_dir / "contexts" / "agi-toy-shop.md", args.force)
     copy_template(templates / "harness_tasks.json", eval_dir / "tasks" / "harness_tasks.json", args.force)
+    copy_template(templates / "agents_md_tasks.json", eval_dir / "tasks" / "agents_md_tasks.json", args.force)
     copy_template(templates / "agent.md", eval_dir / "prompts" / "agent.md", args.force)
     copy_template(templates / "judge.md", eval_dir / "prompts" / "judge.md", args.force)
     copy_template(templates / "README.md", eval_dir / "README.md", args.force)
@@ -655,7 +692,7 @@ def command_init(args: argparse.Namespace) -> int:
     print(f"Initialized {eval_dir}")
     print("")
     print("Next steps:")
-    print(f"  1. Edit {eval_dir / 'tasks' / 'harness_tasks.json'} with one important skill, workflow, or system-prompt task.")
+    print(f"  1. Edit {eval_dir / 'tasks' / 'harness_tasks.json'} or {eval_dir / 'tasks' / 'agents_md_tasks.json'} with one important task.")
     print("  2. Use tags/notes to mark whether a task is skill, workflow, or system-prompt level.")
     print(f"  3. Run: python3 {eval_dir / 'run_evals.py'} run --harness {args.harness} --label baseline --limit 1")
     print(f"  4. Inspect results with either {eval_dir / 'viewer.html'} or the React viewer:")
@@ -686,17 +723,14 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--target-root", default=".")
     run_parser.add_argument("--eval-dir")
     run_parser.add_argument("--tasks")
-    run_parser.add_argument(
-        "--suite",
-        choices=["harness", "skills"],
-        default="harness",
-        help="Built-in task suite to run when --tasks is not provided. Use 'skills' to discover skills/*/eval_task.json.",
-    )
+    run_parser.add_argument("--harness-evals", action="store_true", help="Run only .farplane/evals/tasks/harness_tasks.json.")
+    run_parser.add_argument("--agents-md", action="store_true", help="Run only .farplane/evals/tasks/agents_md_tasks.json.")
+    run_parser.add_argument("--skills", action="store_true", help="Run all skills/*/eval_task.json files.")
     run_parser.add_argument(
         "--skill",
         action="append",
         default=[],
-        help="Run selected skill-local eval files. Implies --suite skills unless --tasks is provided; accepts a skill name, skills/name, or skills/name/eval_task.json. May be passed multiple times or comma-separated.",
+        help="Run selected skill-local eval files. Implies --skills unless --tasks is provided; accepts a skill name, skills/name, or skills/name/eval_task.json. May be passed multiple times or comma-separated.",
     )
     run_parser.add_argument("--agent-prompt")
     run_parser.add_argument("--judge-prompt")

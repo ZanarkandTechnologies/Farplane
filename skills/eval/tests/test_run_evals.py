@@ -98,6 +98,7 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertTrue((eval_dir / "tasks" / "harness_tasks.json").exists())
             self.assertTrue((eval_dir / "prompts" / "judge.md").exists())
             self.assertTrue((eval_dir / "README.md").exists())
+            self.assertTrue((eval_dir / "tasks" / "agents_md_tasks.json").exists())
 
     def test_load_tasks_requires_string_reference_points(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -218,11 +219,12 @@ class EvalRunnerTests(unittest.TestCase):
             run_dirs = list((eval_dir / "runs").glob("*-unit"))
             self.assertEqual(len(run_dirs), 1)
             summary = json.loads((run_dirs[0] / "summary.json").read_text())
+            self.assertEqual(summary["scopes"], ["custom"])
             self.assertEqual(summary["pass_rate"], 1.0)
             self.assertEqual(summary["verdict_counts"], {"A": 1})
             self.assertTrue((run_dirs[0] / "tasks" / "proof_01.json").exists())
 
-    def test_default_suite_loads_harness_task_file(self) -> None:
+    def test_harness_scope_loads_harness_task_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             eval_dir = root / "evals"
@@ -244,8 +246,9 @@ class EvalRunnerTests(unittest.TestCase):
                     str(eval_dir),
                     "--target-root",
                     str(root),
+                    "--harness-evals",
                     "--label",
-                    "suite",
+                    "harness-scope",
                     "--agent-command-template",
                     template,
                     "--judge-command-template",
@@ -254,13 +257,96 @@ class EvalRunnerTests(unittest.TestCase):
             )
 
             self.assertEqual(code, 0)
-            run_dir = next((eval_dir / "runs").glob("*-suite"))
+            run_dir = next((eval_dir / "runs").glob("*-harness-scope"))
             summary = json.loads((run_dir / "summary.json").read_text())
-            self.assertEqual(summary["suite"], "harness")
+            self.assertNotIn("suite", summary)
+            self.assertEqual(summary["scopes"], ["harness"])
             self.assertEqual(summary["task_count"], 1)
             self.assertEqual(summary["verdict_counts"], {"A": 1})
 
-    def test_skills_suite_discovers_skill_eval_task_files(self) -> None:
+    def test_default_scope_loads_all_known_eval_families(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "fake_cli.py"
+            skill_eval = root / "skills" / "qa" / "eval_task.json"
+            (eval_dir / "prompts").mkdir(parents=True)
+            (eval_dir / "tasks").mkdir(parents=True)
+            skill_eval.parent.mkdir(parents=True)
+            write_fake_cli(fake_cli)
+            write_tasks(eval_dir / "tasks" / "harness_tasks.json")
+            write_tasks(eval_dir / "tasks" / "agents_md_tasks.json")
+            write_tasks(skill_eval)
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+
+            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            code = runner.main(
+                [
+                    "run",
+                    "--harness",
+                    "custom",
+                    "--eval-dir",
+                    str(eval_dir),
+                    "--target-root",
+                    str(root),
+                    "--label",
+                    "all-families",
+                    "--agent-command-template",
+                    template,
+                    "--judge-command-template",
+                    template,
+                ]
+            )
+
+            self.assertEqual(code, 0)
+            run_dir = next((eval_dir / "runs").glob("*-all-families"))
+            summary = json.loads((run_dir / "summary.json").read_text())
+            self.assertNotIn("suite", summary)
+            self.assertEqual(summary["scopes"], ["harness", "agents-md", "skills"])
+            self.assertEqual(summary["task_count"], 3)
+
+    def test_agents_md_scope_loads_agents_md_task_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "fake_cli.py"
+            (eval_dir / "prompts").mkdir(parents=True)
+            (eval_dir / "tasks").mkdir(parents=True)
+            write_fake_cli(fake_cli)
+            write_tasks(eval_dir / "tasks" / "harness_tasks.json")
+            write_tasks(eval_dir / "tasks" / "agents_md_tasks.json")
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+
+            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            code = runner.main(
+                [
+                    "run",
+                    "--harness",
+                    "custom",
+                    "--eval-dir",
+                    str(eval_dir),
+                    "--target-root",
+                    str(root),
+                    "--agents-md",
+                    "--label",
+                    "agents-md",
+                    "--agent-command-template",
+                    template,
+                    "--judge-command-template",
+                    template,
+                ]
+            )
+
+            self.assertEqual(code, 0)
+            run_dir = next((eval_dir / "runs").glob("*-agents-md"))
+            summary = json.loads((run_dir / "summary.json").read_text())
+            self.assertNotIn("suite", summary)
+            self.assertEqual(summary["scopes"], ["agents-md"])
+            self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [(eval_dir / "tasks" / "agents_md_tasks.json").resolve()])
+
+    def test_skills_scope_discovers_skill_eval_task_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             eval_dir = root / "evals"
@@ -283,10 +369,9 @@ class EvalRunnerTests(unittest.TestCase):
                     str(eval_dir),
                     "--target-root",
                     str(root),
-                    "--suite",
-                    "skills",
+                    "--skills",
                     "--label",
-                    "skill-suite",
+                    "skill-scope",
                     "--agent-command-template",
                     template,
                     "--judge-command-template",
@@ -295,9 +380,10 @@ class EvalRunnerTests(unittest.TestCase):
             )
 
             self.assertEqual(code, 0)
-            run_dir = next((eval_dir / "runs").glob("*-skill-suite"))
+            run_dir = next((eval_dir / "runs").glob("*-skill-scope"))
             summary = json.loads((run_dir / "summary.json").read_text())
-            self.assertEqual(summary["suite"], "skills")
+            self.assertNotIn("suite", summary)
+            self.assertEqual(summary["scopes"], ["skills"])
             self.assertEqual(summary["task_count"], 1)
             self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [skill_eval.resolve()])
             self.assertEqual(summary["verdict_counts"], {"A": 1})
@@ -344,7 +430,7 @@ class EvalRunnerTests(unittest.TestCase):
         self.assertNotIn("Skill under evaluation: qa", tasks[0].context)
         self.assertNotIn("The QA skill requires best_evidence", tasks[0].context)
 
-    def test_skills_suite_filters_selected_skill(self) -> None:
+    def test_skills_scope_filters_selected_skill(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             eval_dir = root / "evals"
@@ -381,8 +467,6 @@ class EvalRunnerTests(unittest.TestCase):
                     str(eval_dir),
                     "--target-root",
                     str(root),
-                    "--suite",
-                    "skills",
                     "--skill",
                     "qa",
                     "--label",
@@ -397,11 +481,13 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual(code, 0)
             run_dir = next((eval_dir / "runs").glob("*-selected-skill"))
             summary = json.loads((run_dir / "summary.json").read_text())
+            self.assertNotIn("suite", summary)
+            self.assertEqual(summary["scopes"], ["skills"])
             self.assertEqual(summary["task_count"], 1)
             self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [qa_eval.resolve()])
             self.assertEqual(summary["tasks"][0]["task_id"], "proof_01")
 
-    def test_skill_flag_implies_skills_suite(self) -> None:
+    def test_skill_flag_implies_skills_scope(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             eval_dir = root / "evals"
@@ -438,7 +524,8 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual(code, 0)
             run_dir = next((eval_dir / "runs").glob("*-skill-implied"))
             summary = json.loads((run_dir / "summary.json").read_text())
-            self.assertEqual(summary["suite"], "skills")
+            self.assertNotIn("suite", summary)
+            self.assertEqual(summary["scopes"], ["skills"])
             self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [qa_eval.resolve()])
 
     def test_load_task_suite_filters_task_ids(self) -> None:

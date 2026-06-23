@@ -916,8 +916,8 @@
         const summary = state.summary;
         const cards = [
           { label: "Job", value: summary.label || "--", subtle: summary.job_id || "" },
-          { label: "Harness", value: summary.farplane || "--", subtle: `Judge: ${summary.judge_harness || "--"}` },
-          { label: "Suite", value: summary.suite || "--", subtle: sourceLabel(summary.task_files) },
+          { label: "Harness", value: summary.harness || "--", subtle: `Judge: ${summary.judge_harness || "--"}` },
+          { label: "Scopes", value: scopeLabel(summary.scopes), subtle: sourceLabel(summary.task_files) },
           { label: "Tasks", value: numberValue(summary.task_count), subtle: `${countDetailsLoaded()} details loaded` },
           { label: "Pass rate", value: percent(summary.pass_rate), subtle: formatDate(summary.created_at) },
         ];
@@ -1160,6 +1160,11 @@
         if (!Array.isArray(taskFiles) || taskFiles.length === 0) return "No task file recorded";
         if (taskFiles.length === 1) return taskFiles[0];
         return `${taskFiles.length} task files`;
+      }
+
+      function scopeLabel(scopes) {
+        if (!Array.isArray(scopes) || scopes.length === 0) return "--";
+        return scopes.join(", ");
       }
 
       function formatDate(value) {

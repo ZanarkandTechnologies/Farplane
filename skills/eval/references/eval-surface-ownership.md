@@ -26,7 +26,8 @@ Judges decide whether the observed answer met the reference points.
 | Shared fictional company state, role assumptions, toy tickets, product facts, safety boundaries | AGI Toy Shop fixture context | Codex profile |
 | One user ask and expected behavior | `eval_task.json` row | Profile or shared fixture |
 | Skill-specific regression coverage | `skills/<skill>/eval_task.json` | Global harness task file |
-| Cross-skill or system behavior coverage | `.farplane/evals/tasks/*` or reusable examples | One skill package |
+| Cross-skill or workflow behavior coverage | `.farplane/evals/tasks/harness_tasks.json` or reusable examples | One skill package |
+| AGENTS.md or system-prompt behavior coverage | `.farplane/evals/tasks/agents_md_tasks.json` | Skill-local task file |
 | Judge strictness, tier rules, required output shape | Judge prompt or eval quality rubric | Task query |
 | Runner behavior, profile selection, artifact layout, summary schema | `run_evals.py` plus tests and templates | Skill instructions only |
 | Deterministic structural invariant | Validator, lint, or unit test | LLM eval |
@@ -46,7 +47,7 @@ Use AGI Toy Shop for:
 - hardcases that must be sanitized before becoming reusable evals
 
 Do not create new fictional companies for ordinary harness evals. Extend the
-AGI Toy Shop context when the suite needs a new department, ticket, workflow,
+AGI Toy Shop context when the eval set needs a new department, ticket, workflow,
 UI, policy, or failure case. Use a real repo fixture only when the eval needs
 actual files, validators, scripts, browser UI, or local state.
 
@@ -69,6 +70,22 @@ missing, disabled, poorly described, or non-triggering skill fails honestly.
 If the profile should isolate one skill, configure Codex skill entries in the
 profile to disable unrelated skill paths. Codex documents per-skill
 disable/re-enable entries, not a single `allowed_skills` key.
+
+## Scope Selection
+
+```text
+eval_scope(flags, files) -> task_files
+```
+
+File location is the canonical family signal:
+
+- `.farplane/evals/tasks/harness_tasks.json` for harness and workflow evals.
+- `.farplane/evals/tasks/agents_md_tasks.json` for AGENTS.md/system-prompt evals.
+- `skills/<skill>/eval_task.json` for skill-local evals.
+
+No-scope `run` executes every known available family. Use `--harness-evals`,
+`--agents-md`, `--skills`, or `--skill <name>` to narrow the run. `--harness`
+is only the runner backend selector, such as `codex`, `claude`, or `custom`.
 
 ## Task Shape
 

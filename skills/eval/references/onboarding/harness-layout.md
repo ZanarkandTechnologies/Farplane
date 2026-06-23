@@ -13,7 +13,8 @@ Use this shape when a repo has no eval harness yet:
 │   ├── agent.md
 │   └── judge.md
 ├── tasks/
-│   └── harness_tasks.json
+│   ├── harness_tasks.json
+│   └── agents_md_tasks.json
 └── runs/
 ```
 
@@ -30,14 +31,21 @@ The first runner should use the real harness path and only one task.
 ```bash
 python3 skills/eval/scripts/run_evals.py init --harness codex --target-root .
 python3 .farplane/evals/run_evals.py run --harness codex --label baseline --limit 1
-python3 .farplane/evals/run_evals.py run --harness codex --suite skills --label skill-baseline
+python3 .farplane/evals/run_evals.py run --harness codex --harness-evals --label harness-only
+python3 .farplane/evals/run_evals.py run --harness codex --agents-md --label agents-md
+python3 .farplane/evals/run_evals.py run --harness codex --skills --label skill-baseline
 ```
+
+File location defines the eval family. Keep harness and workflow tasks in
+`tasks/harness_tasks.json`, AGENTS.md/system-prompt tasks in
+`tasks/agents_md_tasks.json`, and skill-specific tasks in
+`skills/<skill-name>/eval_task.json`.
 
 If no runner exists yet, use this manual smoke checklist:
 
 ```text
 1. JSON parses without errors.
-2. Suite-wide context lives in config.json plus contexts/*. Every task has id,
+2. Shared eval context lives in config.json plus contexts/*. Every task has id,
    title, query, reference_points, optional context override, and optional
    tags/notes.
 3. Rubric rules live in the judge prompt, not in task JSON.
@@ -78,5 +86,5 @@ Run `init` only when `status` reports missing eval files.
 
 Use the local runner for first harness-native behavior checks, especially when
 the proof depends on Codex/Claude CLI artifacts, files, or local task reports.
-Graduate to Promptfoo when the suite is stable enough to compare models,
+Graduate to Promptfoo when the eval set is stable enough to compare models,
 providers, prompts, or variants in a matrix.

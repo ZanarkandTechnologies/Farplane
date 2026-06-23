@@ -117,24 +117,5 @@
       "repeatability"
     ],
     "notes": "Layer: workflow. Metric focus: repeatability. Expected result: a skill contract that is concise on first load and reusable from repo files."
-  },
-  {
-    "id": "system_ticketing_01",
-    "title": "System prompt behavior creates visible tickets",
-    "query": "I need a concrete release-harness change that should be tracked. Explain how the agent should use the ticketing system before and after implementation.",
-    "reference_points": [
-      "Creates or updates a visible ticket for new or changed Farplane work",
-      "Keeps frontmatter and body aligned with active work state",
-      "Records plan, acceptance criteria, verification, proof contract, evidence, and blockers in the ticket",
-      "Does not claim completion without tests, evidence, and review",
-      "Moves to documenting or done only after implementation and QA or proof pass",
-      "Keeps detailed working state in repo artifacts instead of chat-only memory"
-    ],
-    "tags": [
-      "system-prompt",
-      "ticketing",
-      "farplane"
-    ],
-    "notes": "Layer: system prompt. Expected result: tests whether always-loaded repo rules lead to visible ticket behavior."
   }
 ]

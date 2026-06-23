@@ -15,9 +15,10 @@ This folder is the local eval lab for this harness.
    Example: does the harness create or update tickets when repo policy requires
    visible task state?
 
-All task types live in one file. Use `tags` and `notes` to mark the layer.
-Start with one or two tasks total. Add more only after the first run shows a
-useful failure.
+Harness and workflow tasks live in `tasks/harness_tasks.json`. AGENTS.md and
+system-prompt tasks live in `tasks/agents_md_tasks.json`. Use `tags` and
+`notes` to mark the layer. Start with one or two tasks total. Add more only
+after the first run shows a useful failure.
 
 Skill-specific tasks may instead live in the owning skill package as
 `skills/<skill-name>/eval_task.json`. Use that modular file when a task proves
@@ -25,7 +26,8 @@ one skill's behavior rather than the whole harness.
 
 ## Edit These First
 
-- `tasks/harness_tasks.json`: skill, workflow, and system-prompt tasks.
+- `tasks/harness_tasks.json`: harness and cross-skill workflow tasks.
+- `tasks/agents_md_tasks.json`: AGENTS.md and system-prompt behavior tasks.
 - `config.json` and `contexts/*`: shared fixture setup such as AGI Toy Shop.
 - `prompts/judge.md`: the rubric. Keep rubric rules here, not in task JSON,
   and use A-D tiers plus booleans instead of 0-100 scores.
@@ -68,8 +70,15 @@ Run one task:
 
 ```bash
 python3 .farplane/evals/run_evals.py run --harness codex --label baseline --limit 1
-python3 .farplane/evals/run_evals.py run --harness codex --suite skills --label skill-baseline
+python3 .farplane/evals/run_evals.py run --harness codex --harness-evals --label harness-only
+python3 .farplane/evals/run_evals.py run --harness codex --agents-md --label agents-md
+python3 .farplane/evals/run_evals.py run --harness codex --skills --label skill-baseline
+python3 .farplane/evals/run_evals.py run --harness codex --skill qa --label qa-skill
 ```
+
+No-scope `run` executes every known available family. Use `--harness-evals`,
+`--agents-md`, `--skills`, or `--skill <name>` to narrow scope. `--harness`
+continues to choose the runner backend only.
 
 Claude users should run the same `.farplane/evals/run_evals.py` commands with
 `--harness claude`.

@@ -49,7 +49,7 @@ type EvalSummary = {
   created_at: string
   harness: string
   judge_harness: string
-  suite: string
+  scopes: string[]
   task_files: string[]
   task_count: number
   pass_rate: number
@@ -124,7 +124,8 @@ function isEvalSummary(value: unknown): value is EvalSummary {
     typeof value.created_at === 'string' &&
     typeof value.harness === 'string' &&
     typeof value.judge_harness === 'string' &&
-    typeof value.suite === 'string' &&
+    Array.isArray(value.scopes) &&
+    value.scopes.every((item) => typeof item === 'string') &&
     typeof value.task_count === 'number' &&
     typeof value.pass_rate === 'number' &&
     Array.isArray(value.task_files) &&
@@ -381,7 +382,8 @@ function App() {
                 <CardContent className="grid gap-3">
                   <Metric label="Pass rate" value={summary ? formatPercent(summary.pass_rate) : '--'} />
                   <Metric label="Tasks" value={summary ? String(summary.task_count) : '--'} />
-                  <Metric label="Harness" value={summary?.farplane ?? '--'} />
+                  <Metric label="Harness" value={summary?.harness ?? '--'} />
+                  <Metric label="Scopes" value={summary ? summary.scopes.join(', ') : '--'} />
                   <Metric label="Judge" value={summary?.judge_harness ?? '--'} />
                   {summary ? <p className="text-xs text-muted-foreground">{formatDate(summary.created_at)}</p> : null}
                 </CardContent>
