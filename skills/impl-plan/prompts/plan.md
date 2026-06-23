@@ -28,6 +28,10 @@ Rules:
 9. If `--consensus` is active, run Planner -> Architect -> Critic before final handoff.
 10. Add appendix detail only if risk or novelty justifies it.
 11. Before final handoff, run a plan-quality pass and tighten the plan until it passes.
+11a. Run `skills/impl-plan/qa_checklist.md` for material plans. Revise or
+     block when the plan fails minimal required version, reuse before new
+     surface, least parameters, function/file necessity, split boundary, or
+     proof-route checks.
 12. For material, cross-module, or architecture-facing work, add one Mermaid
     delta map when it makes flow, ownership, changed seams, or typed data path
     easier to understand visually.
@@ -41,9 +45,8 @@ Rules:
     detail only when the map would become crowded or ambiguous without it.
 16. Require a compact `Program` whenever the implementation has more than one non-trivial step.
 17. Use decisive action language. Do not hedge core execution steps or the recommendation with "maybe", "might", or "could".
-18. When diagrams are used, follow `skills/diagramming/SKILL.md` plus
-    `skills/diagramming/SKILL.md` for compactness, delta coloring,
-    inline signatures, and anti-bloat rules.
+18. When diagrams are used, follow `skills/diagramming/SKILL.md` for
+    compactness, delta coloring, inline signatures, and anti-bloat rules.
 19. If an `Agent Testability Brief` exists, preserve its proof/testability surfaces instead of re-deriving them ad hoc.
 20. For material tickets, write a compact `Done / Proof` block that separates
     done conditions, mechanical checks, caller-declared rubric families,
@@ -113,6 +116,8 @@ Requirements:
 - Typed data flow should appear in the map or a compact fallback flow using
   only the fields that matter to the plan.
 - Proof must use concrete checks, not generic test categories.
+- New files, functions, parameters, config knobs, routes, or abstractions must
+  justify reuse checked, ownership, testability, or blast-radius reduction.
 - `Done / Proof` should be compact by default: done conditions, metric or
   `none mechanical`, review rubrics/TAS gates, hard gates, required proof, and
   optional autoresearch session path.
@@ -122,3 +127,4 @@ Requirements:
   pros, cons, and why the chosen path won.
 - End with a clear readiness call in `State` or `Notes`, not a full
   planning `Evidence` report.
+- Include a compact `plan_qa` readiness note for material plans.
