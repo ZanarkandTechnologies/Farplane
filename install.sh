@@ -125,6 +125,7 @@ INSTALL_BIN_FILES=(
   farplane_compute.py
   farplane_invocation.py
   farplane.py
+  file_growth_hook.py
   notify.py
   runtime_telemetry.py
   self_improve_hook_probe.py
