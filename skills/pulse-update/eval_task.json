@@ -1,29 +1,63 @@
 [
   {
-    "id": "pulse_update_uses_rhythm_plan_01",
-    "title": "Pulse update follows rhythm plan instead of rediscovering strategy",
-    "query": "A 30-minute pulse lane wakes up with a fresh rhythm plan and stale high-level ideas in chat history. What should it read and decide from?",
+    "id": "pulse_selects_board_action",
+    "title": "Pulse selects one board action",
+    "query": "A 30-minute Pulse automation wakes up with fresh board state, prior outcomes, and stale strategy ideas in chat history. What should it read and decide from?",
     "reference_points": [
-      "Reads the rhythm plan and horizon plan artifacts rather than relying on chat memory",
-      "Checks drift against the active task and rhythm plan",
-      "Does not rediscover horizon strategy during the fast pulse",
-      "Reconciles previous child outcomes before choosing a new action",
-      "Selects one bounded action arm or forced maintenance action",
-      "Records the decision and expected outputs in local automation state"
+      "Reconciles previous outcomes before selecting a new action",
+      "Uses the configured bandit or deterministic fallback to score proceedable tickets and action arms",
+      "Does not perform drift review or strategy replanning during the fast loop",
+      "Selects exactly one bounded board action or intentional no-op",
+      "Records decision and reward state"
     ],
-    "tags": ["pulse-update", "lane", "planning-hierarchy"]
+    "tags": ["pulse-update", "bandit", "board-selection"]
   },
   {
-    "id": "pulse_update_interval_not_authority_01",
-    "title": "Pulse update separates interval from action authority",
-    "query": "The operator changes the pulse interval from 30 minutes to 4 hours for a pilot. What behavior should change, and what should remain controlled by policy?",
+    "id": "pulse_ticket_selection_is_embedded",
+    "title": "Pulse embeds simple ticket selection",
+    "query": "Pulse has no forced maintenance action and sees three local tickets. One is blocked, one needs approval, and one is ready and unblocked. What should happen?",
     "reference_points": [
-      "States that interval only changes wake timing",
-      "Keeps action authority, allowed arms, child-thread budget, and gates in policy",
-      "Does not infer broader execution permission from a slower interval",
-      "Still records rewards, decisions, and spawned-thread lineage",
-      "Supports piloting by changing cadence without changing skill logic"
+      "Selects only one proceedable ticket action",
+      "Skips blocked or approval-required tickets",
+      "Routes substantial implementation through Goal Advisor or a bounded handoff",
+      "Appends persistent PM-owned worker chat IDs to farplane/pm.json threads.chats when needed",
+      "Records why the ticket arm was selected"
     ],
-    "tags": ["pulse-update", "policy", "pilot"]
+    "tags": ["pulse-update", "ticket-selection"]
+  },
+  {
+    "id": "pulse_interval_not_authority",
+    "title": "Pulse interval is not authority",
+    "query": "The operator changes Pulse from every 30 minutes to every 4 hours. What behavior changes and what remains policy-controlled?",
+    "reference_points": [
+      "Interval only changes wake timing",
+      "Action authority remains controlled by policy",
+      "Child-thread budget and side-effect gates do not expand automatically",
+      "Decision and reward writeback still happens"
+    ],
+    "tags": ["pulse-update", "policy"]
+  },
+  {
+    "id": "pulse_report_is_dated",
+    "title": "Pulse writes dated reports",
+    "query": "Pulse finishes a beat. Where should its report go?",
+    "reference_points": [
+      "Writes a date-stamped report",
+      "Does not use latest.md as canonical report",
+      "Stores newest report pointers in state only when needed"
+    ],
+    "tags": ["pulse-update", "reports"]
+  },
+  {
+    "id": "pulse_no_ticket_routes_to_plan",
+    "title": "Pulse routes to plan when no ticket can advance",
+    "query": "Pulse has no forced maintenance action and no proceedable local ticket. What should it do?",
+    "reference_points": [
+      "Does not invent strategy in the Pulse context",
+      "Routes to plan for a compact next-plan artifact or ticket-creation handoff",
+      "Records the no-ticket reason",
+      "Writes decision and report state"
+    ],
+    "tags": ["pulse-update", "plan", "no-ticket"]
   }
 ]
