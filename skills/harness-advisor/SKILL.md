@@ -71,6 +71,10 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
    - [ ] When material review behavior is a candidate, place rubric routing in
      the calling skill or ticket `Done / Proof`, reviewer execution in
      `agents/reviewer.toml`, and TAS/rubric definitions in `skills/review`.
+   - [ ] When the change concerns eval profiles, fixtures, task rows, judge
+     prompts, runner behavior, validators, or AGI Toy Shop examples, load
+     [eval surface ownership](../eval/references/eval-surface-ownership.md)
+     and route detailed ownership to `eval`.
 - [ ] 5. Use [advise](../advise/SKILL.md) to compare exactly three viable
    placement options when three realistic options exist.
 - [ ] 6. Recommend one primary owner and secondary sync points.
@@ -151,6 +155,9 @@ Next ticket or owner:
   inventory and skill selection guide.
 - `docs/fundamentals/prompt-engineering.md` - shared prompt contract for prompt-like
   templates, examples, output shapes, and proof expectations.
+- [../eval/references/eval-surface-ownership.md](../eval/references/eval-surface-ownership.md) -
+  eval-specific placement for Codex profiles, AGI Toy Shop fixtures, task rows,
+  judge prompts, runner behavior, validators, and harness-advisor routing.
 
 ## Output
 

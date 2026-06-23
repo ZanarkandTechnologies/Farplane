@@ -17,6 +17,11 @@ This module owns the reusable local eval harness for Codex and Claude:
 - Put suite-wide fixture setup in `config.json` plus `contexts/*`; use task
   `context` only for overrides, and use `context: ""` to disable the default
   context for a real-repo task.
+- Keep AGI Toy Shop as the default fictional fixture for generic harness evals;
+  extend it instead of creating one-off toy companies.
+- Use Codex profiles for harness launch settings such as model, sandbox,
+  approvals, MCP, and skill enable/disable. Do not put fixture facts or
+  expected answers in profiles.
 - Keep rubric policy in judge prompts, not task JSON.
 - Prefer reusable templates under `templates/` over one-off runtime-only changes.
 - If install-time behavior changes, update `scripts/run_evals.py`, the matching template files, and tests together.

@@ -2,7 +2,7 @@
   {
     "id": "eval_skill_modular_task_authoring_01",
     "title": "Eval skill writes a modular skill-local task",
-    "query": "Add an eval for the advise skill that proves it chooses among three options and recommends one path. Use the normal eval skill workflow.",
+    "query": "The advise workflow keeps giving one recommendation without showing the other viable options first. Add coverage so that behavior does not regress.",
     "reference_points": [
       "Chooses a skill-local file such as skills/advise/eval_task.json for advise-specific behavior",
       "Keeps AGI Toy Shop setup in shared context instead of repeating it inside the query",
@@ -38,7 +38,7 @@
   {
     "id": "eval_skill_best_practices_branching_01",
     "title": "Eval skill loads best practices only for authoring branches",
-    "query": "Run the existing eval suite and tell me the latest verdicts. Do not create or revise any tasks unless the run shows a concrete failure.",
+    "query": "Can you run the existing eval suite and tell me the latest verdicts? I only need a status report unless something is clearly broken.",
     "reference_points": [
       "Treats this as a run-only eval job rather than an authoring task",
       "Does not require loading the full eval best-practices reference before running",
@@ -96,7 +96,7 @@
   {
     "id": "eval_no_delayed_backlog_01",
     "title": "Eval skill does not delay obvious regression coverage",
-    "query": "The AGI Toy Shop harness keeps forgetting to ask for proof before changing skills. Can you just log this in Lessons or Troubles for later instead of writing an eval now?",
+    "query": "The AGI Toy Shop harness keeps forgetting to ask for proof before changing skills. Can you capture this so the same miss does not keep coming back?",
     "reference_points": [
       "Recognizes the behavior is testable now and should become a proof case rather than only a lesson",
       "Creates or proposes the smallest relevant eval task before or alongside any lesson capture",
@@ -114,7 +114,7 @@
   {
     "id": "eval_consolidation_preserves_immediate_coverage_01",
     "title": "Eval consolidation preserves immediate regression coverage",
-    "query": "The AGI Toy Shop learning drain is creating a bunch of overlapping evals after real harness misses. Can we hold those in a temporary queue and only move the best ones into eval_task.json during the weekly cleanup?",
+    "query": "The AGI Toy Shop learning drain is producing a bunch of overlapping regression cases after recent harness misses. How should we keep the immediate protection without letting the suite turn noisy?",
     "reference_points": [
       "Rejects delaying testable lesson/trouble-derived evals until the weekly drain",
       "Keeps fresh regression coverage in the owning skills/<skill>/eval_task.json file first",

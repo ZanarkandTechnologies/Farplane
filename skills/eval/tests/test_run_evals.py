@@ -123,6 +123,19 @@ class EvalRunnerTests(unittest.TestCase):
         self.assertFalse(runner.normalize_judge({"verdict": "C"})["pass"])
         self.assertFalse(runner.normalize_judge({"verdict": "D"})["pass"])
 
+    def test_codex_profile_args_are_first_class(self) -> None:
+        args = runner.codex_extra_args(["--model", "gpt-5.5"], "skill-eval")
+        self.assertEqual(args, ["--profile", "skill-eval", "--model", "gpt-5.5"])
+
+    def test_codex_profile_rejects_path_like_names(self) -> None:
+        with self.assertRaises(runner.EvalError):
+            runner.codex_extra_args([], "../skill-eval")
+
+    def test_codex_profile_runs_use_native_skill_context(self) -> None:
+        self.assertTrue(runner.uses_native_skill_context("codex", "skill-eval"))
+        self.assertFalse(runner.uses_native_skill_context("codex", None))
+        self.assertFalse(runner.uses_native_skill_context("claude", "ignored"))
+
     def test_context_block_renders_separately_from_query(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "tasks.json"
@@ -310,6 +323,27 @@ class EvalRunnerTests(unittest.TestCase):
         self.assertIn("The QA skill requires best_evidence", tasks[0].context)
         self.assertIn("Skill context:", tasks[0].context)
 
+    def test_native_skill_context_does_not_inline_skill_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill_dir = root / "skills" / "qa"
+            skill_eval = skill_dir / "eval_task.json"
+            skill_dir.mkdir(parents=True)
+            (skill_dir / "SKILL.md").write_text("# QA\n\nThe QA skill requires best_evidence for UI proof.\n")
+            write_tasks(skill_eval)
+
+            tasks = runner.load_task_suite(
+                [skill_eval],
+                default_context="AGI Toy Shop fixture context.",
+                target_root=root,
+                native_skill_context=True,
+            )
+
+        self.assertEqual(tasks[0].query, "Explain proof discipline.")
+        self.assertIn("AGI Toy Shop fixture context.", tasks[0].context)
+        self.assertNotIn("Skill under evaluation: qa", tasks[0].context)
+        self.assertNotIn("The QA skill requires best_evidence", tasks[0].context)
+
     def test_skills_suite_filters_selected_skill(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -366,6 +400,46 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual(summary["task_count"], 1)
             self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [qa_eval.resolve()])
             self.assertEqual(summary["tasks"][0]["task_id"], "proof_01")
+
+    def test_skill_flag_implies_skills_suite(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "fake_cli.py"
+            qa_eval = root / "skills" / "qa" / "eval_task.json"
+            (eval_dir / "prompts").mkdir(parents=True)
+            qa_eval.parent.mkdir(parents=True)
+            write_fake_cli(fake_cli)
+            write_tasks(qa_eval)
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+
+            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            code = runner.main(
+                [
+                    "run",
+                    "--harness",
+                    "custom",
+                    "--eval-dir",
+                    str(eval_dir),
+                    "--target-root",
+                    str(root),
+                    "--skill",
+                    "qa",
+                    "--label",
+                    "skill-implied",
+                    "--agent-command-template",
+                    template,
+                    "--judge-command-template",
+                    template,
+                ]
+            )
+
+            self.assertEqual(code, 0)
+            run_dir = next((eval_dir / "runs").glob("*-skill-implied"))
+            summary = json.loads((run_dir / "summary.json").read_text())
+            self.assertEqual(summary["suite"], "skills")
+            self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [qa_eval.resolve()])
 
     def test_load_task_suite_filters_task_ids(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

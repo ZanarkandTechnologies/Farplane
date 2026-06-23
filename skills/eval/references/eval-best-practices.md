@@ -31,7 +31,9 @@ Use this when writing or revising task files and judge prompts.
   evals: a small app company fully run by agents, with docs, skills, tickets,
   storefront, toy inventory, customer support, safety review, marketing, and
   release operations. Store this as the default context file instead of
-  repeating it in every task.
+  repeating it in every task. Extend AGI Toy Shop when generic evals need new
+  departments, tickets, UI flows, policies, or failure cases; do not invent a
+  second toy company for ordinary harness examples.
 - Avoid prompts that ask the target agent to install, delete, push, deploy,
   rotate secrets, mutate live config, or touch a real user path unless that
   exact side effect is the behavior being tested and the runner is sandboxed.
@@ -85,6 +87,9 @@ Use this when writing or revising task files and judge prompts.
 
 - Run the task through the target harness CLI when behavior depends on system
   prompts, skills, tools, or repo instructions.
+- For Codex skill evals, prefer profile-backed runs. A selected agent profile
+  configures model, sandbox, approvals, MCP, and skill enable/disable; it does
+  not own fixture facts or expected answers.
 - Keep `prompts/agent.md` minimal. Usually it should be
   `{context_block}User request:\n{query}` so the harness under test supplies its
   own instructions while the eval runner can provide clean-room fixture context

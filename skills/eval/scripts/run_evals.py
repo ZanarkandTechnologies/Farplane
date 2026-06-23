@@ -254,11 +254,12 @@ def load_task_suite(
     default_context: str = "",
     target_root: Path | None = None,
     task_ids: set[str] | None = None,
+    native_skill_context: bool = False,
 ) -> list[EvalTask]:
     loaded: list[EvalTask] = []
     resolved_root = target_root.resolve() if target_root else Path.cwd().resolve()
     for path in paths:
-        skill_context = skill_context_for_task_file(path, resolved_root)
+        skill_context = "" if native_skill_context else skill_context_for_task_file(path, resolved_root)
         loaded.extend(load_tasks(path, default_context=compose_task_context(default_context, skill_context)))
     if task_ids:
         loaded = [task for task in loaded if task.id in task_ids]
@@ -266,6 +267,10 @@ def load_task_suite(
         if missing:
             raise EvalError(f"requested task ids not found: {', '.join(missing)}")
     return loaded[:limit] if limit else loaded
+
+
+def uses_native_skill_context(harness: str, agent_profile: str | None) -> bool:
+    return harness == "codex" and bool(agent_profile)
 
 
 def task_to_json(task: EvalTask) -> str:
@@ -368,7 +373,24 @@ def run_custom_command(command_template: str, prompt: str, output_file: Path, cw
     return CommandResult(text=text, returncode=completed.returncode, raw_stdout=completed.stdout, raw_stderr=completed.stderr)
 
 
-def run_codex(prompt: str, output_file: Path, cwd: Path, extra_args: Sequence[str]) -> CommandResult:
+def codex_extra_args(extra_args: Sequence[str], profile: str | None = None) -> list[str]:
+    args: list[str] = []
+    if profile:
+        profile = profile.strip()
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", profile):
+            raise EvalError("--profile values may contain only letters, numbers, hyphens, and underscores")
+        args.extend(["--profile", profile])
+    args.extend(extra_args)
+    return args
+
+
+def run_codex(
+    prompt: str,
+    output_file: Path,
+    cwd: Path,
+    extra_args: Sequence[str],
+    profile: str | None = None,
+) -> CommandResult:
     command = [
         "codex",
         "exec",
@@ -377,7 +399,7 @@ def run_codex(prompt: str, output_file: Path, cwd: Path, extra_args: Sequence[st
         str(cwd),
         "-o",
         str(output_file),
-        *extra_args,
+        *codex_extra_args(extra_args, profile),
         "-",
     ]
     completed = subprocess.run(command, input=prompt, text=True, capture_output=True, check=False)
@@ -399,12 +421,15 @@ def run_harness(
     cwd: Path,
     command_template: str | None,
     extra_args: Sequence[str],
+    profile: str | None = None,
 ) -> CommandResult:
     output_file.parent.mkdir(parents=True, exist_ok=True)
+    if profile and harness != "codex":
+        raise EvalError("--agent-profile and --judge-profile require the codex harness")
     if command_template:
         return run_custom_command(command_template, prompt, output_file, cwd)
     if harness == "codex":
-        return run_codex(prompt, output_file, cwd, extra_args)
+        return run_codex(prompt, output_file, cwd, extra_args, profile)
     if harness == "claude":
         return run_claude(prompt, output_file, cwd, extra_args)
     raise EvalError("custom harness requires a command template")
@@ -435,6 +460,7 @@ def run_task(
         Path(args.target_root).resolve(),
         args.agent_command_template,
         args.agent_extra_arg,
+        args.agent_profile,
     )
     if agent_result.returncode != 0:
         judge = {
@@ -456,6 +482,7 @@ def run_task(
             Path(args.target_root).resolve(),
             args.judge_command_template,
             args.judge_extra_arg,
+            args.judge_profile,
         )
         if judge_result.returncode != 0:
             judge = {
@@ -478,6 +505,8 @@ def run_task(
         "run_config": {
             "harness": args.harness,
             "judge_harness": args.judge_harness or args.harness,
+            "agent_profile": args.agent_profile,
+            "judge_profile": args.judge_profile,
         },
         "agent": {
             "returncode": agent_result.returncode,
@@ -536,14 +565,17 @@ def command_run(args: argparse.Namespace) -> int:
     target_root = Path(args.target_root).resolve()
     eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, target_root)
     eval_config = load_eval_config(eval_dir)
-    task_paths = resolve_task_paths(eval_dir, args.tasks, args.suite, target_root)
+    suite = "skills" if args.skill and not args.tasks else args.suite
+    task_paths = resolve_task_paths(eval_dir, args.tasks, suite, target_root)
     task_paths = filter_skill_task_paths(task_paths, target_root, args.skill)
+    native_skill_context = uses_native_skill_context(args.harness, args.agent_profile)
     tasks = load_task_suite(
         task_paths,
         args.limit,
         default_context=eval_config.default_context,
         target_root=target_root,
         task_ids=set(args.task_id),
+        native_skill_context=native_skill_context,
     )
     if args.max_parallel_tasks < 1:
         raise EvalError("--max-parallel-tasks must be at least 1")
@@ -576,8 +608,9 @@ def command_run(args: argparse.Namespace) -> int:
         "created_at": created_at,
         "harness": args.harness,
         "judge_harness": args.judge_harness or args.harness,
-        "suite": args.suite if not args.tasks else "custom",
+        "suite": suite if not args.tasks else "custom",
         "default_context_file": eval_config.default_context_file,
+        "skill_context": "native" if native_skill_context else "inline",
         "task_files": [str(path) for path in task_paths],
         "task_count": len(rows),
         "pass_rate": pass_rate,
@@ -663,7 +696,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--skill",
         action="append",
         default=[],
-        help="Run only selected skill-local eval files. Use with --suite skills; accepts a skill name, skills/name, or skills/name/eval_task.json. May be passed multiple times or comma-separated.",
+        help="Run selected skill-local eval files. Implies --suite skills unless --tasks is provided; accepts a skill name, skills/name, or skills/name/eval_task.json. May be passed multiple times or comma-separated.",
     )
     run_parser.add_argument("--agent-prompt")
     run_parser.add_argument("--judge-prompt")
@@ -673,6 +706,8 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--runs-dir")
     run_parser.add_argument("--agent-command-template")
     run_parser.add_argument("--judge-command-template")
+    run_parser.add_argument("--agent-profile", help="Codex config profile for agent runs, loaded with codex exec --profile.")
+    run_parser.add_argument("--judge-profile", help="Codex config profile for judge runs, loaded with codex exec --profile.")
     run_parser.add_argument("--agent-extra-arg", action="append", default=[])
     run_parser.add_argument("--judge-extra-arg", action="append", default=[])
     run_parser.add_argument(

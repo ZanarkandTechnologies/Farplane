@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Reject skill eval queries that leak the target skill's answer policy."""
+"""Fast smoke check for obvious skill-eval query leaks.
+
+This is intentionally a narrow heuristic. Use skills/eval/qa_checklist.md with
+a separate reviewer, QA lane, or LLM judgment turn for material eval changes.
+"""
 
 from __future__ import annotations
 

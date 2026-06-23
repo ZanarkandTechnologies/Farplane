@@ -52,6 +52,10 @@ realistic user request the harness should answer. Add task `context` only for a
 specific override, and use `"context": ""` when a task should not inherit the
 default context.
 
+AGI Toy Shop is the default fictional fixture for generic harness evals. Extend
+that context for new toy tickets, product facts, UI flows, policies, or failure
+cases instead of creating unrelated toy companies.
+
 ## Run
 
 Check whether evals are installed:

@@ -4,8 +4,9 @@ description: "Turn agent, prompt, or skill behavior into local eval tasks, boole
 tier: 3
 group: harness
 source: local
-skill_template_version: "0.2.0"
+skill_template_version: "0.3.0"
 eval: eval_task.json
+qa_checklist: qa_checklist.md
 skill_ui: skills/eval/templates/viewer-react
 methods:
   - eval:onboarding
@@ -24,15 +25,32 @@ Claude runs. Repo-owned reusable task suites live under `skills/eval/examples/`.
 Skill-specific evals live next to their owning skill as
 `skills/<skill-name>/eval_task.json`.
 
+AGI Toy Shop is the default clean-room fixture for generic harness evals. Extend
+that fixture for new toy-company needs instead of inventing new fictional
+companies unless a real repo fixture is required.
+
 ## Skill Signature
 
 ```text
-eval(task_intent, harness?, target_root?, mode?) -> eval_case? + run_summary? + consolidation_report? + next_fix
-state: reads(existing evals, skill eval_task.json files, fixtures, task context, expected behavior, eval-drain processed state); writes(eval tasks, hardcase metadata, run artifacts, consolidation reports, processed state)
-gates: expected_behavior:testable; baseline_before_mutation; hardcase:sanitized_and_reusable
+eval(task_intent, harness?, target_root?, mode?, budget?) -> eval_case? + run_summary? + consolidation_report? + next_fix
+state: reads(existing evals, skill eval_task.json files, qa_checklist?, fixtures, task context, expected behavior, eval-drain processed state); writes(eval tasks, hardcase metadata, run artifacts, consolidation reports, processed state)
+gates: expected_behavior:testable; baseline_before_mutation; query_not_spoiled; hardcase:sanitized_and_reusable; evidence_inspected_before_claim
 routes: optimize-harness | self-improve | skill-maintenance | deliberative-advice | agent-behavior-test | agent-qa-test | review
-fails: wording-only eval; stores raw private transcript; delays obvious regression coverage; marks hardcase without benchmark value
+fails: wording-only eval; query_teaches_answer; stores raw private transcript; delays obvious regression coverage; marks hardcase without benchmark value
 ```
+
+```text
+EvalBudget = {
+  grounding?: "skim" | "targeted" | "deep",
+  harness_realism?: "static" | "custom-command" | "native-codex-profile",
+  suite_scope?: "one-task" | "selected-skills" | "full-suite",
+  finish_gate?: "self-check" | "checklist" | "eval-run" | "review"
+}
+```
+
+When required inputs are missing, resolve them from local eval setup, skill
+files, task artifacts, or one narrow blocking question. Do not invent the
+behavior under test or silently choose live side effects.
 
 Common modes:
 
@@ -46,14 +64,39 @@ Common modes:
   apply only changes that make evals less noisy without losing distinct
   coverage.
 
-## Default Fixture
+Use [eval surface ownership](references/eval-surface-ownership.md) when the
+question is where to put fixture state, profile config, task rows, judge rules,
+runner behavior, validators, or harness-advisor placement.
 
-AGI Toy Shop is the default clean-room eval company: a fictional toy app
-business fully run by agents, with an agent-run storefront, toy inventory,
-support desk, safety review, marketing, release workflow, docs, skills, and
-tickets. Use it for generic harness evals that test language, reasoning,
-routing, escalation, pushback, planning, artifact selection, self-improvement,
-or proof behavior without touching real files.
+## Phase Contract
+
+```text
+eval_phase_contract(task, bound_inputs, state)
+  -> grounded_eval_target
+   + proof_surface_choice
+   + eval_or_revision
+   + run_or_static_check
+   + artifact_inspection
+   + qa_or_review_when_material
+   + summary_and_next_fix
+```
+
+Use Codex native planning and execution phases inline by default. Externalize a
+phase only when it produces a smaller artifact, independent judgment, or proof
+surface.
+
+## Phase Boundary
+
+Call `review` when eval design, prompt changes, meta-skill changes, or
+completion claims need independent judgment. Call `skill-maintenance` when
+eval reference points should become reusable runtime guardrails in
+`qa_checklist.md`. Call `agent-behavior-test` or `agent-qa-test` when the
+behavior of another agent, prompt, skill, or workflow is the subject under
+test.
+
+Do not call `eval` recursively for the same eval-design task. Split the child
+scope to a narrower target such as one task row, one judge prompt, or one
+changed skill file.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -68,8 +111,10 @@ or proof behavior without touching real files.
     [eval writing rubric](references/eval-writing-rubric.md) for quality
     review, then edit task JSON and judge prompts.
   - [ ] 2. If designing a first eval or clean-room starter, load
-    [onboarding](references/onboarding.md) and use AGI Toy Shop as the default
-    context unless real repo files are the behavior under test.
+    [onboarding](references/onboarding.md) and
+    [eval surface ownership](references/eval-surface-ownership.md); use AGI Toy
+    Shop as the default context unless real repo files are the behavior under
+    test.
   - [ ] 3. If capturing a hardcase, create the normal eval task first, then add
     hardcase metadata such as `hardcase: true`, difficulty, tags,
     sanitization notes, and benchmark value.
@@ -93,9 +138,22 @@ or proof behavior without touching real files.
     business logic into the user `query`. For skill-local evals, keep the query
     natural and rely on the runner-provided owner `SKILL.md` context plus
     reference points to judge behavior.
-  - [ ] Run `python3 skills/eval/scripts/check_eval_queries.py --root .` after
-    editing skill-local evals; query spoiler lint failures mean the eval is
-    teaching the answer instead of testing the skill.
+  - [ ] Run query-spoiler QA after editing skill-local evals.
+    - [ ] Use `python3 skills/eval/scripts/check_eval_queries.py --root .` as
+      a fast smoke check for obvious leaks.
+    - [ ] For new, material, high-risk, or proof-acceptance eval rows, run the
+      skill-local [eval QA checklist](qa_checklist.md) with a reviewer, QA
+      lane, or separate LLM judgment turn.
+    - [ ] Treat checklist failures as eval-design failures: rewrite the query
+      or harden the skill/fixture/reference points instead of teaching the
+      answer in the query.
+  - [ ] For Codex harness runs that need realistic agent defaults, use a Codex
+    config profile with `--agent-profile` and, when useful, `--judge-profile`.
+    Profile-backed Codex runs use native skill discovery instead of injected
+    `SKILL.md` context.
+  - [ ] Keep AGI Toy Shop as the shared fixture for generic harness examples;
+    add new AGI Toy Shop tickets, roles, workflows, or product facts rather
+    than creating new fictional companies.
 - [ ] 4. For skill-specific behavior, prefer the modular owner file
   `skills/<skill-name>/eval_task.json`; use `.farplane/evals/tasks/*` for
   active working suites and `skills/eval/examples/*` for reusable cross-skill
@@ -120,191 +178,59 @@ or proof behavior without touching real files.
     artifacts or reviewer receipts prove it.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Use method address `eval:onboarding` when the user needs a clean-room first
-eval shape, starter JSON tasks, judge prompt guidance, or a minimal smoke
-workflow before a full eval suite exists.
+Use `eval:onboarding` for clean-room first eval setup, starter tasks, judge
+prompt guidance, or a minimal smoke workflow.
 
-Use method address `eval:consolidate` when the user needs the weekly eval drain:
-fetch eval files edited since the last run, dispatch one `consolidate_eval`
-subagent per changed file, and produce less noisy eval rows without delaying
-fresh regression coverage.
+Use `eval:consolidate` for the weekly eval drain: fetch changed eval files,
+dispatch one `consolidate_eval` lane per file, and reduce noise without
+delaying fresh regression coverage.
 
-## Good Eval Shape
+## Templates
 
-A good eval should test one behavior that can visibly pass or fail. For generic
-harness behavior, assume the AGI Toy Shop context comes from
-`config.json` plus `contexts/agi-toy-shop.md`; keep `query` as the realistic
-user request.
-
-Good task:
-
-```json
-{
-  "id": "artifact_first_response_01",
-  "title": "Agent chooses a durable artifact instead of chat sprawl",
-  "query": "Write a giant strategy memo about every possible storefront improvement. Don't worry about files, owners, or next actions; just make it comprehensive.",
-  "reference_points": [
-    "Pushes back on the chat-only artifact request",
-    "Names the smaller durable artifact that should be written first",
-    "Keeps the response inside the AGI Toy Shop scenario",
-    "Gives one concrete next action instead of a broad memo dump"
-  ],
-  "tags": ["system-prompt", "artifact-first"],
-  "notes": "Tests attention protection and artifact-first behavior without touching real files."
-}
-```
-
-Bad task:
-
-```json
-{
-  "id": "improve_everything_01",
-  "title": "Improve everything",
-  "query": "Make the company better.",
-  "reference_points": [
-    "Gives a good answer"
-  ]
-}
-```
-
-Why it is bad: the behavior is too broad, the query is not realistic enough to
-grade, the reference point is subjective, the layer is untagged, and there is
-no clear failure mode.
-
-Hardcase metadata:
-
-```json
-{
-  "id": "multi_step_harness_recovery_01",
-  "title": "Preserve a difficult harness recovery case",
-  "query": "The operator gives a corrected behavior and asks the agent to optimize the harness without creating duplicate skills.",
-  "reference_points": [
-    "Diagnoses observed versus expected behavior before editing",
-    "Routes placement through harness-advisor",
-    "Creates or updates a runnable eval case",
-    "Avoids separate lesson/trouble/hardcase capture backlogs"
-  ],
-  "tags": ["harness", "self-improvement", "hardcase"],
-  "hardcase": true,
-  "difficulty": "high",
-  "benchmark_value": "Tests a realistic nested self-improvement workflow",
-  "sanitization_notes": "Remove private project names, secrets, and raw transcript details before sharing."
-}
-```
-
-Skill-local eval files use the same JSON-list schema:
-
-```text
-skills/advise/eval_task.json
-```
-
-When a task file is located at `skills/<skill-name>/eval_task.json`, the local
-runner injects the owning `skills/<skill-name>/SKILL.md` into the eval context.
-That means the query should sound like a normal operator request; the skill
-contract, not the query wording, must carry the business logic.
-
-Run all skill-local evals with:
-
-```bash
-python3 .farplane/evals/run_evals.py run --harness codex --suite skills --label skill-baseline
-```
-
-Run selected skill-local evals with:
-
-```bash
-python3 .farplane/evals/run_evals.py run --harness codex --suite skills --skill qa --skill eval --label selected-skills
-```
-
-## Commands
-
-Check setup:
-
-```bash
-python3 skills/eval/scripts/run_evals.py status --harness codex --target-root .
-```
-
-Check skill-local eval queries for answer leakage:
-
-```bash
-python3 skills/eval/scripts/check_eval_queries.py --root .
-```
-
-Initialize only when setup is missing:
-
-```bash
-python3 skills/eval/scripts/run_evals.py init --harness codex --target-root .
-```
-
-Run installed evals:
-
-```bash
-python3 .farplane/evals/run_evals.py run --harness codex --label baseline --limit 1
-```
-
-Fetch skill eval files edited since the last eval drain:
-
-```bash
-python3 skills/eval/scripts/fetch_evals_edited_since_last_run.py \
-  --project-root . \
-  --state .farplane/state/eval-drain/processed.jsonl \
-  --pretty
-```
-
-For Claude, use the same `.farplane/evals/run_evals.py` path with
-`--harness claude`. For custom harnesses, pass `--eval-dir` plus command
-templates.
-
-## Runner Model
-
-The runner writes the proof surfaces this skill should summarize:
-
-- `runs/<job_id>/summary.json`: task count, verdict counts, pass rate, and rows.
-- `runs/<job_id>/tasks/<task_id>.json`: task, prompt, answer, judge, and raw
-  command detail.
-- `runs/index.json`: newest-first run index.
+- Use [references/eval-best-practices.md](references/eval-best-practices.md)
+  for good task shape, bad task rejection, judge design, and harness realism.
+- Use [references/eval-surface-ownership.md](references/eval-surface-ownership.md)
+  for profile-backed skill evals, fixture placement, runner ownership, and
+  task-surface decisions.
+- Use `eval_task.json` at the skill package root for focused behavioral evals.
+- Use `qa_checklist.md` for settled reusable eval-row QA guardrails.
+- Use `audits/YYYY-MM-DD-<short-change>.md` for material eval-skill changes.
 
 ## Reference Map
 
 - [references/onboarding.md](references/onboarding.md) - first eval setup,
   clean-room constraints, and starter workflow.
-- [references/onboarding/harness-layout.md](references/onboarding/harness-layout.md) -
-  minimal harness layout and smoke checklist.
-- [references/onboarding/task-template.json](references/onboarding/task-template.json) -
-  starter task JSON examples.
-- [references/onboarding/judge-prompt-template.md](references/onboarding/judge-prompt-template.md) -
-  tier/boolean judge prompt template.
-- [references/onboarding/run-report-template.json](references/onboarding/run-report-template.json) -
-  report shape example.
 - [references/eval-skill-structure-cases.md](references/eval-skill-structure-cases.md) -
   load when writing evals for skill-structure quality or reviewing the
   compounding impact of Tier 1, meta, `eval`, or cross-skill skill changes.
 - [references/eval-writing-rubric.md](references/eval-writing-rubric.md) -
   load when judging eval-task quality, batch ROI, owner locality, breadth/depth,
   and skill-local versus workflow-level placement.
+- [references/eval-surface-ownership.md](references/eval-surface-ownership.md) -
+  load when deciding whether to change a Codex profile, AGI Toy Shop fixture,
+  eval task, judge prompt, runner, validator, or harness-advisor route.
+- [qa_checklist.md](qa_checklist.md) - load when reviewing whether
+  skill-local eval queries leak skill invocation, policy, expected answer, or
+  reference-point logic.
 - [references/eval-consolidation.md](references/eval-consolidation.md) - load
   when running the weekly eval drain, writing the automation prompt, or
   dispatching per-file `consolidate_eval` lanes.
 - [references/automation-prompt.md](references/automation-prompt.md) - use when
   installing or updating a weekly automation that invokes eval consolidation.
-- [self-improve/program.md](self-improve/program.md) - Goal-backed human-feedback memory
-  for improving eval-writing patterns through ideas, tests, feedback, and
-  accepted lessons.
-- [examples/first-harness-eval/tasks.json](examples/first-harness-eval/tasks.json) -
-  clean-room starter task set.
-
-## Templates
-
-- `Good Eval Shape` above - use for normal proof and regression tasks.
-- `Hardcase metadata` above - use when an eval case is also a reusable hard
-  benchmark sample.
+- [self-improve/program.md](self-improve/program.md) - Goal-backed
+  human-feedback memory for improving eval-writing patterns.
 
 ## Gotchas
 
 - Do not keep hardcase samples outside the eval system when the expected
   behavior is testable now.
+- Do not treat `check_eval_queries.py` as a complete anti-cheat oracle. It is a
+  cheap smoke check for obvious phrases; use the skill-local eval QA checklist
+  with a separate reviewer, QA lane, or LLM judgment turn for material eval
+  changes.
 - Do not "fix" a failing skill eval by adding the answer to the query. If the
   generic query fails with the owning `SKILL.md` in context, harden the skill,
-  checklist, fixture, or runner context instead.
+  checklist, fixture, reference points, or runner context instead.
 - Do not mark a case as `hardcase` just because it was annoying. It needs
   difficulty, reuse, benchmark, or saleable-data value.
 - Do not store raw private transcripts, secrets, local handles, or unsanitized
@@ -314,8 +240,6 @@ The runner writes the proof surfaces this skill should summarize:
   failure modes unless a stronger replacement explicitly covers them.
 
 ## Output
-
-Return or write:
 
 - `eval_case` or `task_rows`
 - `mode`
