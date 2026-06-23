@@ -25,6 +25,50 @@ These surfaces define the live repo story and should stay mutually coherent:
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
 - [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md)
 
+## Documentation Architecture
+
+Use document shape as a retrieval and ownership decision, not as a place to put
+all related prose.
+
+Create a new durable Markdown file only when the content has at least one
+distinct boundary:
+
+- different audience or reader task
+- different owner or review surface
+- different lifecycle, status, or update cadence
+- different retrieval path, such as an index, registry, skill package, ticket,
+  or archive
+- different documentation type, such as tutorial, how-to, reference, or
+  explanation
+
+Merge content into an existing file when it shares the same audience, owner,
+lifecycle, and retrieval path. Prefer one canonical definition with direct
+links over repeated explanations in several docs.
+
+Split a file when it mixes concerns that age or get used differently:
+
+- current contract plus historical research
+- tutorial/how-to steps plus reference tables
+- conceptual doctrine plus implementation procedure
+- user-facing documentation plus agent/process instructions
+- durable policy plus ticket-local proof, blockers, or closeout notes
+
+Choose density by surface:
+
+- `README.md` and directory indexes: sparse map, current orientation, links
+- `ARCHITECTURE.md`: system model, ownership boundaries, major flows
+- `docs/specs/*`: dense contracts, schemas, state machines, and testable rules
+- `docs/fundamentals/*`: conceptual doctrine and reusable mental models
+- `docs/skills/*`: skill-system policy, inventories, and operating guidance
+- `skills/<name>/SKILL.md`: compact executable workflow contract
+- `skills/<name>/qa_checklist.md`: preflight and final-review guardrails
+- `tickets/*`: task-local plan, blockers, progress, and proof
+- `docs/archive/*`: historical or superseded context, not current truth
+
+If a doc grows because it is accumulating task evidence, archive notes, or
+implementation history, move those details to the ticket, artifact, or archive
+and keep the current contract compact.
+
 ## Structural Checks
 
 Use mechanical validators when the repo needs wording-independent protection.
