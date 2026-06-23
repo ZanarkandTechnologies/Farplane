@@ -4,6 +4,7 @@ description: "Turn short feedback, automation, blocker, or artifact-review updat
 tier: 1
 source: local
 allowed-tools: Bash, Read
+qa_checklist: qa_checklist.md
 ---
 
 # Telegram Message
@@ -11,13 +12,18 @@ allowed-tools: Bash, Read
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
+- [ ] Read `qa_checklist.md` as preflight guardrails before preparing or
+  sending a message.
 - [ ] Confirm the message is for Kenji, not an external customer or public
   channel.
 - [ ] Confirm the message contains no secrets or private credentials.
-- [ ] Use `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` from environment only.
+- [ ] Use `TELEGRAM_CHAT_ID` from environment and `TELEGRAM_BOT_TOKEN` from
+  environment or the configured Keychain fallback only.
 - [ ] Send with `scripts/send_message.py` using `--text`, `--file`, or stdin.
 - [ ] If Telegram is not configured, report the fallback artifact path instead
   of blocking unrelated workflow progress.
+- [ ] Apply `qa_checklist.md` again before sending; for material or automated
+  notifications, use independent review of the message body when feasible.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill when a workflow needs to notify Kenji on Telegram.

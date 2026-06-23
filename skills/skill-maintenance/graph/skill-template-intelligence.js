@@ -420,9 +420,29 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-b8d14f481c20.md",
-      "source_commit": "b8d14f481c20",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-c471fb6dcb4f.md",
+      "source_commit": "c471fb6dcb4f",
       "summary": "working tree current template",
+      "version": "0.3.1"
+    },
+    {
+      "changed_sections": [],
+      "introduced_at": "2026-06-23",
+      "section_count": 9,
+      "sections": [
+        "Context",
+        "Skill Signature",
+        "Phase Contract",
+        "Phase Boundary",
+        "Todo List",
+        "Templates",
+        "Gotchas",
+        "Reference Map",
+        "Output"
+      ],
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-ce733a1d8100.md",
+      "source_commit": "ce733a1d8100",
+      "summary": "Update Farplane project goals and PM harness",
       "version": "0.3.1"
     }
   ],
@@ -1958,7 +1978,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "b8d14f481c20",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -1972,7 +1992,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "b8d14f481c20",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Todo executability",
       "verdict": "pass"
@@ -1986,7 +2006,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "b8d14f481c20",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -2000,7 +2020,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "b8d14f481c20",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Proof contract",
       "verdict": "pass"
@@ -2014,7 +2034,77 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "b8d14f481c20",
+      "source_commit": "c471fb6dcb4f",
+      "template_version": "0.3.1",
+      "title": "Eval / QA sync",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "routing",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "routing_clarity",
+      "expected_signals": [
+        "description uses verb/input/output/call-condition guidance",
+        "trigger catalogs stay out of frontmatter"
+      ],
+      "missing_signals": [],
+      "source_commit": "ce733a1d8100",
+      "template_version": "0.3.1",
+      "title": "Routing clarity",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "todo_executability",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "todo_executability",
+      "expected_signals": [
+        "top-level todos use visible numbered checkbox actions",
+        "policy prose is not treated as a top-level todo"
+      ],
+      "missing_signals": [],
+      "source_commit": "ce733a1d8100",
+      "template_version": "0.3.1",
+      "title": "Todo executability",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "phase_boundary",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "phase_boundary",
+      "expected_signals": [
+        "phase-like skills are externalized only when their artifact is needed",
+        "same-scope recursion is forbidden"
+      ],
+      "missing_signals": [],
+      "source_commit": "ce733a1d8100",
+      "template_version": "0.3.1",
+      "title": "Phase boundary",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "proof_contract",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "proof_contract",
+      "expected_signals": [
+        "the finish gate names proof, blockers, or evidence",
+        "output contract is explicit"
+      ],
+      "missing_signals": [],
+      "source_commit": "ce733a1d8100",
+      "template_version": "0.3.1",
+      "title": "Proof contract",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "eval_qa_sync",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "eval_qa_sync",
+      "expected_signals": [
+        "eval_task.json is a first-class special file",
+        "qa_checklist.md is a repeatable runtime guardrail only when warranted"
+      ],
+      "missing_signals": [],
+      "source_commit": "ce733a1d8100",
       "template_version": "0.3.1",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -2026,10 +2116,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "docs/HISTORY.md"
       ],
       "id": "FEAT-0022",
-      "known_limits": "Depends on skill maintainers keeping Markdown links accurate; Tier 0 is a universal phase protocol rather than a skill tier, plan is a planning prompt-template rather than the phase itself, execute remains a deprecated compatibility wrapper, and concrete coding skills such as spec-to-ticket, impl-plan, goal-advisor, and close-ticket must not be treated as universal generic workflows.",
-      "last_verified": "2026-06-11",
+      "known_limits": "Depends on skill maintainers keeping Markdown links accurate; numeric tiers describe compound upgrade priority while first-load todo links enforce loading boundaries; Tier 0 is a universal phase protocol rather than a skill tier, plan is a planning prompt-template rather than the phase itself, execute remains a deprecated compatibility wrapper, and concrete coding skills such as spec-to-ticket, impl-plan, goal-advisor, and close-ticket must not be treated as universal generic workflows.",
+      "last_verified": "2026-06-23",
       "metrics": [],
-      "name": "Tiered skill dependency loading",
+      "name": "Skill tier leverage classes",
       "status": "implemented",
       "surfaces": [
         "templates/global/AGENTS.md",
@@ -2206,11 +2296,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "evidence_refs": [
-        "skills/skill-maintenance/qa_checklist.md"
+        "skills/skill-maintenance/qa_checklist.md",
+        "skills/skill-maintenance/audits/2026-06-23-qa-checklist-preflight-review.md"
       ],
       "id": "FEAT-0057",
-      "known_limits": "Markdown artifact standard only; no dedicated qacheck runner, renderer, or subagent fanout script exists yet. Agents apply checklists through skill-maintenance, skill-creator, reviewer lanes, and recorded audit/proof notes.",
-      "last_verified": "2026-06-13",
+      "known_limits": "Markdown artifact standard only; no dedicated qacheck runner, renderer, or subagent fanout script exists yet. Agents now read skill-local checklists as preflight guardrails, apply them again at finish, and route independent reviewer lanes for material checklist conformance through skill-maintenance, skill-creator, and recorded audit/proof notes.",
+      "last_verified": "2026-06-23",
       "metrics": [
         "skill_qa_checklist_application_pass"
       ],
@@ -2270,7 +2361,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-06-23T08:25:37+00:00",
+  "generated_at": "2026-06-23T13:42:29+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -2278,6 +2369,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/budget-advisor/SKILL.md",
       "qa_checklist": "",
       "skill_id": "budget-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.0",
+      "tier": 2
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/documentation/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "documentation",
       "skill_ui": "",
       "source": "local",
       "status": "current",
@@ -2314,6 +2417,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/impl-plan/SKILL.md",
       "qa_checklist": "qa_checklist.md",
       "skill_id": "impl-plan",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/knowledge-tidier/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "knowledge-tidier",
       "skill_ui": "",
       "source": "local",
       "status": "current",
@@ -2650,18 +2765,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/diagramming/SKILL.md",
       "qa_checklist": "",
       "skill_id": "diagramming",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 2
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/documentation/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "documentation",
       "skill_ui": "",
       "source": "local",
       "status": "missing",
@@ -3008,7 +3111,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "eval": "",
       "has_checklist": true,
       "path": "skills/telegram-message/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "telegram-message",
       "skill_ui": "",
       "source": "local",
@@ -3104,13 +3207,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "eval": "",
       "has_checklist": true,
       "path": "skills/advise/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "advise",
       "skill_ui": "",
       "source": "local",
       "status": "stale",
       "template_version": "0.1.0",
       "tier": 1
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/automation-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "automation-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
     },
     {
       "eval": "",
@@ -3332,7 +3447,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "eval": "",
       "has_checklist": true,
       "path": "skills/prototyping/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "prototyping",
       "skill_ui": "",
       "source": "local",
@@ -3356,7 +3471,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "eval": "",
       "has_checklist": true,
       "path": "skills/reference-grounding/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "reference-grounding",
       "skill_ui": "",
       "source": "local",
@@ -3427,6 +3542,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "eval": "eval_task.json",
       "has_checklist": true,
+      "path": "skills/steer-update/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "steer-update",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
       "path": "skills/ticket-drainer/SKILL.md",
       "qa_checklist": "",
       "skill_id": "ticket-drainer",
@@ -3488,21 +3615,21 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 98
+      "local": 101
     },
     "by_status": {
-      "current": 5,
+      "current": 7,
       "external": 3,
-      "missing": 61,
-      "stale": 32
+      "missing": 60,
+      "stale": 34
     },
     "by_template_version": {
       "0.1.0": 4,
-      "0.2.0": 28,
-      "0.3.0": 5,
-      "missing": 64
+      "0.2.0": 30,
+      "0.3.0": 7,
+      "missing": 63
     },
-    "total_skills": 101
+    "total_skills": 104
   },
   "schema_version": "1.0.0",
   "source": {
@@ -3709,9 +3836,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "introduced_at": "2026-06-23",
       "latest_at": "2026-06-23",
-      "latest_commit": "b8d14f481c20",
-      "latest_summary": "working tree current template",
-      "release_count": 1,
+      "latest_commit": "ce733a1d8100",
+      "latest_summary": "Update Farplane project goals and PM harness",
+      "release_count": 2,
       "sections": [
         "Context",
         "Skill Signature",
@@ -3723,16 +3850,22 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-b8d14f481c20.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-ce733a1d8100.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-23",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-b8d14f481c20.md",
-          "source_commit": "b8d14f481c20",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-c471fb6dcb4f.md",
+          "source_commit": "c471fb6dcb4f",
           "summary": "working tree current template"
+        },
+        {
+          "introduced_at": "2026-06-23",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-ce733a1d8100.md",
+          "source_commit": "ce733a1d8100",
+          "summary": "Update Farplane project goals and PM harness"
         }
       ],
-      "source_commit": "b8d14f481c20",
+      "source_commit": "c471fb6dcb4f",
       "summary": "working tree current template",
       "template_metadata": {
         "feature_refs": [

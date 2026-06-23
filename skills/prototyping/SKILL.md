@@ -6,6 +6,7 @@ tier: 1
 source: local
 skill_template_version: "0.1.0"
 allowed-tools: Read, Glob, Grep
+qa_checklist: qa_checklist.md
 ---
 
 # Prototyping
@@ -28,20 +29,24 @@ supports it.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. State the scale risk: data volume, users, workflow breadth, architecture,
+- [ ] 1. Read `qa_checklist.md` as preflight guardrails when using this skill
+  for material scale decisions.
+- [ ] 2. State the scale risk: data volume, users, workflow breadth, architecture,
   automation, polish, file count, research breadth, or operational complexity.
-- [ ] 2. Name the hypothesis the prototype must prove or falsify.
-- [ ] 3. Pick the smallest representative slice, usually `1 -> 10 -> 100`.
-- [ ] 4. Include real examples, real edge cases, real users, real files, or real
+- [ ] 3. Name the hypothesis the prototype must prove or falsify.
+- [ ] 4. Pick the smallest representative slice, usually `1 -> 10 -> 100`.
+- [ ] 5. Include real examples, real edge cases, real users, real files, or real
   records where possible.
-- [ ] 5. Prefer the manual or non-scalable path first when it reveals the pattern
+- [ ] 6. Prefer the manual or non-scalable path first when it reveals the pattern
   faster than automation.
-- [ ] 6. Define the evidence that promotes the work to the next scale.
-- [ ] 7. Define the evidence that forces revision, simplification, or stopping.
-- [ ] 8. Label prototype-only shortcuts so they do not masquerade as production
+- [ ] 7. Define the evidence that promotes the work to the next scale.
+- [ ] 8. Define the evidence that forces revision, simplification, or stopping.
+- [ ] 9. Label prototype-only shortcuts so they do not masquerade as production
   readiness.
-- [ ] 9. Return a `Prototype Note` to the active workflow before broadening scope.
-- [ ] 10. Review that the slice is representative before scale.
+- [ ] 10. Return a `Prototype Note` to the active workflow before broadening scope.
+- [ ] 11. Review that the slice is representative before scale.
+  - [ ] Apply `qa_checklist.md` again for material prototype decisions and
+    delegate independent review before broad rollout.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Core Flow

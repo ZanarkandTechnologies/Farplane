@@ -420,8 +420,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-57ea27334cd6.md",
-      "source_commit": "57ea27334cd6",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-c471fb6dcb4f.md",
+      "source_commit": "c471fb6dcb4f",
       "summary": "working tree current template",
       "version": "0.3.1"
     },
@@ -1978,7 +1978,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "57ea27334cd6",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -1992,7 +1992,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "57ea27334cd6",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Todo executability",
       "verdict": "pass"
@@ -2006,7 +2006,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "57ea27334cd6",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -2020,7 +2020,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "57ea27334cd6",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Proof contract",
       "verdict": "pass"
@@ -2034,7 +2034,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "57ea27334cd6",
+      "source_commit": "c471fb6dcb4f",
       "template_version": "0.3.1",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -2361,7 +2361,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-23T12:08:43+00:00",
+  "generated_at": "2026-06-23T13:42:29+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -2417,6 +2417,18 @@
       "path": "skills/impl-plan/SKILL.md",
       "qa_checklist": "qa_checklist.md",
       "skill_id": "impl-plan",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/knowledge-tidier/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "knowledge-tidier",
       "skill_ui": "",
       "source": "local",
       "status": "current",
@@ -3099,7 +3111,7 @@
       "eval": "",
       "has_checklist": true,
       "path": "skills/telegram-message/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "telegram-message",
       "skill_ui": "",
       "source": "local",
@@ -3195,13 +3207,25 @@
       "eval": "",
       "has_checklist": true,
       "path": "skills/advise/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "advise",
       "skill_ui": "",
       "source": "local",
       "status": "stale",
       "template_version": "0.1.0",
       "tier": 1
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/automation-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "automation-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
     },
     {
       "eval": "",
@@ -3423,7 +3447,7 @@
       "eval": "",
       "has_checklist": true,
       "path": "skills/prototyping/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "prototyping",
       "skill_ui": "",
       "source": "local",
@@ -3447,7 +3471,7 @@
       "eval": "",
       "has_checklist": true,
       "path": "skills/reference-grounding/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "reference-grounding",
       "skill_ui": "",
       "source": "local",
@@ -3518,6 +3542,18 @@
     {
       "eval": "eval_task.json",
       "has_checklist": true,
+      "path": "skills/steer-update/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "steer-update",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
       "path": "skills/ticket-drainer/SKILL.md",
       "qa_checklist": "",
       "skill_id": "ticket-drainer",
@@ -3579,21 +3615,21 @@
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 98
+      "local": 101
     },
     "by_status": {
-      "current": 6,
+      "current": 7,
       "external": 3,
       "missing": 60,
-      "stale": 32
+      "stale": 34
     },
     "by_template_version": {
       "0.1.0": 4,
-      "0.2.0": 28,
-      "0.3.0": 6,
+      "0.2.0": 30,
+      "0.3.0": 7,
       "missing": 63
     },
-    "total_skills": 101
+    "total_skills": 104
   },
   "schema_version": "1.0.0",
   "source": {
@@ -3818,8 +3854,8 @@
       "snapshots": [
         {
           "introduced_at": "2026-06-23",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-57ea27334cd6.md",
-          "source_commit": "57ea27334cd6",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.1-c471fb6dcb4f.md",
+          "source_commit": "c471fb6dcb4f",
           "summary": "working tree current template"
         },
         {
@@ -3829,7 +3865,7 @@
           "summary": "Update Farplane project goals and PM harness"
         }
       ],
-      "source_commit": "57ea27334cd6",
+      "source_commit": "c471fb6dcb4f",
       "summary": "working tree current template",
       "template_metadata": {
         "feature_refs": [

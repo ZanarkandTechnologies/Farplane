@@ -6,6 +6,7 @@ tier: 1
 source: local
 skill_template_version: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
+qa_checklist: qa_checklist.md
 ---
 
 # Reference Grounding
@@ -30,11 +31,13 @@ codebase instead of inventing from memory.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. State the one claim, decision, expectation, or comparison that needs
+- [ ] 1. Read `qa_checklist.md` as preflight guardrails when using this skill
+  for material claims or recommendations.
+- [ ] 2. State the one claim, decision, expectation, or comparison that needs
   grounding.
-- [ ] 2. Capture the local baseline from nearby code, tickets, specs, docs, or
+- [ ] 3. Capture the local baseline from nearby code, tickets, specs, docs, or
   provided sources when repo scope matters.
-- [ ] 3. Classify the source need before searching.
+- [ ] 4. Classify the source need before searching.
    - [ ] Local-only evidence is enough only for repo-internal questions, tiny
      same-scope fixes, or user-requested local-only work.
    - [ ] Implementation choices need current official docs or maintained
@@ -43,19 +46,21 @@ codebase instead of inventing from memory.
    - [ ] "Best practice", "state of the art", "latest", peer expectation,
      product behavior, standards, pricing, law, API behavior, or current facts
      need web or official-source evidence; local files alone are insufficient.
-- [ ] 4. Choose the smallest useful source class: local evidence, current
+- [ ] 5. Choose the smallest useful source class: local evidence, current
   official docs, standards, maintained repos, peer products, competitors, web
   sources, or user-provided sources.
-- [ ] 5. Prefer primary sources and real implementations over commentary.
-- [ ] 6. Write a compact grounding note with evidence, confidence, and local
+- [ ] 6. Prefer primary sources and real implementations over commentary.
+- [ ] 7. Write a compact grounding note with evidence, confidence, and local
   impact.
-- [ ] 7. When the caller will answer the user directly, include a visible
+- [ ] 8. When the caller will answer the user directly, include a visible
   `Grounding:` line that names the source class used or why grounding was
   intentionally skipped.
-- [ ] 8. If compact grounding is not enough, route the exact evidence gap to the
+- [ ] 9. If compact grounding is not enough, route the exact evidence gap to the
   caller's next step, usually `research:official-docs`, `research:code-patterns`,
   `research:parity`, `research:gap`, or `research:source-synthesis`.
-- [ ] 9. Review before completion.
+- [ ] 10. Review before completion.
+  - [ ] Apply `qa_checklist.md` again for material claims and delegate
+    independent review when the evidence supports a durable or high-stakes decision.
   - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
