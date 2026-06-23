@@ -13,6 +13,20 @@
     "notes": "Skill-local eval for the core routing distinction."
   },
   {
+    "id": "task-case-design-critical-path",
+    "title": "Design a complete high-signal case batch for a new skill",
+    "query": "I just wrote a skill that helps agents turn messy bug reports into focused debugging plans. I want a small but strong set of task cases for it before I trust it. Please design the cases and tell me which proof surface each one should use.",
+    "reference_points": [
+      "Names the target behavior and main failure risks before listing cases.",
+      "Builds a compact case space or dimensions that explain why the cases are distinct.",
+      "Produces a small selected case batch with realistic inputs, fixture assumptions, oracle or success criteria, failure signals, evidence required, proof surface, and owner-if-fails.",
+      "Includes at least one ordinary success path, one likely failure or regression path, one boundary or ambiguity path, and one anti-cheat or negative-control path.",
+      "Chooses proof surfaces case-by-case instead of routing everything to evals or unit tests."
+    ],
+    "tags": ["skill", "critical-path", "case-design"],
+    "notes": "Critical path: the skill should perform its main job end to end for a realistic new-skill case-design request."
+  },
+  {
     "id": "task-case-design-query-not-spoiled",
     "title": "Generate skill eval cases without leaking the answer",
     "query": "Make a few eval task ideas for a skill that should push back when a requested workflow has unclear ownership. I want the cases to be realistic and not too repetitive.",
@@ -24,5 +38,57 @@
     ],
     "tags": ["skill", "eval-writing", "anti-cheat"],
     "notes": "Covers common eval-authoring failure where expected behavior leaks into the query."
+  },
+  {
+    "id": "task-case-design-source-first",
+    "title": "Mine real failures before synthetic expansion",
+    "query": "We have three recent misses from a planning skill: it made five generic happy-path examples, ignored a user correction about unclear ownership, and never said what evidence would prove a case. Turn this into a useful first batch of cases.",
+    "reference_points": [
+      "Uses the provided misses as primary source material before inventing synthetic cases.",
+      "Maps each selected case to a named failure risk and likely owner if it fails.",
+      "Produces a small first batch instead of an oversized list.",
+      "Includes evidence or oracle criteria for each selected case."
+    ],
+    "tags": ["skill", "real-failure", "case-selection"],
+    "notes": "Tests the source priority rule from the external workflow."
+  },
+  {
+    "id": "task-case-design-dimensions-before-cases",
+    "title": "Build dimensions before writing a large case list",
+    "query": "Give me 30 test ideas for a skill that writes QA plans for messy app changes. I do not have examples yet, just the general behavior.",
+    "reference_points": [
+      "Pushes back on generating a large undifferentiated list before naming dimensions.",
+      "Defines a case space with dimensions such as behavior, caller intent, scenario, fixture state, oracle, and proof surface.",
+      "Selects or proposes a smaller high-signal starter batch.",
+      "Names the missing real source material or logs that would improve the suite."
+    ],
+    "tags": ["skill", "dimensions", "batch-size"],
+    "notes": "Catches the common failure of optimizing for case count."
+  },
+  {
+    "id": "task-case-design-proof-surface-routing",
+    "title": "Route deterministic and variable cases to different proof surfaces",
+    "query": "I need to check a skill package. Some things are structural, like frontmatter and JSON validity. Other things are judgment-heavy, like whether the generated cases are realistic and distinct. Design the proof approach.",
+    "reference_points": [
+      "Routes structural checks to deterministic validators, schema checks, or scripts.",
+      "Routes realism, distinctness, and judgment-heavy behavior to eval, QA checklist, reviewer, or agent QA criteria.",
+      "Explains why one proof surface should not cover all cases.",
+      "Names evidence expected from each proof surface."
+    ],
+    "tags": ["skill", "proof-surface", "validators"],
+    "notes": "Forces the skill to avoid using evals where deterministic tests are better."
+  },
+  {
+    "id": "task-case-design-maintenance-loop",
+    "title": "Add cases without letting the suite rot",
+    "query": "A skill eval suite has six old cases and two new failures from this week. Some old cases overlap and one judge has been flaky. Help me update the cases without just appending more rows.",
+    "reference_points": [
+      "Treats new failures as candidates while checking for overlap with old cases.",
+      "Recommends merging, retiring, or revising noisy duplicate cases instead of only appending.",
+      "Calls out judge flake or unclear oracle as a case-quality problem.",
+      "Leaves a maintenance loop for adding future real failures and recalibrating criteria."
+    ],
+    "tags": ["skill", "maintenance", "eval-suite"],
+    "notes": "Tests the continuous-maintenance rule from eval best practice."
   }
 ]

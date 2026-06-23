@@ -48,8 +48,10 @@ proof:
   - python3 -m json.tool skills/task-case-design/eval_task.json
   - python3 skills/eval/scripts/check_eval_queries.py --root .
   - python3 skills/skill-maintenance/scripts/check_skills.py --write
+  - python3 .farplane/evals/run_evals.py run --harness codex --skill task-case-design --label task-case-design-smoke --limit 1
+  - python3 .farplane/evals/run_evals.py run --harness codex --skill task-case-design --task-id task-case-design-critical-path --label task-case-design-critical-path
 result: pass
-notes: check_skills refreshed generated registry, template registry, and skill-template intelligence artifacts.
+notes: check_skills refreshed generated registry, template registry, and skill-template intelligence artifacts. The real Codex-backed eval smoke wrote `.farplane/evals/runs/20260623-082746-task-case-design-smoke` with pass_rate 1.0 and verdict A for `task-case-design-proof-surface-fit`. The critical-path eval wrote `.farplane/evals/runs/20260623-083155-task-case-design-critical-path` with pass_rate 1.0 and verdict A for `task-case-design-critical-path`.
 ```
 
 ## Checklist Notes
@@ -62,9 +64,9 @@ task_case_qa:
     - skills/task-case-design/references/task-case-rubric.md
     - skills/task-case-design/qa_checklist.md
     - skills/task-case-design/eval_task.json
-  reviewed_cases: 2
+  reviewed_cases: 7
   verdict: pass
-  fixes_applied: kept eval queries natural; put expected behavior in reference_points.
-  deferrals: actual eval harness run not performed in this pass.
-  remaining_risk: behavior proof is seeded but not yet run through a full eval harness trial.
+  fixes_applied: expanded the suite to cover the critical path, source-first case mining, dimension-first generation, proof-surface routing, and maintenance-loop behavior.
+  deferrals: two eval rows were run through the full harness in this pass; the remaining targeted rows still need a full-suite run when compute budget allows.
+  remaining_risk: the expanded rows are linted and registered, but still need a full skill-local eval run when compute budget allows.
 ```
