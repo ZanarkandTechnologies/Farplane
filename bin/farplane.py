@@ -18,6 +18,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+from farplane_adoption import run_scan as run_adoption_scan
+
 
 CORE_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CODEX_HOME = Path.home() / ".codex"
@@ -351,6 +353,19 @@ def build_parser() -> argparse.ArgumentParser:
     delegate.add_argument("extra", nargs=argparse.REMAINDER)
     delegate.set_defaults(func=lambda args: delegate_to_ui(args.delegate_command, args.extra, args.dry_run))
 
+    adoption = sub.add_parser("adoption", help="Inspect Farplane adoption across local project manifests.")
+    adoption_sub = adoption.add_subparsers(dest="adoption_command")
+    adoption_scan = adoption_sub.add_parser("scan", help="Resolve project manifest pins, drift, and local skill presence.")
+    adoption_scan.add_argument("--standard-root", default=str(CORE_ROOT))
+    adoption_scan.add_argument("--project-root", action="append", help="Project root to scan. May be repeated.")
+    adoption_scan.add_argument("--roots-file", help="JSON file containing project roots.")
+    adoption_scan.add_argument("--no-state", action="store_true", help="Do not read ~/.farplane global state project roots.")
+    adoption_scan.add_argument("--include-standard", action="store_true", help="Scan the standard root when no project roots are found.")
+    adoption_scan.add_argument("--feature-registry", help="Feature registry JSONL path.")
+    adoption_scan.add_argument("--template-registry", help="Template registry JSONL path.")
+    adoption_scan.add_argument("--json", action="store_true")
+    adoption_scan.set_defaults(func=run_adoption_scan)
+
     return parser
 
 
@@ -366,6 +381,8 @@ def main(argv: list[str]) -> int:
         parser.error("hooks requires a subcommand: install or doctor")
     if getattr(args, "command", None) == "ui" and getattr(args, "ui_command", None) is None:
         return run_ui_start(argparse.Namespace(extra=[], dry_run=False, json=False))
+    if getattr(args, "command", None) == "adoption" and getattr(args, "adoption_command", None) is None:
+        parser.error("adoption requires a subcommand: scan")
     if not hasattr(args, "func"):
         parser.print_help()
         return 0

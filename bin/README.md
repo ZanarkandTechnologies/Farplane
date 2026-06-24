@@ -66,6 +66,9 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `farplane_invocation.py` - contract helper for `WORKFLOW.md`,
   `FarplaneRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
+- `farplane_adoption.py` - local adoption resolver for project
+  `farplane/manifest.json` pins, optional project `skills/`, feature/template
+  registries, drift, and Office-consumable adoption stats
 - `../skills/ralph/scripts/select_next_ticket.py` - serial Ralph selector that
   consumes `FileTicketAdapter` and `ComputeSelector` so board draining uses the
   same work-item and compute admission policy as invocation prep
@@ -171,6 +174,13 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/farplane_invocation.py prepare --ticket <ticket> --phase planning --proof .farplane/results/<ticket>.proof.json`
   Use to validate a local Farplane invocation envelope and inspect the selected
   skill route without launching Codex
+- `python3 bin/farplane.py adoption scan --project-root . --json`
+  Use to inspect a project's Farplane manifest pins, local skill presence,
+  feature/template adoption, and drift against the global Farplane standard.
+- `python3 bin/farplane.py adoption scan --roots-file ~/.farplane/state/projects.json --json`
+  Use when Farplane Office or global state already knows the local project
+  roots; the CLI reads the same project-root list shape instead of crawling the
+  whole computer.
 - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
   Use to inspect the next serial Ralph handoff plus compute blockers without
   mutating tickets, creating worktrees, or launching Codex
