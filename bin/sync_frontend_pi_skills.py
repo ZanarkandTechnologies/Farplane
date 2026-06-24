@@ -1,49 +1,33 @@
 #!/usr/bin/env python3
+"""Compatibility wrapper for skills/delegate-frontend/scripts/sync_frontend_pi_skills.py."""
+
 from __future__ import annotations
 
-import argparse
-import json
+import importlib.util
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-BIN = ROOT / "bin"
-if str(BIN) not in sys.path:
-    sys.path.insert(0, str(BIN))
 
-import delegate_cli_agent
-
-
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Sync the curated frontend/media skill bundle into the Pi/Kimi profile."
-    )
-    parser.add_argument("--profile", default="frontend-pi-kimi")
-    parser.add_argument("--json", action="store_true")
-    return parser
+SCRIPT = (
+    Path(__file__).resolve().parents[1]
+    / "skills"
+    / "delegate-frontend"
+    / "scripts"
+    / "sync_frontend_pi_skills.py"
+)
 
 
-def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
-    profile = delegate_cli_agent.load_profile(args.profile, ROOT)
-    copied, settings, doctor = delegate_cli_agent.sync_profile_skills(profile, ROOT)
-    payload = {
-        "summary": f"sync {profile.name}: copied {len(copied)} skills",
-        "profile": profile.name,
-        "copied_skills": copied,
-        "settings": str(settings),
-        "skill_bundle": doctor["skill_bundle"],
-        "doctor": doctor,
-    }
-    if args.json:
-        print(json.dumps(payload, indent=2, sort_keys=True))
-    else:
-        print(payload["summary"])
-        print(f"settings: {settings}")
-        for path in copied:
-            print(path)
-    return 0
+def _load_main():
+    if str(SCRIPT.parent) not in sys.path:
+        sys.path.insert(0, str(SCRIPT.parent))
+    spec = importlib.util.spec_from_file_location("farplane_sync_frontend_pi_skills", SCRIPT)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"could not load sync_frontend_pi_skills script from {SCRIPT}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module.main
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(_load_main()())

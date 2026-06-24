@@ -211,6 +211,13 @@ For harness-design research and external patterns:
   `docs/specs/` for concrete system contracts, `bin/validators/` for shared
   repo-wide checks, and top-level `bin/` only for live runtime shims or commands
   intentionally shared across packages.
+- Before adding or moving a top-level `bin/*` file, apply the bin placement
+  gate: keep it in `bin/` only when it is a live installed hook/runtime shim,
+  global Farplane CLI edge, shared cross-skill command, repo-wide validator
+  wrapper, or compatibility wrapper for a moved public command. Put
+  skill-specific implementations and their tests under
+  `skills/<owner>/scripts/`; put repo-wide validators and validator tests under
+  `bin/validators/`; delete generated `__pycache__` rather than preserving it.
 - When moving a command to a clearer owner, leave a small compatibility wrapper
   at the old public path until references, installers, and user habits have had
   a safe migration window.

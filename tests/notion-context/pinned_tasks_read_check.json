@@ -23,7 +23,7 @@
   "user_value_reason": "Pinned task pages are weekly planning memory and must be read before autonomous task selection so stale row-only context does not drive the wrong work.",
   "evidence_refs": [
     "bin/notion_pinned_read_check.py",
-    "bin/test_notion_pinned_read_check.py",
+    "skills/notion-task-field-fill/scripts/test_notion_pinned_read_check.py",
     "/Users/kenjipcx/.codex/skills/notion-context/SKILL.md"
   ]
 }

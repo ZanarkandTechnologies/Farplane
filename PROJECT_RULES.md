@@ -29,6 +29,12 @@ This repo versions the reusable parts of a Codex home directory while keeping ma
 - Keep canonical project config in tracked `farplane/`, not ignored `.farplane/`.
 - Do not enable local git hooks or live automations unless the operator explicitly asks.
 - Prefer relative repo structure plus a small installer over hardcoding machine-specific paths into tracked files.
+- Keep top-level `bin/` narrow: live hook/runtime shims, the global Farplane CLI
+  edge, shared cross-skill commands, repo-wide validator wrappers, and
+  compatibility wrappers only. Skill-specific scripts and tests belong under
+  `skills/<owner>/scripts/`; repo-wide validators and validator tests belong
+  under `bin/validators/`. Do not add source tests or generated `__pycache__`
+  as top-level `bin/` contents.
 
 ## Quick Commands
 
@@ -47,6 +53,12 @@ python3 bin/validators/check_harness_invariants.py
 
 # Validate doc references
 python3 bin/validators/check_doc_refs.py
+
+# Validate focused bin/skill script ownership after moving helpers
+python3 -m unittest skills/delegate-cli/scripts/test_delegate_cli_agent.py
+python3 -m unittest skills/skill-maintenance/scripts/test_install_selected_skills.py
+python3 -m unittest skills/skill-maintenance/scripts/test_import_installed_skills.py
+python3 -m unittest skills/skill-maintenance/scripts/test_sync_skill_plugins.py
 
 # Validate skill metadata and generated registry shape
 python3 skills/skill-maintenance/scripts/check_skills.py --write

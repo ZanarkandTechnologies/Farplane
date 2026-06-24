@@ -351,7 +351,7 @@ flowchart LR
 ## Verification
 
 - `python3 skills/delegate-frontend/self-improve/evals/runner.py`
-- `python3 -m py_compile skills/delegate-frontend/self-improve/evals/assertions.py skills/delegate-frontend/self-improve/evals/runner.py bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py`
+- `python3 -m py_compile skills/delegate-frontend/self-improve/evals/assertions.py skills/delegate-frontend/self-improve/evals/runner.py bin/delegate_cli_agent.py skills/delegate-cli/scripts/test_delegate_cli_agent.py`
 - `python3 -m unittest bin/test_delegate_cli_agent`
 - `python3 skills/skill-creator/scripts/quick_validate.py skills/delegate-frontend`
 - `node --check skills/landing-page/scripts/scroll_scrub_qa.cjs`

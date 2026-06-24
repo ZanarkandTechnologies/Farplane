@@ -15,6 +15,6 @@ Keep this skill explicit, bounded, and project-config driven.
 ## Checks
 
 ```bash
-python3 bin/test_pr_review_watch.py
+python3 -m unittest skills/pr-review-watch/scripts/test_pr_review_watch.py
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```

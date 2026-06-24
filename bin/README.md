@@ -47,28 +47,30 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `self_improve_hook_probe.py` - deterministic probe for the hook-backed
   skill-opportunity sidecar; can seed rolling windows, force dry-run reviews,
   and print the generated input/report paths without waiting for live cadence
-- `delegate_cli_agent.py` - external CLI delegation helper for profile setup,
-  dry-run command rendering, execution logs, and ticket evidence copyback
+- `delegate_cli_agent.py` - compatibility wrapper for the delegate CLI helper
+  owned by `skills/delegate-cli/scripts/delegate_cli_agent.py`
 - `farplane_boards.py` - board adapter contract plus the filesystem
   `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a
   `WorkItem`
 - `farplane_compute.py` - compute admission policy for `local_shared`,
   `local_worktree`, `symphony`, and `codex_cloud`; it emits blockers and setup
   hints but never launches compute
-- `install_selected_skills.py` - dependency-free selected-skill installer for
-  listing, searching, dry-running, and symlinking only chosen skills into a
-  Codex home without rendering full harness config
-- `import_installed_skills.py` - selected-skill importer for pulling useful
-  packages from an installed Codex skills directory into repo-owned
-  `skills/*` source
-- `sync_skill_plugins.py` - deterministic generator for on-demand Codex plugin
-  packages and a local or personal marketplace from `skills/*`
+- `install_selected_skills.py` - compatibility wrapper for the selected-skill
+  installer owned by `skills/skill-maintenance/scripts/install_selected_skills.py`
+- `import_installed_skills.py` - compatibility wrapper for the installed-skill
+  importer owned by `skills/skill-maintenance/scripts/import_installed_skills.py`
+- `sync_skill_plugins.py` - compatibility wrapper for the plugin package
+  generator owned by `skills/skill-maintenance/scripts/sync_skill_plugins.py`
+- `pr_review_watch.py` - compatibility wrapper for the PR review watcher owned
+  by `skills/pr-review-watch/scripts/pr_review_watch.py`
 - `farplane_invocation.py` - contract helper for `WORKFLOW.md`,
   `FarplaneRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
 - `farplane_adoption.py` - local adoption resolver for project
   `farplane/manifest.json` pins, optional project `skills/`, feature/template
   registries, drift, and Office-consumable adoption stats
+- `farplane_recent_activity.py` - compatibility wrapper for the Board Drain
+  recent-activity helper owned by `skills/board-drain/scripts/farplane_recent_activity.py`
 - `../skills/ralph/scripts/select_next_ticket.py` - serial Ralph selector that
   consumes `FileTicketAdapter` and `ComputeSelector` so board draining uses the
   same work-item and compute admission policy as invocation prep
@@ -159,6 +161,8 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/sync_skill_plugins.py --install-local --plugins farplane-core`
   Use to expose selected Farplane plugin bundles through your personal Codex
   marketplace under `~/.agents/plugins`.
+- `python3 bin/pr_review_watch.py classify --repo <repo> --pr <number> --json`
+  Compatibility command for the `pr-review-watch` skill-owned classifier.
 - `python3 bin/validators/check_doc_refs.py`
   Use after moving docs or updating local references; the top-level
   `bin/check_doc_refs.py` path remains as a compatibility wrapper.
@@ -254,7 +258,8 @@ a mechanical block/continue gate for the active session.
 - `python3 bin/validators/check_doc_refs.py`
 - `python3 -m unittest bin/validators/test_harness_invariants.py`
 - `python3 -m unittest bin/validators/test_doc_parity.py`
-- `python3 -m unittest bin/test_delegate_cli_agent.py`
+- `python3 -m unittest skills/delegate-cli/scripts/test_delegate_cli_agent.py`
+- `python3 -m unittest skills/pr-review-watch/scripts/test_pr_review_watch.py`
 - `python3 -m unittest bin/test_ticket_metadata.py`
 - `python3 -m unittest bin/test_ticket_runtime.py`
 - `python3 -m py_compile bin/stop_hook.py`
@@ -265,7 +270,7 @@ a mechanical block/continue gate for the active session.
 - `python3 -m py_compile bin/validators/check_doc_parity.py bin/validators/test_doc_parity.py`
 - `python3 -m py_compile bin/validators/check_doc_refs.py bin/validators/test_check_doc_refs.py`
 - `python3 -m unittest bin/validators/test_check_template_version_metadata.py`
-- `python3 -m py_compile bin/delegate_cli_agent.py bin/test_delegate_cli_agent.py`
+- `python3 -m py_compile bin/delegate_cli_agent.py skills/delegate-cli/scripts/delegate_cli_agent.py`
 - `python3 -m py_compile skills/ralph/scripts/select_next_ticket.py`
 - `python3 skills/ralph/scripts/test_select_next_ticket.py`
 - `python3 -m unittest discover -s bin -p 'test_*.py'`

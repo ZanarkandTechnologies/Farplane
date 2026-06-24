@@ -9,6 +9,21 @@ Top-level `bin/` is for runtime shims and intentionally shared commands.
 Repo-wide checks belong in `bin/validators/`; package-specific scripts belong
 under the owning package, such as `skills/<name>/scripts/`.
 
+## Placement Gate
+
+Before adding a top-level `bin/*` file, classify it:
+
+- keep in `bin/` only for live installed hook/runtime shims, the global
+  Farplane CLI edge, shared cross-skill commands, repo-wide validator wrappers,
+  or compatibility wrappers for moved public commands
+- move skill-specific implementations and their tests to
+  `skills/<owner>/scripts/`
+- move repo-wide validators and validator tests to `bin/validators/`
+- delete generated caches such as `__pycache__`
+
+When in doubt, add the implementation to the owning package and leave a tiny
+`bin/` wrapper only if an existing public command path must keep working.
+
 ## Keep Scripts
 
 - explicit

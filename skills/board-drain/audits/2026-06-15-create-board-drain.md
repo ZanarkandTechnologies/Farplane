@@ -52,7 +52,7 @@ a read source through `notion-context` when available.
 
 ## Proof Artifacts
 
-- `python3 bin/test_farplane_recent_activity.py`
+- `python3 -m unittest skills/board-drain/scripts/test_farplane_recent_activity.py`
 - `python3 bin/farplane_recent_activity.py --project-root . --window-minutes 60 --json`
 - `python3 skills/skill-maintenance/scripts/check_skills.py --write`
 - `python3 bin/validators/sync_skill_registry.py --check`

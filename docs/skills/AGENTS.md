@@ -26,7 +26,8 @@ Rules:
 - Installed skill packages are rendered artifacts: source `SKILL.md` direct
   first-load todo lists stay visible in installed `SKILL.md`. Skill-local
   `todos.md` sidecars are unsupported and must not be copied, embedded, or used
-  as registry input. Update `bin/test_install_selected_skills.py` when changing
+  as registry input. Update
+  `skills/skill-maintenance/scripts/test_install_selected_skills.py` when changing
   this contract.
 - Use `skills/skill-maintenance/` for bulk skill tier/source/todo/registry
   upkeep instead of expanding global prompt rules.

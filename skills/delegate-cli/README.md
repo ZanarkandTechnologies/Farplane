@@ -14,6 +14,6 @@ python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket ticket
 ## How To Test
 
 ```bash
-python3 -m unittest bin.test_delegate_cli_agent
+python3 -m unittest skills/delegate-cli/scripts/test_delegate_cli_agent.py
 python3 skills/skill-creator/scripts/quick_validate.py skills/delegate-cli
 ```

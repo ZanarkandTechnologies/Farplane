@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
-"""Tests for bin/pr_review_watch.py."""
+"""Tests for skills/pr-review-watch/scripts/pr_review_watch.py."""
 
 from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
 
 from pr_review_watch import (
     PipelineConfigError,
@@ -18,7 +23,7 @@ from pr_review_watch import (
 )
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[3]
 FIXTURES = ROOT / "skills" / "pr-review-watch" / "fixtures"
 HELPER = ROOT / "bin" / "pr_review_watch.py"
 

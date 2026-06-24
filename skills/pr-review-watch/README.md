@@ -22,5 +22,5 @@ python3 bin/pr_review_watch.py classify \
 ## Test
 
 ```bash
-python3 bin/test_pr_review_watch.py
+python3 -m unittest skills/pr-review-watch/scripts/test_pr_review_watch.py
 ```
