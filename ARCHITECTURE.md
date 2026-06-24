@@ -13,18 +13,27 @@ whole-system diagram changes.
 
 ## Purpose
 
-Farplane is Farplane Core: the harness repo for running long-form engineering
-work through visible artifacts instead of hidden runtime state or transcript
-memory alone.
+Farplane is the cloneable harness substrate for running long-form AI work
+through visible artifacts instead of hidden runtime state or transcript memory
+alone. Operators clone Farplane to own their standards, skills, evals,
+templates, tickets, automations, runtime adapters, goals, guardrails, review
+loops, and self-improvement machinery.
 
-Farplane Core now sits inside the Farplane OS product family:
+Farplane Core pairs with Farplane UI:
 
 | Surface | Path | Owns |
 | --- | --- | --- |
-| Farplane Core | `Farplane/` | Harness contracts, skills, hooks, evals, tickets, review, proof, and repo memory |
-| Farplane Console | `../Farplane-Console/` | Operational dashboard, activity telemetry, nudges, eval views, and Mighty Guard health workflows |
-| Farplane UI | `../Farplane-UI/` | Optional immersive office/game experience and skill-object interactions |
-| Farplane Office | alias only | The office/game mode inside Farplane UI, not a repo rename |
+| Farplane Core | `Farplane/` | Harness contracts, framework files, skills, hooks, evals, templates, tickets, review, proof, graph/projection payloads, and repo memory |
+| Farplane UI | `../Farplane-UI/` | Operator cockpit, global harness modules, project/company views, visual office entrypoints, state bridge, and settings |
+| Runtime adapters | external / optional | Codex by default for local project/thread visibility; OpenClaw when persistent gateway/agent customization is needed |
+
+The UI scope split is part of the architecture contract:
+
+- **Global harness surfaces** inspect and maintain Farplane itself: Harness
+  Map, Skill OS, Eval OS, Rollout, Template Tracking, User Comms, and Settings.
+- **Project/company surfaces** treat each project as an autonomous company with
+  goals, teams, agents, board state, files, memory, evidence, metrics, and
+  review loops.
 
 The repo is organized around five concerns:
 

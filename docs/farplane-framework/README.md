@@ -8,6 +8,7 @@ framework_template_version: "0.2.0"
 source_of_truth:
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/graph-contract.md
+  - docs/farplane-framework/harness-maintenance.md
   - docs/farplane-framework/hooks-and-runtime.md
   - farplane/README.md
   - farplane/manifest.json
@@ -25,13 +26,21 @@ source_of_truth:
 
 # Farplane Framework
 
-Farplane's project framework is the standard shape for an agent-run project:
-tracked config, visible tickets, durable docs, reusable skills, proof surfaces,
+Farplane's project framework is the local structure that lets every cloned
+harness carry the same minimum operating standard: tracked config, visible
+tickets, durable docs, reusable skills, proof surfaces, versioned templates,
 and recurring Codex automation loops.
 
 ```text
 project = files + tickets + skills + goals + bindings + Pulse/Interval + runtime reports
 ```
+
+This framework is the bridge between the two main product surfaces:
+
+- **Farplane Core** defines and validates the project shape.
+- **Farplane UI** reads the generated payloads and manifests so operators can
+  view global harness state and project/company state without each panel
+  re-inventing framework semantics.
 
 ## Start Here
 
@@ -42,6 +51,16 @@ Goal execution, Pulse/Interval automations, hooks, drains, and memory compressio
 Use [Graph Contract](graph-contract.md) when the lifecycle needs to be consumed
 by tools or the Farplane UI. It defines the node, edge, confidence, and finite
 state projection model used by the generated lifecycle graph.
+
+Use [Harness Maintenance Features](harness-maintenance.md) when you need to
+remember which maintenance systems exist: feature and template registries,
+skill OS checks, template rollout, project adoption, graph projections, evals,
+doc tracking, and CLI/UI payloads.
+
+Use the Farplane UI product model in
+[`../Farplane-UI/docs/specs/FP02-harness-product-model.md`](../../../Farplane-UI/docs/specs/FP02-harness-product-model.md)
+when deciding whether a surface belongs in a global harness entrypoint or a
+project/company panel.
 
 Use [Hooks and Runtime](hooks-and-runtime.md) when you need the concrete hook
 and runtime-state boundaries. Hooks observe and gate; skills and tickets own

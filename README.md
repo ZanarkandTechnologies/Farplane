@@ -1,16 +1,27 @@
 # Farplane
 
-![Farplane OS hero banner](./assets/farplane-hero.png)
+![Farplane hero banner](./assets/farplane-hero.png)
 
-Farplane is Farplane Core: the drift-resistant, evolve-first harness behind
-Farplane OS.
+Farplane is the cloneable AI harness substrate.
 
-Farplane OS gives Codex and adjacent agent runtimes a visible operating system:
-structured skills, reviewable workflow artifacts, hooks, evals, benchmarks,
-durable repo memory, operational dashboards, and optional immersive UI
-surfaces. The ticket-first autonomous coding loop is one important feature, but
-Farplane Core is broader than tickets: it is a way to keep an AI harness
-learning without letting it silently sprawl, forget, or self-approve weak work.
+Clone this repo when you want to build and maintain your own operating harness
+for AI work: standards, skills, evals, templates, tickets, automations, runtime
+adapters, goals, guardrails, graph projections, review loops, and
+self-improvement machinery. Farplane Core is the durable substrate; Farplane UI
+is the cockpit that makes the substrate visible and steerable.
+
+The product has two operating scopes:
+
+- **Global harness scope**: inspect and maintain the harness itself, including
+  skills, evals, templates, rollout, graph/lifecycle maps, runtime settings,
+  and user communication surfaces.
+- **Project/company scope**: treat each project as an autonomous company with
+  goals, teams, agents, board state, files, memory, evidence, metrics, and
+  review loops.
+
+Farplane is broader than tickets. The ticket-first autonomous coding loop is
+one important feature, but the larger purpose is to keep an AI harness learning
+without letting it silently sprawl, forget, or self-approve weak work.
 
 ## Five Developer-Facing Differences
 
@@ -31,34 +42,38 @@ their repo into a haze of prompts, chat memory, and unverifiable claims.
 4. **Skills that improve like software.** Farplane skills carry checklists,
    references, examples, evals, registries, validators, and maintenance scripts,
    so repeated workflows get better without bloating the global prompt.
-5. **Harness health as a product surface.** Farplane Console and Mighty Guard
-   turn weak skills, stale docs, failing evals, drift, telemetry, nudges, and
-   maintenance findings into visible operator workflows.
+5. **Harness health as a product surface.** Harness Map, Skill OS, Eval OS,
+   Rollout, Template Tracking, and Mighty Guard-style checks turn weak skills,
+   stale docs, failing evals, drift, telemetry, nudges, and maintenance
+   findings into visible operator workflows.
 
 ## Product Shape
 
-Farplane OS is the parent product family. This repo is Farplane Core: skills,
-hooks, evals, review, memory, runtime state, and Done / Proof contracts. Farplane
-Console is the practical dashboard for harness health and optimization.
-Farplane UI keeps its current name as the optional immersive office/game
-surface; Farplane Office is only an alias for that mode.
+Farplane has a simple source-of-truth split:
+
+- **Farplane Core** is this repo. It owns harness contracts, project framework
+  files, skills, evals, templates, tickets, review gates, proof contracts,
+  graph/projection payloads, repo memory, and install/runtime policy.
+- **Farplane UI** is the sibling cockpit repo. It owns the browser-facing
+  global harness modules and project/company views that make the harness useful
+  day to day.
+- **Runtime adapters** such as Codex and OpenClaw stay adapters. They run or
+  expose agent work; Farplane gives that work a visible harness.
 
 Farplane Core also owns the global `farplane` CLI. App-specific commands stay
 with their owning module repos, but install, hooks, doctor checks, UI linking,
 UI start, and local delegation all route through this Core-owned command.
 
-Current sibling shape:
+Current repo shape:
 
 | Surface | Path | Owns |
 | --- | --- | --- |
 | Farplane Core | `Farplane/` | Harness contracts, skills, hooks, evals, tickets, review, proof, and repo memory |
-| Farplane Console | `Farplane-Console/` | Operational dashboard, activity telemetry, nudges, eval views, and Mighty Guard health workflows |
-| Farplane UI | `Farplane-UI/` | Optional immersive office/game experience and skill-object interactions |
-| Farplane Office | alias only | The office/game mode inside Farplane UI, not a repo rename |
+| Farplane UI | `Farplane-UI/` | Operator cockpit, global harness entrypoints, project/company surfaces, visual office, state bridge, and settings |
+| Runtime adapters | external / optional | Codex by default for local project/thread visibility; OpenClaw where persistent gateway/agent customization is needed |
 
-Other app ideas are absorbed as Console modules, Core contracts, UI surfaces,
-skill UIs, or archived experiments instead of staying as separate centers of
-gravity.
+Other app ideas should graduate into Core contracts, UI modules, skill-owned
+viewers, or archived experiments instead of becoming new centers of gravity.
 
 ```mermaid
 flowchart LR
@@ -67,36 +82,33 @@ flowchart LR
   classDef module fill:#e5e7eb,stroke:#4b5563,color:#111827
   classDef adapter fill:#f5f3ff,stroke:#8b5cf6,color:#111827,stroke-dasharray:5 3
 
-  os["Farplane OS<br/>product family"]:::shell --> engine["Farplane Core<br/>harness engine"]:::engine
-  os --> console["Farplane Console<br/>dashboard + Mighty Guard"]:::module
-  os --> ui["Farplane UI<br/>optional office/game mode"]:::module
+  os["Farplane<br/>cloneable harness"]:::shell --> engine["Farplane Core<br/>harness substrate"]:::engine
+  os --> ui["Farplane UI<br/>operator cockpit"]:::module
   engine --> skills["skills + skill UI bindings"]:::module
   engine --> evals["evals + proof viewer"]:::module
   engine --> health["health / learning inbox<br/>Mighty Guard contracts"]:::module
   engine --> nudges["nudges / attention loops"]:::module
   engine --> map["harness map<br/>skills + docs + backlinks"]:::module
   engine --> state[".farplane/<br/>project runtime state"]:::module
-  ui --> scene["office scene<br/>skill-object panels"]:::module
-  console --> health
-  console --> nudges
+  ui --> global["global harness modules<br/>map, skills, evals, rollout,<br/>templates, comms, settings"]:::module
+  ui --> project["project/company views<br/>goals, teams, board,<br/>memory, evidence, metrics"]:::module
+  ui --> scene["office scene<br/>project entrypoints"]:::module
+  ui --> nudges
   engine -. runtime adapter .-> openclaw["OpenClaw"]:::adapter
 ```
 
 The product rule is:
 
-- **One product family:** Farplane OS owns the parent story while Core,
-  Console, and UI keep clean surface boundaries.
+- **One cloneable harness:** Farplane owns the parent story while Core and UI
+  keep clean source-of-truth boundaries.
 - **Core owns proof:** Farplane Core owns harness semantics, skills, hooks,
   evals, tickets, review, memory, runtime state, and Done / Proof contracts.
-- **Console owns operations:** Farplane Console owns the practical dashboard,
-  activity telemetry, nudges, and Mighty Guard harness-health workflows.
-- **UI stays optional:** Farplane UI owns the immersive office/game mode and
-  skill-object interactions. Farplane Office is a mode alias, not a rename.
+- **UI owns operation:** Farplane UI owns the cockpit: global harness modules,
+  project/company views, visual office entrypoints, and operator settings.
 - **Skill-owned UI incubation:** a skill may ship a small viewer, panel, or URL
   binding before the workflow is productized.
-- **Roll-up when proven:** useful skill UIs graduate into Console modules or
-  Farplane UI surfaces while keeping a skill binding back to the owning
-  workflow.
+- **Roll-up when proven:** useful skill UIs graduate into Farplane UI modules
+  while keeping a skill binding back to the owning workflow.
 - **Adapters stay adapters:** OpenClaw, Telegram paths, external CLIs, and
   future runtimes connect to the engine without becoming the product core.
 - **State is Farplane-native:** project-local product/runtime state lives under
@@ -253,6 +265,8 @@ What Core owns:
 - `farplane hooks install`: refreshes the hook install through Core.
 - `farplane hooks doctor`: verifies the Core-owned hook links and rendered
   telemetry config.
+- `farplane skills rollout scan --json`: emits a read-only skill rollout
+  projection for Farplane UI and local status checks.
 - `farplane ui link /path/to/Farplane-UI`: stores the UI checkout in
   `~/.farplane/farplane-cli.json`.
 - `farplane ui start`: starts the linked UI checkout.
