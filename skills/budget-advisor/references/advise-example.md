@@ -3,6 +3,13 @@
 This toy example shows how `budget-advisor` resolves budget params for
 `advise`.
 
+Important boundary: `advise` stays the simple base skill. It takes a decision,
+compares exactly three viable options when three exist, recommends one, names
+the accepted tradeoff, and names the next step. Budget fields, persona prompts,
+review depth, ensemble lanes, and tournament aggregation belong to
+`budget-advisor` and the caller's resolved Budget Program, not to
+`advise/SKILL.md`.
+
 Base `advise` output contract:
 
 ```text

@@ -1,36 +1,36 @@
 window.FARPLANE_LIFECYCLE_GRAPH = {
   "counts": {
     "edge_confidence": {
-      "curated": 32,
+      "curated": 36,
       "explicit": 6,
-      "parsed": 133
+      "parsed": 150
     },
     "edge_types": {
       "consumes": 2,
       "contains": 2,
-      "reads": 44,
-      "routes_to": 76,
+      "reads": 46,
+      "routes_to": 95,
       "triggers": 15,
       "updates": 3,
       "writes": 29
     },
-    "edges": 171,
-    "fsa_projections": 4,
+    "edges": 192,
+    "fsa_projections": 5,
     "node_kinds": {
       "automation": 3,
       "command": 3,
       "doc": 11,
-      "file": 16,
+      "file": 17,
       "hook": 2,
       "report": 2,
       "route": 5,
       "runtime": 1,
-      "skill": 33,
+      "skill": 38,
       "state": 10,
       "ticket": 4
     },
-    "nodes": 90,
-    "parsed_skills": 14
+    "nodes": 96,
+    "parsed_skills": 16
   },
   "edges": [
     {
@@ -146,6 +146,20 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "confidence": "curated",
       "evidence_ref": "docs/specs/steer-pulse-automation.md",
       "source": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "target": "skill:horizon-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/lifecycle.md",
+      "source": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "target": "skill:leverage-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "source": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
       "target": "skill:pulse-update",
       "type": "consumes"
     },
@@ -209,6 +223,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "skill:automation-advisor",
       "target": "file:farplane/pm.json",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "skills/automation-advisor/qa_checklist.md?",
+      "source": "skill:automation-advisor",
+      "target": "file:skills/automation-advisor/qa_checklist.md",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -526,6 +548,69 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "skill:goal-advisor",
       "target": "ticket:tickets/TASK-*/ticket.md",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "direct-answer",
+      "source": "skill:harness-advisor",
+      "target": "route:direct-answer",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "eval",
+      "source": "skill:harness-advisor",
+      "target": "skill:eval",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "gap-analysis",
+      "source": "skill:harness-advisor",
+      "target": "skill:gap-analysis",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/lifecycle.md",
+      "source": "skill:harness-advisor",
+      "target": "skill:goal-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "impl-plan",
+      "source": "skill:harness-advisor",
+      "target": "skill:impl-plan",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "self-improve",
+      "source": "skill:harness-advisor",
+      "target": "skill:self-improve",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "skill-maintenance",
+      "source": "skill:harness-advisor",
+      "target": "skill:skill-maintenance",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "spec-to-ticket",
+      "source": "skill:harness-advisor",
+      "target": "skill:spec-to-ticket",
+      "type": "routes_to"
     },
     {
       "confidence": "parsed",
@@ -955,6 +1040,85 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "skill:learning-drain",
       "target": "state:.farplane/state/learning-drain/processed.jsonl",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "advise",
+      "source": "skill:leverage-advisor",
+      "target": "skill:advise",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "autoresearch-plan",
+      "source": "skill:leverage-advisor",
+      "target": "skill:autoresearch-plan",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "goal-advisor",
+      "source": "skill:leverage-advisor",
+      "target": "skill:goal-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/lifecycle.md",
+      "source": "skill:leverage-advisor",
+      "target": "skill:harness-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "harness-advisor",
+      "source": "skill:leverage-advisor",
+      "target": "skill:harness-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "impl-plan",
+      "source": "skill:leverage-advisor",
+      "target": "skill:impl-plan",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "leverage-rollout",
+      "source": "skill:leverage-advisor",
+      "target": "skill:leverage-rollout",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "prototyping",
+      "source": "skill:leverage-advisor",
+      "target": "skill:prototyping",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "reference-grounding",
+      "source": "skill:leverage-advisor",
+      "target": "skill:reference-grounding",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "tickets",
+      "source": "skill:leverage-advisor",
+      "target": "ticket:tickets/TASK-*/ticket.md",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -1443,11 +1607,9 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "states": [
         "fsa:automation_activation:automation-prompts-reviewed",
         "fsa:automation_activation:pulse-thread-created",
-        "fsa:automation_activation:daily-interval-thread-created",
-        "fsa:automation_activation:weekly-interval-thread-created",
-        "fsa:automation_activation:pulse-automation-attached",
-        "fsa:automation_activation:daily-interval-automation-attached",
-        "fsa:automation_activation:weekly-interval-automation-attached",
+        "fsa:automation_activation:pulse-heartbeat-attached",
+        "fsa:automation_activation:daily-interval-cron-created",
+        "fsa:automation_activation:weekly-interval-cron-created",
         "fsa:automation_activation:pm-json-grouped"
       ],
       "terminal": [
@@ -1465,48 +1627,32 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "pulse thread created -> daily interval thread created",
+          "label": "pulse thread created -> pulse heartbeat attached",
           "source": "fsa:automation_activation:pulse-thread-created",
-          "target": "fsa:automation_activation:daily-interval-thread-created",
+          "target": "fsa:automation_activation:pulse-heartbeat-attached",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "daily interval thread created -> weekly interval thread created",
-          "source": "fsa:automation_activation:daily-interval-thread-created",
-          "target": "fsa:automation_activation:weekly-interval-thread-created",
+          "label": "pulse heartbeat attached -> daily interval cron created",
+          "source": "fsa:automation_activation:pulse-heartbeat-attached",
+          "target": "fsa:automation_activation:daily-interval-cron-created",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "weekly interval thread created -> pulse automation attached",
-          "source": "fsa:automation_activation:weekly-interval-thread-created",
-          "target": "fsa:automation_activation:pulse-automation-attached",
+          "label": "daily interval cron created -> weekly interval cron created",
+          "source": "fsa:automation_activation:daily-interval-cron-created",
+          "target": "fsa:automation_activation:weekly-interval-cron-created",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "pulse automation attached -> daily interval automation attached",
-          "source": "fsa:automation_activation:pulse-automation-attached",
-          "target": "fsa:automation_activation:daily-interval-automation-attached",
-          "type": "transition"
-        },
-        {
-          "confidence": "curated",
-          "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "daily interval automation attached -> weekly interval automation attached",
-          "source": "fsa:automation_activation:daily-interval-automation-attached",
-          "target": "fsa:automation_activation:weekly-interval-automation-attached",
-          "type": "transition"
-        },
-        {
-          "confidence": "curated",
-          "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "weekly interval automation attached -> pm json grouped",
-          "source": "fsa:automation_activation:weekly-interval-automation-attached",
+          "label": "weekly interval cron created -> pm json grouped",
+          "source": "fsa:automation_activation:weekly-interval-cron-created",
           "target": "fsa:automation_activation:pm-json-grouped",
           "type": "transition"
         }
@@ -1672,9 +1818,94 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
           "type": "transition"
         }
       ]
+    },
+    {
+      "id": "self_update_loop",
+      "label": "Weekly self-update loop",
+      "start": "fsa:self_update_loop:weekly-report-written",
+      "states": [
+        "fsa:self_update_loop:weekly-report-written",
+        "fsa:self_update_loop:goals-delta-classified",
+        "fsa:self_update_loop:leverage-bets-scored",
+        "fsa:self_update_loop:operator-approval-or-source-gap-recorded",
+        "fsa:self_update_loop:horizon-delta-applied",
+        "fsa:self_update_loop:goal-advisor-handoff-compiled",
+        "fsa:self_update_loop:pulse-executes-bounded-work",
+        "fsa:self_update_loop:reward-signal-recorded",
+        "fsa:self_update_loop:next-weekly-review-reads-outcomes"
+      ],
+      "terminal": [
+        "fsa:self_update_loop:next-weekly-review-reads-outcomes"
+      ],
+      "transitions": [
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "weekly report written -> goals delta classified",
+          "source": "fsa:self_update_loop:weekly-report-written",
+          "target": "fsa:self_update_loop:goals-delta-classified",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "goals delta classified -> leverage bets scored",
+          "source": "fsa:self_update_loop:goals-delta-classified",
+          "target": "fsa:self_update_loop:leverage-bets-scored",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "leverage bets scored -> operator approval or source gap recorded",
+          "source": "fsa:self_update_loop:leverage-bets-scored",
+          "target": "fsa:self_update_loop:operator-approval-or-source-gap-recorded",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "operator approval or source gap recorded -> horizon delta applied when approved",
+          "source": "fsa:self_update_loop:operator-approval-or-source-gap-recorded",
+          "target": "fsa:self_update_loop:horizon-delta-applied",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "horizon delta applied when approved -> goal advisor handoff compiled",
+          "source": "fsa:self_update_loop:horizon-delta-applied",
+          "target": "fsa:self_update_loop:goal-advisor-handoff-compiled",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "goal advisor handoff compiled -> pulse executes bounded work",
+          "source": "fsa:self_update_loop:goal-advisor-handoff-compiled",
+          "target": "fsa:self_update_loop:pulse-executes-bounded-work",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "pulse executes bounded work -> reward signal recorded",
+          "source": "fsa:self_update_loop:pulse-executes-bounded-work",
+          "target": "fsa:self_update_loop:reward-signal-recorded",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "reward signal recorded -> next weekly review reads outcomes",
+          "source": "fsa:self_update_loop:reward-signal-recorded",
+          "target": "fsa:self_update_loop:next-weekly-review-reads-outcomes",
+          "type": "transition"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-06-24T03:11:49+00:00",
+  "generated_at": "2026-06-24T08:58:54+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",
@@ -1982,6 +2213,15 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
+      "id": "file:skills/automation-advisor/qa_checklist.md",
+      "kind": "file",
+      "label": "skills/automation-advisor/qa_checklist.md",
+      "path": "skills/automation-advisor/qa_checklist.md",
+      "tags": [
+        "parsed"
+      ]
+    },
+    {
       "id": "file:skills/automation-advisor/templates/*",
       "kind": "file",
       "label": "skills/automation-advisor/templates/*",
@@ -2147,6 +2387,16 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
+      "id": "skill:autoresearch-plan",
+      "kind": "skill",
+      "label": "autoresearch-plan",
+      "path": "skills/autoresearch-plan/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
       "id": "skill:deep-init-project",
       "kind": "skill",
       "label": "deep-init-project",
@@ -2257,6 +2507,11 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "id": "skill:harness-advisor",
       "kind": "skill",
       "label": "harness-advisor",
+      "metadata": {
+        "description": "Turn a Farplane improvement idea into a recommended owner surface across policy, templates, skills, agents, hooks, tickets, docs, or validators.",
+        "source": "local",
+        "tier": 2
+      },
       "path": "skills/harness-advisor/SKILL.md",
       "tags": [
         "route-target",
@@ -2342,6 +2597,30 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
+      "id": "skill:leverage-advisor",
+      "kind": "skill",
+      "label": "leverage-advisor",
+      "metadata": {
+        "description": "Turn an existing feature or capability into ranked leverage plays, a rollout roadmap, and the next executable proof step.",
+        "source": "local",
+        "tier": 2
+      },
+      "path": "skills/leverage-advisor/SKILL.md",
+      "tags": [
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:leverage-rollout",
+      "kind": "skill",
+      "label": "leverage-rollout",
+      "path": "skills/leverage-rollout/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
       "id": "skill:optimize-harness",
       "kind": "skill",
       "label": "optimize-harness",
@@ -2366,6 +2645,16 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "kind": "skill",
       "label": "prd",
       "path": "skills/prd/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:prototyping",
+      "kind": "skill",
+      "label": "prototyping",
+      "path": "skills/prototyping/SKILL.md",
       "tags": [
         "route-target",
         "skill"
@@ -2399,6 +2688,16 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "path": "skills/qa/SKILL.md",
       "tags": [
         "coding",
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:reference-grounding",
+      "kind": "skill",
+      "label": "reference-grounding",
+      "path": "skills/reference-grounding/SKILL.md",
+      "tags": [
         "route-target",
         "skill"
       ]
@@ -2659,7 +2958,9 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "deep-init-project",
       "horizon-advisor",
       "goal-advisor",
+      "harness-advisor",
       "impl-plan",
+      "leverage-advisor",
       "pulse-update",
       "interval-update",
       "automation-advisor",

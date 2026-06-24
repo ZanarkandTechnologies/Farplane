@@ -1,19 +1,19 @@
 window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
-      "common-chain": 20,
-      "markdown-ref": 293
+      "common-chain": 19,
+      "markdown-ref": 297
     },
-    "edges": 313,
-    "nodes": 97,
+    "edges": 316,
+    "nodes": 96,
     "sources": {
       "external": 3,
-      "local": 94
+      "local": 93
     },
     "tiers": {
       "1": 4,
       "2": 36,
-      "3": 57
+      "3": 56
     }
   },
   "edges": [
@@ -22,6 +22,13 @@ window.SKILL_GRAPH = {
       "source": "advise",
       "target": "best-of-worlds",
       "target_ref": "best-of-worlds",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "advise",
+      "target": "budget-advisor",
+      "target_ref": "budget-advisor",
       "type": "markdown-ref"
     },
     {
@@ -183,20 +190,6 @@ window.SKILL_GRAPH = {
       "source": "best-of-worlds",
       "target": "review",
       "target_ref": "review",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "common_chains.after",
-      "source": "board-drain",
-      "target": "goal-advisor",
-      "target_ref": "goal-advisor",
-      "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "board-drain",
-      "target": "goal-advisor",
-      "target_ref": "goal-advisor",
       "type": "markdown-ref"
     },
     {
@@ -636,13 +629,6 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "feed-scout",
-      "target": "advise",
-      "target_ref": "advise",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "feed-scout",
       "target": "apify",
       "target_ref": "apify",
       "type": "markdown-ref"
@@ -664,15 +650,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "feed-scout",
-      "target": "impl-plan",
-      "target_ref": "impl-plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "feed-scout",
-      "target": "review",
-      "target_ref": "review",
+      "target": "skill-creator",
+      "target_ref": "skill-creator",
       "type": "markdown-ref"
     },
     {
@@ -1448,8 +1427,36 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "optimize-harness",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
       "target": "harness-advisor",
       "target_ref": "harness-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "horizon-advisor",
+      "target_ref": "horizon-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "impl-plan",
+      "target_ref": "impl-plan",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "leverage-advisor",
+      "target_ref": "leverage-advisor",
       "type": "markdown-ref"
     },
     {
@@ -1464,6 +1471,13 @@ window.SKILL_GRAPH = {
       "source": "optimize-harness",
       "target": "self-improve",
       "target_ref": "self-improve",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "skill-creator",
+      "target_ref": "skill-creator",
       "type": "markdown-ref"
     },
     {
@@ -1828,6 +1842,13 @@ window.SKILL_GRAPH = {
       "source": "research",
       "target": "review",
       "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "runtime-debugging",
+      "target": "budget-advisor",
+      "target_ref": "budget-advisor",
       "type": "markdown-ref"
     },
     {
@@ -2209,7 +2230,7 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-24T03:11:18+00:00",
+  "generated_at": "2026-06-24T13:52:45+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -2851,20 +2872,6 @@ window.SKILL_GRAPH = {
       "tier": 3
     },
     {
-      "description": "Turn idle project time and local/Notion task boards into a selected Goal Advisor handoff, clarification request, or strategy-planning fallback.",
-      "eval": "",
-      "group": "harness",
-      "has_checklist": true,
-      "id": "board-drain",
-      "label": "board-drain",
-      "methods": [],
-      "path": "skills/board-drain/SKILL.md",
-      "qa_checklist": "",
-      "skill_ui": "",
-      "source": "local",
-      "tier": 3
-    },
-    {
       "description": "Turn a completed ticket into durable closeout, docs writeback, final checks, commit prep, and optional publish steps.",
       "eval": "",
       "group": "coding",
@@ -3023,7 +3030,7 @@ window.SKILL_GRAPH = {
     },
     {
       "description": "Turn curated feeds into deduped source items, harness-scout runs, pattern synthesis, and proposal tickets or inbox entries.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "harness",
       "has_checklist": true,
       "id": "feed-scout",
@@ -3452,14 +3459,14 @@ window.SKILL_GRAPH = {
     },
     {
       "description": "Turn a reusable workflow or capability idea into a Farplane skill package with frontmatter, todo path, references, and proof surfaces.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "skills",
       "has_checklist": true,
       "id": "skill-creator",
       "label": "skill-creator",
       "methods": [],
       "path": "skills/skill-creator/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 3

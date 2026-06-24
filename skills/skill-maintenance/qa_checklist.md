@@ -246,6 +246,17 @@ they are needed on every invocation:
      may keep specific context only when that specificity is the skill's stated
      purpose.
 
+23. `low_value_prose_scan`
+   - Question: Does each first-load sentence change execution, routing,
+     proof, safety, ownership, or maintenance decisions?
+   - Violation: A sentence is generic aspiration, reassurance, rationale,
+     duplicated workflow prose, or a quality adjective with no concrete
+     behavioral consequence.
+   - Evidence: Use
+     `skills/skill-maintenance/references/low-value-prose-scan.md` when
+     compacting, refining, or reviewing a bloated skill, then classify
+     candidates as `keep | rewrite | move | delete`.
+
 ## Finish Gate
 
 For material `SKILL.md` changes, record this in the audit or final proof notes:
@@ -266,6 +277,7 @@ first_load_review:
   qa_finish_independence:
   qa_gotcha_deduplication:
   project_specific_context_isolation:
+  low_value_prose_scan:
   verdict: pass | fail | unknown
 ```
 

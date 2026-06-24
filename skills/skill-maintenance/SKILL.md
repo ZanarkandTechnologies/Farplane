@@ -4,6 +4,7 @@ description: "Turn skill behavior deltas, lesson hardening, or skill compaction 
 tier: 3
 group: skills
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"
@@ -78,8 +79,8 @@ state:
 modes:
   harden_skill | refine_skill |
   structure_update | metadata_update | qa_checklist_design |
-  eval_to_qa_sync | audit | bulk_rollout | registry_validation |
-  installed_copy_import
+  eval_to_qa_sync | low_value_prose_scan | audit | bulk_rollout |
+  registry_validation | installed_copy_import
 
 gates:
   behavior_delta_named; owner_surface_clear; source_owner_preserved;
@@ -135,7 +136,8 @@ or a Goal/autoresearch loop.
   - [ ] `current_behavior := observed or file-backed current behavior`.
   - [ ] `mode := harden_skill | refine_skill | structure_update |
     metadata_update | qa_checklist_design | eval_to_qa_sync | audit |
-    bulk_rollout | registry_validation | installed_copy_import`.
+    low_value_prose_scan | bulk_rollout | registry_validation |
+    installed_copy_import`.
   - [ ] `evidence := user request + target files + ticket/council/eval/review artifacts`.
 - [ ] 2. Read the minimum authoritative context.
   - [ ] Always read `edited_skill/SKILL.md`, `docs/skills/registry.jsonl`, and
@@ -153,6 +155,8 @@ or a Goal/autoresearch loop.
   - [ ] If `mode == refine_skill`, read target `SKILL.md`, references,
     `eval_task.json`, `qa_checklist.md`, skill-local audits, and recent usage
     or eval results.
+  - [ ] If `mode == low_value_prose_scan` or first-load prose feels bloated,
+    read [low-value-prose-scan](references/low-value-prose-scan.md).
   - [ ] If `mode == installed_copy_import`, preview the import path with
     `python3 scripts/import_installed_skills.py --skills <name> --dry-run`
     from this skill package before any overwrite.
@@ -192,6 +196,9 @@ or a Goal/autoresearch loop.
   - [ ] Move or delete rationale, history, philosophy, tutorial prose, duplicated
     workflow explanation, and template inventories unless they satisfy the
     `qa_checklist.md` First-Load Required Set.
+  - [ ] For low-value prose scans, use
+    [low-value-prose-scan](references/low-value-prose-scan.md) and classify
+    each candidate sentence as `keep | rewrite | move | delete` before editing.
   - [ ] Convert long intake question lists into function signatures, parameter
     lists, or schemas when normal agent behavior can ask for missing params.
   - [ ] Compare top-level sections against the current skill template; fold,
@@ -333,6 +340,9 @@ Return TAS verdicts, blockers, and smallest required fixes.
 - [qa_checklist.md](qa_checklist.md) - first-class skill-local QA checklist for
   material skill structure changes, first-load size, progressive disclosure,
   reference routing, or compaction-risk review.
+- [low-value-prose-scan](references/low-value-prose-scan.md) - sentence-level
+  candidate scan for rationale, generic quality claims, duplicated workflow
+  prose, and other non-operational first-load text.
 - [docs/skills/templates/SKILL_TEMPLATE.md](../../docs/skills/templates/SKILL_TEMPLATE.md)
   - current baseline skill template.
 - [../eval/SKILL.md](../eval/SKILL.md) - create or consolidate runnable
@@ -355,6 +365,9 @@ Return TAS verdicts, blockers, and smallest required fixes.
   regression cases, improvement tickets, and processed-state notes.
 - Refinement outputs when `mode == refine_skill`: consolidated evals/gotchas,
   shortened skill text, moved reference detail, and review notes.
+- Low-value prose outputs when `mode == low_value_prose_scan`: candidate
+  sentences plus `keep | rewrite | move | delete` decisions and resulting
+  owner-local edits when requested.
 - Regenerated `docs/skills/registry.jsonl` when metadata or skill shape changes.
 - Skill-local audit record for material changes, or explicit audit skip reason.
 - Validation output from `python3 scripts/check_skills.py --write` plus any

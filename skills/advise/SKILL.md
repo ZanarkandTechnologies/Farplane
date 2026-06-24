@@ -25,26 +25,20 @@ Use when the user needs judgment, not a neutral menu.
 
 - [ ] 1. Read `qa_checklist.md` as preflight guardrails when using this skill
   for material advice.
-- [ ] 2. State the real decision in one sentence.
-- [ ] 3. Start from first principles before comparing options: objective,
-  user/system need, root cause, constraints, assumptions, proof/falsification,
-  tradeoffs, and non-goals.
-- [ ] 4. Name the evaluation criteria that matter for this user, repo, or ticket.
-- [ ] 5. Require supplied evidence when the recommendation depends on current
-  facts, official behavior, peer norms, local baseline, or implementation
-  examples.
-- [ ] 6. Surface an evidence gap instead of launching a higher-tier research pass
-  from this Tier 1 primitive.
-- [ ] 7. Compare exactly 3 viable options with concrete pros and cons.
-- [ ] 8. Recommend one option clearly and name the tradeoff being accepted.
-- [ ] 9. State whether the recommendation is fully grounded or needs a
-  higher-tier source synthesis step.
-- [ ] 10. State the direct next step or owning next skill.
-- [ ] 11. Review before completion.
-  - [ ] Apply `qa_checklist.md` again for material advice and delegate
-    independent review when the recommendation is high-stakes or durable.
+- [ ] 2. State the real decision and the criteria that matter.
+- [ ] 3. Check evidence needs; use supplied/local grounding when needed, or name
+  the evidence gap instead of doing higher-tier research inside this skill.
+- [ ] 4. Compare exactly 3 viable options with concrete pros and cons when three
+  realistic options exist.
+- [ ] 5. Recommend one option clearly, name the accepted tradeoff, and state the
+  direct next step or owning next skill.
+- [ ] 6. Finish-check the advice.
+  - [ ] No neutral menu, fake third option, hidden evidence gap, or vague
+    "if you want" ending.
+  - [ ] For high-stakes, expensive, or durable decisions, route to
+    `deliberative-advice` or an independent review pass.
   - [ ] For changes to this skill, require a separate review pass before claiming
-  the update is ready.
+    the update is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -66,7 +60,8 @@ Use this shape when a visible decision note is useful:
 - Do not use this for direct execution requests with no meaningful choice.
 - Do not invent fake options.
 - Do not dump a full first-principles essay by default; use the basis to choose
-  better options and explain the recommendation compactly.
+  options that match the decision criteria and explain the recommendation
+  compactly.
 - Do not end with "if you want I can ..."
 - Evidence gate: if the recommended option depends on facts not already in
   context, use `reference-grounding` or state the evidence gap before choosing.

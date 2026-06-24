@@ -32,8 +32,28 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-26a972ea014b.md",
-      "source_commit": "26a972ea014b",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
+      "source_commit": "91bb9ac6f871",
+      "summary": "chore(skills): upgrade skill creator workflows",
+      "version": "0.3.2"
+    },
+    {
+      "changed_sections": [],
+      "introduced_at": "2026-06-24",
+      "section_count": 9,
+      "sections": [
+        "Context",
+        "Skill Signature",
+        "Phase Contract",
+        "Phase Boundary",
+        "Todo List",
+        "Templates",
+        "Gotchas",
+        "Reference Map",
+        "Output"
+      ],
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
+      "source_commit": "91bb9ac6f871",
       "summary": "working tree current template",
       "version": "0.3.2"
     }
@@ -95,7 +115,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "26a972ea014b",
+      "source_commit": "91bb9ac6f871",
       "template_version": "0.3.2",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -109,7 +129,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "26a972ea014b",
+      "source_commit": "91bb9ac6f871",
       "template_version": "0.3.2",
       "title": "Todo executability",
       "verdict": "pass"
@@ -123,7 +143,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "26a972ea014b",
+      "source_commit": "91bb9ac6f871",
       "template_version": "0.3.2",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -137,7 +157,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "26a972ea014b",
+      "source_commit": "91bb9ac6f871",
       "template_version": "0.3.2",
       "title": "Proof contract",
       "verdict": "pass"
@@ -151,7 +171,77 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "26a972ea014b",
+      "source_commit": "91bb9ac6f871",
+      "template_version": "0.3.2",
+      "title": "Eval / QA sync",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "routing",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "routing_clarity",
+      "expected_signals": [
+        "description uses verb/input/output/call-condition guidance",
+        "trigger catalogs stay out of frontmatter"
+      ],
+      "missing_signals": [],
+      "source_commit": "91bb9ac6f871",
+      "template_version": "0.3.2",
+      "title": "Routing clarity",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "todo_executability",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "todo_executability",
+      "expected_signals": [
+        "top-level todos use visible numbered checkbox actions",
+        "policy prose is not treated as a top-level todo"
+      ],
+      "missing_signals": [],
+      "source_commit": "91bb9ac6f871",
+      "template_version": "0.3.2",
+      "title": "Todo executability",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "phase_boundary",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "phase_boundary",
+      "expected_signals": [
+        "phase-like skills are externalized only when their artifact is needed",
+        "same-scope recursion is forbidden"
+      ],
+      "missing_signals": [],
+      "source_commit": "91bb9ac6f871",
+      "template_version": "0.3.2",
+      "title": "Phase boundary",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "proof_contract",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "proof_contract",
+      "expected_signals": [
+        "the finish gate names proof, blockers, or evidence",
+        "output contract is explicit"
+      ],
+      "missing_signals": [],
+      "source_commit": "91bb9ac6f871",
+      "template_version": "0.3.2",
+      "title": "Proof contract",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "eval_qa_sync",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "eval_qa_sync",
+      "expected_signals": [
+        "eval_task.json is a first-class special file",
+        "qa_checklist.md is a repeatable runtime guardrail only when warranted"
+      ],
+      "missing_signals": [],
+      "source_commit": "91bb9ac6f871",
       "template_version": "0.3.2",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -408,7 +498,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-24T08:36:40+00:00",
+  "generated_at": "2026-06-24T14:06:10+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -421,6 +511,18 @@
       "status": "current",
       "template_version": "0.3.2",
       "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/runtime-debugging/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "runtime-debugging",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.2",
+      "tier": 2
     },
     {
       "eval": "eval_task.json",
@@ -1025,18 +1127,6 @@
     {
       "eval": "",
       "has_checklist": true,
-      "path": "skills/runtime-debugging/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "runtime-debugging",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 2
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
       "path": "skills/skill-registry-ui/SKILL.md",
       "qa_checklist": "",
       "skill_id": "skill-registry-ui",
@@ -1196,18 +1286,6 @@
       "path": "skills/automation-advisor/SKILL.md",
       "qa_checklist": "",
       "skill_id": "automation-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/board-drain/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "board-drain",
       "skill_ui": "",
       "source": "local",
       "status": "stale",
@@ -1467,6 +1545,18 @@
       "tier": 2
     },
     {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/proof-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "proof-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.0",
+      "tier": 2
+    },
+    {
       "eval": "",
       "has_checklist": true,
       "path": "skills/prototyping/SKILL.md",
@@ -1539,18 +1629,6 @@
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/task-case-design/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "task-case-design",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.3.0",
-      "tier": 2
-    },
-    {
       "eval": "",
       "has_checklist": true,
       "path": "skills/update-memory/SKILL.md",
@@ -1578,22 +1656,22 @@
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 94
+      "local": 93
     },
     "by_status": {
-      "current": 2,
+      "current": 3,
       "external": 3,
-      "missing": 59,
-      "stale": 33
+      "missing": 58,
+      "stale": 32
     },
     "by_template_version": {
       "0.1.0": 4,
-      "0.2.0": 22,
+      "0.2.0": 21,
       "0.3.0": 7,
-      "0.3.2": 2,
-      "missing": 62
+      "0.3.2": 3,
+      "missing": 61
     },
-    "total_skills": 97
+    "total_skills": 96
   },
   "schema_version": "1.0.0",
   "source": {
@@ -1717,19 +1795,6 @@
         "skill": false
       },
       "template_uses": {}
-    },
-    {
-      "consumer_id": "board-drain",
-      "consumer_scope": "skill",
-      "path": "skills/board-drain/SKILL.md",
-      "surfaces": {
-        "eval": false,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-template": "0.2.0"
-      }
     },
     {
       "consumer_id": "brainstorm",
@@ -2388,6 +2453,21 @@
       "template_uses": {}
     },
     {
+      "consumer_id": "proof-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/proof-advisor/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
+        "skill-qa-checklist": "0.1.0",
+        "skill-template": "0.3.0"
+      }
+    },
+    {
       "consumer_id": "prototyping",
       "consumer_scope": "skill",
       "path": "skills/prototyping/SKILL.md",
@@ -2515,9 +2595,11 @@
       "surfaces": {
         "eval": false,
         "qa_checklist": false,
-        "skill": false
+        "skill": true
       },
-      "template_uses": {}
+      "template_uses": {
+        "skill-template": "0.3.2"
+      }
     },
     {
       "consumer_id": "self-improve",
@@ -2605,21 +2687,6 @@
         "skill": false
       },
       "template_uses": {}
-    },
-    {
-      "consumer_id": "task-case-design",
-      "consumer_scope": "skill",
-      "path": "skills/task-case-design/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": true,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-qa-checklist": "0.1.0",
-        "skill-template": "0.3.0"
-      }
     },
     {
       "consumer_id": "telegram-message",
@@ -2955,6 +3022,19 @@
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "proof-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/proof-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
+    },
+    {
       "consumer_id": "pulse-update",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -2988,19 +3068,6 @@
         "FEAT-0054"
       ],
       "path": "skills/skill-maintenance/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
-      "consumer_id": "task-case-design",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/task-case-design/SKILL.md",
       "status": "current",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -3176,6 +3243,19 @@
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "proof-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0057"
+      ],
+      "path": "skills/proof-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.0"
+    },
+    {
       "consumer_id": "prototyping",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3222,19 +3302,6 @@
         "FEAT-0057"
       ],
       "path": "skills/skill-maintenance/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with a qa_checklist.md surface",
-      "template_id": "skill-qa-checklist",
-      "used_version": "0.1.0"
-    },
-    {
-      "consumer_id": "task-case-design",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0057"
-      ],
-      "path": "skills/task-case-design/SKILL.md",
       "status": "current",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -3310,6 +3377,23 @@
       "used_version": "0.3.2"
     },
     {
+      "consumer_id": "runtime-debugging",
+      "consumer_scope": "skill",
+      "current_version": "0.3.2",
+      "feature_refs": [
+        "FEAT-0048",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0058",
+        "FEAT-0059"
+      ],
+      "path": "skills/runtime-debugging/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.2"
+    },
+    {
       "consumer_id": "skill-creator",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -3355,23 +3439,6 @@
         "FEAT-0059"
       ],
       "path": "skills/automation-advisor/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
-    },
-    {
-      "consumer_id": "board-drain",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/board-drain/SKILL.md",
       "status": "stale",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
@@ -3735,6 +3802,23 @@
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "proof-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.2",
+      "feature_refs": [
+        "FEAT-0048",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0058",
+        "FEAT-0059"
+      ],
+      "path": "skills/proof-advisor/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.0"
+    },
+    {
       "consumer_id": "prototyping",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -3837,23 +3921,6 @@
       "used_version": "0.2.0"
     },
     {
-      "consumer_id": "task-case-design",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/task-case-design/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.0"
-    },
-    {
       "consumer_id": "update-memory",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -3939,8 +4006,8 @@
         "skill": 35
       },
       "by_status": {
-        "current": 2,
-        "stale": 33
+        "current": 3,
+        "stale": 32
       },
       "current_version": "0.3.2",
       "feature_refs": [
@@ -3958,9 +4025,9 @@
     {
       "introduced_at": "2026-06-24",
       "latest_at": "2026-06-24",
-      "latest_commit": "26a972ea014b",
+      "latest_commit": "91bb9ac6f871",
       "latest_summary": "working tree current template",
-      "release_count": 1,
+      "release_count": 2,
       "sections": [
         "Context",
         "Skill Signature",
@@ -3972,17 +4039,23 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-26a972ea014b.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-24",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-26a972ea014b.md",
-          "source_commit": "26a972ea014b",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
+          "source_commit": "91bb9ac6f871",
+          "summary": "chore(skills): upgrade skill creator workflows"
+        },
+        {
+          "introduced_at": "2026-06-24",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
+          "source_commit": "91bb9ac6f871",
           "summary": "working tree current template"
         }
       ],
-      "source_commit": "26a972ea014b",
-      "summary": "working tree current template",
+      "source_commit": "91bb9ac6f871",
+      "summary": "chore(skills): upgrade skill creator workflows",
       "template_metadata": {
         "feature_refs": [
           "FEAT-0048",
