@@ -1,49 +1,50 @@
 [
   {
     "id": "interval_daily_report_before_plan",
-    "title": "Daily interval writes report before planning",
-    "query": "A Daily Interval automation calls interval-update for last_24h -> next_24h. What should it load, write, and avoid?",
+    "title": "Configured short interval writes report before planning",
+    "query": "A project automation calls interval-update for a short review window and next-window plan, with context_refs asking for the latest report from a longer planning interval. What should it load, write, and avoid?",
     "reference_points": [
-      "Loads default goals, tickets, memory, Pulse reports, interval reports, and PM thread refs without the automation restating them",
-      "Uses the latest weekly_interval report as parent context when present",
-      "Writes a date-stamped .farplane/reports/interval/daily_interval/<timestamp>.md report before durable goals or ticket mutation",
-      "Plans only the next 24 hours",
+      "Loads default goals, tickets, memory, Pulse reports, interval reports, and PM thread refs",
+      "Resolves the configured latest longer-interval report as parent context when present and labels it as a source gap when missing",
+      "Writes a date-stamped .farplane/reports/interval/<interval_id>/<timestamp>.md report before durable goals or ticket mutation",
+      "Plans only the configured planning_window",
       "Does not select due jobs, update scheduler state, or perform broad strategy replanning"
     ],
-    "tags": ["interval-update", "daily-interval", "reports"]
+    "tags": ["interval-update", "configured-interval", "reports"]
   },
   {
-    "id": "interval_weekly_goals_delta_gates",
-    "title": "Weekly interval gates material goals deltas",
-    "query": "The Weekly Interval review wants to change the north star and next-week priorities after reading daily reports. What gates apply?",
+    "id": "interval_configured_goals_delta_gates",
+    "title": "Configured interval gates material goals deltas",
+    "query": "An interval review wants to change the north star after reading configured interval_output_refs from another interval inside the review window. What gates apply?",
     "reference_points": [
-      "Loads farplane/goals.md plus daily_interval reports inside the review window",
+      "Loads farplane/goals.md plus the configured interval_output_refs inside the review window",
       "Labels missing or stale evidence as source gaps",
       "Writes the interval report before mutating farplane/goals.md",
       "Requires approval for north-star, KPI, strategy-axis, quarterly, yearly, or durable milestone changes",
       "Routes executable changes into tickets or Goal Advisor handoffs"
     ],
-    "tags": ["interval-update", "weekly-interval", "goals-delta"]
+    "tags": ["interval-update", "goals-delta", "configured-context"]
   },
   {
-    "id": "interval_extensions_do_not_duplicate_defaults",
-    "title": "Interval extensions stay additive",
-    "query": "A project automation calls interval-update with project_root, interval_id, windows, and one extra customer-doc ref. What should the automation include, and what should the skill resolve itself?",
+    "id": "interval_context_refs_do_not_duplicate_defaults",
+    "title": "Interval context refs stay additive",
+    "query": "A project automation calls interval-update with project_root, interval_id, windows, one extra customer-doc ref, and codex_attention_drift enabled. What should the automation include, and what should the skill resolve itself?",
     "reference_points": [
-      "Automation passes project_root, interval_id, review_window, planning_window, and additive extensions only",
+      "Automation passes project_root, interval_id, review_window, planning_window, additive context_refs, and report_workflows only",
       "interval-update resolves default goals, tickets, memory, Pulse reports, interval reports, PM manifest, and report roots",
-      "Extensions may add context refs, phase instructions, lanes, or policy details",
+      "context_refs may add parent context, interval outputs, extra refs, or true replacements",
+      "report_workflows controls optional workflows such as codex_attention_drift instead of the skill assuming daily or weekly behavior",
       "The automation should not restate every default Farplane path or gate",
       "Project-specific profiles stay in automation prompts or project docs, not generic skill first-load refs"
     ],
-    "tags": ["interval-update", "extensions", "defaults"]
+    "tags": ["interval-update", "context-refs", "defaults"]
   },
   {
     "id": "interval_reports_are_dated_not_latest",
     "title": "Interval reports are date-stamped",
-    "query": "A weekly_interval run succeeds. Where should the report go and how should consumers find the newest one?",
+    "query": "A configured interval run succeeds. Where should the report go and how should consumers find the newest one?",
     "reference_points": [
-      "Writes a date-stamped report under .farplane/reports/interval/weekly_interval/",
+      "Writes a date-stamped report under .farplane/reports/interval/<interval_id>/",
       "Does not use latest.md as the canonical report",
       "Consumers find the newest report by timestamp sorting or explicit links in subsequent reports",
       "No tracked config or scheduler state is mutated just to store last_report"

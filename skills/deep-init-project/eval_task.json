@@ -46,8 +46,9 @@
     "reference_points": [
       "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough",
       "Audits docs/bootstrap-brief.md and farplane/goals.md for missing North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
-      "In full mode, asks the first missing project-goals question, starting with what the project should reliably do over the next 3 months",
-      "Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies a farplane/goals.md delta only after operator intent is known",
+            "In full mode, asks the first missing project-goals question, starting with what the project should reliably do over the next 3 months",
+            "Keeps farplane/goals.md as Markdown with a fenced goal-program block for parseable goals, value function, axes, projects, and milestones",
+            "Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies a farplane/goals.md delta only after operator intent is known",
       "Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet"
     ],
     "tags": ["deep-init-project", "full-mode", "project-goals", "readiness-gate"]

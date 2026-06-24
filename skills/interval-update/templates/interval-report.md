@@ -2,7 +2,8 @@
 kind: interval-report
 project: <project>
 automation_id: <automation_id>
-report_profile: <daily_interval | weekly_interval | custom>
+interval_id: <interval_id>
+report_workflows: <enabled workflow list>
 status: draft
 created_at: <timestamp>
 review_window: <start>..<end>
@@ -34,6 +35,69 @@ context_bundle: <path>
 
 | Axis / KPI / feedback surface | State | Trend | Confidence | Gap |
 | --- | --- | --- | --- | --- |
+
+## Report Workflows
+
+Run only workflows enabled by the automation config. For disabled workflows,
+write `not_configured`; for source-dependent workflows with no source, write
+`not_applicable` plus the source gap.
+
+| Workflow | Verdict | Evidence | Next planning implication |
+| --- | --- | --- | --- |
+| Plan progress |  |  |  |
+| Codex attention drift |  |  |  |
+| Ticket / board drift |  |  |  |
+| Relationship / feedback obligations |  |  |  |
+| Opportunity signals |  |  |  |
+| Goal drift |  |  |  |
+| Metric snapshot |  |  |  |
+| Compounding leverage review |  |  |  |
+| Priority planning |  |  |  |
+
+## Self-Update / Leverage Review
+
+Use this section only when `compounding_leverage_review` is enabled. It is the
+state store for leverage decisions; do not create a separate leverage backlog
+unless a ticketed migration proves one is needed.
+
+### Self-Evolution Signals
+
+Summarize signals as evidence, not as a blind aggregate score. If a signal is
+not measured yet, write `source_gap` and route the missing proof surface.
+
+| Signal | Direction | Evidence | Confidence | Planning implication |
+| --- | --- | --- | --- | --- |
+| Accepted output / accepted agent-hours |  |  |  |  |
+| Human intervention minutes |  |  |  |  |
+| Proof closure rate |  |  |  |  |
+| False completion / self-approval incidents |  |  |  |  |
+| Context isolation failures |  |  |  |  |
+| Source gaps |  |  |  |  |
+| Skill backpropagation events |  |  |  |  |
+
+| Lever | Surface | Loss term | Evidence | Score | Bet | Reward signal | Route |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+Score format:
+`compound=<1-5>; proof_speed=<1-5>; reuse=<1-5>; operator_effort=<1-5>; friction=<1-5>; risk=<1-5>`.
+
+Decision states:
+
+- `selected`: one of the 1-3 bets for the next planning window.
+- `rejected`: evidence says the lever should not be pursued now.
+- `deferred`: plausible but not worth displacing the selected bets.
+- `expired`: old candidate with no fresh evidence.
+- `escalated`: high-confidence urgent signal routed before the next interval.
+
+## Reward Closure
+
+Use this section when prior interval reports selected leverage bets or reward
+signals. Close the loop before selecting new bets.
+
+| Previous bet | Expected reward | Observed result | Evidence | Decision |
+| --- | --- | --- | --- | --- |
+
+Decisions: `accept`, `continue`, `kill`, `resize`, `source_gap`.
 
 ## Strategy Decisions
 

@@ -36,7 +36,7 @@ build_graph_projection(repo_root, projection_profile)
 The generated graph surfaces are sibling projections over a shared GraphIR:
 
 - `skill-registry`: skill registry nodes, Markdown references, common chains,
-  and rendered skill docs.
+  workflow chains, and rendered skill docs.
 - `harness-reference`: local file/doc references for cleanup and navigation.
 - `farplane-lifecycle-core`: compact semantic lifecycle graph for UI and agent
   context.
@@ -95,6 +95,11 @@ The first generator version intentionally parses a small, stable surface:
 
 - `SKILL.md` front matter for `name`, `description`, `tier`, `group`, and
   `source`.
+- `workflow: true` skill front matter plus the skill's `## Todo List` for
+  ordered workflow-chain edges. The parser scans only the Todo List and records
+  first-seen explicit skill references in order: Markdown `SKILL.md` links,
+  backticked `skill-name` refs, or `$skill-name` refs. It does not read plain
+  prose or Reference Map prose as execution order.
 - `## Skill Signature` blocks for `state: reads(...)`, `writes(...)`,
   `gates:`, and `routes:`.
 - `hooks.json` for Codex hook events and command hook targets.
@@ -146,6 +151,9 @@ Required projections:
   Packet, native Goal, QA/demo/review proof, and closeout.
 - `memory_drain_upkeep`: reports/troubles/lessons to update-memory,
   learning-drain, skill-maintenance, evals, and compressed durable context.
+- `self_update_loop`: Weekly Interval report to goals-delta decision,
+  leverage/harness placement, Goal Advisor handoff, Pulse execution, reward
+  signal, and next weekly review.
 
 The FSA is a projection over the graph, not a claim that Farplane has one
 central state machine. A project can be initialized while another ticket is in

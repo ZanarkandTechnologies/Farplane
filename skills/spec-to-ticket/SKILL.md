@@ -5,6 +5,7 @@ description: "Turn one SLC spec slice into filesystem tickets with compact summa
 tier: 3
 group: coding
 source: local
+workflow: true
 common_chains:
   after: ["impl-plan"]
 ---

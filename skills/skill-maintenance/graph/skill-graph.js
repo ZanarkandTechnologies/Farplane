@@ -2,9 +2,10 @@ window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
       "common-chain": 19,
-      "markdown-ref": 297
+      "markdown-ref": 297,
+      "workflow-chain": 101
     },
-    "edges": 316,
+    "edges": 417,
     "nodes": 96,
     "sources": {
       "external": 3,
@@ -22,13 +23,6 @@ window.SKILL_GRAPH = {
       "source": "advise",
       "target": "best-of-worlds",
       "target_ref": "best-of-worlds",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "advise",
-      "target": "budget-advisor",
-      "target_ref": "budget-advisor",
       "type": "markdown-ref"
     },
     {
@@ -74,6 +68,33 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "agent-qa-test",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "agent-qa-test",
+      "target": "agent-behavior-test",
+      "target_ref": "agent-behavior-test",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "agent-qa-test",
+      "target": "qa",
+      "target_ref": "qa",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "agent-qa-test",
       "target": "reference-grounding",
@@ -81,11 +102,38 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "agent-qa-test",
+      "target": "reference-grounding",
+      "target_ref": "reference-grounding",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "agent-qa-test",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "agent-qa-test",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "agent-qa-test",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -107,6 +155,24 @@ window.SKILL_GRAPH = {
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "automation-advisor",
+      "target": "interval-update",
+      "target_ref": "interval-update",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "automation-advisor",
+      "target": "pulse-update",
+      "target_ref": "pulse-update",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -319,6 +385,33 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "deep-init-project",
+      "target": "automation-advisor",
+      "target_ref": "automation-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "deep-init-project",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "deep-init-project",
+      "target": "horizon-advisor",
+      "target_ref": "horizon-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "research#researchcode-patterns",
       "source": "deep-init-project",
       "target": "research",
@@ -331,6 +424,15 @@ window.SKILL_GRAPH = {
       "target": "research",
       "target_ref": "research#researchofficial-docs",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "deep-init-project",
+      "target": "research",
+      "target_ref": "research",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -583,6 +685,24 @@ window.SKILL_GRAPH = {
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "eval",
+      "target": "deliberative-advice",
+      "target_ref": "deliberative-advice",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "eval",
+      "target": "skill-maintenance",
+      "target_ref": "skill-maintenance",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -886,6 +1006,15 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "goal-advisor",
+      "target": "demo",
+      "target_ref": "demo",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "goal-advisor",
       "target": "horizon-advisor",
@@ -893,11 +1022,47 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "goal-advisor",
+      "target": "impl-plan",
+      "target_ref": "impl-plan",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "goal-advisor",
       "target": "optimize-with-human",
       "target_ref": "optimize-with-human",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "goal-advisor",
+      "target": "optimize-with-human",
+      "target_ref": "optimize-with-human",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "goal-advisor",
+      "target": "qa",
+      "target_ref": "qa",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "goal-advisor",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -907,11 +1072,56 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "harness-advisor",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "harness-advisor",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "harness-advisor",
+      "target": "gap-analysis",
+      "target_ref": "gap-analysis",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "harness-advisor",
+      "target": "optimize-harness",
+      "target_ref": "optimize-harness",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "harness-advisor",
       "target": "reference-grounding",
       "target_ref": "reference-grounding",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "harness-advisor",
+      "target": "reference-grounding",
+      "target_ref": "reference-grounding",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -921,11 +1131,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "harness-advisor",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "harness-creator",
       "target": "deep-init-project",
       "target_ref": "deep-init-project",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "harness-creator",
+      "target": "deep-init-project",
+      "target_ref": "deep-init-project",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -935,11 +1163,38 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "harness-creator",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "harness-creator",
       "target": "harness-advisor",
       "target_ref": "harness-advisor",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.9",
+      "order": 9,
+      "source": "harness-creator",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "harness-creator",
+      "target": "impl-plan",
+      "target_ref": "impl-plan",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -949,11 +1204,38 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "harness-creator",
+      "target": "interval-update",
+      "target_ref": "interval-update",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "harness-creator",
       "target": "optimize-with-human",
       "target_ref": "optimize-with-human",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.11",
+      "order": 11,
+      "source": "harness-creator",
+      "target": "optimize-with-human",
+      "target_ref": "optimize-with-human",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "harness-creator",
+      "target": "pulse-update",
+      "target_ref": "pulse-update",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "research#researchcompetitor",
@@ -984,11 +1266,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "harness-creator",
+      "target": "research",
+      "target_ref": "research",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "harness-creator",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.12",
+      "order": 12,
+      "source": "harness-creator",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -998,6 +1298,15 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.10",
+      "order": 10,
+      "source": "harness-creator",
+      "target": "skill-creator",
+      "target_ref": "skill-creator",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "harness-creator",
       "target": "update-memory",
@@ -1005,11 +1314,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.8",
+      "order": 8,
+      "source": "harness-creator",
+      "target": "update-memory",
+      "target_ref": "update-memory",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "harness-creator",
       "target": "update-strategy",
       "target_ref": "update-strategy",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.7",
+      "order": 7,
+      "source": "harness-creator",
+      "target": "update-strategy",
+      "target_ref": "update-strategy",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1145,11 +1472,47 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "horizon-advisor",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.9",
+      "order": 9,
+      "source": "impl-plan",
+      "target": "agent-qa-test",
+      "target_ref": "agent-qa-test",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "impl-plan",
+      "target": "close-ticket",
+      "target_ref": "close-ticket",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "impl-plan",
       "target": "deep-system-design",
       "target_ref": "deep-system-design",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "impl-plan",
+      "target": "deep-system-design",
+      "target_ref": "deep-system-design",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1159,11 +1522,38 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "impl-plan",
+      "target": "documentation",
+      "target_ref": "documentation",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "common_chains.after",
       "source": "impl-plan",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
       "type": "common-chain"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "impl-plan",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.7",
+      "order": 7,
+      "source": "impl-plan",
+      "target": "qa",
+      "target_ref": "qa",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "research#researchgap",
@@ -1178,6 +1568,33 @@ window.SKILL_GRAPH = {
       "target": "research",
       "target_ref": "research#researchparity",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "impl-plan",
+      "target": "research",
+      "target_ref": "research",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "impl-plan",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.8",
+      "order": 8,
+      "source": "impl-plan",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1292,11 +1709,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "learning-drain",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "learning-drain",
       "target": "optimize-harness",
       "target_ref": "optimize-harness",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "learning-drain",
+      "target": "optimize-harness",
+      "target_ref": "optimize-harness",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1306,6 +1741,15 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "learning-drain",
+      "target": "skill-maintenance",
+      "target_ref": "skill-maintenance",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "leverage-advisor",
       "target": "advise",
@@ -1313,11 +1757,56 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "leverage-advisor",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "leverage-advisor",
+      "target": "autoresearch-plan",
+      "target_ref": "autoresearch-plan",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "leverage-advisor",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "leverage-advisor",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.7",
+      "order": 7,
+      "source": "leverage-advisor",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "leverage-advisor",
+      "target": "impl-plan",
+      "target_ref": "impl-plan",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1327,11 +1816,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.8",
+      "order": 8,
+      "source": "leverage-advisor",
+      "target": "leverage-rollout",
+      "target_ref": "leverage-rollout",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "leverage-advisor",
       "target": "prototyping",
       "target_ref": "prototyping",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "leverage-advisor",
+      "target": "prototyping",
+      "target_ref": "prototyping",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1341,11 +1848,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "leverage-advisor",
+      "target": "reference-grounding",
+      "target_ref": "reference-grounding",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "leverage-rollout",
       "target": "autoresearch-plan",
       "target_ref": "autoresearch-plan",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "leverage-rollout",
+      "target": "autoresearch-plan",
+      "target_ref": "autoresearch-plan",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1355,11 +1880,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "leverage-rollout",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "leverage-rollout",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "leverage-rollout",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1369,6 +1912,15 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "leverage-rollout",
+      "target": "impl-plan",
+      "target_ref": "impl-plan",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "leverage-rollout",
       "target": "leverage-advisor",
@@ -1376,11 +1928,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "leverage-rollout",
+      "target": "leverage-advisor",
+      "target_ref": "leverage-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "leverage-rollout",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "leverage-rollout",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1425,11 +1995,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "optimize-harness",
+      "target": "gap-analysis",
+      "target_ref": "gap-analysis",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "optimize-harness",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.10",
+      "order": 10,
+      "source": "optimize-harness",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1439,11 +2027,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "optimize-harness",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "optimize-harness",
       "target": "horizon-advisor",
       "target_ref": "horizon-advisor",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "optimize-harness",
+      "target": "horizon-advisor",
+      "target_ref": "horizon-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1453,11 +2059,45 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.9",
+      "order": 9,
+      "source": "optimize-harness",
+      "target": "impl-plan",
+      "target_ref": "impl-plan",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "optimize-harness",
       "target": "leverage-advisor",
       "target_ref": "leverage-advisor",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "optimize-harness",
+      "target": "leverage-advisor",
+      "target_ref": "leverage-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "proof-advisor",
+      "target_ref": "proof-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "optimize-harness",
+      "target": "proof-advisor",
+      "target_ref": "proof-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1474,6 +2114,15 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "optimize-harness",
+      "target": "self-improve",
+      "target_ref": "self-improve",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "optimize-harness",
       "target": "skill-creator",
@@ -1481,11 +2130,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.8",
+      "order": 8,
+      "source": "optimize-harness",
+      "target": "skill-creator",
+      "target_ref": "skill-creator",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "optimize-harness",
       "target": "skill-maintenance",
       "target_ref": "skill-maintenance",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.7",
+      "order": 7,
+      "source": "optimize-harness",
+      "target": "skill-maintenance",
+      "target_ref": "skill-maintenance",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1628,6 +2295,83 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "proof-advisor",
+      "target": "agent-behavior-test",
+      "target_ref": "agent-behavior-test",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "proof-advisor",
+      "target": "agent-qa-test",
+      "target_ref": "agent-qa-test",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "proof-advisor",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "proof-advisor",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "proof-advisor",
+      "target": "qa",
+      "target_ref": "qa",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.7",
+      "order": 7,
+      "source": "proof-advisor",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "proof-advisor",
+      "target": "testing",
+      "target_ref": "testing",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "proof-advisor",
+      "target": "testing",
+      "target_ref": "testing",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "proof-advisor",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "prototyping",
       "target": "advise",
@@ -1635,11 +2379,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "pulse-update",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "qa",
       "target": "agent-browser",
       "target_ref": "agent-browser",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "qa",
+      "target": "agent-browser",
+      "target_ref": "agent-browser",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "common_chains.after",
@@ -1663,11 +2425,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "qa",
+      "target": "pr-runtime",
+      "target_ref": "pr-runtime",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "qa",
       "target": "visual-qa",
       "target_ref": "visual-qa",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "qa",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1845,6 +2625,15 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "review",
+      "target": "plan",
+      "target_ref": "plan",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "runtime-debugging",
       "target": "budget-advisor",
@@ -1880,6 +2669,51 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "skill-creator",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "skill-creator",
+      "target": "agent-behavior-test",
+      "target_ref": "agent-behavior-test",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.6",
+      "order": 6,
+      "source": "skill-creator",
+      "target": "deliberative-advice",
+      "target_ref": "deliberative-advice",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "skill-creator",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "skill-creator",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "research#researchparity",
       "source": "skill-creator",
       "target": "research",
@@ -1894,6 +2728,24 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "skill-creator",
+      "target": "research",
+      "target_ref": "research",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.3",
+      "order": 3,
+      "source": "skill-maintenance",
+      "target": "advise",
+      "target_ref": "advise",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "skill-maintenance",
       "target": "eval",
@@ -1901,11 +2753,47 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.4",
+      "order": 4,
+      "source": "skill-maintenance",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "skill-maintenance",
+      "target": "gap-analysis",
+      "target_ref": "gap-analysis",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "skill-maintenance",
+      "target": "harness-advisor",
+      "target_ref": "harness-advisor",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "skill-maintenance",
       "target": "self-improve",
       "target_ref": "self-improve",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.5",
+      "order": 5,
+      "source": "skill-maintenance",
+      "target": "self-improve",
+      "target_ref": "self-improve",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -1978,6 +2866,15 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "spec-to-ticket",
+      "target": "research",
+      "target_ref": "research",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "summarize",
       "target": "advise",
@@ -1996,20 +2893,6 @@ window.SKILL_GRAPH = {
       "source": "summarize",
       "target": "review",
       "target_ref": "review",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "task-case-design",
-      "target": "eval",
-      "target_ref": "eval",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "task-case-design",
-      "target": "testing",
-      "target_ref": "testing",
       "type": "markdown-ref"
     },
     {
@@ -2041,11 +2924,29 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "update-memory",
+      "target": "documentation",
+      "target_ref": "documentation",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
+    },
+    {
       "label": "markdown-ref",
       "source": "update-memory",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.2",
+      "order": 2,
+      "source": "update-memory",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -2067,6 +2968,15 @@ window.SKILL_GRAPH = {
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
+    },
+    {
+      "label": "workflow.todo.1",
+      "order": 1,
+      "source": "update-strategy",
+      "target": "review",
+      "target_ref": "review",
+      "type": "workflow-chain",
+      "workflow_source": "todo_list"
     },
     {
       "label": "markdown-ref",
@@ -2230,7 +3140,7 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-24T13:52:45+00:00",
+  "generated_at": "2026-06-24T14:11:17+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -2244,7 +3154,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 1
+      "tier": 1,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn an unproven pattern into the smallest representative proof before expanding scope, automation, volume, or implementation depth.",
@@ -2258,7 +3170,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 1
+      "tier": 1,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn claims, plans, or implementation choices into compact evidence notes with the right local, current-web, official, peer, or provided sources.",
@@ -2272,7 +3186,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 1
+      "tier": 1,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn short feedback, automation, blocker, or artifact-review updates into Telegram notifications using configured environment variables.",
@@ -2286,7 +3202,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 1
+      "tier": 1,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Capture one isolated agent or Codex exec run into logs, artifacts, and a scored behavior report when behavior needs proof.",
@@ -2300,7 +3218,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Automate browser or web-app tasks into clicks, form fills, screenshots, scraped data, or QA evidence when a page must be operated.",
@@ -2314,7 +3234,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "external",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn an app, skill, prompt, or workflow claim into adversarial QA cases, tester evidence, critique, and rerun guidance.",
@@ -2333,7 +3255,16 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": true,
+      "workflow_refs": [
+        "qa",
+        "visual-qa",
+        "reference-grounding",
+        "agent-behavior-test",
+        "review",
+        "advise"
+      ]
     },
     {
       "description": "Turn social, video, profile, or place targets into normalized external data through Apify MCP actors when scraping is required.",
@@ -2347,7 +3278,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn shell-heavy filesystem, build, or debug work into safe command sequences and verification when terminal execution is central.",
@@ -2361,7 +3294,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn multiple projects, repos, tools, or sources into scored feature takeaways and an adapted workflow or implementation plan.",
@@ -2375,7 +3310,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn early ambiguous intent into option space, useful questions, and candidate directions before requirements are committed.",
@@ -2389,7 +3326,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Resolve a budget-aware skill call into concrete execution template refs, parameters, and guardrails when effort changes workflow shape.",
@@ -2403,7 +3342,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn local diffs and branch context into maintainability, modularity, and code-smell findings before pushing agent-written code.",
@@ -2417,7 +3358,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn local codebase questions into file maps, implementation explanations, and reusable pattern findings.",
@@ -2431,7 +3374,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn local changes or a PR branch into a heavyweight CodeRabbit CLI review result when external review is useful before push.",
@@ -2445,7 +3390,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn staged or recent git diffs into a compact repo-style commit subject when a commit message is needed.",
@@ -2459,7 +3406,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn ambiguous user intent into clarified goals, constraints, and decision points through a Socratic interview before execution.",
@@ -2473,7 +3422,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn underspecified architecture intent into entities, APIs, storage, execution boundaries, retries, and design choices.",
@@ -2487,7 +3438,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn unclear UI taste or aesthetic direction into grounded visual preferences and boundaries before design implementation.",
@@ -2501,7 +3454,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a high-stakes or expensive decision into independent perspectives, critique, synthesis, dissent, and one recommended path.",
@@ -2518,7 +3473,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn plans, specs, tickets, architecture notes, or code explanations into compact Mermaid diagrams and flow traces.",
@@ -2532,7 +3489,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn durable doc-writing or doc-revision work into grounded, metadata-aware, human-usable docs with doc-quality checks.",
@@ -2548,7 +3507,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Deprecated compatibility wrapper for native execution phase guidance when no domain execution skill owns the artifact.",
@@ -2562,7 +3523,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn API or implementation uncertainty into GitHub code examples and repository pattern findings.",
@@ -2576,7 +3539,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a capability-seeking request into matching installable skills and installation guidance.",
@@ -2590,7 +3555,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn current-vs-expected behavior evidence into a grounded GapReport with missing pieces, owner surface, and proof path.",
@@ -2609,7 +3576,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a Farplane improvement idea into a recommended owner surface across policy, templates, skills, agents, hooks, tickets, docs, or validators.",
@@ -2623,7 +3592,16 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "skills/harness-advisor",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": true,
+      "workflow_refs": [
+        "gap-analysis",
+        "reference-grounding",
+        "eval",
+        "advise",
+        "optimize-harness",
+        "review"
+      ]
     },
     {
       "description": "Turn an existing feature or capability into ranked leverage plays, a rollout roadmap, and the next executable proof step.",
@@ -2637,7 +3615,18 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": true,
+      "workflow_refs": [
+        "reference-grounding",
+        "advise",
+        "prototyping",
+        "autoresearch-plan",
+        "impl-plan",
+        "goal-advisor",
+        "harness-advisor",
+        "leverage-rollout"
+      ]
     },
     {
       "description": "Turn URLs or local audio, video, or social media into metadata, transcript status, representative frames, retention notes, and handoff paths.",
@@ -2651,7 +3640,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Route an optimization goal through Goal Advisor with human feedback as the metric and Telegram-first review requests.",
@@ -2665,7 +3656,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a goal, context, invoked skills, and budget into composed todos, proof targets, and handoff when planning can reduce wasted work.",
@@ -2679,7 +3672,33 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
+    },
+    {
+      "description": "Turn behavior claims into proof plans, high-quality cases, proof-surface choices, and execution handoffs.",
+      "eval": "eval_task.json",
+      "group": "",
+      "has_checklist": true,
+      "id": "proof-advisor",
+      "label": "proof-advisor",
+      "methods": [],
+      "path": "skills/proof-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 2,
+      "workflow": true,
+      "workflow_refs": [
+        "testing",
+        "eval",
+        "agent-qa-test",
+        "agent-behavior-test",
+        "qa",
+        "visual-qa",
+        "review"
+      ]
     },
     {
       "description": "Turn current external evidence needs into method-addressed research briefs for parity, gaps, competitors, official docs, code patterns, users, or sources.",
@@ -2701,7 +3720,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid.",
@@ -2715,7 +3736,11 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": true,
+      "workflow_refs": [
+        "plan"
+      ]
     },
     {
       "description": "Turn reproducible runtime failures into instrumentation, evidence, root cause, fixes, and proof.",
@@ -2729,7 +3754,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn URLs, podcasts, transcripts, or local files into concise summaries or extracted text.",
@@ -2743,21 +3770,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
-    },
-    {
-      "description": "Turn behavior risks, failures, and contracts into high-quality test or eval task cases with coverage, oracle, and proof-surface decisions.",
-      "eval": "eval_task.json",
-      "group": "",
-      "has_checklist": true,
-      "id": "task-case-design",
-      "label": "task-case-design",
-      "methods": [],
-      "path": "skills/task-case-design/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_ui": "",
-      "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a testing need into the right Farplane testing guidance, backpressure, and domain-specific verification path.",
@@ -2771,7 +3786,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn transcripts and representative media frames into storyboard evidence, workflow reconstruction, extracted todos, and proof requirements.",
@@ -2785,7 +3802,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn expected UI specs and screenshots into observed reports, layout assertions, diffs, fix plans, and evidence artifacts.",
@@ -2799,7 +3818,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn UI code or site review requests into Web Interface Guidelines findings for accessibility, UX, and best-practice compliance.",
@@ -2813,7 +3834,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 2
+      "tier": 2,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a System Design Brief into an Agent Testability Brief with controls, state probes, coordination views, tooling, and proof surfaces.",
@@ -2827,7 +3850,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Design or revise Farplane Codex automations using reviewable automations.md prompts and generic Pulse/Interval skill calls.",
@@ -2841,7 +3866,12 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "pulse-update",
+        "interval-update"
+      ]
     },
     {
       "description": "Run or resume autoresearch session artifacts into metric-based keep/discard decisions when an experiment already exists.",
@@ -2855,7 +3885,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a fuzzy optimization goal into autoresearch scope, metric, direction, verification, guardrails, and execution artifacts.",
@@ -2869,7 +3901,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a completed ticket into durable closeout, docs writeback, final checks, commit prep, and optional publish steps.",
@@ -2883,7 +3917,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Route Convex project questions to official Convex AI instructions when a repo uses Convex backend files or deployment tooling.",
@@ -2897,7 +3933,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "external",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn chart, dashboard, or graph UI needs into D3 or Recharts implementation guidance when data visualization is the core task.",
@@ -2911,7 +3949,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a new-project intake into a Farplane project with docs, tickets, runtime commands, QA gates, harness config, and reusable planning/build prompts.",
@@ -2925,7 +3965,14 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "research",
+        "horizon-advisor",
+        "goal-advisor",
+        "automation-advisor"
+      ]
     },
     {
       "description": "Turn bounded Farplane work into an external coding-agent CLI handoff while preserving ticket, log, QA, review, and integration control.",
@@ -2939,7 +3986,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn frontend build or polish work into an external CLI handoff while Farplane keeps ticket, QA, visual review, and integration control.",
@@ -2953,7 +4002,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn passing QA artifacts for one ticket into demo-ready outputs and a structured demo result for Stop-hook gating.",
@@ -2967,7 +4018,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a fake-feeling MVP or prototype into realistic workflows, demo data, and a presentation-readiness rubric.",
@@ -2981,7 +4034,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn repo cleanup requests into desloppify scan, next, and resolve loops while keeping nested runner ownership explicit.",
@@ -2995,7 +4050,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn agent, prompt, or skill behavior into local eval tasks, boolean or tier judges, run artifacts, and verdicts.",
@@ -3012,7 +4069,12 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "skills/eval/templates/viewer-react",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "deliberative-advice",
+        "skill-maintenance"
+      ]
     },
     {
       "description": "Turn a FarplaneRunEnvelope into policy validation, compute selection, skill routing, and a filesystem ProofPacket.",
@@ -3026,7 +4088,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn curated feeds into deduped source items, harness-scout runs, pattern synthesis, and proposal tickets or inbox entries.",
@@ -3040,7 +4104,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Route frontend build or improvement work through UX, visual design, implementation, assets, standards review, and QA.",
@@ -3056,7 +4122,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn settled app UX and visual direction into shadcn, AI Elements, theming, registry, and component implementation guidance.",
@@ -3070,7 +4138,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn broken or unclear product workflows into user stories, UI-state diagnosis, comparable examples, and implementation handoff.",
@@ -3084,7 +4154,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn an ambitious request into Goal architecture, ticket-backed loop state, and a native Codex /goal prompt when warranted.",
@@ -3098,7 +4170,15 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "review",
+        "qa",
+        "demo",
+        "impl-plan",
+        "optimize-with-human"
+      ]
     },
     {
       "description": "Turn a high-level project or business idea into a values-goals-KPI-heartbeat harness, skill/ticket map, and current milestone.",
@@ -3112,7 +4192,22 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "research",
+        "deep-init-project",
+        "pulse-update",
+        "interval-update",
+        "impl-plan",
+        "goal-advisor",
+        "update-strategy",
+        "update-memory",
+        "harness-advisor",
+        "skill-creator",
+        "optimize-with-human",
+        "review"
+      ]
     },
     {
       "description": "Turn an external source into deduped Farplane feature candidates, adopt/adapt/reject/defer scorecards, and ticket handoffs.",
@@ -3126,7 +4221,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn ambiguous long-horizon intent into goals.md, KPI trees, feedback-sized projects, and Goal Advisor handoffs.",
@@ -3140,7 +4237,11 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "review"
+      ]
     },
     {
       "description": "Turn image generation or editing requests into inference.sh belt image pipeline outputs when Codex-native imagegen is not enough.",
@@ -3154,7 +4255,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn one selected coding ticket or material implementation request into an approval-ready ticket plan, test strategy, and proof contract.",
@@ -3168,7 +4271,19 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "research",
+        "deep-system-design",
+        "close-ticket",
+        "documentation",
+        "goal-advisor",
+        "review",
+        "qa",
+        "visual-qa",
+        "agent-qa-test"
+      ]
     },
     {
       "description": "Route liked links, images, videos, files, or notes into analyzed, searchable Convex inspiration records with reusable elements and tags.",
@@ -3182,7 +4297,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Run one Farplane interval automation: review the past window, write a dated report, plan the next window, and emit Pulse or Goal Advisor guidance.",
@@ -3196,7 +4313,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": []
     },
     {
       "description": "Turn bloated knowledge artifacts into ranked keep/cut/reroute decisions when docs, memory, or context surfaces need pruning.",
@@ -3210,7 +4329,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a one-page marketing or launch surface into offer, story arc, sections, assets, motion, and proof before frontend implementation.",
@@ -3224,7 +4345,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Compatibility wrapper that turns recent TROUBLES/LESSONS rows into a skill-maintenance harden_skill handoff with dedupe and processed-state records.",
@@ -3238,7 +4361,13 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "optimize-harness",
+        "eval",
+        "skill-maintenance"
+      ]
     },
     {
       "description": "Turn a selected leverage play into exemplar proof, extracted rollout pattern, and optional Goal-backed staged rollout.",
@@ -3252,7 +4381,16 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "leverage-advisor",
+        "impl-plan",
+        "autoresearch-plan",
+        "goal-advisor",
+        "review",
+        "eval"
+      ]
     },
     {
       "description": "Turn incomplete Notion Tasks into field proposals, safe high-confidence patches, and Telegram review requests.",
@@ -3266,7 +4404,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn observed Farplane behavior gaps into placement decisions, proof or eval, accepted changes, and review.",
@@ -3280,7 +4420,20 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "gap-analysis",
+        "horizon-advisor",
+        "leverage-advisor",
+        "harness-advisor",
+        "proof-advisor",
+        "self-improve",
+        "skill-maintenance",
+        "skill-creator",
+        "impl-plan",
+        "goal-advisor"
+      ]
     },
     {
       "description": "Turn an explicit GitHub PR into bounded polling, review-memory checks, fix loops, and notification-ready status until checks pass.",
@@ -3294,7 +4447,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn PR follow-up or separate-writer work into an isolated checkout and ticket runtime record.",
@@ -3308,7 +4463,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a finished branch into smaller non-stacked pull requests when feature seams or layers can be separated.",
@@ -3322,7 +4479,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn product intent into a Phase-1 Farplane PRD with requirements, scope, and handoff shape.",
@@ -3336,7 +4495,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn product-image needs into packshots, lifestyle photos, detail shots, marketplace assets, cutouts, mockups, or product-page visuals.",
@@ -3357,7 +4518,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Run the Farplane fast idle loop: reconcile outcomes, use reasoning plus bandit state to select one action, spawn a worker when useful, and update decision ledgers.",
@@ -3371,7 +4534,11 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "goal-advisor"
+      ]
     },
     {
       "description": "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Stop-hook gating.",
@@ -3385,7 +4552,13 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "agent-browser",
+        "pr-runtime",
+        "visual-qa"
+      ]
     },
     {
       "description": "Turn graph-app or node-editor needs into React Flow implementation guidance and best-practice patterns.",
@@ -3399,7 +4572,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn image URLs or local files into 9:16 reel collage backgrounds for shorts, explainers, and green-screen videos.",
@@ -3413,7 +4588,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn deterministic video requirements into Remotion/React compositions with timing, media, captions, audio, transitions, and render checks.",
@@ -3427,7 +4604,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn existing React/Remotion video code into rendered MP4 output through inference.sh belt when code-to-video export is needed.",
@@ -3441,7 +4620,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn an existing skill improvement goal into evals, variant comparison, prompt context, memory, or Goal-backed improvement artifacts.",
@@ -3455,7 +4636,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a reusable workflow or capability idea into a Farplane skill package with frontmatter, todo path, references, and proof surfaces.",
@@ -3469,7 +4652,16 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "harness-advisor",
+        "research",
+        "eval",
+        "agent-behavior-test",
+        "advise",
+        "deliberative-advice"
+      ]
     },
     {
       "description": "Turn skill behavior deltas, lesson hardening, or skill compaction into owner-local skill edits, eval/gotcha updates, registry sync, audit proof, and review.",
@@ -3483,7 +4675,15 @@ window.SKILL_GRAPH = {
       "qa_checklist": "qa_checklist.md",
       "skill_ui": "skills/skill-maintenance/graph/index.html",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "gap-analysis",
+        "harness-advisor",
+        "advise",
+        "eval",
+        "self-improve"
+      ]
     },
     {
       "description": "Turn the Farplane skill registry into a refreshed graph UI with rendered skill docs, frontmatter, tier colors, and chain edges.",
@@ -3497,7 +4697,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn social campaign goals into posts, carousels, threads, calendars, hooks, captions, thumbnails, or cross-platform bundles.",
@@ -3516,7 +4718,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn one SLC spec slice into filesystem tickets with compact summaries, agent contracts, and evidence requirements.",
@@ -3530,7 +4734,11 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "research"
+      ]
     },
     {
       "description": "Turn project history, memory, README, docs, lessons, troubles, and recent progress into consolidated project context and doc deltas.",
@@ -3544,7 +4752,12 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "documentation",
+        "review"
+      ]
     },
     {
       "description": "Turn project goals, tickets, progress, and feedback into strategy deltas, system gaps, experiments, and ticket updates.",
@@ -3558,7 +4771,11 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": true,
+      "workflow_refs": [
+        "review"
+      ]
     },
     {
       "description": "Turn React or Next.js code work into Vercel performance-guideline checks for components, pages, and data fetching.",
@@ -3572,7 +4789,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "external",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn AI video generation or editing requests into inference.sh belt video outputs such as text-to-video, image-to-video, avatars, edits, or upscales.",
@@ -3586,7 +4805,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn video deliverable goals into marketing clips, explainers, storyboards, talking-head pieces, demos, or platform ad specs.",
@@ -3606,7 +4827,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     },
     {
       "description": "Turn a known frontend workflow into typography, color, layout, hierarchy, motion, and anti-generic visual direction.",
@@ -3620,7 +4843,9 @@ window.SKILL_GRAPH = {
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
-      "tier": 3
+      "tier": 3,
+      "workflow": false,
+      "workflow_refs": []
     }
   ],
   "schema_version": "1.0.0"

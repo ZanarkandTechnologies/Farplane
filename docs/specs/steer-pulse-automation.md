@@ -24,7 +24,9 @@ Farplane projects run autonomously through explicit Codex automations:
 pulse_update(project_root, extensions?, pulse_policy?)
   -> one bounded action + decision state
 
-interval_update(project_root, interval_id, review_window, planning_window, extensions?, now?)
+interval_update(project_root, interval_id, review_window, planning_window,
+                context_refs?, report_workflows?, planning_policy?,
+                write_policy?, now?)
   -> dated interval report + next-window plan + Pulse guidance
 ```
 
@@ -40,10 +42,13 @@ Use the smallest explicit loop that preserves useful context isolation:
 - Pulse is the fast actor/idle loop. It reconciles outcomes, uses reasoning
   plus bandit state to select one board/action-tree move, spawns a bounded
   worker when useful, and records the decision.
-- Daily Interval reviews the last 24 hours, writes a dated report, compares
-  against the latest weekly plan when available, and plans the next 24 hours.
-- Weekly Interval reviews the last week, writes a dated report, checks drift
-  against `farplane/goals.md`, and plans the next week.
+- Daily Interval reviews the last 24 hours, writes a dated report, reads the
+  latest weekly interval output through configured context refs, and plans the
+  next 24 hours.
+- Weekly Interval reviews the last week, writes a dated report, reads daily
+  interval outputs inside the review window through configured context refs,
+  checks drift against goals, scores leverage opportunities when enabled, and
+  plans the next week.
 - Files are the shared memory. Loops should not depend on shared transcript
   context.
 - Longer horizons become explicit interval automations only after repeated
@@ -79,7 +84,7 @@ deep_init_project(...)
   -> files + automations.md + pm_manifest
 
 automation_advisor(activate=true, project_ref)
-  -> loop_threads + codex_automations + pm_json_thread_group_delta
+  -> pulse_thread + codex_automations + pm_json_thread_group_delta
 ```
 
 Critical path:
@@ -95,14 +100,14 @@ Critical path:
    ticket-backed Goal Packet when the goals are actionable.
 6. Use `automation-advisor` to prepare the live Codex automation prompts.
 7. When the operator requests live automation activation, create or reuse the
-   dedicated project threads named by `farplane/automations.md`, commonly:
-   - `Project Pulse`
-   - `Project Daily Interval`
-   - `Project Weekly Interval`
-8. Attach each Codex automation to the matching thread at the named cadence.
-9. Append visible loop thread IDs to `farplane/pm.json` so the UI renders them
-   under the persistent PM employee.
-10. When Pulse creates persistent PM-owned ticket or worker chat threads,
+   dedicated `Project Pulse` thread.
+8. Attach the Pulse heartbeat automation to the Pulse thread at the fast idle
+   cadence.
+9. Create or update standalone Codex cron automations for Daily Interval and
+   Weekly Interval at their configured cadences.
+10. Append PM-visible thread IDs and automation IDs to `farplane/pm.json` only
+    when they should render under the persistent PM employee.
+11. When Pulse creates persistent PM-owned ticket or worker chat threads,
     append those thread IDs to `farplane/pm.json` `threads.chats`.
 
 When the Codex app automation tools are unavailable, write the prompt templates
@@ -181,19 +186,102 @@ Consumers find the newest interval report by timestamp sorting or by explicit
 links written in later reports. No tracked config file exists solely to store
 `last_report`.
 
-Default intervals:
+Project-configured intervals:
 
 ```text
 daily_interval:
   review_window: last_24h
   planning_window: next_24h
-  parent_context: latest weekly_interval report when present
+  Reads:
+    - default interval refs
+    - latest weekly_interval report as parent_weekly_plan
 
 weekly_interval:
   review_window: last_week
   planning_window: next_week
-  parent_context: farplane/goals.md + daily_interval reports in review_window
+  Reads:
+    - default interval refs
+    - farplane/goals.md
+    - daily_interval reports inside last_week as daily_reports
+  Runs:
+    - plan_progress
+    - codex_attention_drift
+    - ticket_board_drift
+    - goal_drift
+    - compounding_leverage_review
+    - priority_planning
 ```
+
+## Goals Delta And Self-Update
+
+Weekly Interval may propose goals deltas, but it must report before mutation.
+It classifies each delta:
+
+- `auto_apply`: minor evidence-backed source/current-signal/stale-label updates
+  when policy allows.
+- `approval_required`: north-star, KPI, strategy-axis, priority, hold,
+  quarterly/yearly, stop-condition, or durable milestone changes.
+- `rejected_source_gap`: insufficient evidence; create a source, research,
+  feedback, metric, or ticket proposal instead.
+
+Approval path:
+
+```text
+weekly_interval_report
+  -> goals_delta_candidates
+  -> operator accepts or asks horizon-advisor to apply material strategy delta
+  -> farplane/goals.md update
+  -> goal-advisor compiles selected executable bets
+  -> Pulse executes bounded work
+  -> reports/rewards feed the next interval
+```
+
+When `compounding_leverage_review` is enabled, Weekly Interval also scores
+Farplane improvement levers and chooses 1-3 next-window bets. `leverage-advisor`
+scores value; `harness-advisor` chooses the owner surface; `goal-advisor`
+compiles selected execution; Pulse acts.
+
+Use the advisor matrix instead of inventing hidden orchestration:
+
+| Question | Owner |
+| --- | --- |
+| Should goals, KPI tree, value function, or frontier change? | `horizon-advisor` |
+| Which existing capability compounds fastest? | `leverage-advisor` |
+| Where should the change live? | `harness-advisor` |
+| What proof surface should judge the claim? | `proof-advisor` |
+| Is this a new reusable skill? | `skill-creator` |
+| Does an existing skill need backpropagation? | `skill-maintenance` |
+| Does the coding bet need a plan/proof contract? | `impl-plan` |
+| Is selected execution ready to run? | `goal-advisor` |
+| Is the full harness behavior gap the task? | `optimize-harness` |
+
+Before selecting new leverage bets, Weekly Interval closes reward signals from
+prior selected bets in the dated report:
+
+```text
+previous_weekly_interval_report
+  -> selected leverage bets + reward signals
+  -> current weekly reward closure
+  -> accept | continue | kill | resize | source_gap
+  -> next selected bets
+```
+
+Leverage signals are evidence extracted from existing artifacts: reports,
+tickets, skill or feature registry changes, evals, troubles, lessons, feedback,
+metrics, opportunity refs, or supplied external source refs. Do not create a
+separate leverage backlog by default; write selected/rejected/deferred/expired
+decisions into the dated interval report.
+
+Weekly scores are reasoning aids, not blind telemetry. The report may summarize
+signals such as accepted output, accepted agent-hours, intervention minutes,
+false-completion incidents, context-isolation failures, source gaps,
+proof-closure rate, and skill-backpropagation events, but the final choice must
+cite the evidence and explain why the selected bets reduce a named loss term.
+
+An urgent signal may bypass weekly selection only when it is high-confidence,
+source-backed, names an explicit loss term, includes a review-by date, and has
+a clear owner route. Urgent escalation may create a report, ticket, Goal
+Advisor handoff, or approval request; it must not mutate strategy directly.
 
 ## Migration Rule
 

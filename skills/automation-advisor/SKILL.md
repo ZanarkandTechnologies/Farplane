@@ -4,6 +4,7 @@ description: "Design or revise Farplane Codex automations using reviewable autom
 tier: 3
 group: harness
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
@@ -24,13 +25,13 @@ thread. Keep the exact project-specific Codex prompts in
 `farplane/automations.md`, and copy those prompt blocks into the Codex app
 automation records. Keep skills generic and parameterized; the skills own
 default Farplane paths and policies, while project-specific additions belong in
-automation `extensions`.
+automation `context_refs`, workflow flags, or policy.
 
 Prefer high-level operational prompts over fully resolved wiring. Canonical
 files, report paths, boards, PM manifests, and standard side-effect gates are
 resolved by the called skill. Automation prompts should name `project_root`,
 the target skill, cadence, interval windows when relevant, and only the
-extensions a human expects to edit.
+configuration a human expects to edit.
 
 ## Skill Signature
 
@@ -47,6 +48,7 @@ state:
   reads(docs/specs/steer-pulse-automation.md,
         farplane/automations.md?,
         farplane/pm.json?,
+        skills/automation-advisor/qa_checklist.md?,
         skills/automation-advisor/templates/*,
         skills/interval-update/SKILL.md,
         skills/pulse-update/SKILL.md)
@@ -80,6 +82,8 @@ fails:
   - [ ] Read the Pulse/Interval spec and current `farplane/automations.md`
         when present.
   - [ ] Read existing Codex automation prompt text when the task is an update.
+  - [ ] Read [qa_checklist.md](qa_checklist.md) before material prompt edits
+        or live automation updates.
 - [ ] 3. Keep prompts reviewable and runtime state untracked.
   - [ ] Put project-specific automation prompt text in
         `farplane/automations.md`.
@@ -91,7 +95,8 @@ fails:
 - [ ] 4. Write or update the prompt.
   - [ ] Use the Pulse or Interval automation template as a starting point.
   - [ ] Ensure the prompt calls the owning skill in plain operational language
-        with only project-specific extensions that humans should edit.
+        with only project-specific context refs, workflow flags, policies, or
+        side-effect gates that humans should edit.
   - [ ] Name side-effect gates and final state/report writebacks.
 - [ ] 5. Activate live Codex loops only when requested.
   - [ ] Do not create live threads or automations during passive planning or
@@ -108,6 +113,8 @@ fails:
   - [ ] If tools are unavailable, write the prompts and report
         `needs_automation_setup`.
 - [ ] 6. Check the proof surface.
+  - [ ] Apply [qa_checklist.md](qa_checklist.md) to the prompt or live
+        automation delta.
   - [ ] Confirm interval report paths are date-stamped.
   - [ ] Confirm `farplane/automations.md` is the reviewable prompt source and
         no `farplane/automations.json`, `farplane/steer.config.toml`, or
@@ -175,4 +182,6 @@ Risk guards:
 
 - [templates/interval-automation.md](templates/interval-automation.md)
 - [templates/pulse-automation.md](templates/pulse-automation.md)
+- [qa_checklist.md](qa_checklist.md) - prompt minimality, config hygiene,
+  state-boundary, and no-legacy checks.
 - [../../docs/specs/steer-pulse-automation.md](../../docs/specs/steer-pulse-automation.md)

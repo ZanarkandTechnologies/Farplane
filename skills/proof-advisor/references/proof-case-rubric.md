@@ -1,18 +1,18 @@
 ---
-title: Task Case Rubric
-owner: skills/task-case-design
+title: Proof Case Rubric
+owner: skills/proof-advisor
 status: active
 kind: reference
 updated_at: 2026-06-23
 ---
 
-# Task Case Rubric
+# Proof Case Rubric
 
-Use this rubric to accept, revise, or reject candidate task cases before they
+Use this rubric to accept, revise, or reject candidate proof cases before they
 become tests, eval rows, QA cases, or behavior-capture prompts.
 
 ```text
-judge_task_case(candidate_case, target_behavior, owner_scope)
+judge_proof_case(candidate_case, claim_or_behavior, owner_scope)
   -> accept | revise | reject + reason + smallest_fix
 ```
 

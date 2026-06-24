@@ -1,12 +1,12 @@
 ---
-title: Task Case Design Source Ledger
-owner: skills/task-case-design
+title: Proof Advisor Source Ledger
+owner: skills/proof-advisor
 status: active
 kind: reference
 updated_at: 2026-06-23
 ---
 
-# Task Case Design Source Ledger
+# Proof Advisor Source Ledger
 
 Use this source ledger when external testing and eval practice should influence
 case design. External sources are inputs to Farplane's local workflow, not live

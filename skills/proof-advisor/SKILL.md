@@ -1,8 +1,9 @@
 ---
-name: task-case-design
-description: "Turn behavior risks, failures, and contracts into high-quality test or eval task cases with coverage, oracle, and proof-surface decisions."
+name: proof-advisor
+description: "Turn behavior claims into proof plans, high-quality cases, proof-surface choices, and execution handoffs."
 tier: 2
 source: local
+workflow: true
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.1.0"
@@ -13,31 +14,37 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ---
 
-# Task Case Design
+# Proof Advisor
 
 ## Context
 
-Use this skill when the hard part is not running tests or evals, but inventing
-good cases: realistic, distinct, judgeable tasks that expose failure modes.
+Use this skill when the hard part is deciding how to prove a behavior claim:
+what cases matter, what oracle can judge them, which proof surface should run,
+and what evidence would make the result trustworthy.
 
-This skill is the shared case-design workflow underneath software tests, AI
-evals, skill evals, agent QA, and validators. It does not collapse them into
-one proof surface. Deterministic behavior should become code, schema, fixture,
-unit, integration, contract, browser, or validator checks when possible. AI,
-prompt, agent, and skill behavior should become eval rows, model/human judge
-criteria, `agent-behavior-test`, or `agent-qa-test` when output variation or
-multi-step behavior is the thing being tested.
+This skill owns proof selection and proof-case design. It does not execute
+every proof surface itself. Deterministic behavior should become code, schema,
+fixture, unit, integration, contract, browser, or validator checks when
+possible. AI, prompt, agent, and skill behavior should become eval rows,
+model/human judge criteria, `agent-behavior-test`, or `agent-qa-test` when
+output variation or multi-step behavior is the thing being tested.
 
 ## Skill Signature
 
 ```text
-task_case_design(target_behavior, risk_context?, source_material?, proof_goal?)
-  -> case_matrix + selected_cases + proof_surface_map + qa_verdict
+proof_advice(claim_or_behavior, risk_context?, source_material?, proof_goal?)
+  -> proof_plan
+   + case_matrix
+   + selected_cases
+   + proof_surface_map
+   + handoff
+   + qa_verdict
 
 state:
   reads(local contracts, tickets/specs, logs/traces/failures, existing tests,
         eval_task.json files, QA checklists, external source notes when needed)
-  writes(case matrix, eval rows, test-case drafts, QA findings, or handoff notes)
+  writes(proof plan, case matrix, eval rows, test-case drafts, QA findings,
+         or handoff notes)
 
 gates:
   target_behavior_named; source_material_classified; oracle_defined;
@@ -55,7 +62,7 @@ fails:
 
 ## Phase Boundary
 
-Run grounding and case design inline by default. Route to:
+Run grounding and proof-case design inline by default. Route to:
 
 - `testing` when the next step is choosing or running the proof command.
 - `eval` when selected cases should become runnable eval rows or judge prompts.
@@ -69,7 +76,7 @@ Run grounding and case design inline by default. Route to:
 ## Todo List
 
 - [ ] 1. Name the target behavior and failure risk.
-  - [ ] State what a good case would prove, and what it would falsify.
+  - [ ] State what a good proof would establish, and what it would falsify.
   - [ ] Classify the target as deterministic software behavior, AI output
     behavior, agent/tool behavior, skill workflow behavior, or mixed.
 - [ ] 2. Gather candidate sources.
@@ -93,13 +100,15 @@ Run grounding and case design inline by default. Route to:
   - [ ] Keep eval queries natural; put expected behavior in reference points,
     fixtures, or the owning skill, not in the query.
 - [ ] 5. Score and select cases with
-  [task-case rubric](references/task-case-rubric.md).
+  [proof-case rubric](references/proof-case-rubric.md).
   - [ ] Reject near-duplicates, vague goodness checks, hidden-oracle cases,
     impossible fixtures, and cases whose failure would not identify an owner.
   - [ ] Keep fewer high-signal cases over broad but blurry coverage.
 - [ ] 6. Choose the proof surface for each selected case.
   - [ ] Use deterministic tests, validators, schemas, or scripts when the
     expected result is mechanically checkable.
+  - [ ] Use `testing`, `eval`, `agent-qa-test`, `agent-behavior-test`, `qa`,
+    `visual-qa`, or `review` according to proof-surface fit.
   - [ ] Use evals or model/human judges when the behavior is variable but the
     criteria are explicit.
   - [ ] Use agent QA or behavior capture when the behavior depends on tool use,
@@ -112,7 +121,7 @@ Run grounding and case design inline by default. Route to:
   - [ ] For QA, write claim under test, test cases, required evidence, and
     reviewer focus.
 - [ ] 8. Finish with QA.
-  - [ ] Run [task-case QA checklist](qa_checklist.md) for material case suites.
+  - [ ] Run [proof-case QA checklist](qa_checklist.md) for material case suites.
   - [ ] If eval rows changed, also run `skills/eval/qa_checklist.md` and the
     cheap query-spoiler smoke check when available.
   - [ ] If a skill package changed, run
@@ -171,9 +180,9 @@ coverage_gaps:
 
 - [references/source-ledger.md](references/source-ledger.md) - read when
   external eval/testing practice should shape the case-generation workflow.
-- [references/task-case-rubric.md](references/task-case-rubric.md) - read when
-  scoring, selecting, rejecting, or reviewing task cases.
-- [qa_checklist.md](qa_checklist.md) - run before claiming material task-case
+- [references/proof-case-rubric.md](references/proof-case-rubric.md) - read when
+  scoring, selecting, rejecting, or reviewing proof cases.
+- [qa_checklist.md](qa_checklist.md) - run before claiming material proof-case
   design is ready.
 - [../testing/SKILL.md](../testing/SKILL.md) - route proof-surface execution and
   testing backpressure decisions.
@@ -182,9 +191,11 @@ coverage_gaps:
 
 ## Output
 
+- `proof_plan`
 - `case_matrix`
 - `selected_cases`
 - `proof_surface_map`
+- `handoff`
 - `rejected_cases`
 - `coverage_gaps`
 - `qa_verdict`

@@ -26,6 +26,8 @@ def write_skill(
     eval_surface: str | None = None,
     qa_checklist: str | None = None,
     skill_ui: str | None = None,
+    workflow: bool = False,
+    todo_lines: list[str] | None = None,
 ) -> None:
     skill_dir = repo / "skills" / name
     skill_dir.mkdir(parents=True)
@@ -47,6 +49,7 @@ def write_skill(
                 "description: Test skill.",
                 "tier: 2",
                 "source: local",
+                "workflow: true" if workflow else "",
                 template_line.rstrip(),
                 feature_lines.rstrip(),
                 f"eval: {eval_surface}" if eval_surface else "",
@@ -59,7 +62,7 @@ def write_skill(
                 "<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->",
                 "## Todo List",
                 "",
-                "- [ ] Test.",
+                "\n".join(todo_lines or ["- [ ] Test."]),
                 "<!-- END FARPLANE_IMPORTANT_CHECKLIST -->",
                 "",
             ]
@@ -113,6 +116,42 @@ class SyncSkillRegistryTests(unittest.TestCase):
             self.assertEqual(rows[0]["eval"], "eval_task.json")
             self.assertEqual(rows[0]["qa_checklist"], "qa_checklist.md")
             self.assertEqual(rows[0]["skill_ui"], "skills/example/ui/index.html")
+
+    def test_workflow_true_extracts_ordered_todo_skill_refs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "horizon-advisor")
+            write_skill(repo, "goal-advisor")
+            write_skill(repo, "eval")
+            write_skill(repo, "plan")
+            write_skill(
+                repo,
+                "weekly-workflow",
+                workflow=True,
+                todo_lines=[
+                    "- [ ] 1. Load [horizon](../horizon-advisor/SKILL.md).",
+                    "- [ ] 2. Call `goal-advisor` after goals are ready.",
+                    "- [ ] 3. Mention `horizon-advisor` again without duplicating it.",
+                    "- [ ] 4. Keep Reference Map prose out of this test; use `eval` last.",
+                    "- [ ] 5. Plain prose can say plan without becoming a skill edge.",
+                ],
+            )
+
+            rows = sync_skill_registry.build_registry(repo)
+            row = next(row for row in rows if row["name"] == "weekly-workflow")
+
+            self.assertTrue(row["workflow"])
+            self.assertEqual(row["workflow_refs"], ["horizon-advisor", "goal-advisor", "eval"])
+
+    def test_workflow_field_must_be_boolean_true(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "example")
+            skill_path = repo / "skills" / "example" / "SKILL.md"
+            skill_path.write_text(skill_path.read_text().replace("source: local", "source: local\nworkflow: yes"))
+
+            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "workflow must be true"):
+                sync_skill_registry.build_registry(repo)
 
 
 if __name__ == "__main__":

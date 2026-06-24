@@ -149,6 +149,34 @@ system itself. Represent them with normal numeric `tier` plus `group: meta`,
 `group: skills`, `group: harness`, or another explicit group. Use Tier 0 only
 for universal lifecycle phases.
 
+Do not create `tier: 4` to describe an end-to-end workflow. Numeric tiers are
+compounding upgrade classes, not call-stack depth. Model e2e workflows as
+composition artifacts owned by the orchestrating surface:
+
+```text
+workflow_chain(owner_skill, scenario)
+  -> key_steps[] + source_refs[] + proof_surface
+```
+
+Use these surfaces to make a chain visible:
+
+- `workflow: true` in skill frontmatter when the skill is an invocable
+  high-level workflow entrypoint. Graph tooling then scans only that skill's
+  `## Todo List` and extracts first-seen explicit skill references in order:
+  Markdown `SKILL.md` links, backticked `skill-name` refs, or `$skill-name`
+  refs. Plain prose is ignored.
+- `common_chains` in skill frontmatter for stable Tier 3 adjacency hints.
+- `routes:` in `## Skill Signature` for normal downstream owners.
+- workflow reference files under `skills/<owner>/references/` when one
+  orchestrator owns a conditional multi-skill procedure.
+- `eval_task.json` rows when the composed behavior should be tested end to end.
+- lifecycle graph curated edges only for framework-critical paths that need UI
+  rendering.
+
+An e2e eval should mark every required skill in the chain as a key workflow
+step in its reference points. This tests composition without turning chained
+skills into a new skill tier.
+
 Reclassification candidates:
 
 - `plan` is a Tier 2 planning prompt-template and todo-composition interface.
@@ -209,13 +237,17 @@ Manual fields:
   `qa_checklist.md`.
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding.
+- `workflow`: optional `true` for high-level workflow entrypoints. This is the
+  only manual workflow-chain field; ordered workflow refs are generated from
+  `## Todo List`.
 - `group`: required for Tier 3 only.
 - `methods`: optional method addresses owned by the skill.
 - `common_chains`: optional one-way Tier 3 adjacency hints.
 - `upstream_url`: optional for `source: external`.
 
 Generated registry fields include `path`, `description`, `has_checklist`,
-`version`, `allowed_tools`, `skill_links`, and the manual fields above.
+`version`, `allowed_tools`, `skill_links`, `workflow_refs`, and the manual
+fields above.
 Structural feature IDs belong to the versioned skill template metadata, not
 per-skill frontmatter. Derive generated fields from source files instead of
 duplicating them in frontmatter.

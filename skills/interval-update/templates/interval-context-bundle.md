@@ -4,7 +4,8 @@ Generated: <timestamp>
 Project: <project>
 Review window: <start> to <end> <timezone>
 Planning window: <start> to <end> <timezone>
-Report profile: <daily_interval | weekly_interval | custom>
+Interval id: <interval_id>
+Report workflows: <enabled workflow list>
 
 ## Source Status
 
@@ -48,6 +49,17 @@ Report profile: <daily_interval | weekly_interval | custom>
 
 | Signal | What happened | Planning implication | Evidence |
 | --- | --- | --- | --- |
+
+## Configured Report Workflow Inputs
+
+| Workflow | Inputs present | Missing or stale sources | Notes |
+| --- | --- | --- | --- |
+| Plan progress |  |  |  |
+| Codex attention drift |  |  |  |
+| Ticket / board drift |  |  |  |
+| Relationship / feedback obligations |  |  |  |
+| Opportunity signals |  |  |  |
+| Priority planning |  |  |  |
 
 ## External / Opportunity Signals
 

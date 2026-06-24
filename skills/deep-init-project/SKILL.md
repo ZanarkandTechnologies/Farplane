@@ -5,6 +5,7 @@ description: "Turn a new-project intake into a Farplane project with docs, ticke
 tier: 3
 group: coding
 source: local
+workflow: true
 eval: eval_task.json
 ---
 

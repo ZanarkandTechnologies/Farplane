@@ -4,6 +4,7 @@ description: "Turn one selected ticket into proof artifacts, reconciled Done / P
 tier: 3
 group: coding
 source: local
+workflow: true
 eval: eval_task.json
 qa_checklist: qa_checklist.md
 common_chains:

@@ -35,6 +35,7 @@ PROTOCOL_WRAPPERS = {"review"}
 ALLOWED_SOURCES = {"local", "external"}
 DESCRIPTION_MAX_CHARS = 220
 SURFACE_FIELDS = {"eval", "qa_checklist", "skill_ui"}
+WORKFLOW_FIELD = "workflow"
 
 
 class RegistryError(Exception):
@@ -189,6 +190,42 @@ def collect_skill_links_from_text(text: str, skill_name: str) -> list[str]:
     return sorted(links)
 
 
+def collect_ordered_skill_refs_from_text(
+    text: str,
+    skill_name: str,
+    skill_names: set[str],
+) -> list[str]:
+    """Collect first-seen skill references from todo text in human order."""
+
+    candidates: list[tuple[int, str]] = []
+    for match in SKILL_LINK_RE.finditer(text):
+        target, _anchor = match.groups()
+        target = skill_ref_name(target)
+        if target in skill_names and target != skill_name:
+            candidates.append((match.start(), target))
+
+    for target in skill_names:
+        if target == skill_name:
+            continue
+        explicit_patterns = [
+            rf"(?<![A-Za-z0-9_-])\${re.escape(target)}(?![A-Za-z0-9_-])",
+            rf"`{re.escape(target)}(?:[#:][^`]*)?`",
+            rf"`(?:skills/|\.\./)?{re.escape(target)}/SKILL\.md(?:#[^`]*)?`",
+        ]
+        for pattern in explicit_patterns:
+            for match in re.finditer(pattern, text):
+                candidates.append((match.start(), target))
+
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for _position, target in sorted(candidates, key=lambda item: (item[0], item[1])):
+        if target in seen:
+            continue
+        seen.add(target)
+        ordered.append(target)
+    return ordered
+
+
 def extract_direct_checklist(skill_path: Path) -> str:
     text = skill_path.read_text()
     match = CHECKLIST_RE.search(text)
@@ -202,6 +239,10 @@ def checklist_source_text(skill_dir: Path) -> str:
 
 def collect_checklist_links(skill_dir: Path, skill_name: str) -> list[str]:
     return collect_skill_links_from_text(checklist_source_text(skill_dir), skill_name)
+
+
+def collect_workflow_refs(skill_dir: Path, skill_name: str, skill_names: set[str]) -> list[str]:
+    return collect_ordered_skill_refs_from_text(checklist_source_text(skill_dir), skill_name, skill_names)
 
 
 def collect_skill_links(skill_dir: Path, skill_name: str) -> list[str]:
@@ -259,6 +300,15 @@ def validate_common_chain_refs(rows: list[dict[str, Any]]) -> None:
     for row in rows:
         for ref in row.get("common_chains", {}).get("after", []):
             validate_skill_ref(ref, skill_names, methods_by_skill)
+
+
+def attach_workflow_refs(repo_root: Path, rows: list[dict[str, Any]]) -> None:
+    skill_names = {row["name"] for row in rows}
+    for row in rows:
+        if not row.get(WORKFLOW_FIELD):
+            continue
+        skill_dir = repo_root / "skills" / row["name"]
+        row["workflow_refs"] = collect_workflow_refs(skill_dir, row["name"], skill_names)
 
 
 def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> None:
@@ -345,6 +395,12 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if common_chains:
             row["common_chains"] = common_chains
 
+        workflow = metadata.get(WORKFLOW_FIELD)
+        if workflow not in (None, "", False):
+            if workflow is not True:
+                raise RegistryError(f"{skill_path}: workflow must be true when present")
+            row[WORKFLOW_FIELD] = True
+
         version = metadata.get("version")
         if version not in (None, ""):
             row["version"] = str(version)
@@ -373,6 +429,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
 
         rows.append(row)
 
+    attach_workflow_refs(repo_root, rows)
     validate_common_chain_refs(rows)
     validate_todos_hierarchy(repo_root, rows)
     return rows

@@ -31,6 +31,8 @@ def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 "tier": row.get("tier"),
                 "source": row.get("source", "local"),
                 "group": row.get("group", ""),
+                "workflow": bool(row.get("workflow")),
+                "workflow_refs": row.get("workflow_refs", []),
                 "methods": row.get("methods", []),
                 "has_checklist": bool(row.get("has_checklist")),
                 "eval": row.get("eval", ""),
@@ -46,7 +48,13 @@ def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
     edges: list[dict[str, Any]] = []
     seen: set[tuple[str, str, str, str]] = set()
 
-    def add_edge(source: str, target_ref: str, edge_type: str, label: str) -> None:
+    def add_edge(
+        source: str,
+        target_ref: str,
+        edge_type: str,
+        label: str,
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
         target = skill_ref_name(target_ref)
         if target not in skill_names or source == target:
             return
@@ -60,7 +68,7 @@ def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 target=target,
                 type=edge_type,
                 label=label,
-                metadata={"target_ref": target_ref},
+                metadata={"target_ref": target_ref, **(metadata or {})},
             ).as_dict()
         )
 
@@ -71,6 +79,14 @@ def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
             add_edge(source, link, "markdown-ref", label)
         for target_ref in row.get("common_chains", {}).get("after", []):
             add_edge(source, target_ref, "common-chain", "common_chains.after")
+        for order, target_ref in enumerate(row.get("workflow_refs", []), start=1):
+            add_edge(
+                source,
+                target_ref,
+                "workflow-chain",
+                f"workflow.todo.{order}",
+                {"order": order, "workflow_source": "todo_list"},
+            )
 
     nodes.sort(key=lambda node: (int(node.get("tier") or 9), node["label"]))
     edges.sort(key=lambda edge: (edge["source"], edge["target"], edge["type"], edge["label"]))

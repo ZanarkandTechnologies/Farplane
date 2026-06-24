@@ -1,6 +1,6 @@
 ---
 title: Create Task Case Design Skill Audit
-owner: skills/task-case-design
+owner: skills/proof-advisor
 status: draft
 created_at: 2026-06-23
 ---
@@ -9,8 +9,10 @@ created_at: 2026-06-23
 
 ## Change
 
-Created `task-case-design` as a Tier 2 case-generation workflow shared by
-software tests, evals, skill evals, agent QA, and validators.
+Originally created `task-case-design` as a Tier 2 case-generation workflow
+shared by software tests, evals, skill evals, agent QA, and validators. The
+package was later renamed to `proof-advisor`; this audit remains as source
+history, not a compatibility surface.
 
 ## Source Basis
 
@@ -32,7 +34,7 @@ first_load_review:
   line_count_before: 0
   line_count_after: 186
   kept_in_skill: trigger boundary, signature, todo workflow, proof routing, templates, gotchas, reference map
-  moved_to_reference: source synthesis, detailed task-case rubric
+  moved_to_reference: source synthesis, detailed proof-case rubric
   deleted_as_duplicate_or_rationale: none
   extra_sections_kept_with_reason: none
   remaining_sections_over_budget: none

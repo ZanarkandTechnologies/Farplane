@@ -8,16 +8,19 @@ kind: reference
 # Interval Update Workflow
 
 `interval_update` is the generic Farplane report-then-plan primitive. Use it
-when one explicit Codex automation needs to review a bounded window, check
-drift, write a report, plan the next bounded window, and give guidance to
-Pulse, Goal Advisor, or ticket creation.
+when one explicit Codex automation needs to review a configured bounded window,
+check drift against configured context, write a report, plan the next bounded
+window, and give guidance to Pulse, Goal Advisor, or ticket creation.
 
 ```text
-interval_update(project_root, interval_id, review_window, planning_window, extensions?)
+interval_update(project_root, interval_id, review_window, planning_window,
+                context_refs?, report_workflows?, planning_policy?,
+                write_policy?)
   -> context_bundle
    + source_gaps
    + interval_report
-   + drift_check
+   + workflow_findings
+   + drift_findings
    + next_window_plan
    + downstream_guidance
    + ticket_deltas
@@ -29,8 +32,8 @@ interval_update(project_root, interval_id, review_window, planning_window, exten
 
 ## Default Context Refs
 
-The skill resolves these for every Farplane project unless an extension adds or
-replaces a source:
+The skill resolves these for every Farplane project unless `context_refs`
+adds or replaces a source:
 
 ```text
 default_context_refs(project_root, interval_id) = {
@@ -50,86 +53,96 @@ default_context_refs(project_root, interval_id) = {
 }
 ```
 
-For `daily_interval`, add:
+## Configurable Context Refs
+
+Callers use `context_refs` to wire interval-to-interval dependencies. This is
+where one interval can say "read the latest report from another interval" or
+"read another interval's reports inside this review window." The skill only
+knows how to resolve the selectors.
 
 ```text
-review_window: last_24h
-planning_window: next_24h
-parent_plan_ref: latest weekly_interval report from .farplane/reports/interval/weekly_interval/
-daily_report_refs: none
-```
-
-For `weekly_interval`, add:
-
-```text
-review_window: last_week
-planning_window: next_week
-daily_report_refs: daily_interval reports inside review_window
-parent_plan_ref: goals_ref
-```
-
-## Extensions
-
-Use `extensions`, not overrides. Extensions add to the default Farplane shape;
-they do not make every project restate common paths.
-
-```text
-IntervalExtensions = {
-  timezone?: string,
-  context_extensions?: {
-    extra_refs?: [ref],
-    replace_refs?: { <default_ref_name>: ref | [ref] }
+context_refs = {
+  extra_refs?: [ref],
+  parent_context_refs?: [ref],
+  workflow_refs?: {
+    telemetry_refs?: [ref],
+    feedback_refs?: [ref],
+    opportunity_refs?: [ref],
+    metric_refs?: [ref],
+    status_refs?: [ref]
   },
-  phase_extensions?: {
-    before_context_load_append?,
-    context_collection_append?,
-    after_context_bundle_append?,
-    analysis_lanes_append?,
-    synthesis_append?,
-    report_format_append?,
-    writeback_candidates_append?
-  },
-  policy_extensions?: {
-    goals_delta_policy?,
-    side_effect_gates?,
-    report_shape?
-  }
+  interval_output_refs?: [
+    {
+      interval_id: string,
+      selector: latest | inside_review_window | explicit_paths,
+      as: string,
+      required?: bool
+    }
+  ],
+  replace_refs?: { <default_ref_name>: ref | [ref] }
 }
 ```
 
 Rules:
 
-- Missing extensions mean use the default Farplane behavior.
-- `extra_refs` are additive. Use `replace_refs` only when a project truly has a
-  non-standard source of truth.
-- Phase extensions append project-specific instructions to the default
-  interval behavior. They cannot skip source-gap labels,
-  report-before-goals-mutation, goals-delta promotion, side-effect gates, or
-  leaf-execution avoidance.
-- Project/person/customer/private paths belong in the project automation file,
-  project docs, or bindings passed through extensions; never in generic skill
-  first-load refs.
+- `extra_refs` and `parent_context_refs` are additive.
+- `workflow_refs` binds source refs to optional report workflows. Use it when
+  telemetry, feedback, opportunity, metric, or status sources should feed a
+  specific workflow.
+- `interval_output_refs.selector = latest` selects the newest dated report under
+  `.farplane/reports/interval/<interval_id>/`.
+- `interval_output_refs.selector = inside_review_window` selects dated reports
+  from that interval whose timestamps fall inside `review_window`.
+- `interval_output_refs.selector = explicit_paths` reads only supplied paths.
+- Missing optional refs become source gaps. Missing required refs block durable
+  goals or ticket mutation but still allow a report.
+- Use `replace_refs` only when a project has a non-standard source of truth.
+
+## Optional Report Workflows
+
+Report workflows are generic functions over a context bundle and timeframe. The
+caller enables them with booleans or lightweight modes.
+
+```text
+report_workflows = {
+  plan_progress?: bool | "light",
+  codex_attention_drift?: bool | "light",
+  ticket_board_drift?: bool | "light",
+  feedback_obligations?: bool | "when_sources_exist",
+  opportunity_signals?: bool | "when_sources_exist",
+  goal_drift?: bool | "light",
+  metric_snapshot?: bool | "when_sources_exist",
+  compounding_leverage_review?: bool | "light",
+  priority_planning?: bool | "light"
+}
+```
+
+Missing workflow flags mean do not run that workflow. `SKILL.md` owns the
+workflow reference index. Load only the workflow ref files for enabled flags;
+those files own detailed todos, inline-vs-subagent routing, evidence rules, and
+merge shape.
 
 ## Workflow
 
-1. Bind `interval_id`, `review_window`, `planning_window`, report profile, and
-   merged context refs.
-2. Run `before_context_load_append` only to refine source plans and gates.
-3. Read default refs plus extension refs; label missing or stale sources.
+1. Bind `interval_id`, `review_window`, `planning_window`, and configured
+   context refs.
+2. Read default refs plus configured refs; label missing or stale sources.
+3. Resolve cross-interval refs from `interval_output_refs`.
 4. Normalize evidence into
    [interval-context-bundle.md](../templates/interval-context-bundle.md).
-5. Run any lane or analysis extensions against the context bundle path.
-6. Review the past window:
-   - daily: compare actual work against the latest weekly interval plan when
-     present.
-   - weekly: compare daily reports and outcomes against goals.
-7. Write [interval-report.md](../templates/interval-report.md) before any
+5. Run only enabled `report_workflows` against the context bundle,
+   `review_window`, and `planning_window`, loading only the workflow reference
+   files named in `SKILL.md`.
+6. For enabled self-update workflows, close due reward signals from prior
+   interval reports before selecting new bets.
+7. Review the past window against goals and configured parent contexts.
+8. Write [interval-report.md](../templates/interval-report.md) before any
    goals mutation.
-8. Plan the next window, sized to `planning_window`.
-9. Classify every goals delta as `auto_apply`, `approval_required`, or
+9. Plan the next window, sized to `planning_window`.
+10. Classify every goals delta as `auto_apply`, `approval_required`, or
    `rejected_source_gap`.
-10. Convert executable changes into ticket deltas or Goal Advisor handoffs.
-11. Return downstream guidance so Pulse gets the next constraints.
+11. Convert executable changes into ticket deltas or Goal Advisor handoffs.
+12. Return downstream guidance so Pulse gets the next constraints.
 
 ## Goals Delta Promotion
 
@@ -155,3 +168,18 @@ be represented as explicit interval automations only when they produce useful
 decisions often enough to deserve their own thread and cadence. Otherwise, the
 weekly interval can create a ticket or Goal Advisor handoff for the longer
 horizon review.
+
+## Workflow Rules
+
+- Every enabled workflow output must cite context-bundle evidence or raw source
+  pointers. Reject generic strategy prose.
+- Analysis subagents are read-only. They must not mutate tickets, goals,
+  external tools, or automation state.
+- Leverage signals should come from existing reports, tickets, skills,
+  registries, lessons, troubles, feedback, metrics, or explicitly supplied
+  external source refs. Do not create a separate leverage backlog by default.
+- The dated interval report is the state store for self-update decisions:
+  reward closure, selected bets, rejected/deferred/expired candidates, advisor
+  routes, and next reward signals.
+- Urgent leverage escalation is allowed only for high-confidence evidence with
+  a source ref, explicit loss term, review-by date, and next owner route.

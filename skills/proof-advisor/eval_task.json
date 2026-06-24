@@ -1,6 +1,6 @@
 [
   {
-    "id": "task-case-design-proof-surface-fit",
+    "id": "proof-advisor-proof-surface-fit",
     "title": "Separate shared case design from proof surface execution",
     "query": "I need cases for a skill that sometimes gives generic plans instead of concrete proof. I keep calling them unit tests, but some of the behavior is agent judgment. Help me design the cases.",
     "reference_points": [
@@ -9,13 +9,13 @@
       "Includes at least one deterministic/mechanical case and one variable/judgment case with explicit criteria.",
       "Avoids labeling every AI behavior check as a unit test."
     ],
-    "tags": ["skill", "proof-surface", "case-design"],
+    "tags": ["skill", "proof-surface", "proof-case-design"],
     "notes": "Skill-local eval for the core routing distinction."
   },
   {
-    "id": "task-case-design-critical-path",
+    "id": "proof-advisor-critical-path",
     "title": "Design a complete high-signal case batch for a new skill",
-    "query": "I just wrote a skill that helps agents turn messy bug reports into focused debugging plans. I want a small but strong set of task cases for it before I trust it. Please design the cases and tell me which proof surface each one should use.",
+    "query": "I just wrote a skill that helps agents turn messy bug reports into focused debugging plans. I want a small but strong set of proof cases for it before I trust it. Please design the cases and tell me which proof surface each one should use.",
     "reference_points": [
       "Names the target behavior and main failure risks before listing cases.",
       "Builds a compact case space or dimensions that explain why the cases are distinct.",
@@ -23,11 +23,11 @@
       "Includes at least one ordinary success path, one likely failure or regression path, one boundary or ambiguity path, and one anti-cheat or negative-control path.",
       "Chooses proof surfaces case-by-case instead of routing everything to evals or unit tests."
     ],
-    "tags": ["skill", "critical-path", "case-design"],
-    "notes": "Critical path: the skill should perform its main job end to end for a realistic new-skill case-design request."
+    "tags": ["skill", "critical-path", "proof-case-design"],
+    "notes": "Critical path: the skill should perform its main job end to end for a realistic new-skill proof-case-design request."
   },
   {
-    "id": "task-case-design-query-not-spoiled",
+    "id": "proof-advisor-query-not-spoiled",
     "title": "Generate skill eval cases without leaking the answer",
     "query": "Make a few eval task ideas for a skill that should push back when a requested workflow has unclear ownership. I want the cases to be realistic and not too repetitive.",
     "reference_points": [
@@ -40,7 +40,7 @@
     "notes": "Covers common eval-authoring failure where expected behavior leaks into the query."
   },
   {
-    "id": "task-case-design-source-first",
+    "id": "proof-advisor-source-first",
     "title": "Mine real failures before synthetic expansion",
     "query": "We have three recent misses from a planning skill: it made five generic happy-path examples, ignored a user correction about unclear ownership, and never said what evidence would prove a case. Turn this into a useful first batch of cases.",
     "reference_points": [
@@ -53,7 +53,7 @@
     "notes": "Tests the source priority rule from the external workflow."
   },
   {
-    "id": "task-case-design-dimensions-before-cases",
+    "id": "proof-advisor-dimensions-before-cases",
     "title": "Build dimensions before writing a large case list",
     "query": "Give me 30 test ideas for a skill that writes QA plans for messy app changes. I do not have examples yet, just the general behavior.",
     "reference_points": [
@@ -66,7 +66,7 @@
     "notes": "Catches the common failure of optimizing for case count."
   },
   {
-    "id": "task-case-design-proof-surface-routing",
+    "id": "proof-advisor-proof-surface-routing",
     "title": "Route deterministic and variable cases to different proof surfaces",
     "query": "I need to check a skill package. Some things are structural, like frontmatter and JSON validity. Other things are judgment-heavy, like whether the generated cases are realistic and distinct. Design the proof approach.",
     "reference_points": [
@@ -79,7 +79,7 @@
     "notes": "Forces the skill to avoid using evals where deterministic tests are better."
   },
   {
-    "id": "task-case-design-maintenance-loop",
+    "id": "proof-advisor-maintenance-loop",
     "title": "Add cases without letting the suite rot",
     "query": "A skill eval suite has six old cases and two new failures from this week. Some old cases overlap and one judge has been flaky. Help me update the cases without just appending more rows.",
     "reference_points": [

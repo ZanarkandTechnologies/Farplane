@@ -1,18 +1,18 @@
 ---
-title: Task Case Design QA Checklist
-owner: skills/task-case-design
+title: Proof Advisor QA Checklist
+owner: skills/proof-advisor
 status: active
 kind: qa-checklist
 updated_at: 2026-06-23
 ---
 
-# Task Case Design QA Checklist
+# Proof Advisor QA Checklist
 
-Use this checklist after creating or materially revising task cases for tests,
+Use this checklist after creating or materially revising proof cases for tests,
 evals, QA, or agent behavior proof.
 
 ```text
-task_case_qa(case_matrix, selected_cases, target_behavior)
+proof_case_qa(case_matrix, selected_cases, claim_or_behavior)
   -> pass | revise | fail + fixes + remaining_risk
 ```
 
@@ -81,7 +81,7 @@ task_case_qa(case_matrix, selected_cases, target_behavior)
 ## Finish Note
 
 ```text
-task_case_qa:
+proof_case_qa:
   changed_files:
   reviewed_cases:
   verdict: pass | revise | fail | unknown

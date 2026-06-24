@@ -1,20 +1,20 @@
 {
   "counts": {
     "edge_confidence": {
-      "curated": 36,
+      "curated": 37,
       "explicit": 6,
-      "parsed": 150
+      "parsed": 179
     },
     "edge_types": {
       "consumes": 2,
       "contains": 2,
-      "reads": 46,
-      "routes_to": 95,
+      "reads": 49,
+      "routes_to": 122,
       "triggers": 15,
       "updates": 3,
       "writes": 29
     },
-    "edges": 192,
+    "edges": 222,
     "fsa_projections": 5,
     "node_kinds": {
       "automation": 3,
@@ -25,12 +25,12 @@
       "report": 2,
       "route": 5,
       "runtime": 1,
-      "skill": 38,
+      "skill": 40,
       "state": 10,
-      "ticket": 4
+      "ticket": 5
     },
-    "nodes": 96,
-    "parsed_skills": 16
+    "nodes": 99,
+    "parsed_skills": 19
   },
   "edges": [
     {
@@ -589,6 +589,13 @@
       "type": "routes_to"
     },
     {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/lifecycle.md",
+      "source": "skill:harness-advisor",
+      "target": "skill:proof-advisor",
+      "type": "routes_to"
+    },
+    {
       "confidence": "parsed",
       "evidence_ref": "skills/harness-advisor/SKILL.md",
       "label": "self-improve",
@@ -1122,6 +1129,190 @@
     },
     {
       "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "farplane/goals.md?",
+      "source": "skill:optimize-harness",
+      "target": "file:farplane/goals.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "eval",
+      "source": "skill:optimize-harness",
+      "target": "skill:eval",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "gap-analysis",
+      "source": "skill:optimize-harness",
+      "target": "skill:gap-analysis",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "goal-advisor",
+      "source": "skill:optimize-harness",
+      "target": "skill:goal-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "harness-advisor",
+      "source": "skill:optimize-harness",
+      "target": "skill:harness-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "horizon-advisor",
+      "source": "skill:optimize-harness",
+      "target": "skill:horizon-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "impl-plan",
+      "source": "skill:optimize-harness",
+      "target": "skill:impl-plan",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "leverage-advisor",
+      "source": "skill:optimize-harness",
+      "target": "skill:leverage-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "proof-advisor",
+      "source": "skill:optimize-harness",
+      "target": "skill:proof-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "review",
+      "source": "skill:optimize-harness",
+      "target": "skill:review",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "self-improve",
+      "source": "skill:optimize-harness",
+      "target": "skill:self-improve",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "skill-creator",
+      "source": "skill:optimize-harness",
+      "target": "skill:skill-creator",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "skill-maintenance",
+      "source": "skill:optimize-harness",
+      "target": "skill:skill-maintenance",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "tickets",
+      "source": "skill:optimize-harness",
+      "target": "ticket:tickets/TASK-*/ticket.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "agent-behavior-test",
+      "source": "skill:proof-advisor",
+      "target": "skill:agent-behavior-test",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "agent-qa-test",
+      "source": "skill:proof-advisor",
+      "target": "skill:agent-qa-test",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "eval",
+      "source": "skill:proof-advisor",
+      "target": "skill:eval",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "qa",
+      "source": "skill:proof-advisor",
+      "target": "skill:qa",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "review",
+      "source": "skill:proof-advisor",
+      "target": "skill:review",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "skill-maintenance",
+      "source": "skill:proof-advisor",
+      "target": "skill:skill-maintenance",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "testing",
+      "source": "skill:proof-advisor",
+      "target": "skill:testing",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "visual-qa",
+      "source": "skill:proof-advisor",
+      "target": "skill:visual-qa",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "tickets/specs",
+      "source": "skill:proof-advisor",
+      "target": "ticket:tickets/specs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
       "label": "farplane/goals.md?",
       "source": "skill:pulse-update",
@@ -1356,6 +1547,54 @@
       "label": "caller-owned",
       "source": "skill:review",
       "target": "route:caller-owned",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "advise",
+      "source": "skill:skill-creator",
+      "target": "skill:advise",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "deliberative-advice",
+      "source": "skill:skill-creator",
+      "target": "skill:deliberative-advice",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "gap-analysis",
+      "source": "skill:skill-creator",
+      "target": "skill:gap-analysis",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "research:source-synthesis",
+      "source": "skill:skill-creator",
+      "target": "skill:research",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "review",
+      "source": "skill:skill-creator",
+      "target": "skill:review",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "skill-maintenance",
+      "source": "skill:skill-creator",
+      "target": "skill:skill-maintenance",
       "type": "routes_to"
     },
     {
@@ -1827,6 +2066,7 @@
         "fsa:self_update_loop:weekly-report-written",
         "fsa:self_update_loop:goals-delta-classified",
         "fsa:self_update_loop:leverage-bets-scored",
+        "fsa:self_update_loop:proof-route-selected",
         "fsa:self_update_loop:operator-approval-or-source-gap-recorded",
         "fsa:self_update_loop:horizon-delta-applied",
         "fsa:self_update_loop:goal-advisor-handoff-compiled",
@@ -1857,8 +2097,16 @@
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "leverage bets scored -> operator approval or source gap recorded",
+          "label": "leverage bets scored -> proof route selected",
           "source": "fsa:self_update_loop:leverage-bets-scored",
+          "target": "fsa:self_update_loop:proof-route-selected",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "proof route selected -> operator approval or source gap recorded",
+          "source": "fsa:self_update_loop:proof-route-selected",
           "target": "fsa:self_update_loop:operator-approval-or-source-gap-recorded",
           "type": "transition"
         },
@@ -1905,7 +2153,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-24T08:58:54+00:00",
+  "generated_at": "2026-06-24T14:11:17+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",
@@ -2607,6 +2855,7 @@
       },
       "path": "skills/leverage-advisor/SKILL.md",
       "tags": [
+        "route-target",
         "skill"
       ]
     },
@@ -2624,8 +2873,14 @@
       "id": "skill:optimize-harness",
       "kind": "skill",
       "label": "optimize-harness",
+      "metadata": {
+        "description": "Turn observed Farplane behavior gaps into placement decisions, proof or eval, accepted changes, and review.",
+        "source": "local",
+        "tier": 3
+      },
       "path": "skills/optimize-harness/SKILL.md",
       "tags": [
+        "harness",
         "route-target",
         "skill"
       ]
@@ -2645,6 +2900,21 @@
       "kind": "skill",
       "label": "prd",
       "path": "skills/prd/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:proof-advisor",
+      "kind": "skill",
+      "label": "proof-advisor",
+      "metadata": {
+        "description": "Turn behavior claims into proof plans, high-quality cases, proof-surface choices, and execution handoffs.",
+        "source": "local",
+        "tier": 2
+      },
+      "path": "skills/proof-advisor/SKILL.md",
       "tags": [
         "route-target",
         "skill"
@@ -2741,10 +3011,16 @@
       "id": "skill:skill-creator",
       "kind": "skill",
       "label": "skill-creator",
+      "metadata": {
+        "description": "Turn a reusable workflow or capability idea into a Farplane skill package with frontmatter, todo path, references, and proof surfaces.",
+        "source": "local",
+        "tier": 3
+      },
       "path": "skills/skill-creator/SKILL.md",
       "tags": [
         "route-target",
-        "skill"
+        "skill",
+        "skills"
       ]
     },
     {
@@ -2768,6 +3044,16 @@
       "kind": "skill",
       "label": "spec-to-ticket",
       "path": "skills/spec-to-ticket/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:testing",
+      "kind": "skill",
+      "label": "testing",
+      "path": "skills/testing/SKILL.md",
       "tags": [
         "route-target",
         "skill"
@@ -2942,6 +3228,15 @@
         "goal-packet",
         "ticket"
       ]
+    },
+    {
+      "id": "ticket:tickets/specs",
+      "kind": "ticket",
+      "label": "tickets/specs",
+      "path": "tickets/specs",
+      "tags": [
+        "parsed"
+      ]
     }
   ],
   "schema_version": "1.0.0",
@@ -2959,6 +3254,7 @@
       "horizon-advisor",
       "goal-advisor",
       "harness-advisor",
+      "proof-advisor",
       "impl-plan",
       "leverage-advisor",
       "pulse-update",
@@ -2966,6 +3262,8 @@
       "automation-advisor",
       "update-memory",
       "learning-drain",
+      "optimize-harness",
+      "skill-creator",
       "skill-maintenance",
       "knowledge-tidier",
       "eval",

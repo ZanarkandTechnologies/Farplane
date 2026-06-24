@@ -4,6 +4,7 @@ description: "Run the Farplane fast idle loop: reconcile outcomes, use reasoning
 tier: 3
 group: harness
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"

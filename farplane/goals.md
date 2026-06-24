@@ -41,10 +41,11 @@ goal farplane_os {
   outcome: "Farplane is the standard way researchers and builders create harnesses that run longer, improve from evidence, and produce higher-quality results with less human intervention."
   metric: hybrid(
     learning_metric("validated meaningful improvement cycles per human intervention hour increases"),
+    learning_metric("accepted agent-hours that produce reviewed artifacts increases without increasing false completion"),
     review_metric("quality, proof, auditability, and operator control are preserved"),
     artifact_presence("goals, tickets, Pulse/Interval automations, evals, reports, and memory stay discoverable")
   )
-  anti_metric: "more agent activity without accepted evidence-backed improvement"
+  anti_metric: "more raw agent hours or activity without accepted evidence-backed improvement"
   proof: [README.md, ARCHITECTURE.md, docs/fundamentals/harness-algebra.md, docs/MEMORY.md, docs/specs/README.md, farplane/]
 }
 
@@ -59,11 +60,13 @@ goal q3_harness_operating_system {
 value_function harness_autonomy_quality {
   maximize: [
     meaningful_long_running_output,
+    accepted_agent_output,
     quality,
     validated_improvement,
     reliability,
     reusable_behavior,
-    auditability
+    auditability,
+    context_isolated_execution
   ]
   minimize: [
     human_intervention,
@@ -71,7 +74,10 @@ value_function harness_autonomy_quality {
     agent_churn,
     coordination_cost,
     ungrounded_claims,
-    brittle_state_loss
+    brittle_state_loss,
+    context_bleed,
+    source_gap_rate,
+    skill_backpropagation_delay
   ]
   constraints: [
     user_goal_satisfied,
@@ -79,7 +85,8 @@ value_function harness_autonomy_quality {
     correctness_regression_false,
     safety_regression_false,
     proof_exists,
-    operator_control_preserved
+    operator_control_preserved,
+    context_isolation_preserved
   ]
 }
 
@@ -88,7 +95,9 @@ axis validated_self_improvement {
   kpi: hybrid(
     learning_metric("validated_improvement_cycles_completed"),
     learning_metric("accepted_harness_improvements"),
-    learning_metric("human_intervention_minutes_per_cycle trends down")
+    learning_metric("human_intervention_minutes_per_cycle trends down"),
+    learning_metric("accepted_agent_hours_with_proof trends up"),
+    learning_metric("skill_backpropagation_events close repeated misses")
   )
   current_signal: ref("docs/fundamentals/harness-algebra.md") + ref("skills/optimize-harness/SKILL.md") + ref("skills/horizon-advisor/SKILL.md")
 }
@@ -98,7 +107,8 @@ axis quality_and_proof {
   kpi: hybrid(
     review_metric("completion claims include sufficient proof and no self-certified QA/review where prohibited"),
     mechanical("framework, doc, harness, and skill validators pass"),
-    learning_metric("false_completion and brittle_state_loss incidents trend down")
+    learning_metric("false_completion, context_bleed, source_gap, and brittle_state_loss incidents trend down"),
+    learning_metric("proof_closure_rate trends up")
   )
   current_signal: ref("bin/validators/") + ref("farplane/evals.md") + ref("docs/TROUBLES.md")
 }
@@ -160,15 +170,17 @@ project goal_advisor_program_grammar {
 
 project low_intervention_experiment_engine {
   parent: q3_harness_operating_system
-  output: "Farplane can propose, run, evaluate, and accept/reject harness improvement experiments with explicit human-intervention accounting."
-  feedback_surface: hybrid_metric("validated cycles", "accepted improvements", "human intervention minutes", "quality/proof review")
+  output: "Farplane can propose, run, evaluate, backpropagate, and accept/reject harness improvement experiments with explicit human-intervention, proof, and context-isolation accounting."
+  feedback_surface: hybrid_metric("validated cycles", "accepted improvements", "accepted agent-hours", "human intervention minutes", "proof closure", "context isolation", "quality/proof review")
   budget: time_budget("quarter")
   route: optimize_harness + eval + horizon_advisor
   gates: [no_fake_precision, no_unreviewed_self_improvement_claims, operator_control_preserved]
   starting_tasks: [
     "define validated improvement cycle report format",
+    "define weekly metric review fields for accepted output, intervention minutes, proof closure, context isolation, and skill backpropagation",
     "select first 3 project contexts for low-intervention improvement loops",
-    "run ablations only where baseline and proof surface are clear"
+    "run ablations only where baseline and proof surface are clear",
+    "add an e2e workflow eval for one self-evolution chain before broad claims"
   ]
 }
 
@@ -244,6 +256,14 @@ value function instead of vague growth or vague self-improvement claims:
 
 - North Star = meaningful long-running autonomous improvement per human
   intervention hour
+- accepted agent-hours matter only when they produce reviewed artifacts or
+  accepted state deltas
+- proof routes are selected by `proof-advisor`; `eval` executes repeatable eval
+  proof only after eval is selected as the right surface
+- skill updates are the backpropagation path for repeated misses discovered in
+  daily or weekly reports
+- context isolation is measured through source gaps, context bleed,
+  self-approval, cross-thread state loss, and missing writeback incidents
 - Horizon Advisor owns goal/KPI/project-goals authoring
 - Goal Advisor owns execution compilation for selected frontiers
 - first validated improvement cycles define intervention budget, quality
@@ -256,9 +276,20 @@ Weekly Interval review may propose updates to this file when fresh reports or
 tickets change strategy:
 
 ```text
-update_strategy(farplane/goals.md, interval_reports, tickets, memory)
-  -> goal_delta + milestone_delta + holds_delta + ticket_delta
+weekly_strategy_delta(farplane/goals.md, interval_reports, tickets, memory)
+  -> goals_delta_candidates
+   + milestone_delta_candidates
+   + holds_delta_candidates
+   + ticket_delta_candidates
+   + goal_advisor_handoffs
 ```
+
+Material deltas to the North Star, KPI tree, strategy axes, project priority,
+holds, stop conditions, quarterly/yearly goals, or durable milestones require
+operator approval or a `horizon-advisor` run before this file changes. Weekly
+Interval may auto-apply only small evidence-backed source refs, stale labels,
+current-signal notes, or minor milestone wording when the report includes the
+evidence and policy allows it.
 
 Interval automation should not move schedule, grouped-job, report-path, or
 run-ledger configuration into this file. It should update

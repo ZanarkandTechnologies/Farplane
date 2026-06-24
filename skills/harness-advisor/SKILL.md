@@ -3,6 +3,7 @@ name: harness-advisor
 description: "Turn a Farplane improvement idea into a recommended owner surface across policy, templates, skills, agents, hooks, tickets, docs, or validators."
 tier: 2
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"

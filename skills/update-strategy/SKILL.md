@@ -4,6 +4,7 @@ description: "Turn project goals, tickets, progress, and feedback into strategy 
 tier: 3
 group: project-ops
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash

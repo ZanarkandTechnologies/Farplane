@@ -4,6 +4,7 @@ description: "Turn a selected leverage play into exemplar proof, extracted rollo
 tier: 3
 group: harness
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash

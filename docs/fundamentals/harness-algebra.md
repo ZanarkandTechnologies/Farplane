@@ -486,6 +486,31 @@ remaining failure is genuinely compositional.
 Use skill engineering when behavior should repeat across tasks. Use a ticket or
 one-off prompt when the workflow is local, unstable, or not worth packaging.
 
+Do not create a fourth skill tier for composed workflows. E2E behavior is a
+projection over existing mini-harnesses:
+
+```text
+E2EWorkflow(owner, scenario) =
+  key_skill_steps[]
++ state_edges[]
++ proof_surface
++ accept_or_rollback_rule
+```
+
+Mark the chain where it will be used:
+
+- `workflow: true` on high-level workflow skills; graph tooling scans only the
+  skill's `## Todo List` for first-seen explicit skill references in order.
+- `common_chains` for stable skill adjacency.
+- `routes:` in skill signatures for normal handoffs.
+- workflow refs for orchestrator-owned conditional procedures.
+- e2e eval reference points for testable composition.
+- lifecycle graph curated edges for framework-critical UI visibility.
+
+The proof question is not "is there a tier 4 skill?" It is "does the composed
+workflow preserve context isolation, state writeback, proof, and owner
+boundaries across every key step?"
+
 ## 5. Phase And Budget Engineering
 
 Every serious skill invocation inherits the Tier 0 phase protocol:

@@ -61,6 +61,7 @@ def validate_skill(skill_path):
         'group',
         'methods',
         'common_chains',
+        'workflow',
         'upstream_url',
     }
 

@@ -4,6 +4,7 @@ description: "Turn project history, memory, README, docs, lessons, troubles, and
 tier: 3
 group: project-ops
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
@@ -33,7 +34,7 @@ a dedicated ticket or cadence.
 
 Use when a project PM heartbeat needs durable memory, README, docs, history,
 lesson, and trouble consolidation. The automation manifest supplies cadence,
-freshness, reports, gates, and project-local overrides; this skill owns default
+freshness, reports, gates, and project-local extensions; this skill owns default
 source reads, candidate classification, hardening handoffs, output fields, and
 review routing.
 

@@ -4,6 +4,7 @@ description: "Turn a reusable workflow or capability idea into a Farplane skill 
 tier: 3
 group: skills
 source: local
+workflow: true
 eval: eval_task.json
 template_uses:
   skill-template: "0.3.2"

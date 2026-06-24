@@ -4,6 +4,7 @@ description: "Turn a high-level project or business idea into a values-goals-KPI
 tier: 3
 group: harness
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
 allowed-tools: Read, Write, Glob, Grep, Bash, web_search

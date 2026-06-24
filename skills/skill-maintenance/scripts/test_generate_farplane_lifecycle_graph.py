@@ -112,8 +112,11 @@ routes:
         self.assertIn("skill:deep-init-project", nodes)
         self.assertIn("skill:horizon-advisor", nodes)
         self.assertIn("skill:goal-advisor", nodes)
+        self.assertIn("skill:proof-advisor", nodes)
         self.assertIn("hook:Stop", nodes)
         self.assertIn(("skill:goal-advisor", "ticket:tickets/TASK-*/program.md", "writes"), edges)
+        self.assertIn(("skill:harness-advisor", "skill:proof-advisor", "routes_to"), edges)
+        self.assertIn(("skill:proof-advisor", "skill:eval", "routes_to"), edges)
         self.assertIn(("automation:pulse", "skill:pulse-update", "triggers"), edges)
         self.assertIn(("automation:daily-interval", "skill:interval-update", "triggers"), edges)
         self.assertIn(("automation:weekly-interval", "skill:interval-update", "triggers"), edges)
@@ -125,7 +128,7 @@ routes:
         self.assertNotIn("gate", kinds)
         self.assertNotIn("fsa_state", kinds)
         self.assertFalse(any("abstract-state" in node.get("tags", []) for node in graph["nodes"]))
-        self.assertEqual(len(graph["fsa_projections"]), 4)
+        self.assertEqual(len(graph["fsa_projections"]), 5)
 
     def test_full_graph_can_include_noisy_detail_nodes(self) -> None:
         repo = Path(__file__).resolve().parents[3]
@@ -150,6 +153,7 @@ routes:
                 "automation_activation",
                 "ticket_goal_execution",
                 "memory_drain_upkeep",
+                "self_update_loop",
             },
         )
         ticket = by_id["ticket_goal_execution"]

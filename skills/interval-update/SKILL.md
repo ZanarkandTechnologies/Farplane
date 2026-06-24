@@ -4,6 +4,7 @@ description: "Run one Farplane interval automation: review the past window, writ
 tier: 3
 group: harness
 source: local
+workflow: true
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"
@@ -17,28 +18,24 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Context
 
 Use this skill for one scheduled Farplane interval automation. The Codex app
-owns cadence by running separate automations, such as Daily Interval and Weekly
-Interval. This skill owns the shared report-then-plan workflow for a single
-window.
-
-Default presets:
-
-- `daily_interval`: review the last 24 hours, plan the next 24 hours, and use
-  the latest weekly interval report as parent context when present.
-- `weekly_interval`: review the last week, plan the next week, and use goals
-  plus daily reports from the review window as context.
+owns cadence by running explicit automations. This skill owns the shared
+report-then-plan workflow for one configured window. The caller supplies the
+timeframe, cross-interval context refs, and optional report workflows.
 
 Do not wrap this skill in a hidden scheduler thread. If a project needs another
 cadence, create another explicit automation that calls this skill with a named
-interval, review window, planning window, and small additive extensions.
+interval, review window, planning window, context refs, and workflow flags.
 
 ## Skill Signature
 
 ```text
-interval_update(project_root, interval_id, review_window, planning_window, extensions?, now?)
+interval_update(project_root, interval_id, review_window, planning_window,
+                context_refs?, report_workflows?, planning_policy?,
+                write_policy?, now?)
   -> context_bundle
    + source_gaps
    + interval_report
+   + workflow_findings
    + drift_findings
    + next_window_plan
    + pulse_guidance
@@ -62,9 +59,10 @@ state:
          farplane/goals.md only through explicit goals-delta policy)
 
 gates:
-  defaults_resolved; extensions_merged; review_window_bound;
+  default_refs_resolved; configured_refs_merged; review_window_bound;
+  cross_interval_refs_resolved_or_gap_labeled;
   context_bundle_written_or_summarized; report_written_before_plan_or_goals_mutation;
-  drift_checked; next_window_plan_written; side_effect_gates_respected;
+  configured_report_workflows_run; drift_checked; next_window_plan_written; side_effect_gates_respected;
   date_stamped_report_used
 
 routes:
@@ -80,7 +78,8 @@ fails:
 
 ## Default Resolution
 
-Resolve this standard context for every Farplane project:
+Resolve this standard context for every Farplane project, then merge
+caller-supplied `context_refs`.
 
 ```text
 default_context_refs(project_root, interval_id) = {
@@ -94,25 +93,85 @@ default_context_refs(project_root, interval_id) = {
 }
 ```
 
-Default presets:
+Configurable inputs:
 
 ```text
-daily_interval:
-  review_window: last_24h
-  planning_window: next_24h
-  parent_plan_ref: latest weekly_interval report when present
+context_refs:
+  extra_refs?: [ref]
+  parent_context_refs?: [ref]
+  workflow_refs?: {
+    telemetry_refs?: [ref]
+    feedback_refs?: [ref]
+    opportunity_refs?: [ref]
+    metric_refs?: [ref]
+    status_refs?: [ref]
+  }
+  interval_output_refs?: [
+    {
+      interval_id: string,
+      selector: latest | inside_review_window | explicit_paths,
+      as: string
+    }
+  ]
+  replace_refs?: { <default_ref_name>: ref | [ref] }
 
-weekly_interval:
-  review_window: last_week
-  planning_window: next_week
-  parent_plan_ref: farplane/goals.md
-  daily_report_refs: daily_interval reports inside review_window
+report_workflows:
+  plan_progress?: bool | "light"
+  codex_attention_drift?: bool | "light"
+  ticket_board_drift?: bool | "light"
+  feedback_obligations?: bool | "when_sources_exist"
+  opportunity_signals?: bool | "when_sources_exist"
+  goal_drift?: bool | "light"
+  metric_snapshot?: bool | "when_sources_exist"
+  compounding_leverage_review?: bool | "light"
+  priority_planning?: bool | "light"
 ```
 
-`extensions` may add context refs, phase instructions, analysis lanes, or
-policy details. Missing extensions mean use the default Farplane behavior.
+`planning_policy` and `write_policy` may add phase instructions, side-effect
+gates, goals-delta policy, or report shape. Missing optional configs mean use
+the generic report-then-plan path only.
 Use [references/interval-update.md](references/interval-update.md) for the
-extension merge contract and goals-delta policy.
+configuration contract, optional workflow definitions, and goals-delta policy.
+
+Workflow reference index:
+
+```text
+plan_progress(review_window)
+  -> goal_movement + task_drag + plan_realism
+  ref: references/workflows/plan-progress.md
+
+codex_attention_drift(review_window)
+  -> attention_map + drift_causes
+  ref: references/workflows/codex-attention-drift.md
+
+ticket_board_drift(review_window)
+  -> stale_work + board_hygiene_deltas
+  ref: references/workflows/ticket-board-drift.md
+
+feedback_obligations(review_window, planning_window)
+  -> commitments + followups
+  ref: references/workflows/feedback-obligations.md
+
+opportunity_signals(review_window, planning_window)
+  -> candidates + defer_or_displace_decisions
+  ref: references/workflows/opportunity-signals.md
+
+goal_drift(review_window)
+  -> goal_findings + goals_delta_candidates
+  ref: references/workflows/goal-drift.md
+
+metric_snapshot(review_window)
+  -> metric_status + gaps
+  ref: references/workflows/metric-snapshot.md
+
+compounding_leverage_review(review_window, planning_window)
+  -> lever_inventory + top_experiment_candidates + reward_signals
+  ref: references/workflows/compounding-leverage-review.md
+
+priority_planning(review_window, planning_window)
+  -> priorities + depriorities + proof_checks
+  ref: references/workflows/priority-planning.md
+```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -120,20 +179,30 @@ extension merge contract and goals-delta policy.
 - [ ] 1. Bind the interval invocation.
   - [ ] Resolve `project_root`.
   - [ ] Bind `interval_id`, `review_window`, and `planning_window`.
-  - [ ] Load additive `extensions` only when the automation supplies them.
+  - [ ] Load `context_refs`, `report_workflows`, `planning_policy`, and
+        `write_policy` only when the automation supplies them.
 - [ ] 2. Resolve default context.
   - [ ] Build default refs for goals, tickets, memory, Pulse reports, interval
         reports, PM thread grouping, and worker outcome refs.
-  - [ ] Add daily parent weekly-plan context or weekly daily-report context
-        from the preset.
-  - [ ] Merge extension refs without making the caller restate default
+  - [ ] Merge configured refs without making the caller restate default
         Farplane paths.
+  - [ ] Resolve configured cross-interval refs, such as latest output from one
+        interval or reports from another interval inside `review_window`.
+  - [ ] Bind workflow-specific source refs from `context_refs.workflow_refs`
+        before running source-dependent report workflows.
   - [ ] Label missing or stale sources as source gaps.
 - [ ] 3. Review the past window.
   - [ ] Summarize tickets, Pulse decisions, worker outcomes, blockers,
         failures, file/doc changes, and human feedback inside `review_window`.
-  - [ ] Check drift against the relevant parent context: latest weekly plan for
-        daily intervals, goals and daily reports for weekly intervals.
+  - [ ] Check drift against configured parent context refs and goals.
+  - [ ] Run only the report workflows enabled by `report_workflows`, passing
+        the context bundle, `review_window`, and `planning_window` to each
+        workflow.
+  - [ ] Load only the workflow ref files named in the workflow reference index
+        for enabled workflows, then run inline or read-only subagent analysis
+        lanes as those refs direct.
+  - [ ] When `compounding_leverage_review` is enabled, close due reward
+        signals from prior interval reports before selecting new leverage bets.
 - [ ] 4. Write the report before durable mutations.
   - [ ] Write a date-stamped interval report.
   - [ ] Include source gaps, drift findings, evidence, and the proposed next
@@ -159,13 +228,8 @@ extension merge contract and goals-delta policy.
 
 ## Reference Map
 
-- [templates/daily-interval.md](templates/daily-interval.md) - default daily
-  interval preset.
-- [templates/weekly-interval.md](templates/weekly-interval.md) - default weekly
-  interval preset.
 - [references/interval-update.md](references/interval-update.md) - interval
-  planning, default context refs, extension merge rules, and goals-delta
-  promotion.
+  planning, context refs, optional report workflows, and goals-delta promotion.
 - [templates/interval-context-bundle.md](templates/interval-context-bundle.md)
   - default interval context bundle.
 - [templates/interval-report.md](templates/interval-report.md) - default
