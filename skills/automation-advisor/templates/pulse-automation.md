@@ -32,6 +32,9 @@ Gates:
 - Do not perform drift review, scrum reflection, or strategy replanning.
 - Do not run more than one child/action per beat unless the active policy
   explicitly raises the budget.
+- Zero ready tickets means only `pick_ready_ticket` is blocked. Before selecting
+  `no_op_unsafe`, write `Action Arm Verdicts` for every non-ticket arm with a
+  concrete eligible/blocked reason.
 
 Finish:
 - Summarize reward updates, selected action, handoff/report paths, and what

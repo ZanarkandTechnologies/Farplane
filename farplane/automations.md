@@ -53,6 +53,12 @@ Run one Pulse beat only. Do not perform drift review, scrum reflection, or
 strategy replanning. Do not push, deploy, publish, spend, mutate external
 systems, commit, or perform destructive cleanup.
 
+Hard no-op gate: zero ready tickets means only `pick_ready_ticket` is blocked.
+Before selecting `no_op_unsafe` or rewarding a no-op as positive, write an
+`Action Arm Verdicts` section that evaluates `split_oversized_ticket`,
+`clarify_blocker`, `create_prep_ticket`, `run_qa_or_eval`,
+`refresh_ticket_metadata`, and `consult_goal_advisor` with concrete evidence.
+
 Final output: reward updates, selected action or no-op reason, child thread ID
 or handoff blocker, report/state paths, and what evidence will decide the
 reward next time.

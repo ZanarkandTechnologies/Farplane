@@ -40,6 +40,16 @@ shape, and decision/outcome ledger writes. If no proceedable ticket exists,
 Pulse chooses one narrow refill or maintenance arm; `consult goal-advisor` is
 an arm, not the default.
 
+`no_op_unsafe` is a last-resort arm, not the normal empty-board outcome. A
+zero-ready ticket count proves only that `pick_ready_ticket` is unavailable.
+Before selecting `no_op_unsafe`, Pulse must record an `Action Arm Verdicts`
+section that evaluates every non-ticket arm (`split_oversized_ticket`,
+`clarify_blocker`, `create_prep_ticket`, `run_qa_or_eval`,
+`refresh_ticket_metadata`, and `consult_goal_advisor`) with a concrete
+eligible/blocked verdict and evidence. Rewarding a no-op as positive requires
+that same arm-by-arm evidence; metadata staying valid and ready staying zero is
+not enough by itself.
+
 Proceedable ticket selection is a hard gate. Pulse must not select local ticket
 implementation work unless the ticket is `ready: true`,
 `approval_required: false`, `blocked_by: []`, `claimed_by:` empty, dependency
@@ -128,6 +138,8 @@ fails:
   - [ ] Treat `consult goal-advisor` as one action-tree arm only when the empty
         board is caused by unclear goals, an unclear milestone, or missing
         executable Goal Packets.
+  - [ ] Select `no_op_unsafe` only after writing arm-by-arm verdicts for every
+        non-ticket arm; do not treat `ready_tickets: 0` as sufficient evidence.
 - [ ] 5. Spawn or record.
   - [ ] If the action needs a child, create a named child-thread handoff with
         objective, context refs, gates, expected outputs, reward horizon, and
@@ -156,15 +168,20 @@ fails:
   approval-free, non-parked, non-complete ticket and spawn a bounded PM-owned
   worker when useful.
 - `split_oversized_ticket`: turn one blocked or too-large ticket into a smaller
-  executable ticket handoff.
+  executable ticket handoff when the split is mechanical and does not need a
+  material product decision.
 - `clarify_blocker`: ask for or record the smallest blocker clarification.
 - `create_prep_ticket`: add one small setup, research, QA, or cleanup ticket
-  that unlocks obvious work.
+  that unlocks obvious work. This is the default empty-board refill when goals,
+  interval guidance, recent Pulse reports, or stale board state show an
+  actionable gap that can be made ticket-shaped without guessing strategy.
 - `run_qa_or_eval`: collect proof for a ticket or workflow whose next reward
   depends on evidence.
 - `refresh_ticket_metadata`: repair stale ready/approval/phase metadata so the
   board becomes selectable again.
 - `consult_goal_advisor`: ask for Goal Advisor help only when goals or the next
   milestone are too unclear to create executable work.
-- `no_op_unsafe`: stop when all available actions violate gates, require human
-  approval, or would create noisy work.
+- `no_op_unsafe`: stop only when every available arm violates gates, requires
+  human approval, requires external side effects, or would create noisy work.
+  The report must include `Action Arm Verdicts` showing why each non-ticket arm
+  is blocked.
