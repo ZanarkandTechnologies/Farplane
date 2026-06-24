@@ -13,7 +13,7 @@ tags:
 refs:
   - context.md
   - decision.md
-  - ../../../bin/farplane_adoption.py
+  - ../../../bin/core/farplane_adoption.py
   - ../../../bin/farplane.py
   - ../../../bin/tests/test_farplane_adoption.py
   - ../../../docs/features/registry.jsonl
@@ -66,12 +66,12 @@ Two related pieces now exist:
 
    ```bash
    python3 bin/farplane.py adoption scan --project-root . --no-state --json
-   python3 bin/farplane_adoption.py scan --project-root . --no-state --json
+   python3 bin/farplane.py adoption scan --project-root . --no-state --json
    ```
 
    Main entry points:
 
-   - `bin/farplane_adoption.py`
+   - `bin/core/farplane_adoption.py`
    - `bin/farplane.py`
    - `bin/tests/test_farplane_adoption.py`
    - `docs/features/registry.jsonl`
@@ -125,7 +125,7 @@ Useful variants:
 ```bash
 python3 bin/farplane.py adoption scan --roots-file ~/.farplane/state/projects.json --json
 python3 bin/farplane.py adoption scan --project-root /path/to/project-a --project-root /path/to/project-b --json
-python3 bin/farplane_adoption.py scan --standard-root /path/to/Farplane --roots-file /path/to/projects.json --json
+python3 bin/farplane.py adoption scan --standard-root /path/to/Farplane --roots-file /path/to/projects.json --json
 ```
 
 The UI can shell out to this command for v1. That keeps the resolver logic in
@@ -532,7 +532,7 @@ Add only after the Office UI proves the v1 surface is useful:
 The current implementation was verified with:
 
 ```bash
-python3 -m py_compile bin/farplane_adoption.py bin/farplane.py
+python3 -m py_compile bin/core/farplane_adoption.py bin/farplane.py
 python3 -m unittest bin/tests/test_farplane_adoption.py
 python3 bin/farplane.py adoption scan --project-root . --no-state --json
 python3 bin/validators/check_doc_refs.py

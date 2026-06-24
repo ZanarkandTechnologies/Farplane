@@ -55,30 +55,19 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `self_improve_hook_probe.py` - deterministic probe for the hook-backed
   skill-opportunity sidecar; can seed rolling windows, force dry-run reviews,
   and print the generated input/report paths without waiting for live cadence
-- `delegate_cli_agent.py` - compatibility wrapper for the delegate CLI helper
-  owned by `skills/delegate-cli/scripts/delegate_cli_agent.py`
 - `farplane_boards.py` - board adapter contract plus the filesystem
   `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a
   `WorkItem`
 - `farplane_compute.py` - compute admission policy for `local_shared`,
   `local_worktree`, `symphony`, and `codex_cloud`; it emits blockers and setup
   hints but never launches compute
-- `install_selected_skills.py` - compatibility wrapper for the selected-skill
-  installer owned by `skills/skill-maintenance/scripts/install_selected_skills.py`
-- `import_installed_skills.py` - compatibility wrapper for the installed-skill
-  importer owned by `skills/skill-maintenance/scripts/import_installed_skills.py`
-- `sync_skill_plugins.py` - compatibility wrapper for the plugin package
-  generator owned by `skills/skill-maintenance/scripts/sync_skill_plugins.py`
-- `pr_review_watch.py` - compatibility wrapper for the PR review watcher owned
-  by `skills/pr-review-watch/scripts/pr_review_watch.py`
 - `farplane_invocation.py` - contract helper for `WORKFLOW.md`,
   `FarplaneRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
-- `farplane_adoption.py` - local adoption resolver for project
+- `farplane.py adoption scan` - local adoption resolver for project
   `farplane/manifest.json` pins, optional project `skills/`, feature/template
-  registries, drift, and Office-consumable adoption stats
-- `farplane_recent_activity.py` - compatibility wrapper for the Board Drain
-  recent-activity helper owned by `skills/board-drain/scripts/farplane_recent_activity.py`
+  registries, drift, and Office-consumable adoption stats; implementation lives
+  in `bin/core/farplane_adoption.py`
 - `../skills/ralph/scripts/select_next_ticket.py` - serial Ralph selector that
   consumes `FileTicketAdapter` and `ComputeSelector` so board draining uses the
   same work-item and compute admission policy as invocation prep
@@ -146,34 +135,35 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/ticket_runtime.py down ...`
   Use when the helper should stop tracked processes or run the declared
   compose-down command, then release reserved ports
-- `python3 bin/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json`
+- `python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json`
   Use before a live external CLI run to check the profile templates, copied
   skill sources, executable, and required environment variables
-- `python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket <ticket> --dry-run --json`
+- `python3 skills/delegate-cli/scripts/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket <ticket> --dry-run --json`
   Use to render the Pi/Kimi frontend delegation prompt, command, runtime logs,
   and durable ticket artifacts without spending tokens or editing files
-- `python3 bin/install_selected_skills.py --search frontend`
+- `python3 skills/skill-maintenance/scripts/install_selected_skills.py --search frontend`
   Use to discover shareable skills without rendering the full Farplane config.
-- `python3 bin/install_selected_skills.py --skills review,visual-qa --dry-run`
+- `python3 skills/skill-maintenance/scripts/install_selected_skills.py --skills review,visual-qa --dry-run`
   Use to preview selected skill symlinks into `~/.codex/skills`.
-- `python3 bin/import_installed_skills.py --list`
+- `python3 skills/skill-maintenance/scripts/import_installed_skills.py --list`
   Use to list installed Codex skills and see whether each already exists in
   repo source.
-- `python3 bin/import_installed_skills.py --skills notion-task-field-fill,reel-collage --dry-run`
+- `python3 skills/skill-maintenance/scripts/import_installed_skills.py --skills notion-task-field-fill,reel-collage --dry-run`
   Use to preview importing installed skills into `skills/*` before writing.
-- `python3 bin/import_installed_skills.py --skills <name> --overwrite`
+- `python3 skills/skill-maintenance/scripts/import_installed_skills.py --skills <name> --overwrite`
   Use to replace an existing repo skill from the installed copy, with the old
   repo package backed up under `.farplane/import-backups/`.
-- `python3 bin/sync_skill_plugins.py --check`
+- `python3 skills/skill-maintenance/scripts/sync_skill_plugins.py --check`
   Use after changing `skills/*` to prove plugin packages can still be generated.
-- `python3 bin/sync_skill_plugins.py --install-local --plugins farplane-core`
+- `python3 skills/skill-maintenance/scripts/sync_skill_plugins.py --install-local --plugins farplane-core`
   Use to expose selected Farplane plugin bundles through your personal Codex
   marketplace under `~/.agents/plugins`.
-- `python3 bin/pr_review_watch.py classify --repo <repo> --pr <number> --json`
+- `python3 skills/pr-review-watch/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json`
   Compatibility command for the `pr-review-watch` skill-owned classifier.
 - `python3 bin/validators/check_doc_refs.py`
-  Use after moving docs or updating local references; the top-level
-  `bin/check_doc_refs.py` path remains as a compatibility wrapper.
+  Use after moving docs or updating local references. The old top-level
+  `bin/check_doc_refs.py` wrapper was removed during TASK-0218 bin
+  minimization.
 - `python3 bin/validators/sync_skill_registry.py --check`
   Use after skill metadata changes when debugging the broader
   `skills/skill-maintenance/scripts/check_skills.py --write` path.
@@ -239,8 +229,8 @@ python3 bin/ticket_runtime.py up \
 python3 bin/ticket_runtime.py qa --ticket TASK-0014 --json
 python3 bin/ticket_runtime.py down --ticket TASK-0014 --json
 
-python3 bin/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json
-python3 bin/delegate_cli_agent.py run \
+python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json
+python3 skills/delegate-cli/scripts/delegate_cli_agent.py run \
   --profile frontend-pi-kimi \
   --ticket tickets/TASK-0014/ticket.md \
   --dry-run \
@@ -278,7 +268,7 @@ a mechanical block/continue gate for the active session.
 - `python3 -m py_compile bin/validators/check_doc_parity.py bin/validators/test_doc_parity.py`
 - `python3 -m py_compile bin/validators/check_doc_refs.py bin/validators/test_check_doc_refs.py`
 - `python3 -m unittest bin/validators/test_check_template_version_metadata.py`
-- `python3 -m py_compile bin/delegate_cli_agent.py skills/delegate-cli/scripts/delegate_cli_agent.py`
+- `python3 -m py_compile skills/delegate-cli/scripts/delegate_cli_agent.py`
 - `python3 -m py_compile skills/ralph/scripts/select_next_ticket.py`
 - `python3 skills/ralph/scripts/test_select_next_ticket.py`
 - `python3 -m unittest discover -s bin/tests -p 'test_*.py'`

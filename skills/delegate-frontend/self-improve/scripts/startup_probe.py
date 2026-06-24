@@ -23,7 +23,7 @@ def project_root() -> Path:
 def build_probe_command(args: argparse.Namespace, prompt_path: Path) -> list[str]:
     command = [
         "python3",
-        "bin/delegate_cli_agent.py",
+        "skills/delegate-cli/scripts/delegate_cli_agent.py",
         "run",
         "--profile",
         args.profile,

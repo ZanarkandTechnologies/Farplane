@@ -13,7 +13,7 @@ Explicit PR watcher workflow for already-open GitHub pull requests.
 ## Minimal Example
 
 ```bash
-python3 bin/pr_review_watch.py classify \
+python3 skills/pr-review-watch/scripts/pr_review_watch.py classify \
   --fixture skills/pr-review-watch/fixtures/clean-pass.json \
   --config skills/pr-review-watch/fixtures/pipeline-config.md \
   --json

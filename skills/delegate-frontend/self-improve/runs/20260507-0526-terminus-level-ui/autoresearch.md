@@ -8,7 +8,7 @@ measurable first-write, scroll-scrub, asset, and visual-parity evidence.
 ## Scope
 - Target skill: `skills/delegate-frontend`
 - Target profile: `templates/external-cli/profiles/frontend-pi-kimi`
-- Supporting harness: `bin/delegate_cli_agent.py`
+- Supporting harness: `skills/delegate-cli/scripts/delegate_cli_agent.py`
 - QA harness: `skills/landing-page/scripts/scroll_scrub_qa.cjs`
 
 ## Metric

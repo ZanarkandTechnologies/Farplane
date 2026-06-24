@@ -143,7 +143,7 @@ if [ "$SKILLS_ONLY" -eq 1 ]; then
   if [ "${#SKILL_INSTALL_ARGS[@]}" -eq 0 ]; then
     SKILL_INSTALL_ARGS+=("--list")
   fi
-  python3 "$REPO_DIR/bin/install_selected_skills.py" \
+  python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" \
     --repo "$REPO_DIR" \
     --target "$TARGET_DIR" \
     "${SKILL_INSTALL_ARGS[@]}"
@@ -348,7 +348,7 @@ for agent_file in "$REPO_DIR"/agents/*.toml; do
   link_path "$agent_file" "$TARGET_DIR/agents/$(basename "$agent_file")"
 done
 
-python3 "$REPO_DIR/bin/install_selected_skills.py" \
+python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" \
   --repo "$REPO_DIR" \
   --target "$TARGET_DIR" \
   --all

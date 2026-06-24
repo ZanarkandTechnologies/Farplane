@@ -9,7 +9,7 @@
       "skills/delegate-frontend/SKILL.md",
       "skills/landing-page/self-improve/program.md",
       "skills/landing-page/references/spec-first-cinematic-industrial.md",
-      "bin/delegate_cli_agent.py",
+      "skills/delegate-cli/scripts/delegate_cli_agent.py",
       "templates/external-cli/profiles/frontend-pi-kimi/APPEND_SYSTEM.md"
     ],
     "docs_checked": [

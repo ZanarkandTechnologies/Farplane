@@ -101,7 +101,7 @@ Each failure needs its own hypothesis, metric, and stop condition.
 - `evals/assertions.py / evaluate_phase_completion(case, output): list[AssertionResult]`
 - `evals/assertions.py / evaluate_startup_reliability(case, output): list[AssertionResult]`
 - `evals/runner.py / load_jsonl(path): list[dict]`
-- `bin/delegate_cli_agent.py / command_run(args): DelegateRunResult payload`
+- `skills/delegate-cli/scripts/delegate_cli_agent.py / command_run(args): DelegateRunResult payload`
 - `scroll_scrub_qa.cjs / result.score: ScrollScrubScore`
 
 ### Type Sketch
@@ -351,7 +351,7 @@ flowchart LR
 ## Verification
 
 - `python3 skills/delegate-frontend/self-improve/evals/runner.py`
-- `python3 -m py_compile skills/delegate-frontend/self-improve/evals/assertions.py skills/delegate-frontend/self-improve/evals/runner.py bin/delegate_cli_agent.py skills/delegate-cli/scripts/test_delegate_cli_agent.py`
+- `python3 -m py_compile skills/delegate-frontend/self-improve/evals/assertions.py skills/delegate-frontend/self-improve/evals/runner.py skills/delegate-cli/scripts/delegate_cli_agent.py skills/delegate-cli/scripts/test_delegate_cli_agent.py`
 - `python3 -m unittest skills/delegate-cli/scripts/test_delegate_cli_agent.py`
 - `python3 skills/skill-creator/scripts/quick_validate.py skills/delegate-frontend`
 - `node --check skills/landing-page/scripts/scroll_scrub_qa.cjs`

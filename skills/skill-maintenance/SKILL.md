@@ -154,7 +154,7 @@ or a Goal/autoresearch loop.
     `eval_task.json`, `qa_checklist.md`, skill-local audits, and recent usage
     or eval results.
   - [ ] If `mode == installed_copy_import`, preview the import path with
-    `python3 ../../bin/import_installed_skills.py --skills <name> --dry-run`
+    `python3 scripts/import_installed_skills.py --skills <name> --dry-run`
     from this skill package before any overwrite.
 - [ ] 3. Compute `behavior_delta := expected_behavior - current_behavior`.
   - [ ] If the delta is vague, first use `gap-analysis`, `harness-advisor`, or

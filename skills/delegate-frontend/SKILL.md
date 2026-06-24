@@ -190,8 +190,8 @@ Codex lane.
    require a first-write checkpoint before broad review. If the external run
    reads for minutes without creating the requested file, kill it and record the
    handoff as failed rather than widening the prompt.
-7. Run `python3 bin/sync_frontend_pi_skills.py --json` or
-   `python3 bin/delegate_cli_agent.py setup --profile frontend-pi-kimi --json`
+7. Run `python3 skills/delegate-frontend/scripts/sync_frontend_pi_skills.py --json` or
+   `python3 skills/delegate-cli/scripts/delegate_cli_agent.py setup --profile frontend-pi-kimi --json`
    so the managed Pi profile receives the curated frontend/media skill bundle.
 8. Run `doctor`, then `run --dry-run`. Before another live Pi/Kimi spec or
    implementation attempt, run the lightweight startup probe plan:

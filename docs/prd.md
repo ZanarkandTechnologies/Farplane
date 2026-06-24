@@ -110,7 +110,7 @@ status, so I can see whether the harness is alive.
 
 **Acceptance Criteria:**
 
-- [ ] A CLI such as `bin/farplane_telemetry_status.py` reads local event JSONL.
+- [ ] A CLI such as `bin/core/farplane_telemetry_status.py` reads local event JSONL.
 - [ ] The CLI prints counts by event type, skill, hook, ticket, project, and
       sync result.
 - [ ] The CLI reports self-improvement window counts and application report

@@ -97,7 +97,7 @@ material changed artifact or completion claim.
   - [ ] `board_sources :=` local tickets first, then Notion through `notion-context` when available.
   - [ ] `budget :=` operator-provided time/compute/notification limits, or a normal bounded ticket budget.
 - [ ] 2. Check recent activity before selecting work.
-  - [ ] Run `python3 bin/farplane_recent_activity.py --project-root <project_root> --window-minutes <activity_window> --json` to query the Farplane Console activity endpoint.
+  - [ ] Run `python3 skills/board-drain/scripts/farplane_recent_activity.py --project-root <project_root> --window-minutes <activity_window> --json` to query the Farplane Console activity endpoint.
   - [ ] If recent activity exists, emit `no_op(activity_present)` unless the caller explicitly asks to drain anyway.
   - [ ] If the endpoint or key is missing, stop with `activity_provider_unavailable` unless the caller explicitly permits `--allow-local-fallback` for diagnostics.
 - [ ] 3. Load and normalize candidate boards.
@@ -192,7 +192,7 @@ No-op policy: if the ticket is no longer proceedable, re-run board-drain selecti
 - `notion-context` installed skill - Notion project/task context rules when the connector is available.
 - [../../tickets/README.md](../../tickets/README.md) - local ticket board and proceedable-work rules.
 - [../../docs/specs/goal-loop-contract.md](../../docs/specs/goal-loop-contract.md) - Goal Packet, heartbeat, and progress contracts.
-- [../../bin/farplane_recent_activity.py](../../bin/farplane_recent_activity.py) - Farplane Console recent-activity helper.
+- [scripts/farplane_recent_activity.py](scripts/farplane_recent_activity.py) - Farplane Console recent-activity helper.
 
 ## Output
 

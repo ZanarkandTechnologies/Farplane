@@ -50,12 +50,12 @@ without letting that CLI become Farplane's source of truth.
    lane, not final authority.
 2. Pick one configured profile such as `frontend-pi-kimi`; use `advise` when
    multiple profiles fit materially differently.
-3. Run `python3 bin/delegate_cli_agent.py doctor --profile <profile> --json`
+3. Run `python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile <profile> --json`
    to check the executable, templates, skills, and environment.
-4. Run `python3 bin/delegate_cli_agent.py setup --profile <profile> --json`
+4. Run `python3 skills/delegate-cli/scripts/delegate_cli_agent.py setup --profile <profile> --json`
    when the profile needs a managed skill/prompt bundle.
 5. Load [prompt-engineering](../../docs/fundamentals/prompt-engineering.md) when the delegated prompt needs role, task, constraints, output format, examples, or structured-output discipline.
-6. Run `python3 bin/delegate_cli_agent.py run --profile <profile> --ticket <ticket> --dry-run --json`
+6. Run `python3 skills/delegate-cli/scripts/delegate_cli_agent.py run --profile <profile> --ticket <ticket> --dry-run --json`
    first to inspect the rendered command and prompt.
    For tightly bounded phase work, prefer `--compact-prompt` and repeat
    `--skill <name>` to mount only the directly relevant skills.

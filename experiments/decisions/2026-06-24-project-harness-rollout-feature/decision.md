@@ -14,7 +14,7 @@ refs:
   - ../../../docs/farplane-framework/graph-contract.md
   - ../../../skills/skill-maintenance/graph/README.md
   - ../../../tickets/TASK-0216/ticket.md
-  - ../../../bin/farplane_adoption.py
+  - ../../../bin/core/farplane_adoption.py
 ---
 
 # Decision: Project Harness Overlay
@@ -26,7 +26,7 @@ manifest-and-metrics pilot rather than a broad platform or Office-heavy UI
 feature.
 
 The implemented v1 is the narrower **Farplane Adoption Tracker CLI** in
-`bin/farplane_adoption.py` and `farplane adoption scan`.
+`bin/core/farplane_adoption.py` and `farplane adoption scan`.
 
 ## Scope Revision
 

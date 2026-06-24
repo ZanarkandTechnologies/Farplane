@@ -229,7 +229,7 @@ duplicating them in frontmatter.
 - Do not patch installed skill bodies such as `~/.codex/skills/*` as the source
   of truth. Edit the Farplane source package, then reinstall selected skills.
 - If a useful skill begins life in `~/.codex/skills`, pull it into repo source
-  with `python3 bin/import_installed_skills.py --skills <name> --dry-run` first,
+  with `python3 skills/skill-maintenance/scripts/import_installed_skills.py --skills <name> --dry-run` first,
   then rerun without `--dry-run` after reviewing the package boundary. Existing
   repo packages require explicit `--overwrite` and are backed up under
   `.farplane/import-backups/`.

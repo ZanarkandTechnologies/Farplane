@@ -34,8 +34,8 @@ capture runnable browser evidence in the same thread before handoff.
 ## Minimal Usage
 
 ```bash
-python3 bin/sync_frontend_pi_skills.py --json
-python3 bin/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket tickets/TASK-0106/ticket.md --dry-run --json
+python3 skills/delegate-frontend/scripts/sync_frontend_pi_skills.py --json
+python3 skills/delegate-cli/scripts/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket tickets/TASK-0106/ticket.md --dry-run --json
 ```
 
 ## How To Test

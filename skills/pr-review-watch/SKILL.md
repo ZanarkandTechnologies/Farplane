@@ -27,7 +27,7 @@ common_chains:
   require an explicit `pr_review_pipeline` JSON block before live watching.
 - [ ] Use adaptive backoff from `docs/specs/adaptive-backoff.md` for repeated
   wait states unless project memory declares a narrower PR-specific cadence.
-- [ ] Run `python3 bin/pr_review_watch.py classify --fixture <path> --json` for
+- [ ] Run `python3 skills/pr-review-watch/scripts/pr_review_watch.py classify --fixture <path> --json` for
   deterministic state checks, or live `gh` discovery only after the user
   explicitly asks to watch a PR.
 - [ ] Fix only actionable review items and run only project-configured local
@@ -106,7 +106,7 @@ copyable project-local contract.
 4. Run:
 
    ```bash
-   python3 bin/pr_review_watch.py classify --repo <repo> --pr <number> --json
+   python3 skills/pr-review-watch/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json
    ```
 
 5. Inspect the `WatchVerdict`:

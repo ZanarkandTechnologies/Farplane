@@ -12,7 +12,7 @@ Resume `pr-review-watch` for:
 Use the project `pr_review_pipeline` config. Re-run:
 
 ```bash
-python3 bin/pr_review_watch.py classify --repo <repo_path> --pr <pr_number> --json
+python3 skills/pr-review-watch/scripts/pr_review_watch.py classify --repo <repo_path> --pr <pr_number> --json
 ```
 
 Then:
