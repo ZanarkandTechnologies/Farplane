@@ -23,7 +23,7 @@ SPEC.loader.exec_module(validator)
 class TemplateVersionMetadataTests(unittest.TestCase):
     def test_watch_config_controls_template_paths(self) -> None:
         config = validator.WatchConfig(
-            paths=frozenset({"skills/skill-creator/references/SKILL_TEMPLATE.md"}),
+            paths=frozenset({"docs/skills/templates/SKILL_TEMPLATE.md"}),
             globs=("tickets/templates/*", "tickets/templates/**/*"),
             exclude_globs=("tickets/templates/archive/*", "tickets/templates/archive/**/*"),
             source=Path("rules/template-version-watch.toml"),
@@ -31,7 +31,7 @@ class TemplateVersionMetadataTests(unittest.TestCase):
 
         self.assertTrue(
             validator.is_watched_path(
-                "skills/skill-creator/references/SKILL_TEMPLATE.md",
+                "docs/skills/templates/SKILL_TEMPLATE.md",
                 config,
             )
         )
@@ -48,7 +48,7 @@ class TemplateVersionMetadataTests(unittest.TestCase):
                 textwrap.dedent(
                     """\
                     [template_version_watch]
-                    paths = ["skills/skill-creator/references/SKILL_TEMPLATE.md"]
+                    paths = ["docs/skills/templates/SKILL_TEMPLATE.md"]
                     globs = ["templates/**/*.md"]
                     exclude_globs = ["templates/archive/**/*"]
                     """
@@ -58,7 +58,7 @@ class TemplateVersionMetadataTests(unittest.TestCase):
 
             config = validator.load_watch_config(config_path)
 
-        self.assertIn("skills/skill-creator/references/SKILL_TEMPLATE.md", config.paths)
+        self.assertIn("docs/skills/templates/SKILL_TEMPLATE.md", config.paths)
         self.assertEqual(config.globs, ("templates/**/*.md",))
         self.assertEqual(config.exclude_globs, ("templates/archive/**/*",))
 

@@ -186,6 +186,9 @@ or a Goal/autoresearch loop.
     conditions before adding or preserving a standalone gotcha catalog.
   - [ ] Move long examples, rare recipes, templates, detailed rubrics, and
     conditional branches to references only when the todo names when to load them.
+  - [ ] If a reference is a reusable subskill or method workflow, require
+    `template_uses.skill-method-reference` and validate it against
+    [docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md).
   - [ ] Move or delete rationale, history, philosophy, tutorial prose, duplicated
     workflow explanation, and template inventories unless they satisfy the
     `qa_checklist.md` First-Load Required Set.
@@ -330,7 +333,7 @@ Return TAS verdicts, blockers, and smallest required fixes.
 - [qa_checklist.md](qa_checklist.md) - first-class skill-local QA checklist for
   material skill structure changes, first-load size, progressive disclosure,
   reference routing, or compaction-risk review.
-- [../skill-creator/references/SKILL_TEMPLATE.md](../skill-creator/references/SKILL_TEMPLATE.md)
+- [docs/skills/templates/SKILL_TEMPLATE.md](../../docs/skills/templates/SKILL_TEMPLATE.md)
   - current baseline skill template.
 - [../eval/SKILL.md](../eval/SKILL.md) - create or consolidate runnable
   regression proof when hardening or refinement touches behavior.

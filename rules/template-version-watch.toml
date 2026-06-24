@@ -2,9 +2,10 @@
 # Humans own this watchlist. Keep it focused on high-impact prompt-shaped
 # templates whose structure materially changes harness behavior.
 paths = [
-  "skills/skill-creator/references/SKILL_TEMPLATE.md",
+  "docs/skills/templates/SKILL_TEMPLATE.md",
+  "docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
   "skills/skill-creator/references/EVAL_TASK_TEMPLATE.json",
-  "skills/skill-creator/references/QA_CHECKLIST_TEMPLATE.md",
+  "docs/skills/templates/QA_CHECKLIST_TEMPLATE.md",
   "templates/global/AGENTS.md",
   "tickets/templates/ticket.md",
   "tickets/templates/goal-loop/program.md",

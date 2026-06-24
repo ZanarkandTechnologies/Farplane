@@ -98,7 +98,8 @@ Use UTC timestamps consistently across report generation
 Follow this style: type(scope): brief description, then detailed explanation.
 ````
 
-Examples help Claude understand the desired style and level of detail more clearly than descriptions alone.
+Examples help agents understand the desired style and level of detail more
+clearly than descriptions alone.
 
 ## Validation Checklist Pattern
 

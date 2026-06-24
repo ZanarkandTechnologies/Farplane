@@ -633,6 +633,10 @@ the smallest useful upgrade in the same pass:
   inputs, outputs, state, files, evidence, gates, routes, or composition.
 - Move optional detail, rare branches, examples, long rubrics, and model maps
   into references.
+- When a reference is a reusable subskill or method workflow, declare
+  `template_uses.skill-method-reference` and follow
+  `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md` instead of copying the
+  full `SKILL.md` template.
 - Remove duplicate workflow prose when the todo list already carries the
   default path.
 - Confirm proof commands, output artifacts, or explicit blockers are named.

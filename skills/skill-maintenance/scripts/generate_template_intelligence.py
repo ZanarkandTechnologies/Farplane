@@ -28,7 +28,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from bin.validators.template_usage import normalize_template_uses, template_target_basis
 CURRENT_TEMPLATE_VERSION = "0.3.2"
-TEMPLATE_PATH = Path("skills/skill-creator/references/SKILL_TEMPLATE.md")
+TEMPLATE_PATH = Path("docs/skills/templates/SKILL_TEMPLATE.md")
 DEFAULT_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.json")
 DEFAULT_JS_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.js")
 DEFAULT_ARCHIVE_DIR = Path("skills/skill-maintenance/templates/archive")

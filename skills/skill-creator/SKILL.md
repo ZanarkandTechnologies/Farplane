@@ -4,8 +4,11 @@ description: "Turn a reusable workflow or capability idea into a Farplane skill 
 tier: 3
 group: skills
 source: local
+eval: eval_task.json
 template_uses:
-  skill-template: "0.2.0"
+  skill-template: "0.3.2"
+  skill-qa-checklist: "0.1.0"
+qa_checklist: qa_checklist.md
 license: Complete terms in LICENSE.txt
 allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, Glob
 
@@ -37,7 +40,8 @@ fails: creates duplicate skills; hides required logic in references; omits proof
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read the request, related skills, registry row, nearby project docs,
+- [ ] 1. Read `qa_checklist.md` as preflight guardrails, then read the request,
+   related skills, registry row, nearby project docs,
    [docs/skills/system.md](../../docs/skills/system.md),
    [docs/skills/README.md](../../docs/skills/README.md), and
    the relevant anchored section of
@@ -56,6 +60,11 @@ fails: creates duplicate skills; hides required logic in references; omits proof
    - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
      [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
      when source comparison is required.
+   - [ ] When book-summary videos, articles, blogs, apps, or longform sources
+     are grounding material, load
+     [book-to-skill extraction](references/book-to-skill.md) before drafting so
+     online key takeaways become workflow candidates, task analysis,
+     skill-package deltas, and proof.
    - [ ] Use
      [advice and proof routing](../../docs/skills/best-practices.md#advice-and-proof-routing)
      before changing shared standards, Tier 1 primitives, meta skills, `eval`,
@@ -89,6 +98,9 @@ fails: creates duplicate skills; hides required logic in references; omits proof
    - [ ] Keep every-invocation rules in `SKILL.md`.
    - [ ] Move conditional branches, examples, templates, long rubrics, model
      maps, delegated prompts, and rare-path recipes into references.
+   - [ ] When a reference is a reusable subskill or method workflow, declare
+     `template_uses.skill-method-reference` and follow
+     [docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md).
    - [ ] Keep actor identity, delegation routing, tool-use policy, and artifact
      writeback in the owning agent prompt or caller skill.
    - [ ] Promote reference logic back into `SKILL.md` when it must be read every
@@ -100,6 +112,8 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      `skills/<skill-name>/audits/YYYY-MM-DD-<short-change>.md` from
      [skill-maintenance/templates/skill-audit.md](../skill-maintenance/templates/skill-audit.md),
      or state why the change is mechanical enough to skip an audit record.
+   - [ ] Apply `qa_checklist.md` against the finished skill package and record
+     pass, violation, not-applicable, or deferral for each item.
    - [ ] Repeatability from files alone.
    - [ ] Run each item in
      [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md)
@@ -129,40 +143,10 @@ fails: creates duplicate skills; hides required logic in references; omits proof
 
 ## Templates
 
-Minimal `SKILL.md` shape:
-
-```markdown
-## Context
-
-## Skill Signature
-
-```text
-skill_action(input_text, state?) -> primary_output + evidence?
-state: reads(...); writes(...)
-gates: proof_condition; review_condition
-routes: next-skill | direct-answer
-fails: known bad behavior
-```
-
-TODO: add the marker-delimited `## Todo List` section from
-`references/SKILL_TEMPLATE.md`.
-
-- [ ] 1. ...
-- [ ] 2. Choose the branch.
-   - [ ] 1. Default branch.
-   - [ ] 2. Repair branch.
-- [ ] 3. Review before completion.
-   - [ ] Repeatability from files alone.
-   - [ ] No duplicated first-load logic.
-
-## Templates
-## Gotchas
-## Reference Map
-## Output
-```
-
-Use [references/SKILL_TEMPLATE.md](references/SKILL_TEMPLATE.md) for the full
-starter file.
+Use [docs/skills/templates/SKILL_TEMPLATE.md](../../docs/skills/templates/SKILL_TEMPLATE.md)
+for new skill package structure. Use
+[docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md)
+when a reusable subskill or method reference needs a standard shape.
 
 ## Gotchas
 
@@ -185,9 +169,9 @@ starter file.
 - Do not spend a full pass polishing structure for a quality-dependent skill
   that has no representative example; make the example first unless the skill
   is too broken to run.
-- Do not treat `check_skills.py` or the structure checklist as behavior proof.
-  Prompt-like, budget-bearing, router, multi-agent, and eval-facing skills need
-  at least one agent-comprehension proof or an explicit blocker.
+- Do not turn a book into a condensed substitute for the book. Extract
+  transferable practices, cite lawful sources, and transform them into
+  operator-owned skill behavior, gates, examples, and evals.
 - Do not summarize QA as "looks good." Name the checklist verdicts and proof
   artifact path so the next maintainer can see what actually ran.
 
@@ -205,8 +189,12 @@ starter file.
 - [../skill-maintenance/qa_checklist.md](../skill-maintenance/qa_checklist.md)
   - first-class skill-local QA checklist for first-load size, progressive
   disclosure, reference routing, and compaction risk.
-- [references/SKILL_TEMPLATE.md](references/SKILL_TEMPLATE.md) - minimal starter
-  template for new skill packages.
+- [qa_checklist.md](qa_checklist.md) - skill-creator-specific preflight and
+  final checks for authoring, scaffolding, proof, and template hygiene.
+- [docs/skills/templates/SKILL_TEMPLATE.md](../../docs/skills/templates/SKILL_TEMPLATE.md)
+  - minimal starter template for new skill packages.
+- [docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md)
+  - starter template for reusable subskill or method reference files.
 - [references/workflows.md](references/workflows.md) - branch and
   outcome-contract patterns when the todo list needs shaping help.
 - [references/architecture.md](references/architecture.md) - boundary between
@@ -215,9 +203,11 @@ starter file.
   advise-style skill decisions.
 - [references/output-patterns.md](references/output-patterns.md) - prompt,
   template, example, and validation output patterns.
+- [references/book-to-skill.md](references/book-to-skill.md) - load when a skill
+  design is grounded in books, longform reading, author interviews, public book
+  notes, or online summaries.
 - [references/tier3-pipeline-model.md](references/tier3-pipeline-model.md) -
   optional model for complex Tier 3 pipeline skills.
-- [references/gotchas.md](references/gotchas.md) - extra review negatives.
 
 ## Output
 
@@ -227,15 +217,18 @@ Paths here are relative to the `skill-creator` package.
 python3 ../skill-maintenance/scripts/check_skills.py --write
 ```
 
-When creating or packaging a non-Farplane standalone skill, use the local
-helper scripts:
+When creating or packaging a non-Farplane standalone skill, use the local helper
+scripts only when a concrete package artifact is needed:
 
 ```bash
 python3 scripts/init_skill.py <skill-name> --path ..
 python3 scripts/package_skill.py ../<skill-name>
 ```
 
-Run added or changed scripts directly before claiming they work.
+`init_skill.py` creates only `SKILL.md` by default. Add optional support files
+with `--with-helper`, `--with-references`, or `--with-assets` only when the new
+skill genuinely needs them. Run added or changed scripts directly before
+claiming they work.
 
 After this skill runs:
 

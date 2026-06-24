@@ -26,6 +26,8 @@ if str(REPO_ROOT) not in sys.path:
 from bin.validators.template_usage import template_target_basis
 
 REQUIRED_TEMPLATE_HEADINGS = ("Context", "Todo List", "Templates", "Gotchas", "Reference Map", "Output")
+REQUIRED_METHOD_REFERENCE_HEADINGS = ("Use When", "Inputs", "Workflow", "Output Shape", "Quality Gates", "Bad Output")
+CURRENT_METHOD_REFERENCE_VERSION = "0.1.0"
 HEADING_RE = re.compile(r"^## (?P<heading>.+?)\s*$")
 TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^- \[ \] \d+\. ")
 LEGACY_NUMBERED_TODO_RE = re.compile(r"^\s*\d+\. \[ \] ")
@@ -260,7 +262,84 @@ def validate_template_version(current_version: str, require: bool) -> int:
     return 0
 
 
+def parse_simple_frontmatter(text: str) -> dict[str, object]:
+    if not text.startswith("---\n"):
+        return {}
+    end = text.find("\n---\n", 4)
+    if end == -1:
+        return {}
+    raw = text[4:end]
+    parsed: dict[str, object] = {}
+    current_key: str | None = None
+    for raw_line in raw.splitlines():
+        if not raw_line.strip():
+            continue
+        if not raw_line.startswith(" "):
+            key, _, value = raw_line.partition(":")
+            key = key.strip()
+            value = value.strip()
+            parsed[key] = {} if value == "" else value.strip("\"'")
+            current_key = key
+            continue
+        if current_key is None:
+            continue
+        current_value = parsed.get(current_key)
+        stripped = raw_line.strip()
+        if ":" in stripped:
+            subkey, _, value = stripped.partition(":")
+            if not isinstance(current_value, dict):
+                current_value = {}
+                parsed[current_key] = current_value
+            current_value[subkey.strip()] = value.strip().strip("\"'")
+    return parsed
+
+
+def method_reference_structure_errors(current_version: str) -> list[str]:
+    errors: list[str] = []
+    for path in sorted((REPO_ROOT / "skills").glob("*/references/*.md")):
+        text = path.read_text(encoding="utf-8")
+        metadata = parse_simple_frontmatter(text)
+        template_uses = metadata.get("template_uses")
+        if not isinstance(template_uses, dict):
+            continue
+        used_version = template_uses.get("skill-method-reference")
+        if used_version is None:
+            continue
+        label = str(path.relative_to(REPO_ROOT))
+        if used_version != current_version:
+            errors.append(
+                f"{label}: skill-method-reference version {used_version!r} is not current {current_version!r}"
+            )
+        headings = [heading for _, heading in iter_markdown_headings(text)]
+        for required_heading in REQUIRED_METHOD_REFERENCE_HEADINGS:
+            if required_heading not in headings:
+                errors.append(f"{label}: missing ## {required_heading}")
+    return errors
+
+
+def method_reference_template_rows() -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for path in sorted((REPO_ROOT / "skills").glob("*/references/*.md")):
+        text = path.read_text(encoding="utf-8")
+        metadata = parse_simple_frontmatter(text)
+        template_uses = metadata.get("template_uses")
+        if not isinstance(template_uses, dict):
+            continue
+        used_version = template_uses.get("skill-method-reference")
+        if used_version is None:
+            continue
+        rows.append(
+            {
+                "name": str(path.relative_to(REPO_ROOT)),
+                "template_uses": {"skill-method-reference": used_version},
+            }
+        )
+    return rows
+
+
 def skill_template_target_rows(rows: list[dict[str, object]], template_id: str) -> list[dict[str, object]]:
+    if template_id == "skill-method-reference":
+        return method_reference_template_rows()
     if template_id == "skill-template":
         return [
             row
@@ -315,6 +394,13 @@ def validate_skill_template_rollout(template_id: str, current_version: str, requ
         structure_errors = template_structure_errors(current_version)
         if structure_errors:
             print("skill template structure errors:")
+            for error in structure_errors:
+                print(f"- {error}")
+            return 1
+    if template_id == "skill-method-reference":
+        structure_errors = method_reference_structure_errors(current_version)
+        if structure_errors:
+            print("skill method reference structure errors:")
             for error in structure_errors:
                 print(f"- {error}")
             return 1
@@ -378,6 +464,14 @@ def main() -> int:
         run(["python3", "bin/validators/check_skill_capabilities.py", "validate"])
         run(["python3", "skills/eval/scripts/check_eval_queries.py", "--root", "."])
         run(["python3", "bin/validators/check_doc_refs.py"])
+
+        method_reference_errors = method_reference_structure_errors(CURRENT_METHOD_REFERENCE_VERSION)
+        if method_reference_errors:
+            print("skill method reference structure errors:")
+            for error in method_reference_errors:
+                print(f"- {error}")
+            return 1
+        print("skill method reference templates OK")
 
         run(
             [

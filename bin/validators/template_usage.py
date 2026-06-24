@@ -23,6 +23,7 @@ TEMPLATE_TARGET_BASIS = {
     "skill-template": "local skills that declare skill-template usage",
     "skill-eval-task": "skills with an eval_task.json surface",
     "skill-qa-checklist": "skills with a qa_checklist.md surface",
+    "skill-method-reference": "skill reference files that declare method-reference usage",
     "farplane-framework": "projects with a farplane/manifest.json surface",
     "farplane-steer-config": "projects in the rollout inventory",
 }

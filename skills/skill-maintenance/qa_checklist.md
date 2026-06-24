@@ -80,7 +80,7 @@ Use this placement rule:
   stale prevention rules.
 
 The baseline `SKILL.md` section set comes from
-`../skill-creator/references/SKILL_TEMPLATE.md`. Extra top-level sections are
+`../../docs/skills/templates/SKILL_TEMPLATE.md`. Extra top-level sections are
 allowed only when they add substantial unique first-load value that cannot be
 folded cleanly into `Context`, `Skill Signature`, `Phase Boundary`, `Todo List`,
 `Templates`, `Gotchas`, `Reference Map`, or the signature/todo result contract.
@@ -234,6 +234,18 @@ they are needed on every invocation:
      `qa_checklist.md` merely copies gotchas without structured evidence,
      violation, fix, or deferral checks.
 
+22. `project_specific_context_isolation`
+   - Question: If the skill is reusable, does it avoid embedding a specific
+     project, person, private path, customer, automation profile, or local
+     workflow in `SKILL.md`, first-load refs, evals, templates, or generated
+     registry-visible metadata?
+   - Violation: A generic skill links to or names a project-specific profile,
+     private path, personal workflow, or customer/source assumption that every
+     caller would see. Move it to the Codex automation prompt, project docs,
+     bindings, examples, or caller-supplied hook refs. Personal/project skills
+     may keep specific context only when that specificity is the skill's stated
+     purpose.
+
 ## Finish Gate
 
 For material `SKILL.md` changes, record this in the audit or final proof notes:
@@ -253,6 +265,7 @@ first_load_review:
   qa_preflight_loaded:
   qa_finish_independence:
   qa_gotcha_deduplication:
+  project_specific_context_isolation:
   verdict: pass | fail | unknown
 ```
 
@@ -275,7 +288,7 @@ For each checklist item, return:
 - fix: smallest required edit, or "none"
 
 For every top-level section not in
-skills/skill-creator/references/SKILL_TEMPLATE.md, decide whether it should
+docs/skills/templates/SKILL_TEMPLATE.md, decide whether it should
 fold into a core section, move to a reference, delete as duplicate/rationale, or
 remain because it provides substantial unique first-load value.
 

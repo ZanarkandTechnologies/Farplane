@@ -285,7 +285,7 @@ applied. A versioned skill promises that its `SKILL.md` follows the current
 template spine and todo-list shape for that version.
 
 Template source edits are release events. When
-`skills/skill-creator/references/SKILL_TEMPLATE.md` changes, refresh the
+`docs/skills/templates/SKILL_TEMPLATE.md` changes, refresh the
 generated release metadata and archive snapshots through the normal
 skill-maintenance write path:
 
@@ -307,6 +307,18 @@ python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.
 
 Add `--require-template-version` only when the rollout is intentionally ready to
 fail missing or non-current skills.
+
+Reusable method or subskill references are not skill packages and must not be
+forced into the full `SKILL.md` template. When a reference under
+`skills/*/references/*.md` is a reusable conditional workflow, declare:
+
+```yaml
+template_uses:
+  skill-method-reference: "0.1.0"
+```
+
+Then follow `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md`. The standard
+skill-maintenance check validates declared method references.
 
 ## Rollout Policy
 

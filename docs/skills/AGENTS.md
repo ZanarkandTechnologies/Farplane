@@ -36,7 +36,7 @@ Rules:
   skills, subagents, hooks/scripts, ticket contracts, validators, or registries.
 - Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
   skill frontmatter, Markdown links, or first-load todo changes.
-- When `skills/skill-creator/references/SKILL_TEMPLATE.md` changes, treat it as
+- When `docs/skills/templates/SKILL_TEMPLATE.md` changes, treat it as
   a template release candidate: run
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` so
   `skills/skill-maintenance/graph/skill-template-intelligence.json` and

@@ -3,24 +3,25 @@
 Skill Initializer - Creates a new skill from template
 
 Usage:
-    init_skill.py <skill-name> --path <path> [--version <version>]
+    init_skill.py <skill-name> --path <path> [--with-helper] [--with-references] [--with-assets]
 
 Examples:
     init_skill.py my-new-skill --path skills/public
-    init_skill.py my-api-helper --path skills/private --version 1.1.0
+    init_skill.py my-api-helper --path skills/private --with-helper
 """
 
 import sys
 import argparse
 from pathlib import Path
 
-# Fallback template if file is not found
+# Fallback template if the canonical docs-owned template is not found.
 FALLBACK_SKILL_TEMPLATE = """---
 name: {skill_name}
 description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
 tier: [TODO: 1 | 2 | 3]
 source: local
-skill_template_version: "0.3.0"
+template_uses:
+  skill-template: "0.3.2"
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---
@@ -41,15 +42,15 @@ use a specific contract section only when it adds non-duplicated durable shape.]
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [ ] Read required context and current artifacts.
-2. [ ] Choose the branch.
-   1. [ ] Default branch.
-   2. [ ] Update/repair branch.
-   3. [ ] Review branch.
-3. [ ] Execute the workflow for the selected branch.
-4. [ ] Produce or update the required artifact.
-5. [ ] Verify with the named proof command or evidence surface.
-6. [ ] Review against the gotchas before completion.
+- [ ] 1. Read required context and current artifacts.
+- [ ] 2. Choose the branch.
+   - [ ] 1. Default branch.
+   - [ ] 2. Update/repair branch.
+   - [ ] 3. Review branch.
+- [ ] 3. Execute the workflow for the selected branch.
+- [ ] 4. Produce or update the required artifact.
+- [ ] 5. Verify with the named proof command or evidence surface.
+- [ ] 6. Review against the gotchas before completion.
    - [ ] Repeatability from files alone.
    - [ ] No duplicated first-load logic.
    - [ ] Explicit proof command or blocker.
@@ -93,8 +94,7 @@ if __name__ == "__main__":
 
 ARCH_REF_CONTENT = """# Architectural Decisions for {skill_title}
 
-This file documents the "Why" behind the patterns used in this skill.
-It should be populated based on the Sequential Thinking phase during skill creation.
+This file documents the rationale behind the patterns used in this skill.
 
 ## Core Architecture
 [TODO: Describe the high-level architecture]
@@ -150,7 +150,22 @@ def strip_template_metadata(template_text):
     body = template_text[first_end + len('\n---\n'):].lstrip('\n')
     return body if body.startswith('---\n') else template_text
 
-def init_skill(skill_name, path, version="1.0.0", tools="Read, Write, Grep, LS"):
+def render_template(template: str, replacements: dict[str, str]) -> str:
+    """Replace only supported placeholders without interpreting other braces."""
+    rendered = template
+    for key, value in replacements.items():
+        rendered = rendered.replace("{" + key + "}", value)
+    return rendered
+
+
+def init_skill(
+    skill_name,
+    path,
+    tools="Read, Write, Grep, LS",
+    with_helper=False,
+    with_references=False,
+    with_assets=False,
+):
     """
     Initialize a new skill directory with template SKILL.md and reference files.
     """
@@ -167,8 +182,8 @@ def init_skill(skill_name, path, version="1.0.0", tools="Read, Write, Grep, LS")
         print(f"❌ Error creating directory: {e}")
         return None
 
-    # Try to read template from references/SKILL_TEMPLATE.md
-    template_path = Path(__file__).parent.parent / 'references' / 'SKILL_TEMPLATE.md'
+    # Read the canonical docs-owned skill template.
+    template_path = Path(__file__).resolve().parents[3] / 'docs' / 'skills' / 'templates' / 'SKILL_TEMPLATE.md'
     if template_path.exists():
         skill_template = strip_template_metadata(template_path.read_text())
         print("📖 Loaded SKILL.md template from file")
@@ -177,45 +192,50 @@ def init_skill(skill_name, path, version="1.0.0", tools="Read, Write, Grep, LS")
         print("⚠️ SKILL_TEMPLATE.md not found, using fallback")
 
     skill_title = title_case_skill_name(skill_name)
-    skill_content = skill_template.format(
-        skill_name=skill_name,
-        skill_title=skill_title,
-        version=version,
-        tools=tools
+    skill_content = render_template(
+        skill_template,
+        {
+            "skill_name": skill_name,
+            "skill_title": skill_title,
+            "skill_function": skill_name.replace("-", "_"),
+            "tools": tools,
+        },
     )
 
     try:
         (skill_dir / 'SKILL.md').write_text(skill_content)
         print("✅ Created SKILL.md")
 
-        # Create resource directories
-        scripts_dir = skill_dir / 'scripts'
-        scripts_dir.mkdir(exist_ok=True)
-        (scripts_dir / 'helper.py').write_text(EXAMPLE_HELPER_SCRIPT.format(skill_name=skill_name))
-        (scripts_dir / 'helper.py').chmod(0o755)
-        print("✅ Created scripts/helper.py")
+        if with_helper:
+            scripts_dir = skill_dir / 'scripts'
+            scripts_dir.mkdir(exist_ok=True)
+            (scripts_dir / 'helper.py').write_text(EXAMPLE_HELPER_SCRIPT.format(skill_name=skill_name))
+            (scripts_dir / 'helper.py').chmod(0o755)
+            print("✅ Created scripts/helper.py")
 
-        references_dir = skill_dir / 'references'
-        references_dir.mkdir(exist_ok=True)
-        (references_dir / 'architecture.md').write_text(ARCH_REF_CONTENT.format(skill_title=skill_title))
-        (references_dir / 'workflows.md').write_text(WORKFLOW_REF_CONTENT.format(skill_title=skill_title))
-        (references_dir / 'gotchas.md').write_text(GOTCHAS_REF_CONTENT.format(skill_title=skill_title))
-        print("✅ Created references/ (architecture.md, workflows.md, gotchas.md)")
+        if with_references:
+            references_dir = skill_dir / 'references'
+            references_dir.mkdir(exist_ok=True)
+            (references_dir / 'architecture.md').write_text(ARCH_REF_CONTENT.format(skill_title=skill_title))
+            (references_dir / 'workflows.md').write_text(WORKFLOW_REF_CONTENT.format(skill_title=skill_title))
+            (references_dir / 'gotchas.md').write_text(GOTCHAS_REF_CONTENT.format(skill_title=skill_title))
+            print("✅ Created references/ (architecture.md, workflows.md, gotchas.md)")
 
-        assets_dir = skill_dir / 'assets'
-        assets_dir.mkdir(exist_ok=True)
-        (assets_dir / '.gitkeep').touch()
-        print("✅ Created assets/")
+        if with_assets:
+            assets_dir = skill_dir / 'assets'
+            assets_dir.mkdir(exist_ok=True)
+            (assets_dir / '.gitkeep').touch()
+            print("✅ Created assets/")
 
     except Exception as e:
         print(f"❌ Error creating resources: {e}")
         return None
 
-    print(f"\n✅ Skill '{skill_name}' v{version} initialized successfully at {skill_dir}")
+    print(f"\n✅ Skill '{skill_name}' initialized successfully at {skill_dir}")
     print("\nNext steps:")
-    print("1. Populate architecture.md and workflows.md with your reasoning results.")
-    print("2. Update SKILL.md to link to your findings.")
-    print("3. Run quick_validate.py to ensure compliance.")
+    print("1. Replace TODOs in SKILL.md with the actual skill contract.")
+    print("2. Add references, scripts, templates, or prompts only when the skill needs them.")
+    print("3. Run quick_validate.py and the Farplane skill-maintenance validator.")
 
     return skill_dir
 
@@ -223,8 +243,10 @@ def main():
     parser = argparse.ArgumentParser(description="Skill Initializer")
     parser.add_argument("name", help="Name of the skill (hyphen-case)")
     parser.add_argument("--path", required=True, help="Path to create the skill in")
-    parser.add_argument("--version", default="1.0.0", help="Initial version (default: 1.0.0)")
     parser.add_argument("--tools", default="Read, Write, Grep, LS", help="Comma-separated list of allowed-tools (default: Read, Write, Grep, LS)")
+    parser.add_argument("--with-helper", action="store_true", help="Create scripts/helper.py")
+    parser.add_argument("--with-references", action="store_true", help="Create placeholder references")
+    parser.add_argument("--with-assets", action="store_true", help="Create assets/.gitkeep")
 
     args = parser.parse_args()
 
@@ -234,7 +256,14 @@ def main():
         print(f"❌ Error: Name '{args.name}' must be hyphen-case (lowercase, digits, hyphens)")
         sys.exit(1)
 
-    result = init_skill(args.name, args.path, args.version, args.tools)
+    result = init_skill(
+        args.name,
+        args.path,
+        args.tools,
+        args.with_helper,
+        args.with_references,
+        args.with_assets,
+    )
     sys.exit(0 if result else 1)
 
 if __name__ == "__main__":

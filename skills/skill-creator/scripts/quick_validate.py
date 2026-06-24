@@ -49,6 +49,7 @@ def validate_skill(skill_path):
         'description',
         'version',
         'skill_template_version',
+        'template_uses',
         'eval',
         'qa_checklist',
         'skill_ui',
@@ -92,15 +93,20 @@ def validate_skill(skill_path):
     if not re.match(r'^[a-z0-9-]+$', str(name)):
         return False, f"Name '{name}' should be hyphen-case"
 
-    # Validate reusable support surfaces without enforcing a fixed taxonomy.
-    support_dirs = ['references', 'templates', 'prompts']
-    support_files = []
-    for dirname in support_dirs:
+    template_uses = frontmatter.get('template_uses')
+    if template_uses is not None and not isinstance(template_uses, dict):
+        return False, "'template_uses' must be a mapping"
+
+    if 'skill_template_version' in frontmatter and template_uses:
+        return False, "Use either legacy 'skill_template_version' or 'template_uses', not both"
+
+    for dirname in ['references', 'templates', 'prompts']:
         support_dir = skill_path / dirname
-        if support_dir.exists() and support_dir.is_dir():
-            support_files.extend(p for p in support_dir.rglob('*.md') if p.is_file())
-    if not support_files:
-        return False, "Missing markdown support files under references/, templates/, or prompts/"
+        if not support_dir.exists() or not support_dir.is_dir():
+            continue
+        empty = [p for p in support_dir.rglob('*.md') if p.is_file() and not p.read_text().strip()]
+        if empty:
+            return False, f"Empty markdown support file(s): {', '.join(str(p) for p in empty)}"
 
     return True, "Skill is valid!"
 

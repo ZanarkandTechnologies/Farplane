@@ -1,0 +1,23 @@
+[
+  {
+    "id": "feed_scout_book_summary_workflow_route_01",
+    "title": "Feed Scout routes book-summary sources into skill workflow extraction",
+    "query": "Run a dry pass over a configured YouTube channel and blog list that often post business-book summaries. Several new items look like summaries with key takeaways and exercises. What should the scout do before creating proposals?",
+    "reference_points": [
+      "Keeps the run explicit or dry-run and does not start a daemon, background crawler, live spend, or unapproved Notion write",
+      "Normalizes and dedupes discovered videos/articles before extraction",
+      "Uses summarize for transcripts, articles, and linked summary-source extraction",
+      "Extracts workflow-shaped takeaway signals such as triggers, steps, decision points, exercises, prompts, outputs, and proof ideas instead of producing generic book recaps",
+      "Compares related summary sources when available and labels convergence or uncertainty before proposing a skill change",
+      "Routes reusable skill behavior to skill-creator's book-summary branch, broader harness techniques to harness-scout, repeated patterns to best-of-worlds, and weak recaps to ledger-only status"
+    ],
+    "tags": [
+      "feed-scout",
+      "book-summary",
+      "summarize",
+      "skill-creator",
+      "workflow-extraction"
+    ],
+    "notes": "Guards the new route where feeds of book-summary videos/articles become skill workflow candidates rather than plain content summaries."
+  }
+]

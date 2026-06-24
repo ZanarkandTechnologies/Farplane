@@ -19,14 +19,28 @@
 5. Compute canonical URL keys.
 6. Skip seen items; queue new or changed items.
 7. Extract content with `summarize`, repo inspection, or existing thread text.
-8. Run `harness-scout` on eligible content items, carrying `entity_ids` into
+8. For book-summary videos, articles, blogs, public notes, app pages, and
+   author interviews, extract key takeaways with `summarize`, then keep only
+   workflow-shaped signals: triggers, inputs, steps, decision points,
+   exercises, prompts, stop conditions, outputs, and proof ideas.
+9. Compare related summary sources when available. Label takeaway workflows as
+   `converged`, `single-source`, `conflicting`, or `weak` before proposing a
+   skill delta.
+10. Route each summary-source item by output type:
+   - reusable skill behavior -> `skill-creator` with
+     `skills/skill-creator/references/book-to-skill.md`
+   - broader harness technique -> `harness-scout`
+   - repeated pattern across several items -> `best-of-worlds`
+   - generic motivation or weak recap -> ledger only
+11. Run `harness-scout` on eligible content items, carrying `entity_ids` into
    source-run provenance.
-9. Update the ingestion ledger with scout/proposal links.
-10. When writing to a live Notion Tasks database, resolve `Project` and `Areas`
+12. Update the ingestion ledger with scout, skill-creator handoff, or proposal
+    links.
+13. When writing to a live Notion Tasks database, resolve `Project` and `Areas`
     from explicit request context, parent project/task context, or private
     Notion handles under `~/.codex/private/`. If either relation is unresolved,
     keep the proposal in the ledger or local inbox with `routing_missing`.
-11. After live Tasks writeback, fetch the page and record whether `Project` and
+14. After live Tasks writeback, fetch the page and record whether `Project` and
     `Areas` are present.
 
 ## Review
@@ -54,3 +68,14 @@ Report:
 - pending proposal count
 - credential or Notion blockers
 - latest local evidence path
+
+## Judgement Questions
+
+Use `advise` when these cannot be decided mechanically:
+
+- Is a profile valuable enough to track daily?
+- Should a profile default to high, medium, or low signal?
+- Should a repeated pattern create one proposal or several narrower proposals?
+- Is an item useful enough to promote into `docs/sources/registry.jsonl`?
+- Is live API/Apify spend justified, or should the run stay fixture/dry-run
+  only?
