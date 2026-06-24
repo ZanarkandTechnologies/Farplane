@@ -1,7 +1,8 @@
 """Farplane runtime config loading.
 
-Inputs: ~/.farplane/config.json, ~/.farplane/secrets.json,
-~/.codex/config.toml, optional ~/.codex/config.local.env, and process env.
+Inputs: ~/.farplane/config.toml, legacy ~/.farplane/config.json and
+~/.farplane/secrets.json, ~/.codex/config.toml, optional
+~/.codex/config.local.env, and process env.
 Outputs: a merged env dict for Farplane Core commands and hooks.
 Side effects: read-only filesystem access, except hydrate_process_env mutates
 os.environ at process boundaries.
@@ -55,6 +56,14 @@ def _object_string_at(row: Mapping[str, object], path_parts: list[str]) -> str:
     return current.strip() if isinstance(current, str) else ""
 
 
+def _first_object_string_at(row: Mapping[str, object], paths: list[list[str]]) -> str:
+    for path_parts in paths:
+        value = _object_string_at(row, path_parts)
+        if value:
+            return value
+    return ""
+
+
 def _iter_env_strings(row: Mapping[str, object]) -> dict[str, str]:
     env = row.get("env")
     if not isinstance(env, dict):
@@ -87,42 +96,79 @@ def saved_runtime_env(env: Mapping[str, str] | None = None) -> dict[str, str]:
         return {}
 
     root = farplane_home(source)
-    config = _read_json_object(root / "config.json")
-    secrets = _read_json_object(root / "secrets.json")
+    config_toml = _read_toml_object(root / "config.toml")
+    legacy_config = _read_json_object(root / "config.json")
+    legacy_secrets = _read_json_object(root / "secrets.json")
     values: dict[str, str] = {}
-    values.update(_iter_env_strings(config))
-    values.update(_iter_env_strings(secrets))
+    values.update(_structured_runtime_env(legacy_config, legacy_secrets))
+    values.update(_iter_env_strings(legacy_config))
+    values.update(_iter_env_strings(legacy_secrets))
+    values.update(_structured_runtime_env(config_toml, config_toml))
+    values.update(_iter_env_strings(config_toml))
+    return values
 
-    structured_aliases = {
-        "FARPLANE_TELEMETRY_TOKEN": _object_string_at(secrets, ["convex", "telemetryToken"]),
-        "FARPLANE_MESHY_API_KEY": _object_string_at(secrets, ["integrations", "meshyApiKey"]),
-        "MESHY_API_KEY": _object_string_at(secrets, ["integrations", "meshyApiKey"]),
-        "NOTION_API_KEY": _object_string_at(secrets, ["integrations", "notionApiKey"]),
-        "NOTION_TOKEN": (
-            _object_string_at(secrets, ["env", "NOTION_TOKEN"])
-            or _object_string_at(secrets, ["env", "NOTION_API_KEY"])
-            or _object_string_at(secrets, ["integrations", "notionApiKey"])
+
+def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, object]) -> dict[str, str]:
+    aliases = {
+        "FARPLANE_TELEMETRY_TOKEN": _first_object_string_at(
+            secrets,
+            [["convex", "telemetry_token"], ["convex", "telemetryToken"]],
         ),
+        "FARPLANE_MESHY_API_KEY": _first_object_string_at(
+            secrets,
+            [["integrations", "meshy_api_key"], ["integrations", "meshyApiKey"]],
+        ),
+        "MESHY_API_KEY": _first_object_string_at(
+            secrets,
+            [["integrations", "meshy_api_key"], ["integrations", "meshyApiKey"]],
+        ),
+        "NOTION_API_KEY": _first_object_string_at(
+            secrets,
+            [["integrations", "notion_api_key"], ["integrations", "notionApiKey"]],
+        ),
+        "NOTION_TOKEN": (
+            _first_object_string_at(secrets, [["env", "NOTION_TOKEN"], ["env", "NOTION_API_KEY"]])
+            or _first_object_string_at(
+                secrets,
+                [
+                    ["integrations", "notion_token"],
+                    ["integrations", "notion_api_key"],
+                    ["integrations", "notionApiKey"],
+                ],
+            )
+        ),
+        "REF_API_KEY": _first_object_string_at(secrets, [["integrations", "ref_api_key"]]),
         "CODEX_APP_SERVER_URL": (
-            _object_string_at(config, ["env", "CODEX_APP_SERVER_URL"])
-            or _object_string_at(config, ["env", "VITE_CODEX_APP_SERVER_URL"])
-            or _object_string_at(config, ["runtime", "codexAppServerUrl"])
+            _first_object_string_at(
+                config,
+                [["env", "CODEX_APP_SERVER_URL"], ["env", "VITE_CODEX_APP_SERVER_URL"]],
+            )
+            or _first_object_string_at(
+                config,
+                [["runtime", "codex_app_server_url"], ["runtime", "codexAppServerUrl"]],
+            )
         ),
         "FARPLANE_STATE_BASE": (
-            _object_string_at(config, ["env", "FARPLANE_STATE_BASE"])
-            or _object_string_at(config, ["env", "VITE_STATE_URL"])
-            or _object_string_at(config, ["runtime", "stateBase"])
+            _first_object_string_at(config, [["env", "FARPLANE_STATE_BASE"], ["env", "VITE_STATE_URL"]])
+            or _first_object_string_at(config, [["runtime", "state_base"], ["runtime", "stateBase"]])
         ),
         "FARPLANE_CONVEX_SITE_URL": (
-            _object_string_at(config, ["env", "FARPLANE_CONVEX_SITE_URL"])
-            or _object_string_at(config, ["env", "CONVEX_SITE_URL"])
-            or _object_string_at(config, ["convex", "siteUrl"])
+            _first_object_string_at(
+                config,
+                [["env", "FARPLANE_CONVEX_SITE_URL"], ["env", "CONVEX_SITE_URL"]],
+            )
+            or _first_object_string_at(config, [["convex", "site_url"], ["convex", "siteUrl"]])
+        ),
+        "CONVEX_URL": (
+            _first_object_string_at(config, [["env", "CONVEX_URL"], ["env", "VITE_CONVEX_URL"]])
+            or _first_object_string_at(config, [["convex", "client_url"], ["convex", "clientUrl"]])
+        ),
+        "VITE_CONVEX_URL": (
+            _first_object_string_at(config, [["env", "VITE_CONVEX_URL"], ["env", "CONVEX_URL"]])
+            or _first_object_string_at(config, [["convex", "client_url"], ["convex", "clientUrl"]])
         ),
     }
-    for key, value in structured_aliases.items():
-        if value:
-            values[key] = value
-    return values
+    return {key: value for key, value in aliases.items() if value}
 
 
 def read_config_value(name: str, env: Mapping[str, str] | None = None) -> str:

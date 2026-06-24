@@ -20,9 +20,11 @@ def write_json(path: Path, value: object) -> None:
 
 
 class RuntimeConfigTests(unittest.TestCase):
-    def test_saved_config_and_secrets_override_rendered_toml_and_legacy_env_file(self) -> None:
+    def test_farplane_config_toml_overrides_rendered_toml_json_and_legacy_env_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
+            farplane_home = root / "farplane"
+            farplane_home.mkdir()
             codex_home = root / "codex"
             codex_home.mkdir()
             (codex_home / "config.toml").write_text(
@@ -32,6 +34,26 @@ class RuntimeConfigTests(unittest.TestCase):
                         'FARPLANE_CONVEX_SITE_URL = "https://rendered.convex.site"',
                         'FARPLANE_TELEMETRY_TOKEN = "rendered-token"',
                         'NOTION_TOKEN = "rendered-notion"',
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (farplane_home / "config.toml").write_text(
+                "\n".join(
+                    [
+                        "[runtime]",
+                        'codex_app_server_url = "ws://127.0.0.1:9999"',
+                        "",
+                        "[convex]",
+                        'site_url = "https://canonical.convex.site"',
+                        'telemetry_token = "canonical-token"',
+                        "",
+                        "[integrations]",
+                        'notion_token = "canonical-notion"',
+                        "",
+                        "[env]",
+                        'FARPLANE_STATE_BASE = "http://127.0.0.1:5173"',
                     ]
                 )
                 + "\n",
@@ -50,11 +72,11 @@ class RuntimeConfigTests(unittest.TestCase):
                 encoding="utf-8",
             )
             write_json(
-                root / "farplane" / "config.json",
+                farplane_home / "config.json",
                 {"env": {"FARPLANE_CONVEX_SITE_URL": "https://saved.convex.site"}},
             )
             write_json(
-                root / "farplane" / "secrets.json",
+                farplane_home / "secrets.json",
                 {
                     "env": {"FARPLANE_TELEMETRY_TOKEN": "saved-token"},
                     "integrations": {"notionApiKey": "saved-notion"},
@@ -64,14 +86,16 @@ class RuntimeConfigTests(unittest.TestCase):
             env = runtime_config.load_runtime_env(
                 {
                     "CODEX_HOME": str(codex_home),
-                    "FARPLANE_STATE_DIR": str(root / "farplane"),
+                    "FARPLANE_STATE_DIR": str(farplane_home),
                 },
                 local_env,
             )
 
-        self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://saved.convex.site")
-        self.assertEqual(env["FARPLANE_TELEMETRY_TOKEN"], "saved-token")
-        self.assertEqual(env["NOTION_TOKEN"], "saved-notion")
+        self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://canonical.convex.site")
+        self.assertEqual(env["FARPLANE_TELEMETRY_TOKEN"], "canonical-token")
+        self.assertEqual(env["NOTION_TOKEN"], "canonical-notion")
+        self.assertEqual(env["CODEX_APP_SERVER_URL"], "ws://127.0.0.1:9999")
+        self.assertEqual(env["FARPLANE_STATE_BASE"], "http://127.0.0.1:5173")
 
     def test_rendered_config_toml_env_is_loaded_before_legacy_env_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

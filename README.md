@@ -274,14 +274,14 @@ What Core owns:
   `farplane onboarding`, `farplane status`, and `farplane whoami`: delegate to
   the linked Farplane-UI module CLI while that implementation still lives there.
 
-Farplane runtime configuration is TOML-backed and Settings-first when Farplane
-UI is linked. `config.toml.example` renders the installed `~/.codex/config.toml`
-with its `[env]` table; Farplane Core reads that rendered TOML for delegated
-commands and hooks. The UI writes local settings inputs to
-`~/.farplane/config.json` and `~/.farplane/secrets.json`, and Core uses those
-saved settings to override rendered TOML values during commands, hooks, and
-`install.sh` `config.toml` rendering. `~/.codex/config.local.env` remains a
-legacy fallback for values not yet managed by the UI.
+Farplane runtime configuration is owned by `~/.farplane/config.toml` when
+Farplane UI is linked. The UI writes local settings and API keys there, and
+Farplane Core reads it for delegated commands, Codex lifecycle hooks, and
+`install.sh` rendering. `config.toml.example` still renders the installed
+`~/.codex/config.toml`, but that file is a Codex adapter output rather than the
+Farplane source of truth. Legacy `~/.farplane/config.json`,
+`~/.farplane/secrets.json`, and `~/.codex/config.local.env` files remain
+fallbacks for older installs.
 
 Override the linked UI checkout for one shell with `FARPLANE_UI_REPO=/path/to/Farplane-UI`.
 Use `FARPLANE_CLI_LINK_DIR=/custom/bin bash install.sh` if your preferred
