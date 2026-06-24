@@ -1,6 +1,7 @@
 # Managed template for ~/.codex/config.toml.
 # Do not put machine-local secrets or trust entries here.
 # `install.sh` renders this template using values from:
+#   - ~/.farplane/config.json and ~/.farplane/secrets.json
 #   - ~/.codex/config.local.env
 #   - ~/.codex/config.local.toml (optional, appended verbatim)
 

@@ -1,7 +1,7 @@
 """Farplane runtime config loading.
 
-Inputs: ~/.farplane/config.json, ~/.farplane/secrets.json, optional
-~/.codex/config.local.env, and process env.
+Inputs: ~/.farplane/config.json, ~/.farplane/secrets.json,
+~/.codex/config.toml, optional ~/.codex/config.local.env, and process env.
 Outputs: a merged env dict for Farplane Core commands and hooks.
 Side effects: read-only filesystem access, except hydrate_process_env mutates
 os.environ at process boundaries.
@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import os
+import tomllib
 from pathlib import Path
 from typing import Mapping
 
@@ -23,9 +24,23 @@ def farplane_home(env: Mapping[str, str] | None = None) -> Path:
     return Path(configured).expanduser() if configured else Path.home() / ".farplane"
 
 
+def codex_home(env: Mapping[str, str] | None = None) -> Path:
+    source = env if env is not None else os.environ
+    configured = str(source.get("CODEX_HOME") or "").strip()
+    return Path(configured).expanduser() if configured else Path.home() / ".codex"
+
+
 def _read_json_object(path: Path) -> dict[str, object]:
     try:
         parsed = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def _read_toml_object(path: Path) -> dict[str, object]:
+    try:
+        parsed = tomllib.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return {}
     return parsed if isinstance(parsed, dict) else {}
@@ -120,6 +135,11 @@ def load_runtime_env(
     local_env_path: Path | None = None,
 ) -> dict[str, str]:
     merged = dict(base_env if base_env is not None else os.environ)
+    rendered_toml_env = _iter_env_strings(
+        _read_toml_object(codex_home(merged) / "config.toml")
+    )
+    for key, value in rendered_toml_env.items():
+        merged.setdefault(key, value)
     if local_env_path is not None:
         for key, value in _read_env_file(local_env_path).items():
             merged.setdefault(key, value)

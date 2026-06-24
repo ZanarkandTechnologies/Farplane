@@ -20,9 +20,23 @@ def write_json(path: Path, value: object) -> None:
 
 
 class RuntimeConfigTests(unittest.TestCase):
-    def test_saved_config_and_secrets_override_legacy_env_file(self) -> None:
+    def test_saved_config_and_secrets_override_rendered_toml_and_legacy_env_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
+            codex_home = root / "codex"
+            codex_home.mkdir()
+            (codex_home / "config.toml").write_text(
+                "\n".join(
+                    [
+                        "[env]",
+                        'FARPLANE_CONVEX_SITE_URL = "https://rendered.convex.site"',
+                        'FARPLANE_TELEMETRY_TOKEN = "rendered-token"',
+                        'NOTION_TOKEN = "rendered-notion"',
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
             local_env = root / "config.local.env"
             local_env.write_text(
                 "\n".join(
@@ -48,13 +62,47 @@ class RuntimeConfigTests(unittest.TestCase):
             )
 
             env = runtime_config.load_runtime_env(
-                {"FARPLANE_STATE_DIR": str(root / "farplane")},
+                {
+                    "CODEX_HOME": str(codex_home),
+                    "FARPLANE_STATE_DIR": str(root / "farplane"),
+                },
                 local_env,
             )
 
         self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://saved.convex.site")
         self.assertEqual(env["FARPLANE_TELEMETRY_TOKEN"], "saved-token")
         self.assertEqual(env["NOTION_TOKEN"], "saved-notion")
+
+    def test_rendered_config_toml_env_is_loaded_before_legacy_env_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            codex_home = root / "codex"
+            codex_home.mkdir()
+            (codex_home / "config.toml").write_text(
+                "\n".join(
+                    [
+                        "[env]",
+                        'FARPLANE_CONVEX_SITE_URL = "https://rendered.convex.site"',
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            local_env = root / "config.local.env"
+            local_env.write_text(
+                "FARPLANE_CONVEX_SITE_URL=https://legacy.convex.site\n",
+                encoding="utf-8",
+            )
+
+            env = runtime_config.load_runtime_env(
+                {
+                    "CODEX_HOME": str(codex_home),
+                    "FARPLANE_STATE_DIR": str(root / "farplane"),
+                },
+                local_env,
+            )
+
+        self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://rendered.convex.site")
 
     def test_disable_flag_uses_process_or_legacy_values_only(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
