@@ -3,7 +3,7 @@ title: "Farplane Lifecycle Graph Contract"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 framework_template_version: "0.2.0"
 tags:
   - farplane
@@ -29,9 +29,23 @@ automations, Goal Packets, reports, and drains.
 It is not a new runtime. It is a harness map.
 
 ```text
-build_lifecycle_graph(repo_root)
-  -> nodes[] + edges[] + fsa_projections[] + extraction_report
+build_graph_projection(repo_root, projection_profile)
+  -> nodes[] + edges[] + fsa_projections? + extraction_report?
 ```
+
+The generated graph surfaces are sibling projections over a shared GraphIR:
+
+- `skill-registry`: skill registry nodes, Markdown references, common chains,
+  and rendered skill docs.
+- `harness-reference`: local file/doc references for cleanup and navigation.
+- `farplane-lifecycle-core`: compact semantic lifecycle graph for UI and agent
+  context.
+- `farplane-lifecycle-full`: audit lifecycle graph with optional gate,
+  abstract-state, and FSA-state nodes.
+
+The lifecycle graph is not a child projection of the skill graph. It needs
+non-skill entities such as hooks, automations, reports, ticket files, runtime
+state, curated framework edges, and finite-state projections.
 
 ## Node Contract
 
@@ -99,6 +113,12 @@ state nodes, and abstract prose-derived state nodes so the main UI can focus on
 how concrete framework files are consumed. Use `--full`, `--include-gates`,
 `--include-abstract-state`, or `--include-fsa-nodes` when auditing parser
 detail.
+
+Projection profiles live in
+`skills/skill-maintenance/scripts/graph_projection_config.py`. Keep them as
+small named Python configs until a non-Python consumer needs an external
+JSON/YAML config file. This keeps profile behavior typed, testable, and close
+to the generator code while the model is still settling.
 
 ## Finite State Projections
 

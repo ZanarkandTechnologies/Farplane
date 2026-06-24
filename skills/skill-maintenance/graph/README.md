@@ -19,12 +19,53 @@ Generated visual inspection surface for Farplane skills and harness docs.
 - `docs/doc-audit/generated/doc-reference-report.md`: generated Markdown audit
   report for docs cleanup, global-docs bundling, and archive candidates
 
+## Projection Model
+
+All graph generators now route through a shared GraphIR and named projection
+profiles under `skills/skill-maintenance/scripts/`:
+
+- `graph_ir.py`: shared node, edge, timestamp, JSON/JS, comparison, and
+  validation helpers
+- `graph_projection_config.py`: named projection profiles and output defaults
+- `graph_projection.py`: generic projection filtering and check helpers
+- `generate_graph_projection.py`: profile-based dispatcher
+
+The three generated graph families are sibling projections of one normalized
+model, not parent/child views. In particular, the lifecycle graph is not a
+projection of the skill graph because it needs hooks, automations, reports,
+ticket files, finite-state projections, and curated framework edges that the
+skill registry graph does not own.
+
+Current projection profiles:
+
+- `skill-registry`: skill registry graph and rendered skill docs
+- `harness-reference`: repo-wide local-reference graph and docs audit report
+- `farplane-lifecycle-core`: compact lifecycle graph for UI and agent context
+- `farplane-lifecycle-full`: audit lifecycle graph with optional detail nodes
+
 ## Regenerate
 
 ```bash
 python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 python3 skills/skill-maintenance/scripts/generate_harness_graph.py
 python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py
+```
+
+Or use the profile dispatcher:
+
+```bash
+python3 skills/skill-maintenance/scripts/generate_graph_projection.py --list
+python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection skill-registry
+python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection harness-reference
+python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-core
+python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-full
+```
+
+Each compatibility wrapper also accepts `--projection` for its graph family.
+For example:
+
+```bash
+python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py --projection farplane-lifecycle-full --out /tmp/lifecycle-full.json --js-out /tmp/lifecycle-full.js
 ```
 
 ## Open
@@ -51,3 +92,7 @@ edges, and finite state projections described in
 The default output is the compact core graph for UI and agent context use. Run
 with `--full` when reviewing parser internals such as gates, FSA state nodes,
 and abstract prose-derived state.
+
+Use `--check` on the dispatcher or lifecycle wrapper when a workflow needs a
+stale-output guard. The check ignores `generated_at` but compares the rest of
+the generated JSON/JS payload exactly.

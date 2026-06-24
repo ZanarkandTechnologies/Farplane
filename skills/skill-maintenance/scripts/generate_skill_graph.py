@@ -5,9 +5,11 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+
+from graph_ir import GraphBundle, GraphEdge, GraphNode, edge_counts, utc_timestamp, write_js, write_json
+from graph_projection_config import get_projection_config
 
 
 def load_registry(path: Path) -> list[dict[str, Any]]:
@@ -22,20 +24,22 @@ def skill_ref_name(ref: str) -> str:
 def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
     skill_names = {row["name"] for row in rows}
     nodes = [
-        {
-            "id": row["name"],
-            "label": row["name"],
-            "tier": row.get("tier"),
-            "source": row.get("source", "local"),
-            "group": row.get("group", ""),
-            "methods": row.get("methods", []),
-            "has_checklist": bool(row.get("has_checklist")),
-            "eval": row.get("eval", ""),
-            "qa_checklist": row.get("qa_checklist", ""),
-            "skill_ui": row.get("skill_ui", ""),
-            "path": row.get("path", ""),
-            "description": row.get("description", ""),
-        }
+        GraphNode(
+            id=row["name"],
+            label=row["name"],
+            attributes={
+                "tier": row.get("tier"),
+                "source": row.get("source", "local"),
+                "group": row.get("group", ""),
+                "methods": row.get("methods", []),
+                "has_checklist": bool(row.get("has_checklist")),
+                "eval": row.get("eval", ""),
+                "qa_checklist": row.get("qa_checklist", ""),
+                "skill_ui": row.get("skill_ui", ""),
+                "path": row.get("path", ""),
+                "description": row.get("description", ""),
+            },
+        ).as_dict()
         for row in rows
     ]
 
@@ -51,13 +55,13 @@ def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
             return
         seen.add(key)
         edges.append(
-            {
-                "source": source,
-                "target": target,
-                "target_ref": target_ref,
-                "type": edge_type,
-                "label": label,
-            }
+            GraphEdge(
+                source=source,
+                target=target,
+                type=edge_type,
+                label=label,
+                metadata={"target_ref": target_ref},
+            ).as_dict()
         )
 
     for row in rows:
@@ -76,24 +80,15 @@ def build_graph(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "edges": len(edges),
         "tiers": {},
         "sources": {},
-        "edge_types": {},
+        "edge_types": edge_counts(edges),
     }
     for node in nodes:
         tier = str(node.get("tier", "unknown"))
         counts["tiers"][tier] = counts["tiers"].get(tier, 0) + 1
         source = str(node.get("source", "unknown"))
         counts["sources"][source] = counts["sources"].get(source, 0) + 1
-    for edge in edges:
-        edge_type = edge["type"]
-        counts["edge_types"][edge_type] = counts["edge_types"].get(edge_type, 0) + 1
 
-    return {
-        "schema_version": "1.0.0",
-        "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "counts": counts,
-        "nodes": nodes,
-        "edges": edges,
-    }
+    return GraphBundle(nodes=nodes, edges=edges, generated_at=utc_timestamp(), counts=counts).as_dict()
 
 
 def parse_frontmatter(markdown: str) -> tuple[dict[str, Any], str, str]:
@@ -166,7 +161,7 @@ def parse_simple_yaml(raw: str) -> dict[str, Any]:
 def build_docs(rows: list[dict[str, Any]]) -> dict[str, Any]:
     docs: dict[str, Any] = {
         "schema_version": "1.0.0",
-        "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "generated_at": utc_timestamp(),
         "skills": {},
     }
     for row in rows:
@@ -186,24 +181,14 @@ def build_docs(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return docs
 
 
-def write_js(path: Path, global_name: str, value: dict[str, Any]) -> None:
-    path.write_text(
-        f"window.{global_name} = "
-        + json.dumps(value, indent=2, sort_keys=True)
-        + ";\n"
-    )
-
-
 def write_graph(graph: dict[str, Any], output_path: Path, js_path: Path | None) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(graph, indent=2, sort_keys=True) + "\n")
+    write_json(output_path, graph)
     if js_path is not None:
         write_js(js_path, "SKILL_GRAPH", graph)
 
 
 def write_docs(docs: dict[str, Any], output_path: Path, js_path: Path | None) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(docs, indent=2, sort_keys=True) + "\n")
+    write_json(output_path, docs)
     if js_path is not None:
         write_js(js_path, "SKILL_DOCS", docs)
 
@@ -215,7 +200,12 @@ def main() -> int:
     parser.add_argument("--js-out", default="skills/skill-maintenance/graph/skill-graph.js")
     parser.add_argument("--docs-out", default="skills/skill-maintenance/graph/skill-docs.json")
     parser.add_argument("--docs-js-out", default="skills/skill-maintenance/graph/skill-docs.js")
+    parser.add_argument("--projection", default="skill-registry", help="projection profile name")
     args = parser.parse_args()
+
+    config = get_projection_config(args.projection)
+    if config.output_schema != "skill_graph":
+        raise SystemExit(f"{args.projection} is not a skill graph projection")
 
     rows = load_registry(Path(args.registry))
     graph = build_graph(rows)

@@ -11,6 +11,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import farplane_lifecycle_graph as lifecycle_graph
+from graph_projection import project_graph
+from graph_projection_config import ProjectionConfig, get_projection_config, list_projection_configs
 
 
 class LifecycleGraphTests(unittest.TestCase):
@@ -154,21 +156,74 @@ routes:
         self.assertTrue(ticket["terminal"])
         self.assertEqual(len(ticket["transitions"]), len(ticket["states"]) - 1)
 
-    def test_checked_in_artifacts_match_fresh_generation(self) -> None:
+    def test_named_projection_configs_include_graph_surfaces(self) -> None:
+        configs = {config.name: config for config in list_projection_configs()}
+        self.assertEqual(
+            set(configs),
+            {
+                "skill-registry",
+                "harness-reference",
+                "farplane-lifecycle-core",
+                "farplane-lifecycle-full",
+            },
+        )
+        self.assertEqual(get_projection_config("skill-registry").output_schema, "skill_graph")
+        self.assertEqual(get_projection_config("harness-reference").output_schema, "harness_graph")
+        self.assertEqual(get_projection_config("farplane-lifecycle-core").output_schema, "lifecycle_graph")
+        full = get_projection_config("farplane-lifecycle-full")
+        self.assertIn("gates", full.optional_nodes)
+        self.assertIn("ticket_ids", full.flatteners)
+
+    def test_generic_projection_filters_nodes_and_edges(self) -> None:
+        graph = {
+            "schema_version": "1.0.0",
+            "generated_at": "ignored",
+            "source": {},
+            "counts": {},
+            "nodes": [
+                {"id": "skill:a", "kind": "skill", "label": "a", "tags": ["skill"]},
+                {"id": "file:x", "kind": "file", "label": "x", "tags": ["file"]},
+                {"id": "state:y", "kind": "state", "label": "y", "tags": ["abstract-state"]},
+            ],
+            "edges": [
+                {"source": "skill:a", "target": "file:x", "type": "reads", "confidence": "parsed"},
+                {"source": "skill:a", "target": "state:y", "type": "writes", "confidence": "parsed"},
+            ],
+        }
+        config = ProjectionConfig(
+            name="files-only",
+            description="test",
+            output_schema="test",
+            default_out="unused.json",
+            include_node_kinds=frozenset({"skill", "file"}),
+            include_edge_types=frozenset({"reads"}),
+        )
+        projected = project_graph(graph, config, annotate=True)
+        self.assertEqual({node["id"] for node in projected["nodes"]}, {"skill:a", "file:x"})
+        self.assertEqual(
+            [(edge["source"], edge["target"], edge["type"]) for edge in projected["edges"]],
+            [("skill:a", "file:x", "reads")],
+        )
+        self.assertEqual(projected["source"]["projection"], "files-only")
+
+    def test_temp_artifacts_match_fresh_generation(self) -> None:
         repo = Path(__file__).resolve().parents[3]
         graph = lifecycle_graph.build_graph(repo)
-        json_path = repo / "skills/skill-maintenance/graph/farplane-lifecycle-graph.json"
-        js_path = repo / "skills/skill-maintenance/graph/farplane-lifecycle-graph.js"
-        existing_json = json.loads(json_path.read_text())
-        existing_js = lifecycle_graph.load_js_value(js_path)
-        self.assertEqual(
-            lifecycle_graph.normalized_for_compare(existing_json),
-            lifecycle_graph.normalized_for_compare(graph),
-        )
-        self.assertEqual(
-            lifecycle_graph.normalized_for_compare(existing_js),
-            lifecycle_graph.normalized_for_compare(graph),
-        )
+        with tempfile.TemporaryDirectory() as tmp:
+            json_path = Path(tmp) / "farplane-lifecycle-graph.json"
+            js_path = Path(tmp) / "farplane-lifecycle-graph.js"
+            lifecycle_graph.write_json(json_path, graph)
+            lifecycle_graph.write_js(js_path, "FARPLANE_LIFECYCLE_GRAPH", graph)
+            existing_json = json.loads(json_path.read_text())
+            existing_js = lifecycle_graph.load_js_value(js_path)
+            self.assertEqual(
+                lifecycle_graph.normalized_for_compare(existing_json),
+                lifecycle_graph.normalized_for_compare(graph),
+            )
+            self.assertEqual(
+                lifecycle_graph.normalized_for_compare(existing_js),
+                lifecycle_graph.normalized_for_compare(graph),
+            )
 
 
 if __name__ == "__main__":

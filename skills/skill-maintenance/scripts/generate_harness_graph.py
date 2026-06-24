@@ -7,9 +7,11 @@ import argparse
 import json
 import re
 from collections import Counter, defaultdict
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+
+from graph_ir import GraphBundle, GraphEdge, GraphNode, edge_counts, node_kind_counts, utc_timestamp, write_js, write_json
+from graph_projection_config import get_projection_config
 
 
 TEXT_SUFFIXES = {
@@ -272,23 +274,39 @@ def build_graph(repo_root: Path) -> dict[str, Any]:
                         }
                     )
 
-    edge_type_counts = Counter(edge["type"] for edge in edges)
-    kind_counts = Counter(node["kind"] for node in nodes.values())
-    return {
-        "schema_version": "1.0.0",
-        "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "counts": {
-            "nodes": len(nodes),
-            "edges": len(edges),
-            "scanned_files": len(files),
-            "unresolved_refs": len(unresolved),
-            "node_kinds": dict(sorted(kind_counts.items())),
-            "edge_types": dict(sorted(edge_type_counts.items())),
-        },
-        "nodes": sorted(nodes.values(), key=lambda node: (node["kind"], node["label"])),
-        "edges": sorted(edges, key=lambda edge: (edge["source"], edge["target"], edge["type"], edge["from_file"])),
-        "unresolved_refs": sorted(unresolved, key=lambda item: (item["source"], item["raw_ref"]))[:200],
+    ir_nodes = [
+        GraphNode(
+            id=node["id"],
+            label=node["label"],
+            kind=node.get("kind", ""),
+            path=node.get("path", ""),
+        ).as_dict()
+        for node in nodes.values()
+    ]
+    ir_edges = [
+        GraphEdge(
+            source=edge["source"],
+            target=edge["target"],
+            type=edge["type"],
+            metadata={"from_file": edge["from_file"], "raw_ref": edge["raw_ref"]},
+        ).as_dict()
+        for edge in edges
+    ]
+    counts = {
+        "nodes": len(nodes),
+        "edges": len(edges),
+        "scanned_files": len(files),
+        "unresolved_refs": len(unresolved),
+        "node_kinds": node_kind_counts(ir_nodes),
+        "edge_types": edge_counts(ir_edges),
     }
+    return GraphBundle(
+        nodes=sorted(ir_nodes, key=lambda node: (node["kind"], node["label"])),
+        edges=sorted(ir_edges, key=lambda edge: (edge["source"], edge["target"], edge["type"], edge["from_file"])),
+        generated_at=utc_timestamp(),
+        counts=counts,
+        extras={"unresolved_refs": sorted(unresolved, key=lambda item: (item["source"], item["raw_ref"]))[:200]},
+    ).as_dict()
 
 
 def local_doc_paths(repo_root: Path) -> list[str]:
@@ -318,16 +336,6 @@ def skill_doc_counts(graph: dict[str, Any]) -> Counter[str]:
         if target_path.startswith("docs/"):
             counts[target_path] += 1
     return counts
-
-
-def write_json(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
-
-
-def write_js(path: Path, global_name: str, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(f"window.{global_name} = " + json.dumps(value, indent=2, sort_keys=True) + ";\n")
 
 
 def markdown_table(rows: list[list[str]]) -> str:
@@ -460,7 +468,12 @@ def main() -> int:
     parser.add_argument("--out", default="skills/skill-maintenance/graph/harness-graph.json")
     parser.add_argument("--js-out", default="skills/skill-maintenance/graph/harness-graph.js")
     parser.add_argument("--report-out", default="docs/doc-audit/generated/doc-reference-report.md")
+    parser.add_argument("--projection", default="harness-reference", help="projection profile name")
     args = parser.parse_args()
+
+    config = get_projection_config(args.projection)
+    if config.output_schema != "harness_graph":
+        raise SystemExit(f"{args.projection} is not a harness graph projection")
 
     repo_root = Path(args.repo_root).resolve()
     graph = build_graph(repo_root)

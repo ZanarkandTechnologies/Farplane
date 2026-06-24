@@ -9,11 +9,13 @@ import re
 import sys
 from collections import Counter
 from dataclasses import dataclass
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from farplane_lifecycle_catalog import CURATED_EDGES, CURATED_FILES, FSA_SPECS, TARGET_SKILLS
+from graph_ir import GraphBundle, GraphEdge, GraphNode, edge_counts, load_js_value as load_graph_js_value
+from graph_ir import node_kind_counts, normalized_for_compare, utc_timestamp, write_js, write_json
+from graph_projection_config import get_projection_config
 
 
 JS_PREFIX = "window.FARPLANE_LIFECYCLE_GRAPH = "
@@ -233,17 +235,14 @@ def canonical_ref(value: str) -> tuple[str, str, str, list[str]]:
 
 
 def make_node(node_id: str, kind: str, label: str, path: str | None = None, tags: list[str] | None = None, **metadata: Any) -> dict[str, Any]:
-    node = {
-        "id": node_id,
-        "kind": kind,
-        "label": label,
-        "tags": sorted(set(tags or [])),
-    }
-    if path:
-        node["path"] = path
-    if metadata:
-        node["metadata"] = metadata
-    return node
+    return GraphNode(
+        id=node_id,
+        label=label,
+        kind=kind,
+        path=path or "",
+        tags=tuple(tags or ()),
+        metadata=metadata,
+    ).as_dict()
 
 
 def add_node(nodes: dict[str, dict[str, Any]], node: dict[str, Any]) -> None:
@@ -262,16 +261,16 @@ def add_edge(edges: list[dict[str, Any]], seen: set[tuple[str, str, str, str]], 
     if key in seen:
         return
     seen.add(key)
-    edge = {
-        "source": source,
-        "target": target,
-        "type": edge_type,
-        "evidence_ref": evidence_ref,
-        "confidence": confidence,
-    }
-    if label:
-        edge["label"] = label
-    edges.append(edge)
+    edges.append(
+        GraphEdge(
+            source=source,
+            target=target,
+            type=edge_type,
+            label=label or "",
+            evidence_ref=evidence_ref,
+            confidence=confidence,
+        ).as_dict()
+    )
 
 
 def add_ref_node(nodes: dict[str, dict[str, Any]], value: str, include_abstract_state: bool = False) -> str | None:
@@ -442,13 +441,23 @@ def build_graph(
     if include_fsa_nodes:
         add_fsa_nodes(nodes, fsa_projections)
 
-    edge_counts = Counter(edge["type"] for edge in edges)
-    kind_counts = Counter(node["kind"] for node in nodes.values())
     confidence_counts = Counter(edge["confidence"] for edge in edges)
-    return {
-        "schema_version": "1.0.0",
-        "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "source": {
+    counts = {
+        "nodes": len(nodes),
+        "edges": len(edges),
+        "fsa_projections": len(fsa_projections),
+        "node_kinds": node_kind_counts(list(nodes.values())),
+        "edge_types": edge_counts(edges),
+        "edge_confidence": dict(sorted(confidence_counts.items())),
+        "parsed_skills": len(parsed_skills),
+    }
+    return GraphBundle(
+        nodes=sorted(nodes.values(), key=lambda node: (node["kind"], node["id"])),
+        edges=sorted(edges, key=lambda edge: (edge["source"], edge["target"], edge["type"], edge["evidence_ref"])),
+        generated_at=utc_timestamp(),
+        counts=counts,
+        extras={
+            "source": {
             "generator": "skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py",
             "target_skills": TARGET_SKILLS,
             "missing_skills": missing_skills,
@@ -458,44 +467,14 @@ def build_graph(
                 "abstract_state": include_abstract_state,
                 "fsa_state_nodes": include_fsa_nodes,
             },
+            },
+            "fsa_projections": fsa_projections,
         },
-        "counts": {
-            "nodes": len(nodes),
-            "edges": len(edges),
-            "fsa_projections": len(fsa_projections),
-            "node_kinds": dict(sorted(kind_counts.items())),
-            "edge_types": dict(sorted(edge_counts.items())),
-            "edge_confidence": dict(sorted(confidence_counts.items())),
-            "parsed_skills": len(parsed_skills),
-        },
-        "nodes": sorted(nodes.values(), key=lambda node: (node["kind"], node["id"])),
-        "edges": sorted(edges, key=lambda edge: (edge["source"], edge["target"], edge["type"], edge["evidence_ref"])),
-        "fsa_projections": fsa_projections,
-    }
-
-
-def write_json(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
-
-
-def write_js(path: Path, global_name: str, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(f"window.{global_name} = " + json.dumps(value, indent=2, sort_keys=True) + ";\n")
+    ).as_dict()
 
 
 def load_js_value(path: Path, global_name: str = "FARPLANE_LIFECYCLE_GRAPH") -> dict[str, Any]:
-    text = path.read_text()
-    prefix = f"window.{global_name} = "
-    if not text.startswith(prefix) or not text.endswith(";\n"):
-        raise ValueError(f"{path} is not a {global_name} wrapper")
-    return json.loads(text[len(prefix) : -2])
-
-
-def normalized_for_compare(value: dict[str, Any]) -> dict[str, Any]:
-    copy = json.loads(json.dumps(value))
-    copy["generated_at"] = "<ignored>"
-    return copy
+    return load_graph_js_value(path, global_name)
 
 
 def validate_graph(graph: dict[str, Any]) -> list[str]:
@@ -550,14 +529,21 @@ def main() -> int:
     parser.add_argument("--include-gates", action="store_true", help="include skill gate nodes and guard edges")
     parser.add_argument("--include-abstract-state", action="store_true", help="include abstract prose-derived state nodes")
     parser.add_argument("--include-fsa-nodes", action="store_true", help="include FSA state nodes in the top-level node list")
+    parser.add_argument("--projection", default="farplane-lifecycle-core", help="projection profile name")
     args = parser.parse_args()
 
+    config = get_projection_config(args.projection)
+    if config.output_schema != "lifecycle_graph":
+        raise SystemExit(f"{args.projection} is not a lifecycle graph projection")
+    profile_gates = "gates" in config.optional_nodes
+    profile_abstract = "abstract_state" in config.optional_nodes
+    profile_fsa = "fsa_state_nodes" in config.optional_nodes
     repo_root = Path(args.repo_root).resolve()
     graph = build_graph(
         repo_root,
-        include_gates=args.full or args.include_gates,
-        include_abstract_state=args.full or args.include_abstract_state,
-        include_fsa_nodes=args.full or args.include_fsa_nodes,
+        include_gates=args.full or args.include_gates or profile_gates,
+        include_abstract_state=args.full or args.include_abstract_state or profile_abstract,
+        include_fsa_nodes=args.full or args.include_fsa_nodes or profile_fsa,
     )
     errors = validate_graph(graph)
     if errors:
@@ -568,12 +554,17 @@ def main() -> int:
     out_path = repo_root / args.out
     js_path = repo_root / args.js_out if args.js_out else None
     if args.check:
-        if out_path.exists():
-            existing = json.loads(out_path.read_text())
-            if normalized_for_compare(existing) != normalized_for_compare(graph):
-                print(f"{args.out} is stale; rerun generator", file=sys.stderr)
+        if not out_path.exists():
+            print(f"{args.out} does not exist", file=sys.stderr)
+            return 1
+        existing = json.loads(out_path.read_text())
+        if normalized_for_compare(existing) != normalized_for_compare(graph):
+            print(f"{args.out} is stale; rerun generator", file=sys.stderr)
+            return 1
+        if js_path:
+            if not js_path.exists():
+                print(f"{args.js_out} does not exist", file=sys.stderr)
                 return 1
-        if js_path and js_path.exists():
             existing_js = load_js_value(js_path)
             if normalized_for_compare(existing_js) != normalized_for_compare(graph):
                 print(f"{args.js_out} is stale; rerun generator", file=sys.stderr)
