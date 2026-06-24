@@ -32,9 +32,9 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
-      "source_commit": "91bb9ac6f871",
-      "summary": "chore(skills): upgrade skill creator workflows",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-0ccf031a96ae.md",
+      "source_commit": "0ccf031a96ae",
+      "summary": "working tree current template",
       "version": "0.3.2"
     },
     {
@@ -54,7 +54,7 @@
       ],
       "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
       "source_commit": "91bb9ac6f871",
-      "summary": "working tree current template",
+      "summary": "chore(skills): upgrade skill creator workflows",
       "version": "0.3.2"
     }
   ],
@@ -115,7 +115,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "0ccf031a96ae",
       "template_version": "0.3.2",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -129,7 +129,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "0ccf031a96ae",
       "template_version": "0.3.2",
       "title": "Todo executability",
       "verdict": "pass"
@@ -143,7 +143,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "0ccf031a96ae",
       "template_version": "0.3.2",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -157,7 +157,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "0ccf031a96ae",
       "template_version": "0.3.2",
       "title": "Proof contract",
       "verdict": "pass"
@@ -171,7 +171,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "0ccf031a96ae",
       "template_version": "0.3.2",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -498,8 +498,20 @@
       ]
     }
   ],
-  "generated_at": "2026-06-24T14:06:10+00:00",
+  "generated_at": "2026-06-24T14:13:46+00:00",
   "rollout": [
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/deliberative-advice/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "deliberative-advice",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.2",
+      "tier": 2
+    },
     {
       "eval": "eval_task.json",
       "has_checklist": true,
@@ -1317,18 +1329,6 @@
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/deliberative-advice/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "deliberative-advice",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.1.0",
-      "tier": 2
-    },
-    {
       "eval": "",
       "has_checklist": true,
       "path": "skills/documentation/SKILL.md",
@@ -1659,16 +1659,16 @@
       "local": 93
     },
     "by_status": {
-      "current": 3,
+      "current": 4,
       "external": 3,
       "missing": 58,
-      "stale": 32
+      "stale": 31
     },
     "by_template_version": {
-      "0.1.0": 4,
+      "0.1.0": 3,
       "0.2.0": 21,
       "0.3.0": 7,
-      "0.3.2": 3,
+      "0.3.2": 4,
       "missing": 61
     },
     "total_skills": 96
@@ -1966,7 +1966,7 @@
       },
       "template_uses": {
         "skill-eval-task": "0.1.0",
-        "skill-template": "0.1.0"
+        "skill-template": "0.3.2"
       }
     },
     {
@@ -3360,6 +3360,23 @@
       "used_version": ""
     },
     {
+      "consumer_id": "deliberative-advice",
+      "consumer_scope": "skill",
+      "current_version": "0.3.2",
+      "feature_refs": [
+        "FEAT-0048",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0058",
+        "FEAT-0059"
+      ],
+      "path": "skills/deliberative-advice/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.2"
+    },
+    {
       "consumer_id": "feed-scout",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -3477,23 +3494,6 @@
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
       "used_version": "0.2.0"
-    },
-    {
-      "consumer_id": "deliberative-advice",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/deliberative-advice/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.1.0"
     },
     {
       "consumer_id": "documentation",
@@ -4006,8 +4006,8 @@
         "skill": 35
       },
       "by_status": {
-        "current": 3,
-        "stale": 32
+        "current": 4,
+        "stale": 31
       },
       "current_version": "0.3.2",
       "feature_refs": [
@@ -4026,7 +4026,7 @@
       "introduced_at": "2026-06-24",
       "latest_at": "2026-06-24",
       "latest_commit": "91bb9ac6f871",
-      "latest_summary": "working tree current template",
+      "latest_summary": "chore(skills): upgrade skill creator workflows",
       "release_count": 2,
       "sections": [
         "Context",
@@ -4043,19 +4043,19 @@
       "snapshots": [
         {
           "introduced_at": "2026-06-24",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
-          "source_commit": "91bb9ac6f871",
-          "summary": "chore(skills): upgrade skill creator workflows"
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-0ccf031a96ae.md",
+          "source_commit": "0ccf031a96ae",
+          "summary": "working tree current template"
         },
         {
           "introduced_at": "2026-06-24",
           "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
           "source_commit": "91bb9ac6f871",
-          "summary": "working tree current template"
+          "summary": "chore(skills): upgrade skill creator workflows"
         }
       ],
-      "source_commit": "91bb9ac6f871",
-      "summary": "chore(skills): upgrade skill creator workflows",
+      "source_commit": "0ccf031a96ae",
+      "summary": "working tree current template",
       "template_metadata": {
         "feature_refs": [
           "FEAT-0048",

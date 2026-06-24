@@ -1,14 +1,14 @@
 [
   {
     "id": "deliberative_council_context_packet_01",
-    "title": "Council mode writes a context packet before spawning lanes",
-    "query": "After a long AGI Toy Shop architecture discussion, the operator asks for full council advice on whether to refactor the skill-maintenance workflow. The prior thread contains options, dissent, file evidence, and constraints. How should deliberative-advice prepare the council lanes?",
+    "title": "Council preset resolves budgeted advise with a context packet",
+    "query": "After a long AGI Toy Shop architecture discussion, the operator asks for full council advice on whether to refactor the skill-maintenance workflow. The prior thread contains options, dissent, file evidence, and constraints. How should deliberative-advice prepare the budgeted advice run?",
     "reference_points": [
-      "States the decision and why prior discussion matters before spawning lanes",
+      "States the decision, stakes, and why plain advise is too shallow",
       "Creates or identifies a durable Council Context Packet instead of relying on chat memory",
-      "Includes decision, stakes, prior discussion summary, options, evidence refs, relevant files, constraints, lane briefs, output shape, and proof or next owner in the packet",
-      "Passes the same context_ref or packet path to every perspective lane with only lane-specific instructions added",
-      "Allows a ticket path when the decision is ticketed but does not force a ticket for pure advice or council decisions"
+      "Resolves the hardcoded council preset through budget-advisor using advise as the base skill",
+      "Supplies complete persona prompts for Operator value, Engineering risk, Evidence skeptic, Systems fit, and Chair",
+      "Preserves first-pass independence, meaningful dissent, the base advise output contract, and a concrete next owner"
     ],
     "tags": [
       "skill",
@@ -16,6 +16,6 @@
       "council",
       "subagent-context"
     ],
-    "notes": "Regression guard for thin council subagent prompts that lose rich prior discussion."
+    "notes": "Regression guard for treating deliberative-advice as a standalone council implementation instead of a budgeted advise preset."
   }
 ]
