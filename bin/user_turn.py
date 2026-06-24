@@ -53,7 +53,6 @@ HARD_CONSTRAINTS = {
     "specific_ticket_required",
 }
 SESSION_ORIGINS = {"control", "internal", "non_owning"}
-SESSION_ALIAS_POOL = tuple(f"agent-{index:02d}" for index in range(1, 11))
 EXECUTION_PHASES = {"build", "qa", "demo"}
 TICKET_PATH_ID_PATTERN = re.compile(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)")
 SELF_IMPROVEMENT_WINDOW_SCHEMA_VERSION = 1
@@ -588,11 +587,18 @@ def clear_ticket_claim_alias(project_root: Path, ticket_id: str, session_name: s
     write_ticket_text(ticket_path, updated_frontmatter, body)
 
 
+def codex_session_alias(session_id: str) -> str:
+    suffix = re.sub(r"[^A-Za-z0-9]+", "", session_id.strip().lower())[:12]
+    return f"codex-{suffix or 'session'}"
+
+
 def allocate_session_name(project_root: Path, session_id: str, existing_payload: Mapping[str, object] | None = None) -> str:
     if isinstance(existing_payload, Mapping):
         existing_name = existing_payload.get("session_name")
         if isinstance(existing_name, str) and existing_name.strip():
-            return existing_name.strip()
+            existing_name = existing_name.strip()
+            if not re.fullmatch(r"agent-\d{2}", existing_name):
+                return existing_name
 
     used: set[str] = set()
     for candidate in session_state_dir(project_root).glob("*.json"):
@@ -602,11 +608,11 @@ def allocate_session_name(project_root: Path, session_id: str, existing_payload:
         session_name = payload.get("session_name")
         if isinstance(session_name, str) and session_name.strip():
             used.add(session_name.strip())
-    for alias in SESSION_ALIAS_POOL:
-        if alias not in used:
-            return alias
-    suffix = re.sub(r"[^A-Za-z0-9]+", "", session_id)[-4:] or "x"
-    return f"agent-{suffix.lower()}"
+    alias = codex_session_alias(session_id)
+    if alias not in used:
+        return alias
+    suffix = re.sub(r"[^A-Za-z0-9]+", "", session_id.strip().lower())[-6:] or "session"
+    return f"{alias}-{suffix}"
 
 
 def resolve_runtime_path(project_root: Path, raw: str) -> Path:

@@ -98,6 +98,11 @@ attach to a ticket and use a Goal Packet: `ticket.md` for the task contract,
 `program.md` for loop configuration, and `progress.md` for append-only turn
 logs. Use `goal-advisor` to choose Goal versus heartbeat, rollout, or feedback
 shape and to compile the final native `/goal` prompt.
+When a Codex session starts active execution or creates a ticket it is actively
+handling, set `claimed_by` to that session's human-facing alias such as
+`codex-019ef784`; clear it when the session parks, blocks, completes, or
+archives the ticket. Keep raw `session_id` values in `.farplane/` runtime state,
+not ticket frontmatter.
 Ticket bodies should stay compact and program-shaped: `Summary`, `Scope`,
 `Delta`, `Program`, `Map`, `Done / Proof`, `State`, `Links`, and sparse
 `Notes`. Put loop configuration in `program.md`, append-only logs in

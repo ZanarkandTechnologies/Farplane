@@ -88,7 +88,8 @@ tracks the active ticket/run/session ownership for hook consumers, while
 For live multi-session coordination:
 
 - `session_id` remains the transport/runtime identity
-- `session_name` is the human-facing session alias, such as `agent-03`
+- `session_name` is the human-facing session alias, derived from the runtime
+  session as `codex-<session-fragment>` such as `codex-019ef784`
 - `session_origin` records whether a session is `control`, `internal`, or `non_owning`
 - ticket frontmatter may mirror only the human-facing alias as `claimed_by`
 - raw `session_id` should stay runtime-only

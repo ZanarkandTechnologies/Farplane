@@ -23,6 +23,7 @@ REQUIRED_FIELDS = {
     "phase",
     "status",
     "owner",
+    "claimed_by",
     "priority",
     "depends_on",
     "blocked_by",
@@ -42,6 +43,13 @@ ALLOWED_COMPUTE_TARGETS = {
     "symphony",
     "codex_cloud",
 }
+GENERIC_CODEX_CLAIM = "codex"
+
+
+def normalize_optional_scalar(value: object) -> str:
+    if isinstance(value, list):
+        return ""
+    return str(value or "").strip()
 
 
 def load_ticket(path: Path) -> tuple[dict[str, object], str]:
@@ -138,6 +146,8 @@ def validate_ticket(path: Path) -> list[str]:
                 errors.append(f"{rel}: blocked_by entries must be ticket IDs only: {item!r}")
 
     approval_required = bool(frontmatter.get("approval_required", False))
+    claimed_by = normalize_optional_scalar(frontmatter.get("claimed_by", ""))
+    next_action = str(frontmatter.get("next_action", "")).strip()
     requires_qa = frontmatter.get("requires_qa", None)
     requires_demo = frontmatter.get("requires_demo", None)
     compute_target = frontmatter.get("compute_target", None)
@@ -160,6 +170,21 @@ def validate_ticket(path: Path) -> list[str]:
 
     if status == "building" and approval_required:
         errors.append(f"{rel}: status=building cannot contain approval-gated work")
+
+    if claimed_by.lower() == GENERIC_CODEX_CLAIM:
+        errors.append(
+            f"{rel}: claimed_by must be a live session alias such as codex-019ef784, not plain codex"
+        )
+
+    if (
+        status == "building"
+        and not claimed_by
+        and "parked" not in next_action.lower()
+        and "waiting" not in next_action.lower()
+    ):
+        errors.append(
+            f"{rel}: status=building requires claimed_by unless the ticket is explicitly parked or waiting"
+        )
 
     if "## Status" in body:
         errors.append(f"{rel}: legacy '## Status' block is not allowed")

@@ -104,7 +104,7 @@ title: short title
 phase: planning
 status: review
 owner: codex
-claimed_by: agent-03  # optional active session claim alias
+claimed_by: codex-019ef784  # optional active session claim alias; empty when unclaimed
 priority: medium
 # optional compute override: local_shared, local_worktree, symphony, or codex_cloud
 # compute_target: local_shared
@@ -126,7 +126,10 @@ last_verification: none
 - `phase`: `planning`, `building`, `documenting`, `complete`, `failed`
 - `status`: `todo`, `review`, `building`, `blocked`, `done`, `failed`
 - `owner`: broad work owner, not a live session id
-- `claimed_by`: optional human-facing active claim alias for the current live session, such as `agent-03`
+- `claimed_by`: optional human-facing active claim alias for the current live
+  session. Codex agents must use a session-specific alias such as
+  `codex-019ef784`, not plain `codex`; clear this field when the live session
+  blocks, parks, completes, or archives the ticket.
 - `compute_target`: optional ticket-level compute override. Supported values
   are `local_shared`, `local_worktree`, `symphony`, and `codex_cloud`; future
   targets may be recorded but remain blocked unless the active workflow and
@@ -149,10 +152,13 @@ last_verification: none
 - `decision_refs`: optional references to `progress.md` entries or
   `decisions.md` headings; do not put decision bodies in frontmatter
 
-For `$ralph`, the explicit invocation is the operator running `$ralph`. After
-that, a ticket is selectable only when `ready: true`,
-`approval_required: false`, `blocked_by: []`, `claimed_by:` is empty, and every
-dependency is complete, archived, or explicitly waived in the ticket body.
+For `$ralph`, Pulse, and board-drain, the explicit invocation is the operator or
+automation running the selector. After that, a ticket is selectable only when
+`ready: true`, `approval_required: false`, `blocked_by: []`, `claimed_by:` is
+empty, `phase` is not `complete` or `failed`, `status` is not `done` or
+`failed`, the ticket is not parked or waiting on external credentials/feedback,
+and every dependency is complete, archived, or explicitly waived in the ticket
+body. These are hard gates, not ranking preferences.
 
 For Farplane invocation, `bin/farplane_boards.py` is the canonical v1
 BoardAdapter surface for reading filesystem tickets into normalized `WorkItem`

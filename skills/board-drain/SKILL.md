@@ -9,7 +9,6 @@ template_uses:
 common_chains:
   after:
     - goal-advisor
-    - weekly-strategy-analysis
 allowed-tools: Read, Grep, Glob, Bash
 
 ---
@@ -24,10 +23,10 @@ and Notion boards, and hand the selected work to Goal Advisor without creating
 a hidden scheduler.
 
 This skill is a selector and handoff contract. It does not replace
-`goal-advisor` as the execution compiler and coding-ticket executor, or
-`weekly-strategy-analysis` as the no-ticket planning fallback. Live hourly
-scheduling must be provided by an explicit automation surface; until then, this
-skill emits a ready-to-run heartbeat packet or no-op report.
+`goal-advisor` as the execution compiler and coding-ticket executor. Live
+hourly scheduling must be provided by an explicit automation surface; until
+then, this skill emits a ready-to-run heartbeat packet, clarification request,
+or no-op report.
 
 ## Skill Signature
 
@@ -36,7 +35,7 @@ board_drain(project_root?, activity_window?, board_sources?, budget?)
   -> activity_status
    + candidate_set
    + selection_decision
-   + goal_advisor_handoff | clarification_request | weekly_strategy_handoff | no_op
+   + goal_advisor_handoff | clarification_request | no_op
 
 state:
   reads(Farplane Console activity provider, tickets/TASK-*/ticket.md,
@@ -50,8 +49,7 @@ gates:
   human_gates_respected; goal_advisor_handoff_ready
 
 routes:
-  notion-context | goal-advisor | impl-plan |
-  weekly-strategy-analysis | telegram-message | review
+  notion-context | goal-advisor | impl-plan | telegram-message | review
 
 fails:
   hidden daemon; skipping activity check; mutating Notion;
@@ -85,9 +83,10 @@ route for the selected ticket.
 
 ## Phase Boundary
 
-This skill performs board normalization and selection inline. Call
-`weekly-strategy-analysis` only when no proceedable candidate exists, and call
-`review` only for a material changed artifact or completion claim.
+This skill performs board normalization and selection inline. When no
+proceedable candidate exists, emit a no-op or exact clarification request
+instead of routing to a missing planning skill; call `review` only for a
+material changed artifact or completion claim.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -105,8 +104,15 @@ This skill performs board normalization and selection inline. Call
   - [ ] Read local `tickets/TASK-*/ticket.md` plus `tickets/README.md` selection rules.
   - [ ] Use `notion-context` for Notion task/project rows when the connector is available; if it is unavailable, label `notion_status := unavailable` and continue with local tickets.
   - [ ] Normalize each candidate as `source, id, title, status, phase, ready, approval_required, claimed_by, blocked_by, depends_on, project, next_action, proof, confidence, compounding_reason`.
+  - [ ] Treat `claimed_by` as a live active-session claim. Codex claims should
+        be session-specific, such as `codex-019ef784`; plain `codex` is broad
+        ownership, not a valid active claim alias.
 - [ ] 4. Filter for safe autonomous work.
-  - [ ] Keep only tickets that are ready, unblocked, unclaimed, dependency-satisfied, computer-actionable, and not gated by approval, spend, deploy, private credentials, or missing external access.
+  - [ ] Keep only tickets that are ready, approval-free, unblocked, unclaimed,
+        dependency-satisfied, computer-actionable, not complete or failed, not
+        parked, and not gated by approval, spend, deploy, private credentials,
+        human feedback, or missing external access. Treat every item in this
+        sentence as a hard exclusion, not a ranking preference.
   - [ ] Skip Notion tasks in `Review` unless the operator explicitly asks for review work.
   - [ ] Prefer tasks with clear `Done / Proof`, explicit files, and narrow blast radius.
 - [ ] 5. Rank the top milestone.
@@ -116,7 +122,9 @@ This skill performs board normalization and selection inline. Call
 - [ ] 6. Route the result.
   - [ ] If a ticket is selected, emit a `goal-advisor` handoff that lists the ticket, program/progress files if present, budget, proof target, and recommended path such as `impl-plan -> goal-advisor`.
   - [ ] If a promising ticket is unclear, emit a clarification request or `telegram-message` draft with the exact missing human input.
-  - [ ] If no proceedable tickets exist, emit a `weekly-strategy-analysis` handoff to create or refresh tickets.
+  - [ ] If no proceedable tickets exist, emit `no_op_empty_ready_queue` with
+        rejected-blocker counts, or a clarification request naming the smallest
+        human decision needed to make one ticket executable.
 - [ ] 7. Finish with an operator-readable report.
   - [ ] Include `activity_status`, board source status, rejected blockers by category, selected ticket or fallback, next Goal prompt location, and notification/evidence paths.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -140,7 +148,7 @@ shortlist:
     compounding_reason:
     confidence:
 decision:
-  route: no_op|goal_advisor|clarification|weekly_strategy
+  route: no_op|goal_advisor|clarification
   selected:
   accepted_tradeoff:
 handoff:
@@ -174,13 +182,13 @@ No-op policy: if the ticket is no longer proceedable, re-run board-drain selecti
   separate task explicitly authorizes a write.
 - Do not pick the highest-upside ticket if it is vague, blocked, human-gated,
   or missing proof; pick the most compounding proceedable ticket instead.
-- Do not let an empty board end the loop silently. Route to
-  `weekly-strategy-analysis` and create or refresh ticket candidates.
+- Do not let an empty board end the loop silently. Emit `no_op_empty_ready_queue`
+  with blocker categories, or a clarification request when exactly one human
+  decision would make a ticket executable.
 
 ## Reference Map
 
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - compile selected work into native Goal, heartbeat, rollout, or direct-route prompt.
-- [../weekly-strategy-analysis/SKILL.md](../weekly-strategy-analysis/SKILL.md) - fallback when no proceedable tickets exist.
 - `notion-context` installed skill - Notion project/task context rules when the connector is available.
 - [../../tickets/README.md](../../tickets/README.md) - local ticket board and proceedable-work rules.
 - [../../docs/specs/goal-loop-contract.md](../../docs/specs/goal-loop-contract.md) - Goal Packet, heartbeat, and progress contracts.
@@ -189,5 +197,5 @@ No-op policy: if the ticket is no longer proceedable, re-run board-drain selecti
 ## Output
 
 - A compact board-drain report in chat or a ticket-scoped artifact.
-- A `goal-advisor` handoff for a selected ticket, or a clarification request,
-  no-op report, or `weekly-strategy-analysis` handoff.
+- A `goal-advisor` handoff for a selected ticket, or a clarification request
+  or no-op report.

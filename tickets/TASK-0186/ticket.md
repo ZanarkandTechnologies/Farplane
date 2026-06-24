@@ -4,17 +4,17 @@ title: move Notion handles into private tool docs
 phase: documenting
 status: review
 owner: codex
-claimed_by: codex
+claimed_by:
 priority: high
 depends_on: []
 blocked_by: []
-ready: true
+ready: false
 approval_required: false
 requires_qa: true
 requires_demo: false
 created_at: 2026-06-01T00:00:00+08:00
-updated_at: 2026-06-01T13:24:00+08:00
-next_action: commit and push the modular private-context slice to main
+updated_at: 2026-06-24T10:21:36+08:00
+next_action: parked; requires explicit commit/push outside Pulse no-publish automation
 last_verification: 2026-06-01 13:24 +0800 - README/private-context docs, focused QA, live-ID grep, doc parity, and review passed
 ---
 

@@ -47,7 +47,7 @@ BIN_README_TEXT = """\
 TICKETS_README_TEXT = """\
 # Tickets
 
-claimed_by: agent-03  # optional active session claim alias
+claimed_by: codex-019ef784  # optional active session claim alias; empty when unclaimed
 
 - do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter
 """

@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.0"
+template_version: "0.1.1"
 feature_refs:
   - FEAT-0002
   - FEAT-0007
@@ -11,6 +11,7 @@ title: short title
 phase: planning
 status: review
 owner: unassigned
+# Active session alias such as codex-019ef784; empty when unclaimed.
 claimed_by:
 priority: medium
 depends_on: []

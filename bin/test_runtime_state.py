@@ -438,7 +438,7 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertIsNotNone(captured)
         assert captured is not None
         self.assertEqual(session_payload["session_id"], "sess-init")
-        self.assertEqual(session_payload["session_name"], "agent-01")
+        self.assertEqual(session_payload["session_name"], "codex-sessinit")
         self.assertEqual(session_payload["last_user_turn"]["turn_id"], "turn-init")
         self.assertEqual(session_payload["session_origin"], "control")
         self.assertEqual(current_run["session_id"], "sess-init")
@@ -779,8 +779,8 @@ linked_docs: []
             ticket_text = ticket_path.read_text(encoding="utf-8")
             session_payload = json.loads(session_path.read_text(encoding="utf-8"))
 
-        self.assertIn("claimed_by: agent-01", ticket_text)
-        self.assertEqual(session_payload["session_name"], "agent-01")
+        self.assertIn("claimed_by: codex-sess123", ticket_text)
+        self.assertEqual(session_payload["session_name"], "codex-sess123")
         self.assertEqual(session_payload["current_ticket_id"], "TASK-1234")
 
     def test_capture_user_turn_updates_only_resolved_session_lane(self) -> None:
@@ -892,7 +892,7 @@ linked_docs: []
         self.assertEqual(session_a["last_user_turn"]["raw_text"], "Implement TASK-0042 in this session only.")
         self.assertEqual(session_a["session_origin"], "control")
         self.assertFalse(session_a["execution_loop_active"])
-        self.assertEqual(session_a["session_name"], "agent-01")
+        self.assertEqual(session_a["session_name"], "codex-sessa")
         self.assertEqual(session_b["last_user_turn"]["turn_id"], "turn-b")
         self.assertNotIn("execution_loop_active", session_b)
         self.assertFalse(persisted_run_state_a["execution_loop_active"])
