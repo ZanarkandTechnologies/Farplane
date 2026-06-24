@@ -8,10 +8,10 @@ from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
-ROOT = Path(__file__).resolve().parent.parent
-BIN_DIR = str((ROOT / "bin").resolve())
-if BIN_DIR not in sys.path:
-    sys.path.insert(0, BIN_DIR)
+ROOT = Path(__file__).resolve().parents[2]
+RUNTIME_DIR = str((ROOT / "bin" / "runtime").resolve())
+if RUNTIME_DIR not in sys.path:
+    sys.path.insert(0, RUNTIME_DIR)
 
 import notify
 

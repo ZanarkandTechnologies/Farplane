@@ -4,10 +4,12 @@ Executable helpers for the Codex harness.
 
 ## Purpose
 
-This folder contains small scripts used by the live Codex config plus shared
-repo commands that are intentionally broader than one skill package. Validators
-live under `bin/validators/`; package-specific scripts should live with their
-owning package, such as `skills/<name>/scripts/`.
+This folder contains public command wrappers used by the live Codex config plus
+shared repo commands that are intentionally broader than one skill package.
+Core implementations live under `bin/core/`; hook/runtime implementations live
+under `bin/runtime/`; Core tests live under `bin/tests/`; validators live under
+`bin/validators/`; package-specific scripts should live with their owning
+package, such as `skills/<name>/scripts/`.
 
 Primary control plane:
 
@@ -30,6 +32,12 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `farplane` / `farplane.py` - Core-owned global CLI for install, hooks,
   doctor checks, UI linking/start, and delegation into the linked Farplane-UI
   module checkout
+- `core/*` - implementation modules for global CLI, invocation, board, compute,
+  ticket-runtime, telemetry-status, and adoption helpers
+- `runtime/*` - implementation modules for Codex hooks, user-turn capture,
+  notification, runtime telemetry, file-growth compaction, and stop-hook logic
+- `tests/*` - Core-owned tests for `bin/core`, `bin/runtime`, and public
+  command wrappers
 - `validators/check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
 - `validators/check_doc_refs.py` - local reference validator for active docs and registries;
   use `--all` for broader cleanup audits across tickets, experiments, and tests
@@ -169,10 +177,10 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/validators/sync_skill_registry.py --check`
   Use after skill metadata changes when debugging the broader
   `skills/skill-maintenance/scripts/check_skills.py --write` path.
-- `python3 -m unittest bin/test_farplane_boards.py`
+- `python3 -m unittest bin/tests/test_farplane_boards.py`
   Use to prove the filesystem BoardAdapter path containment and ticket
   normalization contract before changing invocation or Ralph selection behavior
-- `python3 -m unittest bin/test_farplane_compute.py`
+- `python3 -m unittest bin/tests/test_farplane_compute.py`
   Use to prove compute precedence, blockers, worktree runtime hints, and future
   target behavior without launching local or remote compute
 - `python3 bin/farplane_invocation.py prepare --ticket <ticket> --phase planning --proof .farplane/results/<ticket>.proof.json`
@@ -260,11 +268,11 @@ a mechanical block/continue gate for the active session.
 - `python3 -m unittest bin/validators/test_doc_parity.py`
 - `python3 -m unittest skills/delegate-cli/scripts/test_delegate_cli_agent.py`
 - `python3 -m unittest skills/pr-review-watch/scripts/test_pr_review_watch.py`
-- `python3 -m unittest bin/test_ticket_metadata.py`
-- `python3 -m unittest bin/test_ticket_runtime.py`
+- `python3 -m unittest bin/tests/test_ticket_metadata.py`
+- `python3 -m unittest bin/tests/test_ticket_runtime.py`
 - `python3 -m py_compile bin/stop_hook.py`
-- `python3 -m py_compile bin/ticket_runtime.py bin/test_ticket_runtime.py`
-- `python3 -m py_compile bin/capture_user_turn.py bin/user_turn.py`
+- `python3 -m py_compile bin/ticket_runtime.py bin/core/ticket_runtime.py bin/tests/test_ticket_runtime.py`
+- `python3 -m py_compile bin/capture_user_turn.py bin/runtime/capture_user_turn.py bin/runtime/user_turn.py`
 - `python3 -m py_compile bin/self_improve_hook_probe.py`
 - `python3 -m py_compile bin/validators/check_harness_invariants.py bin/validators/test_harness_invariants.py`
 - `python3 -m py_compile bin/validators/check_doc_parity.py bin/validators/test_doc_parity.py`
@@ -273,4 +281,4 @@ a mechanical block/continue gate for the active session.
 - `python3 -m py_compile bin/delegate_cli_agent.py skills/delegate-cli/scripts/delegate_cli_agent.py`
 - `python3 -m py_compile skills/ralph/scripts/select_next_ticket.py`
 - `python3 skills/ralph/scripts/test_select_next_ticket.py`
-- `python3 -m unittest discover -s bin -p 'test_*.py'`
+- `python3 -m unittest discover -s bin/tests -p 'test_*.py'`

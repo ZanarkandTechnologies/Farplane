@@ -13,9 +13,11 @@ under the owning package, such as `skills/<name>/scripts/`.
 
 Before adding a top-level `bin/*` file, classify it:
 
-- keep in `bin/` only for live installed hook/runtime shims, the global
-  Farplane CLI edge, shared cross-skill commands, repo-wide validator wrappers,
-  or compatibility wrappers for moved public commands
+- keep top-level `bin/` files only for live installed hook/runtime shims, the
+  global Farplane CLI edge, shared cross-skill commands, repo-wide validator
+  wrappers, or compatibility wrappers for moved public commands
+- put Core helper implementations under `bin/core/`, Codex hook/runtime
+  implementations under `bin/runtime/`, and Core-owned tests under `bin/tests/`
 - move skill-specific implementations and their tests to
   `skills/<owner>/scripts/`
 - move repo-wide validators and validator tests to `bin/validators/`

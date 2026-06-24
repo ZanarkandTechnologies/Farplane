@@ -7,9 +7,10 @@ import textwrap
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+ROOT = Path(__file__).resolve().parents[2]
+CORE_DIR = ROOT / "bin" / "core"
+if str(CORE_DIR) not in sys.path:
+    sys.path.insert(0, str(CORE_DIR))
 
 import farplane_invocation
 
@@ -166,7 +167,7 @@ class FarplaneInvocationTests(unittest.TestCase):
                 TICKET_TEXT.replace("TASK-1234", "TASK-0112"),
             )
             template = (
-                Path(__file__).resolve().parents[1]
+                Path(__file__).resolve().parents[2]
                 / "skills"
                 / "farplane-invocation"
                 / "templates"

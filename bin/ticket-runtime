@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from ticket_runtime import main
+from _compat import run_script
 
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+run_script("core/ticket_runtime.py")

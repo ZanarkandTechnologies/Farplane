@@ -119,6 +119,7 @@ BACKUP_ROOT="${TARGET_DIR}/.install-backups/${STAMP}"
 LOCAL_ENV_FILE="${TARGET_DIR}/config.local.env"
 LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
 INSTALL_BIN_FILES=(
+  _compat.py
   capture_user_turn.py
   farplane
   farplane_boards.py
@@ -130,7 +131,6 @@ INSTALL_BIN_FILES=(
   runtime_telemetry.py
   self_improve_hook_probe.py
   stop_hook.py
-  stop_hook_output.schema.json
   ticket-runtime
   ticket_runtime.py
   user_turn.py
@@ -336,6 +336,7 @@ fi
 for bin_name in "${INSTALL_BIN_FILES[@]}"; do
   link_path "$REPO_DIR/bin/$bin_name" "$TARGET_DIR/bin/$bin_name"
 done
+link_path "$REPO_DIR/bin/runtime/stop_hook_output.schema.json" "$TARGET_DIR/bin/stop_hook_output.schema.json"
 
 link_global_cli "$TARGET_DIR/bin/farplane"
 

@@ -29,12 +29,13 @@ This repo versions the reusable parts of a Codex home directory while keeping ma
 - Keep canonical project config in tracked `farplane/`, not ignored `.farplane/`.
 - Do not enable local git hooks or live automations unless the operator explicitly asks.
 - Prefer relative repo structure plus a small installer over hardcoding machine-specific paths into tracked files.
-- Keep top-level `bin/` narrow: live hook/runtime shims, the global Farplane CLI
-  edge, shared cross-skill commands, repo-wide validator wrappers, and
-  compatibility wrappers only. Skill-specific scripts and tests belong under
-  `skills/<owner>/scripts/`; repo-wide validators and validator tests belong
-  under `bin/validators/`. Do not add source tests or generated `__pycache__`
-  as top-level `bin/` contents.
+- Keep top-level `bin/` narrow: public wrappers, live hook/runtime shims, the
+  global Farplane CLI edge, shared cross-skill commands, and repo-wide validator
+  wrappers only. Core implementations belong under `bin/core/`, hook/runtime
+  implementations under `bin/runtime/`, Core-owned tests under `bin/tests/`,
+  skill-specific scripts and tests under `skills/<owner>/scripts/`, and
+  repo-wide validators/tests under `bin/validators/`. Do not add generated
+  `__pycache__` as tracked source.
 
 ## Quick Commands
 

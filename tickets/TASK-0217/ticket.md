@@ -15,7 +15,7 @@ requires_demo: false
 created_at: 2026-06-24T00:00:00Z
 updated_at: 2026-06-24T00:00:00Z
 next_action: done; archive after operator review if desired
-last_verification: focused migrated unittest suite passed; harness invariants, doc parity, doc refs, ticket metadata, py_compile, wrapper smokes, and hooks doctor passed
+last_verification: bin/tests unittest suite passed 136 tests; py_compile, doc refs, harness invariants, ticket metadata, install shell syntax, and wrapper smokes passed
 ---
 
 # TASK-0217 Clean up bin ownership and compatibility wrappers
@@ -41,6 +41,9 @@ paths, and leave only Core runtime/shared command surfaces in top-level `bin/`.
 - `After:` skill workflow helpers live under `skills/<owner>/scripts/`; tests
   live beside the owning implementation; old public `bin/*` commands remain as
   wrappers where references or install habits still exist.
+- `Second pass:` Core helper implementations live under `bin/core/`, Codex
+  hook/runtime implementations live under `bin/runtime/`, and remaining
+  Core-owned tests live under `bin/tests/` instead of the top-level `bin/`.
 - `Why now:` operator explicitly found `bin/` hard to reason about and asked for
   a right-directory strategy plus relevance review.
 - `First-principles basis:` `bin/` should be the installed Core command edge,
@@ -54,6 +57,9 @@ paths, and leave only Core runtime/shared command surfaces in top-level `bin/`.
 flowchart LR
   bin["bin/* mixed helper surface"] --> keep["keep: Core hooks/runtime/shared CLI"]
   bin --> validators["keep: bin/validators/* repo checks"]
+  bin --> core["move: bin/core/* Core helper implementations"]
+  bin --> runtime["move: bin/runtime/* Codex hook/runtime implementations"]
+  bin --> tests["move: bin/tests/* Core-owned tests"]
   bin --> move["move: skill-owned implementations + tests"]
   move --> delegate["skills/delegate-cli/scripts"]
   move --> frontend["skills/delegate-frontend/scripts"]
@@ -64,7 +70,8 @@ flowchart LR
   move --> wrappers["bin/* compatibility wrappers"]
 ```
 
-- `Touch:` `bin/*` wrappers, owner skill `scripts/`, owner skill docs,
+- `Touch:` `bin/*` wrappers, `bin/core/`, `bin/runtime/`, `bin/tests/`,
+  owner skill `scripts/`, owner skill docs,
   feature/doc-audit refs, this ticket.
 - `Inspect:` `install.sh`, `hooks.json`, `bin/README.md`, feature registry,
   skill docs, focused tests.
@@ -139,6 +146,13 @@ docs_closeout:
   `python3 tickets/scripts/check_ticket_metadata.py`, `python3 -m py_compile`
   for migrated wrappers/scripts, wrapper smoke commands, and
   `python3 bin/farplane.py hooks doctor --json` passed.
+- `second_pass_verification:` `python3 -m unittest discover -s bin/tests -p
+  'test_*.py'` passed 136 tests; `python3 -m py_compile bin/*.py
+  bin/core/*.py bin/runtime/*.py bin/tests/*.py`,
+  `python3 bin/validators/check_doc_refs.py`,
+  `python3 bin/validators/check_harness_invariants.py`,
+  `python3 tickets/scripts/check_ticket_metadata.py`, `bash -n install.sh`,
+  and wrapper `--help` smoke commands passed.
 - `plan_qa:` minimal required version pass; reuse before new surface pass;
   least parameters pass; new files/functions justified by ownership pass; goal
   packet preview not applicable; proof route explicit pass; documentation

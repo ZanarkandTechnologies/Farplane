@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
-HOOK_PATH = ROOT / "bin" / "file_growth_hook.py"
+HOOK_PATH = ROOT / "runtime" / "file_growth_hook.py"
 
 
 def load_hook_module():

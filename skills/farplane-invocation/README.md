@@ -51,6 +51,6 @@ for review before `codex cloud apply`.
 
 ## How To Test
 
-- `python3 -m unittest bin/test_farplane_invocation.py`
-- `python3 -m unittest bin/test_farplane_compute.py`
+- `python3 -m unittest bin/tests/test_farplane_invocation.py`
+- `python3 -m unittest bin/tests/test_farplane_compute.py`
 - `python3 -m py_compile bin/farplane_invocation.py`

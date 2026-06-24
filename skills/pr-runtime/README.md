@@ -25,6 +25,6 @@ optionally launch the ticket-scoped runtime for QA.
 
 ## How to Test
 
-- `python3 -m unittest bin/test_ticket_runtime.py`
+- `python3 -m unittest bin/tests/test_ticket_runtime.py`
 - `python3 tickets/scripts/check_ticket_metadata.py`
 - `python3 bin/ticket_runtime.py up --ticket TASK-0123 --branch feat/task-0123 --checkout-mode shared --runtime-mode branch-runtime --reserve frontend --frontend-cmd "npm run dev" --json`

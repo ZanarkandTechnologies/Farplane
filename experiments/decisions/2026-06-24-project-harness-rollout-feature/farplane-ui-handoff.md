@@ -15,7 +15,7 @@ refs:
   - decision.md
   - ../../../bin/farplane_adoption.py
   - ../../../bin/farplane.py
-  - ../../../bin/test_farplane_adoption.py
+  - ../../../bin/tests/test_farplane_adoption.py
   - ../../../docs/features/registry.jsonl
   - ../../../docs/templates/registry.jsonl
   - ../../../farplane/manifest.json
@@ -73,7 +73,7 @@ Two related pieces now exist:
 
    - `bin/farplane_adoption.py`
    - `bin/farplane.py`
-   - `bin/test_farplane_adoption.py`
+   - `bin/tests/test_farplane_adoption.py`
    - `docs/features/registry.jsonl`
    - `docs/templates/registry.jsonl`
    - `farplane/manifest.json`
@@ -533,7 +533,7 @@ The current implementation was verified with:
 
 ```bash
 python3 -m py_compile bin/farplane_adoption.py bin/farplane.py
-python3 -m unittest bin/test_farplane_adoption.py
+python3 -m unittest bin/tests/test_farplane_adoption.py
 python3 bin/farplane.py adoption scan --project-root . --no-state --json
 python3 bin/validators/check_doc_refs.py
 git diff --check

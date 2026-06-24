@@ -215,8 +215,10 @@ For harness-design research and external patterns:
   gate: keep it in `bin/` only when it is a live installed hook/runtime shim,
   global Farplane CLI edge, shared cross-skill command, repo-wide validator
   wrapper, or compatibility wrapper for a moved public command. Put
+  Core helper implementations under `bin/core/`, Codex hook/runtime
+  implementations under `bin/runtime/`, Core-owned tests under `bin/tests/`,
   skill-specific implementations and their tests under
-  `skills/<owner>/scripts/`; put repo-wide validators and validator tests under
+  `skills/<owner>/scripts/`, and repo-wide validators and validator tests under
   `bin/validators/`; delete generated `__pycache__` rather than preserving it.
 - When moving a command to a clearer owner, leave a small compatibility wrapper
   at the old public path until references, installers, and user habits have had

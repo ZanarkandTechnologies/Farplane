@@ -38,7 +38,7 @@ SKIP_FILE_PREFIXES = (
     ".git/",
     ".farplane/",
     "agents/",
-    "bin/test_",
+    "bin/tests/",
     "docs/archive/",
     "docs/doc-audit/",
     "node_modules/",

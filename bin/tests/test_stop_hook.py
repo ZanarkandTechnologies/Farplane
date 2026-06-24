@@ -14,9 +14,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 
-ROOT = Path(__file__).resolve().parent.parent
-STOP_HOOK_PATH = ROOT / "bin" / "stop_hook.py"
-SELF_IMPROVE_PROBE_PATH = ROOT / "bin" / "self_improve_hook_probe.py"
+ROOT = Path(__file__).resolve().parents[2]
+STOP_HOOK_PATH = ROOT / "bin" / "runtime" / "stop_hook.py"
+SELF_IMPROVE_PROBE_PATH = ROOT / "bin" / "runtime" / "self_improve_hook_probe.py"
 
 
 def load_stop_hook_module():
