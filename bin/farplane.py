@@ -23,6 +23,7 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_adoption import run_scan as run_adoption_scan
+from runtime_config import load_runtime_env
 
 
 CORE_ROOT = Path(__file__).resolve().parents[1]
@@ -163,7 +164,7 @@ def run_process(args: list[str], cwd: Path, dry_run: bool = False) -> int:
     if dry_run:
         print(json.dumps({"cwd": str(cwd), "command": args}, indent=2))
         return 0
-    child = subprocess.run(args, cwd=str(cwd), env=os.environ.copy())
+    child = subprocess.run(args, cwd=str(cwd), env=load_runtime_env(os.environ))
     return child.returncode
 
 

@@ -11,7 +11,7 @@
           },
           {
             "type": "command",
-            "command": "bash -lc 'set -a; [ -f \"$HOME/.codex/config.local.env\" ] && . \"$HOME/.codex/config.local.env\"; set +a; exec /opt/homebrew/bin/python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"'",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
             "statusMessage": "Sending Farplane Console start heartbeat",
             "timeout": 5
           }
@@ -29,7 +29,7 @@
           },
           {
             "type": "command",
-            "command": "bash -lc 'set -a; [ -f \"$HOME/.codex/config.local.env\" ] && . \"$HOME/.codex/config.local.env\"; set +a; exec /opt/homebrew/bin/python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"'",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
             "statusMessage": "Sending Farplane Console stop heartbeat",
             "timeout": 5
           }

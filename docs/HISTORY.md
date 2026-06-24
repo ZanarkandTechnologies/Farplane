@@ -314,3 +314,4 @@
 2026-06-12 11:16 +0800 | DOCS | adopt the compact ticket-as-program standard with `Program` and `Done / Proof` replacing duplicated acceptance, verification, and proof-contract sections
 2026-06-23 16:35 +0800 | DOCS | clarify numeric skill tiers as compounding leverage classes for upgrade priority while keeping first-load todo links as the tier-derived loading contract
 2026-06-23 00:00 +0800 | MIGRATION | replace the unreleased automation manifest lane model with the Farplane Framework Steer/Pulse automation standard, adding `farplane/steer.config.toml`, `steer-update`, and `automation-advisor` while keeping old daily/weekly planning skills as migration-source context
+2026-06-25 00:00 +0800 | FEAT | make Farplane Core load UI-managed `~/.farplane/config.json` and `~/.farplane/secrets.json` before legacy `~/.codex/config.local.env` fallbacks for delegated CLI commands, hook telemetry, and install-time `config.toml` rendering

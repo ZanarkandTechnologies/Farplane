@@ -189,17 +189,14 @@ output_path = Path(sys.argv[2])
 env_path = Path(sys.argv[3])
 local_toml_path = Path(sys.argv[4])
 target_dir = sys.argv[5]
+repo_dir = template_path.parent
+core_dir = repo_dir / "bin" / "core"
+if str(core_dir) not in sys.path:
+    sys.path.insert(0, str(core_dir))
 
-env = {"CODEX_HOME": target_dir}
-if env_path.exists():
-    for raw_line in env_path.read_text().splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#"):
-            continue
-        if "=" not in line:
-            raise SystemExit(f"Invalid line in {env_path}: {raw_line}")
-        key, value = line.split("=", 1)
-        env[key.strip()] = value.strip()
+from runtime_config import load_runtime_env
+
+env = load_runtime_env({"CODEX_HOME": target_dir, **os.environ}, env_path)
 
 required = ["CODEX_HOME", "REF_API_KEY", "NOTION_TOKEN"]
 missing = [key for key in required if not env.get(key) or env[key].startswith("YOUR_") or env[key].startswith("__")]
@@ -215,6 +212,8 @@ replacements = {
     "__NOTION_TOKEN__": env["NOTION_TOKEN"],
     "__FARPLANE_CONVEX_SITE_URL__": env.get("FARPLANE_CONVEX_SITE_URL", ""),
     "__FARPLANE_TELEMETRY_TOKEN__": env.get("FARPLANE_TELEMETRY_TOKEN", ""),
+    "__FARPLANE_CONSOLE_KEY__": env.get("FARPLANE_CONSOLE_KEY", ""),
+    "__FARPLANE_ACTIVITY_RECENT_URL__": env.get("FARPLANE_ACTIVITY_RECENT_URL", ""),
 }
 for needle, value in replacements.items():
     text = text.replace(needle, value)

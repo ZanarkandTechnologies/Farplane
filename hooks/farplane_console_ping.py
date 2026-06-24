@@ -12,6 +12,12 @@ import urllib.request
 from pathlib import Path
 from urllib.parse import urljoin
 
+CORE_DIR = Path(__file__).resolve().parents[1] / "bin" / "core"
+if str(CORE_DIR) not in sys.path:
+    sys.path.insert(0, str(CORE_DIR))
+
+from runtime_config import hydrate_process_env, read_config_value
+
 
 def clean_text(value: object, limit: int) -> str | None:
     if not isinstance(value, str):
@@ -69,14 +75,14 @@ def get_project_metadata(event: dict[str, object]) -> tuple[str | None, str | No
 
 
 def telemetry_endpoint() -> str | None:
-    explicit = clean_text(os.getenv("FARPLANE_TELEMETRY_ACTIVITY_URL"), 500)
+    explicit = clean_text(read_config_value("FARPLANE_TELEMETRY_ACTIVITY_URL"), 500)
     if explicit:
         return explicit
 
     site_url = (
-        clean_text(os.getenv("FARPLANE_CONVEX_SITE_URL"), 500)
-        or clean_text(os.getenv("CONVEX_SITE_URL"), 500)
-        or clean_text(os.getenv("FARPLANE_CONVEX_URL"), 500)
+        clean_text(read_config_value("FARPLANE_CONVEX_SITE_URL"), 500)
+        or clean_text(read_config_value("CONVEX_SITE_URL"), 500)
+        or clean_text(read_config_value("FARPLANE_CONVEX_URL"), 500)
     )
     if not site_url:
         return None
@@ -132,6 +138,7 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
 
 
 def main() -> int:
+    hydrate_process_env(Path.home() / ".codex" / "config.local.env")
     event = read_payload()
     if not event:
         return 0
@@ -141,7 +148,7 @@ def main() -> int:
         return 0
 
     headers = {"content-type": "application/json"}
-    token = clean_text(os.getenv("FARPLANE_TELEMETRY_TOKEN"), 500)
+    token = clean_text(read_config_value("FARPLANE_TELEMETRY_TOKEN"), 500)
     if token:
         headers["x-farplane-telemetry-token"] = token
 
