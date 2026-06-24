@@ -18,10 +18,10 @@ Use this as the generic project strategy refresh primitive. It is the interface
 that project PM heartbeats call before choosing next tickets or Goal Advisor
 handoffs.
 
-Specialized strategy skills can wrap this skill by pre-filling sources, taste,
-private context, report shape, and cadence. For example,
-`weekly-strategy-analysis` is a Kenji/life-specific wrapper, not the generic
-strategy interface.
+Project-specific automations can call this skill or `interval-update` extensions
+with caller-supplied sources, taste, private context, report shape, and cadence.
+Keep those source-specific extensions at the automation or project-doc layer,
+not in the generic strategy skill.
 
 ## Automation Presets
 
@@ -48,7 +48,7 @@ update_strategy(project_harness?, project_goals?, tickets?, progress?, metrics_o
    + operator_report
 state: reads(project harness, project goals, tickets, progress, metrics, feedback, recent PM reports); writes(strategy artifact or ticket deltas only when an owning project path is explicit)
 gates: goals_read; tickets_read; feedback_loop_status_named; metric_honesty_preserved; ticket_deltas_actionable; side_effect_gates_respected
-routes: goal-advisor | weekly-strategy-analysis | review | ticket/spec owner
+routes: goal-advisor | interval-update | review | ticket/spec owner
 fails: updates strategy without evidence; invents metrics; skips proceedable tickets; turns PM strategy into hidden execution
 ```
 
@@ -111,17 +111,14 @@ Strategy Update
   or instrumentation tickets.
 - Do not let strategy updates bypass the ticket board; concrete work should
   become ticket deltas or Goal Advisor handoffs.
-- Do not use Kenji-specific Notion/life assumptions unless a wrapper skill
-  supplied those inputs.
+- Do not use caller-specific Notion, life, CRM, or private-tool assumptions
+  unless the caller supplied those inputs.
 
 ## Reference Map
 
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - compile selected
   strategy deltas into native Goal, heartbeat, rollout, feedback, or direct
   routes.
-- [../weekly-strategy-analysis/SKILL.md](../weekly-strategy-analysis/SKILL.md)
-  - Kenji/life-specific wrapper with Notion, meetings, people signals, Codex
-  thread drift, and opportunity scans.
 - [../review/SKILL.md](../review/SKILL.md) - use for material readiness or
   evidence-quality judgment.
 - [../../docs/specs/program-notation.md](../../docs/specs/program-notation.md)

@@ -50,7 +50,7 @@ project "Name" {
     bet: "Who should find this first?"
     kpi: review_metric("hook/title clarity")
     evidence: ref("research/channel-examples.md")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   system analytics {
@@ -83,11 +83,11 @@ project "Name" {
     gates: [no_external_side_effects]
   }
 
-  heartbeat horizon_update {
+  heartbeat weekly_interval {
     first: update_strategy
     skills: [weekly_strategy_analysis, skill_maintenance, goal_advisor, review]
     delegate: delegate(ref("project-harness.md"), "refresh strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
-    output: "artifacts/strategy/horizon-update.md"
+    output: "artifacts/strategy/interval-update.md"
   }
 
   milestone first_episode_selection {
@@ -391,7 +391,7 @@ blocker
 ```text
 pulse_update
 rhythm_update
-horizon_update
+weekly_interval
 ticket_drainer
 update_system_gaps
 update_strategy
@@ -423,7 +423,7 @@ heartbeat ticket_drainer {
   then: rank_one_ticket -> impl-plan -> goal-advisor
 }
 
-heartbeat horizon_update {
+heartbeat weekly_interval {
   first: grouped_jobs_with_report_cache
   bindings: "farplane/bindings.md"
   skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
@@ -438,7 +438,7 @@ ticket_drainer(ticket_sources, gates, ranking_policy)
   -> selected_ticket | no_op_report
   -> impl_plan_result + goal_advisor_execution + evidence_or_blocker
 
-horizon_update(grouped_jobs, reports, ledger, goals, tickets, metrics, memory)
+weekly_interval(grouped_jobs, reports, ledger, goals, tickets, metrics, memory)
   -> drift_check + horizon_report + scheduled_action_results + ticket_board_delta + memory_delta
    + skill_improvement_delta + blockers
 

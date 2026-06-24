@@ -115,7 +115,8 @@ routes:
         self.assertIn("hook:Stop", nodes)
         self.assertIn(("skill:goal-advisor", "ticket:tickets/TASK-*/program.md", "writes"), edges)
         self.assertIn(("automation:pulse", "skill:pulse-update", "triggers"), edges)
-        self.assertIn(("automation:steer", "skill:steer-update", "triggers"), edges)
+        self.assertIn(("automation:daily-interval", "skill:interval-update", "triggers"), edges)
+        self.assertIn(("automation:weekly-interval", "skill:interval-update", "triggers"), edges)
 
     def test_core_graph_excludes_noisy_detail_nodes(self) -> None:
         repo = Path(__file__).resolve().parents[3]

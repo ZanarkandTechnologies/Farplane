@@ -3,7 +3,7 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 framework_template_version: "0.2.0"
 tags:
   - farplane
@@ -33,7 +33,7 @@ init_project(intent)
   -> visible project files
   -> goals and current frontier
   -> ticket-backed Goal Packets
-  -> Pulse acts and Steer plans
+  -> Pulse acts and intervals plan
   -> drains compress outcomes back into docs, memory, skills, and tickets
 ```
 
@@ -47,9 +47,9 @@ gate without becoming another hidden brain.
 Farplane uses visible files because agents need shared memory that survives
 outside one chat transcript. It uses Goal Packets because material work needs a
 small contract, loop configuration, and progress log that can be reviewed or
-resumed. It uses two automation loops because planning and acting have
-different context needs: Steer compresses and replans, while Pulse chooses one
-bounded move. It requires proof because autonomous progress is only useful when
+resumed. It uses explicit automation loops because planning and acting have
+different context needs: interval automations compress and replan, while Pulse
+chooses one bounded move. It requires proof because autonomous progress is only useful when
 the next human or agent can audit what changed. It uses drains because raw
 reports, troubles, lessons, and eval results become noise unless they are
 periodically routed to their owning docs, skills, tickets, or memory files.
@@ -75,8 +75,8 @@ Then inspect the created files:
    stale, or too broad.
 6. Run or ask for `goal-advisor` only after the current milestone is concrete
    enough to become a ticket-backed Goal Packet.
-7. Activate Pulse and Steer only after goals, reviewed automation prompts,
-   visible work, and proof surfaces exist.
+7. Activate Pulse, Daily Interval, and Weekly Interval only after goals,
+   reviewed automation prompts, visible work, and proof surfaces exist.
 
 The deeper bootstrap path is [Deep Init Critical Path](deep-init-critical-path.md).
 The file-by-file reference is [Project Files](project-files.md).
@@ -94,8 +94,8 @@ flowchart TD
   G --> H["Native Codex Goal"]
   H --> I["implementation, QA, demo, review evidence"]
   I --> J["ticket closeout and docs writeback"]
-  E --> K["steer-update"]
-  K --> L["dated Steer reports + Pulse guidance"]
+  E --> K["interval-update"]
+  K --> L["dated interval reports + Pulse guidance"]
   G --> M["pulse-update"]
   L --> M
   M --> N["one bounded action or worker handoff"]
@@ -112,7 +112,7 @@ Farplane divides project state by lifecycle:
 
 ```text
 farplane/   tracked framework config and project strategy
-.farplane/  ignored runtime reports, scheduler state, ledgers, logs, eval runs
+.farplane/  ignored runtime reports, automation ledgers, logs, eval runs
 tickets/    work contracts, Goal Packets, progress, proof artifacts
 docs/       durable memory, specs, lessons, troubles, and reader docs
 skills/     reusable workflows with declared reads, writes, routes, and gates
@@ -152,7 +152,7 @@ progress.md  append-only execution log and drift evidence
 
 The generated `/goal` prompt lists the packet files and current proof policy.
 It is runtime input, not the source of truth. The files remain the durable
-contract that future turns, reviewers, Pulse, Steer, and closeout can inspect.
+contract that future turns, reviewers, Pulse, interval automations, and closeout can inspect.
 
 Within a coding Pulse or native Goal, the normal leaf workflow is:
 
@@ -171,31 +171,31 @@ focused implementation plan, test strategy, and proof contract. Once the Goal
 Packet is approved, Goal execution should land the whole ticket unless a real
 blocker or proof boundary makes narrower scope necessary.
 
-## Steer And Pulse
+## Pulse And Intervals
 
-Farplane autonomous operation uses two Codex automation loops:
+Farplane autonomous operation uses explicit Codex automation loops:
 
 ```text
-pulse_update(project, board_state, action_tree, reward_state)
+pulse_update(project_root, extensions?, pulse_policy?)
   -> one bounded action + decision state
 
-steer_update(project, jobs, plan_triggers, scheduler_state)
-  -> due interval jobs + scheduler state delta + Pulse guidance
+interval_update(project_root, interval_id, review_window, planning_window, extensions?, now?)
+  -> dated interval report + next-window plan + Pulse guidance
 ```
 
-Pulse is the fast actor loop. It reads current goals, recent Steer guidance,
+Pulse is the fast actor loop. It reads current goals, recent interval guidance,
 ticket state, action arms, rewards, and ledgers. It selects one bounded board
 move, optionally spawns a worker, writes a dated Pulse report, and updates
 decision/reward state.
 
-Steer is the planning loop. It reads configured jobs, scheduler state, goals,
-recent tickets, memory, lessons, troubles, and Pulse reports. It calls
-`horizon-update` for due daily or weekly interval planning, writes dated Steer
-reports, gives Pulse guidance, and updates `.farplane/state/steer-scheduler.json`.
+Daily Interval reviews the last 24 hours and plans the next 24 hours. Weekly
+Interval reviews the last week, checks drift against `farplane/goals.md`, and
+plans the next week. Both call `interval-update`, write dated reports under
+`.farplane/reports/interval/`, and give Pulse guidance.
 
 The important design choice is that Pulse does not become long-horizon
-strategy, and Steer does not become a fast action dispatcher. They share files,
-not hidden transcript memory.
+strategy, and interval automations do not become fast action dispatchers. They
+share files, not hidden transcript memory.
 
 ## Hooks And Runtime
 

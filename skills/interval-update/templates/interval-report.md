@@ -1,15 +1,16 @@
 ---
-kind: weekly-pm-report
+kind: interval-report
 project: <project>
 automation_id: <automation_id>
-cadence: weekly_pm_plan
+report_profile: <daily_interval | weekly_interval | custom>
 status: draft
 created_at: <timestamp>
 review_window: <start>..<end>
+planning_window: <start>..<end>
 context_bundle: <path>
 ---
 
-# Weekly PM Report
+# Interval Update Report
 
 ## Summary
 
@@ -21,6 +22,13 @@ context_bundle: <path>
 
 | Source | Status | Key signal | Evidence |
 | --- | --- | --- | --- |
+
+## Drift Check
+
+- `drift_against:` parent plan, original goals, mission, current milestone
+- `verdict:` aligned | drifting | blocked | source_gap
+- `evidence:`
+- `correction:`
 
 ## KPI / Feedback Status
 
@@ -34,9 +42,14 @@ context_bundle: <path>
 
 Kinds: `keep`, `change`, `pause`, `kill`, `test`.
 
+## Next Window Plan
+
+| Priority | Why now | Expected output | Proof or reward signal | Owner / next surface |
+| --- | --- | --- | --- | --- |
+
 ## Goals Delta
 
-Use this block as the only bridge from weekly evidence into `farplane/goals.md`.
+Use this block as the only bridge from interval evidence into `farplane/goals.md`.
 Do not edit the goals portfolio before this block exists.
 
 | Delta | Target | Decision | Evidence | Risk | Next action |
@@ -56,23 +69,24 @@ Decisions:
 | Ticket / candidate | Delta | Reason | Evidence |
 | --- | --- | --- | --- |
 
-## Daily PM Guidance
+## Downstream Guidance
 
 - `top_lanes:`
 - `constraints:`
 - `blocked_or_human_gated:`
-- `allowed_heartbeat_actions:`
+- `allowed_pulse_actions:`
 - `do_not_do:`
 
-## Quarterly / Yearly Rollup
+## Scheduled Actions
 
-- `decision:` no_new_schedule | manual_rollup | propose_future_cadence
-- `reason:`
-- `evidence:`
+| Action | Due? | Result | Evidence | Next due |
+| --- | --- | --- | --- | --- |
+| quarterly_plan |  |  |  |  |
+| annual_review |  |  |  |  |
 
-Default: keep quarterly/yearly as manual or on-demand aggregation over weekly
-reports until repeated weekly evidence shows a separate scheduled thread adds
-value.
+Default: keep quarterly/yearly and other intervals greater than one week as
+scheduled actions inside the weekly interval until repeated evidence shows a
+separate persistent lane adds value.
 
 ## Source Gaps And Blockers
 
@@ -81,7 +95,7 @@ value.
 ## Outputs
 
 - `context_bundle:`
-- `weekly_report:`
+- `interval_report:`
 - `goals_delta_applied:`
 - `goals_delta_requires_approval:`
 - `ticket_deltas:`

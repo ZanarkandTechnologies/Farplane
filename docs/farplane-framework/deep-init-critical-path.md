@@ -3,7 +3,7 @@ title: "Deep Init Critical Path"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 framework_template_version: "0.2.0"
 tags:
   - farplane
@@ -25,7 +25,7 @@ refs:
 
 This document is the full story for setting up a new Farplane project. It is
 the reader-facing explanation of what `deep-init-project` does, what it does
-not do, and how the project becomes an autonomous Steer/Pulse project.
+not do, and how the project becomes an autonomous Pulse/Interval project.
 
 ```text
 deep_init_project(...)
@@ -33,7 +33,7 @@ deep_init_project(...)
    + project operating docs
    + ticket system
    + QA/proof surfaces
-   + steer config and scheduler state
+   + automation prompt source
    + PM UI thread grouping manifest
    + starter planning ticket
    + horizon-advisor goal-shaping handoff
@@ -128,7 +128,6 @@ farplane/manifest.json
 farplane/harness.md
 farplane/goals.md
 farplane/automations.md
-farplane/steer.config.toml
 farplane/bindings.md
 farplane/evals.md
 farplane/pm.json
@@ -139,7 +138,6 @@ Ignored runtime state:
 ```text
 .farplane/README.md
 .farplane/state/run-ledger.json
-.farplane/state/steer-scheduler.json
 .farplane/reports/
 .farplane/evals/runs/
 .farplane/logs/
@@ -150,22 +148,21 @@ Key contracts:
 - `farplane/manifest.json` records the project spec version and standard
   tracked/ignored files.
 - `farplane/goals.md` is project strategy context.
-- `farplane/automations.md` is the human-reviewable source for the exact Pulse
-  and Steer prompts copied into Codex automations.
-- `farplane/steer.config.toml` is an optional compact schedule helper for Steer
-  jobs when a project wants machine-readable job rows.
-- `.farplane/state/steer-scheduler.json` stores mutable `next_due_at`,
-  `last_run_at`, `last_report`, and job status.
+- `farplane/automations.md` is the human-reviewable source for the exact Pulse,
+  Daily Interval, and Weekly Interval prompts copied into Codex automations.
+- Codex automation records own cadence. Farplane does not create a tracked
+  scheduler config or ignored scheduler state by default.
 - `farplane/pm.json` is UI glue that groups PM-visible chat and automation
   thread IDs under one persistent employee agent.
 
 Guardrails:
 
 - Do not recreate `farplane/automations.json` or a hidden automation compiler.
-- Do not put `last_run_at`, `next_due_at`, or automation IDs in
-  `steer.config.toml`.
+- Do not reintroduce `farplane/steer.config.toml` or
+  `.farplane/state/steer-scheduler.json` without a new ticket proving the
+  explicit Codex automation model cannot hold the work.
 - Do not duplicate workflow inputs, outputs, drift checks, report paths, or
-  gates in `steer.config.toml`; put those in the job prompt or owning skill.
+  gates in automation prompts when the called skill already owns them.
 
 ### 4. Run Readiness Audit
 
@@ -176,7 +173,6 @@ Audit:
 - `docs/bootstrap-brief.md`
 - `farplane/harness.md`
 - `farplane/goals.md`
-- `farplane/steer.config.toml`
 - `farplane/bindings.md`
 - `farplane/pm.json`
 - `PROJECT_RULES.md`
@@ -200,7 +196,7 @@ Rules:
 - `needs_goal_intake` means `farplane/goals.md` is missing, placeholder, stale,
   or not grounded in the operator's current intent.
 - `needs_automation_setup` means the project has not yet activated live
-  Steer/Pulse automations.
+  Pulse and Interval automations.
 
 Guardrails:
 
@@ -275,7 +271,7 @@ What this means:
 - The first frontier is turned into a ticket-backed Goal Packet or a direct
   route.
 - Execution state has durable files.
-- The future Pulse/Steer loops have a real project direction to follow.
+- The future Pulse and Interval loops have a real project direction to follow.
 
 Guardrails:
 
@@ -340,21 +336,23 @@ asks to activate live automations.
 ```text
 automation_advisor(activate=true, project_refs)
   -> pulse_thread_id
-   + steer_thread_id
+   +  daily_interval_thread_id
+   + weekly_interval_thread_id
    + pulse_automation_id
-   + steer_automation_id
+   +  daily_interval_automation_id
+   + weekly_interval_automation_id
    + farplane/pm.json thread-grouping delta
 ```
 
 Activation steps:
 
 1. Inspect existing Codex automations and project threads.
-2. Reuse or update matching Pulse/Steer loops instead of creating duplicates.
+2. Reuse or update matching Pulse/Interval loops instead of creating duplicates.
 3. Create or reuse a dedicated `Project Pulse` thread.
-4. Create or reuse a dedicated `Project Steer` thread.
+4. Create or reuse a dedicated `Project Daily Interval` and `Project Weekly Interval` thread.
 5. Attach Pulse automation to the Pulse thread at the fast idle cadence.
-6. Attach Steer automation to the Steer thread or project workspace at the
-   minimum planning cadence.
+6. Attach Daily and Weekly Interval automations to their matching threads at
+   their configured Codex cadences.
 7. Append PM-visible thread IDs to `farplane/pm.json` so the UI renders them
    under the same persistent employee.
 
@@ -374,15 +372,16 @@ Activation steps:
 
 Guardrails:
 
-- Create exactly two live loops: Pulse and Steer.
-- Do not create separate daily, weekly, quarterly, yearly, strategy-review, or
-  ticket-drainer threads; daily and weekly are Steer interval jobs.
+- Create the live loops named in `farplane/automations.md`, commonly Pulse,
+  Daily Interval, and Weekly Interval.
+- Do not create separate ticket-drainer or hidden scheduler threads; Pulse owns
+  fast ticket selection and intervals own report-then-plan work.
 - Do not activate autonomous loops when goals are placeholder or stale.
 - If Codex thread/automation tools are unavailable, write prepared prompts and
   report `needs_automation_setup`.
 - Do not store automation runtime state in `farplane/pm.json`; it is only UI
   grouping glue for thread IDs.
-- When Pulse or Steer creates persistent ticket/worker threads that should
+- When Pulse creates persistent ticket/worker threads that should
   appear under the same employee, append those chat thread IDs to
   `threads.chats`.
 
@@ -397,9 +396,7 @@ Guardrails:
 | `farplane/manifest.json` | `deep-init-project` | framework migrations | expected tracked/ignored paths |
 | `farplane/harness.md` | `deep-init-project` / `harness-creator` | harness planning | mission, values, systems |
 | `farplane/goals.md` | `deep-init-project` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
-| `farplane/automations.md` | `deep-init-project` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Steer prompt source |
-| `farplane/steer.config.toml` | `deep-init-project` | operator / `automation-advisor` | Steer job prompts and cadence |
-| `.farplane/state/steer-scheduler.json` | `deep-init-project` / Steer | Steer runtime | next due and last run state |
+| `farplane/automations.md` | `deep-init-project` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Interval prompt source |
 | `farplane/pm.json` | `deep-init-project` | `automation-advisor` / PM-visible threads | UI grouping for persistent chat and automation threads |
 | `tickets/TASK-0001/ticket.md` | `deep-init-project` | planning flow | starter PRD/discovery handoff |
 | `qa/` | `deep-init-project` | QA work | reusable proof paths |
@@ -420,9 +417,9 @@ first executable frontier.
 
 ### Automation Activated
 
-The repo has exactly two live recurring automation loops, Pulse and Steer.
-Pulse handles frequent bounded action. Steer handles scheduled planning jobs
-from `farplane/steer.config.toml`. PM-visible threads are grouped in
+The repo has live recurring automation loops for Pulse, Daily Interval, and
+Weekly Interval. Pulse handles frequent bounded action. Intervals handle
+scheduled report-then-plan work. PM-visible threads are grouped in
 `farplane/pm.json`.
 
 ## Common Failure Modes
@@ -431,16 +428,17 @@ from `farplane/steer.config.toml`. PM-visible threads are grouped in
   placeholders. Report `substrate_complete`, not `project_initialized`.
 - `automation_surprise:` Bootstrap creates live automations without operator
   intent. Do not do this; route activation through `automation-advisor`.
-- `loop_duplication:` Daily/weekly/quarterly jobs become separate threads.
-  Keep them as Steer jobs.
-- `config_bloat:` `steer.config.toml` starts duplicating skill runbooks. Keep it
-  to job `id`, `cadence`, and `prompt`.
-- `state_mixup:` runtime timestamps or automation IDs enter tracked Steer
-  config. Store schedule runtime in `.farplane/state/steer-scheduler.json`;
-  keep `farplane/pm.json` for UI thread grouping only.
+- `loop_duplication:` ticket-drainer, scheduler, or strategy-review jobs become
+  extra threads. Keep action selection in Pulse and report-then-plan work in
+  explicit interval automations.
+- `prompt_bloat:` `farplane/automations.md` starts duplicating skill runbooks.
+  Keep prompts to skill calls, cadence, and true project-specific extensions.
+- `state_mixup:` runtime timestamps or automation IDs enter tracked project
+  config. Keep automation runtime IDs in Codex and `farplane/pm.json` for UI
+  thread grouping only.
 - `goal_drift:` autonomous loops activate against placeholder goals. Run
   `horizon-advisor` first, then `goal-advisor` once the frontier is executable.
-- `pm_ui_split:` Pulse, Steer, or ticket-worker threads are not listed in
+- `pm_ui_split:` Pulse, Interval, or ticket-worker threads are not listed in
   `farplane/pm.json`, so the UI renders them as ephemeral agents. Append
   persistent PM-owned thread IDs to the appropriate `threads.*` list.
 

@@ -25,12 +25,11 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/harness.md",
                         "farplane/goals.md",
                         "farplane/automations.md",
-                        "farplane/steer.config.toml",
                         "farplane/bindings.md",
                         "farplane/evals.md",
                         "tickets/templates/ticket.md",
                     ],
-                    "ignored": [".farplane/state/run-ledger.json", ".farplane/state/steer-scheduler.json"],
+                    "ignored": [".farplane/state/run-ledger.json"],
                 },
                 "optional": {
                     "tracked": ["farplane/pm.json"],
@@ -38,26 +37,6 @@ def write_framework_manifest(farplane: Path) -> None:
                 },
             }
         ),
-        encoding="utf-8",
-    )
-
-
-def write_steer_config(farplane: Path) -> None:
-    (farplane / "steer.config.toml").write_text(
-        """
-schema = "farplane_steer_config"
-version = "2026-06-23.1"
-timezone = "UTC"
-state_ref = ".farplane/state/steer-scheduler.json"
-
-[template_uses]
-farplane-steer-config = "0.1.0"
-
-[[jobs]]
-id = "daily_plan"
-cadence = "FREQ=DAILY;INTERVAL=1"
-prompt = "Run the daily Steer plan."
-""".lstrip(),
         encoding="utf-8",
     )
 
@@ -91,7 +70,6 @@ def write_required_project_files(root: Path) -> None:
     state = root / ".farplane" / "state"
     state.mkdir(parents=True)
     (state / "run-ledger.json").write_text("{\"runs\": []}\n", encoding="utf-8")
-    (state / "steer-scheduler.json").write_text("{\"jobs\": {}}\n", encoding="utf-8")
 
 
 def test_missing_automations_file_fails(tmp_path: Path) -> None:
@@ -109,7 +87,6 @@ def test_retired_integrations_file_fails(tmp_path: Path) -> None:
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_automations_md(farplane)
-    write_steer_config(farplane)
     (farplane / "bindings.md").write_text(
         "---\nkind: project-bindings\nframework_template_version: \"0.1.0\"\n---\n",
         encoding="utf-8",
@@ -121,31 +98,27 @@ def test_retired_integrations_file_fails(tmp_path: Path) -> None:
     assert f"{RETIRED_INTEGRATIONS_REF} is retired; use farplane/bindings.md." in errors
 
 
-def test_invalid_steer_config_fails(tmp_path: Path) -> None:
+def test_retired_steer_files_fail(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_automations_md(farplane)
-    (farplane / "steer.config.toml").write_text(
-        'schema = "wrong"\nversion = ""\n\n[[jobs]]\n',
-        encoding="utf-8",
-    )
+    write_required_project_files(tmp_path)
+    (farplane / "steer.config.toml").write_text("schema = \"farplane_steer_config\"\n", encoding="utf-8")
+    state = tmp_path / ".farplane" / "state"
+    state.mkdir(parents=True, exist_ok=True)
+    (state / "steer-scheduler.json").write_text("{\"jobs\": {}}\n", encoding="utf-8")
 
     errors = validate(tmp_path)
 
-    assert "farplane/steer.config.toml schema must be farplane_steer_config." in errors
-    assert "farplane/steer.config.toml version must be a non-empty string." in errors
-    assert "farplane/steer.config.toml template_uses.farplane-steer-config must be a non-empty string." in errors
-    assert "farplane/steer.config.toml jobs[0].id must be a non-empty string." in errors
-    assert "farplane/steer.config.toml jobs[0].cadence must be a non-empty string." in errors
-    assert "farplane/steer.config.toml jobs[0].prompt must be a non-empty string." in errors
+    assert "farplane/steer.config.toml is retired; use farplane/automations.md." in errors
+    assert ".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling." in errors
 
 
 def test_valid_versioned_files_pass(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
-    write_steer_config(farplane)
     write_required_project_files(tmp_path)
 
     assert validate(tmp_path) == []
@@ -155,7 +128,6 @@ def test_missing_pm_manifest_passes(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
-    write_steer_config(farplane)
     write_required_project_files(tmp_path)
 
     assert validate(tmp_path) == []
@@ -209,7 +181,6 @@ def test_valid_pm_manifest_passes(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
-    write_steer_config(farplane)
     write_required_project_files(tmp_path)
     (farplane / "pm.json").write_text(
         json.dumps(
@@ -233,7 +204,6 @@ def test_pm_manifest_shape_is_validated(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
-    write_steer_config(farplane)
     (farplane / "pm.json").write_text(
         json.dumps(
             {

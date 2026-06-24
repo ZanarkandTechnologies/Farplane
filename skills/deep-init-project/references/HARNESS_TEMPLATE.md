@@ -42,14 +42,22 @@ project "TODO" {
     output: ".farplane/reports/pulse/<timestamp>.md"
   }
 
-  heartbeat steer_update {
-    trigger: "Codex automation at the minimum planning cadence"
+  heartbeat daily_interval {
+    trigger: "Codex automation daily"
     bindings: "farplane/bindings.md"
-    first: steer_update
-    config: "farplane/steer.config.toml"
-    state: ".farplane/state/steer-scheduler.json"
-    jobs: [daily_report, weekly_steer]
-    output: ".farplane/reports/steer/<job>/<timestamp>.md"
+    first: interval_update
+    review_window: "last_24h"
+    planning_window: "next_24h"
+    output: ".farplane/reports/interval/daily_interval/<timestamp>.md"
+  }
+
+  heartbeat weekly_interval {
+    trigger: "Codex automation weekly"
+    bindings: "farplane/bindings.md"
+    first: interval_update
+    review_window: "last_week"
+    planning_window: "next_week"
+    output: ".farplane/reports/interval/weekly_interval/<timestamp>.md"
   }
 }
 ```

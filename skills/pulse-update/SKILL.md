@@ -19,10 +19,10 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this skill for the Farplane Pulse loop: immediate attention, reward
 reconciliation, reasoning plus bandit-based action selection, and one bounded
 action. It does not own drift review, scrum reflection, strategy, or scheduled
-planning. It may read Steer guidance as constraints, but its job is to choose
+planning. It may read interval guidance as constraints, but its job is to choose
 the next board/action-tree move and spawn or record the worker handoff.
 
-This skill should be easy to pilot by changing cadence and policy, without
+This skill should be easy to pilot by changing cadence and extensions, without
 rewriting the action logic. Interval controls when Pulse wakes; policy controls
 what it may do.
 
@@ -30,17 +30,26 @@ what it may do.
 
 `pulse-update.bandit @30m -> reports.pulse`
 
-The live Codex automation supplies cadence and prompt context. Project policy
-may supply action arms, child-thread budget, gates, and local overrides. Pulse
-owns reward reconciliation, forced action checks, bandit scoring, action-tree
-selection, child handoff shape, and decision/outcome ledger writes. If no
-proceedable ticket exists, Pulse chooses one narrow refill or maintenance arm;
-`consult goal-advisor` is an arm, not the default.
+Pulse resolves the standard Farplane project refs by default: local tickets,
+recent interval guidance, action arms, bandit state, spawned threads, outcomes,
+rewards, reports, and `farplane/pm.json`. The live Codex automation supplies
+cadence and true project extensions only. Pulse owns reward reconciliation,
+forced action checks, bandit scoring, action-tree selection, child handoff
+shape, and decision/outcome ledger writes. If no proceedable ticket exists,
+Pulse chooses one narrow refill or maintenance arm; `consult goal-advisor` is
+an arm, not the default.
+
+Proceedable ticket selection is a hard gate. Pulse must not select local ticket
+implementation work unless the ticket is `ready: true`,
+`approval_required: false`, `blocked_by: []`, `claimed_by:` empty, dependency
+satisfied, not `phase: complete` or `status: done`, not parked, and not waiting
+on external credentials, human feedback, deploy, publish, spend, or other
+non-computer-actionable input.
 
 ## Skill Signature
 
 ```text
-pulse_update(project_root, pulse_policy, board_state, action_tree, reward_state)
+pulse_update(project_root, extensions?, pulse_policy?)
   -> reward_update
    + selected_action
    + child_thread_handoff?
@@ -49,7 +58,7 @@ pulse_update(project_root, pulse_policy, board_state, action_tree, reward_state)
 
 state:
   reads(farplane/goals.md?,
-        .farplane/reports/steer/**?,
+        .farplane/reports/interval/**?,
         .farplane/automation/heartbeat-policy.json,
         .farplane/automation/action-arms.json,
         .farplane/automation/bandit-state.json,
@@ -64,14 +73,14 @@ state:
          farplane/pm.json when persistent PM-owned worker threads are spawned)
 
 gates:
-  board_loaded; rewards_reconciled;
+  default_refs_resolved; extensions_merged; board_loaded; rewards_reconciled;
   forced_actions_checked; one_action_selected; child_budget_respected;
   side_effect_gates_respected; decision_recorded;
   pm_thread_grouping_updated_when_persistent
 
 routes:
   goal-advisor | impl-plan | feed-scout | skill-maintenance |
-  eval | qa | review | steer-update
+  eval | qa | review
 
 fails:
   performing drift review or weekly scrum planning; rediscovering strategy
@@ -84,10 +93,12 @@ fails:
 ## Todo List
 
 - [ ] 1. Bind policy and context.
-  - [ ] Read Pulse policy, action tree/action arms, local ticket board, latest Steer
-        guidance when present, bandit state, spawned thread rows, and recent
-        outcomes.
-  - [ ] Treat Steer guidance as constraints only; do not perform drift review
+  - [ ] Resolve standard Farplane refs for ticket board, action arms, latest
+        interval guidance, bandit state, spawned thread rows, recent outcomes,
+        report paths, and `farplane/pm.json`.
+  - [ ] Merge caller-supplied extensions for custom action arms, budgets,
+        gates, or extra context refs.
+  - [ ] Treat interval guidance as constraints only; do not perform drift review
         or weekly scrum planning inside Pulse.
 - [ ] 2. Reconcile previous outcomes.
   - [ ] Inspect prior spawned thread rows and expected outputs.
@@ -95,7 +106,7 @@ fails:
         missing-output child work.
   - [ ] Avoid double-counting already rewarded outcomes.
 - [ ] 3. Check forced actions.
-  - [ ] Prefer `reward_update`, `metric_snapshot`, or `steer_request` when
+  - [ ] Prefer `reward_update`, `metric_snapshot`, or `interval_request` when
         policy thresholds require maintenance.
   - [ ] Otherwise score allowed action arms with the configured deterministic
         bandit policy.
@@ -104,9 +115,12 @@ fails:
   - [ ] Respect `maxChildThreadsPerBeat`, open child-thread limits, gates, and
         action authority.
   - [ ] When selecting ticket work, choose one proceedable ticket from local
-        ticket state, prefer ready/unblocked work, and route substantial coding
-        execution through `goal-advisor` when the ticket needs a Goal-backed
-        worker program.
+        ticket state. Treat `ready: false`, `approval_required: true`, nonempty
+        `blocked_by`, nonempty `claimed_by`, incomplete dependencies,
+        `phase: complete`, `status: done`, parked next actions, and external or
+        human gates as hard exclusions, then route substantial coding execution
+        through `goal-advisor` when the ticket needs a Goal-backed worker
+        program.
   - [ ] If no proceedable ticket exists, choose one narrow refill or
         maintenance arm from the action tree instead of inventing strategy in
         the Pulse context.
@@ -137,8 +151,9 @@ fails:
 
 ## Default Action Arms
 
-- `pick_ready_ticket`: choose one ready, unblocked ticket and spawn a bounded
-  PM-owned worker when useful.
+- `pick_ready_ticket`: choose one ready, unblocked, unclaimed, dependency-satisfied,
+  approval-free, non-parked, non-complete ticket and spawn a bounded PM-owned
+  worker when useful.
 - `split_oversized_ticket`: turn one blocked or too-large ticket into a smaller
   executable ticket handoff.
 - `clarify_blocker`: ask for or record the smallest blocker clarification.

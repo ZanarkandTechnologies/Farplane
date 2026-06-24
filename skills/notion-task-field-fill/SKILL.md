@@ -5,7 +5,7 @@ tier: 3
 group: personal-ops
 source: local
 common_chains:
-  after: ["weekly-strategy-analysis"]
+  after: ["interval-update"]
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -82,7 +82,7 @@ For a bounded task window:
 - `live-high-confidence`: apply only typed high-confidence patches after the
   proposal artifact exists. Verify readback for every changed page.
 - `weekly-preflight`: run dry-run against the weekly review window and add a
-  `Task Hygiene` section for `weekly-strategy-analysis`.
+  `Task Hygiene` section for the caller's weekly strategy automation.
 - `fixture`: use local tests and examples only; do not call Notion or Telegram.
 
 ## Inputs
@@ -271,11 +271,11 @@ skill in `notify` or `dry-run` mode first, and only use
 
 ## Weekly Strategy Handoff
 
-When `weekly-strategy-analysis` is running, execute this skill in
-`weekly-preflight` mode before the weekly context bundle is finalized. Add the
-result under `Task Hygiene` with proposals, abstentions, Telegram requests, and
-source gaps. Weekly strategy should consume the hygiene result as evidence; it
-should not independently mutate Notion.
+When a weekly strategy automation asks for task hygiene, execute this skill in
+`weekly-preflight` mode before that automation finalizes its context bundle.
+Add the result under `Task Hygiene` with proposals, abstentions, Telegram
+requests, and source gaps. Weekly strategy should consume the hygiene result as
+evidence; it should not independently mutate Notion.
 
 ## Outcome Contract
 

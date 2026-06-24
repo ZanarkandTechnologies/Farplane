@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.1.4"
+template_version: "0.2.0"
 feature_refs:
   - FEAT-0027
   - FEAT-0048
@@ -48,28 +48,28 @@ project "TODO" {
     bet: "TODO: who finds this first?"
     kpi: missing_instrumentation("reach/acquisition baseline")
     evidence: ref("TODO")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   axis activate_first_value {
     bet: "TODO: what is first value?"
     kpi: review_metric("first-value clarity")
     evidence: ref("TODO")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   axis retain_loyalty {
     bet: "TODO: why would they return?"
     kpi: human_feedback("would return / would not return")
     evidence: ref("TODO")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   axis efficiency_capability {
     bet: "TODO: what can be made easier or more repeatable?"
     kpi: learning_metric("cycle-time or effort baseline")
     evidence: ref("TODO")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   system ticket_loop {
@@ -150,7 +150,7 @@ project "TODO" {
     type: unblock
     human_step: "TODO: connect read-only access, provide recurring export, approve connector setup, or define operator labels for the first feedback signal"
     why: "The project cannot refine strategy until at least one honest feedback loop exists"
-    enables: [first_feedback_signal, horizon_update]
+    enables: [first_feedback_signal, weekly_interval]
     fallback: human_feedback("operator labels outputs manually until the concrete signal exists")
     gates: [no_account_changes, no_private_scraping]
   }
@@ -164,17 +164,28 @@ project "TODO" {
     output: ".farplane/reports/pulse/<timestamp>.md"
   }
 
-  heartbeat steer_update {
-    trigger: "Codex automation at the minimum planning cadence"
+  heartbeat daily_interval {
+    trigger: "Codex automation daily"
     bindings: "farplane/bindings.md"
-    first: steer_update
-    config: "farplane/steer.config.toml"
-    state: ".farplane/state/steer-scheduler.json"
-    jobs: [daily_report, weekly_steer]
-    skills: [steer_update, feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
-    delegate: delegate(ref("project-harness.md"), "refresh planning, strategy, memory, and skill upkeep", skills=[steer_update, skill_maintenance])
+    first: interval_update
+    review_window: "last_24h"
+    planning_window: "next_24h"
+    skills: [interval_update, update_memory, update_strategy, goal_advisor, review]
+    delegate: delegate(ref("project-harness.md"), "refresh daily report and next-day plan", skills=[interval_update])
     gates: [review_before_external_side_effects]
-    output: ".farplane/reports/steer/<job>/<timestamp>.md"
+    output: ".farplane/reports/interval/daily_interval/<timestamp>.md"
+  }
+
+  heartbeat weekly_interval {
+    trigger: "Codex automation weekly"
+    bindings: "farplane/bindings.md"
+    first: interval_update
+    review_window: "last_week"
+    planning_window: "next_week"
+    skills: [interval_update, feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
+    delegate: delegate(ref("project-harness.md"), "refresh weekly strategy, memory, and skill upkeep", skills=[interval_update, skill_maintenance])
+    gates: [review_before_external_side_effects]
+    output: ".farplane/reports/interval/weekly_interval/<timestamp>.md"
   }
 
   milestone first_evidence_loop {

@@ -1,38 +1,45 @@
 window.FARPLANE_LIFECYCLE_GRAPH = {
   "counts": {
     "edge_confidence": {
-      "curated": 31,
+      "curated": 32,
       "explicit": 6,
-      "parsed": 136
+      "parsed": 133
     },
     "edge_types": {
       "consumes": 2,
       "contains": 2,
       "reads": 44,
-      "routes_to": 78,
-      "triggers": 13,
-      "updates": 4,
-      "writes": 30
+      "routes_to": 76,
+      "triggers": 15,
+      "updates": 3,
+      "writes": 29
     },
-    "edges": 173,
+    "edges": 171,
     "fsa_projections": 4,
     "node_kinds": {
-      "automation": 2,
+      "automation": 3,
       "command": 3,
       "doc": 11,
-      "file": 17,
+      "file": 16,
       "hook": 2,
       "report": 2,
       "route": 5,
       "runtime": 1,
-      "skill": 34,
-      "state": 11,
+      "skill": 33,
+      "state": 10,
       "ticket": 4
     },
-    "nodes": 92,
+    "nodes": 90,
     "parsed_skills": 14
   },
   "edges": [
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "source": "automation:daily-interval",
+      "target": "skill:interval-update",
+      "type": "triggers"
+    },
     {
       "confidence": "curated",
       "evidence_ref": "docs/specs/steer-pulse-automation.md",
@@ -43,8 +50,8 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "curated",
       "evidence_ref": "docs/specs/steer-pulse-automation.md",
-      "source": "automation:steer",
-      "target": "skill:steer-update",
+      "source": "automation:weekly-interval",
+      "target": "skill:interval-update",
       "type": "triggers"
     },
     {
@@ -65,6 +72,13 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "confidence": "curated",
       "evidence_ref": "docs/specs/steer-pulse-automation.md",
       "source": "file:farplane/automations.md",
+      "target": "automation:daily-interval",
+      "type": "triggers"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "source": "file:farplane/automations.md",
       "target": "automation:pulse",
       "type": "triggers"
     },
@@ -72,7 +86,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "confidence": "curated",
       "evidence_ref": "docs/specs/steer-pulse-automation.md",
       "source": "file:farplane/automations.md",
-      "target": "automation:steer",
+      "target": "automation:weekly-interval",
       "type": "triggers"
     },
     {
@@ -131,15 +145,15 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "curated",
       "evidence_ref": "docs/specs/steer-pulse-automation.md",
-      "source": "report:.farplane/reports/pulse/<timestamp>.md",
-      "target": "skill:steer-update",
+      "source": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "target": "skill:pulse-update",
       "type": "consumes"
     },
     {
       "confidence": "curated",
       "evidence_ref": "docs/specs/steer-pulse-automation.md",
-      "source": "report:.farplane/reports/steer/<job>/<timestamp>.md",
-      "target": "skill:pulse-update",
+      "source": "report:.farplane/reports/pulse/<timestamp>.md",
+      "target": "skill:interval-update",
       "type": "consumes"
     },
     {
@@ -199,17 +213,17 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "farplane/steer.config.toml?",
+      "label": "skills/automation-advisor/templates/*",
       "source": "skill:automation-advisor",
-      "target": "file:farplane/steer.config.toml",
+      "target": "file:skills/automation-advisor/templates/*",
       "type": "reads"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "skills/automation-advisor/templates/*",
+      "label": "skills/interval-update/SKILL.md",
       "source": "skill:automation-advisor",
-      "target": "file:skills/automation-advisor/templates/*",
+      "target": "file:skills/interval-update/SKILL.md",
       "type": "reads"
     },
     {
@@ -223,17 +237,17 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "skills/steer-update/SKILL.md",
+      "label": "goal-advisor",
       "source": "skill:automation-advisor",
-      "target": "file:skills/steer-update/SKILL.md",
-      "type": "reads"
+      "target": "skill:goal-advisor",
+      "type": "routes_to"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "goal-advisor",
+      "label": "interval-update",
       "source": "skill:automation-advisor",
-      "target": "skill:goal-advisor",
+      "target": "skill:interval-update",
       "type": "routes_to"
     },
     {
@@ -250,14 +264,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "label": "review",
       "source": "skill:automation-advisor",
       "target": "skill:review",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "steer-update",
-      "source": "skill:automation-advisor",
-      "target": "skill:steer-update",
       "type": "routes_to"
     },
     {
@@ -279,6 +285,13 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "evidence_ref": "docs/farplane-framework/deep-init-critical-path.md",
       "source": "skill:deep-init-project",
       "target": "file:PROJECT_RULES.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:deep-init-project",
+      "target": "file:farplane/automations.md",
       "type": "writes"
     },
     {
@@ -307,13 +320,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:deep-init-project",
       "target": "file:farplane/pm.json",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/project-files.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/steer.config.toml",
       "type": "writes"
     },
     {
@@ -524,6 +530,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "parsed",
       "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "farplane/automations.md?",
+      "source": "skill:horizon-advisor",
+      "target": "file:farplane/automations.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
       "label": "farplane/goals.md",
       "source": "skill:horizon-advisor",
       "target": "file:farplane/goals.md",
@@ -550,14 +564,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "label": "farplane/harness.md",
       "source": "skill:horizon-advisor",
       "target": "file:farplane/harness.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/steer.config.toml?",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/steer.config.toml",
       "type": "reads"
     },
     {
@@ -679,6 +685,157 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "skill:impl-plan",
       "target": "skill:visual-qa",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "docs/HISTORY.md?",
+      "source": "skill:interval-update",
+      "target": "doc:docs/HISTORY.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "docs/LESSONS.md?",
+      "source": "skill:interval-update",
+      "target": "doc:docs/LESSONS.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "docs/MEMORY.md?",
+      "source": "skill:interval-update",
+      "target": "doc:docs/MEMORY.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "docs/TROUBLES.md?",
+      "source": "skill:interval-update",
+      "target": "doc:docs/TROUBLES.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "farplane/goals.md?",
+      "source": "skill:interval-update",
+      "target": "file:farplane/goals.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "farplane/goals.md only through explicit goals-delta policy",
+      "source": "skill:interval-update",
+      "target": "file:farplane/goals.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "farplane/pm.json?",
+      "source": "skill:interval-update",
+      "target": "file:farplane/pm.json",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": ".farplane/reports/interval/?",
+      "source": "skill:interval-update",
+      "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "source": "skill:interval-update",
+      "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": ".farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md",
+      "source": "skill:interval-update",
+      "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": ".farplane/reports/pulse/?",
+      "source": "skill:interval-update",
+      "target": "report:.farplane/reports/pulse/<timestamp>.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "feed-scout",
+      "source": "skill:interval-update",
+      "target": "skill:feed-scout",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "goal-advisor",
+      "source": "skill:interval-update",
+      "target": "skill:goal-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "pulse-update",
+      "source": "skill:interval-update",
+      "target": "skill:pulse-update",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "review",
+      "source": "skill:interval-update",
+      "target": "skill:review",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "skill-maintenance",
+      "source": "skill:interval-update",
+      "target": "skill:skill-maintenance",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "update-memory",
+      "source": "skill:interval-update",
+      "target": "skill:update-memory",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "update-strategy",
+      "source": "skill:interval-update",
+      "target": "skill:update-strategy",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "tickets/",
+      "source": "skill:interval-update",
+      "target": "ticket:tickets/TASK-*/ticket.md",
+      "type": "reads"
     },
     {
       "confidence": "curated",
@@ -824,6 +981,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "type": "writes"
     },
     {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": ".farplane/reports/interval/**?",
+      "source": "skill:pulse-update",
+      "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "type": "reads"
+    },
+    {
       "confidence": "curated",
       "evidence_ref": "docs/specs/steer-pulse-automation.md",
       "source": "skill:pulse-update",
@@ -837,14 +1002,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "skill:pulse-update",
       "target": "report:.farplane/reports/pulse/<timestamp>.md",
       "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/reports/steer/**?",
-      "source": "skill:pulse-update",
-      "target": "report:.farplane/reports/steer/<job>/<timestamp>.md",
-      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -900,14 +1057,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "label": "skill-maintenance",
       "source": "skill:pulse-update",
       "target": "skill:skill-maintenance",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "steer-update",
-      "source": "skill:pulse-update",
-      "target": "skill:steer-update",
       "type": "routes_to"
     },
     {
@@ -1127,172 +1276,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "docs/LESSONS.md?",
-      "source": "skill:steer-update",
-      "target": "doc:docs/LESSONS.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "docs/MEMORY.md?",
-      "source": "skill:steer-update",
-      "target": "doc:docs/MEMORY.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "docs/TROUBLES.md?",
-      "source": "skill:steer-update",
-      "target": "doc:docs/TROUBLES.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "farplane/goals.md?",
-      "source": "skill:steer-update",
-      "target": "file:farplane/goals.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "farplane/goals.md only through explicit goals-delta policy",
-      "source": "skill:steer-update",
-      "target": "file:farplane/goals.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": ".farplane/reports/pulse/?",
-      "source": "skill:steer-update",
-      "target": "report:.farplane/reports/pulse/<timestamp>.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": ".farplane/reports/steer/?",
-      "source": "skill:steer-update",
-      "target": "report:.farplane/reports/steer/<job>/<timestamp>.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
-      "source": "skill:steer-update",
-      "target": "report:.farplane/reports/steer/<job>/<timestamp>.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": ".farplane/reports/steer/<job>/<YYYY-MM-DDTHHMMSSZ>.md",
-      "source": "skill:steer-update",
-      "target": "report:.farplane/reports/steer/<job>/<timestamp>.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "feed-scout",
-      "source": "skill:steer-update",
-      "target": "skill:feed-scout",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "goal-advisor",
-      "source": "skill:steer-update",
-      "target": "skill:goal-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "horizon-update",
-      "source": "skill:steer-update",
-      "target": "skill:horizon-update",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "pulse-update",
-      "source": "skill:steer-update",
-      "target": "skill:pulse-update",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "review",
-      "source": "skill:steer-update",
-      "target": "skill:review",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "skill-maintenance",
-      "source": "skill:steer-update",
-      "target": "skill:skill-maintenance",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "update-memory",
-      "source": "skill:steer-update",
-      "target": "skill:update-memory",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "update-strategy",
-      "source": "skill:steer-update",
-      "target": "skill:update-strategy",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": ".farplane/state/steer-scheduler.json?",
-      "source": "skill:steer-update",
-      "target": "state:.farplane/state/steer-scheduler.json",
-      "type": "reads"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
-      "source": "skill:steer-update",
-      "target": "state:.farplane/state/steer-scheduler.json",
-      "type": "updates"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": ".farplane/state/steer-scheduler.json",
-      "source": "skill:steer-update",
-      "target": "state:.farplane/state/steer-scheduler.json",
-      "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/steer-update/SKILL.md",
-      "label": "tickets/",
-      "source": "skill:steer-update",
-      "target": "ticket:tickets/TASK-*/ticket.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
       "evidence_ref": "skills/update-memory/SKILL.md",
       "label": "docs/**/*.md",
       "source": "skill:update-memory",
@@ -1459,11 +1442,12 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "start": "fsa:automation_activation:automation-prompts-reviewed",
       "states": [
         "fsa:automation_activation:automation-prompts-reviewed",
-        "fsa:automation_activation:scheduler-state-prepared",
         "fsa:automation_activation:pulse-thread-created",
-        "fsa:automation_activation:steer-thread-created",
+        "fsa:automation_activation:daily-interval-thread-created",
+        "fsa:automation_activation:weekly-interval-thread-created",
         "fsa:automation_activation:pulse-automation-attached",
-        "fsa:automation_activation:steer-automation-attached",
+        "fsa:automation_activation:daily-interval-automation-attached",
+        "fsa:automation_activation:weekly-interval-automation-attached",
         "fsa:automation_activation:pm-json-grouped"
       ],
       "terminal": [
@@ -1473,48 +1457,56 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "automation prompts reviewed -> scheduler state prepared",
+          "label": "automation prompts reviewed -> pulse thread created",
           "source": "fsa:automation_activation:automation-prompts-reviewed",
-          "target": "fsa:automation_activation:scheduler-state-prepared",
-          "type": "transition"
-        },
-        {
-          "confidence": "curated",
-          "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "scheduler state prepared -> pulse thread created",
-          "source": "fsa:automation_activation:scheduler-state-prepared",
           "target": "fsa:automation_activation:pulse-thread-created",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "pulse thread created -> steer thread created",
+          "label": "pulse thread created -> daily interval thread created",
           "source": "fsa:automation_activation:pulse-thread-created",
-          "target": "fsa:automation_activation:steer-thread-created",
+          "target": "fsa:automation_activation:daily-interval-thread-created",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "steer thread created -> pulse automation attached",
-          "source": "fsa:automation_activation:steer-thread-created",
+          "label": "daily interval thread created -> weekly interval thread created",
+          "source": "fsa:automation_activation:daily-interval-thread-created",
+          "target": "fsa:automation_activation:weekly-interval-thread-created",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "weekly interval thread created -> pulse automation attached",
+          "source": "fsa:automation_activation:weekly-interval-thread-created",
           "target": "fsa:automation_activation:pulse-automation-attached",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "pulse automation attached -> steer automation attached",
+          "label": "pulse automation attached -> daily interval automation attached",
           "source": "fsa:automation_activation:pulse-automation-attached",
-          "target": "fsa:automation_activation:steer-automation-attached",
+          "target": "fsa:automation_activation:daily-interval-automation-attached",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "steer automation attached -> pm json grouped",
-          "source": "fsa:automation_activation:steer-automation-attached",
+          "label": "daily interval automation attached -> weekly interval automation attached",
+          "source": "fsa:automation_activation:daily-interval-automation-attached",
+          "target": "fsa:automation_activation:weekly-interval-automation-attached",
+          "type": "transition"
+        },
+        {
+          "confidence": "curated",
+          "evidence_ref": "docs/farplane-framework/graph-contract.md",
+          "label": "weekly interval automation attached -> pm json grouped",
+          "source": "fsa:automation_activation:weekly-interval-automation-attached",
           "target": "fsa:automation_activation:pm-json-grouped",
           "type": "transition"
         }
@@ -1682,8 +1674,16 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     }
   ],
-  "generated_at": "2026-06-23T15:59:18+00:00",
+  "generated_at": "2026-06-24T03:11:49+00:00",
   "nodes": [
+    {
+      "id": "automation:daily-interval",
+      "kind": "automation",
+      "label": "daily-interval",
+      "tags": [
+        "automation"
+      ]
+    },
     {
       "id": "automation:pulse",
       "kind": "automation",
@@ -1693,9 +1693,9 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "automation:steer",
+      "id": "automation:weekly-interval",
       "kind": "automation",
-      "label": "steer",
+      "label": "weekly-interval",
       "tags": [
         "automation"
       ]
@@ -1972,16 +1972,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "file:farplane/steer.config.toml",
-      "kind": "file",
-      "label": "Steer config",
-      "path": "farplane/steer.config.toml",
-      "tags": [
-        "automation",
-        "farplane"
-      ]
-    },
-    {
       "id": "file:hooks.json",
       "kind": "file",
       "label": "Codex hook config",
@@ -2001,19 +1991,19 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "file:skills/pulse-update/SKILL.md",
+      "id": "file:skills/interval-update/SKILL.md",
       "kind": "file",
-      "label": "skills/pulse-update/SKILL.md",
-      "path": "skills/pulse-update/SKILL.md",
+      "label": "skills/interval-update/SKILL.md",
+      "path": "skills/interval-update/SKILL.md",
       "tags": [
         "parsed"
       ]
     },
     {
-      "id": "file:skills/steer-update/SKILL.md",
+      "id": "file:skills/pulse-update/SKILL.md",
       "kind": "file",
-      "label": "skills/steer-update/SKILL.md",
-      "path": "skills/steer-update/SKILL.md",
+      "label": "skills/pulse-update/SKILL.md",
+      "path": "skills/pulse-update/SKILL.md",
       "tags": [
         "parsed"
       ]
@@ -2037,6 +2027,16 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
+      "id": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "kind": "report",
+      "label": "Interval reports",
+      "path": ".farplane/reports/interval/<interval_id>/<timestamp>.md",
+      "tags": [
+        "interval",
+        "runtime"
+      ]
+    },
+    {
       "id": "report:.farplane/reports/pulse/<timestamp>.md",
       "kind": "report",
       "label": "Pulse reports",
@@ -2044,16 +2044,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "tags": [
         "pulse",
         "runtime"
-      ]
-    },
-    {
-      "id": "report:.farplane/reports/steer/<job>/<timestamp>.md",
-      "kind": "report",
-      "label": "Steer reports",
-      "path": ".farplane/reports/steer/<job>/<timestamp>.md",
-      "tags": [
-        "runtime",
-        "steer"
       ]
     },
     {
@@ -2145,7 +2135,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "kind": "skill",
       "label": "automation-advisor",
       "metadata": {
-        "description": "Design or revise Farplane Codex automations using reviewable automations.md prompts and generic Steer/Pulse skill calls.",
+        "description": "Design or revise Farplane Codex automations using reviewable automations.md prompts and generic Pulse/Interval skill calls.",
         "source": "local",
         "tier": 3
       },
@@ -2290,16 +2280,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "skill:horizon-update",
-      "kind": "skill",
-      "label": "horizon-update",
-      "path": "skills/horizon-update/SKILL.md",
-      "tags": [
-        "route-target",
-        "skill"
-      ]
-    },
-    {
       "id": "skill:impl-plan",
       "kind": "skill",
       "label": "impl-plan",
@@ -2311,6 +2291,22 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "path": "skills/impl-plan/SKILL.md",
       "tags": [
         "coding",
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:interval-update",
+      "kind": "skill",
+      "label": "interval-update",
+      "metadata": {
+        "description": "Run one Farplane interval automation: review the past window, write a dated report, plan the next window, and emit Pulse or Goal Advisor guidance.",
+        "source": "local",
+        "tier": 3
+      },
+      "path": "skills/interval-update/SKILL.md",
+      "tags": [
+        "harness",
         "route-target",
         "skill"
       ]
@@ -2479,22 +2475,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "skill:steer-update",
-      "kind": "skill",
-      "label": "steer-update",
-      "metadata": {
-        "description": "Run the Farplane Steer scheduler: select due interval jobs, call interval planning, and update scheduler state.",
-        "source": "local",
-        "tier": 3
-      },
-      "path": "skills/steer-update/SKILL.md",
-      "tags": [
-        "harness",
-        "route-target",
-        "skill"
-      ]
-    },
-    {
       "id": "skill:update-memory",
       "kind": "skill",
       "label": "update-memory",
@@ -2625,16 +2605,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "state:.farplane/state/steer-scheduler.json",
-      "kind": "state",
-      "label": "Steer scheduler state",
-      "path": ".farplane/state/steer-scheduler.json",
-      "tags": [
-        "automation",
-        "runtime"
-      ]
-    },
-    {
       "id": "ticket:tickets/TASK-*/artifacts/",
       "kind": "ticket",
       "label": "Ticket proof artifacts",
@@ -2691,7 +2661,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "goal-advisor",
       "impl-plan",
       "pulse-update",
-      "steer-update",
+      "interval-update",
       "automation-advisor",
       "update-memory",
       "learning-drain",

@@ -35,7 +35,7 @@ horizon_advice(project_root?, intent?, current_goals?, evidence?, constraints?)
    + project_goal_map
    + current_milestone
    + goal_advisor_handoff?
-state: reads(farplane/goals.md, farplane/harness.md, farplane/steer.config.toml?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.md delta or strategy artifact when explicitly in scope)
+state: reads(farplane/goals.md, farplane/harness.md, farplane/automations.md?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.md delta or strategy artifact when explicitly in scope)
 gates: north_star_named; value_function_named; metrics_have_proof_surfaces; anti_metrics_named; current_frontier_expanded_only; execution_handoff_goes_to_goal_advisor
 routes: goal-advisor | update-strategy | deep-interview | review
 fails: vague goals; fake precision; turning all goals into tasks; compiling native Goal prompts; hiding strategy in chat; optimizing proxy metrics without a shared value function
@@ -69,8 +69,8 @@ Goal prompts here.
    - [ ] Resolve project root, goal artifact path, current horizon, operator
      intent, available metrics, and whether this run should write files or only
      advise.
-   - [ ] Read current `farplane/goals.md`, `farplane/harness.md`, Steer
-     config when present, tickets/progress, and relevant memory before asking
+   - [ ] Read current `farplane/goals.md`, `farplane/harness.md`, automation
+     prompts when present, tickets/progress, and relevant memory before asking
      for facts.
 - [ ] 2. Define the value function before goals.
    - [ ] Name the primary winning condition, such as users, money, attention,

@@ -447,7 +447,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-06-23",
+      "introduced_at": "2026-06-24",
       "section_count": 9,
       "sections": [
         "Context",
@@ -460,8 +460,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-6acd9b24312c.md",
-      "source_commit": "6acd9b24312c",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-00283451c87b.md",
+      "source_commit": "00283451c87b",
       "summary": "working tree current template",
       "version": "0.3.2"
     }
@@ -2138,7 +2138,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "6acd9b24312c",
+      "source_commit": "00283451c87b",
       "template_version": "0.3.2",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -2152,7 +2152,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "6acd9b24312c",
+      "source_commit": "00283451c87b",
       "template_version": "0.3.2",
       "title": "Todo executability",
       "verdict": "pass"
@@ -2166,7 +2166,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "6acd9b24312c",
+      "source_commit": "00283451c87b",
       "template_version": "0.3.2",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -2180,7 +2180,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "6acd9b24312c",
+      "source_commit": "00283451c87b",
       "template_version": "0.3.2",
       "title": "Proof contract",
       "verdict": "pass"
@@ -2194,7 +2194,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "6acd9b24312c",
+      "source_commit": "00283451c87b",
       "template_version": "0.3.2",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -2451,7 +2451,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-06-23T15:02:28+00:00",
+  "generated_at": "2026-06-24T03:37:39+00:00",
   "rollout": [
     {
       "eval": "",
@@ -3272,18 +3272,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "eval": "eval_task.json",
       "has_checklist": true,
-      "path": "skills/daily-pm-plan/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "daily-pm-plan",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
       "path": "skills/deliberative-advice/SKILL.md",
       "qa_checklist": "",
       "skill_id": "deliberative-advice",
@@ -3392,18 +3380,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "eval": "eval_task.json",
       "has_checklist": true,
-      "path": "skills/horizon-update/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "horizon-update",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
       "path": "skills/impl-plan/SKILL.md",
       "qa_checklist": "qa_checklist.md",
       "skill_id": "impl-plan",
@@ -3419,6 +3395,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/ingest-content/SKILL.md",
       "qa_checklist": "",
       "skill_id": "ingest-content",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.2.0",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/interval-update/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "interval-update",
       "skill_ui": "",
       "source": "local",
       "status": "stale",
@@ -3510,18 +3498,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/pm-heartbeat/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "pm-heartbeat",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
       "eval": "",
       "has_checklist": true,
       "path": "skills/prototyping/SKILL.md",
@@ -3572,18 +3548,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "eval": "eval_task.json",
       "has_checklist": true,
-      "path": "skills/rhythm-update/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "rhythm-update",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
       "path": "skills/self-improve/SKILL.md",
       "qa_checklist": "",
       "skill_id": "self-improve",
@@ -3620,18 +3584,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "eval": "eval_task.json",
       "has_checklist": true,
-      "path": "skills/steer-update/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "steer-update",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
       "path": "skills/task-case-design/SKILL.md",
       "qa_checklist": "qa_checklist.md",
       "skill_id": "task-case-design",
@@ -3640,18 +3592,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "stale",
       "template_version": "0.3.0",
       "tier": 2
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/ticket-drainer/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "ticket-drainer",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
     },
     {
       "eval": "",
@@ -3676,49 +3616,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "stale",
       "template_version": "0.2.0",
       "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/weekly-pm-plan/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "weekly-pm-plan",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/weekly-strategy-analysis/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "weekly-strategy-analysis",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
     }
   ],
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 101
+      "local": 94
     },
     "by_status": {
       "external": 3,
       "missing": 60,
-      "stale": 41
+      "stale": 34
     },
     "by_template_version": {
       "0.1.0": 4,
-      "0.2.0": 30,
+      "0.2.0": 23,
       "0.3.0": 7,
       "missing": 63
     },
-    "total_skills": 104
+    "total_skills": 97
   },
   "schema_version": "1.0.0",
   "source": {
@@ -3937,20 +3853,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": false
       },
       "template_uses": {}
-    },
-    {
-      "consumer_id": "daily-pm-plan",
-      "consumer_scope": "skill",
-      "path": "skills/daily-pm-plan/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
     },
     {
       "consumer_id": "data-viz",
@@ -4288,20 +4190,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       }
     },
     {
-      "consumer_id": "horizon-update",
-      "consumer_scope": "skill",
-      "path": "skills/horizon-update/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
-    },
-    {
       "consumer_id": "image-generation",
       "consumer_scope": "skill",
       "path": "skills/image-generation/SKILL.md",
@@ -4337,6 +4225,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
+        "skill-template": "0.2.0"
+      }
+    },
+    {
+      "consumer_id": "interval-update",
+      "consumer_scope": "skill",
+      "path": "skills/interval-update/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": false,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
         "skill-template": "0.2.0"
       }
     },
@@ -4459,20 +4361,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_id": "plan",
       "consumer_scope": "skill",
       "path": "skills/plan/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
-    },
-    {
-      "consumer_id": "pm-heartbeat",
-      "consumer_scope": "skill",
-      "path": "skills/pm-heartbeat/SKILL.md",
       "surfaces": {
         "eval": true,
         "qa_checklist": false,
@@ -4660,20 +4548,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       }
     },
     {
-      "consumer_id": "rhythm-update",
-      "consumer_scope": "skill",
-      "path": "skills/rhythm-update/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
-    },
-    {
       "consumer_id": "runtime-debugging",
       "consumer_scope": "skill",
       "path": "skills/runtime-debugging/SKILL.md",
@@ -4760,20 +4634,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "template_uses": {}
     },
     {
-      "consumer_id": "steer-update",
-      "consumer_scope": "skill",
-      "path": "skills/steer-update/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
-    },
-    {
       "consumer_id": "summarize",
       "consumer_scope": "skill",
       "path": "skills/summarize/SKILL.md",
@@ -4820,20 +4680,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": false
       },
       "template_uses": {}
-    },
-    {
-      "consumer_id": "ticket-drainer",
-      "consumer_scope": "skill",
-      "path": "skills/ticket-drainer/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
     },
     {
       "consumer_id": "update-memory",
@@ -4928,34 +4774,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "template_uses": {}
     },
     {
-      "consumer_id": "weekly-pm-plan",
-      "consumer_scope": "skill",
-      "path": "skills/weekly-pm-plan/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
-    },
-    {
-      "consumer_id": "weekly-strategy-analysis",
-      "consumer_scope": "skill",
-      "path": "skills/weekly-strategy-analysis/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
-    },
-    {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
       "path": "farplane/manifest.json",
@@ -4963,7 +4781,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.2.1"
+        "farplane-framework": "1.3.0"
       }
     },
     {
@@ -4982,7 +4800,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.2.1",
+      "current_version": "1.3.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -4990,12 +4808,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.2.1"
+      "used_version": "1.3.0"
     },
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.2.1",
+      "current_version": "1.3.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -5006,32 +4824,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "1.1.0"
     },
     {
-      "consumer_id": "Farplane",
-      "consumer_scope": "project",
-      "current_version": "0.2.0",
-      "feature_refs": [
-        "FEAT-0060"
-      ],
-      "path": "farplane/manifest.json",
-      "status": "missing",
-      "target_basis": "projects in the rollout inventory",
-      "template_id": "farplane-steer-config",
-      "used_version": ""
-    },
-    {
-      "consumer_id": "Farplane-UI",
-      "consumer_scope": "project",
-      "current_version": "0.2.0",
-      "feature_refs": [
-        "FEAT-0060"
-      ],
-      "path": "../Farplane-UI/farplane/manifest.json",
-      "status": "missing",
-      "target_basis": "projects in the rollout inventory",
-      "template_id": "farplane-steer-config",
-      "used_version": ""
-    },
-    {
       "consumer_id": "budget-advisor",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -5039,19 +4831,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "path": "skills/budget-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
-      "consumer_id": "daily-pm-plan",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/daily-pm-plan/SKILL.md",
       "status": "current",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -5123,19 +4902,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
-      "consumer_id": "horizon-update",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/horizon-update/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
       "consumer_id": "impl-plan",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -5143,6 +4909,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "path": "skills/impl-plan/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
+    },
+    {
+      "consumer_id": "interval-update",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/interval-update/SKILL.md",
       "status": "current",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -5214,19 +4993,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
-      "consumer_id": "pm-heartbeat",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/pm-heartbeat/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
       "consumer_id": "pulse-update",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -5234,19 +5000,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "path": "skills/pulse-update/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
-      "consumer_id": "rhythm-update",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/rhythm-update/SKILL.md",
       "status": "current",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -5279,19 +5032,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
-      "consumer_id": "steer-update",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/steer-update/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
       "consumer_id": "task-case-design",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -5299,45 +5039,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "path": "skills/task-case-design/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
-      "consumer_id": "ticket-drainer",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/ticket-drainer/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
-      "consumer_id": "weekly-pm-plan",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/weekly-pm-plan/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
-      "consumer_id": "weekly-strategy-analysis",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/weekly-strategy-analysis/SKILL.md",
       "status": "current",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -5676,23 +5377,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
-      "consumer_id": "daily-pm-plan",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/daily-pm-plan/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
-    },
-    {
       "consumer_id": "deliberative-advice",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -5846,23 +5530,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.0"
     },
     {
-      "consumer_id": "horizon-update",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/horizon-update/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
-    },
-    {
       "consumer_id": "impl-plan",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -5891,6 +5558,23 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0059"
       ],
       "path": "skills/ingest-content/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "interval-update",
+      "consumer_scope": "skill",
+      "current_version": "0.3.2",
+      "feature_refs": [
+        "FEAT-0048",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0058",
+        "FEAT-0059"
+      ],
+      "path": "skills/interval-update/SKILL.md",
       "status": "stale",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
@@ -6016,23 +5700,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
-      "consumer_id": "pm-heartbeat",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/pm-heartbeat/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
-    },
-    {
       "consumer_id": "prototyping",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -6101,23 +5768,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
-      "consumer_id": "rhythm-update",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/rhythm-update/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
-    },
-    {
       "consumer_id": "self-improve",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -6169,23 +5819,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
-      "consumer_id": "steer-update",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/steer-update/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
-    },
-    {
       "consumer_id": "task-case-design",
       "consumer_scope": "skill",
       "current_version": "0.3.2",
@@ -6201,23 +5834,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
       "used_version": "0.3.0"
-    },
-    {
-      "consumer_id": "ticket-drainer",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/ticket-drainer/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
     },
     {
       "consumer_id": "update-memory",
@@ -6252,40 +5868,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
       "used_version": "0.2.0"
-    },
-    {
-      "consumer_id": "weekly-pm-plan",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/weekly-pm-plan/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
-    },
-    {
-      "consumer_id": "weekly-strategy-analysis",
-      "consumer_scope": "skill",
-      "current_version": "0.3.2",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/weekly-strategy-analysis/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
     }
   ],
   "template_rollout_summary": {
@@ -6297,33 +5879,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "current": 1,
         "stale": 1
       },
-      "current_version": "1.2.1",
+      "current_version": "1.3.0",
       "feature_refs": [
         "FEAT-0060"
       ],
       "target_basis": "projects with a farplane/manifest.json surface",
       "total_consumers": 2
     },
-    "farplane-steer-config": {
-      "by_scope": {
-        "project": 2
-      },
-      "by_status": {
-        "missing": 2
-      },
-      "current_version": "0.2.0",
-      "feature_refs": [
-        "FEAT-0060"
-      ],
-      "target_basis": "projects in the rollout inventory",
-      "total_consumers": 2
-    },
     "skill-eval-task": {
       "by_scope": {
-        "skill": 29
+        "skill": 22
       },
       "by_status": {
-        "current": 24,
+        "current": 17,
         "missing": 5
       },
       "current_version": "0.1.0",
@@ -6331,7 +5899,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "target_basis": "skills with an eval_task.json surface",
-      "total_consumers": 29
+      "total_consumers": 22
     },
     "skill-qa-checklist": {
       "by_scope": {
@@ -6350,10 +5918,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     "skill-template": {
       "by_scope": {
-        "skill": 41
+        "skill": 34
       },
       "by_status": {
-        "stale": 41
+        "stale": 34
       },
       "current_version": "0.3.2",
       "feature_refs": [
@@ -6364,7 +5932,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0059"
       ],
       "target_basis": "local skills that declare skill-template usage",
-      "total_consumers": 41
+      "total_consumers": 34
     }
   },
   "template_versions": [
@@ -6610,8 +6178,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "introduced_at": "2026-06-23",
-      "latest_at": "2026-06-23",
-      "latest_commit": "6acd9b24312c",
+      "latest_at": "2026-06-24",
+      "latest_commit": "00283451c87b",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -6625,7 +6193,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-6acd9b24312c.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-00283451c87b.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-23",
@@ -6634,9 +6202,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
           "summary": "feat(templates): track template rollout usage"
         },
         {
-          "introduced_at": "2026-06-23",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-6acd9b24312c.md",
-          "source_commit": "6acd9b24312c",
+          "introduced_at": "2026-06-24",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-00283451c87b.md",
+          "source_commit": "00283451c87b",
           "summary": "working tree current template"
         }
       ],

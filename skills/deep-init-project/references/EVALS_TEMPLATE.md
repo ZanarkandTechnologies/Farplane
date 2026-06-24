@@ -27,5 +27,5 @@ Use the project-specific validator, test, build, or QA commands recorded in
 - TODO: first end-to-end acceptance example
 - TODO: first review or QA proof path
 - TODO: Pulse selects one bounded action and writes a date-stamped report
-- TODO: Steer runs due jobs from cached next_due_at state and writes
-  date-stamped reports
+- TODO: Daily and Weekly Interval automations write date-stamped reports and
+  bounded next-window plans

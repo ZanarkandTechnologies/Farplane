@@ -49,35 +49,35 @@ project "Faceless AI Engineering Channel" {
     bet: "Find high-signal AI engineering learners with sharp topic and hook choices"
     kpi: review_metric("hook/title clarity and audience fit")
     evidence: ref("research-baseline.md")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   axis activate_first_value {
     bet: "Each video teaches one useful harness engineering move"
     kpi: human_feedback("viewer learned a useful move")
     evidence: ref("operator_feedback")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   axis retain_loyalty {
     bet: "A coherent episode ladder gives viewers a reason to return"
     kpi: review_metric("series promise and next-video pull")
     evidence: ref("farplane/goals.md")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   axis efficiency_capability {
     bet: "Reuse Farplane docs, tickets, and video templates to reduce cycle time"
     kpi: learning_metric("time from idea to reviewed draft")
     evidence: ref("local Farplane corpus")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   axis risk_trust {
     bet: "No fake authority, no misleading claims, no unreviewed publishing"
     kpi: review_metric("trust and claim accuracy")
     evidence: ref("review")
-    heartbeat: horizon_update
+    heartbeat: weekly_interval
   }
 
   system publishing_gate {
@@ -123,7 +123,7 @@ project "Faceless AI Engineering Channel" {
     gates: [no_publish, no_spend, no_account_changes]
   }
 
-  heartbeat horizon_update {
+  heartbeat weekly_interval {
     first: grouped_jobs_with_report_cache
     jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy, quarterly_plan, annual_review]
     skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]

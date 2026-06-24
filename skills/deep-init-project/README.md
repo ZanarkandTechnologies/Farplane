@@ -39,7 +39,7 @@ any port or environment-variable assumptions. When the user wants app code
 created during init, select the stack scaffold before running commands.
 
 That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.md`,
-`farplane/goals.md`, `farplane/automations.md`, `farplane/steer.config.toml`, `farplane/bindings.md`,
+`farplane/goals.md`, `farplane/automations.md`, `farplane/bindings.md`,
 `farplane/evals.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
@@ -53,18 +53,17 @@ use for ordinary app work versus QA. It also creates
 `tickets/TASK-0001/ticket.md` as the starter PRD handoff.
 
 The script also creates ignored `.farplane/` runtime folders:
-`.farplane/state/run-ledger.json`, `.farplane/state/steer-scheduler.json`,
-`.farplane/reports/`,
+`.farplane/state/run-ledger.json`, `.farplane/reports/`,
 `.farplane/evals/runs/`, and `.farplane/logs/`. Keep canonical framework
 config in tracked `farplane/`; use `.farplane/` for generated local state only.
 
 Bootstrap does not create live Codex automations by itself. After the substrate
 exists, use `horizon-advisor` to shape project goals when needed, then
 `goal-advisor` to compile the first executable frontier when a milestone is
-ready, then `automation-advisor` to activate exactly two recurring project
-loops: Pulse and Steer. Activation creates or reuses the dedicated loop threads,
-creates or updates the two Codex automations, and appends PM-visible thread IDs
-to `farplane/pm.json`.
+ready, then `automation-advisor` to activate the recurring project loops:
+Pulse, Daily Interval, and Weekly Interval by default. Activation creates or
+reuses the dedicated loop threads, creates or updates the Codex automations,
+and appends PM-visible thread IDs to `farplane/pm.json`.
 
 Optional code scaffold recipes live in `SKILL.md` under `Code Scaffold Recipes`.
 Use the selected recipe during init when requested, but stop for interactive
@@ -98,7 +97,6 @@ Then copy in:
 - `farplane/harness.md`
 - `farplane/goals.md`
 - `farplane/automations.md`
-- `farplane/steer.config.toml`
 - `farplane/bindings.md`
 - `farplane/evals.md`
 - `farplane/pm.json`
@@ -208,14 +206,13 @@ Those can come after one clean ticket run.
 - [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
 - [ ] `farplane/harness.md` exists or `harness_depth=none` is recorded
 - [ ] `farplane/goals.md` exists or `harness_depth=none` is recorded
-- [ ] `farplane/automations.md` exists and contains the exact Pulse and Steer prompt blocks to copy into Codex automations
-- [ ] `farplane/steer.config.toml` exists when the project still wants a small machine-readable Steer schedule helper
+- [ ] `farplane/automations.md` exists and contains the exact Pulse, Daily Interval, and Weekly Interval prompt blocks to copy into Codex automations
 - [ ] `farplane/bindings.md` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `farplane/evals.md` exists or `harness_depth=none` is recorded
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
 - [ ] Live automation activation, when requested, is handled by
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
-- [ ] `.farplane/state/run-ledger.json`, `.farplane/state/steer-scheduler.json`, `.farplane/reports/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local runtime state
+- [ ] `.farplane/state/run-ledger.json`, `.farplane/reports/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local runtime state
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist

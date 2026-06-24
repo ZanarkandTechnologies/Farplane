@@ -1,19 +1,19 @@
 window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
-      "common-chain": 21,
-      "markdown-ref": 286
+      "common-chain": 20,
+      "markdown-ref": 293
     },
-    "edges": 307,
-    "nodes": 91,
+    "edges": 313,
+    "nodes": 97,
     "sources": {
       "external": 3,
-      "local": 88
+      "local": 94
     },
     "tiers": {
       "1": 4,
-      "2": 34,
-      "3": 53
+      "2": 36,
+      "3": 57
     }
   },
   "edges": [
@@ -197,20 +197,6 @@ window.SKILL_GRAPH = {
       "source": "board-drain",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "common_chains.after",
-      "source": "board-drain",
-      "target": "weekly-strategy-analysis",
-      "target_ref": "weekly-strategy-analysis",
-      "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "board-drain",
-      "target": "weekly-strategy-analysis",
-      "target_ref": "weekly-strategy-analysis",
       "type": "markdown-ref"
     },
     {
@@ -923,6 +909,13 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "goal-advisor",
+      "target": "horizon-advisor",
+      "target_ref": "horizon-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "goal-advisor",
       "target": "optimize-with-human",
       "target_ref": "optimize-with-human",
       "type": "markdown-ref"
@@ -967,6 +960,13 @@ window.SKILL_GRAPH = {
       "source": "harness-creator",
       "target": "harness-advisor",
       "target_ref": "harness-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "harness-creator",
+      "target": "interval-update",
+      "target_ref": "interval-update",
       "type": "markdown-ref"
     },
     {
@@ -1030,13 +1030,6 @@ window.SKILL_GRAPH = {
       "source": "harness-creator",
       "target": "update-strategy",
       "target_ref": "update-strategy",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "harness-creator",
-      "target": "weekly-strategy-analysis",
-      "target_ref": "weekly-strategy-analysis",
       "type": "markdown-ref"
     },
     {
@@ -1166,18 +1159,32 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "label": "markdown-ref",
+      "source": "horizon-advisor",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "impl-plan",
+      "target": "deep-system-design",
+      "target_ref": "deep-system-design",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "impl-plan",
+      "target": "documentation",
+      "target_ref": "documentation",
+      "type": "markdown-ref"
+    },
+    {
       "label": "common_chains.after",
       "source": "impl-plan",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
       "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "impl-plan",
-      "target": "research",
-      "target_ref": "research",
-      "type": "markdown-ref"
     },
     {
       "label": "research#researchgap",
@@ -1261,6 +1268,34 @@ window.SKILL_GRAPH = {
       "source": "ingest-content",
       "target": "visual-design",
       "target_ref": "visual-design",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "knowledge-tidier",
+      "target": "documentation",
+      "target_ref": "documentation",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "knowledge-tidier",
+      "target": "review",
+      "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "knowledge-tidier",
+      "target": "skill-maintenance",
+      "target_ref": "skill-maintenance",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "knowledge-tidier",
+      "target": "update-memory",
+      "target_ref": "update-memory",
       "type": "markdown-ref"
     },
     {
@@ -1392,8 +1427,8 @@ window.SKILL_GRAPH = {
     {
       "label": "common_chains.after",
       "source": "notion-task-field-fill",
-      "target": "weekly-strategy-analysis",
-      "target_ref": "weekly-strategy-analysis",
+      "target": "interval-update",
+      "target_ref": "interval-update",
       "type": "common-chain"
     },
     {
@@ -1944,6 +1979,20 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
+      "source": "task-case-design",
+      "target": "eval",
+      "target_ref": "eval",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "task-case-design",
+      "target": "testing",
+      "target_ref": "testing",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
       "source": "testing",
       "target": "advise",
       "target_ref": "advise",
@@ -1996,13 +2045,6 @@ window.SKILL_GRAPH = {
       "source": "update-strategy",
       "target": "review",
       "target_ref": "review",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "update-strategy",
-      "target": "weekly-strategy-analysis",
-      "target_ref": "weekly-strategy-analysis",
       "type": "markdown-ref"
     },
     {
@@ -2167,7 +2209,7 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     }
   ],
-  "generated_at": "2026-06-19T18:20:44+00:00",
+  "generated_at": "2026-06-24T03:11:18+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -2178,7 +2220,7 @@ window.SKILL_GRAPH = {
       "label": "advise",
       "methods": [],
       "path": "skills/advise/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 1
@@ -2192,7 +2234,7 @@ window.SKILL_GRAPH = {
       "label": "prototyping",
       "methods": [],
       "path": "skills/prototyping/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 1
@@ -2206,7 +2248,7 @@ window.SKILL_GRAPH = {
       "label": "reference-grounding",
       "methods": [],
       "path": "skills/reference-grounding/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 1
@@ -2220,7 +2262,7 @@ window.SKILL_GRAPH = {
       "label": "telegram-message",
       "methods": [],
       "path": "skills/telegram-message/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 1
@@ -2255,7 +2297,7 @@ window.SKILL_GRAPH = {
     },
     {
       "description": "Turn an app, skill, prompt, or workflow claim into adversarial QA cases, tester evidence, critique, and rerun guidance.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "",
       "has_checklist": true,
       "id": "agent-qa-test",
@@ -2267,7 +2309,7 @@ window.SKILL_GRAPH = {
         "agent-qa-test:regression"
       ],
       "path": "skills/agent-qa-test/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 2
@@ -2323,6 +2365,20 @@ window.SKILL_GRAPH = {
       "label": "brainstorm",
       "methods": [],
       "path": "skills/brainstorm/SKILL.md",
+      "qa_checklist": "",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 2
+    },
+    {
+      "description": "Resolve a budget-aware skill call into concrete execution template refs, parameters, and guardrails when effort changes workflow shape.",
+      "eval": "eval_task.json",
+      "group": "",
+      "has_checklist": true,
+      "id": "budget-advisor",
+      "label": "budget-advisor",
+      "methods": [],
+      "path": "skills/budget-advisor/SKILL.md",
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
@@ -2458,7 +2514,7 @@ window.SKILL_GRAPH = {
       "tier": 2
     },
     {
-      "description": "Turn durable doc-writing or doc-revision work into grounded, concise, human-usable docs with consistency checks and review proof.",
+      "description": "Turn durable doc-writing or doc-revision work into grounded, metadata-aware, human-usable docs with doc-quality checks.",
       "eval": "",
       "group": "",
       "has_checklist": true,
@@ -2468,7 +2524,7 @@ window.SKILL_GRAPH = {
         "documentation:doc-quality"
       ],
       "path": "skills/documentation/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 2
@@ -2669,6 +2725,20 @@ window.SKILL_GRAPH = {
       "tier": 2
     },
     {
+      "description": "Turn behavior risks, failures, and contracts into high-quality test or eval task cases with coverage, oracle, and proof-surface decisions.",
+      "eval": "eval_task.json",
+      "group": "",
+      "has_checklist": true,
+      "id": "task-case-design",
+      "label": "task-case-design",
+      "methods": [],
+      "path": "skills/task-case-design/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 2
+    },
+    {
       "description": "Turn a testing need into the right Farplane testing guidance, backpressure, and domain-specific verification path.",
       "eval": "",
       "group": "",
@@ -2698,14 +2768,14 @@ window.SKILL_GRAPH = {
     },
     {
       "description": "Turn expected UI specs and screenshots into observed reports, layout assertions, diffs, fix plans, and evidence artifacts.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "",
       "has_checklist": true,
       "id": "visual-qa",
       "label": "visual-qa",
       "methods": [],
       "path": "skills/visual-qa/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 2
@@ -2733,6 +2803,20 @@ window.SKILL_GRAPH = {
       "label": "agent-testability-plan",
       "methods": [],
       "path": "skills/agent-testability-plan/SKILL.md",
+      "qa_checklist": "",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "description": "Design or revise Farplane Codex automations using reviewable automations.md prompts and generic Pulse/Interval skill calls.",
+      "eval": "",
+      "group": "harness",
+      "has_checklist": true,
+      "id": "automation-advisor",
+      "label": "automation-advisor",
+      "methods": [],
+      "path": "skills/automation-advisor/SKILL.md",
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
@@ -2824,7 +2908,7 @@ window.SKILL_GRAPH = {
     },
     {
       "description": "Turn a new-project intake into a Farplane project with docs, tickets, runtime commands, QA gates, harness config, and reusable planning/build prompts.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "coding",
       "has_checklist": true,
       "id": "deep-init-project",
@@ -2918,14 +3002,14 @@ window.SKILL_GRAPH = {
         "eval:consolidate"
       ],
       "path": "skills/eval/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "skills/eval/templates/viewer-react",
       "source": "local",
       "tier": 3
     },
     {
       "description": "Turn a FarplaneRunEnvelope into policy validation, compute selection, skill routing, and a filesystem ProofPacket.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "harness",
       "has_checklist": true,
       "id": "farplane-invocation",
@@ -3004,7 +3088,7 @@ window.SKILL_GRAPH = {
       "label": "goal-advisor",
       "methods": [],
       "path": "skills/goal-advisor/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 3
@@ -3038,6 +3122,20 @@ window.SKILL_GRAPH = {
       "tier": 3
     },
     {
+      "description": "Turn ambiguous long-horizon intent into goals.md, KPI trees, feedback-sized projects, and Goal Advisor handoffs.",
+      "eval": "",
+      "group": "harness",
+      "has_checklist": true,
+      "id": "horizon-advisor",
+      "label": "horizon-advisor",
+      "methods": [],
+      "path": "skills/horizon-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3
+    },
+    {
       "description": "Turn image generation or editing requests into inference.sh belt image pipeline outputs when Codex-native imagegen is not enough.",
       "eval": "",
       "group": "content-image",
@@ -3052,15 +3150,15 @@ window.SKILL_GRAPH = {
       "tier": 3
     },
     {
-      "description": "Turn one ticket into a before/after implementation plan with code maps, ordered edits, verification, and audit notes.",
-      "eval": "",
+      "description": "Turn one selected coding ticket or material implementation request into an approval-ready ticket plan, test strategy, and proof contract.",
+      "eval": "eval_task.json",
       "group": "coding",
       "has_checklist": true,
       "id": "impl-plan",
       "label": "impl-plan",
       "methods": [],
       "path": "skills/impl-plan/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 3
@@ -3074,6 +3172,34 @@ window.SKILL_GRAPH = {
       "label": "ingest-content",
       "methods": [],
       "path": "skills/ingest-content/SKILL.md",
+      "qa_checklist": "",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "description": "Run one Farplane interval automation: review the past window, write a dated report, plan the next window, and emit Pulse or Goal Advisor guidance.",
+      "eval": "eval_task.json",
+      "group": "harness",
+      "has_checklist": true,
+      "id": "interval-update",
+      "label": "interval-update",
+      "methods": [],
+      "path": "skills/interval-update/SKILL.md",
+      "qa_checklist": "",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3
+    },
+    {
+      "description": "Turn bloated knowledge artifacts into ranked keep/cut/reroute decisions when docs, memory, or context surfaces need pruning.",
+      "eval": "eval_task.json",
+      "group": "project-ops",
+      "has_checklist": true,
+      "id": "knowledge-tidier",
+      "label": "knowledge-tidier",
+      "methods": [],
+      "path": "skills/knowledge-tidier/SKILL.md",
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",
@@ -3227,15 +3353,29 @@ window.SKILL_GRAPH = {
       "tier": 3
     },
     {
+      "description": "Run the Farplane fast idle loop: reconcile outcomes, use reasoning plus bandit state to select one action, spawn a worker when useful, and update decision ledgers.",
+      "eval": "eval_task.json",
+      "group": "harness",
+      "has_checklist": true,
+      "id": "pulse-update",
+      "label": "pulse-update",
+      "methods": [],
+      "path": "skills/pulse-update/SKILL.md",
+      "qa_checklist": "",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3
+    },
+    {
       "description": "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Stop-hook gating.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "coding",
       "has_checklist": true,
       "id": "qa",
       "label": "qa",
       "methods": [],
       "path": "skills/qa/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 3
@@ -3470,20 +3610,6 @@ window.SKILL_GRAPH = {
       "label": "visual-design",
       "methods": [],
       "path": "skills/visual-design/SKILL.md",
-      "qa_checklist": "",
-      "skill_ui": "",
-      "source": "local",
-      "tier": 3
-    },
-    {
-      "description": "Turn weekly plans, tasks, meetings, people signals, Codex threads, and opportunities into priorities, due dates, and drift analysis.",
-      "eval": "",
-      "group": "personal-ops",
-      "has_checklist": true,
-      "id": "weekly-strategy-analysis",
-      "label": "weekly-strategy-analysis",
-      "methods": [],
-      "path": "skills/weekly-strategy-analysis/SKILL.md",
       "qa_checklist": "",
       "skill_ui": "",
       "source": "local",

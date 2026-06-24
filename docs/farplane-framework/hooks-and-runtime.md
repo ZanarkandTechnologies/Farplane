@@ -3,7 +3,7 @@ title: "Farplane Hooks and Runtime"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 framework_template_version: "0.2.0"
 tags:
   - farplane
@@ -46,9 +46,8 @@ Runtime state lives under `.farplane/` when it is generated, mutable, local, or
 too noisy for tracked config.
 
 ```text
-.farplane/state/steer-scheduler.json
 .farplane/reports/pulse/<timestamp>.md
-.farplane/reports/steer/<job>/<timestamp>.md
+.farplane/reports/interval/<interval_id>/<timestamp>.md
 .farplane/automation/decisions.jsonl
 .farplane/automation/rewards.jsonl
 .farplane/automation/action-outcomes.jsonl
@@ -59,9 +58,8 @@ too noisy for tracked config.
 
 Tracked framework config stays under `farplane/`. The important separation is:
 
-- `farplane/steer.config.toml` stores human-owned cadence and prompt intent.
-- `.farplane/state/steer-scheduler.json` stores mutable due times and last
-  report pointers.
+- `farplane/automations.md` stores human-owned Codex prompt text.
+- Codex automation records store cadence and runtime automation IDs.
 - `farplane/pm.json` groups PM-visible thread IDs for UI display.
 - automation runtime IDs live in the Codex app automation store, not in
   `farplane/pm.json`.
@@ -93,4 +91,3 @@ Hook and runtime nodes should use these tags:
 
 These tags let the lifecycle graph show hook boundaries without implying that
 hooks are a central orchestrator.
-

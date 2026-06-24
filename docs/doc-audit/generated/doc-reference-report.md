@@ -15,72 +15,74 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-19T18:20:44+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-24T03:11:19+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
 
 The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
-- All inbound refs: `13`
-- Skill-origin refs: `5`
+- All inbound refs: `14`
+- Skill-origin refs: `6`
 - Cleanup rule: keep this as the canonical equation/model surface and point
   workflow docs back to it instead of duplicating the algebra.
 
 ## Counts
 
-- Scanned files: `1075`
-- Nodes: `790`
-- Edges: `3078`
-- Unresolved local-looking refs: `866`
+- Scanned files: `1186`
+- Nodes: `873`
+- Edges: `3589`
+- Unresolved local-looking refs: `1029`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/LESSONS.md` | 54 | 25 |
-| `docs/specs/README.md` | 53 | 26 |
-| `docs/MEMORY.md` | 47 | 18 |
-| `docs/TROUBLES.md` | 45 | 20 |
-| `docs/HISTORY.md` | 37 | 11 |
-| `docs/specs/self-improvement-contracts.md` | 32 | 25 |
-| `docs/skills/README.md` | 30 | 13 |
-| `docs/skills/registry.jsonl` | 29 | 15 |
-| `docs/features/registry.jsonl` | 27 | 9 |
-| `docs/prd.md` | 23 | 20 |
-| `docs/skills/best-practices.md` | 21 | 15 |
-| `docs/skills/system.md` | 19 | 13 |
-| `docs/sources/registry.jsonl` | 18 | 6 |
+| `docs/LESSONS.md` | 60 | 29 |
+| `docs/MEMORY.md` | 58 | 25 |
+| `docs/specs/README.md` | 55 | 26 |
+| `docs/TROUBLES.md` | 51 | 24 |
+| `docs/specs/self-improvement-contracts.md` | 51 | 44 |
+| `docs/HISTORY.md` | 41 | 14 |
+| `docs/skills/README.md` | 33 | 15 |
+| `docs/skills/registry.jsonl` | 33 | 19 |
+| `docs/features/registry.jsonl` | 26 | 8 |
+| `docs/specs/goal-loop-contract.md` | 25 | 13 |
+| `docs/prd.md` | 23 | 19 |
+| `docs/skills/best-practices.md` | 22 | 16 |
+| `docs/bootstrap-brief.md` | 22 | 17 |
+| `docs/skills/system.md` | 20 | 14 |
+| `docs/TASTE.md` | 19 | 14 |
+| `docs/specs/filesystem-lifecycle.md` | 19 | 9 |
 | `docs/specs/harness-techniques.md` | 18 | 2 |
-| `docs/TASTE.md` | 18 | 14 |
-| `docs/specs/goal-loop-contract.md` | 18 | 9 |
+| `docs/sources/registry.jsonl` | 17 | 5 |
+| `docs/fundamentals/harness-engineering-doctrine.md` | 15 | 7 |
 | `docs/specs/invocation-and-adapters.md` | 15 | 2 |
-| `docs/fundamentals/harness-engineering-doctrine.md` | 13 | 5 |
-| `docs/fundamentals/harness-algebra.md` | 13 | 5 |
-| `docs/review/rubrics/review-rubric-index.md` | 12 | 6 |
 
 ## Spec Status Preview
 
 | Spec | All refs | Skill refs | Suggested status |
 | --- | --- | --- | --- |
 | `docs/specs/AGENTS.md` | 1 | 0 | keep active |
-| `docs/specs/README.md` | 53 | 26 | keep active |
+| `docs/specs/README.md` | 55 | 26 | keep active |
 | `docs/specs/adaptive-backoff.md` | 7 | 6 | keep active |
 | `docs/specs/agent-testability-surfaces.md` | 4 | 3 | keep active |
 | `docs/specs/context-and-handoff-policy.md` | 7 | 4 | keep active |
-| `docs/specs/doc-governance.md` | 8 | 0 | keep active |
-| `docs/specs/filesystem-lifecycle.md` | 8 | 1 | keep active |
-| `docs/specs/first-principles-planning.md` | 8 | 6 | keep active |
-| `docs/specs/goal-loop-contract.md` | 18 | 9 | keep active |
+| `docs/specs/doc-governance.md` | 12 | 4 | keep active |
+| `docs/specs/filesystem-lifecycle.md` | 19 | 9 | keep active |
+| `docs/specs/first-principles-planning.md` | 6 | 4 | keep active |
+| `docs/specs/goal-loop-contract.md` | 25 | 13 | keep active |
 | `docs/specs/harness-techniques.md` | 18 | 2 | keep active |
 | `docs/specs/inspiration-vault.md` | 1 | 0 | keep active |
 | `docs/specs/invocation-and-adapters.md` | 15 | 2 | keep active |
+| `docs/specs/nested-pm-projects.md` | 0 | 0 | keep active |
 | `docs/specs/product-convergence-plan.md` | 0 | 0 | keep active |
-| `docs/specs/program-notation.md` | 11 | 7 | keep active |
+| `docs/specs/program-notation.md` | 10 | 7 | keep active |
 | `docs/specs/review-gates.md` | 7 | 2 | keep active |
-| `docs/specs/self-improvement-contracts.md` | 32 | 25 | keep active |
-| `docs/specs/spec-authoring-contract.md` | 6 | 3 | keep active |
+| `docs/specs/self-improvement-contracts.md` | 51 | 44 | keep active |
+| `docs/specs/spec-authoring-contract.md` | 5 | 2 | keep active |
 | `docs/specs/spec-first-execution-loop.md` | 5 | 0 | keep active |
+| `docs/specs/steer-pulse-automation.md` | 12 | 6 | keep active |
 
 ## Suggested Global Docs Bundle
 
@@ -115,10 +117,15 @@ can still be worth keeping.
 | `docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md` | review before archive or merge |
 | `docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md` | review before archive or merge |
 | `docs/automation-previews/2026-06-15-pm-ticket-update-automation-preview.md` | review before archive or merge |
+| `docs/automation-previews/personal-weekly-steer-extension/lanes/context-bundle.md` | review before archive or merge |
+| `docs/automation-previews/personal-weekly-steer-extension/lanes/lane-codex-drift.md` | review before archive or merge |
+| `docs/automation-previews/personal-weekly-steer-extension/lanes/lane-meeting-people.md` | review before archive or merge |
+| `docs/automation-previews/personal-weekly-steer-extension/lanes/lane-opportunity-scan.md` | review before archive or merge |
+| `docs/automation-previews/personal-weekly-steer-extension/lanes/lane-plan-progress.md` | review before archive or merge |
 | `docs/features/AGENTS.md` | keep if loaded by directory convention |
-| `docs/futureideas/autonomous-unit-filesystem.md` | review before archive or merge |
 | `docs/private-tool-context.md` | review before archive or merge |
 | `docs/sources/AGENTS.md` | keep if loaded by directory convention |
+| `docs/specs/nested-pm-projects.md` | review before archive or merge |
 | `docs/specs/product-convergence-plan.md` | review before archive or merge |
 
 ## Next Cleanup Pass

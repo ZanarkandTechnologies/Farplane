@@ -59,9 +59,9 @@ project_harness_creator(project_idea, values?, priorities?, mode_presets?, conte
    + proposed_tickets
    + current_milestone
    + goal_advisor_handoff
-state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, farplane/goals.md, farplane/steer.config.toml, and farplane/bindings.md when present, current external research only when domain truth matters); writes(project-harness.md, proposed tickets, farplane/steer.config.toml, and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
+state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, farplane/goals.md, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(project-harness.md, proposed tickets, farplane/automations.md, and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
 gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_providers_honest; existing_tickets_checked_first; missing_systems_named; blockers_ticketed; side_effect_gates_named; current_milestone_named; goal_advisor_handoff_ready
-routes: deep-init-project | research:* | ingest-content | harness-advisor | skill-creator | goal-advisor | optimize-with-human | weekly-strategy-analysis | review | relevant domain skill
+routes: deep-init-project | research:* | ingest-content | harness-advisor | skill-creator | goal-advisor | optimize-with-human | interval-update | review | relevant domain skill
 fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates skills before checking existing systems; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
 ```
 
@@ -172,20 +172,21 @@ the current milestone is selected, and `review` for material readiness.
      `ticket` node with `type: unblock` instead of expanding the harness
      Markdown.
 - [ ] 6. Define the Scrum-style operating cadence.
-   - [ ] Create or update tracked `farplane/steer.config.toml`; keep ignored
+   - [ ] Create or update tracked `farplane/automations.md`; keep ignored
      `.farplane/` for runtime state, reports, eval runs, and logs.
    - [ ] Create or update tracked `farplane/bindings.md` for project-specific
      external coordinates needed by skills.
-   - [ ] Default to two project loops first: `pulse-update` for bounded
-     immediate actions and `steer-update` for scheduled planning, drift checks,
-     strategy/backlog/memory/skill maintenance, and long-horizon rollups.
+   - [ ] Default to explicit project loops first: `pulse-update` for bounded
+     immediate actions plus daily and weekly `interval-update` automations for
+     reporting, drift checks, strategy/backlog/memory/skill maintenance, and
+     long-horizon rollups.
    - [ ] Keep ticket selection inside `pulse-update`: fetch local tickets
      first, skip blocked or approval-required work, rank for priority and
      compounding ROI, run `impl-plan` if needed, then use `goal-advisor` to
      execute one ticket as far as possible.
-   - [ ] `steer-update`: group due scheduled planning actions through
-     `farplane/steer.config.toml`, reuse fresh reports when state points at
-     them, and produce dated Steer reports plus local ticket deltas.
+   - [ ] `interval-update`: report on a bounded review window, plan the next
+     bounded window, and produce dated interval reports plus local ticket
+     deltas or Goal Advisor handoffs.
    - [ ] When horizon work can split safely, express subagent lanes as
      `delegate(context_ref, task_prompt, skills?, output?)`; `context_ref` must
      be a file, ticket, Goal Packet, or artifact path.
@@ -225,8 +226,9 @@ the current milestone is selected, and `review` for material readiness.
      to make the handoff explicit.
    - [ ] Use [goal-advisor](../goal-advisor/SKILL.md) only after the milestone,
      source files, metric provider, drift policy, and stop conditions are known.
-   - [ ] Use [optimize-with-human](../optimize-with-human/SKILL.md) when
-     Kenji's labels, rankings, approval, or taste are the honest early metric.
+   - [ ] Use [optimize-with-human](../optimize-with-human/SKILL.md) when the
+     operator's labels, rankings, approval, or taste are the honest early
+     metric.
 - [ ] 10. Finish with proof and review.
    - [ ] Produce the filled harness packet or state why the task should remain
      template-only.
@@ -301,11 +303,12 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
   before asking `goal-advisor` to compile the selected milestone.
 - [deep-init-project](../deep-init-project/SKILL.md) - use when a project lacks
   standard repo, ticket, QA, feedback, or bootstrap systems.
-- [weekly-strategy-analysis](../weekly-strategy-analysis/SKILL.md) - use when a
-  horizon strategy refresh needs Kenji-specific Farplane project signals.
+- [interval-update](../interval-update/SKILL.md) - scheduled report-then-plan primitive for
+  project-specific strategy refreshes configured by automation prompts or
+  project docs.
 - [update-strategy](../update-strategy/SKILL.md) - generic project strategy
-  refresh primitive for horizon updates.
+  refresh primitive for interval updates.
 - [update-memory](../update-memory/SKILL.md) - generic project memory refresh
-  primitive for horizon updates.
+  primitive for interval updates.
 - [examples/faceless-ai-channel.md](examples/faceless-ai-channel.md) - pilot
   example for the first proof case.

@@ -1,17 +1,17 @@
 [
   {
-    "id": "deep_init_project_steer_pulse_01",
-    "title": "Deep init emits Steer/Pulse framework config",
+    "id": "deep_init_project_pulse_interval_01",
+    "title": "Deep init emits Pulse and Interval automation prompts",
     "query": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
     "reference_points": [
-      "Creates farplane/automations.md as the reviewable prompt source and keeps farplane/steer.config.toml only as an optional compact schedule helper",
-      "Keeps each Steer job to id, cadence, and prompt rather than duplicating workflow inputs and outputs",
+      "Creates farplane/automations.md as the reviewable prompt source",
       "Uses Pulse for fast bounded action selection",
-      "Uses Steer for scheduled planning jobs and drift checks",
-      "Keeps mutable next_due_at, last_run_at, and last_report in .farplane/state/steer-scheduler.json",
-      "Uses date-stamped reports rather than latest.md as the canonical report path"
+      "Uses Daily Interval for last-24h reporting and next-24h planning",
+      "Uses Weekly Interval for goals drift checks and next-week planning",
+      "Does not create farplane/steer.config.toml or .farplane/state/steer-scheduler.json",
+      "Uses date-stamped interval reports rather than latest.md as the canonical report path"
     ],
-    "tags": ["deep-init-project", "steer", "pulse"]
+    "tags": ["deep-init-project", "pulse", "interval-update"]
   },
   {
     "id": "deep_init_project_ticket_selection_inside_pulse_01",
@@ -21,19 +21,19 @@
       "Pulse selects at most one bounded action per beat",
       "Local ready and unblocked tickets are preferred over blocked or approval-required work",
       "Substantial implementation routes through goal-advisor or an implementation handoff",
-      "No separate ticket-drainer automation is required"
+      "No separate ticket-drainer automation is required because Pulse owns fast ticket selection"
     ],
     "tags": ["deep-init-project", "pulse", "ticket-selection"]
   },
   {
     "id": "deep_init_project_automation_activation_path_01",
     "title": "Deep init routes live automation activation to automation-advisor",
-    "query": "A user initializes a new Farplane project and asks whether it creates two threads and two automations. What should deep-init-project do end-to-end?",
+    "query": "A user initializes a new Farplane project and asks whether it creates threads and automations. What should deep-init-project do end-to-end?",
     "reference_points": [
-      "Bootstrap creates files, steer config, scheduler state, tickets, and pm manifest",
+      "Bootstrap creates files, tickets, and pm manifest, but not live Codex automations by default",
       "Does not create live Codex threads or automations unless activation is requested",
       "Routes activation to automation-advisor",
-      "Activation creates or reuses exactly two loops: Pulse and Steer",
+      "Activation creates or reuses the loops named in farplane/automations.md, commonly Pulse, Daily Interval, and Weekly Interval",
       "Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store",
       "Reports needs_goal_intake or needs_automation_setup when blocked"
     ],

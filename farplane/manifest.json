@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "1.2.1",
+  "spec_version": "1.3.0",
   "template_uses": {
-    "farplane-framework": "1.2.1"
+    "farplane-framework": "1.3.0"
   },
   "standard": {
     "tracked": [
@@ -14,7 +14,6 @@
       "farplane/harness.md",
       "farplane/goals.md",
       "farplane/automations.md",
-      "farplane/steer.config.toml",
       "farplane/bindings.md",
       "farplane/evals.md",
       "docs/bootstrap-brief.md",
@@ -36,7 +35,6 @@
     "ignored": [
       ".farplane/README.md",
       ".farplane/state/run-ledger.json",
-      ".farplane/state/steer-scheduler.json",
       ".farplane/reports/",
       ".farplane/evals/runs/",
       ".farplane/logs/"

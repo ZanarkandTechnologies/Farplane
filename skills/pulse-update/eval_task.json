@@ -49,15 +49,16 @@
     "tags": ["pulse-update", "reports"]
   },
   {
-    "id": "pulse_no_ticket_routes_to_plan",
-    "title": "Pulse routes to plan when no ticket can advance",
+    "id": "pulse_no_ticket_uses_action_tree",
+    "title": "Pulse uses action tree when no ticket can advance",
     "query": "Pulse has no forced maintenance action and no proceedable local ticket. What should it do?",
     "reference_points": [
       "Does not invent strategy in the Pulse context",
-      "Routes to plan for a compact next-plan artifact or ticket-creation handoff",
+      "Chooses one narrow refill or maintenance arm from the action tree",
+      "Treats consult goal-advisor as one eligible arm only when goals or the next milestone are unclear",
       "Records the no-ticket reason",
       "Writes decision and report state"
     ],
-    "tags": ["pulse-update", "plan", "no-ticket"]
+    "tags": ["pulse-update", "action-tree", "no-ticket"]
   }
 ]

@@ -140,7 +140,7 @@ Required projections:
 
 - `project_initialization`: operator intent to initialized Farplane substrate,
   goal intake, and first Goal Advisor handoff.
-- `automation_activation`: reviewed automation prompts to Pulse and Steer
+- `automation_activation`: reviewed automation prompts to Pulse and Interval
   thread/automation activation and PM UI grouping.
 - `ticket_goal_execution`: selected ticket to implementation plan, Goal
   Packet, native Goal, QA/demo/review proof, and closeout.

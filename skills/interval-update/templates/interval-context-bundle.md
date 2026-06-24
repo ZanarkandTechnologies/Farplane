@@ -1,19 +1,22 @@
-# Weekly PM Context Bundle
+# Interval Context Bundle
 
 Generated: <timestamp>
 Project: <project>
 Review window: <start> to <end> <timezone>
+Planning window: <start> to <end> <timezone>
+Report profile: <daily_interval | weekly_interval | custom>
 
 ## Source Status
 
 | Source | Status | Freshness | Notes |
 | --- | --- | --- | --- |
 | Goals portfolio |  |  |  |
-| Automation manifest |  |  |  |
 | Run ledger |  |  |  |
-| Weekly reports |  |  |  |
-| Daily PM reports |  |  |  |
-| PM heartbeat outcomes |  |  |  |
+| Parent plan / goals |  |  |  |
+| Daily interval reports |  |  |  |
+| Prior interval reports |  |  |  |
+| Pulse outcomes |  |  |  |
+| Worker threads |  |  |  |
 | Ticket board |  |  |  |
 | Memory docs |  |  |  |
 | Metrics refs |  |  |  |
@@ -41,9 +44,9 @@ Review window: <start> to <end> <timezone>
 | Ticket / work item | State | Impact | Carry / pause / kill / split | Evidence |
 | --- | --- | --- | --- | --- |
 
-## Daily And Heartbeat Signals
+## Planning Signals
 
-| Signal | What happened | Strategic implication | Evidence |
+| Signal | What happened | Planning implication | Evidence |
 | --- | --- | --- | --- |
 
 ## External / Opportunity Signals

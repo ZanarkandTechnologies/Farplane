@@ -3,7 +3,7 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 framework_template_version: "0.2.0"
 source_of_truth:
   - docs/farplane-framework/lifecycle.md
@@ -14,7 +14,6 @@ source_of_truth:
   - farplane/harness.md
   - farplane/goals.md
   - farplane/automations.md
-  - farplane/steer.config.toml
   - farplane/bindings.md
   - farplane/evals.md
   - farplane/pm.json
@@ -28,17 +27,17 @@ source_of_truth:
 
 Farplane's project framework is the standard shape for an agent-run project:
 tracked config, visible tickets, durable docs, reusable skills, proof surfaces,
-and two recurring Codex automation loops.
+and recurring Codex automation loops.
 
 ```text
-project = files + tickets + skills + goals + bindings + Steer/Pulse + runtime reports
+project = files + tickets + skills + goals + bindings + Pulse/Interval + runtime reports
 ```
 
 ## Start Here
 
 Use [Lifecycle](lifecycle.md) as the friendly end-to-end surface. It explains
 how a project moves from initialization into Horizon, Goal Advisor, ticketed
-Goal execution, Pulse/Steer automations, hooks, drains, and memory compression.
+Goal execution, Pulse/Interval automations, hooks, drains, and memory compression.
 
 Use [Graph Contract](graph-contract.md) when the lifecycle needs to be consumed
 by tools or the Farplane UI. It defines the node, edge, confidence, and finite
@@ -63,7 +62,6 @@ PROJECT_ROOT/
     harness.md
     goals.md
     automations.md
-    steer.config.toml
     bindings.md
     evals.md
     pm.json
@@ -91,7 +89,7 @@ PROJECT_ROOT/
 
   .farplane/
     state/run-ledger.json
-    state/steer-scheduler.json
+    automation/
     reports/
     evals/runs/
     logs/
@@ -127,7 +125,6 @@ deep_init_project(project_root?, project_idea?, repo_shape?, profile?, harness_d
    + farplane/harness.md
    + farplane/goals.md
    + farplane/automations.md
-   + farplane/steer.config.toml
    + farplane/bindings.md
    + farplane/evals.md
    + farplane/pm.json?
@@ -136,28 +133,27 @@ deep_init_project(project_root?, project_idea?, repo_shape?, profile?, harness_d
 
 `harness-creator` fills or refines the operating program: mission, values,
 goals, KPIs, feedback loops, missing skills, current milestone, and automation
-setup. It should produce Steer/Pulse-ready project harness output rather than a
+setup. It should produce Pulse/Interval-ready project harness output rather than a
 separate automation manifest.
 
 ## Automation Model
 
-Farplane projects use two recurring automation loops:
+Farplane projects use explicit recurring automation loops:
 
 ```text
 pulse_update(...)  # fast idle/action loop
-steer_update(...)  # scheduled planning loop
+interval_update(...)  # scheduled report-then-plan loop
 ```
 
 Pulse is the actor loop. It wakes frequently, reconciles outcomes, selects one
 bounded action, optionally hands off work, and records decision/reward state.
 
-Steer is the planning loop. Its live Codex prompt is reviewed in
-`farplane/automations.md`. When the project uses the optional helper config,
-it reads `farplane/steer.config.toml`, checks cached `next_due_at` values in
-`.farplane/state/steer-scheduler.json`, runs due jobs, writes date-stamped
-reports, and advances scheduler state.
+Daily Interval and Weekly Interval are planning loops. Their live Codex prompts
+are reviewed in `farplane/automations.md`; Codex automation records own their
+cadence. They call `interval-update`, write date-stamped reports, check drift,
+and produce Pulse guidance or Goal Advisor handoffs.
 
-The full contract lives in [Steer and Pulse Automation](../specs/steer-pulse-automation.md).
+The full contract lives in [Pulse and Interval Automation](../specs/steer-pulse-automation.md).
 
 ## Automation Authoring
 
@@ -165,14 +161,14 @@ Use `automation-advisor` when creating or revising live Codex automations. The
 advisor owns prompt templates and config guidance; it is not a compiler.
 
 ```text
-automation_advisor(intent, project_refs, current_automation?, steer_config?)
-  -> prompt_delta + config_delta? + proof_checklist
+automation_advisor(intent, project_refs, current_automation?)
+  -> prompt_delta + proof_checklist
 ```
 
 Live Codex automations should load their owning skills:
 
 - `skills/pulse-update/SKILL.md`
-- `skills/steer-update/SKILL.md`
+- `skills/interval-update/SKILL.md`
 
 ## Reports
 
@@ -180,7 +176,7 @@ Reports are date-stamped records:
 
 ```text
 .farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
-.farplane/reports/steer/<job>/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md
 ```
 
 State files may store `last_report` pointers. Do not make `latest.md` the

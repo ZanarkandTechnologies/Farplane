@@ -201,8 +201,8 @@ def canonical_ref(value: str) -> tuple[str, str, str, list[str]]:
     pathish = pathish.replace("<YYYY-MM-DDTHHMMSSZ>", "<timestamp>")
     if pathish.startswith(".farplane/reports/pulse/"):
         pathish = ".farplane/reports/pulse/<timestamp>.md"
-    if pathish.startswith(".farplane/reports/steer/"):
-        pathish = ".farplane/reports/steer/<job>/<timestamp>.md"
+    if pathish.startswith(".farplane/reports/interval/"):
+        pathish = ".farplane/reports/interval/<interval_id>/<timestamp>.md"
     if pathish.startswith("tickets/TASK-"):
         if "artifacts" in pathish:
             pathish = "tickets/TASK-*/artifacts/"
@@ -492,7 +492,7 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "skill:horizon-advisor",
         "skill:goal-advisor",
         "skill:pulse-update",
-        "skill:steer-update",
+        "skill:interval-update",
         "skill:update-memory",
         "skill:skill-maintenance",
         "skill:learning-drain",
@@ -500,7 +500,6 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "skill:knowledge-tidier",
         "file:farplane/goals.md",
         "file:farplane/pm.json",
-        "state:.farplane/state/steer-scheduler.json",
         "hook:UserPromptSubmit",
         "hook:Stop",
     ]

@@ -1,6 +1,6 @@
 ---
 kind: project-automations
-framework_template_version: "0.2.0"
+framework_template_version: "0.3.0"
 updated_at: YYYY-MM-DD
 owner: automation-advisor
 ---
@@ -11,9 +11,9 @@ This file stores the exact Codex automation prompt blocks for the project.
 Copy the prompt blocks into the Codex app automation records.
 
 Skills stay generic. Project-specific intent, cadence, policy, and workflow
-overrides live here as plain operational prompts. Canonical files, state paths,
-report paths, ticket boards, and PM thread grouping are resolved by the
-Farplane project context and the called skills unless explicitly overridden.
+extensions live here as plain operational prompts. Canonical files, report
+paths, ticket boards, and PM thread grouping are resolved by the Farplane
+project context and the called skills unless explicitly extended.
 
 ## Pulse
 
@@ -26,12 +26,15 @@ Target thread: `<pulse-thread-id>`
 ```text
 You are the Project Pulse automation.
 
-Your job is to keep the project moving without turning the fast loop into a
-strategy meeting.
+Call `pulse-update` for this project.
 
-On each beat, call `pulse-update` for this project:
+Use the skill's default Farplane refs for tickets, interval guidance, action
+state, reward state, reports, and PM thread grouping. Only pass extensions when
+this project has extra action arms, custom gates, or extra context files.
+
+Run one Pulse beat:
 1. Reconcile previous worker outcomes and update reward memory.
-2. Read the board, action tree, recent Steer guidance, and bandit state.
+2. Read the board, action tree, recent interval guidance, and bandit state.
 3. Use reasoning plus bandit state to choose exactly one bounded action.
 4. Valid action arms include: pick a ready ticket, split an oversized ticket,
    clarify a blocker, create a small prep ticket, run QA/eval, update stale
@@ -44,49 +47,62 @@ On each beat, call `pulse-update` for this project:
    possible arm when goals or the next milestone are unclear.
 8. Write decision, reward, spawned-thread, and report state.
 
-Do not perform drift review, scrum reflection, or strategy replanning. Steer
-owns those.
+Do not perform drift review, scrum reflection, or strategy replanning.
 ```
 
-## Steer
+## Daily Interval
 
-Automation id: `<steer-automation-id>`
-Name: `Project Steer`
+Automation id: `<daily-interval-automation-id>`
+Name: `Project Daily Interval`
 Kind: `heartbeat`
 RRULE: `FREQ=DAILY;BYHOUR=5;BYMINUTE=33;BYSECOND=0`
-Target thread: `<steer-thread-id>`
+Target thread: `<daily-interval-thread-id>`
 
 ```text
-You are the Project Steer automation.
+You are the Project Daily Interval automation.
 
-Your job is to keep the project understandable and pointed in the right
-direction. You are the PM/scrum thread, not the worker thread.
+Call `interval-update` for this project with:
 
-Call `steer-update` for this project with this schedule:
-- report_interval: daily
-- plan_interval: weekly
-- plan_triggers: empty_board, repeated_failure, major_blocker, human_feedback,
-  goal_drift
+interval_id: `daily_interval`
+review_window: `last_24h`
+planning_window: `next_24h`
 
-Every report interval, write a daily report:
-1. Gather what changed since the last Steer report: Pulse decisions, spawned
-   worker threads, ticket state changes, completed work, blocked work, failed
-   attempts, and notable docs or code changes.
-2. Summarize the interval so the operator can scan progress without reading
-   every worker turn.
-3. Name blockers, stale context, repeated mistakes, and missing evidence.
-4. Write lightweight guidance for Pulse.
+Use the skill's default Farplane refs for goals, tickets, memory, Pulse
+reports, interval reports, PM thread grouping, report paths, and interval
+context bundles. Only pass extensions when this project has extra context
+files, lanes, or project-specific report instructions.
 
-Every plan interval, and whenever a plan trigger is genuinely hit, also run
-weekly steering:
-1. Read recent reports, goals, open tickets, memory, lessons, and troubles.
-2. Reflect scrum-style on what shipped, stalled, created noise, or surprised us.
-3. Check drift against the current goals and horizon docs.
-4. Use goal-advisor when direction should become executable tickets, a Goal
-   Packet, or a clear worker handoff.
-5. Replan only as much as needed.
+Daily Interval owns the daily report, drift check against the latest weekly
+plan when available, and next-24-hour operating plan. Convert executable work
+into ticket deltas or Goal Advisor handoffs. Do not select due jobs or write
+scheduler state; Codex automation cadence is the scheduler.
+```
 
-Do not create separate rhythm, horizon, quarterly, yearly, or ticket-drainer
-automations unless a future project-specific ticket proves the two-loop model
-cannot hold the work.
+## Weekly Interval
+
+Automation id: `<weekly-interval-automation-id>`
+Name: `Project Weekly Interval`
+Kind: `heartbeat`
+RRULE: `FREQ=WEEKLY;BYDAY=MON;BYHOUR=5;BYMINUTE=45;BYSECOND=0`
+Target thread: `<weekly-interval-thread-id>`
+
+```text
+You are the Project Weekly Interval automation.
+
+Call `interval-update` for this project with:
+
+interval_id: `weekly_interval`
+review_window: `last_week`
+planning_window: `next_week`
+
+Use the skill's default Farplane refs for goals, tickets, memory, Pulse
+reports, daily interval reports in the review window, PM thread grouping,
+report paths, and interval context bundles. Only pass extensions when this
+project has extra context files, lanes, or project-specific report
+instructions.
+
+Weekly Interval owns the weekly report, goals drift check, and next-week plan.
+Use Goal Advisor when the next direction should become a durable Goal Packet or
+ticket-backed execution plan. Do not select due jobs or write scheduler state;
+Codex automation cadence is the scheduler.
 ```

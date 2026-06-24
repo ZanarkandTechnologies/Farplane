@@ -8,7 +8,6 @@ import json
 import re
 import subprocess
 import sys
-import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -170,12 +169,10 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/harness.md",
         "farplane/goals.md",
         "farplane/automations.md",
-        "farplane/steer.config.toml",
         "farplane/bindings.md",
         "farplane/evals.md",
         "tickets/templates/ticket.md",
         ".farplane/state/run-ledger.json",
-        ".farplane/state/steer-scheduler.json",
     }
     standard = data.get("standard") if isinstance(data.get("standard"), dict) else {}
     paths = set()
@@ -217,10 +214,11 @@ def validate(root: Path) -> list[str]:
     framework_dir = root / "farplane"
     framework_manifest = framework_dir / "manifest.json"
     automations = framework_dir / "automations.md"
-    steer_config = framework_dir / "steer.config.toml"
     bindings = framework_dir / "bindings.md"
     pm_manifest = framework_dir / "pm.json"
     retired_integrations = framework_dir / "integrations.md"
+    retired_steer_config = framework_dir / "steer.config.toml"
+    retired_steer_state = root / ".farplane/state/steer-scheduler.json"
 
     if not framework_dir.exists():
         return errors
@@ -232,43 +230,13 @@ def validate(root: Path) -> list[str]:
 
     if retired_integrations.exists():
         errors.append(f"{RETIRED_INTEGRATIONS_REF} is retired; use farplane/bindings.md.")
+    if retired_steer_config.exists():
+        errors.append("farplane/steer.config.toml is retired; use farplane/automations.md.")
+    if retired_steer_state.exists():
+        errors.append(".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling.")
 
     if not automations.exists():
         errors.append("farplane/automations.md is required for reviewable Codex automation prompts.")
-
-    if not steer_config.exists():
-        errors.append("farplane/steer.config.toml is required for Steer automation config.")
-    else:
-        try:
-            data = tomllib.loads(steer_config.read_text(encoding="utf-8"))
-        except tomllib.TOMLDecodeError as exc:
-            errors.append(f"farplane/steer.config.toml is invalid TOML: {exc}")
-        else:
-            if data.get("schema") != "farplane_steer_config":
-                errors.append("farplane/steer.config.toml schema must be farplane_steer_config.")
-            if not isinstance(data.get("version"), str) or not data.get("version", "").strip():
-                errors.append("farplane/steer.config.toml version must be a non-empty string.")
-            try:
-                template_uses = normalize_template_uses(
-                    data, "farplane/steer.config.toml", include_legacy=False
-                )
-            except TemplateUsageError as exc:
-                errors.append(str(exc))
-                template_uses = {}
-            if not template_uses.get("farplane-steer-config"):
-                errors.append(
-                    "farplane/steer.config.toml template_uses.farplane-steer-config must be a non-empty string."
-                )
-            if not isinstance(data.get("jobs"), list):
-                errors.append("farplane/steer.config.toml jobs must be a list.")
-            else:
-                for idx, job in enumerate(data["jobs"]):
-                    if not isinstance(job, dict):
-                        errors.append(f"farplane/steer.config.toml jobs[{idx}] must be an object.")
-                        continue
-                    for key in ("id", "cadence", "prompt"):
-                        if not isinstance(job.get(key), str) or not job.get(key, "").strip():
-                            errors.append(f"farplane/steer.config.toml jobs[{idx}].{key} must be a non-empty string.")
 
     if pm_manifest.exists():
         errors.extend(validate_pm_manifest(root, pm_manifest))

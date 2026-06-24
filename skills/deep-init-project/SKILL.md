@@ -28,8 +28,9 @@ scaffolding branch while simplifying project initialization.
 
 Reusable project automation prompt templates live in
 [AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md). New projects use
-the Farplane Framework's two recurring loops: `pulse-update` for frequent
-bounded action selection and `steer-update` for scheduled planning jobs.
+the Farplane Framework's recurring loops: `pulse-update` for frequent bounded
+action selection and explicit `interval-update` automations for daily or weekly
+reporting and planning.
 Generated project config should include `farplane/automations.md` as the
 reviewable prompt source copied into Codex automations.
 
@@ -119,8 +120,7 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   - [ ] Do not auto-enable scaffolded git hooks.
 - [ ] 4. Run readiness audit and full-mode project-goals setup.
   - [ ] Audit `docs/bootstrap-brief.md`, `farplane/harness.md`,
-    `farplane/goals.md`, `farplane/automations.md`, `farplane/steer.config.toml`,
-    `farplane/bindings.md`,
+    `farplane/goals.md`, `farplane/automations.md`, `farplane/bindings.md`,
     `farplane/pm.json`, `PROJECT_RULES.md`, and QA surfaces for missing,
     placeholder, stale, or disabled state.
   - [ ] Write the audit result into `docs/bootstrap-brief.md` under
@@ -156,8 +156,9 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   - [ ] Do not create live threads or automations unless the operator asked for
         live automation activation.
   - [ ] When live activation is requested, call `automation-advisor` after the
-        substrate exists so it can create or update exactly two Codex loops:
-        Pulse and Steer.
+        substrate exists so it can create or update the Codex loops named in
+        `farplane/automations.md`, commonly Pulse, Daily Interval, and Weekly
+        Interval.
   - [ ] Record PM-visible thread IDs in `farplane/pm.json`; do not store
         automation runtime IDs there.
   - [ ] If activation is skipped or unavailable, report
@@ -185,8 +186,8 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   scripts, and optional local Codex SDK review-loop files.
 - Starter handoff: `tickets/TASK-0001/ticket.md` for the post-init
   `deep-interview -> prd` phase.
-- Automation setup handoff: `automation-advisor` creates or updates the two
-  live Codex loops only when activation is requested.
+- Automation setup handoff: `automation-advisor` creates or updates the live
+  Codex loops only when activation is requested.
 - Full-mode project-goals setup: goal-intake readiness in
   `docs/bootstrap-brief.md`, a proposed or applied `farplane/goals.md` delta,
   a `horizon-advisor` pass when strategy needs shaping, and a `goal-advisor`
@@ -235,8 +236,6 @@ pnpm dlx convex@latest dev
   copied to `farplane/manifest.json` for the Farplane project spec instance.
 - [references/AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md) -
   copied to `farplane/automations.md` for reviewable Codex automation prompts.
-- [references/STEER_CONFIG_TEMPLATE.toml](references/STEER_CONFIG_TEMPLATE.toml)
-  - copied to `farplane/steer.config.toml` for scheduled planning jobs.
 - [references/PRD_TICKET_TEMPLATE.md](references/PRD_TICKET_TEMPLATE.md) -
   copied to `tickets/TASK-0001/ticket.md` as the post-init PRD handoff.
 - [references/PROJECT_RULES_TEMPLATE.md](references/PROJECT_RULES_TEMPLATE.md)

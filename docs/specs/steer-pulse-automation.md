@@ -1,52 +1,54 @@
 ---
-title: "Steer and Pulse Automation"
+title: "Pulse and Interval Automation"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 tags:
   - farplane
   - automations
-  - steer
   - pulse
+  - intervals
 refs:
-  - farplane/steer.config.toml
-  - skills/steer-update/SKILL.md
+  - farplane/automations.md
   - skills/pulse-update/SKILL.md
+  - skills/interval-update/SKILL.md
   - skills/automation-advisor/SKILL.md
 ---
 
-# Steer and Pulse Automation
+# Pulse and Interval Automation
 
-Farplane projects run autonomously through two framework loops:
+Farplane projects run autonomously through explicit Codex automations:
 
 ```text
-pulse_update(project, board_state, action_tree, reward_state)
+pulse_update(project_root, extensions?, pulse_policy?)
   -> one bounded action + decision state
 
-steer_update(project, report_interval, plan_interval, plan_triggers, scheduler_state)
-  -> due reports/plans + date-stamped reports + scheduler state delta
+interval_update(project_root, interval_id, review_window, planning_window, extensions?, now?)
+  -> dated interval report + next-window plan + Pulse guidance
 ```
 
-Pulse and Steer are framework primitives, not project-specific inventions. A
-project may start without enabling them, but once the goal is repeated
-autonomous progress, these are the two default loops.
+The default project set is Pulse, Daily Interval, and Weekly Interval. Codex
+automation cadence is the scheduler. Farplane does not add a hidden scheduler,
+daemon, compiler, or Steer thread between `farplane/automations.md` and the
+Codex app automation records.
 
 ## Principle
 
-Use the smallest loop that preserves useful context isolation:
+Use the smallest explicit loop that preserves useful context isolation:
 
 - Pulse is the fast actor/idle loop. It reconciles outcomes, uses reasoning
   plus bandit state to select one board/action-tree move, spawns a bounded
   worker when useful, and records the decision.
-- Steer is the PM/scrum loop. It writes daily report compression for the human,
-  gathers recent ticket and report changes, performs drift checks against
-  goals, reflects scrum-style on the last interval, and replans weekly or when
-  a real trigger appears.
-- Files are the shared memory. Pulse and Steer should not depend on shared
-  transcript context.
-- Codex automations are the runner. Farplane does not add a hidden scheduler,
-  daemon, or compiler between the project files and Codex automations.
+- Daily Interval reviews the last 24 hours, writes a dated report, compares
+  against the latest weekly plan when available, and plans the next 24 hours.
+- Weekly Interval reviews the last week, writes a dated report, checks drift
+  against `farplane/goals.md`, and plans the next week.
+- Files are the shared memory. Loops should not depend on shared transcript
+  context.
+- Longer horizons become explicit interval automations only after repeated
+  weekly reports prove they produce useful decisions often enough to deserve
+  their own cadence and thread.
 
 ## Adoption Thresholds
 
@@ -56,16 +58,17 @@ human-driven spike with no recurring action expectation.
 Use Pulse when the project has proceedable tickets, open loops, or outcome
 ledgers that benefit from frequent small decisions. Pulse is appropriate when a
 30-minute to few-hour cadence can produce value without replanning the whole
-project. If the board is empty, Pulse chooses one narrow action-tree arm; it
-does not automatically call Goal Advisor.
+project. If the board is empty, Pulse chooses one narrow action-tree arm;
+`consult_goal_advisor` is one option, not the default.
 
-Use Steer when the project has goals, strategy, recurring planning needs,
-daily status reports, or checks that should not share Pulse's action context.
-Steer is appropriate when the project needs a report interval, a plan interval,
-and triggered replanning without separate persistent threads for each cadence.
+Use interval automations when the project needs reports, drift checks, or
+bounded replanning. Daily and weekly are the default because they create a
+human-readable daily digest and a weekly strategy reset without forcing every
+interval through another scheduler.
 
-Use both when the project should run autonomously: Steer updates direction and
-drift; Pulse turns current direction into bounded action.
+Use all three when the project should run autonomously: Weekly Interval updates
+direction, Daily Interval keeps the immediate plan current, and Pulse turns
+current direction into bounded action.
 
 ## Activation Critical Path
 
@@ -73,66 +76,60 @@ Project bootstrap and live automation activation are separate phases.
 
 ```text
 deep_init_project(...)
-  -> files + steer_config + scheduler_state + pm_manifest
+  -> files + automations.md + pm_manifest
 
 automation_advisor(activate=true, project_ref)
-  -> pulse_thread + steer_thread + pulse_automation + steer_automation + pm_json_thread_group_delta
+  -> loop_threads + codex_automations + pm_json_thread_group_delta
 ```
 
 Critical path:
 
 1. Scaffold the project files with `deep-init-project`.
-2. Create or verify `farplane/automations.md` with the exact Pulse and Steer
-   prompts to copy into Codex automations.
-3. Create or verify `.farplane/state/steer-scheduler.json`.
-4. Create or verify `farplane/pm.json` as UI grouping glue with
+2. Create or verify `farplane/automations.md` with the exact Pulse, Daily
+   Interval, and Weekly Interval prompts to copy into Codex automations.
+3. Create or verify `farplane/pm.json` as UI grouping glue with
    `threads.chats` and `threads.automations`.
-5. Use `horizon-advisor` to shape `farplane/goals.md` when project goals are
+4. Use `horizon-advisor` to shape `farplane/goals.md` when project goals are
    missing, placeholder, or stale.
-6. Use `goal-advisor` to compile the first executable frontier into a
+5. Use `goal-advisor` to compile the first executable frontier into a
    ticket-backed Goal Packet when the goals are actionable.
-7. Use `automation-advisor` to prepare the live Codex automation prompts.
-8. When the operator requests live automation activation, create two dedicated
-   project threads:
+6. Use `automation-advisor` to prepare the live Codex automation prompts.
+7. When the operator requests live automation activation, create or reuse the
+   dedicated project threads named by `farplane/automations.md`, commonly:
    - `Project Pulse`
-   - `Project Steer`
-9. Attach the Pulse automation to the Pulse thread at the fast idle cadence.
-10. Attach the Steer automation to the Steer thread at the minimum planning
-   cadence.
-11. Append the visible Pulse/Steer thread IDs to `farplane/pm.json` so the UI
-    renders them under the persistent PM employee.
-12. When Pulse or Steer creates persistent PM-owned ticket or worker chat
-    threads, append those thread IDs to `farplane/pm.json` `threads.chats`.
-
-Do not create extra threads for daily, weekly, quarterly, yearly, ticket
-draining, or strategy review jobs. Those are Steer jobs or Pulse actions.
+   - `Project Daily Interval`
+   - `Project Weekly Interval`
+8. Attach each Codex automation to the matching thread at the named cadence.
+9. Append visible loop thread IDs to `farplane/pm.json` so the UI renders them
+   under the persistent PM employee.
+10. When Pulse creates persistent PM-owned ticket or worker chat threads,
+    append those thread IDs to `farplane/pm.json` `threads.chats`.
 
 When the Codex app automation tools are unavailable, write the prompt templates
 and report `needs_automation_setup` instead of pretending activation happened.
 
-Activation is idempotent: inspect existing project Pulse/Steer threads and
+Activation is idempotent: inspect existing project automation threads and
 automations first, update matches, and create only missing pieces. The
 canonical UI grouping writeback is `farplane/pm.json`; automation runtime IDs
 belong in the Codex app automation store, not in `pm.json`.
 
 ## Risk Guards
 
-- `duplicate_loops:` do not create more than one Pulse and one Steer loop per
-  project unless a separate ticket explicitly changes the framework standard.
+- `duplicate_loops:` do not create duplicate automations for the same loop and
+  cadence unless a separate ticket explicitly changes the project standard.
 - `placeholder_goals:` do not activate autonomous loops when `farplane/goals.md`
   is still placeholder, stale, or not grounded in the operator's intent; report
   `needs_goal_intake`.
 - `tool_unavailable:` if Codex thread or automation tools are unavailable,
   produce prompts and report `needs_automation_setup`.
-- `thread_confusion:` Pulse and Steer get dedicated named threads when
-  thread-attached heartbeats are used; daily/weekly/quarterly jobs do not get
-  separate threads.
-- `state_confusion:` tracked config stores job prompts and cadence only;
-  PM-visible thread grouping lives in `farplane/pm.json`; automation runtime
-  IDs live in the Codex app automation store; run timestamps live in
-  `.farplane/state/steer-scheduler.json`.
-- `pm_worker_threads:` when Pulse or Steer creates persistent ticket or worker
-  chat threads that should belong to the project PM employee, append the IDs to
+- `thread_confusion:` each context-isolated recurring loop gets a dedicated
+  named thread when thread-attached heartbeats are used.
+- `state_confusion:` PM-visible thread grouping lives in `farplane/pm.json`;
+  automation cadence/runtime IDs live in the Codex app automation store; Pulse
+  decision/reward state lives under `.farplane/automation/`; interval outputs
+  live under `.farplane/reports/interval/`.
+- `pm_worker_threads:` when Pulse creates persistent ticket or worker chat
+  threads that should belong to the project PM employee, append the IDs to
   `farplane/pm.json` `threads.chats`.
 
 ## Pulse Action State
@@ -171,89 +168,48 @@ Default action arms:
 - `consult_goal_advisor`
 - `no_op_unsafe`
 
-`consult_goal_advisor` is selected only when the empty board is caused by
-unclear goals, an unclear milestone, or missing executable Goal Packets.
-
-## Steer Schedule State
-
-The preferred Steer model is one automation prompt with:
-
-```text
-report_interval = daily
-plan_interval = weekly
-plan_triggers = empty_board | repeated_failure | major_blocker |
-                human_feedback | goal_drift
-```
-
-Tracked config, when present, is human-owned and intentionally small:
-
-```text
-farplane/steer.config.toml
-  -> version, timezone, report_interval, plan_interval, plan_triggers,
-     and any project-specific prompt overrides
-```
-
-Mutable scheduler state is ignored:
-
-```text
-.farplane/state/steer-scheduler.json
-  -> config_version, last_report_run_at, next_report_due_at,
-     last_plan_run_at, next_plan_due_at, last_report, last_plan_report,
-     last_status
-```
-
-Keep the Steer config easy for a human to edit. A job is present only when it
-should run. The job prompt may point at skills or workflow templates, but the
-config should not duplicate their inputs, outputs, drift checks, reports, or
-side-effect gates.
-
-## Steer Due Check
-
-```text
-now = current_time()
-load schedule from automation prompt or farplane/steer.config.toml
-load .farplane/state/steer-scheduler.json
-
-if state.config_version != config.version:
-  initialize_or_migrate_state(config, state)
-
-report_due = now >= state.next_report_due_at
-plan_due = now >= state.next_plan_due_at or plan_trigger_hit
-
-if report_due:
-  write daily report
-  update last_report_run_at, last_report, next_report_due_at
-
-if plan_due:
-  run weekly steering
-  write steering report
-  update last_plan_run_at, last_plan_report, next_plan_due_at
-
-save scheduler state only
-```
-
-The hot path is timestamp comparison plus trigger detection. Recurrence
-calculation happens only when a workflow runs or when state is initialized from
-a new config version.
-
-## Report Naming
+## Interval Reports
 
 Reports are dated records, not mutable `latest.md` files:
 
 ```text
-.farplane/reports/steer/<job>/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md
 ```
 
-State files store `last_report` pointers when a loop needs the newest report.
+Consumers find the newest interval report by timestamp sorting or by explicit
+links written in later reports. No tracked config file exists solely to store
+`last_report`.
+
+Default intervals:
+
+```text
+daily_interval:
+  review_window: last_24h
+  planning_window: next_24h
+  parent_context: latest weekly_interval report when present
+
+weekly_interval:
+  review_window: last_week
+  planning_window: next_week
+  parent_context: farplane/goals.md + daily_interval reports in review_window
+```
 
 ## Migration Rule
 
-The old daily, weekly, rhythm, horizon, heartbeat, and ticket-drainer packages
-are migration sources until their useful practices have been moved into Steer
-and Pulse. They should not remain the active framework model.
+The old daily, weekly, rhythm, heartbeat, ticket-drainer, and Steer scheduler
+packages are retired as active surfaces. Their useful practices live in
+`pulse-update`, `interval-update`, and project automation prompts.
 
-Do not delete a legacy planning skill only because the new loop exists. First
-extract report-before-mutation, goals-delta promotion, ticket selection,
-outcome reconciliation, and source-gap labeling practices into the new skills
-or templates.
+The active model is:
+
+- `pulse-update` owns the fast idle loop, ticket selection, child-thread
+  handoffs, bandit/reward state, and outcome reconciliation.
+- `interval-update` owns report-before-plan interval review, drift checks,
+  goals-delta promotion, next-window plans, Pulse guidance, and Goal Advisor
+  handoffs.
+- `automation-advisor` owns prompt authoring and live Codex automation setup.
+
+Do not recreate legacy cadence skills, a separate ticket-drainer automation, or
+a Steer scheduler/orchestrator unless a future ticket proves explicit Codex
+automations cannot hold the work.

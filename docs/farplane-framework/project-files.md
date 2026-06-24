@@ -3,13 +3,12 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 framework_template_version: "0.2.0"
 source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
   - farplane/automations.md
-  - farplane/steer.config.toml
   - farplane/bindings.md
   - farplane/pm.json
   - .gitignore
@@ -36,7 +35,6 @@ farplane/
   harness.md
   goals.md
   automations.md
-  steer.config.toml
   bindings.md
   evals.md
   pm.json
@@ -62,32 +60,14 @@ holds, stop conditions, and Goal Advisor handoffs.
 
 ### `farplane/automations.md`
 
-Human-reviewable Codex automation prompt source. It stores the exact Pulse and
-Steer prompt blocks copied into the Codex app automation records.
+Human-reviewable Codex automation prompt source. It stores the exact Pulse,
+Daily Interval, and Weekly Interval prompt blocks copied into the Codex app
+automation records.
 
 Skills stay generic and parameterized. Project-specific cadence, paths,
 policies, thread IDs, and schedule choices live in the prompts here. This file
 is not generated runtime state and does not store `last_run_at`, `next_due_at`,
 or automation execution logs.
-
-### `farplane/steer.config.toml`
-
-Human-owned Steer job config:
-
-- config version and timezone
-- scheduler state ref
-- scheduled planning jobs
-- job cadence strings
-- job prompts
-
-Use `template_uses.farplane-steer-config` so project rollout reporting can tell
-which projects have adopted the current Steer config template.
-
-Keep this file easy to edit. If a job should not run, remove it from the list.
-Do not duplicate workflow inputs, outputs, drift checks, report paths, or gates
-that the job prompt or skill already owns. Mutable fields such as
-`last_run_at`, `next_due_at`, and `last_report` belong in
-`.farplane/state/steer-scheduler.json`.
 
 ### `farplane/bindings.md`
 
@@ -129,24 +109,21 @@ may appear as ephemeral agents in the UI.
 .farplane/
   README.md
   state/run-ledger.json
-  state/steer-scheduler.json
+  automation/
   reports/
   evals/runs/
   logs/
 ```
 
-### `.farplane/state/steer-scheduler.json`
+### `.farplane/automation/`
 
-Mutable Steer scheduler cache:
+Mutable Pulse automation state:
 
-- config version used to generate state
-- per-job `last_run_at`
-- per-job `next_due_at`
-- per-job `last_report`
-- per-job `last_status`
-
-Steer reads this file first after loading config. The normal hot path is simple
-timestamp comparison against cached `next_due_at` values.
+- bandit and action-arm scores
+- Pulse decision rows
+- reward observations
+- spawned worker thread rows
+- normalized action outcomes
 
 ### `.farplane/reports/`
 
@@ -154,10 +131,12 @@ Generated reports. New framework reports should be date-stamped:
 
 ```text
 .farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
-.farplane/reports/steer/<job>/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md
 ```
 
-State files store newest-report pointers when needed.
+Consumers find newest interval reports by timestamp sorting or explicit links
+from later reports. There is no tracked scheduler config just to store
+`last_report`.
 
 ## Validation
 
@@ -167,5 +146,5 @@ Run:
 python3 bin/validators/check_farplane_project_files.py
 ```
 
-The validator checks the current manifest shape, retired file names, Steer
-config TOML shape, bindings front matter, and obvious secret leakage.
+The validator checks the current manifest shape, retired file names, bindings
+front matter, and obvious secret leakage.

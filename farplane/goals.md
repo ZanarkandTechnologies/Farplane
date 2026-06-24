@@ -3,13 +3,13 @@ kind: project-goals
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 framework_template_version: "0.2.0"
 owner: project-pm-automation
 source: horizon-advisor
 refs:
   - farplane/harness.md
-  - farplane/steer.config.toml
+  - farplane/automations.md
   - farplane/bindings.md
   - docs/farplane-framework/README.md
   - docs/specs/program-notation.md
@@ -25,15 +25,15 @@ value function, KPI tree, strategy axes, current bets, current milestone,
 holds, and Goal Advisor handoffs.
 
 It does not own schedules, grouped jobs, report paths, ticket source policy, or
-run-ledger rules. Scheduled planning mechanics live in
-[steer.config.toml](steer.config.toml), while Pulse behavior lives in the
-`pulse-update` skill and its runtime state.
+run-ledger rules. Recurring automation prompt mechanics live in
+[automations.md](automations.md), while Pulse behavior lives in the
+`pulse-update` skill and interval planning lives in `interval-update`.
 
 ## Goal Program
 
 ```goal-program
 values_ref: farplane/harness.md
-steer_config_ref: farplane/steer.config.toml
+automation_ref: farplane/automations.md
 bindings_ref: farplane/bindings.md
 
 goal farplane_os {
@@ -42,7 +42,7 @@ goal farplane_os {
   metric: hybrid(
     learning_metric("validated meaningful improvement cycles per human intervention hour increases"),
     review_metric("quality, proof, auditability, and operator control are preserved"),
-    artifact_presence("goals, tickets, Steer/Pulse automations, evals, reports, and memory stay discoverable")
+    artifact_presence("goals, tickets, Pulse/Interval automations, evals, reports, and memory stay discoverable")
   )
   anti_metric: "more agent activity without accepted evidence-backed improvement"
   proof: [README.md, ARCHITECTURE.md, docs/fundamentals/harness-algebra.md, docs/MEMORY.md, docs/specs/README.md, farplane/]
@@ -107,10 +107,10 @@ axis project_control {
   question: "Can Farplane control a dynamic list of projects with their own completion criteria and intervention budgets?"
   kpi: hybrid(
     artifact_presence("each active project has goals/metrics/proof state"),
-    review_metric("Steer can select the current frontier without expanding every branch"),
+    review_metric("interval reports can select the current frontier without expanding every branch"),
     learning_metric("projects advanced without human unblock")
   )
-  current_signal: ref("farplane/goals.md") + ref("tickets/") + ref(".farplane/state/steer-scheduler.json")
+  current_signal: ref("farplane/goals.md") + ref("tickets/") + ref(".farplane/reports/interval/")
 }
 
 axis distribution_from_evidence {
@@ -118,9 +118,9 @@ axis distribution_from_evidence {
   kpi: hybrid(
     market_metric("qualified subscribers, serious conversations, and pilot users increase"),
     artifact_presence("evidence-backed content/research artifacts ship from experiment reports"),
-    learning_metric("content/user feedback changes the next Steer strategy review")
+    learning_metric("content/user feedback changes the next weekly interval review")
   )
-  current_signal: ref(".farplane/state/steer-scheduler.json") + ref("tickets/") + ref("docs/LESSONS.md")
+  current_signal: ref(".farplane/reports/interval/") + ref("tickets/") + ref("docs/LESSONS.md")
 }
 
 axis framework_adoption {
@@ -131,14 +131,14 @@ axis framework_adoption {
 
 project framework_standardization {
   parent: q3_harness_operating_system
-  output: "The Farplane project framework has a clear tracked config split: harness, goals, Steer config, bindings, evals, tickets, and runtime reports."
-  feedback_surface: review_metric("a new or existing project can tell where strategy, Steer/Pulse automation, bindings, and proof belong")
+  output: "The Farplane project framework has a clear tracked config split: harness, goals, automation prompts, bindings, evals, tickets, and runtime reports."
+  feedback_surface: review_metric("a new or existing project can tell where strategy, Pulse/Interval automation, bindings, and proof belong")
   budget: time_budget("1 week")
   route: harness_creator
   gates: [no_hidden_automation, no_secret_in_tracked_config, no_duplicate_goal_sources]
   starting_tasks: [
     "keep farplane/goals.md canonical for strategy",
-    "keep farplane/steer.config.toml canonical for Steer scheduled planning jobs",
+    "keep farplane/automations.md canonical for recurring Codex automation prompts",
     "verify no duplicate strategy source exists outside farplane/goals.md",
     "run framework and doc validators"
   ]
@@ -186,17 +186,17 @@ project evidence_distribution_engine {
   ]
 }
 
-project steer_pulse_framework_standard {
+project pulse_interval_framework_standard {
   parent: q3_harness_operating_system
-  output: "A reusable project automation standard: Pulse for one bounded idle action and Steer for scheduled planning, strategy, memory, and skill upkeep."
+  output: "A reusable project automation standard: Pulse for one bounded idle action, Daily Interval for daily reporting/planning, and Weekly Interval for goals drift and next-week planning."
   feedback_surface: review_metric("one project can initialize the preset without inventing custom files")
   budget: time_budget("2 weeks")
   route: deep_init_project
   gates: [automation_preview_before_scheduling, local_files_source_of_truth]
   starting_tasks: [
-    "keep Steer job config in farplane/steer.config.toml",
+    "keep exact Codex automation prompts in farplane/automations.md",
     "keep simple ticket selection inside pulse-update",
-    "migrate useful daily/weekly PM practices into Steer before deleting old skill packages",
+    "migrate useful daily/weekly PM practices into interval-update before deleting old skill packages",
     "write unblock tickets for missing Notion, Telegram, metrics, or binding access"
   ]
 }
@@ -230,7 +230,7 @@ project console_feedback_visibility {
 }
 
 milestone framework_strategy_split {
-  task: "Make farplane/goals.md the canonical dynamic strategy file and keep scheduled automation mechanics in farplane/steer.config.toml."
+  task: "Make farplane/goals.md the canonical dynamic strategy file and keep recurring automation prompts in farplane/automations.md."
   metric: artifact_presence("farplane/goals.md active") + review_metric("no duplicate root strategy file")
   route: one_turn
   gates: [no_commit_without_request]
@@ -252,18 +252,17 @@ value function instead of vague growth or vague self-improvement claims:
 
 ## Strategy Update Rule
 
-Steer strategy review may propose updates to this file when fresh reports or
+Weekly Interval review may propose updates to this file when fresh reports or
 tickets change strategy:
 
 ```text
-update_strategy(farplane/goals.md, steer_reports, tickets, memory)
+update_strategy(farplane/goals.md, interval_reports, tickets, memory)
   -> goal_delta + milestone_delta + holds_delta + ticket_delta
 ```
 
-Steer should not move schedule, grouped-job, report-path, or run-ledger
-configuration into this file. It should update
-[steer.config.toml](steer.config.toml) only when the scheduled planning config
-itself changes.
+Interval automation should not move schedule, grouped-job, report-path, or
+run-ledger configuration into this file. It should update
+[automations.md](automations.md) only when the recurring prompt itself changes.
 Use `horizon-advisor` when the update needs to rewrite the North Star, value
 function, KPI tree, project goal map, or current frontier.
 
@@ -272,7 +271,7 @@ function, KPI tree, project goal map, or current frontier.
 - Do not add hidden daemon behavior.
 - Do not store secrets in tracked config.
 - Do not make Notion canonical until the project explicitly opts in.
-- Do not execute broad leaf tickets from Steer; route execution through Pulse,
+- Do not execute broad leaf tickets from interval automations; route execution through Pulse,
   tickets, or Goal Advisor.
 - Do not split projects into child tickets unless there is a real execution,
   unblock, review, dependency, approval, or proof boundary.
@@ -290,7 +289,7 @@ Next eligible handoff:
 
 ```text
 goal_advisor(
-  files=[farplane/goals.md, farplane/steer.config.toml, farplane/harness.md, docs/fundamentals/harness-algebra.md, tickets/],
+  files=[farplane/goals.md, farplane/automations.md, farplane/harness.md, docs/fundamentals/harness-algebra.md, tickets/],
   task="compile the current low-intervention improvement frontier into one concrete ticket-backed Goal Packet",
   metric_provider=hybrid_metric(learning, review, mechanical),
   trigger=active_goal | heartbeat,
