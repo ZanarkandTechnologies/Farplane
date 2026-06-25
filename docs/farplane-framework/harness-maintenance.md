@@ -190,6 +190,12 @@ Current projection profiles:
 
 - `skill-registry`: skill registry graph and rendered skill docs.
 - `harness-reference`: repo-wide local-reference graph and doc audit report.
+- `farplane-framework-core`: manifest-backed Framework Core projection for
+  Harness OS Map. Sources come from `farplane/manifest.json`
+  `farplane_graph.framework_core.include`; source docs, workflow nodes, direct
+  framework file/spec refs, directly mentioned skills, ordered workflow skill
+  edges, and curated lifecycle routes are retained. Repo-wide connector
+  expansion is intentionally excluded from this operator map.
 - `farplane-lifecycle-core`: compact lifecycle graph for UI and agent context.
 - `farplane-lifecycle-full`: audit lifecycle graph with optional detail nodes.
 
@@ -204,6 +210,7 @@ Use the dispatcher when you want the shared projection path:
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --list
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection skill-registry
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection harness-reference
+python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-framework-core
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-core
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-full
 ```
@@ -241,6 +248,7 @@ python3 bin/validators/check_template_version_metadata.py --all
 # Graphs
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection skill-registry
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection harness-reference
+python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-framework-core
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-core
 
 # Docs and references

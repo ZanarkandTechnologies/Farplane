@@ -11,6 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import farplane_lifecycle_graph as lifecycle_graph
+import farplane_framework_core_graph as framework_core_graph
 from graph_projection import project_graph
 from graph_projection_config import ProjectionConfig, get_projection_config, list_projection_configs
 
@@ -166,12 +167,14 @@ routes:
         self.assertEqual(
             set(configs),
             {
+                "farplane-framework-core",
                 "skill-registry",
                 "harness-reference",
                 "farplane-lifecycle-core",
                 "farplane-lifecycle-full",
             },
         )
+        self.assertEqual(get_projection_config("farplane-framework-core").output_schema, "framework_core_graph")
         self.assertEqual(get_projection_config("skill-registry").output_schema, "skill_graph")
         self.assertEqual(get_projection_config("harness-reference").output_schema, "harness_graph")
         self.assertEqual(get_projection_config("farplane-lifecycle-core").output_schema, "lifecycle_graph")
@@ -210,6 +213,69 @@ routes:
             [("skill:a", "file:x", "reads")],
         )
         self.assertEqual(projected["source"]["projection"], "files-only")
+
+    def test_framework_core_graph_uses_manifest_sources_and_direct_skill_refs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / "docs").mkdir(parents=True)
+            (repo / "farplane").mkdir()
+            (repo / "rules").mkdir()
+            (repo / "skills" / "alpha-skill").mkdir(parents=True)
+            (repo / "skills" / "deep-init-project").mkdir(parents=True)
+            (repo / "skills" / "harness-creator").mkdir(parents=True)
+            (repo / "docs" / "root.md").write_text(
+                "See [second](docs/second.md), [child](docs/child.md), and alpha-skill.\n",
+                encoding="utf-8",
+            )
+            (repo / "docs" / "child.md").write_text("See `rules/rule.toml`.\n", encoding="utf-8")
+            (repo / "docs" / "leaf.md").write_text("Leaf only.\n", encoding="utf-8")
+            (repo / "rules" / "rule.toml").write_text("name = 'rule'\n", encoding="utf-8")
+            (repo / "docs" / "second.md").write_text("See `rules/rule.toml`.\n", encoding="utf-8")
+            (repo / "skills" / "alpha-skill" / "SKILL.md").write_text(
+                "---\nname: alpha-skill\ndescription: test\n---\n",
+                encoding="utf-8",
+            )
+            (repo / "skills" / "deep-init-project" / "SKILL.md").write_text(
+                "---\nname: deep-init-project\ndescription: test\n---\n",
+                encoding="utf-8",
+            )
+            (repo / "skills" / "harness-creator" / "SKILL.md").write_text(
+                "---\nname: harness-creator\ndescription: test\n---\n",
+                encoding="utf-8",
+            )
+            (repo / "farplane" / "manifest.json").write_text(
+                json.dumps(
+                    {
+                        "schema": "farplane_project",
+                        "farplane_graph": {
+                            "framework_core": {
+                                "include": ["docs/root.md", "docs/second.md"],
+                                "exclude": [],
+                            }
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            graph = framework_core_graph.build_graph(repo)
+
+        nodes = {node["id"]: node for node in graph["nodes"]}
+        edges = {(edge["source"], edge["target"], edge["type"]) for edge in graph["edges"]}
+        self.assertEqual(framework_core_graph.validate_graph(graph), [])
+        self.assertEqual(nodes["file:docs/root.md"]["framework_role"], "source")
+        self.assertEqual(nodes["file:docs/second.md"]["framework_role"], "source")
+        self.assertEqual(nodes["workflow:lifecycle"]["framework_role"], "workflow")
+        self.assertEqual(nodes["workflow:bootstrap"]["kind"], "workflow")
+        self.assertEqual(nodes["skill:alpha-skill"]["framework_role"], "linked")
+        self.assertNotIn("file:rules/rule.toml", nodes)
+        self.assertNotIn("file:docs/child.md", nodes)
+        self.assertNotIn("file:docs/leaf.md", nodes)
+        self.assertIn(("file:docs/root.md", "file:docs/second.md", "markdown-link"), edges)
+        self.assertIn(("file:docs/root.md", "skill:alpha-skill", "mentions-skill"), edges)
+        self.assertIn(("workflow:lifecycle", "workflow:bootstrap", "workflow-stage"), edges)
+        self.assertIn(("workflow:bootstrap", "skill:deep-init-project", "workflow-skill"), edges)
+        self.assertIn(("skill:deep-init-project", "skill:harness-creator", "workflow-next"), edges)
 
     def test_temp_artifacts_match_fresh_generation(self) -> None:
         repo = Path(__file__).resolve().parents[3]

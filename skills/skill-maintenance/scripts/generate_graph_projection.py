@@ -39,8 +39,12 @@ def _check_js(path: Path, global_name: str, value: dict) -> list[str]:
 
 def generate_skill_projection(args: argparse.Namespace) -> tuple[dict, dict | None]:
     generator = _load_builder("generate_skill_graph")
-    rows = generator.load_registry(Path(args.registry))
-    graph = generator.build_graph(rows)
+    repo_root = Path(args.repo_root).resolve()
+    registry_path = repo_root / args.registry
+    rows = generator.load_registry(registry_path)
+    skill_heat_config = generator.skill_heat_config_from_env()
+    skill_heat = generator.load_skill_heat(repo_root, {row["name"] for row in rows}, config=skill_heat_config)
+    graph = generator.build_graph(rows, skill_heat=skill_heat, skill_heat_config=skill_heat_config)
     docs = generator.build_docs(rows)
     return graph, docs
 
@@ -51,6 +55,16 @@ def generate_harness_projection(args: argparse.Namespace) -> tuple[dict, str]:
     graph = generator.build_graph(repo_root)
     report = generator.build_report(graph, repo_root)
     return graph, report
+
+
+def generate_framework_core_projection(args: argparse.Namespace) -> dict:
+    generator = _load_builder("farplane_framework_core_graph")
+    repo_root = Path(args.repo_root).resolve()
+    graph = generator.build_graph(repo_root)
+    errors = generator.validate_graph(graph)
+    if errors:
+        raise SystemExit("\n".join(errors))
+    return graph
 
 
 def generate_lifecycle_projection(args: argparse.Namespace, projection: str) -> dict:
@@ -147,6 +161,23 @@ def main() -> int:
         report_out.parent.mkdir(parents=True, exist_ok=True)
         report_out.write_text(report)
         print(f"wrote {out_path} and {report_out}")
+        return 0
+
+    if config.output_schema == "framework_core_graph":
+        graph = generate_framework_core_projection(args)
+        if args.check:
+            errors = _check_json(out_path, graph)
+            if js_path:
+                errors.extend(_check_js(js_path, config.js_global, graph))
+            if errors:
+                print("\n".join(errors), file=sys.stderr)
+                return 1
+            print(f"{config.name} OK ({graph['counts']['nodes']} nodes, {graph['counts']['edges']} edges)")
+            return 0
+        write_json(out_path, graph)
+        if js_path:
+            write_js(js_path, config.js_global, graph)
+        print(f"wrote {out_path}")
         return 0
 
     if config.output_schema == "lifecycle_graph":

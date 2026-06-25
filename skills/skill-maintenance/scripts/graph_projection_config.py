@@ -53,6 +53,14 @@ PROJECTION_CONFIGS: dict[str, ProjectionConfig] = {
         js_global="HARNESS_GRAPH",
         report_out="docs/doc-audit/generated/doc-reference-report.md",
     ),
+    "farplane-framework-core": ProjectionConfig(
+        name="farplane-framework-core",
+        description="Manifest-backed Farplane framework core graph.",
+        output_schema="framework_core_graph",
+        default_out="skills/skill-maintenance/graph/farplane-framework-core-graph.json",
+        default_js_out="skills/skill-maintenance/graph/farplane-framework-core-graph.js",
+        js_global="FARPLANE_FRAMEWORK_CORE_GRAPH",
+    ),
     "farplane-lifecycle-core": ProjectionConfig(
         name="farplane-lifecycle-core",
         description="Compact Farplane lifecycle graph for UI and agent context.",

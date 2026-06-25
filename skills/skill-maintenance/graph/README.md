@@ -11,6 +11,10 @@ Generated visual inspection surface for Farplane skills and harness docs.
 - `harness-graph.json`: generated repo-wide local-reference graph for docs,
   skills, templates, agents, scripts, and root docs
 - `harness-graph.js`: generated local-file wrapper for the same harness graph
+- `farplane-framework-core-graph.json`: generated manifest-backed Framework
+  Core graph for Harness OS Map
+- `farplane-framework-core-graph.js`: generated local-file wrapper for the
+  same Framework Core graph
 - `farplane-lifecycle-graph.json`: generated semantic Farplane lifecycle graph
   with skill reads/writes/routes, framework files, hooks, and FSA projections
 - `farplane-lifecycle-graph.js`: generated local-file wrapper for the same
@@ -40,6 +44,10 @@ Current projection profiles:
 
 - `skill-registry`: skill registry graph and rendered skill docs
 - `harness-reference`: repo-wide local-reference graph and docs audit report
+- `farplane-framework-core`: manifest-backed Framework Core graph. It reads
+  `farplane/manifest.json` `farplane_graph.framework_core`, matches source
+  docs with include/exclude patterns, adds a curated workflow spine, keeps
+  direct framework file/spec refs, and connects ordered workflow skills.
 - `farplane-lifecycle-core`: compact lifecycle graph for UI and agent context
 - `farplane-lifecycle-full`: audit lifecycle graph with optional detail nodes
 
@@ -57,6 +65,7 @@ Or use the profile dispatcher:
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --list
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection skill-registry
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection harness-reference
+python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-framework-core
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-core
 python3 skills/skill-maintenance/scripts/generate_graph_projection.py --projection farplane-lifecycle-full
 ```
@@ -73,16 +82,35 @@ python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py --
 Open `index.html` directly, or serve the repo root with a local static server
 and visit `/skills/skill-maintenance/graph/`.
 
-The graph treats `skill_links` as solid Markdown-reference edges and
-`common_chains.after` as dashed chain edges. Nodes are color-coded by tier and
-marked when the skill is upstream-owned external source. Clicking a node opens
-the skill detail panel with parsed frontmatter, raw YAML frontmatter, rendered
-`SKILL.md` Markdown, and outgoing links.
+The graph treats `skill_links` as solid Markdown-reference edges,
+`todo_skill_refs` as ordered todo-chain edges, and `common_chains.after` as
+dashed chain edges. Nodes are color-coded by tier, sized by observed skill heat
+when telemetry exists, and marked when the skill is upstream-owned external
+source. Clicking a node opens the skill detail panel with parsed frontmatter,
+raw YAML frontmatter, rendered `SKILL.md` Markdown, heat counters, and outgoing
+links.
+
+Skill heat defaults are configured at generation time through environment
+variables, usually from `config.toml.example`:
+
+- `FARPLANE_SKILL_HEAT_WINDOW_DAYS`: main ranking window, default `30`.
+- `FARPLANE_SKILL_HEAT_RECENT_DAYS`: secondary recent counter, default `7`.
+- `FARPLANE_SKILL_HEAT_TOP_N`: default hot-skills filter, default `25`.
+- `FARPLANE_SKILL_HEAT_EVENT_TYPES`: comma-separated telemetry event types to
+  count as skill heat.
 
 The harness graph is currently a data/report surface rather than a rendered UI
 view. It detects local Markdown links and literal repo paths, resolves them to
 repo files when possible, and keeps unresolved local-looking references visible
 for cleanup.
+
+The Framework Core graph is the Harness OS Map surface. It starts from
+manifest-owned framework doc include/exclude patterns, preserves those docs as
+source nodes, adds workflow nodes for the main lifecycle lanes, keeps direct
+refs to framework files/specs, adds mentioned skills from the source docs, and
+uses curated lifecycle workflow edges to show skill order. It intentionally
+avoids repo-wide connector expansion so the UI can explain the lifecycle and
+core workflows instead of rendering every reachable maintenance file.
 
 The lifecycle graph is a semantic framework surface. It combines conservative
 `SKILL.md` signature parsing, `hooks.json` commands, curated framework-critical
