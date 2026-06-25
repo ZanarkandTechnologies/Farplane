@@ -23,9 +23,10 @@ create a starter planning ticket, but it should not try to finish product
 discovery during init unless the user explicitly asks for that separate phase.
 
 This skill also owns the place where reusable stack setup recipes live for
-common repo types such as Convex, Next.js, Clerk, shadcn, and React apps. Keep
-those recipes in this skill or its references; do not delete the code-repo
-scaffolding branch while simplifying project initialization.
+common repo types such as Convex, Next.js, Clerk, shadcn, React apps, and
+optional quality tooling. Keep those recipes in this skill or its references;
+do not delete the code-repo scaffolding branch while simplifying project
+initialization.
 
 Reusable project automation prompt templates live in
 [AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md). New projects use
@@ -144,6 +145,12 @@ setup_project_goals(bootstrap_brief, project_context, existing_goals?)
   - [ ] Record canonical app-only and QA/evidence run commands in
     `PROJECT_RULES.md`, `docs/bootstrap-brief.md`, and the relevant `qa/`
     cookbook surface.
+  - [ ] Record optional maintainability and hardening commands in
+    `PROJECT_RULES.md` when the stack already has or explicitly adopts tools
+    such as ESLint/Oxlint, Ruff/Radon, Semgrep, CodeQL, SonarQube, jscpd,
+    dependency-cruiser/Madge, Knip/depcheck, dependency audit, or secret scan.
+    Do not install these tools automatically unless setup scope explicitly
+    includes code scaffold/tooling installation.
 - [ ] 6. Create the starter planning handoff.
   - [ ] Create or preserve `tickets/TASK-0001/ticket.md` for drafting the
     initial PRD.
@@ -225,6 +232,19 @@ pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/darkmatter.json
 pnpm add convex
 pnpm dlx convex@latest dev
 ```
+
+### Optional Quality Tooling Slots
+
+Record adopted commands in `PROJECT_RULES.md`; install only when the operator
+or selected stack setup explicitly includes those tools.
+
+- JavaScript / TypeScript: ESLint or Oxlint, TypeScript checks, jscpd,
+  dependency-cruiser or Madge, Knip or depcheck, Semgrep, CodeQL, SonarQube, and
+  dependency audit commands.
+- Python: Ruff, Radon, mypy or pyright, vulture, pip-audit or uv audit,
+  Semgrep, CodeQL, SonarQube, and mutation testing only for high-budget proof.
+- Cross-stack hardening: secret scanning, config validation, dependency audit,
+  and resilience/failure tests when the project owns the relevant runtime.
 
 ## Reference Map
 

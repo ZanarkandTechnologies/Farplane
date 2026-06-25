@@ -52,5 +52,19 @@
       "Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet"
     ],
     "tags": ["deep-init-project", "full-mode", "project-goals", "readiness-gate"]
+  },
+  {
+    "id": "deep_init_project_quality_tooling_slots_01",
+    "title": "Deep init records optional maintainability and hardening command slots",
+    "query": "A TypeScript/Python mixed project is being initialized and the operator is open to quality tooling. What should the project rules template record without forcing installation?",
+    "reference_points": [
+      "Records maintainability/refactoring command slots such as lint, complexity, duplication, dependency boundaries, dead code, static analysis dashboard, and mutation testing",
+      "Records hardening command slots such as SAST, dependency audit, secret scan, config validation, and resilience/failure tests",
+      "Keeps tools optional and stack-specific instead of mandating one universal linter stack",
+      "Does not install tools automatically unless code scaffold/tooling installation is explicitly in scope",
+      "Routes behavior-preserving cleanup to the refactoring skill and risk-reduction work to the hardening skill"
+    ],
+    "tags": ["deep-init-project", "quality-tooling", "refactoring", "hardening"]
   }
+
 ]

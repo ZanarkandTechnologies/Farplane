@@ -79,6 +79,31 @@ This file defines the project-specific technical rules, tech stack, and conventi
   - Desloppify: `[command or disabled]`
   - CodeRabbit: `coderabbit review --plain --type committed --base [branch]`
 
+## 🧹 Maintainability / Refactoring
+- **Smell score target**: optimize changed or high-churn code first, using
+  complexity, nesting, duplication, coverage gaps, lint/static issues, boundary
+  violations, and churn as prioritization signals rather than absolute goals.
+- **Complexity command**: `[command or n/a; e.g., eslint complexity, oxlint, radon]`
+- **Duplication command**: `[command or n/a; e.g., jscpd, PMD CPD]`
+- **Dependency boundary command**: `[command or n/a; e.g., dependency-cruiser, madge]`
+- **Dead code command**: `[command or n/a; e.g., knip, depcheck, vulture]`
+- **Static analysis dashboard**: `[SonarQube/SonarCloud/Code Climate/Qlty/n/a]`
+- **Mutation testing**: `[command or high-budget only / n/a]`
+- **Agent workflow**: use the `refactoring` skill for behavior-preserving
+  structure cleanup after features, and keep behavior proof as the hard gate.
+
+## 🛡 Hardening
+- **Risk model**: map trust boundaries, input abuse, authz, secrets/data,
+  dependencies, availability, concurrency, observability, recovery, and unsafe
+  configuration before patching.
+- **SAST command**: `[command or n/a; e.g., semgrep, codeql, sonar]`
+- **Dependency audit command**: `[command or n/a; e.g., pnpm audit, npm audit, pip-audit, uv audit, osv-scanner]`
+- **Secret scan command**: `[command or n/a; e.g., gitleaks, detect-secrets]`
+- **Config validation command**: `[command or n/a]`
+- **Resilience/failure tests**: `[command or n/a]`
+- **Agent workflow**: use the `hardening` skill after major features to produce
+  a risk map, mitigations, adversarial proof, and residual-risk note.
+
 ## 🧑‍⚖️ Review Policy
 - **Canonical material reviewer**: Farplane reviewer lane from
   `~/.codex/agents/reviewer.toml` plus the TAS `review` skill.
