@@ -43,7 +43,7 @@
       "Recognizes the request as an obvious direct maintenance fix rather than a metric-driven experiment",
       "Routes to direct edit or skill-maintenance instead of setting up a full self-improve loop",
       "Names the minimal verification such as link check, JSON parse, or skill validation",
-      "Avoids creating unnecessary variants, metrics, or autoresearch artifacts",
+      "Avoids creating unnecessary variants, metrics, or experiment scaffolding",
       "Preserves self-improve for cases with search space, baseline, and comparison"
     ],
     "tags": [

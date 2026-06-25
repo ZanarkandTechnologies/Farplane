@@ -29,17 +29,17 @@ Each line in `registry.jsonl` is one JSON object:
 
 ```json
 {
-  "id": "FEAT-0001",
-  "name": "Metric-driven autoresearch sessions",
+  "id": "FEAT-0063",
+  "name": "Metric advisor cards",
   "status": "implemented",
-  "category": "improvement-loop",
-  "surfaces": ["skills/autoresearch-plan", "skills/autoresearch-exec"],
-  "source_refs": ["skills/autoresearch-plan"],
+  "category": "skills",
+  "surfaces": ["skills/metric-advisor", "docs/specs/self-improvement-contracts.md"],
+  "source_refs": ["tickets/TASK-0228/ticket.md"],
   "external_refs": [],
-  "evidence_refs": ["tickets/archive/TASK-0100/ticket.md"],
-  "known_limits": "Skill-and-script based, not a hosted benchmark lab.",
-  "metrics": [],
-  "last_verified": "2026-05-04"
+  "evidence_refs": ["skills/metric-advisor/SKILL.md"],
+  "known_limits": "Advisory metric-card contract only; callers still own execution.",
+  "metrics": ["metric_card_traceability_pass"],
+  "last_verified": "2026-06-26"
 }
 ```
 

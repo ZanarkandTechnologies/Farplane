@@ -74,8 +74,8 @@ normalize source facts before this skill when the source set is noisy.
 7. **Synthesize:** produce the recommended best-of-worlds workflow, file layout,
    metric contract, and implementation steps.
 8. **Handoff:** route implementation to the right skill such as
-   `impl-plan`, `autoresearch-plan`, `self-improve`, `research:gap`, or
-   `functional-ui`.
+   `metric-advisor`, `impl-plan`, `self-improve`, `research:gap`,
+   or `functional-ui`.
 
 Load `references/feature-scoring.md` before scoring features and
 `references/metric-discovery.md` when the metric is unclear.
@@ -96,10 +96,10 @@ For bigger comparisons, scaffold a durable synthesis workspace:
 
 ```bash
 python3 skills/best-of-worlds/scripts/init_synthesis.py \
-  --name autoresearch-skill-suite \
+  --name skill-improvement-suite \
   --target "Farplane skill self-improvement workflow" \
-  --source https://github.com/karpathy/autoresearch \
-  --source https://www.mindstudio.ai/blog/claude-code-autoresearch-self-improving-skills
+  --source docs/specs/self-improvement-contracts.md \
+  --source skills/self-improve/SKILL.md
 ```
 
 This creates:

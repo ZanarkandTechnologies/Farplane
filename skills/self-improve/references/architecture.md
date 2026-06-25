@@ -1,6 +1,7 @@
 # Self Improve Architecture
 
-`self-improve` is a skill-specific autoresearch setup.
+`self-improve` is skill-specific improvement memory and measured candidate
+comparison.
 
 Inputs:
 
@@ -14,7 +15,8 @@ Outputs:
 - experiment-local eval cases
 - optional target-skill `self-improve/program.md` memory
 - baseline skill score
-- autoresearch session configured around eval pass rate
+- metric card or no-metric rationale
+- eval, review, human-feedback, or Goal-loop comparison plan
 - measured skill edits
 - before/after debrief
 

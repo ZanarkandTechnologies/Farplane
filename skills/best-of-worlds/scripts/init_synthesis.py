@@ -102,7 +102,8 @@ TBD
 
 ## Next Skill
 
-- `impl-plan`, `autoresearch-plan`, `self-improve`, `research:gap`, or `functional-ui`
+- `metric-advisor`, `impl-plan`, `self-improve`, `research:gap`, or
+  `functional-ui`
 """
 
 

@@ -60,7 +60,7 @@ compute/budget, and blocker handling.
 advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
 state: reads(operator intent, listed files, tickets, board files?, farplane/goals.md?, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
 gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
-routes: impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
+routes: metric-advisor | impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
 fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
 ```
 
@@ -150,6 +150,8 @@ only after the branch is selected:
    - [ ] Use heartbeat when the next useful action depends on elapsed time,
      feedback arrival, an external event, or a periodic board-drain check.
 - [ ] 5. Choose the metric or feedback provider.
+   - [ ] If the provider, guard metrics, anti-metrics, or no-metric rationale
+     are unclear, derive a metric card before writing `program.md`.
    - [ ] `mechanical`: command, script, eval, benchmark, or artifact check.
    - [ ] `review`: TAS verdict from review.
    - [ ] `agent_qa`: adversarial QA evidence.
@@ -277,6 +279,8 @@ Or create/update the Goal Packet files and then report their paths.
   triggers for the same Goal Packet contract.
 - Do not force numeric metrics onto judgment-heavy work. Use human feedback,
   review verdicts, or artifact-presence signals when those are more honest.
+- Do not re-invent the metric contract inside the Goal prompt. When the signal
+  is unclear, derive the metric card first and cite it compactly.
 - Do not emit a prompt-only material Goal without a named ticket/program/progress
   setup path.
 - Do not route new public execution through `$work`, `$ralph`, or `batch-work`.
@@ -304,6 +308,8 @@ Or create/update the Goal Packet files and then report their paths.
 - [../horizon-advisor/SKILL.md](../horizon-advisor/SKILL.md) - use before this
   skill when project-level goal graphs or `goals.md` strategy deltas still
   need to be authored.
+- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - derive honest
+  metric cards before Goal Packet metric provider compilation.
 - [optimize-with-human](../optimize-with-human/SKILL.md) - route optimization
   loops through human feedback and feedback-file contracts.
 - [tickets/templates/goal-loop/program.md](../../tickets/templates/goal-loop/program.md) -

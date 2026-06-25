@@ -162,8 +162,8 @@ Requirements:
   the selected ticket, and proposed new functions, helpers, services, or modules
   must prove why an existing owner surface cannot carry them.
 - `Done / Proof` should be compact by default: done conditions, metric or
-  `none mechanical`, review rubrics/TAS gates, hard gates, required proof, and
-  optional autoresearch session path.
+  `none mechanical`, optional metric-card rationale, review rubrics/TAS gates,
+  hard gates, and required proof.
 - If the work is a trivial localized fix, `Map`, typed flow, and other deeper
   detail may be intentionally short or omitted.
 - `Options considered` must appear only for real material choices, with compact

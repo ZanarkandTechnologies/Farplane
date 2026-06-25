@@ -99,9 +99,9 @@ Generated audit:
   `skills/skill-maintenance/scripts/generate_harness_graph.py`.
 
 Skill-owned contracts should live with their skills, not as separate specs.
-Examples: autoresearch belongs to `skills/autoresearch-plan`,
-`skills/autoresearch-exec`, and `skills/self-improve`; best-of-worlds belongs
-to `skills/best-of-worlds`; skill registry/tier rollout belongs to
+Examples: metric-card advice belongs to `skills/metric-advisor`,
+self-improvement memory belongs to `skills/self-improve`, best-of-worlds
+belongs to `skills/best-of-worlds`, and skill registry/tier rollout belongs to
 `docs/skills/README.md` and `skills/skill-maintenance`.
 
 Use this folder for:

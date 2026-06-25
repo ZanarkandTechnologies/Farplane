@@ -129,7 +129,7 @@ proof.
 
 Use `self-improve` only when `harden_skill` or `refine_skill` finds a measured
 search problem: multiple candidate variants, a metric, an experiment program,
-or a Goal/autoresearch loop.
+or a Goal-backed experiment loop.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List

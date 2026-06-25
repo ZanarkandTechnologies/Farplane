@@ -94,8 +94,8 @@ so future dependency tooling can discover the composition graph:
   direct evidence
 - [brainstorm](../brainstorm/SKILL.md) when the operator wants several
   workflow shapes before scoring a source idea
-- [autoresearch-plan](../autoresearch-plan/SKILL.md) when a repeated candidate
-  needs a real metric-backed benchmark plan beyond the manual scorecard
+- [metric-advisor](../metric-advisor/SKILL.md) when a repeated candidate needs
+  an honest metric card beyond the manual scorecard
 - [self-improve](../self-improve/SKILL.md) when the adopted idea changes a
   skill and needs skill-specific evals
 - [impl-plan](../impl-plan/SKILL.md) when an adopted/adapted feature needs a
@@ -124,7 +124,7 @@ every skill on every run.
 | Harness placement | [harness-advisor](../harness-advisor/SKILL.md) | A useful source feature could belong in AGENTS.md, global templates, docs/specs, skills, subagents, hooks/scripts, ticket contracts, validators, or registries. |
 | Multi-source synthesis | [best-of-worlds](../best-of-worlds/SKILL.md) | Several sources mention similar features or competing implementations. |
 | Judgment call | [advise](../advise/SKILL.md) | Evidence leaves a real choice about value, risk, or timing. |
-| Benchmark planning | [autoresearch-plan](../autoresearch-plan/SKILL.md) | A manual scorecard is not enough and a metric-driven experiment is worth scoping. |
+| Metric selection | [metric-advisor](../metric-advisor/SKILL.md) | A manual scorecard is not enough and the candidate needs an honest metric, guard, anti-metric, or no-metric rationale. |
 | Skill improvement follow-up | [self-improve](../self-improve/SKILL.md) | The candidate changes a skill and needs eval-backed variants. |
 | Ticket planning | [impl-plan](../impl-plan/SKILL.md) | An `adopt` or `adapt` decision becomes implementation work. |
 | Quality gate | [review](../review/SKILL.md) | Scout output changed durable artifacts or created a handoff that needs trust. |

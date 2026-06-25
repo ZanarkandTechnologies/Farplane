@@ -23,23 +23,24 @@ The ticket answers before build starts:
 
 - what concrete conditions define done
 - what mechanical metric, if any, should move or pass
+- which metric card or `none mechanical` rationale selected the provider,
+  guard metrics, and anti-metrics when the metric was not obvious
 - which review rubric families and TAS gates are required
 - which rubric families are hard gates
 - which reviewer handoff fields should be passed to the `reviewer` lane:
   task path, review focus, changed files, evidence, rubric families,
   required TAS gates, hard gates, and expected output path
 - which evidence artifacts must exist before completion
-- whether an `autoresearch` session exists for repeated metric experiments
 
 The calling skill or ticket owns rubric routing. The contract carries handles,
 reviewer handoff fields, and TAS gates, not full specialist bodies. Rubric
 details remain in `docs/review/rubrics/*`; the reusable handoff template
-lives in `docs/review/rubrics/reviewer-handoff.md`; autoresearch session
-details remain in `autoresearch.md`, `autoresearch.sh`, and
-`autoresearch.jsonl`.
+lives in `docs/review/rubrics/reviewer-handoff.md`; metric-card decisions live
+in the ticket/program/proof artifact that called `metric-advisor`.
 
 When no honest metric exists, the contract should say `none mechanical` rather
 than rewarding a fake proxy. Older tickets may still call this block
+`Proof Contract`; new tickets should use `Done / Proof`.
 
 ### QA
 
@@ -65,8 +66,8 @@ Reviewer answers:
 
 - does the implementation satisfy the work package?
 - is the evidence strong enough?
-- do ticket-declared metrics trace to real command output, artifacts, or
-  autoresearch logs?
+- do ticket-declared metrics trace to a metric card, real command output,
+  artifacts, review/eval evidence, or experiment logs?
 - what should be fixed before completion?
 - what neighboring repo surfaces were checked to rule out drift or hidden coupling?
 - if continuation is required, what is the single best immediate next same-ticket step?

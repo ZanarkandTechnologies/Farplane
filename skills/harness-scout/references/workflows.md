@@ -40,8 +40,8 @@
    overhead, and maintainability.
 4. Record confidence and anti-metrics.
 5. If the manual scorecard is too weak but the candidate is still important,
-   route to [autoresearch-plan](../../autoresearch-plan/SKILL.md) for a real
-   metric-backed benchmark plan.
+   route to [metric-advisor](../../metric-advisor/SKILL.md) for a real metric
+   card.
 6. Treat the scorecard as a judgment aid, not a scientific benchmark.
 
 ## Skill-Change Follow-Up

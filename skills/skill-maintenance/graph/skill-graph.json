@@ -2,11 +2,11 @@
   "counts": {
     "edge_types": {
       "common-chain": 19,
-      "markdown-ref": 302,
-      "todo-chain": 313
+      "markdown-ref": 311,
+      "todo-chain": 312
     },
-    "edges": 634,
-    "nodes": 97,
+    "edges": 642,
+    "nodes": 96,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
@@ -26,12 +26,12 @@
     ],
     "sources": {
       "external": 3,
-      "local": 94
+      "local": 93
     },
     "tiers": {
-      "1": 4,
+      "1": 5,
       "2": 38,
-      "3": 55
+      "3": 53
     }
   },
   "edges": [
@@ -279,54 +279,6 @@
       "source": "automation-advisor",
       "target": "pulse-update",
       "target_ref": "pulse-update",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "autoresearch-exec",
-      "target": "self-improve",
-      "target_ref": "self-improve",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
-      "source": "autoresearch-exec",
-      "target": "self-improve",
-      "target_ref": "self-improve",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "autoresearch-plan",
-      "target": "autoresearch-exec",
-      "target_ref": "autoresearch-exec",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "autoresearch-plan",
-      "target": "autoresearch-exec",
-      "target_ref": "autoresearch-exec",
-      "type": "todo-chain"
-    },
-    {
-      "label": "research#researchcode-patterns",
-      "source": "autoresearch-plan",
-      "target": "research",
-      "target_ref": "research#researchcode-patterns",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
-      "source": "autoresearch-plan",
-      "target": "research",
-      "target_ref": "research",
       "type": "todo-chain"
     },
     {
@@ -1997,6 +1949,13 @@
     {
       "label": "markdown-ref",
       "source": "goal-advisor",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "goal-advisor",
       "target": "optimize-with-human",
       "target_ref": "optimize-with-human",
       "type": "markdown-ref"
@@ -2360,13 +2319,6 @@
     {
       "label": "markdown-ref",
       "source": "harness-scout",
-      "target": "autoresearch-plan",
-      "target_ref": "autoresearch-plan",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "harness-scout",
       "target": "best-of-worlds",
       "target_ref": "best-of-worlds",
       "type": "markdown-ref"
@@ -2450,6 +2402,13 @@
     {
       "label": "markdown-ref",
       "source": "harness-scout",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "harness-scout",
       "target": "reference-grounding",
       "target_ref": "reference-grounding",
       "type": "markdown-ref"
@@ -2526,6 +2485,13 @@
       "source": "horizon-advisor",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "horizon-advisor",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
       "type": "markdown-ref"
     },
     {
@@ -2629,6 +2595,13 @@
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
       "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "impl-plan",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
@@ -2854,6 +2827,13 @@
     },
     {
       "label": "markdown-ref",
+      "source": "interval-update",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
       "source": "knowledge-tidier",
       "target": "documentation",
       "target_ref": "documentation",
@@ -2946,15 +2926,6 @@
       "source": "leverage-advisor",
       "target": "advise",
       "target_ref": "advise",
-      "type": "todo-chain"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
-      "source": "leverage-advisor",
-      "target": "autoresearch-plan",
-      "target_ref": "autoresearch-plan",
       "type": "todo-chain"
     },
     {
@@ -3010,6 +2981,22 @@
     {
       "label": "markdown-ref",
       "source": "leverage-advisor",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "leverage-advisor",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "leverage-advisor",
       "target": "prototyping",
       "target_ref": "prototyping",
       "type": "markdown-ref"
@@ -3042,30 +3029,14 @@
     {
       "label": "markdown-ref",
       "source": "leverage-rollout",
-      "target": "autoresearch-plan",
-      "target_ref": "autoresearch-plan",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
-      "source": "leverage-rollout",
-      "target": "autoresearch-plan",
-      "target_ref": "autoresearch-plan",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "leverage-rollout",
       "target": "eval",
       "target_ref": "eval",
       "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.6",
-      "order": 6,
+      "label": "todo.5",
+      "order": 5,
       "source": "leverage-rollout",
       "target": "eval",
       "target_ref": "eval",
@@ -3080,8 +3051,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
+      "label": "todo.3",
+      "order": 3,
       "source": "leverage-rollout",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
@@ -3122,14 +3093,21 @@
     {
       "label": "markdown-ref",
       "source": "leverage-rollout",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "leverage-rollout",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
+      "label": "todo.4",
+      "order": 4,
       "source": "leverage-rollout",
       "target": "review",
       "target_ref": "review",
@@ -3166,11 +3144,82 @@
       "type": "markdown-ref"
     },
     {
+      "label": "markdown-ref",
+      "source": "metric-advisor",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "metric-advisor",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "metric-advisor",
+      "target": "optimize-harness",
+      "target_ref": "optimize-harness",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "metric-advisor",
+      "target": "proof-advisor",
+      "target_ref": "proof-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "metric-advisor",
+      "target": "review",
+      "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "metric-advisor",
+      "target": "review",
+      "target_ref": "review",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "metric-advisor",
+      "target": "self-improve",
+      "target_ref": "self-improve",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "metric-advisor",
+      "target": "self-improve",
+      "target_ref": "self-improve",
+      "type": "todo-chain"
+    },
+    {
       "label": "common_chains.after",
       "source": "notion-task-field-fill",
       "target": "interval-update",
       "target_ref": "interval-update",
       "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "optimize-harness",
+      "target": "agent-browser",
+      "target_ref": "agent-browser",
+      "type": "todo-chain"
     },
     {
       "label": "markdown-ref",
@@ -3204,8 +3253,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.10",
-      "order": 10,
+      "label": "todo.11",
+      "order": 11,
       "source": "optimize-harness",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
@@ -3252,8 +3301,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.9",
-      "order": 9,
+      "label": "todo.10",
+      "order": 10,
       "source": "optimize-harness",
       "target": "impl-plan",
       "target_ref": "impl-plan",
@@ -3274,6 +3323,13 @@
       "target": "leverage-advisor",
       "target_ref": "leverage-advisor",
       "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "optimize-harness",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
     },
     {
       "label": "markdown-ref",
@@ -3307,8 +3363,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.6",
-      "order": 6,
+      "label": "todo.7",
+      "order": 7,
       "source": "optimize-harness",
       "target": "self-improve",
       "target_ref": "self-improve",
@@ -3323,8 +3379,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.8",
-      "order": 8,
+      "label": "todo.9",
+      "order": 9,
       "source": "optimize-harness",
       "target": "skill-creator",
       "target_ref": "skill-creator",
@@ -3339,8 +3395,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.7",
-      "order": 7,
+      "label": "todo.8",
+      "order": 8,
       "source": "optimize-harness",
       "target": "skill-maintenance",
       "target_ref": "skill-maintenance",
@@ -3641,8 +3697,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
+      "label": "todo.5",
+      "order": 5,
       "source": "proof-advisor",
       "target": "agent-behavior-test",
       "target_ref": "agent-behavior-test",
@@ -3650,8 +3706,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.4",
+      "order": 4,
       "source": "proof-advisor",
       "target": "agent-qa-test",
       "target_ref": "agent-qa-test",
@@ -3666,17 +3722,33 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
+      "label": "todo.3",
+      "order": 3,
       "source": "proof-advisor",
       "target": "eval",
       "target_ref": "eval",
       "type": "todo-chain"
     },
     {
+      "label": "markdown-ref",
+      "source": "proof-advisor",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
+    },
+    {
       "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
+      "label": "todo.1",
+      "order": 1,
+      "source": "proof-advisor",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
       "source": "proof-advisor",
       "target": "qa",
       "target_ref": "qa",
@@ -3684,8 +3756,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.7",
-      "order": 7,
+      "label": "todo.8",
+      "order": 8,
       "source": "proof-advisor",
       "target": "review",
       "target_ref": "review",
@@ -3700,8 +3772,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
+      "label": "todo.2",
+      "order": 2,
       "source": "proof-advisor",
       "target": "testing",
       "target_ref": "testing",
@@ -3709,8 +3781,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.6",
-      "order": 6,
+      "label": "todo.7",
+      "order": 7,
       "source": "proof-advisor",
       "target": "visual-qa",
       "target_ref": "visual-qa",
@@ -3722,15 +3794,6 @@
       "target": "advise",
       "target_ref": "advise",
       "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
-      "source": "pulse-update",
-      "target": "goal-advisor",
-      "target_ref": "goal-advisor",
-      "type": "todo-chain"
     },
     {
       "label": "markdown-ref",
@@ -4288,24 +4351,15 @@
     {
       "label": "markdown-ref",
       "source": "self-improve",
-      "target": "autoresearch-plan",
-      "target_ref": "autoresearch-plan",
+      "target": "eval",
+      "target_ref": "eval",
       "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "self-improve",
-      "target": "autoresearch-plan",
-      "target_ref": "autoresearch-plan",
-      "type": "todo-chain"
     },
     {
       "label": "markdown-ref",
       "source": "self-improve",
-      "target": "eval",
-      "target_ref": "eval",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
       "type": "markdown-ref"
     },
     {
@@ -4333,8 +4387,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.2",
+      "order": 2,
       "source": "self-improve",
       "target": "skill-maintenance",
       "target_ref": "skill-maintenance",
@@ -5100,7 +5154,7 @@
       "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-06-25T09:42:34+00:00",
+  "generated_at": "2026-06-25T18:10:19+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -5133,6 +5187,41 @@
       "tier": 1,
       "todo_skill_refs": [
         "deliberative-advice"
+      ]
+    },
+    {
+      "description": "Turn objectives and evidence into honest metric cards, guard metrics, anti-metrics, and route hints.",
+      "eval": "eval_task.json",
+      "group": "",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_30d": 0,
+        "distinct_threads_window": 0,
+        "distinct_tickets_30d": 0,
+        "distinct_tickets_window": 0,
+        "heat_score": 0,
+        "invocation_count_30d": 0,
+        "invocation_count_7d": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "metric-advisor",
+      "label": "metric-advisor",
+      "methods": [],
+      "path": "skills/metric-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 1,
+      "todo_skill_refs": [
+        "review",
+        "self-improve",
+        "goal-advisor"
       ]
     },
     {
@@ -6112,7 +6201,7 @@
         "reference-grounding",
         "advise",
         "prototyping",
-        "autoresearch-plan",
+        "metric-advisor",
         "impl-plan",
         "goal-advisor",
         "harness-advisor",
@@ -6254,6 +6343,7 @@
       "source": "local",
       "tier": 2,
       "todo_skill_refs": [
+        "metric-advisor",
         "testing",
         "eval",
         "agent-qa-test",
@@ -6648,73 +6738,6 @@
       "todo_skill_refs": [
         "pulse-update",
         "interval-update"
-      ]
-    },
-    {
-      "description": "Run or resume autoresearch session artifacts into metric-based keep/discard decisions when an experiment already exists.",
-      "eval": "",
-      "group": "self-improvement",
-      "has_checklist": true,
-      "heat": {
-        "distinct_threads_30d": 0,
-        "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
-        "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
-        "invocation_count_all": 0,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
-        "recent_days": 7,
-        "window_days": 30
-      },
-      "id": "autoresearch-exec",
-      "label": "autoresearch-exec",
-      "methods": [],
-      "path": "skills/autoresearch-exec/SKILL.md",
-      "qa_checklist": "",
-      "skill_ui": "",
-      "source": "local",
-      "tier": 3,
-      "todo_skill_refs": [
-        "self-improve"
-      ]
-    },
-    {
-      "description": "Turn a fuzzy optimization goal into autoresearch scope, metric, direction, verification, guardrails, and execution artifacts.",
-      "eval": "",
-      "group": "self-improvement",
-      "has_checklist": true,
-      "heat": {
-        "distinct_threads_30d": 0,
-        "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
-        "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
-        "invocation_count_all": 0,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
-        "recent_days": 7,
-        "window_days": 30
-      },
-      "id": "autoresearch-plan",
-      "label": "autoresearch-plan",
-      "methods": [],
-      "path": "skills/autoresearch-plan/SKILL.md",
-      "qa_checklist": "",
-      "skill_ui": "",
-      "source": "local",
-      "tier": 3,
-      "todo_skill_refs": [
-        "research",
-        "autoresearch-exec"
       ]
     },
     {
@@ -7650,7 +7673,6 @@
       "todo_skill_refs": [
         "leverage-advisor",
         "impl-plan",
-        "autoresearch-plan",
         "goal-advisor",
         "review",
         "eval"
@@ -7722,6 +7744,7 @@
         "leverage-advisor",
         "harness-advisor",
         "proof-advisor",
+        "agent-browser",
         "self-improve",
         "skill-maintenance",
         "skill-creator",
@@ -7905,7 +7928,7 @@
       ]
     },
     {
-      "description": "Run the Farplane fast idle loop: reconcile outcomes, use reasoning plus bandit state to select one action, spawn a worker when useful, and update decision ledgers.",
+      "description": "Run the Farplane fast executor loop: reconcile outcomes, execute ready tickets up to policy cap, request planning when blocked, and update ledgers.",
       "eval": "eval_task.json",
       "group": "harness",
       "has_checklist": true,
@@ -7933,9 +7956,7 @@
       "skill_ui": "",
       "source": "local",
       "tier": 3,
-      "todo_skill_refs": [
-        "goal-advisor"
-      ]
+      "todo_skill_refs": []
     },
     {
       "description": "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Stop-hook gating.",
@@ -8146,7 +8167,6 @@
       "tier": 3,
       "todo_skill_refs": [
         "research",
-        "autoresearch-plan",
         "skill-maintenance"
       ]
     },

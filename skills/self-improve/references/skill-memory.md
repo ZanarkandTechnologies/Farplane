@@ -29,9 +29,6 @@ skills/<target-skill>/self-improve/
   evals/test_cases.jsonl
   evals/assertions.md
   runs/<YYYYMMDD-HHMM-slug>/
-    autoresearch.md
-    autoresearch.sh
-    autoresearch.jsonl
     scores.jsonl
     notes.md
 ```
@@ -116,12 +113,10 @@ raw observation.
 
 ## Run Folder Rules
 
-Each run folder gets its own autoresearch session files. Keep:
+Each run folder gets its own comparison notes. Keep:
 
-- `autoresearch.md` for the run-specific goal and scope
-- `autoresearch.jsonl` for machine-readable run history
-- `scores.jsonl` for eval-level pass/fail details
 - `notes.md` for a short before/after debrief
+- `scores.jsonl` for eval-level pass/fail details
 
 After a run, copy only the durable lessons back into `program.md`.
 

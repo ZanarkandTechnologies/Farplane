@@ -307,8 +307,8 @@ proof:
 For material work, `Done / Proof` is still the completion scoreboard. It should
 name honest mechanical metrics when they exist, `none mechanical` when they do
 not, reviewer rubric families, TAS gates, hard gates, and required artifacts.
-Keep full rubric bodies in `docs/review/rubrics/` and full autoresearch session
-files in the owning autoresearch artifacts. Tickets carry handles, thresholds,
+Keep full rubric bodies in `docs/review/rubrics/` and full experiment session
+files in the owning experiment artifacts. Tickets carry handles, thresholds,
 and artifact obligations, not duplicate specialist contracts.
 
 For UI-bearing, browser-driven, canvas/game, or otherwise agentically hard

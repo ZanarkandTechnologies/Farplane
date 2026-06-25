@@ -50,7 +50,7 @@ gates:
 
 routes:
   research:gap | research:parity | deep-system-design |
-  goal-advisor | qa | visual-qa | agent-qa-test | review
+  metric-advisor | goal-advisor | qa | visual-qa | agent-qa-test | review
 
 fails:
   chat-only material plan; hidden architecture invention; vague "run tests";
@@ -118,6 +118,8 @@ its own artifact, independent judgment, or proof surface.
   - [ ] Write or refine `Done / Proof` with done conditions, mechanical checks
     or `Metrics: none mechanical`, manual checks, review rubric/TAS gates, hard
     gates, human gates, and required evidence.
+  - [ ] If the metric or provider is unclear, derive a metric card before
+    writing `Done / Proof` or the Goal Packet preview.
   - [ ] Name `Proof weight:` and `Delegated lanes:` for material work when QA,
     visual judgment, agent QA, demo, or reviewer evidence is required.
   - [ ] For UI/user-visible work, name the design baseline, key screens/states,
@@ -202,6 +204,9 @@ proof reason.
   the plan.
 - [qa_checklist.md](qa_checklist.md) - run against material plans and against
   changes to this skill's planning behavior.
+- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - metric cards for
+  proof providers, guard metrics, anti-metrics, and no-mechanical-metric
+  rationale.
 - [references/examples.md](references/examples.md) - load only when examples are
   needed to calibrate output shape.
 - [prompts/plan.md](prompts/plan.md) - update when prompt wording must stay in

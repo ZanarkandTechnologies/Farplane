@@ -19,7 +19,7 @@ Use this when a target skill, prompt, or harness surface needs measured
 optimization against a metric. This skill owns experiment context, evals,
 baselines, candidate comparison, skill-local memory, and promotion rules. It is
 not a generic implementation planner and should not mutate a target before the
-metric and proof path are clear.
+metric card and proof path are clear.
 
 Current mental model:
 
@@ -36,7 +36,7 @@ skill-maintenance = accepted writeback into SKILL.md/references/source copies
 self_improve_experiment(target_skill_or_surface, metric, search_space?, eval_suite?) -> best_candidate + experiment_log + promotion_recommendation
 state: reads(target package, evals, metric, prior runs, candidate constraints); writes(program.md?, evals?, results?, promoted_change?)
 gates: metric_named; baseline_recorded; candidates_compared; promotion_rule_met
-routes: eval | goal-advisor | autoresearch-plan | skill-maintenance | review
+routes: metric-advisor | eval | goal-advisor | skill-maintenance | review
 fails: optimizes by taste; mutates before baseline; promotes unmeasured changes; bloats the target skill
 ```
 
@@ -52,19 +52,17 @@ fails: optimizes by taste; mutates before baseline; promotes unmeasured changes;
   when comparison is required.
 - [ ] 4. Define the quality rubric and convert it into binary assertions before
   optimizing.
-- [ ] 5. Establish a baseline score before mutating the target skill.
+- [ ] 5. If the metric is unclear, derive a metric card first; then establish a
+  baseline score or baseline judgment before mutating the target skill.
 - [ ] 6. For durable iterative work, prefer native Goal mode as the loop runner;
   use this skill as the eval, prompt-profile, and skill-memory context surface.
-- [ ] 7. Route to [autoresearch-plan](../autoresearch-plan/SKILL.md) only when
-  the operator explicitly wants filesystem autoresearch artifacts in addition
-  to a native Goal.
-- [ ] 8. Promote only durable lessons, evals, and accepted changes into the target
+- [ ] 7. Promote only durable lessons, evals, and accepted changes into the target
   skill package, normally through [skill-maintenance](../skill-maintenance/SKILL.md).
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Improve a target by giving native Goal mode or a filesystem experiment loop the
-context it needs to run a measured search. It does not need to own the durable
-loop when a native `/goal` can do that directly.
+Improve a target by giving native Goal mode the context it needs to run a
+measured search. It does not need to own the durable loop when a native `/goal`
+can do that directly.
 
 ## Trigger Conditions
 
@@ -83,9 +81,7 @@ Use when the user asks to:
 - prepare context files that a native Goal should read while optimizing a skill
 
 Use `goal-advisor` first when the user wants a durable native Goal. Use
-`autoresearch-plan` only when the user explicitly wants filesystem
-autoresearch artifacts, separate experiment scripts, or a metric loop outside
-native Goal mode.
+`metric-advisor` first when the metric provider or guard metrics are unclear.
 
 ## Workflow
 
@@ -96,18 +92,20 @@ native Goal mode.
 3. **Classify maturity:** rewrite if the skill is broken or missing core
    workflow; optimize only when it is already roughly usable.
 4. **Define rubric:** capture 3-6 human quality dimensions that matter.
-5. **Build binary evals:** convert rubric dimensions into `pass/fail`
+5. **Bind metric card:** use metric-advisor when the primary metric, provider,
+   guard metrics, or anti-metrics are missing.
+6. **Build binary evals:** convert rubric dimensions into `pass/fail`
    assertions over realistic prompts and expected artifacts.
-6. **Baseline:** run the eval suite against the current skill and record pass
+7. **Baseline:** run the eval suite against the current skill and record pass
    rate when deterministic evals exist. For subjective artifacts, record the
    current human-review rubric and latest feedback instead.
-7. **Prepare Goal context:** make sure `program.md`, evals, latest results, and
+8. **Prepare Goal context:** make sure `program.md`, evals, latest results, and
    failure analysis tell Goal mode what to optimize, how to verify, and what
    not to regress.
-8. **Iterate through native Goal mode:** change one bounded part of the skill
+9. **Iterate through native Goal mode:** change one bounded part of the skill
    at a time, rerun evals or present the review artifact, keep only
    improvements that do not break skill validation, and record the lesson.
-9. **Debrief and write back:** summarize before/after behavior in rubric
+10. **Debrief and write back:** summarize before/after behavior in rubric
    terms, update `program.md` with reusable lessons, preserve evals only when
    durable, and use `skill-maintenance` for accepted edits to
    `SKILL.md`/references/source copies.
@@ -156,9 +154,8 @@ experiments/self-improve/<skill-name>/<date-slug>/
   evals/cases.jsonl
   evals/assertions.md
   results/scores.jsonl
-  autoresearch.md
-  autoresearch.sh
-  autoresearch.jsonl
+  metric-card.md
+  notes.md
 ```
 
 For durable skill self-improvement, store memory inside the target skill package:
@@ -169,9 +166,7 @@ skills/<target-skill>/self-improve/
   evals/cases.jsonl
   evals/assertions.md
   runs/<YYYYMMDD-HHMM-slug>/
-    autoresearch.md
-    autoresearch.sh
-    autoresearch.jsonl
+    metric-card.md
     scores.jsonl
     notes.md
 ```
@@ -216,7 +211,9 @@ installed copies.
 
 - **Skill is missing the first-load contract:** rewrite the skill before
   optimizing.
-- **No binary metric exists:** build evals first; do not optimize by taste.
+- **No binary metric exists:** ask metric-advisor for the honest provider and
+  no-metric rationale, then build evals or use review/human feedback before
+  optimizing.
 - **Target skill has `self-improve/program.md`:** read it as durable memory
   before proposing a new hypothesis.
 - **Target skill has scripts:** include script behavior in evals when scripts
@@ -236,10 +233,8 @@ installed copies.
 3. Do not mutate the user's target skill until baseline evals exist.
 4. Do not promote experimental evals into the skill package until they catch at
    least one real failure mode.
-5. Do not treat old autoresearch artifacts as mandatory when native Goal mode
-   is the simpler durable loop.
-6. Do not optimize a skill that should be split into smaller skills first.
-7. Do not fill target skill packages with bulky raw logs; store durable
+5. Do not optimize a skill that should be split into smaller skills first.
+6. Do not fill target skill packages with bulky raw logs; store durable
   summaries, accepted evals, and reusable lessons.
 
 ## Reference Map
@@ -254,6 +249,8 @@ installed copies.
   design.
 - [references/skill-memory.md](references/skill-memory.md) - target-skill
   `program.md` and run history.
+- [metric-advisor](../metric-advisor/SKILL.md) - metric card, guard metrics,
+  anti-metrics, and no-metric rationale before variant search.
 - [eval](../eval/SKILL.md) - proof and hardcase-marked eval cases.
 - [skill-maintenance](../skill-maintenance/SKILL.md) - accepted writeback to
   skill source files.

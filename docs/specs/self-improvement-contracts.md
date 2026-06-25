@@ -43,6 +43,7 @@ Guidelines:
 observe_wrong_behavior
   -> gap_analysis(target, expected_behavior?, evidence?)
   -> harness_place(gap_report)
+  -> metric_advice(objective, evidence?, proof_surface?, constraints?)
   -> eval(task_intent, mode?)
   -> direct_change | self_improve_experiment(target, metric, search_space?, eval_suite?)
   -> review_change(change_or_evidence)
@@ -77,23 +78,31 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
 eval(task_intent, harness?, target_root?, mode?) -> eval_case? + run_summary? + next_fix
 state: reads(existing evals, fixtures, task context, expected behavior); writes(eval tasks, hardcase metadata, run artifacts)
 gates: expected_behavior:testable; baseline_before_mutation; hardcase:sanitized_and_reusable
-routes: optimize-harness | self-improve | skill-maintenance | agent-behavior-test | agent-qa-test | review
+routes: optimize-harness | metric-advisor | self-improve | skill-maintenance | agent-behavior-test | agent-qa-test | review
 fails: wording-only eval; stores raw private transcript; delays obvious regression coverage; marks hardcase without benchmark value
+```
+
+```text
+metric_advice(objective, evidence?, proof_surface?, constraints?) -> metric_card + route_hint + no_metric_reason?
+state: reads(objective, ticket/progress/eval/review artifacts, constraints); writes(none by default; caller writes ticket/program/progress/proof)
+gates: objective_named; provider_truthful; metric_matches_objective; guard_metric_named; anti_metric_named; measurement_method_named; no_fake_precision
+routes: optimize-harness | goal-advisor | self-improve | impl-plan | horizon-advisor | proof-advisor | review
+fails: fake numeric score; proxy gaming; hidden subjective judgment
 ```
 
 ```text
 self_improve_experiment(target_skill_or_surface, metric, search_space?, eval_suite?) -> best_candidate + experiment_log + promotion_recommendation
 state: reads(target package, evals, metric, prior runs, candidate constraints); writes(program.md?, evals?, results?, promoted_change?)
 gates: metric_named; baseline_recorded; candidates_compared; promotion_rule_met
-routes: eval | goal-advisor | autoresearch-plan | skill-maintenance | review
+routes: metric-advisor | eval | goal-advisor | skill-maintenance | review
 fails: optimizes by taste; mutates before baseline; promotes unmeasured changes; bloats the target skill
 ```
 
 ```text
 optimize_harness(observed_behavior, expected_behavior?, metric?, evidence?) -> accepted_change | experiment_plan | blocked_report
 state: reads(gap reports, harness doctrine, registries, evals, target surfaces); writes(ticket?, eval_case?, experiment_artifact?, applied_change?, review_receipt?)
-gates: gap_named; owner_surface_named; proof_exists; review_passes_or_blocked
-routes: gap-analysis | harness-advisor | eval | self-improve | skill-maintenance | goal-advisor | review
+gates: gap_named; metric_or_no_metric_rationale_named; owner_surface_named; proof_exists; review_passes_or_blocked
+routes: gap-analysis | metric-advisor | harness-advisor | eval | self-improve | skill-maintenance | goal-advisor | review
 fails: changes without proof; optimizes vague taste; creates new skill before checking registry; hides blocked state
 ```
 

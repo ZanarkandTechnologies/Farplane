@@ -2,8 +2,10 @@
 
 ## Eval Philosophy
 
-Self-improvement needs binary assertions. Rubrics are useful for setup and
-debrief, but the autonomous loop needs a mechanical keep/discard metric.
+Self-improvement needs explicit assertions. Rubrics are useful for setup and
+debrief; metric-advisor decides whether the honest provider is a mechanical
+metric, eval result, review verdict, human feedback, hybrid signal, or
+`none mechanical`.
 
 Good evals answer: "Did this skill make the agent behave correctly on this
 representative task?"
@@ -13,7 +15,7 @@ representative task?"
 Use JSONL for cases:
 
 ```json
-{"id":"metric-loop-setup","prompt":"Set up autoresearch to reduce type errors in this repo","expected_behavior":["asks only for non-discoverable fields","writes autoresearch.md","creates numeric verify command"],"assertions":["mentions Goal/Scope/Metric/Direction/Verify","rejects subjective metric","does not start execution"]}
+{"id":"metric-card-setup","prompt":"Choose how to measure whether this skill's planning output got easier to approve","expected_behavior":["uses metric-advisor or an equivalent metric card","names provider and guard metrics","uses none mechanical when no command exists"],"assertions":["does not invent a fake numeric score","names review or human feedback when qualitative","does not start execution"]}
 ```
 
 Store durable cases at `self-improve/evals/test_cases.jsonl`. Older

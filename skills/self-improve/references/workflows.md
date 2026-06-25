@@ -7,11 +7,13 @@
    improvement memory.
 3. Classify whether it needs rewrite or optimization.
 4. Define rubric dimensions.
-5. Convert rubric into binary assertions.
-6. Build at least 3 eval cases.
-7. Baseline pass rate.
-8. Create an autoresearch session with `skill_eval_pass_rate`.
-9. Iterate one skill change at a time through `autoresearch-exec`.
+5. Use metric-advisor when provider, guard metrics, anti-metrics, or no-metric
+   rationale are unclear.
+6. Convert rubric into binary assertions.
+7. Build at least 3 eval cases.
+8. Baseline pass rate or baseline reviewer/human judgment.
+9. Iterate one skill change at a time through native Goal mode or a bounded
+   candidate-comparison pass.
 10. Debrief before/after behavior and update durable skill memory with lessons.
 
 Use 3-5 cases for smoke validation. Use 20-100 diverse cases before trusting an
@@ -25,7 +27,7 @@ Use this path when the operator wants the skill itself to remember experiments:
 2. Fill `self-improve/program.md` with the skill contract, rubric, and first
    hypotheses.
 3. Put reusable binary evals in `self-improve/evals/`.
-4. Create one run directory per autoresearch session under
+4. Create one run directory per candidate-comparison session under
    `self-improve/runs/<YYYYMMDD-HHMM-slug>/`.
 5. After each run, copy the short lesson into `program.md` and leave bulky raw
    logs in `experiments/` unless they are safe and useful.

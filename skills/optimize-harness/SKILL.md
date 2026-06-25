@@ -29,8 +29,9 @@ review.
 This skill orchestrates existing surfaces. It should not absorb their jobs:
 `gap-analysis` diagnoses, `horizon-advisor` owns strategy deltas,
 `leverage-advisor` scores compounding plays, `harness-advisor` places the fix,
-`proof-advisor` chooses the proof surface and proof cases, `eval` executes
-runnable eval proof after eval is selected, `skill-creator` packages new
+`metric-advisor` chooses honest metric cards, `proof-advisor` chooses the proof
+surface and proof cases, `eval` executes runnable eval proof after eval is
+selected, `skill-creator` packages new
 reusable workflows, `skill-maintenance` backpropagates into existing skills,
 `impl-plan` plans material coding tickets, `goal-advisor` compiles execution,
 `self-improve` runs metric-driven experiments, and `review` judges readiness.
@@ -48,8 +49,8 @@ gates: gap_named; loss_term_named; metric_or_reward_signal_named;
        owner_surface_named; proof_route_named; accept_hold_or_rollback_named;
        review_passes_or_blocked
 routes: gap-analysis | horizon-advisor | leverage-advisor | harness-advisor |
-  proof-advisor | eval | skill-creator | skill-maintenance | impl-plan |
-  goal-advisor | self-improve | review
+  metric-advisor | proof-advisor | eval | skill-creator | skill-maintenance |
+  impl-plan | goal-advisor | self-improve | review
 fails: changes without proof; optimizes vague taste; creates new skill before checking registry; hides blocked state
 ```
 
@@ -65,12 +66,19 @@ fails: changes without proof; optimizes vague taste; creates new skill before ch
   - [ ] Name the loss term: human intervention, false completion, agent churn,
         coordination cost, ungrounded claims, brittle state loss, context bleed,
         source gaps, quality, proof, or auditability.
-  - [ ] Name the reward signal or proof provider. Prefer reasoning over honest
-        qualitative evidence early; use numbers only when the metric source is
-        real enough to compare across intervals.
+  - [ ] When the metric is missing or disputed, derive a metric card first:
+        provider, primary signal, direction, guard metrics, anti-metrics,
+        minimum meaningful delta, measurement method, and route hint.
+  - [ ] Name the reward signal or proof provider from that card. Prefer
+        reasoning over honest qualitative evidence early; use numbers only when
+        the metric source is real enough to compare across intervals.
+  - [ ] For eval recovery, derive observed/current behavior and expected
+        behavior from the eval run artifact, then use the metric card before
+        placement or proof routing.
 - [ ] 3. Diagnose the gap with [gap-analysis](../gap-analysis/SKILL.md).
   - [ ] If the gap is already obvious and well grounded, state it explicitly
-    and keep moving.
+    and keep moving, but still name the `gap-analysis` route or equivalent
+    diagnostic pass.
   - [ ] If expected behavior is underspecified, mark the uncertainty instead of
     inventing a target.
 - [ ] 4. Choose whether this is a full harness optimization or a smaller route.
@@ -83,6 +91,8 @@ fails: changes without proof; optimizes vague taste; creates new skill before ch
 - [ ] 5. Place the fix with [harness-advisor](../harness-advisor/SKILL.md).
   - [ ] Name one primary owner surface.
   - [ ] Name rejected surfaces and why they should not own this change now.
+  - [ ] State that `harness-advisor` owns the placement decision when the owner
+    surface is not already settled.
 - [ ] 6. Design proof with [proof-advisor](../proof-advisor/SKILL.md).
   - [ ] Choose deterministic test, validator, eval, QA, visual QA, agent QA,
         review, or source-gap proof before creating proof artifacts.
@@ -92,10 +102,24 @@ fails: changes without proof; optimizes vague taste; creates new skill before ch
         tools, tickets, reports, or subagents.
   - [ ] Mark the case as `hardcase` only when it is unusually difficult,
     reusable, benchmark-worthy, or saleable after sanitization.
+  - [ ] For hardcase evals, name metadata explicitly:
+    `hardcase: true`, difficulty, benchmark value, and sanitization notes.
+  - [ ] Name where the eval should live: skill-local when one skill owns the
+    failure, workflow/e2e when composition across skills or routing is the
+    behavior under test.
+  - [ ] For browser/user-visible proof, preserve QA ownership: delegate
+    operated browser proof to `qa-tester` when available; qa-tester may use
+    `agent-browser` for page operation, screenshots, snapshots, console logs,
+    and page errors. Keep Playwright for regression suites, existing tests, or
+    already-settled scripted flows.
 - [ ] 7. Choose direct change, experiment, or execution handoff.
   - [ ] 1. Use direct implementation when the owner and proof are clear.
   - [ ] 2. Use [self-improve](../self-improve/SKILL.md) when a target skill or
-    harness surface needs metric-driven candidate search.
+    harness surface needs metric-driven candidate search after a baseline
+    metric card exists.
+  - [ ] Explicitly justify direct change versus self-improve: direct change
+    when owner/proof are clear; self-improve only when there is a metric,
+    baseline, search space, and candidate comparison.
   - [ ] 3. Use [skill-maintenance](../skill-maintenance/SKILL.md) for
     existing skill hardening, eval-to-QA sync, registry, bulk rollout, or
     skill-contract migrations.
@@ -134,13 +158,29 @@ Minimal handoff:
 ```text
 Observed:
 Expected:
-Gap:
+Gap / gap-analysis:
 Loss term:
 Reward signal:
-Primary owner:
+Primary owner / harness-advisor:
 Proof:
+Direct change vs self-improve:
+QA ownership:
 Route:
 Review gate:
+```
+
+Required route labels for full harness fixes:
+
+```text
+Diagnostic route: gap-analysis.
+Placement route: harness-advisor, with primary owner and rejected surfaces.
+Metric route: metric-advisor when the reward signal is not explicit.
+Proof route: proof-advisor or eval, with proof surface and evidence artifact.
+Execution route: direct change, self-improve, skill-maintenance, impl-plan, or
+  goal-advisor, with direct-change versus self-improve justification.
+QA ownership: qa-tester for operated browser/user-visible proof when available;
+  qa-tester may use agent-browser for fast page operation and evidence capture.
+Review route: review before claiming the harness behavior changed.
 ```
 
 Self-evolution routing:
@@ -149,6 +189,7 @@ Self-evolution routing:
 strategy gap -> horizon-advisor
 unclear compounding value -> leverage-advisor
 unclear owner surface -> harness-advisor
+unclear metric or reward signal -> metric-advisor
 proof or e2e behavior gap -> eval
 new reusable workflow -> skill-creator
 existing skill backpropagation -> skill-maintenance
@@ -169,6 +210,13 @@ material harness behavior gap -> optimize-harness
   scores as guided reasoning only when the evidence and proof surface are named.
 - Do not use `self-improve` for ordinary implementation. Use it only when there
   is a metric, target surface, search space, baseline, and candidate comparison.
+- Do not omit the owner skill names in a full harness fix. The response or
+  artifact must visibly name `gap-analysis`, `harness-advisor`, proof route,
+  direct change versus `self-improve`, and review/validation status.
+- Do not let browser proof routing bypass QA ownership. For operated browser
+  evidence, preserve `qa-tester` delegation when available; `agent-browser` is
+  the fast page-operation tool inside that QA lane, while Playwright remains
+  for regression tests, existing suites, or settled scripted flows.
 - Do not keep hard cases in a separate capture backlog. Hardcase is eval
   metadata for a runnable proof case.
 - Do not add a new skill before checking the generated skill registry for an
@@ -189,6 +237,8 @@ material harness behavior gap -> optimize-harness
   for an existing feature, workflow, capability, or artifact.
 - [harness-advisor](../harness-advisor/SKILL.md) - choose the primary harness
   placement surface.
+- [metric-advisor](../metric-advisor/SKILL.md) - turn objectives and evidence
+  into honest metric cards before recovery routing.
 - [eval](../eval/SKILL.md) - create, tag, and run proof cases including
   hardcase mode.
 - [skill-creator](../skill-creator/SKILL.md) - create or reshape a reusable
@@ -219,9 +269,11 @@ Return or write:
 - `Loss term`
 - `Metric or reward signal`
 - `Gap report`
-- `Placement decision`
+- `Placement decision` naming `harness-advisor`
 - `Proof or eval case`
-- `Direct change or experiment route`
+- `Direct change or experiment route` with direct-change versus self-improve
+  justification
+- `QA ownership` when browser, UI, or user-visible proof is involved
 - `Accept / hold / rollback decision`
 - `Review result`
 - `Next concrete action`

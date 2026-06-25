@@ -79,7 +79,7 @@ flowchart LR
     interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute"]:::callout
     intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout
-    research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>autoresearch-plan/exec<br/>self-improve"]:::skill
+    research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     goalSkill["goal-advisor<br/>native Goal<br/>heartbeat<br/>batch"]:::callout

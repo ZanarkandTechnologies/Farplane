@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-25T09:42:35+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-25T18:10:20+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -29,20 +29,20 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
 ## Counts
 
-- Scanned files: `1255`
-- Nodes: `934`
-- Edges: `4200`
-- Unresolved local-looking refs: `1128`
+- Scanned files: `1246`
+- Nodes: `938`
+- Edges: `4197`
+- Unresolved local-looking refs: `1114`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/specs/self-improvement-contracts.md` | 66 | 58 |
-| `docs/MEMORY.md` | 60 | 24 |
-| `docs/specs/README.md` | 58 | 27 |
-| `docs/LESSONS.md` | 57 | 24 |
-| `docs/TROUBLES.md` | 48 | 19 |
+| `docs/specs/self-improvement-contracts.md` | 70 | 61 |
+| `docs/MEMORY.md` | 60 | 25 |
+| `docs/specs/README.md` | 57 | 27 |
+| `docs/LESSONS.md` | 56 | 24 |
+| `docs/TROUBLES.md` | 47 | 19 |
 | `docs/HISTORY.md` | 42 | 14 |
 | `docs/skills/registry.jsonl` | 39 | 23 |
 | `docs/skills/README.md` | 34 | 15 |
@@ -64,7 +64,7 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | Spec | All refs | Skill refs | Suggested status |
 | --- | --- | --- | --- |
 | `docs/specs/AGENTS.md` | 1 | 0 | keep active |
-| `docs/specs/README.md` | 58 | 27 | keep active |
+| `docs/specs/README.md` | 57 | 27 | keep active |
 | `docs/specs/adaptive-backoff.md` | 7 | 6 | keep active |
 | `docs/specs/agent-testability-surfaces.md` | 4 | 3 | keep active |
 | `docs/specs/context-and-handoff-policy.md` | 7 | 4 | keep active |
@@ -78,9 +78,9 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/specs/minimal-autonomy-loop.md` | 4 | 4 | keep active |
 | `docs/specs/nested-pm-projects.md` | 0 | 0 | keep active |
 | `docs/specs/product-convergence-plan.md` | 0 | 0 | keep active |
-| `docs/specs/program-notation.md` | 11 | 7 | keep active |
-| `docs/specs/review-gates.md` | 7 | 2 | keep active |
-| `docs/specs/self-improvement-contracts.md` | 66 | 58 | keep active |
+| `docs/specs/program-notation.md` | 10 | 7 | keep active |
+| `docs/specs/review-gates.md` | 9 | 4 | keep active |
+| `docs/specs/self-improvement-contracts.md` | 70 | 61 | keep active |
 | `docs/specs/spec-authoring-contract.md` | 5 | 2 | keep active |
 | `docs/specs/spec-first-execution-loop.md` | 5 | 0 | keep active |
 | `docs/specs/steer-pulse-automation.md` | 12 | 6 | keep active |

@@ -51,7 +51,7 @@ gates:
 
 routes:
   testing | eval | agent-qa-test | agent-behavior-test | qa | visual-qa |
-  skill-maintenance | review
+  metric-advisor | skill-maintenance | review
 
 fails:
   many_near_duplicate_cases; happy_path_only; vague_quality_case;
@@ -104,6 +104,9 @@ Run grounding and proof-case design inline by default. Route to:
     impossible fixtures, and cases whose failure would not identify an owner.
   - [ ] Keep fewer high-signal cases over broad but blurry coverage.
 - [ ] 6. Choose the proof surface for each selected case.
+  - [ ] Use [metric-advisor](../metric-advisor/SKILL.md) first when the proof
+    claim depends on an unclear metric, reward signal, guard metric, or
+    no-mechanical-metric rationale.
   - [ ] Use deterministic tests, validators, schemas, or scripts when the
     expected result is mechanically checkable.
   - [ ] Use `testing`, `eval`, `agent-qa-test`, `agent-behavior-test`, `qa`,
@@ -187,6 +190,8 @@ coverage_gaps:
   testing backpressure decisions.
 - [../eval/SKILL.md](../eval/SKILL.md) - route runnable eval rows, judges,
   fixture ownership, and eval-run proof.
+- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - route unclear
+  proof metrics into a metric card before selecting cases.
 
 ## Output
 

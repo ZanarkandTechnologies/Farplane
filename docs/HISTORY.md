@@ -318,3 +318,4 @@
 2026-06-25 00:00 +0800 | FIX | treat rendered `~/.codex/config.toml` `[env]` as a Farplane Core runtime config source before legacy env-file fallbacks while keeping UI-managed settings as the highest-precedence local override
 2026-06-25 00:00 +0800 | MIGRATION | make `~/.farplane/config.toml` the canonical Farplane runtime config source while keeping legacy JSON, rendered Codex TOML, and env-file fallbacks for older installs
 2026-06-25 00:00 +0800 | MIGRATION | rename the public project setup skill from `deep-init-project` to `init-advisor`, move the critical-path docs and generated registries/graphs, and keep `harness-creator` as the full operating-model advisor
+2026-06-26 00:00 +0800 | SKILL | add `metric-advisor` as the metric-card primitive for eval recovery, Goal Packets, self-improvement, and proof contracts, then remove the old `autoresearch-plan` and `autoresearch-exec` skill packages from active routing

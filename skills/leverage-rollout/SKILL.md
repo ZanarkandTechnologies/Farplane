@@ -27,7 +27,7 @@ one to three excellent examples, extract the pattern, and only then use
 roll_out_leverage(feature_ref, selected_play?, target_set?, ambition?, proof_need?) -> exemplar_packet + sample_proof + rollout_recommendation + optional_rollout_packet
 state: reads(leverage plan, feature refs, tickets, specs, registries, current repo state, existing proof); writes(ticket.md? program.md? progress.md? artifacts? rollout child tickets?)
 gates: selected_play_exists; exemplar_selected; sample_proof_created; pattern_extracted; rollout_readiness_decided; goal_advisor_rollout_used_when_scaling
-routes: leverage-advisor | goal-advisor | impl-plan | autoresearch-plan | review | eval | optimize-with-human
+routes: leverage-advisor | metric-advisor | goal-advisor | impl-plan | review | eval | optimize-with-human
 fails: scales before exemplar proof; treats generic advice as sample proof; creates rollout Goal without target set; hides learning outside progress or artifacts
 ```
 
@@ -67,8 +67,7 @@ rollout, batch, or final prompt compilation after an exemplar pattern exists.
    - [ ] Use direct action for tiny exemplar proof.
    - [ ] Use [impl-plan](../impl-plan/SKILL.md) when the exemplar is a coding
      ticket that needs an approval-ready build plan.
-   - [ ] Use [autoresearch-plan](../autoresearch-plan/SKILL.md) when the
-     exemplar is a metric-based research experiment.
+   - [ ] Derive a metric card before any repeated metric-based exemplar.
    - [ ] Use [goal-advisor](../goal-advisor/SKILL.md) when the exemplar needs
      ticket.md, program.md, progress.md, budget, metric, or drift policy.
 - [ ] 4. Capture sample proof and extract the rollout pattern.
@@ -120,7 +119,7 @@ program:
     ]
 
   create_or_prepare_exemplar(exemplar_case) ->
-    direct_proof | impl_plan | autoresearch_plan | goal_packet
+    direct_proof | impl_plan | goal_packet
 
   run_or_handoff_exemplar(exemplar_execution) -> sample_proof
 
@@ -172,6 +171,8 @@ Output:
 
 - [../leverage-advisor/SKILL.md](../leverage-advisor/SKILL.md) - use when the
   selected leverage play is missing or needs recommendation.
+- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - use when exemplar
+  proof needs an honest metric card before repeated measurement.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - use for Goal Packet,
   heartbeat, rollout, batch, and native `/goal` prompt architecture.
 - [../goal-advisor/references/goal-shapes.md](../goal-advisor/references/goal-shapes.md) -

@@ -69,7 +69,7 @@ gates:
 
 routes:
   pulse-update | goal-advisor | feed-scout | update-memory |
-  update-strategy | skill-maintenance | review
+  update-strategy | skill-maintenance | metric-advisor | review
 
 fails:
   selecting due jobs; writing scheduler state; mutating tracked cadence config;
@@ -214,6 +214,8 @@ priority_planning(review_window, planning_window)
         lanes as those refs direct.
   - [ ] When `compounding_leverage_review` is enabled, close due reward
         signals from prior interval reports before selecting new leverage bets.
+  - [ ] When metric snapshots or reward signals are ambiguous, use a metric
+        card before allowing them to drive planning.
   - [ ] When `learning_backpropagation` is enabled, route repeated troubles,
         lessons, progress-log findings, and proof failures to
         `skill-maintenance(mode: harden_skill)` instead of using a legacy drain
@@ -251,4 +253,6 @@ priority_planning(review_window, planning_window)
   - default interval context bundle.
 - [templates/interval-report.md](templates/interval-report.md) - default
   interval report.
+- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - honest metric
+  cards for interval snapshots and compounding reward signals.
 - [../../docs/specs/steer-pulse-automation.md](../../docs/specs/steer-pulse-automation.md)

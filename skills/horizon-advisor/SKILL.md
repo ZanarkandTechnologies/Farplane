@@ -37,7 +37,7 @@ horizon_advice(project_root?, intent?, current_goals?, evidence?, constraints?)
    + goal_advisor_handoff?
 state: reads(farplane/goals.md, farplane/harness.md, farplane/automations.md?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.md delta or strategy artifact when explicitly in scope)
 gates: north_star_named; value_function_named; metrics_have_proof_surfaces; anti_metrics_named; current_frontier_expanded_only; execution_handoff_goes_to_goal_advisor
-routes: goal-advisor | update-strategy | deep-interview | review
+routes: metric-advisor | goal-advisor | update-strategy | deep-interview | review
 fails: vague goals; fake precision; turning all goals into tasks; compiling native Goal prompts; hiding strategy in chat; optimizing proxy metrics without a shared value function
 ```
 
@@ -83,6 +83,8 @@ Goal prompts here.
    - [ ] Pair every metric with a provider and proof surface:
      `artifact_presence`, `mechanical`, `review`, `agent_qa`,
      `human_feedback`, `market`, `learning`, or `hybrid`.
+   - [ ] Derive a metric card for any KPI whose provider, guard metric,
+     anti-metric, or proof surface is unclear.
    - [ ] Avoid fake precision when the honest signal is qualitative,
      researcher-led, or early-stage.
 - [ ] 4. Shape the project goals.
@@ -182,6 +184,8 @@ goal_advisor(
   - project goals, Goal Packet, ticket/program/progress boundary.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - handoff target for
   selected frontier execution compilation.
+- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - metric cards for
+  KPI providers, guard metrics, anti-metrics, and no-metric rationale.
 
 ## Output
 

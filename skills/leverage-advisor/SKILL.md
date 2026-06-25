@@ -25,9 +25,9 @@ execution.
 
 ```text
 advise_leverage(feature_ref, context_refs?, ambition?, constraints?) -> leverage_plan + recommended_first_move
-state: reads(feature docs, feature registry, tickets, specs, current repo state, related skills, prior proof); writes(leverage_plan.md? ticket_seed? autoresearch_seed? goal_recommendation?)
+state: reads(feature docs, feature registry, tickets, specs, current repo state, related skills, prior proof); writes(leverage_plan.md? ticket_seed? metric_card? goal_recommendation?)
 gates: feature_grounded; opportunities_ranked; recommendation_named; proof_path_named; next_action_executable
-routes: reference-grounding | advise | prototyping | autoresearch-plan | impl-plan | goal-advisor | harness-advisor | leverage-rollout
+routes: reference-grounding | advise | prototyping | metric-advisor | impl-plan | goal-advisor | harness-advisor | leverage-rollout
 fails: gives generic strategy; invents feature capability; recommends a roadmap with no first proof step; over-goalifies tiny moves
 ```
 
@@ -70,8 +70,9 @@ the chosen next step needs its own artifact, budget, or proof surface.
    - [ ] Use [prototyping](../prototyping/SKILL.md) when a 1 -> 10 -> 100
      proving path matters before scale.
 - [ ] 5. Choose the next owner.
-   - [ ] Name `autoresearch-plan` when the first proof is metric-driven
-     research.
+   - [ ] Use [metric-advisor](../metric-advisor/SKILL.md) when the first proof
+     depends on choosing a metric, reward signal, guard metric, or no-metric
+     rationale.
    - [ ] Name `impl-plan` when the first proof is a coding ticket plan.
    - [ ] Name `goal-advisor` only when a durable Goal Packet is warranted.
    - [ ] Name `harness-advisor` when the main unresolved question is owner
@@ -120,7 +121,7 @@ program:
   design_first_test(recommended_play) -> experiment_or_ticket_seed
 
   decide_execution_shape(recommended_play) ->
-    direct_action | autoresearch_plan | impl_plan | goal_packet | leverage_rollout
+    direct_action | metric_card | impl_plan | goal_packet | leverage_rollout
 
   output(leverage_plan)
 ```
@@ -160,6 +161,8 @@ Output:
   when current capability or expected value needs evidence.
 - [../prototyping/SKILL.md](../prototyping/SKILL.md) - use when the proof path
   should start with one representative case before expansion.
+- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - use when the
+  first proof step needs an honest metric card before execution routing.
 - [../leverage-rollout/SKILL.md](../leverage-rollout/SKILL.md) - use when the
   recommended play should become exemplar runs and staged rollout.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - use when a chosen play

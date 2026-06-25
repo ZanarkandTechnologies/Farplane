@@ -434,7 +434,7 @@ Skill-applicable capabilities belong in the harness-wide feature registry:
 ```
 
 Use feature rows for supported optional capabilities such as eval support,
-skill capability fixtures, template-owned metadata, or autoresearchability.
+skill capability fixtures, template-owned metadata, or experiment support.
 Use versioned template metadata for structural `FEAT-####` adoption handles,
 and use skill frontmatter only for local eval, QA checklist, and skill UI
 surface paths. Use `skill_template_version` for structural template onboarding.
