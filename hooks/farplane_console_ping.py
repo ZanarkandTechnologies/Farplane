@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import socket
 import sys
 import urllib.error
@@ -75,7 +76,7 @@ def get_project_metadata(event: dict[str, object]) -> tuple[str | None, str | No
 
 
 def telemetry_endpoint() -> str | None:
-    explicit = clean_text(read_config_value("FARPLANE_TELEMETRY_ACTIVITY_URL"), 500)
+    explicit = clean_text(read_config_value("FARPLANE_TELEMETRY_HOOKS_URL"), 500)
     if explicit:
         return explicit
 
@@ -85,8 +86,52 @@ def telemetry_endpoint() -> str | None:
         or clean_text(read_config_value("FARPLANE_CONVEX_URL"), 500)
     )
     if not site_url:
+        legacy_activity = clean_text(read_config_value("FARPLANE_TELEMETRY_ACTIVITY_URL"), 500)
+        return legacy_activity
+    return urljoin(site_url.rstrip("/") + "/", "telemetry/hooks")
+
+
+def safe_id_part(value: str) -> str:
+    slug = re.sub(r"[^a-z0-9_.:-]+", "-", value.lower())
+    slug = re.sub(r"-+", "-", slug).strip("-")
+    return (slug or "unknown")[:120]
+
+
+def project_id_from_directory(value: str | None) -> str | None:
+    if not value:
         return None
-    return urljoin(site_url.rstrip("/") + "/", "telemetry/activity")
+    return f"codex-proj-{safe_id_part(value)}"
+
+
+def hook_type(event: dict[str, object]) -> str:
+    return (
+        clean_text(event.get("hook_event_name"), 160)
+        or clean_text(event.get("hookType"), 160)
+        or clean_text(event.get("event"), 160)
+        or "Heartbeat"
+    )
+
+
+def event_type_for_hook(hook: str) -> str:
+    if hook in {"UserPromptSubmit", "TurnStart"}:
+        return "turn_start"
+    if hook in {"Stop", "TurnEnd"}:
+        return "turn_end"
+    return "heartbeat"
+
+
+def source_for_hook(hook: str) -> str:
+    if hook == "UserPromptSubmit":
+        return "codex-user-prompt"
+    if hook == "Stop":
+        return "codex-stop"
+    return "codex-hook"
+
+
+def event_key_for_hook(hook: str, session_id: str | None, turn_id: str | None) -> str | None:
+    if not session_id or not turn_id:
+        return None
+    return f"codex-lifecycle:{session_id}:{turn_id}:{hook}"
 
 
 def read_payload() -> dict[str, object]:
@@ -109,31 +154,34 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
         machine_name = clean_text(socket.gethostname(), 120)
     project_name, project_directory = get_project_metadata(event)
 
-    hook_event_name = event.get("hook_event_name")
-    event_type = "heartbeat"
-    source = "codex-hook"
-    prompt = None
-
-    if hook_event_name == "UserPromptSubmit":
-        event_type = "turn_start"
-        source = "codex-user-prompt"
-        prompt = clean_text(event.get("prompt"), 100)
-    elif hook_event_name == "Stop":
-        event_type = "turn_end"
-        source = "codex-stop"
+    current_hook_type = hook_type(event)
+    event_type = event_type_for_hook(current_hook_type)
+    prompt = clean_text(event.get("prompt"), 100) if event_type == "turn_start" else None
+    session_id = clean_text(event.get("session_id"), 120)
+    turn_id = clean_text(event.get("turn_id"), 120)
+    project_id = project_id_from_directory(project_directory)
 
     return {
-        "eventType": event_type,
-        "source": source,
-        "activeAgentCount": max(active_agents, 1),
-        "prompt": prompt,
-        "agentName": clean_text(os.getenv("AIKAGE_AGENT_NAME", "codex"), 80),
-        "workflowName": clean_text(os.getenv("AIKAGE_WORKFLOW_NAME"), 120),
-        "machineName": machine_name,
-        "projectName": project_name,
-        "projectDirectory": project_directory,
-        "sessionId": clean_text(event.get("session_id"), 120),
-        "turnId": clean_text(event.get("turn_id"), 120),
+        "hookName": "farplane-console-ping",
+        "hookType": current_hook_type,
+        "projectId": project_id,
+        "sessionId": session_id,
+        "eventKey": event_key_for_hook(current_hook_type, session_id, turn_id),
+        "payload": {
+            "eventType": event_type,
+            "source": source_for_hook(current_hook_type),
+            "activeAgentCount": max(active_agents, 1),
+            "prompt": prompt,
+            "agentName": clean_text(os.getenv("AIKAGE_AGENT_NAME", "codex"), 80),
+            "workflowName": clean_text(os.getenv("AIKAGE_WORKFLOW_NAME"), 120),
+            "machineName": machine_name,
+            "projectName": project_name,
+            "projectDirectory": project_directory,
+            "cwd": project_directory,
+            "projectId": project_id,
+            "sessionId": session_id,
+            "turnId": turn_id,
+        },
     }
 
 

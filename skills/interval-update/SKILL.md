@@ -4,7 +4,6 @@ description: "Run one Farplane interval automation: review the past window, writ
 tier: 3
 group: harness
 source: local
-workflow: true
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"
@@ -44,7 +43,8 @@ interval_update(project_root, interval_id, review_window, planning_window,
    + goal_advisor_handoffs?
 
 state:
-  reads(farplane/goals.md?,
+  reads(farplane/harness.md?,
+        farplane/goals.md?,
         tickets/,
         docs/HISTORY.md?,
         docs/MEMORY.md?,
@@ -83,6 +83,7 @@ caller-supplied `context_refs`.
 
 ```text
 default_context_refs(project_root, interval_id) = {
+  harness_ref: farplane/harness.md,
   goals_ref: farplane/goals.md,
   ticket_refs: tickets/,
   memory_refs: [docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md],
@@ -182,8 +183,9 @@ priority_planning(review_window, planning_window)
   - [ ] Load `context_refs`, `report_workflows`, `planning_policy`, and
         `write_policy` only when the automation supplies them.
 - [ ] 2. Resolve default context.
-  - [ ] Build default refs for goals, tickets, memory, Pulse reports, interval
-        reports, PM thread grouping, and worker outcome refs.
+  - [ ] Build default refs for the static harness charter, goals, tickets,
+        memory, Pulse reports, interval reports, PM thread grouping, and worker
+        outcome refs.
   - [ ] Merge configured refs without making the caller restate default
         Farplane paths.
   - [ ] Resolve configured cross-interval refs, such as latest output from one
@@ -194,7 +196,8 @@ priority_planning(review_window, planning_window)
 - [ ] 3. Review the past window.
   - [ ] Summarize tickets, Pulse decisions, worker outcomes, blockers,
         failures, file/doc changes, and human feedback inside `review_window`.
-  - [ ] Check drift against configured parent context refs and goals.
+  - [ ] Check drift against the static harness charter, configured parent
+        context refs, and goals.
   - [ ] Run only the report workflows enabled by `report_workflows`, passing
         the context bundle, `review_window`, and `planning_window` to each
         workflow.

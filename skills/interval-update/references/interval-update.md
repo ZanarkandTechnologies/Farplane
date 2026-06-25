@@ -37,6 +37,7 @@ adds or replaces a source:
 
 ```text
 default_context_refs(project_root, interval_id) = {
+  harness_ref: project_root/farplane/harness.md,
   goals_ref: project_root/farplane/goals.md,
   ticket_refs: project_root/tickets/,
   memory_refs: [
@@ -135,7 +136,8 @@ merge shape.
    files named in `SKILL.md`.
 6. For enabled self-update workflows, close due reward signals from prior
    interval reports before selecting new bets.
-7. Review the past window against goals and configured parent contexts.
+7. Review the past window against the static harness charter, goals, and
+   configured parent contexts.
 8. Write [interval-report.md](../templates/interval-report.md) before any
    goals mutation.
 9. Plan the next window, sized to `planning_window`.
@@ -178,6 +180,9 @@ horizon review.
 - Leverage signals should come from existing reports, tickets, skills,
   registries, lessons, troubles, feedback, metrics, or explicitly supplied
   external source refs. Do not create a separate leverage backlog by default.
+- Static charter changes belong to `farplane/harness.md` and require explicit
+  human approval. Intervals may propose charter deltas in the dated report but
+  must not apply them silently.
 - The dated interval report is the state store for self-update decisions:
   reward closure, selected bets, rejected/deferred/expired candidates, advisor
   routes, and next reward signals.

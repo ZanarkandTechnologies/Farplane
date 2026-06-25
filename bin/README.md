@@ -30,8 +30,8 @@ runtime helpers instead of symlinking every script, validator, and test.
 
 - `validators/check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
 - `farplane` / `farplane.py` - Core-owned global CLI for install, hooks,
-  doctor checks, UI linking/start, and delegation into the linked Farplane-UI
-  module checkout
+  doctor checks, UI linking/start, skill rollout projections, and delegation
+  into the linked Farplane-UI module checkout
 - `core/*` - implementation modules for global CLI, invocation, board, compute,
   ticket-runtime, telemetry-status, and adoption helpers
 - `runtime/*` - implementation modules for Codex hooks, user-turn capture,
@@ -183,6 +183,9 @@ success quiet and make failure output the thing that stands out.
   Use when Farplane Office or global state already knows the local project
   roots; the CLI reads the same project-root list shape instead of crawling the
   whole computer.
+- `python3 bin/farplane.py skills rollout scan --json`
+  Use to inspect the current skill rollout and template-consumer projection that
+  Farplane UI can render without reading generated graph files directly.
 - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
   Use to inspect the next serial Ralph handoff plus compute blockers without
   mutating tickets, creating worktrees, or launching Codex

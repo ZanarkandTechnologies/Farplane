@@ -5,7 +5,6 @@ description: "Turn one SLC spec slice into filesystem tickets with compact summa
 tier: 3
 group: coding
 source: local
-workflow: true
 common_chains:
   after: ["impl-plan"]
 ---
@@ -36,11 +35,11 @@ common_chains:
 - [ ] If an `Agent Testability Brief` exists, carry its surfaces into the ticket contract instead of re-deriving them.
 - [ ] If there is no richer testability brief yet but `docs/bootstrap-brief.md` has `Agent Experience / Testability`, use it as the fallback seed for the first UI-bearing or agentically hard ticket.
 - [ ] If `docs/bootstrap-brief.md` or `docs/prd.md` names a project profile,
-  load [project-profiles](../deep-init-project/references/project-profiles.md)
+  load [project-profiles](../init-advisor/references/project-profiles.md)
   and carry component matrix, selected directions, prototype gates, pipeline
   handoffs, and proof surfaces into ticket boundaries.
 - [ ] Map PRD/spec work into project lifecycle ticket loops from
-  [project-lifecycle](../deep-init-project/references/project-lifecycle.md):
+  [project-lifecycle](../init-advisor/references/project-lifecycle.md):
   planner owner, executor owner, proof owner, and closeout owner.
 - [ ] If a profile prototype gate names a real unresolved risk, create the
   PoC/proof ticket before full production tickets; do not make PoC tickets
@@ -114,7 +113,7 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 - optionally `docs/prd.md` for slice intent
 - optionally `docs/specs/first-principles-planning.md` when shaping material
   ticket boundaries or preserving PRD/spec basis
-- optionally `skills/deep-init-project/references/project-profiles.md` when a
+- optionally `skills/init-advisor/references/project-profiles.md` when a
   bootstrap or PRD profile is present
 - optionally `docs/TASTE.md` for shared UI doctrine
 - optionally `qa/cookbook/*.md` when the repo already keeps reusable QA workflows

@@ -17,8 +17,7 @@ Rules:
   minimal: `tier`, `source`, optional `skill_template_version`, Tier 3 `group`,
   optional local surface fields (`eval`, `qa_checklist`, `skill_ui`), optional
   `methods`, optional `upstream_url`, and optional one-way Tier 3
-  `common_chains`, plus optional `workflow: true` for high-level workflow
-  entrypoints.
+  `common_chains`.
 - For `source: external` skills, keep Farplane-specific wrapper policy in the
   local caller skill instead of editing upstream-owned command/reference bodies.
 - External skills may intentionally omit direct todo lists when the local
@@ -56,11 +55,11 @@ Rules:
   todo-tier contract violations leave a deduplicated hardcase artifact for
   eval or self-improvement follow-up. Durable hard cases should become runnable
   eval rows with hardcase metadata when the expected behavior is testable.
-- Do not maintain a second hand-authored sequence registry. Generate flow or
-  graph views from Tier 3 `group`, `common_chains`, and `workflow: true` Todo
-  List extraction when a view is needed. Workflow extraction reads explicit
-  refs only: Markdown `SKILL.md` links, backticked `skill-name`, or
-  `$skill-name`.
+- Do not maintain a second hand-authored sequence registry. Generate graph
+  importance from observed skill heat, generate structural todo-chain edges from
+  explicit first-load todo refs, and use `common_chains` only for stable Tier 3
+  adjacency hints. Todo extraction reads explicit refs only: Markdown
+  `SKILL.md` links, backticked `skill-name`, or `$skill-name`.
 - If a field can be derived from file paths, existing frontmatter, direct todo
   lists, or Markdown links, derive it in the sync script rather than duplicating
   it in frontmatter. Structural `FEAT-####` adoption belongs to versioned

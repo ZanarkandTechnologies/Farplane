@@ -4,7 +4,6 @@ description: "Design or revise Farplane Codex automations using reviewable autom
 tier: 3
 group: harness
 source: local
-workflow: true
 template_uses:
   skill-template: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash

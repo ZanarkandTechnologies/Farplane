@@ -317,3 +317,4 @@
 2026-06-25 00:00 +0800 | FEAT | make Farplane Core load UI-managed `~/.farplane/config.json` and `~/.farplane/secrets.json` before legacy `~/.codex/config.local.env` fallbacks for delegated CLI commands, hook telemetry, and install-time `config.toml` rendering
 2026-06-25 00:00 +0800 | FIX | treat rendered `~/.codex/config.toml` `[env]` as a Farplane Core runtime config source before legacy env-file fallbacks while keeping UI-managed settings as the highest-precedence local override
 2026-06-25 00:00 +0800 | MIGRATION | make `~/.farplane/config.toml` the canonical Farplane runtime config source while keeping legacy JSON, rendered Codex TOML, and env-file fallbacks for older installs
+2026-06-25 00:00 +0800 | MIGRATION | rename the public project setup skill from `deep-init-project` to `init-advisor`, move the critical-path docs and generated registries/graphs, and keep `harness-creator` as the full operating-model advisor

@@ -4,7 +4,6 @@ description: "Turn observed Farplane behavior gaps into placement decisions, pro
 tier: 3
 group: harness
 source: local
-workflow: true
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"

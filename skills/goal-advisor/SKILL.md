@@ -4,7 +4,6 @@ description: "Turn an ambitious request into Goal architecture, ticket-backed lo
 tier: 3
 group: harness
 source: local
-workflow: true
 version: 0.2.0
 template_uses:
   skill-template: "0.2.0"

@@ -168,15 +168,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "deep-init-project",
-      "source": "file:docs/farplane-framework/README.md",
-      "target": "skill:deep-init-project",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/README.md",
-      "projection": "farplane-framework-core",
       "raw_ref": "eval",
       "source": "file:docs/farplane-framework/README.md",
       "target": "skill:eval",
@@ -186,9 +177,45 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
+      "raw_ref": "goal-advisor",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:goal-advisor",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "harness-advisor",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:harness-advisor",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
       "raw_ref": "harness-creator",
       "source": "file:docs/farplane-framework/README.md",
       "target": "skill:harness-creator",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "horizon-advisor",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:horizon-advisor",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "init-advisor",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:init-advisor",
       "type": "mentions-skill"
     },
     {
@@ -219,209 +246,22 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "type": "mentions-skill"
     },
     {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "docs/farplane-framework/README.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:docs/farplane-framework/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "docs/farplane-framework/project-files.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:docs/farplane-framework/project-files.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/README.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:docs/specs/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/steer-pulse-automation.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:docs/specs/steer-pulse-automation.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/README.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:farplane/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/automations.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:farplane/automations.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/bindings.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:farplane/bindings.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/evals.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:farplane/evals.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:farplane/goals.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/harness.md",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:farplane/harness.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/manifest.json",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:farplane/manifest.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/pm.json",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "file:farplane/pm.json",
-      "type": "literal-path"
-    },
-    {
       "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "brainstorm",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:brainstorm",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "deep-interview",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:deep-interview",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "execute",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:execute",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "goal-advisor",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:goal-advisor",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "horizon-advisor",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:horizon-advisor",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "impl-plan",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:impl-plan",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "prd",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:prd",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
       "raw_ref": "research",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
+      "source": "file:docs/farplane-framework/README.md",
       "target": "skill:research",
       "type": "mentions-skill"
     },
     {
       "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "review",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:review",
+      "raw_ref": "skill-creator",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:skill-creator",
       "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "skill-maintenance",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:skill-maintenance",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "spec-to-ticket",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "skill:spec-to-ticket",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "label": "Bootstrap",
-      "projection": "farplane-framework-core",
-      "raw_ref": "workflow:bootstrap",
-      "source": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "target": "workflow:bootstrap",
-      "type": "defines-workflow"
     },
     {
       "from_file": "docs/farplane-framework/graph-contract.md",
@@ -488,6 +328,24 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "plan",
       "source": "file:docs/farplane-framework/graph-contract.md",
       "target": "skill:plan",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/graph-contract.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "review",
+      "source": "file:docs/farplane-framework/graph-contract.md",
+      "target": "skill:review",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/graph-contract.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "skill-maintenance",
+      "source": "file:docs/farplane-framework/graph-contract.md",
+      "target": "skill:skill-maintenance",
       "type": "mentions-skill"
     },
     {
@@ -600,19 +458,171 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "type": "defines-workflow"
     },
     {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/farplane-framework/README.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:docs/farplane-framework/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/farplane-framework/project-files.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:docs/farplane-framework/project-files.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/specs/README.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:docs/specs/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/specs/steer-pulse-automation.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:docs/specs/steer-pulse-automation.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/README.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/automations.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/automations.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/bindings.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/bindings.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/evals.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/evals.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/goals.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/goals.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/harness.md",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/harness.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/manifest.json",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/manifest.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/pm.json",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/pm.json",
+      "type": "literal-path"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "brainstorm",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "skill:brainstorm",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "deep-interview",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "skill:deep-interview",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "execute",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "skill:execute",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "impl-plan",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "skill:impl-plan",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "prd",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "skill:prd",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "spec-to-ticket",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "skill:spec-to-ticket",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "label": "Bootstrap",
+      "projection": "farplane-framework-core",
+      "raw_ref": "workflow:bootstrap",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "workflow:bootstrap",
+      "type": "defines-workflow"
+    },
+    {
       "from_file": "docs/farplane-framework/lifecycle.md",
       "projection": "farplane-framework-core",
       "raw_ref": "docs/farplane-framework/README.md",
       "source": "file:docs/farplane-framework/lifecycle.md",
       "target": "file:docs/farplane-framework/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "docs/farplane-framework/deep-init-critical-path.md",
-      "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:docs/farplane-framework/deep-init-critical-path.md",
       "type": "literal-path"
     },
     {
@@ -629,6 +639,14 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "docs/farplane-framework/hooks-and-runtime.md",
       "source": "file:docs/farplane-framework/lifecycle.md",
       "target": "file:docs/farplane-framework/hooks-and-runtime.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/lifecycle.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/farplane-framework/init-advisor-critical-path.md",
+      "source": "file:docs/farplane-framework/lifecycle.md",
+      "target": "file:docs/farplane-framework/init-advisor-critical-path.md",
       "type": "literal-path"
     },
     {
@@ -700,15 +718,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/lifecycle.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "harness-advisor",
-      "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "skill:harness-advisor",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "projection": "farplane-framework-core",
       "raw_ref": "leverage-advisor",
       "source": "file:docs/farplane-framework/lifecycle.md",
       "target": "skill:leverage-advisor",
@@ -730,15 +739,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "proof-advisor",
       "source": "file:docs/farplane-framework/lifecycle.md",
       "target": "skill:proof-advisor",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "skill-creator",
-      "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "skill:skill-creator",
       "type": "mentions-skill"
     },
     {
@@ -938,68 +938,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "writes",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/automations.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/automations.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "writes",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/goals.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/goals.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "writes",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/harness.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/harness.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "writes",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/manifest.json",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/manifest.json",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "writes",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/pm.json",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/pm.json",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "label": "next.1",
-      "order": 1,
-      "projection": "farplane-framework-core",
-      "raw_ref": "workflow:bootstrap",
-      "source": "skill:deep-init-project",
-      "target": "skill:harness-creator",
-      "type": "workflow-next"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "label": "next.3",
       "order": 3,
       "projection": "farplane-framework-core",
@@ -1074,7 +1013,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "label": "next.2",
       "order": 2,
       "projection": "farplane-framework-core",
@@ -1113,6 +1052,67 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "workflow:goal-execution",
       "source": "skill:impl-plan",
       "target": "skill:qa",
+      "type": "workflow-next"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/project-files.md",
+      "label": "writes",
+      "projection": "farplane-framework-core",
+      "raw_ref": "file:farplane/automations.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/automations.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/project-files.md",
+      "label": "writes",
+      "projection": "farplane-framework-core",
+      "raw_ref": "file:farplane/goals.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/goals.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/project-files.md",
+      "label": "writes",
+      "projection": "farplane-framework-core",
+      "raw_ref": "file:farplane/harness.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/harness.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/project-files.md",
+      "label": "writes",
+      "projection": "farplane-framework-core",
+      "raw_ref": "file:farplane/manifest.json",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/manifest.json",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/project-files.md",
+      "label": "writes",
+      "projection": "farplane-framework-core",
+      "raw_ref": "file:farplane/pm.json",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/pm.json",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "label": "next.1",
+      "order": 1,
+      "projection": "farplane-framework-core",
+      "raw_ref": "workflow:bootstrap",
+      "source": "skill:init-advisor",
+      "target": "skill:harness-creator",
       "type": "workflow-next"
     },
     {
@@ -1170,7 +1170,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "label": "next.4",
       "order": 4,
       "projection": "farplane-framework-core",
@@ -1331,18 +1331,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
-      "label": "1. deep-init-project",
-      "order": 1,
-      "projection": "farplane-framework-core",
-      "raw_ref": "deep-init-project",
-      "source": "workflow:bootstrap",
-      "target": "skill:deep-init-project",
-      "type": "workflow-skill"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "label": "3. deep-interview",
       "order": 3,
       "projection": "farplane-framework-core",
@@ -1353,7 +1342,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "label": "2. harness-creator",
       "order": 2,
       "projection": "farplane-framework-core",
@@ -1364,7 +1353,18 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "label": "1. init-advisor",
+      "order": 1,
+      "projection": "farplane-framework-core",
+      "raw_ref": "init-advisor",
+      "source": "workflow:bootstrap",
+      "target": "skill:init-advisor",
+      "type": "workflow-skill"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "label": "4. prd",
       "order": 4,
       "projection": "farplane-framework-core",
@@ -1375,7 +1375,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "from_file": "docs/farplane-framework/deep-init-critical-path.md",
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "label": "5. spec-to-ticket",
       "order": 5,
       "projection": "farplane-framework-core",
@@ -1660,7 +1660,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "type": "workflow-skill"
     }
   ],
-  "generated_at": "2026-06-25T07:10:30+00:00",
+  "generated_at": "2026-06-25T07:48:50+00:00",
   "nodes": [
     {
       "framework_role": "linked",
@@ -1819,35 +1819,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "path": "skills/brainstorm/SKILL.md",
       "source_match": false,
       "source_path": "skills/brainstorm/SKILL.md",
-      "tags": [
-        "framework-core",
-        "framework-role:linked"
-      ]
-    },
-    {
-      "framework_role": "linked",
-      "heat": {
-        "distinct_threads_30d": 0,
-        "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
-        "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
-        "invocation_count_all": 0,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
-        "recent_days": 7,
-        "window_days": 30
-      },
-      "id": "skill:deep-init-project",
-      "kind": "skill",
-      "label": "deep-init-project",
-      "path": "skills/deep-init-project/SKILL.md",
-      "source_match": false,
-      "source_path": "skills/deep-init-project/SKILL.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2167,6 +2138,35 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "path": "skills/impl-plan/SKILL.md",
       "source_match": false,
       "source_path": "skills/impl-plan/SKILL.md",
+      "tags": [
+        "framework-core",
+        "framework-role:linked"
+      ]
+    },
+    {
+      "framework_role": "linked",
+      "heat": {
+        "distinct_threads_30d": 0,
+        "distinct_threads_window": 0,
+        "distinct_tickets_30d": 0,
+        "distinct_tickets_window": 0,
+        "heat_score": 0,
+        "invocation_count_30d": 0,
+        "invocation_count_7d": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "skill:init-advisor",
+      "kind": "skill",
+      "label": "init-advisor",
+      "path": "skills/init-advisor/SKILL.md",
+      "source_match": false,
+      "source_path": "skills/init-advisor/SKILL.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2719,22 +2719,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "framework_role": "source",
-      "id": "file:docs/farplane-framework/deep-init-critical-path.md",
-      "kind": "doc",
-      "label": "docs/farplane-framework/deep-init-critical-path.md",
-      "matched_patterns": [
-        "docs/farplane-framework/deep-init-critical-path.md"
-      ],
-      "path": "docs/farplane-framework/deep-init-critical-path.md",
-      "source_match": true,
-      "source_path": "docs/farplane-framework/deep-init-critical-path.md",
-      "tags": [
-        "framework-core",
-        "framework-role:source"
-      ]
-    },
-    {
-      "framework_role": "source",
       "id": "file:docs/farplane-framework/graph-contract.md",
       "kind": "doc",
       "label": "docs/farplane-framework/graph-contract.md",
@@ -2776,6 +2760,22 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "path": "docs/farplane-framework/hooks-and-runtime.md",
       "source_match": true,
       "source_path": "docs/farplane-framework/hooks-and-runtime.md",
+      "tags": [
+        "framework-core",
+        "framework-role:source"
+      ]
+    },
+    {
+      "framework_role": "source",
+      "id": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "kind": "doc",
+      "label": "docs/farplane-framework/init-advisor-critical-path.md",
+      "matched_patterns": [
+        "docs/farplane-framework/init-advisor-critical-path.md"
+      ],
+      "path": "docs/farplane-framework/init-advisor-critical-path.md",
+      "source_match": true,
+      "source_path": "docs/farplane-framework/init-advisor-critical-path.md",
       "tags": [
         "framework-core",
         "framework-role:source"
@@ -2840,9 +2840,9 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "id": "workflow:bootstrap",
       "kind": "workflow",
       "label": "Bootstrap",
-      "path": "docs/farplane-framework/deep-init-critical-path.md",
+      "path": "docs/farplane-framework/init-advisor-critical-path.md",
       "source_match": false,
-      "source_path": "docs/farplane-framework/deep-init-critical-path.md",
+      "source_path": "docs/farplane-framework/init-advisor-critical-path.md",
       "tags": [
         "framework-core",
         "framework-role:workflow",
@@ -2850,7 +2850,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       ],
       "workflow_order": 1,
       "workflow_skills": [
-        "deep-init-project",
+        "init-advisor",
         "harness-creator",
         "deep-interview",
         "prd",
@@ -2980,7 +2980,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     "include": [
       "docs/farplane-framework/README.md",
       "docs/farplane-framework/lifecycle.md",
-      "docs/farplane-framework/deep-init-critical-path.md",
+      "docs/farplane-framework/init-advisor-critical-path.md",
       "docs/farplane-framework/project-files.md",
       "docs/farplane-framework/graph-contract.md",
       "docs/farplane-framework/hooks-and-runtime.md",

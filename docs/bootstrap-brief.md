@@ -7,7 +7,7 @@ updated_at: 2026-06-21
 framework_template_version: "0.1.0"
 owner: harness
 source:
-  - skills/deep-init-project/SKILL.md
+  - skills/init-advisor/SKILL.md
   - farplane/manifest.json
   - docs/farplane-framework/project-files.md
 ---
@@ -24,7 +24,7 @@ source:
 ## Intent
 
 - Why now: Farplane is dogfooding the project substrate created by
-  `deep-init-project`.
+  `init-advisor`.
 - What good looks like: A new agent can find the project harness, current
   goals, automation manifest, runtime state, tickets, proof commands, and
   stop conditions without relying on transcript memory.
@@ -151,5 +151,5 @@ source:
   - local tickets first
   - Notion disabled by default
   - live side effects gated
-- Explicit overrides: Farplane dogfoods richer goals and automation manifests
+- Explicit extensions: Farplane dogfoods richer goals and automation manifests
   than a minimal new project template.

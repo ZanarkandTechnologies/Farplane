@@ -192,7 +192,7 @@ For install and bootstrap work:
 - `templates/global/AGENTS.md`
 - `PROJECT_RULES.md`
 - `config.toml.example`
-- `skills/deep-init-project/SKILL.md`
+- `skills/init-advisor/SKILL.md`
 
 For harness-design research and external patterns:
 

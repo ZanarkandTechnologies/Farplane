@@ -60,7 +60,7 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
         "display_name": "Farplane Coding Workflow",
         "description": "Ticket, implementation, QA, review, and closeout workflow skills.",
         "skills": (
-            "deep-init-project",
+            "init-advisor",
             "prd",
             "spec-to-ticket",
             "impl-plan",

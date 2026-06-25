@@ -35,7 +35,7 @@ PROTOCOL_WRAPPERS = {"review"}
 ALLOWED_SOURCES = {"local", "external"}
 DESCRIPTION_MAX_CHARS = 220
 SURFACE_FIELDS = {"eval", "qa_checklist", "skill_ui"}
-WORKFLOW_FIELD = "workflow"
+RETIRED_FRONTMATTER_FIELDS = {"workflow"}
 
 
 class RegistryError(Exception):
@@ -241,7 +241,7 @@ def collect_checklist_links(skill_dir: Path, skill_name: str) -> list[str]:
     return collect_skill_links_from_text(checklist_source_text(skill_dir), skill_name)
 
 
-def collect_workflow_refs(skill_dir: Path, skill_name: str, skill_names: set[str]) -> list[str]:
+def collect_todo_skill_refs(skill_dir: Path, skill_name: str, skill_names: set[str]) -> list[str]:
     return collect_ordered_skill_refs_from_text(checklist_source_text(skill_dir), skill_name, skill_names)
 
 
@@ -302,13 +302,13 @@ def validate_common_chain_refs(rows: list[dict[str, Any]]) -> None:
             validate_skill_ref(ref, skill_names, methods_by_skill)
 
 
-def attach_workflow_refs(repo_root: Path, rows: list[dict[str, Any]]) -> None:
+def attach_todo_skill_refs(repo_root: Path, rows: list[dict[str, Any]]) -> None:
     skill_names = {row["name"] for row in rows}
     for row in rows:
-        if not row.get(WORKFLOW_FIELD):
-            continue
         skill_dir = repo_root / "skills" / row["name"]
-        row["workflow_refs"] = collect_workflow_refs(skill_dir, row["name"], skill_names)
+        refs = collect_todo_skill_refs(skill_dir, row["name"], skill_names)
+        if refs:
+            row["todo_skill_refs"] = refs
 
 
 def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> None:
@@ -344,6 +344,14 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
     for skill_path in skill_paths:
         skill_dir = skill_path.parent
         metadata = parse_frontmatter(skill_path)
+        retired_fields = RETIRED_FRONTMATTER_FIELDS.intersection(metadata)
+        if retired_fields:
+            names = ", ".join(sorted(retired_fields))
+            raise RegistryError(
+                f"{skill_path}: retired frontmatter field(s): {names}; "
+                "skill graph importance is derived from observed skill heat"
+            )
+
         name = metadata.get("name")
         if name != skill_dir.name:
             raise RegistryError(f"{skill_path}: name must match directory {skill_dir.name!r}")
@@ -395,12 +403,6 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if common_chains:
             row["common_chains"] = common_chains
 
-        workflow = metadata.get(WORKFLOW_FIELD)
-        if workflow not in (None, "", False):
-            if workflow is not True:
-                raise RegistryError(f"{skill_path}: workflow must be true when present")
-            row[WORKFLOW_FIELD] = True
-
         version = metadata.get("version")
         if version not in (None, ""):
             row["version"] = str(version)
@@ -429,7 +431,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
 
         rows.append(row)
 
-    attach_workflow_refs(repo_root, rows)
+    attach_todo_skill_refs(repo_root, rows)
     validate_common_chain_refs(rows)
     validate_todos_hierarchy(repo_root, rows)
     return rows

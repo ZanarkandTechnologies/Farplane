@@ -90,7 +90,7 @@ eval_required: no
 - High-level workflow skills can set `workflow: true`; generated
   `workflow_refs` come only from explicit Todo List refs such as Markdown
   `SKILL.md` links, backticked `skill-name`, or `$skill-name`.
-- `skills/deep-init-project/references/GOALS_TEMPLATE.md` scaffolds one
+- `skills/init-advisor/references/GOALS_TEMPLATE.md` scaffolds one
   `farplane/goals.md` file with human Markdown plus fenced `goal-program`.
 
 ## Followups

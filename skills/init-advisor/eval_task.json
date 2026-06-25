@@ -1,0 +1,76 @@
+[
+  {
+    "id": "init_advisor_pulse_interval_01",
+    "title": "Init advisor emits Pulse and Interval automation prompts",
+    "query": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
+    "reference_points": [
+      "Creates farplane/automations.md as the reviewable prompt source",
+      "Creates farplane/harness.md as the static human charter with human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
+      "Creates farplane/products.md as the product catalog for primary and supporting products",
+      "Grounds the team archetype against real-world equivalents before finalizing harness, products, or goals",
+      "Uses Pulse for fast bounded action selection",
+      "Uses Daily Interval for last-24h reporting and next-24h planning",
+      "Uses Weekly Interval for goals drift checks and next-week planning",
+      "Does not create farplane/steer.config.toml or .farplane/state/steer-scheduler.json",
+      "Uses date-stamped interval reports rather than latest.md as the canonical report path"
+    ],
+    "tags": ["init-advisor", "pulse", "interval-update"]
+  },
+  {
+    "id": "init_advisor_ticket_selection_inside_pulse_01",
+    "title": "Init advisor keeps ticket selection inside Pulse",
+    "query": "The initialized project has local tickets and a Pulse automation. What should the template say about selecting work?",
+    "reference_points": [
+      "Pulse selects at most one bounded action per beat",
+      "Pulse reads farplane/harness.md to preserve the static human thesis and farplane/products.md when shaping product refill tickets",
+      "Product refill tickets name the project type, baseline or comparison point, expected artifact, and proof signal",
+      "Local ready and unblocked tickets are preferred over blocked or approval-required work",
+      "Substantial implementation routes through harness-creator first when the operating model is missing, then goal-advisor only after a concrete milestone exists",
+      "No separate ticket-drainer automation is required because Pulse owns fast ticket selection"
+    ],
+    "tags": ["init-advisor", "pulse", "ticket-selection"]
+  },
+  {
+    "id": "init_advisor_automation_activation_path_01",
+    "title": "Init advisor routes live automation activation to automation-advisor",
+    "query": "A user initializes a new Farplane project and asks whether it creates threads and automations. What should init-advisor do end-to-end?",
+    "reference_points": [
+      "Bootstrap creates files, tickets, and pm manifest, but not live Codex automations by default",
+      "Does not create live Codex threads or automations unless activation is requested",
+      "Routes activation to automation-advisor",
+      "Activation creates or reuses the loops named in farplane/automations.md, commonly Pulse, Daily Interval, and Weekly Interval",
+      "Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store",
+      "Reports needs_operating_model_intake or needs_automation_setup when blocked"
+    ],
+    "tags": ["init-advisor", "automation-advisor", "activation"]
+  },
+  {
+    "id": "init_advisor_full_mode_goal_intake_01",
+    "title": "Init advisor full mode routes operating-model setup through harness-creator",
+    "query": "A brownfield repo already has farplane/goals.md, but its harness/products/goals are placeholder, stale, or not grounded in the operator's current intent. The operator asks to initialize the repo as a full Farplane project. What should init-advisor do before claiming the project is initialized?",
+    "reference_points": [
+      "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough",
+      "Audits farplane/harness.md for missing human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
+      "Audits docs/bootstrap-brief.md, farplane/products.md, and farplane/goals.md for missing team archetype, product outputs, North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
+      "In full mode, calls harness-creator after substrate setup for static charter, products, goals, feedback loops, missing systems, current milestone, and any Goal Advisor handoff",
+      "Asks the first missing harness-creator parameter instead of running separate product/goals/advisor interviews from init-advisor",
+      "Keeps farplane/goals.md as Markdown with a fenced goal-program block for parseable goals, value function, axes, projects, and milestones",
+      "Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies split-file deltas only after operator intent is known",
+      "Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet"
+    ],
+    "tags": ["init-advisor", "full-mode", "harness-creator", "readiness-gate"]
+  },
+  {
+    "id": "init_advisor_quality_tooling_slots_01",
+    "title": "Init advisor records optional maintainability and hardening command slots",
+    "query": "A TypeScript/Python mixed project is being initialized and the operator is open to quality tooling. What should the project rules template record without forcing installation?",
+    "reference_points": [
+      "Records maintainability/refactoring command slots such as lint, complexity, duplication, dependency boundaries, dead code, static analysis dashboard, and mutation testing",
+      "Records hardening command slots such as SAST, dependency audit, secret scan, config validation, and resilience/failure tests",
+      "Keeps tools optional and stack-specific instead of mandating one universal linter stack",
+      "Does not install tools automatically unless code scaffold/tooling installation is explicitly in scope",
+      "Routes behavior-preserving cleanup to the refactoring skill and risk-reduction work to the hardening skill"
+    ],
+    "tags": ["init-advisor", "quality-tooling", "refactoring", "hardening"]
+  }
+]

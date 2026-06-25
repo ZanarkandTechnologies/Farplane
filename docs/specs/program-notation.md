@@ -40,8 +40,9 @@ Farplane currently has several related program dialects:
 - ticket `Program` uses compact function/pseudocode.
 - Goal Packet `program.md` uses loop configuration.
 - Project `farplane/goals.md` uses horizon and milestone maps.
-- harness-creator `project-harness.md` combines values, goals, KPIs, strategy
-  axes, heartbeat previews, skill gaps, and Goal Advisor handoffs.
+- `harness-creator` may use transient worksheets to review split-file deltas
+  before writing `farplane/harness.md`, `farplane/products.md`,
+  `farplane/goals.md`, `farplane/automations.md`, or `farplane/bindings.md`.
 
 They are not wrong, but they make it hard to see which variables are required,
 which skills are bound, which actions are automatable, and which proof gates
@@ -221,7 +222,7 @@ feedback collection, different owner/agent, dependency risk, proof/review state,
 or an executable Goal Packet. Do not pre-split a goal map into day-level tasks
 just because the next steps are imaginable.
 
-### Harness Program
+### Project Harness Split
 
 Project, business, content, academy, lab, ecommerce, product, and internal-ops
 harnesses should lead with a program-first operator view.
@@ -229,27 +230,35 @@ harnesses should lead with a program-first operator view.
 Projection:
 
 ```text
-HarnessProgram := values + priorities + mode_presets + goals + axes
-                + strategy_state + kpi_map + feedback_loop_skills
-                + heartbeat_preview + skills + bindings + tickets + missing_systems
-                + current_milestone + goal_advisor_handoff
+ProjectHarness := static_charter + product_catalog + strategy_state
+                + automation_prompts + safe_bindings + proof_policy
+                + tickets_or_goal_handoffs
 ```
 
 Use this when a user wants to understand how an agent could run or improve a
 business, content engine, funnel, project, research program, or recurring
 strategy loop.
 
-Default harness storage is one Markdown file with YAML front matter and one
-fenced `harness-program` block. Recurring Codex automation prompts belong in
-tracked `farplane/automations.md`; generated runtime state, reports,
-eval runs, and logs belong in ignored `.farplane/`. Use Markdown around the
-block for evidence, assumptions, open questions, review, and optional inventory
-tables. Split to Goal Packet files only when a current milestone is ready to
-run. Project-specific non-secret skill coordinates belong in
-`farplane/bindings.md`.
+Default project harness storage is split across standard Farplane files:
 
-`HarnessIL` and `Harness DSL` are internal aliases. Prefer **Harness Program**
-in operator-facing docs.
+- `farplane/harness.md`: YAML front matter plus Markdown static-charter
+  sections.
+- `farplane/products.md`: dynamic product catalog and project pipelines.
+- `farplane/goals.md`: strategy, KPIs, milestones, and execution handoffs.
+- `farplane/automations.md`: recurring Codex automation prompts.
+- `farplane/bindings.md`: non-secret project coordinates.
+- `farplane/evals.md`: proof and eval policy.
+- `tickets/`: missing systems, blockers, and executable work.
+
+Canonical `farplane/harness.md` files should not use fenced
+`harness-program` blocks. Use Markdown headings and tables for human review and
+simple UI parsing. A transient worksheet may still use compact pseudocode when
+it helps review a proposed split-file delta, but the standard files are the
+source of truth. Split to Goal Packet files only when a current milestone is
+ready to run.
+
+`HarnessIL` and `Harness DSL` are legacy internal aliases. Prefer **project
+harness** or **split-file harness** in operator-facing docs.
 
 The `values` block is the project constitution:
 
@@ -263,7 +272,8 @@ values {
 ```
 
 Goals, KPIs, strategy axes, tickets, and heartbeats should be derived from
-these values rather than treating values as a loose note beside the program.
+these values, but they belong in the split files that own them rather than in a
+single charter program block.
 
 ## Project Harness Backbone
 
@@ -298,7 +308,7 @@ define_feedback_loop_skills(axes, kpi_map, metric_providers, available_skills)
   -> feedback_skills + required_inputs + unblock_or_build_tickets
 
 map_systems_skills_and_tickets(strategy_state, local_repo, available_skills)
-  -> skills + missing_systems + tickets + deep_init_project_routes
+  -> skills + missing_systems + tickets + init_advisor_routes
 
 define_scrum_heartbeats(project_harness, active_tickets?, goal_packets?)
   -> ticket_update + weekly_pm_update + update_system_gaps
@@ -353,7 +363,7 @@ must be explicit before strategy refinement claims begin.
 
 Model feedback loops as concrete skills with required inputs:
 
-```harness-program
+```text
 skill instagram_attention_graph {
   status: needs_access
   requires: [instagram_insights_export]
@@ -385,10 +395,11 @@ Avoid vague tasks like "create feedback loop". Name the capability first:
 ### Skills, Required Inputs, And Operator Unblocks
 
 Standardize external data, notifications, shared team systems, and account
-access as `skill` capabilities with required inputs. Do not add another
-top-level abstraction unless pilots prove that skills cannot express the need.
+access as `skill` capabilities with required inputs inside the relevant skill,
+binding, product, or strategy surface. Do not add another top-level abstraction
+unless pilots prove that skills cannot express the need.
 
-```harness-program
+```text
 skill instagram_attention_graph {
   status: needs_access
   requires: [instagram_insights_export]
@@ -440,36 +451,36 @@ skill_maintenance.refine_skill(skill, evals, gotchas, usage_results)
 delegate(context_ref, task_prompt, skills?, output?)
   -> subagent_handoff + evidence_ref
 
-update_system_gaps(project_harness, current_state)
+update_system_gaps(project_files, current_state)
   -> missing_system_ticket | prep_artifact | review_request | no_op
 
-daily_chief_of_staff(project_harness, progress, signals)
+daily_chief_of_staff(project_files, progress, signals)
   -> opportunities + risks + blockers + recommended_next_actions
 ```
 
-Default to two always-on project automations first:
+Default to explicit Pulse and Interval automations first:
 
 ```text
-automation daily_ticket_drainer {
-  schedule: configurable
-  first: fetch_local_tickets
-  optional: fetch_notion_when_enabled_bound_and_local_empty
-  then: rank_one_ticket -> rename_current_thread -> impl-plan -> goal-advisor
+automation pulse {
+  schedule: every 30 minutes by default
+  first: reconcile_outcomes
+  then: select_one_bounded_action_or_refill_ticket
+  reads: farplane/harness.md + farplane/products.md + farplane/goals.md + tickets
 }
 
-automation weekly_pm_update {
-  schedule: configurable
-  first: grouped_jobs_with_report_cache
-  grouped_jobs: [update_external_context, update_memory, skill_maintenance.harden_skill, skill_maintenance.refine_skill, update_strategy]
-  delegate: delegate(ref("project-harness.md"), "refresh strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
+automation interval {
+  schedule: daily or weekly by project prompt
+  first: report(review_window)
+  then: plan(planning_window)
+  reads: farplane/harness.md + farplane/products.md + farplane/goals.md + reports
+  writes: dated interval report + proposed deltas + tickets or Goal handoffs
 }
 ```
 
-The ticket drainer executes one proceedable ticket. It should not run feed
-scout, memory updates, registry drift, skill maintenance, or strategy updates.
-The weekly PM update groups recurring jobs with the same cadence into one
-thread and uses `.farplane/state/run-ledger.json` plus Markdown reports to
-reuse fresh outputs. Live scheduling requires explicit automation approval.
+Pulse executes one proceedable action or creates one grounded refill ticket.
+Interval reports on a bounded review window, checks drift against the static
+charter and goals, and plans the next bounded window. Live scheduling requires
+explicit automation approval in the Codex app.
 
 Use `delegate(context_ref, task_prompt, skills?, output?)` when a PM heartbeat
 can split work into a bounded subagent lane. `context_ref` must point to a
@@ -490,71 +501,37 @@ Ask the operator only for taste, intent, risk, private context, permissions,
 budgets, and success definitions. Use local search or research for discoverable
 facts such as methods, competitors, peer workflows, and available repo assets.
 
-### Minimal Syntax Example
+### Split-File Example
 
-```harness-program
-project "Faceless AI Engineering Channel" {
-  values {
-    mission: "Teach practical AI and harness engineering so serious builders become more capable"
-    operating_principles: [
-      "teach from real work, not recycled theory",
-      "prefer depth and trust over shallow reach",
-      "make claims auditable"
-    ]
-    priorities: [impact.high, loyal_users.high, trust.high, money.low]
-    non_tradeoffs: [
-      "do not publish unreviewed claims",
-      "do not optimize revenue before usefulness"
-    ]
-  }
+```text
+farplane/harness.md:
+  mission: "Teach practical AI and harness engineering so serious builders become more capable."
+  human thesis: "The channel teaches from real work and preserves trust over shallow reach."
+  non-tradeoffs: ["do not publish unreviewed claims", "do not optimize revenue before usefulness"]
 
-  modes: [channel, academy, lab]
+farplane/products.md:
+  team archetype: "AI engineering education lab"
+  primary products: ["episodes", "case studies", "tooling walkthroughs"]
+  pulse refill guidance: "Prefer evidence-backed episode experiments over generic content chores."
 
-  axis reach_acquire {
-    bet: "Find high-signal AI engineering learners"
+farplane/goals.md:
+  axis reach_acquire:
+    question: "Can high-signal AI engineering learners find this?"
     kpi: review_metric("hook/title clarity")
-    evidence: ref("research/channel-examples.md")
-    heartbeat: weekly_pm_update
-  }
-
-  system analytics {
-    status: missing_instrumentation
-    action: ticket(instagram_insights_export)
-  }
-
-  skill instagram_attention_graph {
-    status: needs_access
-    requires: [instagram_insights_export]
-    use: "read attention graph, retention, replay, save, share, and comment signals"
-  }
-
-  ticket instagram_insights_export {
-    type: unblock
-    human_step: "Connect read-only metrics access or provide a CSV export"
-    enables: [instagram_attention_graph]
-    fallback: human_feedback("rank recent posts manually")
-  }
-
-  heartbeat ticket_update {
-    first: update_tasks
-    else: update_system_gaps
-    gates: [no_external_side_effects]
-  }
-
-  heartbeat weekly_pm_update {
-    first: update_strategy
-    skills: [weekly_strategy_analysis, skill_maintenance, goal_advisor, review]
-    delegate: delegate(ref("project-harness.md"), "refresh strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
-    gates: [review_before_external_side_effects]
-  }
-
-  milestone first_episode_selection {
-    task: "Choose first pilot episode"
-    route: goal_advisor
+    missing_signal: instagram_attention_graph
+  current_frontier:
+    output: "Choose first pilot episode"
     metric: review_metric
     gates: [no_publish, no_spend]
-  }
-}
+
+farplane/bindings.md:
+  safe coordinates: channel URLs, dashboard labels, non-secret account aliases
+
+tickets/:
+  instagram_insights_export:
+    type: unblock
+    human_step: "Connect read-only metrics access or provide a CSV export"
+    fallback: "operator ranks recent posts manually"
 ```
 
 ## Blast Radius
@@ -567,7 +544,7 @@ Standardizing notation affects these surfaces:
 | `tickets/templates/ticket.md` | compact task program | Rename `vars` guidance toward `params` and align field names | Medium; many tickets follow this |
 | `tickets/templates/goal-loop/program.md` | loop config | Add cross-reference to this spec; keep field shape | Low |
 | `farplane/goals.md` | horizon map | Add cross-reference and field vocabulary | Low |
-| `skills/harness-creator/templates/*` | harness/capability/handoff templates | Add `project-harness.md` with a fenced `harness-program` block | Medium; direct user-facing impact |
+| `skills/harness-creator/templates/*` | harness/capability/handoff templates | Keep worksheets split-file oriented; do not make fenced DSL canonical | Medium; direct user-facing impact |
 | `impl-plan` skill | ticket planning guidance | Reference common notation but keep coding-ticket projection | Low |
 | `goal-advisor` skill | Goal architecture guidance | Clarify that it compiles selected blocks, not whole parent programs | Low |
 | validators | mostly unrelated today | Optional future check for required sections in templates | Medium if enforced |
@@ -576,7 +553,8 @@ Standardizing notation affects these surfaces:
 ## Migration Plan
 
 1. Adopt this spec as a draft vocabulary.
-2. Add `project-harness.md` template to `harness-creator`.
+2. Keep `project-harness.md` as an optional transient worksheet, not a
+   canonical project file.
 3. Update `harness-creator` first-load checklist to require values,
    priorities, metric-provider honesty, Scrum heartbeats, and Goal Advisor
    milestones for project/business/content harnesses.
@@ -584,8 +562,8 @@ Standardizing notation affects these surfaces:
    name while preserving `vars` compatibility.
 5. Add short links from Goal loop templates to this spec.
 6. Update `impl-plan` and `goal-advisor` docs to use the projection terms.
-7. After two pilots, decide whether to add a validator for required
-   `harness-program` nodes.
+7. After two pilots, decide whether to add more validators for required
+   Markdown sections or table columns in split files.
 
 ## Non-Goals
 
@@ -604,7 +582,12 @@ Standardizing notation affects these surfaces:
 
 Resolved for now:
 
-- Primary harness output is `project-harness.md`, not `program-preview.md` or
-  `harness-program.md`.
-- The compact source is a fenced `harness-program` block. Markdown tables are
-  optional audit views, not the main program.
+- Primary harness output is the standard split-file set:
+  `farplane/harness.md`, `farplane/products.md`, `farplane/goals.md`,
+  `farplane/automations.md`, `farplane/bindings.md`, `farplane/evals.md`, and
+  tickets.
+- Canonical `farplane/harness.md` uses YAML front matter plus Markdown
+  sections. Fenced `harness-program` DSL is retired for canonical project
+  harness files.
+- Markdown tables are acceptable source views when their columns are stable and
+  validator-backed.

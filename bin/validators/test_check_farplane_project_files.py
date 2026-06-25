@@ -15,6 +15,11 @@ def write_framework_manifest(farplane: Path) -> None:
                 "template_uses": {
                     "farplane-framework": "1.2.0",
                 },
+                "project": {
+                    "name": "Test Project",
+                    "description": "Test project description.",
+                    "archetype": "test_project",
+                },
                 "standard": {
                     "tracked": [
                         "AGENTS.md",
@@ -24,6 +29,7 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/manifest.json",
                         "farplane/harness.md",
                         "farplane/goals.md",
+                        "farplane/products.md",
                         "farplane/automations.md",
                         "farplane/bindings.md",
                         "farplane/evals.md",
@@ -53,11 +59,107 @@ def write_required_project_files(root: Path) -> None:
     for path in ("AGENTS.md", "PROJECT_RULES.md", "ARCHITECTURE.md"):
         (root / path).write_text(f"# {path}\n", encoding="utf-8")
 
-    for name in ("README.md", "harness.md", "goals.md", "evals.md"):
+    for name in ("README.md", "goals.md", "evals.md"):
         (farplane / name).write_text(
             "---\nframework_template_version: \"0.1.0\"\n---\n\n# Test\n",
             encoding="utf-8",
         )
+    (farplane / "harness.md").write_text(
+        """---
+kind: project-harness
+framework_template_version: "0.2.0"
+---
+
+# Test Harness
+
+## Mission
+
+Test mission.
+
+## Human Thesis
+
+Test thesis.
+
+## Operating Principles
+
+- Prefer visible artifacts.
+
+## Static Leverage Commitments
+
+| Commitment | Why It Compounds | Evidence To Seek | Pivot Signal |
+| --- | --- | --- | --- |
+| Test | compounds | evidence | pivot |
+
+## Non-Tradeoffs
+
+- Do not silently rewrite the thesis.
+
+## Agent Authority
+
+- Agents may propose charter deltas.
+
+## Change Rule
+
+Static charter changes require approval.
+
+## Charter-Level Operating Loop
+
+```text
+signal -> work -> proof -> feedback
+```
+
+## File Boundaries
+
+- `farplane/harness.md`: static charter.
+""",
+        encoding="utf-8",
+    )
+    (farplane / "products.md").write_text(
+        """---
+kind: project-products
+framework_template_version: "0.1.0"
+---
+
+# Products
+
+## Team Archetype
+
+Test project.
+
+## Operating Flywheel
+
+```text
+signal -> work -> proof -> feedback
+```
+
+## Primary Products
+
+| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |
+| --- | --- | --- | --- | --- |
+| Test product | users | artifact | signal | `skill` |
+
+## Supporting Products
+
+| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |
+| --- | --- | --- | --- | --- |
+| Support | team | artifact | signal | `skill` |
+
+## Autonomous Project Types
+
+| Project Type | When To Create It | Output | Proof / Reward Signal |
+| --- | --- | --- | --- |
+| Experiment | need | output | proof |
+
+## Product Selection Notes
+
+- Prefer primary products.
+
+## Pulse Refill Guidance
+
+Use products for grounded refill tickets.
+""",
+        encoding="utf-8",
+    )
 
     (farplane / "bindings.md").write_text(
         "---\nkind: project-bindings\nframework_template_version: \"0.1.0\"\n---\n\n# Project Bindings\n",
@@ -80,6 +182,94 @@ def test_missing_automations_file_fails(tmp_path: Path) -> None:
     errors = validate(tmp_path)
 
     assert "farplane/automations.md is required for reviewable Codex automation prompts." in errors
+
+
+def test_missing_products_file_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "products.md").unlink()
+
+    errors = validate(tmp_path)
+
+    assert "farplane/products.md is required for project product catalogs." in errors
+
+
+def test_malformed_products_file_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "products.md").write_text(
+        "---\nframework_template_version: \"0.1.0\"\n---\n\n# Products\n\n## Primary Products\n",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert "farplane/products.md must use front matter kind: project-products." in errors
+    assert any(error.startswith("farplane/products.md missing required headings:") for error in errors)
+    assert "farplane/products.md Primary Products must use the standard product table columns." in errors
+
+
+def test_missing_harness_file_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "harness.md").unlink()
+
+    errors = validate(tmp_path)
+
+    assert "farplane/harness.md is required for the static human charter." in errors
+
+
+def test_malformed_harness_file_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "harness.md").write_text(
+        "---\nframework_template_version: \"0.1.0\"\n---\n\n# Harness\n\n## Human Thesis\n",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert "farplane/harness.md must use front matter kind: project-harness." in errors
+    assert any(error.startswith("farplane/harness.md missing required static-charter headings:") for error in errors)
+
+
+def test_harness_program_dsl_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    with (farplane / "harness.md").open("a", encoding="utf-8") as handle:
+        handle.write("\n```harness-program\nproject \"Legacy\" {}\n```\n")
+
+    errors = validate(tmp_path)
+
+    assert (
+        "farplane/harness.md must not use fenced harness-program DSL; "
+        "use YAML front matter plus Markdown charter sections."
+    ) in errors
+
+
+def test_duplicate_project_charter_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "project.md").write_text("---\nframework_template_version: \"0.1.0\"\n---\n", encoding="utf-8")
+
+    errors = validate(tmp_path)
+
+    assert (
+        "farplane/project.md would duplicate the active static charter; use farplane/harness.md "
+        "unless a versioned framework migration replaces it."
+    ) in errors
 
 
 def test_retired_integrations_file_fails(tmp_path: Path) -> None:
@@ -148,6 +338,7 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
             {
                 "schema": "other",
                 "spec_version": "",
+                "project": {"name": "", "description": "", "archetype": ""},
                 "standard": {
                     "tracked": ["farplane/manifest.json", "farplane/manifest.json", ".farplane/state/run-ledger.json"],
                     "ignored": [".farplane/state/run-ledger.json"],
@@ -166,6 +357,9 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
     assert "farplane/manifest.json schema must be farplane_project." in errors
     assert "farplane/manifest.json spec_version must be a non-empty string." in errors
     assert "farplane/manifest.json template_uses.farplane-framework must be a non-empty string." in errors
+    assert "farplane/manifest.json project.name must be a non-empty string." in errors
+    assert "farplane/manifest.json project.description must be a non-empty string." in errors
+    assert "farplane/manifest.json project.archetype must be a non-empty string." in errors
     assert "farplane/manifest.json standard.tracked must not contain duplicate paths." in errors
     assert "farplane/manifest.json optional.tracked must be a list." in errors
     assert "farplane/manifest.json optional.ignored must contain only non-empty strings." in errors
@@ -173,7 +367,14 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
     missing_surface_error = next(
         error for error in errors if error.startswith("farplane/manifest.json missing required standard paths:")
     )
-    for path in ["AGENTS.md", "PROJECT_RULES.md", "ARCHITECTURE.md", "farplane/README.md", "tickets/templates/ticket.md"]:
+    for path in [
+        "AGENTS.md",
+        "PROJECT_RULES.md",
+        "ARCHITECTURE.md",
+        "farplane/README.md",
+        "farplane/products.md",
+        "tickets/templates/ticket.md",
+    ]:
         assert path in missing_surface_error
 
 

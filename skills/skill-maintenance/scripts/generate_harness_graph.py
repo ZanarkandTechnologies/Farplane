@@ -44,6 +44,8 @@ GENERATED_PATHS = {
     "skills/skill-maintenance/graph/skill-docs.js",
     "skills/skill-maintenance/graph/harness-graph.json",
     "skills/skill-maintenance/graph/harness-graph.js",
+    "skills/skill-maintenance/graph/farplane-framework-core-graph.json",
+    "skills/skill-maintenance/graph/farplane-framework-core-graph.js",
     "docs/doc-audit/generated/doc-reference-report.md",
 }
 
@@ -51,7 +53,7 @@ MARKDOWN_LINK_RE = re.compile(r"!?\[[^\]]*]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 LOCAL_PATH_RE = re.compile(
     r"(?<![\w/.-])"
     r"((?:\.\./|./)?"
-    r"(?:docs|skills|tickets|templates|agents|bin|rules|qa|experiments)/"
+    r"(?:docs|skills|tickets|templates|agents|bin|rules|qa|experiments|farplane)/"
     r"[A-Za-z0-9_./#@:+%=-]+"
     r"|(?:AGENTS|README|ARCHITECTURE|PROJECT_RULES)\.md)"
 )
@@ -83,6 +85,7 @@ def iter_scan_files(repo_root: Path) -> list[Path]:
         repo_root / "templates",
         repo_root / "agents",
         repo_root / "bin",
+        repo_root / "farplane",
         repo_root / "rules",
         repo_root / "tickets" / "README.md",
     ]
@@ -182,6 +185,8 @@ def node_kind(node_id: str) -> str:
         return "doc"
     if path.startswith("templates/"):
         return "template"
+    if path.startswith("farplane/"):
+        return "file"
     if path.startswith("agents/"):
         return "agent"
     if path.startswith("bin/"):

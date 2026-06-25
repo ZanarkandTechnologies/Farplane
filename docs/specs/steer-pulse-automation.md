@@ -80,7 +80,7 @@ current direction into bounded action.
 Project bootstrap and live automation activation are separate phases.
 
 ```text
-deep_init_project(...)
+init_advisor(...)
   -> files + automations.md + pm_manifest
 
 automation_advisor(activate=true, project_ref)
@@ -89,7 +89,7 @@ automation_advisor(activate=true, project_ref)
 
 Critical path:
 
-1. Scaffold the project files with `deep-init-project`.
+1. Scaffold the project files with `init-advisor`.
 2. Create or verify `farplane/automations.md` with the exact Pulse, Daily
    Interval, and Weekly Interval prompts to copy into Codex automations.
 3. Create or verify `farplane/pm.json` as UI grouping glue with

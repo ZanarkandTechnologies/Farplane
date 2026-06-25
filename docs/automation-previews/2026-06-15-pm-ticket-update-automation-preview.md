@@ -10,12 +10,12 @@ owner: project-pm-automation
 This preview normalizes project automations into two recurring functions:
 
 ```text
-weekly_pm_update(project, goals, strategy_state, metrics, tickets, memory, overrides) -> strategy_delta + ticket_deltas + delegated_reports + blockers
-ticket_update(project, tickets, strategy_state, memory, overrides) -> selected_ticket + work_handoff + evidence_or_blocker
+weekly_pm_update(project, goals, strategy_state, metrics, tickets, memory, extensions) -> strategy_delta + ticket_deltas + delegated_reports + blockers
+pulse_update(project, extensions) -> selected_action + work_handoff + evidence_or_blocker
 ```
 
 Default board policy is local-first: inspect project-local `tickets/` before
-fetching Notion unless an override explicitly makes Notion canonical.
+fetching Notion unless an extension explicitly makes Notion canonical.
 
 ## Farplane Active Automations
 
@@ -29,7 +29,7 @@ weekly_pm_update(
   metrics = read(docs/TROUBLES.md, docs/LESSONS.md, docs/skills/registry.jsonl, validation output),
   tickets = read(local:tickets/),
   memory = read(docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md),
-  overrides = {
+  extensions = {
     board_policy: "local_first",
     notion_policy: "context_only_when_explicitly_named",
     ticket_creation_policy: "local_ticket_only",
@@ -56,7 +56,7 @@ ticket_update(
   tickets = read(local:tickets/ first, notion only when project config enables it),
   strategy_state = read(selected ticket only when needed),
   memory = none,
-  overrides = {
+  extensions = {
     board_policy: "local_first",
     notion_policy: "skip unless farplane/automations.md enables Notion binding",
     execution_limit: "one_ticket",
@@ -77,7 +77,7 @@ Behavior:
 ## Life Preview
 
 The Life project is the main intentional exception to the default local-first
-policy because the existing task board is Notion-canonical. The override should
+policy because the existing task board is Notion-canonical. The extension should
 be explicit so other projects do not accidentally inherit Notion-first behavior.
 
 ### Existing `weekly-opportunity-deep-research` As `life-weekly-pm-update`
@@ -90,19 +90,21 @@ weekly_pm_update(
   metrics = read(Notion task state, meeting notes, people signals, opportunity scan, completed/deprioritized work),
   tickets = read(notion:canonical tasks, then linked local project tickets),
   memory = read(life docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md),
-  overrides = {
+  extensions = {
     board_policy: "notion_first_for_life_canonical_task_board",
     local_ticket_policy: "resolve linked project-local ticket after selecting a Notion task",
     ticket_creation_policy: "create local project ticket only after resolving project root and concrete scope",
-    strategy_skill: "weekly-strategy-analysis",
+    steer_extension: "call steer-update with Life-specific context refs and phase hooks",
+    hook_preview: "docs/automation-previews/personal-weekly-steer-extension/profile.md",
     weekly_subagents: "task retro, meeting/people signals, Codex drift, grand-plan deltas, opportunity scan",
     free_text: "Keep this as the single weekly Life strategy trigger; write the context bundle under /Users/kenjipcx/life/docs/strategy-automation/runs/."
   }
 ) -> weekly_report + priorities + depriorities + due_dates + ticket_deltas + blockers
 ```
 
-This preserves the existing `weekly-strategy-analysis` specialization instead
-of replacing it with a generic prompt.
+This preserves the Kenji weekly strategy specialization as call-site
+Steer extensions instead of placing Life-specific refs inside the generic skill
+package.
 
 ### Existing `autonomous-ticket-planner-and-builder` As `life-ticket-update`
 
@@ -112,7 +114,7 @@ ticket_update(
   tickets = read(notion:canonical In Progress/Not started tasks, then linked local project tickets),
   strategy_state = read(life docs/MEMORY.md + selected project AGENTS.md + selected ticket),
   memory = read(life docs/MEMORY.md, docs/TROUBLES.md, docs/LESSONS.md, docs/HISTORY.md),
-  overrides = {
+  extensions = {
     board_policy: "notion_first_for_life_canonical_task_board",
     local_ticket_policy: "after Notion selection, prefer linked local ticket; create one only when project has tickets/ and task is concrete",
     execution_limit: "one_ticket",
@@ -131,7 +133,7 @@ requests, while `life-ticket-update` executes one safe work item.
 ```text
 project_automation_contract(
   default_board_policy = "local_first",
-  project_override = optional structured policy + free_text,
+  project_extension = optional structured policy + free_text,
   weekly = weekly_pm_update(...),
   daily = ticket_update(...)
 ) -> visible strategy loop + visible work loop

@@ -29,7 +29,7 @@ eval_required: no
   scheduler, but a values-first project harness that uses standard systems
   where known and delegates leaf execution to Goal Advisor.
 - Tradeoff accepted: The first-load skill grew slightly to prevent drift on
-  metric honesty, board-drain priority, Deep Init Project boundaries, and
+  metric honesty, board-drain priority, Init Advisor boundaries, and
   hidden-automation gates.
 
 ## First-Principles Reasoning
@@ -50,7 +50,7 @@ eval_required: no
 | Check | Verdict | Evidence |
 | --- | --- | --- |
 | `first_load_sufficiency` | pass | `SKILL.md` names signature, gates, routes, heartbeats, output contract, and gotchas. |
-| `reference_load_precision` | pass | `SKILL.md` names when to load `harness-il.md`, `project-harness.md`, sidecar templates, Goal Advisor, Deep Init Project, and weekly strategy analysis. |
+| `reference_load_precision` | pass | `SKILL.md` names when to load `harness-il.md`, `project-harness.md`, sidecar templates, Goal Advisor, Init Advisor, and weekly strategy analysis. |
 | `missing_context_rate` | pass | Metric honesty, board-drain priority, missing systems, and side-effect gates remain in first load. |
 | `noisy_context_rate` | pass | Detailed axis semantics and one-file config rows live in reference/template files. |
 | `duplicated_instruction_count` | pass | `SKILL.md` owns routing; `harness-il.md` owns semantics; `project-harness.md` owns artifact shape. |
@@ -58,7 +58,7 @@ eval_required: no
 | `task_success_rate` | unknown | No post-change pilot run yet. |
 | `review_tas_rate` | unknown | No independent reviewer lane run in this pass. |
 | `maintenance_locality` | pass | Future edits have clear owners: skill routing, IL semantics, or template rows. |
-| `composition_clarity` | pass | `deep-init-project` and `goal-advisor` are explicit subfunction routes. |
+| `composition_clarity` | pass | `init-advisor` and `goal-advisor` are explicit subfunction routes. |
 
 ## Proof Artifacts
 

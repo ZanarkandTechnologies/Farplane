@@ -160,11 +160,12 @@ workflow_chain(owner_skill, scenario)
 
 Use these surfaces to make a chain visible:
 
-- `workflow: true` in skill frontmatter when the skill is an invocable
-  high-level workflow entrypoint. Graph tooling then scans only that skill's
-  `## Todo List` and extracts first-seen explicit skill references in order:
-  Markdown `SKILL.md` links, backticked `skill-name` refs, or `$skill-name`
-  refs. Plain prose is ignored.
+- observed skill heat from Farplane telemetry when deciding which skills should
+  receive visual prominence in graph views. Invocation counts are behavior, not
+  hand-maintained taxonomy.
+- generated todo-chain edges from every skill's `## Todo List` when it contains
+  first-seen explicit skill references in order: Markdown `SKILL.md` links,
+  backticked `skill-name` refs, or `$skill-name` refs. Plain prose is ignored.
 - `common_chains` in skill frontmatter for stable Tier 3 adjacency hints.
 - `routes:` in `## Skill Signature` for normal downstream owners.
 - workflow reference files under `skills/<owner>/references/` when one
@@ -237,16 +238,13 @@ Manual fields:
   `qa_checklist.md`.
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding.
-- `workflow`: optional `true` for high-level workflow entrypoints. This is the
-  only manual workflow-chain field; ordered workflow refs are generated from
-  `## Todo List`.
 - `group`: required for Tier 3 only.
 - `methods`: optional method addresses owned by the skill.
 - `common_chains`: optional one-way Tier 3 adjacency hints.
 - `upstream_url`: optional for `source: external`.
 
 Generated registry fields include `path`, `description`, `has_checklist`,
-`version`, `allowed_tools`, `skill_links`, `workflow_refs`, and the manual
+`version`, `allowed_tools`, `skill_links`, `todo_skill_refs`, and the manual
 fields above.
 Structural feature IDs belong to the versioned skill template metadata, not
 per-skill frontmatter. Derive generated fields from source files instead of

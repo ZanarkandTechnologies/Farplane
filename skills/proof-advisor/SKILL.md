@@ -3,7 +3,6 @@ name: proof-advisor
 description: "Turn behavior claims into proof plans, high-quality cases, proof-surface choices, and execution handoffs."
 tier: 2
 source: local
-workflow: true
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.1.0"

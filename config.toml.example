@@ -27,6 +27,14 @@ FARPLANE_ACTIVITY_RECENT_URL = "__FARPLANE_ACTIVITY_RECENT_URL__"
 # FARPLANE_TELEMETRY_API_URL = "https://your-backend.example.com/api/codex/activity"
 # FARPLANE_TELEMETRY_API_TOKEN = "replace-me"
 # FARPLANE_TELEMETRY_TIMEOUT_SECS = "2.0"
+# Skill graph heat controls. The generated skill graph reads local
+# `.farplane/events/*.jsonl` and uses these values to decide its default hot
+# skill window and top-N view.
+FARPLANE_SKILL_HEAT_WINDOW_DAYS = "30"
+FARPLANE_SKILL_HEAT_RECENT_DAYS = "7"
+FARPLANE_SKILL_HEAT_TOP_N = "25"
+# Comma-separated event types counted as skill heat.
+FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,learning_review_launched,skill_requested"
 # Hook-backed skill-opportunity proposer. Captured windows stay local under
 # `.farplane/state/self-improve/`. The Stop hook launches a background
 # fire-and-forget Codex job every interval by default. The job creates Notion

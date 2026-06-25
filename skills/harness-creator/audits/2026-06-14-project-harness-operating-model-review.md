@@ -33,7 +33,7 @@ refs:
 | Rubric | TAS | Evidence |
 | --- | --- | --- |
 | `skill-contract` | TAS-A | `SKILL.md` names trigger, signature, gates, routes, todo path, output contract, gotchas, and reference routing. |
-| `integration-readiness` | TAS-A | `goal-advisor` remains the frontier compiler, `deep-init-project` owns standard project systems, and the template stays declarative until approved. |
+| `integration-readiness` | TAS-A | `goal-advisor` remains the frontier compiler, `init-advisor` owns standard project systems, and the template stays declarative until approved. |
 | `evidence-quality` | TAS-A | Validator output passed; audit and changed artifacts map directly to the behavior claim. |
 
 ## Checks
@@ -45,7 +45,7 @@ refs:
 - `reference-placement:` pass; detailed axis semantics live in
   `references/harness-il.md`, while the reusable artifact shape lives in
   `templates/project-harness.md`.
-- `contract-correctness:` pass; Goal Advisor and Deep Init Project boundaries
+- `contract-correctness:` pass; Goal Advisor and Init Advisor boundaries
   align with their existing skill contracts.
 - `replayable:` pass; another agent can inspect the changed files and rerun the
   listed validators.

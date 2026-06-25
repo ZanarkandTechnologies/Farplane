@@ -1,7 +1,7 @@
 ---
 title: Harness Program Notation
 owner: harness-creator
-status: draft
+status: legacy
 created_at: 2026-06-14
 updated_at: 2026-06-14
 aliases:
@@ -11,18 +11,24 @@ aliases:
 
 # Harness Program Notation
 
-Use **Harness Program** as the operator-facing name.
+This file documents the legacy compact Harness Program notation. Do not use it
+as the default authoring shape for canonical Farplane project files.
 
-`HarnessIL` and `Harness DSL` are acceptable internal aliases, but avoid making
-the operator choose or read those names. The useful artifact is the program:
+The canonical project state is split across standard Farplane files:
 
 ```text
-harness_creator(input) -> project-harness.md containing one harness-program block
+harness_creator(input)
+  -> farplane/harness.md static-charter delta
+   + farplane/products.md product-catalog delta
+   + farplane/goals.md strategy delta
+   + optional project-harness.md transient worksheet
 ```
 
-The harness program is the compressed, executable-looking core of the project
-or business harness. Markdown around it is only for evidence, assumptions,
-notes, and review.
+Use YAML front matter plus Markdown sections for canonical files. Use this
+legacy notation only when reading older worksheets, migrating old examples, or
+capturing a quick transient review sketch that will be projected back into the
+standard files. Do not treat `project-harness.md` as a canonical replacement for
+`farplane/harness.md`.
 
 ## Shape
 
@@ -86,7 +92,7 @@ project "Name" {
   heartbeat weekly_interval {
     first: update_strategy
     skills: [weekly_strategy_analysis, skill_maintenance, goal_advisor, review]
-    delegate: delegate(ref("project-harness.md"), "refresh strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
+    delegate: delegate(ref("farplane/goals.md"), "refresh strategy and skill upkeep", skills=[interval_update, skill_maintenance])
     output: "artifacts/strategy/interval-update.md"
   }
 
@@ -334,7 +340,7 @@ defer
 
 ```text
 use_existing("skill_or_system")
-deep_init_project("missing_standard_systems")
+init_advisor("missing_standard_systems")
 create_ticket("task")
 ticket(identifier)
 delegate(context_ref, task_prompt, skills?, output?)
@@ -427,7 +433,7 @@ heartbeat weekly_interval {
   first: grouped_jobs_with_report_cache
   bindings: "farplane/bindings.md"
   skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
-  delegate: delegate(ref("project-harness.md"), "refresh strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
+  delegate: delegate(ref("farplane/goals.md"), "refresh strategy and skill upkeep", skills=[interval_update, skill_maintenance])
 }
 ```
 
@@ -488,7 +494,7 @@ ticket_or_goal_required_for_edits
   environment input.
 - Use `ticket { type: unblock }` for human setup, credentials, data exports,
   approval, account linking, and shared-system access.
-- Use `deep_init_project(...)` for standard project systems instead of
+- Use `init_advisor(...)` for standard project systems instead of
   rediscovering docs, tickets, QA, runtime commands, feedback loops, or
   bootstrap files.
 - Use `research:*` only when domain truth is uncertain and the research changes
@@ -498,16 +504,26 @@ ticket_or_goal_required_for_edits
 
 ## Output Rule
 
-The harness program is the output. Sidecar Markdown sections explain the proof:
+Write durable output to the split Farplane files. A worksheet may explain the
+proof before those deltas are accepted:
 
 ```text
+farplane/harness.md :=
+  static human charter sections
+
+farplane/products.md :=
+  product catalog and Pulse refill context
+
+farplane/goals.md :=
+  strategy, KPIs, current frontier, and handoffs
+
 project-harness.md :=
-  YAML front matter
-+ harness-program block
-+ Evidence
-+ Assumptions
-+ Open Questions
-+ Goal Advisor Handoff
+  optional transient worksheet
++ target file deltas
++ evidence
++ assumptions
++ open questions
++ Goal Advisor handoff
 ```
 
 Do not generate a giant table-first harness unless the operator asks for an

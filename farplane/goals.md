@@ -136,13 +136,13 @@ axis distribution_from_evidence {
 axis framework_adoption {
   question: "Can more project types initialize into Farplane and run a first measured improvement loop?"
   kpi: review_metric("new project can produce farplane/ config, goals, evals, tickets, and first Goal Advisor handoff")
-  current_signal: ref("skills/deep-init-project/SKILL.md") + ref("docs/farplane-framework/") + ref("skills/horizon-advisor/SKILL.md")
+  current_signal: ref("skills/init-advisor/SKILL.md") + ref("docs/farplane-framework/") + ref("skills/horizon-advisor/SKILL.md")
 }
 
 project framework_standardization {
   parent: q3_harness_operating_system
-  output: "The Farplane project framework has a clear tracked config split: harness, goals, automation prompts, bindings, evals, tickets, and runtime reports."
-  feedback_surface: review_metric("a new or existing project can tell where strategy, Pulse/Interval automation, bindings, and proof belong")
+  output: "The Farplane project framework has a clear tracked config split: harness, goals, products, automation prompts, bindings, evals, tickets, and runtime reports."
+  feedback_surface: review_metric("a new or existing project can tell where strategy, product catalog, Pulse/Interval automation, bindings, and proof belong")
   budget: time_budget("1 week")
   route: harness_creator
   gates: [no_hidden_automation, no_secret_in_tracked_config, no_duplicate_goal_sources]
@@ -170,13 +170,14 @@ project goal_advisor_program_grammar {
 
 project low_intervention_experiment_engine {
   parent: q3_harness_operating_system
-  output: "Farplane can propose, run, evaluate, backpropagate, and accept/reject harness improvement experiments with explicit human-intervention, proof, and context-isolation accounting."
+  output: "Farplane can write experiment and ablation papers that propose, run, evaluate, backpropagate, and accept/reject harness improvements with explicit human-intervention, proof, trust, and context-isolation accounting."
   feedback_surface: hybrid_metric("validated cycles", "accepted improvements", "accepted agent-hours", "human intervention minutes", "proof closure", "context isolation", "quality/proof review")
   budget: time_budget("quarter")
   route: optimize_harness + eval + horizon_advisor
   gates: [no_fake_precision, no_unreviewed_self_improvement_claims, operator_control_preserved]
   starting_tasks: [
     "define validated improvement cycle report format",
+    "define experiment paper and ablation paper formats",
     "define weekly metric review fields for accepted output, intervention minutes, proof closure, context isolation, and skill backpropagation",
     "select first 3 project contexts for low-intervention improvement loops",
     "run ablations only where baseline and proof surface are clear",
@@ -186,7 +187,7 @@ project low_intervention_experiment_engine {
 
 project evidence_distribution_engine {
   parent: q3_harness_operating_system
-  output: "Farplane turns accepted experiments, ablations, and lessons into research notes, educational content, subscriber growth, and pilot conversations."
+  output: "Farplane turns accepted experiments, ablations, and lessons into trust distribution: real-pain-point product marketing, educational content, demos, subscriber growth, and pilot conversations."
   feedback_surface: hybrid_metric("content shipped", "qualified attention", "serious conversations", "pilot users")
   budget: time_budget("quarter")
   route: horizon_advisor + social_content + research
@@ -203,7 +204,7 @@ project pulse_interval_framework_standard {
   output: "A reusable project automation standard: Pulse for one bounded idle action, Daily Interval for daily reporting/planning, and Weekly Interval for goals drift and next-week planning."
   feedback_surface: review_metric("one project can initialize the preset without inventing custom files")
   budget: time_budget("2 weeks")
-  route: deep_init_project
+  route: init_advisor
   gates: [automation_preview_before_scheduling, local_files_source_of_truth]
   starting_tasks: [
     "keep exact Codex automation prompts in farplane/automations.md",

@@ -10,8 +10,7 @@ paths = [
   "tickets/templates/ticket.md",
   "tickets/templates/goal-loop/program.md",
   "skills/harness-creator/templates/project-harness.md",
-  "skills/deep-init-project/references/MANIFEST_TEMPLATE.json",
-  "skills/deep-init-project/references/STEER_CONFIG_TEMPLATE.toml",
+  "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
 ]
 
 globs = []

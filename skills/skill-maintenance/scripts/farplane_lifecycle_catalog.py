@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 TARGET_SKILLS = [
-    "deep-init-project",
+    "init-advisor",
     "horizon-advisor",
     "goal-advisor",
     "harness-advisor",
@@ -59,14 +59,14 @@ CURATED_FILES = {
 }
 
 CURATED_EDGES = [
-    ("skill:deep-init-project", "file:AGENTS.md", "writes", "docs/farplane-framework/deep-init-critical-path.md"),
-    ("skill:deep-init-project", "file:PROJECT_RULES.md", "writes", "docs/farplane-framework/deep-init-critical-path.md"),
-    ("skill:deep-init-project", "file:ARCHITECTURE.md", "writes", "docs/farplane-framework/deep-init-critical-path.md"),
-    ("skill:deep-init-project", "file:farplane/manifest.json", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:deep-init-project", "file:farplane/harness.md", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:deep-init-project", "file:farplane/goals.md", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:deep-init-project", "file:farplane/automations.md", "writes", "docs/farplane-framework/project-files.md"),
-    ("skill:deep-init-project", "file:farplane/pm.json", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:init-advisor", "file:AGENTS.md", "writes", "docs/farplane-framework/init-advisor-critical-path.md"),
+    ("skill:init-advisor", "file:PROJECT_RULES.md", "writes", "docs/farplane-framework/init-advisor-critical-path.md"),
+    ("skill:init-advisor", "file:ARCHITECTURE.md", "writes", "docs/farplane-framework/init-advisor-critical-path.md"),
+    ("skill:init-advisor", "file:farplane/manifest.json", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:init-advisor", "file:farplane/harness.md", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:init-advisor", "file:farplane/goals.md", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:init-advisor", "file:farplane/automations.md", "writes", "docs/farplane-framework/project-files.md"),
+    ("skill:init-advisor", "file:farplane/pm.json", "writes", "docs/farplane-framework/project-files.md"),
     ("skill:horizon-advisor", "file:farplane/goals.md", "updates", "docs/farplane-framework/lifecycle.md"),
     ("file:farplane/goals.md", "skill:goal-advisor", "triggers", "docs/specs/goal-loop-contract.md"),
     ("skill:goal-advisor", "ticket:tickets/TASK-*/ticket.md", "writes", "docs/specs/goal-loop-contract.md"),
@@ -109,7 +109,7 @@ FSA_SPECS = [
         "Project initialization",
         [
             "operator intent",
-            "deep init target bound",
+            "init advisor target bound",
             "project substrate written",
             "framework config written",
             "readiness audited",

@@ -40,6 +40,8 @@ fails: writing a vague plan; mixing reporting and execution; hiding
 
 Default sources:
 
+- the static human thesis, durable leverage commitments, non-tradeoffs, and
+  agent authority from the context bundle.
 - parent context refs and goals from the context bundle.
 - enabled workflow findings such as plan progress, goal drift, ticket board
   drift, feedback obligations, opportunity signals, attention drift, and
@@ -68,6 +70,8 @@ that a second read reduces self-confirmation.
 - [ ] 1. Bind inputs.
   - [ ] Confirm `review_window`, `planning_window`, parent context refs, and
         enabled workflow findings.
+  - [ ] Confirm the static charter boundary from the context bundle before
+        ranking product, goal, or ticket changes.
   - [ ] Read planning policy for side-effect, goals-delta, or output-shape
         instructions.
 - [ ] 2. Separate planning inputs.
@@ -90,6 +94,8 @@ that a second read reduces self-confirmation.
 - [ ] 6. Gate strategy changes.
   - [ ] Mark material goals, KPI, strategy-axis, quarterly/yearly, or durable
         milestone changes as approval-required goals deltas.
+  - [ ] Mark human thesis, static leverage commitment, non-tradeoff, or
+        agent-authority changes as approval-required harness deltas.
 
 ## Templates
 

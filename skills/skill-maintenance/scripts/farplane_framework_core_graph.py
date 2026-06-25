@@ -27,7 +27,7 @@ from graph_ir import GraphBundle, edge_counts, node_kind_counts, validate_edge_e
 DEFAULT_INCLUDE = [
     "docs/farplane-framework/README.md",
     "docs/farplane-framework/lifecycle.md",
-    "docs/farplane-framework/deep-init-critical-path.md",
+    "docs/farplane-framework/init-advisor-critical-path.md",
     "docs/farplane-framework/project-files.md",
     "docs/farplane-framework/graph-contract.md",
     "docs/farplane-framework/hooks-and-runtime.md",
@@ -72,8 +72,8 @@ WORKFLOWS = [
         "id": "workflow:bootstrap",
         "label": "Bootstrap",
         "description": "Create the project substrate and first usable harness state.",
-        "doc": "docs/farplane-framework/deep-init-critical-path.md",
-        "skills": ["deep-init-project", "harness-creator", "deep-interview", "prd", "spec-to-ticket"],
+        "doc": "docs/farplane-framework/init-advisor-critical-path.md",
+        "skills": ["init-advisor", "harness-creator", "deep-interview", "prd", "spec-to-ticket"],
     },
     {
         "id": "workflow:strategy",

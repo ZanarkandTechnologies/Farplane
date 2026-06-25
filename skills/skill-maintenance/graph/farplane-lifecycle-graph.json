@@ -3,33 +3,33 @@
     "edge_confidence": {
       "curated": 37,
       "explicit": 6,
-      "parsed": 179
+      "parsed": 181
     },
     "edge_types": {
       "consumes": 2,
       "contains": 2,
-      "reads": 49,
-      "routes_to": 122,
+      "reads": 52,
+      "routes_to": 121,
       "triggers": 15,
       "updates": 3,
       "writes": 29
     },
-    "edges": 222,
+    "edges": 224,
     "fsa_projections": 5,
     "node_kinds": {
       "automation": 3,
       "command": 3,
       "doc": 11,
-      "file": 17,
+      "file": 18,
       "hook": 2,
       "report": 2,
       "route": 5,
       "runtime": 1,
-      "skill": 40,
+      "skill": 41,
       "state": 10,
       "ticket": 5
     },
-    "nodes": 99,
+    "nodes": 101,
     "parsed_skills": 19
   },
   "edges": [
@@ -113,14 +113,6 @@
     {
       "confidence": "explicit",
       "evidence_ref": "hooks.json",
-      "label": "Sending Farplane Console stop heartbeat",
-      "source": "hook:Stop",
-      "target": "command:bash--lc-set--a--f-home/.codex/config.local.env-.-home/.codex/config.local.env-s",
-      "type": "triggers"
-    },
-    {
-      "confidence": "explicit",
-      "evidence_ref": "hooks.json",
       "label": "Evaluating Ralph stop hook",
       "source": "hook:Stop",
       "target": "command:python3-home/.codex/bin/stop_hook.py",
@@ -129,9 +121,9 @@
     {
       "confidence": "explicit",
       "evidence_ref": "hooks.json",
-      "label": "Sending Farplane Console start heartbeat",
-      "source": "hook:UserPromptSubmit",
-      "target": "command:bash--lc-set--a--f-home/.codex/config.local.env-.-home/.codex/config.local.env-s",
+      "label": "Sending Farplane Console stop heartbeat",
+      "source": "hook:Stop",
+      "target": "command:python3-home/.codex/hooks/farplane_console_ping.py",
       "type": "triggers"
     },
     {
@@ -140,6 +132,14 @@
       "label": "Capturing current-turn user intent",
       "source": "hook:UserPromptSubmit",
       "target": "command:python3-home/.codex/bin/capture_user_turn.py",
+      "type": "triggers"
+    },
+    {
+      "confidence": "explicit",
+      "evidence_ref": "hooks.json",
+      "label": "Sending Farplane Console start heartbeat",
+      "source": "hook:UserPromptSubmit",
+      "target": "command:python3-home/.codex/hooks/farplane_console_ping.py",
       "type": "triggers"
     },
     {
@@ -286,118 +286,6 @@
       "label": "review",
       "source": "skill:automation-advisor",
       "target": "skill:review",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/deep-init-critical-path.md",
-      "source": "skill:deep-init-project",
-      "target": "file:AGENTS.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/deep-init-critical-path.md",
-      "source": "skill:deep-init-project",
-      "target": "file:ARCHITECTURE.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/deep-init-critical-path.md",
-      "source": "skill:deep-init-project",
-      "target": "file:PROJECT_RULES.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/project-files.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/automations.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/project-files.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/goals.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/project-files.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/harness.md",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/project-files.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/manifest.json",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/project-files.md",
-      "source": "skill:deep-init-project",
-      "target": "file:farplane/pm.json",
-      "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/deep-init-project/SKILL.md",
-      "label": "automation-advisor",
-      "source": "skill:deep-init-project",
-      "target": "skill:automation-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/deep-init-project/SKILL.md",
-      "label": "deep-interview",
-      "source": "skill:deep-init-project",
-      "target": "skill:deep-interview",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/deep-init-project/SKILL.md",
-      "label": "goal-advisor",
-      "source": "skill:deep-init-project",
-      "target": "skill:goal-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/deep-init-project/SKILL.md",
-      "label": "horizon-advisor",
-      "source": "skill:deep-init-project",
-      "target": "skill:horizon-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/deep-init-project/SKILL.md",
-      "label": "prd",
-      "source": "skill:deep-init-project",
-      "target": "skill:prd",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/deep-init-project/SKILL.md",
-      "label": "research:official-docs",
-      "source": "skill:deep-init-project",
-      "target": "skill:research",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/deep-init-project/SKILL.md",
-      "label": "spec-to-ticket",
-      "source": "skill:deep-init-project",
-      "target": "skill:spec-to-ticket",
       "type": "routes_to"
     },
     {
@@ -779,6 +667,110 @@
       "type": "routes_to"
     },
     {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/init-advisor-critical-path.md",
+      "source": "skill:init-advisor",
+      "target": "file:AGENTS.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/init-advisor-critical-path.md",
+      "source": "skill:init-advisor",
+      "target": "file:ARCHITECTURE.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/init-advisor-critical-path.md",
+      "source": "skill:init-advisor",
+      "target": "file:PROJECT_RULES.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/automations.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/goals.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/harness.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/manifest.json",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/pm.json",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "automation-advisor",
+      "source": "skill:init-advisor",
+      "target": "skill:automation-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "deep-interview",
+      "source": "skill:init-advisor",
+      "target": "skill:deep-interview",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "harness-creator",
+      "source": "skill:init-advisor",
+      "target": "skill:harness-creator",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "prd",
+      "source": "skill:init-advisor",
+      "target": "skill:prd",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "research:official-docs",
+      "source": "skill:init-advisor",
+      "target": "skill:research",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "spec-to-ticket",
+      "source": "skill:init-advisor",
+      "target": "skill:spec-to-ticket",
+      "type": "routes_to"
+    },
+    {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
       "label": "docs/HISTORY.md?",
@@ -825,6 +817,14 @@
       "source": "skill:interval-update",
       "target": "file:farplane/goals.md",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "farplane/harness.md?",
+      "source": "skill:interval-update",
+      "target": "file:farplane/harness.md",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -1322,6 +1322,14 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "farplane/harness.md?",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/harness.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
       "label": "farplane/pm.json?",
       "source": "skill:pulse-update",
       "target": "file:farplane/pm.json",
@@ -1334,6 +1342,14 @@
       "source": "skill:pulse-update",
       "target": "file:farplane/pm.json",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "farplane/products.md?",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/products.md",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -1778,7 +1794,7 @@
       "start": "fsa:project_initialization:operator-intent",
       "states": [
         "fsa:project_initialization:operator-intent",
-        "fsa:project_initialization:deep-init-target-bound",
+        "fsa:project_initialization:init-advisor-target-bound",
         "fsa:project_initialization:project-substrate-written",
         "fsa:project_initialization:framework-config-written",
         "fsa:project_initialization:readiness-audited",
@@ -1792,16 +1808,16 @@
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "operator intent -> deep init target bound",
+          "label": "operator intent -> init advisor target bound",
           "source": "fsa:project_initialization:operator-intent",
-          "target": "fsa:project_initialization:deep-init-target-bound",
+          "target": "fsa:project_initialization:init-advisor-target-bound",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "deep init target bound -> project substrate written",
-          "source": "fsa:project_initialization:deep-init-target-bound",
+          "label": "init advisor target bound -> project substrate written",
+          "source": "fsa:project_initialization:init-advisor-target-bound",
           "target": "fsa:project_initialization:project-substrate-written",
           "type": "transition"
         },
@@ -2153,7 +2169,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-24T14:11:17+00:00",
+  "generated_at": "2026-06-25T07:48:51+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",
@@ -2180,20 +2196,6 @@
       ]
     },
     {
-      "id": "command:bash--lc-set--a--f-home/.codex/config.local.env-.-home/.codex/config.local.env-s",
-      "kind": "command",
-      "label": "bash -lc 'set -a; [ -f \"$HOME/.codex/config.local.env\" ] && . \"$HOME/.codex/config.local.env\"; set +a; exec /opt/homebrew/bin/python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"'",
-      "metadata": {
-        "statusMessage": "Sending Farplane Console start heartbeat",
-        "timeout": 5
-      },
-      "path": "hooks.json",
-      "tags": [
-        "command",
-        "hook"
-      ]
-    },
-    {
       "id": "command:python3-home/.codex/bin/capture_user_turn.py",
       "kind": "command",
       "label": "python3 \"$HOME/.codex/bin/capture_user_turn.py\"",
@@ -2214,6 +2216,20 @@
       "metadata": {
         "statusMessage": "Evaluating Ralph stop hook",
         "timeout": 90
+      },
+      "path": "hooks.json",
+      "tags": [
+        "command",
+        "hook"
+      ]
+    },
+    {
+      "id": "command:python3-home/.codex/hooks/farplane_console_ping.py",
+      "kind": "command",
+      "label": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
+      "metadata": {
+        "statusMessage": "Sending Farplane Console start heartbeat",
+        "timeout": 5
       },
       "path": "hooks.json",
       "tags": [
@@ -2451,6 +2467,15 @@
       ]
     },
     {
+      "id": "file:farplane/products.md",
+      "kind": "file",
+      "label": "farplane/products.md",
+      "path": "farplane/products.md",
+      "tags": [
+        "parsed"
+      ]
+    },
+    {
       "id": "file:hooks.json",
       "kind": "file",
       "label": "Codex hook config",
@@ -2645,21 +2670,6 @@
       ]
     },
     {
-      "id": "skill:deep-init-project",
-      "kind": "skill",
-      "label": "deep-init-project",
-      "metadata": {
-        "description": "Turn a new-project intake into a Farplane project with docs, tickets, runtime commands, QA gates, harness config, and reusable planning/build prompts.",
-        "source": "local",
-        "tier": 3
-      },
-      "path": "skills/deep-init-project/SKILL.md",
-      "tags": [
-        "coding",
-        "skill"
-      ]
-    },
-    {
       "id": "skill:deep-interview",
       "kind": "skill",
       "label": "deep-interview",
@@ -2767,6 +2777,16 @@
       ]
     },
     {
+      "id": "skill:harness-creator",
+      "kind": "skill",
+      "label": "harness-creator",
+      "path": "skills/harness-creator/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
       "id": "skill:horizon-advisor",
       "kind": "skill",
       "label": "horizon-advisor",
@@ -2795,6 +2815,21 @@
       "tags": [
         "coding",
         "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:init-advisor",
+      "kind": "skill",
+      "label": "init-advisor",
+      "metadata": {
+        "description": "Turn a new-project intake into a Farplane substrate, readiness audit, optional code scaffold, and harness-creator handoff.",
+        "source": "local",
+        "tier": 3
+      },
+      "path": "skills/init-advisor/SKILL.md",
+      "tags": [
+        "coding",
         "skill"
       ]
     },
@@ -3250,7 +3285,7 @@
     "missing_skills": [],
     "mode": "core",
     "target_skills": [
-      "deep-init-project",
+      "init-advisor",
       "horizon-advisor",
       "goal-advisor",
       "harness-advisor",

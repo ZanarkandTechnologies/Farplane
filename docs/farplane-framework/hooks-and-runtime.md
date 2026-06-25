@@ -35,8 +35,8 @@ hook(event, transcript/runtime_state)
 
 | Event | Commands | Purpose |
 | --- | --- | --- |
-| `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | capture current-turn user intent and send a start heartbeat |
-| `Stop` | `stop_hook.py`, `farplane_console_ping.py` | evaluate mechanical stop gates and send a stop heartbeat |
+| `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | capture current-turn user intent and send `turn_start` hook telemetry |
+| `Stop` | `stop_hook.py`, `farplane_console_ping.py` | evaluate mechanical stop gates and send `turn_end` hook telemetry |
 
 These are graphable as `hook:*` nodes that `triggers` command nodes.
 

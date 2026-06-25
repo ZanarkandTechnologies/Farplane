@@ -3,7 +3,7 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-24
+updated_at: 2026-06-25
 framework_template_version: "0.2.0"
 source_of_truth:
   - docs/farplane-framework/lifecycle.md
@@ -14,13 +14,14 @@ source_of_truth:
   - farplane/manifest.json
   - farplane/harness.md
   - farplane/goals.md
+  - farplane/products.md
   - farplane/automations.md
   - farplane/bindings.md
   - farplane/evals.md
   - farplane/pm.json
   - docs/specs/steer-pulse-automation.md
   - docs/specs/program-notation.md
-  - skills/deep-init-project/SKILL.md
+  - skills/init-advisor/SKILL.md
   - skills/harness-creator/SKILL.md
 ---
 
@@ -80,6 +81,7 @@ PROJECT_ROOT/
     manifest.json
     harness.md
     goals.md
+    products.md
     automations.md
     bindings.md
     evals.md
@@ -117,6 +119,13 @@ PROJECT_ROOT/
 Use `farplane/` for tracked config. Use `.farplane/` for generated state,
 reports, eval runs, and logs.
 
+`farplane/manifest.json` carries the small UI card identity:
+`project.name`, `project.description`, and `project.archetype`. The richer
+description of what the project is lives in Markdown:
+`farplane/harness.md` owns the static human charter,
+`farplane/products.md` owns the dynamic product portfolio, and
+`farplane/goals.md` owns current strategy.
+
 ## Template Version
 
 This standard uses:
@@ -126,13 +135,13 @@ framework_template_version: "0.2.0"
 ```
 
 When the framework shape changes, bump the manifest `spec_version`, dogfood the
-current Farplane files, update deep-init and harness-creator templates, and run
-the project-file validator.
+current Farplane files, update init-advisor and harness-creator templates, and
+run the project-file validator.
 
 ## Setup Lifecycle
 
 ```text
-deep_init_project(project_root?, project_idea?, repo_shape?, profile?, harness_depth?)
+init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mode?, force?)
   -> AGENTS.md
    + PROJECT_RULES.md
    + ARCHITECTURE.md
@@ -143,6 +152,7 @@ deep_init_project(project_root?, project_idea?, repo_shape?, profile?, harness_d
    + farplane/manifest.json
    + farplane/harness.md
    + farplane/goals.md
+   + farplane/products.md
    + farplane/automations.md
    + farplane/bindings.md
    + farplane/evals.md
@@ -150,10 +160,14 @@ deep_init_project(project_root?, project_idea?, repo_shape?, profile?, harness_d
    + .farplane/ ignored runtime root
 ```
 
-`harness-creator` fills or refines the operating program: mission, values,
-goals, KPIs, feedback loops, missing skills, current milestone, and automation
-setup. It should produce Pulse/Interval-ready project harness output rather than a
-separate automation manifest.
+In `full` init mode, `init-advisor` calls `harness-creator` after the
+substrate exists. `harness-creator` fills or refines the split project files:
+static charter in `harness.md`, product catalog and pipelines in `products.md`,
+strategy and KPIs in `goals.md`, automation prompt text in `automations.md`,
+and safe coordinates in `bindings.md`. It owns the smaller advisor calls such
+as research, `horizon-advisor`, `harness-advisor`, `skill-creator`, and
+`goal-advisor` when those are needed. Canonical `harness.md` files use YAML
+front matter plus Markdown sections, not a fenced custom program DSL.
 
 ## Automation Model
 
@@ -164,13 +178,15 @@ pulse_update(...)  # fast idle/action loop
 interval_update(...)  # scheduled report-then-plan loop
 ```
 
-Pulse is the actor loop. It wakes frequently, reconciles outcomes, selects one
-bounded action, optionally hands off work, and records decision/reward state.
+Pulse is the actor loop. It wakes frequently, reads the static harness charter
+and dynamic product/strategy context, reconciles outcomes, selects one bounded
+action, optionally hands off work, and records decision/reward state.
 
 Daily Interval and Weekly Interval are planning loops. Their live Codex prompts
 are reviewed in `farplane/automations.md`; Codex automation records own their
 cadence. They call `interval-update`, write date-stamped reports, check drift,
-and produce Pulse guidance or Goal Advisor handoffs.
+and produce Pulse guidance or Goal Advisor handoffs. They may propose static
+charter deltas in reports, but must not silently apply them.
 
 The full contract lives in [Pulse and Interval Automation](../specs/steer-pulse-automation.md).
 
@@ -206,4 +222,4 @@ canonical report contract for new framework surfaces.
 See [Project Files](project-files.md) for file-by-file responsibilities.
 
 For the end-to-end bootstrap and automation activation story, see
-[Deep Init Critical Path](deep-init-critical-path.md).
+[Init Advisor Critical Path](init-advisor-critical-path.md).

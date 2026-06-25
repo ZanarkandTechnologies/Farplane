@@ -1,10 +1,9 @@
 ---
 name: harness-creator
-description: "Turn a high-level project or business idea into a values-goals-KPI-heartbeat harness, skill/ticket map, and current milestone."
+description: "Turn a high-level project or business idea into split Farplane project files, advisor handoffs, missing-system tickets, and a current milestone."
 tier: 3
 group: harness
 source: local
-workflow: true
 template_uses:
   skill-template: "0.2.0"
 allowed-tools: Read, Write, Glob, Grep, Bash, web_search
@@ -18,25 +17,29 @@ allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 Use this skill when the operator gives a high-level project, business, channel,
 academy, research, product, ecommerce, or internal-ops idea and needs Farplane
 to design the operating harness before execution. This is the layer above
-`goal-advisor`: it writes a compact **Harness Program** for the idea, grounded
-by evidence, then selects the current milestone.
+`goal-advisor`: it is the project operating-model advisor. It writes or
+proposes split-file Farplane deltas for the idea, grounds them by evidence,
+routes smaller advisor calls when needed, then selects the current milestone.
 
-The default output is one operator-readable Markdown file:
+The default durable outputs are the standard Farplane project files:
 
 ```text
-project-harness.md = YAML metadata
-                   + one fenced harness-program block
-                   + evidence / assumptions / open questions
+farplane/harness.md  = static human charter: mission, thesis, values,
+                       non-tradeoffs, leverage commitments, agent authority,
+                       and change rule
+farplane/products.md = dynamic product catalog and Pulse refill context
+farplane/goals.md    = dynamic strategy, KPIs, current frontier, and
+                       Goal Advisor handoffs
 ```
 
-Use the `harness-program` block as the compact source of truth. Use Markdown
-around it only for evidence, assumptions, review notes, and handoff context.
-Split into child Goal Packet files only when the selected milestone is ready to
-run.
+Use `templates/project-harness.md` only as a transient split-surface planning
+worksheet or ticket artifact when a one-file review surface helps. It must not
+be treated as a canonical replacement for `farplane/harness.md`, and it must
+not mix static charter content with dynamic products or current strategy.
 
-`deep-init-project` is the normal public setup entrypoint for making a project
+`init-advisor` is the normal public setup entrypoint for making a project
 a Farplane project. It routes here as the internal operating-program phase when
-`harness_depth != none`. Call this skill directly only for explicit harness
+`init_mode == full`. Call this skill directly only for explicit harness
 redesign, advanced operating-program work, or existing projects that already
 have substrate files.
 
@@ -55,14 +58,14 @@ approval, review, dependency, or proof boundaries.
 ```text
 project_harness_creator(project_idea, values?, priorities?, mode_presets?, context?, constraints?, budget?)
   -> project_harness
-   + harness_program
+   + split_file_deltas
    + evidence_wrapper
    + proposed_tickets
    + current_milestone
    + goal_advisor_handoff
-state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, farplane/goals.md, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(project-harness.md, proposed tickets, farplane/automations.md, and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
+state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, farplane/harness.md, farplane/products.md, farplane/goals.md, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(farplane/harness.md static-charter deltas only with explicit approval, farplane/products.md product-catalog deltas, farplane/goals.md strategy deltas through goals policy, proposed tickets, farplane/automations.md, and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
 gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_providers_honest; existing_tickets_checked_first; missing_systems_named; blockers_ticketed; side_effect_gates_named; current_milestone_named; goal_advisor_handoff_ready
-routes: deep-init-project | research:* | ingest-content | harness-advisor | skill-creator | goal-advisor | optimize-with-human | interval-update | review | relevant domain skill
+routes: init-advisor | research:* | ingest-content | horizon-advisor | harness-advisor | skill-creator | goal-advisor | automation-advisor | optimize-with-human | interval-update | review | relevant domain skill
 fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates skills before checking existing systems; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
 ```
 
@@ -74,7 +77,7 @@ project_harness_creation_phase(project_idea, state)
    + values_priorities_goal_kpi_model
    + feedback_loop_skill_model
    + mode_preset_decisions
-   + harness_program
+   + split_file_deltas
    + skill_gap_and_missing_system_decisions
    + proposed_ticket_plan
    + scrum_heartbeat_policy
@@ -85,10 +88,12 @@ project_harness_creation_phase(project_idea, state)
 ## Phase Boundary
 
 This skill follows Tier 0 phases inline. Call workflow skills only for smaller
-child scopes: `deep-init-project` for standard project systems, `research:*`
-for real domain uncertainty, `harness-advisor` for Farplane surface placement,
-`skill-creator` for a stable reusable missing primitive, `goal-advisor` after
-the current milestone is selected, and `review` for material readiness.
+child scopes: `init-advisor` for standard project systems, `research:*`
+for real domain uncertainty, `horizon-advisor` for strategy/KPI depth,
+`harness-advisor` for Farplane surface placement, `skill-creator` for a stable
+reusable missing primitive, `goal-advisor` after the current milestone is
+selected, `automation-advisor` only for live Codex automation activation, and
+`review` for material readiness.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -121,15 +126,20 @@ the current milestone is selected, and `review` for material readiness.
      harness must be compared with current Farplane capability.
    - [ ] Keep research proportional to choosing the first honest evidence loop;
      do not spend R&D budget when no marginal value exists.
-- [ ] 3. Fill the Harness Program / project harness.
-   - [ ] Load [references/harness-il.md](references/harness-il.md) before
-     writing the compact program notation.
-   - [ ] Use [templates/project-harness.md](templates/project-harness.md) as
-     the default one-file operator artifact.
-   - [ ] Lead with a fenced `harness-program` block. Put facts, assumptions,
-     research refs, and open questions in the Markdown evidence wrapper.
-   - [ ] Define values, modes, goals, axes, systems, skill bindings, operator
-     tickets, heartbeats, gates, current milestone, and Goal Advisor handoff.
+- [ ] 3. Fill the split Farplane project files.
+   - [ ] Use YAML front matter plus Markdown sections in canonical project
+     files; do not write fenced `harness-program` blocks to
+     `farplane/harness.md`.
+   - [ ] Use [templates/project-harness.md](templates/project-harness.md) only
+     as a transient split-surface planning worksheet when one review artifact
+     is useful.
+   - [ ] Write approved static charter content to `farplane/harness.md`;
+     product/team output content to `farplane/products.md`; and strategy,
+     KPIs, current frontier, and Goal Advisor handoffs to `farplane/goals.md`.
+   - [ ] Define static charter values in `harness.md`, product pipelines in
+     `products.md`, strategy axes in `goals.md`, prompt cadence in
+     `automations.md`, safe skill coordinates in `bindings.md`, and operator
+     tickets for missing systems or gates.
    - [ ] For project-goal-shaped harnesses, keep `project` as the default durable
      planning unit and use `starting_tasks` only as hints unless a child ticket
      has a real boundary reason.
@@ -160,7 +170,7 @@ the current milestone is selected, and `review` for material readiness.
      stores.
    - [ ] If the repo lacks standard operating files, feedback surfaces, QA
      surfaces, ticket templates, or bootstrap docs, route setup through
-     [deep-init-project](../deep-init-project/SKILL.md).
+     [init-advisor](../init-advisor/SKILL.md).
    - [ ] Classify capabilities as `ready`, `needs_config`, `needs_access`,
      `needs_operator_setup`, `needs_reference`, `needs_eval`, `needs_wrapper`,
      `missing`, or `defer`.
@@ -221,7 +231,7 @@ the current milestone is selected, and `review` for material readiness.
    - [ ] Use [skill-creator](../skill-creator/SKILL.md) only when a missing
      capability has a stable trigger and reusable workflow.
    - [ ] Otherwise choose reference, ticket, tool connector, eval, validator,
-     subagent, `deep-init-project`, defer-until-pilot, or no-op.
+     subagent, `init-advisor`, defer-until-pilot, or no-op.
 - [ ] 9. Compile the current milestone.
    - [ ] Use [templates/goal-advisor-handoff.md](templates/goal-advisor-handoff.md)
      to make the handoff explicit.
@@ -231,8 +241,8 @@ the current milestone is selected, and `review` for material readiness.
      operator's labels, rankings, approval, or taste are the honest early
      metric.
 - [ ] 10. Finish with proof and review.
-   - [ ] Produce the filled harness packet or state why the task should remain
-     template-only.
+   - [ ] Produce the split Farplane file deltas, or a transient worksheet that
+     explicitly names the target files and approval gates.
    - [ ] Run [review](../review/SKILL.md) for material harness packets,
      skill-creation choices, or readiness claims.
    - [ ] State what can run autonomously now, what requires approval, what
@@ -244,8 +254,10 @@ the current milestone is selected, and `review` for material readiness.
 Return or write:
 
 ```text
-Project Harness:
-Harness Program:
+Static Charter Delta (`farplane/harness.md`):
+Product Catalog Delta (`farplane/products.md`):
+Strategy Delta (`farplane/goals.md`):
+Planning Worksheet:
 Values / Operating Principles / Priorities:
 Strategy Axes / KPI Map:
 Feedback Skill Loops:
@@ -267,7 +279,7 @@ Default artifact paths when ticketed:
 
 ```text
 tickets/TASK-XXXX/artifacts/harness-creator/
-  project-harness.md
+  project-harness.md              # transient worksheet, not canonical charter
   capability-map.md                 # optional sidecar when inventory is large
   missing-primitive-plan.md          # optional sidecar when gaps are material
   goal-advisor-handoff.md            # optional sidecar when milestone is ready
@@ -277,8 +289,10 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 
 ## Gotchas
 
-- Program first: the `harness-program` block is the source of truth; tables and
-  Markdown are evidence or inventory sidecars.
+- Split files first: `farplane/harness.md` owns static human charter content,
+  `farplane/products.md` owns dynamic products, and `farplane/goals.md` owns
+  dynamic strategy. A `project-harness.md` worksheet is evidence, not the
+  canonical source of truth.
 - Evidence first: no refinement, validation, or "business is working" claim
   without at least one honest feedback loop or a concrete feedback-skill ticket.
 - Smallest lever first: check existing skills/tickets/systems before creating
@@ -292,17 +306,17 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 
 ## Reference Map
 
-- [references/harness-il.md](references/harness-il.md) - load before writing
-  the compact Harness Program notation.
-- [templates/project-harness.md](templates/project-harness.md) - copy first
-  when writing the primary one-file project or business operating harness.
+- [references/harness-il.md](references/harness-il.md) - legacy notation notes;
+  use only when reading older worksheets or migrating old examples.
+- [templates/project-harness.md](templates/project-harness.md) - copy only when
+  a transient split-surface planning worksheet is useful.
 - [templates/capability-map.md](templates/capability-map.md) - copy when the
   skill/tool/asset inventory needs its own artifact.
 - [templates/missing-primitive-plan.md](templates/missing-primitive-plan.md) -
   copy when gaps need owner/action decisions.
 - [templates/goal-advisor-handoff.md](templates/goal-advisor-handoff.md) - copy
   before asking `goal-advisor` to compile the selected milestone.
-- [deep-init-project](../deep-init-project/SKILL.md) - use when a project lacks
+- [init-advisor](../init-advisor/SKILL.md) - use when a project lacks
   standard repo, ticket, QA, feedback, or bootstrap systems.
 - [interval-update](../interval-update/SKILL.md) - scheduled report-then-plan primitive for
   project-specific strategy refreshes configured by automation prompts or

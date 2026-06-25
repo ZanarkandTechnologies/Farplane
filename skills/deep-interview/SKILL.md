@@ -16,7 +16,7 @@ argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea
 - [ ] Ask one question per round and target the weakest clarity dimension.
 - [ ] When a project profile exists in `docs/bootstrap-brief.md` or the user
   names a project type, load
-  [project-profiles](../deep-init-project/references/project-profiles.md) and
+  [project-profiles](../init-advisor/references/project-profiles.md) and
   ask along the profile's components, advice axes, prototype gates, and
   pipeline handoff.
 - [ ] Track the required gates: intent, outcome, scope, constraints, success
@@ -41,7 +41,7 @@ Deep Interview is an intent-first Socratic clarification loop before planning or
 - The user wants to avoid misaligned implementation from underspecified requirements
 - You need a requirements artifact before handing off to `impl-plan`, `autopilot`, `goal-advisor`, or `team`
 - You are bootstrapping a new or migrated project and need stack, topology, and
-  quality-gate decisions clarified before `deep-init-project` scaffolds files
+  quality-gate decisions clarified before `init-advisor` scaffolds files
 </Use_When>
 
 <Do_Not_Use_When>
@@ -60,7 +60,7 @@ Execution quality is usually bottlenecked by intent clarity, not just missing im
 - **Standard (`--standard`, default)**: full requirement interview; target threshold `<= 0.20`; max rounds 12
 - **Deep (`--deep`)**: high-rigor exploration; target threshold `<= 0.15`; max rounds 20
 - **Autoresearch (`--autoresearch`)**: same interview rigor as Standard, but specialized for research-brief launch readiness and a Farplane-native handoff through the active ticket or a deliberate experiment/ticket artifact when the user explicitly wants durable research artifacts
-- **Bootstrap (`--bootstrap`)**: same interview rigor as Standard, but specialized for project bootstrap readiness and a Farplane-native handoff through `docs/bootstrap-brief.md` for `deep-init-project`
+- **Bootstrap (`--bootstrap`)**: same interview rigor as Standard, but specialized for project bootstrap readiness and a Farplane-native handoff through `docs/bootstrap-brief.md` for `init-advisor`
 
 If no flag is provided, use **Standard**.
 
@@ -69,11 +69,11 @@ If no flag is provided, use **Standard**.
   mode, the interview should converge on a scaffold-ready bootstrap brief that
   captures project goal, topology recommendation, stack choices, local quality
   gates, large-file policy, shared utility conventions, and explicit decision
-  boundaries for `deep-init-project`.
+  boundaries for `init-advisor`.
 - **Project profiles:** when `docs/bootstrap-brief.md` names a project profile
   or the user names a project type such as coding app, landing page, video
   project, social campaign, or product-photo shoot, use
-  `deep-init-project/references/project-profiles.md` to ask along that
+  `init-advisor/references/project-profiles.md` to ask along that
   profile's components and advice axes.
 - **`--autoresearch`**: switch the interview into research-intake mode. In this mode, the interview should converge on a launch-ready research mission, keep the current requirements brief on live Farplane surfaces, and preserve the explicit `refine further` vs `launch` boundary for downstream handoff.
 </Mode_Flags>
@@ -291,7 +291,7 @@ and emit a scaffold-consumable artifact without skipping clarification.
 - **Required interview focus:** project goal, audience, likely scale, topology
   recommendation, stack defaults, required local checks, optional heavy checks,
   local git-hook activation policy, local-vs-CI/deploy gate split,
-  large-file policy, shared utility convention, and what `deep-init-project`
+  large-file policy, shared utility convention, and what `init-advisor`
   may decide without further confirmation
 - **Profile-specific focus:** select or confirm a `ProjectProfile`, then ask
   material questions across its component set, advice axes, prototype gates,
@@ -306,8 +306,8 @@ and emit a scaffold-consumable artifact without skipping clarification.
   `projectShape`, `topologyRecommendation`, `stackDefaults`, `localChecks`,
   `heavyChecks`, `hookPolicy`, `hookActivationChoice`, `deployGatePolicy`,
   `fileSizePolicy`, `utilityPolicy`, and `defaultsChosen` fields so
-  `deep-init-project` can scaffold from it directly
-- **Handoff rule:** downstream `deep-init-project` scaffolding should preserve the
+  `init-advisor` can scaffold from it directly
+- **Handoff rule:** downstream `init-advisor` scaffolding should preserve the
   clarified bootstrap intent and decision boundaries instead of re-asking the
   same bootstrap questions in a second shallow loop
 
@@ -315,9 +315,9 @@ and emit a scaffold-consumable artifact without skipping clarification.
 
 Present execution options after artifact generation using explicit handoff contracts. Treat the deep-interview spec as the current requirements source of truth and preserve intent, non-goals, decision boundaries, acceptance criteria, and any residual-risk warnings across the handoff.
 
-### 0. **`deep-init-project`**
+### 0. **`init-advisor`**
 - **Input Artifact:** `docs/bootstrap-brief.md`
-- **Invocation:** `$deep-init-project <repo or migration target>`
+- **Invocation:** `$init-advisor <repo or migration target>`
 - **Consumer Behavior:** Treat the bootstrap brief as the current source of
   truth for scaffold defaults, topology recommendation, validator shape,
   hook-routing policy, CI/deploy gate decisions, and shared utility
@@ -409,7 +409,7 @@ Present execution options after artifact generation using explicit handoff contr
 - [ ] Interview summary written to the active ticket or the current response handoff
 - [ ] Requirements brief written to the active ticket or the selected Farplane handoff artifact
 - [ ] Brownfield questions use evidence-backed confirmation when applicable
-- [ ] Handoff options provided (`$deep-init-project`, `$impl-plan`, `$autopilot`, `goal-advisor`, `$team`)
+- [ ] Handoff options provided (`$init-advisor`, `$impl-plan`, `$autopilot`, `goal-advisor`, `$team`)
 - [ ] No direct implementation performed in this mode
 </Final_Checklist>
 

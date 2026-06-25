@@ -24,12 +24,13 @@ explicit goals-delta policy.
 
 ```text
 goal_drift(context_bundle, review_window, planning_window,
-           goals_ref, parent_context_refs?, metric_refs?, status_refs?)
+           harness_ref, goals_ref, parent_context_refs?, metric_refs?,
+           status_refs?)
   -> verdict + goal_findings + unmapped_work + goals_delta_candidates
      + source_gaps
 
-state: reads(context_bundle, goals_ref, parent_context_refs?, metric_refs?,
-             status_refs?);
+state: reads(context_bundle, harness_ref, goals_ref, parent_context_refs?,
+             metric_refs?, status_refs?);
        writes(parent_interval_update_report_section)
 gates: goals_ref_checked; parent_context_checked_or_gap;
        evidence_cited; goals_delta_proposed_not_applied
@@ -41,6 +42,8 @@ fails: changing goals during analysis; treating maintenance as drift by
 
 Default sources:
 
+- `harness_ref`: default `farplane/harness.md` for the static human thesis,
+  non-tradeoffs, and agent authority.
 - `goals_ref`: default `farplane/goals.md`.
 - `parent_context_refs`: configured parent plans, strategy docs, or goals.
 - interval outputs, tickets, Pulse reports, worker outcomes, and memory docs
@@ -63,12 +66,14 @@ reports, or outcomes need mapping.
 
 - [ ] 1. Bind inputs.
   - [ ] Resolve `goals_ref`.
+  - [ ] Resolve `harness_ref` and treat missing static charter context as a
+        source gap.
   - [ ] Resolve parent context refs and mark missing parents as source gaps.
 - [ ] 2. Map work to goals.
   - [ ] Read review-window tickets, reports, Pulse outcomes, and worker
         outcomes.
   - [ ] Map each evidence cluster to goals, strategy axes, parent plans, or
-        `unmapped_work`.
+        `unmapped_work`, while checking the static charter boundary.
 - [ ] 3. Classify drift.
   - [ ] Label each goal as `aligned`, `drifting`, `blocked`, or `source_gap`.
   - [ ] Label unmapped work as `necessary_unplanned_work`,
@@ -76,6 +81,8 @@ reports, or outcomes need mapping.
 - [ ] 4. Propose goals deltas.
   - [ ] Cite evidence for each candidate.
   - [ ] Mark material strategy changes as approval-required.
+  - [ ] Mark static charter changes as approval-required harness deltas, not
+        goals deltas.
   - [ ] Do not edit goals.
 - [ ] 5. Return planning implication.
   - [ ] Name what the next plan should protect, correct, or stop doing.

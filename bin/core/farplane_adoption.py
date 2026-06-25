@@ -10,6 +10,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
+
 
 DEFAULT_FARPLANE_HOME = Path.home() / ".farplane"
 DEFAULT_STATE_PATHS = (
@@ -173,10 +179,10 @@ def explicit_feature_pins(manifest: dict[str, Any]) -> dict[str, str]:
 
 
 def template_uses(manifest: dict[str, Any]) -> dict[str, str]:
-    raw = manifest.get("template_uses") or manifest.get("templateUses") or {}
-    if not isinstance(raw, dict):
-        return {}
-    return {str(key): str(value) for key, value in raw.items() if str(key).strip()}
+    try:
+        return normalize_template_uses(manifest, "<manifest>", include_legacy=False)
+    except TemplateUsageError as exc:
+        raise AdoptionError(str(exc)) from exc
 
 
 def resolve_project(

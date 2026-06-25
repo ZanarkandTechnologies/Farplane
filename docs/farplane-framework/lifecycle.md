@@ -3,7 +3,7 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-24
+updated_at: 2026-06-25
 framework_template_version: "0.2.0"
 tags:
   - farplane
@@ -13,7 +13,7 @@ tags:
   - graph
 refs:
   - docs/farplane-framework/README.md
-  - docs/farplane-framework/deep-init-critical-path.md
+  - docs/farplane-framework/init-advisor-critical-path.md
   - docs/farplane-framework/project-files.md
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/hooks-and-runtime.md
@@ -31,7 +31,7 @@ mental model is:
 ```text
 init_project(intent)
   -> visible project files
-  -> goals and current frontier
+  -> static human charter, products, goals, and current frontier
   -> ticket-backed Goal Packets
   -> Pulse acts and intervals plan
   -> weekly reports propose goals deltas and leverage bets
@@ -60,7 +60,7 @@ periodically routed to their owning docs, skills, tickets, or memory files.
 If you are setting up a project with Codex, start from a plain request:
 
 ```text
-Use deep-init-project for this repo: <project intent>. Create the Farplane
+Use init-advisor for this repo: <project intent>. Create the Farplane
 project files, first ticket, QA/proof surfaces, and framework config. Stop for
 secrets, spend, deploys, destructive actions, or unclear product decisions.
 ```
@@ -68,25 +68,30 @@ secrets, spend, deploys, destructive actions, or unclear product decisions.
 Then inspect the created files:
 
 1. Open `farplane/README.md` for the project-local framework overview.
-2. Open `farplane/harness.md` for mission, values, systems, and skill bindings.
+2. Open `farplane/harness.md` for the static human charter: mission, thesis,
+   static leverage commitments, non-tradeoffs, agent authority, systems, and
+   skill bindings.
 3. Open `farplane/goals.md` for strategy, current milestone, KPIs, and holds.
-4. Open `tickets/TASK-0001/ticket.md` for the first planning or discovery
+4. Open `farplane/products.md` for the primary and supporting products this
+   team creates.
+5. Open `tickets/TASK-0001/ticket.md` for the first planning or discovery
    handoff.
-5. Run or ask for `horizon-advisor` only when `farplane/goals.md` is missing,
+6. Run or ask for `horizon-advisor` only when `farplane/goals.md` is missing,
    stale, or too broad.
-6. Run or ask for `goal-advisor` only after the current milestone is concrete
+7. Run or ask for `goal-advisor` only after the current milestone is concrete
    enough to become a ticket-backed Goal Packet.
-7. Activate Pulse, Daily Interval, and Weekly Interval only after goals,
-   reviewed automation prompts, visible work, and proof surfaces exist.
+8. Activate Pulse, Daily Interval, and Weekly Interval only after goals,
+   products, reviewed automation prompts, visible work, and proof surfaces
+   exist.
 
-The deeper bootstrap path is [Deep Init Critical Path](deep-init-critical-path.md).
+The deeper bootstrap path is [Init Advisor Critical Path](init-advisor-critical-path.md).
 The file-by-file reference is [Project Files](project-files.md).
 
 ## Lifecycle Map
 
 ```mermaid
 flowchart TD
-  A["Operator intent"] --> B["deep-init-project"]
+  A["Operator intent"] --> B["init-advisor"]
   B --> C["Farplane project files"]
   C --> D["horizon-advisor"]
   D --> E["farplane/goals.md"]
@@ -132,13 +137,14 @@ formal semantic continuation loop. Farplane adds visible files around it:
 
 ## Init To Goals
 
-`deep-init-project` turns an empty or existing repo into a Farplane-shaped
+`init-advisor` turns an empty or existing repo into a Farplane-shaped
 project. It creates or preserves local policy, project docs, ticket templates,
 QA entrypoints, framework config, and ignored runtime folders.
 
 The init step does not pretend that file creation is the same as project
-understanding. When the project intent is not grounded, it reports
-`needs_goal_intake` and routes to `horizon-advisor`.
+understanding. When the human thesis, static leverage commitments, products, or
+goals are not grounded, it reports the specific readiness gap before claiming
+the project is initialized.
 
 `horizon-advisor` shapes `farplane/goals.md`. It names the north star, value
 function, KPIs, anti-metrics, strategy axes, and current frontier. It expands
@@ -191,15 +197,17 @@ interval_update(project_root, interval_id, review_window, planning_window,
   -> dated interval report + next-window plan + Pulse guidance
 ```
 
-Pulse is the fast actor loop. It reads current goals, recent interval guidance,
-ticket state, action arms, rewards, and ledgers. It selects one bounded board
-move, optionally spawns a worker, writes a dated Pulse report, and updates
+Pulse is the fast actor loop. It reads the static harness charter, current
+goals, dynamic products, recent interval guidance, ticket state, action arms,
+rewards, and ledgers. It selects one bounded board move inside the charter
+boundary, optionally spawns a worker, writes a dated Pulse report, and updates
 decision/reward state.
 
 Daily Interval reviews the last 24 hours and plans the next 24 hours. Weekly
-Interval reviews the last week, checks drift against `farplane/goals.md`, and
-plans the next week. Both call `interval-update`, write dated reports under
-`.farplane/reports/interval/`, and give Pulse guidance.
+Interval reviews the last week, checks drift against `farplane/harness.md` and
+`farplane/goals.md`, and plans the next week. Both call `interval-update`,
+write dated reports under `.farplane/reports/interval/`, and give Pulse
+guidance.
 
 The important design choice is that Pulse does not become long-horizon
 strategy, and interval automations do not become fast action dispatchers. They
@@ -214,6 +222,11 @@ Signals come from existing artifacts: reports, tickets, lessons, troubles,
 skill/feature registry changes, evals, feedback, metrics, opportunity refs, or
 supplied external source refs. Weekly Interval owns clustering, rejection,
 selection, and decision logging inside the dated interval report.
+
+Static charter changes are different from product or goals deltas. Weekly
+Interval may propose a harness delta when evidence challenges the human thesis,
+durable leverage commitments, non-tradeoffs, or agent authority, but applying
+that delta requires explicit human approval.
 
 ```text
 weekly_interval_report

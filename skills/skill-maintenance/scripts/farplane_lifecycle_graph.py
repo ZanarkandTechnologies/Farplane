@@ -488,7 +488,7 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         if edge.get("confidence") == "explicit" and not edge.get("evidence_ref"):
             errors.append(f"explicit edge lacks evidence_ref: {edge}")
     required_nodes = [
-        "skill:deep-init-project",
+        "skill:init-advisor",
         "skill:horizon-advisor",
         "skill:goal-advisor",
         "skill:proof-advisor",

@@ -29,7 +29,8 @@ and context isolation as constraints.
 
 ```text
 compounding_leverage_review(context_bundle, review_window, planning_window,
-                             goals_ref, workflow_findings?, registries?)
+                             harness_ref, goals_ref, workflow_findings?,
+                             registries?)
   -> lever_inventory
    + leverage_scores
    + top_experiment_candidates
@@ -38,7 +39,7 @@ compounding_leverage_review(context_bundle, review_window, planning_window,
    + goal_advisor_handoffs
    + source_gaps
 
-state: reads(context_bundle, goals_ref, tickets, pulse_reports,
+state: reads(context_bundle, harness_ref, goals_ref, tickets, pulse_reports,
              interval_reports, docs/LESSONS.md?, docs/TROUBLES.md?,
              docs/features/registry.jsonl?, docs/skills/registry.jsonl?);
        writes(parent_interval_update_report_section)
@@ -58,6 +59,8 @@ fails: giant wish list; vague self-improvement; hidden strategy rewrite;
 
 Default sources from the context bundle:
 
+- `farplane/harness.md` for the static human thesis, durable leverage
+  commitments, non-tradeoffs, agent authority, and charter change rule.
 - `farplane/goals.md` for value function, goals, holds, and current milestone.
 - review-window Pulse reports, interval reports, ticket outcomes, blockers, and
   worker evidence.
@@ -104,10 +107,12 @@ report's `Reward Closure` section.
 
 - `horizon-advisor`: use when the value function, KPI tree, north star,
   strategy axes, or current frontier itself should change.
+- `harness-advisor`: use when a selected leverage bet challenges the static
+  charter, durable leverage commitments, non-tradeoffs, or owner surface.
 - `leverage-advisor`: use to score how an existing feature, workflow,
   capability, or artifact could compound value.
-- `harness-advisor`: use when the selected change needs an owner surface across
-  policy, docs, skills, hooks, validators, subagents, tickets, or templates.
+- Charter deltas: record in the interval report as human-approval-required
+  proposals; do not patch `farplane/harness.md` inside this workflow.
 - `proof-advisor`: use when the claim needs proof selection, proof-case design,
   or routing between deterministic tests, validators, eval, QA, visual QA,
   agent QA, review, and source-gap tickets.
@@ -134,6 +139,7 @@ Advisor routing table:
 | Condition | Route | Output expected |
 | --- | --- | --- |
 | Value function, KPI tree, north star, strategy axis, or frontier changes | horizon-advisor | approval-required goals delta or strategy packet |
+| Static thesis, durable leverage commitments, non-tradeoffs, or agent authority changes | harness-advisor | approval-required harness delta proposal |
 | Candidate capability is valuable but compounding value is unclear | leverage-advisor | scored leverage play and proof step |
 | Candidate is selected but owner surface is unclear | harness-advisor | primary owner surface and rejected alternatives |
 | Behavior claim needs proof route, eval, hardcase, or e2e chain test | eval | proof surface, eval case, QA/review/validator route, or source-gap ticket |
@@ -179,6 +185,9 @@ candidate surfaces or the owner-surface decision is material.
 - [ ] 1. Bind the leverage objective.
   - [ ] Read the value function, goals, current milestone, holds, and recent
         interval evidence.
+  - [ ] Read the static human thesis, durable leverage commitments,
+        non-tradeoffs, agent authority, and change rule from
+        `farplane/harness.md`.
   - [ ] Name the loss term being improved, such as human intervention, false
         completion, agent churn, coordination cost, ungrounded claims, brittle
         state loss, quality, or auditability.
@@ -227,6 +236,9 @@ candidate surfaces or the owner-surface decision is material.
         bets.
   - [ ] Mark strategy/KPI/current-frontier changes as approval-required goals
         deltas and route them to `horizon-advisor`.
+  - [ ] Mark static thesis, durable leverage commitment, non-tradeoff, or
+        agent-authority changes as approval-required harness deltas and route
+        them to `harness-advisor`.
   - [ ] Route proof gaps to `eval` before claiming the lever worked.
   - [ ] Route new reusable workflows to `skill-creator`; route existing skill
         backpropagation to `skill-maintenance`.
@@ -311,6 +323,9 @@ Do not mutate files or execute experiments.
   change; Goal Advisor compiles selected execution.
 - If the right move is to rewrite the value function or KPI tree, route to
   Horizon Advisor instead of hiding the strategy change in the weekly plan.
+- If the right move is to rewrite the human thesis or static leverage
+  commitments, route to Harness Advisor and human approval instead of hiding the
+  charter change in products, goals, or the weekly plan.
 - A new skill or feature is not automatically a lever. It becomes a lever only
   when there is evidence that using, hardening, or rolling it out changes a
   named loss term.

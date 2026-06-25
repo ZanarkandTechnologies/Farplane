@@ -95,11 +95,13 @@ The first generator version intentionally parses a small, stable surface:
 
 - `SKILL.md` front matter for `name`, `description`, `tier`, `group`, and
   `source`.
-- `workflow: true` skill front matter plus the skill's `## Todo List` for
-  ordered workflow-chain edges. The parser scans only the Todo List and records
-  first-seen explicit skill references in order: Markdown `SKILL.md` links,
-  backticked `skill-name` refs, or `$skill-name` refs. It does not read plain
-  prose or Reference Map prose as execution order.
+- `SKILL.md` `## Todo List` sections for ordered todo-chain edges. The parser
+  records first-seen explicit skill references in order: Markdown `SKILL.md`
+  links, backticked `skill-name` refs, or `$skill-name` refs. It does not read
+  plain prose or Reference Map prose as execution order.
+- `.farplane/events/*.jsonl` skill telemetry for observed skill heat. Graph
+  prominence is generated from behavior instead of a hand-maintained workflow
+  marker.
 - `## Skill Signature` blocks for `state: reads(...)`, `writes(...)`,
   `gates:`, and `routes:`.
 - `hooks.json` for Codex hook events and command hook targets.

@@ -29,11 +29,11 @@ common_chains:
 - [ ] Fill the PRD by section: audience, JTBD, user stories, constraints,
   non-goals, risks, first SLC slice, metric candidates, and autonomy readiness.
 - [ ] If `docs/bootstrap-brief.md` has a project profile, load
-  [project-profiles](../deep-init-project/references/project-profiles.md) and
+  [project-profiles](../init-advisor/references/project-profiles.md) and
   include component matrix, advice axes explored, selected directions,
   prototype gates, and pipeline handoff.
 - [ ] Preserve the project lifecycle phase boundary from
-  [project-lifecycle](../deep-init-project/references/project-lifecycle.md):
+  [project-lifecycle](../init-advisor/references/project-lifecycle.md):
   PRD writes the project spec/brief and first SLC slice; it does not create
   tickets or implement.
 - [ ] Keep metric candidates honest: mechanical when possible, `none
@@ -68,7 +68,7 @@ Use this as the first session in the Farplane workflow.
   viable slice, proof/falsification, tradeoffs, and non-goals.
 - Confirm the first SLC slice boundary.
 - If `docs/bootstrap-brief.md` names a project profile, use
-  `deep-init-project/references/project-profiles.md` to drive PRD questions and
+  `init-advisor/references/project-profiles.md` to drive PRD questions and
   sections.
 - Explore options across the profile's material advice axes, then synthesize
   complete directions before writing implementation-facing requirements.

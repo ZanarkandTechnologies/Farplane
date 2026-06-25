@@ -4,7 +4,7 @@ owner: impl-plan
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-06-23
+updated_at: 2026-06-24
 applies_to:
   - implementation-plans
   - coding-tickets
@@ -123,6 +123,20 @@ accept_plan(plan)
      explicit blocker?
    - Violation: The final report can pass without showing the UI state.
 
+15. `minimal-impl-plan-claim`
+   - Question: Does the plan explicitly state that this is the minimal
+     implementation plan that satisfies the selected ticket?
+   - Violation: The plan includes future-proofing, optional artifacts, broad
+     cleanup, or unneeded new surfaces without saying why they are required
+     now.
+
+16. `existing-service-fit`
+   - Question: For every proposed new function, helper, service, or module, did
+     the planner prove it cannot belong to an existing service, module, helper,
+     or owner surface?
+   - Violation: The plan defines a new function or service-shaped surface
+     without checking nearby owners first.
+
 ## Finish Gate
 
 For material plans, include a compact readiness note in the ticket `State` or
@@ -134,6 +148,8 @@ plan_qa:
   reuse_before_new_surface: pass | revise | block
   least_parameters: pass | revise | block
   new_files_functions_justified: pass | revise | block
+  minimal_impl_plan_claim: pass | revise | block
+  existing_service_fit: pass | revise | block
   goal_packet_preview: pass | revise | block | not_applicable
   clarifying_questions: pass | revise | block
   proof_route_explicit: pass | revise | block

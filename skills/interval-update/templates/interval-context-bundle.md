@@ -11,6 +11,7 @@ Report workflows: <enabled workflow list>
 
 | Source | Status | Freshness | Notes |
 | --- | --- | --- | --- |
+| Static harness charter |  |  |  |
 | Goals portfolio |  |  |  |
 | Run ledger |  |  |  |
 | Parent plan / goals |  |  |  |
@@ -24,6 +25,11 @@ Report workflows: <enabled workflow list>
 | Thread index |  |  |  |
 | Meeting or feedback refs |  |  |  |
 | Opportunity sources |  |  |  |
+
+## Static Charter Snapshot
+
+| Thesis / leverage commitment / non-tradeoff | Current signal | Evidence | Gap |
+| --- | --- | --- | --- |
 
 ## Goals Snapshot
 

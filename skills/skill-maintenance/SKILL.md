@@ -4,7 +4,6 @@ description: "Turn skill behavior deltas, lesson hardening, or skill compaction 
 tier: 3
 group: skills
 source: local
-workflow: true
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"

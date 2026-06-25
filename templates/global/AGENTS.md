@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.6
+template_version: 0.2.7
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -234,7 +234,7 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Do not promote one-off observations into global policy.
 - Delete or consolidate stale guidance instead of accumulating duplicate rules.
 - If a project lacks durable operating structure and the task needs it, use or
-  propose `deep-init-project` instead of improvising a large workflow in chat.
+  propose `init-advisor` instead of improvising a large workflow in chat.
 - When private handles, workspace IDs, local services, device names, private
   URLs, or personal conventions matter, check private local context first and
   do not copy secrets into shared artifacts.
@@ -312,7 +312,7 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   - `harness-advisor`: decide where a Farplane harness improvement belongs.
   - `skill-maintenance`: maintain skill frontmatter, checklists, registry
     metadata, and skill-system docs.
-  - `deep-init-project`: bootstrap a project with docs-first operating files,
+  - `init-advisor`: bootstrap a project with docs-first operating files,
     commands, runtime, QA paths, and reusable planning/build prompts.
   - `agent-behavior-test`: capture one isolated child-agent behavior probe.
   - `agent-qa-test`: run adversarial readiness tests for apps, prompts, skills,

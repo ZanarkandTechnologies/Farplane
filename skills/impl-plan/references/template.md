@@ -130,6 +130,8 @@ checks.
 - `next_action:`
 - `blocked:`
 - `latest_verification:`
+- `plan_qa:` include `minimal_impl_plan_claim` and `existing_service_fit` for
+  material plans
 
 ## Links
 

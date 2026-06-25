@@ -52,8 +52,28 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-9979d4486781.md",
-      "source_commit": "9979d4486781",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
+      "source_commit": "cc5423051bcd",
+      "summary": "Introduce proof advisor workflow inference",
+      "version": "0.3.3"
+    },
+    {
+      "changed_sections": [],
+      "introduced_at": "2026-06-25",
+      "section_count": 9,
+      "sections": [
+        "Context",
+        "Skill Signature",
+        "Phase Contract",
+        "Phase Boundary",
+        "Todo List",
+        "Templates",
+        "Gotchas",
+        "Reference Map",
+        "Output"
+      ],
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
+      "source_commit": "f3188fd6cded",
       "summary": "working tree current template",
       "version": "0.3.3"
     }
@@ -185,7 +205,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "9979d4486781",
+      "source_commit": "cc5423051bcd",
       "template_version": "0.3.3",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -199,7 +219,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "9979d4486781",
+      "source_commit": "cc5423051bcd",
       "template_version": "0.3.3",
       "title": "Todo executability",
       "verdict": "pass"
@@ -213,7 +233,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "9979d4486781",
+      "source_commit": "cc5423051bcd",
       "template_version": "0.3.3",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -227,7 +247,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "9979d4486781",
+      "source_commit": "cc5423051bcd",
       "template_version": "0.3.3",
       "title": "Proof contract",
       "verdict": "pass"
@@ -241,7 +261,77 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "9979d4486781",
+      "source_commit": "cc5423051bcd",
+      "template_version": "0.3.3",
+      "title": "Eval / QA sync",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "routing",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "routing_clarity",
+      "expected_signals": [
+        "description uses verb/input/output/call-condition guidance",
+        "trigger catalogs stay out of frontmatter"
+      ],
+      "missing_signals": [],
+      "source_commit": "f3188fd6cded",
+      "template_version": "0.3.3",
+      "title": "Routing clarity",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "todo_executability",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "todo_executability",
+      "expected_signals": [
+        "top-level todos use visible numbered checkbox actions",
+        "policy prose is not treated as a top-level todo"
+      ],
+      "missing_signals": [],
+      "source_commit": "f3188fd6cded",
+      "template_version": "0.3.3",
+      "title": "Todo executability",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "phase_boundary",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "phase_boundary",
+      "expected_signals": [
+        "phase-like skills are externalized only when their artifact is needed",
+        "same-scope recursion is forbidden"
+      ],
+      "missing_signals": [],
+      "source_commit": "f3188fd6cded",
+      "template_version": "0.3.3",
+      "title": "Phase boundary",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "proof_contract",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "proof_contract",
+      "expected_signals": [
+        "the finish gate names proof, blockers, or evidence",
+        "output contract is explicit"
+      ],
+      "missing_signals": [],
+      "source_commit": "f3188fd6cded",
+      "template_version": "0.3.3",
+      "title": "Proof contract",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "eval_qa_sync",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "eval_qa_sync",
+      "expected_signals": [
+        "eval_task.json is a first-class special file",
+        "qa_checklist.md is a repeatable runtime guardrail only when warranted"
+      ],
+      "missing_signals": [],
+      "source_commit": "f3188fd6cded",
       "template_version": "0.3.3",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -496,9 +586,34 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "docs/skills/system.md",
         "docs/skills/README.md"
       ]
+    },
+    {
+      "evidence_refs": [
+        "skills/refactoring/SKILL.md",
+        "skills/hardening/SKILL.md",
+        "skills/refactoring/eval_task.json",
+        "skills/hardening/eval_task.json",
+        "tickets/TASK-0224/progress.md"
+      ],
+      "id": "FEAT-0062",
+      "known_limits": "Reference-driven workflows and eval rows only; no analyzer aggregation script or automatic project tool installation exists yet. Stack-specific tooling remains optional and must be adopted by each project through PROJECT_RULES or a setup ticket.",
+      "last_verified": "2026-06-25",
+      "metrics": [
+        "skill_registry_validation_pass",
+        "skill_eval_query_lint_pass",
+        "quality_tooling_slots_present"
+      ],
+      "name": "Budget-aware refactoring and hardening workflows",
+      "status": "implemented",
+      "surfaces": [
+        "skills/refactoring",
+        "skills/hardening",
+        "skills/init-advisor/references/PROJECT_RULES_TEMPLATE.md",
+        "docs/skills/registry.jsonl"
+      ]
     }
   ],
-  "generated_at": "2026-06-24T14:22:53+00:00",
+  "generated_at": "2026-06-25T07:53:11+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -523,6 +638,30 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "current",
       "template_version": "0.3.2",
       "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/hardening/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "hardening",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.2",
+      "tier": 2
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/refactoring/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "refactoring",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.2",
+      "tier": 2
     },
     {
       "eval": "",
@@ -753,18 +892,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/deep-init-project/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "deep-init-project",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 3
-    },
-    {
       "eval": "",
       "has_checklist": true,
       "path": "skills/deep-interview/SKILL.md",
@@ -962,6 +1089,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/image-generation/SKILL.md",
       "qa_checklist": "",
       "skill_id": "image-generation",
+      "skill_ui": "",
+      "source": "local",
+      "status": "missing",
+      "template_version": "missing",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/init-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "init-advisor",
       "skill_ui": "",
       "source": "local",
       "status": "missing",
@@ -1656,10 +1795,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 93
+      "local": 95
     },
     "by_status": {
-      "current": 4,
+      "current": 6,
       "external": 3,
       "missing": 58,
       "stale": 31
@@ -1668,10 +1807,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "0.1.0": 3,
       "0.2.0": 21,
       "0.3.0": 7,
-      "0.3.2": 4,
+      "0.3.2": 6,
       "missing": 61
     },
-    "total_skills": 96
+    "total_skills": 98
   },
   "schema_version": "1.0.0",
   "source": {
@@ -1884,17 +2023,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/data-viz/SKILL.md",
       "surfaces": {
         "eval": false,
-        "qa_checklist": false,
-        "skill": false
-      },
-      "template_uses": {}
-    },
-    {
-      "consumer_id": "deep-init-project",
-      "consumer_scope": "skill",
-      "path": "skills/deep-init-project/SKILL.md",
-      "surfaces": {
-        "eval": true,
         "qa_checklist": false,
         "skill": false
       },
@@ -2165,6 +2293,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       }
     },
     {
+      "consumer_id": "hardening",
+      "consumer_scope": "skill",
+      "path": "skills/hardening/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": false,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-template": "0.3.2"
+      }
+    },
+    {
       "consumer_id": "harness-advisor",
       "consumer_scope": "skill",
       "path": "skills/harness-advisor/SKILL.md",
@@ -2253,6 +2394,17 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "template_uses": {
         "skill-template": "0.2.0"
       }
+    },
+    {
+      "consumer_id": "init-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/init-advisor/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": false,
+        "skill": false
+      },
+      "template_uses": {}
     },
     {
       "consumer_id": "interval-update",
@@ -2527,6 +2679,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": false
       },
       "template_uses": {}
+    },
+    {
+      "consumer_id": "refactoring",
+      "consumer_scope": "skill",
+      "path": "skills/refactoring/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": false,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-template": "0.3.2"
+      }
     },
     {
       "consumer_id": "reference-grounding",
@@ -2810,7 +2975,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.3.0"
+        "farplane-framework": "1.5.0"
       }
     },
     {
@@ -2829,7 +2994,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.3.0",
+      "current_version": "1.5.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -2837,12 +3002,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.3.0"
+      "used_version": "1.5.0"
     },
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.3.0",
+      "current_version": "1.5.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3087,19 +3252,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": ""
     },
     {
-      "consumer_id": "deep-init-project",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/deep-init-project/SKILL.md",
-      "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": ""
-    },
-    {
       "consumer_id": "farplane-invocation",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3126,6 +3278,32 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": ""
     },
     {
+      "consumer_id": "hardening",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/hardening/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "init-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/init-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
       "consumer_id": "qa",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3133,6 +3311,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "path": "skills/qa/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "refactoring",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/refactoring/SKILL.md",
       "status": "missing",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -3547,6 +3738,23 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "hardening",
+      "consumer_scope": "skill",
+      "current_version": "0.3.3",
+      "feature_refs": [
+        "FEAT-0048",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0058",
+        "FEAT-0059"
+      ],
+      "path": "skills/hardening/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.2"
+    },
+    {
       "consumer_id": "harness-advisor",
       "consumer_scope": "skill",
       "current_version": "0.3.3",
@@ -3819,6 +4027,23 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "refactoring",
+      "consumer_scope": "skill",
+      "current_version": "0.3.3",
+      "feature_refs": [
+        "FEAT-0048",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0058",
+        "FEAT-0059"
+      ],
+      "path": "skills/refactoring/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.2"
+    },
+    {
       "consumer_id": "reference-grounding",
       "consumer_scope": "skill",
       "current_version": "0.3.3",
@@ -3964,7 +4189,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "current": 1,
         "stale": 1
       },
-      "current_version": "1.3.0",
+      "current_version": "1.5.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3973,18 +4198,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     "skill-eval-task": {
       "by_scope": {
-        "skill": 24
+        "skill": 26
       },
       "by_status": {
         "current": 17,
-        "missing": 7
+        "missing": 9
       },
       "current_version": "0.1.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "target_basis": "skills with an eval_task.json surface",
-      "total_consumers": 24
+      "total_consumers": 26
     },
     "skill-qa-checklist": {
       "by_scope": {
@@ -4003,10 +4228,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     "skill-template": {
       "by_scope": {
-        "skill": 35
+        "skill": 37
       },
       "by_status": {
-        "stale": 35
+        "stale": 37
       },
       "current_version": "0.3.3",
       "feature_refs": [
@@ -4017,7 +4242,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0059"
       ],
       "target_basis": "local skills that declare skill-template usage",
-      "total_consumers": 35
+      "total_consumers": 37
     }
   },
   "template_versions": [
@@ -4069,10 +4294,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "introduced_at": "2026-06-24",
-      "latest_at": "2026-06-24",
-      "latest_commit": "9979d4486781",
+      "latest_at": "2026-06-25",
+      "latest_commit": "f3188fd6cded",
       "latest_summary": "working tree current template",
-      "release_count": 1,
+      "release_count": 2,
       "sections": [
         "Context",
         "Skill Signature",
@@ -4084,17 +4309,23 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-9979d4486781.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-24",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-9979d4486781.md",
-          "source_commit": "9979d4486781",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
+          "source_commit": "cc5423051bcd",
+          "summary": "Introduce proof advisor workflow inference"
+        },
+        {
+          "introduced_at": "2026-06-25",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
+          "source_commit": "f3188fd6cded",
           "summary": "working tree current template"
         }
       ],
-      "source_commit": "9979d4486781",
-      "summary": "working tree current template",
+      "source_commit": "cc5423051bcd",
+      "summary": "Introduce proof advisor workflow inference",
       "template_metadata": {
         "feature_refs": [
           "FEAT-0048",

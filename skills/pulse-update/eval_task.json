@@ -55,6 +55,7 @@
     "reference_points": [
       "Does not invent strategy in the Pulse context",
       "Chooses one narrow refill or maintenance arm from the action tree",
+      "Uses farplane/harness.md as the static charter boundary and farplane/products.md to shape product refill work",
       "Treats consult goal-advisor as one eligible arm only when goals or the next milestone are unclear",
       "Does not treat zero ready tickets as sufficient reason for no-op",
       "Evaluates non-ticket arms before selecting no_op_unsafe",

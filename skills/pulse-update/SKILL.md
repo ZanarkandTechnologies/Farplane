@@ -4,7 +4,6 @@ description: "Run the Farplane fast idle loop: reconcile outcomes, use reasoning
 tier: 3
 group: harness
 source: local
-workflow: true
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"
@@ -31,14 +30,15 @@ what it may do.
 
 `pulse-update.bandit @30m -> reports.pulse`
 
-Pulse resolves the standard Farplane project refs by default: local tickets,
-recent interval guidance, action arms, bandit state, spawned threads, outcomes,
-rewards, reports, and `farplane/pm.json`. The live Codex automation supplies
-cadence and true project extensions only. Pulse owns reward reconciliation,
-forced action checks, bandit scoring, action-tree selection, child handoff
-shape, and decision/outcome ledger writes. If no proceedable ticket exists,
-Pulse chooses one narrow refill or maintenance arm; `consult goal-advisor` is
-an arm, not the default.
+Pulse resolves the standard Farplane project refs by default: the static
+project charter, local tickets, recent interval guidance, project products,
+action arms, bandit state, spawned threads, outcomes, rewards, reports, and
+`farplane/pm.json`. The live Codex automation supplies cadence and true project
+extensions only. Pulse owns reward reconciliation, forced action checks, bandit
+scoring, action-tree selection, child handoff shape, and decision/outcome ledger
+writes. If no proceedable ticket exists, Pulse chooses one narrow
+product-shaped refill or maintenance arm inside the static charter boundary;
+`consult goal-advisor` is an arm, not the default.
 
 `no_op_unsafe` is a last-resort arm, not the normal empty-board outcome. A
 zero-ready ticket count proves only that `pick_ready_ticket` is unavailable.
@@ -68,7 +68,9 @@ pulse_update(project_root, extensions?, pulse_policy?)
    + ledger_delta
 
 state:
-  reads(farplane/goals.md?,
+  reads(farplane/harness.md?,
+        farplane/goals.md?,
+        farplane/products.md?,
         .farplane/reports/interval/**?,
         .farplane/automation/heartbeat-policy.json,
         .farplane/automation/action-arms.json,
@@ -105,8 +107,9 @@ fails:
 
 - [ ] 1. Bind policy and context.
   - [ ] Resolve standard Farplane refs for ticket board, action arms, latest
-        interval guidance, bandit state, spawned thread rows, recent outcomes,
-        report paths, and `farplane/pm.json`.
+        interval guidance, static project charter, project products, bandit
+        state, spawned thread rows, recent outcomes, report paths, and
+        `farplane/pm.json`.
   - [ ] Merge caller-supplied extensions for custom action arms, budgets,
         gates, or extra context refs.
   - [ ] Treat interval guidance as constraints only; do not perform drift review
@@ -134,7 +137,9 @@ fails:
         program.
   - [ ] If no proceedable ticket exists, choose one narrow refill or
         maintenance arm from the action tree instead of inventing strategy in
-        the Pulse context.
+        the Pulse context. Use `farplane/harness.md` to preserve the static
+        human thesis and `farplane/products.md` to shape product refill
+        tickets; keep chores inside the default maintenance/proof arms.
   - [ ] Treat `consult goal-advisor` as one action-tree arm only when the empty
         board is caused by unclear goals, an unclear milestone, or missing
         executable Goal Packets.
@@ -171,10 +176,12 @@ fails:
   executable ticket handoff when the split is mechanical and does not need a
   material product decision.
 - `clarify_blocker`: ask for or record the smallest blocker clarification.
-- `create_prep_ticket`: add one small setup, research, QA, or cleanup ticket
-  that unlocks obvious work. This is the default empty-board refill when goals,
-  interval guidance, recent Pulse reports, or stale board state show an
-  actionable gap that can be made ticket-shaped without guessing strategy.
+- `create_prep_ticket`: add one small product-shaped setup/research ticket or
+  chore ticket that unlocks obvious work. Product-shaped refill must stay
+  inside the static charter in `farplane/harness.md` and be grounded in
+  `farplane/products.md` plus goals, interval guidance, recent Pulse reports,
+  or stale board state; chores stay limited to framework default
+  maintenance/proof actions.
 - `run_qa_or_eval`: collect proof for a ticket or workflow whose next reward
   depends on evidence.
 - `refresh_ticket_metadata`: repair stale ready/approval/phase metadata so the

@@ -14,7 +14,7 @@ source: local
 - [ ] Resolve exactly one active ticket and confirm the remaining work is
   genuinely closeout, not missing implementation.
 - [ ] Treat this skill as `CloseTicket<CodingTicket>` inside the
-  [project-lifecycle](../deep-init-project/references/project-lifecycle.md).
+  [project-lifecycle](../init-advisor/references/project-lifecycle.md).
 - [ ] Close through the native execution phase proof and writeback shape, but
   keep `close-ticket` coding-ticket closeout specific.
 - [ ] Update the ticket writeback: evidence, linked docs, handoff, next action,

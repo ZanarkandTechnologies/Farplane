@@ -3,7 +3,6 @@ name: review
 description: "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid."
 tier: 2
 source: local
-workflow: true
 template_uses:
   skill-template: "0.2.0"
 

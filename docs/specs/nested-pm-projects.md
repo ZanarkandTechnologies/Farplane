@@ -3,7 +3,7 @@ title: "Nested PM Projects"
 status: designed
 owner: project-pm-automation
 created_at: 2026-06-23
-updated_at: 2026-06-23
+updated_at: 2026-06-25
 tags:
   - farplane
   - nested-projects
@@ -151,11 +151,11 @@ Use a child project PM when:
 
 ## Lightweight PM-Loop Initialization
 
-A future `deep-init-project` mode may create a lightweight PM loop without app
-scaffolding:
+A future `init-advisor` project profile may create a lightweight PM loop
+without app scaffolding:
 
 ```text
-deep_init_project(project_root, harness_depth="pm_loop")
+init_advisor(project_root, project_profile="pm_loop", init_mode="substrate")
   -> farplane/
    + tickets/
    + docs/MEMORY.md
@@ -210,7 +210,7 @@ Before creating a new child PM project, prove at least one of:
 - child-specific memory or automations would be clearer than parent-local rows;
 - a parent-child rollup report would reduce coordination cost.
 
-Before adding `deep-init-project(..., harness_depth="pm_loop")`, prove:
+Before adding `init-advisor(..., project_profile="pm_loop")`, prove:
 
 - the minimal PM-loop file set from a real pilot;
 - the expected report and rollup shape;

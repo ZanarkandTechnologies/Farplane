@@ -4,7 +4,6 @@ description: "Turn agent, prompt, or skill behavior into local eval tasks, boole
 tier: 3
 group: harness
 source: local
-workflow: true
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.1.0"

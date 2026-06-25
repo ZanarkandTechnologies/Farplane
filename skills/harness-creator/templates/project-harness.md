@@ -1,203 +1,145 @@
 ---
-kind: project-harness
+kind: harness-creator-worksheet
 status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.2.0"
+template_version: "0.3.0"
 feature_refs:
   - FEAT-0027
   - FEAT-0048
 project_id: TODO
 automation_status: preview
-framework_template_version: "0.1.0"
+framework_template_version: "0.2.0"
+canonical_targets:
+  - farplane/harness.md
+  - farplane/products.md
+  - farplane/goals.md
+  - farplane/automations.md
+  - farplane/bindings.md
 ---
 
-# Project Harness
+# Harness Creator Worksheet
 
-## Harness Program
+This is a transient planning worksheet. It is not a canonical project charter
+and must not replace `farplane/harness.md`.
 
-```harness-program
-project "TODO" {
-  values {
-    mission: "TODO: why this project or business exists"
-    operating_principles: [
-      "TODO: principle that should guide repeated decisions"
-    ]
-    priorities: [
-      impact.medium,
-      loyal_users.medium,
-      trust.high,
-      money.medium,
-      efficiency.medium
-    ]
-    non_tradeoffs: [
-      "TODO: what cannot be sacrificed for local wins"
-    ]
-  }
+Use it to review proposed split-surface deltas before writing the standard
+Farplane files:
 
-  modes: [business]
+- `farplane/harness.md` owns the static human charter: mission, human thesis,
+  operating principles, non-tradeoffs, static leverage commitments, agent
+  authority, systems, and change rule.
+- `farplane/products.md` owns the dynamic product catalog and Pulse refill
+  context.
+- `farplane/goals.md` owns dynamic strategy, KPIs, current frontier, and Goal
+  Advisor handoffs.
+- `farplane/automations.md` owns reviewable automation prompt text.
+- `farplane/bindings.md` owns non-secret project coordinates.
 
-  goal north_star {
-    outcome: "TODO"
-    metric: learning_metric("first honest baseline")
-    horizon: "TODO"
-  }
+## Static Charter Delta
 
-  axis reach_acquire {
-    bet: "TODO: who finds this first?"
-    kpi: missing_instrumentation("reach/acquisition baseline")
-    evidence: ref("TODO")
-    heartbeat: weekly_interval
-  }
+Target: `farplane/harness.md`
 
-  axis activate_first_value {
-    bet: "TODO: what is first value?"
-    kpi: review_metric("first-value clarity")
-    evidence: ref("TODO")
-    heartbeat: weekly_interval
-  }
+Approval required before applying changes to the human thesis, durable leverage
+commitments, non-tradeoffs, agent authority, or change rule.
 
-  axis retain_loyalty {
-    bet: "TODO: why would they return?"
-    kpi: human_feedback("would return / would not return")
-    evidence: ref("TODO")
-    heartbeat: weekly_interval
-  }
+## Mission
 
-  axis efficiency_capability {
-    bet: "TODO: what can be made easier or more repeatable?"
-    kpi: learning_metric("cycle-time or effort baseline")
-    evidence: ref("TODO")
-    heartbeat: weekly_interval
-  }
+TODO: why this project or business exists.
 
-  system ticket_loop {
-    status: ready
-    evidence: ref("tickets/")
-    action: use_existing("ticket workflow")
-  }
+## Human Thesis
 
-  system feedback_collection {
-    status: missing_instrumentation
-    evidence: ref("TODO")
-    action: ticket(first_feedback_signal_access)
-  }
+TODO: durable human thesis the agents must preserve.
 
-  system analytics {
-    status: missing_instrumentation
-    evidence: ref("TODO")
-    action: ticket(metrics_source_access)
-  }
+## Operating Principles
 
-  skill goal_advisor {
-    status: ready
-    use: "compile the current milestone or heartbeat"
-  }
+- TODO: principle that should guide repeated decisions.
 
-  skill deep_init_project {
-    status: defer
-    use: "create standard project systems only if missing"
-  }
+## Static Leverage Commitments
 
-  skill notion_memory_sync {
-    status: needs_operator_setup
-    requires: [notion_project_access]
-    use: "sync shared project memory and ticket state"
-    action: ticket(notion_project_access)
-  }
+| Commitment | Why It Compounds | Evidence To Seek | Pivot Signal |
+| --- | --- | --- | --- |
+| TODO | TODO | TODO | TODO |
 
-  skill telegram_notifications {
-    status: needs_operator_setup
-    requires: [telegram_notification_target]
-    use: "send review, blocker, and feedback requests"
-    action: ticket(telegram_notification_target)
-  }
+## Non-Tradeoffs
 
-  skill metrics_ingest {
-    status: needs_access
-    requires: [metrics_source_access]
-    use: "read product, content, or business metrics"
-    action: ticket(metrics_source_access)
-  }
+- TODO: what cannot be sacrificed for local wins.
 
-  skill first_feedback_signal {
-    status: needs_access
-    requires: [first_feedback_signal_access]
-    use: "TODO: read the first concrete feedback signal, such as Instagram attention graph, YouTube retention, PostHog activation funnel, sales-call objections, customer interviews, or operator usefulness labels"
-    action: ticket(first_feedback_signal_access)
-  }
+## Agent Authority
 
-  ticket notion_project_access {
-    type: unblock
-    human_step: "Grant access or provide the shared Notion project/database link"
-    why: "Shared team memory and ticket state cannot sync without access"
-    enables: [notion_memory_sync]
-    fallback: use_existing("local filesystem memory only")
-    gates: [no_account_changes]
-  }
+- Agents may evolve products, audiences, tickets, and goals through
+  evidence-backed deltas.
+- Agents may challenge the static thesis with evidence.
+- Agents may propose a charter delta in a dated interval report.
+- Agents may not silently rewrite the static thesis or durable leverage
+  commitments.
 
-  ticket metrics_source_access {
-    type: unblock
-    human_step: "Connect read-only analytics access or provide a recurring export"
-    why: "The harness cannot optimize KPIs from metrics that do not exist"
-    enables: [metrics_ingest]
-    fallback: human_feedback("operator labels examples until metrics exist")
-    gates: [no_account_changes, no_private_scraping]
-  }
+## Change Rule
 
-  ticket first_feedback_signal_access {
-    type: unblock
-    human_step: "TODO: connect read-only access, provide recurring export, approve connector setup, or define operator labels for the first feedback signal"
-    why: "The project cannot refine strategy until at least one honest feedback loop exists"
-    enables: [first_feedback_signal, weekly_interval]
-    fallback: human_feedback("operator labels outputs manually until the concrete signal exists")
-    gates: [no_account_changes, no_private_scraping]
-  }
+Static charter changes require an explicit human-approved harness delta.
+Interval reports may propose the delta, but cannot apply it silently.
 
-  heartbeat pulse_update {
-    trigger: "Codex automation every 30 minutes"
-    bindings: "farplane/bindings.md"
-    first: pulse_update
-    skills: [pulse_update, goal_advisor, review]
-    gates: [no_external_side_effects, ticket_or_goal_required_for_edits]
-    output: ".farplane/reports/pulse/<timestamp>.md"
-  }
+## Charter-Level Operating Loop
 
-  heartbeat daily_interval {
-    trigger: "Codex automation daily"
-    bindings: "farplane/bindings.md"
-    first: interval_update
-    review_window: "last_24h"
-    planning_window: "next_24h"
-    skills: [interval_update, update_memory, update_strategy, goal_advisor, review]
-    delegate: delegate(ref("project-harness.md"), "refresh daily report and next-day plan", skills=[interval_update])
-    gates: [review_before_external_side_effects]
-    output: ".farplane/reports/interval/daily_interval/<timestamp>.md"
-  }
+```text
+TODO signal
+  -> TODO investigation or experiment
+  -> TODO evidence artifact
+  -> TODO product or process update
+  -> TODO feedback signal
+  -> TODO next selection rule
+```
 
-  heartbeat weekly_interval {
-    trigger: "Codex automation weekly"
-    bindings: "farplane/bindings.md"
-    first: interval_update
-    review_window: "last_week"
-    planning_window: "next_week"
-    skills: [interval_update, feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
-    delegate: delegate(ref("project-harness.md"), "refresh weekly strategy, memory, and skill upkeep", skills=[interval_update, skill_maintenance])
-    gates: [review_before_external_side_effects]
-    output: ".farplane/reports/interval/weekly_interval/<timestamp>.md"
-  }
+## Product Catalog Delta
 
-  milestone first_evidence_loop {
-    task: "TODO: first evidence-producing milestone"
-    route: goal_advisor
-    metric: review_metric("milestone produces useful evidence")
-    files: ["project-harness.md"]
-    gates: [no_publish, no_spend, no_account_changes]
-    done_when: "milestone handoff is ready or blocked by missing approval/data"
-  }
+Target: `farplane/products.md`
+
+Use this section for the team archetype, operating flywheel, primary products,
+supporting products, autonomous project types, selection notes, and Pulse refill
+guidance. Do not put these dynamic product decisions in `farplane/harness.md`.
+
+| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |
+| --- | --- | --- | --- | --- |
+| TODO | TODO | TODO | TODO | TODO |
+
+## Strategy Delta
+
+Target: `farplane/goals.md`
+
+Use this section for goals, axes, KPIs, current frontier, holds, strategy
+deltas, and Goal Advisor handoffs. Strategy must stay inside the static charter
+but is not itself the charter.
+
+```goal-program
+goal north_star {
+  outcome: "TODO"
+  metric: learning_metric("first honest baseline")
+  horizon: "TODO"
+}
+
+axis TODO {
+  question: "TODO"
+  kpi: missing_instrumentation("TODO")
+  current_signal: ref("TODO")
+}
+
+project current_frontier {
+  output: "TODO: first evidence-producing milestone"
+  feedback_surface: review_metric("TODO")
+  route: goal_advisor
+  gates: [no_publish, no_spend, no_account_changes]
 }
 ```
+
+## Automation And Binding Delta
+
+Targets: `farplane/automations.md`, `farplane/bindings.md`
+
+- `automation_delta:`
+- `safe_binding_delta:`
+- `activation_status:` preview / needs_operator_setup / ready_for_automation_advisor
+- `side_effect_gates:`
 
 ## Evidence
 
@@ -210,7 +152,8 @@ project "TODO" {
 ## Assumptions
 
 - `inferred_values:`
-- `inferred_modes:`
+- `inferred_products:`
+- `inferred_goals:`
 - `unverified_domain_claims:`
 - `why_research_was_or_was_not_needed:`
 
@@ -256,12 +199,4 @@ Use these only when the program becomes hard to audit.
 
 | System | Program Node | Evidence | Action | Owner |
 | --- | --- | --- | --- | --- |
-|  |  |  | use_existing / deep_init_project / create_ticket / goal_advisor_handoff / defer |  |
-
-## Review
-
-- `metric_honesty_check:`
-- `grounding_check:`
-- `hidden_autonomy_check:`
-- `next_strategy_refresh:`
-- `next_action:`
+|  |  |  | use_existing / init_advisor / create_ticket / goal_advisor_handoff / defer |  |

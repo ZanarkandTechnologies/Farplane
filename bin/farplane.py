@@ -23,6 +23,7 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_adoption import run_scan as run_adoption_scan
+from farplane_skill_rollout import SkillRolloutError, run_scan as run_skill_rollout_scan
 from runtime_config import load_runtime_env
 
 
@@ -371,6 +372,17 @@ def build_parser() -> argparse.ArgumentParser:
     adoption_scan.add_argument("--json", action="store_true")
     adoption_scan.set_defaults(func=run_adoption_scan)
 
+    skills = sub.add_parser("skills", help="Inspect Farplane skill rollout and registry projections.")
+    skills_sub = skills.add_subparsers(dest="skills_command")
+    skills_rollout = skills_sub.add_parser("rollout", help="Inspect skill rollout status.")
+    skills_rollout_sub = skills_rollout.add_subparsers(dest="skills_rollout_command")
+    skills_rollout_scan = skills_rollout_sub.add_parser("scan", help="Resolve skill rollout status for UI rendering.")
+    skills_rollout_scan.add_argument("--standard-root", default=str(CORE_ROOT))
+    skills_rollout_scan.add_argument("--registry", help="Skill registry JSONL path.")
+    skills_rollout_scan.add_argument("--intelligence", help="Skill template intelligence JSON path.")
+    skills_rollout_scan.add_argument("--json", action="store_true")
+    skills_rollout_scan.set_defaults(func=run_skill_rollout_scan)
+
     return parser
 
 
@@ -388,6 +400,10 @@ def main(argv: list[str]) -> int:
         return run_ui_start(argparse.Namespace(extra=[], dry_run=False, json=False))
     if getattr(args, "command", None) == "adoption" and getattr(args, "adoption_command", None) is None:
         parser.error("adoption requires a subcommand: scan")
+    if getattr(args, "command", None) == "skills" and getattr(args, "skills_command", None) is None:
+        parser.error("skills requires a subcommand: rollout")
+    if getattr(args, "skills_command", None) == "rollout" and getattr(args, "skills_rollout_command", None) is None:
+        parser.error("skills rollout requires a subcommand: scan")
     if not hasattr(args, "func"):
         parser.print_help()
         return 0
@@ -396,6 +412,9 @@ def main(argv: list[str]) -> int:
     except CliError as exc:
         print(f"farplane: {exc}", file=sys.stderr)
         return exc.code
+    except SkillRolloutError as exc:
+        print(f"farplane skill rollout: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

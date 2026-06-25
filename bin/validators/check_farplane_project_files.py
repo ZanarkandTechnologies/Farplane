@@ -39,6 +39,26 @@ SECRET_VALUE_RE = re.compile(
     r"(?i)\b(api[_-]?key|access[_-]?token|secret|password)\b\s*[:=]\s*[\"']?[A-Za-z0-9_./+=-]{8,}"
 )
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
+PRODUCTS_REQUIRED_HEADINGS = (
+    "## Team Archetype",
+    "## Operating Flywheel",
+    "## Primary Products",
+    "## Supporting Products",
+    "## Autonomous Project Types",
+    "## Product Selection Notes",
+    "## Pulse Refill Guidance",
+)
+HARNESS_REQUIRED_HEADINGS = (
+    "## Mission",
+    "## Human Thesis",
+    "## Operating Principles",
+    "## Static Leverage Commitments",
+    "## Non-Tradeoffs",
+    "## Agent Authority",
+    "## Change Rule",
+    "## Charter-Level Operating Loop",
+    "## File Boundaries",
+)
 
 
 def tracked_files(root: Path) -> list[Path]:
@@ -144,6 +164,14 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
     if not template_uses.get("farplane-framework"):
         errors.append(f"{rel_path} template_uses.farplane-framework must be a non-empty string.")
 
+    project = data.get("project")
+    if not isinstance(project, dict):
+        errors.append(f"{rel_path} project must be an object.")
+    else:
+        for field in ("name", "description", "archetype"):
+            if not isinstance(project.get(field), str) or not project.get(field, "").strip():
+                errors.append(f"{rel_path} project.{field} must be a non-empty string.")
+
     for key in ("standard", "optional"):
         section = data.get(key)
         if not isinstance(section, dict):
@@ -168,6 +196,7 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/manifest.json",
         "farplane/harness.md",
         "farplane/goals.md",
+        "farplane/products.md",
         "farplane/automations.md",
         "farplane/bindings.md",
         "farplane/evals.md",
@@ -209,12 +238,60 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
     return errors
 
 
+def validate_products_file(root: Path, products_file: Path) -> list[str]:
+    rel_path = products_file.relative_to(root).as_posix()
+    text = products_file.read_text(encoding="utf-8")
+    errors: list[str] = []
+
+    if "kind: project-products" not in text[:700]:
+        errors.append(f"{rel_path} must use front matter kind: project-products.")
+    if "framework_template_version:" not in text[:700]:
+        errors.append(f"{rel_path} must declare framework_template_version in front matter.")
+
+    missing_headings = [heading for heading in PRODUCTS_REQUIRED_HEADINGS if heading not in text]
+    if missing_headings:
+        errors.append(f"{rel_path} missing required headings: {', '.join(missing_headings)}.")
+
+    if "## Primary Products" in text and "| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |" not in text:
+        errors.append(f"{rel_path} Primary Products must use the standard product table columns.")
+
+    return errors
+
+
+def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
+    rel_path = harness_file.relative_to(root).as_posix()
+    text = harness_file.read_text(encoding="utf-8")
+    errors: list[str] = []
+
+    if "kind: project-harness" not in text[:700]:
+        errors.append(f"{rel_path} must use front matter kind: project-harness.")
+    if "framework_template_version:" not in text[:700]:
+        errors.append(f"{rel_path} must declare framework_template_version in front matter.")
+
+    if "```harness-program" in text:
+        errors.append(
+            f"{rel_path} must not use fenced harness-program DSL; use YAML front matter plus Markdown charter sections."
+        )
+
+    missing_headings = [heading for heading in HARNESS_REQUIRED_HEADINGS if heading not in text]
+    if missing_headings:
+        errors.append(f"{rel_path} missing required static-charter headings: {', '.join(missing_headings)}.")
+
+    if "## Static Leverage Commitments" in text and "| Commitment | Why It Compounds | Evidence To Seek | Pivot Signal |" not in text:
+        errors.append(f"{rel_path} Static Leverage Commitments must use the standard commitment table columns.")
+
+    return errors
+
+
 def validate(root: Path) -> list[str]:
     errors: list[str] = []
     framework_dir = root / "farplane"
     framework_manifest = framework_dir / "manifest.json"
     automations = framework_dir / "automations.md"
     bindings = framework_dir / "bindings.md"
+    harness = framework_dir / "harness.md"
+    products = framework_dir / "products.md"
+    duplicate_project_charter = framework_dir / "project.md"
     pm_manifest = framework_dir / "pm.json"
     retired_integrations = framework_dir / "integrations.md"
     retired_steer_config = framework_dir / "steer.config.toml"
@@ -234,9 +311,24 @@ def validate(root: Path) -> list[str]:
         errors.append("farplane/steer.config.toml is retired; use farplane/automations.md.")
     if retired_steer_state.exists():
         errors.append(".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling.")
+    if duplicate_project_charter.exists():
+        errors.append(
+            "farplane/project.md would duplicate the active static charter; use farplane/harness.md "
+            "unless a versioned framework migration replaces it."
+        )
 
     if not automations.exists():
         errors.append("farplane/automations.md is required for reviewable Codex automation prompts.")
+
+    if not harness.exists():
+        errors.append("farplane/harness.md is required for the static human charter.")
+    else:
+        errors.extend(validate_harness_file(root, harness))
+
+    if not products.exists():
+        errors.append("farplane/products.md is required for project product catalogs.")
+    else:
+        errors.extend(validate_products_file(root, products))
 
     if pm_manifest.exists():
         errors.extend(validate_pm_manifest(root, pm_manifest))

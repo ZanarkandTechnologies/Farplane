@@ -36,7 +36,10 @@ Rules:
 11a. Run `skills/impl-plan/qa_checklist.md` for material plans. Revise or
      block when the plan fails minimal required version, reuse before new
      surface, least parameters, function/file necessity, split boundary, or
-     proof-route checks.
+     proof-route checks. Material plans must declare themselves the minimal
+     implementation plan that satisfies the ticket, and every proposed new
+     function, helper, service, or module must justify why it cannot live inside
+     an existing owner surface.
 11b. For Goal-backed work, call `goal-advisor` to compile the Goal Packet
      preview before asking for approval. The human approves the plan and Goal
      Packet together; if the plan changes, rerun `goal-advisor` and refresh the
@@ -155,6 +158,9 @@ Requirements:
 - Proof must use concrete checks, not generic test categories.
 - New files, functions, parameters, config knobs, routes, or abstractions must
   justify reuse checked, ownership, testability, or blast-radius reduction.
+- Material plans must state that they are the minimal implementation plan for
+  the selected ticket, and proposed new functions, helpers, services, or modules
+  must prove why an existing owner surface cannot carry them.
 - `Done / Proof` should be compact by default: done conditions, metric or
   `none mechanical`, review rubrics/TAS gates, hard gates, required proof, and
   optional autoresearch session path.

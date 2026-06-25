@@ -499,8 +499,10 @@ E2EWorkflow(owner, scenario) =
 
 Mark the chain where it will be used:
 
-- `workflow: true` on high-level workflow skills; graph tooling scans only the
-  skill's `## Todo List` for first-seen explicit skill references in order.
+- observed skill heat for graph prominence; frequently invoked skills surface
+  because the harness actually uses them.
+- generated todo-chain edges from every skill's `## Todo List` when it names
+  first-seen explicit skill references in order.
 - `common_chains` for stable skill adjacency.
 - `routes:` in skill signatures for normal handoffs.
 - workflow refs for orchestrator-owned conditional procedures.

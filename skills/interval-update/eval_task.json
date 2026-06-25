@@ -4,7 +4,7 @@
     "title": "Configured short interval writes report before planning",
     "query": "A project automation calls interval-update for a short review window and next-window plan, with context_refs asking for the latest report from a longer planning interval. What should it load, write, and avoid?",
     "reference_points": [
-      "Loads default goals, tickets, memory, Pulse reports, interval reports, and PM thread refs",
+      "Loads default harness charter, goals, tickets, memory, Pulse reports, interval reports, and PM thread refs",
       "Resolves the configured latest longer-interval report as parent context when present and labels it as a source gap when missing",
       "Writes a date-stamped .farplane/reports/interval/<interval_id>/<timestamp>.md report before durable goals or ticket mutation",
       "Plans only the configured planning_window",
@@ -17,10 +17,10 @@
     "title": "Configured interval gates material goals deltas",
     "query": "An interval review wants to change the north star after reading configured interval_output_refs from another interval inside the review window. What gates apply?",
     "reference_points": [
-      "Loads farplane/goals.md plus the configured interval_output_refs inside the review window",
+      "Loads farplane/harness.md, farplane/goals.md, and the configured interval_output_refs inside the review window",
       "Labels missing or stale evidence as source gaps",
       "Writes the interval report before mutating farplane/goals.md",
-      "Requires approval for north-star, KPI, strategy-axis, quarterly, yearly, or durable milestone changes",
+      "Requires approval for static charter, north-star, KPI, strategy-axis, quarterly, yearly, or durable milestone changes",
       "Routes executable changes into tickets or Goal Advisor handoffs"
     ],
     "tags": ["interval-update", "goals-delta", "configured-context"]
@@ -31,7 +31,7 @@
     "query": "A project automation calls interval-update with project_root, interval_id, windows, one extra customer-doc ref, and codex_attention_drift enabled. What should the automation include, and what should the skill resolve itself?",
     "reference_points": [
       "Automation passes project_root, interval_id, review_window, planning_window, additive context_refs, and report_workflows only",
-      "interval-update resolves default goals, tickets, memory, Pulse reports, interval reports, PM manifest, and report roots",
+      "interval-update resolves default harness charter, goals, tickets, memory, Pulse reports, interval reports, PM manifest, and report roots",
       "context_refs may add parent context, interval outputs, extra refs, or true replacements",
       "report_workflows controls optional workflows such as codex_attention_drift instead of the skill assuming daily or weekly behavior",
       "The automation should not restate every default Farplane path or gate",

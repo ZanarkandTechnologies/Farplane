@@ -27,6 +27,9 @@ Loop model:
   should become durable execution.
 - Codex automation cadence is the scheduler. There is no separate Steer config,
   scheduler state, or hidden orchestrator thread.
+- Pulse is a persistent heartbeat thread because it owns fast PM/worker
+  continuity. Daily and Weekly Interval are standalone Codex automations; each
+  run writes dated reports, and file reports are the shared memory.
 
 ## Pulse
 
@@ -39,25 +42,32 @@ Target thread: `019ed47a-3182-73f3-879f-a53797759b2a`
 ```text
 You are the Farplane Pulse automation for this project.
 
-Call `pulse-update` with:
+Call `pulse-update` with project_root
+`/Users/kenjipcx/Zanarkand Technologies/projects/Farplane` and no
+project-specific extensions.
 
-project_root: `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`
+Use the skill's default Farplane refs for the static harness charter, tickets,
+interval guidance, reports, project products, reward state, bandit state,
+spawned-thread ledgers, action arms, and `farplane/pm.json`.
 
-extensions: none
-
-Use the skill's default Farplane refs for tickets, interval guidance, reports,
-reward state, bandit state, spawned-thread ledgers, action arms, and
-`farplane/pm.json`.
-
-Run one Pulse beat only. Do not perform drift review, scrum reflection, or
-strategy replanning. Do not push, deploy, publish, spend, mutate external
-systems, commit, or perform destructive cleanup.
+Run one Pulse beat only. Reconcile previous worker outcomes, use reasoning plus
+the bandit policy to choose exactly one bounded action, and spawn or record the
+result according to the `pulse-update` skill. If no proceedable tickets exist,
+choose one narrow product-shaped refill or maintenance arm from the action tree.
+Use `farplane/harness.md` to preserve the static human thesis and
+`farplane/products.md` to shape product refill tickets; chores stay in the
+default maintenance/proof arms. `consult goal-advisor` is one possible arm, not
+the default.
 
 Hard no-op gate: zero ready tickets means only `pick_ready_ticket` is blocked.
 Before selecting `no_op_unsafe` or rewarding a no-op as positive, write an
 `Action Arm Verdicts` section that evaluates `split_oversized_ticket`,
 `clarify_blocker`, `create_prep_ticket`, `run_qa_or_eval`,
 `refresh_ticket_metadata`, and `consult_goal_advisor` with concrete evidence.
+
+Do not perform drift review, scrum reflection, or strategy replanning. Do not
+push, deploy, publish, spend, mutate external systems, commit, or perform
+destructive cleanup.
 
 Final output: reward updates, selected action or no-op reason, child thread ID
 or handoff blocker, report/state paths, and what evidence will decide the
@@ -68,81 +78,120 @@ reward next time.
 
 Automation id: `farplane-daily-interval`
 Name: `Farplane Daily Interval`
-Kind: `heartbeat`
+Kind: `cron`
 RRULE: `FREQ=DAILY;BYHOUR=5;BYMINUTE=33;BYSECOND=0`
-Target thread: `TBD - create or reuse Farplane Daily Interval thread`
+Execution environment: `local`
+Workspace: `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`
 
 ```text
-You are the Farplane Daily Interval automation for this project.
+Run the Farplane Daily Interval automation for this project.
 
-Call `interval-update` with:
+Call:
+- `interval_update(project_root="/Users/kenjipcx/Zanarkand Technologies/projects/Farplane", interval_id="daily_interval", review_window="last_24h", planning_window="next_24h", timezone="Asia/Kuala_Lumpur")`
 
-project_root: `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`
-interval_id: `daily_interval`
-review_window: `last_24h`
-planning_window: `next_24h`
+Reads:
+- The skill's default Farplane refs for the static harness charter, goals,
+  tickets, memory, lessons, troubles, history, Pulse reports, interval reports,
+  PM thread grouping, report paths, and interval context bundles.
+- `farplane/goals.md` as the parent goal context.
+- The latest `weekly_interval` report when one exists; use it as
+  `parent_weekly_plan` and mark a source gap when it does not exist yet.
 
-extensions:
-  timezone: Asia/Kuala_Lumpur
-  context_extensions: none
-  phase_extensions: none
-  policy_extensions: none
+Writes:
+- A dated daily interval report under the default daily interval report path.
+- The next-24-hour operating plan.
+- Pulse guidance, proposed ticket deltas, Goal Advisor handoffs, and any
+  approval-required goals delta.
 
-Use the skill's default Farplane refs for goals, tickets, memory, lessons,
-troubles, history, Pulse reports, interval reports, PM thread grouping, report
-paths, and interval context bundles.
+Runs:
+- `plan_progress`: light.
+- `goal_drift`: light.
+- `ticket_board_drift`: light.
 
-Pulse owns fast board action selection. Daily Interval owns daily reporting,
-daily drift checks against the latest weekly plan when available, and the next
-24-hour operating plan. Goal, KPI, north-star, strategy-axis, quarterly,
-yearly, or durable milestone changes require an explicit goals-delta decision
-and approval when they are material.
+Gates:
+- Report before mutation.
+- Source gaps instead of guessed refs.
+- No scheduler state writes.
 
-Do not push, deploy, publish, spend, mutate external systems, commit, spawn
-unbounded worker threads, perform destructive cleanup, select due jobs, or
-write scheduler state.
+Daily Interval owns daily reporting, configured drift checks against goals and
+the latest weekly interval report when available, and the next 24-hour
+operating plan. The workflow must write the daily interval report first, then
+produce the next-24h plan, Pulse guidance, Goal Advisor handoffs, and any
+approval-required goals delta.
 
-Final output: interval report path, blockers, drift findings, next-24h plan,
-Pulse guidance, Goal Advisor handoffs, and any approval-required goals delta.
+Pulse owns fast board action selection. Do not push, deploy, publish, spend,
+mutate external systems, commit, spawn unbounded worker threads, perform
+destructive cleanup, select due jobs, or write scheduler state.
 ```
 
 ## Weekly Interval
 
 Automation id: `farplane-weekly-interval`
 Name: `Farplane Weekly Interval`
-Kind: `heartbeat`
+Kind: `cron`
 RRULE: `FREQ=WEEKLY;BYDAY=MON;BYHOUR=5;BYMINUTE=45;BYSECOND=0`
-Target thread: `TBD - create or reuse Farplane Weekly Interval thread`
+Execution environment: `local`
+Workspace: `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`
 
 ```text
-You are the Farplane Weekly Interval automation for this project.
+Run the Farplane Weekly Interval automation for this project.
 
-Call `interval-update` with:
+Call:
+- `interval_update(project_root="/Users/kenjipcx/Zanarkand Technologies/projects/Farplane", interval_id="weekly_interval", review_window="last_week", planning_window="next_week", timezone="Asia/Kuala_Lumpur")`
 
-project_root: `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane`
-interval_id: `weekly_interval`
-review_window: `last_week`
-planning_window: `next_week`
+Reads:
+- The skill's default Farplane refs for the static harness charter, goals,
+  tickets, memory, lessons, troubles, history, Pulse reports, interval reports,
+  PM thread grouping, report paths, and interval context bundles.
+- `farplane/goals.md` as the parent goal context.
+- All `daily_interval` reports inside `last_week`; use them as
+  `daily_reports` and mark a source gap when none exist yet.
 
-extensions:
-  timezone: Asia/Kuala_Lumpur
-  context_extensions: none
-  phase_extensions: none
-  policy_extensions: none
+Writes:
+- A dated weekly interval report under the default weekly interval report path.
+- The next-week plan.
+- Pulse guidance, proposed ticket deltas, Goal Advisor handoffs, and any
+  approval-required goals delta.
+- Leverage decisions in the weekly interval report: selected, rejected,
+  deferred, expired, or escalated candidates.
+- Reward closure in the weekly interval report for previously selected
+  leverage bets whose reward signal is due.
 
-Use the skill's default Farplane refs for goals, tickets, memory, lessons,
-troubles, history, Pulse reports, daily interval reports in the review window,
-PM thread grouping, report paths, and interval context bundles.
+Runs:
+- `plan_progress`: true.
+- `codex_attention_drift`: true.
+- `ticket_board_drift`: true.
+- `feedback_obligations`: when sources exist.
+- `opportunity_signals`: when sources exist.
+- `goal_drift`: true.
+- `metric_snapshot`: when sources exist.
+- `compounding_leverage_review`: true.
+- `priority_planning`: true.
 
-Pulse owns fast board action selection. Weekly Interval owns weekly reporting,
-drift checks against `farplane/goals.md`, and next-week replanning. Use Goal
-Advisor when the next direction should become a durable Goal Packet or
-ticket-backed execution plan.
+Gates:
+- Report before mutation.
+- Approval required for static charter, north-star, KPI, strategy-axis,
+  quarterly/yearly, durable milestone, and hold changes.
+- Urgent leverage escalation requires high confidence, explicit loss term,
+  evidence refs, review-by date, and owner route.
+- Source gaps instead of guessed refs.
+- No scheduler state writes.
 
+Before final synthesis, run only the configured report workflows above. Keep
+every workflow evidence-backed: cite tickets, daily reports, Pulse reports,
+worker/thread refs, telemetry, feedback refs, feature/skill changes, external
+source refs, prior leverage reward signals, or source gaps. Do not import
+project-specific private Kenji workflow assumptions unless this automation later
+supplies them as explicit context refs or workflows. When the context is large,
+`interval-update` may run configured workflows as read-only subagent analysis
+lanes before merging findings into the report.
+
+Weekly Interval owns weekly reporting, drift checks against
+`farplane/goals.md`, and next-week replanning. Use Goal Advisor when the next
+direction should become a durable Goal Packet or ticket-backed execution plan.
+When `compounding_leverage_review` is enabled, close due reward signals before
+selecting the next 1-3 leverage bets.
 Do not push, deploy, publish, spend, mutate external systems, commit, spawn
 unbounded worker threads, perform destructive cleanup, select due jobs, or
 write scheduler state.
-
-Final output: interval report path, blockers, drift findings, next-week plan,
-Pulse guidance, Goal Advisor handoffs, and any approval-required goals delta.
 ```

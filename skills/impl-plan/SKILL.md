@@ -3,7 +3,6 @@ name: impl-plan
 description: "Turn one selected coding ticket or material implementation request into an approval-ready ticket plan, test strategy, and proof contract."
 tier: 3
 source: local
-workflow: true
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.1.0"
