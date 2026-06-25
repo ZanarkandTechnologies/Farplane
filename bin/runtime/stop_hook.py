@@ -2022,7 +2022,7 @@ def skill_opportunity_review_input(
 ) -> dict[str, object]:
     skill_paths = relative_paths(base, "skills/*/SKILL.md")
     recent_ticket_paths = relative_paths(base, "tickets/TASK-*/ticket.md")[-12:]
-    source_project_skill_paths = [] if project_root == base else relative_paths(project_root, "skills/*/SKILL.md")
+    source_project_skill_paths = [] if project_root == base else relative_paths(project_root, ".agents/skills/*/SKILL.md")
     source_project_ticket_paths = [] if project_root == base else relative_paths(project_root, "tickets/TASK-*/ticket.md")[-12:]
     dedupe_refs = {
         "skills": skill_paths,

@@ -44,7 +44,7 @@ Default sources:
   allocation guardrails from the context bundle.
 - product work lanes, default weight hints, product boundaries, reward signals,
   and local product skill refs from `farplane/products.md` and
-  `farplane/skills/` in the context bundle.
+  `.agents/skills/` in the context bundle.
 - parent context refs and goals from the context bundle.
 - enabled workflow findings such as plan progress, goal drift, ticket board
   drift, feedback obligations, opportunity signals, attention drift, and
@@ -97,7 +97,7 @@ that a second read reduces self-confirmation.
   - [ ] Separate solo work, people-facing follow-ups, background-agent work,
         and approval-required decisions when the project has those lanes.
   - [ ] Convert executable work into proposed ticket deltas or Goal Advisor
-        handoffs. Include a `farplane/skills/<product-skill>/SKILL.md` ref when
+        handoffs. Include a `.agents/skills/<product-skill>/SKILL.md` ref when
         a local product skill owns the workflow.
   - [ ] Return Pulse constraints for the fast executor loop; Pulse should
         execute ready tickets or request more planning, not create strategy.

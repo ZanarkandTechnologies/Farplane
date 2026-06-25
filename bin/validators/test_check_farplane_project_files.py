@@ -33,7 +33,7 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/automations.md",
                         "farplane/bindings.md",
                         "farplane/hooks.json",
-                        "farplane/skills/README.md",
+                        ".agents/skills/README.md",
                         "tickets/templates/ticket.md",
                     ],
                     "ignored": [".farplane/state/run-ledger.json"],
@@ -66,7 +66,7 @@ def write_required_project_files(root: Path) -> None:
             encoding="utf-8",
         )
     (farplane / "hooks.json").write_text('{"version": 1, "hooks": {}}\n', encoding="utf-8")
-    skills_dir = farplane / "skills"
+    skills_dir = root / ".agents" / "skills"
     skills_dir.mkdir()
     (skills_dir / "README.md").write_text(
         "---\nkind: local-product-skills-index\nframework_template_version: \"0.1.0\"\n---\n\n# Local Product Skills\n",

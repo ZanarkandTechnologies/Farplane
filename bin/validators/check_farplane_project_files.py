@@ -196,7 +196,7 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/automations.md",
         "farplane/bindings.md",
         "farplane/hooks.json",
-        "farplane/skills/README.md",
+        ".agents/skills/README.md",
         "tickets/templates/ticket.md",
         ".farplane/state/run-ledger.json",
     }

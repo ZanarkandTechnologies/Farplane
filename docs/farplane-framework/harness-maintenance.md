@@ -172,7 +172,7 @@ This layer can report:
 - tracked template version drift,
 - explicit `feature_pins`,
 - implied feature adoption from template feature refs,
-- local skill presence under project `skills/`.
+- local skill presence under project `.agents/skills/`.
 
 It does not crawl the whole computer or mutate project manifests.
 

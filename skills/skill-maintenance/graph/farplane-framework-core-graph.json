@@ -3,33 +3,33 @@
     "edge_types": {
       "defines-workflow": 7,
       "lifecycle-workflow": 6,
-      "literal-path": 62,
+      "literal-path": 59,
       "markdown-link": 1,
       "mentions-skill": 29,
       "routes_to": 7,
       "triggers": 1,
-      "updates": 2,
+      "updates": 1,
       "workflow-next": 20,
       "workflow-skill": 26,
       "workflow-stage": 6,
-      "writes": 7
+      "writes": 6
     },
-    "edges": 174,
+    "edges": 169,
     "framework_roles": {
-      "linked": 43,
+      "linked": 42,
       "source": 7,
       "workflow": 7
     },
     "isolated_nodes": 0,
-    "linked_nodes": 50,
+    "linked_nodes": 49,
     "node_kinds": {
       "doc": 7,
-      "file": 9,
+      "file": 8,
       "skill": 29,
       "spec": 5,
       "workflow": 7
     },
-    "nodes": 57,
+    "nodes": 56,
     "other_nodes": 0,
     "source_nodes": 7,
     "workflow_nodes": 7
@@ -153,14 +153,6 @@
       "raw_ref": "farplane/pm.json",
       "source": "file:docs/farplane-framework/README.md",
       "target": "file:farplane/pm.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/README.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/skills/",
-      "source": "file:docs/farplane-framework/README.md",
-      "target": "file:farplane/skills/README.md",
       "type": "literal-path"
     },
     {
@@ -553,14 +545,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/skills/README.md",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:farplane/skills/README.md",
-      "type": "literal-path"
-    },
-    {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
@@ -923,14 +907,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/farplane-framework/project-files.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/skills/README.md",
-      "source": "file:docs/farplane-framework/project-files.md",
-      "target": "file:farplane/skills/README.md",
-      "type": "literal-path"
-    },
-    {
       "confidence": "curated",
       "from_file": "docs/specs/goal-loop-contract.md",
       "label": "triggers",
@@ -1025,16 +1001,6 @@
       "source": "skill:harness-advisor",
       "target": "skill:proof-advisor",
       "type": "routes_to"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "updates",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/skills/README.md",
-      "source": "skill:harness-creator",
-      "target": "file:farplane/skills/README.md",
-      "type": "updates"
     },
     {
       "confidence": "curated",
@@ -1137,16 +1103,6 @@
       "raw_ref": "file:farplane/pm.json",
       "source": "skill:init-advisor",
       "target": "file:farplane/pm.json",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "writes",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/skills/README.md",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/skills/README.md",
       "type": "writes"
     },
     {
@@ -1673,7 +1629,7 @@
       "type": "workflow-skill"
     }
   ],
-  "generated_at": "2026-06-25T17:12:03+00:00",
+  "generated_at": "2026-06-25T18:00:49+00:00",
   "nodes": [
     {
       "framework_role": "linked",
@@ -1781,27 +1737,9 @@
     },
     {
       "framework_role": "linked",
-      "id": "file:farplane/skills/README.md",
-      "kind": "file",
-      "label": "farplane/skills/README.md",
-      "path": "farplane/skills/README.md",
-      "source_match": false,
-      "source_path": "farplane/skills/README.md",
-      "tags": [
-        "framework-core",
-        "framework-role:linked"
-      ]
-    },
-    {
-      "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -1824,18 +1762,13 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 7,
-        "distinct_threads_window": 7,
-        "distinct_tickets_30d": 0,
+        "distinct_threads_window": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 14,
-        "invocation_count_30d": 7,
-        "invocation_count_7d": 0,
-        "invocation_count_all": 7,
+        "invocation_count_all": 0,
         "invocation_count_recent": 0,
-        "invocation_count_window": 7,
-        "last_invoked_at": "2026-06-06T14:11:49.058419Z",
-        "observed_event_count_all": 14,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
         "recent_days": 7,
         "window_days": 30
       },
@@ -1853,13 +1786,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -1882,13 +1810,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -1911,13 +1834,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -1940,13 +1858,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -1969,13 +1882,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -1998,13 +1906,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2027,13 +1930,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2056,13 +1954,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2085,13 +1978,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2114,13 +2002,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2143,18 +2026,13 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 7,
-        "distinct_threads_window": 7,
-        "distinct_tickets_30d": 0,
+        "distinct_threads_window": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 14,
-        "invocation_count_30d": 7,
-        "invocation_count_7d": 0,
-        "invocation_count_all": 7,
+        "invocation_count_all": 0,
         "invocation_count_recent": 0,
-        "invocation_count_window": 7,
-        "last_invoked_at": "2026-06-06T14:11:49.058337Z",
-        "observed_event_count_all": 14,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
         "recent_days": 7,
         "window_days": 30
       },
@@ -2172,13 +2050,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2201,13 +2074,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2230,13 +2098,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2259,13 +2122,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2288,13 +2146,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2317,13 +2170,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2346,13 +2194,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2375,13 +2218,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2404,13 +2242,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2433,13 +2266,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2462,13 +2290,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2491,13 +2314,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2520,13 +2338,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2549,13 +2362,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2578,13 +2386,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -2607,13 +2410,8 @@
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,

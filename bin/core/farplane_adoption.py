@@ -157,7 +157,7 @@ def compare_version(pinned: str, expected: str) -> str:
 
 
 def local_skill_names(project_root: Path) -> list[str]:
-    skills_dir = project_root / "skills"
+    skills_dir = project_root / ".agents" / "skills"
     if not skills_dir.is_dir():
         return []
     names: list[str] = []

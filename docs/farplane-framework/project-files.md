@@ -14,7 +14,7 @@ source_of_truth:
   - farplane/products.md
   - farplane/bindings.md
   - farplane/hooks.json
-  - farplane/skills/README.md
+  - .agents/skills/README.md
   - farplane/pm.json
   - .gitignore
 ---
@@ -25,7 +25,7 @@ Farplane projects separate tracked control files from local runtime state.
 
 ```text
 farplane/        = tracked project framework config
-farplane/skills/ = project-local product skills
+.agents/skills/ = tracked project-local product skills
 .farplane/       = ignored local runtime state, reports, eval runs, and logs
 docs/            = tracked human-readable project memory and durable narrative
 tickets/         = visible work queue and proof surface
@@ -54,9 +54,11 @@ farplane/
   automations.md
   bindings.md
   hooks.json
+  pm.json
+
+.agents/
   skills/
     README.md
-  pm.json
 ```
 
 ### `farplane/manifest.json`
@@ -127,11 +129,11 @@ Declarative Farplane-native hook configuration. It may contain thresholds,
 enabled flags, and hook-specific refs. Hook algorithms and post-action behavior
 belong in hook scripts or skills.
 
-### `farplane/skills/`
+### `.agents/skills/`
 
 Project-local product skills. Use this for monetizable or company-specific
 workflows derived from `farplane/products.md`, such as
-`farplane/skills/<product-skill>/SKILL.md`.
+`.agents/skills/<product-skill>/SKILL.md`.
 
 These local skills are referenced by tickets, interval reports, or automation
 prompts by path. Promote a local product skill to root `skills/` only after

@@ -96,6 +96,7 @@ copy_file "${REF_DIR}/PROJECT_RULES_TEMPLATE.md" "${TARGET_DIR}/PROJECT_RULES.md
 copy_file "${REF_DIR}/ARCHITECTURE_TEMPLATE.md" "${TARGET_DIR}/ARCHITECTURE.md"
 
 mkdir -p "${TARGET_DIR}/farplane"
+mkdir -p "${TARGET_DIR}/.agents/skills"
 copy_file "${REF_DIR}/FARPLANE_README_TEMPLATE.md" "${TARGET_DIR}/farplane/README.md"
 copy_file "${REF_DIR}/MANIFEST_TEMPLATE.json" "${TARGET_DIR}/farplane/manifest.json"
 copy_file "${REF_DIR}/HARNESS_TEMPLATE.md" "${TARGET_DIR}/farplane/harness.md"
@@ -104,7 +105,7 @@ copy_file "${REF_DIR}/FARPLANE_PRODUCTS_TEMPLATE.md" "${TARGET_DIR}/farplane/pro
 copy_file "${REF_DIR}/AUTOMATION_TEMPLATE.md" "${TARGET_DIR}/farplane/automations.md"
 copy_file "${REF_DIR}/BINDINGS_TEMPLATE.md" "${TARGET_DIR}/farplane/bindings.md"
 copy_file "${REF_DIR}/HOOKS_TEMPLATE.json" "${TARGET_DIR}/farplane/hooks.json"
-copy_file "${REF_DIR}/LOCAL_SKILLS_README_TEMPLATE.md" "${TARGET_DIR}/farplane/skills/README.md"
+copy_file "${REF_DIR}/LOCAL_SKILLS_README_TEMPLATE.md" "${TARGET_DIR}/.agents/skills/README.md"
 copy_file "${REF_DIR}/PM_TEMPLATE.json" "${TARGET_DIR}/farplane/pm.json"
 
 mkdir -p "${TARGET_DIR}/.farplane/state" "${TARGET_DIR}/.farplane/reports" "${TARGET_DIR}/.farplane/evals/runs" "${TARGET_DIR}/.farplane/logs"
@@ -160,7 +161,7 @@ echo "  - Fill in farplane/harness.md and farplane/goals.md, or run harness-crea
 echo "  - Fill in farplane/bindings.md with non-secret project IDs, URLs, labels, and aliases for skills."
 echo "  - Fill in farplane/automations.md with the exact Pulse and Interval prompts to copy into Codex automations."
 echo "  - Keep skills generic and parameterized; configure project paths, cadence, schedule, and thread IDs in farplane/automations.md."
-echo "  - Use farplane/skills/ for project-local product skills; promote only stable cross-project workflows to root skills/."
+echo "  - Use .agents/skills/ for project-local product skills; promote only stable cross-project workflows to root skills/."
 echo "  - Use horizon-advisor to shape project goals when goals are missing or weak."
 echo "  - Use goal-advisor to compile the first executable frontier after goals are concrete."
 echo "  - Run automation-advisor when you want to activate live Codex Pulse and Interval automations; bootstrap only creates the files."

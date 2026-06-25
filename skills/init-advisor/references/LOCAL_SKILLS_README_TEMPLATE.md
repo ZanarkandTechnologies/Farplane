@@ -1,6 +1,5 @@
 ---
 kind: local-product-skills-index
-status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
@@ -12,7 +11,7 @@ owner: harness
 
 Project-local product skills live here.
 
-Use `farplane/skills/<product-skill>/SKILL.md` for workflows that are specific
+Use `.agents/skills/<product-skill>/SKILL.md` for workflows that are specific
 to this project or company. Promote a local product skill to root `skills/`
 only after repeated runs show that the workflow is reusable across projects.
 

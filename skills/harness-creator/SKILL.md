@@ -31,7 +31,7 @@ farplane/products.md = product catalog and work-lane weights
 farplane/goals.md    = dynamic strategy, KPIs, current bets, milestone, and
                        holds
 farplane/hooks.json  = declarative project hook config
-farplane/skills/     = local product skills for company-specific production
+.agents/skills/      = local product skills for company-specific production
                        workflows
 ```
 
@@ -69,7 +69,7 @@ project_harness_creator(project_idea, values?, priorities?, mode_presets?, conte
    + proposed_tickets
    + current_milestone
    + goal_advisor_handoff
-state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, farplane/skills/**?, harness doctrine, farplane/harness.md, farplane/products.md, farplane/goals.md, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(farplane/harness.md static-charter deltas only with explicit approval, farplane/products.md product-catalog deltas, farplane/goals.md strategy deltas through goals policy, proposed tickets, farplane/automations.md, farplane/bindings.md when configuring recurring work, farplane/skills/<product-skill>/SKILL.md stubs or refinement-ticket handoffs, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
+state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, .agents/skills/**?, harness doctrine, farplane/harness.md, farplane/products.md, farplane/goals.md, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(farplane/harness.md static-charter deltas only with explicit approval, farplane/products.md product-catalog deltas, farplane/goals.md strategy deltas through goals policy, proposed tickets, farplane/automations.md, farplane/bindings.md when configuring recurring work, .agents/skills/<product-skill>/SKILL.md stubs or refinement-ticket handoffs, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
 gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_providers_honest; existing_tickets_checked_first; existing_skills_checked_before_product_skill_stubs; product_skill_reuse_map_written; missing_systems_named; blockers_ticketed; side_effect_gates_named; current_milestone_named; pm_activation_gate_named; goal_advisor_handoff_ready
 routes: init-advisor | research:* | ingest-content | horizon-advisor | harness-advisor | skill-creator | goal-advisor | automation-advisor | optimize-with-human | interval-update | review | relevant domain skill
 fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates local product skills before checking existing reusable skills and systems; promotes project-local product skills to root skills before repeated proof; activates PM loops before core product skills or refinement tickets exist; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
@@ -104,7 +104,7 @@ selected, `automation-advisor` only for live Codex automation activation, and
 `review` for material readiness.
 
 Local product skills are project-owned company workflows. Create or propose
-them under `farplane/skills/<product-skill>/SKILL.md` only after mapping
+them under `.agents/skills/<product-skill>/SKILL.md` only after mapping
 existing root skills and project-local skills first. Promote a local product
 skill to root `skills/` only after repeated proof shows cross-project reuse.
 
@@ -200,9 +200,9 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      `derive_local_product_skill(product, existing_skills, goals, constraints)
      -> reuse_map + local_skill_stub? + refinement_ticket?`.
    - [ ] Prefer reusing existing root `skills/*` and existing
-     `farplane/skills/*` before proposing any new local product skill.
+     `.agents/skills/*` before proposing any new local product skill.
    - [ ] If a product workflow is repeated, valuable, and specific to this
-     company, propose or create `farplane/skills/<product-skill>/SKILL.md`.
+     company, propose or create `.agents/skills/<product-skill>/SKILL.md`.
    - [ ] If the workflow is not stable enough to stub, create one product-skill
      refinement ticket that names the product line, existing skills to compose,
      missing proof, and activation gate.
@@ -286,7 +286,7 @@ Return or write:
 Static Charter Delta (`farplane/harness.md`):
 Product Catalog Delta (`farplane/products.md`):
 Product Skill Reuse Map:
-Local Product Skill Stubs (`farplane/skills/<product-skill>/SKILL.md`):
+Local Product Skill Stubs (`.agents/skills/<product-skill>/SKILL.md`):
 Product Skill Refinement Ticket:
 Strategy Delta (`farplane/goals.md`):
 Planning Worksheet:
@@ -317,7 +317,7 @@ tickets/TASK-XXXX/artifacts/harness-creator/
   missing-primitive-plan.md          # optional sidecar when gaps are material
   goal-advisor-handoff.md            # optional sidecar when milestone is ready
 
-farplane/skills/<product-skill>/SKILL.md
+.agents/skills/<product-skill>/SKILL.md
                                      # project-local product workflow skill
 tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 ```
@@ -332,7 +332,7 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
   without at least one honest feedback loop or a concrete feedback-skill ticket.
 - Smallest lever first: check existing skills/tickets/systems before creating
   new skills, external-IO abstractions, hidden automations, or root-prompt rules.
-- Local before global: product workflow skills start under `farplane/skills/`
+- Local before global: product workflow skills start under `.agents/skills/`
   and promote to root `skills/` only after repeated proof of cross-project use.
 - Leaf execution first: parent harnesses coordinate; native Goal runs selected
   milestones or tickets, and `pulse-update` selects one proceedable bounded

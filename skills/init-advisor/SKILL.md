@@ -148,9 +148,9 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] Create `farplane/hooks.json` as declarative hook configuration. Do not
         put hook algorithms, eval runners, or post-action procedures in project
         files; those belong in skills, hooks, validators, or ticket programs.
-  - [ ] Create `farplane/skills/README.md` as the local product-skill home.
+  - [ ] Create `.agents/skills/README.md` as the local product-skill home.
         Project-specific product workflows live under
-        `farplane/skills/<product-skill>/SKILL.md`; promote only stable
+        `.agents/skills/<product-skill>/SKILL.md`; promote only stable
         cross-project workflows to root `skills/`.
   - [ ] Keep `farplane/automations.md` as the exact prompt source that calls
     generic skills in plain project-specific operational language.
@@ -164,7 +164,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
 - [ ] 4. Run readiness audit and full-mode operating-model setup.
   - [ ] Audit `docs/bootstrap-brief.md`, `farplane/harness.md`,
     `farplane/goals.md`, `farplane/products.md`, `farplane/automations.md`,
-    `farplane/bindings.md`, `farplane/skills/README.md`, `farplane/pm.json`,
+    `farplane/bindings.md`, `.agents/skills/README.md`, `farplane/pm.json`,
     `PROJECT_RULES.md`, and QA surfaces for missing,
     placeholder, stale, or disabled state.
   - [ ] Treat missing human thesis, static leverage commitments, agent
@@ -243,7 +243,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
 
 - Farplane substrate: `farplane/manifest.json`, `farplane/README.md`,
   `farplane/harness.md`, `farplane/products.md`, `farplane/hooks.json`,
-  `farplane/skills/README.md`, `farplane/*.md`,
+  `.agents/skills/README.md`, `farplane/*.md`,
   `.farplane/` runtime state, and `tickets/`.
 - Project operating docs: `AGENTS.md`, `PROJECT_RULES.md`, `ARCHITECTURE.md`,
   `docs/bootstrap-brief.md`, `docs/prd.md`, `docs/specs/`, and memory logs.

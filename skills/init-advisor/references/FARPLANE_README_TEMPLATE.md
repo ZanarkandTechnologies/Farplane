@@ -24,9 +24,11 @@ farplane/
   automations.md   # exact Codex automation prompt blocks for Pulse and Intervals
   bindings.md      # non-secret project IDs, URLs, labels, aliases
   hooks.json       # declarative Farplane-native hook configuration
+  pm.json          # optional UI thread manifest for one visual project PM
+
+.agents/
   skills/          # project-local product skills
     README.md
-  pm.json          # optional UI thread manifest for one visual project PM
 ```
 
 Runtime state lives under `.farplane/` and is intentionally ignored by git.

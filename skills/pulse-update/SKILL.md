@@ -33,7 +33,7 @@ what it may do.
 
 Pulse resolves the standard Farplane project refs by default: the static
 project charter, local tickets, recent interval guidance, project products,
-local product skill refs under `farplane/skills/`, execution policy, spawned
+local product skill refs under `.agents/skills/`, execution policy, spawned
 threads, outcomes, rewards, reports, and
 `farplane/pm.json`. The live Codex automation supplies cadence, concurrency cap,
 and true project extensions only. Pulse owns reward reconciliation, proceedable
@@ -67,7 +67,7 @@ state:
   reads(farplane/harness.md?,
         farplane/goals.md?,
         farplane/products.md?,
-        farplane/skills/**/SKILL.md?,
+        .agents/skills/**/SKILL.md?,
         .farplane/reports/interval/**?,
         .farplane/automation/heartbeat-policy.json,
         .farplane/automation/spawned-threads.jsonl,

@@ -24,7 +24,7 @@ eval_required: no
 - Before: `harness-creator` defined products and inventoried skills, but did
   not explicitly derive local product workflow skills.
 - After: it must map existing root and local skills first, then propose
-  `farplane/skills/<product-skill>/SKILL.md` stubs or one refinement ticket for
+  `.agents/skills/<product-skill>/SKILL.md` stubs or one refinement ticket for
   immature product workflows.
 - Why: core product workflows are the company's monetizable production
   capabilities and need a durable feedback/hardening home.
@@ -34,7 +34,7 @@ eval_required: no
 ## First-Principles Reasoning
 
 - Objective: connect product lines to executable, improvable workflows.
-- Placement logic: product-specific workflows belong under `farplane/skills/`
+- Placement logic: product-specific workflows belong under `.agents/skills/`
   until repeated proof shows cross-project reuse.
 - Expected behavior delta: PM activation waits until each core product line has
   an existing route, local product skill, or refinement ticket.
@@ -72,7 +72,7 @@ eval_required: no
 
 ## After Behavior
 
-- `harness-creator` derives local product skills under `farplane/skills/`,
+- `harness-creator` derives local product skills under `.agents/skills/`,
   maps existing skill reuse first, and creates refinement tickets when a stub is
   premature.
 

@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "1.6.0",
+  "spec_version": "1.6.1",
   "template_uses": {
-    "farplane-framework": "1.6.0"
+    "farplane-framework": "1.6.1"
   },
   "project": {
     "name": "Farplane",
@@ -22,7 +22,7 @@
       "farplane/automations.md",
       "farplane/bindings.md",
       "farplane/hooks.json",
-      "farplane/skills/README.md",
+      ".agents/skills/README.md",
       "docs/bootstrap-brief.md",
       "docs/prd.md",
       "docs/specs/README.md",

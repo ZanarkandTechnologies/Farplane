@@ -65,7 +65,7 @@ runtime helpers instead of symlinking every script, validator, and test.
   `FarplaneRunEnvelope`, board-backed `WorkItem`, compute selection, skill
   routing, and `ProofPacket` validation; it does not launch Codex
 - `farplane.py adoption scan` - local adoption resolver for project
-  `farplane/manifest.json` pins, optional project `skills/`, feature/template
+  `farplane/manifest.json` pins, optional project `.agents/skills/`, feature/template
   registries, drift, and Office-consumable adoption stats; implementation lives
   in `bin/core/farplane_adoption.py`
 - `../skills/ralph/scripts/select_next_ticket.py` - serial Ralph selector that

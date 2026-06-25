@@ -29,6 +29,8 @@ tmp/
 .farplane/
 .ralph/
 .agents/*
+!.agents/skills/
+!.agents/skills/**
 plugins/
 .desloppify/
 skills/.system/

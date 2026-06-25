@@ -39,7 +39,7 @@ adds or replaces a source:
 default_context_refs(project_root, interval_id) = {
   harness_ref: project_root/farplane/harness.md,
   products_ref: project_root/farplane/products.md,
-  local_product_skill_refs: project_root/farplane/skills/**/SKILL.md,
+  local_product_skill_refs: project_root/.agents/skills/**/SKILL.md,
   goals_ref: project_root/farplane/goals.md,
   ticket_refs: project_root/tickets/,
   memory_refs: [

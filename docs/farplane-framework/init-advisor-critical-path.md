@@ -154,7 +154,7 @@ farplane/products.md
 farplane/automations.md
 farplane/bindings.md
 farplane/hooks.json
-farplane/skills/README.md
+.agents/skills/README.md
 farplane/pm.json
 ```
 
@@ -187,8 +187,8 @@ Key contracts:
 - `farplane/hooks.json` is declarative project hook config. Hook algorithms,
   eval runners, and post-action procedures belong in skills, runtime hooks,
   validators, or ticket programs.
-- `farplane/skills/README.md` is the local product-skill home. Project-specific
-  production workflows live under `farplane/skills/<product-skill>/SKILL.md`
+- `.agents/skills/README.md` is the local product-skill home. Project-specific
+  production workflows live under `.agents/skills/<product-skill>/SKILL.md`
   until repeated evidence justifies promotion to reusable root `skills/`.
 - Codex automation records own cadence. Farplane does not create a tracked
   scheduler config or ignored scheduler state by default.
@@ -218,7 +218,7 @@ Audit:
 - `farplane/goals.md`
 - `farplane/products.md`
 - `farplane/bindings.md`
-- `farplane/skills/README.md`
+- `.agents/skills/README.md`
 - `farplane/pm.json`
 - `PROJECT_RULES.md`
 - QA surfaces
@@ -476,7 +476,7 @@ Guardrails:
 | `farplane/goals.md` | `init-advisor` / `harness-creator` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
 | `farplane/products.md` | `init-advisor` / `harness-creator` | product planning / work-lane tuning | product rows and work lanes |
 | `farplane/automations.md` | `init-advisor` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Interval prompt source |
-| `farplane/skills/README.md` | `init-advisor` | `harness-creator` / product-skill refinement | local product-skill home |
+| `.agents/skills/README.md` | `init-advisor` | `harness-creator` / product-skill refinement | local product-skill home |
 | `farplane/pm.json` | `init-advisor` | `automation-advisor` / PM-visible threads | UI grouping for persistent chat and automation threads |
 | `tickets/TASK-0001/ticket.md` | `init-advisor` | planning flow | starter PRD/discovery handoff |
 | `qa/` | `init-advisor` | QA work | reusable proof paths |

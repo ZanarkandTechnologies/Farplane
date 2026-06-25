@@ -3,33 +3,36 @@
     "edge_confidence": {
       "curated": 43,
       "explicit": 6,
-      "parsed": 176
+      "parsed": 418
     },
     "edge_types": {
       "consumes": 4,
       "contains": 2,
-      "reads": 53,
+      "guards": 120,
+      "reads": 131,
       "routes_to": 116,
       "triggers": 15,
       "updates": 4,
-      "writes": 31
+      "writes": 75
     },
-    "edges": 225,
+    "edges": 467,
     "fsa_projections": 5,
     "node_kinds": {
       "automation": 3,
       "command": 3,
       "doc": 11,
-      "file": 20,
+      "file": 19,
+      "fsa_state": 40,
+      "gate": 116,
       "hook": 2,
       "report": 2,
       "route": 4,
       "runtime": 1,
       "skill": 40,
-      "state": 6,
+      "state": 118,
       "ticket": 6
     },
-    "nodes": 98,
+    "nodes": 365,
     "parsed_skills": 18
   },
   "edges": [
@@ -273,6 +276,62 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "cadence_named",
+      "source": "skill:automation-advisor",
+      "target": "gate:cadence_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "dated_report_path_used",
+      "source": "skill:automation-advisor",
+      "target": "gate:dated_report_path_used",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "loop_choice_made",
+      "source": "skill:automation-advisor",
+      "target": "gate:loop_choice_made",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "no_hidden_scheduler_config",
+      "source": "skill:automation-advisor",
+      "target": "gate:no_hidden_scheduler_config",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "no_lane_manifest_required",
+      "source": "skill:automation-advisor",
+      "target": "gate:no_lane_manifest_required",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "prompt_calls_skill_plainly",
+      "source": "skill:automation-advisor",
+      "target": "gate:prompt_calls_skill_plainly",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "side_effect_gates_named",
+      "source": "skill:automation-advisor",
+      "target": "gate:side_effect_gates_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
       "label": "goal-advisor",
       "source": "skill:automation-advisor",
       "target": "skill:goal-advisor",
@@ -301,6 +360,46 @@
       "source": "skill:automation-advisor",
       "target": "skill:review",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "baseline_before_mutation",
+      "source": "skill:eval",
+      "target": "gate:baseline_before_mutation",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "evidence_inspected_before_claim",
+      "source": "skill:eval",
+      "target": "gate:evidence_inspected_before_claim",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "expected_behavior:testable",
+      "source": "skill:eval",
+      "target": "gate:expected_behavior-testable",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "hardcase:sanitized_and_reusable",
+      "source": "skill:eval",
+      "target": "gate:hardcase-sanitized_and_reusable",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "query_not_spoiled",
+      "source": "skill:eval",
+      "target": "gate:query_not_spoiled",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -360,11 +459,195 @@
     },
     {
       "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "consolidation reports",
+      "source": "skill:eval",
+      "target": "state:consolidation-reports",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "eval-drain processed state",
+      "source": "skill:eval",
+      "target": "state:eval-drain-processed-state",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "eval tasks",
+      "source": "skill:eval",
+      "target": "state:eval-tasks",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "existing evals",
+      "source": "skill:eval",
+      "target": "state:existing-evals",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "expected behavior",
+      "source": "skill:eval",
+      "target": "state:expected-behavior",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "fixtures",
+      "source": "skill:eval",
+      "target": "state:fixtures",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "hardcase metadata",
+      "source": "skill:eval",
+      "target": "state:hardcase-metadata",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "processed state",
+      "source": "skill:eval",
+      "target": "state:processed-state",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "qa_checklist?",
+      "source": "skill:eval",
+      "target": "state:qa_checklist",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "run artifacts",
+      "source": "skill:eval",
+      "target": "state:run-artifacts",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "skill eval_task.json files",
+      "source": "skill:eval",
+      "target": "state:skill-eval_task.json-files",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/eval/SKILL.md",
+      "label": "task context",
+      "source": "skill:eval",
+      "target": "state:task-context",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
       "evidence_ref": "skills/goal-advisor/SKILL.md",
       "label": "farplane/goals.md?",
       "source": "skill:goal-advisor",
       "target": "file:farplane/goals.md",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "approval_before_goal_run_when_material",
+      "source": "skill:goal-advisor",
+      "target": "gate:approval_before_goal_run_when_material",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "budget_named",
+      "source": "skill:goal-advisor",
+      "target": "gate:budget_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "drift_policy_named",
+      "source": "skill:goal-advisor",
+      "target": "gate:drift_policy_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "final_evidence_policy_named",
+      "source": "skill:goal-advisor",
+      "target": "gate:final_evidence_policy_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "logging_policy_named",
+      "source": "skill:goal-advisor",
+      "target": "gate:logging_policy_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "loop_owner_single",
+      "source": "skill:goal-advisor",
+      "target": "gate:loop_owner_single",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "material_goal_has_files",
+      "source": "skill:goal-advisor",
+      "target": "gate:material_goal_has_files",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "metric_provider_named",
+      "source": "skill:goal-advisor",
+      "target": "gate:metric_provider_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "missing_execution_inputs_resolved_or_asked",
+      "source": "skill:goal-advisor",
+      "target": "gate:missing_execution_inputs_resolved_or_asked",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "progress_surface_named",
+      "source": "skill:goal-advisor",
+      "target": "gate:progress_surface_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "proof_route_named",
+      "source": "skill:goal-advisor",
+      "target": "gate:proof_route_named",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -423,6 +706,70 @@
       "type": "routes_to"
     },
     {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "board files?",
+      "source": "skill:goal-advisor",
+      "target": "state:board-files",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "goal-loop contract",
+      "source": "skill:goal-advisor",
+      "target": "state:goal-loop-contract",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "listed files",
+      "source": "skill:goal-advisor",
+      "target": "state:listed-files",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "operator intent",
+      "source": "skill:goal-advisor",
+      "target": "state:operator-intent",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "program.md?",
+      "source": "skill:goal-advisor",
+      "target": "state:program.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "progress.md?",
+      "source": "skill:goal-advisor",
+      "target": "state:progress.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "relevant skills/docs",
+      "source": "skill:goal-advisor",
+      "target": "state:relevant-skills/docs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "ticket/program/progress? generated goal prompt? or recommendation",
+      "source": "skill:goal-advisor",
+      "target": "state:ticket/program/progress-generated-goal-prompt-or-recommendation",
+      "type": "writes"
+    },
+    {
       "confidence": "curated",
       "evidence_ref": "docs/specs/goal-loop-contract.md",
       "source": "skill:goal-advisor",
@@ -450,6 +797,38 @@
       "source": "skill:goal-advisor",
       "target": "ticket:tickets/TASK-*/ticket.md",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "failure_named",
+      "source": "skill:harness-advisor",
+      "target": "gate:failure_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "owner_surface:named",
+      "source": "skill:harness-advisor",
+      "target": "gate:owner_surface-named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "proof_path:named",
+      "source": "skill:harness-advisor",
+      "target": "gate:proof_path-named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "rejected_surfaces:named",
+      "source": "skill:harness-advisor",
+      "target": "gate:rejected_surfaces-named",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -522,10 +901,50 @@
       "type": "routes_to"
     },
     {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "feature registry",
+      "source": "skill:harness-advisor",
+      "target": "state:feature-registry",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "harness doctrine",
+      "source": "skill:harness-advisor",
+      "target": "state:harness-doctrine",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "relevant surfaces",
+      "source": "skill:harness-advisor",
+      "target": "state:relevant-surfaces",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "skill registry",
+      "source": "skill:harness-advisor",
+      "target": "state:skill-registry",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/harness-advisor/SKILL.md",
+      "label": "ticket? handoff?",
+      "source": "skill:harness-advisor",
+      "target": "state:ticket-handoff",
+      "type": "writes"
+    },
+    {
       "confidence": "curated",
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:harness-creator",
-      "target": "file:farplane/skills/README.md",
+      "target": "file:.agents/skills/README.md",
       "type": "updates"
     },
     {
@@ -570,6 +989,54 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "anti_metrics_named",
+      "source": "skill:horizon-advisor",
+      "target": "gate:anti_metrics_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "current_frontier_expanded_only",
+      "source": "skill:horizon-advisor",
+      "target": "gate:current_frontier_expanded_only",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "execution_handoff_goes_to_goal_advisor",
+      "source": "skill:horizon-advisor",
+      "target": "gate:execution_handoff_goes_to_goal_advisor",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "metrics_have_proof_surfaces",
+      "source": "skill:horizon-advisor",
+      "target": "gate:metrics_have_proof_surfaces",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "north_star_named",
+      "source": "skill:horizon-advisor",
+      "target": "gate:north_star_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "value_function_named",
+      "source": "skill:horizon-advisor",
+      "target": "gate:value_function_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
       "label": "deep-interview",
       "source": "skill:horizon-advisor",
       "target": "skill:deep-interview",
@@ -602,6 +1069,38 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "memory",
+      "source": "skill:horizon-advisor",
+      "target": "state:memory",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "metrics",
+      "source": "skill:horizon-advisor",
+      "target": "state:metrics",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "progress",
+      "source": "skill:horizon-advisor",
+      "target": "state:progress",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "relevant strategy docs",
+      "source": "skill:horizon-advisor",
+      "target": "state:relevant-strategy-docs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
       "label": "tickets",
       "source": "skill:horizon-advisor",
       "target": "ticket:tickets/TASK-*/ticket.md",
@@ -630,6 +1129,70 @@
       "source": "skill:impl-plan",
       "target": "doc:docs/TROUBLES.md",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "approval_before_goal_run",
+      "source": "skill:impl-plan",
+      "target": "gate:approval_before_goal_run",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "code_context_read",
+      "source": "skill:impl-plan",
+      "target": "gate:code_context_read",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "done_proof_concrete",
+      "source": "skill:impl-plan",
+      "target": "gate:done_proof_concrete",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "goal_packet_preview_compiled",
+      "source": "skill:impl-plan",
+      "target": "gate:goal_packet_preview_compiled",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "minimal_plan_challenge_passed",
+      "source": "skill:impl-plan",
+      "target": "gate:minimal_plan_challenge_passed",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "missing_inputs_resolved_or_asked",
+      "source": "skill:impl-plan",
+      "target": "gate:missing_inputs_resolved_or_asked",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "proof_route_named",
+      "source": "skill:impl-plan",
+      "target": "gate:proof_route_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "ticket_surface_exists",
+      "source": "skill:impl-plan",
+      "target": "gate:ticket_surface_exists",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -686,6 +1249,77 @@
       "source": "skill:impl-plan",
       "target": "skill:visual-qa",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "active ticket",
+      "source": "skill:impl-plan",
+      "target": "state:active-ticket",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "approval handoff",
+      "source": "skill:impl-plan",
+      "target": "state:approval-handoff",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "linked PRD/specs/docs",
+      "source": "skill:impl-plan",
+      "target": "state:linked-prd/specs/docs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "optional design.md or Agent Testability Brief",
+      "source": "skill:impl-plan",
+      "target": "state:optional-design.md-or-agent-testability-brief",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "optional design.md recommendation",
+      "source": "skill:impl-plan",
+      "target": "state:optional-design.md-recommendation",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "proof route",
+      "source": "skill:impl-plan",
+      "target": "state:proof-route",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "relevant code",
+      "source": "skill:impl-plan",
+      "target": "state:relevant-code",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "ticket.md updates",
+      "source": "skill:impl-plan",
+      "target": "state:ticket.md-updates",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:.agents/skills/README.md",
+      "type": "writes"
     },
     {
       "confidence": "curated",
@@ -758,11 +1392,52 @@
       "type": "writes"
     },
     {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "existing_files_preserved",
       "source": "skill:init-advisor",
-      "target": "file:farplane/skills/README.md",
-      "type": "writes"
+      "target": "gate:existing_files_preserved",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "human_gates_named",
+      "source": "skill:init-advisor",
+      "target": "gate:human_gates_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "interactive_stack_steps_stop_for_human",
+      "source": "skill:init-advisor",
+      "target": "gate:interactive_stack_steps_stop_for_human",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "no_hidden_automation",
+      "source": "skill:init-advisor",
+      "target": "gate:no_hidden_automation",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "secrets_not_written",
+      "source": "skill:init-advisor",
+      "target": "gate:secrets_not_written",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "spec_version_recorded",
+      "source": "skill:init-advisor",
+      "target": "gate:spec_version_recorded",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -811,6 +1486,70 @@
       "source": "skill:init-advisor",
       "target": "skill:spec-to-ticket",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds",
+      "source": "skill:init-advisor",
+      "target": "state:agents/project_rules/architecture/docs/tickets/qa/farplane-scaffolds",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "and starter PRD ticket",
+      "source": "skill:init-advisor",
+      "target": "state:and-starter-prd-ticket",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "bootstrap brief",
+      "source": "skill:init-advisor",
+      "target": "state:bootstrap-brief",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "existing repo files",
+      "source": "skill:init-advisor",
+      "target": "state:existing-repo-files",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "operator context",
+      "source": "skill:init-advisor",
+      "target": "state:operator-context",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "optional stack scaffold",
+      "source": "skill:init-advisor",
+      "target": "state:optional-stack-scaffold",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "project profile",
+      "source": "skill:init-advisor",
+      "target": "state:project-profile",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/init-advisor/SKILL.md",
+      "label": "README/AGENTS/docs/tickets when present",
+      "source": "skill:init-advisor",
+      "target": "state:readme/agents/docs/tickets",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -887,10 +1626,90 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "farplane/skills/**/SKILL.md?",
+      "label": "configured_refs_merged",
       "source": "skill:interval-update",
-      "target": "file:farplane/skills/**/SKILL.md",
-      "type": "reads"
+      "target": "gate:configured_refs_merged",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "configured_report_workflows_run",
+      "source": "skill:interval-update",
+      "target": "gate:configured_report_workflows_run",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "context_bundle_written_or_summarized",
+      "source": "skill:interval-update",
+      "target": "gate:context_bundle_written_or_summarized",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "cross_interval_refs_resolved_or_gap_labeled",
+      "source": "skill:interval-update",
+      "target": "gate:cross_interval_refs_resolved_or_gap_labeled",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "date_stamped_report_used",
+      "source": "skill:interval-update",
+      "target": "gate:date_stamped_report_used",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "default_refs_resolved",
+      "source": "skill:interval-update",
+      "target": "gate:default_refs_resolved",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "drift_checked",
+      "source": "skill:interval-update",
+      "target": "gate:drift_checked",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "next_window_plan_written",
+      "source": "skill:interval-update",
+      "target": "gate:next_window_plan_written",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "report_written_before_plan_or_goals_mutation",
+      "source": "skill:interval-update",
+      "target": "gate:report_written_before_plan_or_goals_mutation",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "review_window_bound",
+      "source": "skill:interval-update",
+      "target": "gate:review_window_bound",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "side_effect_gates_respected",
+      "source": "skill:interval-update",
+      "target": "gate:side_effect_gates_respected",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -982,6 +1801,30 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": ".agents/skills/**/SKILL.md?",
+      "source": "skill:interval-update",
+      "target": "state:.agents/skills/*/skill.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "optional .farplane/reports/interval/<interval_id>/context/<YYYY-MM-DDTHHMMSSZ>.md",
+      "source": "skill:interval-update",
+      "target": "state:optional-.farplane/reports/interval/<interval_id>/context/<yyyy-mm-ddthhmmssz>.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "worker thread refs when available",
+      "source": "skill:interval-update",
+      "target": "state:worker-thread-refs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
       "label": "tickets/",
       "source": "skill:interval-update",
       "target": "ticket:tickets/TASK-*/ticket.md",
@@ -1001,6 +1844,54 @@
       "source": "skill:knowledge-tidier",
       "target": "file:AGENTS.md",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "no_data_loss",
+      "source": "skill:knowledge-tidier",
+      "target": "gate:no_data_loss",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "owner_checked",
+      "source": "skill:knowledge-tidier",
+      "target": "gate:owner_checked",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "scoring_applied",
+      "source": "skill:knowledge-tidier",
+      "target": "gate:scoring_applied",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "source_preserved",
+      "source": "skill:knowledge-tidier",
+      "target": "gate:source_preserved",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "stale_facts_flagged",
+      "source": "skill:knowledge-tidier",
+      "target": "gate:stale_facts_flagged",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "validators_or_review_run",
+      "source": "skill:knowledge-tidier",
+      "target": "gate:validators_or_review_run",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -1033,6 +1924,86 @@
       "source": "skill:knowledge-tidier",
       "target": "skill:update-memory",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "archive only when preserving exact source rows",
+      "source": "skill:knowledge-tidier",
+      "target": "state:archive-only",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "archive_ref",
+      "source": "skill:knowledge-tidier",
+      "target": "state:archive_ref",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "relevant specs/skills/docs",
+      "source": "skill:knowledge-tidier",
+      "target": "state:relevant-specs/skills/docs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "target_file",
+      "source": "skill:knowledge-tidier",
+      "target": "state:target_file",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "target_file",
+      "source": "skill:knowledge-tidier",
+      "target": "state:target_file",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "feature_grounded",
+      "source": "skill:leverage-advisor",
+      "target": "gate:feature_grounded",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "next_action_executable",
+      "source": "skill:leverage-advisor",
+      "target": "gate:next_action_executable",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "opportunities_ranked",
+      "source": "skill:leverage-advisor",
+      "target": "gate:opportunities_ranked",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "proof_path_named",
+      "source": "skill:leverage-advisor",
+      "target": "gate:proof_path_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "recommendation_named",
+      "source": "skill:leverage-advisor",
+      "target": "gate:recommendation_named",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -1108,6 +2079,62 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "current repo state",
+      "source": "skill:leverage-advisor",
+      "target": "state:current-repo-state",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "feature docs",
+      "source": "skill:leverage-advisor",
+      "target": "state:feature-docs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "feature registry",
+      "source": "skill:leverage-advisor",
+      "target": "state:feature-registry",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "leverage_plan.md? ticket_seed? autoresearch_seed? goal_recommendation?",
+      "source": "skill:leverage-advisor",
+      "target": "state:leverage_plan.md-ticket_seed-autoresearch_seed-goal_recommendation",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "prior proof",
+      "source": "skill:leverage-advisor",
+      "target": "state:prior-proof",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "related skills",
+      "source": "skill:leverage-advisor",
+      "target": "state:related-skills",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
+      "label": "specs",
+      "source": "skill:leverage-advisor",
+      "target": "state:specs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/leverage-advisor/SKILL.md",
       "label": "tickets",
       "source": "skill:leverage-advisor",
       "target": "ticket:tickets/TASK-*/ticket.md",
@@ -1120,6 +2147,62 @@
       "source": "skill:optimize-harness",
       "target": "file:farplane/goals.md",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "accept_hold_or_rollback_named",
+      "source": "skill:optimize-harness",
+      "target": "gate:accept_hold_or_rollback_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "gap_named",
+      "source": "skill:optimize-harness",
+      "target": "gate:gap_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "loss_term_named",
+      "source": "skill:optimize-harness",
+      "target": "gate:loss_term_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "metric_or_reward_signal_named",
+      "source": "skill:optimize-harness",
+      "target": "gate:metric_or_reward_signal_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "owner_surface_named",
+      "source": "skill:optimize-harness",
+      "target": "gate:owner_surface_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "proof_route_named",
+      "source": "skill:optimize-harness",
+      "target": "gate:proof_route_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "review_passes_or_blocked",
+      "source": "skill:optimize-harness",
+      "target": "gate:review_passes_or_blocked",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -1220,10 +2303,170 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "applied_change?",
+      "source": "skill:optimize-harness",
+      "target": "state:applied_change",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "eval_case?",
+      "source": "skill:optimize-harness",
+      "target": "state:eval_case",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "evals",
+      "source": "skill:optimize-harness",
+      "target": "state:evals",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "experiment_artifact?",
+      "source": "skill:optimize-harness",
+      "target": "state:experiment_artifact",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "feature registry",
+      "source": "skill:optimize-harness",
+      "target": "state:feature-registry",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "gap reports",
+      "source": "skill:optimize-harness",
+      "target": "state:gap-reports",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "goals_delta_candidate?",
+      "source": "skill:optimize-harness",
+      "target": "state:goals_delta_candidate",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "harness algebra",
+      "source": "skill:optimize-harness",
+      "target": "state:harness-algebra",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "harness doctrine",
+      "source": "skill:optimize-harness",
+      "target": "state:harness-doctrine",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "interval reports?",
+      "source": "skill:optimize-harness",
+      "target": "state:interval-reports",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "review_receipt?",
+      "source": "skill:optimize-harness",
+      "target": "state:review_receipt",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "skill registry",
+      "source": "skill:optimize-harness",
+      "target": "state:skill-registry",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "target surfaces",
+      "source": "skill:optimize-harness",
+      "target": "state:target-surfaces",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "ticket?",
+      "source": "skill:optimize-harness",
+      "target": "state:ticket",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
       "label": "tickets",
       "source": "skill:optimize-harness",
       "target": "ticket:tickets/TASK-*/ticket.md",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "anti-cheat_reviewed",
+      "source": "skill:proof-advisor",
+      "target": "gate:anti-cheat_reviewed",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "cases_distinct_and_judgeable",
+      "source": "skill:proof-advisor",
+      "target": "gate:cases_distinct_and_judgeable",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "oracle_defined",
+      "source": "skill:proof-advisor",
+      "target": "gate:oracle_defined",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "proof_surface_fit",
+      "source": "skill:proof-advisor",
+      "target": "gate:proof_surface_fit",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "source_material_classified",
+      "source": "skill:proof-advisor",
+      "target": "gate:source_material_classified",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "target_behavior_named",
+      "source": "skill:proof-advisor",
+      "target": "gate:target_behavior_named",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -1292,6 +2535,102 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "case matrix",
+      "source": "skill:proof-advisor",
+      "target": "state:case-matrix",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "eval rows",
+      "source": "skill:proof-advisor",
+      "target": "state:eval-rows",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "eval_task.json files",
+      "source": "skill:proof-advisor",
+      "target": "state:eval_task.json-files",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "existing tests",
+      "source": "skill:proof-advisor",
+      "target": "state:existing-tests",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "external source notes when needed",
+      "source": "skill:proof-advisor",
+      "target": "state:external-source-notes",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "local contracts",
+      "source": "skill:proof-advisor",
+      "target": "state:local-contracts",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "logs/traces/failures",
+      "source": "skill:proof-advisor",
+      "target": "state:logs/traces/failures",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "or handoff notes",
+      "source": "skill:proof-advisor",
+      "target": "state:or-handoff-notes",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "proof plan",
+      "source": "skill:proof-advisor",
+      "target": "state:proof-plan",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "QA checklists",
+      "source": "skill:proof-advisor",
+      "target": "state:qa-checklists",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "QA findings",
+      "source": "skill:proof-advisor",
+      "target": "state:qa-findings",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
+      "label": "test-case drafts",
+      "source": "skill:proof-advisor",
+      "target": "state:test-case-drafts",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/proof-advisor/SKILL.md",
       "label": "tickets/specs",
       "source": "skill:proof-advisor",
       "target": "ticket:tickets/specs",
@@ -1340,10 +2679,74 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "farplane/skills/**/SKILL.md?",
+      "label": "board_loaded",
       "source": "skill:pulse-update",
-      "target": "file:farplane/skills/**/SKILL.md",
-      "type": "reads"
+      "target": "gate:board_loaded",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "decision_recorded",
+      "source": "skill:pulse-update",
+      "target": "gate:decision_recorded",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "default_refs_resolved",
+      "source": "skill:pulse-update",
+      "target": "gate:default_refs_resolved",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "execution_cap_respected",
+      "source": "skill:pulse-update",
+      "target": "gate:execution_cap_respected",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "extensions_merged",
+      "source": "skill:pulse-update",
+      "target": "gate:extensions_merged",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "pm_thread_grouping_updated_when_persistent",
+      "source": "skill:pulse-update",
+      "target": "gate:pm_thread_grouping_updated_when_persistent",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "proceedable_ticket_admission_checked",
+      "source": "skill:pulse-update",
+      "target": "gate:proceedable_ticket_admission_checked",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "rewards_reconciled",
+      "source": "skill:pulse-update",
+      "target": "gate:rewards_reconciled",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "side_effect_gates_respected",
+      "source": "skill:pulse-update",
+      "target": "gate:side_effect_gates_respected",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -1427,6 +2830,14 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": ".agents/skills/**/SKILL.md?",
+      "source": "skill:pulse-update",
+      "target": "state:.agents/skills/*/skill.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
       "label": ".farplane/automation/action-outcomes.jsonl",
       "source": "skill:pulse-update",
       "target": "state:.farplane/automation/action-outcomes.jsonl",
@@ -1490,6 +2901,46 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/qa/SKILL.md",
+      "label": "artifacts_captured",
+      "source": "skill:qa",
+      "target": "gate:artifacts_captured",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "proof_policy_read",
+      "source": "skill:qa",
+      "target": "gate:proof_policy_read",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "ticket_selected",
+      "source": "skill:qa",
+      "target": "gate:ticket_selected",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "ui_work_has_screenshots_or_blocker",
+      "source": "skill:qa",
+      "target": "gate:ui_work_has_screenshots_or_blocker",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "weak_proof_blocks",
+      "source": "skill:qa",
+      "target": "gate:weak_proof_blocks",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
       "label": "qa-tester",
       "source": "skill:qa",
       "target": "route:qa-tester",
@@ -1522,6 +2973,62 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/qa/SKILL.md",
+      "label": "captured artifacts",
+      "source": "skill:qa",
+      "target": "state:captured-artifacts",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "linked specs/docs",
+      "source": "skill:qa",
+      "target": "state:linked-specs/docs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "optional design.md",
+      "source": "skill:qa",
+      "target": "state:optional-design.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "result.json",
+      "source": "skill:qa",
+      "target": "state:result.json",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "runtime handoff",
+      "source": "skill:qa",
+      "target": "state:runtime-handoff",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "ticket State/Links",
+      "source": "skill:qa",
+      "target": "state:ticket-state/links",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
+      "label": "ticket.md",
+      "source": "skill:qa",
+      "target": "state:ticket.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/qa/SKILL.md",
       "label": "tickets/TASK-XXXX/artifacts/qa/<run>/report.md",
       "source": "skill:qa",
       "target": "ticket:tickets/TASK-*/artifacts/",
@@ -1538,10 +3045,106 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/review/SKILL.md",
+      "label": "evidence_inspected",
+      "source": "skill:review",
+      "target": "gate:evidence_inspected",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/review/SKILL.md",
+      "label": "next_action_named",
+      "source": "skill:review",
+      "target": "gate:next_action_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/review/SKILL.md",
+      "label": "rubric_family_named",
+      "source": "skill:review",
+      "target": "gate:rubric_family_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/review/SKILL.md",
+      "label": "TAS_supported",
+      "source": "skill:review",
+      "target": "gate:tas_supported",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/review/SKILL.md",
       "label": "caller-owned",
       "source": "skill:review",
       "target": "route:caller-owned",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/review/SKILL.md",
+      "label": "changed artifacts",
+      "source": "skill:review",
+      "target": "state:changed-artifacts",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/review/SKILL.md",
+      "label": "evidence",
+      "source": "skill:review",
+      "target": "state:evidence",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/review/SKILL.md",
+      "label": "review artifact?",
+      "source": "skill:review",
+      "target": "state:review-artifact",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/review/SKILL.md",
+      "label": "task context",
+      "source": "skill:review",
+      "target": "state:task-context",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "proof_or_blocker_named",
+      "source": "skill:skill-creator",
+      "target": "gate:proof_or_blocker_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "review_ready",
+      "source": "skill:skill-creator",
+      "target": "gate:review_ready",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "template_structure_valid",
+      "source": "skill:skill-creator",
+      "target": "gate:template_structure_valid",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "trigger_stable",
+      "source": "skill:skill-creator",
+      "target": "gate:trigger_stable",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -1593,6 +3196,70 @@
     },
     {
       "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "references?",
+      "source": "skill:skill-creator",
+      "target": "state:references",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "registry",
+      "source": "skill:skill-creator",
+      "target": "state:registry",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "registry?",
+      "source": "skill:skill-creator",
+      "target": "state:registry",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "scripts?",
+      "source": "skill:skill-creator",
+      "target": "state:scripts",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "skill-system docs",
+      "source": "skill:skill-creator",
+      "target": "state:skill-system-docs",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "SKILL.md",
+      "source": "skill:skill-creator",
+      "target": "state:skill.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "target skill",
+      "source": "skill:skill-creator",
+      "target": "state:target-skill",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-creator/SKILL.md",
+      "label": "template",
+      "source": "skill:skill-creator",
+      "target": "state:template",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
       "evidence_ref": "skills/skill-maintenance/SKILL.md",
       "label": "docs/LESSONS.md?",
       "source": "skill:skill-maintenance",
@@ -1622,6 +3289,86 @@
       "source": "skill:skill-maintenance",
       "target": "doc:docs/skills/registry.jsonl",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "audit_or_skip_recorded",
+      "source": "skill:skill-maintenance",
+      "target": "gate:audit_or_skip_recorded",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "behavior_delta_named",
+      "source": "skill:skill-maintenance",
+      "target": "gate:behavior_delta_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "check_skills_passed",
+      "source": "skill:skill-maintenance",
+      "target": "gate:check_skills_passed",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "eval_guardrails_synced_or_skipped",
+      "source": "skill:skill-maintenance",
+      "target": "gate:eval_guardrails_synced_or_skipped",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "first_load_executable",
+      "source": "skill:skill-maintenance",
+      "target": "gate:first_load_executable",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "owner_surface_clear",
+      "source": "skill:skill-maintenance",
+      "target": "gate:owner_surface_clear",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "registry_synced",
+      "source": "skill:skill-maintenance",
+      "target": "gate:registry_synced",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "reviewer_routed_when_material",
+      "source": "skill:skill-maintenance",
+      "target": "gate:reviewer_routed_when_material",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "source_owner_preserved",
+      "source": "skill:skill-maintenance",
+      "target": "gate:source_owner_preserved",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "template_version_truthful",
+      "source": "skill:skill-maintenance",
+      "target": "gate:template_version_truthful",
+      "type": "guards"
     },
     {
       "confidence": "parsed",
@@ -1690,6 +3437,126 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "edited_skill.eval_task?",
+      "source": "skill:skill-maintenance",
+      "target": "state:edited_skill.eval_task",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "edited_skill.eval_task?",
+      "source": "skill:skill-maintenance",
+      "target": "state:edited_skill.eval_task",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "edited_skill.qa_checklist?",
+      "source": "skill:skill-maintenance",
+      "target": "state:edited_skill.qa_checklist",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "edited_skill.qa_checklist?",
+      "source": "skill:skill-maintenance",
+      "target": "state:edited_skill.qa_checklist",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "edited_skill.references?",
+      "source": "skill:skill-maintenance",
+      "target": "state:edited_skill.references",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "edited_skill.references?",
+      "source": "skill:skill-maintenance",
+      "target": "state:edited_skill.references",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "edited_skill.SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "state:edited_skill.skill.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "edited_skill.SKILL.md?",
+      "source": "skill:skill-maintenance",
+      "target": "state:edited_skill.skill.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "interval_reports?",
+      "source": "skill:skill-maintenance",
+      "target": "state:interval_reports",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "optional .farplane/state/skill-maintenance/processed-learning.jsonl",
+      "source": "skill:skill-maintenance",
+      "target": "state:optional-.farplane/state/skill-maintenance/processed-learning.jsonl",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "prior_audits?",
+      "source": "skill:skill-maintenance",
+      "target": "state:prior_audits",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "pulse_reports?",
+      "source": "skill:skill-maintenance",
+      "target": "state:pulse_reports",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "reviewer_receipts?",
+      "source": "skill:skill-maintenance",
+      "target": "state:reviewer_receipts",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "run_artifacts?",
+      "source": "skill:skill-maintenance",
+      "target": "state:run_artifacts",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "skill-local audit?",
+      "source": "skill:skill-maintenance",
+      "target": "state:skill-local-audit",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
       "label": "tickets/**/progress.md?",
       "source": "skill:skill-maintenance",
       "target": "ticket:tickets/**/progress.md",
@@ -1745,6 +3612,54 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "docs_owner_identified",
+      "source": "skill:update-memory",
+      "target": "gate:docs_owner_identified",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "no_raw_transcripts",
+      "source": "skill:update-memory",
+      "target": "gate:no_raw_transcripts",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "promotion_threshold_named",
+      "source": "skill:update-memory",
+      "target": "gate:promotion_threshold_named",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "skill_hardening_routed_out",
+      "source": "skill:update-memory",
+      "target": "gate:skill_hardening_routed_out",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "source_files_read",
+      "source": "skill:update-memory",
+      "target": "gate:source_files_read",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "stale_context_labeled",
+      "source": "skill:update-memory",
+      "target": "gate:stale_context_labeled",
+      "type": "guards"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
       "label": "ticket/spec owner",
       "source": "skill:update-memory",
       "target": "route:ticket/spec-owner",
@@ -1773,6 +3688,30 @@
       "source": "skill:update-memory",
       "target": "skill:skill-maintenance",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "docs only when an owning project path and approval are explicit",
+      "source": "skill:update-memory",
+      "target": "state:docs-only",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "README",
+      "source": "skill:update-memory",
+      "target": "state:readme",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "tickets/progress/PM reports",
+      "source": "skill:update-memory",
+      "target": "state:tickets/progress/pm-reports",
+      "type": "reads"
     },
     {
       "confidence": "curated",
@@ -2171,7 +4110,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-25T17:12:01+00:00",
+  "generated_at": "2026-06-25T18:00:50+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",
@@ -2348,6 +4287,17 @@
       ]
     },
     {
+      "id": "file:.agents/skills/README.md",
+      "kind": "file",
+      "label": "Local product skill home",
+      "path": ".agents/skills/README.md",
+      "tags": [
+        "agents",
+        "skills",
+        "tracked-config"
+      ]
+    },
+    {
       "id": "file:AGENTS.md",
       "kind": "file",
       "label": "Project operating policy",
@@ -2481,26 +4431,6 @@
       ]
     },
     {
-      "id": "file:farplane/skills/**/SKILL.md",
-      "kind": "file",
-      "label": "farplane/skills/**/SKILL.md",
-      "path": "farplane/skills/**/SKILL.md",
-      "tags": [
-        "parsed"
-      ]
-    },
-    {
-      "id": "file:farplane/skills/README.md",
-      "kind": "file",
-      "label": "Local product skill home",
-      "path": "farplane/skills/README.md",
-      "tags": [
-        "farplane",
-        "skills",
-        "tracked-config"
-      ]
-    },
-    {
       "id": "file:hooks.json",
       "kind": "file",
       "label": "Codex hook config",
@@ -2544,6 +4474,1294 @@
       "path": "skills/pulse-update/SKILL.md",
       "tags": [
         "parsed"
+      ]
+    },
+    {
+      "id": "fsa:automation_activation:automation-prompts-reviewed",
+      "kind": "fsa_state",
+      "label": "automation prompts reviewed",
+      "tags": [
+        "automation_activation",
+        "fsa"
+      ]
+    },
+    {
+      "id": "fsa:automation_activation:daily-interval-cron-created",
+      "kind": "fsa_state",
+      "label": "daily interval cron created",
+      "tags": [
+        "automation_activation",
+        "fsa"
+      ]
+    },
+    {
+      "id": "fsa:automation_activation:pm-json-grouped",
+      "kind": "fsa_state",
+      "label": "pm json grouped",
+      "tags": [
+        "automation_activation",
+        "fsa"
+      ]
+    },
+    {
+      "id": "fsa:automation_activation:pulse-heartbeat-attached",
+      "kind": "fsa_state",
+      "label": "pulse heartbeat attached",
+      "tags": [
+        "automation_activation",
+        "fsa"
+      ]
+    },
+    {
+      "id": "fsa:automation_activation:pulse-thread-created",
+      "kind": "fsa_state",
+      "label": "pulse thread created",
+      "tags": [
+        "automation_activation",
+        "fsa"
+      ]
+    },
+    {
+      "id": "fsa:automation_activation:weekly-interval-cron-created",
+      "kind": "fsa_state",
+      "label": "weekly interval cron created",
+      "tags": [
+        "automation_activation",
+        "fsa"
+      ]
+    },
+    {
+      "id": "fsa:memory_drain_upkeep:drain-window-selected",
+      "kind": "fsa_state",
+      "label": "drain window selected",
+      "tags": [
+        "fsa",
+        "memory_drain_upkeep"
+      ]
+    },
+    {
+      "id": "fsa:memory_drain_upkeep:eval-or-review-evidence-recorded",
+      "kind": "fsa_state",
+      "label": "eval or review evidence recorded",
+      "tags": [
+        "fsa",
+        "memory_drain_upkeep"
+      ]
+    },
+    {
+      "id": "fsa:memory_drain_upkeep:memory-or-docs-updated",
+      "kind": "fsa_state",
+      "label": "memory or docs updated",
+      "tags": [
+        "fsa",
+        "memory_drain_upkeep"
+      ]
+    },
+    {
+      "id": "fsa:memory_drain_upkeep:owner-surfaces-chosen",
+      "kind": "fsa_state",
+      "label": "owner surfaces chosen",
+      "tags": [
+        "fsa",
+        "memory_drain_upkeep"
+      ]
+    },
+    {
+      "id": "fsa:memory_drain_upkeep:processed-state-written",
+      "kind": "fsa_state",
+      "label": "processed state written",
+      "tags": [
+        "fsa",
+        "memory_drain_upkeep"
+      ]
+    },
+    {
+      "id": "fsa:memory_drain_upkeep:raw-signals-accumulated",
+      "kind": "fsa_state",
+      "label": "raw signals accumulated",
+      "tags": [
+        "fsa",
+        "memory_drain_upkeep"
+      ]
+    },
+    {
+      "id": "fsa:memory_drain_upkeep:rows-deduped-and-scored",
+      "kind": "fsa_state",
+      "label": "rows deduped and scored",
+      "tags": [
+        "fsa",
+        "memory_drain_upkeep"
+      ]
+    },
+    {
+      "id": "fsa:memory_drain_upkeep:skill-hardening-routed",
+      "kind": "fsa_state",
+      "label": "skill hardening routed",
+      "tags": [
+        "fsa",
+        "memory_drain_upkeep"
+      ]
+    },
+    {
+      "id": "fsa:project_initialization:framework-config-written",
+      "kind": "fsa_state",
+      "label": "framework config written",
+      "tags": [
+        "fsa",
+        "project_initialization"
+      ]
+    },
+    {
+      "id": "fsa:project_initialization:goal-advisor-handoff-ready",
+      "kind": "fsa_state",
+      "label": "goal advisor handoff ready",
+      "tags": [
+        "fsa",
+        "project_initialization"
+      ]
+    },
+    {
+      "id": "fsa:project_initialization:horizon-goals-shaped",
+      "kind": "fsa_state",
+      "label": "horizon goals shaped",
+      "tags": [
+        "fsa",
+        "project_initialization"
+      ]
+    },
+    {
+      "id": "fsa:project_initialization:init-advisor-target-bound",
+      "kind": "fsa_state",
+      "label": "init advisor target bound",
+      "tags": [
+        "fsa",
+        "project_initialization"
+      ]
+    },
+    {
+      "id": "fsa:project_initialization:operator-intent",
+      "kind": "fsa_state",
+      "label": "operator intent",
+      "tags": [
+        "fsa",
+        "project_initialization"
+      ]
+    },
+    {
+      "id": "fsa:project_initialization:project-substrate-written",
+      "kind": "fsa_state",
+      "label": "project substrate written",
+      "tags": [
+        "fsa",
+        "project_initialization"
+      ]
+    },
+    {
+      "id": "fsa:project_initialization:readiness-audited",
+      "kind": "fsa_state",
+      "label": "readiness audited",
+      "tags": [
+        "fsa",
+        "project_initialization"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:goal-advisor-handoff-compiled",
+      "kind": "fsa_state",
+      "label": "goal advisor handoff compiled",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:goals-delta-classified",
+      "kind": "fsa_state",
+      "label": "goals delta classified",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:horizon-delta-applied",
+      "kind": "fsa_state",
+      "label": "horizon delta applied",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:leverage-bets-scored",
+      "kind": "fsa_state",
+      "label": "leverage bets scored",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:next-weekly-review-reads-outcomes",
+      "kind": "fsa_state",
+      "label": "next weekly review reads outcomes",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:operator-approval-or-source-gap-recorded",
+      "kind": "fsa_state",
+      "label": "operator approval or source gap recorded",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:proof-route-selected",
+      "kind": "fsa_state",
+      "label": "proof route selected",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:pulse-executes-bounded-work",
+      "kind": "fsa_state",
+      "label": "pulse executes bounded work",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:reward-signal-recorded",
+      "kind": "fsa_state",
+      "label": "reward signal recorded",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:self_update_loop:weekly-report-written",
+      "kind": "fsa_state",
+      "label": "weekly report written",
+      "tags": [
+        "fsa",
+        "self_update_loop"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:build-executed",
+      "kind": "fsa_state",
+      "label": "build executed",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:demo-proof-captured",
+      "kind": "fsa_state",
+      "label": "demo proof captured",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:goal-packet-written",
+      "kind": "fsa_state",
+      "label": "goal packet written",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:implementation-plan-prepared",
+      "kind": "fsa_state",
+      "label": "implementation plan prepared",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:native-goal-started",
+      "kind": "fsa_state",
+      "label": "native goal started",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:qa-proof-captured",
+      "kind": "fsa_state",
+      "label": "qa proof captured",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:review-passed",
+      "kind": "fsa_state",
+      "label": "review passed",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:ticket-closed-out",
+      "kind": "fsa_state",
+      "label": "ticket closed out",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "fsa:ticket_goal_execution:ticket-selected",
+      "kind": "fsa_state",
+      "label": "ticket selected",
+      "tags": [
+        "fsa",
+        "ticket_goal_execution"
+      ]
+    },
+    {
+      "id": "gate:accept_hold_or_rollback_named",
+      "kind": "gate",
+      "label": "accept_hold_or_rollback_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:anti-cheat_reviewed",
+      "kind": "gate",
+      "label": "anti-cheat_reviewed",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:anti_metrics_named",
+      "kind": "gate",
+      "label": "anti_metrics_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:approval_before_goal_run",
+      "kind": "gate",
+      "label": "approval_before_goal_run",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:approval_before_goal_run_when_material",
+      "kind": "gate",
+      "label": "approval_before_goal_run_when_material",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:artifacts_captured",
+      "kind": "gate",
+      "label": "artifacts_captured",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:audit_or_skip_recorded",
+      "kind": "gate",
+      "label": "audit_or_skip_recorded",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:baseline_before_mutation",
+      "kind": "gate",
+      "label": "baseline_before_mutation",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:behavior_delta_named",
+      "kind": "gate",
+      "label": "behavior_delta_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:board_loaded",
+      "kind": "gate",
+      "label": "board_loaded",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:budget_named",
+      "kind": "gate",
+      "label": "budget_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:cadence_named",
+      "kind": "gate",
+      "label": "cadence_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:cases_distinct_and_judgeable",
+      "kind": "gate",
+      "label": "cases_distinct_and_judgeable",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:check_skills_passed",
+      "kind": "gate",
+      "label": "check_skills_passed",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:code_context_read",
+      "kind": "gate",
+      "label": "code_context_read",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:configured_refs_merged",
+      "kind": "gate",
+      "label": "configured_refs_merged",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:configured_report_workflows_run",
+      "kind": "gate",
+      "label": "configured_report_workflows_run",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:context_bundle_written_or_summarized",
+      "kind": "gate",
+      "label": "context_bundle_written_or_summarized",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:cross_interval_refs_resolved_or_gap_labeled",
+      "kind": "gate",
+      "label": "cross_interval_refs_resolved_or_gap_labeled",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:current_frontier_expanded_only",
+      "kind": "gate",
+      "label": "current_frontier_expanded_only",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:date_stamped_report_used",
+      "kind": "gate",
+      "label": "date_stamped_report_used",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:dated_report_path_used",
+      "kind": "gate",
+      "label": "dated_report_path_used",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:decision_recorded",
+      "kind": "gate",
+      "label": "decision_recorded",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:default_refs_resolved",
+      "kind": "gate",
+      "label": "default_refs_resolved",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:docs_owner_identified",
+      "kind": "gate",
+      "label": "docs_owner_identified",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:done_proof_concrete",
+      "kind": "gate",
+      "label": "done_proof_concrete",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:drift_checked",
+      "kind": "gate",
+      "label": "drift_checked",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:drift_policy_named",
+      "kind": "gate",
+      "label": "drift_policy_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:eval_guardrails_synced_or_skipped",
+      "kind": "gate",
+      "label": "eval_guardrails_synced_or_skipped",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:evidence_inspected",
+      "kind": "gate",
+      "label": "evidence_inspected",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:evidence_inspected_before_claim",
+      "kind": "gate",
+      "label": "evidence_inspected_before_claim",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:execution_cap_respected",
+      "kind": "gate",
+      "label": "execution_cap_respected",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:execution_handoff_goes_to_goal_advisor",
+      "kind": "gate",
+      "label": "execution_handoff_goes_to_goal_advisor",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:existing_files_preserved",
+      "kind": "gate",
+      "label": "existing_files_preserved",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:expected_behavior-testable",
+      "kind": "gate",
+      "label": "expected_behavior:testable",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:extensions_merged",
+      "kind": "gate",
+      "label": "extensions_merged",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:failure_named",
+      "kind": "gate",
+      "label": "failure_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:feature_grounded",
+      "kind": "gate",
+      "label": "feature_grounded",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:final_evidence_policy_named",
+      "kind": "gate",
+      "label": "final_evidence_policy_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:first_load_executable",
+      "kind": "gate",
+      "label": "first_load_executable",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:gap_named",
+      "kind": "gate",
+      "label": "gap_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:goal_packet_preview_compiled",
+      "kind": "gate",
+      "label": "goal_packet_preview_compiled",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:hardcase-sanitized_and_reusable",
+      "kind": "gate",
+      "label": "hardcase:sanitized_and_reusable",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:human_gates_named",
+      "kind": "gate",
+      "label": "human_gates_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:interactive_stack_steps_stop_for_human",
+      "kind": "gate",
+      "label": "interactive_stack_steps_stop_for_human",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:logging_policy_named",
+      "kind": "gate",
+      "label": "logging_policy_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:loop_choice_made",
+      "kind": "gate",
+      "label": "loop_choice_made",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:loop_owner_single",
+      "kind": "gate",
+      "label": "loop_owner_single",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:loss_term_named",
+      "kind": "gate",
+      "label": "loss_term_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:material_goal_has_files",
+      "kind": "gate",
+      "label": "material_goal_has_files",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:metric_or_reward_signal_named",
+      "kind": "gate",
+      "label": "metric_or_reward_signal_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:metric_provider_named",
+      "kind": "gate",
+      "label": "metric_provider_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:metrics_have_proof_surfaces",
+      "kind": "gate",
+      "label": "metrics_have_proof_surfaces",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:minimal_plan_challenge_passed",
+      "kind": "gate",
+      "label": "minimal_plan_challenge_passed",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:missing_execution_inputs_resolved_or_asked",
+      "kind": "gate",
+      "label": "missing_execution_inputs_resolved_or_asked",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:missing_inputs_resolved_or_asked",
+      "kind": "gate",
+      "label": "missing_inputs_resolved_or_asked",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:next_action_executable",
+      "kind": "gate",
+      "label": "next_action_executable",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:next_action_named",
+      "kind": "gate",
+      "label": "next_action_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:next_window_plan_written",
+      "kind": "gate",
+      "label": "next_window_plan_written",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:no_data_loss",
+      "kind": "gate",
+      "label": "no_data_loss",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:no_hidden_automation",
+      "kind": "gate",
+      "label": "no_hidden_automation",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:no_hidden_scheduler_config",
+      "kind": "gate",
+      "label": "no_hidden_scheduler_config",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:no_lane_manifest_required",
+      "kind": "gate",
+      "label": "no_lane_manifest_required",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:no_raw_transcripts",
+      "kind": "gate",
+      "label": "no_raw_transcripts",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:north_star_named",
+      "kind": "gate",
+      "label": "north_star_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:opportunities_ranked",
+      "kind": "gate",
+      "label": "opportunities_ranked",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:oracle_defined",
+      "kind": "gate",
+      "label": "oracle_defined",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:owner_checked",
+      "kind": "gate",
+      "label": "owner_checked",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:owner_surface-named",
+      "kind": "gate",
+      "label": "owner_surface:named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:owner_surface_clear",
+      "kind": "gate",
+      "label": "owner_surface_clear",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:owner_surface_named",
+      "kind": "gate",
+      "label": "owner_surface_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:pm_thread_grouping_updated_when_persistent",
+      "kind": "gate",
+      "label": "pm_thread_grouping_updated_when_persistent",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:proceedable_ticket_admission_checked",
+      "kind": "gate",
+      "label": "proceedable_ticket_admission_checked",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:progress_surface_named",
+      "kind": "gate",
+      "label": "progress_surface_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:promotion_threshold_named",
+      "kind": "gate",
+      "label": "promotion_threshold_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:prompt_calls_skill_plainly",
+      "kind": "gate",
+      "label": "prompt_calls_skill_plainly",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:proof_or_blocker_named",
+      "kind": "gate",
+      "label": "proof_or_blocker_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:proof_path-named",
+      "kind": "gate",
+      "label": "proof_path:named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:proof_path_named",
+      "kind": "gate",
+      "label": "proof_path_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:proof_policy_read",
+      "kind": "gate",
+      "label": "proof_policy_read",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:proof_route_named",
+      "kind": "gate",
+      "label": "proof_route_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:proof_surface_fit",
+      "kind": "gate",
+      "label": "proof_surface_fit",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:query_not_spoiled",
+      "kind": "gate",
+      "label": "query_not_spoiled",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:recommendation_named",
+      "kind": "gate",
+      "label": "recommendation_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:registry_synced",
+      "kind": "gate",
+      "label": "registry_synced",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:rejected_surfaces-named",
+      "kind": "gate",
+      "label": "rejected_surfaces:named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:report_written_before_plan_or_goals_mutation",
+      "kind": "gate",
+      "label": "report_written_before_plan_or_goals_mutation",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:review_passes_or_blocked",
+      "kind": "gate",
+      "label": "review_passes_or_blocked",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:review_ready",
+      "kind": "gate",
+      "label": "review_ready",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:review_window_bound",
+      "kind": "gate",
+      "label": "review_window_bound",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:reviewer_routed_when_material",
+      "kind": "gate",
+      "label": "reviewer_routed_when_material",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:rewards_reconciled",
+      "kind": "gate",
+      "label": "rewards_reconciled",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:rubric_family_named",
+      "kind": "gate",
+      "label": "rubric_family_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:scoring_applied",
+      "kind": "gate",
+      "label": "scoring_applied",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:secrets_not_written",
+      "kind": "gate",
+      "label": "secrets_not_written",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:side_effect_gates_named",
+      "kind": "gate",
+      "label": "side_effect_gates_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:side_effect_gates_respected",
+      "kind": "gate",
+      "label": "side_effect_gates_respected",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:skill_hardening_routed_out",
+      "kind": "gate",
+      "label": "skill_hardening_routed_out",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:source_files_read",
+      "kind": "gate",
+      "label": "source_files_read",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:source_material_classified",
+      "kind": "gate",
+      "label": "source_material_classified",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:source_owner_preserved",
+      "kind": "gate",
+      "label": "source_owner_preserved",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:source_preserved",
+      "kind": "gate",
+      "label": "source_preserved",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:spec_version_recorded",
+      "kind": "gate",
+      "label": "spec_version_recorded",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:stale_context_labeled",
+      "kind": "gate",
+      "label": "stale_context_labeled",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:stale_facts_flagged",
+      "kind": "gate",
+      "label": "stale_facts_flagged",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:target_behavior_named",
+      "kind": "gate",
+      "label": "target_behavior_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:tas_supported",
+      "kind": "gate",
+      "label": "TAS_supported",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:template_structure_valid",
+      "kind": "gate",
+      "label": "template_structure_valid",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:template_version_truthful",
+      "kind": "gate",
+      "label": "template_version_truthful",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:ticket_selected",
+      "kind": "gate",
+      "label": "ticket_selected",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:ticket_surface_exists",
+      "kind": "gate",
+      "label": "ticket_surface_exists",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:trigger_stable",
+      "kind": "gate",
+      "label": "trigger_stable",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:ui_work_has_screenshots_or_blocker",
+      "kind": "gate",
+      "label": "ui_work_has_screenshots_or_blocker",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:validators_or_review_run",
+      "kind": "gate",
+      "label": "validators_or_review_run",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:value_function_named",
+      "kind": "gate",
+      "label": "value_function_named",
+      "tags": [
+        "gate"
+      ]
+    },
+    {
+      "id": "gate:weak_proof_blocks",
+      "kind": "gate",
+      "label": "weak_proof_blocks",
+      "tags": [
+        "gate"
       ]
     },
     {
@@ -3132,6 +6350,15 @@
       ]
     },
     {
+      "id": "state:.agents/skills/*/skill.md",
+      "kind": "state",
+      "label": ".agents/skills/**/SKILL.md",
+      "path": ".agents/skills/*/skill.md",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
       "id": "state:.farplane/automation/action-outcomes.jsonl",
       "kind": "state",
       "label": "Pulse action outcomes",
@@ -3187,6 +6414,1005 @@
       "path": ".farplane/state/run-ledger.json",
       "tags": [
         "runtime"
+      ]
+    },
+    {
+      "id": "state:active-ticket",
+      "kind": "state",
+      "label": "active ticket",
+      "path": "active-ticket",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:agents/project_rules/architecture/docs/tickets/qa/farplane-scaffolds",
+      "kind": "state",
+      "label": "AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds",
+      "path": "agents/project_rules/architecture/docs/tickets/qa/farplane-scaffolds",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:and-starter-prd-ticket",
+      "kind": "state",
+      "label": "and starter PRD ticket",
+      "path": "and-starter-prd-ticket",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:applied_change",
+      "kind": "state",
+      "label": "applied_change",
+      "path": "applied_change",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:approval-handoff",
+      "kind": "state",
+      "label": "approval handoff",
+      "path": "approval-handoff",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:archive-only",
+      "kind": "state",
+      "label": "archive only when preserving exact source rows",
+      "path": "archive-only",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:archive_ref",
+      "kind": "state",
+      "label": "archive_ref",
+      "path": "archive_ref",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:board-files",
+      "kind": "state",
+      "label": "board files",
+      "path": "board-files",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:bootstrap-brief",
+      "kind": "state",
+      "label": "bootstrap brief",
+      "path": "bootstrap-brief",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:captured-artifacts",
+      "kind": "state",
+      "label": "captured artifacts",
+      "path": "captured-artifacts",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:case-matrix",
+      "kind": "state",
+      "label": "case matrix",
+      "path": "case-matrix",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:changed-artifacts",
+      "kind": "state",
+      "label": "changed artifacts",
+      "path": "changed-artifacts",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:consolidation-reports",
+      "kind": "state",
+      "label": "consolidation reports",
+      "path": "consolidation-reports",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:current-repo-state",
+      "kind": "state",
+      "label": "current repo state",
+      "path": "current-repo-state",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:docs-only",
+      "kind": "state",
+      "label": "docs only when an owning project path and approval are explicit",
+      "path": "docs-only",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:edited_skill.eval_task",
+      "kind": "state",
+      "label": "edited_skill.eval_task",
+      "path": "edited_skill.eval_task",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:edited_skill.qa_checklist",
+      "kind": "state",
+      "label": "edited_skill.qa_checklist",
+      "path": "edited_skill.qa_checklist",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:edited_skill.references",
+      "kind": "state",
+      "label": "edited_skill.references",
+      "path": "edited_skill.references",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:edited_skill.skill.md",
+      "kind": "state",
+      "label": "edited_skill.SKILL.md",
+      "path": "edited_skill.skill.md",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:eval-drain-processed-state",
+      "kind": "state",
+      "label": "eval-drain processed state",
+      "path": "eval-drain-processed-state",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:eval-rows",
+      "kind": "state",
+      "label": "eval rows",
+      "path": "eval-rows",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:eval-tasks",
+      "kind": "state",
+      "label": "eval tasks",
+      "path": "eval-tasks",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:eval_case",
+      "kind": "state",
+      "label": "eval_case",
+      "path": "eval_case",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:eval_task.json-files",
+      "kind": "state",
+      "label": "eval_task.json files",
+      "path": "eval_task.json-files",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:evals",
+      "kind": "state",
+      "label": "evals",
+      "path": "evals",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:evidence",
+      "kind": "state",
+      "label": "evidence",
+      "path": "evidence",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:existing-evals",
+      "kind": "state",
+      "label": "existing evals",
+      "path": "existing-evals",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:existing-repo-files",
+      "kind": "state",
+      "label": "existing repo files",
+      "path": "existing-repo-files",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:existing-tests",
+      "kind": "state",
+      "label": "existing tests",
+      "path": "existing-tests",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:expected-behavior",
+      "kind": "state",
+      "label": "expected behavior",
+      "path": "expected-behavior",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:experiment_artifact",
+      "kind": "state",
+      "label": "experiment_artifact",
+      "path": "experiment_artifact",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:external-source-notes",
+      "kind": "state",
+      "label": "external source notes when needed",
+      "path": "external-source-notes",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:feature-docs",
+      "kind": "state",
+      "label": "feature docs",
+      "path": "feature-docs",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:feature-registry",
+      "kind": "state",
+      "label": "feature registry",
+      "path": "feature-registry",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:fixtures",
+      "kind": "state",
+      "label": "fixtures",
+      "path": "fixtures",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:gap-reports",
+      "kind": "state",
+      "label": "gap reports",
+      "path": "gap-reports",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:goal-loop-contract",
+      "kind": "state",
+      "label": "goal-loop contract",
+      "path": "goal-loop-contract",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:goals_delta_candidate",
+      "kind": "state",
+      "label": "goals_delta_candidate",
+      "path": "goals_delta_candidate",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:hardcase-metadata",
+      "kind": "state",
+      "label": "hardcase metadata",
+      "path": "hardcase-metadata",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:harness-algebra",
+      "kind": "state",
+      "label": "harness algebra",
+      "path": "harness-algebra",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:harness-doctrine",
+      "kind": "state",
+      "label": "harness doctrine",
+      "path": "harness-doctrine",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:interval-reports",
+      "kind": "state",
+      "label": "interval reports",
+      "path": "interval-reports",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:interval_reports",
+      "kind": "state",
+      "label": "interval_reports",
+      "path": "interval_reports",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:leverage_plan.md-ticket_seed-autoresearch_seed-goal_recommendation",
+      "kind": "state",
+      "label": "leverage_plan.md? ticket_seed? autoresearch_seed? goal_recommendation",
+      "path": "leverage_plan.md-ticket_seed-autoresearch_seed-goal_recommendation",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:linked-prd/specs/docs",
+      "kind": "state",
+      "label": "linked PRD/specs/docs",
+      "path": "linked-prd/specs/docs",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:linked-specs/docs",
+      "kind": "state",
+      "label": "linked specs/docs",
+      "path": "linked-specs/docs",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:listed-files",
+      "kind": "state",
+      "label": "listed files",
+      "path": "listed-files",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:local-contracts",
+      "kind": "state",
+      "label": "local contracts",
+      "path": "local-contracts",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:logs/traces/failures",
+      "kind": "state",
+      "label": "logs/traces/failures",
+      "path": "logs/traces/failures",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:memory",
+      "kind": "state",
+      "label": "memory",
+      "path": "memory",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:metrics",
+      "kind": "state",
+      "label": "metrics",
+      "path": "metrics",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:operator-context",
+      "kind": "state",
+      "label": "operator context",
+      "path": "operator-context",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:operator-intent",
+      "kind": "state",
+      "label": "operator intent",
+      "path": "operator-intent",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:optional-.farplane/reports/interval/<interval_id>/context/<yyyy-mm-ddthhmmssz>.md",
+      "kind": "state",
+      "label": "optional .farplane/reports/interval/<interval_id>/context/<YYYY-MM-DDTHHMMSSZ>.md",
+      "path": "optional-.farplane/reports/interval/<interval_id>/context/<yyyy-mm-ddthhmmssz>.md",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:optional-.farplane/state/skill-maintenance/processed-learning.jsonl",
+      "kind": "state",
+      "label": "optional .farplane/state/skill-maintenance/processed-learning.jsonl",
+      "path": "optional-.farplane/state/skill-maintenance/processed-learning.jsonl",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:optional-design.md",
+      "kind": "state",
+      "label": "optional design.md",
+      "path": "optional-design.md",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:optional-design.md-or-agent-testability-brief",
+      "kind": "state",
+      "label": "optional design.md or Agent Testability Brief",
+      "path": "optional-design.md-or-agent-testability-brief",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:optional-design.md-recommendation",
+      "kind": "state",
+      "label": "optional design.md recommendation",
+      "path": "optional-design.md-recommendation",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:optional-stack-scaffold",
+      "kind": "state",
+      "label": "optional stack scaffold",
+      "path": "optional-stack-scaffold",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:or-handoff-notes",
+      "kind": "state",
+      "label": "or handoff notes",
+      "path": "or-handoff-notes",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:prior-proof",
+      "kind": "state",
+      "label": "prior proof",
+      "path": "prior-proof",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:prior_audits",
+      "kind": "state",
+      "label": "prior_audits",
+      "path": "prior_audits",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:processed-state",
+      "kind": "state",
+      "label": "processed state",
+      "path": "processed-state",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:program.md",
+      "kind": "state",
+      "label": "program.md",
+      "path": "program.md",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:progress",
+      "kind": "state",
+      "label": "progress",
+      "path": "progress",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:progress.md",
+      "kind": "state",
+      "label": "progress.md",
+      "path": "progress.md",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:project-profile",
+      "kind": "state",
+      "label": "project profile",
+      "path": "project-profile",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:proof-plan",
+      "kind": "state",
+      "label": "proof plan",
+      "path": "proof-plan",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:proof-route",
+      "kind": "state",
+      "label": "proof route",
+      "path": "proof-route",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:pulse_reports",
+      "kind": "state",
+      "label": "pulse_reports",
+      "path": "pulse_reports",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:qa-checklists",
+      "kind": "state",
+      "label": "QA checklists",
+      "path": "qa-checklists",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:qa-findings",
+      "kind": "state",
+      "label": "QA findings",
+      "path": "qa-findings",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:qa_checklist",
+      "kind": "state",
+      "label": "qa_checklist",
+      "path": "qa_checklist",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:readme",
+      "kind": "state",
+      "label": "README",
+      "path": "readme",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:readme/agents/docs/tickets",
+      "kind": "state",
+      "label": "README/AGENTS/docs/tickets when present",
+      "path": "readme/agents/docs/tickets",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:references",
+      "kind": "state",
+      "label": "references",
+      "path": "references",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:registry",
+      "kind": "state",
+      "label": "registry",
+      "path": "registry",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:related-skills",
+      "kind": "state",
+      "label": "related skills",
+      "path": "related-skills",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:relevant-code",
+      "kind": "state",
+      "label": "relevant code",
+      "path": "relevant-code",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:relevant-skills/docs",
+      "kind": "state",
+      "label": "relevant skills/docs",
+      "path": "relevant-skills/docs",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:relevant-specs/skills/docs",
+      "kind": "state",
+      "label": "relevant specs/skills/docs",
+      "path": "relevant-specs/skills/docs",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:relevant-strategy-docs",
+      "kind": "state",
+      "label": "relevant strategy docs",
+      "path": "relevant-strategy-docs",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:relevant-surfaces",
+      "kind": "state",
+      "label": "relevant surfaces",
+      "path": "relevant-surfaces",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:result.json",
+      "kind": "state",
+      "label": "result.json",
+      "path": "result.json",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:review-artifact",
+      "kind": "state",
+      "label": "review artifact",
+      "path": "review-artifact",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:review_receipt",
+      "kind": "state",
+      "label": "review_receipt",
+      "path": "review_receipt",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:reviewer_receipts",
+      "kind": "state",
+      "label": "reviewer_receipts",
+      "path": "reviewer_receipts",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:run-artifacts",
+      "kind": "state",
+      "label": "run artifacts",
+      "path": "run-artifacts",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:run_artifacts",
+      "kind": "state",
+      "label": "run_artifacts",
+      "path": "run_artifacts",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:runtime-handoff",
+      "kind": "state",
+      "label": "runtime handoff",
+      "path": "runtime-handoff",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:scripts",
+      "kind": "state",
+      "label": "scripts",
+      "path": "scripts",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:skill-eval_task.json-files",
+      "kind": "state",
+      "label": "skill eval_task.json files",
+      "path": "skill-eval_task.json-files",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:skill-local-audit",
+      "kind": "state",
+      "label": "skill-local audit",
+      "path": "skill-local-audit",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:skill-registry",
+      "kind": "state",
+      "label": "skill registry",
+      "path": "skill-registry",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:skill-system-docs",
+      "kind": "state",
+      "label": "skill-system docs",
+      "path": "skill-system-docs",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:skill.md",
+      "kind": "state",
+      "label": "SKILL.md",
+      "path": "skill.md",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:specs",
+      "kind": "state",
+      "label": "specs",
+      "path": "specs",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:target-skill",
+      "kind": "state",
+      "label": "target skill",
+      "path": "target-skill",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:target-surfaces",
+      "kind": "state",
+      "label": "target surfaces",
+      "path": "target-surfaces",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:target_file",
+      "kind": "state",
+      "label": "target_file",
+      "path": "target_file",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:task-context",
+      "kind": "state",
+      "label": "task context",
+      "path": "task-context",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:template",
+      "kind": "state",
+      "label": "template",
+      "path": "template",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:test-case-drafts",
+      "kind": "state",
+      "label": "test-case drafts",
+      "path": "test-case-drafts",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:ticket",
+      "kind": "state",
+      "label": "ticket",
+      "path": "ticket",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:ticket-handoff",
+      "kind": "state",
+      "label": "ticket? handoff",
+      "path": "ticket-handoff",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:ticket-state/links",
+      "kind": "state",
+      "label": "ticket State/Links",
+      "path": "ticket-state/links",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:ticket.md",
+      "kind": "state",
+      "label": "ticket.md",
+      "path": "ticket.md",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:ticket.md-updates",
+      "kind": "state",
+      "label": "ticket.md updates",
+      "path": "ticket.md-updates",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:ticket/program/progress-generated-goal-prompt-or-recommendation",
+      "kind": "state",
+      "label": "ticket/program/progress? generated goal prompt? or recommendation",
+      "path": "ticket/program/progress-generated-goal-prompt-or-recommendation",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:tickets/progress/pm-reports",
+      "kind": "state",
+      "label": "tickets/progress/PM reports",
+      "path": "tickets/progress/pm-reports",
+      "tags": [
+        "abstract-state"
+      ]
+    },
+    {
+      "id": "state:worker-thread-refs",
+      "kind": "state",
+      "label": "worker thread refs when available",
+      "path": "worker-thread-refs",
+      "tags": [
+        "abstract-state"
       ]
     },
     {
@@ -3252,12 +7478,12 @@
   "source": {
     "generator": "skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py",
     "included_optional_nodes": {
-      "abstract_state": false,
-      "fsa_state_nodes": false,
-      "gates": false
+      "abstract_state": true,
+      "fsa_state_nodes": true,
+      "gates": true
     },
     "missing_skills": [],
-    "mode": "core",
+    "mode": "full",
     "target_skills": [
       "init-advisor",
       "horizon-advisor",

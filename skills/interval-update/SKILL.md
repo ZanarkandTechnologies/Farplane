@@ -45,7 +45,7 @@ interval_update(project_root, interval_id, review_window, planning_window,
 state:
   reads(farplane/harness.md?,
         farplane/products.md?,
-        farplane/skills/**/SKILL.md?,
+        .agents/skills/**/SKILL.md?,
         farplane/goals.md?,
         tickets/,
         docs/HISTORY.md?,
@@ -226,7 +226,7 @@ priority_planning(review_window, planning_window)
 - [ ] 5. Emit next-window guidance.
   - [ ] Produce a plan sized to `planning_window`.
   - [ ] Convert executable work into ticket deltas or Goal Advisor handoffs,
-        including `farplane/skills/<product-skill>/SKILL.md` refs when a
+        including `.agents/skills/<product-skill>/SKILL.md` refs when a
         local product skill owns the workflow.
   - [ ] Return Pulse guidance as constraints for the fast executor loop.
   - [ ] Summarize report paths, blockers, goals-delta decisions, and handoffs.

@@ -127,7 +127,7 @@ description of what the project is lives in Markdown:
 `farplane/harness.md` owns the static human charter,
 `farplane/products.md` owns the product catalog and work lanes, and
 `farplane/goals.md` owns current strategy.
-Project-specific product workflows live under `farplane/skills/`; promote them
+Project-specific product workflows live under `.agents/skills/`; promote them
 to root `skills/` only after repeated evidence shows cross-project reuse.
 
 ## Template Version
@@ -160,7 +160,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + farplane/automations.md
    + farplane/bindings.md
    + farplane/hooks.json
-   + farplane/skills/README.md
+   + .agents/skills/README.md
    + farplane/pm.json?
    + .farplane/ ignored runtime root
 ```

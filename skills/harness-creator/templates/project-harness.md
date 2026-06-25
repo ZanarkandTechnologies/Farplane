@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.3.1"
+template_version: "0.3.2"
 feature_refs:
   - FEAT-0027
   - FEAT-0048
@@ -18,7 +18,7 @@ canonical_targets:
   - farplane/automations.md
   - farplane/bindings.md
   - farplane/hooks.json
-  - farplane/skills/README.md
+  - .agents/skills/README.md
 ---
 
 # Harness Creator Worksheet
@@ -38,7 +38,7 @@ Farplane files:
 - `farplane/automations.md` owns reviewable automation prompt text.
 - `farplane/bindings.md` owns non-secret project coordinates.
 - `farplane/hooks.json` owns declarative project hook config.
-- `farplane/skills/` owns project-local product workflow skills.
+- `.agents/skills/` owns project-local product workflow skills.
 
 ## Static Charter Delta
 
@@ -107,7 +107,7 @@ constraints. Do not put planning algorithms or operational workflow steps in
 
 ## Product Skill Plan
 
-Target: `farplane/skills/<product-skill>/SKILL.md` or a refinement ticket.
+Target: `.agents/skills/<product-skill>/SKILL.md` or a refinement ticket.
 
 Map existing reusable skills before creating local product skill stubs.
 
@@ -121,9 +121,9 @@ derive_local_product_skills(products, existing_skills, goals, constraints)
 
 | Product | Existing Skill Route | Local Skill Path | Status | Next Ticket |
 | --- | --- | --- | --- | --- |
-| TODO | TODO | `farplane/skills/TODO/SKILL.md` | reuse / stub / refine_ticket / defer | TODO |
+| TODO | TODO | `.agents/skills/TODO/SKILL.md` | reuse / stub / refine_ticket / defer | TODO |
 
-Promotion rule: keep product skills under `farplane/skills/` until repeated
+Promotion rule: keep product skills under `.agents/skills/` until repeated
 runs prove the workflow is reusable across projects.
 
 ## Strategy Delta

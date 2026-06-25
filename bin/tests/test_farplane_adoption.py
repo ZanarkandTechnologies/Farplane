@@ -43,7 +43,7 @@ class FarplaneAdoptionTests(unittest.TestCase):
             project = root / "project"
             write_manifest(standard, features={"FEAT-0061": "adopted"})
             write_manifest(project, features={"FEAT-0061": "adopted"})
-            skill_dir = project / "skills" / "client-report"
+            skill_dir = project / ".agents" / "skills" / "client-report"
             skill_dir.mkdir(parents=True)
             (skill_dir / "SKILL.md").write_text("---\nname: client-report\n---\n", encoding="utf-8")
             write_jsonl(
