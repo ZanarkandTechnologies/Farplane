@@ -30,19 +30,24 @@ class FileGrowthHookTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="file-growth-hook-") as td:
             root = Path(td)
             (root / "farplane").mkdir()
-            (root / "farplane" / "file-growth-hook.json").write_text(
+            (root / "farplane" / "hooks.json").write_text(
                 json.dumps(
                     {
-                        "enabled": True,
-                        "rules": [
-                            {
-                                "name": "memory",
-                                "patterns": ["memory.mb"],
-                                "max_lines": 3,
-                                "target_lines": 2,
-                                "action": "summarize_in_place",
+                        "version": 1,
+                        "hooks": {
+                            "file_growth": {
+                                "enabled": True,
+                                "rules": [
+                                    {
+                                        "name": "memory",
+                                        "patterns": ["memory.mb"],
+                                        "max_lines": 3,
+                                        "target_lines": 2,
+                                        "action": "summarize_in_place",
+                                    }
+                                ],
                             }
-                        ],
+                        },
                     }
                 ),
                 encoding="utf-8",
@@ -72,19 +77,24 @@ class FileGrowthHookTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="file-growth-hook-") as td:
             root = Path(td)
             (root / "farplane").mkdir()
-            (root / "farplane" / "file-growth-hook.json").write_text(
+            (root / "farplane" / "hooks.json").write_text(
                 json.dumps(
                     {
-                        "enabled": True,
-                        "rules": [
-                            {
-                                "name": "memory",
-                                "patterns": ["memory.mb"],
-                                "max_lines": 10,
-                                "target_lines": 2,
-                                "action": "summarize_in_place",
+                        "version": 1,
+                        "hooks": {
+                            "file_growth": {
+                                "enabled": True,
+                                "rules": [
+                                    {
+                                        "name": "memory",
+                                        "patterns": ["memory.mb"],
+                                        "max_lines": 10,
+                                        "target_lines": 2,
+                                        "action": "summarize_in_place",
+                                    }
+                                ],
                             }
-                        ],
+                        },
                     }
                 ),
                 encoding="utf-8",

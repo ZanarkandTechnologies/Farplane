@@ -496,7 +496,6 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "skill:interval-update",
         "skill:update-memory",
         "skill:skill-maintenance",
-        "skill:learning-drain",
         "skill:eval",
         "skill:knowledge-tidier",
         "file:farplane/goals.md",

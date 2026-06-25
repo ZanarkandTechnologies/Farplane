@@ -3,7 +3,7 @@ title: "Pulse and Interval Automation"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-24
+updated_at: 2026-06-25
 tags:
   - farplane
   - automations
@@ -22,7 +22,7 @@ Farplane projects run autonomously through explicit Codex automations:
 
 ```text
 pulse_update(project_root, extensions?, pulse_policy?)
-  -> one bounded action + decision state
+  -> ready ticket execution + planning request? + decision state
 
 interval_update(project_root, interval_id, review_window, planning_window,
                 context_refs?, report_workflows?, planning_policy?,
@@ -39,9 +39,9 @@ Codex app automation records.
 
 Use the smallest explicit loop that preserves useful context isolation:
 
-- Pulse is the fast actor/idle loop. It reconciles outcomes, uses reasoning
-  plus bandit state to select one board/action-tree move, spawns a bounded
-  worker when useful, and records the decision.
+- Pulse is the fast executor loop. It reconciles outcomes, admits ready
+  tickets, executes parallelizable work up to policy cap, writes planning
+  requests when no executable work exists, and records the decision.
 - Daily Interval reviews the last 24 hours, writes a dated report, reads the
   latest weekly interval output through configured context refs, and plans the
   next 24 hours.
@@ -61,10 +61,10 @@ Use no automation when a project is still a one-off setup, exploratory note, or
 human-driven spike with no recurring action expectation.
 
 Use Pulse when the project has proceedable tickets, open loops, or outcome
-ledgers that benefit from frequent small decisions. Pulse is appropriate when a
+ledgers that benefit from frequent execution. Pulse is appropriate when a
 30-minute to few-hour cadence can produce value without replanning the whole
-project. If the board is empty, Pulse chooses one narrow action-tree arm;
-`consult_goal_advisor` is one option, not the default.
+project. If the board is empty or stale, Pulse writes a planning request; Daily
+or Weekly Interval owns creating, splitting, or reprioritizing work.
 
 Use interval automations when the project needs reports, drift checks, or
 bounded replanning. Daily and weekly are the default because they create a
@@ -137,20 +137,17 @@ belong in the Codex app automation store, not in `pm.json`.
   threads that should belong to the project PM employee, append the IDs to
   `farplane/pm.json` `threads.chats`.
 
-## Pulse Action State
+## Pulse Execution State
 
-Pulse combines reasoning with a weak memory prior. The bandit state is useful
-because it remembers which action arms have recently paid off, but it is not a
-replacement for judgment.
+Pulse is an admission and execution loop. Planner-level reward learning may
+later use ticket outcomes to adjust work-lane distribution, but Pulse itself
+does not own strategy arms or product-lane exploration.
 
 Ignored runtime state:
 
 ```text
-.farplane/automation/bandit-state.json
-  -> action arm scores, counts, uncertainty, and last update
-
 .farplane/automation/decisions.jsonl
-  -> each Pulse decision, selected arm, reason, and expected reward
+  -> each Pulse execution mode, admitted or excluded tickets, reason, and expected reward
 
 .farplane/automation/rewards.jsonl
   -> reconciled reward observations from worker outcomes
@@ -162,16 +159,12 @@ Ignored runtime state:
   -> child thread IDs, context refs, expected proof, and reward horizon
 ```
 
-Default action arms:
+Default execution modes:
 
-- `pick_ready_ticket`
-- `split_oversized_ticket`
-- `clarify_blocker`
-- `create_prep_ticket`
-- `run_qa_or_eval`
-- `refresh_ticket_metadata`
-- `consult_goal_advisor`
-- `no_op_unsafe`
+- `execute_ready_tickets`
+- `repair_ticket_admission_state`
+- `request_planning`
+- `no_op_blocked`
 
 ## Interval Reports
 
@@ -194,6 +187,7 @@ daily_interval:
   planning_window: next_24h
   Reads:
     - default interval refs
+    - farplane/products.md work lanes
     - latest weekly_interval report as parent_weekly_plan
 
 weekly_interval:
@@ -201,6 +195,7 @@ weekly_interval:
   planning_window: next_week
   Reads:
     - default interval refs
+    - farplane/products.md work lanes
     - farplane/goals.md
     - daily_interval reports inside last_week as daily_reports
   Runs:
@@ -209,6 +204,7 @@ weekly_interval:
     - ticket_board_drift
     - goal_drift
     - compounding_leverage_review
+    - learning_backpropagation
     - priority_planning
 ```
 
@@ -232,14 +228,15 @@ weekly_interval_report
   -> operator accepts or asks horizon-advisor to apply material strategy delta
   -> farplane/goals.md update
   -> goal-advisor compiles selected executable bets
-  -> Pulse executes bounded work
+  -> Pulse executes ready tickets
   -> reports/rewards feed the next interval
 ```
 
 When `compounding_leverage_review` is enabled, Weekly Interval also scores
 Farplane improvement levers and chooses 1-3 next-window bets. `leverage-advisor`
 scores value; `harness-advisor` chooses the owner surface; `goal-advisor`
-compiles selected execution; Pulse acts.
+compiles selected execution; Pulse executes ready tickets after planners create
+them.
 
 Use the advisor matrix instead of inventing hidden orchestration:
 
@@ -291,11 +288,12 @@ packages are retired as active surfaces. Their useful practices live in
 
 The active model is:
 
-- `pulse-update` owns the fast idle loop, ticket selection, child-thread
-  handoffs, bandit/reward state, and outcome reconciliation.
+- `pulse-update` owns the fast executor loop, ready-ticket admission,
+  child-thread handoffs, reward state, planning requests, and outcome
+  reconciliation.
 - `interval-update` owns report-before-plan interval review, drift checks,
-  goals-delta promotion, next-window plans, Pulse guidance, and Goal Advisor
-  handoffs.
+  work-lane distribution, goals-delta promotion, next-window plans, Pulse
+  guidance, and Goal Advisor handoffs.
 - `automation-advisor` owns prompt authoring and live Codex automation setup.
 
 Do not recreate legacy cadence skills, a separate ticket-drainer automation, or

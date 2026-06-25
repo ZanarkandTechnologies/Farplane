@@ -3,7 +3,7 @@ title: "Pulse Codex Automation Template"
 status: active
 owner: automation-advisor
 created_at: 2026-06-23
-updated_at: 2026-06-24
+updated_at: 2026-06-25
 ---
 
 # Pulse Codex Automation Template
@@ -17,26 +17,26 @@ Call `pulse-update` with:
 
 project_root: <project-root>
 
-extensions:
-  action_extensions: none
-  context_extensions: none
-  policy_extensions: none
-
-Use the skill's default Farplane refs for tickets, interval guidance, action
-state, reward state, reports, and PM thread grouping. Only fill extension
-blocks when this project has extra action arms, custom gates, or extra context
-files.
+Use the skill's default Farplane refs for tickets, interval guidance, project
+products, execution policy, reward state, reports, spawned-thread ledgers, and
+PM thread grouping. Only add project-specific extensions for custom execution
+gates or extra context files.
 
 Gates:
 - No push, deploy, publish, spend, account changes, or destructive cleanup.
 - Do not perform drift review, scrum reflection, or strategy replanning.
-- Do not run more than one child/action per beat unless the active policy
-  explicitly raises the budget.
-- Zero ready tickets means only `pick_ready_ticket` is blocked. Before selecting
-  `no_op_unsafe`, write `Action Arm Verdicts` for every non-ticket arm with a
-  concrete eligible/blocked reason.
+- Execute every proceedable parallelizable ticket up to the active policy cap.
+- If no proceedable ticket exists, perform only mechanical ticket admission
+  repair when it can make an existing ticket executable.
+- Otherwise write `request_planning` with queue evidence, idle reason, latest
+  interval guidance, and the planning scope Daily or Weekly Interval should
+  handle.
+- Do not create product-shaped refill tickets, choose work-lane distribution,
+  run planner-level exploration, or call Goal Advisor as an empty-board
+  default.
 
 Finish:
-- Summarize reward updates, selected action, handoff/report paths, and what
-  evidence will decide the reward next time.
+- Summarize reward updates, execution mode, child thread IDs or planning
+  request, report/state paths, and what evidence will decide the reward next
+  time.
 ```

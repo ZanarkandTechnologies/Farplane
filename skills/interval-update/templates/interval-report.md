@@ -108,6 +108,15 @@ Kinds: `keep`, `change`, `pause`, `kill`, `test`.
 
 ## Next Window Plan
 
+## Lane Distribution
+
+| Lane | Planned weight | Ticket budget | Why now | Expected reward | Guardrail check |
+| --- | ---: | ---: | --- | --- | --- |
+
+Use `farplane/products.md` for plannable lanes and `farplane/harness.md`
+allocation guardrails for static safety rails. Planned weights are next-window
+decisions, not permanent product strategy.
+
 | Priority | Why now | Expected output | Proof or reward signal | Owner / next surface |
 | --- | --- | --- | --- | --- |
 

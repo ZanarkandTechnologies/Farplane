@@ -38,6 +38,8 @@ adds or replaces a source:
 ```text
 default_context_refs(project_root, interval_id) = {
   harness_ref: project_root/farplane/harness.md,
+  products_ref: project_root/farplane/products.md,
+  local_product_skill_refs: project_root/farplane/skills/**/SKILL.md,
   goals_ref: project_root/farplane/goals.md,
   ticket_refs: project_root/tickets/,
   memory_refs: [
@@ -114,6 +116,7 @@ report_workflows = {
   goal_drift?: bool | "light",
   metric_snapshot?: bool | "when_sources_exist",
   compounding_leverage_review?: bool | "light",
+  learning_backpropagation?: bool | "when_sources_exist",
   priority_planning?: bool | "light"
 }
 ```
@@ -136,15 +139,21 @@ merge shape.
    files named in `SKILL.md`.
 6. For enabled self-update workflows, close due reward signals from prior
    interval reports before selecting new bets.
-7. Review the past window against the static harness charter, goals, and
+7. Read product work lanes, local product skill refs, and static allocation
+   guardrails when priority planning or ticket refill is enabled.
+8. For enabled learning backpropagation, route repeated lessons, troubles,
+   ticket-progress findings, and proof failures to
+   `skill-maintenance(mode: harden_skill)`.
+9. Review the past window against the static harness charter, goals, and
    configured parent contexts.
-8. Write [interval-report.md](../templates/interval-report.md) before any
+10. Write [interval-report.md](../templates/interval-report.md) before any
    goals mutation.
-9. Plan the next window, sized to `planning_window`.
-10. Classify every goals delta as `auto_apply`, `approval_required`, or
+11. Plan the next window, sized to `planning_window`.
+12. Classify every goals delta as `auto_apply`, `approval_required`, or
    `rejected_source_gap`.
-11. Convert executable changes into ticket deltas or Goal Advisor handoffs.
-12. Return downstream guidance so Pulse gets the next constraints.
+13. Convert executable changes into ticket deltas or Goal Advisor handoffs,
+    including local product skill refs when they own the workflow.
+14. Return downstream guidance so Pulse gets the next constraints.
 
 ## Goals Delta Promotion
 
@@ -186,5 +195,8 @@ horizon review.
 - The dated interval report is the state store for self-update decisions:
   reward closure, selected bets, rejected/deferred/expired candidates, advisor
   routes, and next reward signals.
+- Learning backpropagation is not a separate compatibility automation. Weekly
+  Interval routes learning sources to `skill-maintenance(mode: harden_skill)`
+  and records processed or deferred learning in the dated report.
 - Urgent leverage escalation is allowed only for high-confidence evidence with
   a source ref, explicit loss term, review-by date, and next owner route.

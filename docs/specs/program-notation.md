@@ -231,7 +231,7 @@ Projection:
 
 ```text
 ProjectHarness := static_charter + product_catalog + strategy_state
-                + automation_prompts + safe_bindings + proof_policy
+                + automation_prompts + safe_bindings + hook_config
                 + tickets_or_goal_handoffs
 ```
 
@@ -243,11 +243,11 @@ Default project harness storage is split across standard Farplane files:
 
 - `farplane/harness.md`: YAML front matter plus Markdown static-charter
   sections.
-- `farplane/products.md`: dynamic product catalog and project pipelines.
-- `farplane/goals.md`: strategy, KPIs, milestones, and execution handoffs.
+- `farplane/products.md`: product catalog and work-lane weights.
+- `farplane/goals.md`: strategy, KPIs, milestones, and current bets.
 - `farplane/automations.md`: recurring Codex automation prompts.
 - `farplane/bindings.md`: non-secret project coordinates.
-- `farplane/evals.md`: proof and eval policy.
+- `farplane/hooks.json`: declarative project hook config.
 - `tickets/`: missing systems, blockers, and executable work.
 
 Canonical `farplane/harness.md` files should not use fenced
@@ -510,16 +510,16 @@ farplane/harness.md:
   non-tradeoffs: ["do not publish unreviewed claims", "do not optimize revenue before usefulness"]
 
 farplane/products.md:
-  team archetype: "AI engineering education lab"
-  primary products: ["episodes", "case studies", "tooling walkthroughs"]
-  pulse refill guidance: "Prefer evidence-backed episode experiments over generic content chores."
+  team: "AI engineering education lab"
+  products: ["episodes", "case studies", "tooling walkthroughs"]
+  work_lanes: ["episode_experiments", "proof_and_quality", "distribution"]
 
 farplane/goals.md:
   axis reach_acquire:
     question: "Can high-signal AI engineering learners find this?"
     kpi: review_metric("hook/title clarity")
     missing_signal: instagram_attention_graph
-  current_frontier:
+  current_milestone:
     output: "Choose first pilot episode"
     metric: review_metric
     gates: [no_publish, no_spend]
@@ -584,7 +584,7 @@ Resolved for now:
 
 - Primary harness output is the standard split-file set:
   `farplane/harness.md`, `farplane/products.md`, `farplane/goals.md`,
-  `farplane/automations.md`, `farplane/bindings.md`, `farplane/evals.md`, and
+  `farplane/automations.md`, `farplane/bindings.md`, `farplane/hooks.json`, and
   tickets.
 - Canonical `farplane/harness.md` uses YAML front matter plus Markdown
   sections. Fenced `harness-program` DSL is retired for canonical project

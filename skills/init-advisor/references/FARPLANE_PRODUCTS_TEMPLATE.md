@@ -4,98 +4,44 @@ status: draft
 project: "{{PROJECT_NAME}}"
 created_at: "{{DATE}}"
 updated_at: "{{DATE}}"
-framework_template_version: "0.1.0"
+framework_template_version: "0.2.0"
 owner: harness
 source_of_truth:
   - farplane/harness.md
   - farplane/goals.md
-  - skills/pulse-update/SKILL.md
+  - skills/interval-update/SKILL.md
 ---
 
 # Project Products
 
-This file defines the repeatable outputs this project exists to create. Products
-are not chores. Products are the value artifacts a team should refill tickets
-toward when the board is empty or stale; chores stay in Pulse's default action
-arms.
+## Team
 
-## Team Archetype
+| Field | Value |
+| --- | --- |
+| Archetype | TODO |
+| Core product | TODO |
+| Secondary product | TODO |
 
-TODO: Describe what kind of team this project is. Examples:
+## Products
 
-- autonomous AI harness lab
-- product engineering team
-- marketing team
-- research team
-- personal operating system
-- customer success / operations team
-
-Store the short archetype string in `farplane/manifest.json` as
-`project.archetype`; keep the richer explanation here.
-
-## Operating Flywheel
-
-```text
-TODO input or signal
-  -> research real-world equivalents and current baseline
-  -> TODO repeatable project/action
-  -> TODO proof or review
-  -> TODO product/output
-  -> TODO feedback into next cycle
-```
-
-## Primary Products
-
-| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |
+| ID | Product | Audience | Output | Reward |
 | --- | --- | --- | --- | --- |
-| Core product | target users | artifact examples | success signals | owner skills |
+| core | TODO | TODO | TODO | TODO |
 
-## Supporting Products
+## Work Lanes
 
-| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |
-| --- | --- | --- | --- | --- |
-| Supporting product | target users or team | artifact examples | success signals | owner skills |
+| Lane | Default Weight | Purpose |
+| --- | ---: | --- |
+| primary_product | 40 | create or improve the main product output |
+| proof_and_quality | 20 | prove claims, reduce risk, and raise trust |
+| growth_and_distribution | 15 | help the right audience discover or adopt the work |
+| market_learning | 15 | learn which users, pains, and opportunities matter |
+| maintenance | 10 | keep the project operable |
 
-## Autonomous Project Types
+## Constraints
 
-| Project Type | When To Create It | Output | Proof / Reward Signal |
-| --- | --- | --- | --- |
-| Experiment | A change might improve the project. | Experiment ticket and result note | improvement against baseline |
-| Ablation | An implemented feature needs proof or a with/without comparison. | Ablation report and decision | accepted claim, rejected feature, or proof gap |
-| Productization | A proven win should become durable. | Product, feature, skill, doc, workflow, or asset | accepted implementation with proof |
-| Evidence distribution | A proven result can teach users or grow adoption. | Demo, post, note, video, or onboarding artifact | qualified attention or useful feedback |
-| Market learning | A promising win needs demand evidence. | Interview, parity scan, gap brief, or opportunity note | clearer product bet or rejected assumption |
-| Admin / maintenance | Work is needed to keep the team operating. | Research, cleanup, hardening, metadata repair, blocker clarification | reduced drag or unblocked product work |
-
-## Admin Work
-
-Admin work is allowed, but it is not the project product. Treat customer
-research, market research, source scans, codebase maintenance, dependency
-cleanup, ticket metadata repair, blocker clarification, and routine hardening as
-admin unless they directly feed a primary product, productization decision, or
-distribution artifact.
-
-## Product Selection Notes
-
-- Prefer primary products when the current goals or interval plan show a clear
-  need for product work.
-- Use supporting products when the project needs adoption, learning, evidence,
-  or internal leverage.
-- Productize only after evidence supports the change.
-- Treat adoption as evidence distribution, not generic marketing. Content should
-  be grounded in accepted work, user questions, or adoption gaps.
-- Do not treat routine metadata repair, blocker clarification, QA collection,
-  report writing, or ticket cleanup as products. Those are chores or proof
-  actions.
-
-## Pulse Refill Guidance
-
-When no proceedable ticket exists, Pulse may create or refine one product-shaped
-ticket if the product need is grounded in goals, interval guidance, recent
-Pulse outcomes, user feedback, or source gaps. The ticket should name the
-project type, intended audience, expected artifact, proof signal, owner skill,
-baseline or comparison point, and why the work is not just a chore.
-
-If no product-shaped refill is grounded, Pulse should fall back to default chore
-arms such as metadata repair, QA/eval collection, blocker clarification, or
-Goal Advisor consultation.
+- Products are not chores.
+- Pulse executes tickets; intervals create, split, reprioritize, or request
+  product-shaped tickets.
+- Operational planning, refill, and prioritization logic belongs in
+  `interval-update`, not this file.

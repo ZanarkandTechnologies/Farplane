@@ -72,8 +72,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
-      "source_commit": "f3188fd6cded",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
+      "source_commit": "1e5518d834db",
       "summary": "working tree current template",
       "version": "0.3.3"
     }
@@ -275,7 +275,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "f3188fd6cded",
+      "source_commit": "1e5518d834db",
       "template_version": "0.3.3",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -289,7 +289,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "f3188fd6cded",
+      "source_commit": "1e5518d834db",
       "template_version": "0.3.3",
       "title": "Todo executability",
       "verdict": "pass"
@@ -303,7 +303,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "f3188fd6cded",
+      "source_commit": "1e5518d834db",
       "template_version": "0.3.3",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -317,7 +317,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "f3188fd6cded",
+      "source_commit": "1e5518d834db",
       "template_version": "0.3.3",
       "title": "Proof contract",
       "verdict": "pass"
@@ -331,7 +331,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "f3188fd6cded",
+      "source_commit": "1e5518d834db",
       "template_version": "0.3.3",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -613,7 +613,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-25T07:53:11+00:00",
+  "generated_at": "2026-06-25T17:23:49+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -1612,18 +1612,6 @@
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/learning-drain/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "learning-drain",
-      "skill_ui": "",
-      "source": "local",
-      "status": "stale",
-      "template_version": "0.2.0",
-      "tier": 3
-    },
-    {
       "eval": "",
       "has_checklist": true,
       "path": "skills/leverage-advisor/SKILL.md",
@@ -1795,22 +1783,22 @@
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 95
+      "local": 94
     },
     "by_status": {
       "current": 6,
       "external": 3,
       "missing": 58,
-      "stale": 31
+      "stale": 30
     },
     "by_template_version": {
       "0.1.0": 3,
-      "0.2.0": 21,
+      "0.2.0": 20,
       "0.3.0": 7,
       "0.3.2": 6,
       "missing": 61
     },
-    "total_skills": 98
+    "total_skills": 97
   },
   "schema_version": "1.0.0",
   "source": {
@@ -2446,20 +2434,6 @@
       "template_uses": {}
     },
     {
-      "consumer_id": "learning-drain",
-      "consumer_scope": "skill",
-      "path": "skills/learning-drain/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-template": "0.2.0"
-      }
-    },
-    {
       "consumer_id": "leverage-advisor",
       "consumer_scope": "skill",
       "path": "skills/leverage-advisor/SKILL.md",
@@ -2975,7 +2949,7 @@
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.5.0"
+        "farplane-framework": "1.6.0"
       }
     },
     {
@@ -2994,7 +2968,7 @@
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.5.0",
+      "current_version": "1.6.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3002,12 +2976,12 @@
       "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.5.0"
+      "used_version": "1.6.0"
     },
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.5.0",
+      "current_version": "1.6.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3129,19 +3103,6 @@
         "FEAT-0054"
       ],
       "path": "skills/knowledge-tidier/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
-      "consumer_id": "learning-drain",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/learning-drain/SKILL.md",
       "status": "current",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -3874,23 +3835,6 @@
       "used_version": "0.3.0"
     },
     {
-      "consumer_id": "learning-drain",
-      "consumer_scope": "skill",
-      "current_version": "0.3.3",
-      "feature_refs": [
-        "FEAT-0048",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0058",
-        "FEAT-0059"
-      ],
-      "path": "skills/learning-drain/SKILL.md",
-      "status": "stale",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.2.0"
-    },
-    {
       "consumer_id": "leverage-advisor",
       "consumer_scope": "skill",
       "current_version": "0.3.3",
@@ -4189,7 +4133,7 @@
         "current": 1,
         "stale": 1
       },
-      "current_version": "1.5.0",
+      "current_version": "1.6.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -4198,10 +4142,10 @@
     },
     "skill-eval-task": {
       "by_scope": {
-        "skill": 26
+        "skill": 25
       },
       "by_status": {
-        "current": 17,
+        "current": 16,
         "missing": 9
       },
       "current_version": "0.1.0",
@@ -4209,7 +4153,7 @@
         "FEAT-0054"
       ],
       "target_basis": "skills with an eval_task.json surface",
-      "total_consumers": 26
+      "total_consumers": 25
     },
     "skill-qa-checklist": {
       "by_scope": {
@@ -4228,10 +4172,10 @@
     },
     "skill-template": {
       "by_scope": {
-        "skill": 37
+        "skill": 36
       },
       "by_status": {
-        "stale": 37
+        "stale": 36
       },
       "current_version": "0.3.3",
       "feature_refs": [
@@ -4242,7 +4186,7 @@
         "FEAT-0059"
       ],
       "target_basis": "local skills that declare skill-template usage",
-      "total_consumers": 37
+      "total_consumers": 36
     }
   },
   "template_versions": [
@@ -4295,7 +4239,7 @@
     {
       "introduced_at": "2026-06-24",
       "latest_at": "2026-06-25",
-      "latest_commit": "f3188fd6cded",
+      "latest_commit": "1e5518d834db",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -4309,7 +4253,7 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-24",
@@ -4319,8 +4263,8 @@
         },
         {
           "introduced_at": "2026-06-25",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
-          "source_commit": "f3188fd6cded",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
+          "source_commit": "1e5518d834db",
           "summary": "working tree current template"
         }
       ],

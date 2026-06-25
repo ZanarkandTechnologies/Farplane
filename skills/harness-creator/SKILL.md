@@ -26,10 +26,13 @@ The default durable outputs are the standard Farplane project files:
 ```text
 farplane/harness.md  = static human charter: mission, thesis, values,
                        non-tradeoffs, leverage commitments, agent authority,
-                       and change rule
-farplane/products.md = dynamic product catalog and Pulse refill context
-farplane/goals.md    = dynamic strategy, KPIs, current frontier, and
-                       Goal Advisor handoffs
+                       allocation guardrails, and change rule
+farplane/products.md = product catalog and work-lane weights
+farplane/goals.md    = dynamic strategy, KPIs, current bets, milestone, and
+                       holds
+farplane/hooks.json  = declarative project hook config
+farplane/skills/     = local product skills for company-specific production
+                       workflows
 ```
 
 Use `templates/project-harness.md` only as a transient split-surface planning
@@ -59,14 +62,17 @@ approval, review, dependency, or proof boundaries.
 project_harness_creator(project_idea, values?, priorities?, mode_presets?, context?, constraints?, budget?)
   -> project_harness
    + split_file_deltas
+   + product_skill_reuse_map
+   + local_product_skill_stubs?
+   + product_skill_refinement_ticket?
    + evidence_wrapper
    + proposed_tickets
    + current_milestone
    + goal_advisor_handoff
-state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, harness doctrine, farplane/harness.md, farplane/products.md, farplane/goals.md, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(farplane/harness.md static-charter deltas only with explicit approval, farplane/products.md product-catalog deltas, farplane/goals.md strategy deltas through goals policy, proposed tickets, farplane/automations.md, and farplane/bindings.md when configuring recurring work, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
-gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_providers_honest; existing_tickets_checked_first; missing_systems_named; blockers_ticketed; side_effect_gates_named; current_milestone_named; goal_advisor_handoff_ready
+state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, farplane/skills/**?, harness doctrine, farplane/harness.md, farplane/products.md, farplane/goals.md, farplane/automations.md, and farplane/bindings.md when present, current external research only when domain truth matters); writes(farplane/harness.md static-charter deltas only with explicit approval, farplane/products.md product-catalog deltas, farplane/goals.md strategy deltas through goals policy, proposed tickets, farplane/automations.md, farplane/bindings.md when configuring recurring work, farplane/skills/<product-skill>/SKILL.md stubs or refinement-ticket handoffs, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
+gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_providers_honest; existing_tickets_checked_first; existing_skills_checked_before_product_skill_stubs; product_skill_reuse_map_written; missing_systems_named; blockers_ticketed; side_effect_gates_named; current_milestone_named; pm_activation_gate_named; goal_advisor_handoff_ready
 routes: init-advisor | research:* | ingest-content | horizon-advisor | harness-advisor | skill-creator | goal-advisor | automation-advisor | optimize-with-human | interval-update | review | relevant domain skill
-fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates skills before checking existing systems; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
+fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates local product skills before checking existing reusable skills and systems; promotes project-local product skills to root skills before repeated proof; activates PM loops before core product skills or refinement tickets exist; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
 ```
 
 ## Phase Contract
@@ -78,6 +84,8 @@ project_harness_creation_phase(project_idea, state)
    + feedback_loop_skill_model
    + mode_preset_decisions
    + split_file_deltas
+   + product_skill_reuse_map
+   + local_product_skill_plan
    + skill_gap_and_missing_system_decisions
    + proposed_ticket_plan
    + scrum_heartbeat_policy
@@ -94,6 +102,11 @@ for real domain uncertainty, `horizon-advisor` for strategy/KPI depth,
 reusable missing primitive, `goal-advisor` after the current milestone is
 selected, `automation-advisor` only for live Codex automation activation, and
 `review` for material readiness.
+
+Local product skills are project-owned company workflows. Create or propose
+them under `farplane/skills/<product-skill>/SKILL.md` only after mapping
+existing root skills and project-local skills first. Promote a local product
+skill to root `skills/` only after repeated proof shows cross-project reuse.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -135,7 +148,7 @@ selected, `automation-advisor` only for live Codex automation activation, and
      is useful.
    - [ ] Write approved static charter content to `farplane/harness.md`;
      product/team output content to `farplane/products.md`; and strategy,
-     KPIs, current frontier, and Goal Advisor handoffs to `farplane/goals.md`.
+     KPIs, current bets, milestone, and holds to `farplane/goals.md`.
    - [ ] Define static charter values in `harness.md`, product pipelines in
      `products.md`, strategy axes in `goals.md`, prompt cadence in
      `automations.md`, safe skill coordinates in `bindings.md`, and operator
@@ -182,7 +195,23 @@ selected, `automation-advisor` only for live Codex automation activation, and
    - [ ] For each human access/setup/approval blocker, create or propose a
      `ticket` node with `type: unblock` instead of expanding the harness
      Markdown.
-- [ ] 6. Define the Scrum-style operating cadence.
+- [ ] 6. Derive local product skills after the inventory.
+   - [ ] For each `farplane/products.md` product row, write
+     `derive_local_product_skill(product, existing_skills, goals, constraints)
+     -> reuse_map + local_skill_stub? + refinement_ticket?`.
+   - [ ] Prefer reusing existing root `skills/*` and existing
+     `farplane/skills/*` before proposing any new local product skill.
+   - [ ] If a product workflow is repeated, valuable, and specific to this
+     company, propose or create `farplane/skills/<product-skill>/SKILL.md`.
+   - [ ] If the workflow is not stable enough to stub, create one product-skill
+     refinement ticket that names the product line, existing skills to compose,
+     missing proof, and activation gate.
+   - [ ] Keep local product skills out of the reusable root `skills/` registry
+     until repeated runs prove cross-project reuse.
+   - [ ] Gate PM activation on each core product line having either a local
+     product skill, an existing reusable skill route, or an explicit refinement
+     ticket.
+- [ ] 7. Define the Scrum-style operating cadence.
    - [ ] Create or update tracked `farplane/automations.md`; keep ignored
      `.farplane/` for runtime state, reports, eval runs, and logs.
    - [ ] Create or update tracked `farplane/bindings.md` for project-specific
@@ -216,7 +245,7 @@ selected, `automation-advisor` only for live Codex automation activation, and
      insufficient.
    - [ ] Keep all automations as `preview` or `ready_for_goal_advisor` until a
      real scheduler/automation is explicitly approved.
-- [ ] 7. Choose harness levers from doctrine.
+- [ ] 8. Choose harness levers from doctrine.
    - [ ] Use [harness-advisor](../harness-advisor/SKILL.md) when ownership is
      unclear across skill, ticket, template, docs, subagent, hook, validator,
      tool, automation, or prompt surface.
@@ -225,14 +254,14 @@ selected, `automation-advisor` only for live Codex automation activation, and
      prompt in that rough order.
    - [ ] Do not expand root/global prompt unless the rule is truly global,
      durable, and expensive to recover later.
-- [ ] 8. Decide missing primitive and missing system actions.
+- [ ] 9. Decide missing primitive and missing system actions.
    - [ ] Use [templates/missing-primitive-plan.md](templates/missing-primitive-plan.md)
      when the gap list is material.
    - [ ] Use [skill-creator](../skill-creator/SKILL.md) only when a missing
      capability has a stable trigger and reusable workflow.
    - [ ] Otherwise choose reference, ticket, tool connector, eval, validator,
      subagent, `init-advisor`, defer-until-pilot, or no-op.
-- [ ] 9. Compile the current milestone.
+- [ ] 10. Compile the current milestone.
    - [ ] Use [templates/goal-advisor-handoff.md](templates/goal-advisor-handoff.md)
      to make the handoff explicit.
    - [ ] Use [goal-advisor](../goal-advisor/SKILL.md) only after the milestone,
@@ -240,7 +269,7 @@ selected, `automation-advisor` only for live Codex automation activation, and
    - [ ] Use [optimize-with-human](../optimize-with-human/SKILL.md) when the
      operator's labels, rankings, approval, or taste are the honest early
      metric.
-- [ ] 10. Finish with proof and review.
+- [ ] 11. Finish with proof and review.
    - [ ] Produce the split Farplane file deltas, or a transient worksheet that
      explicitly names the target files and approval gates.
    - [ ] Run [review](../review/SKILL.md) for material harness packets,
@@ -256,6 +285,9 @@ Return or write:
 ```text
 Static Charter Delta (`farplane/harness.md`):
 Product Catalog Delta (`farplane/products.md`):
+Product Skill Reuse Map:
+Local Product Skill Stubs (`farplane/skills/<product-skill>/SKILL.md`):
+Product Skill Refinement Ticket:
 Strategy Delta (`farplane/goals.md`):
 Planning Worksheet:
 Values / Operating Principles / Priorities:
@@ -270,6 +302,7 @@ Feedback Skill / Metric Plan:
 Approval Gates:
 Current Milestone:
 Goal Advisor Handoff:
+PM Activation Gate:
 Autonomy Boundary:
 Evidence Gap:
 Next Action:
@@ -284,19 +317,23 @@ tickets/TASK-XXXX/artifacts/harness-creator/
   missing-primitive-plan.md          # optional sidecar when gaps are material
   goal-advisor-handoff.md            # optional sidecar when milestone is ready
 
+farplane/skills/<product-skill>/SKILL.md
+                                     # project-local product workflow skill
 tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 ```
 
 ## Gotchas
 
 - Split files first: `farplane/harness.md` owns static human charter content,
-  `farplane/products.md` owns dynamic products, and `farplane/goals.md` owns
-  dynamic strategy. A `project-harness.md` worksheet is evidence, not the
+  `farplane/products.md` owns product catalog and work lanes, and
+  `farplane/goals.md` owns dynamic strategy. A `project-harness.md` worksheet is evidence, not the
   canonical source of truth.
 - Evidence first: no refinement, validation, or "business is working" claim
   without at least one honest feedback loop or a concrete feedback-skill ticket.
 - Smallest lever first: check existing skills/tickets/systems before creating
   new skills, external-IO abstractions, hidden automations, or root-prompt rules.
+- Local before global: product workflow skills start under `farplane/skills/`
+  and promote to root `skills/` only after repeated proof of cross-project use.
 - Leaf execution first: parent harnesses coordinate; native Goal runs selected
   milestones or tickets, and `pulse-update` selects one proceedable bounded
   action per beat before proactive gap work.

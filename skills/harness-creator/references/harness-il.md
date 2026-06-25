@@ -512,10 +512,10 @@ farplane/harness.md :=
   static human charter sections
 
 farplane/products.md :=
-  product catalog and Pulse refill context
+  product catalog and work-lane weights
 
 farplane/goals.md :=
-  strategy, KPIs, current frontier, and handoffs
+  strategy, KPIs, current bets, milestone, and holds
 
 project-harness.md :=
   optional transient worksheet

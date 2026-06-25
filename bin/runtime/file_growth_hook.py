@@ -74,9 +74,18 @@ def load_json_file(path: Path) -> Any:
         return None
 
 
+def file_growth_config(raw: Any) -> dict[str, Any] | None:
+    if not is_record(raw):
+        return None
+    hooks = raw.get("hooks")
+    if is_record(hooks) and is_record(hooks.get("file_growth")):
+        return dict(hooks["file_growth"])
+    return None
+
+
 def merge_config(project_root: Path) -> dict[str, Any]:
     config = dict(DEFAULT_CONFIG)
-    tracked = load_json_file(project_root / "farplane" / "file-growth-hook.json")
+    tracked = file_growth_config(load_json_file(project_root / "farplane" / "hooks.json"))
     local = load_json_file(project_root / ".farplane" / "hooks" / "file-growth.json")
     for candidate in (tracked, local):
         if not is_record(candidate):

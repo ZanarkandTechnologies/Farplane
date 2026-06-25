@@ -3,8 +3,8 @@ kind: project-harness
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-06-25
-framework_template_version: "0.2.0"
+updated_at: 2026-06-26
+framework_template_version: "0.3.0"
 owner: harness
 ---
 
@@ -33,18 +33,28 @@ preserve human intent instead of drifting into busywork.
 
 | Commitment | Why It Compounds | Evidence To Seek | Pivot Signal |
 | --- | --- | --- | --- |
-| Evals and proof systems | Each accepted proof pattern increases trust and reduces future supervision. | Accepted agent-hours per human intervention rises while false completion falls. | Proof artifacts add friction but do not change decisions or trust. |
-| Skill systems | Lessons stop being trapped in transcripts and become callable workflows. | Repeated misses decrease after skill updates; skill invocation heat matches important work. | Skills become stale docs that agents ignore or over-call. |
+| Evals and proof systems | Accepted proof patterns raise trust and reduce supervision. | Accepted agent-hours per human intervention rises while false completion falls. | Proof artifacts add friction but do not change decisions or trust. |
+| Skill systems | Lessons become callable workflows instead of transcript residue. | Repeated misses decrease after skill updates. | Skills become stale docs that agents ignore or over-call. |
 | Template tracking | Framework fixes become defaults instead of one-off repairs. | New projects reach first measured loop faster with fewer missing surfaces. | Templates drift faster than they help or become too hard to configure. |
 
 ## Non-Tradeoffs
 
 - Do not hide orchestration state in chat.
-- Do not create a scheduler or daemon when a visible automation prompt is
+- Do not create a scheduler or daemon when visible automation prompts are
   enough.
 - Do not store secrets in tracked project config.
 - Do not silently rewrite the human thesis, durable leverage commitments, or
-  product/domain boundary through product, goal, ticket, or interval updates.
+  product/domain boundary.
+
+## Allocation Guardrails
+
+| Guardrail | Rule |
+| --- | --- |
+| Proof | Claims about harness behavior, autonomy, trust, quality, or productivity need nonzero proof work. |
+| Maintenance | Admin work stays bounded unless it unblocks product, proof, or current goals. |
+| Distribution | Trust distribution must be grounded in accepted evidence, user pain, or an adoption gap. |
+| Productization | Productization should follow accepted experiment, ablation, review, or operator-feedback evidence. |
+| Authority | Publishing, spend, customer contact, deploys, destructive cleanup, and product/domain-boundary changes require explicit authorization unless already granted by ticket or policy. |
 
 ## Agent Authority
 
@@ -57,29 +67,4 @@ preserve human intent instead of drifting into busywork.
 
 ## Change Rule
 
-Static charter changes require an explicit human-approved harness delta. Weekly
-Interval may propose the delta, but cannot apply it silently.
-
-## Charter-Level Operating Loop
-
-```text
-observe harness pain, trust gap, or efficiency opportunity
-  -> research real-world equivalents and current baseline
-  -> run an experiment or ablation with proof
-  -> write the evidence as a paper, report, or decision artifact
-  -> productize accepted wins into Farplane
-  -> distribute trust through educational product content
-  -> use adoption, trust, and operator feedback to choose the next experiment
-```
-
-## File Boundaries
-
-- `farplane/harness.md`: static human charter, durable thesis, leverage
-  commitments, non-tradeoffs, authority, and change rule.
-- `farplane/products.md`: dynamic product pipelines, autonomous project types,
-  and Pulse refill guidance.
-- `farplane/goals.md`: current strategy, KPIs, bets, milestones, holds, and
-  Goal Advisor handoffs.
-- `farplane/automations.md`: exact Pulse and Interval Codex automation prompts.
-- `farplane/bindings.md`: non-secret project coordinates.
-- `farplane/evals.md`: proof and eval policy.
+Static charter changes require an explicit human-approved harness delta.

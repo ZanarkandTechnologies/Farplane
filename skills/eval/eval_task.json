@@ -114,11 +114,11 @@
   {
     "id": "eval_consolidation_preserves_immediate_coverage_01",
     "title": "Eval consolidation preserves immediate regression coverage",
-    "query": "The AGI Toy Shop learning drain is producing a bunch of overlapping regression cases after recent harness misses. How should we keep the immediate protection without letting the suite turn noisy?",
+    "query": "The AGI Toy Shop weekly learning backpropagation pass is producing a bunch of overlapping regression cases after recent harness misses. How should we keep the immediate protection without letting the suite turn noisy?",
     "reference_points": [
-      "Rejects delaying testable lesson/trouble-derived evals until the weekly drain",
+      "Rejects delaying testable lesson/trouble-derived evals until the weekly backpropagation pass",
       "Keeps fresh regression coverage in the owning skills/<skill>/eval_task.json file first",
-      "Defines the weekly drain as a later consolidation pass over already-landed evals",
+      "Defines weekly backpropagation as a later consolidation pass over already-landed evals",
       "Uses fetch_evals_edited_since_last_run or equivalent content-hash discovery for changed eval files",
       "Routes each changed eval file to a bounded consolidate_eval subagent or isolated review lane"
     ],

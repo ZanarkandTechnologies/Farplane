@@ -78,7 +78,7 @@ project/
   farplane/goals.md          # program: strategy, KPIs, current milestone
   farplane/automations.md    # loop runner config: cadences and grouped jobs
   farplane/bindings.md       # project-specific external coordinates
-  farplane/evals.md          # proof policy
+  farplane/hooks.json        # declarative hook config
 
   .farplane/reports/         # recurring progress reports and run cache
   docs/HISTORY.md            # durable promoted progress

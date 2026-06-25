@@ -1,27 +1,27 @@
 {
   "counts": {
     "edge_types": {
-      "directory-contains": 243,
-      "literal-path": 3445,
-      "markdown-link": 520
+      "directory-contains": 244,
+      "literal-path": 3439,
+      "markdown-link": 517
     },
-    "edges": 4208,
+    "edges": 4200,
     "node_kinds": {
       "agent": 19,
       "doc": 42,
-      "file": 639,
+      "file": 636,
       "research": 11,
       "review-rubric": 22,
       "root-doc": 5,
       "script": 68,
-      "skill": 98,
+      "skill": 97,
       "skill-doc": 8,
-      "spec": 20,
+      "spec": 21,
       "template": 5
     },
-    "nodes": 937,
-    "scanned_files": 1258,
-    "unresolved_refs": 1131
+    "nodes": 934,
+    "scanned_files": 1255,
+    "unresolved_refs": 1128
   },
   "edges": [
     {
@@ -1604,6 +1604,13 @@
       "raw_ref": "skills/skill-maintenance/templates/archive",
       "source": "dir:skills/skill-maintenance/templates/archive",
       "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.2-c542d30fb624.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/skill-maintenance/templates/archive",
+      "raw_ref": "skills/skill-maintenance/templates/archive",
+      "source": "dir:skills/skill-maintenance/templates/archive",
+      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
       "type": "directory-contains"
     },
     {
@@ -8916,20 +8923,6 @@
     },
     {
       "from_file": "docs/skills/README.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "file:docs/skills/README.md",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/README.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "file:docs/skills/README.md",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/README.md",
       "raw_ref": "docs/bootstrap-brief.md",
       "source": "file:docs/skills/README.md",
       "target": "file:docs/bootstrap-brief.md",
@@ -9507,13 +9500,6 @@
       "raw_ref": "skills/landing-page/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/landing-page/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/registry.jsonl",
-      "raw_ref": "skills/learning-drain/SKILL.md",
-      "source": "file:docs/skills/registry.jsonl",
-      "target": "file:skills/learning-drain/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -11383,6 +11369,83 @@
       "raw_ref": "skills/goal-advisor/SKILL.md",
       "source": "file:docs/specs/invocation-and-adapters.md",
       "target": "file:skills/goal-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "docs/LESSONS.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:docs/LESSONS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "docs/TROUBLES.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:docs/TROUBLES.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "docs/specs/filesystem-lifecycle.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:docs/specs/filesystem-lifecycle.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:docs/specs/goal-loop-contract.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "farplane/automations.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:farplane/automations.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "farplane/goals.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:farplane/goals.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "farplane/harness.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:farplane/harness.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "farplane/products.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:farplane/products.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "skills/interval-update/SKILL.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:skills/interval-update/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "skills/pulse-update/SKILL.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:skills/pulse-update/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/specs/minimal-autonomy-loop.md",
+      "raw_ref": "skills/skill-maintenance/SKILL.md",
+      "source": "file:docs/specs/minimal-autonomy-loop.md",
+      "target": "file:skills/skill-maintenance/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -19877,6 +19940,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/interval-update/references/workflows/learning-backpropagation.md",
+      "raw_ref": "docs/LESSONS.md",
+      "source": "skill:interval-update",
+      "target": "file:docs/LESSONS.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/interval-update/SKILL.md",
       "raw_ref": "docs/MEMORY.md",
       "source": "skill:interval-update",
@@ -19898,6 +19968,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/interval-update/references/workflows/learning-backpropagation.md",
+      "raw_ref": "docs/TROUBLES.md",
+      "source": "skill:interval-update",
+      "target": "file:docs/TROUBLES.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/interval-update/references/workflows/compounding-leverage-review.md",
       "raw_ref": "docs/features/registry.jsonl",
       "source": "skill:interval-update",
@@ -19910,6 +19987,13 @@
       "source": "skill:interval-update",
       "target": "file:docs/skills/registry.jsonl",
       "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/references/workflows/learning-backpropagation.md",
+      "raw_ref": "../../../../docs/specs/minimal-autonomy-loop.md",
+      "source": "skill:interval-update",
+      "target": "file:docs/specs/minimal-autonomy-loop.md",
+      "type": "markdown-link"
     },
     {
       "from_file": "skills/interval-update/SKILL.md",
@@ -20049,6 +20133,13 @@
       "raw_ref": "../templates/interval-report.md",
       "source": "skill:interval-update",
       "target": "file:skills/interval-update/templates/interval-report.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/interval-update/references/workflows/learning-backpropagation.md",
+      "raw_ref": "../../../skill-maintenance/SKILL.md",
+      "source": "skill:interval-update",
+      "target": "file:skills/skill-maintenance/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -20637,153 +20728,6 @@
       "raw_ref": "skills/skill-creator/scripts/quick_validate.py",
       "source": "skill:landing-page",
       "target": "file:skills/skill-creator/scripts/quick_validate.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/SKILL.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/audits/2026-06-13-create-learning-drain.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/eval_task.json",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/references/automation-prompt.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/references/processed-state.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/SKILL.md",
-      "raw_ref": "../../docs/LESSONS.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/LESSONS.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/learning-drain/SKILL.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/audits/2026-06-13-create-learning-drain.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/eval_task.json",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/references/automation-prompt.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/references/processed-state.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/SKILL.md",
-      "raw_ref": "../../docs/TROUBLES.md",
-      "source": "skill:learning-drain",
-      "target": "file:docs/TROUBLES.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/learning-drain/SKILL.md",
-      "raw_ref": "../eval/SKILL.md",
-      "source": "skill:learning-drain",
-      "target": "file:skills/eval/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/learning-drain/audits/2026-06-13-create-learning-drain.md",
-      "raw_ref": "skills/learning-drain/SKILL.md",
-      "source": "skill:learning-drain",
-      "target": "file:skills/learning-drain/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/audits/2026-06-13-create-learning-drain.md",
-      "raw_ref": "skills/learning-drain/eval_task.json",
-      "source": "skill:learning-drain",
-      "target": "file:skills/learning-drain/eval_task.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/audits/2026-06-13-create-learning-drain.md",
-      "raw_ref": "skills/learning-drain/references/automation-prompt.md",
-      "source": "skill:learning-drain",
-      "target": "file:skills/learning-drain/references/automation-prompt.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/audits/2026-06-13-create-learning-drain.md",
-      "raw_ref": "skills/learning-drain/references/processed-state.md",
-      "source": "skill:learning-drain",
-      "target": "file:skills/learning-drain/references/processed-state.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/SKILL.md",
-      "raw_ref": "../optimize-harness/SKILL.md",
-      "source": "skill:learning-drain",
-      "target": "file:skills/optimize-harness/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/learning-drain/SKILL.md",
-      "raw_ref": "../skill-maintenance/SKILL.md",
-      "source": "skill:learning-drain",
-      "target": "file:skills/skill-maintenance/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/learning-drain/SKILL.md",
-      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
-      "source": "skill:learning-drain",
-      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/learning-drain/audits/2026-06-13-create-learning-drain.md",
-      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
-      "source": "skill:learning-drain",
-      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
       "type": "literal-path"
     },
     {
@@ -24210,6 +24154,27 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.js",
+      "raw_ref": "docs/specs/minimal-autonomy-loop.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/specs/minimal-autonomy-loop.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.json",
+      "raw_ref": "docs/specs/minimal-autonomy-loop.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/specs/minimal-autonomy-loop.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/scripts/farplane_lifecycle_catalog.py",
+      "raw_ref": "docs/specs/minimal-autonomy-loop.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/specs/minimal-autonomy-loop.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
       "raw_ref": "docs/specs/self-improvement-contracts.md",
       "source": "skill:skill-maintenance",
@@ -24526,6 +24491,13 @@
     },
     {
       "from_file": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-c542d30fb624.md",
+      "raw_ref": "docs/specs/self-improvement-contracts.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:docs/specs/self-improvement-contracts.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
       "raw_ref": "docs/specs/self-improvement-contracts.md",
       "source": "skill:skill-maintenance",
       "target": "file:docs/specs/self-improvement-contracts.md",
@@ -26188,41 +26160,6 @@
       "raw_ref": "skills/landing-page/SKILL.md",
       "source": "skill:skill-maintenance",
       "target": "file:skills/landing-page/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.js",
-      "raw_ref": "skills/learning-drain/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/learning-drain/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.json",
-      "raw_ref": "skills/learning-drain/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/learning-drain/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
-      "raw_ref": "skills/learning-drain/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/learning-drain/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
-      "raw_ref": "skills/learning-drain/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/learning-drain/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/scripts/farplane_lifecycle_catalog.py",
-      "raw_ref": "skills/learning-drain/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/learning-drain/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -27927,6 +27864,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
+      "raw_ref": "skills/skill-maintenance/scripts/generate_template_intelligence.py",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/skill-maintenance/scripts/generate_template_intelligence.py",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-5df4ae0fbf62.md",
       "raw_ref": "skills/skill-maintenance/scripts/generate_template_intelligence.py",
       "source": "skill:skill-maintenance",
@@ -28138,30 +28082,30 @@
     },
     {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
-      "raw_ref": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
+      "raw_ref": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
       "source": "skill:skill-maintenance",
-      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
+      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
-      "raw_ref": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
+      "raw_ref": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
       "source": "skill:skill-maintenance",
-      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
+      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
-      "raw_ref": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
+      "raw_ref": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
       "source": "skill:skill-maintenance",
-      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
+      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
-      "raw_ref": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
+      "raw_ref": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
       "source": "skill:skill-maintenance",
-      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-f3188fd6cded.md",
+      "target": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
       "type": "literal-path"
     },
     {
@@ -29481,7 +29425,7 @@
       "type": "markdown-link"
     }
   ],
-  "generated_at": "2026-06-25T07:52:28+00:00",
+  "generated_at": "2026-06-25T09:42:35+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -32040,30 +31984,6 @@
       "path": "skills/landing-page/self-improve/runs/20260505-0845-terminal-warehouse/notes.md"
     },
     {
-      "id": "file:skills/learning-drain/SKILL.md",
-      "kind": "file",
-      "label": "skills/learning-drain/SKILL.md",
-      "path": "skills/learning-drain/SKILL.md"
-    },
-    {
-      "id": "file:skills/learning-drain/eval_task.json",
-      "kind": "file",
-      "label": "skills/learning-drain/eval_task.json",
-      "path": "skills/learning-drain/eval_task.json"
-    },
-    {
-      "id": "file:skills/learning-drain/references/automation-prompt.md",
-      "kind": "file",
-      "label": "skills/learning-drain/references/automation-prompt.md",
-      "path": "skills/learning-drain/references/automation-prompt.md"
-    },
-    {
-      "id": "file:skills/learning-drain/references/processed-state.md",
-      "kind": "file",
-      "label": "skills/learning-drain/references/processed-state.md",
-      "path": "skills/learning-drain/references/processed-state.md"
-    },
-    {
       "id": "file:skills/leverage-advisor/SKILL.md",
       "kind": "file",
       "label": "skills/leverage-advisor/SKILL.md",
@@ -33166,6 +33086,12 @@
       "kind": "file",
       "label": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-c542d30fb624.md",
       "path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-c542d30fb624.md"
+    },
+    {
+      "id": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
+      "kind": "file",
+      "label": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md",
+      "path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-1e5518d834db.md"
     },
     {
       "id": "file:skills/skill-maintenance/templates/archive/skill-template-0.3.3-5df4ae0fbf62.md",
@@ -34644,12 +34570,6 @@
       "path": "skills/landing-page/SKILL.md"
     },
     {
-      "id": "skill:learning-drain",
-      "kind": "skill",
-      "label": "learning-drain",
-      "path": "skills/learning-drain/SKILL.md"
-    },
-    {
       "id": "skill:leverage-advisor",
       "kind": "skill",
       "label": "leverage-advisor",
@@ -35026,6 +34946,12 @@
       "kind": "spec",
       "label": "docs/specs/invocation-and-adapters.md",
       "path": "docs/specs/invocation-and-adapters.md"
+    },
+    {
+      "id": "file:docs/specs/minimal-autonomy-loop.md",
+      "kind": "spec",
+      "label": "docs/specs/minimal-autonomy-loop.md",
+      "path": "docs/specs/minimal-autonomy-loop.md"
     },
     {
       "id": "file:docs/specs/nested-pm-projects.md",

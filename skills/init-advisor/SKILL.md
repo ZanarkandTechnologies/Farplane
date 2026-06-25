@@ -35,7 +35,7 @@ initialization.
 Reusable project automation prompt templates live in
 [AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md). New projects use
 the Farplane Framework's recurring loops: `pulse-update` for frequent bounded
-action selection and explicit `interval-update` automations for daily or weekly
+ticket execution and explicit `interval-update` automations for daily or weekly
 reporting and planning.
 Generated project config should include `farplane/automations.md` as the
 reviewable prompt source copied into Codex automations.
@@ -139,12 +139,19 @@ setup_project_operating_model(bootstrap_brief, project_context,
     hooks, validation scripts, and review helper surfaces.
   - [ ] Create `farplane/harness.md` as the tracked static human charter:
         mission, human thesis, operating principles, priorities,
-        non-tradeoffs, static leverage commitments, agent authority, and change
-        rule. Do not place dynamic product direction or current strategy here.
+        non-tradeoffs, static leverage commitments, allocation guardrails,
+        agent authority, and change rule. Do not place dynamic product
+        direction or current strategy here.
   - [ ] Create `farplane/products.md` as the tracked project product catalog:
-        team archetype, operating flywheel, primary products, supporting
-        products, autonomous project types, selection notes, and Pulse refill
-        guidance. Do not treat chores as products.
+        team table, product table, work-lane table, and constraints. Do not
+        treat chores as products, and do not put planning algorithms here.
+  - [ ] Create `farplane/hooks.json` as declarative hook configuration. Do not
+        put hook algorithms, eval runners, or post-action procedures in project
+        files; those belong in skills, hooks, validators, or ticket programs.
+  - [ ] Create `farplane/skills/README.md` as the local product-skill home.
+        Project-specific product workflows live under
+        `farplane/skills/<product-skill>/SKILL.md`; promote only stable
+        cross-project workflows to root `skills/`.
   - [ ] Keep `farplane/automations.md` as the exact prompt source that calls
     generic skills in plain project-specific operational language.
   - [ ] Ensure `farplane/manifest.json` records the Farplane project
@@ -157,7 +164,8 @@ setup_project_operating_model(bootstrap_brief, project_context,
 - [ ] 4. Run readiness audit and full-mode operating-model setup.
   - [ ] Audit `docs/bootstrap-brief.md`, `farplane/harness.md`,
     `farplane/goals.md`, `farplane/products.md`, `farplane/automations.md`,
-    `farplane/bindings.md`, `farplane/pm.json`, `PROJECT_RULES.md`, and QA surfaces for missing,
+    `farplane/bindings.md`, `farplane/skills/README.md`, `farplane/pm.json`,
+    `PROJECT_RULES.md`, and QA surfaces for missing,
     placeholder, stale, or disabled state.
   - [ ] Treat missing human thesis, static leverage commitments, agent
         authority, or change rule in `farplane/harness.md` as a readiness gap.
@@ -234,7 +242,8 @@ setup_project_operating_model(bootstrap_brief, project_context,
 ## What This Sets Up
 
 - Farplane substrate: `farplane/manifest.json`, `farplane/README.md`,
-  `farplane/harness.md`, `farplane/products.md`, `farplane/*.md`,
+  `farplane/harness.md`, `farplane/products.md`, `farplane/hooks.json`,
+  `farplane/skills/README.md`, `farplane/*.md`,
   `.farplane/` runtime state, and `tickets/`.
 - Project operating docs: `AGENTS.md`, `PROJECT_RULES.md`, `ARCHITECTURE.md`,
   `docs/bootstrap-brief.md`, `docs/prd.md`, `docs/specs/`, and memory logs.

@@ -27,10 +27,10 @@ holds together.
 `skill-maintenance` owns skill-package mechanics after the owner surface is
 known: `SKILL.md` shape, references, eval/checklist sync, source ownership,
 frontmatter, registry sync, audit records, reinstall checks, and review
-routing. It also owns the weekly skill upkeep interface:
+routing. It also owns the weekly learning backpropagation interface:
 
 ```text
-harden_skill = turn fresh lessons/troubles into evals, gotchas, and blockers now
+harden_skill = turn fresh lessons/troubles/progress findings into evals, gotchas, and blockers now
 refine_skill = consolidate older evals/gotchas and shorten the skill later
 ```
 
@@ -40,12 +40,13 @@ variant/search loops with a program, metric, progress, and promotion rule.
 
 ## Automation Presets
 
-`skill-maintenance.harden_skill @7d -> reports.skill_hardening`
+`skill-maintenance.harden_skill @7d or weekly_interval.learning_backpropagation -> reports.skill_hardening`
 
-Turns fresh lesson/trouble rows into immediate evals, gotchas, checklist
-guardrails, or tickets. The automation manifest supplies cadence, report paths,
-freshness, and gates; this skill owns dedupe, source ownership, eval handoff,
-audit/proof, registry sync, and blocker reporting.
+Turns fresh lesson/trouble rows, ticket progress findings, interval report
+findings, proof failures, and repeated planning misses into immediate evals,
+gotchas, checklist guardrails, or tickets. The caller supplies cadence or
+review-window refs; this skill owns dedupe, source ownership, eval handoff,
+processed-state policy, audit/proof, registry sync, and blocker reporting.
 
 `skill-maintenance.refine_skill @7d -> reports.skill_refinement`
 
@@ -71,9 +72,11 @@ skill_maintenance(expected_behavior, current_behavior, edited_skill, mode?, evid
 state:
   reads(edited_skill.SKILL.md, edited_skill.references?, edited_skill.eval_task?,
         edited_skill.qa_checklist?, docs/skills/registry.jsonl, prior_audits?,
-        run_artifacts?, reviewer_receipts?)
+        run_artifacts?, reviewer_receipts?, docs/LESSONS.md?, docs/TROUBLES.md?,
+        tickets/**/progress.md?, interval_reports?, pulse_reports?)
   writes(edited_skill.SKILL.md?, edited_skill.references?, edited_skill.eval_task?,
-         edited_skill.qa_checklist?, skill-local audit?, docs/skills/registry.jsonl)
+         edited_skill.qa_checklist?, skill-local audit?, docs/skills/registry.jsonl,
+         optional .farplane/state/skill-maintenance/processed-learning.jsonl)
 
 modes:
   harden_skill | refine_skill |
@@ -102,7 +105,7 @@ fails:
 ## Upkeep Modes
 
 ```text
-harden_skill(edited_skill, lessons?, troubles?, usage_evidence?, cap?)
+harden_skill(edited_skill, lessons?, troubles?, progress_findings?, usage_evidence?, cap?)
   -> eval_candidates + gotchas + regression_cases + improvement_tickets
    + processed_state_delta?
 
@@ -111,11 +114,13 @@ refine_skill(edited_skill, evals?, gotchas?, usage_results?, target_size?)
    + deleted_or_moved_detail + review_notes
 ```
 
-Use `harden_skill` for fresh prevention: take new `docs/LESSONS.md` and
-`docs/TROUBLES.md` rows, dedupe them, and add the smallest durable blockers
-against recurrence: eval cases, gotchas, QA/checklist guardrails, or tickets.
-Legacy `learning-drain` automations should migrate to this mode; the
-`learning-drain` skill remains a compatibility wrapper around this intake.
+Use `harden_skill` for fresh prevention: take new `docs/LESSONS.md`,
+`docs/TROUBLES.md`, ticket progress findings, interval report findings, proof
+failures, and repeated planning misses; dedupe them; and add the smallest
+durable blockers against recurrence: eval cases, gotchas, QA/checklist
+guardrails, or tickets. Weekly Interval should call this mode through
+`learning_backpropagation` when a project needs recurring learning
+backpropagation.
 
 Use `refine_skill` for compaction after hardening has accumulated material:
 merge duplicate evals, collapse overlapping gotchas, move long examples into

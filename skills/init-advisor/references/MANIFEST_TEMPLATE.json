@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "1.5.0",
+    "template_version": "1.6.0",
     "feature_refs": ["FEAT-0060"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "1.5.0",
+  "spec_version": "1.6.0",
   "template_uses": {
-    "farplane-framework": "1.5.0"
+    "farplane-framework": "1.6.0"
   },
   "project": {
     "name": "TODO",
@@ -28,7 +28,8 @@
       "farplane/products.md",
       "farplane/automations.md",
       "farplane/bindings.md",
-      "farplane/evals.md",
+      "farplane/hooks.json",
+      "farplane/skills/README.md",
       "docs/bootstrap-brief.md",
       "docs/prd.md",
       "docs/specs/README.md",

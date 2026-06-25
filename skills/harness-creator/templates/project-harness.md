@@ -4,19 +4,21 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.3.0"
+template_version: "0.3.1"
 feature_refs:
   - FEAT-0027
   - FEAT-0048
 project_id: TODO
 automation_status: preview
-framework_template_version: "0.2.0"
+framework_template_version: "0.3.0"
 canonical_targets:
   - farplane/harness.md
   - farplane/products.md
   - farplane/goals.md
   - farplane/automations.md
   - farplane/bindings.md
+  - farplane/hooks.json
+  - farplane/skills/README.md
 ---
 
 # Harness Creator Worksheet
@@ -29,13 +31,14 @@ Farplane files:
 
 - `farplane/harness.md` owns the static human charter: mission, human thesis,
   operating principles, non-tradeoffs, static leverage commitments, agent
-  authority, systems, and change rule.
-- `farplane/products.md` owns the dynamic product catalog and Pulse refill
-  context.
-- `farplane/goals.md` owns dynamic strategy, KPIs, current frontier, and Goal
-  Advisor handoffs.
+  authority, allocation guardrails, and change rule.
+- `farplane/products.md` owns the product catalog and work-lane weights.
+- `farplane/goals.md` owns dynamic strategy, KPIs, current bets, milestone, and
+  holds.
 - `farplane/automations.md` owns reviewable automation prompt text.
 - `farplane/bindings.md` owns non-secret project coordinates.
+- `farplane/hooks.json` owns declarative project hook config.
+- `farplane/skills/` owns project-local product workflow skills.
 
 ## Static Charter Delta
 
@@ -80,57 +83,66 @@ TODO: durable human thesis the agents must preserve.
 Static charter changes require an explicit human-approved harness delta.
 Interval reports may propose the delta, but cannot apply it silently.
 
-## Charter-Level Operating Loop
+## Allocation Guardrails
 
-```text
-TODO signal
-  -> TODO investigation or experiment
-  -> TODO evidence artifact
-  -> TODO product or process update
-  -> TODO feedback signal
-  -> TODO next selection rule
-```
+| Lane | Min | Max | Why |
+| --- | ---: | ---: | --- |
+| TODO | TODO | TODO | TODO |
 
 ## Product Catalog Delta
 
 Target: `farplane/products.md`
 
-Use this section for the team archetype, operating flywheel, primary products,
-supporting products, autonomous project types, selection notes, and Pulse refill
-guidance. Do not put these dynamic product decisions in `farplane/harness.md`.
+Use this section for team identity, product rows, work-lane weights, and
+constraints. Do not put planning algorithms or operational workflow steps in
+`farplane/products.md`; those belong in skills and automation prompts.
 
-| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |
+| ID | Product | Audience | Output | Reward |
 | --- | --- | --- | --- | --- |
 | TODO | TODO | TODO | TODO | TODO |
+
+| Lane | Default Weight | Purpose |
+| --- | ---: | --- |
+| TODO | TODO | TODO |
+
+## Product Skill Plan
+
+Target: `farplane/skills/<product-skill>/SKILL.md` or a refinement ticket.
+
+Map existing reusable skills before creating local product skill stubs.
+
+```text
+derive_local_product_skills(products, existing_skills, goals, constraints)
+  -> product_skill_reuse_map
+   + local_product_skill_stubs?
+   + product_skill_refinement_ticket?
+   + pm_activation_gate
+```
+
+| Product | Existing Skill Route | Local Skill Path | Status | Next Ticket |
+| --- | --- | --- | --- | --- |
+| TODO | TODO | `farplane/skills/TODO/SKILL.md` | reuse / stub / refine_ticket / defer | TODO |
+
+Promotion rule: keep product skills under `farplane/skills/` until repeated
+runs prove the workflow is reusable across projects.
 
 ## Strategy Delta
 
 Target: `farplane/goals.md`
 
-Use this section for goals, axes, KPIs, current frontier, holds, strategy
-deltas, and Goal Advisor handoffs. Strategy must stay inside the static charter
-but is not itself the charter.
+Use this section for north star, value function, KPI axes, current bets,
+current milestone, and holds. Strategy must stay inside the static charter but
+is not itself the charter.
 
-```goal-program
-goal north_star {
-  outcome: "TODO"
-  metric: learning_metric("first honest baseline")
-  horizon: "TODO"
-}
+| Field | Value |
+| --- | --- |
+| North Star | TODO |
+| Horizon | TODO |
+| Metric | TODO |
 
-axis TODO {
-  question: "TODO"
-  kpi: missing_instrumentation("TODO")
-  current_signal: ref("TODO")
-}
-
-project current_frontier {
-  output: "TODO: first evidence-producing milestone"
-  feedback_surface: review_metric("TODO")
-  route: goal_advisor
-  gates: [no_publish, no_spend, no_account_changes]
-}
-```
+| Bet | Why | Evidence | Next Review |
+| --- | --- | --- | --- |
+| TODO | TODO | TODO | TODO |
 
 ## Automation And Binding Delta
 
@@ -172,18 +184,6 @@ instrumentation, memory sync, notifications, or feedback loops.
 | Ticket | Type | Human Step | Enables | Fallback |
 | --- | --- | --- | --- | --- |
 | `tickets/TASK-XXXX-unblock-*.md` | unblock |  |  |  |
-
-## Goal Advisor Handoff
-
-- `files:`
-- `task:`
-- `trigger:` active_goal / heartbeat / feedback_loop / rollout / batch_goal / direct
-- `budget:`
-- `metric_provider:`
-- `drift_policy:`
-- `side_effect_gates:`
-- `stop_conditions:`
-- `prompt_or_next_action:`
 
 ## Optional Inventory Views
 

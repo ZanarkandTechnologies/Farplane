@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.7
+template_version: 0.2.8
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -266,6 +266,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 
 - When a relevant skill is named or clearly applies, read its `SKILL.md` before
   using it.
+- If the skill package has `qa_checklist.md`, read it before execution as
+  preflight guardrails and apply it again before completion. For material skill
+  work, use an independent reviewer or QA lane to re-apply the checklist when
+  available.
 - Treat each skill as a callable mini harness:
   `skill(task, state) -> artifact + evidence + state_delta`.
 - Pay attention to the skill's `## Skill Signature` when present. Bind the

@@ -75,7 +75,7 @@ Tracked framework config stays under `farplane/`. The important separation is:
 
 This rule exists because durable memory cleanup needs source preservation,
 retention scoring, proposal evidence, and review. A hook can notice growth or
-missing capture, but `knowledge-tidier`, `update-memory`, `learning-drain`, or
+missing capture, but `knowledge-tidier`, `update-memory`, or
 `skill-maintenance` should own the applied change.
 
 ## Graph Tags

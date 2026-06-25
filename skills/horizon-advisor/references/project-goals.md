@@ -58,7 +58,7 @@ ProjectGoals :=
   farplane/goals.md
 + farplane/harness.md
 + farplane/automations.md
-+ farplane/evals.md
++ farplane/hooks.json
 + tickets/
 + memory_docs
 ```

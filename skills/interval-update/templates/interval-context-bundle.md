@@ -12,6 +12,7 @@ Report workflows: <enabled workflow list>
 | Source | Status | Freshness | Notes |
 | --- | --- | --- | --- |
 | Static harness charter |  |  |  |
+| Product work lanes |  |  |  |
 | Goals portfolio |  |  |  |
 | Run ledger |  |  |  |
 | Parent plan / goals |  |  |  |
@@ -35,6 +36,11 @@ Report workflows: <enabled workflow list>
 
 | Goal / axis / project | Current signal | Evidence | Gap |
 | --- | --- | --- | --- |
+
+## Product Work Lane Snapshot
+
+| Lane | Default weight hint | Current signal | Evidence | Gap |
+| --- | ---: | --- | --- | --- |
 
 ## KPI And Feedback Snapshot
 

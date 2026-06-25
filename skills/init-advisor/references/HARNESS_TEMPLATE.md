@@ -4,7 +4,7 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.2.0"
+framework_template_version: "0.3.0"
 owner: harness
 ---
 
@@ -14,11 +14,12 @@ owner: harness
 
 This file is the static human charter. Fill it with `harness-creator` or a
 human-approved harness delta when the project needs richer mission, thesis,
-values, non-tradeoffs, leverage commitments, authority, or change rules.
+values, non-tradeoffs, leverage commitments, allocation guardrails, authority,
+or change rules.
 
-Dynamic product direction belongs in `farplane/products.md`. Current strategy,
-KPIs, milestones, and Goal Advisor handoffs belong in `farplane/goals.md`.
-Recurring prompt mechanics belong in `farplane/automations.md`.
+Dynamic product direction belongs in `farplane/products.md`. Current strategy
+belongs in `farplane/goals.md`. Recurring prompt configuration belongs in
+`farplane/automations.md`. Operational logic belongs in skills.
 
 ## Mission
 
@@ -43,6 +44,12 @@ must preserve while products and goals evolve.
 
 - TODO
 
+## Allocation Guardrails
+
+| Guardrail | Rule |
+| --- | --- |
+| TODO | TODO |
+
 ## Agent Authority
 
 - Agents may evolve products, audiences, tickets, and goals through
@@ -56,24 +63,3 @@ must preserve while products and goals evolve.
 
 Static charter changes require an explicit human-approved harness delta.
 Interval reports may propose the delta, but cannot apply it silently.
-
-## Charter-Level Operating Loop
-
-```text
-TODO signal
-  -> TODO investigation or experiment
-  -> TODO evidence artifact
-  -> TODO product or process update
-  -> TODO feedback signal
-  -> TODO next selection rule
-```
-
-## File Boundaries
-
-- `farplane/harness.md`: static human charter.
-- `farplane/products.md`: dynamic product pipelines and Pulse refill guidance.
-- `farplane/goals.md`: current strategy, KPIs, milestones, and execution
-  handoffs.
-- `farplane/automations.md`: exact Codex automation prompts.
-- `farplane/bindings.md`: non-secret project coordinates.
-- `farplane/evals.md`: proof and eval policy.

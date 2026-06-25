@@ -32,7 +32,8 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/products.md",
                         "farplane/automations.md",
                         "farplane/bindings.md",
-                        "farplane/evals.md",
+                        "farplane/hooks.json",
+                        "farplane/skills/README.md",
                         "tickets/templates/ticket.md",
                     ],
                     "ignored": [".farplane/state/run-ledger.json"],
@@ -59,11 +60,18 @@ def write_required_project_files(root: Path) -> None:
     for path in ("AGENTS.md", "PROJECT_RULES.md", "ARCHITECTURE.md"):
         (root / path).write_text(f"# {path}\n", encoding="utf-8")
 
-    for name in ("README.md", "goals.md", "evals.md"):
+    for name in ("README.md", "goals.md"):
         (farplane / name).write_text(
             "---\nframework_template_version: \"0.1.0\"\n---\n\n# Test\n",
             encoding="utf-8",
         )
+    (farplane / "hooks.json").write_text('{"version": 1, "hooks": {}}\n', encoding="utf-8")
+    skills_dir = farplane / "skills"
+    skills_dir.mkdir()
+    (skills_dir / "README.md").write_text(
+        "---\nkind: local-product-skills-index\nframework_template_version: \"0.1.0\"\n---\n\n# Local Product Skills\n",
+        encoding="utf-8",
+    )
     (farplane / "harness.md").write_text(
         """---
 kind: project-harness
@@ -102,15 +110,11 @@ Test thesis.
 
 Static charter changes require approval.
 
-## Charter-Level Operating Loop
+## Allocation Guardrails
 
-```text
-signal -> work -> proof -> feedback
-```
-
-## File Boundaries
-
-- `farplane/harness.md`: static charter.
+| Guardrail | Rule |
+| --- | --- |
+| Proof | Keep proof work nonzero. |
 """,
         encoding="utf-8",
     )
@@ -122,41 +126,27 @@ framework_template_version: "0.1.0"
 
 # Products
 
-## Team Archetype
+## Team
 
-Test project.
+| Field | Value |
+| --- | --- |
+| Archetype | test_project |
 
-## Operating Flywheel
+## Products
 
-```text
-signal -> work -> proof -> feedback
-```
-
-## Primary Products
-
-| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |
+| ID | Product | Audience | Output | Reward |
 | --- | --- | --- | --- | --- |
-| Test product | users | artifact | signal | `skill` |
+| test | Test product | users | artifact | signal |
 
-## Supporting Products
+## Work Lanes
 
-| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |
-| --- | --- | --- | --- | --- |
-| Support | team | artifact | signal | `skill` |
+| Lane | Default Weight | Purpose |
+| --- | ---: | --- |
+| experiment | 50 | Test a product hypothesis. |
 
-## Autonomous Project Types
+## Constraints
 
-| Project Type | When To Create It | Output | Proof / Reward Signal |
-| --- | --- | --- | --- |
-| Experiment | need | output | proof |
-
-## Product Selection Notes
-
-- Prefer primary products.
-
-## Pulse Refill Guidance
-
-Use products for grounded refill tickets.
+- Products are not chores.
 """,
         encoding="utf-8",
     )
@@ -202,7 +192,7 @@ def test_malformed_products_file_fails(tmp_path: Path) -> None:
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
     (farplane / "products.md").write_text(
-        "---\nframework_template_version: \"0.1.0\"\n---\n\n# Products\n\n## Primary Products\n",
+        "---\nframework_template_version: \"0.1.0\"\n---\n\n# Products\n\n## Products\n",
         encoding="utf-8",
     )
 
@@ -210,7 +200,7 @@ def test_malformed_products_file_fails(tmp_path: Path) -> None:
 
     assert "farplane/products.md must use front matter kind: project-products." in errors
     assert any(error.startswith("farplane/products.md missing required headings:") for error in errors)
-    assert "farplane/products.md Primary Products must use the standard product table columns." in errors
+    assert "farplane/products.md Products must use the standard product table columns." in errors
 
 
 def test_missing_harness_file_fails(tmp_path: Path) -> None:
@@ -303,6 +293,30 @@ def test_retired_steer_files_fail(tmp_path: Path) -> None:
 
     assert "farplane/steer.config.toml is retired; use farplane/automations.md." in errors
     assert ".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling." in errors
+
+
+def test_hooks_file_shape_is_validated(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "hooks.json").write_text('{"version": 1, "hooks": {"file_growth": {"rules": {}}}}\n', encoding="utf-8")
+
+    errors = validate(tmp_path)
+
+    assert "farplane/hooks.json hooks.file_growth.rules must be a list when present." in errors
+
+
+def test_retired_file_growth_hook_config_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "file-growth-hook.json").write_text("{}\n", encoding="utf-8")
+
+    errors = validate(tmp_path)
+
+    assert "farplane/file-growth-hook.json is retired; use farplane/hooks.json." in errors
 
 
 def test_valid_versioned_files_pass(tmp_path: Path) -> None:

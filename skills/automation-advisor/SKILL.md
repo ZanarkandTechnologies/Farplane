@@ -16,8 +16,9 @@ allowed-tools: Read, Glob, Grep, Bash
 
 Use this skill when creating, revising, or auditing Farplane Codex automations.
 It is Farplane-specific authoring guidance for live Codex automation prompts.
-Pulse belongs to the fast action loop; interval automations belong to reporting,
-reflection, drift checks, and bounded replanning.
+Pulse belongs to the fast executor loop; interval automations belong to
+reporting, reflection, drift checks, work-lane allocation, and bounded
+replanning.
 
 Do not reintroduce a project-local automation compiler or a hidden scheduler
 thread. Keep the exact project-specific Codex prompts in

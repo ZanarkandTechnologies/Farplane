@@ -1,27 +1,27 @@
 [
   {
-    "id": "pulse_selects_board_action",
-    "title": "Pulse selects one board action",
+    "id": "pulse_executes_ready_tickets",
+    "title": "Pulse executes ready tickets",
     "query": "A 30-minute Pulse automation wakes up with fresh board state, prior outcomes, and stale strategy ideas in chat history. What should it read and decide from?",
     "reference_points": [
-      "Reconciles previous outcomes before selecting a new action",
-      "Uses the configured bandit or deterministic fallback to score proceedable tickets and action arms",
+      "Reconciles previous outcomes before admitting new work",
+      "Builds the proceedable ticket set from local ticket state and execution policy",
       "Does not perform drift review or strategy replanning during the fast loop",
-      "Selects exactly one bounded board action or intentional no-op",
+      "Executes ready tickets up to policy cap or records why execution is blocked",
       "Records decision and reward state"
     ],
-    "tags": ["pulse-update", "bandit", "board-selection"]
+    "tags": ["pulse-update", "ticket-execution", "board-admission"]
   },
   {
     "id": "pulse_ticket_selection_is_embedded",
     "title": "Pulse embeds simple ticket selection",
     "query": "Pulse has no forced maintenance action and sees three local tickets. One is blocked, one needs approval, and one is ready and unblocked. What should happen?",
     "reference_points": [
-      "Selects only one proceedable ticket action",
+      "Admits only proceedable tickets",
       "Skips blocked or approval-required tickets",
       "Routes substantial implementation through Goal Advisor or a bounded handoff",
       "Appends persistent PM-owned worker chat IDs to farplane/pm.json threads.chats when needed",
-      "Records why the ticket arm was selected"
+      "Records why each candidate was admitted or excluded"
     ],
     "tags": ["pulse-update", "ticket-selection"]
   },
@@ -49,19 +49,18 @@
     "tags": ["pulse-update", "reports"]
   },
   {
-    "id": "pulse_no_ticket_uses_action_tree",
-    "title": "Pulse uses action tree when no ticket can advance",
+    "id": "pulse_no_ticket_requests_planning",
+    "title": "Pulse requests planning when no ticket can advance",
     "query": "Pulse has no forced maintenance action and no proceedable local ticket. What should it do?",
     "reference_points": [
       "Does not invent strategy in the Pulse context",
-      "Chooses one narrow refill or maintenance arm from the action tree",
-      "Uses farplane/harness.md as the static charter boundary and farplane/products.md to shape product refill work",
-      "Treats consult goal-advisor as one eligible arm only when goals or the next milestone are unclear",
-      "Does not treat zero ready tickets as sufficient reason for no-op",
-      "Evaluates non-ticket arms before selecting no_op_unsafe",
+      "Performs only mechanical ticket admission repair when it can make an existing ticket executable",
+      "Writes request_planning when the board is empty, stale, vague, or needs product/goal judgment",
+      "Uses farplane/products.md as planner context rather than creating product-shaped refill tickets inside Pulse",
+      "Does not treat Goal Advisor as the default empty-board fallback",
       "Records the no-ticket reason",
       "Writes decision and report state"
     ],
-    "tags": ["pulse-update", "action-tree", "no-ticket"]
+    "tags": ["pulse-update", "planning-request", "no-ticket"]
   }
 ]

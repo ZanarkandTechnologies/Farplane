@@ -3,7 +3,7 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-25
+updated_at: 2026-06-26
 framework_template_version: "0.2.0"
 source_of_truth:
   - docs/farplane-framework/lifecycle.md
@@ -17,7 +17,7 @@ source_of_truth:
   - farplane/products.md
   - farplane/automations.md
   - farplane/bindings.md
-  - farplane/evals.md
+  - farplane/hooks.json
   - farplane/pm.json
   - docs/specs/steer-pulse-automation.md
   - docs/specs/program-notation.md
@@ -84,7 +84,9 @@ PROJECT_ROOT/
     products.md
     automations.md
     bindings.md
-    evals.md
+    hooks.json
+    skills/
+      README.md
     pm.json
 
   tickets/
@@ -123,8 +125,10 @@ reports, eval runs, and logs.
 `project.name`, `project.description`, and `project.archetype`. The richer
 description of what the project is lives in Markdown:
 `farplane/harness.md` owns the static human charter,
-`farplane/products.md` owns the dynamic product portfolio, and
+`farplane/products.md` owns the product catalog and work lanes, and
 `farplane/goals.md` owns current strategy.
+Project-specific product workflows live under `farplane/skills/`; promote them
+to root `skills/` only after repeated evidence shows cross-project reuse.
 
 ## Template Version
 
@@ -155,14 +159,15 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + farplane/products.md
    + farplane/automations.md
    + farplane/bindings.md
-   + farplane/evals.md
+   + farplane/hooks.json
+   + farplane/skills/README.md
    + farplane/pm.json?
    + .farplane/ ignored runtime root
 ```
 
 In `full` init mode, `init-advisor` calls `harness-creator` after the
 substrate exists. `harness-creator` fills or refines the split project files:
-static charter in `harness.md`, product catalog and pipelines in `products.md`,
+static charter in `harness.md`, product rows and work lanes in `products.md`,
 strategy and KPIs in `goals.md`, automation prompt text in `automations.md`,
 and safe coordinates in `bindings.md`. It owns the smaller advisor calls such
 as research, `horizon-advisor`, `harness-advisor`, `skill-creator`, and
@@ -174,13 +179,14 @@ front matter plus Markdown sections, not a fenced custom program DSL.
 Farplane projects use explicit recurring automation loops:
 
 ```text
-pulse_update(...)  # fast idle/action loop
+pulse_update(...)  # fast ticket executor loop
 interval_update(...)  # scheduled report-then-plan loop
 ```
 
-Pulse is the actor loop. It wakes frequently, reads the static harness charter
-and dynamic product/strategy context, reconciles outcomes, selects one bounded
-action, optionally hands off work, and records decision/reward state.
+Pulse is the executor loop. It wakes frequently, reads the static harness
+charter and dynamic product/strategy context, reconciles outcomes, executes
+ready tickets up to policy cap, requests planning when no executable work
+exists, and records decision/reward state.
 
 Daily Interval and Weekly Interval are planning loops. Their live Codex prompts
 are reviewed in `farplane/automations.md`; Codex automation records own their

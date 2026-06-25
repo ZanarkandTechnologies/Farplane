@@ -31,7 +31,7 @@ mental model is:
 ```text
 init_project(intent)
   -> visible project files
-  -> static human charter, products, goals, and current frontier
+  -> static human charter, products, goals, and current milestone
   -> ticket-backed Goal Packets
   -> Pulse acts and intervals plan
   -> weekly reports propose goals deltas and leverage bets
@@ -109,10 +109,10 @@ flowchart TD
   S -->|minor evidence-backed update| E
   G --> M["pulse-update"]
   L --> M
-  M --> N["one bounded action or worker handoff"]
+  M --> N["ready ticket execution or planning request"]
   N --> O["Pulse reports and ledgers"]
   O --> K
-  J --> P["update-memory / learning-drain / skill-maintenance"]
+  J --> P["update-memory / skill-maintenance"]
   P --> Q["compressed memory, lessons, skills, evals"]
   Q --> D
 ```
@@ -147,7 +147,7 @@ goals are not grounded, it reports the specific readiness gap before claiming
 the project is initialized.
 
 `horizon-advisor` shapes `farplane/goals.md`. It names the north star, value
-function, KPIs, anti-metrics, strategy axes, and current frontier. It expands
+function, KPIs, anti-metrics, strategy axes, and current milestone. It expands
 only the first branch that can produce useful evidence now, then hands
 executable work to `goal-advisor`.
 
@@ -189,7 +189,7 @@ Farplane autonomous operation uses explicit Codex automation loops:
 
 ```text
 pulse_update(project_root, extensions?, pulse_policy?)
-  -> one bounded action + decision state
+  -> ready ticket execution + planning request? + decision state
 
 interval_update(project_root, interval_id, review_window, planning_window,
                 context_refs?, report_workflows?, planning_policy?,
@@ -197,11 +197,11 @@ interval_update(project_root, interval_id, review_window, planning_window,
   -> dated interval report + next-window plan + Pulse guidance
 ```
 
-Pulse is the fast actor loop. It reads the static harness charter, current
-goals, dynamic products, recent interval guidance, ticket state, action arms,
-rewards, and ledgers. It selects one bounded board move inside the charter
-boundary, optionally spawns a worker, writes a dated Pulse report, and updates
-decision/reward state.
+Pulse is the fast executor loop. It reads the static harness charter, current
+goals, dynamic products, recent interval guidance, ticket state, execution
+policy, rewards, and ledgers. It admits ready tickets, executes parallelizable
+work up to policy cap, writes planning requests when no executable work exists,
+writes a dated Pulse report, and updates decision/reward state.
 
 Daily Interval reviews the last 24 hours and plans the next 24 hours. Weekly
 Interval reviews the last week, checks drift against `farplane/harness.md` and
@@ -210,8 +210,8 @@ write dated reports under `.farplane/reports/interval/`, and give Pulse
 guidance.
 
 The important design choice is that Pulse does not become long-horizon
-strategy, and interval automations do not become fast action dispatchers. They
-share files, not hidden transcript memory.
+strategy, and interval automations do not become fast execution dispatchers.
+They share files, not hidden transcript memory.
 
 ## Self-Update Loop
 
@@ -253,7 +253,7 @@ Goals deltas have three outcomes:
 The advisor boundaries are:
 
 - `horizon-advisor` owns long-horizon strategy: value function, KPI tree,
-  strategy axes, current frontier, and material `farplane/goals.md` deltas.
+  strategy axes, current milestone, and material `farplane/goals.md` deltas.
 - `leverage-advisor` scores how an existing feature, workflow, capability, or
   artifact can compound value.
 - `harness-advisor` decides which harness surface should own a selected
@@ -278,7 +278,8 @@ The advisor boundaries are:
 - `optimize-harness` is the umbrella improvement loop when the observed
   behavior gap itself is the task: diagnose the gap, place the lever, choose
   proof, route the change or experiment, and require review.
-- `pulse-update` executes one bounded action and records immediate outcomes.
+- `pulse-update` executes ready tickets up to policy cap, records immediate
+  outcomes, or writes a planning request when the board lacks executable work.
 
 Use this matrix when the weekly self-update report routes work:
 
@@ -302,8 +303,8 @@ then selects a small number of bets:
 ```
 
 After approval, a material strategy delta returns to `horizon-advisor`; an
-execution bet goes to `goal-advisor`; small ticket or Pulse guidance goes to
-the board and Pulse. The next daily and weekly intervals read the resulting
+execution bet goes to `goal-advisor`; small ticket deltas go to the board for
+Pulse execution. The next daily and weekly intervals read the resulting
 reports and reward signals.
 
 The weekly report should reason over scores rather than pretending scores are
@@ -351,10 +352,10 @@ Farplane keeps information useful by compressing it into the right owner:
 - `update-memory` refreshes project context across README, docs, memory,
   history, lessons, troubles, tickets, and reports when an owning path and
   approval are explicit.
-- `learning-drain` dedupes recent troubles and lessons, writes processed state,
-  and routes durable skill hardening or eval follow-up.
 - `skill-maintenance` turns behavior deltas and lesson hardening into owner
-  skill edits, evals, registry sync, audit proof, and review.
+  skill edits, evals, registry sync, audit proof, processed learning state, and
+  review. Weekly Interval routes learning backpropagation here instead of using
+  a separate drain wrapper.
 - `knowledge-tidier` ranks bloated knowledge artifacts and routes keep, cut,
   archive, or owner-specific handoffs.
 - `eval` converts agent, prompt, or skill behavior into repeatable tasks,

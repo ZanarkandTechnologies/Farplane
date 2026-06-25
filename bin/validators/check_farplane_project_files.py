@@ -40,13 +40,10 @@ SECRET_VALUE_RE = re.compile(
 )
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
 PRODUCTS_REQUIRED_HEADINGS = (
-    "## Team Archetype",
-    "## Operating Flywheel",
-    "## Primary Products",
-    "## Supporting Products",
-    "## Autonomous Project Types",
-    "## Product Selection Notes",
-    "## Pulse Refill Guidance",
+    "## Team",
+    "## Products",
+    "## Work Lanes",
+    "## Constraints",
 )
 HARNESS_REQUIRED_HEADINGS = (
     "## Mission",
@@ -54,10 +51,9 @@ HARNESS_REQUIRED_HEADINGS = (
     "## Operating Principles",
     "## Static Leverage Commitments",
     "## Non-Tradeoffs",
+    "## Allocation Guardrails",
     "## Agent Authority",
     "## Change Rule",
-    "## Charter-Level Operating Loop",
-    "## File Boundaries",
 )
 
 
@@ -199,7 +195,8 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/products.md",
         "farplane/automations.md",
         "farplane/bindings.md",
-        "farplane/evals.md",
+        "farplane/hooks.json",
+        "farplane/skills/README.md",
         "tickets/templates/ticket.md",
         ".farplane/state/run-ledger.json",
     }
@@ -252,8 +249,40 @@ def validate_products_file(root: Path, products_file: Path) -> list[str]:
     if missing_headings:
         errors.append(f"{rel_path} missing required headings: {', '.join(missing_headings)}.")
 
-    if "## Primary Products" in text and "| Product | Audience | Artifact Examples | Reward Signals | Owner Skills |" not in text:
-        errors.append(f"{rel_path} Primary Products must use the standard product table columns.")
+    if "## Team" in text and "| Field | Value |" not in text:
+        errors.append(f"{rel_path} Team must use the standard field/value table columns.")
+    if "## Products" in text and "| ID | Product | Audience | Output | Reward |" not in text:
+        errors.append(f"{rel_path} Products must use the standard product table columns.")
+    if "## Work Lanes" in text and "| Lane | Default Weight | Purpose |" not in text:
+        errors.append(f"{rel_path} Work Lanes must use the standard lane table columns.")
+
+    return errors
+
+
+def validate_hooks_file(root: Path, hooks_file: Path) -> list[str]:
+    rel_path = hooks_file.relative_to(root).as_posix()
+    errors: list[str] = []
+
+    try:
+        data = json.loads(hooks_file.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"{rel_path} must be valid JSON: {exc.msg}."]
+
+    if not isinstance(data, dict):
+        return [f"{rel_path} must be a JSON object."]
+    if data.get("version") != 1:
+        errors.append(f"{rel_path} version must be 1.")
+    hooks = data.get("hooks")
+    if not isinstance(hooks, dict):
+        errors.append(f"{rel_path} hooks must be an object.")
+        return errors
+
+    file_growth = hooks.get("file_growth")
+    if file_growth is not None:
+        if not isinstance(file_growth, dict):
+            errors.append(f"{rel_path} hooks.file_growth must be an object when present.")
+        elif "rules" in file_growth and not isinstance(file_growth.get("rules"), list):
+            errors.append(f"{rel_path} hooks.file_growth.rules must be a list when present.")
 
     return errors
 
@@ -291,6 +320,8 @@ def validate(root: Path) -> list[str]:
     bindings = framework_dir / "bindings.md"
     harness = framework_dir / "harness.md"
     products = framework_dir / "products.md"
+    hooks = framework_dir / "hooks.json"
+    retired_file_growth_hook = framework_dir / "file-growth-hook.json"
     duplicate_project_charter = framework_dir / "project.md"
     pm_manifest = framework_dir / "pm.json"
     retired_integrations = framework_dir / "integrations.md"
@@ -311,6 +342,8 @@ def validate(root: Path) -> list[str]:
         errors.append("farplane/steer.config.toml is retired; use farplane/automations.md.")
     if retired_steer_state.exists():
         errors.append(".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling.")
+    if retired_file_growth_hook.exists():
+        errors.append("farplane/file-growth-hook.json is retired; use farplane/hooks.json.")
     if duplicate_project_charter.exists():
         errors.append(
             "farplane/project.md would duplicate the active static charter; use farplane/harness.md "
@@ -332,6 +365,11 @@ def validate(root: Path) -> list[str]:
 
     if pm_manifest.exists():
         errors.extend(validate_pm_manifest(root, pm_manifest))
+
+    if not hooks.exists():
+        errors.append("farplane/hooks.json is required for declarative Farplane hook config.")
+    else:
+        errors.extend(validate_hooks_file(root, hooks))
 
     if bindings.exists():
         text = bindings.read_text(encoding="utf-8")

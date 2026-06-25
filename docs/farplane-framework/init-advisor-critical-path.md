@@ -153,7 +153,8 @@ farplane/goals.md
 farplane/products.md
 farplane/automations.md
 farplane/bindings.md
-farplane/evals.md
+farplane/hooks.json
+farplane/skills/README.md
 farplane/pm.json
 ```
 
@@ -173,16 +174,22 @@ Key contracts:
   tracked/ignored files, plus a compact UI-facing project identity:
   `project.name`, `project.description`, and `project.archetype`.
 - `farplane/harness.md` is the static human charter: mission, human thesis,
-  operating principles, non-tradeoffs, static leverage commitments, agent
-  authority, change rule, and one compact charter-level operating loop. It uses
-  YAML front matter plus Markdown sections, not a fenced custom program DSL.
-- `farplane/goals.md` is project strategy context.
-- `farplane/products.md` is the project product catalog: team archetype,
-  operating flywheel, primary/supporting value outputs, and autonomous project
-  types the team can create. It informs Pulse refill choices but does not list
-  routine chores.
+  operating principles, non-tradeoffs, static leverage commitments, allocation
+  guardrails, agent authority, and change rule. It uses YAML front matter plus
+  Markdown sections, not a fenced custom program DSL.
+- `farplane/goals.md` is compact dynamic strategy context: north star, value
+  function, KPI axes, current bets, milestone, and holds.
+- `farplane/products.md` is the project product catalog: team identity,
+  product rows, work-lane weights, and constraints. It informs interval
+  planning; Pulse executes ready tickets after planners create them.
 - `farplane/automations.md` is the human-reviewable source for the exact Pulse,
   Daily Interval, and Weekly Interval prompts copied into Codex automations.
+- `farplane/hooks.json` is declarative project hook config. Hook algorithms,
+  eval runners, and post-action procedures belong in skills, runtime hooks,
+  validators, or ticket programs.
+- `farplane/skills/README.md` is the local product-skill home. Project-specific
+  production workflows live under `farplane/skills/<product-skill>/SKILL.md`
+  until repeated evidence justifies promotion to reusable root `skills/`.
 - Codex automation records own cadence. Farplane does not create a tracked
   scheduler config or ignored scheduler state by default.
 - `farplane/pm.json` is UI glue that groups PM-visible chat and automation
@@ -211,6 +218,7 @@ Audit:
 - `farplane/goals.md`
 - `farplane/products.md`
 - `farplane/bindings.md`
+- `farplane/skills/README.md`
 - `farplane/pm.json`
 - `PROJECT_RULES.md`
 - QA surfaces
@@ -290,11 +298,11 @@ What this means:
 - The project can answer "what does this team do?" in one sentence.
 - The project can answer "what human thesis must not drift?" in one sentence.
 - Products are value outputs, not chores.
-- Autonomous project types explain how Pulse should refill work without
-  rediscovering strategy.
+- Work lanes explain how interval planners should distribute planned work
+  without rediscovering the product catalog.
 - The manifest has a short UI card; `products.md` has the richer operating
   model.
-- The goals file has a value function, KPI tree, current frontier, and
+- The goals file has a value function, KPI axes, current bets, and
   handoff-ready milestone when enough operator intent exists.
 - Human access, missing metrics, missing skills, or unavailable integrations
   become explicit tickets or bindings instead of hidden assumptions.
@@ -464,10 +472,11 @@ Guardrails:
 | `ARCHITECTURE.md` | `init-advisor` | architecture/docs work | system map |
 | `docs/bootstrap-brief.md` | `init-advisor` | deep interview / setup | setup decisions and readiness |
 | `farplane/manifest.json` | `init-advisor` | framework migrations | expected tracked/ignored paths |
-| `farplane/harness.md` | `init-advisor` / `harness-creator` | harness planning | static human charter: mission, thesis, non-tradeoffs, leverage commitments, authority, change rule, compact operating loop |
+| `farplane/harness.md` | `init-advisor` / `harness-creator` | harness planning | static human charter: mission, thesis, non-tradeoffs, leverage commitments, authority, change rule |
 | `farplane/goals.md` | `init-advisor` / `harness-creator` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
-| `farplane/products.md` | `init-advisor` / `harness-creator` | product planning / Pulse refill tuning | primary and supporting products the team creates |
+| `farplane/products.md` | `init-advisor` / `harness-creator` | product planning / work-lane tuning | product rows and work lanes |
 | `farplane/automations.md` | `init-advisor` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Interval prompt source |
+| `farplane/skills/README.md` | `init-advisor` | `harness-creator` / product-skill refinement | local product-skill home |
 | `farplane/pm.json` | `init-advisor` | `automation-advisor` / PM-visible threads | UI grouping for persistent chat and automation threads |
 | `tickets/TASK-0001/ticket.md` | `init-advisor` | planning flow | starter PRD/discovery handoff |
 | `qa/` | `init-advisor` | QA work | reusable proof paths |
@@ -489,8 +498,8 @@ and either prepared or produced the first `goal-advisor` handoff.
 ### Automation Activated
 
 The repo has live recurring automation loops for Pulse, Daily Interval, and
-Weekly Interval. Pulse is a persistent heartbeat thread for frequent bounded
-action. Daily and Weekly Interval are standalone Codex cron automations that
+Weekly Interval. Pulse is a persistent heartbeat thread for frequent ticket
+execution. Daily and Weekly Interval are standalone Codex cron automations that
 write dated reports and plans. PM-visible threads are grouped in
 `farplane/pm.json`; automation cadence/runtime metadata stays in the Codex app.
 
@@ -502,7 +511,7 @@ write dated reports and plans. PM-visible threads are grouped in
 - `automation_surprise:` Bootstrap creates live automations without operator
   intent. Do not do this; route activation through `automation-advisor`.
 - `loop_duplication:` ticket-drainer, scheduler, or strategy-review jobs become
-  extra threads. Keep action selection in Pulse and report-then-plan work in
+  extra threads. Keep ticket execution in Pulse and report-then-plan work in
   explicit interval automations.
 - `prompt_bloat:` `farplane/automations.md` starts duplicating skill runbooks.
   Keep prompts to skill calls, cadence, and true project-specific extensions.

@@ -24,7 +24,7 @@ This workflow plans and routes. It does not execute leaf work.
 ```text
 priority_planning(context_bundle, review_window, planning_window,
                   workflow_findings?, parent_context_refs?, planning_policy?)
-  -> priorities + depriorities + proof_checks + downstream_guidance
+  -> lane_distribution + priorities + depriorities + proof_checks + downstream_guidance
      + goals_delta_candidates + source_gaps
 
 state: reads(context_bundle, workflow_findings?, parent_context_refs?,
@@ -41,7 +41,10 @@ fails: writing a vague plan; mixing reporting and execution; hiding
 Default sources:
 
 - the static human thesis, durable leverage commitments, non-tradeoffs, and
-  agent authority from the context bundle.
+  allocation guardrails from the context bundle.
+- product work lanes, default weight hints, product boundaries, reward signals,
+  and local product skill refs from `farplane/products.md` and
+  `farplane/skills/` in the context bundle.
 - parent context refs and goals from the context bundle.
 - enabled workflow findings such as plan progress, goal drift, ticket board
   drift, feedback obligations, opportunity signals, attention drift, and
@@ -72,6 +75,8 @@ that a second read reduces self-confirmation.
         enabled workflow findings.
   - [ ] Confirm the static charter boundary from the context bundle before
         ranking product, goal, or ticket changes.
+  - [ ] Confirm product work lanes and default weight hints from the context
+        bundle before creating or reprioritizing tickets.
   - [ ] Read planning policy for side-effect, goals-delta, or output-shape
         instructions.
 - [ ] 2. Separate planning inputs.
@@ -79,6 +84,9 @@ that a second read reduces self-confirmation.
         board hygiene, opportunity signals, metrics, and attention drift.
   - [ ] Convert changed insight into implication into action.
 - [ ] 3. Rank priorities.
+  - [ ] Choose a lane distribution for `planning_window`, using product lane
+        hints as defaults and recent evidence to adjust them.
+  - [ ] Check the distribution against static allocation guardrails.
   - [ ] Pick the top priorities sized to `planning_window`.
   - [ ] For each priority, include why-now, owner or next surface, expected
         output, and proof check.
@@ -89,8 +97,10 @@ that a second read reduces self-confirmation.
   - [ ] Separate solo work, people-facing follow-ups, background-agent work,
         and approval-required decisions when the project has those lanes.
   - [ ] Convert executable work into proposed ticket deltas or Goal Advisor
-        handoffs.
-  - [ ] Return Pulse constraints for the fast action loop.
+        handoffs. Include a `farplane/skills/<product-skill>/SKILL.md` ref when
+        a local product skill owns the workflow.
+  - [ ] Return Pulse constraints for the fast executor loop; Pulse should
+        execute ready tickets or request more planning, not create strategy.
 - [ ] 6. Gate strategy changes.
   - [ ] Mark material goals, KPI, strategy-axis, quarterly/yearly, or durable
         milestone changes as approval-required goals deltas.
@@ -113,6 +123,7 @@ Priority row:
 ```text
 - priority:
   why_now:
+  lane:
   owner_or_next_surface:
   expected_output:
   proof_check:
@@ -136,10 +147,17 @@ Priority row:
 ```text
 priorities:
   - priority:
+    lane:
     why_now:
     owner_or_next_surface:
     expected_output:
     proof_check:
+lane_distribution:
+  - lane:
+    planned_weight:
+    ticket_budget:
+    expected_reward:
+    guardrail_check:
 depriorities:
   - item:
     reason:

@@ -152,7 +152,7 @@ Required projections:
 - `ticket_goal_execution`: selected ticket to implementation plan, Goal
   Packet, native Goal, QA/demo/review proof, and closeout.
 - `memory_drain_upkeep`: reports/troubles/lessons to update-memory,
-  learning-drain, skill-maintenance, evals, and compressed durable context.
+  skill-maintenance, evals, and compressed durable context.
 - `self_update_loop`: Weekly Interval report to goals-delta decision,
   leverage/harness placement, Goal Advisor handoff, Pulse execution, reward
   signal, and next weekly review.

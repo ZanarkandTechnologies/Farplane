@@ -2,11 +2,11 @@ window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
       "common-chain": 19,
-      "markdown-ref": 305,
-      "todo-chain": 316
+      "markdown-ref": 302,
+      "todo-chain": 313
     },
-    "edges": 640,
-    "nodes": 98,
+    "edges": 634,
+    "nodes": 97,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
@@ -26,12 +26,12 @@ window.SKILL_GRAPH = {
     ],
     "sources": {
       "external": 3,
-      "local": 95
+      "local": 94
     },
     "tiers": {
       "1": 4,
       "2": 38,
-      "3": 56
+      "3": 55
     }
   },
   "edges": [
@@ -2934,54 +2934,6 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
-      "source": "learning-drain",
-      "target": "eval",
-      "target_ref": "eval",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "learning-drain",
-      "target": "eval",
-      "target_ref": "eval",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "learning-drain",
-      "target": "optimize-harness",
-      "target_ref": "optimize-harness",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
-      "source": "learning-drain",
-      "target": "optimize-harness",
-      "target_ref": "optimize-harness",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "learning-drain",
-      "target": "skill-maintenance",
-      "target_ref": "skill-maintenance",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
-      "source": "learning-drain",
-      "target": "skill-maintenance",
-      "target_ref": "skill-maintenance",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
       "source": "leverage-advisor",
       "target": "advise",
       "target_ref": "advise",
@@ -5148,7 +5100,7 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-06-25T07:48:48+00:00",
+  "generated_at": "2026-06-25T09:42:34+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -7664,41 +7616,6 @@ window.SKILL_GRAPH = {
       "tier": 3,
       "todo_skill_refs": [
         "frontend-craft"
-      ]
-    },
-    {
-      "description": "Compatibility wrapper that turns recent TROUBLES/LESSONS rows into a skill-maintenance harden_skill handoff with dedupe and processed-state records.",
-      "eval": "eval_task.json",
-      "group": "harness",
-      "has_checklist": true,
-      "heat": {
-        "distinct_threads_30d": 0,
-        "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
-        "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
-        "invocation_count_all": 0,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
-        "recent_days": 7,
-        "window_days": 30
-      },
-      "id": "learning-drain",
-      "label": "learning-drain",
-      "methods": [],
-      "path": "skills/learning-drain/SKILL.md",
-      "qa_checklist": "",
-      "skill_ui": "",
-      "source": "local",
-      "tier": 3,
-      "todo_skill_refs": [
-        "optimize-harness",
-        "eval",
-        "skill-maintenance"
       ]
     },
     {

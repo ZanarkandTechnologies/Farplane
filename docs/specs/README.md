@@ -28,6 +28,9 @@ Canonical inventory specs:
 
 Execution and proof specs:
 
+- `minimal-autonomy-loop.md` - Pulse, Daily Interval, Weekly Interval, ticket
+  supply learning, reward closure, and weekly learning backpropagation into
+  skill maintenance.
 - `spec-first-execution-loop.md` - spec -> ticket -> plan -> build -> QA ->
   review execution model.
 - `review-gates.md` - ticket Done / Proof contract, QA, reviewer, and Stop-hook review

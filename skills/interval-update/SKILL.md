@@ -44,6 +44,8 @@ interval_update(project_root, interval_id, review_window, planning_window,
 
 state:
   reads(farplane/harness.md?,
+        farplane/products.md?,
+        farplane/skills/**/SKILL.md?,
         farplane/goals.md?,
         tickets/,
         docs/HISTORY.md?,
@@ -84,6 +86,7 @@ caller-supplied `context_refs`.
 ```text
 default_context_refs(project_root, interval_id) = {
   harness_ref: farplane/harness.md,
+  products_ref: farplane/products.md,
   goals_ref: farplane/goals.md,
   ticket_refs: tickets/,
   memory_refs: [docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md],
@@ -125,6 +128,7 @@ report_workflows:
   goal_drift?: bool | "light"
   metric_snapshot?: bool | "when_sources_exist"
   compounding_leverage_review?: bool | "light"
+  learning_backpropagation?: bool | "when_sources_exist"
   priority_planning?: bool | "light"
 ```
 
@@ -169,6 +173,10 @@ compounding_leverage_review(review_window, planning_window)
   -> lever_inventory + top_experiment_candidates + reward_signals
   ref: references/workflows/compounding-leverage-review.md
 
+learning_backpropagation(review_window, planning_window)
+  -> harden_skill_handoffs + eval_candidates + processed_state_delta
+  ref: references/workflows/learning-backpropagation.md
+
 priority_planning(review_window, planning_window)
   -> priorities + depriorities + proof_checks
   ref: references/workflows/priority-planning.md
@@ -206,6 +214,10 @@ priority_planning(review_window, planning_window)
         lanes as those refs direct.
   - [ ] When `compounding_leverage_review` is enabled, close due reward
         signals from prior interval reports before selecting new leverage bets.
+  - [ ] When `learning_backpropagation` is enabled, route repeated troubles,
+        lessons, progress-log findings, and proof failures to
+        `skill-maintenance(mode: harden_skill)` instead of using a legacy drain
+        wrapper.
 - [ ] 4. Write the report before durable mutations.
   - [ ] Write a date-stamped interval report.
   - [ ] Include source gaps, drift findings, evidence, and the proposed next
@@ -213,8 +225,10 @@ priority_planning(review_window, planning_window)
   - [ ] Use goals-delta promotion before changing `farplane/goals.md`.
 - [ ] 5. Emit next-window guidance.
   - [ ] Produce a plan sized to `planning_window`.
-  - [ ] Convert executable work into ticket deltas or Goal Advisor handoffs.
-  - [ ] Return Pulse guidance as constraints for the fast action loop.
+  - [ ] Convert executable work into ticket deltas or Goal Advisor handoffs,
+        including `farplane/skills/<product-skill>/SKILL.md` refs when a
+        local product skill owns the workflow.
+  - [ ] Return Pulse guidance as constraints for the fast executor loop.
   - [ ] Summarize report paths, blockers, goals-delta decisions, and handoffs.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

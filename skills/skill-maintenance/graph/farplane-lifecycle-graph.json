@@ -1,36 +1,36 @@
 {
   "counts": {
     "edge_confidence": {
-      "curated": 37,
+      "curated": 43,
       "explicit": 6,
-      "parsed": 181
+      "parsed": 176
     },
     "edge_types": {
-      "consumes": 2,
+      "consumes": 4,
       "contains": 2,
-      "reads": 52,
-      "routes_to": 121,
+      "reads": 53,
+      "routes_to": 116,
       "triggers": 15,
-      "updates": 3,
-      "writes": 29
+      "updates": 4,
+      "writes": 31
     },
-    "edges": 224,
+    "edges": 225,
     "fsa_projections": 5,
     "node_kinds": {
       "automation": 3,
       "command": 3,
       "doc": 11,
-      "file": 18,
+      "file": 20,
       "hook": 2,
       "report": 2,
-      "route": 5,
+      "route": 4,
       "runtime": 1,
-      "skill": 41,
-      "state": 10,
-      "ticket": 5
+      "skill": 40,
+      "state": 6,
+      "ticket": 6
     },
-    "nodes": 101,
-    "parsed_skills": 19
+    "nodes": 98,
+    "parsed_skills": 18
   },
   "edges": [
     {
@@ -56,16 +56,16 @@
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/filesystem-lifecycle.md",
+      "evidence_ref": "docs/specs/minimal-autonomy-loop.md",
       "source": "doc:docs/LESSONS.md",
-      "target": "skill:learning-drain",
+      "target": "skill:skill-maintenance",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/filesystem-lifecycle.md",
+      "evidence_ref": "docs/specs/minimal-autonomy-loop.md",
       "source": "doc:docs/TROUBLES.md",
-      "target": "skill:learning-drain",
+      "target": "skill:skill-maintenance",
       "type": "triggers"
     },
     {
@@ -95,6 +95,20 @@
       "source": "file:farplane/goals.md",
       "target": "skill:goal-advisor",
       "type": "triggers"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/specs/minimal-autonomy-loop.md",
+      "source": "file:farplane/products.md",
+      "target": "skill:interval-update",
+      "type": "consumes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/specs/minimal-autonomy-loop.md",
+      "source": "file:farplane/products.md",
+      "target": "skill:pulse-update",
+      "type": "consumes"
     },
     {
       "confidence": "explicit",
@@ -508,6 +522,13 @@
       "type": "routes_to"
     },
     {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:harness-creator",
+      "target": "file:farplane/skills/README.md",
+      "type": "updates"
+    },
+    {
       "confidence": "parsed",
       "evidence_ref": "skills/horizon-advisor/SKILL.md",
       "label": "farplane/automations.md?",
@@ -712,6 +733,13 @@
       "confidence": "curated",
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:init-advisor",
+      "target": "file:farplane/hooks.json",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
       "target": "file:farplane/manifest.json",
       "type": "writes"
     },
@@ -720,6 +748,20 @@
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:init-advisor",
       "target": "file:farplane/pm.json",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/products.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/skills/README.md",
       "type": "writes"
     },
     {
@@ -832,6 +874,22 @@
       "label": "farplane/pm.json?",
       "source": "skill:interval-update",
       "target": "file:farplane/pm.json",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "farplane/products.md?",
+      "source": "skill:interval-update",
+      "target": "file:farplane/products.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": "farplane/skills/**/SKILL.md?",
+      "source": "skill:interval-update",
+      "target": "file:farplane/skills/**/SKILL.md",
       "type": "reads"
     },
     {
@@ -975,78 +1033,6 @@
       "source": "skill:knowledge-tidier",
       "target": "skill:update-memory",
       "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": "docs/LESSONS.md",
-      "source": "skill:learning-drain",
-      "target": "doc:docs/LESSONS.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": "docs/TROUBLES.md",
-      "source": "skill:learning-drain",
-      "target": "doc:docs/TROUBLES.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": "direct-summary",
-      "source": "skill:learning-drain",
-      "target": "route:direct-summary",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": "eval",
-      "source": "skill:learning-drain",
-      "target": "skill:eval",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": "gap-analysis",
-      "source": "skill:learning-drain",
-      "target": "skill:gap-analysis",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": "optimize-harness",
-      "source": "skill:learning-drain",
-      "target": "skill:optimize-harness",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": "skill-maintenance:harden_skill",
-      "source": "skill:learning-drain",
-      "target": "skill:skill-maintenance",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": ".farplane/state/**/processed*.jsonl",
-      "source": "skill:learning-drain",
-      "target": "state:.farplane/state/**/processed*.jsonl",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/learning-drain/SKILL.md",
-      "label": ".farplane/state/learning-drain/processed.jsonl",
-      "source": "skill:learning-drain",
-      "target": "state:.farplane/state/learning-drain/processed.jsonl",
-      "type": "writes"
     },
     {
       "confidence": "parsed",
@@ -1354,6 +1340,14 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "farplane/skills/**/SKILL.md?",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/skills/**/SKILL.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
       "label": ".farplane/reports/interval/**?",
       "source": "skill:pulse-update",
       "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
@@ -1433,25 +1427,9 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/automation/action-arms.json",
-      "source": "skill:pulse-update",
-      "target": "state:.farplane/automation/action-arms.json",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
       "label": ".farplane/automation/action-outcomes.jsonl",
       "source": "skill:pulse-update",
       "target": "state:.farplane/automation/action-outcomes.jsonl",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/automation/bandit-state.json",
-      "source": "skill:pulse-update",
-      "target": "state:.farplane/automation/bandit-state.json",
       "type": "reads"
     },
     {
@@ -1616,6 +1594,22 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "docs/LESSONS.md?",
+      "source": "skill:skill-maintenance",
+      "target": "doc:docs/LESSONS.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "docs/TROUBLES.md?",
+      "source": "skill:skill-maintenance",
+      "target": "doc:docs/TROUBLES.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
       "label": "docs/skills/registry.jsonl",
       "source": "skill:skill-maintenance",
       "target": "doc:docs/skills/registry.jsonl",
@@ -1692,6 +1686,14 @@
       "source": "skill:skill-maintenance",
       "target": "skill:skill-creator",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "tickets/**/progress.md?",
+      "source": "skill:skill-maintenance",
+      "target": "ticket:tickets/**/progress.md",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -2169,7 +2171,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-25T07:48:51+00:00",
+  "generated_at": "2026-06-25T17:12:01+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",
@@ -2416,16 +2418,6 @@
       ]
     },
     {
-      "id": "file:farplane/evals.md",
-      "kind": "file",
-      "label": "Project eval policy",
-      "path": "farplane/evals.md",
-      "tags": [
-        "farplane",
-        "proof"
-      ]
-    },
-    {
       "id": "file:farplane/goals.md",
       "kind": "file",
       "label": "Project goals",
@@ -2443,6 +2435,17 @@
       "path": "farplane/harness.md",
       "tags": [
         "farplane",
+        "tracked-config"
+      ]
+    },
+    {
+      "id": "file:farplane/hooks.json",
+      "kind": "file",
+      "label": "Project hook config",
+      "path": "farplane/hooks.json",
+      "tags": [
+        "farplane",
+        "hooks",
         "tracked-config"
       ]
     },
@@ -2469,10 +2472,32 @@
     {
       "id": "file:farplane/products.md",
       "kind": "file",
-      "label": "farplane/products.md",
+      "label": "Project products and work lanes",
       "path": "farplane/products.md",
       "tags": [
+        "farplane",
+        "products",
+        "tracked-config"
+      ]
+    },
+    {
+      "id": "file:farplane/skills/**/SKILL.md",
+      "kind": "file",
+      "label": "farplane/skills/**/SKILL.md",
+      "path": "farplane/skills/**/SKILL.md",
+      "tags": [
         "parsed"
+      ]
+    },
+    {
+      "id": "file:farplane/skills/README.md",
+      "kind": "file",
+      "label": "Local product skill home",
+      "path": "farplane/skills/README.md",
+      "tags": [
+        "farplane",
+        "skills",
+        "tracked-config"
       ]
     },
     {
@@ -2572,15 +2597,6 @@
       "id": "route:direct-answer",
       "kind": "route",
       "label": "direct-answer",
-      "tags": [
-        "abstract-route",
-        "route"
-      ]
-    },
-    {
-      "id": "route:direct-summary",
-      "kind": "route",
-      "label": "direct-summary",
       "tags": [
         "abstract-route",
         "route"
@@ -2865,21 +2881,6 @@
       ]
     },
     {
-      "id": "skill:learning-drain",
-      "kind": "skill",
-      "label": "learning-drain",
-      "metadata": {
-        "description": "Compatibility wrapper that turns recent TROUBLES/LESSONS rows into a skill-maintenance harden_skill handoff with dedupe and processed-state records.",
-        "source": "local",
-        "tier": 3
-      },
-      "path": "skills/learning-drain/SKILL.md",
-      "tags": [
-        "harness",
-        "skill"
-      ]
-    },
-    {
       "id": "skill:leverage-advisor",
       "kind": "skill",
       "label": "leverage-advisor",
@@ -2970,7 +2971,7 @@
       "kind": "skill",
       "label": "pulse-update",
       "metadata": {
-        "description": "Run the Farplane fast idle loop: reconcile outcomes, use reasoning plus bandit state to select one action, spawn a worker when useful, and update decision ledgers.",
+        "description": "Run the Farplane fast executor loop: reconcile outcomes, execute ready tickets up to policy cap, request planning when blocked, and update ledgers.",
         "source": "local",
         "tier": 3
       },
@@ -3131,15 +3132,6 @@
       ]
     },
     {
-      "id": "state:.farplane/automation/action-arms.json",
-      "kind": "state",
-      "label": ".farplane/automation/action-arms.json",
-      "path": ".farplane/automation/action-arms.json",
-      "tags": [
-        "parsed"
-      ]
-    },
-    {
       "id": "state:.farplane/automation/action-outcomes.jsonl",
       "kind": "state",
       "label": "Pulse action outcomes",
@@ -3147,15 +3139,6 @@
       "tags": [
         "pulse",
         "runtime"
-      ]
-    },
-    {
-      "id": "state:.farplane/automation/bandit-state.json",
-      "kind": "state",
-      "label": ".farplane/automation/bandit-state.json",
-      "path": ".farplane/automation/bandit-state.json",
-      "tags": [
-        "parsed"
       ]
     },
     {
@@ -3198,30 +3181,21 @@
       ]
     },
     {
-      "id": "state:.farplane/state/**/processed*.jsonl",
-      "kind": "state",
-      "label": ".farplane/state/**/processed*.jsonl",
-      "path": ".farplane/state/**/processed*.jsonl",
-      "tags": [
-        "parsed"
-      ]
-    },
-    {
-      "id": "state:.farplane/state/learning-drain/processed.jsonl",
-      "kind": "state",
-      "label": ".farplane/state/learning-drain/processed.jsonl",
-      "path": ".farplane/state/learning-drain/processed.jsonl",
-      "tags": [
-        "parsed"
-      ]
-    },
-    {
       "id": "state:.farplane/state/run-ledger.json",
       "kind": "state",
       "label": "Run ledger",
       "path": ".farplane/state/run-ledger.json",
       "tags": [
         "runtime"
+      ]
+    },
+    {
+      "id": "ticket:tickets/**/progress.md",
+      "kind": "ticket",
+      "label": "tickets/**/progress.md",
+      "path": "tickets/**/progress.md",
+      "tags": [
+        "parsed"
       ]
     },
     {
@@ -3296,7 +3270,6 @@
       "interval-update",
       "automation-advisor",
       "update-memory",
-      "learning-drain",
       "optimize-harness",
       "skill-creator",
       "skill-maintenance",

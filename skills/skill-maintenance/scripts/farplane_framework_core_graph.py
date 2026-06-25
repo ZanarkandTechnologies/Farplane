@@ -108,7 +108,7 @@ WORKFLOWS = [
         "label": "Improvement",
         "description": "Drain outcomes into memory, lessons, skill maintenance, and future evals.",
         "doc": "docs/farplane-framework/lifecycle.md",
-        "skills": ["update-memory", "learning-drain", "skill-maintenance", "skill-creator", "optimize-harness", "eval"],
+        "skills": ["update-memory", "skill-maintenance", "skill-creator", "optimize-harness", "eval"],
     },
 ]
 
