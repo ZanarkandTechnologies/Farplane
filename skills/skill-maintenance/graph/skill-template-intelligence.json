@@ -32,8 +32,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
-      "source_commit": "91bb9ac6f871",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-a55523040aca.md",
+      "source_commit": "a55523040aca",
       "summary": "chore(skills): upgrade skill creator workflows",
       "version": "0.3.2"
     },
@@ -52,8 +52,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
-      "source_commit": "cc5423051bcd",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-b8f67d0311ce.md",
+      "source_commit": "b8f67d0311ce",
       "summary": "Introduce proof advisor workflow inference",
       "version": "0.3.3"
     },
@@ -72,8 +72,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-db21de788521.md",
-      "source_commit": "db21de788521",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-d8abb67693a6.md",
+      "source_commit": "d8abb67693a6",
       "summary": "working tree current template",
       "version": "0.3.3"
     }
@@ -135,7 +135,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "a55523040aca",
       "template_version": "0.3.2",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -149,7 +149,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "a55523040aca",
       "template_version": "0.3.2",
       "title": "Todo executability",
       "verdict": "pass"
@@ -163,7 +163,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "a55523040aca",
       "template_version": "0.3.2",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -177,7 +177,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "a55523040aca",
       "template_version": "0.3.2",
       "title": "Proof contract",
       "verdict": "pass"
@@ -191,7 +191,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "a55523040aca",
       "template_version": "0.3.2",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -205,7 +205,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "cc5423051bcd",
+      "source_commit": "b8f67d0311ce",
       "template_version": "0.3.3",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -219,7 +219,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "cc5423051bcd",
+      "source_commit": "b8f67d0311ce",
       "template_version": "0.3.3",
       "title": "Todo executability",
       "verdict": "pass"
@@ -233,7 +233,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "cc5423051bcd",
+      "source_commit": "b8f67d0311ce",
       "template_version": "0.3.3",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -247,7 +247,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "cc5423051bcd",
+      "source_commit": "b8f67d0311ce",
       "template_version": "0.3.3",
       "title": "Proof contract",
       "verdict": "pass"
@@ -261,7 +261,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "cc5423051bcd",
+      "source_commit": "b8f67d0311ce",
       "template_version": "0.3.3",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -275,7 +275,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "db21de788521",
+      "source_commit": "d8abb67693a6",
       "template_version": "0.3.3",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -289,7 +289,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "db21de788521",
+      "source_commit": "d8abb67693a6",
       "template_version": "0.3.3",
       "title": "Todo executability",
       "verdict": "pass"
@@ -303,7 +303,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "db21de788521",
+      "source_commit": "d8abb67693a6",
       "template_version": "0.3.3",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -317,7 +317,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "db21de788521",
+      "source_commit": "d8abb67693a6",
       "template_version": "0.3.3",
       "title": "Proof contract",
       "verdict": "pass"
@@ -331,7 +331,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "db21de788521",
+      "source_commit": "d8abb67693a6",
       "template_version": "0.3.3",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -659,7 +659,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-26T09:40:52+00:00",
+  "generated_at": "2026-06-26T12:46:23+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -4315,7 +4315,7 @@
     {
       "introduced_at": "2026-06-24",
       "latest_at": "2026-06-24",
-      "latest_commit": "91bb9ac6f871",
+      "latest_commit": "a55523040aca",
       "latest_summary": "chore(skills): upgrade skill creator workflows",
       "release_count": 1,
       "sections": [
@@ -4329,16 +4329,16 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-a55523040aca.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-24",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-91bb9ac6f871.md",
-          "source_commit": "91bb9ac6f871",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.2-a55523040aca.md",
+          "source_commit": "a55523040aca",
           "summary": "chore(skills): upgrade skill creator workflows"
         }
       ],
-      "source_commit": "91bb9ac6f871",
+      "source_commit": "a55523040aca",
       "summary": "chore(skills): upgrade skill creator workflows",
       "template_metadata": {
         "feature_refs": [
@@ -4361,7 +4361,7 @@
     {
       "introduced_at": "2026-06-24",
       "latest_at": "2026-06-26",
-      "latest_commit": "db21de788521",
+      "latest_commit": "d8abb67693a6",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -4375,22 +4375,22 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-db21de788521.md",
+      "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-d8abb67693a6.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-24",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-cc5423051bcd.md",
-          "source_commit": "cc5423051bcd",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-b8f67d0311ce.md",
+          "source_commit": "b8f67d0311ce",
           "summary": "Introduce proof advisor workflow inference"
         },
         {
           "introduced_at": "2026-06-26",
-          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-db21de788521.md",
-          "source_commit": "db21de788521",
+          "snapshot_path": "skills/skill-maintenance/templates/archive/skill-template-0.3.3-d8abb67693a6.md",
+          "source_commit": "d8abb67693a6",
           "summary": "working tree current template"
         }
       ],
-      "source_commit": "cc5423051bcd",
+      "source_commit": "b8f67d0311ce",
       "summary": "Introduce proof advisor workflow inference",
       "template_metadata": {
         "feature_refs": [

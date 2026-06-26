@@ -41,7 +41,7 @@ state: reads(config env, farplane/products.md, docs/skills/registry.jsonl,
        writes(.farplane/reports/taste-loop/*.md,
               .farplane/automation/taste-loop/*.md?)
 gates: active_hours_checked; feedback_budget_checked; top_n_selected;
-       output_artifact_visible; no_hidden_scheduler
+       open_feedback_deduped; output_artifact_visible; no_hidden_scheduler
 routes: metric-advisor | optimize-with-human | self-improve | goal-advisor |
   review
 fails: creates a local runner as the primary surface; runs hidden loops;
@@ -64,12 +64,15 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     `FARPLANE_SKILL_HEAT_*` controls when available.
   - [ ] Prefer configured target groups and known product/money-making skills.
   - [ ] Include existing open feedback and cooldown state.
+  - [ ] Normalize open feedback by `target_id + feedback_question` before
+    applying the budget gate; duplicate open rows are hygiene findings, not
+    extra budget usage.
 - [ ] 3. Score and select top N.
   - [ ] Use the Skill Compounding Score; expose every component in the report.
   - [ ] Keep the score distinct from eval score, review TAS, and human
     preference labels.
-  - [ ] Penalize open feedback, cooldown, ambiguous targets, and fake metric
-    risk.
+  - [ ] Penalize unique open feedback, cooldown, ambiguous targets, and fake
+    metric risk.
 - [ ] 4. Route exactly one Codex-native bounded action by default.
   - [ ] Ask `metric-advisor` for an honest provider before creating benchmarks,
     harder task suites, or Goal handoffs.
@@ -84,6 +87,8 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Write or update feedback-card and Goal-handoff Markdown artifacts
     under `.farplane/automation/taste-loop/` when useful.
   - [ ] Keep generated feedback questions short and decision-shaped.
+  - [ ] When duplicate open feedback exists, report the canonical card and
+    duplicate rows; do not create another duplicate for that target/question.
 - [ ] 6. Stop cleanly.
   - [ ] Report the action, skipped targets, report path, and next trigger.
   - [ ] Do not edit target skills directly from this heartbeat.
@@ -139,6 +144,22 @@ Signal ownership:
 - feedback budget and cooldown: `.farplane/automation/taste-loop/`
 - metric route: `metric-advisor`
 
+## Feedback Budget
+
+Open feedback budget is based on unique active requests, not raw JSONL rows.
+Normalize each open feedback row by:
+
+```text
+feedback_key = target_id + "\n" + feedback_question
+```
+
+Only one open row for a key counts toward
+`FARPLANE_TASTE_LOOP_MAX_OPEN_FEEDBACK`. Additional open rows with the same key
+must be listed in the report as `duplicate_open_feedback` and should not block
+new useful work. If the top selected target already has an open canonical card,
+skip it with `open_feedback_and_cooldown` and pick the next eligible target
+rather than creating another duplicate.
+
 ## Benchmark And Convergence
 
 Do not create benchmarks by default. Use an existing target-skill eval or
@@ -174,6 +195,8 @@ Return and write:
 - Do not call this a training loop. It creates structured feedback and
   accepted writeback opportunities; it does not train models.
 - Do not let open feedback pile up. Respect `MAX_OPEN_FEEDBACK`.
+- Do not let duplicate feedback rows consume the open-feedback budget. Count
+  unique active requests and report duplicate rows as hygiene.
 - Do not optimize by fake numeric taste scores. Use labels, rankings, and
   accept/revise/reject when that is the honest signal.
 - Do not invent a second heat, product, or benchmark system. Reuse the skill

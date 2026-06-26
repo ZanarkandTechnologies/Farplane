@@ -43,7 +43,7 @@ Stop with a visible no-op report when any hard gate fails:
 
 - disabled
 - outside active days or active hours
-- open feedback count is at or above the cap
+- unique open feedback count is at or above the cap
 - target registry or product-lane context is missing
 
 ## Select
@@ -58,6 +58,17 @@ Read:
   config as the heat-window owner
 - recent `.farplane/reports/taste-loop/` reports when present
 - existing `.farplane/automation/taste-loop/` feedback or handoff artifacts
+
+Normalize open feedback before gating:
+
+```text
+feedback_key = target_id + "\n" + feedback_question
+```
+
+Count one open card per key toward
+`FARPLANE_TASTE_LOOP_MAX_OPEN_FEEDBACK`. Duplicate open rows for the same key
+are `duplicate_open_feedback` hygiene findings and do not consume additional
+budget. List duplicates in the report with their canonical target/question.
 
 Select the top `FARPLANE_TASTE_LOOP_TOP_N` targets with the official Skill
 Compounding Score. Keep this distinct from eval score or review TAS:
@@ -160,4 +171,5 @@ Return:
 - selected target IDs, score breakdown, and metric provider
 - action artifact path, if any
 - skipped target reasons
+- unique open feedback count and duplicate open feedback count
 - next trigger expectation

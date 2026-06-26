@@ -5,7 +5,8 @@
     "query": "Set up an active-hours heartbeat that improves top money-making skills without spamming me outside work hours.",
     "reference_points": [
       "Loads active hours and budget from FARPLANE_TASTE_LOOP_* config",
-      "No-ops outside active hours or when open feedback exceeds the cap",
+      "No-ops outside active hours or when unique open feedback exceeds the cap",
+      "Dedupes open feedback by target_id plus feedback_question before applying the budget gate and reports duplicate open rows as hygiene",
       "Reads docs/specs/skill-compounding-score.md and keeps skill score distinct from eval score",
       "Selects top N compounding skill targets from registry, lifecycle refs, product lanes, and existing skill heat",
       "Shows tier, lifecycle-reference fit, product-lane fit, heat, downstream leverage, improvement gap, feedback fit, proof fit, and penalties instead of hiding a magic ranking",
