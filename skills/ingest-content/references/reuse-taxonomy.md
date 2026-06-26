@@ -8,8 +8,9 @@ skills. Prefer concrete tags and reusable levers over generic taste words.
 Each saved reference should answer:
 
 - `what_it_is`: the source format and visible subject.
-- `why_it_works`: the hook, contrast, novelty, emotional promise, craft move, or
-  audience fit.
+- `why_it_works`: the first 0-3s hook, contrast, novelty, emotional promise,
+  craft move, or audience fit.
+- `retention_beats`: what makes the viewer stay after the first few seconds.
 - `reusable_levers`: the repeatable parts that can inspire new work.
 - `reusable_elements`: first-class candidates such as style, layout, segment,
   asset, pattern, recipe, or remix constraint.
@@ -19,7 +20,27 @@ Each saved reference should answer:
 - `remix_constraints`: what to avoid copying literally.
 - `best_for`: future project, content type, campaign, product surface, or vibe.
 
+## Retrieval Facets
+
+Use fields, not tags, when the operator is likely to fetch Tasty Packs by the
+facet:
+
+- `outputTypes`: `reel`, `short-video`, `landing-page`, `thumbnail`, `ad`.
+- `audiences`: `founders`, `operators`, `students`, `creators`, `buyers`.
+- `ageRanges`: `18-24`, `25-34`, `35-44`.
+- `industries`: `ai`, `saas`, `education`, `finance`, `creator-economy`.
+- `customerRoles`: `founder`, `marketer`, `engineer`, `creator`, `buyer`.
+- `tastinessScore`: optional relative value signal when the operator or agent
+  can rank how useful the source is.
+
+These fields exist to answer "what did I save recently for this audience or
+idea?" quickly.
+
 ## Tag Buckets
+
+Use tags for lightweight recall and creative language. Do not maintain a large
+taxonomy for hook/open-loop/pacing/retention mechanics; those belong in
+analysis text for the AI to synthesize.
 
 Use a mix of these buckets when evidence supports them:
 
@@ -61,7 +82,7 @@ Write reusable levers as action-ready phrases:
 Future creation skills should query by:
 
 ```text
-retrieve_assets(goal, tags?, recency?, project?, output_type?, count?)
+create_tasty_pack(idea?, timeframe?, audience?, industry?, outputType?, tags?, count?)
   -> top_matches + why_relevant + reusable_levers + attribution
 ```
 

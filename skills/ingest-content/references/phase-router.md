@@ -33,7 +33,7 @@ The note should influence:
 
 - what part of the source is inspected;
 - which elements are extracted;
-- which tags are added;
+- which retrieval facets and tags are added;
 - whether generation recipes are stored or generation skills are called now.
 
 ## Read Phase
@@ -51,7 +51,7 @@ Routes:
   `video-understanding` over selected frames/transcript section.
 - Image/screenshot: direct visual inspection; optionally store original or
   screenshot as an asset.
-- Plain idea: create note-only evidence with source kind `manual`.
+- Plain idea: create note-only evidence with source kind `note`.
 
 Evidence must mark confidence:
 
@@ -72,7 +72,8 @@ Breakdown variants:
 
 - `summary`: what the source is and what is visible.
 - `visual`: composition, typography, color, layout, asset choices, focal point.
-- `video`: hook, pacing, shot structure, segment timing, editing pattern.
+- `video`: first 0-3s hook, retention beats, pacing, shot structure, segment
+  timing, editing pattern.
 - `copy`: caption, headline, claim, CTA, on-screen text, meme wording.
 - `style`: mood, texture, genre, cultural pattern, audience signal.
 - `prompt`: likely generation/editing prompt or recreation instructions.
@@ -117,23 +118,31 @@ or save the extracted recipe first so the vault remains the durable memory.
 ## Store Phase
 
 ```text
-store_content(source, evidence, usefulness, note?) -> contentItemId + proof
+store_content(source, evidence, usefulness, note?) -> jobId + assetId + retrieval_proof
 ```
 
-Current LocalPinterest storage can represent elements through:
+Current Resource Bank storage can represent elements through:
 
-- `contentItems`: one source/reference.
-- `assets`: source URL, original file, screenshot, frame, transcript, or
-  attachment.
-- `analyses`: summary, tags, takeaways, prompt guess, source skill.
-- `notes`: user intent, Codex observations, follow-up todos.
+- `resourceBankIngestionJobs`: one source/request with note, source scope,
+  status, tags, and project/task links.
+- `resourceBankAssets`: source URL, original file, screenshot, frame,
+  transcript, clip, and retrieval facets for Tasty Packs.
+- `resourceBankAnalyses`: facts, interpretation, why-it-works,
+  hook/retention notes, takeaways, prompt guess, remix constraints, confidence,
+  and embedding text.
+- `resourceBankSkillFindings`: reusable techniques, skill updates, existing
+  skill matches, and skill candidates.
 
 Future richer storage should add first-class records for:
 
 - segments: time ranges, selected frames, clip labels, transcript spans.
 - reusable elements: style/layout/asset/pattern/recipe records.
-- embeddings or search metadata: semantic retrieval beyond tag search.
-- projects/collections: why a source was saved for a future task.
+- richer timeline records: only when segment-level rendering or editing needs
+  first-class retention beats.
+- `@convex-dev/rag` or chunk tables: only when large transcripts/documents need
+  chunked retrieval, namespaces, importance weighting, or surrounding context.
 
 Until those tables exist, write element records into `analyses.takeaways`,
-`promptGuess`, tags, and notes in a structured way.
+`frameNotes`, `promptGuess`, `remixConstraints`, skill findings, and lightweight
+tags in a structured way. Keep customer/audience/output retrieval in asset
+facets rather than tags.
