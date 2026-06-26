@@ -72,11 +72,5 @@ plugins/feed-scout/skills/feed-scout/config/
 plugins/farplane-research/skills/feed-scout/config/
 
 # Local ticket working set
-tickets/**
-!tickets/README.md
-!tickets/scripts/
-!tickets/scripts/**
-tickets/scripts/__pycache__/
-!tickets/templates/
-!tickets/templates/**
+tickets/
 artifacts/
