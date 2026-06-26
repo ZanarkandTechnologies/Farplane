@@ -8,16 +8,17 @@ runtime.
 - `skills/harness-scout/`: workflow contract and scoring references
 - `docs/sources/registry.jsonl`: structured source provenance and duplicate
   source identity
-- `docs/systems/*.md`: structured system and capability source of record
+- `docs/systems/*.md`: structured system source of record
+- feature pages in `docs/features/`: structured feature source of record
 - `docs/systems/registry.jsonl`: generated public system registry output
-- `docs/features/registry.jsonl`: generated internal capability registry output
+- `docs/features/registry.jsonl`: generated feature registry output
 - `experiments/harness-scout/runs/`: source-run outputs and scorecards
 
 ## Upstream Inputs
 
 - [summarize](../../summarize/SKILL.md): extracts source content
 - `docs/sources/registry.jsonl`: source identity, provenance, and dedupe
-- system capability metadata and generated registries: dedupe and local
+- system/feature metadata and generated registries: dedupe and local
   baseline
 - `docs/specs/harness-techniques.md`: human-readable current inventory
 - [codebase-analysis](../../codebase-analysis/SKILL.md): checks local behavior
@@ -46,7 +47,7 @@ runtime.
 - optional [self-improve](../../self-improve/SKILL.md) skill-eval follow-up
 - optional [impl-plan](../../impl-plan/SKILL.md) ticket handoff
 - optional [review](../../review/SKILL.md) quality gate
-- optional system capability metadata update plus generated registry refresh
+- optional feature doc update plus generated registry refresh
 - optional source registry update
 
 ## Boundaries

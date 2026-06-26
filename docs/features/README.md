@@ -1,111 +1,129 @@
-# Feature Registry
+---
+title: "Feature Docs"
+status: active
+owner: feature-registry
+created_at: 2026-06-26
+updated_at: 2026-06-26
+tags:
+  - farplane
+  - features
+  - generated-registry-source
+refs:
+  - docs/systems/README.md
+  - docs/features/TEMPLATE.md
+  - docs/features/registry.md
+  - docs/features/registry.jsonl
+  - docs/features/validate_features.py
+---
 
-Farplane's feature registry is generated compatibility output. It preserves
-stable `FEAT-*` handles for templates, tickets, sources, validators, and
-adoption checks, but it is no longer the public product map.
+# Feature Docs
 
-The authored source of truth is the system stack:
+Farplane features are first-class capabilities with their own Markdown owner
+file. If a `FEAT-*` handle is too small, stale, or implementation-detail-shaped
+to deserve a page here, delete the handle and remove its template, source, and
+ticket references.
+
+This folder is the authored source for feature records:
 
 ```text
-docs/systems/*.md
-  -> docs/systems/registry.jsonl       # public system inventory
-  -> docs/features/registry.jsonl      # internal capability inventory
+feature pages in docs/features/
+  -> docs/features/registry.jsonl
+  -> docs/features/registry.md
 ```
 
-Use [`docs/systems/README.md`](../systems/README.md) when deciding what
-Farplane is made of. Use this folder when a tool needs a stable `FEAT-*`
-capability handle.
+Systems stay in [`docs/systems/`](../systems/README.md). A system explains the
+product layer; its `feature_refs` point to the feature docs that are worth
+maintaining as named capabilities.
+
+## Current Outputs
+
+- Human registry: [`registry.md`](registry.md)
+- Machine registry: [`registry.jsonl`](registry.jsonl)
+- Feature template: [`TEMPLATE.md`](TEMPLATE.md)
+
+Do not hand-edit generated registry files.
 
 ## Record Shape
 
-Each generated line in `registry.jsonl` is one JSON object:
+Each feature page starts with YAML front matter and a `feature_record_json`
+block:
 
-```json
-{
-  "id": "FEAT-0064",
-  "name": "Skill compounding score",
-  "status": "implemented",
-  "system_id": "SYS-0006",
-  "system_name": "Skill System",
-  "capability_role": "subcapability",
-  "public": false,
-  "category": "skills",
-  "surfaces": ["docs/specs/skill-compounding-score.md"],
-  "source_refs": ["docs/skills/system.md"],
-  "external_refs": [],
-  "evidence_refs": ["skills/taste-loop/SKILL.md"],
-  "known_limits": "Prompt-consumed ranking contract; no standalone scorer yet.",
-  "metrics": ["skill_compounding_score_traceability_pass"],
-  "owner_spec": "docs/systems/skill-system.md",
-  "last_verified": "2026-06-26"
-}
+```yaml
+---
+title: "Goal Advisor execution compilation"
+status: implemented
+owner: feature-registry
+created_at: 2026-06-26
+updated_at: 2026-06-26
+tags:
+  - farplane
+  - feature
+  - sys-0003
+refs:
+  - docs/specs/goal-loop-contract.md
+feature_record_json: |
+  {
+    "id": "FEAT-0032",
+    "name": "Goal Advisor execution compilation",
+    "status": "implemented",
+    "system_id": "SYS-0003",
+    "category": "execution",
+    "public": true,
+    "surfaces": ["skills/goal-advisor/SKILL.md"],
+    "source_refs": ["docs/specs/goal-loop-contract.md"],
+    "external_refs": [],
+    "evidence_refs": ["skills/goal-advisor/eval_task.json"],
+    "known_limits": "Compiles visible execution prompts; it is not a hidden scheduler.",
+    "metrics": ["goal_prompt_contract_pass"],
+    "last_verified": "2026-06-26"
+  }
+---
 ```
 
 ## Field Contract
 
-- `id`: stable `FEAT-####` identifier; never reuse an ID for a different
-  capability.
-- `name`: short, unique capability name.
+- `id`: stable `FEAT-####` identifier for this docs-worthy capability.
+- `name`: short, unique feature name.
 - `status`: `implemented`, `partial`, `proposed`, `designed`, `deferred`, or
   `retired`.
-- `system_id` / `system_name`: generated owner system.
-- `capability_role`: `primary`, `subcapability`, `implementation_detail`,
-  `retired_alias`, or `retired`.
-- `public`: `true` only for primary system-facing capabilities. Most `FEAT-*`
-  rows should stay internal.
-- `category`: broad internal grouping such as `planning`, `proof`, `memory`,
+- `system_id`: owning `SYS-*` record from `docs/systems/*.md`.
+- `category`: broad grouping such as `planning`, `proof`, `memory`,
   `source-ingestion`, `skills`, or `improvement-loop`.
+- `public`: must be `true`. A feature file is a public/maintainable capability
+  owner, not a private alias row.
 - `surfaces`: repo paths that own the live behavior.
 - `source_refs`: `SRC-*` records, local docs, tickets, memories, or specs that
-  explain why the capability exists.
-- `external_refs`: outside URLs, repos, videos, or standards that influenced the
-  capability.
-- `evidence_refs`: tickets, artifacts, commands, or experiment outputs that
-  support the current status.
-- `known_limits`: one concise caveat agents should preserve when comparing
-  source ideas.
-- `metrics`: metric names or scorecards associated with the capability. Leave
-  empty when it is not benchmarked yet.
-- `owner_spec`: generated path to the owning `docs/systems/*.md` file.
+  explain why the feature exists.
+- `external_refs`: outside URLs, repos, videos, or standards that influenced
+  the feature.
+- `evidence_refs`: tickets, artifacts, commands, evals, or experiment outputs
+  that support the current status.
+- `known_limits`: one concise caveat future agents should preserve.
+- `metrics`: metric names or scorecards associated with the feature.
 - `last_verified`: date when the record was checked against live surfaces.
+
+Generated rows add `system_name` and `owner_spec`.
 
 ## Update Rules
 
-1. Add or update `capability_records_json` in the owning `docs/systems/*.md`
-   file.
-2. If no current system should own the capability, update the system stack
-   before allocating another `FEAT-*` ID.
-3. Keep raw transcripts, bulky summaries, and one-off logs in `experiments/` or
-   ticket artifacts, not in capability records.
-4. Link to ticket evidence instead of copying proof into the record.
-5. Use `harness-scout` to dedupe source identity in
-   `docs/sources/registry.jsonl` before creating new capability handles.
-6. Run:
+1. Start from [`TEMPLATE.md`](TEMPLATE.md) for a new first-class capability.
+2. Add or update the feature page under this folder.
+3. Add the feature ID to exactly one system file's `feature_refs`.
+4. Update template/source/ticket refs only when they should still point at the
+   surviving feature.
+5. Run:
 
    ```bash
    python3 docs/features/validate_features.py --write
    python3 docs/features/validate_features.py
    ```
 
-Do not hand-edit generated JSONL registries.
+## Deletion Rule
 
-## ID Allocation
+Delete a `FEAT-*` handle when it no longer earns a feature page. Before
+deleting, move any current truth into the owning system doc, spec, skill,
+template, source record, or ticket. Then remove all active references to the
+deleted ID and regenerate the registries.
 
-1. Read generated `id` values before adding a record.
-2. Pick the next unused numeric ID in `FEAT-####` form.
-3. Do not fill gaps without checking tickets and archived branches that may
-   already reference the missing ID.
-4. Do not rename or reuse an ID after another doc, ticket, scorecard, source
-   run, or template references it.
-
-## Skill-Applicable Capabilities
-
-Use the same generated registry for capabilities that apply to Farplane skill
-packages. Put skill-related records in
-[`docs/systems/skill-system.md`](../systems/skill-system.md) unless another
-system is the clearer owner.
-
-Do not create a second hand-authored skill feature registry. The skill package
-inventory already lives in generated form at `docs/skills/registry.jsonl`, and
-versioned templates can keep referencing stable `FEAT-*` handles from this
-registry.
+Do not keep a retired alias just to preserve noise. The registry is a product
+capability list, not an archaeological ledger.

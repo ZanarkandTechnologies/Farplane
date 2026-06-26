@@ -3,8 +3,8 @@
 
 Ownership: skill-maintenance owns this generated governance artifact. Inputs are
 local Farplane files plus git history; outputs are UI-ready JSON/JS graph assets
-and archived template snapshots. The script does not edit skill packages or
-registry rows.
+and temporary template snapshots. The script does not edit skill packages or
+registry rows, and it keeps snapshot files outside tracked docs by default.
 """
 
 from __future__ import annotations
@@ -27,11 +27,11 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from bin.validators.template_usage import normalize_template_uses, template_target_basis
-CURRENT_TEMPLATE_VERSION = "0.3.2"
+CURRENT_TEMPLATE_VERSION = "0.3.4"
 TEMPLATE_PATH = Path("docs/skills/templates/SKILL_TEMPLATE.md")
 DEFAULT_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.json")
 DEFAULT_JS_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.js")
-DEFAULT_ARCHIVE_DIR = Path("skills/skill-maintenance/templates/archive")
+DEFAULT_ARCHIVE_DIR = Path("tmp/skill-template-snapshots")
 PROJECT_ROOTS = (
     Path("."),
     Path("../Farplane-UI"),
@@ -622,8 +622,8 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
         },
         "caveats": [
             "Template evals are hidden research signals until real eval-run artifacts can be joined to template release windows.",
-            "Git mining is a recovery path; future template changes should archive snapshots at change time.",
-            "Skill-applicable capabilities remain owned by docs/systems/skill-system.md metadata; generated system and feature registries are output.",
+            "Git mining is a recovery path; template snapshots are temporary generated artifacts under tmp/ by default.",
+            "Skill-applicable features are owned by feature pages under docs/features/ and linked from docs/systems/skill-system.md; generated system and feature registries are output.",
             "Template-level features are declared by the versioned skill template; skill rows expose local eval, QA checklist, and UI surfaces.",
         ],
         "epochs": summarize_epochs(snapshots, archive_paths),

@@ -13,9 +13,10 @@ operator-provided source needs a durable answer to:
 - did we adopt, adapt, reject, defer, or treat it as a duplicate?
 
 `docs/sources/registry.jsonl` tracks source provenance. `docs/systems/*.md`
-owns durable system and capability records, and `docs/features/registry.jsonl`
-is the generated compatibility output. A single source can inform many
-capabilities, and a single capability can synthesize many sources.
+owns durable system records, feature pages in `docs/features/` own
+first-class feature records, and `docs/features/registry.jsonl` is generated
+output. A single source can inform many features, and a single feature can
+synthesize many sources.
 
 ## Record Shape
 
@@ -75,11 +76,11 @@ Each line in `registry.jsonl` is one JSON object:
    duplicate` and `duplicate_of` instead of opening new feature tickets.
 4. Keep raw transcripts, bulky source extracts, customer details, and secrets
    out of this registry. Link to redacted scout artifacts instead.
-5. Link source records to `FEAT-*` records when durable capabilities exist;
-   link to tickets or research artifacts when a source is still only
+5. Link source records to `FEAT-*` records only when a durable feature doc
+   exists; link to tickets or research artifacts when a source is still only
    inspiration.
-6. Keep system capability records focused on Farplane behavior. Do not copy
-   source identity fields into capability records, and regenerate
+6. Keep feature records focused on Farplane behavior. Do not copy source
+   identity fields into feature records, and regenerate
    `docs/features/registry.jsonl` instead of hand-editing it.
 
 ## ID Allocation

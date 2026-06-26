@@ -1,16 +1,10 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.9
+template_version: 0.2.10
 feature_refs:
   - FEAT-0022
   - FEAT-0042
   - FEAT-0043
-  - FEAT-0045
-  - FEAT-0047
-  - FEAT-0049
-  - FEAT-0050
-  - FEAT-0051
-  - FEAT-0052
 -->
 <!-- AUTONOMY DIRECTIVE - DO NOT REMOVE -->
 YOU ARE AN AUTONOMOUS CODING AGENT. EXECUTE TASKS TO COMPLETION WITHOUT ASKING FOR PERMISSION.

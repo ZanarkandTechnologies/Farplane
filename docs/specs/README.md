@@ -14,8 +14,9 @@ Documentation ownership:
 
 - `README.md` is the public documentation router.
 - `ARCHITECTURE.md` owns the whole-system diagram and surface ownership map.
-- `docs/systems/README.md` owns the public system stack and generated
-  capability source contract.
+- `docs/systems/README.md` owns the public system stack.
+- `docs/features/README.md` owns first-class feature docs and generated feature
+  registry output.
 - this file indexes canonical behavior specs and the doc-gardening loop.
 - `docs/fundamentals/README.md` indexes conceptual foundations that are not
   themselves runtime/spec contracts.
@@ -24,7 +25,9 @@ Documentation ownership:
 Canonical inventory and registry companions:
 
 - `../systems/README.md` - public system stack; edit `docs/systems/*.md` to
-  update system and capability metadata.
+  update system metadata.
+- `../features/README.md` - first-class feature docs; edit
+  feature pages in `docs/features/` to update feature metadata.
 - `harness-techniques.md` - current-state feature and technique inventory.
 - `feature-catalog.md` - compatibility pointer for old references to the
   pre-systems feature metadata source.

@@ -57,7 +57,7 @@ by tools or the Farplane UI. It defines the node, edge, confidence, and finite
 state projection model used by the generated lifecycle graph.
 
 Use [Harness Maintenance Features](harness-maintenance.md) when you need to
-remember which maintenance systems exist: system and capability registries,
+remember which maintenance systems exist: system and feature registries,
 template registries, skill OS checks, template rollout, project adoption, graph
 projections, evals, doc tracking, and CLI/UI payloads.
 

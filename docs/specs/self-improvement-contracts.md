@@ -68,7 +68,7 @@ fails: jumps to a fix before naming the gap; confuses symptom with owner; invent
 
 ```text
 harness_place(gap_or_request, evidence?) -> placement_decision
-state: reads(harness doctrine, system/capability metadata, generated registries, skill registry, relevant surfaces); writes(ticket? handoff?)
+state: reads(harness doctrine, system and feature metadata, generated registries, skill registry, relevant surfaces); writes(ticket? handoff?)
 gates: failure_named; owner_surface:named; rejected_surfaces:named; proof_path:named
 routes: gap-analysis | eval | self-improve | skill-maintenance | impl-plan | spec-to-ticket | direct-answer
 fails: defaults to AGENTS.md; creates new skill before checking registry; recommends hooks for judgment-heavy work

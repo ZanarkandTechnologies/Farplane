@@ -14,8 +14,8 @@ Files here define buildable system behavior, schemas, and flows.
 - specific about data flow and responsibilities
 - one file per current harness feature, contract, or doctrine surface; see
   `MEM-0135`
-- linked from `docs/systems/*.md` when the spec explains a stable system or
-  capability
+- linked from `docs/systems/*.md` when the spec explains a stable system and
+  from feature pages in `docs/features/` when it explains a first-class feature
 
 ## Do Not
 
@@ -24,7 +24,8 @@ Files here define buildable system behavior, schemas, and flows.
 - keep completed migration plans, superseded milestone notes, or skill-owned
   workflow contracts as active specs
 - hand-edit `docs/systems/registry.jsonl` or `docs/features/registry.jsonl`;
-  update the owning `docs/systems/*.md` source and regenerate instead
+  update the owning `docs/systems/*.md` or feature pages in `docs/features/` source
+  and regenerate instead
 - bury executable contracts in long prose when diagrams or examples would be clearer
 - do not split simple delta views into separate before/after diagrams when one legend-backed diagram would be clearer
 
@@ -33,5 +34,5 @@ Files here define buildable system behavior, schemas, and flows.
 - update `README.md` when adding new canonical spec files
 - update `docs/HISTORY.md` when specs materially change the target system shape
 - run `python3 docs/features/validate_features.py --write` when system or
-  capability metadata changes
+  feature metadata changes
 - run `python3 bin/validators/check_doc_parity.py` when changing canonical README/spec/ticket docs that define the current public harness story

@@ -87,7 +87,8 @@ Surface-specific schemas may add or replace fields:
 - skill files use their existing `SKILL.md` front matter contract
 - ticket files use the ticket template metadata contract
 - generated system and feature registry outputs stay JSONL, while authored
-  system and capability records live in `docs/systems/*.md` front matter
+  system records live in `docs/systems/*.md` front matter and authored feature
+  records live in feature-page front matter under `docs/features/`
 - source registries stay JSONL
 - research artifacts may add `source_refs`, `method`, `confidence`, or
   `decision`
@@ -108,11 +109,12 @@ body section, redacted artifact, or private local context.
 | `docs/LESSONS.md` | distilled post-fix learning | review, eval, trouble-drain, or self-improvement pass produced a reusable lesson | `tail -n 30` plus `rg` by area | promote into skills, prompts, evals, `docs/MEMORY.md`, or tickets; archive solved noise when needed | review / self-improve / doc governance |
 | `tickets/TASK-*/ticket.md` | active task memory | planned or active work | selected active ticket only | archive after closeout and durable writeback | ticket workflow |
 | `tickets/TASK-*/artifacts/` | task-scoped proof | QA, review, demo, smoke, or implementation evidence | linked from ticket evidence | keep with ticket archive; do not promote bulky proof into docs | ticket workflow |
-| `docs/systems/*.md` | authored system and capability metadata | public system or stable `FEAT-*` capability is shipped, planned, partial, retired, or needs dedupe | owning system spec | update system summary, capability status, evidence, limits, or mark retired; do not delete stable IDs | doc governance / system metadata |
-| `docs/systems/registry.jsonl` | generated public system inventory | generated from system specs | query by system/status/primary capability | regenerate with `python3 docs/features/validate_features.py --write`; do not hand-edit | system registry generator |
-| `docs/features/registry.jsonl` | generated internal capability inventory | generated from system specs | query by feature/status/surface/template/source | regenerate with `python3 docs/features/validate_features.py --write`; do not hand-edit | feature registry generator |
+| `docs/systems/*.md` | authored public system metadata | public system is shipped, planned, partial, retired, or needs dedupe | owning system doc | update system summary, refs, primary feature, and feature links | doc governance / system metadata |
+| `docs/systems/registry.jsonl` | generated public system inventory | generated from system specs | query by system/status/primary feature | regenerate with `python3 docs/features/validate_features.py --write`; do not hand-edit | system registry generator |
+| feature pages in `docs/features/` | authored first-class feature records | feature deserves a stable public handle, behavior owner, evidence path, and registry row | owning feature doc | update feature surfaces, evidence, limits, metrics, or delete when no longer docs-worthy | feature registry generator |
+| `docs/features/registry.jsonl` | generated feature inventory | generated from feature docs | query by feature/status/surface/template/source | regenerate with `python3 docs/features/validate_features.py --write`; do not hand-edit | feature registry generator |
 | `docs/sources/registry.jsonl` | external source provenance | source is ingested or reused | query by URL/key/source ID | mark archived, superseded, or sensitive-redacted; keep canonical IDs | harness-scout |
-| `experiments/harness-scout/runs/` | source-ingestion evidence | source run, scorecard, decision matrix, handoff | only when linked by source/capability/ticket | promote compact outcomes to source or capability registry, or to tickets; delete/redact unsafe bulky extracts | harness-scout |
+| `experiments/harness-scout/runs/` | source-ingestion evidence | source run, scorecard, decision matrix, handoff | only when linked by source/feature/ticket | promote compact outcomes to source registry, feature docs, or tickets; delete/redact unsafe bulky extracts | harness-scout |
 | `experiments/hardcases/` | temporary sanitized benchmark seeds | deterministic validators or legacy captures leave a clear contract violation before it becomes a runnable eval row | only when building evals or self-improvement | promote into eval fixtures with hardcase metadata; archive or delete stale standalone seeds once covered | self-improve / eval / validators |
 | other `experiments/` | scratch proof, smoke runs, prototype evidence | bounded experiment or temporary proof | only when linked by ticket/source/feature | promote outcome or delete/archive stale scratch evidence | owning skill |
 | `docs/specs/*.md` | current behavior contracts | stable feature, doctrine, schema, lifecycle, or execution flow | spec index first, then relevant file | merge duplicates, delete superseded plans, move skill-owned contracts to skills | doc governance |
@@ -138,8 +140,9 @@ Run a weekly or periodic drain when the ledgers stop being easy to use:
 4. Review `docs/HISTORY.md` only for admission quality. Do not drain ordinary
    history into actions; archive eras only if file size hurts usability.
 5. Validate generated system and feature records plus
-   `docs/sources/registry.jsonl`; fix missing refs, mark stale capability rows
-   retired in the owning system spec, or open cleanup tickets.
+   `docs/sources/registry.jsonl`; fix missing refs, update surviving feature
+   docs, delete feature docs that no longer earn a first-class handle, or open
+   cleanup tickets.
 
 Promote only the smallest durable rule needed. If a rule must affect every turn,
 put it in the always-loaded owner surface such as `AGENTS.md`,
@@ -156,18 +159,19 @@ flowchart TD
     L --> M["docs/MEMORY.md<br/>stable invariant"]
     HC["experiments/hardcases/<br/>sanitized hard tasks"] --> E["eval fixtures / self-improve"]
     HS["experiments/harness-scout/runs/<br/>source evidence"] --> SR["docs/sources registry"]
-    HS --> FR["system specs<br/>generated capability registry"]
+    HS --> FR["feature docs<br/>generated feature registry"]
     TK --> A["tickets/archive<br/>after closeout"]
 ```
 
 ## Keep / Delete Rules
 
 - Keep current operating rules, active feature contracts, linked evidence, and
-  stable IDs.
+  stable IDs that still have an owning feature doc.
 - Delete superseded migration plans, duplicate specs, stale scratch outputs,
   unlinked bulky experiment evidence, and tracked archive/future-idea docs that
   no longer own current truth.
-- Do not delete stable registry IDs; mark status instead.
+- Delete `FEAT-*` IDs that no longer deserve a feature doc after active
+  references are removed or migrated.
 - Do not move raw private transcripts, secrets, credentials, or unrelated user
   data into tracked docs or hardcases.
 - Do not turn `experiments/` into canonical memory. Promote the outcome to the

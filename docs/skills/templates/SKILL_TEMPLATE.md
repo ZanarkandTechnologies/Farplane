@@ -1,12 +1,10 @@
 ---
 template_id: skill-template
-template_version: "0.3.3"
+template_version: "0.3.4"
 feature_refs:
-  - FEAT-0048
+  - FEAT-0022
   - FEAT-0054
   - FEAT-0057
-  - FEAT-0058
-  - FEAT-0059
 consumer_scope: skill
 applies_to:
   - skills/*/SKILL.md
@@ -23,7 +21,7 @@ description: "[TODO: Verb input/context into output/artifact when call-condition
 tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
-  skill-template: "0.3.2"
+  skill-template: "0.3.4"
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---

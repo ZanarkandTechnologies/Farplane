@@ -2,12 +2,9 @@
 template_id: ticket-template
 template_version: "0.1.1"
 feature_refs:
-  - FEAT-0041
-  - FEAT-0049
-  - FEAT-0055
   - FEAT-0060
 ticket_id: TASK-0235
-title: Move feature registry to system-owned capability specs
+title: Make feature registry source-of-truth feature docs
 phase: complete
 status: done
 owner: codex
@@ -21,125 +18,126 @@ approval_required: false
 requires_qa: true
 requires_demo: false
 created_at: 2026-06-26T15:42:57+08:00
-updated_at: 2026-06-26T17:05:00+08:00
-next_action: complete; scoped commit is the only remaining operator-visible follow-through
-last_verification: all Done / Proof commands passed, including system/feature generation, template registry, doc refs/parity, harness invariants, skill maintenance checks, ticket metadata, and py_compile
+updated_at: 2026-06-26T21:34:03+08:00
+next_action: complete; commit the strict feature-doc registry cleanup
+last_verification: all Done / Proof commands passed; stale deleted FEAT search returned no active refs
 ---
 
-# TASK-0235: Move Feature Registry To System-Owned Capability Specs
+# TASK-0235: Make Feature Registry Source-Of-Truth Feature Docs
 
 ## Summary
 
-Replace the flat hand-authored feature-catalog model with a small public system
-stack. Authored metadata now lives in `docs/systems/*.md`; generated output
-still preserves stable `FEAT-*` handles for templates, tickets, sources,
-validators, and adoption checks.
+Replace the weak "systems own many tiny feature rows" model with a stricter
+feature-doc model. Systems explain Farplane's public product layers. A `FEAT-*`
+survives only when it has its own feature page in `docs/features/` with
+frontmatter, `feature_record_json`, owner surfaces, evidence, limits, and
+maintenance rules.
 
 ## Scope
 
 - In:
-  - Add `docs/systems/` as the public system/spec layer.
-  - Author one Markdown file per system with `system_record_json` plus
-    `capability_records_json`.
-  - Generate `docs/systems/registry.jsonl` and `docs/features/registry.jsonl`
-    from system specs.
-  - Collapse the old 64 capability rows under 10 system specs instead of
-    presenting each row as a public feature.
-  - Preserve existing `FEAT-*` IDs as compatibility handles.
-  - Rewrite registry, docs-governance, framework, skill, source, and interval
-    guidance so future edits go through `docs/systems/*.md`.
-  - Keep `docs/specs/feature-catalog.md` only as a compatibility pointer.
-  - Run docs, feature/system, template, ticket, and skill/doc validators.
+  - Keep `docs/systems/*.md` as the public system layer.
+  - Move first-class feature records into feature pages in `docs/features/`.
+  - Generate `docs/features/registry.jsonl`, `docs/features/registry.md`,
+    `docs/systems/registry.jsonl`, and `docs/systems/registry.md`.
+  - Collapse the old 64-row feature registry down to the 21 feature IDs that
+    earn their own feature docs.
+  - Remove active template, source, and docs references to deleted feature IDs.
+  - Make `docs/features/TEMPLATE.md` the feature-authoring template.
+  - Rewrite docs, scout, skill, and governance guidance around the new source
+    of truth.
+  - Delete tracked generated template snapshot archives and move future
+    snapshots to ignored `tmp/`.
 - Out:
-  - No deletion or reuse of existing `FEAT-*` IDs.
-  - No hidden scheduler, daemon, UI route, or remote telemetry behavior.
   - No generic entity-consolidation engine.
   - No metrics registry implementation.
-  - No broad archive deletion pass beyond replacing the stale feature catalog
-    source.
+  - No hidden scheduler, daemon, or UI route.
+  - No retention of non-doc-worthy `FEAT-*` handles as aliases.
 
 ## Delta
 
-- `Before:` `docs/specs/feature-catalog.md` and scattered spec
-  `feature_records_json` blocks acted as authored metadata sources. The
-  generated registry made dozens of small internal handles look like equal
-  public features.
-- `After:` `docs/systems/*.md` is the authored source. `SYS-*` records are the
-  public system/module view, while generated `FEAT-*` rows are internal
-  capability handles with `system_id`, `system_name`, `capability_role`,
-  `public`, and `owner_spec`.
-- `Example:` `FEAT-0064 Skill compounding score` is owned by
-  `docs/systems/skill-system.md`; `docs/specs/skill-compounding-score.md`
-  remains the behavioral contract and points back through `feature_refs`.
+- `Before:` `FEAT-*` rows could survive as internal compatibility handles
+  under system docs, which made implementation details look like product
+  features.
+- `After:` `FEAT-*` means "docs-worthy first-class feature." If it lacks a
+  feature page, it gets deleted and active references are removed.
+- `Example:` `FEAT-0064 Skill compounding score` survives as
+  `docs/features/FEAT-0064-skill-compounding-score.md`; Inspiration Vault is
+  removed from feature metadata and remains only a proposed spec until it earns
+  a real feature doc.
 
 ## Program
 
 ```text
-move_feature_registry_to_system_specs(repo)
-  -> system_specs
+strict_feature_docs(repo)
+  -> surviving_feature_docs
    + generated_system_registry
-   + generated_capability_registry
-   + updated_docs_contract
+   + generated_feature_registry
+   + stale_ref_cleanup
    + validation_evidence
 
 program:
-  inventory(current_features, current_specs)
-    -> capability_clusters
+  inventory(old_feature_rows, system_specs, template_refs, source_refs)
+    -> survivor_set + deleted_ids
 
-  create_system_specs(capability_clusters)
-    -> docs/systems/*.md
-    -> system_record_json + capability_records_json
+  author_feature_docs(survivor_set)
+    -> feature pages in docs/features/
+    -> docs/features/TEMPLATE.md
 
-  update_generator()
-    -> validate system records
-    -> validate capability records
-    -> render docs/systems/registry.jsonl
-    -> render docs/features/registry.jsonl
+  simplify_system_docs()
+    -> system_record_json only
+    -> feature_refs pointing at surviving feature docs
 
   rewrite_docs_contract()
-    -> registry README and AGENTS files
-    -> doc governance and filesystem lifecycle
-    -> framework and skill guidance
-    -> old feature catalog compatibility pointer
+    -> feature README/AGENTS
+    -> system README
+    -> docs governance and lifecycle
+    -> source/scout/skill guidance
+
+  purge_stale_refs(deleted_ids)
+    -> templates, source refs, specs, tickets, generated docs
 
   verify()
     -> feature/system generator pass
-    -> template registry pass
-    -> doc refs/parity pass
-    -> skill checks if skill docs changed
-    -> ticket metadata pass
+    -> source/template/doc/skill/ticket validators
+    -> py_compile
 ```
 
 ## Map
 
 - `Touch:`
+  - feature pages in `docs/features/`
+  - `docs/features/TEMPLATE.md`
+  - `docs/features/README.md`
+  - `docs/features/AGENTS.md`
+  - `docs/features/validate_features.py`
+  - `docs/features/registry.jsonl`
+  - `docs/features/registry.md`
   - `docs/systems/*.md`
   - `docs/systems/README.md`
   - `docs/systems/registry.jsonl`
-  - `docs/features/README.md`
-  - `docs/features/AGENTS.md`
-  - `docs/features/registry.jsonl`
-  - `docs/features/validate_features.py`
+  - `docs/systems/registry.md`
   - `docs/specs/feature-catalog.md`
-  - `docs/specs/skill-compounding-score.md`
   - `docs/specs/doc-governance.md`
   - `docs/specs/filesystem-lifecycle.md`
   - `docs/specs/harness-techniques.md`
-  - `docs/specs/README.md`
-  - docs and skill guidance that mentioned the old feature source
-- `Inspect:`
+  - `docs/specs/inspiration-vault.md`
+  - `docs/sources/registry.jsonl`
   - `docs/templates/registry.jsonl`
-  - `templates/global/AGENTS.md`
-  - `docs/skills/templates/*`
-  - `bin/validators/sync_template_registry.py`
-  - `skills/harness-advisor/SKILL.md`
-  - `skills/documentation/SKILL.md`
-  - `skills/interval-update/references/workflows/docs-consolidation.md`
+  - `skills/*` docs that mention system/feature metadata
+  - high-impact templates with `feature_refs`
+- `Delete:`
+  - `skills/skill-maintenance/templates/archive/*`
+- `Inspect:`
+  - template and source validators
+  - stale FEAT reference search
+  - generated registry diffs
 
 ## Done / Proof
 
 - [x] `python3 docs/features/validate_features.py --write`
 - [x] `python3 docs/features/validate_features.py`
+- [x] `python3 docs/sources/validate_sources.py`
 - [x] `python3 bin/validators/sync_template_registry.py --write`
 - [x] `python3 bin/validators/sync_template_registry.py`
 - [x] `python3 bin/validators/check_doc_refs.py`
@@ -148,19 +146,24 @@ program:
 - [x] `python3 skills/skill-maintenance/scripts/check_skills.py --write`
 - [x] `python3 skills/skill-maintenance/scripts/check_skills.py`
 - [x] `python3 tickets/scripts/check_ticket_metadata.py`
-- [x] `python3 -m py_compile docs/features/validate_features.py`
+- [x] `python3 -m py_compile docs/features/validate_features.py skills/skill-maintenance/scripts/generate_template_intelligence.py`
 
 ## State
 
 - `2026-06-26T15:42:57+08:00:` Ticket drafted around feature hierarchy.
-- `2026-06-26T16:40:00+08:00:` User approved stronger systems rewrite. Ticket
-  moved to building; first generator write pass succeeded.
-- `2026-06-26T17:05:00+08:00:` Migration implemented and proof checklist
-  passed. Ready for scoped commit.
+- `2026-06-26T17:05:00+08:00:` First migration pass shipped the weaker
+  system-owned capability-row model.
+- `2026-06-26T21:28:00+08:00:` Operator rejected compatibility handles for
+  non-doc-worthy features. Ticket reopened for strict feature-doc source of
+  truth and deletion of dead feature rows.
+- `2026-06-26T21:34:03+08:00:` Strict feature-doc source of truth implemented,
+  registries regenerated, tracked template snapshot archive deleted, and proof
+  checks passed.
 
 ## Links
 
 - `docs/systems/README.md`
 - `docs/features/README.md`
+- `docs/features/TEMPLATE.md`
 - `docs/specs/feature-catalog.md`
 - `docs/specs/doc-governance.md`

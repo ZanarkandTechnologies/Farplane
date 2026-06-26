@@ -194,7 +194,7 @@ flowchart LR
   ground --> decide["advise / placement<br/>choose owning surface"]:::surface
   decide --> change["skill, prompt, doc,<br/>validator, ticket, or agent"]:::surface
   change --> verify["tests, evals,<br/>QA, review"]:::proof
-  verify --> capture["lessons, hardcases,<br/>generated system/capability index"]:::learn
+  verify --> capture["lessons, hardcases,<br/>generated system/feature index"]:::learn
   capture --> evals["regression evals<br/>or behavior tests"]:::proof
   evals --> change
 ```
@@ -210,8 +210,8 @@ flowchart LR
 | `bin/` | Hooks, runtime helpers, compatibility validator wrappers, launchers, and sync scripts. |
 | `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, tiers, and registries. |
 | `docs/` | Systems, specs, generated registries, history, memory, troubles, lessons, and durable research. |
-| `docs/systems/` | Authored system specs plus generated public system registry. |
-| `docs/features/` | Generated internal capability registry output and validation. |
+| `docs/systems/` | Authored public system docs plus generated system registry. |
+| `docs/features/` | Authored first-class feature docs plus generated feature registry output. |
 | `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |
 | `docs/specs/` | Buildable behavior contracts, lifecycle specs, runtime adapters, and proof gates. |
 | `experiments/` | Smoke runs, eval artifacts, prototypes, and temporary proof. |
@@ -233,10 +233,10 @@ flowchart LR
 - Prompt engineering: [docs/fundamentals/prompt-engineering.md](docs/fundamentals/prompt-engineering.md)
 - Self-growing harness map: [docs/specs/harness-techniques.md](docs/specs/harness-techniques.md#self-growing-harness-map)
 - Feature inventory: [harness-techniques.md](docs/specs/harness-techniques.md)
-- System and capability source: [docs/systems/README.md](docs/systems/README.md)
+- System source: [docs/systems/README.md](docs/systems/README.md)
 - Generated system registry data: [docs/systems/registry.jsonl](docs/systems/registry.jsonl)
-- Generated capability registry: [docs/features/README.md](docs/features/README.md)
-- Generated capability registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)
+- Feature docs and registry contract: [docs/features/README.md](docs/features/README.md)
+- Generated feature registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)
 - Skill guide: [docs/skills/README.md](docs/skills/README.md)
 - Skill best practices: [docs/skills/best-practices.md](docs/skills/best-practices.md)
 - Ticket contract: [tickets/README.md](tickets/README.md)

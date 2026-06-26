@@ -28,8 +28,8 @@
 2. Normalize duplicate feature candidates.
 3. Build a project comparison matrix when feature support differs by source.
 4. Use [best-of-worlds](../../best-of-worlds/SKILL.md) for synthesis.
-5. Update the source registry for provenance and system capability metadata
-   only for durable local feature knowledge, then regenerate the registries.
+5. Update the source registry for provenance and feature docs only for durable
+   local feature knowledge, then regenerate the registries.
 6. Ticket only the chosen now-scope.
 
 ## Benchmark Scorecard

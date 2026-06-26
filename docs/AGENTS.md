@@ -15,13 +15,14 @@ machine-checkable outputs.
 - Put task-local plans, proof, and bulky evidence in tickets or artifacts.
 - Put temporary research outside tracked docs unless it has a current owner.
 
-## System And Capability Records
+## System And Feature Records
 
-System specs own capability metadata. Add or update `capability_records_json`
-in the owning `docs/systems/*.md` file, and update the file's
-`system_record_json` when the public system itself changes.
+System docs own public product-layer records. Feature docs own `FEAT-*`
+capability records. Update `system_record_json` in the owning
+`docs/systems/*.md` file when the public system changes, and update or delete
+the owning feature page in `docs/features/` when a first-class feature changes.
 
-After editing system or capability metadata, run:
+After editing system or feature metadata, run:
 
 ```bash
 python3 docs/features/validate_features.py --write
@@ -29,8 +30,8 @@ python3 docs/features/validate_features.py
 ```
 
 `docs/systems/registry.jsonl` is generated public system inventory.
-`docs/features/registry.jsonl` is generated internal capability compatibility
-output. Do not hand-edit either JSONL file.
+`docs/features/registry.jsonl` is generated feature inventory. Do not
+hand-edit either JSONL file.
 
 ## Stale Docs
 

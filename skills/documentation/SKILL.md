@@ -34,11 +34,11 @@ canonical sources, and validator-backed reference checks. Use
 standards.
 
 Farplane's docs strategy is minimal surface area with high reader quality.
-System and capability metadata belongs in `docs/systems/*.md` front matter.
-`docs/systems/registry.jsonl` and `docs/features/registry.jsonl` are generated
-output from that metadata and must not be hand-edited. Stale or superseded docs
-should be deleted after live truth is promoted into an active owner; tracked
-archives are not a default destination for new work.
+System metadata belongs in `docs/systems/*.md` front matter. Feature metadata
+belongs in feature-page front matter under `docs/features/`. Generated system
+and feature registries must not be hand-edited. Stale or superseded docs should be deleted
+after live truth is promoted into an active owner; tracked archives are not a
+default destination for new work.
 
 ## Skill Signature
 
@@ -122,8 +122,8 @@ cross-surface policy, or a completion claim that needs independent judgment.
   - [ ] Update `updated_at`, `status`, `owner`, `refs`, `template_version`,
     `feature_refs`, `source_refs`, or registry/index links when the owning
     schema uses them.
-  - [ ] When changing system or capability metadata, update the owning
-    `docs/systems/*.md` source and run
+  - [ ] When changing system or feature metadata, update the owning
+    `docs/systems/*.md` file or feature page in `docs/features/` and run
     `python3 docs/features/validate_features.py --write`; do not hand-edit
     `docs/systems/registry.jsonl` or `docs/features/registry.jsonl`.
   - [ ] Do not invent version fields for ordinary docs; preserve or update

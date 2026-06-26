@@ -16,19 +16,22 @@ refs:
 
 # Systems
 
-Farplane systems are the public, maintainable product modules. Each Markdown file in this directory owns one system record plus the capability handles that belong to it.
+Farplane systems are the public, maintainable product modules. Each Markdown
+file in this directory owns one `system_record_json` block and links to the
+first-class feature docs that belong to that system.
 
 ```text
-system spec markdown
+docs/systems/*.md
   -> docs/systems/registry.jsonl       # public system inventory
-  -> docs/features/registry.jsonl      # internal capability inventory
 ```
 
-Use this directory when deciding what Farplane is made of. Use `docs/features/registry.jsonl` when a template, ticket, source run, or validator needs a stable `FEAT-*` compatibility handle.
+Use this directory when deciding what Farplane is made of. Use
+[`docs/features/`](../features/README.md) when a capability deserves its own
+`FEAT-*` feature doc, registry row, proof path, and template/source refs.
 
 ## Current Systems
 
-| System | Primary capability | Owner file |
+| System | Primary feature | Owner file |
 | --- | --- | --- |
 | Agent Kernel | `FEAT-0042` | `agent-kernel.md` |
 | Work Loop | `FEAT-0007` | `work-loop.md` |
@@ -43,9 +46,12 @@ Use this directory when deciding what Farplane is made of. Use `docs/features/re
 
 ## Update Flow
 
-1. Update the owning system Markdown file.
-2. Run `python3 docs/features/validate_features.py --write`.
-3. Run `python3 docs/features/validate_features.py`.
-4. Run template/adoption/doc validators when a referenced capability or owner path changes.
+1. Update the owning system Markdown file when the system layer changes.
+2. Update or delete the owning feature page in `docs/features/` when the
+   feature set changes.
+3. Run `python3 docs/features/validate_features.py --write`.
+4. Run `python3 docs/features/validate_features.py`.
+5. Run template/adoption/doc validators when a referenced feature or owner
+   path changes.
 
 Do not hand-edit generated JSONL registries.

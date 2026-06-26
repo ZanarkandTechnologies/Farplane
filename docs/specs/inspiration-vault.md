@@ -1,5 +1,5 @@
 ---
-feature_id: FEAT-0056
+title: "Inspiration Vault"
 status: proposed
 last_verified: 2026-06-12
 owner_surfaces:

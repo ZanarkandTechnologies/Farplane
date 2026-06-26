@@ -13,10 +13,11 @@ fields, and todo-link rules stay in one place.
 - `skills/skill-creator/` owns creating or updating one reusable skill package.
 - `skills/skill-maintenance/` owns bulk upkeep, validation, generated registry
   sync, and rollout audits.
-- `docs/systems/skill-system.md` owns skill-applicable harness capability rows
-  with `category: "skills"`.
-- `docs/features/registry.jsonl` is generated compatibility output, not
-  hand-authored truth.
+- feature pages in `docs/features/` own skill-applicable harness feature docs
+  with `category: "skills"`, and `docs/systems/skill-system.md` links the
+  surviving feature refs.
+- `docs/features/registry.jsonl` is generated feature output, not hand-authored
+  truth.
 - `docs/skills/registry.jsonl` is generated inventory, not hand-authored truth.
 - `skills/<skill-name>/eval_task.json` owns focused modular eval tasks for one
   skill's behavior when a runnable eval is the right proof surface.
@@ -435,16 +436,16 @@ the child scope is smaller or more specialized than the parent scope.
 
 ## Feature Tracking
 
-Skill-applicable capabilities belong in the system-owned capability metadata in
-`docs/systems/skill-system.md`:
+Skill-applicable features belong in first-class feature docs under
+`docs/features/`, linked from `docs/systems/skill-system.md`:
 
 ```json
 {"category": "skills"}
 ```
 
-Use capability rows for supported optional capabilities such as eval support,
-skill capability fixtures, template-owned metadata, or experiment support, then
-regenerate `docs/features/registry.jsonl`.
+Use feature docs for supported optional capabilities such as eval support,
+skill fixtures, template-owned metadata, or experiment support, then regenerate
+`docs/features/registry.jsonl`.
 Use versioned template metadata for structural `FEAT-####` adoption handles,
 and use skill frontmatter only for local eval, QA checklist, and skill UI
 surface paths. Use `skill_template_version` for structural template onboarding.
@@ -452,7 +453,7 @@ surface paths. Use `skill_template_version` for structural template onboarding.
 Do not store long applied-migration histories in skill frontmatter. If a
 migration needs rollout tracking, let `skill-maintenance` compare the generated
 skill inventory, template version report, local surface fields, template
-metadata, and relevant capability rows.
+metadata, and relevant feature docs.
 
 ## Installed Rendering
 

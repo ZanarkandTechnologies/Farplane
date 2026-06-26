@@ -32,48 +32,6 @@ system_record_json: |
     ],
     "last_verified": "2026-06-26"
   }
-capability_records_json: |
-  [
-    {
-      "id": "FEAT-0014",
-      "name": "Frontend skill parity upgrade",
-      "status": "implemented",
-      "category": "frontend-skills",
-      "surfaces": [
-        "skills/frontend-craft",
-        "skills/frontend-design",
-        "skills/visual-design",
-        "skills/delegate-frontend",
-        "skills/visual-qa",
-        "skills/landing-page"
-      ],
-      "source_refs": [
-        "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-        "docs/MEMORY.md#MEM-0085"
-      ],
-      "external_refs": [
-        "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills",
-        "https://github.com/Leonxlnx/taste-skill/blob/main/skills/taste-skill/SKILL.md",
-        "https://ui.shadcn.com/docs/mcp",
-        "https://ui.shadcn.com/docs/cli",
-        "https://ui.shadcn.com/docs/components-json",
-        "https://ui.shadcn.com/r/registries.json"
-      ],
-      "evidence_refs": [
-        "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
-        "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
-        "docs/HISTORY.md"
-      ],
-      "known_limits": "Docs/skill-contract upgrade only; no automated eval suite or searchable frontend rule corpus yet.",
-      "metrics": [
-        "frontend_skill_prebuild_completeness_rate",
-        "generic_ui_regression_rate"
-      ],
-      "last_verified": "2026-05-11",
-      "capability_role": "primary",
-      "public": true
-    }
-  ]
 ---
 
 # Domain Skill Families
@@ -82,17 +40,20 @@ The specialized skill families for frontend, media, content, and future vertical
 
 ## Role
 
-This system spec is the authored source for one public Farplane system and its internal capability handles. The generated registries expose the same data as `docs/systems/registry.jsonl` and `docs/features/registry.jsonl`.
+Domain Skill Families are specialized workflow products that sit on top of the core loops, starting with frontend/media/content-style work.
 
-## Public Capability
+## What Belongs Here
 
-- `FEAT-0014` - Frontend skill parity upgrade
+Vertical skill families, domain-specific orchestration, specialized QA, and future workflow products that reuse core Farplane loops.
 
-## Capability Handles
+## What Belongs Elsewhere
 
-- `FEAT-0014` `primary` - Frontend skill parity upgrade
+Shared skill mechanics belong to Skill System; generic execution and proof stay in Work Loop and Proof and Review.
 
-## Maintenance Notes
+## Feature Docs
 
-- Edit the `system_record_json` and `capability_records_json` blocks in this file, then run `python3 docs/features/validate_features.py --write`.
-- Keep public docs focused on the system and primary capability; use subcapability rows for compatibility, dedupe, rollout, and evidence tracking.
+- [FEAT-0014 Frontend skill parity upgrade](../features/FEAT-0014-frontend-skill-parity-upgrade.md)
+
+## Maintenance
+
+This system page owns only the system-level contract. Feature registry rows are authored as feature pages in `docs/features/` and generated into `docs/features/registry.jsonl`.

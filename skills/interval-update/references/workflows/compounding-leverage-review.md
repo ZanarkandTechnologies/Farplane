@@ -67,7 +67,7 @@ Default sources from the context bundle:
   worker evidence.
 - `docs/LESSONS.md` and `docs/TROUBLES.md` for repeated misses and fixed
   lessons.
-- recently created or changed skills, system/capability records, generated
+- recently created or changed skills, system/feature records, generated
   registry rows, eval results, review findings, tickets, reports, and
   explicitly supplied external source refs.
 

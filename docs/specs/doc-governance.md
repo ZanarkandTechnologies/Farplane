@@ -69,20 +69,20 @@ If a doc grows because it is accumulating task evidence, archive notes, or
 implementation history, move those details to the ticket, artifact, or `tmp/**`
 scratch space and keep the current contract compact.
 
-## System And Capability Metadata Ownership
+## System And Feature Metadata Ownership
 
-`docs/systems/*.md` owns Farplane's public system stack and internal capability
-handles. Each system file carries one `system_record_json` block and one
-`capability_records_json` block.
+`docs/systems/*.md` owns Farplane's public system stack. Each system file
+carries one `system_record_json` block and links to the feature docs that
+belong to that system.
 
-Use `SYS-*` records for public product modules and `FEAT-*` records for stable
-compatibility handles consumed by templates, tickets, sources, validators, and
-adoption checks. If a candidate feature is not worth placing in an owning
-system spec, it is not yet worth a first-class `FEAT-*` handle.
+Feature pages in `docs/features/` own Farplane's first-class feature records.
+Use `SYS-*` records for public product modules and `FEAT-*` records only for
+capabilities that deserve their own feature page, proof path, surfaces, and
+maintenance contract. If a candidate capability is not worth a feature page,
+delete or avoid the `FEAT-*` handle instead of hiding it as a sub-row.
 
 `docs/systems/registry.jsonl` and `docs/features/registry.jsonl` are generated
-output. Do not hand-edit them. After system or capability metadata changes,
-run:
+output. Do not hand-edit them. After system or feature metadata changes, run:
 
 ```bash
 python3 docs/features/validate_features.py --write
