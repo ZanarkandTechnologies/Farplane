@@ -40,7 +40,7 @@ variant/search loops with a program, metric, progress, and promotion rule.
 
 ## Automation Presets
 
-`skill-maintenance.harden_skill @7d or weekly_interval.learning_backpropagation -> reports.skill_hardening`
+`skill-maintenance.harden_skill @7d or weekly_interval.skill_hardening -> reports.skill_hardening`
 
 Turns fresh lesson/trouble rows, ticket progress findings, interval report
 findings, proof failures, and repeated planning misses into immediate evals,
@@ -119,8 +119,7 @@ Use `harden_skill` for fresh prevention: take new `docs/LESSONS.md`,
 failures, and repeated planning misses; dedupe them; and add the smallest
 durable blockers against recurrence: eval cases, gotchas, QA/checklist
 guardrails, or tickets. Weekly Interval should call this mode through
-`learning_backpropagation` when a project needs recurring learning
-backpropagation.
+`skill_hardening` when a project needs recurring learning backpropagation.
 
 Use `refine_skill` for compaction after hardening has accumulated material:
 merge duplicate evals, collapse overlapping gotchas, move long examples into

@@ -1,5 +1,5 @@
 ---
-title: "Learning Backpropagation Workflow"
+title: "Skill Hardening Workflow"
 status: active
 owner: interval-update
 kind: workflow-reference
@@ -7,24 +7,23 @@ template_uses:
   skill-template: "0.3.2"
 ---
 
-# Learning Backpropagation Workflow
+# Skill Hardening Workflow
 
 ## Context
 
-Use this workflow when an interval needs to convert qualitative execution
-feedback into durable harness improvements. It replaces the old standalone
-learning-drain compatibility path. Weekly Interval is the default caller
-because enough evidence has accumulated to distinguish one-off noise from
-repeatable skill, eval, checklist, ticket, or process updates.
+Use this workflow when an interval needs to convert fresh execution feedback into
+durable skill prevention. Weekly Interval is the default caller because enough
+evidence has usually accumulated to separate repeated failures from one-off
+noise.
 
-This workflow selects and routes learning. It does not edit skills directly
+This workflow selects and routes hardening. It does not edit skills directly
 unless the parent interval explicitly enters a `skill-maintenance` subtask.
 
 ## Workflow Signature
 
 ```text
-learning_backpropagation(context_bundle, review_window, planning_window,
-                         workflow_findings?, cap?)
+skill_hardening(context_bundle, review_window, planning_window,
+                workflow_findings?, cap?)
   -> harden_skill_handoffs
    + eval_candidates
    + checklist_guardrails
@@ -44,7 +43,7 @@ gates: source_rows_deduped; cap_respected; no_raw_transcripts;
        one_off_noise_deferred; processed_or_deferred_recorded
 routes: skill-maintenance:harden_skill | eval | optimize-harness |
         gap-analysis | ticket delta | direct no-change
-fails: invokes legacy learning-drain; reprocesses old rows; deletes ledgers;
+fails: invokes a compatibility drain; reprocesses old rows; deletes ledgers;
        spawns unbounded hardening work; treats every note as a skill bug
 ```
 
@@ -105,51 +104,6 @@ Optional sources:
         interval report.
   - [ ] If processed-state idempotence is enabled, append sanitized records to
         `.farplane/state/skill-maintenance/processed-learning.jsonl`.
-
-## Templates
-
-Harden-skill handoff:
-
-```text
-edited_skill:
-expected_behavior:
-current_behavior:
-evidence_refs:
-lesson_or_trouble_refs:
-mode: harden_skill
-recommended_guardrail:
-proof_required:
-```
-
-Learning row:
-
-```text
-- finding:
-  source_refs:
-  class: repeated_failure | proof_gap | planning_miss | skill_ambiguity |
-         eval_gap | checklist_gap | one_off | unclear_owner
-  owner_route:
-  disposition: harden_skill | eval | optimize_harness | ticket_delta |
-               deferred | no_change
-  reason:
-```
-
-## Gotchas
-
-- Do not call `learning-drain`; this workflow is the active feedback updater.
-- Do not use append-only ledgers as a todo list. Keep processing state separate.
-- Do not harden a skill from one ambiguous anecdote unless the failure is high
-  severity and the guardrail is cheap.
-- Do not let weekly backpropagation create an unbounded improvement queue.
-
-## Reference Map
-
-- Parent interval update loads this file only when
-  `report_workflows.learning_backpropagation` is enabled.
-- [skill-maintenance](../../../skill-maintenance/SKILL.md) owns
-  `harden_skill`, eval/gotcha/checklist updates, registry sync, and proof.
-- [../../../../docs/specs/minimal-autonomy-loop.md](../../../../docs/specs/minimal-autonomy-loop.md)
-  defines the overall Pulse/Daily/Weekly feedback loop.
 
 ## Output
 

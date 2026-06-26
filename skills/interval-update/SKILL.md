@@ -128,7 +128,9 @@ report_workflows:
   goal_drift?: bool | "light"
   metric_snapshot?: bool | "when_sources_exist"
   compounding_leverage_review?: bool | "light"
-  learning_backpropagation?: bool | "when_sources_exist"
+  skill_hardening?: bool | "when_sources_exist"
+  skill_refinement?: bool | "when_sources_exist"
+  docs_consolidation?: bool | "when_sources_exist"
   priority_planning?: bool | "light"
 ```
 
@@ -173,9 +175,17 @@ compounding_leverage_review(review_window, planning_window)
   -> lever_inventory + top_experiment_candidates + reward_signals
   ref: references/workflows/compounding-leverage-review.md
 
-learning_backpropagation(review_window, planning_window)
+skill_hardening(review_window, planning_window)
   -> harden_skill_handoffs + eval_candidates + processed_state_delta
-  ref: references/workflows/learning-backpropagation.md
+  ref: references/workflows/skill-hardening.md
+
+skill_refinement(review_window, planning_window)
+  -> refine_skill_handoffs + compaction_candidates + coverage_risks
+  ref: references/workflows/skill-refinement.md
+
+docs_consolidation(review_window, planning_window)
+  -> docs_consolidation_handoffs + stale_doc_candidates + source_gaps
+  ref: references/workflows/docs-consolidation.md
 
 priority_planning(review_window, planning_window)
   -> priorities + depriorities + proof_checks
@@ -216,10 +226,14 @@ priority_planning(review_window, planning_window)
         signals from prior interval reports before selecting new leverage bets.
   - [ ] When metric snapshots or reward signals are ambiguous, use a metric
         card before allowing them to drive planning.
-  - [ ] When `learning_backpropagation` is enabled, route repeated troubles,
-        lessons, progress-log findings, and proof failures to
-        `skill-maintenance(mode: harden_skill)` instead of using a legacy drain
-        wrapper.
+  - [ ] When `skill_hardening` is enabled, route repeated troubles, lessons,
+        progress-log findings, and proof failures to
+        `skill-maintenance(mode: harden_skill)`.
+  - [ ] When `skill_refinement` is enabled, route accumulated older evals,
+        gotchas, and usage results to `skill-maintenance(mode: refine_skill)`.
+  - [ ] When `docs_consolidation` is enabled, route broad project context
+        refresh through `update-memory` and substantive doc-quality rewrites
+        through `documentation`.
 - [ ] 4. Write the report before durable mutations.
   - [ ] Write a date-stamped interval report.
   - [ ] Include source gaps, drift findings, evidence, and the proposed next

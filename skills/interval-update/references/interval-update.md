@@ -116,7 +116,9 @@ report_workflows = {
   goal_drift?: bool | "light",
   metric_snapshot?: bool | "when_sources_exist",
   compounding_leverage_review?: bool | "light",
-  learning_backpropagation?: bool | "when_sources_exist",
+  skill_hardening?: bool | "when_sources_exist",
+  skill_refinement?: bool | "when_sources_exist",
+  docs_consolidation?: bool | "when_sources_exist",
   priority_planning?: bool | "light"
 }
 ```
@@ -141,19 +143,24 @@ merge shape.
    interval reports before selecting new bets.
 7. Read product work lanes, local product skill refs, and static allocation
    guardrails when priority planning or ticket refill is enabled.
-8. For enabled learning backpropagation, route repeated lessons, troubles,
+8. For enabled `skill_hardening`, route repeated lessons, troubles,
    ticket-progress findings, and proof failures to
    `skill-maintenance(mode: harden_skill)`.
-9. Review the past window against the static harness charter, goals, and
+9. For enabled `skill_refinement`, route accumulated older evals, gotchas,
+   usage results, and compaction risks to
+   `skill-maintenance(mode: refine_skill)`.
+10. For enabled `docs_consolidation`, route whole-project context refresh to
+   `update-memory` and substantive durable doc cleanup to `documentation`.
+11. Review the past window against the static harness charter, goals, and
    configured parent contexts.
-10. Write [interval-report.md](../templates/interval-report.md) before any
+12. Write [interval-report.md](../templates/interval-report.md) before any
    goals mutation.
-11. Plan the next window, sized to `planning_window`.
-12. Classify every goals delta as `auto_apply`, `approval_required`, or
+13. Plan the next window, sized to `planning_window`.
+14. Classify every goals delta as `auto_apply`, `approval_required`, or
    `rejected_source_gap`.
-13. Convert executable changes into ticket deltas or Goal Advisor handoffs,
+15. Convert executable changes into ticket deltas or Goal Advisor handoffs,
     including local product skill refs when they own the workflow.
-14. Return downstream guidance so Pulse gets the next constraints.
+16. Return downstream guidance so Pulse gets the next constraints.
 
 ## Goals Delta Promotion
 
@@ -195,8 +202,14 @@ horizon review.
 - The dated interval report is the state store for self-update decisions:
   reward closure, selected bets, rejected/deferred/expired candidates, advisor
   routes, and next reward signals.
-- Learning backpropagation is not a separate compatibility automation. Weekly
-  Interval routes learning sources to `skill-maintenance(mode: harden_skill)`
-  and records processed or deferred learning in the dated report.
+- Skill hardening is not a separate compatibility automation. Weekly Interval
+  routes learning sources to `skill-maintenance(mode: harden_skill)` and records
+  processed or deferred learning in the dated report.
+- Skill refinement is a separate optional workflow from hardening. Use it only
+  after immediate guardrails exist, so compaction does not delay fresh
+  prevention work.
+- Docs consolidation is a separate optional workflow from memory refresh.
+  Intervals should produce handoffs or compact deltas first, then let
+  `update-memory` or `documentation` own the actual doc edits when warranted.
 - Urgent leverage escalation is allowed only for high-confidence evidence with
   a source ref, explicit loss term, review-by date, and next owner route.

@@ -42,7 +42,7 @@ layer.
 weekly_interval(project) -> weekly_bets + expected_rewards + ticket_budget + pulse_guidance
 daily_interval(project) -> recalibrated_queue + next_24h_plan + priority_changes
 pulse(project) -> ready_ticket_execution + outcome_feedback + planning_request?
-weekly_learning_backprop(project) -> skill_hardening + planning_calibration + next_reward_model
+weekly_upkeep(project) -> skill_hardening + skill_refinement + docs_consolidation + planning_calibration + next_reward_model
 ```
 
 The loops have different reward horizons:
@@ -51,8 +51,8 @@ The loops have different reward horizons:
 - Daily Interval recalibrates the queue and next-day execution plan.
 - Weekly Interval chooses bets, expected rewards, ticket supply, and strategy
   adjustments.
-- Weekly learning backprop turns qualitative progress into durable skill,
-  eval, checklist, ticket, or planning improvements.
+- Weekly upkeep turns qualitative progress into durable skill, eval, checklist,
+  ticket, docs, or planning improvements.
 
 Files are the shared memory. Codex automations own cadence. Skills own reusable
 workflow behavior.
@@ -221,7 +221,9 @@ weekly_interval(last_week, goals, daily_reports)
    + ticket_budget
    + pulse_guidance
    + goal_advisor_handoffs
-   + learning_backpropagation
+   + skill_hardening
+   + skill_refinement
+   + docs_consolidation
 ```
 
 It should:
@@ -234,26 +236,36 @@ It should:
 - choose a small number of next-week bets with expected rewards.
 - create or propose enough tickets to test those bets.
 - route durable execution through Goal Advisor when needed.
-- run learning backpropagation into `skill-maintenance(mode: harden_skill)`.
+- run skill hardening into `skill-maintenance(mode: harden_skill)`.
+- run skill refinement into `skill-maintenance(mode: refine_skill)` when older
+  guardrails need compaction.
+- route documentation consolidation through `update-memory` and `documentation`.
 
-## Learning Backpropagation
+## Skill Hardening And Refinement
 
-Learning backpropagation is the decoupled feedback updater. It should run from
-Weekly Interval after reports and reward closure, not as a separate compatibility
+Skill hardening is the decoupled feedback updater. It should run from Weekly
+Interval after reports and reward closure, not as a separate compatibility
 automation.
 
 ```text
-learning_backpropagation(review_window, tickets, progress_logs, lessons, troubles,
-                         pulse_reports, interval_reports)
+skill_hardening(review_window, tickets, progress_logs, lessons, troubles,
+                pulse_reports, interval_reports)
   -> harden_skill_handoffs
    + eval_candidates
    + checklist_guardrails
    + improvement_tickets
    + processed_state_delta
    + deferred_learning
+
+skill_refinement(review_window, skill_audits, evals, gotchas, usage_results)
+  -> refine_skill_handoffs
+   + compaction_candidates
+   + coverage_risks
+   + deferred_refinement
 ```
 
-The owner is `skill-maintenance(mode: harden_skill)`.
+The owners are `skill-maintenance(mode: harden_skill)` and
+`skill-maintenance(mode: refine_skill)`.
 
 Inputs:
 
@@ -271,9 +283,10 @@ Outputs:
 - processed-state records so the same row is not reprocessed.
 - deferred learning when evidence is too weak or owner surface is unclear.
 
-This replaces the old `learning-drain` compatibility surface. New automations
-call `interval-update` with `learning_backpropagation` enabled, which then
-routes to `skill-maintenance(mode: harden_skill)`.
+New automations call `interval-update` with `skill_hardening` enabled, which
+then routes to `skill-maintenance(mode: harden_skill)`. Add
+`skill_refinement` only when the interval should compact already-hardened skill
+surfaces.
 
 ## Human Authority
 
@@ -307,7 +320,9 @@ flowchart TD
     DR["daily reports"] --> W
     PR["Pulse reports"] --> W
     T["tickets + progress.md"] --> W
-    L["docs/LESSONS.md<br/>docs/TROUBLES.md"] --> LB["learning_backpropagation"]
+    L["docs/LESSONS.md<br/>docs/TROUBLES.md"] --> SH["skill_hardening"]
+    SA["skill audits<br/>evals + gotchas"] --> SR["skill_refinement"]
+    DOC["docs + memory<br/>reference reports"] --> DC["docs_consolidation"]
     W --> WB["weekly bets + expected rewards"]
     WB --> LD["lane distribution + ticket budget"]
     LD --> D["Daily Interval"]
@@ -316,9 +331,15 @@ flowchart TD
     PU --> T
     PU --> PR
     W --> GA["Goal Advisor handoffs"]
-    W --> LB
-    LB --> SM["skill-maintenance<br/>harden_skill"]
+    W --> SH
+    W --> SR
+    W --> DC
+    SH --> SM["skill-maintenance<br/>harden_skill"]
+    SR --> SMR["skill-maintenance<br/>refine_skill"]
+    DC --> UM["update-memory / documentation"]
     SM --> SK["skills / evals / checklists / tickets"]
+    SMR --> SK
+    UM --> W
     SK --> W
 ```
 
@@ -334,7 +355,9 @@ Required surfaces:
 - `skills/pulse-update`: fast ticket execution, planning requests, and outcome
   recording.
 - `skills/interval-update`: daily and weekly report-then-plan workflow.
-- `skills/skill-maintenance`: learning backpropagation owner.
+- `skills/skill-maintenance`: skill hardening and refinement owner.
+- `skills/update-memory` and `skills/documentation`: docs consolidation owner
+  routes.
 - `.farplane/reports/pulse/**`: Pulse reports.
 - `.farplane/reports/interval/**`: dated interval reports.
 - `tickets/**/progress.md`: qualitative execution feedback.
@@ -344,6 +367,6 @@ Non-goals:
 - no hidden Steer scheduler thread.
 - no separate quarterly/yearly loop unless it produces useful decisions often
   enough to deserve its own automation.
-- no compatibility learning-drain automation.
+- no compatibility drain automation.
 - no Pulse-level strategy or planner-level exploration before reward learning
   proves it is useful.

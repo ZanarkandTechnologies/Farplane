@@ -204,7 +204,9 @@ weekly_interval:
     - ticket_board_drift
     - goal_drift
     - compounding_leverage_review
-    - learning_backpropagation
+    - skill_hardening
+    - skill_refinement
+    - docs_consolidation
     - priority_planning
 ```
 

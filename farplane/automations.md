@@ -113,7 +113,9 @@ Project workflows:
 - `goal_drift`: true.
 - `metric_snapshot`: when sources exist.
 - `compounding_leverage_review`: true.
-- `learning_backpropagation`: true.
+- `skill_hardening`: true.
+- `skill_refinement`: when sources exist.
+- `docs_consolidation`: when sources exist.
 - `priority_planning`: true.
 
 Project gates:
