@@ -246,13 +246,22 @@ should explain why one target is first, not pretend to be scientific telemetry.
 Taste Loop is the first official consumer. It should:
 
 1. Gate on active hours and feedback budget.
-2. Build candidates from the skill registry, product lanes, heat, lifecycle
-   refs, and recent Taste Loop state.
-3. Rank candidates with Skill Compounding Score.
-4. Emit one bounded action by default: no-op, feedback card, Goal handoff, or
-   blocked report.
+2. Build candidates from `farplane/products.md` Taste Loop Artifact Workflows,
+   then use the skill registry, product lanes, heat, lifecycle refs, and recent
+   Taste Loop state as scoring evidence.
+3. Rank product-lane artifact workflows with Skill Compounding Score plus an
+   `artifact_workflow_fit` gate.
+4. Emit one bounded action by default: no-op, artifact feedback, artifact Goal
+   handoff, or blocked report.
 5. Ask `metric-advisor` for a provider before benchmark or Goal creation.
 6. Stop without editing target skills directly.
+
+Taste Loop must not ask for feedback on a skill summary. A valid feedback card
+requires a generated artifact, artifact preview, screenshot, URL, or Goal
+handoff artifact. Broad router skills such as `frontend-craft`,
+`functional-ui`, `remotion`, `remotion-render`, `goal-advisor`,
+`self-improve`, and `skill-maintenance` can support artifact generation, but
+they are not direct Taste Loop targets.
 
 ## UI Contract
 

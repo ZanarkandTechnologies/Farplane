@@ -1,7 +1,7 @@
 ---
 name: taste-loop
 version: 0.1.0
-description: "Run a Codex-native active-hours heartbeat prompt that selects high-compounding skills and emits feedback cards or Goal handoffs."
+description: "Run a Codex-native active-hours heartbeat prompt that creates product-lane artifacts and asks for human taste feedback."
 tier: 3
 group: self-improvement
 source: local
@@ -16,37 +16,46 @@ eval: eval_task.json
 ## Context
 
 Use this when a Farplane project should convert active human attention into
-structured skill or product improvement signals through the official optional
-Codex automation heartbeat. The heartbeat prompt selects the top compounding
-targets with the official Skill Compounding Score; gates on active hours and
-feedback budget; then emits one bounded action per beat: no-op, feedback card,
-Goal Advisor handoff, or blocked report.
+structured feedback on product artifacts through the official optional Codex
+automation heartbeat. The heartbeat prompt reads `farplane/products.md`, selects
+one high-compounding artifact workflow from the Taste Loop Artifact Workflows
+table, generates or hands off one reviewable artifact, and asks for a compact
+human taste judgment on that artifact.
 
 This skill is a prompt owner, not a script, scheduler, hidden daemon, or
-alternate continuation runtime. Codex automation records own cadence; native
-Goal mode owns uninterrupted improvement turns; `goal-advisor` compiles Goal
-Packets; `metric-advisor` chooses the honest provider; `optimize-with-human`
-owns human-feedback protocol; `self-improve` owns target-skill experiment
-memory.
+alternate continuation runtime. Codex automation records own cadence; product
+lanes own what outputs matter; native Goal mode owns uninterrupted artifact
+generation turns; `goal-advisor` compiles Goal Packets; `metric-advisor`
+chooses the honest provider; `optimize-with-human` owns human-feedback
+protocol; artifact-producing skills own end-to-end generation.
 
 ## Skill Signature
 
 ```text
 taste_loop(project_root, config?, now?)
-  -> no_op | feedback_card_report | goal_handoff_report | blocked_report
-state: reads(config env, farplane/products.md, docs/skills/registry.jsonl,
+  -> no_op | artifact_feedback_report | artifact_goal_handoff_report |
+     blocked_report
+state: reads(config env, farplane/products.md,
+             farplane/products.md#taste-loop-artifact-workflows,
+             docs/skills/registry.jsonl,
              docs/specs/skill-compounding-score.md,
              skill graph heat / FARPLANE_SKILL_HEAT_*,
              .farplane/automation/taste-loop/*?);
        writes(.farplane/reports/taste-loop/*.md,
-              .farplane/automation/taste-loop/*.md?)
-gates: active_hours_checked; feedback_budget_checked; top_n_selected;
-       open_feedback_deduped; output_artifact_visible; no_hidden_scheduler
-routes: metric-advisor | optimize-with-human | self-improve | goal-advisor |
-  review
+              .farplane/automation/taste-loop/artifacts/*,
+              .farplane/automation/taste-loop/feedback/*?)
+gates: active_hours_checked; feedback_budget_checked; product_lane_selected;
+       artifact_workflow_selected; artifact_generated_or_goal_handoff;
+       artifact_ref_visible; open_feedback_deduped; no_hidden_scheduler
+routes: landing-page | social-content | video-production |
+  product-photography | farplane-evidence-content |
+  farplane-experiment-report | farplane-ablation-proof |
+  farplane-productization | optimize-with-human | goal-advisor | review
 fails: creates a local runner as the primary surface; runs hidden loops;
-  bypasses human feedback; routes to retired autoresearch by default; spams
-  more feedback than budget allows
+  asks for feedback on a skill summary; selects broad router skills as direct
+  targets; creates a feedback card without an artifact; optimizes generic skill
+  quality instead of a products.md output; routes to retired autoresearch by
+  default; spams more feedback than budget allows
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -59,10 +68,16 @@ fails: creates a local runner as the primary surface; runs hidden loops;
 - [ ] 2. Collect candidate targets.
   - [ ] Read `docs/specs/skill-compounding-score.md`.
   - [ ] Read `docs/skills/registry.jsonl`.
-  - [ ] Read `farplane/products.md` Work Lanes.
+  - [ ] Read `farplane/products.md` Work Lanes and Taste Loop Artifact
+    Workflows.
   - [ ] Use existing skill heat generated from `.farplane/events/` and
     `FARPLANE_SKILL_HEAT_*` controls when available.
-  - [ ] Prefer configured target groups and known product/money-making skills.
+  - [ ] Prefer artifact workflows tied to configured target groups and
+    product/money-making lanes.
+  - [ ] Exclude broad router skills as direct targets. `frontend-craft`,
+    `functional-ui`, `remotion`, `remotion-render`, `goal-advisor`,
+    `self-improve`, and `skill-maintenance` can support a workflow but should
+    not be the thing Kenji is asked to judge.
   - [ ] Include existing open feedback and cooldown state.
   - [ ] Normalize open feedback by `target_id + feedback_question` before
     applying the budget gate; duplicate open rows are hygiene findings, not
@@ -71,21 +86,30 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Use the Skill Compounding Score; expose every component in the report.
   - [ ] Keep the score distinct from eval score, review TAS, and human
     preference labels.
+  - [ ] Require `artifact_workflow_fit`: the candidate can create or hand off a
+    reviewable artifact end-to-end from `products.md`.
   - [ ] Penalize unique open feedback, cooldown, ambiguous targets, and fake
     metric risk.
 - [ ] 4. Route exactly one Codex-native bounded action by default.
   - [ ] Ask `metric-advisor` for an honest provider before creating benchmarks,
     harder task suites, or Goal handoffs.
-  - [ ] Use `feedback_card` through `optimize-with-human` when human taste is
-    the honest next metric.
-  - [ ] Use `goal_handoff` with `self-improve` context when a bounded
-    skill-improvement Goal should run in native Goal mode.
-  - [ ] Use `blocked_report` when the target lacks proof or config.
+  - [ ] Generate a small artifact immediately when the owning artifact skill can
+    do so inside one heartbeat without hidden continuation.
+  - [ ] Use `artifact_goal_handoff` when native Goal mode should generate the
+    artifact in a bounded continuation.
+  - [ ] Use `artifact_feedback_report` through `optimize-with-human` only after
+    an artifact path, preview, screenshot, or URL exists.
+  - [ ] Use `blocked_report` when the target lacks product-lane ownership,
+    artifact workflow ownership, proof, config, or generation feasibility.
   - [ ] Do not route to legacy autoresearch unless explicitly configured later.
 - [ ] 5. Write visible state, not hidden runtime output.
   - [ ] Write a Markdown report under `.farplane/reports/taste-loop/`.
-  - [ ] Write or update feedback-card and Goal-handoff Markdown artifacts
-    under `.farplane/automation/taste-loop/` when useful.
+  - [ ] Write generated artifacts under
+    `.farplane/automation/taste-loop/artifacts/`.
+  - [ ] Write feedback-card and Goal-handoff Markdown artifacts under
+    `.farplane/automation/taste-loop/feedback/` when useful.
+  - [ ] Feedback cards must include `artifact_ref`; if no artifact was produced
+    or handed off, write `blocked_report` instead of a feedback card.
   - [ ] Keep generated feedback questions short and decision-shaped.
   - [ ] When duplicate open feedback exists, report the canonical card and
     duplicate rows; do not create another duplicate for that target/question.
@@ -124,8 +148,9 @@ automation record.
 ## Scoring Contract
 
 The prompt should consume the official Skill Compounding Score from
-`docs/specs/skill-compounding-score.md` and expose a readable score breakdown
-rather than hiding a magic ranking:
+`docs/specs/skill-compounding-score.md`, then apply the Taste Loop-specific
+artifact workflow gate. Expose a readable score breakdown rather than hiding a
+magic ranking:
 
 ```text
 skill_compounding_score(skill, project_state, lifecycle_refs, now?)
@@ -141,8 +166,18 @@ Signal ownership:
 - heat: generated skill graph heat from `.farplane/events/` and
   `FARPLANE_SKILL_HEAT_*`
 - product lane: `farplane/products.md`
+- artifact workflow fit: `farplane/products.md` Taste Loop Artifact Workflows
 - feedback budget and cooldown: `.farplane/automation/taste-loop/`
 - metric route: `metric-advisor`
+
+Taste Loop may use broad skills as support routes, but the selected target is
+always:
+
+```text
+product_lane + workflow_id + owner + artifact_ref
+```
+
+`feedback_card` is invalid without `artifact_ref`.
 
 ## Feedback Budget
 
@@ -176,9 +211,12 @@ feedback deltas stay below `FARPLANE_TASTE_LOOP_MINIMUM_DELTA` across
 
 Return and write:
 
-- `status`: `no_op`, `feedback_card`, `goal_handoff`, or `blocked`
+- `status`: `no_op`, `artifact_feedback`, `artifact_goal_handoff`, or
+  `blocked`
 - `report_path`
-- `selected_targets`
+- `selected_product_lane`
+- `selected_artifact_workflow`
+- `artifact_ref`
 - `score_breakdown`
 - `action`
 - `skipped_targets`
@@ -194,6 +232,11 @@ Return and write:
   reviewed as a prompt contract plus sample artifacts.
 - Do not call this a training loop. It creates structured feedback and
   accepted writeback opportunities; it does not train models.
+- Do not ask Kenji to review a skill summary, skill README, or generic skill
+  quality target. Ask for feedback on an artifact created by a product workflow.
+- Do not use broad router skills as direct targets. Pick an artifact workflow
+  from `farplane/products.md`; use router skills only as supporting routes.
+- Do not create `feedback_card` without `artifact_ref`.
 - Do not let open feedback pile up. Respect `MAX_OPEN_FEEDBACK`.
 - Do not let duplicate feedback rows consume the open-feedback budget. Count
   unique active requests and report duplicate rows as hygiene.

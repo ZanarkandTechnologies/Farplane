@@ -14,8 +14,8 @@ project_root = "{{PROJECT_ROOT}}"
 
 ## Load
 
-Read the project-local `AGENTS.md`, then load `skills/taste-loop/SKILL.md` and
-`docs/specs/skill-compounding-score.md`.
+Read the project-local `AGENTS.md`, then load `skills/taste-loop/SKILL.md`,
+`farplane/products.md`, and `docs/specs/skill-compounding-score.md`.
 Read the active-hours config from the rendered Codex config or environment:
 
 ```text
@@ -44,7 +44,8 @@ Stop with a visible no-op report when any hard gate fails:
 - disabled
 - outside active days or active hours
 - unique open feedback count is at or above the cap
-- target registry or product-lane context is missing
+- Taste Loop Artifact Workflows are missing from `farplane/products.md`
+- no candidate workflow can create or hand off a reviewable artifact
 
 ## Select
 
@@ -59,6 +60,22 @@ Read:
 - recent `.farplane/reports/taste-loop/` reports when present
 - existing `.farplane/automation/taste-loop/` feedback or handoff artifacts
 
+Build candidates from `farplane/products.md` Taste Loop Artifact Workflows.
+Each candidate must include:
+
+```text
+product_lane:
+workflow_id:
+owner:
+reviewable_artifact:
+feedback_question:
+```
+
+Do not select broad router skills as direct targets. `frontend-craft`,
+`functional-ui`, `remotion`, `remotion-render`, `goal-advisor`,
+`self-improve`, and `skill-maintenance` may support a workflow, but Kenji
+should not be asked to review those skills or their summaries.
+
 Normalize open feedback before gating:
 
 ```text
@@ -70,8 +87,9 @@ Count one open card per key toward
 are `duplicate_open_feedback` hygiene findings and do not consume additional
 budget. List duplicates in the report with their canonical target/question.
 
-Select the top `FARPLANE_TASTE_LOOP_TOP_N` targets with the official Skill
-Compounding Score. Keep this distinct from eval score or review TAS:
+Select the top `FARPLANE_TASTE_LOOP_TOP_N` artifact workflows with the official
+Skill Compounding Score plus the Taste Loop artifact gate. Keep this distinct
+from eval score or review TAS:
 
 - tier leverage from `docs/skills/registry.jsonl`
 - lifecycle-reference fit from `docs/farplane-framework/lifecycle.md` and graph
@@ -82,12 +100,16 @@ Compounding Score. Keep this distinct from eval score or review TAS:
 - improvement gap from grounded lessons, troubles, evals, self-improve deltas,
   review findings, or missing proof
 - feedback fit and proof fit
+- artifact workflow fit from `farplane/products.md`
 - cooldown, open-feedback, ambiguity, fake-metric, and convergence penalties
 
 Expose a score breakdown in the report:
 
 ```text
-Skill:
+Product lane:
+Workflow:
+Owner:
+Reviewable artifact:
 Route:
 Score:
 Components:
@@ -99,6 +121,7 @@ Components:
   improvement_gap_fit:
   feedback_fit:
   proof_fit:
+  artifact_workflow_fit:
 Penalties:
 Decision:
 Evidence refs:
@@ -110,16 +133,18 @@ Take at most `FARPLANE_TASTE_LOOP_MAX_ACTIONS_PER_BEAT` action. Default to one.
 
 Use:
 
-- `feedback_card` through `optimize-with-human` when human taste is the honest
-  metric.
-- `goal_handoff` through `goal-advisor` with `self-improve` context when native
-  Goal mode should run a bounded measured improvement loop.
-- `blocked_report` when proof, config, target ownership, metric provider, or
-  benchmark honesty is unclear.
+- `artifact_feedback` through `optimize-with-human` only after a reviewable
+  artifact exists at `artifact_ref`.
+- `artifact_goal_handoff` through `goal-advisor` when native Goal mode should
+  generate the artifact in a bounded continuation.
+- `blocked_report` when proof, config, product-lane ownership, artifact
+  ownership, metric provider, or generation feasibility is unclear.
 
-Do not edit target skills directly from this heartbeat. Do not create a local
-runner, hidden daemon, unbounded queue, external mutation, deploy, publish,
-spend, or legacy autoresearch session by default.
+Do not ask for feedback on a skill summary, skill README, or broad skill target.
+Do not create a feedback card without `artifact_ref`. Do not edit target skills
+directly from this heartbeat. Do not create a local runner, hidden daemon,
+unbounded queue, external mutation, deploy, publish, spend, or legacy
+autoresearch session by default.
 
 Before creating a benchmark, harder task suite, or Goal handoff, derive a
 compact metric card:
@@ -156,19 +181,22 @@ Write a Markdown report under:
 When an action is emitted, also write a small artifact under:
 
 ```text
-.farplane/automation/taste-loop/
+.farplane/automation/taste-loop/artifacts/
+.farplane/automation/taste-loop/feedback/
 ```
 
-Use Markdown for human review. Keep feedback questions short enough to answer
-from Telegram or a compact Farplane UI card.
+Use Markdown for human review. A feedback artifact must point to the generated
+artifact path, screenshot, preview, or URL. Keep feedback questions short enough
+to answer from Telegram or a compact Farplane UI card.
 
 ## Final Output
 
 Return:
 
-- status: `no_op`, `feedback_card`, `goal_handoff`, or `blocked`
+- status: `no_op`, `artifact_feedback`, `artifact_goal_handoff`, or `blocked`
 - report path
-- selected target IDs, score breakdown, and metric provider
+- selected product lane, artifact workflow, score breakdown, and metric provider
+- artifact ref, if generated or handed off
 - action artifact path, if any
 - skipped target reasons
 - unique open feedback count and duplicate open feedback count
