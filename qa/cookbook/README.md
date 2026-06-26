@@ -18,5 +18,11 @@ Keep each page short and biased toward deterministic access.
   understandable
 - `Known gaps:` missing shortcuts or helpers that still need implementation
 
-Use [TEMPLATE.md](/Users/kenjipcx/coding-harness/Farplane/qa/cookbook/TEMPLATE.md)
-when adding a new page.
+Use [TEMPLATE.md](TEMPLATE.md) when adding a new page.
+
+## Current Pages
+
+- [Framework Validation](framework-validation.md)
+- [Skill Validation](skill-validation.md)
+- [Ticket Metadata](ticket-metadata.md)
+- [UI Browser Proof](ui-browser-proof.md)

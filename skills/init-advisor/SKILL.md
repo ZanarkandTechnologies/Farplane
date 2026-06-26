@@ -6,6 +6,7 @@ tier: 3
 group: coding
 source: local
 eval: eval_task.json
+qa_checklist: qa_checklist.md
 ---
 
 # Init Advisor Skill
@@ -39,6 +40,28 @@ ticket execution and explicit `interval-update` automations for daily or weekly
 reporting and planning.
 Generated project config should include `farplane/automations.md` as the
 reviewable prompt source copied into Codex automations.
+
+When answering "what does init create?", "what should the automation template
+say?", or "what should generated automation surfaces contain?", do not answer
+with `farplane/automations.md` alone. Lead with the core generated substrate and
+then describe the recurring-loop prompts:
+
+- `farplane/harness.md`: static human charter with human thesis, static
+  leverage commitments, non-tradeoffs, agent authority, and change rule.
+- `farplane/products.md`: product catalog for primary/supporting products and
+  work lanes.
+- Grounding step: before finalizing `farplane/harness.md`,
+  `farplane/products.md`, or `farplane/goals.md`, ground the team archetype
+  against real-world equivalents so the static charter and product catalog are
+  not invented from file names alone.
+- `farplane/automations.md`: reviewable Pulse, Daily Interval, and Weekly
+  Interval prompt source. It does not create legacy `farplane/steer.config.toml`
+  or `.farplane/state/steer-scheduler.json`; interval reports are date-stamped
+  artifacts, not `latest.md` as canonical state.
+
+Required sentence for generated-surface answers: "Before finalizing
+`farplane/harness.md`, `farplane/products.md`, or `farplane/goals.md`, ground
+the team archetype against real-world equivalents."
 
 When the operator asks how init or migration should decide what to ask before
 filling `farplane/harness.md`, `farplane/products.md`, or `farplane/goals.md`,
@@ -114,9 +137,10 @@ ticketed handoff, not the default init phase.
   `substrate_complete`.
 - `full`: after substrate setup, call `harness-creator` for the operating-model
   pass. It should ground the team archetype, static charter, products, goals,
-  feedback loops, missing systems, and current milestone. Ask the first missing
-  operator-owned harness-creator parameter instead of running separate goal,
-  product, or advisor interviews from init-advisor.
+  feedback loops, missing systems, current milestone, and any Goal Advisor
+  handoff. Ask the first missing operator-owned harness-creator parameter
+  instead of running separate goal, product, or advisor interviews from
+  init-advisor.
 
 `human_intake` controls how init/migration fills human-meaning files:
 
@@ -148,6 +172,11 @@ Do not treat `farplane/goals.md` existing as proof that goal setup is complete.
 If the split project files are placeholder, stale, or not grounded in the
 operator's stated intent, the result is `needs_operating_model_intake`, not
 `project_initialized`.
+Keep `farplane/goals.md` as Markdown with a fenced `goal-program` block for
+parseable goals, value function, axes, projects, and milestones. Propose or
+apply split-file deltas only after operator intent is known, and use
+`goal-advisor` only after a current milestone is concrete enough to compile
+into a ticket-backed Goal Packet.
 
 Every material setup stage should be expressible as a function signature.
 Resolve missing params from local files, operator context, and real-world
@@ -219,6 +248,26 @@ setup_project_operating_model(bootstrap_brief, project_context,
         cross-project workflows to root `skills/`.
   - [ ] Keep `farplane/automations.md` as the exact prompt source that calls
     generic skills in plain project-specific operational language.
+  - [ ] Include Pulse, Daily Interval, and Weekly Interval prompt blocks:
+        Pulse selects fast bounded actions; Daily Interval reviews the last 24
+        hours and plans the next 24 hours; Weekly Interval checks goals drift
+        and plans the next week.
+  - [ ] In the Pulse prompt, say Pulse selects at most one bounded action per
+        beat, prefers local ready/unblocked tickets, and does not require a
+        separate ticket-drainer automation.
+  - [ ] In the Pulse prompt, say it reads `farplane/harness.md` to preserve the
+        static human thesis and `farplane/products.md` when shaping product
+        refill tickets.
+  - [ ] Product refill tickets name the project type, baseline or comparison
+        point, expected artifact, and proof signal.
+  - [ ] Substantial implementation routes through `harness-creator` first when
+        the operating model is missing, then `goal-advisor` only after a
+        concrete milestone exists.
+  - [ ] Do not create legacy Steer scheduler files such as
+        `farplane/steer.config.toml` or
+        `.farplane/state/steer-scheduler.json`.
+  - [ ] Use date-stamped interval report paths as canonical evidence; do not
+        make `latest.md` the canonical interval state.
   - [ ] Ensure `farplane/manifest.json` records the Farplane project
     `spec_version` and standard tracked/ignored paths.
   - [ ] Preserve existing files unless `force == true` or explicit overwrite
@@ -227,18 +276,24 @@ setup_project_operating_model(bootstrap_brief, project_context,
     spec.
   - [ ] Do not auto-enable scaffolded git hooks.
 - [ ] 4. Run readiness audit and full-mode operating-model setup.
+  - [ ] When doing a dogfood, final readiness review, or material init
+        behavior change, read [qa_checklist.md](qa_checklist.md) and apply it
+        as preflight plus finish-gate checks.
   - [ ] Audit `docs/bootstrap-brief.md`, `farplane/harness.md`,
     `farplane/goals.md`, `farplane/products.md`, `farplane/automations.md`,
     `farplane/bindings.md`, `.agents/skills/README.md`, `farplane/pm.json`,
     `PROJECT_RULES.md`, and QA surfaces for missing,
     placeholder, stale, or disabled state.
-  - [ ] Treat missing human thesis, static leverage commitments, agent
-        authority, or change rule in `farplane/harness.md` as a readiness gap.
-        The first useful question is: "What is the durable human thesis this
-        project must preserve while its products and goals evolve?"
+  - [ ] Treat missing human thesis, static leverage commitments, non-tradeoffs,
+        agent authority, or change rule in `farplane/harness.md` as a readiness
+        gap. The first useful question is: "What is the durable human thesis
+        this project must preserve while its products and goals evolve?"
   - [ ] Treat missing or placeholder team archetype as a readiness gap. The
         first useful question is: "What kind of team is this project supposed to
         be, and what should it repeatedly produce?"
+  - [ ] Audit `docs/bootstrap-brief.md`, `farplane/products.md`, and
+        `farplane/goals.md` for team archetype, product outputs, North Star,
+        3-month outcome, success criteria, non-goals, and decision boundaries.
   - [ ] Use the destination skill signatures as the question inventory:
         `harness-creator` params for static charter, product catalog, feedback
         loops, missing systems, and current milestone shape; `horizon-advisor`
@@ -257,11 +312,15 @@ setup_project_operating_model(bootstrap_brief, project_context,
         Goal Intake Status and Initialization Readiness when those sections
         exist, including readiness state, human intake decision, missing
         answers, and any `deep-interview` summary or handoff.
+  - [ ] Keep `farplane/goals.md` as Markdown with a fenced `goal-program` block
+        for parseable goals, value function, axes, projects, and milestones.
+  - [ ] Propose or apply split-file deltas only after operator intent is known.
   - [ ] In `substrate` mode, report missing operating-model questions as next
     handoff rather than asking the full interview now.
   - [ ] In `full` mode, call `harness-creator` after substrate setup when the
     static charter, products, goals, feedback loops, missing systems, or
-    current milestone need to be written or improved.
+    current milestone need to be written or improved, including any Goal Advisor
+    handoff after the milestone is concrete.
   - [ ] Ask only the first missing direct `harness-creator` or
         `horizon-advisor` parameter before claiming `project_initialized`,
         unless the adaptive intake rule escalates to `deep-interview --quick`.
@@ -271,6 +330,8 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] Let `harness-creator` decide whether to use `horizon-advisor`,
     `harness-advisor`, `skill-creator`, or `goal-advisor`; do not duplicate
     those advisor calls in init-advisor.
+  - [ ] Use `goal-advisor` only after the current milestone is concrete enough
+        to compile into a ticket-backed Goal Packet.
 - [ ] 5. Initialize the optional code scaffold.
   - [ ] Bind `code_scaffold(...)`; ask only for missing params needed to choose
     or skip the stack profile.
@@ -283,9 +344,13 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] Record optional maintainability and hardening commands in
     `PROJECT_RULES.md` when the stack already has or explicitly adopts tools
     such as ESLint/Oxlint, Ruff/Radon, Semgrep, CodeQL, SonarQube, jscpd,
-    dependency-cruiser/Madge, Knip/depcheck, dependency audit, or secret scan.
+    dependency-cruiser/Madge, Knip/depcheck, static analysis dashboard,
+    mutation testing, dependency audit, secret scan, config validation, or
+    resilience/failure tests.
     Do not install these tools automatically unless setup scope explicitly
     includes code scaffold/tooling installation.
+  - [ ] Route behavior-preserving cleanup to `refactoring` and risk-reduction
+        work to `hardening`.
 - [ ] 6. Create the starter planning handoff.
   - [ ] Create or preserve `tickets/TASK-0001/ticket.md` for drafting the
     initial PRD.
@@ -303,18 +368,20 @@ setup_project_operating_model(bootstrap_brief, project_context,
         `farplane/automations.md`, commonly Pulse, Daily Interval, and Weekly
         Interval.
   - [ ] Record PM-visible thread IDs in `farplane/pm.json`; do not store
-        automation runtime IDs there.
+        automation runtime IDs there. Runtime automation IDs stay in the Codex
+        app automation store.
   - [ ] If activation is skipped or unavailable, report
-        `needs_automation_setup` with the exact next owner:
-        `automation-advisor`.
+        `needs_operating_model_intake` or `needs_automation_setup` with the
+        exact next owner: `harness-creator` or `automation-advisor`.
 - [ ] 8. Verify and finish init.
   - [ ] Run focused scaffold checks such as
     `python3 bin/validators/check_farplane_project_files.py` when available.
   - [ ] Confirm the expected `farplane/`, `.farplane/`, and `tickets/` surfaces
     exist.
-  - [ ] Report `substrate_complete`, `needs_operating_model_intake`,
-    `needs_runtime_setup`, `needs_automation_setup`, or
-    `project_initialized`; do not collapse these into a generic "done".
+  - [ ] Report a plain human status such as "Ready", "Filesystem ready,
+    operating model still missing", "Runtime setup missing", or "Automation
+    setup missing"; include the snake_case internal status only when writing a
+    machine-readable field or validator-facing note.
   - [ ] Report the initialized stack profile, any skipped human-gated steps,
     the starter PRD ticket, and the next command or skill.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -332,12 +399,16 @@ setup_project_operating_model(bootstrap_brief, project_context,
 - Starter handoff: `tickets/TASK-0001/ticket.md` for the post-init
   `deep-interview -> prd` phase.
 - Automation setup handoff: `automation-advisor` creates or updates the live
-  Codex loops only when activation is requested.
+  Codex loops only when activation is requested; `farplane/pm.json` keeps
+  PM-visible thread IDs while runtime automation IDs stay in the Codex app
+  automation store.
 - Full-mode operating-model setup: `harness-creator` receives the initialized
   substrate and owns proposed or applied deltas for `farplane/harness.md`,
   `farplane/products.md`, `farplane/goals.md`, `farplane/automations.md`,
   `farplane/bindings.md`, missing-system tickets, and any Goal Advisor handoff
-  after the current milestone is concrete.
+  after the current milestone is concrete. `human_intake` controls whether
+  missing operator-owned params are skipped as readiness gaps, offered as a
+  short intake, or required before file finalization.
 - Optional code scaffold selected from the stack recipes below.
 
 ## Code Scaffold Recipes
@@ -377,7 +448,8 @@ Record adopted commands in `PROJECT_RULES.md`; install only when the operator
 or selected stack setup explicitly includes those tools.
 
 - JavaScript / TypeScript: ESLint or Oxlint, TypeScript checks, jscpd,
-  dependency-cruiser or Madge, Knip or depcheck, Semgrep, CodeQL, SonarQube, and
+  dependency-cruiser or Madge, Knip or depcheck, static analysis dashboard,
+  mutation testing for high-budget proof, Semgrep, CodeQL, SonarQube, and
   dependency audit commands.
 - Python: Ruff, Radon, mypy or pyright, vulture, pip-audit or uv audit,
   Semgrep, CodeQL, SonarQube, and mutation testing only for high-budget proof.

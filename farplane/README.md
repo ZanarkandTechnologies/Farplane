@@ -1,6 +1,6 @@
 ---
 kind: farplane-config-index
-status: draft
+status: active
 created_at: 2026-06-15
 updated_at: 2026-06-26
 framework_template_version: "0.1.0"

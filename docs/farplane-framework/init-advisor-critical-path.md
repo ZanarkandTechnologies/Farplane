@@ -223,7 +223,16 @@ Audit:
 - `PROJECT_RULES.md`
 - QA surfaces
 
-Results:
+Human-facing results:
+
+```text
+Ready
+Filesystem ready, operating model still missing
+Runtime setup missing
+Automation setup missing
+```
+
+Internal status labels:
 
 ```text
 substrate_complete
@@ -235,6 +244,8 @@ project_initialized
 
 Rules:
 
+- Use the human-facing result in chat and checklists. Keep the snake_case label
+  only in machine-readable fields or when a validator needs exact status.
 - `substrate_complete` means the filesystem base exists.
 - `project_initialized` requires a grounded operating model, current goals, and
   enough runtime/proof context to start useful work.

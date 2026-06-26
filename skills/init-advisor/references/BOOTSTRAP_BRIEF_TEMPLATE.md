@@ -145,4 +145,5 @@ finalizing the scaffold.
 - Automations:
 - PM thread grouping:
 - Human gates:
-- Overall status: [substrate_complete / needs_goal_intake / needs_runtime_setup / needs_automation_setup / project_initialized]
+- Human status: [Ready / Filesystem ready, operating model still missing / Runtime setup missing / Automation setup missing]
+- Internal status: [substrate_complete / needs_operating_model_intake / needs_runtime_setup / needs_automation_setup / project_initialized]

@@ -6,6 +6,7 @@ owner: automation-advisor
 source_of_truth:
   - skills/pulse-update/SKILL.md
   - skills/interval-update/SKILL.md
+  - skills/taste-loop/SKILL.md
   - farplane/pm.json
 ---
 
@@ -13,8 +14,8 @@ source_of_truth:
 
 This file stores the exact prompt blocks copied into Codex automation records.
 Prompts should configure cadence, project root, thread IDs, and project-specific
-extensions only. The reusable loop behavior lives in `pulse-update` and
-`interval-update`.
+extensions only. The reusable loop behavior lives in `pulse-update`,
+`interval-update`, and `taste-loop`.
 
 ## Pulse
 
@@ -92,7 +93,7 @@ Final output:
 | Automation id | `farplane-weekly-interval` |
 | Name | `Farplane Weekly Interval` |
 | Kind | `cron` |
-| RRULE | `FREQ=WEEKLY;BYDAY=MON;BYHOUR=5;BYMINUTE=45;BYSECOND=0` |
+| RRULE | `FREQ=WEEKLY;BYDAY=MO;BYHOUR=5;BYMINUTE=45;BYSECOND=0` |
 | Workspace | `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane` |
 
 ```text
@@ -137,4 +138,48 @@ Final output:
 - proposed ticket deltas or Goal Advisor handoffs
 - approval-required goals delta, if any
 - leverage decisions and reward closure
+```
+
+## Active-Hours Taste Loop
+
+| Field | Value |
+| --- | --- |
+| Automation id | `farplane-active-hours-taste-loop` |
+| Name | `Farplane Active-Hours Taste Loop` |
+| Kind | `cron` |
+| RRULE | `FREQ=HOURLY;INTERVAL=1` |
+| Workspace | `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane` |
+| Status | `prompt-ready; activation requires explicit operator action` |
+
+```text
+Run one Farplane active-hours taste-loop beat.
+
+Call:
+- `taste_loop(project_root="/Users/kenjipcx/Zanarkand Technologies/projects/Farplane")`
+
+Project context:
+- use `skills/taste-loop/templates/heartbeat-prompt.md` as the reusable prompt
+  body and this block as the Farplane-specific automation wrapper.
+- use `FARPLANE_TASTE_LOOP_*` config from the rendered Codex config.
+- Daily and Weekly Interval may influence priorities through goals/products and
+  reports, but this heartbeat owns only the active-hours feedback opportunity.
+
+Project gates:
+- no hidden daemon, unbounded worker spawning, publish, deploy, spend,
+  account changes, or external mutation.
+- no local runner or script is the primary execution surface; this is a
+  Codex-native heartbeat prompt.
+- no live target skill edits from this heartbeat; emit a feedback card or Goal
+  Advisor handoff instead.
+- no legacy autoresearch route unless a future approved config explicitly
+  enables a safe mechanical METRIC loop.
+- respect active-hours, max-open-feedback, max-actions-per-beat, cooldown, and
+  convergence config.
+
+Final output:
+- status: no_op, feedback_card, goal_handoff, or blocked
+- report path under `.farplane/reports/taste-loop/`
+- selected target IDs and scores
+- feedback card path or Goal handoff path when emitted
+- reason for no-op or blocked result
 ```

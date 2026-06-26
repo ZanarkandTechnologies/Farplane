@@ -19,3 +19,13 @@ Tickets, interval reports, and automation prompts should call local skills by
 path when those skills own the product workflow. Promote a local product skill
 to reusable root `skills/` only through an explicit human-reviewed change after
 repeated use shows cross-project value.
+
+## Farplane Product Skills
+
+| Product | Local skill |
+| --- | --- |
+| Experiment reports | `farplane-experiment-report` |
+| Trust ablations | `farplane-ablation-proof` |
+| Harness improvements | `farplane-productization` |
+| Evidence content | `farplane-evidence-content` |
+| Market learning | `farplane-market-learning` |
