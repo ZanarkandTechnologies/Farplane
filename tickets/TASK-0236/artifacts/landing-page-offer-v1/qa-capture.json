@@ -1,0 +1,38 @@
+{
+  "artifact_id": "landing-page-offer-v1",
+  "captured_at": "2026-06-26T21:41:14+08:00",
+  "capture_url": "http://127.0.0.1:8126/index.html",
+  "browser": {
+    "engine": "chromium",
+    "executable": "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+  },
+  "screenshots": [
+    {
+      "name": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 2
+      },
+      "path": "screenshots/mobile.png",
+      "h1_visible": true,
+      "cta_visible": true,
+      "hero_board_visible": true,
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "path": "screenshots/desktop.png",
+      "h1_visible": true,
+      "cta_visible": true,
+      "hero_board_visible": true,
+      "errors": []
+    }
+  ],
+  "verdict": "pass"
+}

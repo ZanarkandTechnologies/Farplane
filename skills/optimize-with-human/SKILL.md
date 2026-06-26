@@ -22,10 +22,12 @@ for improving content, skills, creative artifacts, strategy, demos, video, UI,
 taste, or artifact selection before a benchmark or market test exists.
 
 This skill is not a separate continuation runtime. Native Goal mode owns
-continuation; `goal-advisor` owns Goal architecture and native `/goal` prompt
-compilation; the ticket Goal Packet owns durable state. This skill owns the
-human feedback policy, Telegram-first communication protocol, feedback request,
-and feedback-file contract for optimization loops.
+uninterrupted continuation; persistent Codex worker threads own Telegram reply
+routing when feedback should resume the same job; `goal-advisor` owns Goal
+architecture and native `/goal` prompt compilation; the ticket Goal Packet owns
+durable state. This skill owns the human feedback policy, Telegram-first
+communication protocol, feedback request, and feedback-file contract for
+optimization loops.
 
 Plain one-off approval, non-optimization review, or deterministic QA should use
 chat, `review`, `qa`, or `telegram-message` directly instead of this preset.
@@ -33,12 +35,20 @@ chat, `review`, `qa`, or `telegram-message` directly instead of this preset.
 ## Skill Signature
 
 ```text
-optimize_with_human(target, objective, artifacts?, budget?, channel=telegram)
-  -> goal_advisor_params + feedback_protocol + goal_packet_ref
-state: reads(operator intent, target skill/artifacts, ticket/program/progress?); writes(feedback-request.md? feedback.json? progress entry?)
-gates: target_named; objective_named; feedback_policy_named; artifact_refs_visible_or_generation_step_named; goal_advisor_owns_loop
+optimize_with_human(target, objective, artifacts?, budget?, channel=telegram,
+                    worker_thread_ref?)
+  -> goal_advisor_params + feedback_protocol + goal_packet_ref +
+     feedback_request_ref
+state: reads(operator intent, target skill/artifacts, ticket/program/progress?,
+             worker_thread_ref?); writes(feedback-request.md? feedback.json?
+             progress entry?)
+gates: target_named; objective_named; feedback_policy_named;
+       artifact_refs_visible_or_generation_step_named; goal_advisor_owns_loop;
+       telegram_reply_path_bound_when_needed
 routes: goal-advisor | telegram-message | review
-fails: runs its own loop; treats human feedback as completion; asks vague broad questions; publishes or spends from feedback alone
+fails: runs its own loop; treats human feedback as completion; asks vague broad
+  questions; publishes or spends from feedback alone; sends a Telegram request
+  from the wrong thread when replies are expected to resume the worker
 ```
 
 ## Phase Contract
@@ -53,7 +63,8 @@ human_optimization_phase(target, objective, artifacts, budget)
 
 ## Phase Boundary
 
-`optimize-with-human` pre-binds a Goal Advisor call with:
+`optimize-with-human` pre-binds a Goal Advisor call or worker-thread program
+with:
 
 ```text
 loop_shape = optimization | skill_improvement
@@ -63,7 +74,10 @@ feedback_policy = ask_when_artifact_ready
 ```
 
 It may create feedback artifacts after a Goal Packet exists, but it does not own
-the parent Goal, heartbeat, rollout, skill improvement, or market test.
+the parent Goal, heartbeat, rollout, skill improvement, market test, or thread
+creation. When Telegram replies should drive the next iteration, the caller
+must create or name the dedicated worker thread first, then invoke this preset
+inside that thread or pass its `worker_thread_ref`.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -74,7 +88,11 @@ the parent Goal, heartbeat, rollout, skill improvement, or market test.
 - [ ] 2. Decide whether a Goal Packet already exists.
    - [ ] If not, route to `goal-advisor` with human-feedback parameters.
    - [ ] If yes, read or name `ticket.md`, `program.md`, and `progress.md`.
-- [ ] 3. Bind the feedback policy.
+- [ ] 3. Bind the reply path and feedback policy.
+   - [ ] If Telegram replies should continue the job, confirm the current
+     context is the dedicated worker thread or a `worker_thread_ref` is named.
+   - [ ] If no worker thread exists and replies need routing, return a handoff
+     requirement instead of sending from the parent thread.
    - [ ] Default `channel=telegram`.
    - [ ] Default `metric_provider=human_feedback`.
    - [ ] Default pause policy: ask when reviewable artifacts exist, then wait.
@@ -113,6 +131,18 @@ feedback_channel: telegram
 feedback_policy: ask_when_artifact_ready
 state_surfaces: ticket.md + program.md + progress.md
 after_each_turn: log progress, request feedback when artifacts exist, pause or continue from feedback
+```
+
+When a worker Goal Packet and thread already exist, do not create another
+packet. Bind this preset inside the worker's `program.md` and feedback request:
+
+```text
+worker_thread_ref: <thread id or URL>
+metric_provider: human_feedback
+feedback_channel: telegram
+feedback_policy: ask_when_artifact_ready
+resume_policy: Telegram replies land in worker_thread_ref; worker appends
+  feedback to progress.md and generates the next artifact revision.
 ```
 
 ## Feedback Schema
@@ -171,6 +201,9 @@ Optimization target:
 Objective:
 <objective>
 
+Worker thread:
+<worker_thread_ref or current thread>
+
 Artifact refs:
 - <path or URL>
 
@@ -190,6 +223,8 @@ Feedback shape:
   ask for a small judgment.
 - Do not treat human feedback as permission to publish, spend, contact users,
   or make external promises.
+- Do not send a Telegram feedback request from a parent heartbeat if Kenji's
+  reply is meant to continue a dedicated worker thread.
 - Do not confuse human taste feedback with mechanical QA. Use QA/review when
   correctness evidence is needed.
 - Do not call this for tasks where a deterministic command is the honest metric.

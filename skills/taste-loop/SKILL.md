@@ -19,45 +19,55 @@ Use this when a Farplane project should convert active human attention into
 structured feedback on product artifacts through the official optional Codex
 automation heartbeat. The heartbeat prompt reads `farplane/products.md`, selects
 one high-compounding artifact workflow from the Taste Loop Artifact Workflows
-table, generates or hands off one reviewable artifact, and asks for a compact
-human taste judgment on that artifact.
+table, creates or reuses a dedicated worker Goal Packet and Codex thread, and
+instructs that worker to generate reviewable artifacts through
+`optimize-with-human`.
 
 This skill is a prompt owner, not a script, scheduler, hidden daemon, or
 alternate continuation runtime. Codex automation records own cadence; product
-lanes own what outputs matter; native Goal mode owns uninterrupted artifact
-generation turns; `goal-advisor` compiles Goal Packets; `metric-advisor`
-chooses the honest provider; `optimize-with-human` owns human-feedback
-protocol; artifact-producing skills own end-to-end generation.
+lanes own what outputs matter; persistent Codex threads own Telegram reply
+routing; worker Goal Packets own durable state; `goal-advisor` compiles the
+packet; `metric-advisor` chooses the honest provider; `optimize-with-human`
+owns the worker's human-feedback protocol; artifact-producing skills own
+end-to-end generation.
 
 ## Skill Signature
 
 ```text
 taste_loop(project_root, config?, now?)
-  -> no_op | artifact_feedback_report | artifact_goal_handoff_report |
-     blocked_report
+  -> no_op | artifact_worker_thread_report | artifact_feedback_report |
+     artifact_goal_handoff_report | blocked_report
 state: reads(config env, farplane/products.md,
              farplane/products.md#taste-loop-artifact-workflows,
              docs/skills/registry.jsonl,
              docs/specs/skill-compounding-score.md,
+             tickets/*/ticket.md?,
              skill graph heat / FARPLANE_SKILL_HEAT_*,
              .farplane/automation/taste-loop/*?);
        writes(.farplane/reports/taste-loop/*.md,
+              tickets/TASK-*/ticket.md?,
+              tickets/TASK-*/program.md?,
+              tickets/TASK-*/progress.md?,
               .farplane/automation/taste-loop/artifacts/*,
               .farplane/automation/taste-loop/feedback/*?,
               .farplane/automation/taste-loop/preview/*?)
 gates: active_hours_checked; feedback_budget_checked; product_lane_selected;
-       artifact_workflow_selected; artifact_generated_or_goal_handoff;
-       artifact_ref_visible; preview_ref_visible_for_visual_artifacts;
-       open_feedback_deduped; no_hidden_scheduler
+       artifact_workflow_selected; worker_packet_created_or_reused;
+       worker_thread_created_or_reused; optimize_with_human_bound_in_worker;
+       artifact_generated_or_goal_handoff; artifact_ref_visible;
+       preview_ref_visible_for_visual_artifacts; open_feedback_deduped;
+       no_hidden_scheduler
 routes: landing-page | social-content | video-production |
   product-photography | farplane-evidence-content |
   farplane-experiment-report | farplane-ablation-proof |
-  farplane-productization | optimize-with-human | goal-advisor | review
+  farplane-productization | optimize-with-human | goal-advisor | create_thread |
+  review
 fails: creates a local runner as the primary surface; runs hidden loops;
   asks for feedback on a skill summary; selects broad router skills as direct
   targets; creates a feedback card without an artifact; optimizes generic skill
   quality instead of a products.md output; routes to retired autoresearch by
-  default; spams more feedback than budget allows
+  default; sends Telegram feedback from the parent heartbeat thread when a
+  dedicated worker thread is needed; spams more feedback than budget allows
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -95,17 +105,25 @@ fails: creates a local runner as the primary surface; runs hidden loops;
 - [ ] 4. Route exactly one Codex-native bounded action by default.
   - [ ] Ask `metric-advisor` for an honest provider before creating benchmarks,
     harder task suites, or Goal handoffs.
+  - [ ] Prefer `artifact_worker_thread` for human-feedback product artifacts:
+    create or reuse a ticket-backed Goal Packet, then create or reuse a
+    dedicated Codex worker thread whose prompt tells the worker to use
+    `optimize-with-human`.
   - [ ] Generate a small artifact immediately when the owning artifact skill can
-    do so inside one heartbeat without hidden continuation.
+    do so inside the worker thread without hidden continuation.
   - [ ] Use `artifact_goal_handoff` when native Goal mode should generate the
     artifact in a bounded continuation.
-  - [ ] Use `artifact_feedback_report` through `optimize-with-human` only after
-    an artifact path, preview, screenshot, or URL exists.
+  - [ ] Use direct `artifact_feedback_report` through `optimize-with-human` only
+    when an existing worker thread already owns the reply path or the artifact
+    is intentionally local/manual.
   - [ ] Use `blocked_report` when the target lacks product-lane ownership,
     artifact workflow ownership, proof, config, or generation feasibility.
   - [ ] Do not route to legacy autoresearch unless explicitly configured later.
 - [ ] 5. Write visible state, not hidden runtime output.
   - [ ] Write a Markdown report under `.farplane/reports/taste-loop/`.
+  - [ ] For `artifact_worker_thread`, write or update `ticket.md`, `program.md`,
+    and `progress.md` under `tickets/TASK-*`, and record the worker thread id
+    in the ticket links, progress log, and Taste Loop report.
   - [ ] Write generated artifacts under
     `.farplane/automation/taste-loop/artifacts/`.
   - [ ] Write feedback-card and Goal-handoff Markdown artifacts under
@@ -185,6 +203,41 @@ product_lane + workflow_id + owner + artifact_ref
 
 `feedback_card` is invalid without `artifact_ref`.
 
+## Worker Thread Contract
+
+Taste Loop's default human-feedback action is a worker handoff:
+
+```text
+artifact_worker_thread(product_lane, workflow_id, owner, feedback_question)
+  -> ticket_ref + program_ref + progress_ref + worker_thread_ref + report_ref
+```
+
+The parent heartbeat selects and dispatches. It does not own artifact iteration.
+The worker thread prompt must name the Goal Packet files inline and instruct the
+worker to use `optimize-with-human` after creating a reviewable artifact.
+
+Required worker prompt shape:
+
+```text
+Files:
+- tickets/TASK-XXXX/ticket.md
+- tickets/TASK-XXXX/program.md
+- tickets/TASK-XXXX/progress.md
+
+Task:
+Use $<artifact-owner> to generate one reviewable artifact for the selected
+workflow. Then use $optimize-with-human with target=<workflow>, objective=<what
+should improve>, channel=telegram, and feedback_policy=ask_when_artifact_ready.
+When Kenji replies in this thread, append the feedback to progress.md and
+produce the next revision. Stop only on keep/approve/convergence/budget/blocker.
+```
+
+For Telegram-routed feedback, the feedback request should point Kenji at the
+worker thread identity and the artifact preview, not at the parent heartbeat
+thread. Localhost URLs are allowed only as computer-side smoke proof; the worker
+must prefer a public/mobile-viewable URL, attached screenshot, or Farplane
+UI-ready preview when asking for phone feedback.
+
 ## Feedback Budget
 
 Open feedback budget is based on unique active requests, not raw JSONL rows.
@@ -217,11 +270,13 @@ feedback deltas stay below `FARPLANE_TASTE_LOOP_MINIMUM_DELTA` across
 
 Return and write:
 
-- `status`: `no_op`, `artifact_feedback`, `artifact_goal_handoff`, or
-  `blocked`
+- `status`: `no_op`, `artifact_worker_thread`, `artifact_feedback`,
+  `artifact_goal_handoff`, or `blocked`
 - `report_path`
 - `selected_product_lane`
 - `selected_artifact_workflow`
+- `worker_ticket_ref`
+- `worker_thread_ref`
 - `artifact_ref`
 - `preview_ref` for website, image, video, or visual artifacts
 - `score_breakdown`
@@ -235,6 +290,9 @@ Return and write:
 - Do not make Daily/Weekly Interval execute this loop internally. Intervals set
   priorities; this heartbeat turns active human attention into feedback cards
   or Goal handoffs.
+- Do not call `optimize-with-human` as the parent heartbeat's first move when
+  Telegram replies need a stable worker thread. Create or reuse the packet and
+  thread first, then instruct the worker to call `optimize-with-human`.
 - Do not add a local runner just to make the prompt testable. The behavior is
   reviewed as a prompt contract plus sample artifacts.
 - Do not call this a training loop. It creates structured feedback and
@@ -246,6 +304,9 @@ Return and write:
 - Do not create `feedback_card` without `artifact_ref`.
 - Do not send website feedback without a browser-viewable `preview_ref`, local
   URL, deploy URL, or Farplane UI-ready preview manifest.
+- Do not send phone-facing Telegram feedback with only `localhost`. Include a
+  worker thread reference plus a public/mobile-viewable URL, screenshot, or
+  Farplane UI-ready preview fallback.
 - Do not let open feedback pile up. Respect `MAX_OPEN_FEEDBACK`.
 - Do not let duplicate feedback rows consume the open-feedback budget. Count
   unique active requests and report duplicate rows as hygiene.

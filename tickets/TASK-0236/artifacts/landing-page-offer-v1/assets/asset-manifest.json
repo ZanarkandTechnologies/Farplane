@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_id": "landing-page-offer-v1",
+  "status": "prototype",
+  "primary_media_claim": "code-native visual carrier plus browser screenshots",
+  "premium_or_cinematic_claimed": false,
+  "assets": [
+    {
+      "id": "hero-evidence-board",
+      "type": "html-css-visual",
+      "path": "../index.html#hero-board",
+      "provenance": "authored from TASK-0236 ticket/program/progress surfaces",
+      "fallback": "screenshots/mobile.png"
+    },
+    {
+      "id": "mobile-review-screenshot",
+      "type": "browser-screenshot",
+      "path": "../screenshots/mobile.png",
+      "provenance": "captured from local static HTML after artifact creation",
+      "fallback": "../index.html"
+    },
+    {
+      "id": "desktop-review-screenshot",
+      "type": "browser-screenshot",
+      "path": "../screenshots/desktop.png",
+      "provenance": "captured from local static HTML after artifact creation",
+      "fallback": "../index.html"
+    },
+    {
+      "id": "capture-proof",
+      "type": "qa-json",
+      "path": "../qa-capture.json",
+      "provenance": "Brave/Chromium browser capture from local static HTML",
+      "fallback": "../screenshots/mobile.png"
+    }
+  ],
+  "notes": [
+    "This attempt is a phone-reviewable offer prototype, not a premium generated-media build.",
+    "No public deployment, customer contact, spend, or unsupported adoption claims are included."
+  ]
+}

@@ -133,8 +133,14 @@ Take at most `FARPLANE_TASTE_LOOP_MAX_ACTIONS_PER_BEAT` action. Default to one.
 
 Use:
 
-- `artifact_feedback` through `optimize-with-human` only after a reviewable
-  artifact exists at `artifact_ref`.
+- `artifact_worker_thread` for normal human-feedback artifact workflows. Create
+  or reuse a ticket-backed Goal Packet first, then create or reuse a dedicated
+  Codex worker thread. The worker prompt must tell that thread to generate the
+  artifact and then use `$optimize-with-human` with
+  `feedback_channel=telegram`.
+- `artifact_feedback` through `optimize-with-human` only when an existing worker
+  thread already owns the Telegram reply path or the artifact is intentionally
+  local/manual.
 - `artifact_goal_handoff` through `goal-advisor` when native Goal mode should
   generate the artifact in a bounded continuation.
 - `blocked_report` when proof, config, product-lane ownership, artifact
@@ -142,9 +148,10 @@ Use:
 
 Do not ask for feedback on a skill summary, skill README, or broad skill target.
 Do not create a feedback card without `artifact_ref`. Do not edit target skills
-directly from this heartbeat. Do not create a local runner, hidden daemon,
-unbounded queue, external mutation, deploy, publish, spend, or legacy
-autoresearch session by default.
+directly from this heartbeat. Do not send Telegram feedback from the parent
+heartbeat thread when Kenji's reply needs to resume the worker. Do not create a
+local runner, hidden daemon, unbounded queue, external mutation, deploy,
+publish, spend, or legacy autoresearch session by default.
 
 Before creating a benchmark, harder task suite, or Goal handoff, derive a
 compact metric card:
@@ -181,25 +188,55 @@ Write a Markdown report under:
 When an action is emitted, also write a small artifact under:
 
 ```text
+tickets/TASK-*/ticket.md
+tickets/TASK-*/program.md
+tickets/TASK-*/progress.md
 .farplane/automation/taste-loop/artifacts/
 .farplane/automation/taste-loop/feedback/
 .farplane/automation/taste-loop/preview/
 ```
 
+For `artifact_worker_thread`, write or update the ticket Goal Packet before
+creating the Codex thread. The worker thread prompt must include:
+
+```text
+Files:
+- tickets/TASK-XXXX/ticket.md
+- tickets/TASK-XXXX/program.md
+- tickets/TASK-XXXX/progress.md
+
+Task:
+Use $<artifact-owner> to generate one reviewable artifact for <workflow_id>.
+Then use $optimize-with-human with target=<workflow_id>,
+objective=<artifact quality objective>, channel=telegram, and
+feedback_policy=ask_when_artifact_ready. When Kenji replies in this thread,
+append the feedback to progress.md and generate the next revision. Stop only on
+keep/approve/convergence/budget/blocker.
+```
+
+After the thread is created or found, record `worker_thread_ref` in the ticket,
+`progress.md`, and the Taste Loop report. Set the thread title to a readable
+workflow name when the tool is available.
+
 Use Markdown for human review. A feedback artifact must point to the generated
 artifact path, screenshot, preview, or URL. For website, image, video, or other
 visual artifacts, also create a preview wrapper or manifest under
 `.farplane/automation/taste-loop/preview/` and include a `preview_ref` in the
-feedback card and report. Keep feedback questions short enough to answer from
-Telegram or a compact Farplane UI card.
+feedback card and report. Localhost previews are smoke-test evidence only; do
+not send phone-facing Telegram feedback with only a localhost URL. Prefer a
+public/mobile-viewable URL, attached screenshot, or Farplane UI-ready preview
+fallback. Keep feedback questions short enough to answer from Telegram or a
+compact Farplane UI card.
 
 ## Final Output
 
 Return:
 
-- status: `no_op`, `artifact_feedback`, `artifact_goal_handoff`, or `blocked`
+- status: `no_op`, `artifact_worker_thread`, `artifact_feedback`,
+  `artifact_goal_handoff`, or `blocked`
 - report path
 - selected product lane, artifact workflow, score breakdown, and metric provider
+- worker ticket ref and worker thread ref, if created or reused
 - artifact ref, if generated or handed off
 - preview ref or deploy URL for visual artifacts
 - action artifact path, if any

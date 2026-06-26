@@ -1,0 +1,14 @@
+Farplane landing-page offer V1 is ready for phone review.
+
+Question: keep, revise, or reject the offer and page direction?
+
+Best mobile review surface is the screenshot evidence in the worker thread, also saved locally at:
+tickets/TASK-0236/artifacts/landing-page-offer-v1/screenshots/mobile.png
+
+Artifact packet:
+tickets/TASK-0236/artifacts/landing-page-offer-v1/
+
+Worker thread:
+019f0424-a832-7712-b952-85b50222a716
+
+Reply here with keep, revise, reject, or a short note. I will append the feedback to tickets/TASK-0236/progress.md and revise the artifact from this worker thread.

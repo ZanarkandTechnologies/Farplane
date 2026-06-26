@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Farplane - The Work Loop Is The Product</title>
+    <style>
+      :root {
+        --ink: #f4f7ef;
+        --muted: #aeb8aa;
+        --dim: #6f7a72;
+        --line: rgba(210, 235, 206, 0.16);
+        --panel: rgba(13, 19, 16, 0.78);
+        --panel-strong: rgba(21, 30, 25, 0.92);
+        --green: #b6ff5f;
+        --amber: #f6b44b;
+        --blue: #8fc8ff;
+        --bg: #050806;
+        --danger: #ff745f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        letter-spacing: 0;
+        overflow-x: hidden;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        max-width: 100%;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 70% 15%, rgba(182, 255, 95, 0.13), transparent 24rem),
+          radial-gradient(circle at 15% 20%, rgba(143, 200, 255, 0.1), transparent 22rem),
+          linear-gradient(180deg, #060b08 0%, #08100c 48%, #050806 100%);
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+        background-image:
+          linear-gradient(rgba(182, 255, 95, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(182, 255, 95, 0.04) 1px, transparent 1px);
+        background-size: 46px 46px;
+        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 78%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1180px, calc(100vw - 32px));
+        margin: 0 auto;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 72px;
+        color: var(--muted);
+      }
+
+      .brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        color: var(--ink);
+        font-weight: 720;
+      }
+
+      .mark {
+        width: 32px;
+        height: 32px;
+        border: 1px solid rgba(182, 255, 95, 0.42);
+        border-radius: 6px;
+        background:
+          linear-gradient(135deg, rgba(182, 255, 95, 0.22), transparent 46%),
+          #0d1610;
+        box-shadow: 0 0 32px rgba(182, 255, 95, 0.14);
+      }
+
+      .nav__meta {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        font-size: 13px;
+      }
+
+      .button {
+        display: inline-flex;
+        gap: 9px;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 16px;
+        border: 1px solid rgba(182, 255, 95, 0.36);
+        border-radius: 6px;
+        background: rgba(182, 255, 95, 0.12);
+        color: var(--ink);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .button--ghost {
+        border-color: var(--line);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
+        gap: 36px;
+        align-items: center;
+        min-height: calc(100vh - 72px);
+        padding: 28px 0 56px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 10px;
+        border: 1px solid rgba(182, 255, 95, 0.24);
+        border-radius: 999px;
+        color: var(--green);
+        background: rgba(182, 255, 95, 0.07);
+        font-size: 12px;
+        font-weight: 760;
+      }
+
+      h1 {
+        margin: 18px 0 18px;
+        max-width: 720px;
+        font-size: clamp(48px, 7vw, 88px);
+        line-height: 0.96;
+        letter-spacing: 0;
+        overflow-wrap: break-word;
+      }
+
+      .lede {
+        max-width: 650px;
+        color: #d1dacd;
+        font-size: 20px;
+        line-height: 1.48;
+      }
+
+      .hero__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .proof-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 32px;
+      }
+
+      .proof-chip {
+        min-height: 78px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .proof-chip strong {
+        display: block;
+        color: var(--ink);
+        font-size: 16px;
+      }
+
+      .proof-chip span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .board {
+        position: relative;
+        min-height: 620px;
+        padding: 18px;
+        border: 1px solid rgba(182, 255, 95, 0.2);
+        border-radius: 8px;
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.08), transparent 42%),
+          rgba(4, 9, 6, 0.72);
+        box-shadow: 0 24px 90px rgba(0, 0, 0, 0.48);
+        overflow: hidden;
+      }
+
+      .board::after {
+        position: absolute;
+        inset: 0;
+        content: "";
+        pointer-events: none;
+        background:
+          linear-gradient(90deg, transparent 0, rgba(182, 255, 95, 0.05) 50%, transparent 100%),
+          linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.46));
+      }
+
+      .board__top {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .status {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        color: var(--green);
+      }
+
+      .pulse {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--green);
+        box-shadow: 0 0 18px rgba(182, 255, 95, 0.8);
+      }
+
+      .board__grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 12px;
+      }
+
+      .module {
+        min-height: 118px;
+        padding: 15px;
+        border: 1px solid rgba(210, 235, 206, 0.14);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .module--wide {
+        grid-column: span 2;
+      }
+
+      .module h2,
+      .module h3 {
+        margin: 0;
+        font-size: 14px;
+        letter-spacing: 0;
+      }
+
+      .module p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .path {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .path span {
+        min-height: 54px;
+        padding: 9px;
+        border: 1px solid rgba(182, 255, 95, 0.2);
+        border-radius: 6px;
+        color: var(--green);
+        background: rgba(182, 255, 95, 0.06);
+        font-size: 12px;
+        line-height: 1.25;
+      }
+
+      .file-list {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .file-list div {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 9px 10px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.045);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .file-list b {
+        color: var(--ink);
+        font-weight: 680;
+      }
+
+      .decision {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .decision span {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 780;
+      }
+
+      .decision span:nth-child(1) {
+        background: rgba(182, 255, 95, 0.16);
+      }
+
+      .decision span:nth-child(2) {
+        background: rgba(246, 180, 75, 0.16);
+      }
+
+      .decision span:nth-child(3) {
+        background: rgba(255, 116, 95, 0.15);
+      }
+
+      section {
+        padding: 76px 0;
+      }
+
+      .section-title {
+        max-width: 760px;
+        margin: 0 0 24px;
+        font-size: 38px;
+        line-height: 1.05;
+      }
+
+      .section-lede {
+        max-width: 720px;
+        margin: 0 0 32px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.55;
+      }
+
+      .split,
+      .cards,
+      .use-cases {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .card {
+        min-height: 190px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-strong);
+      }
+
+      .card h3 {
+        margin: 0 0 10px;
+        font-size: 19px;
+      }
+
+      .card p,
+      .card li {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .card ul {
+        display: grid;
+        gap: 8px;
+        margin: 12px 0 0;
+        padding-left: 18px;
+      }
+
+      .loop {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .loop__step {
+        min-height: 146px;
+        padding: 16px 12px;
+        border: 1px solid rgba(143, 200, 255, 0.22);
+        border-radius: 8px;
+        background: rgba(143, 200, 255, 0.06);
+      }
+
+      .loop__step b {
+        display: block;
+        color: var(--blue);
+        font-size: 12px;
+      }
+
+      .loop__step strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 16px;
+      }
+
+      .loop__step span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .proof-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .cta {
+        padding-bottom: 90px;
+      }
+
+      .cta__box {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 24px;
+        align-items: center;
+        padding: 30px;
+        border: 1px solid rgba(182, 255, 95, 0.28);
+        border-radius: 8px;
+        background:
+          linear-gradient(135deg, rgba(182, 255, 95, 0.14), transparent 50%),
+          var(--panel-strong);
+      }
+
+      .cta h2 {
+        margin: 0;
+        font-size: 34px;
+        line-height: 1.08;
+      }
+
+      .cta p {
+        max-width: 660px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      @media (max-width: 920px) {
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: auto;
+          padding-top: 24px;
+        }
+
+        .board {
+          min-height: auto;
+        }
+
+        .loop,
+        .proof-strip {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .shell {
+          width: 100vw;
+          max-width: 100vw;
+          padding-right: 11px;
+          padding-left: 11px;
+        }
+
+        .hero,
+        .lede,
+        .proof-chip,
+        .proof-chip span,
+        .board,
+        .module,
+        .cta {
+          max-width: 100%;
+          overflow-wrap: anywhere;
+        }
+
+        .nav {
+          min-height: 60px;
+        }
+
+        .nav__meta span {
+          display: none;
+        }
+
+        h1 {
+          max-width: 100%;
+          font-size: 38px;
+          line-height: 1.02;
+        }
+
+        .lede {
+          font-size: 17px;
+        }
+
+        .hero__actions {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .button {
+          width: 100%;
+        }
+
+        .board {
+          padding: 12px;
+        }
+
+        .board__grid,
+        .split,
+        .cards,
+        .use-cases,
+        .proof-panel,
+        .cta__box {
+          grid-template-columns: 1fr;
+        }
+
+        .module--wide {
+          grid-column: auto;
+        }
+
+        .path,
+        .decision {
+          grid-template-columns: 1fr;
+        }
+
+        .section-title,
+        .cta h2 {
+          font-size: 30px;
+        }
+
+        section {
+          padding: 54px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="shell nav" aria-label="Primary navigation">
+      <div class="brand"><span class="mark" aria-hidden="true"></span> Farplane</div>
+      <div class="nav__meta">
+        <span>Local-first agent harness</span>
+        <a class="button button--ghost" href="#packet">See packet</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="shell hero">
+        <div>
+          <div class="eyebrow">Trust distribution / landing page offer</div>
+          <h1>The work loop is the product.</h1>
+          <p class="lede">
+            Farplane turns serious Codex work into visible packets: a ticket
+            contract, a bounded skill, a reviewable artifact, proof, and the
+            next human decision.
+          </p>
+          <div class="hero__actions">
+            <a class="button" href="#decision">Review the loop</a>
+            <a class="button button--ghost" href="#mechanism">See how it works</a>
+          </div>
+          <div class="proof-strip" aria-label="Current artifact proof">
+            <div class="proof-chip">
+              <strong>TASK-0236</strong>
+              <span>Dedicated worker thread, packet first, feedback routed back here.</span>
+            </div>
+            <div class="proof-chip">
+              <strong>Human metric</strong>
+              <span>Keep, revise, or reject from a phone-reviewable artifact.</span>
+            </div>
+            <div class="proof-chip">
+              <strong>No launch claims</strong>
+              <span>Prototype only. No spend, publish, or customer contact.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="board" id="hero-board" aria-label="Farplane evidence packet visual">
+          <div class="board__top">
+            <span>Worker packet / live artifact attempt</span>
+            <span class="status"><span class="pulse"></span> Awaiting Kenji decision</span>
+          </div>
+          <div class="board__grid">
+            <article class="module">
+              <h2>Ticket contract</h2>
+              <p>Scope, stop conditions, proof route, and what must not happen.</p>
+            </article>
+            <article class="module">
+              <h2>Skill method</h2>
+              <p><b>$landing-page</b> shapes the artifact. <b>$optimize-with-human</b> owns the feedback ask.</p>
+            </article>
+            <article class="module module--wide">
+              <h2>Visible loop</h2>
+              <div class="path">
+                <span>ticket.md</span>
+                <span>program.md</span>
+                <span>artifact</span>
+                <span>screenshot</span>
+                <span>feedback</span>
+              </div>
+            </article>
+            <article class="module">
+              <h2>Artifact refs</h2>
+              <div class="file-list">
+                <div><b>Spec</b><span>LANDING_SPEC.md</span></div>
+                <div><b>Preview</b><span>index.html</span></div>
+                <div><b>Phone proof</b><span>mobile.png</span></div>
+              </div>
+            </article>
+            <article class="module">
+              <h2>Next decision</h2>
+              <p>Kenji does not need to invent a prompt. The worker needs one label.</p>
+              <div class="decision">
+                <span>keep</span>
+                <span>revise</span>
+                <span>reject</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <section class="shell" id="problem">
+        <h2 class="section-title">Agent output is cheap. Trustworthy agent work is not.</h2>
+        <p class="section-lede">
+          The hard part is no longer getting an agent to produce something.
+          The hard part is knowing what it was trying to do, why it chose that
+          path, what proof exists, and how to improve it without losing the thread.
+        </p>
+        <div class="split">
+          <article class="card">
+            <h3>Before Farplane</h3>
+            <ul>
+              <li>Long chat history becomes the memory.</li>
+              <li>Outputs appear before contracts and proof.</li>
+              <li>Human feedback lands in the wrong place.</li>
+              <li>Revision becomes a fresh prompt instead of a loop.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>After Farplane</h3>
+            <ul>
+              <li>Ticket, program, and progress are the memory.</li>
+              <li>Skills define the method before artifacts ship.</li>
+              <li>Evidence lives beside the work.</li>
+              <li>Human feedback resumes the same worker thread.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="shell" id="mechanism">
+        <h2 class="section-title">A small operating system for reviewable agent work.</h2>
+        <p class="section-lede">
+          Farplane does not replace Codex. It wraps serious Codex work in a
+          visible loop that makes continuation, feedback, and proof easier to
+          inspect.
+        </p>
+        <div class="loop" aria-label="Farplane loop">
+          <div class="loop__step"><b>01</b><strong>Contract</strong><span>Name scope, risks, stop conditions, and proof.</span></div>
+          <div class="loop__step"><b>02</b><strong>Method</strong><span>Load the skill that owns the work shape.</span></div>
+          <div class="loop__step"><b>03</b><strong>Artifact</strong><span>Create something reviewable, not a summary.</span></div>
+          <div class="loop__step"><b>04</b><strong>Evidence</strong><span>Attach screenshots, checks, refs, or QA output.</span></div>
+          <div class="loop__step"><b>05</b><strong>Feedback</strong><span>Ask for the smallest useful human judgment.</span></div>
+          <div class="loop__step"><b>06</b><strong>Revision</strong><span>Append the decision and improve the next artifact.</span></div>
+        </div>
+      </section>
+
+      <section class="shell" id="packet">
+        <h2 class="section-title">This page is already inside a Farplane packet.</h2>
+        <p class="section-lede">
+          TASK-0236 is the proof object. It has a dedicated worker thread, a
+          selected product lane, an artifact budget, and a stop condition that
+          pauses for human feedback.
+        </p>
+        <div class="proof-panel">
+          <article class="card">
+            <h3>Source files</h3>
+            <ul>
+              <li><code>tickets/TASK-0236/ticket.md</code></li>
+              <li><code>tickets/TASK-0236/program.md</code></li>
+              <li><code>tickets/TASK-0236/progress.md</code></li>
+              <li><code>farplane/products.md</code></li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Worker rule</h3>
+            <p>
+              Use <code>$landing-page</code> first. Then use
+              <code>$optimize-with-human</code> only after a phone-friendly
+              artifact exists. Stop paused while waiting for Kenji feedback.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="shell">
+        <h2 class="section-title">The first wedge is trust distribution.</h2>
+        <p class="section-lede">
+          Farplane can turn proven work into reviewable public-facing artifacts
+          without pretending the page is already the product-market answer.
+        </p>
+        <div class="use-cases">
+          <article class="card">
+            <h3>Landing offer tests</h3>
+            <p>Generate a page direction, attach screenshots, ask keep / revise / reject.</p>
+          </article>
+          <article class="card">
+            <h3>Evidence content</h3>
+            <p>Transform accepted proof into posts, demos, and launch notes.</p>
+          </article>
+          <article class="card">
+            <h3>Skill improvements</h3>
+            <p>Route skill changes through tests, proof, and human taste review.</p>
+          </article>
+          <article class="card">
+            <h3>QA loops</h3>
+            <p>Keep browser screenshots, findings, and final verdicts beside the work.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="shell cta" id="decision">
+        <div class="cta__box">
+          <div>
+            <h2>Keep, revise, or reject this direction?</h2>
+            <p>
+              The only decision requested from this artifact is whether the
+              offer and page direction are worth another pass.
+            </p>
+          </div>
+          <a class="button" href="./feedback-request.md">Open feedback request</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
