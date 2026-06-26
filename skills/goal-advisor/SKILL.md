@@ -86,6 +86,13 @@ the Goal architecture. It may also emit the native Goal prompt for direct
 coding-ticket execution. It does not launch hidden schedulers or preserve
 retired public orchestration skills as peers.
 
+When `loop_shape == skill_improvement | optimization` and
+`metric_provider == human_feedback`, name `optimize-with-human` as the
+human-feedback optimization preset. The Goal Packet still owns state and native
+Goal continuation; `optimize-with-human` supplies the feedback protocol:
+`feedback-request.md` plus `feedback.json` with `artifact_id`, `score` or
+`null`, `verdict`, `feedback`, `labels`, and `next_instruction`.
+
 When called from `impl-plan`, this skill compiles a Goal Packet preview for the
 same approval surface as the ticket plan. It should create or update
 `program.md`, `progress.md`, and the native `/goal` prompt preview, then pause
@@ -131,11 +138,40 @@ only after the branch is selected:
    - [ ] `feedback_loop`: needs human or reviewer feedback before continuing.
    - [ ] `skill_improvement`: improves a target skill using evals, review, or
      feedback.
+   - [ ] If the shape is `skill_improvement` and feedback is Kenji's fastest
+     honest quality signal before market tests or benchmarks, route through the
+     `optimize-with-human` preset inside the Goal Packet rather than inventing a
+     separate feedback runtime.
    - [ ] `rollout`: applies a proven pattern across a target set.
    - [ ] `batch_goal`: executes a listed file set inside one time/budget window
      while preserving per-ticket proof.
    - [ ] `business_loop` or `project_goals`: coordinates recurring or
      long-horizon project work through heartbeat/manual resume and leaf Goals.
+   - [ ] For `project_goals` parent work, explicitly explain the boundary:
+     native Goal is for one uninterrupted time/budget window over a selected
+     file set, while heartbeat/manual resume is for paused, recurring, or
+     parent-controller work that chooses the next leaf after state changes.
+   - [ ] For any `heartbeat`, explicitly say heartbeat is a trigger over the
+     same Goal Packet state, not a separate loop runtime, hidden scheduler, or
+     second state owner.
+   - [ ] For parent heartbeats, define the action vocabulary:
+     `start_goal` starts a ready leaf Goal, `resume_goal` continues a blocked or
+     paused child when its blocker clears, `request_feedback` asks for missing
+     human/reviewer input, `replan` revises the frontier when the current one is
+     exhausted or invalid, and `no_op` logs that nothing useful can advance.
+   - [ ] For non-parent heartbeat answers, still name `resume`, `blocked`, and
+     `no_op`: resume when a paused Goal can continue, blocked when required
+     input/approval/evidence is missing, and no-op when no useful eligible work
+     can advance.
+   - [ ] Any heartbeat prompt's `Action vocabulary` must include:
+     `start_goal`, `resume_goal`, `request_feedback`, `replan`, `blocked`, and
+     `no_op`, with one-line meanings.
+   - [ ] After a child completes, parent heartbeat records the child completion,
+     updates the child node to `complete` or `complete_candidate`, runs or
+     requests required proof/review before treating it as done, then chooses
+     exactly one next action: `start_goal` or `resume_goal` for the next eligible
+     sibling, `request_feedback`, `replan` when the current frontier is
+     complete/invalid, or `no_op`.
    - [ ] Load `references/goal-shapes.md` when the chosen shape needs more than
      the one-line classifier above.
 - [ ] 3. Choose the state surfaces.
@@ -156,6 +192,10 @@ only after the branch is selected:
    - [ ] `review`: TAS verdict from review.
    - [ ] `agent_qa`: adversarial QA evidence.
    - [ ] `human_feedback`: human score, qualitative feedback, or approval.
+   - [ ] For `human_feedback` optimization loops, name `optimize-with-human`,
+     `feedback-request.md`, and `feedback.json`; define feedback shape as
+     `artifact_id`, `score` or `null`, `verdict`, `feedback`, `labels`, and
+     `next_instruction`.
    - [ ] `market`: external result such as clicks, replies, sales, or retention.
    - [ ] `hybrid`: combine signals without inventing fake numbers.
    - [ ] If proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
@@ -173,6 +213,12 @@ only after the branch is selected:
      implementation evidence through Ref MCP, official docs, GitHub code
      search, maintained examples, or web search unless the ticket is explicitly
      local-only.
+   - [ ] For project-goals leaf Goals, list only the selected leaf file set plus
+     `farplane/goals.md` when project strategy context is needed; do not include
+     sibling tickets as executable work files.
+   - [ ] Leaf Goal logging must append `progress.md` observations and a
+     completion entry for every changed ticket before returning control to the
+     parent heartbeat.
    - [ ] Load `references/goal-shapes.md` for batch, board-drain, rollout, or
      project-goals details.
 - [ ] 7. Define drift policy.
@@ -213,6 +259,9 @@ only after the branch is selected:
      `program.md`, `progress.md`, and the native `/goal` prompt before approval.
    - [ ] Use `optimize-with-human` when the metric provider is `human_feedback`
      and the loop needs a Telegram-first feedback protocol.
+   - [ ] For skill-improvement loops with human feedback before market tests,
+     output `Use optimize-with-human preset` in the Goal Architecture and
+     include the concrete feedback artifact shape.
    - [ ] Use direct ticket creation/update when the missing surface is state.
 - [ ] 10. Return a Goal Architecture note, create Goal Packet scaffolding, or
    output the final native `/goal` prompt.

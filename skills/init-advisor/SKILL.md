@@ -288,12 +288,23 @@ setup_project_operating_model(bootstrap_brief, project_context,
         agent authority, or change rule in `farplane/harness.md` as a readiness
         gap. The first useful question is: "What is the durable human thesis
         this project must preserve while its products and goals evolve?"
+  - [ ] In full-mode answers, spell out that `farplane/harness.md` is audited
+        for human thesis, static leverage commitments, non-tradeoffs, agent
+        authority, and change rule.
   - [ ] Treat missing or placeholder team archetype as a readiness gap. The
         first useful question is: "What kind of team is this project supposed to
         be, and what should it repeatedly produce?"
   - [ ] Audit `docs/bootstrap-brief.md`, `farplane/products.md`, and
         `farplane/goals.md` for team archetype, product outputs, North Star,
         3-month outcome, success criteria, non-goals, and decision boundaries.
+  - [ ] In full-mode answers, spell out that `docs/bootstrap-brief.md`,
+        `farplane/products.md`, and `farplane/goals.md` are audited for team
+        archetype, product outputs, North Star, 3-month outcome, success
+        criteria, non-goals, and decision boundaries.
+  - [ ] Required full-mode audit sentence:
+        "Audit `docs/bootstrap-brief.md`, `farplane/products.md`, and
+        `farplane/goals.md` for team archetype, product outputs, North Star,
+        3-month outcome, success criteria, non-goals, and decision boundaries."
   - [ ] Use the destination skill signatures as the question inventory:
         `harness-creator` params for static charter, product catalog, feedback
         loops, missing systems, and current milestone shape; `horizon-advisor`
@@ -314,13 +325,25 @@ setup_project_operating_model(bootstrap_brief, project_context,
         answers, and any `deep-interview` summary or handoff.
   - [ ] Keep `farplane/goals.md` as Markdown with a fenced `goal-program` block
         for parseable goals, value function, axes, projects, and milestones.
+  - [ ] Required full-mode goals format sentence:
+        "`farplane/goals.md` stays Markdown with a fenced `goal-program` block
+        for parseable goals, value function, axes, projects, and milestones."
   - [ ] Propose or apply split-file deltas only after operator intent is known.
+  - [ ] In full-mode answers, say readiness state and missing answers go into
+        `docs/bootstrap-brief.md`, and split-file deltas are proposed or applied
+        only after operator intent is known.
+  - [ ] Required split-file delta sentence:
+        "Propose or apply split-file deltas only after operator intent is
+        known."
   - [ ] In `substrate` mode, report missing operating-model questions as next
     handoff rather than asking the full interview now.
   - [ ] In `full` mode, call `harness-creator` after substrate setup when the
     static charter, products, goals, feedback loops, missing systems, or
     current milestone need to be written or improved, including any Goal Advisor
     handoff after the milestone is concrete.
+  - [ ] In full-mode answers, say `harness-creator` owns static charter,
+        products, goals, feedback loops, missing systems, current milestone, and
+        any Goal Advisor handoff after substrate setup.
   - [ ] Ask only the first missing direct `harness-creator` or
         `horizon-advisor` parameter before claiming `project_initialized`,
         unless the adaptive intake rule escalates to `deep-interview --quick`.
@@ -332,6 +355,8 @@ setup_project_operating_model(bootstrap_brief, project_context,
     those advisor calls in init-advisor.
   - [ ] Use `goal-advisor` only after the current milestone is concrete enough
         to compile into a ticket-backed Goal Packet.
+  - [ ] In full-mode answers, say `goal-advisor` is used only after the current
+        milestone is concrete enough for a ticket-backed Goal Packet.
 - [ ] 5. Initialize the optional code scaffold.
   - [ ] Bind `code_scaffold(...)`; ask only for missing params needed to choose
     or skip the stack profile.
@@ -351,6 +376,11 @@ setup_project_operating_model(bootstrap_brief, project_context,
     includes code scaffold/tooling installation.
   - [ ] Route behavior-preserving cleanup to `refactoring` and risk-reduction
         work to `hardening`.
+  - [ ] For quality-tooling answers, explicitly include mutation testing and a
+        static analysis dashboard in maintainability/refactoring slots.
+  - [ ] For quality-tooling answers, explicitly say behavior-preserving cleanup
+        routes to `refactoring`, while risk-reduction work routes to
+        `hardening`.
 - [ ] 6. Create the starter planning handoff.
   - [ ] Create or preserve `tickets/TASK-0001/ticket.md` for drafting the
     initial PRD.
@@ -367,12 +397,18 @@ setup_project_operating_model(bootstrap_brief, project_context,
         substrate exists so it can create or update the Codex loops named in
         `farplane/automations.md`, commonly Pulse, Daily Interval, and Weekly
         Interval.
-  - [ ] Record PM-visible thread IDs in `farplane/pm.json`; do not store
-        automation runtime IDs there. Runtime automation IDs stay in the Codex
-        app automation store.
+  - [ ] For activation answers, say live activation creates or reuses the loops
+        named in `farplane/automations.md`, commonly Pulse, Daily Interval, and
+        Weekly Interval.
+  - [ ] Record and explicitly say "write PM-visible thread IDs to
+        `farplane/pm.json`"; do not store automation runtime IDs there. Runtime
+        automation IDs stay in the Codex app automation store.
   - [ ] If activation is skipped or unavailable, report
         `needs_operating_model_intake` or `needs_automation_setup` with the
         exact next owner: `harness-creator` or `automation-advisor`.
+  - [ ] If the operating model is missing, name `needs_operating_model_intake`
+        before `needs_automation_setup`; automation activation should not imply
+        the project is fully initialized.
 - [ ] 8. Verify and finish init.
   - [ ] Run focused scaffold checks such as
     `python3 bin/validators/check_farplane_project_files.py` when available.
