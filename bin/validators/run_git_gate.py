@@ -43,6 +43,10 @@ def run_command(args: list[str], *, root: Path = ROOT) -> subprocess.CompletedPr
     )
 
 
+def run_streaming(args: list[str], *, root: Path = ROOT) -> int:
+    return subprocess.run(args, cwd=root, check=False).returncode
+
+
 def git_lines(args: list[str]) -> list[str]:
     result = run_command(["git", *args])
     if result.returncode != 0:
@@ -184,30 +188,27 @@ def run_check(
     mode = check_mode(config, stage, check_name)
     env_name = skip_env(config, check_name)
     if env_name and os.environ.get(env_name, "").lower() in {"1", "true", "yes"}:
-        print(f"[skip] {check_name}: {env_name} is set")
+        print(f"[skip] {check_name}: {env_name} is set", flush=True)
         return CommandResult(check_name, mode, 0)
 
-    print(f"[run:{mode}] {check_name}")
+    print(f"[run:{mode}] {check_name}", flush=True)
     if check_name == "large_file_guard":
         if dry_run:
-            print("  builtin: large_file_guard")
+            print("  builtin: large_file_guard", flush=True)
             return CommandResult(check_name, mode, 0)
         errors = large_file_errors(config, paths)
         if errors:
-            print("\n".join(errors))
+            print("\n".join(errors), flush=True)
             return CommandResult(check_name, mode, 1)
-        print("large file guard OK")
+        print("large file guard OK", flush=True)
         return CommandResult(check_name, mode, 0)
 
     argv = configured_argv(config, check_name, base=base)
     if dry_run:
-        print("  " + " ".join(argv))
+        print("  " + " ".join(argv), flush=True)
         return CommandResult(check_name, mode, 0)
 
-    result = run_command(argv)
-    if result.stdout:
-        print(result.stdout.rstrip())
-    return CommandResult(check_name, mode, result.returncode)
+    return CommandResult(check_name, mode, run_streaming(argv))
 
 
 def parse_args() -> argparse.Namespace:
@@ -226,13 +227,13 @@ def main() -> int:
     base = args.base or str(stage.get("base") or "main")
     paths = staged_paths() if args.stage == "pre_commit" else branch_paths(base)
     checks = select_checks(stage, paths)
-    print(f"farplane git gate: {args.stage} ({len(paths)} paths, {len(checks)} checks)")
+    print(f"farplane git gate: {args.stage} ({len(paths)} paths, {len(checks)} checks)", flush=True)
     if paths:
-        print("paths:")
+        print("paths:", flush=True)
         for path in paths[:30]:
-            print(f"  {path}")
+            print(f"  {path}", flush=True)
         if len(paths) > 30:
-            print(f"  ... {len(paths) - 30} more")
+            print(f"  ... {len(paths) - 30} more", flush=True)
 
     failures: list[CommandResult] = []
     warnings: list[CommandResult] = []
@@ -251,11 +252,11 @@ def main() -> int:
             warnings.append(result)
 
     if warnings:
-        print("warning checks failed: " + ", ".join(item.name for item in warnings))
+        print("warning checks failed: " + ", ".join(item.name for item in warnings), flush=True)
     if failures:
-        print("blocking checks failed: " + ", ".join(item.name for item in failures))
+        print("blocking checks failed: " + ", ".join(item.name for item in failures), flush=True)
         return 1
-    print(f"farplane git gate OK ({args.stage})")
+    print(f"farplane git gate OK ({args.stage})", flush=True)
     return 0
 
 
