@@ -53,13 +53,13 @@
       ".githooks/README.md",
       ".githooks/pre-commit",
       ".githooks/pre-push",
-      "scripts/pre_commit_check.sh",
-      "scripts/pre_push_check.sh",
-      "docs/code_review.md",
-      "docs/review-agent.md",
-      "scripts/collect_review_context.sh",
-      "scripts/codex_review_agent.ts",
-      "scripts/run_pre_push_review.sh"
+      "bin/validators/run_git_gate.py",
+      "rules/git-review-gates.toml",
+      "skills/code-review/SKILL.md",
+      "skills/coderabbit-review/SKILL.md",
+      "skills/coderabbit-review/references/stage-matrix.md",
+      "skills/coderabbit-review/scripts/run_review.py",
+      "skills/coderabbit-review/scripts/pre-push.sample"
     ],
     "ignored": [
       ".farplane/reviews/"

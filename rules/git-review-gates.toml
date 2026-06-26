@@ -1,0 +1,86 @@
+[pre_commit]
+# Fast, staged-only checks. Keep this cheap enough that normal commits still feel
+# local and predictable.
+mode = "block"
+checks = [
+  "staged_diff_check",
+  "template_version_staged",
+  "large_file_guard",
+]
+
+[[pre_commit.path_check]]
+globs = ["skills/**", "docs/skills/**"]
+checks = ["skill_check"]
+
+[[pre_commit.path_check]]
+globs = ["tickets/**"]
+checks = ["ticket_metadata"]
+
+[pre_push]
+# Branch-level checks. This is where cross-commit drift, duplicated patterns,
+# stale docs, and heavyweight review belong.
+mode = "block"
+base = "origin/main"
+checks = [
+  "branch_diff_check",
+  "coderabbit_pre_push",
+]
+
+[[pre_push.path_check]]
+globs = ["skills/**", "docs/skills/**"]
+checks = ["skill_check", "skill_registry_check"]
+
+[[pre_push.path_check]]
+globs = ["tickets/**"]
+checks = ["ticket_metadata"]
+
+[[pre_push.path_check]]
+globs = ["README.md", "ARCHITECTURE.md", "docs/**"]
+checks = ["doc_refs", "doc_parity"]
+
+[[pre_push.path_check]]
+globs = ["AGENTS.md", "templates/global/**", "rules/**", "bin/**", ".githooks/**"]
+checks = ["harness_invariants"]
+
+[large_file_guard]
+max_bytes = 1048576
+skip_globs = [
+  "skills/skill-maintenance/graph/*.json",
+  "skills/skill-maintenance/graph/*.js",
+  "docs/features/*.md",
+]
+
+[checks.staged_diff_check]
+argv = ["git", "diff", "--cached", "--check"]
+
+[checks.branch_diff_check]
+argv = ["git", "diff", "--check", "{base}...HEAD"]
+
+[checks.template_version_staged]
+argv = ["python3", "bin/validators/check_template_version_metadata.py", "--staged"]
+
+[checks.skill_check]
+argv = ["python3", "skills/skill-maintenance/scripts/check_skills.py"]
+
+[checks.skill_registry_check]
+argv = ["python3", "bin/validators/sync_skill_registry.py", "--check"]
+
+[checks.ticket_metadata]
+argv = ["python3", "tickets/scripts/check_ticket_metadata.py"]
+
+[checks.doc_refs]
+argv = ["python3", "bin/validators/check_doc_refs.py"]
+
+[checks.doc_parity]
+argv = ["python3", "bin/validators/check_doc_parity.py"]
+
+[checks.harness_invariants]
+argv = ["python3", "bin/validators/check_harness_invariants.py"]
+
+[checks.coderabbit_pre_push]
+argv = ["python3", "skills/coderabbit-review/scripts/run_review.py", "--stage", "pre-push", "--base", "{base}"]
+# CodeRabbit is intentionally advisory by default: it catches cross-commit design
+# smells without making auth/network state a surprise push blocker. Change this
+# to "block" locally or in a future ticket when the team wants a hard gate.
+mode = "warn"
+skip_env = "FARPLANE_SKIP_CODERABBIT"

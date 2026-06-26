@@ -2,4 +2,4 @@
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-python3 "$ROOT/bin/validators/run_git_gate.py" --stage pre_commit
+python3 "$ROOT/bin/validators/run_git_gate.py" --stage pre_push
