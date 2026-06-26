@@ -183,11 +183,15 @@ When an action is emitted, also write a small artifact under:
 ```text
 .farplane/automation/taste-loop/artifacts/
 .farplane/automation/taste-loop/feedback/
+.farplane/automation/taste-loop/preview/
 ```
 
 Use Markdown for human review. A feedback artifact must point to the generated
-artifact path, screenshot, preview, or URL. Keep feedback questions short enough
-to answer from Telegram or a compact Farplane UI card.
+artifact path, screenshot, preview, or URL. For website, image, video, or other
+visual artifacts, also create a preview wrapper or manifest under
+`.farplane/automation/taste-loop/preview/` and include a `preview_ref` in the
+feedback card and report. Keep feedback questions short enough to answer from
+Telegram or a compact Farplane UI card.
 
 ## Final Output
 
@@ -197,6 +201,7 @@ Return:
 - report path
 - selected product lane, artifact workflow, score breakdown, and metric provider
 - artifact ref, if generated or handed off
+- preview ref or deploy URL for visual artifacts
 - action artifact path, if any
 - skipped target reasons
 - unique open feedback count and duplicate open feedback count

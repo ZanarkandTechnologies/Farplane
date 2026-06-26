@@ -43,10 +43,12 @@ state: reads(config env, farplane/products.md,
              .farplane/automation/taste-loop/*?);
        writes(.farplane/reports/taste-loop/*.md,
               .farplane/automation/taste-loop/artifacts/*,
-              .farplane/automation/taste-loop/feedback/*?)
+              .farplane/automation/taste-loop/feedback/*?,
+              .farplane/automation/taste-loop/preview/*?)
 gates: active_hours_checked; feedback_budget_checked; product_lane_selected;
        artifact_workflow_selected; artifact_generated_or_goal_handoff;
-       artifact_ref_visible; open_feedback_deduped; no_hidden_scheduler
+       artifact_ref_visible; preview_ref_visible_for_visual_artifacts;
+       open_feedback_deduped; no_hidden_scheduler
 routes: landing-page | social-content | video-production |
   product-photography | farplane-evidence-content |
   farplane-experiment-report | farplane-ablation-proof |
@@ -108,6 +110,10 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     `.farplane/automation/taste-loop/artifacts/`.
   - [ ] Write feedback-card and Goal-handoff Markdown artifacts under
     `.farplane/automation/taste-loop/feedback/` when useful.
+  - [ ] For website, image, video, or other visual artifacts, also write a
+    preview wrapper or manifest under `.farplane/automation/taste-loop/preview/`
+    so Kenji can open a single URL or Farplane UI-ready file without hunting
+    through reports.
   - [ ] Feedback cards must include `artifact_ref`; if no artifact was produced
     or handed off, write `blocked_report` instead of a feedback card.
   - [ ] Keep generated feedback questions short and decision-shaped.
@@ -217,6 +223,7 @@ Return and write:
 - `selected_product_lane`
 - `selected_artifact_workflow`
 - `artifact_ref`
+- `preview_ref` for website, image, video, or visual artifacts
 - `score_breakdown`
 - `action`
 - `skipped_targets`
@@ -237,6 +244,8 @@ Return and write:
 - Do not use broad router skills as direct targets. Pick an artifact workflow
   from `farplane/products.md`; use router skills only as supporting routes.
 - Do not create `feedback_card` without `artifact_ref`.
+- Do not send website feedback without a browser-viewable `preview_ref`, local
+  URL, deploy URL, or Farplane UI-ready preview manifest.
 - Do not let open feedback pile up. Respect `MAX_OPEN_FEEDBACK`.
 - Do not let duplicate feedback rows consume the open-feedback budget. Count
   unique active requests and report duplicate rows as hygiene.
