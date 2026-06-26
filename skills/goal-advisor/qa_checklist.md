@@ -66,6 +66,14 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
      before compiling the packet?
    - Violation: The Goal Packet guesses at execution-safety inputs.
 
+9. `coding-grounding-evidence`
+   - Question: For implementation feature work, does the Goal prompt require
+     code documentation or maintained implementation evidence before final
+     completion, using Ref MCP, official docs, GitHub code search, maintained
+     examples, or web sources unless the work is explicitly local-only?
+   - Violation: A coding Goal can complete from local files and tests alone
+     without a final `Grounding:` source-class line or local-only reason.
+
 ## Evidence Note Template
 
 ```text
@@ -74,6 +82,7 @@ goal_advisor_qa:
   files_listed:
   approval_state:
   delegated_lanes:
+  grounding_evidence_rule:
   final_evidence_rule:
   violations:
   fixes_or_deferrals:

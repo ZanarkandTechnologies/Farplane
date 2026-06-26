@@ -137,6 +137,14 @@ accept_plan(plan)
    - Violation: The plan defines a new function or service-shaped surface
      without checking nearby owners first.
 
+17. `grounding-evidence`
+   - Question: For implementation feature work, does `Done / Proof` require code
+     documentation or maintained implementation evidence before finalizing, using
+     Ref MCP, official docs, GitHub code search, maintained examples, or web
+     sources unless the ticket is explicitly local-only?
+   - Violation: The plan can be completed from local intuition and tests alone
+     without naming current source evidence or a local-only reason.
+
 ## Finish Gate
 
 For material plans, include a compact readiness note in the ticket `State` or
@@ -154,6 +162,7 @@ plan_qa:
   clarifying_questions: pass | revise | block
   proof_route_explicit: pass | revise | block
   documentation_closeout_route: pass | revise | block
+  grounding_evidence: pass | revise | block | local_only
   highest_risk:
   fix_or_deferral:
 ```

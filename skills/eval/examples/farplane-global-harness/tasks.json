@@ -42,6 +42,29 @@
     "notes": "Tests whether the agent fetches local files and placement context before executing a prompt-template edit."
   },
   {
+    "id": "global_coding_feature_grounding_01",
+    "title": "Ground a small coding feature before finalizing",
+    "context": "",
+    "query": "In Farplane, before coding, give me the grounded implementation approach for adding a small JSON output option to `skills/eval/scripts/check_eval_queries.py`.",
+    "reference_points": [
+      "Treats the request as implementation feature work, even though it is small and not ticketed",
+      "Reads the relevant local files before choosing the implementation approach, including `skills/eval/scripts/check_eval_queries.py` and nearby eval docs or tests",
+      "Checks current code documentation or maintained implementation evidence before finalizing, using an appropriate source such as Ref MCP, official docs, GitHub code search, maintained examples, or web search",
+      "Uses external grounding to confirm CLI argparse, JSON output, or Python command-line implementation patterns instead of relying only on memory",
+      "Keeps the implementation scoped to the existing eval query checker rather than inventing broad new infrastructure",
+      "Names an appropriate verification step for the future change",
+      "Final answer includes a compact `Grounding:` line naming the source class checked, or clearly explains why the task was local-only",
+      "Does not claim completion from local files and tests alone when external code documentation or maintained implementation evidence was available"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "reference-grounding",
+      "small-feature"
+    ],
+    "notes": "Regression for the coding grounding gate: even small non-ticket feature work should check current docs, Ref MCP, GitHub code search, maintained examples, or web evidence before finalizing. The query asks for the grounded approach before coding so the eval does not mutate the real repo."
+  },
+  {
     "id": "global_multi_decision_advise_routing_01",
     "title": "Route several material decisions through advice-shaped reasoning",
     "query": "Our harness needs to decide where checklist rendering belongs, whether evals should use our local runner or Promptfoo, and whether QA should be done by the main agent or a tester lane. Decide and implement the safe parts.",

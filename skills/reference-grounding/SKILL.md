@@ -31,6 +31,13 @@ reference repos for implementation patterns, and peer/product examples when the
 workflow or UX expectation matters. Then adapt that evidence to the local
 codebase instead of inventing from memory.
 
+For implementation feature work, code documentation or maintained
+implementation evidence is a finish gate, not an optional polish step. Prefer
+Ref MCP or official docs for APIs and libraries, GitHub code search or
+maintained examples for usage patterns, and web search when current ecosystem
+state matters. The caller's final answer should include `Grounding:` naming the
+source class checked, or a brief local-only reason.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
@@ -46,6 +53,10 @@ codebase instead of inventing from memory.
    - [ ] Implementation choices need current official docs or maintained
      implementation examples unless the dependency and pattern are already
      freshly grounded in the active context.
+   - [ ] Implementation feature completion needs code documentation or
+     maintained implementation evidence from Ref MCP, official docs, GitHub
+     code search, maintained examples, or web sources unless the work is
+     explicitly local-only.
    - [ ] "Best practice", "state of the art", "latest", peer expectation,
      product behavior, standards, pricing, law, API behavior, or current facts
      need web or official-source evidence; local files alone are insufficient.
@@ -75,6 +86,9 @@ codebase instead of inventing from memory.
 - Implementation feature work: inspect the local baseline, then check current
   official docs and at least one maintained implementation/example source before
   locking the approach unless the task is a tiny same-scope fix.
+- Coding feature finish gate: before finalizing, make sure the final answer can
+  name the code documentation or maintained implementation evidence actually
+  checked in a compact `Grounding:` line.
 - Provided source: use the supplied material first.
 
 Escalate to `research:*` only when the answer needs multiple comparables, source

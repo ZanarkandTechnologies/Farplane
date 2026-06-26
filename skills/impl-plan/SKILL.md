@@ -118,6 +118,10 @@ its own artifact, independent judgment, or proof surface.
   - [ ] Write or refine `Done / Proof` with done conditions, mechanical checks
     or `Metrics: none mechanical`, manual checks, review rubric/TAS gates, hard
     gates, human gates, and required evidence.
+  - [ ] For implementation feature work, include `Grounding evidence:` in
+    `Done / Proof`: code documentation or maintained implementation evidence
+    from Ref MCP, official docs, GitHub code search, maintained examples, or
+    web sources before finalizing, unless the ticket is explicitly local-only.
   - [ ] If the metric or provider is unclear, derive a metric card before
     writing `Done / Proof` or the Goal Packet preview.
   - [ ] Name `Proof weight:` and `Delegated lanes:` for material work when QA,
@@ -166,6 +170,7 @@ Delta(before, after, why_now, first_principles_basis?)
 Program(vars, ordered_operations, outputs)
 Map(touch, inspect, seams?, typed_flow?)
 DoneProof(done_when, checks, manual, review, evidence)
+GroundingEvidence(source_class, sources_checked, local_only_reason?)
 PlanQA(minimality, reuse, parameters, files_functions, proof_route)
 GoalPacketPreview(files, program, progress, metric, proof_route, drift, native_goal_prompt)
 CloseoutRoute(close_ticket, documentation_if_substantive_docs, docs_changed?)

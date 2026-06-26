@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.8
+template_version: 0.2.9
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -100,6 +100,12 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   locking the approach, then adapt the smallest useful version to the local
   codebase. Skip this only for tiny same-scope fixes, user-requested local-only
   work, or when the active context already contains fresh external evidence.
+- Before finalizing implementation feature work, treat code documentation or
+  maintained implementation evidence as a completion gate. Prefer Ref MCP or
+  official docs for APIs and libraries, GitHub code search or maintained
+  examples for usage patterns, and web search when current ecosystem state
+  matters. The final response must include a compact `Grounding:` line naming
+  the source class checked, or explicitly state why the work was local-only.
 - Look for what already works in the repo and in the world before inventing a
   novel implementation, unless novelty is the goal.
 - Explore data, logs, examples, and code paths before drawing conclusions.

@@ -168,6 +168,11 @@ only after the branch is selected:
      tickets, skips blocked/gated work, and logs no-op when nothing can advance.
    - [ ] For coding leaves, compile an `active_goal` prompt over the ticket,
      program, progress, and proof files.
+   - [ ] For coding leaves that implement features, require a grounding step
+     before final evidence: check code documentation or maintained
+     implementation evidence through Ref MCP, official docs, GitHub code
+     search, maintained examples, or web search unless the ticket is explicitly
+     local-only.
    - [ ] Load `references/goal-shapes.md` for batch, board-drain, rollout, or
      project-goals details.
 - [ ] 7. Define drift policy.
@@ -188,6 +193,10 @@ only after the branch is selected:
      as source of truth instead of restating their full contents.
    - [ ] Include final evidence policy. For UI/user-visible work, completion
      must return best screenshot/image evidence or block with the missing proof.
+   - [ ] For implementation feature work, include a final `Grounding:` evidence
+     rule in the prompt: name the source class checked, such as Ref MCP,
+     official docs, GitHub code search, maintained examples, or web sources, or
+     state the local-only reason.
    - [ ] For UI/user-visible work, include literal Markdown image syntax in the
      prompt's final evidence rule:
      `Final evidence: include ![best evidence](ABSOLUTE_SCREENSHOT_PATH), or
