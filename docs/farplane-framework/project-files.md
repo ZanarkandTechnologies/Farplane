@@ -28,7 +28,7 @@ farplane/        = tracked project framework config
 .agents/skills/ = tracked project-local product skills
 .farplane/       = ignored local runtime state, reports, eval runs, and logs
 docs/            = tracked human-readable project memory and durable narrative
-tickets/         = visible work queue and proof surface
+tickets/         = local visible work queue; README/templates are tracked
 skills/          = tracked reusable cross-project or repo skills
 ```
 
@@ -161,6 +161,29 @@ Use `threads.chats` for persistent chat or worker threads that should render
 under the same employee agent. Use `threads.automations` for automation-owned
 threads that should also render under that employee. Threads not listed here
 may appear as ephemeral agents in the UI.
+
+## Local Work State
+
+InitAdvisor owns the generated `.gitignore` block for Farplane local work in
+`skills/init-advisor/references/GITIGNORE_TEMPLATE`:
+
+```gitignore
+# Farplane local runtime and work state
+.farplane/
+tickets/**
+!tickets/README.md
+!tickets/templates/
+!tickets/templates/**
+.agents/*
+!.agents/skills/
+!.agents/skills/**
+```
+
+Active tickets such as `tickets/TASK-0001/ticket.md` are local execution state
+by default. Commit shared ticket scaffolding such as `tickets/README.md` and
+`tickets/templates/`, but keep project-specific active work, reports, logs,
+eval runs, and non-skill agent state out of normal commits unless the repo has
+an explicit reason to version them.
 
 ## Ignored Runtime State
 

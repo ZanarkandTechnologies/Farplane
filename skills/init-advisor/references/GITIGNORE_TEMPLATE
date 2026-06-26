@@ -1,0 +1,9 @@
+# Farplane local runtime and work state
+.farplane/
+tickets/**
+!tickets/README.md
+!tickets/templates/
+!tickets/templates/**
+.agents/*
+!.agents/skills/
+!.agents/skills/**

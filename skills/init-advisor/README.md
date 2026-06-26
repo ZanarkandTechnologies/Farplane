@@ -57,6 +57,10 @@ The script also creates ignored `.farplane/` runtime folders:
 `.farplane/state/run-ledger.json`, `.farplane/reports/`,
 `.farplane/evals/runs/`, and `.farplane/logs/`. Keep canonical framework
 config in tracked `farplane/`; use `.farplane/` for generated local state only.
+It also appends [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) to
+`.gitignore` so active `tickets/TASK-*` work stays local by default while
+`tickets/README.md` and `tickets/templates/` remain available as tracked
+scaffold.
 
 Bootstrap does not create live Codex automations by itself. After the substrate
 exists, use `harness-creator` in full mode to shape the static charter,
@@ -67,9 +71,10 @@ calls are needed. When live loops are explicitly requested, use
 Activation creates or reuses the dedicated loop threads, creates or updates the
 Codex automations, and appends PM-visible thread IDs to `farplane/pm.json`.
 
-Optional code scaffold recipes live in `SKILL.md` under `Code Scaffold Recipes`.
-Use the selected recipe during init when requested, but stop for interactive
-cloud setup, credentials, billing, deploys, and destructive actions.
+Optional code scaffold recipes live in
+[CODE_SCAFFOLD_RECIPES.md](references/CODE_SCAFFOLD_RECIPES.md). Use the
+selected recipe during init when requested, but stop for interactive cloud
+setup, credentials, billing, deploys, and destructive actions.
 
 After init, follow the planning funnel:
 

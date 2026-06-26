@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "1.6.1",
+    "template_version": "1.6.2",
     "feature_refs": ["FEAT-0060"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "1.6.1",
+  "spec_version": "1.6.2",
   "template_uses": {
-    "farplane-framework": "1.6.1"
+    "farplane-framework": "1.6.2"
   },
   "project": {
     "name": "TODO",
@@ -19,6 +19,7 @@
   "standard": {
     "tracked": [
       "AGENTS.md",
+      ".gitignore",
       "PROJECT_RULES.md",
       "ARCHITECTURE.md",
       "farplane/README.md",

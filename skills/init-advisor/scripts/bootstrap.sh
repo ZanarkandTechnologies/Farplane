@@ -74,17 +74,28 @@ write_file_if_missing() {
   echo "Wrote: $dest"
 }
 
-append_line_if_missing() {
+append_gitignore_block_if_missing() {
   local dest="$1"
-  local line="$2"
+  local template="$2"
+  local marker="# Farplane local runtime and work state"
 
-  if [ -e "$dest" ] && grep -Fxq "$line" "$dest"; then
-    echo "Skip (line exists): $dest :: $line"
+  if [ ! -f "$template" ]; then
+    echo "Error: missing source file: $template" >&2
+    exit 1
+  fi
+
+  if [ -e "$dest" ] && grep -Fxq "$marker" "$dest"; then
+    echo "Skip (block exists): $dest :: $marker"
     return 0
   fi
 
   mkdir -p "$(dirname "$dest")"
-  printf "%s\n" "$line" >> "$dest"
+  {
+    if [ -s "$dest" ]; then
+      printf "\n"
+    fi
+    cat "$template"
+  } >> "$dest"
   echo "Updated: $dest"
 }
 
@@ -141,8 +152,7 @@ copy_file "${REF_DIR}/PRE_PUSH_CHECK_TEMPLATE.sh" "${TARGET_DIR}/scripts/pre_pus
 copy_file "${REF_DIR}/COLLECT_REVIEW_CONTEXT_TEMPLATE.sh" "${TARGET_DIR}/scripts/collect_review_context.sh"
 copy_file "${REF_DIR}/CODEX_REVIEW_AGENT_TEMPLATE.ts" "${TARGET_DIR}/scripts/codex_review_agent.ts"
 copy_file "${REF_DIR}/RUN_PRE_PUSH_REVIEW_TEMPLATE.sh" "${TARGET_DIR}/scripts/run_pre_push_review.sh"
-append_line_if_missing "${TARGET_DIR}/.gitignore" ".farplane/reviews/"
-append_line_if_missing "${TARGET_DIR}/.gitignore" ".farplane/"
+append_gitignore_block_if_missing "${TARGET_DIR}/.gitignore" "${REF_DIR}/GITIGNORE_TEMPLATE"
 
 mkdir -p "${TARGET_DIR}/qa/cookbook"
 copy_file "${REF_DIR}/qa/AGENTS.md" "${TARGET_DIR}/qa/AGENTS.md"
