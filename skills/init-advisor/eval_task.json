@@ -61,6 +61,24 @@
     "tags": ["init-advisor", "full-mode", "harness-creator", "readiness-gate"]
   },
   {
+    "id": "init_advisor_adaptive_human_intake_01",
+    "title": "Init advisor adapts human intake depth for meaning-heavy file migration",
+    "query": "A migrated project now has a current farplane/manifest.json, but farplane/harness.md, farplane/products.md, and farplane/goals.md are new or placeholder. The operator asks init-advisor to finish the migration but is worried that Deep Interview asks too many questions. How should init-advisor decide what to ask before filling those files?",
+    "reference_points": [
+      "Resolves human_intake as skip, offer, or required and defaults to offer for new or migrated meaning-heavy files",
+      "Uses destination skill signatures as the question inventory instead of inventing a generic init interview",
+      "Routes harness.md, products.md, feedback loops, missing systems, and milestone-shape params to harness-creator",
+      "Routes goals.md, North Star, value function, KPI tree, holds, and milestone deltas to horizon-advisor",
+      "Asks direct signature questions for factual or narrow missing params",
+      "Escalates to deep-interview --quick only when missing params are intent-heavy, contradictory, or risky for canonical file fills",
+      "Constrains deep-interview --quick to the missing signature params plus intent, outcome, non-goals, decision boundaries, and success criteria",
+      "Writes the human intake decision, missing answers, and any deep-interview summary into docs/bootstrap-brief.md",
+      "Does not embed or duplicate the Deep Interview loop inside init-advisor, harness-creator, or horizon-advisor",
+      "Does not claim project_initialized until required operator-owned params are answered or recorded as blocked"
+    ],
+    "tags": ["init-advisor", "human-intake", "deep-interview", "harness-creator", "horizon-advisor"]
+  },
+  {
     "id": "init_advisor_quality_tooling_slots_01",
     "title": "Init advisor records optional maintainability and hardening command slots",
     "query": "A TypeScript/Python mixed project is being initialized and the operator is open to quality tooling. What should the project rules template record without forcing installation?",

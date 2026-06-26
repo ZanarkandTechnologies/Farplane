@@ -40,10 +40,44 @@ reporting and planning.
 Generated project config should include `farplane/automations.md` as the
 reviewable prompt source copied into Codex automations.
 
+When the operator asks how init or migration should decide what to ask before
+filling `farplane/harness.md`, `farplane/products.md`, or `farplane/goals.md`,
+answer with this adaptive intake shape:
+
+```text
+1. Resolve `human_intake := skip | offer | required`; default to `offer` for
+   new or migrated meaning-heavy files.
+2. Use destination skill signatures as the question inventory.
+3. Route `harness.md`, `products.md`, feedback loops, missing systems, and
+   milestone-shape params to `harness-creator`.
+4. Route `goals.md`, North Star, value function, KPI tree, holds, and milestone
+   deltas to `horizon-advisor`.
+5. Ask direct signature questions for factual or narrow missing params.
+6. Escalate to `deep-interview --quick` only for intent-heavy, contradictory,
+   or risky canonical-file gaps.
+7. Constrain `deep-interview --quick` to the missing signature params plus
+   intent, outcome, non-goals, decision boundaries, and success criteria.
+8. Write the human intake decision, missing answers, and any
+   `deep-interview` summary into `docs/bootstrap-brief.md`.
+9. Do not embed or duplicate Deep Interview inside `init-advisor`,
+   `harness-creator`, or `horizon-advisor`.
+10. Do not claim `project_initialized` until required operator-owned params are
+    answered or recorded as blocked.
+```
+
+Always include these two closeout lines in adaptive-intake answers:
+
+```text
+Record: write `human_intake`, missing answers, and any `deep-interview`
+summary to `docs/bootstrap-brief.md`.
+Boundary: do not embed or duplicate the Deep Interview loop inside
+`init-advisor`, `harness-creator`, or `horizon-advisor`.
+```
+
 ## Skill Signature
 
 ```text
-init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mode?, force?)
+init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mode?, human_intake?, force?)
   -> project_substrate
    + farplane_config
    + readiness_audit
@@ -60,7 +94,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + automation_setup_handoff?
    + next_planning_handoff
 state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and starter PRD ticket
-gates: existing_files_preserved; spec_version_recorded; human_gates_named; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
+gates: existing_files_preserved; spec_version_recorded; human_gates_named; human_intake_decision_recorded; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
 routes: harness-creator | automation-advisor | deep-interview | prd | spec-to-ticket | research:official-docs | research:code-patterns
 fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when the operating model, goals, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
 ```
@@ -84,6 +118,32 @@ ticketed handoff, not the default init phase.
   operator-owned harness-creator parameter instead of running separate goal,
   product, or advisor interviews from init-advisor.
 
+`human_intake` controls how init/migration fills human-meaning files:
+
+- `skip`: scaffold or migrate files mechanically and write missing intent as
+  readiness gaps in `docs/bootstrap-brief.md`.
+- `offer` (default): when missing, placeholder, stale, or newly introduced
+  files depend on human intent, offer a short intake before filling them.
+- `required`: do not finalize meaning-heavy file content until the missing
+  operator-owned params have been answered or recorded as blocked.
+
+Use direct signature questions first. Derive the question inventory from the
+destination skill signatures instead of inventing a generic interview:
+`harness-creator` for `farplane/harness.md`, `farplane/products.md`,
+feedback loops, missing systems, and current milestone shape;
+`horizon-advisor` for `farplane/goals.md`, value function, KPIs, holds, and
+milestone deltas. Escalate to `deep-interview --quick` only when the missing
+params are intent-heavy, contradictory, or risky enough that one direct
+question would produce a shallow or misleading file fill. Intent-heavy params
+include mission, human thesis, priorities, non-goals, decision boundaries,
+success criteria, North Star, value function, KPI meaning, and current
+milestone.
+
+Do not embed the Deep Interview loop in `init-advisor`, `harness-creator`, or
+`horizon-advisor`. `deep-interview` supplies the questioning method when
+signature questions are not enough; the destination skill still owns the file
+delta and handoff.
+
 Do not treat `farplane/goals.md` existing as proof that goal setup is complete.
 If the split project files are placeholder, stale, or not grounded in the
 operator's stated intent, the result is `needs_operating_model_intake`, not
@@ -97,9 +157,11 @@ blocking question and record the readiness gap instead of inventing the value.
 ```text
 setup_project_operating_model(bootstrap_brief, project_context,
                               existing_harness?, existing_products?,
-                              existing_goals?)
+                              existing_goals?, human_intake?)
   -> readiness_status
+   + human_intake_decision
    + first_missing_question?
+   + deep_interview_quick_handoff?
    + harness_delta?
    + products_delta?
    + goals_delta?
@@ -117,6 +179,9 @@ setup_project_operating_model(bootstrap_brief, project_context,
         `project.name`, `project.description`, and `project.archetype`.
   - [ ] Resolve `init_mode := substrate | full`; use `full` only when the
     operator wants project-goals setup during initialization.
+  - [ ] Resolve `human_intake := skip | offer | required`; default to `offer`
+        for new or migrated meaning-heavy files and record the decision in
+        `docs/bootstrap-brief.md` when readiness gaps remain.
   - [ ] Inspect existing README, AGENTS, docs, tickets, package files, and app
     structure before writing.
 - [ ] 2. Select the project and stack profile.
@@ -174,20 +239,35 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] Treat missing or placeholder team archetype as a readiness gap. The
         first useful question is: "What kind of team is this project supposed to
         be, and what should it repeatedly produce?"
-  - [ ] Use the function-signature params as the question inventory; do not ask
-        a separate generic interview when one missing param blocks readiness.
+  - [ ] Use the destination skill signatures as the question inventory:
+        `harness-creator` params for static charter, product catalog, feedback
+        loops, missing systems, and current milestone shape; `horizon-advisor`
+        params for North Star, value function, KPI tree, goals, holds, and
+        milestone deltas.
+  - [ ] Ask direct signature questions for factual or narrow missing params.
+        Escalate to `deep-interview --quick` only when missing params are
+        intent-heavy, contradictory, or likely to produce shallow canonical
+        files without a Socratic pass.
+  - [ ] When using `deep-interview --quick`, constrain it to the missing
+        signature params and readiness gates: intent, outcome, non-goals,
+        decision boundaries, and success criteria. Write the summary into
+        `docs/bootstrap-brief.md`; do not duplicate the interview loop inside
+        `init-advisor`.
   - [ ] Write the audit result into `docs/bootstrap-brief.md` under
-    Goal Intake Status and Initialization Readiness when those sections exist.
+        Goal Intake Status and Initialization Readiness when those sections
+        exist, including readiness state, human intake decision, missing
+        answers, and any `deep-interview` summary or handoff.
   - [ ] In `substrate` mode, report missing operating-model questions as next
     handoff rather than asking the full interview now.
   - [ ] In `full` mode, call `harness-creator` after substrate setup when the
     static charter, products, goals, feedback loops, missing systems, or
     current milestone need to be written or improved.
-  - [ ] Ask only the first missing `harness-creator` parameter before claiming
-    `project_initialized`. Common first questions are: "What is the durable
-    human thesis this project must preserve?" or "What should this project
-    reliably do for you over the next 3 months that it does not yet do
-    reliably today?"
+  - [ ] Ask only the first missing direct `harness-creator` or
+        `horizon-advisor` parameter before claiming `project_initialized`,
+        unless the adaptive intake rule escalates to `deep-interview --quick`.
+        Common first questions are: "What is the durable human thesis this
+        project must preserve?" or "What should this project reliably do for
+        you over the next 3 months that it does not yet do reliably today?"
   - [ ] Let `harness-creator` decide whether to use `horizon-advisor`,
     `harness-advisor`, `skill-creator`, or `goal-advisor`; do not duplicate
     those advisor calls in init-advisor.
