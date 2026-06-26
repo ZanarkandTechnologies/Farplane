@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import shlex
@@ -121,6 +122,21 @@ def detect_base_branch() -> str:
 
 
 def ensure_authenticated() -> None:
+    agent_status = subprocess.run(
+        ["coderabbit", "auth", "status", "--agent"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if agent_status.returncode == 0:
+        try:
+            payload = json.loads(strip_ansi(agent_status.stdout + agent_status.stderr))
+        except json.JSONDecodeError:
+            payload = {}
+        if isinstance(payload, dict) and payload.get("authenticated") is True:
+            return
+
     try:
         fallback = subprocess.run(
             ["coderabbit", "auth", "status"],
