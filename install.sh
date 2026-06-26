@@ -118,6 +118,7 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_ROOT="${TARGET_DIR}/.install-backups/${STAMP}"
 LOCAL_ENV_FILE="${TARGET_DIR}/config.local.env"
 LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
+LOCAL_TOML_MARKER="# Machine-local config appended from config.local.toml"
 INSTALL_BIN_FILES=(
   _compat.py
   capture_user_turn.py
@@ -174,6 +175,69 @@ render_config() {
   ensure_local_env
 
   if [ -e "$TARGET_DIR/config.toml" ]; then
+    python3 - "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$LOCAL_TOML_MARKER" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+config_path = Path(sys.argv[1])
+local_path = Path(sys.argv[2])
+marker = sys.argv[3]
+
+text = config_path.read_text()
+local_text = local_path.read_text() if local_path.exists() else ""
+
+if marker in text:
+    candidate_text = text.split(marker, 1)[1]
+else:
+    candidate_text = text
+
+header_re = re.compile(r"^\[([^\]]+)\]\s*$")
+preserve_exact = {"hooks.state"}
+preserve_prefixes = ("projects.", "hooks.state.", "marketplaces.")
+
+
+def table_blocks(source: str) -> list[tuple[str, str]]:
+    blocks: list[tuple[str, str]] = []
+    current_header: str | None = None
+    current_lines: list[str] = []
+    for line in source.splitlines():
+        match = header_re.match(line)
+        if match:
+            if current_header is not None:
+                blocks.append((current_header, "\n".join(current_lines).rstrip() + "\n"))
+            current_header = match.group(1)
+            current_lines = [line]
+        elif current_header is not None:
+            current_lines.append(line)
+    if current_header is not None:
+        blocks.append((current_header, "\n".join(current_lines).rstrip() + "\n"))
+    return blocks
+
+
+def should_preserve(header: str) -> bool:
+    return header in preserve_exact or header.startswith(preserve_prefixes)
+
+
+local_headers = {header for header, _block in table_blocks(local_text)}
+missing_blocks = [
+    block
+    for header, block in table_blocks(candidate_text)
+    if should_preserve(header) and header not in local_headers
+]
+
+if missing_blocks:
+    prefix = local_text.rstrip()
+    if prefix:
+        prefix += "\n\n"
+    else:
+        prefix = "# Machine-local TOML appended after the managed template.\n\n"
+    local_path.write_text(prefix + "\n".join(missing_blocks).rstrip() + "\n")
+    print(f"Preserved {len(missing_blocks)} machine-local TOML table(s) in {local_path}")
+PY
+  fi
+
+  if [ -e "$TARGET_DIR/config.toml" ]; then
     mkdir -p "$BACKUP_ROOT"
     cp "$TARGET_DIR/config.toml" "$BACKUP_ROOT/config.toml"
   fi
@@ -218,10 +282,12 @@ replacements = {
 for needle, value in replacements.items():
     text = text.replace(needle, value)
 
+marker = "# Machine-local config appended from config.local.toml"
+
 if local_toml_path.exists():
     local_text = local_toml_path.read_text().strip()
     if local_text:
-        text = text.rstrip() + "\n\n# Machine-local config appended from config.local.toml\n\n" + local_text + "\n"
+        text = text.rstrip() + "\n\n" + marker + "\n\n" + local_text + "\n"
 else:
     text = text.rstrip() + "\n"
 
