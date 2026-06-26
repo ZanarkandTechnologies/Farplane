@@ -45,8 +45,8 @@ Respond directly for:
 
 If the right owner is unknown but the information clearly matters, create the
 smallest honest artifact under the nearest owning surface, such as a ticket
-artifact, `experiments/**`, `docs/archive/research/**`, or a draft spec. Do not hide
-durable state in chat because the exact final home is still uncertain.
+artifact, `experiments/**`, `tmp/**`, or a draft spec. Do not hide durable state
+in chat because the exact final home is still uncertain.
 
 ## Markdown Front Matter Standard
 
@@ -86,7 +86,9 @@ Surface-specific schemas may add or replace fields:
 
 - skill files use their existing `SKILL.md` front matter contract
 - ticket files use the ticket template metadata contract
-- feature and source registries stay JSONL, not Markdown front matter
+- generated feature registry output stays JSONL, while authored feature records
+  live in spec front matter
+- source registries stay JSONL
 - research artifacts may add `source_refs`, `method`, `confidence`, or
   `decision`
 - eval artifacts may add `suite`, `metric`, `judge`, or `run_id`
@@ -106,13 +108,13 @@ body section, redacted artifact, or private local context.
 | `docs/LESSONS.md` | distilled post-fix learning | review, eval, trouble-drain, or self-improvement pass produced a reusable lesson | `tail -n 30` plus `rg` by area | promote into skills, prompts, evals, `docs/MEMORY.md`, or tickets; archive solved noise when needed | review / self-improve / doc governance |
 | `tickets/TASK-*/ticket.md` | active task memory | planned or active work | selected active ticket only | archive after closeout and durable writeback | ticket workflow |
 | `tickets/TASK-*/artifacts/` | task-scoped proof | QA, review, demo, smoke, or implementation evidence | linked from ticket evidence | keep with ticket archive; do not promote bulky proof into docs | ticket workflow |
-| `docs/features/registry.jsonl` | harness feature inventory | feature is shipped, planned, partial, retired, or needs dedupe | query by feature/status/surface | update status, evidence, limits, or mark retired; do not delete stable IDs | harness-advisor / feature registry |
+| `docs/specs/* feature_records_json` | authored harness feature metadata | feature is shipped, planned, partial, retired, or needs dedupe | owning spec or `docs/specs/feature-catalog.md` | update status, evidence, limits, or mark retired; do not delete stable IDs | doc governance / feature metadata |
+| `docs/features/registry.jsonl` | generated harness feature inventory | generated from active spec metadata | query by feature/status/surface | regenerate with `python3 docs/features/validate_features.py --write`; do not hand-edit | feature registry generator |
 | `docs/sources/registry.jsonl` | external source provenance | source is ingested or reused | query by URL/key/source ID | mark archived, superseded, or sensitive-redacted; keep canonical IDs | harness-scout |
 | `experiments/harness-scout/runs/` | source-ingestion evidence | source run, scorecard, decision matrix, handoff | only when linked by source/feature/ticket | promote compact outcomes to source/feature registry or tickets; delete/redact unsafe bulky extracts | harness-scout |
 | `experiments/hardcases/` | temporary sanitized benchmark seeds | deterministic validators or legacy captures leave a clear contract violation before it becomes a runnable eval row | only when building evals or self-improvement | promote into eval fixtures with hardcase metadata; archive or delete stale standalone seeds once covered | self-improve / eval / validators |
 | other `experiments/` | scratch proof, smoke runs, prototype evidence | bounded experiment or temporary proof | only when linked by ticket/source/feature | promote outcome or delete/archive stale scratch evidence | owning skill |
 | `docs/specs/*.md` | current behavior contracts | stable feature, doctrine, schema, lifecycle, or execution flow | spec index first, then relevant file | merge duplicates, delete superseded plans, move skill-owned contracts to skills | doc governance |
-| `docs/archive/research/**` | historical research and comparison evidence | retired research pass or external comparison | only by topic/source need | keep as cold evidence; do not promote raw research into active contracts | research / harness-scout |
 
 ## Read Rules
 
@@ -134,8 +136,9 @@ Run a weekly or periodic drain when the ledgers stop being easy to use:
    rules that are current and worth consulting.
 4. Review `docs/HISTORY.md` only for admission quality. Do not drain ordinary
    history into actions; archive eras only if file size hurts usability.
-5. Validate `docs/features/registry.jsonl` and `docs/sources/registry.jsonl`;
-   fix missing refs, mark stale rows superseded, or open cleanup tickets.
+5. Validate generated feature records and `docs/sources/registry.jsonl`; fix
+   missing refs, mark stale rows superseded in spec metadata, or open cleanup
+   tickets.
 
 Promote only the smallest durable rule needed. If a rule must affect every turn,
 put it in the always-loaded owner surface such as `AGENTS.md`,
@@ -152,7 +155,7 @@ flowchart TD
     L --> M["docs/MEMORY.md<br/>stable invariant"]
     HC["experiments/hardcases/<br/>sanitized hard tasks"] --> E["eval fixtures / self-improve"]
     HS["experiments/harness-scout/runs/<br/>source evidence"] --> SR["docs/sources registry"]
-    HS --> FR["docs/features registry"]
+    HS --> FR["spec feature metadata<br/>generated feature registry"]
     TK --> A["tickets/archive<br/>after closeout"]
 ```
 
@@ -160,8 +163,9 @@ flowchart TD
 
 - Keep current operating rules, active feature contracts, linked evidence, and
   stable IDs.
-- Delete or archive superseded migration plans, duplicate specs, stale scratch
-  outputs, and unlinked bulky experiment evidence.
+- Delete superseded migration plans, duplicate specs, stale scratch outputs,
+  unlinked bulky experiment evidence, and tracked archive/future-idea docs that
+  no longer own current truth.
 - Do not delete stable registry IDs; mark status instead.
 - Do not move raw private transcripts, secrets, credentials, or unrelated user
   data into tracked docs or hardcases.

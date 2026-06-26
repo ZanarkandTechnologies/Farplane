@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-06-25T18:10:20+00:00` from local Markdown links and literal repo-path
+Generated at `2026-06-26T04:54:12+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -29,60 +29,61 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
 ## Counts
 
-- Scanned files: `1246`
-- Nodes: `938`
-- Edges: `4197`
-- Unresolved local-looking refs: `1114`
+- Scanned files: `1229`
+- Nodes: `871`
+- Edges: `4168`
+- Unresolved local-looking refs: `979`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/specs/self-improvement-contracts.md` | 70 | 61 |
-| `docs/MEMORY.md` | 60 | 25 |
-| `docs/specs/README.md` | 57 | 27 |
-| `docs/LESSONS.md` | 56 | 24 |
-| `docs/TROUBLES.md` | 47 | 19 |
-| `docs/HISTORY.md` | 42 | 14 |
-| `docs/skills/registry.jsonl` | 39 | 23 |
-| `docs/skills/README.md` | 34 | 15 |
-| `docs/features/registry.jsonl` | 28 | 9 |
+| `docs/specs/self-improvement-contracts.md` | 71 | 61 |
+| `docs/specs/README.md` | 60 | 27 |
+| `docs/MEMORY.md` | 57 | 26 |
+| `docs/LESSONS.md` | 55 | 25 |
+| `docs/TROUBLES.md` | 46 | 20 |
+| `docs/HISTORY.md` | 39 | 15 |
+| `docs/skills/registry.jsonl` | 36 | 23 |
+| `docs/skills/README.md` | 33 | 15 |
+| `docs/features/registry.jsonl` | 32 | 11 |
 | `docs/specs/goal-loop-contract.md` | 24 | 11 |
-| `docs/prd.md` | 24 | 19 |
-| `docs/bootstrap-brief.md` | 23 | 17 |
-| `docs/skills/best-practices.md` | 22 | 16 |
+| `docs/skills/best-practices.md` | 23 | 16 |
+| `docs/prd.md` | 22 | 19 |
+| `docs/bootstrap-brief.md` | 22 | 17 |
 | `docs/skills/system.md` | 21 | 15 |
-| `docs/TASTE.md` | 20 | 14 |
-| `docs/specs/filesystem-lifecycle.md` | 20 | 9 |
-| `docs/skills/templates/SKILL_TEMPLATE.md` | 19 | 9 |
-| `docs/sources/registry.jsonl` | 18 | 6 |
-| `docs/specs/harness-techniques.md` | 18 | 2 |
-| `docs/fundamentals/harness-algebra.md` | 16 | 7 |
+| `docs/specs/filesystem-lifecycle.md` | 21 | 9 |
+| `docs/skills/templates/SKILL_TEMPLATE.md` | 20 | 9 |
+| `docs/TASTE.md` | 19 | 14 |
+| `docs/sources/registry.jsonl` | 17 | 6 |
+| `docs/specs/harness-techniques.md` | 17 | 2 |
+| `docs/fundamentals/harness-engineering-doctrine.md` | 16 | 7 |
 
 ## Spec Status Preview
 
 | Spec | All refs | Skill refs | Suggested status |
 | --- | --- | --- | --- |
 | `docs/specs/AGENTS.md` | 1 | 0 | keep active |
-| `docs/specs/README.md` | 57 | 27 | keep active |
-| `docs/specs/adaptive-backoff.md` | 7 | 6 | keep active |
+| `docs/specs/README.md` | 60 | 27 | keep active |
+| `docs/specs/adaptive-backoff.md` | 8 | 6 | keep active |
 | `docs/specs/agent-testability-surfaces.md` | 4 | 3 | keep active |
-| `docs/specs/context-and-handoff-policy.md` | 7 | 4 | keep active |
-| `docs/specs/doc-governance.md` | 12 | 4 | keep active |
-| `docs/specs/filesystem-lifecycle.md` | 20 | 9 | keep active |
+| `docs/specs/context-and-handoff-policy.md` | 8 | 4 | keep active |
+| `docs/specs/doc-governance.md` | 11 | 4 | keep active |
+| `docs/specs/feature-catalog.md` | 12 | 1 | keep active |
+| `docs/specs/filesystem-lifecycle.md` | 21 | 9 | keep active |
 | `docs/specs/first-principles-planning.md` | 6 | 4 | keep active |
 | `docs/specs/goal-loop-contract.md` | 24 | 11 | keep active |
-| `docs/specs/harness-techniques.md` | 18 | 2 | keep active |
-| `docs/specs/inspiration-vault.md` | 1 | 0 | keep active |
+| `docs/specs/harness-techniques.md` | 17 | 2 | keep active |
+| `docs/specs/inspiration-vault.md` | 2 | 0 | keep active |
 | `docs/specs/invocation-and-adapters.md` | 15 | 2 | keep active |
-| `docs/specs/minimal-autonomy-loop.md` | 4 | 4 | keep active |
+| `docs/specs/minimal-autonomy-loop.md` | 4 | 3 | keep active |
 | `docs/specs/nested-pm-projects.md` | 0 | 0 | keep active |
 | `docs/specs/product-convergence-plan.md` | 0 | 0 | keep active |
-| `docs/specs/program-notation.md` | 10 | 7 | keep active |
-| `docs/specs/review-gates.md` | 9 | 4 | keep active |
-| `docs/specs/self-improvement-contracts.md` | 70 | 61 | keep active |
+| `docs/specs/program-notation.md` | 9 | 7 | keep active |
+| `docs/specs/review-gates.md` | 10 | 4 | keep active |
+| `docs/specs/self-improvement-contracts.md` | 71 | 61 | keep active |
 | `docs/specs/spec-authoring-contract.md` | 5 | 2 | keep active |
-| `docs/specs/spec-first-execution-loop.md` | 5 | 0 | keep active |
+| `docs/specs/spec-first-execution-loop.md` | 6 | 0 | keep active |
 | `docs/specs/steer-pulse-automation.md` | 12 | 6 | keep active |
 
 ## Suggested Global Docs Bundle
@@ -111,12 +112,7 @@ can still be worth keeping.
 
 | Doc | Note |
 | --- | --- |
-| `docs/archive/research/code-reviews/2026-04-05_ralph-prototype_review.md` | review before archive or merge |
-| `docs/archive/research/web-research/2026-04-02_run-artifacts-risk-analysis.md` | review before archive or merge |
-| `docs/archive/research/web-research/2026-04-03_ralf-form-factor-proposal.md` | review before archive or merge |
-| `docs/archive/research/web-research/2026-04-03_ralf-ideal-product-form-factor.md` | review before archive or merge |
-| `docs/archive/research/web-research/2026-05-05_external-cli-frontend-delegation-proposal.md` | review before archive or merge |
-| `docs/archive/research/web-research/2026-05-27_ai-agent-skill-file-structure-brief.md` | review before archive or merge |
+| `docs/AGENTS.md` | keep if loaded by directory convention |
 | `docs/automation-previews/2026-06-15-pm-ticket-update-automation-preview.md` | review before archive or merge |
 | `docs/automation-previews/2026-06-24-life-weekly-interval-preview.md` | review before archive or merge |
 | `docs/features/AGENTS.md` | keep if loaded by directory convention |
@@ -131,7 +127,7 @@ can still be worth keeping.
    especially template-era `docs/progress.md` and old external repo paths.
 2. Keep `docs/review/rubrics/*` as canonical docs even when individual family
    files are primarily reached through the directory and rubric index.
-3. Keep `docs/archive/research/**` as historical evidence unless a source registry row
-   or active spec requires a new location.
-4. Use this report before any future archive move: redirect active inbound refs
-   first, then move superseded files under `docs/archive/`.
+3. Move temporary research and speculative notes to tickets, experiments, or
+   `tmp/**`; keep tracked docs for live contracts and generated inventories.
+4. Use this report before deleting or moving docs: redirect active inbound refs
+   first, then remove the superseded file.

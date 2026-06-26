@@ -197,8 +197,8 @@ For install and bootstrap work:
 For harness-design research and external patterns:
 
 - `docs/sources/registry.jsonl`
+- `docs/specs/feature-catalog.md`
 - `docs/features/registry.jsonl`
-- `docs/archive/research/web-research/2026-04-02_anthropic-harness-comparison.md`
 
 ## Local Operating Rules
 

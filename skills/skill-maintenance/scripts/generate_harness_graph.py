@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
@@ -37,6 +38,12 @@ IGNORE_PARTS = {
     "__pycache__",
 }
 
+IGNORE_PREFIXES = (
+    "docs/archive/",
+    "docs/doc-audit/",
+    "docs/futureideas/",
+)
+
 GENERATED_PATHS = {
     "skills/skill-maintenance/graph/skill-graph.json",
     "skills/skill-maintenance/graph/skill-graph.js",
@@ -63,15 +70,35 @@ def rel(path: Path, repo_root: Path) -> str:
     return path.resolve().relative_to(repo_root.resolve()).as_posix()
 
 
+def ignored_prefix(path: str) -> bool:
+    return path.startswith(IGNORE_PREFIXES)
+
+
 def should_scan(path: Path, repo_root: Path) -> bool:
     rel_path = rel(path, repo_root)
     if rel_path in GENERATED_PATHS:
+        return False
+    if ignored_prefix(rel_path):
         return False
     if any(part in IGNORE_PARTS for part in path.parts):
         return False
     if path.name.startswith("."):
         return False
     return path.is_file() and path.suffix in TEXT_SUFFIXES
+
+
+def git_cached_rel_paths(repo_root: Path) -> set[str] | None:
+    try:
+        result = subprocess.run(
+            ["git", "ls-files", "-z", "--cached"],
+            cwd=repo_root,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    return {raw.decode() for raw in result.stdout.split(b"\0") if raw}
 
 
 def iter_scan_files(repo_root: Path) -> list[Path]:
@@ -89,12 +116,23 @@ def iter_scan_files(repo_root: Path) -> list[Path]:
         repo_root / "rules",
         repo_root / "tickets" / "README.md",
     ]
+    cached_rel_paths = git_cached_rel_paths(repo_root)
+    tracked_paths = None
+    if cached_rel_paths is not None:
+        tracked_paths = {(repo_root / raw).resolve() for raw in cached_rel_paths}
+
     files: list[Path] = []
     for root in roots:
         if root.is_file() and should_scan(root, repo_root):
-            files.append(root)
+            if tracked_paths is None or root.resolve() in tracked_paths:
+                files.append(root)
         elif root.is_dir():
-            files.extend(path for path in root.rglob("*") if should_scan(path, repo_root))
+            files.extend(
+                path
+                for path in root.rglob("*")
+                if should_scan(path, repo_root)
+                and (tracked_paths is None or path.resolve() in tracked_paths)
+            )
     return sorted(set(files))
 
 
@@ -141,6 +179,8 @@ def resolve_local_ref(ref: str, source: Path, repo_root: Path) -> tuple[str | No
         local = candidate.relative_to(repo_root.resolve()).as_posix()
     except ValueError:
         return None, path_part, False
+    if ignored_prefix(local):
+        return None, None, False
     if candidate.exists():
         if candidate.is_dir():
             for name in ("README.md", "SKILL.md"):
@@ -177,8 +217,6 @@ def node_kind(node_id: str) -> str:
         return "spec"
     if path.startswith("docs/skills/"):
         return "skill-doc"
-    if path.startswith("docs/archive/research/"):
-        return "research"
     if path.startswith("dir:docs/review/rubrics") or path.startswith("docs/review/rubrics/"):
         return "review-rubric"
     if path.startswith("docs/"):
@@ -198,6 +236,7 @@ def node_kind(node_id: str) -> str:
 
 def build_graph(repo_root: Path) -> dict[str, Any]:
     files = iter_scan_files(repo_root)
+    cached_rel_paths = git_cached_rel_paths(repo_root)
     nodes: dict[str, dict[str, Any]] = {}
     edges: list[dict[str, Any]] = []
     unresolved: list[dict[str, str]] = []
@@ -220,12 +259,21 @@ def build_graph(repo_root: Path) -> dict[str, Any]:
         except UnicodeDecodeError:
             continue
         for raw_ref, ref_type in extract_refs(text):
+            if ignored_prefix(clean_ref(raw_ref)):
+                continue
             target_path, missing, is_directory = resolve_local_ref(raw_ref, path, repo_root)
             if missing:
                 unresolved.append({"source": local_source, "raw_ref": clean_ref(raw_ref), "candidate": missing})
                 continue
             if not target_path:
                 continue
+            if cached_rel_paths is not None:
+                if is_directory:
+                    prefix = target_path.rstrip("/") + "/"
+                    if not any(path.startswith(prefix) for path in cached_rel_paths):
+                        continue
+                elif target_path not in cached_rel_paths:
+                    continue
             target = f"dir:{target_path}" if is_directory else f"file:{target_path}"
             nodes.setdefault(
                 target,
@@ -255,6 +303,8 @@ def build_graph(repo_root: Path) -> dict[str, Any]:
                     if not child.is_file() or child.suffix not in {".md", ".jsonl", ".py"}:
                         continue
                     child_path = rel(child, repo_root)
+                    if cached_rel_paths is not None and child_path not in cached_rel_paths:
+                        continue
                     child_target = f"file:{child_path}"
                     nodes.setdefault(
                         child_target,
@@ -318,7 +368,7 @@ def local_doc_paths(repo_root: Path) -> list[str]:
     docs = [
         rel(path, repo_root)
         for path in (repo_root / "docs").rglob("*")
-        if path.is_file() and path.suffix in {".md", ".jsonl", ".py"}
+        if path.is_file() and path.suffix in {".md", ".jsonl", ".py"} and not ignored_prefix(rel(path, repo_root))
     ]
     return sorted(docs)
 
@@ -368,16 +418,8 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
         top_docs.append([f"`{path}`", str(count), str(skill_inbound[path])])
 
     specs = [["Spec", "All refs", "Skill refs", "Suggested status"]]
-    consolidation_candidates = {
-        "docs/archive/specs/case-based-memory-context-graph.md": "archived after folding active model into harness-algebra",
-        "docs/archive/specs/meta-harness-automation.md": "archived after folding active map into harness-techniques and self-improvement-contracts",
-        "docs/archive/specs/orchestrator-subagent-loop.md": "archived after folding durable lane rules into spec-first-execution-loop",
-        "docs/archive/specs/runtime-surface.md": "archived after folding runtime boundaries into invocation-and-adapters",
-        "docs/archive/specs/skill-self-healing.md": "archived after folding repair contract into self-improvement-contracts and docs/skills",
-    }
     for path in sorted(spec_paths):
-        status = consolidation_candidates.get(path, "keep active")
-        specs.append([f"`{path}`", str(inbound[path]), str(skill_inbound[path]), status])
+        specs.append([f"`{path}`", str(inbound[path]), str(skill_inbound[path]), "keep active"])
 
     global_bundle = [["Doc", "Why"]]
     for path in [
@@ -460,10 +502,10 @@ can still be worth keeping.
    especially template-era `docs/progress.md` and old external repo paths.
 2. Keep `docs/review/rubrics/*` as canonical docs even when individual family
    files are primarily reached through the directory and rubric index.
-3. Keep `docs/archive/research/**` as historical evidence unless a source registry row
-   or active spec requires a new location.
-4. Use this report before any future archive move: redirect active inbound refs
-   first, then move superseded files under `docs/archive/`.
+3. Move temporary research and speculative notes to tickets, experiments, or
+   `tmp/**`; keep tracked docs for live contracts and generated inventories.
+4. Use this report before deleting or moving docs: redirect active inbound refs
+   first, then remove the superseded file.
 """
 
 

@@ -63,11 +63,29 @@ Choose density by surface:
 - `skills/<name>/SKILL.md`: compact executable workflow contract
 - `skills/<name>/qa_checklist.md`: preflight and final-review guardrails
 - `tickets/*`: task-local plan, blockers, progress, and proof
-- `docs/archive/*`: historical or superseded context, not current truth
 
 If a doc grows because it is accumulating task evidence, archive notes, or
-implementation history, move those details to the ticket, artifact, or archive
-and keep the current contract compact.
+implementation history, move those details to the ticket, artifact, or `tmp/**`
+scratch space and keep the current contract compact.
+
+## Feature Metadata Ownership
+
+Specs own feature metadata. Add or update `feature_records_json` in the
+smallest active spec that owns the behavior. Use
+`docs/specs/feature-catalog.md` only for transitional, cross-cutting, or
+historical `FEAT-*` records without a clearer spec owner.
+
+`docs/features/registry.jsonl` is generated output. Do not hand-edit it. After
+feature metadata changes, run:
+
+```bash
+python3 docs/features/validate_features.py --write
+python3 docs/features/validate_features.py
+```
+
+Delete stale docs instead of creating permanent tracked archives by default.
+Before deletion, promote any still-current truth into an active owner: spec,
+fundamentals, skill, ticket, or generated metadata source.
 
 ## Structural Checks
 
@@ -79,6 +97,9 @@ Current structural checks:
   Purpose: ticket frontmatter/body contract and lifecycle invariants
 - `python3 bin/validators/check_doc_parity.py`
   Purpose: narrow entrypoint parity for canonical docs and stale queue claims
+- `python3 docs/features/validate_features.py`
+  Purpose: generated feature registry freshness, stable ID, ref, and row-shape
+  validation
 
 Rule of thumb:
 

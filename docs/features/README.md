@@ -1,10 +1,11 @@
 # Feature Registry
 
-Farplane's feature registry is the structured system of record for harness
-techniques.
+Farplane's feature registry is generated compatibility output for structured
+harness feature records. The authored source lives in active specs through
+`feature_records_json` front matter blocks.
 
-Use it when a source, video, blog, repo, or ticket proposes a feature and the
-agent needs to answer:
+Use the generated registry when a source, video, blog, repo, or ticket proposes
+a feature and the agent needs to answer:
 
 - does Farplane already have this?
 - where does it live?
@@ -13,19 +14,22 @@ agent needs to answer:
 - what limits or metrics should future work consider?
 
 Use `skills/harness-advisor/` when the operator is asking where a proposed
-Farplane improvement should live. That skill checks this registry for existing
-features before recommending a primary surface.
+Farplane improvement should live. That skill checks generated feature records
+for existing features before recommending a primary surface.
 
 `docs/specs/harness-techniques.md` remains the skimmable human inventory.
-`docs/features/registry.jsonl` is the queryable feature record for technique
-dedupe, provenance, and benchmark history. `docs/sources/registry.jsonl` is the
-source provenance registry; use `SRC-*` there to dedupe blogs, specs, videos,
-docs, and repos before deciding whether they introduce or update `FEAT-*`
-records.
+`docs/specs/feature-catalog.md` is the transitional spec-owned metadata source
+for cross-cutting or historical records. Prefer moving records into the
+smallest owning spec over adding new catalog-only entries.
+`docs/features/registry.jsonl` is the queryable generated feature record for
+technique dedupe, provenance, and benchmark history. `docs/sources/registry.jsonl`
+is the source provenance registry; use `SRC-*` there to dedupe blogs, specs,
+videos, docs, and repos before deciding whether they introduce or update
+`FEAT-*` records.
 
 ## Record Shape
 
-Each line in `registry.jsonl` is one JSON object:
+Each generated line in `registry.jsonl` is one JSON object:
 
 ```json
 {
@@ -67,22 +71,25 @@ Each line in `registry.jsonl` is one JSON object:
 
 ## Update Rules
 
-1. Add or update the registry when a shipped or planned harness technique needs
-   dedupe, provenance, or benchmark tracking.
+1. Add or update `feature_records_json` in the smallest owning spec when a
+   shipped or planned harness technique needs dedupe, provenance, or benchmark
+   tracking.
 2. Keep raw transcripts, bulky summaries, and one-off logs in `experiments/`,
-   not in the registry.
+   not in feature records.
 3. Link to ticket evidence instead of copying proof into the record.
 4. Keep `harness-techniques.md` synchronized at the category/status level, but
    do not duplicate every registry field there.
 5. When a source proposes a feature, use `harness-scout` to search
-   `docs/sources/registry.jsonl` first for source dedupe, then this registry
-   for feature dedupe before creating a new ticket.
+   `docs/sources/registry.jsonl` first for source dedupe, then generated feature
+   records for feature dedupe before creating a new ticket.
+6. Run `python3 docs/features/validate_features.py --write` after metadata
+   edits. Do not hand-edit `registry.jsonl`.
 
 ## Skill-Applicable Features
 
-Use this same registry for features that apply to Farplane skill packages.
-Set `category` to `skills` and keep the operational details in the feature row's
-`surfaces`, `evidence_refs`, `known_limits`, and `metrics`.
+Use the same generated registry for features that apply to Farplane skill
+packages. Set `category` to `skills` and keep the operational details in the
+feature row's `surfaces`, `evidence_refs`, `known_limits`, and `metrics`.
 
 Do not create a second hand-authored skill feature registry. The skill package
 inventory already lives in generated form at `docs/skills/registry.jsonl`, and
@@ -94,7 +101,7 @@ for the full self-growing harness map.
 
 ## ID Allocation
 
-1. Read all existing `id` values before adding a record.
+1. Read generated `id` values before adding a record.
 2. Pick the next unused numeric ID in `FEAT-####` form.
 3. Do not fill gaps without checking archived branches or tickets that may
    already reference the missing ID.
@@ -116,11 +123,14 @@ for the full self-growing harness map.
 
 ## Validation
 
-Run this before claiming registry edits are safe:
+Run this before claiming feature metadata edits are safe:
 
 ```bash
+python3 docs/features/validate_features.py --write
 python3 docs/features/validate_features.py
 ```
 
-The validator checks JSONL shape, ID uniqueness, allowed enum values, local
-surface/evidence existence, `SRC-*` source references, and date formats.
+The validator scans active specs for `feature_records_json`, writes or checks
+the generated JSONL, and validates shape, ID uniqueness, allowed enum values,
+local surface/evidence existence, `SRC-*` source references, date formats, and
+generated-output freshness.

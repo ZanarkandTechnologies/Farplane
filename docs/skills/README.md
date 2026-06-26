@@ -29,12 +29,12 @@ into a second place to maintain skill truth.
   owning registry correctness and generated audits, while `harness-advisor`
   consumes the broader map for placement decisions instead of owning the
   generator or UI.
-- Skill-applicable harness features live in
-  [`docs/features/registry.jsonl`](../features/registry.jsonl) with
-  `category: "skills"`. Versioned skill templates declare structural feature
-  IDs; individual skills declare local eval, QA checklist, and skill UI
-  surfaces. This folder owns the generated skill inventory, not a second
-  hand-authored skill feature registry.
+- Skill-applicable harness features are authored in spec `feature_records_json`
+  blocks with `category: "skills"` and generated into
+  [`docs/features/registry.jsonl`](../features/registry.jsonl). Versioned skill
+  templates declare structural feature IDs; individual skills declare local
+  eval, QA checklist, and skill UI surfaces. This folder owns the generated
+  skill inventory, not a second hand-authored skill feature registry.
 - `skills/<skill-name>/qa_checklist.md` is the optional first-class
   skill-local QA checklist for settled runtime guardrails. Keep it at the skill
   package root, not under `references/`, when agents should read it as
@@ -353,7 +353,8 @@ Use `skills/skill-maintenance/` for bulk tier, source, todo, registry, and
 consolidation work. Keep this module's docs as the registry contract; keep the
 step-by-step maintenance workflow in that skill.
 
-When skill standards or optional skill capabilities change, use
+When skill standards or optional skill capabilities change, update the owning
+spec `feature_records_json` block and regenerate
 [`docs/features/registry.jsonl`](../features/registry.jsonl) as the supported
 feature catalog. Skill template versions carry structural `FEAT-####` handles;
 skill packages carry only local surface fields for eval, QA checklist, and skill

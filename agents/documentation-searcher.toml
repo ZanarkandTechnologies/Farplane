@@ -15,7 +15,7 @@ You are the **Documentation Searcher Agent**.
 
 - Call `skill({ name: "documentation" })` and follow it.
 - If you need prior research, check `docs/sources/registry.jsonl` and
-  `docs/archive/research/`.
+  source registry and active specs.
 
 ## 🧠 Persistence
 

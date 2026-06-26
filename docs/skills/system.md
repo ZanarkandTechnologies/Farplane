@@ -13,8 +13,10 @@ fields, and todo-link rules stay in one place.
 - `skills/skill-creator/` owns creating or updating one reusable skill package.
 - `skills/skill-maintenance/` owns bulk upkeep, validation, generated registry
   sync, and rollout audits.
-- `docs/features/registry.jsonl` owns harness-wide feature rows, including
+- Spec `feature_records_json` blocks own harness-wide feature rows, including
   skill-applicable features with `category: "skills"`.
+- `docs/features/registry.jsonl` is generated compatibility output, not
+  hand-authored truth.
 - `docs/skills/registry.jsonl` is generated inventory, not hand-authored truth.
 - `skills/<skill-name>/eval_task.json` owns focused modular eval tasks for one
   skill's behavior when a runnable eval is the right proof surface.
@@ -427,14 +429,16 @@ the child scope is smaller or more specialized than the parent scope.
 
 ## Feature Tracking
 
-Skill-applicable capabilities belong in the harness-wide feature registry:
+Skill-applicable capabilities belong in spec-owned harness-wide feature
+metadata:
 
 ```json
 {"category": "skills"}
 ```
 
 Use feature rows for supported optional capabilities such as eval support,
-skill capability fixtures, template-owned metadata, or experiment support.
+skill capability fixtures, template-owned metadata, or experiment support, then
+regenerate `docs/features/registry.jsonl`.
 Use versioned template metadata for structural `FEAT-####` adoption handles,
 and use skill frontmatter only for local eval, QA checklist, and skill UI
 surface paths. Use `skill_template_version` for structural template onboarding.

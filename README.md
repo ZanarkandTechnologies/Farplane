@@ -194,7 +194,7 @@ flowchart LR
   ground --> decide["advise / placement<br/>choose owning surface"]:::surface
   decide --> change["skill, prompt, doc,<br/>validator, ticket, or agent"]:::surface
   change --> verify["tests, evals,<br/>QA, review"]:::proof
-  verify --> capture["lessons, hardcases,<br/>feature registry"]:::learn
+  verify --> capture["lessons, hardcases,<br/>generated feature index"]:::learn
   capture --> evals["regression evals<br/>or behavior tests"]:::proof
   evals --> change
 ```
@@ -209,8 +209,8 @@ flowchart LR
 | `assets/` | Repo-level media and generated assets. |
 | `bin/` | Hooks, runtime helpers, compatibility validator wrappers, launchers, and sync scripts. |
 | `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, tiers, and registries. |
-| `docs/` | Specs, feature inventory, history, memory, troubles, lessons, and research. |
-| `docs/features/` | Structured feature registry and feature metadata. |
+| `docs/` | Specs, generated feature index, history, memory, troubles, lessons, and durable research. |
+| `docs/features/` | Generated feature registry output and validation. |
 | `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |
 | `docs/specs/` | Buildable behavior contracts, lifecycle specs, runtime adapters, and proof gates. |
 | `experiments/` | Smoke runs, eval artifacts, prototypes, and temporary proof. |
@@ -231,8 +231,9 @@ flowchart LR
 - Prompt engineering: [docs/fundamentals/prompt-engineering.md](docs/fundamentals/prompt-engineering.md)
 - Self-growing harness map: [docs/specs/harness-techniques.md](docs/specs/harness-techniques.md#self-growing-harness-map)
 - Feature inventory: [harness-techniques.md](docs/specs/harness-techniques.md)
-- Structured feature registry: [docs/features/README.md](docs/features/README.md)
-- Feature registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)
+- Feature metadata source: [docs/specs/feature-catalog.md](docs/specs/feature-catalog.md)
+- Generated feature registry: [docs/features/README.md](docs/features/README.md)
+- Generated feature registry data: [docs/features/registry.jsonl](docs/features/registry.jsonl)
 - Skill guide: [docs/skills/README.md](docs/skills/README.md)
 - Skill best practices: [docs/skills/best-practices.md](docs/skills/best-practices.md)
 - Ticket contract: [tickets/README.md](tickets/README.md)

@@ -32,7 +32,7 @@ hand implementation to a Tier 3 skill such as `skill-maintenance`, `impl-plan`,
 
 ```text
 harness_place(gap_or_request, evidence?) -> placement_decision
-state: reads(harness doctrine, feature registry, skill registry, relevant surfaces); writes(ticket? handoff?)
+state: reads(harness doctrine, spec feature metadata, generated feature registry, skill registry, relevant surfaces); writes(ticket? handoff?)
 gates: failure_named; owner_surface:named; rejected_surfaces:named; proof_path:named
 routes: gap-analysis | eval | self-improve | skill-maintenance | impl-plan | spec-to-ticket | direct-answer
 fails: defaults to AGENTS.md; creates new skill before checking registry; recommends hooks for judgment-heavy work
@@ -48,8 +48,9 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
    - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for compact
      local evidence before recommending a surface.
    - [ ] Read `docs/fundamentals/harness-engineering-doctrine.md` for placement rules.
-   - [ ] Check `docs/features/registry.jsonl` for an existing or partial
-     harness feature before proposing a new feature.
+   - [ ] Check spec `feature_records_json` metadata and the generated
+     `docs/features/registry.jsonl` for an existing or partial harness feature
+     before proposing a new feature.
    - [ ] Check `docs/skills/registry.jsonl` for an existing skill, method,
      source owner, or consolidation target before proposing a new skill.
 - [ ] 3. Choose the decision depth.
@@ -124,7 +125,8 @@ Next ticket or owner:
   first, then load `docs/fundamentals/harness-algebra.md` only when the
   decision needs deeper optimization, budget, ensemble, or proof modeling.
 - Do not create a new skill before checking the existing skill registry.
-- Do not create a new feature row before checking the feature registry.
+- Do not create a new feature row before checking spec feature metadata and the
+  generated feature registry.
 - Do not use a hook or validator for judgment-heavy work that is not
   deterministic.
 - Do not treat a generated harness map as source of truth. It should summarize
@@ -152,8 +154,9 @@ Next ticket or owner:
 - `docs/fundamentals/harness-algebra.md` - operational harness-optimization
   model for loss terms, coordinates, proof signals, and accept/hold/rollback
   rules.
-- `docs/features/README.md` and `docs/features/registry.jsonl` - feature
-  dedupe, provenance, status, and evidence.
+- `docs/specs/feature-catalog.md`, `docs/features/README.md`, and
+  `docs/features/registry.jsonl` - feature dedupe, provenance, status, and
+  generated evidence output.
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` - generated skill
   inventory and skill selection guide.
 - `docs/fundamentals/prompt-engineering.md` - shared prompt contract for prompt-like

@@ -3,7 +3,7 @@ title: "Nested PM Projects"
 status: designed
 owner: project-pm-automation
 created_at: 2026-06-23
-updated_at: 2026-06-25
+updated_at: 2026-06-26
 tags:
   - farplane
   - nested-projects
@@ -12,7 +12,7 @@ tags:
 refs:
   - docs/farplane-framework/README.md
   - docs/farplane-framework/project-files.md
-  - docs/futureideas/autonomous-unit-filesystem.md
+  - docs/specs/minimal-autonomy-loop.md
   - docs/specs/goal-loop-contract.md
   - farplane/goals.md
 ---

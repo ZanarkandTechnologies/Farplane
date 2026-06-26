@@ -22,6 +22,8 @@ Documentation ownership:
 Canonical inventory specs:
 
 - `harness-techniques.md` - current-state feature and technique inventory.
+- `feature-catalog.md` - transitional spec-owned source for generated
+  `FEAT-*` records that do not yet have a smaller owning spec.
 - `filesystem-lifecycle.md` - lifecycle and drain rules for ledgers, tickets,
   registries, experiments, specs, and research.
 - `doc-governance.md` - structural versus narrative doc-audit policy.
@@ -116,9 +118,10 @@ Use `docs/fundamentals/` for reusable theory, doctrine, and best-practice
 contracts such as harness algebra, harness placement doctrine, and prompt
 engineering.
 
-Keep exploratory source comparison notes and one-off research in ticket or
-experiment artifacts. Historical research retained only for context belongs in
-`docs/archive/research/`.
+Keep exploratory source comparison notes and one-off research in ticket,
+experiment, or external temporary artifacts. Do not create tracked archive docs
+by default; superseded ideas should be folded into the nearest live spec or
+deleted.
 
 ## Doc Gardening Loop
 

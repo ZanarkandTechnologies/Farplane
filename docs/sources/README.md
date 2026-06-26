@@ -12,9 +12,11 @@ operator-provided source needs a durable answer to:
 - which `FEAT-*` records or tickets came from it?
 - did we adopt, adapt, reject, defer, or treat it as a duplicate?
 
-`docs/sources/registry.jsonl` tracks source provenance. `docs/features/registry.jsonl`
-tracks durable harness techniques. A single source can inform many features, and
-a single feature can synthesize many sources.
+`docs/sources/registry.jsonl` tracks source provenance. Spec
+`feature_records_json` blocks own durable harness techniques, and
+`docs/features/registry.jsonl` is the generated compatibility output. A single
+source can inform many features, and a single feature can synthesize many
+sources.
 
 ## Record Shape
 
@@ -76,8 +78,9 @@ Each line in `registry.jsonl` is one JSON object:
    out of this registry. Link to redacted scout artifacts instead.
 5. Link source records to `FEAT-*` records when durable techniques exist; link
    to tickets or research artifacts when a source is still only inspiration.
-6. Keep `docs/features/registry.jsonl` focused on harness techniques. Do not
-   copy source identity fields into feature records.
+6. Keep spec feature records focused on harness techniques. Do not copy source
+   identity fields into feature records, and regenerate
+   `docs/features/registry.jsonl` instead of hand-editing it.
 
 ## ID Allocation
 

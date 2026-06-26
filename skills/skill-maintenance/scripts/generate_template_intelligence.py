@@ -623,7 +623,7 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
         "caveats": [
             "Template evals are hidden research signals until real eval-run artifacts can be joined to template release windows.",
             "Git mining is a recovery path; future template changes should archive snapshots at change time.",
-            "Skill-applicable features remain owned by docs/features/registry.jsonl.",
+            "Skill-applicable features remain owned by spec feature_records_json metadata; docs/features/registry.jsonl is generated output.",
             "Template-level features are declared by the versioned skill template; skill rows expose local eval, QA checklist, and UI surfaces.",
         ],
         "epochs": summarize_epochs(snapshots, archive_paths),

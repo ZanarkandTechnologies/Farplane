@@ -11,8 +11,9 @@ This document is the repo's current-state feature inventory first. It is not a
 generic harness wishlist.
 
 For structured feature records, provenance, source references, known limits, and
-benchmark metrics, use `docs/features/registry.jsonl`. This Markdown inventory
-stays the skimmable human map.
+benchmark metrics, update spec `feature_records_json` metadata and regenerate
+`docs/features/registry.jsonl`. This Markdown inventory stays the skimmable
+human map.
 
 ## Status Legend
 
@@ -179,7 +180,8 @@ SelfGrowingHarness :=
 
 The owning surfaces are:
 
-- `docs/features/registry.jsonl`: supported harness feature catalog
+- Spec `feature_records_json`: supported harness feature catalog
+- `docs/features/registry.jsonl`: generated feature registry output
 - `docs/skills/registry.jsonl`: generated skill package inventory
 - `skills/skill-maintenance`: bulk skill upkeep, registry sync, and
   skill-system validation
@@ -197,7 +199,8 @@ The owning surfaces are:
 
 Feature rows are provenance and support records, not a substitute for tests,
 tickets, or review evidence. Use `feature_refs` in skill frontmatter only for
-compact `FEAT-####` handles already present in `docs/features/registry.jsonl`.
+compact `FEAT-####` handles already present in generated feature registry
+output.
 
 ## Canonical Companion Docs
 

@@ -18,7 +18,7 @@ You are the **External Librarian Agent**.
 - Call `skill({ name: "external-patterns" })` and follow it.
 - If you need prior research, check `docs/HISTORY.md`, `docs/MEMORY.md`,
   `docs/sources/registry.jsonl`, `docs/features/registry.jsonl`, and
-  `docs/archive/research/`.
+  source registry and active specs.
 
 ## Workflow
 

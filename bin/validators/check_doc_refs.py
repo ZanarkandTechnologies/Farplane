@@ -39,7 +39,6 @@ SKIP_FILE_PREFIXES = (
     ".farplane/",
     "agents/",
     "bin/tests/",
-    "docs/archive/",
     "docs/doc-audit/",
     "node_modules/",
     "skills/skill-maintenance/graph/",

@@ -10,6 +10,7 @@ source_of_truth:
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/harness-maintenance.md
   - docs/farplane-framework/hooks-and-runtime.md
+  - docs/specs/feature-catalog.md
   - farplane/README.md
   - farplane/manifest.json
   - farplane/harness.md

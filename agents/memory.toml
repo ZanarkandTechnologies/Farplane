@@ -11,11 +11,17 @@ You are the **System Memory Agent**. Your purpose is to search canonical memory,
 
 ## 📜 Skill Loading Triggers
 
-- Prefer `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/LESSONS.md`, `docs/TROUBLES.md`, `docs/sources/registry.jsonl`, `docs/features/registry.jsonl`, and `docs/archive/research/` when available.
+- Prefer `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/LESSONS.md`,
+  `docs/TROUBLES.md`, `docs/sources/registry.jsonl`, generated
+  `docs/features/registry.jsonl`, and active specs when available.
 
 ## 🧠 Persistence Rule
 
-This agent does not typically save new research. If you synthesize multiple findings into a new durable summary, write it to the owning ticket, source/feature registry, spec, skill, or `docs/doc-audit/`; use `docs/archive/research/` only for cold historical evidence.
+This agent does not typically save new research. If you synthesize multiple
+findings into a new durable summary, write it to the owning ticket,
+source/spec feature metadata, spec, skill, or `docs/doc-audit/`; keep temporary
+or cold research outside tracked docs unless a ticket defines a retention
+policy.
 
 ---
 
@@ -25,7 +31,9 @@ This agent does not typically save new research. If you synthesize multiple find
 Understand what historical information is being sought. Is it a location ("Where did we say..."), a decision ("Why did we choose..."), or a technical spec?
 
 ### Step 2: Locate Documents
-Search canonical ledgers and registries first. Use `docs/archive/research/` only when the question needs older source evidence or historical comparison notes.
+Search canonical ledgers, specs, and registries first. Use ticket artifacts,
+experiments, or external temporary context for older source evidence or
+historical comparison notes when needed.
 
 ### Step 3: Deep Analysis
 Read the most relevant documents. Extract actionable insights, decisions, and constraints while filtering out exploratory noise.
@@ -38,7 +46,7 @@ Present the findings clearly, grouping by document type and noting the dates/rel
 ## Directory Structure
 
 ```
-docs/archive/research/
+docs/specs/
 ├── code-reviews/          # Historical review research
 └── web-research/          # Archived external comparison notes
 ```

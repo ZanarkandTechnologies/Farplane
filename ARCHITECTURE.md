@@ -69,7 +69,7 @@ flowchart LR
   subgraph Knowledge["Durable Knowledge"]
     specs[(docs/specs/*<br/>behavior specs)]:::surface
     techniques[(harness-techniques.md<br/>current inventory)]:::surface
-    featureRegistry[(docs/features<br/>structured feature registry)]:::surface
+    featureRegistry[(docs/features<br/>generated feature index)]:::surface
     doctrine[(harness-engineering-doctrine.md<br/>surface routing)]:::surface
     memories[(HISTORY.md<br/>MEMORY.md<br/>TROUBLES.md<br/>LESSONS.md)]:::memory
   end
@@ -118,6 +118,7 @@ flowchart LR
   globalAgents -. installed policy .-> localAgents
   architecture --> specs
   architecture --> techniques
+  specs --> featureRegistry
   techniques --> featureRegistry
   doctrine -. placement decisions .-> intake
   globalAgents -. tiered skill contract .-> primitives
@@ -220,11 +221,13 @@ during cleanup unless the replacement carries the same routing information.
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
+- [docs/specs/feature-catalog.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/feature-catalog.md)
+  Purpose: transitional spec-owned source for generated `FEAT-*` records
 - [docs/specs/filesystem-lifecycle.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/filesystem-lifecycle.md)
   Purpose: lifecycle, read defaults, drain flows, and keep/delete rules for
   durable filesystem state
 - [docs/features/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/features/README.md)
-  Purpose: structured feature registry contract for dedupe, provenance, source
+  Purpose: generated feature registry contract for dedupe, provenance, source
   references, evidence links, known limits, and benchmark metrics
 - [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/feed-scout/SKILL.md)
   Purpose: tracked-profile monitoring recipe for discovering X, YouTube, and

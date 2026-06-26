@@ -3,13 +3,12 @@ title: "Farplane Project Memory"
 status: active
 owner: doc-governance
 created_at: 2026-03-26
-updated_at: 2026-06-23
+updated_at: 2026-06-26
 tags:
   - farplane
   - memory
   - promoted-decisions
 refs:
-  - docs/archive/memory/memory-ledger-2026-06-23.md
   - docs/specs/filesystem-lifecycle.md
   - skills/knowledge-tidier/SKILL.md
   - docs/HISTORY.md
@@ -24,8 +23,9 @@ a style guide, and not a ticket log. It keeps only high-value decisions that
 future Farplane work is likely to forget and would pay a real cost for getting
 wrong.
 
-Exact historical rows through 2026-06-23 are preserved in
-`docs/archive/memory/memory-ledger-2026-06-23.md`.
+Retired historical rows are intentionally not kept in tracked archive files.
+Promote durable decisions into this file, `docs/HISTORY.md`, or an owning spec;
+keep temporary research outside tracked docs.
 
 ## Admission Rule
 

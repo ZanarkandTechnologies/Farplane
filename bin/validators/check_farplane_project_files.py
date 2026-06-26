@@ -31,7 +31,6 @@ TEXT_SUFFIXES = {
 SKIP_PREFIXES = (
     ".git/",
     ".farplane/",
-    "docs/archive/",
     "node_modules/",
     "tickets/archive/",
 )

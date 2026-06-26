@@ -12,8 +12,8 @@ developer_instructions = """
 When working on specific features, load the appropriate skill:
 - **General Convex**: Call `skill({ name: "convex" })`.
 - **Payments/Email/Multiplayer**: Use the relevant references inside the `convex` skill.
-- **Memory**: Check `docs/HISTORY.md`, `docs/MEMORY.md`, registries, and
-  `docs/archive/research/` before repeating work.
+- **Memory**: Check `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/LESSONS.md`,
+  `docs/TROUBLES.md`, specs, and registries before repeating work.
 - **Occasional local UI smoke checks**: If needed, call `skill({ name: "agent-browser" })` or `skill({ name: "dev-browser" })` (otherwise delegate).
 
 ## Delegation rules (reduce context + improve quality)
@@ -56,8 +56,7 @@ You can delegate specialized tasks to subagents:
 - `documentation-searcher` - Fetch official Convex docs for deep dives
 - `librarian` - Find external patterns and examples from GitHub
 - `explore` - Analyze the local codebase for existing patterns
-- `memory` - Search docs memory, registries, and archived research for previous
-  decisions
+- `memory` - Search docs memory, specs, and registries for previous decisions
 
 ## Workflow
 

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Validate Farplane's feature registry."""
+"""Generate and validate Farplane's feature registry from spec metadata."""
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
@@ -13,6 +14,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = ROOT / "docs" / "features" / "registry.jsonl"
 SOURCE_REGISTRY = ROOT / "docs" / "sources" / "registry.jsonl"
+SPEC_ROOT = ROOT / "docs" / "specs"
 
 REQUIRED_FIELDS = {
     "id",
@@ -68,6 +70,67 @@ def load_source_ids() -> set[str]:
     return ids
 
 
+def extract_frontmatter(text: str, path: Path, errors: list[str]) -> str | None:
+    if not text.startswith("---\n"):
+        return None
+    end = text.find("\n---", 4)
+    if end == -1:
+        errors.append(f"{path.relative_to(ROOT)}: unterminated frontmatter")
+        return None
+    return text[4:end]
+
+
+def extract_block(frontmatter: str, key: str) -> str | None:
+    lines = frontmatter.splitlines()
+    for index, line in enumerate(lines):
+        if line.strip() != f"{key}: |":
+            continue
+        block: list[str] = []
+        for raw in lines[index + 1 :]:
+            if raw and not raw.startswith((" ", "\t")):
+                break
+            block.append(raw[2:] if raw.startswith("  ") else raw.lstrip())
+        return "\n".join(block).strip()
+    return None
+
+
+def spec_paths(root: Path = SPEC_ROOT) -> list[Path]:
+    return sorted(
+        path
+        for path in root.glob("*.md")
+        if path.name not in {"README.md", "AGENTS.md"}
+    )
+
+
+def load_spec_feature_records(root: Path = ROOT) -> tuple[list[dict[str, Any]], list[str]]:
+    errors: list[str] = []
+    records: list[dict[str, Any]] = []
+    specs_root = root / "docs" / "specs"
+
+    for path in spec_paths(specs_root):
+        text = path.read_text(encoding="utf-8")
+        frontmatter = extract_frontmatter(text, path, errors)
+        if frontmatter is None:
+            continue
+        raw_records = extract_block(frontmatter, "feature_records_json")
+        if raw_records is None:
+            continue
+        try:
+            parsed = json.loads(raw_records)
+        except json.JSONDecodeError as exc:
+            errors.append(f"{path.relative_to(root)}: invalid feature_records_json: {exc}")
+            continue
+        if not isinstance(parsed, list) or not all(isinstance(item, dict) for item in parsed):
+            errors.append(
+                f"{path.relative_to(root)}: feature_records_json must be a JSON array of objects"
+            )
+            continue
+        for record in parsed:
+            records.append(record)
+
+    return records, errors
+
+
 def require_string(record: dict[str, Any], field: str, feature_id: str, errors: list[str]) -> None:
     value = record.get(field)
     if not isinstance(value, str) or not value.strip():
@@ -103,24 +166,19 @@ def validate() -> list[str]:
     feature_ids: set[str] = set()
     source_ids = load_source_ids()
 
-    if not REGISTRY.exists():
-        return [f"{REGISTRY.relative_to(ROOT)}: missing registry"]
+    records, load_errors = load_spec_feature_records(ROOT)
+    errors.extend(load_errors)
+    if not records:
+        errors.append("docs/specs: no feature_records_json entries found")
+        return errors
 
-    for line_no, line in enumerate(REGISTRY.read_text(encoding="utf-8").splitlines(), 1):
-        if not line.strip():
-            continue
-        try:
-            record = json.loads(line)
-        except json.JSONDecodeError as exc:
-            errors.append(f"line {line_no}: invalid JSON: {exc}")
-            continue
-
+    for line_no, record in enumerate(records, 1):
         missing = REQUIRED_FIELDS - record.keys()
         extra = record.keys() - REQUIRED_FIELDS
         if missing:
-            errors.append(f"line {line_no}: missing fields: {sorted(missing)}")
+            errors.append(f"record {line_no}: missing fields: {sorted(missing)}")
         if extra:
-            errors.append(f"line {line_no}: unknown fields: {sorted(extra)}")
+            errors.append(f"record {line_no}: unknown fields: {sorted(extra)}")
 
         feature_id = record.get("id")
         if not isinstance(feature_id, str) or not FEATURE_ID_RE.match(feature_id):
@@ -155,16 +213,46 @@ def validate() -> list[str]:
         validate_local_refs(feature_id, "source_refs", source_refs, source_ids, errors)
         validate_local_refs(feature_id, "evidence_refs", evidence_refs, source_ids, errors)
 
+    generated = render_registry(records)
+    if REGISTRY.exists():
+        current = REGISTRY.read_text(encoding="utf-8")
+        if current != generated:
+            errors.append(
+                "docs/features/registry.jsonl is stale; run "
+                "python3 docs/features/validate_features.py --write"
+            )
+    else:
+        errors.append(f"{REGISTRY.relative_to(ROOT)}: missing generated registry")
+
     return errors
 
 
+def render_registry(records: list[dict[str, Any]]) -> str:
+    rows = sorted(records, key=lambda row: row.get("id", ""))
+    return "".join(json.dumps(row, separators=(",", ":"), ensure_ascii=False) + "\n" for row in rows)
+
+
+def write_registry() -> None:
+    records, errors = load_spec_feature_records(ROOT)
+    if errors:
+        raise SystemExit("\n".join(errors))
+    REGISTRY.write_text(render_registry(records), encoding="utf-8")
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--write", action="store_true", help="write generated registry")
+    args = parser.parse_args()
+
+    if args.write:
+        write_registry()
+
     errors = validate()
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1
     count = sum(1 for line in REGISTRY.read_text(encoding="utf-8").splitlines() if line.strip())
-    print(f"feature registry contract OK ({count} records)")
+    print(f"feature registry contract OK ({count} generated records)")
     return 0
 
 

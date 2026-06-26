@@ -14,6 +14,7 @@ tags:
 refs:
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/lifecycle.md
+  - docs/specs/feature-catalog.md
   - docs/features/registry.jsonl
   - docs/templates/registry.jsonl
   - docs/skills/README.md
@@ -36,10 +37,11 @@ harness_maintenance(repo_root, project_roots?)
    + CLI/UI payloads
 ```
 
-The important distinction: rollout, registry, graph, and CLI are separate
-layers. Registries own inventory truth. Rollout reports compare consumers
-against current templates or manifests. Graphs show relationships. CLI commands
-expose stable JSON payloads for humans and Farplane UI.
+The important distinction: source metadata, generated registries, rollout,
+graph, and CLI are separate layers. Specs own authored feature metadata.
+Generated registries expose queryable inventory. Rollout reports compare
+consumers against current templates or manifests. Graphs show relationships.
+CLI commands expose stable JSON payloads for humans and Farplane UI.
 
 ## Shared Services Boundary
 
@@ -70,7 +72,8 @@ UI route or CLI projection
 
 | Feature | Source Of Truth | Generated / Output Surface | Main Commands | Purpose |
 | --- | --- | --- | --- | --- |
-| Feature registry | `docs/features/registry.jsonl` | Feature rows grouped by ID, status, category, surfaces, refs, evidence, and limits | none direct; consumed by adoption and docs | Track what Farplane capabilities exist, where they live, and what remains limited. |
+| Feature metadata | `docs/specs/*` `feature_records_json`, currently concentrated in `docs/specs/feature-catalog.md` | Authored `FEAT-*` rows grouped near behavior contracts | `python3 docs/features/validate_features.py --write` | Track what Farplane capabilities exist, where they live, and what remains limited without hand-maintaining duplicate JSONL truth. |
+| Feature registry | `docs/features/registry.jsonl` | Generated feature rows grouped by ID, status, category, surfaces, refs, evidence, and limits | `python3 docs/features/validate_features.py` | Queryable compatibility output consumed by adoption and docs. |
 | Template registry | `docs/templates/registry.jsonl` | `path`-resolved template rows and template rollout rows | `python3 bin/validators/sync_template_registry.py --write` | Track high-impact templates, versions, feature refs, and consumer scopes. |
 | Project manifest adoption | `farplane/manifest.json` in each project plus the Farplane standard manifest | `farplane adoption scan --json` | `python3 bin/farplane.py adoption scan --project-root . --json` | Show project spec/template drift, local skill presence, and explicit or implied feature adoption. |
 | Skill registry | `skills/*/SKILL.md` front matter, direct todo lists, and Markdown links | `docs/skills/registry.jsonl` | `python3 bin/validators/sync_skill_registry.py --write` | Inventory skills without hand-maintaining a second registry. |
@@ -149,7 +152,7 @@ frontmatter, or update templates.
 ### Project Adoption / Feature Rollout
 
 ```text
-project_adoption(project_manifest, standard_manifest, feature_registry, template_registry)
+project_adoption(project_manifest, standard_manifest, generated_feature_registry, template_registry)
   -> project drift + explicit/implied feature adoption
 ```
 
@@ -288,6 +291,8 @@ source declarations
 Examples:
 
 - Skill frontmatter changes `docs/skills/registry.jsonl`.
+- Spec feature metadata changes `docs/features/registry.jsonl` through
+  `docs/features/validate_features.py --write`.
 - Template metadata changes `docs/templates/registry.jsonl`.
 - `template_uses` changes template rollout.
 - `skill_template_version` changes skill template rollout.
