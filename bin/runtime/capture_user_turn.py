@@ -14,6 +14,7 @@ from user_turn import (
     is_internal_user_prompt,
     normalize_user_turn,
     project_root_from_payload,
+    runtime_metadata_from_payload,
 )
 
 
@@ -42,6 +43,7 @@ def main() -> int:
     project_root = project_root_from_payload(payload)
     if project_root is None:
         return 0
+    runtime = runtime_metadata_from_payload(payload, prompt)
 
     captured = capture_user_turn(
         project_root=project_root,
@@ -50,6 +52,7 @@ def main() -> int:
         source="user_prompt_submit_hook",
         session_id=str(payload.get("session_id") or "").strip() or None,
         explicit_run_state=explicit_run_state_selector(payload) or None,
+        runtime=runtime,
     )
     session_id = str(payload.get("session_id") or "").strip()
     if captured is not None and session_id:
@@ -66,6 +69,7 @@ def main() -> int:
                 prompt,
                 turn_id=str(payload.get("turn_id") or "").strip() or None,
                 source="user_prompt_submit_hook",
+                runtime=runtime,
             ),
         )
     control_surfaces = extract_control_surfaces(prompt)

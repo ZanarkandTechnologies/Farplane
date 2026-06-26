@@ -221,14 +221,16 @@ during cleanup unless the replacement carries the same routing information.
 - [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
-- [docs/specs/feature-catalog.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/feature-catalog.md)
-  Purpose: transitional spec-owned source for generated `FEAT-*` records
+- [docs/systems/README.md](docs/systems/README.md)
+  Purpose: public system stack and authored source for `SYS-*` systems plus
+  `FEAT-*` capability handles
 - [docs/specs/filesystem-lifecycle.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/filesystem-lifecycle.md)
   Purpose: lifecycle, read defaults, drain flows, and keep/delete rules for
   durable filesystem state
 - [docs/features/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/features/README.md)
-  Purpose: generated feature registry contract for dedupe, provenance, source
-  references, evidence links, known limits, and benchmark metrics
+  Purpose: generated internal capability registry contract for dedupe,
+  provenance, source references, evidence links, known limits, and benchmark
+  metrics
 - [skills/feed-scout/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/feed-scout/SKILL.md)
   Purpose: tracked-profile monitoring recipe for discovering X, YouTube, and
   blog content, deduping canonical URLs in a content/proposal ledger, and

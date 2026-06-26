@@ -10,10 +10,10 @@ techniques it is likely to adopt next.
 This document is the repo's current-state feature inventory first. It is not a
 generic harness wishlist.
 
-For structured feature records, provenance, source references, known limits, and
-benchmark metrics, update spec `feature_records_json` metadata and regenerate
-`docs/features/registry.jsonl`. This Markdown inventory stays the skimmable
-human map.
+For structured system and capability records, provenance, source references,
+known limits, and benchmark metrics, update the owning `docs/systems/*.md`
+metadata and regenerate `docs/features/registry.jsonl`. This Markdown
+inventory stays the skimmable human map.
 
 ## Status Legend
 
@@ -33,6 +33,8 @@ This inventory is grounded in:
 - subagent prompts under `agents/`
 - `hooks.json` and `bin/stop_hook.py`
 - `docs/MEMORY.md`, `docs/TROUBLES.md`, and `docs/LESSONS.md`
+- `docs/systems/README.md`
+- `docs/systems/registry.jsonl`
 - `docs/features/registry.jsonl`
 - `docs/sources/registry.jsonl`
 
@@ -57,9 +59,9 @@ This inventory is grounded in:
 | Feature-gap research before implementation planning | Implemented | `skills/research#research:gap`, `skills/impl-plan`, `tickets/templates/ticket.md` | Grounds missing or parity-driven feature work in comparable apps, codebases, and official docs so tickets say what a production-grade version actually needs | depends on the available research tools and disciplined use of real comparables instead of intuition |
 | External parity research before local scoping | Implemented | `skills/research#research:parity`, `skills/research#research:gap`, `skills/functional-ui` | Grounds "what do peers include?" questions in comparable products, official docs, standards, and open-source repos before the work collapses into repo-specific scope | depends on good source selection and on keeping parity targets proportional instead of importing every adjacent premium feature |
 | Best-of-worlds synthesis | Implemented | `skills/best-of-worlds`, `skills/advise` | Lets agents compare a provided set of projects/repos/blogs, extract transferable features, discover metrics, and make adopt/adapt/reject/defer calls before implementation | depends on source quality and on agents recording decisions instead of copying every attractive feature |
-| Structured feature registry and source scouting | Implemented | `docs/features/registry.jsonl`, `docs/features/README.md`, `skills/harness-scout`, `experiments/harness-scout` | Gives source-ingestion passes stable feature IDs, dedupe, provenance, local match evidence, decision matrices, and manual scorecards before opening tickets | manual scorecards are judgment aids, not scientific benchmarks; no cron, feed polling, or async Codex benchmark runner yet |
-| Meta-harness automation map | Implemented | `docs/specs/harness-techniques.md`, `docs/specs/self-improvement-contracts.md`, `docs/features/registry.jsonl`, `docs/skills/registry.jsonl`, `skills/skill-maintenance` | Shows how Farplane tracks supported harness features, skill package inventory, skill maintenance, source ingestion, behavior tests, gap analysis, review, and durable memory as one self-growing loop | broad skill feature adoption remains manual/on-contact; current support is cataloged through feature rows and maintenance checks |
-| Filesystem lifecycle and drain routing | Implemented | `docs/specs/filesystem-lifecycle.md`, `ARCHITECTURE.md`, `docs/features/registry.jsonl` | Gives agents one router for which durable file to write, read, drain, archive, or delete without replacing owner docs | still relies on agents following owner docs for exact local rules |
+| Structured system/capability registry and source scouting | Implemented | `docs/systems/README.md`, `docs/systems/registry.jsonl`, `docs/features/registry.jsonl`, `docs/features/README.md`, `skills/harness-scout`, `experiments/harness-scout` | Gives source-ingestion passes stable system and feature IDs, dedupe, provenance, local match evidence, decision matrices, and manual scorecards before opening tickets | manual scorecards are judgment aids, not scientific benchmarks; no cron, feed polling, or async Codex benchmark runner yet |
+| Meta-harness automation map | Implemented | `docs/specs/harness-techniques.md`, `docs/specs/self-improvement-contracts.md`, `docs/systems/registry.jsonl`, `docs/features/registry.jsonl`, `docs/skills/registry.jsonl`, `skills/skill-maintenance` | Shows how Farplane tracks supported harness systems, skill package inventory, skill maintenance, source ingestion, behavior tests, gap analysis, review, and durable memory as one self-growing loop | broad skill capability adoption remains manual/on-contact; current support is cataloged through capability rows and maintenance checks |
+| Filesystem lifecycle and drain routing | Implemented | `docs/specs/filesystem-lifecycle.md`, `ARCHITECTURE.md`, `docs/systems/registry.jsonl`, `docs/features/registry.jsonl` | Gives agents one router for which durable file to write, read, drain, archive, or delete without replacing owner docs | still relies on agents following owner docs for exact local rules |
 | Frontend skill topology | Implemented | `skills/frontend-craft`, `skills/functional-ui`, `skills/visual-design`, `skills/landing-page`, `skills/frontend-design` | Keeps frontend work routed by job: implementation orchestration, UX/workflow redesign, visual taste/system direction, one-page/scrolltelling planning, and app-UI implementation references | depends on agents respecting the wrapper-plus-granular routing instead of treating every UI ask as styling |
 | Generated asset skill topology | Implemented | `skills/image-generation`, `skills/video-generation`, `skills/remotion-render`, installed `imagegen` | Keeps image and video assets as category-level routers with provider details in references, separates Remotion code-to-video from model-native video, and ties frontend-bound media back to asset provenance plus QA | external CLI runs are spend-sensitive and model schemas can change, so agents must capability-gate with the owning skill |
 | Metric advisor cards | Implemented | `skills/metric-advisor`, `skills/optimize-harness`, `skills/goal-advisor`, `skills/self-improve`, `docs/specs/self-improvement-contracts.md` | Gives eval recovery, Goal Packets, self-improvement, strategy, and ticket proof one reusable way to name an honest provider, primary metric, guard metrics, anti-metrics, and no-metric rationale | advisory only; callers still own execution, proof, review, and writeback |
@@ -168,7 +170,8 @@ memory rather than one hidden autonomy loop:
 
 ```text
 SelfGrowingHarness :=
-  FeatureRegistry
+  SystemRegistry
++ CapabilityRegistry
 + SkillRegistry
 + SkillMaintenance
 + SourceIngestion
@@ -180,8 +183,9 @@ SelfGrowingHarness :=
 
 The owning surfaces are:
 
-- Spec `feature_records_json`: supported harness feature catalog
-- `docs/features/registry.jsonl`: generated feature registry output
+- `docs/systems/*.md`: supported system and capability metadata source
+- `docs/systems/registry.jsonl`: generated public system registry output
+- `docs/features/registry.jsonl`: generated internal capability registry output
 - `docs/skills/registry.jsonl`: generated skill package inventory
 - `skills/skill-maintenance`: bulk skill upkeep, registry sync, and
   skill-system validation
@@ -197,17 +201,16 @@ The owning surfaces are:
   `docs/LESSONS.md`: durable timeline, invariants, pain logs, and distilled
   learning
 
-Feature rows are provenance and support records, not a substitute for tests,
-tickets, or review evidence. Use `feature_refs` in skill frontmatter only for
-compact `FEAT-####` handles already present in generated feature registry
-output.
+Capability rows are provenance and support records, not a substitute for tests,
+tickets, or review evidence. Use `feature_refs` in templates only for compact
+`FEAT-####` handles already present in generated capability registry output.
 
 ## Canonical Companion Docs
 
 - `harness-engineering-doctrine.md` for how to decide which harness surface should own a change
-- this file's Self-Growing Harness Map for how feature rows, skill inventory,
-  skill maintenance, source ingestion, evals, gap analysis, review, and durable
-  memory make Farplane self-growing
+- this file's Self-Growing Harness Map for how system/capability rows, skill
+  inventory, skill maintenance, source ingestion, evals, gap analysis, review,
+  and durable memory make Farplane self-growing
 - `invocation-and-adapters.md` for BoardAdapter, ComputeSelector, local Goal
   heartbeat, and future external-runner/shared-board ownership boundaries
 - `spec-authoring-contract.md` for PRD/spec/ticket split, spec depth decisions,

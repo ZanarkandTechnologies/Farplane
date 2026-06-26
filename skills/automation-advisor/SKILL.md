@@ -33,6 +33,23 @@ resolved by the called skill. Automation prompts should name `project_root`,
 the target skill, cadence, interval windows when relevant, and only the
 configuration a human expects to edit.
 
+When the target workflow is already a Codex skill, prefer the `$skill-name`
+operator-facing invocation over function-signature prose. Function signatures
+belong in `SKILL.md`; automation records should stay close to the operator
+instruction the Codex app actually runs.
+
+Current prompt template shape is `framework_template_version: "0.4.1"`:
+
+```text
+Use `$skill-name`.
+
+Params:
+project_root = "<project-root>"
+
+Overrides:
+only values this automation intentionally changes
+```
+
 ## Skill Signature
 
 ```text
@@ -57,6 +74,7 @@ state:
 
 gates:
   loop_choice_made; cadence_named; prompt_calls_skill_plainly;
+  config_source_owned_by_skill; no_skill_contract_duplication;
   side_effect_gates_named; dated_report_path_used; no_lane_manifest_required;
   no_hidden_scheduler_config
 
@@ -88,15 +106,22 @@ fails:
   - [ ] Put project-specific automation prompt text in
         `farplane/automations.md`.
   - [ ] Let Codex automation records own cadence.
+  - [ ] Let the called skill own its config contract and defaults; do not list
+        every env/config key in `farplane/automations.md` unless that specific
+        automation overrides a value.
   - [ ] Do not add a tracked scheduler config or runtime run ledger unless a
         separate ticket proves the need.
   - [ ] Do not enumerate auto-resolved canonical paths unless they are real
         project-specific extensions.
 - [ ] 4. Write or update the prompt.
   - [ ] Use the Pulse or Interval automation template as a starting point.
-  - [ ] Ensure the prompt calls the owning skill in plain operational language
+  - [ ] Ensure the prompt calls the owning skill in plain operational language,
+        preferably `$skill-name` when the skill is directly invocable,
         with only project-specific context refs, workflow flags, policies, or
         side-effect gates that humans should edit.
+  - [ ] Use the `Params` / `Overrides` layout from automation template `0.4.1`.
+  - [ ] Reject prompt prose that restates the called skill's scoring,
+        selection, proof, benchmark, output-shape, or safety contract.
   - [ ] Name side-effect gates and final state/report writebacks.
 - [ ] 5. Activate live Codex loops only when requested.
   - [ ] Do not create live threads or automations during passive planning or

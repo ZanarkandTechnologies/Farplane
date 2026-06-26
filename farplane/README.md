@@ -24,7 +24,7 @@ farplane/
   harness.md       # static human charter
   goals.md         # north star, KPIs, current milestone, holds
   products.md      # products and work lanes this team creates
-  automations.md   # exact Codex automation prompt blocks for Pulse and Intervals
+  automations.md   # exact Codex automation prompt blocks for Pulse, Intervals, and optional Taste Loop
   bindings.md      # non-secret project IDs, URLs, labels, aliases
   hooks.json       # declarative Farplane-native hook configuration
   pm.json          # optional UI thread manifest for one visual project PM
@@ -47,3 +47,12 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 ```
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
+
+## Official Heartbeat Presets
+
+- `Pulse`: drains ready tickets and records execution/reward state.
+- `Daily/Weekly Interval`: reviews recent state and plans the next window.
+- `Active-Hours Taste Loop`: optional human-feedback heartbeat that runs only
+  during configured active hours, ranks high-compounding skills with the
+  official Skill Compounding Score, and emits a feedback card or Goal Advisor
+  handoff without activating hidden workers or editing target skills directly.

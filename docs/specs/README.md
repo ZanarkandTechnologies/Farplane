@@ -14,16 +14,20 @@ Documentation ownership:
 
 - `README.md` is the public documentation router.
 - `ARCHITECTURE.md` owns the whole-system diagram and surface ownership map.
-- this file indexes canonical specs and the doc-gardening loop.
+- `docs/systems/README.md` owns the public system stack and generated
+  capability source contract.
+- this file indexes canonical behavior specs and the doc-gardening loop.
 - `docs/fundamentals/README.md` indexes conceptual foundations that are not
   themselves runtime/spec contracts.
 - `tickets/README.md` owns ticket metadata, lifecycle, and invocation policy.
 
-Canonical inventory specs:
+Canonical inventory and registry companions:
 
+- `../systems/README.md` - public system stack; edit `docs/systems/*.md` to
+  update system and capability metadata.
 - `harness-techniques.md` - current-state feature and technique inventory.
-- `feature-catalog.md` - transitional spec-owned source for generated
-  `FEAT-*` records that do not yet have a smaller owning spec.
+- `feature-catalog.md` - compatibility pointer for old references to the
+  pre-systems feature metadata source.
 - `filesystem-lifecycle.md` - lifecycle and drain rules for ledgers, tickets,
   registries, experiments, specs, and research.
 - `doc-governance.md` - structural versus narrative doc-audit policy.
@@ -80,6 +84,9 @@ Meta-harness specs:
 - `self-improvement-contracts.md` - canonical signatures for gap analysis,
   harness advising, eval capture, skill maintenance, self-improve,
   skill self-healing, and optimize-harness workflows.
+- `skill-compounding-score.md` - official ranking contract for choosing which
+  skills are highest-compounding improvement targets without confusing the
+  priority score with eval quality.
 
 Archived or superseded specs:
 
@@ -128,12 +135,13 @@ deleted.
 Run this loop when the public harness story changes:
 
 1. Run `python3 tickets/scripts/check_ticket_metadata.py`.
-2. Run `python3 bin/validators/check_harness_invariants.py`.
-3. Run `python3 bin/validators/check_doc_parity.py`.
-4. Run `python3 bin/validators/check_doc_refs.py`.
-5. Re-read `ARCHITECTURE.md`, `README.md`, `docs/specs/README.md`, `docs/specs/harness-techniques.md`, and `tickets/README.md` against the active ticket plus `docs/MEMORY.md` / `docs/HISTORY.md`.
-6. Use the `codex exec` narrative audit in `doc-governance.md` when the public story, implemented/proposed status, or canonical links changed.
-7. Patch only the canonical surfaces that drifted; keep README and
+2. Run `python3 docs/features/validate_features.py`.
+3. Run `python3 bin/validators/check_harness_invariants.py`.
+4. Run `python3 bin/validators/check_doc_parity.py`.
+5. Run `python3 bin/validators/check_doc_refs.py`.
+6. Re-read `ARCHITECTURE.md`, `README.md`, `docs/systems/README.md`, `docs/specs/README.md`, `docs/specs/harness-techniques.md`, and `tickets/README.md` against the active ticket plus `docs/MEMORY.md` / `docs/HISTORY.md`.
+7. Use the `codex exec` narrative audit in `doc-governance.md` when the public story, implemented/proposed status, or canonical links changed.
+8. Patch only the canonical surfaces that drifted; keep README and
    ARCHITECTURE synchronized when the whole-system map, shipped capability
    list, or roadmap cap changes.
-8. Re-run `python3 tickets/scripts/check_ticket_metadata.py`, `python3 bin/validators/check_harness_invariants.py`, `python3 bin/validators/check_doc_parity.py`, and `python3 bin/validators/check_doc_refs.py`.
+9. Re-run `python3 tickets/scripts/check_ticket_metadata.py`, `python3 docs/features/validate_features.py`, `python3 bin/validators/check_harness_invariants.py`, `python3 bin/validators/check_doc_parity.py`, and `python3 bin/validators/check_doc_refs.py`.

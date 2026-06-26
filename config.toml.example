@@ -50,6 +50,24 @@ FARPLANE_SKILL_OPPORTUNITY_RECENT_SESSIONS = "5"
 FARPLANE_SKILL_OPPORTUNITY_NOTION_TAG = "agent self improvement"
 FARPLANE_SKILL_OPPORTUNITY_NOTION_STATUS = "Review"
 # FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN = "1"
+# Active-hours Taste Loop heartbeat. This optional official Farplane heartbeat
+# selects high-compounding product and money-making skills with the official
+# Skill Compounding Score, then emits local feedback cards or Goal handoffs.
+# These values are config only; `farplane/automations.md` owns the reviewed
+# Codex automation prompt and live activation remains explicit.
+FARPLANE_TASTE_LOOP_ENABLED = "1"
+FARPLANE_TASTE_LOOP_TIMEZONE = "Asia/Kuala_Lumpur"
+FARPLANE_TASTE_LOOP_ACTIVE_DAYS = "Mon,Tue,Wed,Thu,Fri"
+FARPLANE_TASTE_LOOP_ACTIVE_START = "10:00"
+FARPLANE_TASTE_LOOP_ACTIVE_END = "18:00"
+FARPLANE_TASTE_LOOP_TOP_N = "3"
+FARPLANE_TASTE_LOOP_MAX_ACTIONS_PER_BEAT = "1"
+FARPLANE_TASTE_LOOP_MAX_OPEN_FEEDBACK = "3"
+FARPLANE_TASTE_LOOP_TARGET_GROUPS = "content-social,content-video,frontend,harness,self-improvement"
+FARPLANE_TASTE_LOOP_OUTPUT_CHANNELS = "local_report,telegram_ready,farplane_ui_ready"
+FARPLANE_TASTE_LOOP_COOLDOWN_HOURS = "24"
+FARPLANE_TASTE_LOOP_CONVERGENCE_WINDOW = "5"
+FARPLANE_TASTE_LOOP_MINIMUM_DELTA = "qualitative_threshold"
 # Optional explicit force-on for Farplane hook behavior. The Stop hook also
 # auto-activates from clear runtime context such as `.farplane/`, `tickets/`,
 # `IMPL_RESULT`, or explicit ticket selectors.

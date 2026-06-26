@@ -37,8 +37,8 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Edit
   tracked files unless the user explicitly approves more.
 - [ ] Extract concrete feature candidates and copied-skill candidates, not
   generic themes.
-- [ ] Search spec feature metadata and generated `docs/features/registry.jsonl`
-  before declaring anything new.
+- [ ] Search `docs/systems/*.md`, generated `docs/systems/registry.jsonl`, and
+  generated `docs/features/registry.jsonl` before declaring anything new.
 - [ ] Search local docs, skills, memory, troubles, lessons, tickets, README, and
   ARCHITECTURE for matching behavior.
 - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
@@ -57,8 +57,9 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Edit
 - [ ] Create an [impl-plan](../impl-plan/SKILL.md) handoff only for strong
   `adopt` or `adapt` items.
 - [ ] Keep raw transcripts and bulky logs out of canonical docs.
-- [ ] Update spec feature metadata only for durable feature knowledge, then
-  regenerate `docs/features/registry.jsonl`.
+- [ ] Update system capability metadata only for durable feature knowledge,
+  then regenerate `docs/systems/registry.jsonl` and
+  `docs/features/registry.jsonl`.
 - [ ] Update or create the matching `SRC-*` record with local artifacts,
   feature refs, and the final adopt/adapt/reject/defer/duplicate decision.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -188,8 +189,8 @@ needed; use [summarize](../summarize/SKILL.md) directly.
    `experiments/harness-scout/runs/<date-slug>/`.
 10. **Extract feature candidates:** list concrete features, workflows,
     guardrails, metrics, architecture claims, and operational practices.
-11. **Dedupe locally:** search spec feature metadata,
-   `docs/features/registry.jsonl`,
+11. **Dedupe locally:** search `docs/systems/*.md`,
+   `docs/systems/registry.jsonl`, `docs/features/registry.jsonl`,
    `docs/specs/harness-techniques.md`, `README.md`, `ARCHITECTURE.md`,
    `skills/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`, `docs/LESSONS.md`, and tickets. Use
    [codebase-analysis](../codebase-analysis/SKILL.md) when the local match
@@ -252,8 +253,9 @@ Use [advise](../advise/SKILL.md) when these cannot be answered mechanically:
 - Is this feature a must-have, useful adaptation, or distracting parity bait?
 - Is the source credible enough to influence Farplane now?
 - Does the manual scorecard provide enough confidence to ticket the change?
-- Should the idea update spec feature metadata and regenerate
-  `docs/features/registry.jsonl`, or stay only in a source-run experiment?
+- Should the idea update system capability metadata and regenerate
+  `docs/systems/registry.jsonl` / `docs/features/registry.jsonl`, or stay only
+  in a source-run experiment?
 - Does the proposed ticket stay one coherent build-and-proof loop?
 
 ## Top Gotchas
@@ -292,8 +294,9 @@ A completed scout pass leaves:
 - `scorecard.md` when benchmark comparison is relevant
 - optional project comparison matrix when multiple sources are compared
 - optional `handoff.md` for adopted/adapted features
-- updated spec feature metadata and regenerated `docs/features/registry.jsonl`
-  only when the source changes durable feature knowledge
+- updated system capability metadata and regenerated `docs/systems/registry.jsonl`
+  / `docs/features/registry.jsonl` only when the source changes durable
+  feature knowledge
 - no raw transcript in canonical docs
 
 ## References

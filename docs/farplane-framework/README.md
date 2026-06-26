@@ -10,7 +10,9 @@ source_of_truth:
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/harness-maintenance.md
   - docs/farplane-framework/hooks-and-runtime.md
-  - docs/specs/feature-catalog.md
+  - docs/systems/README.md
+  - docs/systems/registry.jsonl
+  - docs/features/registry.jsonl
   - farplane/README.md
   - farplane/manifest.json
   - farplane/harness.md
@@ -55,9 +57,9 @@ by tools or the Farplane UI. It defines the node, edge, confidence, and finite
 state projection model used by the generated lifecycle graph.
 
 Use [Harness Maintenance Features](harness-maintenance.md) when you need to
-remember which maintenance systems exist: feature and template registries,
-skill OS checks, template rollout, project adoption, graph projections, evals,
-doc tracking, and CLI/UI payloads.
+remember which maintenance systems exist: system and capability registries,
+template registries, skill OS checks, template rollout, project adoption, graph
+projections, evals, doc tracking, and CLI/UI payloads.
 
 Use the Farplane UI product model in
 [`../Farplane-UI/docs/specs/FP02-harness-product-model.md`](../../../Farplane-UI/docs/specs/FP02-harness-product-model.md)

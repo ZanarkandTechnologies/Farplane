@@ -32,7 +32,7 @@ hand implementation to a Tier 3 skill such as `skill-maintenance`, `impl-plan`,
 
 ```text
 harness_place(gap_or_request, evidence?) -> placement_decision
-state: reads(harness doctrine, spec feature metadata, generated feature registry, skill registry, relevant surfaces); writes(ticket? handoff?)
+state: reads(harness doctrine, system/capability metadata, generated registries, skill registry, relevant surfaces); writes(ticket? handoff?)
 gates: failure_named; owner_surface:named; rejected_surfaces:named; proof_path:named
 routes: gap-analysis | eval | self-improve | skill-maintenance | impl-plan | spec-to-ticket | direct-answer
 fails: defaults to AGENTS.md; creates new skill before checking registry; recommends hooks for judgment-heavy work
@@ -48,9 +48,10 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
    - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for compact
      local evidence before recommending a surface.
    - [ ] Read `docs/fundamentals/harness-engineering-doctrine.md` for placement rules.
-   - [ ] Check spec `feature_records_json` metadata and the generated
-     `docs/features/registry.jsonl` for an existing or partial harness feature
-     before proposing a new feature.
+   - [ ] Check `docs/systems/*.md` metadata and the generated
+     `docs/systems/registry.jsonl` / `docs/features/registry.jsonl` for an
+     existing or partial harness system or capability before proposing a new
+     feature.
    - [ ] Check `docs/skills/registry.jsonl` for an existing skill, method,
      source owner, or consolidation target before proposing a new skill.
 - [ ] 3. Choose the decision depth.
@@ -65,8 +66,8 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
    - [ ] Consider repo `AGENTS.md`, `templates/global/AGENTS.md`, generated
      project templates, `docs/fundamentals/*`, `docs/specs/*`, `skills/*`,
      `agents/*.toml`, hooks or scripts under `bin/`, ticket contracts,
-     validators, feature registry, skill registry, and generated harness-map
-     metadata.
+     validators, system/capability registries, skill registry, and generated
+     harness-map metadata.
    - [ ] Load `docs/fundamentals/prompt-engineering.md` when the recommendation creates or
      changes any prompt-like template, subagent brief, skill contract, ticket
      template, eval judge, delegated CLI prompt, or AI app behavior prompt.
@@ -125,8 +126,8 @@ Next ticket or owner:
   first, then load `docs/fundamentals/harness-algebra.md` only when the
   decision needs deeper optimization, budget, ensemble, or proof modeling.
 - Do not create a new skill before checking the existing skill registry.
-- Do not create a new feature row before checking spec feature metadata and the
-  generated feature registry.
+- Do not create a new capability row before checking system metadata and the
+  generated system/capability registries.
 - Do not use a hook or validator for judgment-heavy work that is not
   deterministic.
 - Do not treat a generated harness map as source of truth. It should summarize
@@ -154,9 +155,9 @@ Next ticket or owner:
 - `docs/fundamentals/harness-algebra.md` - operational harness-optimization
   model for loss terms, coordinates, proof signals, and accept/hold/rollback
   rules.
-- `docs/specs/feature-catalog.md`, `docs/features/README.md`, and
-  `docs/features/registry.jsonl` - feature dedupe, provenance, status, and
-  generated evidence output.
+- `docs/systems/README.md`, `docs/features/README.md`,
+  `docs/systems/registry.jsonl`, and `docs/features/registry.jsonl` - system
+  and capability dedupe, provenance, status, and generated evidence output.
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` - generated skill
   inventory and skill selection guide.
 - `docs/fundamentals/prompt-engineering.md` - shared prompt contract for prompt-like

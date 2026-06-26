@@ -1,6 +1,6 @@
 ---
 kind: project-automations
-framework_template_version: "0.4.0"
+framework_template_version: "0.4.1"
 updated_at: YYYY-MM-DD
 owner: automation-advisor
 ---
@@ -8,9 +8,9 @@ owner: automation-advisor
 # Project Automations
 
 This file stores the exact Codex automation prompt blocks for the project.
-Prompts configure cadence, project root, thread IDs, and project-specific
-extensions only. Reusable loop behavior lives in `pulse-update` and
-`interval-update`.
+Prompts configure cadence metadata, the target `$skill`, visible `Params`, and
+intentional `Overrides` only. Reusable config contracts, defaults, gates,
+report shapes, and workflow behavior live in the called skill.
 
 ## Pulse
 
@@ -22,24 +22,18 @@ extensions only. Reusable loop behavior lives in `pulse-update` and
 | RRULE | `FREQ=MINUTELY;INTERVAL=30` |
 | Target thread | `<pulse-thread-id>` |
 
+Use `$pulse-update`.
+
+Params:
+
 ```text
-Run one Project Pulse beat.
+project_root = "<project-root>"
+```
 
-Call:
-- `pulse_update(project_root="<project-root>")`
+Overrides:
 
-Project extensions: none.
-
-Project gates:
-- no push, deploy, publish, spend, account changes, or destructive cleanup.
-- no drift review, scrum reflection, or strategy replanning.
-
-Final output:
-- execution mode
-- reward updates
-- child thread IDs or planning request
-- report/state paths
-- evidence that will decide the next reward update
+```text
+none
 ```
 
 ## Daily Interval
@@ -52,33 +46,25 @@ Final output:
 | RRULE | `FREQ=DAILY;BYHOUR=5;BYMINUTE=33;BYSECOND=0` |
 | Workspace | `<project-root>` |
 
+Use `$interval-update`.
+
+Params:
+
 ```text
-Run the Project Daily Interval.
+project_root = "<project-root>"
+interval_id = "daily_interval"
+review_window = "last_24h"
+planning_window = "next_24h"
+timezone = "<timezone>"
+```
 
-Call:
-- `interval_update(project_root="<project-root>", interval_id="daily_interval", review_window="last_24h", planning_window="next_24h", timezone="<timezone>")`
+Overrides:
 
-Project context:
-- read the latest `weekly_interval` report when it exists.
-
-Project workflows:
-- `plan_progress`: light.
-- `goal_drift`: light.
-- `ticket_board_drift`: light.
-
-Project gates:
-- report before mutation.
-- source gaps instead of guessed refs.
-- no scheduler state writes.
-- no push, deploy, publish, spend, external mutation, commit, unbounded worker
-  spawning, or destructive cleanup.
-
-Final output:
-- dated report path
-- next-24-hour plan
-- Pulse guidance
-- proposed ticket deltas or Goal Advisor handoffs
-- approval-required goals delta, if any
+```text
+read_parent_interval = "latest weekly_interval report when present"
+plan_progress = "light"
+goal_drift = "light"
+ticket_board_drift = "light"
 ```
 
 ## Weekly Interval
@@ -91,46 +77,32 @@ Final output:
 | RRULE | `FREQ=WEEKLY;BYDAY=MON;BYHOUR=5;BYMINUTE=45;BYSECOND=0` |
 | Workspace | `<project-root>` |
 
+Use `$interval-update`.
+
+Params:
+
 ```text
-Run the Project Weekly Interval.
+project_root = "<project-root>"
+interval_id = "weekly_interval"
+review_window = "last_week"
+planning_window = "next_week"
+timezone = "<timezone>"
+```
 
-Call:
-- `interval_update(project_root="<project-root>", interval_id="weekly_interval", review_window="last_week", planning_window="next_week", timezone="<timezone>")`
+Overrides:
 
-Project context:
-- read all `daily_interval` reports inside `last_week`.
-
-Project workflows:
-- `plan_progress`: true.
-- `codex_attention_drift`: true.
-- `ticket_board_drift`: true.
-- `feedback_obligations`: when sources exist.
-- `opportunity_signals`: when sources exist.
-- `goal_drift`: true.
-- `metric_snapshot`: when sources exist.
-- `compounding_leverage_review`: true.
-- `skill_hardening`: true.
-- `skill_refinement`: when sources exist.
-- `docs_consolidation`: when sources exist.
-- `priority_planning`: true.
-
-Project gates:
-- report before mutation.
-- approval required for static charter, north-star, KPI, strategy-axis,
-  quarterly/yearly, durable milestone, and hold changes.
-- urgent leverage escalation requires high confidence, explicit loss term,
-  evidence refs, review-by date, and owner route.
-- source gaps instead of guessed refs.
-- no scheduler state writes.
-- no push, deploy, publish, spend, external mutation, commit, unbounded worker
-  spawning, or destructive cleanup.
-
-Final output:
-- dated report path
-- next-week plan
-- lane distribution and ticket budget
-- Pulse guidance
-- proposed ticket deltas or Goal Advisor handoffs
-- approval-required goals delta, if any
-- leverage decisions and reward closure
+```text
+read_child_intervals = "all daily_interval reports inside last_week"
+plan_progress = true
+codex_attention_drift = true
+ticket_board_drift = true
+feedback_obligations = "when sources exist"
+opportunity_signals = "when sources exist"
+goal_drift = true
+metric_snapshot = "when sources exist"
+compounding_leverage_review = true
+skill_hardening = true
+skill_refinement = "when sources exist"
+docs_consolidation = "when sources exist"
+priority_planning = true
 ```

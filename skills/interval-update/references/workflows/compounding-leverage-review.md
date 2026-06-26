@@ -41,8 +41,8 @@ compounding_leverage_review(context_bundle, review_window, planning_window,
 
 state: reads(context_bundle, harness_ref, goals_ref, tickets, pulse_reports,
              interval_reports, docs/LESSONS.md?, docs/TROUBLES.md?,
-             spec feature metadata?, docs/features/registry.jsonl?,
-             docs/skills/registry.jsonl?);
+             docs/systems/*.md?, docs/systems/registry.jsonl?,
+             docs/features/registry.jsonl?, docs/skills/registry.jsonl?);
        writes(parent_interval_update_report_section)
 gates: loss_term_named; evidence_cited; 1_to_3_bets_only;
        owner_surface_named; proof_or_reward_signal_named;
@@ -67,14 +67,15 @@ Default sources from the context bundle:
   worker evidence.
 - `docs/LESSONS.md` and `docs/TROUBLES.md` for repeated misses and fixed
   lessons.
-- recently created or changed skills, spec feature records, generated feature
-  registry rows, eval results, review findings, tickets, reports, and explicitly
-  supplied external source refs.
+- recently created or changed skills, system/capability records, generated
+  registry rows, eval results, review findings, tickets, reports, and
+  explicitly supplied external source refs.
 
 Optional sources:
 
-- Spec feature metadata, `docs/features/registry.jsonl`, and
-  `docs/skills/registry.jsonl` when present.
+- System specs, `docs/systems/registry.jsonl`,
+  `docs/features/registry.jsonl`, and `docs/skills/registry.jsonl` when
+  present.
 - Eval, review, QA, or telemetry refs when already loaded by the interval.
 - Workflow findings from plan progress, goal drift, ticket board drift,
   attention drift, metrics, feedback, and opportunities.

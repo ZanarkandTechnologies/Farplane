@@ -86,8 +86,8 @@ Surface-specific schemas may add or replace fields:
 
 - skill files use their existing `SKILL.md` front matter contract
 - ticket files use the ticket template metadata contract
-- generated feature registry output stays JSONL, while authored feature records
-  live in spec front matter
+- generated system and feature registry outputs stay JSONL, while authored
+  system and capability records live in `docs/systems/*.md` front matter
 - source registries stay JSONL
 - research artifacts may add `source_refs`, `method`, `confidence`, or
   `decision`
@@ -108,10 +108,11 @@ body section, redacted artifact, or private local context.
 | `docs/LESSONS.md` | distilled post-fix learning | review, eval, trouble-drain, or self-improvement pass produced a reusable lesson | `tail -n 30` plus `rg` by area | promote into skills, prompts, evals, `docs/MEMORY.md`, or tickets; archive solved noise when needed | review / self-improve / doc governance |
 | `tickets/TASK-*/ticket.md` | active task memory | planned or active work | selected active ticket only | archive after closeout and durable writeback | ticket workflow |
 | `tickets/TASK-*/artifacts/` | task-scoped proof | QA, review, demo, smoke, or implementation evidence | linked from ticket evidence | keep with ticket archive; do not promote bulky proof into docs | ticket workflow |
-| `docs/specs/* feature_records_json` | authored harness feature metadata | feature is shipped, planned, partial, retired, or needs dedupe | owning spec or `docs/specs/feature-catalog.md` | update status, evidence, limits, or mark retired; do not delete stable IDs | doc governance / feature metadata |
-| `docs/features/registry.jsonl` | generated harness feature inventory | generated from active spec metadata | query by feature/status/surface | regenerate with `python3 docs/features/validate_features.py --write`; do not hand-edit | feature registry generator |
+| `docs/systems/*.md` | authored system and capability metadata | public system or stable `FEAT-*` capability is shipped, planned, partial, retired, or needs dedupe | owning system spec | update system summary, capability status, evidence, limits, or mark retired; do not delete stable IDs | doc governance / system metadata |
+| `docs/systems/registry.jsonl` | generated public system inventory | generated from system specs | query by system/status/primary capability | regenerate with `python3 docs/features/validate_features.py --write`; do not hand-edit | system registry generator |
+| `docs/features/registry.jsonl` | generated internal capability inventory | generated from system specs | query by feature/status/surface/template/source | regenerate with `python3 docs/features/validate_features.py --write`; do not hand-edit | feature registry generator |
 | `docs/sources/registry.jsonl` | external source provenance | source is ingested or reused | query by URL/key/source ID | mark archived, superseded, or sensitive-redacted; keep canonical IDs | harness-scout |
-| `experiments/harness-scout/runs/` | source-ingestion evidence | source run, scorecard, decision matrix, handoff | only when linked by source/feature/ticket | promote compact outcomes to source/feature registry or tickets; delete/redact unsafe bulky extracts | harness-scout |
+| `experiments/harness-scout/runs/` | source-ingestion evidence | source run, scorecard, decision matrix, handoff | only when linked by source/capability/ticket | promote compact outcomes to source or capability registry, or to tickets; delete/redact unsafe bulky extracts | harness-scout |
 | `experiments/hardcases/` | temporary sanitized benchmark seeds | deterministic validators or legacy captures leave a clear contract violation before it becomes a runnable eval row | only when building evals or self-improvement | promote into eval fixtures with hardcase metadata; archive or delete stale standalone seeds once covered | self-improve / eval / validators |
 | other `experiments/` | scratch proof, smoke runs, prototype evidence | bounded experiment or temporary proof | only when linked by ticket/source/feature | promote outcome or delete/archive stale scratch evidence | owning skill |
 | `docs/specs/*.md` | current behavior contracts | stable feature, doctrine, schema, lifecycle, or execution flow | spec index first, then relevant file | merge duplicates, delete superseded plans, move skill-owned contracts to skills | doc governance |
@@ -136,9 +137,9 @@ Run a weekly or periodic drain when the ledgers stop being easy to use:
    rules that are current and worth consulting.
 4. Review `docs/HISTORY.md` only for admission quality. Do not drain ordinary
    history into actions; archive eras only if file size hurts usability.
-5. Validate generated feature records and `docs/sources/registry.jsonl`; fix
-   missing refs, mark stale rows superseded in spec metadata, or open cleanup
-   tickets.
+5. Validate generated system and feature records plus
+   `docs/sources/registry.jsonl`; fix missing refs, mark stale capability rows
+   retired in the owning system spec, or open cleanup tickets.
 
 Promote only the smallest durable rule needed. If a rule must affect every turn,
 put it in the always-loaded owner surface such as `AGENTS.md`,
@@ -155,7 +156,7 @@ flowchart TD
     L --> M["docs/MEMORY.md<br/>stable invariant"]
     HC["experiments/hardcases/<br/>sanitized hard tasks"] --> E["eval fixtures / self-improve"]
     HS["experiments/harness-scout/runs/<br/>source evidence"] --> SR["docs/sources registry"]
-    HS --> FR["spec feature metadata<br/>generated feature registry"]
+    HS --> FR["system specs<br/>generated capability registry"]
     TK --> A["tickets/archive<br/>after closeout"]
 ```
 

@@ -9,7 +9,8 @@
 4. Redact private or sensitive extracts before writing tracked files.
 5. Create or update a run folder under `experiments/harness-scout/runs/`.
 6. Extract concrete feature candidates.
-7. Search spec feature metadata, generated `docs/features/registry.jsonl`, and nearby local docs/skills; use
+7. Search `docs/systems/*.md`, generated `docs/systems/registry.jsonl`,
+   generated `docs/features/registry.jsonl`, and nearby local docs/skills; use
    [codebase-analysis](../../codebase-analysis/SKILL.md) when the match depends
    on local implementation behavior.
 8. Use [external-patterns](../../external-patterns/SKILL.md) or
@@ -27,8 +28,8 @@
 2. Normalize duplicate feature candidates.
 3. Build a project comparison matrix when feature support differs by source.
 4. Use [best-of-worlds](../../best-of-worlds/SKILL.md) for synthesis.
-5. Update the source registry for provenance and spec feature metadata only for
-   durable local feature knowledge, then regenerate the feature registry.
+5. Update the source registry for provenance and system capability metadata
+   only for durable local feature knowledge, then regenerate the registries.
 6. Ticket only the chosen now-scope.
 
 ## Benchmark Scorecard

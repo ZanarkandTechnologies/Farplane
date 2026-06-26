@@ -319,3 +319,6 @@
 2026-06-25 00:00 +0800 | MIGRATION | make `~/.farplane/config.toml` the canonical Farplane runtime config source while keeping legacy JSON, rendered Codex TOML, and env-file fallbacks for older installs
 2026-06-25 00:00 +0800 | MIGRATION | rename the public project setup skill from `deep-init-project` to `init-advisor`, move the critical-path docs and generated registries/graphs, and keep `harness-creator` as the full operating-model advisor
 2026-06-26 00:00 +0800 | SKILL | add `metric-advisor` as the metric-card primitive for eval recovery, Goal Packets, self-improvement, and proof contracts, then remove the old `autoresearch-plan` and `autoresearch-exec` skill packages from active routing
+2026-06-26 00:00 +0800 | FEAT | add `taste-loop` as a Codex-native active-hours heartbeat prompt for selecting high-compounding skills and emitting local feedback cards or Goal Advisor handoffs from `FARPLANE_TASTE_LOOP_*` config
+2026-06-26 00:00 +0800 | DOCS | promote `taste-loop` into the official optional Farplane framework heartbeat preset with score-breakdown, existing skill-heat/product-lane reuse, metric-advisor routing, and no-fake-benchmark guardrails
+2026-06-26 17:14 +0800 | DOCS | make Skill Compounding Score the official skill-prioritization contract and route Taste Loop ranking through it

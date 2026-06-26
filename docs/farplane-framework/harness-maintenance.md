@@ -14,7 +14,8 @@ tags:
 refs:
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/lifecycle.md
-  - docs/specs/feature-catalog.md
+  - docs/systems/README.md
+  - docs/systems/registry.jsonl
   - docs/features/registry.jsonl
   - docs/templates/registry.jsonl
   - docs/skills/README.md
@@ -38,10 +39,11 @@ harness_maintenance(repo_root, project_roots?)
 ```
 
 The important distinction: source metadata, generated registries, rollout,
-graph, and CLI are separate layers. Specs own authored feature metadata.
-Generated registries expose queryable inventory. Rollout reports compare
-consumers against current templates or manifests. Graphs show relationships.
-CLI commands expose stable JSON payloads for humans and Farplane UI.
+graph, and CLI are separate layers. System specs own authored system and
+capability metadata. Generated registries expose queryable inventory. Rollout
+reports compare consumers against current templates or manifests. Graphs show
+relationships. CLI commands expose stable JSON payloads for humans and
+Farplane UI.
 
 ## Shared Services Boundary
 
@@ -72,8 +74,10 @@ UI route or CLI projection
 
 | Feature | Source Of Truth | Generated / Output Surface | Main Commands | Purpose |
 | --- | --- | --- | --- | --- |
-| Feature metadata | `docs/specs/*` `feature_records_json`, currently concentrated in `docs/specs/feature-catalog.md` | Authored `FEAT-*` rows grouped near behavior contracts | `python3 docs/features/validate_features.py --write` | Track what Farplane capabilities exist, where they live, and what remains limited without hand-maintaining duplicate JSONL truth. |
-| Feature registry | `docs/features/registry.jsonl` | Generated feature rows grouped by ID, status, category, surfaces, refs, evidence, and limits | `python3 docs/features/validate_features.py` | Queryable compatibility output consumed by adoption and docs. |
+| System metadata | `docs/systems/*.md` `system_record_json` | Authored `SYS-*` records grouped by public product module | `python3 docs/features/validate_features.py --write` | Track the small system stack humans should reason about. |
+| Capability metadata | `docs/systems/*.md` `capability_records_json` | Authored `FEAT-*` rows grouped under their owning system | `python3 docs/features/validate_features.py --write` | Preserve stable capability handles without making every handle a public feature. |
+| System registry | `docs/systems/registry.jsonl` | Generated system rows grouped by ID, primary capability, refs, and limits | `python3 docs/features/validate_features.py` | Queryable public system inventory consumed by docs and future UI. |
+| Capability registry | `docs/features/registry.jsonl` | Generated capability rows grouped by ID, system, role, status, category, surfaces, refs, evidence, and limits | `python3 docs/features/validate_features.py` | Queryable compatibility output consumed by adoption, templates, sources, and docs. |
 | Template registry | `docs/templates/registry.jsonl` | `path`-resolved template rows and template rollout rows | `python3 bin/validators/sync_template_registry.py --write` | Track high-impact templates, versions, feature refs, and consumer scopes. |
 | Project manifest adoption | `farplane/manifest.json` in each project plus the Farplane standard manifest | `farplane adoption scan --json` | `python3 bin/farplane.py adoption scan --project-root . --json` | Show project spec/template drift, local skill presence, and explicit or implied feature adoption. |
 | Skill registry | `skills/*/SKILL.md` front matter, direct todo lists, and Markdown links | `docs/skills/registry.jsonl` | `python3 bin/validators/sync_skill_registry.py --write` | Inventory skills without hand-maintaining a second registry. |
@@ -291,7 +295,8 @@ source declarations
 Examples:
 
 - Skill frontmatter changes `docs/skills/registry.jsonl`.
-- Spec feature metadata changes `docs/features/registry.jsonl` through
+- System capability metadata changes `docs/systems/registry.jsonl` and
+  `docs/features/registry.jsonl` through
   `docs/features/validate_features.py --write`.
 - Template metadata changes `docs/templates/registry.jsonl`.
 - `template_uses` changes template rollout.

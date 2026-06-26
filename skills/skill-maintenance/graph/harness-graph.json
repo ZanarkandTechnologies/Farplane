@@ -1,15 +1,15 @@
 {
   "counts": {
     "edge_types": {
-      "directory-contains": 231,
-      "literal-path": 3407,
-      "markdown-link": 530
+      "directory-contains": 226,
+      "literal-path": 3355,
+      "markdown-link": 521
     },
-    "edges": 4168,
+    "edges": 4102,
     "node_kinds": {
       "agent": 19,
       "doc": 32,
-      "file": 594,
+      "file": 587,
       "review-rubric": 22,
       "root-doc": 6,
       "script": 67,
@@ -18,9 +18,9 @@
       "spec": 22,
       "template": 5
     },
-    "nodes": 871,
-    "scanned_files": 1229,
-    "unresolved_refs": 979
+    "nodes": 864,
+    "scanned_files": 1234,
+    "unresolved_refs": 987
   },
   "edges": [
     {
@@ -1606,41 +1606,6 @@
       "type": "directory-contains"
     },
     {
-      "from_file": "tickets/templates",
-      "raw_ref": "tickets/templates",
-      "source": "dir:tickets/templates",
-      "target": "file:tickets/templates/design.md",
-      "type": "directory-contains"
-    },
-    {
-      "from_file": "tickets/templates",
-      "raw_ref": "tickets/templates",
-      "source": "dir:tickets/templates",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "directory-contains"
-    },
-    {
-      "from_file": "tickets/templates/goal-loop",
-      "raw_ref": "tickets/templates/goal-loop",
-      "source": "dir:tickets/templates/goal-loop",
-      "target": "file:tickets/templates/goal-loop/drift-reviewer-handoff.md",
-      "type": "directory-contains"
-    },
-    {
-      "from_file": "tickets/templates/goal-loop",
-      "raw_ref": "tickets/templates/goal-loop",
-      "source": "dir:tickets/templates/goal-loop",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "directory-contains"
-    },
-    {
-      "from_file": "tickets/templates/goal-loop",
-      "raw_ref": "tickets/templates/goal-loop",
-      "source": "dir:tickets/templates/goal-loop",
-      "target": "file:tickets/templates/goal-loop/progress.md",
-      "type": "directory-contains"
-    },
-    {
       "from_file": "AGENTS.md",
       "raw_ref": "bin/core/",
       "source": "file:AGENTS.md",
@@ -2264,41 +2229,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/tickets/README.md",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:tickets/README.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "ARCHITECTURE.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/tickets/templates/ticket.md",
-      "source": "file:ARCHITECTURE.md",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "PROJECT_RULES.md",
       "raw_ref": "bin/core/",
       "source": "file:PROJECT_RULES.md",
@@ -2646,20 +2576,6 @@
       "raw_ref": "skills/review/README.md",
       "source": "file:README.md",
       "target": "file:skills/review/README.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "README.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:README.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "README.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:README.md",
-      "target": "file:tickets/README.md",
       "type": "markdown-link"
     },
     {
@@ -3251,13 +3167,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/README.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:bin/README.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "bin/core/farplane_compute.py",
       "raw_ref": "bin/ticket_runtime.py",
       "source": "file:bin/core/farplane_compute.py",
@@ -3426,20 +3335,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/validators/check_doc_parity.py",
-      "raw_ref": "tickets/README.md",
-      "source": "file:bin/validators/check_doc_parity.py",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/check_doc_parity.py",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:bin/validators/check_doc_parity.py",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "bin/validators/check_doc_refs.py",
       "raw_ref": "bin/tests/",
       "source": "file:bin/validators/check_doc_refs.py",
@@ -3601,13 +3496,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/validators/check_farplane_project_files.py",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:bin/validators/check_farplane_project_files.py",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "bin/validators/check_harness_invariants.py",
       "raw_ref": "agents/",
       "source": "file:bin/validators/check_harness_invariants.py",
@@ -3640,20 +3528,6 @@
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:bin/validators/check_harness_invariants.py",
       "target": "file:templates/global/AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/check_harness_invariants.py",
-      "raw_ref": "tickets/README.md",
-      "source": "file:bin/validators/check_harness_invariants.py",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/check_harness_invariants.py",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:bin/validators/check_harness_invariants.py",
-      "target": "file:tickets/templates/ticket.md",
       "type": "literal-path"
     },
     {
@@ -3693,13 +3567,6 @@
     },
     {
       "from_file": "bin/validators/check_tier0_phase_protocol.py",
-      "raw_ref": "tickets/templates",
-      "source": "file:bin/validators/check_tier0_phase_protocol.py",
-      "target": "dir:tickets/templates",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/check_tier0_phase_protocol.py",
       "raw_ref": "AGENTS.md",
       "source": "file:bin/validators/check_tier0_phase_protocol.py",
       "target": "file:AGENTS.md",
@@ -3717,13 +3584,6 @@
       "raw_ref": "skills/review",
       "source": "file:bin/validators/check_tier0_phase_protocol.py",
       "target": "file:skills/review/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/check_tier0_phase_protocol.py",
-      "raw_ref": "tickets/README.md",
-      "source": "file:bin/validators/check_tier0_phase_protocol.py",
-      "target": "file:tickets/README.md",
       "type": "literal-path"
     },
     {
@@ -3881,20 +3741,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/validators/test_check_farplane_project_files.py",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:bin/validators/test_check_farplane_project_files.py",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/test_check_template_version_metadata.py",
-      "raw_ref": "tickets/templates/",
-      "source": "file:bin/validators/test_check_template_version_metadata.py",
-      "target": "dir:tickets/templates",
-      "type": "literal-path"
-    },
-    {
       "from_file": "bin/validators/test_check_template_version_metadata.py",
       "raw_ref": "docs/skills/templates/SKILL_TEMPLATE.md",
       "source": "file:bin/validators/test_check_template_version_metadata.py",
@@ -3906,13 +3752,6 @@
       "raw_ref": "rules/template-version-watch.toml",
       "source": "file:bin/validators/test_check_template_version_metadata.py",
       "target": "file:rules/template-version-watch.toml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/test_check_template_version_metadata.py",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:bin/validators/test_check_template_version_metadata.py",
-      "target": "file:tickets/templates/ticket.md",
       "type": "literal-path"
     },
     {
@@ -3972,20 +3811,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "bin/validators/test_doc_parity.py",
-      "raw_ref": "tickets/README.md",
-      "source": "file:bin/validators/test_doc_parity.py",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/test_doc_parity.py",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:bin/validators/test_doc_parity.py",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "bin/validators/test_harness_invariants.py",
       "raw_ref": "AGENTS.md",
       "source": "file:bin/validators/test_harness_invariants.py",
@@ -4018,20 +3843,6 @@
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:bin/validators/test_harness_invariants.py",
       "target": "file:templates/global/AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/test_harness_invariants.py",
-      "raw_ref": "tickets/README.md",
-      "source": "file:bin/validators/test_harness_invariants.py",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/test_harness_invariants.py",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:bin/validators/test_harness_invariants.py",
-      "target": "file:tickets/templates/ticket.md",
       "type": "literal-path"
     },
     {
@@ -4490,13 +4301,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/LESSONS.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:docs/LESSONS.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/MEMORY.md",
       "raw_ref": "AGENTS.md",
       "source": "file:docs/MEMORY.md",
@@ -4627,6 +4431,13 @@
       "raw_ref": "skills/eval/qa_checklist.md",
       "source": "file:docs/TROUBLES.md",
       "target": "file:skills/eval/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/TROUBLES.md",
+      "raw_ref": "skills/init-advisor/references/GITIGNORE_TEMPLATE",
+      "source": "file:docs/TROUBLES.md",
+      "target": "file:skills/init-advisor/references/GITIGNORE_TEMPLATE",
       "type": "literal-path"
     },
     {
@@ -5365,13 +5176,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/farplane-framework/harness-maintenance.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:docs/farplane-framework/harness-maintenance.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/farplane-framework/hooks-and-runtime.md",
       "raw_ref": "docs/farplane-framework/lifecycle.md",
       "source": "file:docs/farplane-framework/hooks-and-runtime.md",
@@ -5666,27 +5470,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/farplane-framework/lifecycle.md",
       "raw_ref": "docs/MEMORY.md",
       "source": "file:docs/farplane-framework/lifecycle.md",
@@ -5866,6 +5649,13 @@
       "raw_ref": "farplane/products.md",
       "source": "file:docs/farplane-framework/project-files.md",
       "target": "file:farplane/products.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/project-files.md",
+      "raw_ref": "skills/init-advisor/references/GITIGNORE_TEMPLATE",
+      "source": "file:docs/farplane-framework/project-files.md",
+      "target": "file:skills/init-advisor/references/GITIGNORE_TEMPLATE",
       "type": "literal-path"
     },
     {
@@ -6269,6 +6059,13 @@
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "docs/farplane-framework/lifecycle.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:docs/farplane-framework/lifecycle.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "docs/features/README.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/features/README.md",
@@ -6528,9 +6325,23 @@
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "farplane/automations.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:farplane/automations.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "farplane/goals.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:farplane/goals.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "farplane/products.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:farplane/products.md",
       "type": "literal-path"
     },
     {
@@ -7081,6 +6892,13 @@
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/skill-maintenance/graph/README.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/skill-maintenance/graph/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "skills/skill-maintenance/graph/skill-template-intelligence.json",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:skills/skill-maintenance/graph/skill-template-intelligence.json",
@@ -7196,34 +7014,6 @@
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:templates/global/AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "tickets/README.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "tickets/templates/goal-loop/progress.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:tickets/templates/goal-loop/progress.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:tickets/templates/ticket.md",
       "type": "literal-path"
     },
     {
@@ -7539,13 +7329,6 @@
       "raw_ref": "bin/validators/check_skill_capabilities.py",
       "source": "file:docs/private-tool-context.md",
       "target": "file:bin/validators/check_skill_capabilities.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/private-tool-context.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:docs/private-tool-context.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
       "type": "literal-path"
     },
     {
@@ -9012,20 +8795,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/README.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:docs/specs/README.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/README.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:docs/specs/README.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/specs/adaptive-backoff.md",
       "raw_ref": "skills/pr-review-watch",
       "source": "file:docs/specs/adaptive-backoff.md",
@@ -9185,27 +8954,6 @@
       "source": "file:docs/specs/doc-governance.md",
       "target": "file:docs/specs/harness-techniques.md",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "docs/specs/doc-governance.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:docs/specs/doc-governance.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/doc-governance.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/tickets/README.md",
-      "source": "file:docs/specs/doc-governance.md",
-      "target": "file:tickets/README.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "docs/specs/doc-governance.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:docs/specs/doc-governance.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
     },
     {
       "from_file": "docs/specs/feature-catalog.md",
@@ -10440,34 +10188,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/feature-catalog.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:docs/specs/feature-catalog.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/feature-catalog.md",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:docs/specs/feature-catalog.md",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/feature-catalog.md",
-      "raw_ref": "tickets/templates/goal-loop/progress.md",
-      "source": "file:docs/specs/feature-catalog.md",
-      "target": "file:tickets/templates/goal-loop/progress.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/feature-catalog.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:docs/specs/feature-catalog.md",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/specs/filesystem-lifecycle.md",
       "raw_ref": "experiments/harness-scout/runs/",
       "source": "file:docs/specs/filesystem-lifecycle.md",
@@ -10640,13 +10360,6 @@
       "raw_ref": "templates/external-cli/",
       "source": "file:docs/specs/harness-techniques.md",
       "target": "dir:templates/external-cli",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "tickets/templates/goal-loop/",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "dir:tickets/templates/goal-loop",
       "type": "literal-path"
     },
     {
@@ -11273,34 +10986,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/harness-techniques.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:docs/specs/harness-techniques.md",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/specs/inspiration-vault.md",
       "raw_ref": "skills/ingest-content",
       "source": "file:docs/specs/inspiration-vault.md",
@@ -11616,27 +11301,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/specs/program-notation.md",
-      "raw_ref": "tickets/",
-      "source": "file:docs/specs/program-notation.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/program-notation.md",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:docs/specs/program-notation.md",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/specs/program-notation.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:docs/specs/program-notation.md",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/specs/review-gates.md",
       "raw_ref": "docs/review/rubrics/",
       "source": "file:docs/specs/review-gates.md",
@@ -11812,20 +11476,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/templates/README.md",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:docs/templates/README.md",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/templates/README.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:docs/templates/README.md",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "docs/templates/registry.jsonl",
       "raw_ref": "docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
       "source": "file:docs/templates/registry.jsonl",
@@ -11882,20 +11532,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "docs/templates/registry.jsonl",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:docs/templates/registry.jsonl",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/templates/registry.jsonl",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:docs/templates/registry.jsonl",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "farplane/README.md",
       "raw_ref": "README.md",
       "source": "file:farplane/README.md",
@@ -11918,9 +11554,23 @@
     },
     {
       "from_file": "farplane/automations.md",
+      "raw_ref": "docs/skills/registry.jsonl",
+      "source": "file:farplane/automations.md",
+      "target": "file:docs/skills/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "farplane/automations.md",
       "raw_ref": "farplane/pm.json",
       "source": "file:farplane/automations.md",
       "target": "file:farplane/pm.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "farplane/automations.md",
+      "raw_ref": "farplane/products.md",
+      "source": "file:farplane/automations.md",
+      "target": "file:farplane/products.md",
       "type": "literal-path"
     },
     {
@@ -12204,20 +11854,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/manifest.json",
-      "raw_ref": "tickets/README.md",
-      "source": "file:farplane/manifest.json",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "farplane/manifest.json",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:farplane/manifest.json",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "farplane/products.md",
       "raw_ref": "farplane/goals.md",
       "source": "file:farplane/products.md",
@@ -12288,20 +11924,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "rules/template-registry.toml",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:rules/template-registry.toml",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "rules/template-registry.toml",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:rules/template-registry.toml",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "rules/template-version-watch.toml",
       "raw_ref": "skills/skill-maintenance/templates/archive/",
       "source": "file:rules/template-version-watch.toml",
@@ -12355,20 +11977,6 @@
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:rules/template-version-watch.toml",
       "target": "file:templates/global/AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "rules/template-version-watch.toml",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:rules/template-version-watch.toml",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "rules/template-version-watch.toml",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "file:rules/template-version-watch.toml",
-      "target": "file:tickets/templates/ticket.md",
       "type": "literal-path"
     },
     {
@@ -12439,90 +12047,6 @@
       "raw_ref": "docs/specs/filesystem-lifecycle.md",
       "source": "file:templates/global/AGENTS.md",
       "target": "file:docs/specs/filesystem-lifecycle.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "templates/global/AGENTS.md",
-      "raw_ref": "tickets/README.md",
-      "source": "file:templates/global/AGENTS.md",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "docs/review/rubrics/",
-      "source": "file:tickets/README.md",
-      "target": "dir:docs/review/rubrics",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "bin/farplane_boards.py",
-      "source": "file:tickets/README.md",
-      "target": "file:bin/farplane_boards.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "docs/bootstrap-brief.md",
-      "source": "file:tickets/README.md",
-      "target": "file:docs/bootstrap-brief.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/context-and-handoff-policy.md",
-      "source": "file:tickets/README.md",
-      "target": "file:docs/specs/context-and-handoff-policy.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "docs/specs/goal-loop-contract.md",
-      "source": "file:tickets/README.md",
-      "target": "file:docs/specs/goal-loop-contract.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "docs/specs/invocation-and-adapters.md",
-      "source": "file:tickets/README.md",
-      "target": "file:docs/specs/invocation-and-adapters.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "/Users/kenjipcx/coding-harness/Farplane/docs/specs/invocation-and-adapters.md",
-      "source": "file:tickets/README.md",
-      "target": "file:docs/specs/invocation-and-adapters.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "qa/cookbook/",
-      "source": "file:tickets/README.md",
-      "target": "file:qa/cookbook/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "file:tickets/README.md",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "file:tickets/README.md",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "tickets/README.md",
-      "raw_ref": "tickets/templates/goal-loop/progress.md",
-      "source": "file:tickets/README.md",
-      "target": "file:tickets/templates/goal-loop/progress.md",
       "type": "literal-path"
     },
     {
@@ -13581,13 +13105,6 @@
       "source": "skill:deep-interview",
       "target": "file:skills/review/SKILL.md",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/deep-interview/README.md",
-      "raw_ref": "tickets/README.md",
-      "source": "skill:deep-interview",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
     },
     {
       "from_file": "skills/deep-system-design/README.md",
@@ -16460,55 +15977,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "skills/goal-advisor/SKILL.md",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "skill:goal-advisor",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/goal-advisor/audits/2026-06-13-execution-compiler-consolidation.md",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "skill:goal-advisor",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/goal-advisor/references/prompt-templates.md",
-      "raw_ref": "tickets/templates/goal-loop/program.md",
-      "source": "skill:goal-advisor",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/goal-advisor/SKILL.md",
-      "raw_ref": "../../tickets/templates/goal-loop/program.md",
-      "source": "skill:goal-advisor",
-      "target": "file:tickets/templates/goal-loop/program.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/goal-advisor/SKILL.md",
-      "raw_ref": "tickets/templates/goal-loop/progress.md",
-      "source": "skill:goal-advisor",
-      "target": "file:tickets/templates/goal-loop/progress.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/goal-advisor/references/prompt-templates.md",
-      "raw_ref": "tickets/templates/goal-loop/progress.md",
-      "source": "skill:goal-advisor",
-      "target": "file:tickets/templates/goal-loop/progress.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/goal-advisor/SKILL.md",
-      "raw_ref": "../../tickets/templates/goal-loop/progress.md",
-      "source": "skill:goal-advisor",
-      "target": "file:tickets/templates/goal-loop/progress.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/hardening/references/tooling.md",
       "raw_ref": "PROJECT_RULES.md",
       "source": "skill:hardening",
@@ -17130,13 +16598,6 @@
       "source": "skill:harness-creator",
       "target": "file:skills/update-strategy/SKILL.md",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/harness-creator/audits/2026-06-26-local-product-skills.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "skill:harness-creator",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
     },
     {
       "from_file": "skills/harness-scout/SKILL.md",
@@ -18119,13 +17580,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "skills/ingest-content/references/localpinterest-contract.md",
-      "raw_ref": "AGENTS.md",
-      "source": "skill:ingest-content",
-      "target": "file:AGENTS.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/ingest-content/SKILL.md",
       "raw_ref": "../image-generation/SKILL.md",
       "source": "skill:ingest-content",
@@ -18140,10 +17594,10 @@
       "type": "literal-path"
     },
     {
-      "from_file": "skills/ingest-content/audits/2026-06-12-create-ingest-content.md",
-      "raw_ref": "skills/ingest-content/references/localpinterest-contract.md",
+      "from_file": "skills/ingest-content/audits/2026-06-26-resource-bank-tasty-pack-upgrade.md",
+      "raw_ref": "skills/ingest-content",
       "source": "skill:ingest-content",
-      "target": "file:skills/ingest-content/references/localpinterest-contract.md",
+      "target": "file:skills/ingest-content/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -18197,20 +17651,6 @@
     },
     {
       "from_file": "skills/init-advisor/README.md",
-      "raw_ref": "tickets/templates",
-      "source": "skill:init-advisor",
-      "target": "dir:tickets/templates",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/README.md",
-      "raw_ref": "AGENTS.md",
-      "source": "skill:init-advisor",
-      "target": "file:AGENTS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/SKILL.md",
       "raw_ref": "AGENTS.md",
       "source": "skill:init-advisor",
       "target": "file:AGENTS.md",
@@ -18301,13 +17741,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "skills/init-advisor/SKILL.md",
-      "raw_ref": "ARCHITECTURE.md",
-      "source": "skill:init-advisor",
-      "target": "file:ARCHITECTURE.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/init-advisor/references/AGENTS_TEMPLATE.md",
       "raw_ref": "ARCHITECTURE.md",
       "source": "skill:init-advisor",
@@ -18385,6 +17818,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/references/CODE_SCAFFOLD_RECIPES.md",
+      "raw_ref": "PROJECT_RULES.md",
+      "source": "skill:init-advisor",
+      "target": "file:PROJECT_RULES.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/references/COLLECT_REVIEW_CONTEXT_TEMPLATE.sh",
       "raw_ref": "PROJECT_RULES.md",
       "source": "skill:init-advisor",
@@ -18428,6 +17868,13 @@
     },
     {
       "from_file": "skills/init-advisor/SKILL.md",
+      "raw_ref": "README.md",
+      "source": "skill:init-advisor",
+      "target": "file:README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-first-load-compaction.md",
       "raw_ref": "README.md",
       "source": "skill:init-advisor",
       "target": "file:README.md",
@@ -18540,6 +17987,20 @@
     },
     {
       "from_file": "skills/init-advisor/audits/2026-06-25-init-advisor-rename.md",
+      "raw_ref": "bin/validators/check_farplane_project_files.py",
+      "source": "skill:init-advisor",
+      "target": "file:bin/validators/check_farplane_project_files.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-first-load-compaction.md",
+      "raw_ref": "bin/validators/check_farplane_project_files.py",
+      "source": "skill:init-advisor",
+      "target": "file:bin/validators/check_farplane_project_files.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-gitignore-local-work.md",
       "raw_ref": "bin/validators/check_farplane_project_files.py",
       "source": "skill:init-advisor",
       "target": "file:bin/validators/check_farplane_project_files.py",
@@ -18812,7 +18273,21 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/qa_checklist.md",
+      "raw_ref": "docs/bootstrap-brief.md",
+      "source": "skill:init-advisor",
+      "target": "file:docs/bootstrap-brief.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/references/AGENTS_TEMPLATE.md",
+      "raw_ref": "docs/bootstrap-brief.md",
+      "source": "skill:init-advisor",
+      "target": "file:docs/bootstrap-brief.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/references/CODE_SCAFFOLD_RECIPES.md",
       "raw_ref": "docs/bootstrap-brief.md",
       "source": "skill:init-advisor",
       "target": "file:docs/bootstrap-brief.md",
@@ -18855,6 +18330,13 @@
     },
     {
       "from_file": "skills/init-advisor/audits/2026-06-17-first-load-compaction.md",
+      "raw_ref": "docs/farplane-framework/project-files.md",
+      "source": "skill:init-advisor",
+      "target": "file:docs/farplane-framework/project-files.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-gitignore-local-work.md",
       "raw_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:init-advisor",
       "target": "file:docs/farplane-framework/project-files.md",
@@ -18924,13 +18406,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "skills/init-advisor/SKILL.md",
-      "raw_ref": "docs/specs/",
-      "source": "skill:init-advisor",
-      "target": "file:docs/specs/README.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/init-advisor/prompts/plan.md",
       "raw_ref": "docs/specs/",
       "source": "skill:init-advisor",
@@ -18973,13 +18448,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "skills/init-advisor/SKILL.md",
-      "raw_ref": "farplane/README.md",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/README.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
       "raw_ref": "farplane/README.md",
       "source": "skill:init-advisor",
@@ -19008,7 +18476,21 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/audits/2026-06-26-focused-eval-hardening.md",
+      "raw_ref": "farplane/automations.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/automations.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/eval_task.json",
+      "raw_ref": "farplane/automations.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/automations.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/qa_checklist.md",
       "raw_ref": "farplane/automations.md",
       "source": "skill:init-advisor",
       "target": "file:farplane/automations.md",
@@ -19043,13 +18525,6 @@
       "type": "literal-path"
     },
     {
-      "from_file": "skills/init-advisor/SKILL.md",
-      "raw_ref": "farplane/bindings.md",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/bindings.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
       "raw_ref": "farplane/bindings.md",
       "source": "skill:init-advisor",
@@ -19079,6 +18554,13 @@
     },
     {
       "from_file": "skills/init-advisor/eval_task.json",
+      "raw_ref": "farplane/goals.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/goals.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/qa_checklist.md",
       "raw_ref": "farplane/goals.md",
       "source": "skill:init-advisor",
       "target": "file:farplane/goals.md",
@@ -19134,7 +18616,21 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/audits/2026-06-26-focused-eval-hardening.md",
+      "raw_ref": "farplane/harness.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/harness.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/eval_task.json",
+      "raw_ref": "farplane/harness.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/harness.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/qa_checklist.md",
       "raw_ref": "farplane/harness.md",
       "source": "skill:init-advisor",
       "target": "file:farplane/harness.md",
@@ -19163,13 +18659,6 @@
     },
     {
       "from_file": "skills/init-advisor/README.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/SKILL.md",
       "raw_ref": "farplane/hooks.json",
       "source": "skill:init-advisor",
       "target": "file:farplane/hooks.json",
@@ -19225,6 +18714,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/qa_checklist.md",
+      "raw_ref": "farplane/manifest.json",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/manifest.json",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
       "raw_ref": "farplane/manifest.json",
       "source": "skill:init-advisor",
@@ -19267,6 +18763,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/qa_checklist.md",
+      "raw_ref": "farplane/pm.json",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/pm.json",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
       "raw_ref": "farplane/pm.json",
       "source": "skill:init-advisor",
@@ -19288,7 +18791,21 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/audits/2026-06-26-focused-eval-hardening.md",
+      "raw_ref": "farplane/products.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/products.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/eval_task.json",
+      "raw_ref": "farplane/products.md",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/products.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/qa_checklist.md",
       "raw_ref": "farplane/products.md",
       "source": "skill:init-advisor",
       "target": "file:farplane/products.md",
@@ -19327,6 +18844,13 @@
       "raw_ref": "qa/README.md",
       "source": "skill:init-advisor",
       "target": "file:qa/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/qa_checklist.md",
+      "raw_ref": "qa/cookbook/",
+      "source": "skill:init-advisor",
+      "target": "file:qa/cookbook/README.md",
       "type": "literal-path"
     },
     {
@@ -19393,6 +18917,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/audits/2026-06-26-focused-eval-hardening.md",
+      "raw_ref": "skills/init-advisor/",
+      "source": "skill:init-advisor",
+      "target": "file:skills/init-advisor/README.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/audits/2026-06-16-framework-manifest-runtime-state.md",
       "raw_ref": "skills/init-advisor/SKILL.md",
       "source": "skill:init-advisor",
@@ -19421,6 +18952,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/audits/2026-06-26-first-load-compaction.md",
+      "raw_ref": "skills/init-advisor/SKILL.md",
+      "source": "skill:init-advisor",
+      "target": "file:skills/init-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/audits/2026-06-22-full-mode-goal-portfolio.md",
       "raw_ref": "skills/init-advisor/eval_task.json",
       "source": "skill:init-advisor",
@@ -19435,10 +18973,31 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/audits/2026-06-26-first-load-compaction.md",
+      "raw_ref": "skills/init-advisor/qa_checklist.md",
+      "source": "skill:init-advisor",
+      "target": "file:skills/init-advisor/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/audits/2026-06-22-full-mode-goal-portfolio.md",
       "raw_ref": "skills/init-advisor/references/BOOTSTRAP_BRIEF_TEMPLATE.md",
       "source": "skill:init-advisor",
       "target": "file:skills/init-advisor/references/BOOTSTRAP_BRIEF_TEMPLATE.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-first-load-compaction.md",
+      "raw_ref": "skills/init-advisor/references/CODE_SCAFFOLD_RECIPES.md",
+      "source": "skill:init-advisor",
+      "target": "file:skills/init-advisor/references/CODE_SCAFFOLD_RECIPES.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-gitignore-local-work.md",
+      "raw_ref": "skills/init-advisor/references/GITIGNORE_TEMPLATE",
+      "source": "skill:init-advisor",
+      "target": "file:skills/init-advisor/references/GITIGNORE_TEMPLATE",
       "type": "literal-path"
     },
     {
@@ -19470,18 +19029,25 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/audits/2026-06-26-first-load-compaction.md",
+      "raw_ref": "skills/init-advisor/scripts/bootstrap.sh",
+      "source": "skill:init-advisor",
+      "target": "file:skills/init-advisor/scripts/bootstrap.sh",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-gitignore-local-work.md",
+      "raw_ref": "skills/init-advisor/scripts/bootstrap.sh",
+      "source": "skill:init-advisor",
+      "target": "file:skills/init-advisor/scripts/bootstrap.sh",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/references/FARPLANE_PRODUCTS_TEMPLATE.md",
       "raw_ref": "skills/interval-update/SKILL.md",
       "source": "skill:init-advisor",
       "target": "file:skills/interval-update/SKILL.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/SKILL.md",
-      "raw_ref": "../research/SKILL.md#researchofficial-docs",
-      "source": "skill:init-advisor",
-      "target": "file:skills/research/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/init-advisor/audits/2026-06-17-first-load-compaction.md",
@@ -19512,6 +19078,27 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/audits/2026-06-26-first-load-compaction.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:init-advisor",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-focused-eval-hardening.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:init-advisor",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-06-26-gitignore-local-work.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:init-advisor",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/audits/2026-06-25-init-advisor-rename.md",
       "raw_ref": "skills/skill-maintenance/scripts/generate_graph_projection.py",
       "source": "skill:init-advisor",
@@ -19530,34 +19117,6 @@
       "raw_ref": "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
       "source": "skill:init-advisor",
       "target": "file:skills/skill-maintenance/scripts/test_generate_skill_graph.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/references/ARCHITECTURE_TEMPLATE.md",
-      "raw_ref": "tickets/README.md",
-      "source": "skill:init-advisor",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
-      "raw_ref": "tickets/README.md",
-      "source": "skill:init-advisor",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/README.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "skill:init-advisor",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "skill:init-advisor",
-      "target": "file:tickets/templates/ticket.md",
       "type": "literal-path"
     },
     {
@@ -21150,13 +20709,6 @@
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/pr-runtime/README.md",
-      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
-      "source": "skill:pr-runtime",
-      "target": "file:tickets/scripts/check_ticket_metadata.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/pr-splitting/README.md",
       "raw_ref": "AGENTS.md",
       "source": "skill:pr-splitting",
@@ -22296,13 +21848,6 @@
       "source": "skill:review",
       "target": "file:skills/review/SKILL.md",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/review/README.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "skill:review",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
     },
     {
       "from_file": "skills/runtime-debugging/README.md",
@@ -24385,6 +23930,20 @@
     },
     {
       "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.json",
+      "raw_ref": "farplane/automations.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:farplane/automations.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
+      "raw_ref": "farplane/automations.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:farplane/automations.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
       "raw_ref": "farplane/automations.md",
       "source": "skill:skill-maintenance",
       "target": "file:farplane/automations.md",
@@ -28584,27 +28143,6 @@
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/spec-to-ticket/SKILL.md",
-      "raw_ref": "tickets/",
-      "source": "skill:spec-to-ticket",
-      "target": "file:tickets/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/spec-to-ticket/SKILL.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "skill:spec-to-ticket",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/spec-to-ticket/references/ticket-template.md",
-      "raw_ref": "tickets/templates/ticket.md",
-      "source": "skill:spec-to-ticket",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/summarize/README.md",
       "raw_ref": "AGENTS.md",
       "source": "skill:summarize",
@@ -29200,7 +28738,7 @@
       "type": "markdown-link"
     }
   ],
-  "generated_at": "2026-06-26T04:54:12+00:00",
+  "generated_at": "2026-06-26T09:17:31+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -31195,12 +30733,6 @@
       "path": "skills/ingest-content/audits/2026-06-12-create-ingest-content.md"
     },
     {
-      "id": "file:skills/ingest-content/references/localpinterest-contract.md",
-      "kind": "file",
-      "label": "skills/ingest-content/references/localpinterest-contract.md",
-      "path": "skills/ingest-content/references/localpinterest-contract.md"
-    },
-    {
       "id": "file:skills/ingest-content/references/reuse-taxonomy.md",
       "kind": "file",
       "label": "skills/ingest-content/references/reuse-taxonomy.md",
@@ -31231,6 +30763,12 @@
       "path": "skills/init-advisor/eval_task.json"
     },
     {
+      "id": "file:skills/init-advisor/qa_checklist.md",
+      "kind": "file",
+      "label": "skills/init-advisor/qa_checklist.md",
+      "path": "skills/init-advisor/qa_checklist.md"
+    },
+    {
       "id": "file:skills/init-advisor/references/AGENTS_TEMPLATE.md",
       "kind": "file",
       "label": "skills/init-advisor/references/AGENTS_TEMPLATE.md",
@@ -31241,6 +30779,18 @@
       "kind": "file",
       "label": "skills/init-advisor/references/BOOTSTRAP_BRIEF_TEMPLATE.md",
       "path": "skills/init-advisor/references/BOOTSTRAP_BRIEF_TEMPLATE.md"
+    },
+    {
+      "id": "file:skills/init-advisor/references/CODE_SCAFFOLD_RECIPES.md",
+      "kind": "file",
+      "label": "skills/init-advisor/references/CODE_SCAFFOLD_RECIPES.md",
+      "path": "skills/init-advisor/references/CODE_SCAFFOLD_RECIPES.md"
+    },
+    {
+      "id": "file:skills/init-advisor/references/GITIGNORE_TEMPLATE",
+      "kind": "file",
+      "label": "skills/init-advisor/references/GITIGNORE_TEMPLATE",
+      "path": "skills/init-advisor/references/GITIGNORE_TEMPLATE"
     },
     {
       "id": "file:skills/init-advisor/references/GOALS_TEMPLATE.md",
@@ -33017,60 +32567,6 @@
       "kind": "file",
       "label": "templates/global/",
       "path": "templates/global"
-    },
-    {
-      "id": "file:tickets/README.md",
-      "kind": "file",
-      "label": "tickets/README.md",
-      "path": "tickets/README.md"
-    },
-    {
-      "id": "file:tickets/scripts/check_ticket_metadata.py",
-      "kind": "file",
-      "label": "tickets/scripts/check_ticket_metadata.py",
-      "path": "tickets/scripts/check_ticket_metadata.py"
-    },
-    {
-      "id": "dir:tickets/templates",
-      "kind": "file",
-      "label": "tickets/templates/",
-      "path": "tickets/templates"
-    },
-    {
-      "id": "file:tickets/templates/design.md",
-      "kind": "file",
-      "label": "tickets/templates/design.md",
-      "path": "tickets/templates/design.md"
-    },
-    {
-      "id": "dir:tickets/templates/goal-loop",
-      "kind": "file",
-      "label": "tickets/templates/goal-loop/",
-      "path": "tickets/templates/goal-loop"
-    },
-    {
-      "id": "file:tickets/templates/goal-loop/drift-reviewer-handoff.md",
-      "kind": "file",
-      "label": "tickets/templates/goal-loop/drift-reviewer-handoff.md",
-      "path": "tickets/templates/goal-loop/drift-reviewer-handoff.md"
-    },
-    {
-      "id": "file:tickets/templates/goal-loop/program.md",
-      "kind": "file",
-      "label": "tickets/templates/goal-loop/program.md",
-      "path": "tickets/templates/goal-loop/program.md"
-    },
-    {
-      "id": "file:tickets/templates/goal-loop/progress.md",
-      "kind": "file",
-      "label": "tickets/templates/goal-loop/progress.md",
-      "path": "tickets/templates/goal-loop/progress.md"
-    },
-    {
-      "id": "file:tickets/templates/ticket.md",
-      "kind": "file",
-      "label": "tickets/templates/ticket.md",
-      "path": "tickets/templates/ticket.md"
     },
     {
       "id": "dir:docs/review/rubrics",
@@ -35152,6 +34648,11 @@
       "source": "docs/farplane-framework/project-files.md"
     },
     {
+      "candidate": "tickets/TASK-0001/ticket.md",
+      "raw_ref": "tickets/TASK-0001/ticket.md",
+      "source": "docs/farplane-framework/project-files.md"
+    },
+    {
       "candidate": "docs/features/registry",
       "raw_ref": "docs/features/registry",
       "source": "docs/fundamentals/harness-algebra.md"
@@ -35414,11 +34915,6 @@
     {
       "candidate": "farplane/steer.config.toml",
       "raw_ref": "farplane/steer.config.toml",
-      "source": "skills/automation-advisor/SKILL.md"
-    },
-    {
-      "candidate": "qa_checklist.md",
-      "raw_ref": "qa_checklist.md",
       "source": "skills/automation-advisor/SKILL.md"
     },
     {

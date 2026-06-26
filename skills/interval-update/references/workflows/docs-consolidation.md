@@ -19,8 +19,9 @@ rewrite.
 Use `update-memory` for whole-project context refresh across README, memory,
 history, lessons, troubles, and docs deltas. Use `documentation` for substantive
 reader-quality rewrites or durable docs-as-code changes. Route stale feature
-rows back to spec `feature_records_json`; `docs/features/registry.jsonl` is
-generated output, not an interval write target.
+rows back to the owning `docs/systems/*.md` metadata source;
+`docs/systems/registry.jsonl` and `docs/features/registry.jsonl` are generated
+output, not interval write targets.
 
 ## Workflow Signature
 
@@ -57,7 +58,8 @@ Default sources from the context bundle:
   `docs/TROUBLES.md` when present.
 - recent interval reports, ticket closeouts, review artifacts, and generated doc
   reference reports when present.
-- generated feature registry freshness reports when feature metadata changed.
+- generated system and feature registry freshness reports when capability
+  metadata changed.
 
 ## Todo List
 
@@ -73,15 +75,15 @@ Default sources from the context bundle:
         architecture changes to [documentation](../../../documentation/SKILL.md).
   - [ ] Route bloat or keep/move/delete inventories to
         [knowledge-tidier](../../../knowledge-tidier/SKILL.md).
-  - [ ] Route stale or duplicated `FEAT-*` records to the owning spec
-        `feature_records_json` source and regenerate the registry.
+  - [ ] Route stale or duplicated `FEAT-*` records to the owning
+        `docs/systems/*.md` source and regenerate the registry.
   - [ ] Create a ticket delta when the consolidation is too large for the next
         interval window.
 - [ ] 3. Preserve append-only and proof surfaces.
   - [ ] Do not rewrite `docs/HISTORY.md`, `docs/LESSONS.md`, or
         `docs/TROUBLES.md` to mark items complete.
   - [ ] Do not hand-edit generated registries such as
-        `docs/features/registry.jsonl`.
+        `docs/systems/registry.jsonl` or `docs/features/registry.jsonl`.
   - [ ] Keep detailed proof, review, and ticket evidence in their owning
         artifacts rather than copying them into summary docs.
 - [ ] 4. Bound the work.

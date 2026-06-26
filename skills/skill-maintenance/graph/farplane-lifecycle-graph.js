@@ -2203,7 +2203,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     }
   ],
-  "generated_at": "2026-06-25T18:10:19+00:00",
+  "generated_at": "2026-06-26T09:15:15+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",

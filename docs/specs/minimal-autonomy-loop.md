@@ -3,7 +3,7 @@ title: "Minimal Autonomy Loop"
 status: draft
 owner: farplane-framework
 created_at: 2026-06-25
-updated_at: 2026-06-25
+updated_at: 2026-06-26
 tags:
   - farplane
   - autonomy
@@ -21,6 +21,9 @@ refs:
   - skills/skill-maintenance/SKILL.md
   - docs/specs/goal-loop-contract.md
   - docs/specs/filesystem-lifecycle.md
+  - https://www.hubspot.com/flywheel
+  - https://contentmarketinginstitute.com/what-is-content-marketing
+  - https://amplitude.com/blog/pirate-metrics-framework
 ---
 
 # Minimal Autonomy Loop
@@ -57,6 +60,42 @@ The loops have different reward horizons:
 Files are the shared memory. Codex automations own cadence. Skills own reusable
 workflow behavior.
 
+## Board Spine And Earned Organs
+
+The minimal autonomous business loop is board-first, not sidecar-first:
+
+```text
+autonomous_business_loop(goal, board, sidecars?)
+  -> selected_work + execution + proof + learning_delta + system_gap?
+```
+
+The board, tickets, and proof surfaces are the spine. They hold priority,
+visible state, messy exceptions, operator intent, and unresolved judgment. A
+sidecar system is an earned organ: a decoupled workflow that exists because the
+board repeatedly exposed the same bottleneck, feedback loop, or reusable
+transformation.
+
+Do not start by decoupling every imagined business function. Start with the
+minimal plan-execute-prove-learn loop, then extract organs when repeated
+execution makes the boundary obvious.
+
+Sidecar admission test:
+
+- `frequency`: the workflow appears often enough to benefit from a reusable
+  system.
+- `shape`: inputs, outputs, state, and proof are stable enough to name.
+- `leverage`: the system reduces planning burden, improves quality, or speeds
+  repeated work.
+- `feedback`: outcomes can update future runs instead of producing isolated
+  artifacts.
+- `boundary`: the sidecar can remain callable by the board without becoming a
+  hidden strategy brain.
+
+The main agent should keep owning ambiguous, unpredictable, cross-domain, or
+admin-heavy work until that work reveals a stable organ. The organ should own
+repeatable transformation; the board should still own whether the
+transformation matters now.
+
 ## Product-First Framing
 
 Every autonomous project should know its products before it optimizes its
@@ -80,6 +119,56 @@ for the next week based on goals, work done, reward closure, and queue health.
 weekly_distribution(goals, products.work_lanes, harness.guardrails, outcomes)
   -> lane_weights + bets + ticket_budget + expected_rewards
 ```
+
+## Marketing And Content Shortcut Organs
+
+Marketing and content are good early organ candidates because nearly every
+autonomous business needs repeated audience learning, message testing,
+distribution, and feedback. They should still enter through the board as
+approved work lanes or weekly bets; the sidecars provide shortcuts for repeated
+subproblems.
+
+Useful early primitives:
+
+```text
+audience_signal_intake(sources, offers, questions)
+  -> pain_points + language_patterns + objections + content_angles
+
+content_strategy_loop(goals, audience_signals, product_surfaces, channel_data)
+  -> themes + bets + editorial_queue + proof_metrics
+
+content_brief_generator(theme, audience, offer, channel, proof_goal)
+  -> brief + examples + claims_to_prove + distribution_plan
+
+content_generator(brief, taste_refs, constraints)
+  -> draft_assets + variants + reuse_notes
+
+distribution_router(asset, channels, cadence, approvals)
+  -> publish_plan + repurpose_plan + external_action_gates
+
+performance_feedback(content_results, expected_signal)
+  -> keep_kill_iterate + audience_learning + next_content_bets
+```
+
+These organs map to common marketing primitives: attract or acquire attention,
+engage or activate the right audience, retain trust through repeated value, and
+feed learning back into the next bet. They should help the agent "cheat" by
+making briefs, angles, variants, and feedback loops cheap. They should not let
+the agent publish externally, spend money, contact customers, or redefine the
+offer without the human authority rules below.
+
+Extract these organs in order:
+
+1. `audience_signal_intake`, because weak input language makes every downstream
+   content run worse.
+2. `content_brief_generator`, because briefs preserve intent and proof goals
+   better than raw generation prompts.
+3. `performance_feedback`, because the system needs learning closure before
+   scaling volume.
+4. `content_generator`, once taste references and channel constraints are
+   stable enough to judge outputs.
+5. `distribution_router`, after channel permissions, cadence, and external
+   action gates are clear.
 
 ## Ticket Supply Learning
 

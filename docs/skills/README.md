@@ -29,8 +29,9 @@ into a second place to maintain skill truth.
   owning registry correctness and generated audits, while `harness-advisor`
   consumes the broader map for placement decisions instead of owning the
   generator or UI.
-- Skill-applicable harness features are authored in spec `feature_records_json`
-  blocks with `category: "skills"` and generated into
+- Skill-applicable harness capabilities are authored in
+  [`docs/systems/skill-system.md`](../systems/skill-system.md) with
+  `category: "skills"` and generated into
   [`docs/features/registry.jsonl`](../features/registry.jsonl). Versioned skill
   templates declare structural feature IDs; individual skills declare local
   eval, QA checklist, and skill UI surfaces. This folder owns the generated
@@ -224,6 +225,12 @@ classes. Tier 0 phase steps are not skill links; they are inherited from
 `templates/global/AGENTS.md` and may be written as `## Phase Contract` in a
 skill when useful.
 
+When ranking which skill to improve next, use
+[`docs/specs/skill-compounding-score.md`](../specs/skill-compounding-score.md).
+It combines tier leverage, lifecycle-reference distance, product-lane fit,
+observed heat, downstream leverage, improvement gap, feedback fit, and proof
+fit. Do not confuse that priority score with skill-local eval scores.
+
 - Tier 3 first-load todos link Tier 2 surfaces such as `research:*`, plus peer
   Tier 3 execution skills when a domain handoff needs one.
 - Tier 3 first-load todos do not link Tier 1 primitives such as `advise`,
@@ -353,8 +360,8 @@ Use `skills/skill-maintenance/` for bulk tier, source, todo, registry, and
 consolidation work. Keep this module's docs as the registry contract; keep the
 step-by-step maintenance workflow in that skill.
 
-When skill standards or optional skill capabilities change, update the owning
-spec `feature_records_json` block and regenerate
+When skill standards or optional skill capabilities change, update
+[`docs/systems/skill-system.md`](../systems/skill-system.md) and regenerate
 [`docs/features/registry.jsonl`](../features/registry.jsonl) as the supported
 feature catalog. Skill template versions carry structural `FEAT-####` handles;
 skill packages carry only local surface fields for eval, QA checklist, and skill

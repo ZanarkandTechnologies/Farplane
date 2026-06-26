@@ -473,6 +473,30 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(exchange["assistant_text"], "plan complete")
         self.assertEqual(exchange["assistant_source"], "test-stop")
 
+    def test_conversation_window_preserves_runtime_marker(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            user_turn = normalize_user_turn(
+                "Run the eval and report the pass/fail result.",
+                turn_id="turn-1",
+                source="test",
+                captured_at="2026-05-08T00:00:00Z",
+                runtime={"kind": "ephemeral", "purpose": "eval", "source": "env"},
+            )
+
+            append_conversation_user_turn(project_root, "sess-window", user_turn)
+            window = append_conversation_assistant_response(
+                project_root,
+                "sess-window",
+                "eval complete",
+                captured_at="2026-05-08T00:00:01Z",
+                source="test-stop",
+            )
+
+        self.assertEqual(window["runtime"], {"kind": "ephemeral", "purpose": "eval", "source": "env"})
+        exchange = window["rolling_exchanges"][0]
+        self.assertEqual(exchange["runtime"], {"kind": "ephemeral", "purpose": "eval", "source": "env"})
+
     def test_conversation_window_trims_to_last_ten_exchanges_and_tracks_cadence(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)

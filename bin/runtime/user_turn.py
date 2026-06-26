@@ -324,6 +324,12 @@ def append_conversation_user_turn(
         "assistant_text": "",
         "assistant_source": "",
     }
+    runtime = normalize_runtime_metadata(
+        last_user_turn.get("runtime") if isinstance(last_user_turn.get("runtime"), Mapping) else None
+    )
+    if runtime:
+        window["pending_user_turn"]["runtime"] = runtime
+        window["runtime"] = runtime
     window["updated_at"] = captured_at
     trim_conversation_window(window)
     write_json(conversation_window_path(project_root, normalized_session_id), window)
@@ -1412,6 +1418,7 @@ def normalize_user_turn(
     turn_id: str | None,
     source: str,
     captured_at: str | None = None,
+    runtime: Mapping[str, object] | None = None,
 ) -> dict[str, object]:
     raw_text = raw_text.strip()
     captured_at_value = captured_at or now_iso()
@@ -1425,7 +1432,7 @@ def normalize_user_turn(
     ticket_part = explicit_ticket_id or "no-ticket"
     constraints_part = ",".join(hard_constraints) if hard_constraints else "none"
     summary = f"{intent_mode} {requested_outcome} {ticket_part} constraints={constraints_part}"
-    return {
+    row: dict[str, object] = {
         "turn_id": turn_id or f"turn-{captured_at_value}",
         "captured_at": captured_at_value,
         "source": source,
@@ -1439,6 +1446,53 @@ def normalize_user_turn(
         "hard_constraints": hard_constraints,
         "summary": summary,
     }
+    normalized_runtime = normalize_runtime_metadata(runtime)
+    if normalized_runtime:
+        row["runtime"] = normalized_runtime
+    return row
+
+
+def normalize_runtime_metadata(runtime: Mapping[str, object] | None) -> dict[str, object]:
+    if not isinstance(runtime, Mapping):
+        return {}
+    kind = str(runtime.get("kind") or "").strip().lower()
+    if kind not in {"interactive", "headless", "ephemeral", "automation"}:
+        kind = ""
+    purpose = str(runtime.get("purpose") or "").strip().lower()
+    if purpose and not re.match(r"^[a-z0-9_.:-]{1,80}$", purpose):
+        purpose = ""
+    source = str(runtime.get("source") or "").strip().lower()
+    if source and not re.match(r"^[a-z0-9_.:-]{1,80}$", source):
+        source = ""
+    output: dict[str, object] = {}
+    if kind:
+        output["kind"] = kind
+    if purpose:
+        output["purpose"] = purpose
+    if source:
+        output["source"] = source
+    return output
+
+
+def runtime_metadata_from_payload(payload: Mapping[str, object], raw_text: str = "") -> dict[str, object]:
+    env_kind = str(os.environ.get("FARPLANE_CODEX_RUNTIME_KIND") or "").strip().lower()
+    env_purpose = str(os.environ.get("FARPLANE_CODEX_RUNTIME_PURPOSE") or "").strip().lower()
+    payload_kind = str(payload.get("runtime_kind") or payload.get("codex_runtime_kind") or "").strip().lower()
+    payload_purpose = str(payload.get("runtime_purpose") or payload.get("codex_runtime_purpose") or "").strip().lower()
+    is_eval_like = bool(
+        re.search(
+            r"(^|\n)\s*You are judging an agent answer(?:\s+for\s+(?:a\s+)?harness eval)?\b|\b(harness eval|run_evals\.py|\.farplane/evals)\b",
+            raw_text,
+            re.IGNORECASE,
+        )
+    )
+    kind = env_kind or payload_kind
+    purpose = env_purpose or payload_purpose
+    if not kind and is_eval_like:
+        kind = "ephemeral"
+    if not purpose and is_eval_like:
+        purpose = "eval"
+    return normalize_runtime_metadata({"kind": kind, "purpose": purpose, "source": "hook_payload"})
 
 
 def capture_user_turn(
@@ -1451,6 +1505,7 @@ def capture_user_turn(
     explicit_run_state: str | None = None,
     captured_at: str | None = None,
     only_if_missing: bool = False,
+    runtime: Mapping[str, object] | None = None,
 ) -> dict[str, object] | None:
     captured_at_value = captured_at or now_iso()
     current_run = load_current_run(
@@ -1473,6 +1528,7 @@ def capture_user_turn(
         turn_id=turn_id,
         source=source,
         captured_at=captured_at_value,
+        runtime=runtime,
     )
     current_run = maybe_seed_impl_runtime(
         project_root=project_root,

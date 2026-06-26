@@ -2,11 +2,11 @@
   "counts": {
     "edge_types": {
       "common-chain": 19,
-      "markdown-ref": 311,
-      "todo-chain": 312
+      "markdown-ref": 313,
+      "todo-chain": 316
     },
-    "edges": 642,
-    "nodes": 96,
+    "edges": 648,
+    "nodes": 97,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
@@ -26,12 +26,12 @@
     ],
     "sources": {
       "external": 3,
-      "local": 93
+      "local": 94
     },
     "tiers": {
       "1": 5,
       "2": 38,
-      "3": 53
+      "3": 54
     }
   },
   "edges": [
@@ -1923,8 +1923,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.4",
+      "order": 4,
       "source": "goal-advisor",
       "target": "demo",
       "target_ref": "demo",
@@ -1939,8 +1939,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
+      "label": "todo.5",
+      "order": 5,
       "source": "goal-advisor",
       "target": "impl-plan",
       "target_ref": "impl-plan",
@@ -1962,8 +1962,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
+      "label": "todo.1",
+      "order": 1,
       "source": "goal-advisor",
       "target": "optimize-with-human",
       "target_ref": "optimize-with-human",
@@ -1971,8 +1971,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
+      "label": "todo.3",
+      "order": 3,
       "source": "goal-advisor",
       "target": "qa",
       "target_ref": "qa",
@@ -1980,8 +1980,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
+      "label": "todo.2",
+      "order": 2,
       "source": "goal-advisor",
       "target": "review",
       "target_ref": "review",
@@ -2743,8 +2743,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.7",
-      "order": 7,
+      "label": "todo.6",
+      "order": 6,
       "source": "init-advisor",
       "target": "automation-advisor",
       "target_ref": "automation-advisor",
@@ -2752,8 +2752,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.6",
-      "order": 6,
+      "label": "todo.5",
+      "order": 5,
       "source": "init-advisor",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
@@ -2761,8 +2761,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
+      "label": "todo.3",
+      "order": 3,
       "source": "init-advisor",
       "target": "harness-advisor",
       "target_ref": "harness-advisor",
@@ -2786,43 +2786,29 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.2",
+      "order": 2,
       "source": "init-advisor",
       "target": "horizon-advisor",
       "target_ref": "horizon-advisor",
       "type": "todo-chain"
     },
     {
-      "label": "research#researchcode-patterns",
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
       "source": "init-advisor",
-      "target": "research",
-      "target_ref": "research#researchcode-patterns",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "research#researchofficial-docs",
-      "source": "init-advisor",
-      "target": "research",
-      "target_ref": "research#researchofficial-docs",
-      "type": "markdown-ref"
+      "target": "skill-creator",
+      "target_ref": "skill-creator",
+      "type": "todo-chain"
     },
     {
       "chain_source": "todo_list",
       "label": "todo.2",
       "order": 2,
-      "source": "init-advisor",
-      "target": "research",
-      "target_ref": "research",
-      "type": "todo-chain"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
-      "source": "init-advisor",
-      "target": "skill-creator",
-      "target_ref": "skill-creator",
+      "source": "interval-update",
+      "target": "documentation",
+      "target_ref": "documentation",
       "type": "todo-chain"
     },
     {
@@ -2831,6 +2817,15 @@
       "target": "metric-advisor",
       "target_ref": "metric-advisor",
       "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "interval-update",
+      "target": "update-memory",
+      "target_ref": "update-memory",
+      "type": "todo-chain"
     },
     {
       "label": "markdown-ref",
@@ -4713,6 +4708,61 @@
     },
     {
       "label": "markdown-ref",
+      "source": "taste-loop",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "taste-loop",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "taste-loop",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "taste-loop",
+      "target": "optimize-with-human",
+      "target_ref": "optimize-with-human",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "taste-loop",
+      "target": "optimize-with-human",
+      "target_ref": "optimize-with-human",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "taste-loop",
+      "target": "self-improve",
+      "target_ref": "self-improve",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "taste-loop",
+      "target": "self-improve",
+      "target_ref": "self-improve",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
       "source": "testing",
       "target": "advise",
       "target_ref": "advise",
@@ -5154,7 +5204,7 @@
       "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-06-25T18:10:19+00:00",
+  "generated_at": "2026-06-26T09:17:29+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -7271,11 +7321,11 @@
       "source": "local",
       "tier": 3,
       "todo_skill_refs": [
+        "optimize-with-human",
         "review",
         "qa",
         "demo",
-        "impl-plan",
-        "optimize-with-human"
+        "impl-plan"
       ]
     },
     {
@@ -7469,7 +7519,7 @@
       ]
     },
     {
-      "description": "Route liked links, images, videos, files, or notes into analyzed, searchable Convex inspiration records with reusable elements and tags.",
+      "description": "Route liked links, images, videos, files, or notes into analyzed, searchable Resource Bank records with audience-aware Tasty Pack retrieval fields.",
       "eval": "",
       "group": "content-social",
       "has_checklist": true,
@@ -7527,13 +7577,12 @@
       "label": "init-advisor",
       "methods": [],
       "path": "skills/init-advisor/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_ui": "",
       "source": "local",
       "tier": 3,
       "todo_skill_refs": [
         "harness-creator",
-        "research",
         "horizon-advisor",
         "harness-advisor",
         "skill-creator",
@@ -7570,7 +7619,10 @@
       "skill_ui": "",
       "source": "local",
       "tier": 3,
-      "todo_skill_refs": []
+      "todo_skill_refs": [
+        "update-memory",
+        "documentation"
+      ]
     },
     {
       "description": "Turn bloated knowledge artifacts into ranked keep/cut/reroute decisions when docs, memory, or context surfaces need pruning.",
@@ -8352,6 +8404,41 @@
       "tier": 3,
       "todo_skill_refs": [
         "research"
+      ]
+    },
+    {
+      "description": "Run a Codex-native active-hours heartbeat prompt that selects high-compounding skills and emits feedback cards or Goal handoffs.",
+      "eval": "eval_task.json",
+      "group": "self-improvement",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_30d": 0,
+        "distinct_threads_window": 0,
+        "distinct_tickets_30d": 0,
+        "distinct_tickets_window": 0,
+        "heat_score": 0,
+        "invocation_count_30d": 0,
+        "invocation_count_7d": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "taste-loop",
+      "label": "taste-loop",
+      "methods": [],
+      "path": "skills/taste-loop/SKILL.md",
+      "qa_checklist": "",
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "metric-advisor",
+        "optimize-with-human",
+        "self-improve"
       ]
     },
     {

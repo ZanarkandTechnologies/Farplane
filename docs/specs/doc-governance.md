@@ -18,12 +18,13 @@ Farplane uses two kinds of documentation checks:
 
 These surfaces define the live repo story and should stay mutually coherent:
 
-- [AGENTS.md](/Users/kenjipcx/coding-harness/Farplane/AGENTS.md)
-- [ARCHITECTURE.md](/Users/kenjipcx/coding-harness/Farplane/ARCHITECTURE.md)
-- [README.md](/Users/kenjipcx/coding-harness/Farplane/README.md)
-- [docs/specs/README.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/README.md)
-- [docs/specs/harness-techniques.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/harness-techniques.md)
-- [tickets/README.md](/Users/kenjipcx/coding-harness/Farplane/tickets/README.md)
+- [AGENTS.md](../../AGENTS.md)
+- [ARCHITECTURE.md](../../ARCHITECTURE.md)
+- [README.md](../../README.md)
+- [docs/specs/README.md](README.md)
+- [docs/systems/README.md](../systems/README.md)
+- [docs/specs/harness-techniques.md](harness-techniques.md)
+- [tickets/README.md](../../tickets/README.md)
 
 ## Documentation Architecture
 
@@ -68,15 +69,20 @@ If a doc grows because it is accumulating task evidence, archive notes, or
 implementation history, move those details to the ticket, artifact, or `tmp/**`
 scratch space and keep the current contract compact.
 
-## Feature Metadata Ownership
+## System And Capability Metadata Ownership
 
-Specs own feature metadata. Add or update `feature_records_json` in the
-smallest active spec that owns the behavior. Use
-`docs/specs/feature-catalog.md` only for transitional, cross-cutting, or
-historical `FEAT-*` records without a clearer spec owner.
+`docs/systems/*.md` owns Farplane's public system stack and internal capability
+handles. Each system file carries one `system_record_json` block and one
+`capability_records_json` block.
 
-`docs/features/registry.jsonl` is generated output. Do not hand-edit it. After
-feature metadata changes, run:
+Use `SYS-*` records for public product modules and `FEAT-*` records for stable
+compatibility handles consumed by templates, tickets, sources, validators, and
+adoption checks. If a candidate feature is not worth placing in an owning
+system spec, it is not yet worth a first-class `FEAT-*` handle.
+
+`docs/systems/registry.jsonl` and `docs/features/registry.jsonl` are generated
+output. Do not hand-edit them. After system or capability metadata changes,
+run:
 
 ```bash
 python3 docs/features/validate_features.py --write
@@ -98,8 +104,8 @@ Current structural checks:
 - `python3 bin/validators/check_doc_parity.py`
   Purpose: narrow entrypoint parity for canonical docs and stale queue claims
 - `python3 docs/features/validate_features.py`
-  Purpose: generated feature registry freshness, stable ID, ref, and row-shape
-  validation
+  Purpose: generated system and feature registry freshness, stable ID, ref,
+  owner, and row-shape validation
 
 Rule of thumb:
 
