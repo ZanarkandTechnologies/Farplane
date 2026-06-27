@@ -42,6 +42,9 @@ telegram_message_check(message, recipient, send_path, artifacts?, fallback?)
   the message body or command output.
 - [ ] The send path uses environment or Keychain credentials only; token values
   are never written to files, commands in chat, or repo artifacts.
+- [ ] A route target is available as caller-supplied `threadId`/`sessionId` or
+  `CODEX_THREAD_ID`, so Telegram replies can be routed back to the originating
+  Codex thread.
 
 ## Final Review
 
@@ -52,7 +55,9 @@ telegram_message_check(message, recipient, send_path, artifacts?, fallback?)
   matters, and exactly how Kenji should reply.
 - [ ] `TELEGRAM_CHAT_ID` is configured, and a token is available from
   environment or the configured Keychain path before attempting to send.
-- [ ] `scripts/send_message.py` is used with `--text`, `--file`, or stdin.
+- [ ] The message is sent through `scripts/send_message.py` with
+  `--thread-id`/`--session-id` or `CODEX_THREAD_ID`; the script must use the
+  Farplane UI gateway path for replyable messages.
 - [ ] Markdown parse mode is used only for simple Markdown; raw text uses
   `--parse-mode none`.
 - [ ] Telegram failure or missing configuration is reported clearly without

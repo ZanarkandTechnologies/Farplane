@@ -36,7 +36,8 @@ telegram_message(message_intent, message_body?, artifact_refs?, state?)
 
 state:
   reads(qa_checklist.md, references/configuration.md when credential fallback
-        details are needed, caller artifact when using --file)
+        details are needed, caller artifact when using --file,
+        CODEX_THREAD_ID or caller-supplied thread/session id)
   writes(none by default; caller may persist message files)
 
 gates:
@@ -44,6 +45,7 @@ gates:
   no_secrets
   telegram_viewable
   one_clear_reply_action
+  reply_route_target_available
   credentials_available_or_fallback_recorded
 
 routes:
@@ -90,9 +92,14 @@ material, automated, sensitive, or repeated notification failures.
   - [ ] Ask one concrete reply action Kenji can answer in one Telegram reply.
   - [ ] Keep secrets, tokens, credentials, and sensitive private data out.
 - [ ] 4. Send or fallback.
-  - [ ] Use `TELEGRAM_CHAT_ID` from environment and `TELEGRAM_BOT_TOKEN` from
-    environment or the configured Keychain fallback only.
-  - [ ] Send with `scripts/send_message.py` using `--text`, `--file`, or stdin.
+  - [ ] Resolve `thread_id := caller thread/session id || CODEX_THREAD_ID`.
+    If no route target exists, do not send a replyable message; report a
+    fallback/blocker.
+  - [ ] Use `scripts/send_message.py`, which routes through the Farplane UI
+    gateway by default so every sent message persists a Telegram message id ->
+    thread/session route row.
+  - [ ] Use `TELEGRAM_CHAT_ID` from environment or `~/.farplane/config.json`,
+    and `TELEGRAM_BOT_TOKEN` from environment, Keychain, or gateway config.
   - [ ] Use `--parse-mode Markdown` only for simple Markdown; use
     `--parse-mode none` for raw text.
   - [ ] If Telegram is not configured, report the fallback artifact path instead
@@ -127,14 +134,23 @@ Send inline text:
 
 ```bash
 source /Users/kenjipcx/.codex/private/telegram.env
-python3 scripts/send_message.py --text "Review needed: paste the short choices here, not only a local path."
+python3 scripts/send_message.py \
+  --thread-id "${CODEX_THREAD_ID:?CODEX_THREAD_ID required for reply routing}" \
+  --text "Review needed: paste the short choices here, not only a local path." \
+  --title "Review needed" \
+  --parse-mode none
 ```
 
 Send a prepared file:
 
 ```bash
 source /Users/kenjipcx/.codex/private/telegram.env
-python3 scripts/send_message.py --file feedback-request.md --parse-mode none
+MESSAGE_FILE="/absolute/path/to/feedback-request.md"
+python3 scripts/send_message.py \
+  --thread-id "${CODEX_THREAD_ID:?CODEX_THREAD_ID required for reply routing}" \
+  --file "$MESSAGE_FILE" \
+  --title "Feedback request" \
+  --parse-mode none
 ```
 
 ## Gotchas
@@ -145,6 +161,9 @@ python3 scripts/send_message.py --file feedback-request.md --parse-mode none
   the one reply action.
 - Sending Telegram does not imply permission to publish, message customers,
   spend money, deploy, or perform external side effects beyond notifying Kenji.
+- Do not bypass the gateway with raw Telegram API sends for replyable messages.
+  A sent message without a persisted route row cannot route Kenji's reply back
+  to the originating Codex thread.
 
 ## Reference Map
 
@@ -154,6 +173,7 @@ python3 scripts/send_message.py --file feedback-request.md --parse-mode none
 
 ## Output
 
-- `sent_message`: one Telegram message sent through `scripts/send_message.py`.
+- `sent_message`: one Telegram message sent through the Farplane UI Telegram
+  gateway, with its reply route persisted.
 - `fallback_report`: clear reason Telegram was skipped, missing, blocked, or
   not viewable enough to send.

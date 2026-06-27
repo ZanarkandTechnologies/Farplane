@@ -15,7 +15,6 @@
   "priority_hint": "high",
   "user_value_reason": "Recently created Notion Tasks become usable for planning only when missing fields are filled safely or escalated to Kenji.",
   "evidence_refs": [
-    "tickets/TASK-0193/artifacts/notion-field-fill-dry-run-2026-06-03.md",
     "skills/notion-task-field-fill/references/model.md",
     "skills/notion-task-field-fill/references/confidence.md"
   ],

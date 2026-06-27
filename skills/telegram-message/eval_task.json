@@ -11,7 +11,7 @@
       "Asks for one simple reply action such as pick A/B/C, revise, or reject with one reason",
       "Does not send a giant artifact dump when a compact decision prompt is enough",
       "Does not expose Telegram secrets, tokens, credentials, or unrelated private data",
-      "Uses scripts/send_message.py with environment or Keychain credentials, or records a clear fallback/blocker if not configured",
+      "Uses scripts/send_message.py with a thread/session route target so the Farplane UI Telegram gateway persists reply routing, or records a clear fallback/blocker if not configured",
       "Does not imply permission to publish, contact customers, spend money, or deploy"
     ],
     "tags": [

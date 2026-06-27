@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Send a Telegram message using environment-configured credentials."""
+"""Send a replyable Telegram message through the local Farplane gateway."""
 
 from __future__ import annotations
 
@@ -10,6 +10,8 @@ import sys
 import urllib.parse
 import urllib.request
 from pathlib import Path
+
+DEFAULT_FARPLANE_UI_ROOT = Path("/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI")
 
 
 def read_message(args: argparse.Namespace) -> str:
@@ -65,13 +67,63 @@ def keychain_token() -> str | None:
     return token or None
 
 
+def gateway_send(args: argparse.Namespace, message: str) -> int:
+    thread_id = (args.thread_id or args.session_id or os.environ.get("CODEX_THREAD_ID") or "").strip()
+    if not thread_id:
+        print(
+            "Telegram route target missing: provide --thread-id/--session-id or set CODEX_THREAD_ID.",
+            file=sys.stderr,
+        )
+        return 2
+
+    ui_root = Path(args.farplane_ui_root).expanduser()
+    command = [
+        "npm",
+        "run",
+        "cli",
+        "--",
+        "gateway",
+        "telegram",
+        "send",
+        "--thread-id",
+        thread_id,
+        "--text",
+        message,
+        "--parse-mode",
+        args.parse_mode,
+    ]
+    if args.session_id:
+        command.extend(["--session-id", args.session_id])
+    if args.title:
+        command.extend(["--title", args.title])
+    result = subprocess.run(command, cwd=ui_root, check=False)
+    return result.returncode
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--text")
     parser.add_argument("--file")
     parser.add_argument("--parse-mode", default="none", choices=["none", "Markdown", "MarkdownV2", "HTML"])
     parser.add_argument("--disable-preview", action="store_true", default=True)
+    parser.add_argument("--thread-id", help="Codex thread id to route Telegram replies to")
+    parser.add_argument("--session-id", help="Codex session/thread id to route Telegram replies to")
+    parser.add_argument("--title", help="Short title for the gateway route row")
+    parser.add_argument("--farplane-ui-root", default=str(DEFAULT_FARPLANE_UI_ROOT))
+    parser.add_argument(
+        "--raw-telegram",
+        action="store_true",
+        help="Bypass reply routing and send directly through Telegram. Use only for non-replyable notifications.",
+    )
     args = parser.parse_args()
+
+    message = read_message(args)
+    if not message.strip():
+        print("Refusing to send an empty Telegram message.", file=sys.stderr)
+        return 2
+
+    if not args.raw_telegram:
+        return gateway_send(args, message.strip())
 
     token = os.environ.get("TELEGRAM_BOT_TOKEN") or keychain_token()
     chat_id = os.environ.get("TELEGRAM_CHAT_ID")
@@ -82,13 +134,8 @@ def main() -> int:
         )
         return 2
 
-    message = read_message(args)
-    if not message.strip():
-        print("Refusing to send an empty Telegram message.", file=sys.stderr)
-        return 2
-
     send(token, chat_id, message, args.parse_mode, args.disable_preview)
-    print("Telegram message sent")
+    print("Telegram message sent without reply routing")
     return 0
 
 
