@@ -163,7 +163,7 @@ id = "farplane-active-hours-taste-loop"
 name = "Farplane Active-Hours Taste Loop"
 kind = "heartbeat"
 status = "active"
-target_thread_id = "019effea-bb95-7333-81df-935820114877"
+target_thread_id = "019f0774-76d7-77d3-b7e5-0e9bb48e232f"
 
 [schedule]
 type = "active_hours_interval"
