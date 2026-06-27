@@ -269,7 +269,7 @@ def run_sharded_coderabbit(
             print(f"  {path}", flush=True)
         if len(uncovered) > 20:
             print(f"  ... {len(uncovered) - 20} more", flush=True)
-        if returncode == 0:
+        if not dry_run and returncode == 0:
             returncode = 1
     return returncode
 
