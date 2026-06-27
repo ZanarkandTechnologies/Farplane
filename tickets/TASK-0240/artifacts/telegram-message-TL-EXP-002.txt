@@ -1,0 +1,40 @@
+Taste Loop TASK-0240: Pocket Intern social thread proposals
+
+Why this matters: the last cards were too thin. These are fuller TasteProposals so you can judge the idea from Telegram before we draft anything.
+
+A. The Fake Intern Who Makes Shipping Physical
+Bet: make Pocket Intern feel like a tiny ritual for turning vague work into shipped work.
+Audience: founders/builders with chaotic desks and unfinished ideas.
+Taste insight: the badge + "ship it" stamp should act like a real desk workflow, not just a gag.
+Artifact shape: 8-post thread built around a sticky-note shipping ritual.
+Story: hire a toy intern -> name the half-finished-work problem -> reveal the stamp -> make "if it gets stamped, it ships today" the rule -> show bug fix / launch checklist / scary email uses -> gift CTA.
+Why it could win: concrete, visual, weirdly useful.
+Cringe risk: could become productivity-guru sludge if it loses the joke.
+If approved: draft the 8-post ritual thread.
+
+B. A Performance Review For A Toy Employee
+Bet: make Pocket Intern memorable as a fake employee being reviewed like a real teammate.
+Audience: people who like fake corporate artifacts, founder jokes, and product characters.
+Taste insight: the fake employee badge is the strongest story object.
+Artifact shape: 7-post HR performance-review thread: Strengths, Growth Areas, Compensation, Culture Fit, Rehire Decision.
+Story: "30-day performance review" -> role summary -> strengths: stamps ship it -> growth areas: cannot Slack -> culture fit: reduces overthinking -> gift bridge -> under-$40 salary joke.
+Why it could win: every post can be a joke and a product detail.
+Cringe risk: could drift into stale LinkedIn satire if too corporate.
+If approved: draft the sectioned performance-review thread.
+
+C. The Desk Toy That Bullies Your Ideas Into The World
+Bet: make Pocket Intern a charmingly bossy object that turns hesitation into public commitment.
+Audience: builders, students, and creators who like absurd objects that make work less lonely.
+Taste insight: the stamp externalizes permission; it gives people a dumb ceremony for ending revision loops.
+Artifact shape: 8-post narrative from private hesitation to stamped-note photo proof.
+Story: rewrite/replan loop -> toy intern intervention -> stamp a sticky before sending a scary draft -> text stamped proof to a friend -> explain why silly lowers stakes -> use cases -> gift CTA.
+Why it could win: broader than founders and emotionally specific.
+Cringe risk: "bullies" may feel harsh; needs playful handling.
+If approved: draft the broader-audience proof-mechanic thread.
+
+Reply with: A, B, C, revise, or reject + one short reason.
+
+Desktop refs only:
+- tickets/TASK-0240/artifacts/taste-proposals-TL-EXP-002.md
+
+Planning only. No social thread execution or external posting yet.
