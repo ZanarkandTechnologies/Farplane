@@ -36,67 +36,116 @@ last_verified: 2026-06-07
 ---
 # Lean global agent operating kernel
 
-Lean global agent operating kernel is a first-class Farplane feature in [Agent Kernel](../systems/agent-kernel.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
+Lean global agent operating kernel exists to keep always-loaded agent policy small,
+actionable, and routed to durable owner surfaces. It belongs to [Agent
+Kernel](../systems/agent-kernel.md) and keeps `FEAT-0042` as a stable capability handle
+because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
-feature(FEAT-0042, repo_state?) -> behavior + evidence + maintenance_signal
+load_agent_context(repo, task) -> lean_kernel + routed_skill_context + proof_rules
 ```
 
-## System
+## At A Glance
 
-- System: [Agent Kernel](../systems/agent-kernel.md)
 - Feature ID: `FEAT-0042`
+- System: [Agent Kernel](../systems/agent-kernel.md)
 - Status: `implemented`
 - Category: `context-routing`
+- Primary user: every Farplane coding agent
+- Job: keep always-loaded agent policy small, actionable, and routed to durable owner surfaces.
 
-## Feature Spec
+## Problem
 
-This feature owns the lean always-loaded operating kernel: how an agent decides, acts, communicates, and preserves durable state without bloating every prompt.
+A powerful harness can collapse under its own prompt weight if every rule lives in
+global context.
 
-```text
-agent_kernel(turn, repo_state, user_intent) -> act | plan | answer + durable_state_delta?
-```
+This feature keeps the global and project agent files as a lean operating kernel while
+skills, specs, tickets, validators, and docs own the detailed procedures.
 
-The first-principles planning contract folds into this feature:
+## What It Does
 
-- Start material decisions from objective, user/system need, root cause, constraints, assumptions, proof or falsification, tradeoffs, non-goals, and next action.
-- Use three viable options when a real choice exists; recommend one and name the tradeoff.
-- Treat low-confidence exploratory phrasing as a design signal unless an accepted ticket or explicit implementation request owns the scope.
-- Promote only stable, reusable rules into always-loaded prompts. Move detailed procedures into skills, feature docs, tickets, validators, or owner surfaces.
+- Defines autonomy, action mode, reading, verification, and communication defaults.
+- Routes detailed procedures into skills, tickets, specs, docs, hooks, or validators.
+- Keeps Farplane-native identity in active repo-owned prompts and templates.
+- Treats low-confidence design language as plan-first until a ticket or explicit implementation request exists.
+- Requires local project context before edits and proof before completion claims.
 
-Non-goal: the kernel is not the place for every workflow. It is the small decision loop that routes work to the right artifact.
+## User Stories
 
-Proof gates:
+- As an agent, I can enter Farplane with the right operating shape without loading every procedure.
+- As a maintainer, I can move detailed rules into the right owner instead of bloating AGENTS.md.
+- As an operator, I get momentum without silent architectural drift.
 
-- The agent can explain why it acted, planned, or answered.
-- Material choices name assumptions and proof needs.
-- Durable policy is not duplicated into every surface.
+## Operating Contract
 
-## Owner Surfaces
+The agent kernel is a router and behavioral floor, not the full operating manual.
+
+- Global and project AGENTS files stay navigational and policy-light.
+- Detailed procedures live in skills, specs, tickets, docs, hooks, or validators.
+- Material design choices remain feedback-first unless a ticket, spec, or explicit request owns the scope.
+- Implementation work verifies before claiming completion.
+
+## Surfaces
+
+Owner surfaces:
 
 - `templates/global/AGENTS.md`
 - `skills/init-advisor/references/AGENTS_TEMPLATE.md`
 - `ARCHITECTURE.md`
 
-## Source Context
+Source context:
 
 - `docs/fundamentals/harness-engineering-doctrine.md`
 - `docs/HISTORY.md`
 
-## Evidence
+Evidence:
 
 - `templates/global/AGENTS.md`
 - `skills/init-advisor/references/AGENTS_TEMPLATE.md`
 - `docs/HISTORY.md`
 
-## Known Limits
+## Proof And Quality
 
-The global template now owns only every-turn behavior; project-specific coding defaults and detailed workflows must keep living in project AGENTS files, skills, tickets, docs, validators, or subagent prompts.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Agent Kernel.
+
+## Limits And Non-Goals
+
+- This feature does not paste every skill instruction into AGENTS.md.
+- This feature does not override project-local ticket contracts.
+- This feature does not replace skill loading.
+- Known limit: The global template now owns only every-turn behavior; project-specific coding defaults and detailed workflows must keep living in project AGENTS files, skills, tickets, docs, validators, or subagent prompts.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
 - no dedicated metric yet
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0042`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

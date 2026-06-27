@@ -59,63 +59,61 @@ last_verified: 2026-06-27
 ---
 # Registry-backed documentation OS
 
-Registry-backed documentation OS is a first-class Farplane feature in [Maintenance And Release OS](../systems/maintenance-release-os.md). It survives as a `FEAT-*` handle because it owns the way public docs, systems, features, templates, and generated registries stay coherent.
+Registry-backed documentation OS exists to make system and feature docs the source of
+truth while registries stay generated outputs. It belongs to [Maintenance And Release
+OS](../systems/maintenance-release-os.md) and keeps `FEAT-0060` as a stable capability
+handle because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
-documentation_os(change, repo_state) -> owner_doc + generated_registry_delta + validation_result
+doc_registry_update(spec_docs) -> generated_registries + validation_report
 ```
 
-## System
+## At A Glance
 
-- System: [Maintenance And Release OS](../systems/maintenance-release-os.md)
 - Feature ID: `FEAT-0060`
+- System: [Maintenance And Release OS](../systems/maintenance-release-os.md)
 - Status: `implemented`
 - Category: `context-routing`
+- Primary user: maintainer and documentation author
+- Job: make system and feature docs the source of truth while registries stay generated outputs.
 
-## Feature Spec
+## Problem
 
-This feature folds the former doc-governance, filesystem-lifecycle, feature-catalog, harness-technique inventory, and high-impact template registry specs into one owner.
+Farplane had specs, features, future ideas, archives, registries, and templates drifting
+as separate truth shelves.
 
-Core rules:
+This feature collapses the durable documentation model around reader-first feature and
+system specs with generated registries for machine use.
 
-- Feature docs are the spec files. A `FEAT-*` exists only when a concrete file such as `docs/features/FEAT-0060-registry-backed-documentation-os.md` owns the behavior contract, surfaces, evidence, limits, and registry metadata.
-- System docs are public product-layer containers. They group feature specs; they do not preserve weak feature rows.
-- Generated registries are outputs. Edit system and feature Markdown, then regenerate JSONL/Markdown registries.
-- Durable Markdown uses compact YAML front matter for routing and machine-readable metadata; body prose owns the human contract.
-- Artifact-first writing applies when a result will be reused, resumed, audited, or validated. Chat is fine for one-off answers.
-- Raw signal stays in tickets, experiments, source records, or temporary artifacts until distilled into an owning feature, system, skill, lesson, or memory file.
-- Stale specs, duplicate docs, retired feature aliases, permanent future-idea piles, and tracked archive docs are deleted after current truth is folded into an active owner.
+## What It Does
 
-Lifecycle owners:
+- Makes each surviving `FEAT-*` a Markdown feature spec with YAML frontmatter.
+- Feature docs are the spec files.
+- Makes `docs/systems/*.md` the public product-layer grouping for related features.
+- Generates feature and system registries from docs instead of hand-editing JSONL rows.
+- Keeps durable Markdown artifact-first and routes raw signal to tickets, experiments, or temporary research until distilled.
+- Deletes or folds stale docs rather than preserving tracked archive noise.
 
-- `docs/features/FEAT-NNNN-name.md`: feature specs and registry source.
-- `docs/systems/*.md`: system stack and feature grouping.
-- `docs/fundamentals/`: theory and reusable doctrine.
-- `docs/skills/` and `skills/<name>/`: skill-system policy and executable workflows.
-- `tickets/`: task-local plans, blockers, proof, and closeout evidence.
-- `experiments/` and `tmp/`: bounded proof and scratch work that must not become canonical memory by accident.
+## User Stories
 
-Template registry contract:
+- As an operator, I can understand Farplane's capabilities from specs rather than opaque registry rows.
+- As a maintainer, I can edit one feature file and regenerate derived inventories.
+- As a documentation agent, I know where a new doc belongs and how to prove it.
 
-- High-impact prompt-shaped templates keep stable metadata and feature refs.
-- `bin/validators/sync_template_registry.py` owns generated template registry freshness.
-- Low-impact scaffolds do not get registry ceremony until they have a real consumer.
+## Operating Contract
 
-Non-goals:
+Docs are human contracts first; registries are generated views.
 
-- No parallel spec-folder truth shelf.
-- No permanent tracked archives by default.
+- Feature docs own feature behavior, surfaces, evidence, limits, and metadata.
+- System docs own product-layer grouping and boundaries.
+- Generated JSONL and Markdown registries are never the only source of truth.
+- Stale feature rows are deleted unless they earn a clear feature spec.
+- Template, feature, and system refs must validate together.
 - No compatibility feature rows for capabilities that do not earn their own feature spec.
 
-Proof gates:
+## Surfaces
 
-- `python3 docs/features/validate_features.py` passes.
-- `python3 bin/validators/check_doc_parity.py` passes for canonical entrypoint coherence.
-- `python3 bin/validators/check_doc_refs.py` passes for canonical docs.
-- Feature docs, system docs, and template registries agree on surviving IDs.
-- Deleted docs leave no active broken references in scanned canonical surfaces.
-
-## Owner Surfaces
+Owner surfaces:
 
 - `docs/features/README.md`
 - `docs/features/TEMPLATE.md`
@@ -129,24 +127,49 @@ Proof gates:
 - `rules/template-version-watch.toml`
 - `bin/validators/sync_template_registry.py`
 - `templates/global/AGENTS.md`
-- `docs/skills/templates/SKILL_TEMPLATE.md`
 
-## Source Context
+Source context:
 
 - `docs/features/README.md`
 - `docs/systems/README.md`
 - `docs/templates/registry.jsonl`
 
-## Evidence
+Evidence:
 
 - `docs/features/validate_features.py`
 - `bin/validators/test_check_doc_refs.py`
 - `bin/validators/test_doc_parity.py`
 - `bin/validators/test_sync_template_registry.py`
 
-## Known Limits
+## Proof And Quality
 
-Owns documentation, system, feature, and template registry coherence. It does not preserve retired feature IDs or permanent tracked archive docs just to keep historical noise searchable.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+- `python3 bin/validators/check_doc_parity.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Maintenance And Release OS.
+
+## Limits And Non-Goals
+
+- This feature does not preserve retired feature IDs for nostalgia.
+- This feature does not keep permanent tracked archives by default.
+- This feature does not turn raw future ideas into canonical docs before they earn an owner.
+- No parallel spec-folder truth shelf.
+- Known limit: Owns documentation, system, feature, and template registry coherence. It does not preserve retired feature IDs or permanent tracked archive docs just to keep historical noise searchable.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
@@ -154,6 +177,16 @@ Owns documentation, system, feature, and template registry coherence. It does no
 - `template_feature_registry_validation_pass`
 - `doc_reference_validation_pass`
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0060`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

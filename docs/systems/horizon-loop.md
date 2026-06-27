@@ -31,22 +31,30 @@ system_record_json: |
     "last_verified": "2026-06-27"
   }
 ---
-
 # Horizon Loop
 
-The longer-running project loop that coordinates goals, Goal Packets, Pulse, Interval, backoff, PR watching, feedback, and horizon-level ticket supply.
+The longer-running project loop that coordinates goals, Goal Packets, Pulse, Interval,
+backoff, PR watching, feedback, and horizon-level ticket supply. This page is the
+product-layer owner for that subsystem: it explains what belongs here, which feature
+specs make up the stack, and where adjacent responsibilities should move.
+
+```text
+horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + maintenance_signal
+```
+
+## At A Glance
+
+- System ID: `SYS-0003`
+- Status: `implemented`
+- Primary feature: `FEAT-0029`
+- Owner spec: `docs/systems/horizon-loop.md`
+- Feature count: `3`
 
 ## Role
 
-Horizon Loop is the long-running coordination layer: Goal Packets, pulse/interval cadence, feedback loops, and multi-window execution memory.
-
-## What Belongs Here
-
-Goal architecture, heartbeat execution, drift checks, backoff, PR watch loops, and longer-horizon planning.
-
-## What Belongs Elsewhere
-
-Single-ticket build contracts stay in Work Loop; validators and release registries stay in Maintenance OS.
+Horizon Loop owns recurring and longer-running autonomy: Goal Packets, Pulse, Interval,
+Rhythm, Horizon, backoff, PR watching, and ticket-supply learning. It decides the next
+bounded move without turning Farplane into a hidden daemon.
 
 ## Feature Docs
 
@@ -54,6 +62,40 @@ Single-ticket build contracts stay in Work Loop; validators and release registri
 - [FEAT-0032 Goal Advisor execution compilation](../features/FEAT-0032-goal-advisor-execution-compilation.md)
 - [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md)
 
-## Maintenance
+## What Belongs Here
 
-This system page owns only the system-level contract. Feature registry rows are authored as feature pages in `docs/features/` and generated into `docs/features/registry.jsonl`.
+Goal-backed continuation, pulse actions, interval reports, horizon recalibration,
+adaptive waits, reward closure, and learning signals that create or reshape ticket
+supply.
+
+## What Belongs Elsewhere
+
+Single-ticket execution belongs in Work Loop; external invocation boundaries belong in
+Invocation Runtime; proof standards belong in Proof And Review.
+
+## Operating Contract
+
+- Recurring loops must have visible prompts, reports, tickets, or automations as state owners.
+- Automations may no-op when no safe valuable action exists.
+- Backoff and polling stay tracked and bounded.
+- Human authority remains required for ambiguous or high-risk direction.
+- Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
+- Registry data is generated from system and feature docs, not edited by hand.
+- When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
+
+## Surfaces
+
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `docs/features/FEAT-0065-pulse-and-interval-automation.md`
+
+## Proof And Maintenance
+
+- Registry proof: `python3 docs/features/validate_features.py`.
+- Link proof: `python3 bin/validators/check_doc_refs.py`.
+- Update this system page when product-layer boundaries or feature membership changes.
+- Update feature pages when capability behavior changes.
+- Regenerate registries and commit generated outputs with the source docs.
+
+## Change History
+
+- 2026-06-27: Migrated into the reader-first system-spec shape.

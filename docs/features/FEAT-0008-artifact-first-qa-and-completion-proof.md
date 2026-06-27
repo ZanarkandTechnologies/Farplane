@@ -41,44 +41,61 @@ last_verified: 2026-06-12
 ---
 # Artifact-first QA and completion proof
 
-Artifact-first QA and completion proof is a first-class Farplane feature in [Proof And Review](../systems/proof-review.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
-
-```text
-feature(FEAT-0008, repo_state?) -> behavior + evidence + maintenance_signal
-```
-
-## System
-
-- System: [Proof And Review](../systems/proof-review.md)
-- Feature ID: `FEAT-0008`
-- Status: `implemented`
-- Category: `proof`
-
-## Feature Spec
-
-This feature owns proof-before-completion behavior. Farplane work is not done because the implementer says it is done; it is done when the ticket's proof gates, QA evidence, reviewer checks, and completion path agree.
+Artifact-first QA and completion proof exists to make completion inspectable through
+ticket proof obligations, linked artifacts, and review verdicts. It belongs to [Proof
+And Review](../systems/proof-review.md) and keeps `FEAT-0008` as a stable capability
+handle because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
 proof_gate(work_type, ticket, artifacts) -> pass | needs_revision | blocked
 ```
 
-The former review-gates spec folds into this feature:
+## At A Glance
 
-- Ticket `Done / Proof` is the scoreboard for required checks, evidence, and review gates.
-- QA owns user-visible or runtime evidence such as screenshots, traces, command outputs, console logs, and failure captures.
-- Reviewer owns material plan, implementation, prompt, evidence, and completion-claim judgment.
-- Stop-hook completion for active Goal-backed work stays mechanical and visible: implementation, QA, demo when required, and a final completion-review receipt.
-- Normalized review outputs should identify verdict, TAS gate status, hard blockers, findings, evidence checked, and residual risk.
+- Feature ID: `FEAT-0008`
+- System: [Proof And Review](../systems/proof-review.md)
+- Status: `implemented`
+- Category: `proof`
+- Primary user: operator, QA lane, reviewer, and coding agent
+- Job: make completion inspectable through ticket proof obligations, linked artifacts, and review verdicts.
 
-Non-goal: this feature does not make every task heavyweight. Proof scales with risk, blast radius, and user-facing impact.
+## Problem
 
-Proof gates:
+Farplane work often spans planning, implementation, QA, review, and closeout. If
+completion is declared only in chat, the next reader cannot tell which checks ran, where
+the evidence lives, which risks remain, or whether a reviewer agreed with the claim.
 
-- Completion claims name the checks and evidence used.
-- Material work is not self-approved when a reviewer or QA lane is available.
-- Missing evidence is recorded as a blocker or residual risk, not silently ignored.
+This feature gives each task a visible scoreboard: the ticket names the required proof,
+artifacts carry the evidence, and review or QA lanes judge the result against that
+contract.
 
-## Owner Surfaces
+## What It Does
+
+- Reads the ticket `Done / Proof` block as the scoreboard for checks, evidence, and review gates.
+- Produces or links command output, screenshots, traces, console logs, failure captures, review reports, and QA notes.
+- Routes material plans, implementations, prompts, evidence bundles, and completion claims through reviewer judgment when required.
+- Keeps Goal-backed completion mechanical and visible: implementation, QA, demo when required, and final completion review receipt.
+- Refuses silent completion when required evidence is missing.
+
+## User Stories
+
+- As an operator, I can open a ticket and see exactly what proof is required before accepting the result.
+- As a QA lane, I can attach browser, command, or runtime evidence without turning the ticket body into a proof dump.
+- As a reviewer, I can judge the work against named gates, hard blockers, evidence checked, and residual risk.
+
+## Operating Contract
+
+Proof scales with risk, blast radius, and user-facing impact.
+
+- Ticket `Done / Proof` names the expected checks, evidence, review gates, and acceptance signals.
+- Ticket-local artifacts hold bulky proof and reports.
+- QA owns user-visible and runtime evidence capture.
+- Reviewer owns material judgment of plans, implementations, prompts, evidence, and completion claims.
+- Completion claims must name the checks and evidence used.
+
+## Surfaces
+
+Owner surfaces:
 
 - `tickets/README.md`
 - `tickets/templates/ticket.md`
@@ -86,24 +103,58 @@ Proof gates:
 - `skills/review`
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
 
-## Source Context
+Source context:
 
 - `docs/MEMORY.md#MEM-0048`
 - `docs/MEMORY.md#MEM-0064`
 - `docs/MEMORY.md#MEM-0148`
 
-## Evidence
+Evidence:
 
 - `docs/HISTORY.md`
 
-## Known Limits
+## Proof And Quality
 
-Depends on compact `Done / Proof` obligations plus linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Proof And Review.
+
+## Limits And Non-Goals
+
+- This feature does not make every task heavyweight.
+- This feature does not require proof to live inside the ticket body.
+- This feature does not replace ticket scope, specs, or review rubrics.
+- Known limit: Depends on compact `Done / Proof` obligations plus linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
 - no dedicated metric yet
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0008`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

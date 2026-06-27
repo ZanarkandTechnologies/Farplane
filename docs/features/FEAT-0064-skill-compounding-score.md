@@ -49,60 +49,58 @@ last_verified: 2026-06-26
 ---
 # Skill compounding score
 
-Skill compounding score is a first-class Farplane feature in [Skill System](../systems/skill-system.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
+Skill compounding score exists to prioritize skill upgrades by reusable leverage instead
+of recency or loudness. It belongs to [Skill System](../systems/skill-system.md) and
+keeps `FEAT-0064` as a stable capability handle because the behavior has an owner, proof
+path, and maintenance boundary.
 
 ```text
-feature(FEAT-0064, repo_state?) -> behavior + evidence + maintenance_signal
+score_skill_compounding(skill, usage_evidence) -> leverage_score + maintenance_priority
 ```
 
-## System
+## At A Glance
 
-- System: [Skill System](../systems/skill-system.md)
 - Feature ID: `FEAT-0064`
+- System: [Skill System](../systems/skill-system.md)
 - Status: `implemented`
 - Category: `skills`
+- Primary user: skill maintainer and roadmap planner
+- Job: prioritize skill upgrades by reusable leverage instead of recency or loudness.
 
-## Feature Spec
+## Problem
 
-This feature owns the official ranking function for deciding which skill improvement target is likely to compound most from one more improvement beat.
+Skill maintenance time is limited, and not every skill improvement compounds equally
+across Farplane.
 
-```text
-skill_compounding_score(candidate, evidence) -> ranked_scorecard + caveats
-```
+This feature gives maintainers a scoring language for which skills deserve hardening,
+evals, templates, or documentation first.
 
-The folded score contract is a reward-shaped prioritization function. The real objective is:
+## What It Does
 
-```text
-one more improvement beat should increase the chance that Farplane creates
-better product artifacts, proof, or reusable skill leverage
-```
+- Scores skills by reuse, routing centrality, proof leverage, failure cost, and dependency impact.
+- Separates tier classification from maintenance priority.
+- Highlights first-load bloat, overlap, stale checklists, and missing evals.
+- Feeds skill-maintenance planning and consolidation decisions.
+- Helps decide when a skill should be split, merged, promoted, or retired.
 
-Component signals are shaping terms, not the objective itself. Normalize and cap them before weighting; report evidence and source gaps; penalize proxy-gaming paths such as hot but non-artifact targets, feedback without an artifact, fake metrics, ambiguous ownership, and open feedback spam.
+## User Stories
 
-Canonical components:
+- As a maintainer, I can choose the next skill upgrade based on compounding value.
+- As an operator, I can see why a boring workflow skill deserves investment.
+- As a reviewer, I can challenge upgrades that add complexity without leverage.
 
-- tier leverage
-- lifecycle reference fit
-- product lane fit
-- observed heat fit, split into direct heat and related heat
-- downstream leverage fit
-- improvement gap fit
-- feedback fit
-- proof fit
+## Operating Contract
 
-Observed heat uses direct invocation/ticket/thread signals plus weaker related heat from referencing skills. Related heat is a shaping potential, not proof of demand, and must never override the artifact-workflow gate.
+Compounding score is a prioritization signal, not a skill tier.
 
-Taste Loop is the first official consumer. It ranks product-lane artifact workflows using skill registry data, product lanes, direct/related heat, lifecycle refs, and controller memory.
+- Scores cite evidence such as usage, references, failure patterns, or dependency roles.
+- High score implies stronger QA, eval, and documentation expectations.
+- Low score can justify deferring, merging, or retiring a skill.
+- The score does not override direct user priority or urgent bug fixes.
 
-Non-goal: this score is not an eval quality score and not a universal skill value judgment. It is a prioritization aid.
+## Surfaces
 
-Proof gates:
-
-- Scorecards name direct evidence and source gaps.
-- Proxy-gaming paths are penalized.
-- The selected target has an artifact workflow, not just heat.
-
-## Owner Surfaces
+Owner surfaces:
 
 - `docs/features/FEAT-0064-skill-compounding-score.md`
 - `docs/skills/system.md`
@@ -110,22 +108,46 @@ Proof gates:
 - `farplane/automations.md`
 - `docs/skills/registry.jsonl`
 
-## Source Context
+Source context:
 
 - `docs/farplane-framework/lifecycle.md`
 - `docs/skills/system.md`
 - `farplane/products.md`
 - `skills/skill-maintenance/graph/README.md`
 
-## Evidence
+Evidence:
 
 - `skills/taste-loop/SKILL.md`
 - `skills/taste-loop/templates/heartbeat-prompt.md`
 - `skills/taste-loop/eval_task.json`
 
-## Known Limits
+## Proof And Quality
 
-Official ranking contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Skill System.
+
+## Limits And Non-Goals
+
+- This feature does not auto-rewrite skills.
+- This feature does not make every skill high priority because it is useful once.
+- This feature does not replace skill-maintenance review.
+- Known limit: Official ranking contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
@@ -133,6 +155,16 @@ Official ranking contract only; the current implementation is prompt-consumed by
 - `taste_loop_score_breakdown_pass`
 - `skill_registry_validation_pass`
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0064`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

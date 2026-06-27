@@ -34,89 +34,112 @@ last_verified: 2026-06-27
 ---
 # Inspiration Vault
 
-Inspiration Vault is a proposed first-class Farplane feature in [Source And Sidecar Systems](../systems/source-sidecar-systems.md). It survived the purge because it already had enough product shape to deserve a feature spec rather than a stray idea file.
+Inspiration Vault exists to hold reusable inspiration sources until they can be routed
+into products, skills, or experiments. It belongs to [Source And Sidecar
+Systems](../systems/source-sidecar-systems.md) and keeps `FEAT-0056` as a stable
+capability handle because the behavior has an owner, proof path, and maintenance
+boundary.
 
 ```text
-inspiration_vault(source_item, project_context) -> searchable_inspiration + grounding_candidate
+capture_inspiration(source, use_case) -> vault_record + reuse_route
 ```
 
-## System
+## At A Glance
 
-- System: [Source And Sidecar Systems](../systems/source-sidecar-systems.md)
 - Feature ID: `FEAT-0056`
+- System: [Source And Sidecar Systems](../systems/source-sidecar-systems.md)
 - Status: `proposed`
 - Category: `source-ingestion`
+- Primary user: researching agent, creator, and product maintainer
+- Job: hold reusable inspiration sources until they can be routed into products, skills, or experiments.
 
-## Feature Spec
+## Problem
 
-Intent: capture liked links, images, videos, UI examples, product patterns, and operator notes into a searchable inspiration bank that can later ground creative or product work.
+Useful product, content, and workflow references often arrive before Farplane knows the
+exact feature or skill they should change.
 
-Placement decision:
+An inspiration vault gives those sources a temporary structured owner without pretending
+they are already canonical specs.
 
-- Source ingestion belongs in the sidecar/source system until an item becomes accepted Farplane behavior.
-- Raw inspiration is not a feature by itself. The feature is the reusable capture, retrieval, and grounding loop.
-- Accepted insights can promote into source records, feature specs, skills, evals, or tickets.
+## What It Does
 
-Data contract:
+- Captures high-signal references with source, context, observed pattern, and possible reuse route.
+- Separates inspiration from accepted doctrine or shipped behavior.
+- Feeds harness-scout, market-learning, content, design, or skill work when a concrete question appears.
+- Allows proposed status until the pattern earns a feature, skill, ticket, or experiment owner.
+- Keeps raw inspiration out of long-term docs unless distilled.
 
-- source URL or local file reference;
-- media type and capture method;
-- title, author/source, timestamps, and representative thumbnail/frame when available;
-- extracted transcript, caption, or notes when available;
-- tags, project relevance, and reusable pattern notes;
-- privacy/sensitivity flag;
-- promoted targets such as source registry row, ticket, skill, or feature spec.
+## User Stories
 
-UI requirements:
+- As an operator, I can save a useful reference without deciding its final owner immediately.
+- As a researching agent, I can retrieve inspiration by use case and turn it into a scored decision.
+- As a maintainer, I can keep public docs free of unvalidated idea piles.
 
-- browse by project, source type, tag, recency, and promoted status;
-- search and recall examples for a given product or creative task;
-- inspect representative media without opening raw private clutter;
-- promote one item into a ticket, source record, skill note, or content artifact.
+## Operating Contract
 
-Grounding engine role:
+The vault is a waiting room for reusable signal, not canonical truth.
 
-- Use the vault to make creative/product claims concrete.
-- Prefer representative examples over vague taste memory.
-- Keep inspiration as evidence, not as automatic policy.
+- Records identify source, why it matters, candidate use, and current status.
+- Accepted inspiration must move into a feature, skill, ticket, experiment, or source decision.
+- Stale inspiration is pruned or moved to temporary research.
+- Vault records do not override specs or skill instructions.
 
-Non-goals:
+## Surfaces
 
-- Not a generic bookmarking app.
-- Not a replacement for source registry decisions.
-- Not a place to store secrets, private transcripts, or unredacted user data.
-
-Proof path:
-
-- capture a small mixed-media sample;
-- retrieve it for a later Farplane product/design/content task;
-- show that the retrieved item changed or grounded the output;
-- promote only durable conclusions to the owning source, feature, skill, or ticket surface.
-
-## Owner Surfaces
+Owner surfaces:
 
 - `docs/systems/source-sidecar-systems.md`
 - `skills/ingest-content/SKILL.md`
 - `skills/media-ingest/SKILL.md`
 - `skills/harness-scout/SKILL.md`
 
-## Source Context
+Source context:
 
 - `docs/systems/source-sidecar-systems.md`
 
-## Evidence
+## Proof And Quality
 
-- no implementation evidence yet
+Required checks:
 
-## Known Limits
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
 
-Proposed product surface. It needs a dedicated implementation ticket and proof path before it can be marked implemented.
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Source And Sidecar Systems.
+
+## Limits And Non-Goals
+
+- This feature is not a permanent archive.
+- This feature does not make raw references public docs.
+- This feature does not skip source scoring when the idea becomes product work.
+- Known limit: Proposed product surface. It needs a dedicated implementation ticket and proof path before it can be marked implemented.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
 - `inspiration_recall_quality`
 - `creative_grounding_reuse`
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0056`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-27: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

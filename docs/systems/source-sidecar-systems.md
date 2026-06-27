@@ -35,29 +35,72 @@ system_record_json: |
     "last_verified": "2026-06-27"
   }
 ---
-
 # Source And Sidecar Systems
 
-The external-source, inspiration, video-to-skill, and sidecar-product surfaces that let Farplane adapt useful patterns without making them live dependencies.
+The external-source, inspiration, video-to-skill, and sidecar-product surfaces that let
+Farplane adapt useful patterns without making them live dependencies. This page is the
+product-layer owner for that subsystem: it explains what belongs here, which feature
+specs make up the stack, and where adjacent responsibilities should move.
+
+```text
+source_and_sidecar_systems(change, repo_state?) -> owned_feature_set + boundary_decision + maintenance_signal
+```
+
+## At A Glance
+
+- System ID: `SYS-0008`
+- Status: `implemented`
+- Primary feature: `FEAT-0011`
+- Owner spec: `docs/systems/source-sidecar-systems.md`
+- Feature count: `3`
 
 ## Role
 
-Source and Sidecar Systems ingest outside evidence and adjacent product ideas without making external sources or sidecars live dependencies.
-
-## What Belongs Here
-
-Source registry, harness scouting, video-to-skill reconstruction, and sidecar/draft product grounding surfaces.
-
-## What Belongs Elsewhere
-
-Accepted core behavior moves to the owning system; raw research and bulky media stay in experiments or ticket artifacts.
+Source And Sidecar Systems owns outside signal and decoupled capability organs: source
+scouting, inspiration, media reconstruction, and sidecar systems that help Farplane
+learn without making every pattern a live dependency.
 
 ## Feature Docs
 
 - [FEAT-0011 Harness scout source ingestion](../features/FEAT-0011-harness-scout-source-ingestion.md)
 - [FEAT-0025 Video-to-skill source reconstruction](../features/FEAT-0025-video-to-skill-source-reconstruction.md)
-- [FEAT-0056 Inspiration vault](../features/FEAT-0056-inspiration-vault.md)
+- [FEAT-0056 Inspiration Vault](../features/FEAT-0056-inspiration-vault.md)
 
-## Maintenance
+## What Belongs Here
 
-This system page owns only the system-level contract. Feature registry rows are authored as feature pages in `docs/features/` and generated into `docs/features/registry.jsonl`.
+Harness scout ingestion, source scorecards, inspiration vault records, video-to-skill
+reconstruction, taste/content sidecars, and adopt/adapt/reject/defer decisions.
+
+## What Belongs Elsewhere
+
+Accepted capability contracts belong in feature specs; reusable procedures belong in
+skills; raw scratch research belongs in `tmp/` or bounded experiment artifacts.
+
+## Operating Contract
+
+- External sources become evidence-backed decisions before they change core behavior.
+- Sidecars earn integration through proof, not architectural enthusiasm.
+- Raw signal stays outside canonical docs until distilled.
+- Decoupled organs expose proof gates and handoff boundaries.
+- Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
+- Registry data is generated from system and feature docs, not edited by hand.
+- When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
+
+## Surfaces
+
+- `docs/sources/registry.jsonl`
+- `skills/harness-scout/SKILL.md`
+- `skills/feed-scout/SKILL.md`
+- `docs/features/FEAT-0056-inspiration-vault.md`
+
+## Proof And Maintenance
+
+- Registry proof: `python3 docs/features/validate_features.py`.
+- Link proof: `python3 bin/validators/check_doc_refs.py`.
+- Update this system page when product-layer boundaries or feature membership changes.
+- Update feature pages when capability behavior changes.
+- Regenerate registries and commit generated outputs with the source docs.
+
+## Change History
+
+- 2026-06-27: Migrated into the reader-first system-spec shape.

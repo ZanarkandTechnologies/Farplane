@@ -60,43 +60,59 @@ last_verified: 2026-06-26
 ---
 # Behavior correction, hardcase metadata, and narrow eval capture
 
-Behavior correction, hardcase metadata, and narrow eval capture is a first-class Farplane feature in [Self-Improvement And Learning](../systems/self-improvement-learning.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
-
-```text
-feature(FEAT-0039, repo_state?) -> behavior + evidence + maintenance_signal
-```
-
-## System
-
-- System: [Self-Improvement And Learning](../systems/self-improvement-learning.md)
-- Feature ID: `FEAT-0039`
-- Status: `implemented`
-- Category: `improvement-loop`
-
-## Feature Spec
-
-This feature owns the self-improvement correction loop: behavior gaps become hardcases, eval rows, skill patches, lessons, or harness changes instead of vanishing into chat.
+Behavior correction, hardcase metadata, and narrow eval capture exists to turn repeated
+misses into routed corrections, hardcases, evals, lessons, or skill changes. It belongs
+to [Self-Improvement And Learning](../systems/self-improvement-learning.md) and keeps
+`FEAT-0039` as a stable capability handle because the behavior has an owner, proof path,
+and maintenance boundary.
 
 ```text
 behavior_fix(gap, evidence, owner_surface) -> hardcase? + patch? + eval? + lesson?
 ```
 
-The former self-improvement contracts fold into this feature:
+## At A Glance
 
-- Minimal behavior-fix SOP: identify the gap, bind it to an owner surface, make the smallest durable correction, and prove it on a representative case.
-- Core skill signatures describe how gap-analysis, harness-advisor, eval, skill-maintenance, self-improve, and optimize-harness cooperate.
-- Hardcases should capture task input, expected behavior, observed failure, owner, tags, proof artifacts, and promotion status.
-- Skill self-healing patches local Farplane wrappers, fixtures, registries, or evals; it does not mutate external installed skills unless explicitly requested.
+- Feature ID: `FEAT-0039`
+- System: [Self-Improvement And Learning](../systems/self-improvement-learning.md)
+- Status: `implemented`
+- Category: `improvement-loop`
+- Primary user: maintainer and self-improvement agent
+- Job: turn repeated misses into routed corrections, hardcases, evals, lessons, or skill changes.
 
-Non-goal: self-improvement is not a generic memory dump. It must land in an owner: feature doc, skill, eval, lesson, ticket, or source registry.
+## Problem
 
-Proof gates:
+When an agent misses, the correction can disappear into chat unless Farplane names the
+failure, owner, and prevention surface.
 
-- Repeated misses get a visible prevention surface.
+This feature gives correction a small operating loop: identify the gap, bind it to an
+owner, patch the smallest durable surface, and prove it with a representative case.
+
+## What It Does
+
+- Uses gap-analysis to describe expected versus observed behavior.
+- Uses harness-advisor to choose the owner surface for a fix.
+- Captures hardcases with input, expected behavior, observed failure, owner, tags, proof artifacts, and promotion status.
+- Routes metric selection through metric-advisor before self-improvement claims.
+- Promotes repeated failures into skills, evals, lessons, docs, hooks, validators, or tickets.
+
+## User Stories
+
+- As an operator, I can point to a miss and see what prevention surface changed.
+- As a maintainer, I can avoid turning every correction into global prompt bloat.
+- As a QA lane, I can promote a repeated failure into a narrow regression case.
+
+## Operating Contract
+
+Self-improvement must land in an owner, not a memory dump.
+
+- Corrections name the gap, evidence, owner surface, and proof path.
 - Hardcases are narrow enough to rerun or reason about.
-- The correction route is named: skill, prompt, eval, doc, hook, validator, or ticket.
+- Local Farplane wrappers, fixtures, registries, and evals are patched before external installed skills.
+- Broad migrations require proof before rollout.
 
-## Owner Surfaces
+## Surfaces
+
+Owner surfaces:
 
 - `skills/gap-analysis`
 - `skills/harness-advisor`
@@ -107,14 +123,14 @@ Proof gates:
 - `experiments/hardcases`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
-## Source Context
+Source context:
 
 - `docs/HISTORY.md`
 - `docs/features/registry.jsonl#FEAT-0031`
 - `docs/features/registry.jsonl#FEAT-0063`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
-## Evidence
+Evidence:
 
 - `skills/gap-analysis/SKILL.md`
 - `skills/harness-advisor/SKILL.md`
@@ -126,9 +142,33 @@ Proof gates:
 - `tickets/TASK-0228/ticket.md`
 - `docs/HISTORY.md`
 
-## Known Limits
+## Proof And Quality
 
-Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Self-Improvement And Learning.
+
+## Limits And Non-Goals
+
+- This feature does not train models.
+- This feature does not inspect full Codex histories without a seed anchor.
+- This feature does not auto-apply broad harness migrations without proof.
+- Known limit: Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
@@ -138,6 +178,16 @@ Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy st
 - `hardcase_eval_metadata_pass`
 - `narrow_regression_eval_pass`
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0039`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

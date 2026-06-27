@@ -3,7 +3,7 @@ title: Project-level system prompt eval suite
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
@@ -38,48 +38,116 @@ last_verified: 2026-06-07
 ---
 # Project-level system prompt eval suite
 
-Project-level system prompt eval suite is a first-class Farplane feature in [Proof And Review](../systems/proof-review.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
+Project-level system prompt eval suite exists to test project-level agent prompts
+against known behavior risks before and after policy changes. It belongs to [Proof And
+Review](../systems/proof-review.md) and keeps `FEAT-0043` as a stable capability handle
+because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
-feature(FEAT-0043, repo_state?) -> behavior + evidence + maintenance_signal
+prompt_eval(prompt_surface, cases) -> regression_signal + repair_route
 ```
 
-## System
+## At A Glance
 
-- System: [Proof And Review](../systems/proof-review.md)
 - Feature ID: `FEAT-0043`
+- System: [Proof And Review](../systems/proof-review.md)
 - Status: `implemented`
 - Category: `proof`
+- Primary user: prompt maintainer and reviewer
+- Job: test project-level agent prompts against known behavior risks before and after policy changes.
 
-## Owned Behavior
+## Problem
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+Prompt edits can quietly change autonomy, routing, proof, or communication behavior
+across the repo.
 
-## Owner Surfaces
+This feature gives system prompt changes a regression surface so policy updates can be
+judged against representative cases.
+
+## What It Does
+
+- Defines eval cases for project-level prompt behavior.
+- Checks autonomy, planning boundaries, skill routing, doc writeback, and proof requirements.
+- Uses validators or eval tasks to catch policy drift.
+- Routes failures to prompt edits, skill changes, docs, or hardcases.
+- Keeps prompt behavior evidence out of vague discussion.
+
+## User Stories
+
+- As a prompt maintainer, I can change AGENTS.md or templates with regression evidence.
+- As a reviewer, I can see which behavior cases were protected.
+- As an operator, I get safer harness changes without turning every prompt edit into guesswork.
+
+## Operating Contract
+
+Prompt policy changes need representative behavior checks.
+
+- Cases name the expected behavior and the prompt surface under test.
+- Prompt changes run the narrowest relevant eval or validator before completion.
+- Failures route to a durable owner rather than a one-off apology.
+- Prompt evals stay small enough to maintain.
+
+## Surfaces
+
+Owner surfaces:
 
 - `skills/eval/examples/farplane-global-harness/tasks.json`
 - `skills/eval`
 - `templates/global/AGENTS.md`
 
-## Source Context
+Source context:
 
 - `skills/eval/references/eval-best-practices.md`
 - `docs/HISTORY.md`
 
-## Evidence
+Evidence:
 
 - `skills/eval/examples/farplane-global-harness/tasks.json`
 - `skills/eval/tests/test_run_evals.py`
 - `docs/HISTORY.md`
 
-## Known Limits
+## Proof And Quality
 
-The current runner judges final answers and task artifacts, not full hidden reasoning or complete live tool-event traces. Behavior claims that need child-agent command logs should use agent-behavior-test or agent-qa-test.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Proof And Review.
+
+## Limits And Non-Goals
+
+- This feature is not a full model benchmark.
+- This feature does not replace reviewer judgment for major prompt changes.
+- This feature does not require evals for trivial typo fixes.
+- Known limit: The current runner judges final answers and task artifacts, not full hidden reasoning or complete live tool-event traces. Behavior claims that need child-agent command logs should use agent-behavior-test or agent-qa-test.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
 - `system_prompt_eval_pass_rate`
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0043`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

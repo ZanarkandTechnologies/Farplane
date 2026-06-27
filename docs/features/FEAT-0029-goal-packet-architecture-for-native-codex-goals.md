@@ -52,50 +52,60 @@ last_verified: 2026-06-12
 ---
 # Goal Packet architecture for native Codex goals
 
-Goal Packet architecture for native Codex goals is a first-class Farplane feature in [Horizon Loop](../systems/horizon-loop.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
+Goal Packet architecture for native Codex goals exists to wrap native Codex Goal mode
+with visible ticket, program, and progress state. It belongs to [Horizon
+Loop](../systems/horizon-loop.md) and keeps `FEAT-0029` as a stable capability handle
+because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
-feature(FEAT-0029, repo_state?) -> behavior + evidence + maintenance_signal
+goal_packet(ticket, program, progress) -> native_goal_prompt + resume_contract
 ```
 
-## System
+## At A Glance
 
-- System: [Horizon Loop](../systems/horizon-loop.md)
 - Feature ID: `FEAT-0029`
+- System: [Horizon Loop](../systems/horizon-loop.md)
 - Status: `implemented`
 - Category: `planning`
+- Primary user: operator and long-running coding agent
+- Job: wrap native Codex Goal mode with visible ticket, program, and progress state.
 
-## Feature Spec
+## Problem
 
-This feature owns long-horizon Goal Packets: the visible state around native Codex Goals, parent project goals, program notation, nested PM projects, and continuation policy.
+Native Goal mode can keep working across continuations, but Farplane still needs
+filesystem truth for scope, proof, blockers, and handoff.
 
-```text
-goal_packet(ticket, program, progress, horizon_state?) -> native_goal_prompt + drift_review_surface
-```
+Goal Packets solve that by making the native goal prompt a compiled instruction, not the
+durable source of truth.
 
-The folded contract combines the former goal-loop, program-notation, and nested-PM specs:
+## What It Does
 
-- `ticket.md` remains the task contract and proof scoreboard.
-- `program.md` stores loop configuration: trigger mode, skills, gates, budget, evidence, metrics, and handoff rules.
-- `progress.md` is append-only turn memory for resumability and drift checks.
-- `farplane/goals.md` or a project-level horizon file stores parent goals and ticket supply signals.
-- Native Codex Goal mode owns leaf continuation; Farplane owns visible state, packet compilation, and proof routing around it.
-- Parent/child PM projects only exist when a child loop has its own artifact stream, proof gates, and promotion rule.
-- Program notation is a compact projection format, not a second runtime.
+- Attaches a material goal to a ticket.
+- Uses `ticket.md` as the task contract, `program.md` as loop configuration, and `progress.md` as append-only turn log.
+- Compiles a native Goal prompt from those files.
+- Keeps proof obligations in the ticket and artifacts rather than in hidden goal memory.
+- Lets agents resume or review a goal by reading the packet files.
 
-Non-goals:
+## User Stories
 
-- No hidden Goal manager.
-- No automatic Notion sync.
-- No one-PM-per-skill sprawl before a child project earns its own state and proof surface.
+- As an operator, I can start a long task without losing control of proof and scope.
+- As a resumed agent, I can recover the goal state from files.
+- As a reviewer, I can compare progress against the ticket and program.
 
-Proof gates:
+## Operating Contract
 
-- A Goal can resume from packet files without transcript context.
-- Drift review can compare current work to the ticket/program/progress contract.
-- Parent horizon updates create ticket supply or calibration changes, not vague strategy prose.
+Goal mode is the continuation engine; the Goal Packet is the visible Farplane state
+around it.
 
-## Owner Surfaces
+- Every material Goal attaches to an active ticket or creates one.
+- `program.md` holds loop settings and continuation guidance.
+- `progress.md` records append-only turn updates.
+- The native Goal prompt is regenerated from packet state when needed.
+- Completion still requires ticket proof gates and review when required.
+
+## Surfaces
+
+Owner surfaces:
 
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `skills/goal-advisor`
@@ -107,19 +117,47 @@ Proof gates:
 - `docs/features/README.md`
 - `README.md`
 
-## Source Context
+Source context:
 
 - `https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex`
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 
-## Evidence
+External context:
+
+- `https://developers.openai.com/codex/use-cases/follow-goals`
+
+Evidence:
 
 - `docs/HISTORY.md`
 - `tickets/TASK-0193/ticket.md`
 
-## Known Limits
+## Proof And Quality
 
-Contract, template, skill, and agent prompt surfaces only. Native Codex Goal mode owns leaf continuation; parent project-goals orchestration is heartbeat/manual-resume state selection. Farplane does not ship a hidden loop runtime, scheduler, automatic Goal manager, or Notion sync. End-to-end live project-goals heartbeat still needs a post-contract pilot.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Horizon Loop.
+
+## Limits And Non-Goals
+
+- This feature does not make Goal mode the source of truth.
+- This feature does not bypass tickets for material work.
+- This feature does not hide blockers or proof in the continuation prompt.
+- Known limit: Contract, template, skill, and agent prompt surfaces only. Native Codex Goal mode owns leaf continuation; parent project-goals orchestration is heartbeat/manual-resume state selection. Farplane does not ship a hidden loop runtime, scheduler, automatic Goal manager, or Notion sync. End-to-end live project-goals heartbeat still needs a post-contract pilot.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
@@ -127,6 +165,16 @@ Contract, template, skill, and agent prompt surfaces only. Native Codex Goal mod
 - `drift_review_alignment_pass`
 - `project_goals_parent_leaf_boundary_pass`
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0029`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

@@ -3,7 +3,7 @@ title: On-demand skill plugin packaging
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
@@ -45,52 +45,125 @@ last_verified: 2026-06-24
 ---
 # On-demand skill plugin packaging
 
-On-demand skill plugin packaging is a first-class Farplane feature in [Skill System](../systems/skill-system.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
+On-demand skill plugin packaging exists to package reusable Farplane skills and plugin
+surfaces only when they have a real consumer and validation path. It belongs to [Skill
+System](../systems/skill-system.md) and keeps `FEAT-0030` as a stable capability handle
+because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
-feature(FEAT-0030, repo_state?) -> behavior + evidence + maintenance_signal
+package_skill(skill_dir, audience) -> plugin_artifact + install_contract + validation_signal
 ```
 
-## System
+## At A Glance
 
-- System: [Skill System](../systems/skill-system.md)
 - Feature ID: `FEAT-0030`
+- System: [Skill System](../systems/skill-system.md)
 - Status: `implemented`
 - Category: `skills`
+- Primary user: skill author and plugin maintainer
+- Job: package reusable Farplane skills and plugin surfaces only when they have a real consumer and validation path.
 
-## Owned Behavior
+## Problem
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+Farplane skills can outgrow local-only use, but packaging everything too early creates
+stale plugin shells and version noise.
 
-## Owner Surfaces
+This feature defines when a skill deserves on-demand packaging and what proof is
+required before it becomes installable.
+
+## What It Does
+
+- Identifies skills or plugin surfaces that should be distributed beyond the repo.
+- Keeps local skill docs, templates, scripts, and QA checklists as the source package.
+- Creates plugin metadata and install paths only for skills with clear consumer value.
+- Runs validation before treating a package as shipped.
+- Keeps retired or local-only workflows out of public plugin ceremony.
+
+## User Stories
+
+- As a skill author, I know when to keep a workflow local and when to package it.
+- As an installer, I can trust packaged skills include metadata and validation.
+- As a maintainer, I can avoid packaging every experiment as a product.
+
+## Operating Contract
+
+Packaging follows proven reuse, not speculative distribution.
+
+- A package has a source skill directory, consumer, metadata, install path, and validation check.
+- The repo-owned skill remains the source of truth until an explicit release process says otherwise.
+- Plugin metadata references stable skill behavior rather than duplicating full instructions.
+- Package changes are validated with the owning skill and registry checks.
+
+## Surfaces
+
+Owner surfaces:
 
 - `skills/skill-maintenance/scripts/sync_skill_plugins.py`
 - `skills/skill-maintenance/scripts/install_selected_skills.py`
 - `install.sh`
 - `README.md`
 
-## Source Context
+Source context:
 
 - `skills/skill-maintenance/scripts/sync_skill_plugins.py`
 - `skills/skill-maintenance/scripts/install_selected_skills.py`
 - `install.sh`
 - `docs/HISTORY.md`
 
-## Evidence
+External context:
+
+- `https://developers.openai.com/codex/plugins`
+- `https://developers.openai.com/codex/plugins/build`
+
+Evidence:
 
 - `skills/skill-maintenance/scripts/test_install_selected_skills.py`
 - `skills/skill-maintenance/scripts/test_sync_skill_plugins.py`
 - `docs/HISTORY.md`
 
-## Known Limits
+## Proof And Quality
 
-Generated plugin packages are no longer tracked in source. Farplane keeps `skills/*` as the source of truth; skill-maintenance owns the implementation, and install.sh now calls the owner script directly. Official self-serve public Plugin Directory publishing, icons, screenshots, apps, MCP servers, and hooks are not included yet.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Skill System.
+
+## Limits And Non-Goals
+
+- This feature does not publish every local skill.
+- This feature does not let installed copies become the source of truth.
+- This feature does not replace skill-maintenance.
+- Known limit: Generated plugin packages are no longer tracked in source. Farplane keeps `skills/*` as the source of truth; skill-maintenance owns the implementation, and install.sh now calls the owner script directly. Official self-serve public Plugin Directory publishing, icons, screenshots, apps, MCP servers, and hooks are not included yet.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
 - `selected_skill_installer_tests_pass`
 - `skill_plugin_generation_pass`
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0030`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

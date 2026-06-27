@@ -3,7 +3,7 @@ title: Goal Advisor execution compilation
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
@@ -44,24 +44,58 @@ last_verified: 2026-06-13
 ---
 # Goal Advisor execution compilation
 
-Goal Advisor execution compilation is a first-class Farplane feature in [Horizon Loop](../systems/horizon-loop.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
+Goal Advisor execution compilation exists to choose the right execution mode and compile
+the concrete prompt for material Farplane work. It belongs to [Horizon
+Loop](../systems/horizon-loop.md) and keeps `FEAT-0032` as a stable capability handle
+because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
-feature(FEAT-0032, repo_state?) -> behavior + evidence + maintenance_signal
+compile_execution_route(ticket, trigger, budget?) -> goal | heartbeat | rollout | direct
 ```
 
-## System
+## At A Glance
 
-- System: [Horizon Loop](../systems/horizon-loop.md)
 - Feature ID: `FEAT-0032`
+- System: [Horizon Loop](../systems/horizon-loop.md)
 - Status: `implemented`
 - Category: `execution`
+- Primary user: operator and Goal-backed execution agent
+- Job: choose the right execution mode and compile the concrete prompt for material Farplane work.
 
-## Owned Behavior
+## Problem
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+A request can be a direct fix, native Goal, heartbeat, rollout, or feedback loop.
+Choosing wrong either overcomplicates small work or under-specifies long-running work.
 
-## Owner Surfaces
+Goal Advisor turns the active ticket and context into a bounded execution route with
+proof expectations.
+
+## What It Does
+
+- Reads ticket, program, progress, specs, and current trigger context.
+- Chooses native Goal, heartbeat, rollout, feedback, or direct route.
+- Compiles a concrete execution prompt with proof gates and continuation state.
+- Keeps the ticket as the source of truth for scope and Done / Proof.
+- Routes phases such as build, QA, and demo when the ticket requires them.
+
+## User Stories
+
+- As an operator, I can ask for a goal and get the right execution container.
+- As a coding agent, I can follow one compiled prompt without guessing the loop shape.
+- As a reviewer, I can compare route choice against the ticket and proof gates.
+
+## Operating Contract
+
+Goal Advisor is an execution compiler, not a replacement for the ticket.
+
+- Material work must have a visible ticket or packet before goal-backed execution.
+- Route choice names trigger mode, budget, files, and proof expectations.
+- The compiled prompt shrinks the task rather than expanding global policy.
+- Completion still uses the ticket's proof and review gates.
+
+## Surfaces
+
+Owner surfaces:
 
 - `skills/goal-advisor`
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
@@ -69,27 +103,65 @@ This feature owns the behavior implemented, specified, or enforced by its owner 
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - `tickets/templates/goal-loop/program.md`
 
-## Source Context
+Source context:
 
 - `skills/goal-advisor`
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 - `tickets/archive/TASK-0196/ticket.md`
 
-## Evidence
+External context:
+
+- `https://developers.openai.com/codex/use-cases/follow-goals`
+
+Evidence:
 
 - `skills/goal-advisor/SKILL.md`
 - `docs/HISTORY.md`
 - `tickets/archive/TASK-0196/ticket.md`
 
-## Known Limits
+## Proof And Quality
 
-Skill and docs contract only; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager. Former work, Ralph, and batch-work public skill surfaces are retired into Goal standards.
+Required checks:
+
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+
+Acceptance signals:
+
+- The feature remains listed under exactly one owning system.
+- The owner surfaces still exist and agree with this contract.
+- Evidence refs support the current status.
+
+## Rollout And Maintenance
+
+- Update this feature page first when the capability contract changes.
+- Then update owner surfaces and regenerate feature/system registries when metadata changes.
+- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- Maintenance owner: Horizon Loop.
+
+## Limits And Non-Goals
+
+- This feature does not turn every task into a Goal.
+- This feature does not hide state in the compiled prompt.
+- This feature does not supersede proof review.
+- Known limit: Skill and docs contract only; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager. Former work, Ralph, and batch-work public skill surfaces are retired into Goal standards.
+- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
 
 - no dedicated metric yet
 
-## Maintenance
+## Alternatives Considered
 
-Update this feature doc before regenerating `docs/features/registry.jsonl`. If the feature stops deserving its own doc, delete this file and remove all active template, source, ticket, and system refs to `FEAT-0032`.
+- Keep this only as a registry row.
+  Decision: reject.
+  Reason: Farplane features must be readable specs, not opaque metadata entries.
+- Fold this entirely into the owning system page.
+  Decision: defer.
+  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+
+## Change History
+
+- 2026-06-26: Feature spec created.
+- 2026-06-27: Migrated into the reader-first feature-spec shape.

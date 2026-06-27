@@ -3,7 +3,7 @@ title: "Self-Improvement And Learning"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - systems
@@ -34,28 +34,71 @@ system_record_json: |
     "last_verified": "2026-06-26"
   }
 ---
-
 # Self-Improvement And Learning
 
-The learning loop that observes behavior gaps, captures hardcases, chooses metrics, routes correction, and turns repeated failures into skills, evals, or docs.
+The learning loop that observes behavior gaps, captures hardcases, chooses metrics,
+routes correction, and turns repeated failures into skills, evals, or docs. This page is
+the product-layer owner for that subsystem: it explains what belongs here, which feature
+specs make up the stack, and where adjacent responsibilities should move.
+
+```text
+self_improvement_and_learning(change, repo_state?) -> owned_feature_set + boundary_decision + maintenance_signal
+```
+
+## At A Glance
+
+- System ID: `SYS-0007`
+- Status: `implemented`
+- Primary feature: `FEAT-0039`
+- Owner spec: `docs/systems/self-improvement-learning.md`
+- Feature count: `2`
 
 ## Role
 
-Self-Improvement and Learning turns failures, feedback, metrics, hardcases, and lessons into narrower improvements without pretending there is a hidden autonomous optimizer.
-
-## What Belongs Here
-
-Gap analysis, metric cards, hardcase capture, lesson promotion, and improvement-routing contracts.
-
-## What Belongs Elsewhere
-
-Execution of a selected build remains in Work Loop; reusable skill packaging remains in Skill System; source discovery remains in Source and Sidecar Systems.
+Self-Improvement And Learning owns correction loops: observe behavior gaps, choose
+metrics, capture hardcases, route repairs, and turn repeated failures into skills,
+evals, docs, tickets, or lessons.
 
 ## Feature Docs
 
 - [FEAT-0039 Behavior correction, hardcase metadata, and narrow eval capture](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md)
 - [FEAT-0063 Metric advisor cards](../features/FEAT-0063-metric-advisor-cards.md)
 
-## Maintenance
+## What Belongs Here
 
-This system page owns only the system-level contract. Feature registry rows are authored as feature pages in `docs/features/` and generated into `docs/features/registry.jsonl`.
+Gap analysis, metric cards, hardcase capture, lesson promotion, narrow eval promotion,
+and correction-route decisions.
+
+## What Belongs Elsewhere
+
+Execution of a selected build remains in Work Loop; reusable skill packaging remains in
+Skill System; source discovery remains in Source And Sidecar Systems.
+
+## Operating Contract
+
+- Corrections name the gap, evidence, owner, and proof path.
+- Metric cards choose honest primary and guard metrics before optimization.
+- Repeated misses promote into durable prevention surfaces.
+- Broad self-improvement migrations require representative proof.
+- Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
+- Registry data is generated from system and feature docs, not edited by hand.
+- When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
+
+## Surfaces
+
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
+- `docs/LESSONS.md`
+- `docs/TROUBLES.md`
+- `skills/metric-advisor/SKILL.md`
+
+## Proof And Maintenance
+
+- Registry proof: `python3 docs/features/validate_features.py`.
+- Link proof: `python3 bin/validators/check_doc_refs.py`.
+- Update this system page when product-layer boundaries or feature membership changes.
+- Update feature pages when capability behavior changes.
+- Regenerate registries and commit generated outputs with the source docs.
+
+## Change History
+
+- 2026-06-27: Migrated into the reader-first system-spec shape.

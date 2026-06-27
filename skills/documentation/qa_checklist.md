@@ -113,6 +113,50 @@ and cross-surface policy need the full gate.
 - Paragraphs are short enough to scan, and semantic line breaks support clean
   Markdown diffs.
 
+## Documentation Quality Scores
+
+Use this scoring pass for material docs, public guidance, specs, runbooks, and
+before/after migrations. Scores are reviewer judgment, not fake mechanical
+precision. Rate each dimension `0`, `1`, or `2`:
+
+| Dimension | 0 | 1 | 2 |
+| --- | --- | --- | --- |
+| Followability | Reader cannot tell what to do next. | Reader can infer next action with effort. | Reader can follow the doc without extra context. |
+| Usefulness | Doc is mostly labels, history, or metadata. | Doc answers some real reader questions. | Doc helps the reader make or verify a decision. |
+| Trustworthiness | Claims lack owner, evidence, or freshness. | Most claims are grounded, with gaps visible. | Claims point to owners, evidence, limits, and checks. |
+| Concision | Bloated, repetitive, or noisy. | Some redundancy, but still scannable. | Every section earns its space for the doc type. |
+| Findability | Owner, audience, or source of truth is unclear. | Discoverable with some link-following. | Owner, audience, source of truth, and related docs are obvious. |
+| Maintainability | Future edits are risky or ambiguous. | Update path exists but has weak boundaries. | Metadata, owner, checks, and update/rollback path are clear. |
+
+Recommended summary:
+
+```text
+doc_quality_score =
+  followability + usefulness + trustworthiness + concision + findability + maintainability
+```
+
+Interpretation:
+
+- `10-12`: ship-ready for the doc type.
+- `8-9`: usable, with named follow-up or review notes.
+- `6-7`: revise before broad rollout.
+- `0-5`: do not promote; fold, rewrite, or delete.
+
+Guard metrics:
+
+- Relevant validators still pass.
+- Link/reference count does not rise from copied boilerplate.
+- Word or line count growth is justified by higher followability/usefulness, not
+  template padding.
+- No required metadata, owner, evidence, or limits are removed.
+
+Anti-metrics:
+
+- Optimizing for longer docs.
+- Adding every template section even when it does not help the reader.
+- Hiding uncertainty behind confident prose.
+- Improving score by deleting necessary caveats, proof, or ownership details.
+
 ## Checks To Run
 
 Adapt the patterns to the actual edit:
