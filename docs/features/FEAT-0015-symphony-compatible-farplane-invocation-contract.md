@@ -88,6 +88,9 @@ ticket scanning, or scheduler behavior that is hard to inspect and harder to pro
 
 Invocation is an edge contract, not a background runtime.
 
+Public docs should describe `.farplane/` as the canonical live runtime root.
+There is no separate public retired execution surface anymore.
+
 - `InvocationTrigger` records why work starts.
 - `BoardAdapter` translates external board state into one work item.
 - `WorkItem` binds scope, owner surface, proof obligations, and status.
