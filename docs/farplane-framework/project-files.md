@@ -122,7 +122,7 @@ project-specific extensions only. Generic loop behavior belongs in
 The Active-Hours Taste Loop is the official optional framework heartbeat for
 using human taste while the operator is online. It should read
 `FARPLANE_TASTE_LOOP_*` config from the rendered Codex config, rank candidate
-skills with the official Skill Compounding Score, emit a feedback card or Goal
+skills with the official Skill Signals, emit a feedback card or Goal
 Advisor handoff, and stop. It must not activate itself, create a local runner,
 edit target skills directly, or invent fake benchmarks when the honest metric is
 human feedback or review.

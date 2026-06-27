@@ -16,7 +16,7 @@ project_root = "{{PROJECT_ROOT}}"
 
 Read the project-local `AGENTS.md`, then load `skills/taste-loop/SKILL.md`,
 `farplane/automations.md`, `farplane/products.md`, and
-`docs/features/FEAT-0064-skill-compounding-score.md`.
+`docs/features/FEAT-0064-skill-signals.md`.
 
 Extract the marker-delimited TOML config block and prompt block for
 `farplane-active-hours-taste-loop` from `farplane/automations.md`. Use the
@@ -60,7 +60,7 @@ block that worker in this beat instead of creating a new worker.
 
 Read:
 
-- `docs/features/FEAT-0064-skill-compounding-score.md`
+- `docs/features/FEAT-0064-skill-signals.md`
 - `docs/skills/registry.jsonl`
 - `farplane/products.md`
 - `docs/farplane-framework/lifecycle.md`

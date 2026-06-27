@@ -68,12 +68,12 @@ capability without bloating the agent kernel.
 - [FEAT-0030 On-demand skill plugin packaging](../features/FEAT-0030-on-demand-skill-plugin-packaging.md)
 - [FEAT-0054 Modular skill-local eval tasks](../features/FEAT-0054-modular-skill-local-eval-tasks.md)
 - [FEAT-0057 Skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md)
-- [FEAT-0064 Skill compounding score](../features/FEAT-0064-skill-compounding-score.md)
+- [FEAT-0064 Skill signals](../features/FEAT-0064-skill-signals.md)
 
 ## What Belongs Here
 
 Skill authoring, tier/leverage classification, plugin packaging, skill-local eval tasks,
-QA checklists, compounding score, and skill registry maintenance.
+QA checklists, skill signals, and skill registry maintenance.
 
 ## What Belongs Elsewhere
 

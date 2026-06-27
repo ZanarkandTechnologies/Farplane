@@ -408,18 +408,24 @@
       }
 
       function heatCount(node) {
-        return Number(node.heat?.invocation_count_window ?? node.heat?.invocation_count_30d ?? 0);
+        return Number(node.heat?.invocation_count_window ?? 0);
       }
 
-      function heatScore(node) {
-        return Number(node.heat?.heat_score || 0);
+      function signalRank(node) {
+        const signals = node.signals || {};
+        return (
+          Number(signals.direct_heat?.invocation_count_window || 0)
+          + Number(signals.direct_heat?.distinct_threads_window || 0)
+          + Number(signals.direct_heat?.distinct_tickets_window || 0)
+          + Number(signals.composition_heat?.window_referrer_invocations || 0)
+        );
       }
 
       function hotNodeIds(limit) {
         if (!limit) return null;
         const ranked = graph.nodes
           .filter((node) => heatCount(node) > 0)
-          .sort((a, b) => heatScore(b) - heatScore(a) || heatCount(b) - heatCount(a) || a.id.localeCompare(b.id))
+          .sort((a, b) => signalRank(b) - signalRank(a) || heatCount(b) - heatCount(a) || a.id.localeCompare(b.id))
           .slice(0, limit);
         if (!ranked.length) return null;
         return new Set(ranked.map((node) => node.id));
@@ -660,10 +666,10 @@
                 ${row("Source", node.source)}
                 ${row("Checklist", node.has_checklist ? "present" : "missing")}
                 ${row("Methods", String(methods.length))}
-                ${row(`Invocations ${node.heat?.recent_days || heatConfig.recent_days || 7}d`, String(node.heat?.invocation_count_recent ?? node.heat?.invocation_count_7d ?? 0))}
+                ${row(`Invocations ${node.heat?.recent_days || heatConfig.recent_days || 7}d`, String(node.heat?.invocation_count_recent ?? 0))}
                 ${row("Invocations all", String(node.heat?.invocation_count_all || 0))}
-                ${row(`Threads ${node.heat?.window_days || heatConfig.window_days || 30}d`, String(node.heat?.distinct_threads_window ?? node.heat?.distinct_threads_30d ?? 0))}
-                ${row(`Tickets ${node.heat?.window_days || heatConfig.window_days || 30}d`, String(node.heat?.distinct_tickets_window ?? node.heat?.distinct_tickets_30d ?? 0))}
+                ${row(`Threads ${node.heat?.window_days || heatConfig.window_days || 30}d`, String(node.heat?.distinct_threads_window ?? 0))}
+                ${row(`Tickets ${node.heat?.window_days || heatConfig.window_days || 30}d`, String(node.heat?.distinct_tickets_window ?? 0))}
                 ${row("Last invoked", node.heat?.last_invoked_at || "none")}
               </tbody>
             </table>

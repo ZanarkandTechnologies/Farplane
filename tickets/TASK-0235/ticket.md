@@ -61,8 +61,8 @@ maintenance rules.
   features.
 - `After:` `FEAT-*` means "docs-worthy first-class feature." If it lacks a
   feature page, it gets deleted and active references are removed.
-- `Example:` `FEAT-0064 Skill compounding score` survives as
-  `docs/features/FEAT-0064-skill-compounding-score.md`; Inspiration Vault is
+- `Example:` `FEAT-0064 Skill signals` survives as
+  `docs/features/FEAT-0064-skill-signals.md`; Inspiration Vault is
   removed from feature metadata and remains only a proposed spec until it earns
   a real feature doc.
 

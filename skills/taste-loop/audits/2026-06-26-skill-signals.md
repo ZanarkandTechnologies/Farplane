@@ -1,20 +1,20 @@
 ---
-title: "Taste Loop Skill Compounding Score Audit"
+title: "Taste Loop Skill Signals Audit"
 owner: skill-maintenance
 status: complete
 created_at: 2026-06-26
 change_type: skill-contract
 refs:
-  - docs/features/FEAT-0064-skill-compounding-score.md
+  - docs/features/FEAT-0064-skill-signals.md
   - skills/taste-loop/SKILL.md
   - skills/taste-loop/templates/heartbeat-prompt.md
 ---
 
-# Taste Loop Skill Compounding Score Audit
+# Taste Loop Skill Signals Audit
 
 ## Claim
 
-Taste Loop now consumes the official Skill Compounding Score instead of owning a
+Taste Loop now consumes the official Skill Signals instead of owning a
 local ad hoc score formula.
 
 ## Before
@@ -28,10 +28,10 @@ local ad hoc score formula.
 
 ## After
 
-- `docs/features/FEAT-0064-skill-compounding-score.md` owns the official algorithm,
+- `docs/features/FEAT-0064-skill-signals.md` owns the official signal contract,
   component meanings, and source owners.
-- Taste Loop reads that spec and reports the score breakdown as a consumer.
-- The score is explicitly not an eval score, review TAS, template-health score,
+- Taste Loop reads that spec and reports the signal bundle as a consumer.
+- The recommendation is explicitly not an eval score, review TAS, template-health score,
   or human preference label.
 
 ## Skill Structure QA

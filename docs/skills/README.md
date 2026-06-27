@@ -227,10 +227,10 @@ classes. Tier 0 phase steps are not skill links; they are inherited from
 skill when useful.
 
 When ranking which skill to improve next, use
-[`docs/features/FEAT-0064-skill-compounding-score.md`](../features/FEAT-0064-skill-compounding-score.md).
-It combines tier leverage, lifecycle-reference distance, product-lane fit,
-observed heat, downstream leverage, improvement gap, feedback fit, and proof
-fit. Do not confuse that priority score with skill-local eval scores.
+[`docs/features/FEAT-0064-skill-signals.md`](../features/FEAT-0064-skill-signals.md).
+It exposes direct heat, composition heat, maintenance burden, uniqueness, and a
+maintenance recommendation. Do not confuse those signals with skill-local eval
+scores.
 
 - Tier 3 first-load todos link Tier 2 surfaces such as `research:*`, plus peer
   Tier 3 execution skills when a domain handoff needs one.

@@ -20,7 +20,7 @@ refs:
   - README.md
   - https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex
   - docs/HISTORY.md
-  - tickets/TASK-0193/ticket.md
+  - tickets/archive/TASK-0193/ticket.md
 feature_id: FEAT-0029
 system_id: SYS-0003
 category: planning
@@ -42,7 +42,7 @@ external_refs:
   - https://developers.openai.com/codex/use-cases/follow-goals
 evidence_refs:
   - docs/HISTORY.md
-  - tickets/TASK-0193/ticket.md
+  - tickets/archive/TASK-0193/ticket.md
 known_limits: Contract, template, skill, and agent prompt surfaces only. Native Codex Goal mode owns leaf continuation; parent project-goals orchestration is heartbeat/manual-resume state selection. Farplane does not ship a hidden loop runtime, scheduler, automatic Goal manager, or Notion sync. End-to-end live project-goals heartbeat still needs a post-contract pilot.
 metrics:
   - goal_packet_reconstructability
@@ -129,7 +129,7 @@ External context:
 Evidence:
 
 - `docs/HISTORY.md`
-- `tickets/TASK-0193/ticket.md`
+- `tickets/archive/TASK-0193/ticket.md`
 
 ## Proof And Quality
 

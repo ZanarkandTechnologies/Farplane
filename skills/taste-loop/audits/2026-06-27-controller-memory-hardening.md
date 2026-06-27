@@ -23,7 +23,7 @@ ordinary no-op beats side-effect free.
   read automation memory, avoid `workers.jsonl`, and avoid no-op artifacts.
 - `skills/taste-loop/eval_task.json` includes memory reuse, direct/related
   heat, and side-effect-free no-op reference points.
-- `docs/features/FEAT-0064-skill-compounding-score.md` defines direct heat plus related heat
+- `docs/features/FEAT-0064-skill-signals.md` defines direct heat plus related heat
   as reward-shaping signals with proxy-gaming penalties.
 
 ## Verdict

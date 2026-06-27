@@ -35,5 +35,5 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0060 Registry-backed documentation OS](../features/FEAT-0060-registry-backed-documentation-os.md) | [Documentation OS](../systems/documentation-os.md) | `implemented` | `context-routing` |
 | [FEAT-0061 Farplane adoption tracker CLI](../features/FEAT-0061-farplane-adoption-tracker-cli.md) | [Maintenance And Release OS](../systems/maintenance-release-os.md) | `implemented` | `proof` |
 | [FEAT-0063 Metric advisor cards](../features/FEAT-0063-metric-advisor-cards.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `implemented` | `skills` |
-| [FEAT-0064 Skill compounding score](../features/FEAT-0064-skill-compounding-score.md) | [Skill System](../systems/skill-system.md) | `implemented` | `skills` |
+| [FEAT-0064 Skill signals](../features/FEAT-0064-skill-signals.md) | [Skill System](../systems/skill-system.md) | `implemented` | `skills` |
 | [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `planning` |

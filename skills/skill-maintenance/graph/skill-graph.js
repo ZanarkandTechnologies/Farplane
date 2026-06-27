@@ -1,12 +1,12 @@
 window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
-      "common-chain": 19,
-      "markdown-ref": 313,
-      "todo-chain": 316
+      "common-chain": 21,
+      "markdown-ref": 325,
+      "todo-chain": 329
     },
-    "edges": 648,
-    "nodes": 97,
+    "edges": 675,
+    "nodes": 99,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
@@ -26,12 +26,12 @@ window.SKILL_GRAPH = {
     ],
     "sources": {
       "external": 3,
-      "local": 94
+      "local": 96
     },
     "tiers": {
-      "1": 5,
+      "1": 6,
       "2": 38,
-      "3": 54
+      "3": 55
     }
   },
   "edges": [
@@ -510,6 +510,13 @@ window.SKILL_GRAPH = {
       "source": "close-ticket",
       "target": "review",
       "target_ref": "review",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "code-review",
+      "target": "consolidate",
+      "target_ref": "consolidate",
       "type": "markdown-ref"
     },
     {
@@ -1238,15 +1245,6 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "documentation",
-      "target": "advise",
-      "target_ref": "advise",
-      "type": "todo-chain"
-    },
-    {
       "label": "markdown-ref",
       "source": "documentation",
       "target": "reference-grounding",
@@ -1271,12 +1269,19 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.2",
+      "order": 2,
       "source": "documentation",
       "target": "review",
       "target_ref": "review",
       "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "eval",
+      "target": "consolidate",
+      "target_ref": "consolidate",
+      "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
@@ -2655,6 +2660,123 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
+      "source": "infographic",
+      "target": "data-viz",
+      "target_ref": "data-viz",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "infographic",
+      "target": "data-viz",
+      "target_ref": "data-viz",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "infographic",
+      "target": "diagramming",
+      "target_ref": "diagramming",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "infographic",
+      "target": "diagramming",
+      "target_ref": "diagramming",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "infographic",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "infographic",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "infographic",
+      "target": "image-generation",
+      "target_ref": "image-generation",
+      "type": "common-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "infographic",
+      "target": "image-generation",
+      "target_ref": "image-generation",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.5",
+      "order": 5,
+      "source": "infographic",
+      "target": "image-generation",
+      "target_ref": "image-generation",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "infographic",
+      "target": "social-content",
+      "target_ref": "social-content",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "infographic",
+      "target": "social-content",
+      "target_ref": "social-content",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "infographic",
+      "target": "visual-design",
+      "target_ref": "visual-design",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "infographic",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "common-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "infographic",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "infographic",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
       "source": "ingest-content",
       "target": "image-generation",
       "target_ref": "image-generation",
@@ -2830,14 +2952,30 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "knowledge-tidier",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "consolidate",
+      "target_ref": "consolidate",
       "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
       "label": "todo.1",
       "order": 1,
+      "source": "knowledge-tidier",
+      "target": "consolidate",
+      "target_ref": "consolidate",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "knowledge-tidier",
+      "target": "documentation",
+      "target_ref": "documentation",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
       "source": "knowledge-tidier",
       "target": "documentation",
       "target_ref": "documentation",
@@ -2852,8 +2990,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
+      "label": "todo.5",
+      "order": 5,
       "source": "knowledge-tidier",
       "target": "review",
       "target_ref": "review",
@@ -2868,8 +3006,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
+      "label": "todo.3",
+      "order": 3,
       "source": "knowledge-tidier",
       "target": "skill-maintenance",
       "target_ref": "skill-maintenance",
@@ -2884,8 +3022,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.4",
+      "order": 4,
       "source": "knowledge-tidier",
       "target": "update-memory",
       "target_ref": "update-memory",
@@ -4469,6 +4607,13 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "skill-maintenance",
+      "target": "consolidate",
+      "target_ref": "consolidate",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "skill-maintenance",
       "target": "eval",
       "target_ref": "eval",
       "type": "markdown-ref"
@@ -4498,6 +4643,15 @@ window.SKILL_GRAPH = {
       "source": "skill-maintenance",
       "target": "harness-advisor",
       "target_ref": "harness-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "skill-maintenance",
+      "target": "metric-advisor",
+      "target_ref": "metric-advisor",
       "type": "todo-chain"
     },
     {
@@ -4707,6 +4861,24 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     },
     {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "taste-loop",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "taste-loop",
+      "target": "functional-ui",
+      "target_ref": "functional-ui",
+      "type": "todo-chain"
+    },
+    {
       "label": "markdown-ref",
       "source": "taste-loop",
       "target": "goal-advisor",
@@ -4714,6 +4886,15 @@ window.SKILL_GRAPH = {
       "type": "markdown-ref"
     },
     {
+      "chain_source": "todo_list",
+      "label": "todo.5",
+      "order": 5,
+      "source": "taste-loop",
+      "target": "goal-advisor",
+      "target_ref": "goal-advisor",
+      "type": "todo-chain"
+    },
+    {
       "label": "markdown-ref",
       "source": "taste-loop",
       "target": "metric-advisor",
@@ -4722,8 +4903,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
+      "label": "todo.8",
+      "order": 8,
       "source": "taste-loop",
       "target": "metric-advisor",
       "target_ref": "metric-advisor",
@@ -4738,27 +4919,54 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
+      "label": "todo.9",
+      "order": 9,
       "source": "taste-loop",
       "target": "optimize-with-human",
       "target_ref": "optimize-with-human",
       "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "taste-loop",
-      "target": "self-improve",
-      "target_ref": "self-improve",
-      "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
       "label": "todo.3",
       "order": 3,
       "source": "taste-loop",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "taste-loop",
+      "target": "remotion-render",
+      "target_ref": "remotion-render",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "taste-loop",
       "target": "self-improve",
       "target_ref": "self-improve",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "taste-loop",
+      "target": "self-improve",
+      "target_ref": "self-improve",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.7",
+      "order": 7,
+      "source": "taste-loop",
+      "target": "skill-maintenance",
+      "target_ref": "skill-maintenance",
       "type": "todo-chain"
     },
     {
@@ -4808,6 +5016,13 @@ window.SKILL_GRAPH = {
       "target": "review",
       "target_ref": "review",
       "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "update-memory",
+      "target": "consolidate",
+      "target_ref": "consolidate",
+      "type": "markdown-ref"
     },
     {
       "label": "markdown-ref",
@@ -5204,7 +5419,7 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-06-26T09:17:29+00:00",
+  "generated_at": "2026-06-27T15:29:10+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -5212,13 +5427,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5232,6 +5442,48 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/advise/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 28,
+          "last_referenced_at": "2026-06-06T14:11:49.058419Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058419Z",
+              "skill": "brainstorm"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": true,
+          "status": "moderate",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "harden",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 28,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 1
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 1,
@@ -5240,18 +5492,75 @@ window.SKILL_GRAPH = {
       ]
     },
     {
+      "description": "Compress artifacts into their minimal owner-correct form when material value must be preserved while duplication, fluff, or sprawl is removed.",
+      "eval": "eval_task.json",
+      "group": "",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "consolidate",
+      "label": "consolidate",
+      "methods": [],
+      "path": "skills/consolidate/SKILL.md",
+      "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 5,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.5"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 5,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 1
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 1,
+      "todo_skill_refs": []
+    },
+    {
       "description": "Turn objectives and evidence into honest metric cards, guard metrics, anti-metrics, and route hints.",
       "eval": "eval_task.json",
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5265,6 +5574,48 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/metric-advisor/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 12,
+          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.2"
+        },
+        "maintenance_recommendation": "harden",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 12,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 1
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 1,
@@ -5280,13 +5631,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5300,6 +5646,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/prototyping/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": true,
+          "status": "moderate",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 1
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 1,
@@ -5311,13 +5693,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5331,6 +5708,48 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/reference-grounding/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 26,
+          "last_referenced_at": "2026-06-06T14:11:49.058419Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058419Z",
+              "skill": "brainstorm"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": true,
+          "status": "moderate",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "harden",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 26,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 1
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 1,
@@ -5339,18 +5758,13 @@ window.SKILL_GRAPH = {
       ]
     },
     {
-      "description": "Turn short feedback, automation, blocker, or artifact-review updates into Telegram notifications using configured environment variables.",
-      "eval": "",
+      "description": "Turn short feedback, automation, blocker, or artifact-review updates into Telegram notifications that Kenji can understand and answer from Telegram.",
+      "eval": "eval_task.json",
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5364,6 +5778,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/telegram-message/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 2,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.6"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 2,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 1
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 1,
@@ -5375,13 +5823,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5395,6 +5838,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/agent-behavior-test/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5411,13 +5891,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": false,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5431,6 +5906,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/agent-browser/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": false,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "low",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "external",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "external",
       "tier": 2,
@@ -5442,13 +5951,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5467,6 +5971,46 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/agent-qa-test/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 4,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5485,13 +6029,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5505,6 +6044,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/apify/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5520,13 +6096,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5540,6 +6111,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/bash-efficiency/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5555,13 +6163,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5575,6 +6178,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/best-of-worlds/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 6,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 6,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5590,13 +6230,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 7,
         "distinct_threads_window": 7,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 14,
-        "invocation_count_30d": 7,
-        "invocation_count_7d": 0,
         "invocation_count_all": 7,
         "invocation_count_recent": 0,
         "invocation_count_window": 7,
@@ -5610,6 +6245,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/brainstorm/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 7,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 7,
+          "last_invoked_at": "2026-06-06T14:11:49.058419Z"
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "refine",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5628,13 +6300,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5648,6 +6315,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/budget-advisor/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5659,13 +6362,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5679,6 +6377,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/code-review/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5692,13 +6427,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5712,6 +6442,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/codebase-analysis/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5727,13 +6494,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5747,6 +6509,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/coderabbit-review/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 2,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 2,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5758,13 +6557,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5778,6 +6572,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/commit-message/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5793,13 +6624,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5813,6 +6639,49 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/deep-interview/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "2026-06-06T14:11:49.058419Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058419Z",
+              "skill": "brainstorm"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "refine",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5828,13 +6697,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5848,6 +6712,49 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/deep-system-design/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "refine",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5866,13 +6773,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5886,6 +6788,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/deep-ui-design/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5901,13 +6840,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5924,6 +6858,42 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/deliberative-advice/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.2"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 2,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5940,13 +6910,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5960,6 +6925,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/diagramming/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -5967,17 +6969,12 @@ window.SKILL_GRAPH = {
     },
     {
       "description": "Turn durable doc-writing or doc-revision work into grounded, metadata-aware, human-usable docs with doc-quality checks.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -5989,16 +6986,58 @@ window.SKILL_GRAPH = {
       "id": "documentation",
       "label": "documentation",
       "methods": [
-        "documentation:doc-quality"
+        "documentation:doc-architecture",
+        "documentation:metadata",
+        "documentation:feature-system-spec",
+        "documentation:finish-gate"
       ],
       "path": "skills/documentation/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 5,
+          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.6"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 5,
+          "method_count": 4,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
       "todo_skill_refs": [
         "reference-grounding",
-        "advise",
         "review"
       ]
     },
@@ -6008,13 +7047,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6028,6 +7062,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/execute/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6043,13 +7114,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6063,6 +7129,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/external-patterns/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6078,13 +7181,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6098,6 +7196,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/find-skills/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6113,13 +7248,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6138,6 +7268,42 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/gap-analysis/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 4,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6151,13 +7317,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6171,6 +7332,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/hardening/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.2"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6186,13 +7383,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6206,6 +7398,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/harness-advisor/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 9,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": true,
+          "incoming_ref_count": 9,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "skills/harness-advisor",
       "source": "local",
       "tier": 2,
@@ -6224,13 +7452,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6244,6 +7467,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/leverage-advisor/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 2,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 2,
+          "method_count": 0,
+          "outgoing_ref_count": 8,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6264,13 +7524,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6284,6 +7539,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/media-ingest/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6297,13 +7589,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6316,7 +7603,41 @@ window.SKILL_GRAPH = {
       "label": "optimize-with-human",
       "methods": [],
       "path": "skills/optimize-with-human/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6331,13 +7652,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6351,6 +7667,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/plan/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6369,13 +7721,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6389,6 +7736,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/proof-advisor/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 8,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6409,13 +7790,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6429,6 +7805,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/refactoring/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.2"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6445,13 +7857,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6473,6 +7880,54 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/research/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 2,
+          "incoming_ref_count": 24,
+          "last_referenced_at": "2026-06-06T14:11:49.058419Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058419Z",
+              "skill": "brainstorm"
+            },
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 14
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "refine",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 24,
+          "method_count": 7,
+          "outgoing_ref_count": 7,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6491,13 +7946,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6511,6 +7961,54 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/review/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 2,
+          "incoming_ref_count": 40,
+          "last_referenced_at": "2026-06-06T14:11:49.058419Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058419Z",
+              "skill": "brainstorm"
+            },
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 14
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "refine",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 40,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6524,13 +8022,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6544,6 +8037,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/runtime-debugging/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.3.2"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6560,13 +8090,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6580,6 +8105,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/summarize/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6595,13 +8157,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6615,6 +8172,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/testing/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6630,13 +8224,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6650,6 +8239,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/video-understanding/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6661,13 +8287,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6681,6 +8302,46 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/visual-qa/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 14,
+          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 14,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6694,13 +8355,8 @@ window.SKILL_GRAPH = {
       "group": "",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6714,6 +8370,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/web-design-guidelines/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 2
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 2,
@@ -6728,13 +8421,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6748,6 +8436,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/agent-testability-plan/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -6762,13 +8487,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6782,6 +8502,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/automation-advisor/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -6796,13 +8553,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6816,6 +8568,49 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/close-ticket/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "refine",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -6830,13 +8625,8 @@ window.SKILL_GRAPH = {
       "group": "backend",
       "has_checklist": false,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6850,6 +8640,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/convex/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": false,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "low",
+          "template_version": "4.0.0"
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "backend",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "external",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "external",
       "tier": 3,
@@ -6861,13 +8685,8 @@ window.SKILL_GRAPH = {
       "group": "frontend-data",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6881,6 +8700,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/data-viz/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "frontend-data",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -6897,13 +8753,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6917,6 +8768,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/delegate-cli/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -6932,13 +8820,8 @@ window.SKILL_GRAPH = {
       "group": "frontend",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6952,6 +8835,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/delegate-frontend/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "frontend",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 7,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -6971,13 +8891,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -6991,6 +8906,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/demo/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7005,13 +8957,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7025,6 +8972,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/demo-realism/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7042,13 +9026,8 @@ window.SKILL_GRAPH = {
       "group": "repo-health",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7062,6 +9041,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/desloppify/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "repo-health",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7073,13 +9089,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7096,6 +9107,40 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/eval/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 8,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": true,
+          "incoming_ref_count": 8,
+          "method_count": 2,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "skills/eval/templates/viewer-react",
       "source": "local",
       "tier": 3,
@@ -7110,13 +9155,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7130,6 +9170,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/farplane-invocation/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7141,13 +9217,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7161,6 +9232,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/feed-scout/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.2"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7179,13 +9286,8 @@ window.SKILL_GRAPH = {
       "group": "frontend",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7201,6 +9303,42 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/frontend-craft/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 16,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": true,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "frontend",
+          "has_skill_ui": false,
+          "incoming_ref_count": 16,
+          "method_count": 1,
+          "outgoing_ref_count": 13,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7226,13 +9364,8 @@ window.SKILL_GRAPH = {
       "group": "frontend",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7246,6 +9379,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/frontend-design/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "frontend",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7262,13 +9432,8 @@ window.SKILL_GRAPH = {
       "group": "frontend",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7282,6 +9447,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/functional-ui/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 7,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "frontend",
+          "has_skill_ui": false,
+          "incoming_ref_count": 7,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7297,13 +9499,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7317,6 +9514,46 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/goal-advisor/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 12,
+          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 12,
+          "method_count": 0,
+          "outgoing_ref_count": 7,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7334,13 +9571,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7354,6 +9586,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/harness-creator/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 12,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7378,13 +9647,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7398,6 +9662,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/harness-scout/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 2,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 2,
+          "method_count": 0,
+          "outgoing_ref_count": 16,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7415,13 +9716,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7435,6 +9731,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/horizon-advisor/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.3.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7448,13 +9781,8 @@ window.SKILL_GRAPH = {
       "group": "content-image",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7468,6 +9796,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/image-generation/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 7,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-image",
+          "has_skill_ui": false,
+          "incoming_ref_count": 7,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7483,13 +9848,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 7,
         "distinct_threads_window": 7,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 14,
-        "invocation_count_30d": 7,
-        "invocation_count_7d": 0,
         "invocation_count_all": 7,
         "invocation_count_recent": 0,
         "invocation_count_window": 7,
@@ -7503,6 +9863,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/impl-plan/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 11,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 7,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 7,
+          "last_invoked_at": "2026-06-06T14:11:49.058337Z"
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 11,
+          "method_count": 0,
+          "outgoing_ref_count": 10,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7519,18 +9913,82 @@ window.SKILL_GRAPH = {
       ]
     },
     {
+      "description": "Turn an explanation, dataset, product flow, or argument into a clear infographic brief, layout spec, and production-ready visual asset plan.",
+      "eval": "eval_task.json",
+      "group": "content-visual",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "infographic",
+      "label": "infographic",
+      "methods": [
+        "infographic:handdrawn-saas-wireframe"
+      ],
+      "path": "skills/infographic/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.6"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-visual",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 1,
+          "outgoing_ref_count": 7,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "social-content",
+        "frontend-craft",
+        "data-viz",
+        "diagramming",
+        "image-generation",
+        "visual-qa"
+      ]
+    },
+    {
       "description": "Route liked links, images, videos, files, or notes into analyzed, searchable Resource Bank records with audience-aware Tasty Pack retrieval fields.",
       "eval": "",
       "group": "content-social",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7544,6 +10002,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/ingest-content/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-social",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7558,13 +10053,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7578,6 +10068,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/init-advisor/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "3.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7596,13 +10120,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7616,6 +10135,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/interval-update/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7630,13 +10185,8 @@ window.SKILL_GRAPH = {
       "group": "project-ops",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7650,10 +10200,47 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/knowledge-tidier/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "project-ops",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
       "todo_skill_refs": [
+        "consolidate",
         "documentation",
         "skill-maintenance",
         "update-memory",
@@ -7666,13 +10253,8 @@ window.SKILL_GRAPH = {
       "group": "frontend-content",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7685,7 +10267,43 @@ window.SKILL_GRAPH = {
       "label": "landing-page",
       "methods": [],
       "path": "skills/landing-page/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": true,
+          "status": "moderate",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "frontend-content",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7699,13 +10317,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7719,6 +10332,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/leverage-rollout/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7736,13 +10386,8 @@ window.SKILL_GRAPH = {
       "group": "personal-ops",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7756,6 +10401,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/notion-task-field-fill/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "personal-ops",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7767,13 +10449,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7787,6 +10464,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/optimize-harness/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 2,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 2,
+          "method_count": 0,
+          "outgoing_ref_count": 14,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7810,13 +10523,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7830,6 +10538,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/pr-review-watch/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7845,13 +10590,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7865,6 +10605,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/pr-runtime/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 2,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.1.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 2,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7878,13 +10655,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7898,6 +10670,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/pr-splitting/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7909,13 +10718,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7929,6 +10733,49 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/prd/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "2026-06-06T14:11:49.058419Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058419Z",
+              "skill": "brainstorm"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "refine",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7943,13 +10790,8 @@ window.SKILL_GRAPH = {
       "group": "content-image",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -7970,6 +10812,43 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/product-photography/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-image",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 6,
+          "outgoing_ref_count": 3,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -7985,13 +10864,8 @@ window.SKILL_GRAPH = {
       "group": "harness",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8005,6 +10879,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/pulse-update/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 2,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 2,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8016,13 +10926,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8036,6 +10941,46 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/qa/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 1,
+          "incoming_ref_count": 8,
+          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "top_referrers": [
+            {
+              "invocation_count_window": 7,
+              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "skill": "impl-plan"
+            }
+          ],
+          "window_referrer_invocations": 7
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 8,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8051,13 +10996,8 @@ window.SKILL_GRAPH = {
       "group": "frontend-data",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8071,6 +11011,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/react-flow/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "frontend-data",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8088,13 +11065,8 @@ window.SKILL_GRAPH = {
       "group": "content-social",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8108,6 +11080,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/reel-collage/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "content-social",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8119,13 +11128,8 @@ window.SKILL_GRAPH = {
       "group": "content-video",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8139,6 +11143,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/remotion/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 6,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-video",
+          "has_skill_ui": false,
+          "incoming_ref_count": 6,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8157,13 +11198,8 @@ window.SKILL_GRAPH = {
       "group": "content-video",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8177,6 +11213,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/remotion-render/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 6,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-video",
+          "has_skill_ui": false,
+          "incoming_ref_count": 6,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8194,13 +11267,8 @@ window.SKILL_GRAPH = {
       "group": "self-improvement",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8214,6 +11282,42 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/self-improve/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 5,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "self-improvement",
+          "has_skill_ui": false,
+          "incoming_ref_count": 5,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8228,13 +11332,8 @@ window.SKILL_GRAPH = {
       "group": "skills",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8248,6 +11347,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/skill-creator/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 4,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.2"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "skills",
+          "has_skill_ui": false,
+          "incoming_ref_count": 4,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8266,13 +11399,8 @@ window.SKILL_GRAPH = {
       "group": "skills",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8286,6 +11414,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/skill-maintenance/SKILL.md",
       "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 6,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "skills",
+          "has_skill_ui": true,
+          "incoming_ref_count": 6,
+          "method_count": 0,
+          "outgoing_ref_count": 7,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "skills/skill-maintenance/graph/index.html",
       "source": "local",
       "tier": 3,
@@ -8294,7 +11456,8 @@ window.SKILL_GRAPH = {
         "harness-advisor",
         "advise",
         "eval",
-        "self-improve"
+        "self-improve",
+        "metric-advisor"
       ]
     },
     {
@@ -8303,13 +11466,8 @@ window.SKILL_GRAPH = {
       "group": "skills",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8323,6 +11481,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/skill-registry-ui/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "skills",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8336,13 +11531,8 @@ window.SKILL_GRAPH = {
       "group": "content-social",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8361,6 +11551,43 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/social-content/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 2,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-social",
+          "has_skill_ui": false,
+          "incoming_ref_count": 2,
+          "method_count": 4,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8379,13 +11606,8 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8399,6 +11621,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/spec-to-ticket/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.5.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "coding",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8407,18 +11666,13 @@ window.SKILL_GRAPH = {
       ]
     },
     {
-      "description": "Run a Codex-native active-hours heartbeat prompt that selects high-compounding skills and emits feedback cards or Goal handoffs.",
+      "description": "Run a Codex-native active-hours heartbeat prompt that turns human taste into Goal-backed concept and execution feedback loops.",
       "eval": "eval_task.json",
       "group": "self-improvement",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8432,13 +11686,55 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/taste-loop/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "self-improvement",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 9,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
       "todo_skill_refs": [
+        "frontend-craft",
+        "functional-ui",
+        "remotion",
+        "remotion-render",
+        "goal-advisor",
+        "self-improve",
+        "skill-maintenance",
         "metric-advisor",
-        "optimize-with-human",
-        "self-improve"
+        "optimize-with-human"
       ]
     },
     {
@@ -8447,13 +11743,8 @@ window.SKILL_GRAPH = {
       "group": "project-ops",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8467,6 +11758,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/update-memory/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 3,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "project-ops",
+          "has_skill_ui": false,
+          "incoming_ref_count": 3,
+          "method_count": 0,
+          "outgoing_ref_count": 4,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8481,13 +11809,8 @@ window.SKILL_GRAPH = {
       "group": "project-ops",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8501,6 +11824,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/update-strategy/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.2.0"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "project-ops",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8514,13 +11874,8 @@ window.SKILL_GRAPH = {
       "group": "frontend",
       "has_checklist": false,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8534,6 +11889,40 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/vercel-react-best-practices/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": false,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "low",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "frontend",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "external",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "external",
       "tier": 3,
@@ -8545,13 +11934,8 @@ window.SKILL_GRAPH = {
       "group": "content-video",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8565,6 +11949,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/video-generation/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 6,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-video",
+          "has_skill_ui": false,
+          "incoming_ref_count": 6,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8582,13 +12003,8 @@ window.SKILL_GRAPH = {
       "group": "content-video",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8608,6 +12024,43 @@ window.SKILL_GRAPH = {
       ],
       "path": "skills/video-production/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-video",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 5,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,
@@ -8626,13 +12079,8 @@ window.SKILL_GRAPH = {
       "group": "frontend",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_30d": 0,
         "distinct_threads_window": 0,
-        "distinct_tickets_30d": 0,
         "distinct_tickets_window": 0,
-        "heat_score": 0,
-        "invocation_count_30d": 0,
-        "invocation_count_7d": 0,
         "invocation_count_all": 0,
         "invocation_count_recent": 0,
         "invocation_count_window": 0,
@@ -8646,6 +12094,43 @@ window.SKILL_GRAPH = {
       "methods": [],
       "path": "skills/visual-design/SKILL.md",
       "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 7,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "1.0.0"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "frontend",
+          "has_skill_ui": false,
+          "incoming_ref_count": 7,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
       "skill_ui": "",
       "source": "local",
       "tier": 3,

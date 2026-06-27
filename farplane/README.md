@@ -55,6 +55,6 @@ See [docs/farplane-framework/project-files.md](../docs/farplane-framework/projec
 - `Monthly Registry Consolidation`: optional report-only pass over registry
   truth, duplicate rows, owner drift, and generated-output freshness.
 - `Active-Hours Taste Loop`: optional human-feedback heartbeat that runs only
-  during configured active hours, ranks high-compounding skills with the
-  official Skill Compounding Score, and emits a feedback card or Goal Advisor
+  during configured active hours, ranks candidate skills with the official
+  Skill Signals, and emits a feedback card or Goal Advisor
   handoff without activating hidden workers or editing target skills directly.

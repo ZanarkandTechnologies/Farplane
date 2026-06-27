@@ -148,7 +148,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
 
         self.assertEqual(heat["goal-advisor"]["observed_event_count_all"], 2)
         self.assertEqual(heat["goal-advisor"]["invocation_count_window"], 1)
-        self.assertEqual(heat["goal-advisor"]["invocation_count_30d"], 1)
         self.assertEqual(heat["goal-advisor"]["distinct_threads_window"], 1)
         self.assertEqual(heat["impl-plan"]["observed_event_count_all"], 1)
         self.assertEqual(heat["impl-plan"]["invocation_count_window"], 1)
@@ -177,6 +176,93 @@ class GenerateSkillGraphTests(unittest.TestCase):
 
         self.assertEqual(config["window_days"], 5)
         self.assertEqual(config["recent_days"], 5)
+
+    def test_skill_signals_include_deduped_composition_heat(self) -> None:
+        rows = [
+            {
+                "name": "hot-caller",
+                "tier": 2,
+                "source": "local",
+                "group": "harness",
+                "path": "skills/hot-caller/SKILL.md",
+                "description": "Calls target skill.",
+                "has_checklist": True,
+                "eval": "eval_task.json",
+                "qa_checklist": "qa_checklist.md",
+                "skill_links": ["target-skill"],
+                "todo_skill_refs": ["target-skill"],
+            },
+            {
+                "name": "target-skill",
+                "tier": 3,
+                "source": "local",
+                "group": "harness",
+                "path": "skills/target-skill/SKILL.md",
+                "description": "Receives refs.",
+                "has_checklist": False,
+                "skill_links": [],
+            },
+        ]
+        skill_heat = {
+            "hot-caller": {
+                "invocation_count_window": 4,
+                "invocation_count_recent": 1,
+                "distinct_threads_window": 2,
+                "distinct_tickets_window": 1,
+                "last_invoked_at": "2026-06-24T00:00:00Z",
+            },
+            "target-skill": {
+                "invocation_count_window": 0,
+                "invocation_count_recent": 0,
+                "distinct_threads_window": 0,
+                "distinct_tickets_window": 0,
+                "last_invoked_at": "",
+            },
+        }
+
+        graph = generate_skill_graph.build_graph(rows, skill_heat=skill_heat)
+        target = next(node for node in graph["nodes"] if node["id"] == "target-skill")
+        signals = target["signals"]
+
+        self.assertEqual(signals["direct_heat"]["invocation_count_window"], 0)
+        self.assertEqual(signals["composition_heat"]["incoming_ref_count"], 1)
+        self.assertEqual(signals["composition_heat"]["hot_referrer_count"], 1)
+        self.assertEqual(signals["composition_heat"]["window_referrer_invocations"], 4)
+        self.assertEqual(signals["composition_heat"]["top_referrers"][0]["skill"], "hot-caller")
+        self.assertEqual(signals["maintenance_recommendation"], "refine")
+
+    def test_unique_orchestrator_without_heat_is_kept(self) -> None:
+        rows = [
+            {
+                "name": "tier-one-primitive",
+                "tier": 1,
+                "source": "local",
+                "group": "harness",
+                "path": "skills/tier-one-primitive/SKILL.md",
+                "description": "Primitive skill.",
+                "has_checklist": True,
+                "skill_links": [],
+            },
+            {
+                "name": "orchestrator",
+                "tier": 3,
+                "source": "local",
+                "group": "harness",
+                "path": "skills/orchestrator/SKILL.md",
+                "description": "Coordinates several skills.",
+                "has_checklist": True,
+                "skill_links": ["a", "b", "c"],
+            },
+        ]
+
+        graph = generate_skill_graph.build_graph(rows)
+        recommendations = {
+            node["id"]: node["signals"]["maintenance_recommendation"]
+            for node in graph["nodes"]
+        }
+
+        self.assertEqual(recommendations["tier-one-primitive"], "keep")
+        self.assertEqual(recommendations["orchestrator"], "keep")
 
 
 if __name__ == "__main__":

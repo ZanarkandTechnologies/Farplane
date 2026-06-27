@@ -112,9 +112,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-1e8243d5b940.md",
-      "source_commit": "1e8243d5b940",
-      "summary": "working tree current template",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
+      "source_commit": "79a4641842e9",
+      "summary": "Add infographic example fixture standard",
       "version": "0.3.6"
     },
     {
@@ -132,9 +132,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
-      "source_commit": "79a4641842e9",
-      "summary": "Add infographic example fixture standard",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-ca2e9679d98e.md",
+      "source_commit": "ca2e9679d98e",
+      "summary": "working tree current template",
       "version": "0.3.6"
     }
   ],
@@ -475,7 +475,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "1e8243d5b940",
+      "source_commit": "79a4641842e9",
       "template_version": "0.3.6",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -489,7 +489,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "1e8243d5b940",
+      "source_commit": "79a4641842e9",
       "template_version": "0.3.6",
       "title": "Todo executability",
       "verdict": "pass"
@@ -503,7 +503,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "1e8243d5b940",
+      "source_commit": "79a4641842e9",
       "template_version": "0.3.6",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -517,7 +517,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "1e8243d5b940",
+      "source_commit": "79a4641842e9",
       "template_version": "0.3.6",
       "title": "Proof contract",
       "verdict": "pass"
@@ -531,7 +531,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "1e8243d5b940",
+      "source_commit": "79a4641842e9",
       "template_version": "0.3.6",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -545,7 +545,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "ca2e9679d98e",
       "template_version": "0.3.6",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -559,7 +559,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "ca2e9679d98e",
       "template_version": "0.3.6",
       "title": "Todo executability",
       "verdict": "pass"
@@ -573,7 +573,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "ca2e9679d98e",
       "template_version": "0.3.6",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -587,7 +587,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "ca2e9679d98e",
       "template_version": "0.3.6",
       "title": "Proof contract",
       "verdict": "pass"
@@ -601,7 +601,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "ca2e9679d98e",
       "template_version": "0.3.6",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -729,17 +729,17 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skills/taste-loop/eval_task.json"
       ],
       "id": "FEAT-0064",
-      "known_limits": "Official ranking contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.",
+      "known_limits": "Official signal contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.",
       "last_verified": "2026-06-26",
       "metrics": [
-        "skill_compounding_score_traceability_pass",
-        "taste_loop_score_breakdown_pass",
+        "skill_signal_contract_traceability_pass",
+        "taste_loop_signal_breakdown_pass",
         "skill_registry_validation_pass"
       ],
-      "name": "Skill compounding score",
+      "name": "Skill signals",
       "status": "implemented",
       "surfaces": [
-        "docs/features/FEAT-0064-skill-compounding-score.md",
+        "docs/features/FEAT-0064-skill-signals.md",
         "docs/skills/system.md",
         "skills/taste-loop",
         "farplane/automations.md",
@@ -747,7 +747,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-06-27T15:15:31+00:00",
+  "generated_at": "2026-06-27T15:29:10+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -4705,8 +4705,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "introduced_at": "2026-06-27",
       "latest_at": "2026-06-27",
-      "latest_commit": "79a4641842e9",
-      "latest_summary": "Add infographic example fixture standard",
+      "latest_commit": "ca2e9679d98e",
+      "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
         "Context",
@@ -4719,23 +4719,23 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-ca2e9679d98e.md",
       "snapshots": [
-        {
-          "introduced_at": "2026-06-27",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-1e8243d5b940.md",
-          "source_commit": "1e8243d5b940",
-          "summary": "working tree current template"
-        },
         {
           "introduced_at": "2026-06-27",
           "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
           "source_commit": "79a4641842e9",
           "summary": "Add infographic example fixture standard"
+        },
+        {
+          "introduced_at": "2026-06-27",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-ca2e9679d98e.md",
+          "source_commit": "ca2e9679d98e",
+          "summary": "working tree current template"
         }
       ],
-      "source_commit": "1e8243d5b940",
-      "summary": "working tree current template",
+      "source_commit": "79a4641842e9",
+      "summary": "Add infographic example fixture standard",
       "template_metadata": {
         "feature_refs": [
           "FEAT-0022",

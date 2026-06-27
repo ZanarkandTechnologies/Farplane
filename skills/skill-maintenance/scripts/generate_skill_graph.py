@@ -181,17 +181,167 @@ def load_skill_heat(
     for skill_name, item in heat.items():
         item["distinct_threads_window"] = len(threads_window.get(skill_name, set()))
         item["distinct_tickets_window"] = len(tickets_window.get(skill_name, set()))
-        # Compatibility aliases for existing readers while the graph UI migrates.
-        item["invocation_count_7d"] = item["invocation_count_recent"]
-        item["invocation_count_30d"] = item["invocation_count_window"]
-        item["distinct_threads_30d"] = item["distinct_threads_window"]
-        item["distinct_tickets_30d"] = item["distinct_tickets_window"]
-        item["heat_score"] = (
-            item["invocation_count_window"]
-            + item["distinct_threads_window"]
-            + item["distinct_tickets_window"]
-        )
     return heat
+
+
+def direct_heat_signal(heat: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "invocation_count_window": int(heat.get("invocation_count_window") or 0),
+        "invocation_count_recent": int(heat.get("invocation_count_recent") or 0),
+        "distinct_threads_window": int(heat.get("distinct_threads_window") or 0),
+        "distinct_tickets_window": int(heat.get("distinct_tickets_window") or 0),
+        "last_invoked_at": str(heat.get("last_invoked_at") or ""),
+    }
+
+
+def build_composition_heat(
+    edges: list[dict[str, Any]],
+    skill_heat: dict[str, dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    referrers_by_target: dict[str, set[str]] = defaultdict(set)
+    for edge in edges:
+        source = str(edge.get("source") or "")
+        target = str(edge.get("target") or "")
+        if source and target and source != target:
+            referrers_by_target[target].add(source)
+
+    composition: dict[str, dict[str, Any]] = {}
+    for target, referrers in referrers_by_target.items():
+        hot_referrers: list[dict[str, Any]] = []
+        total_window_invocations = 0
+        last_referenced_at = ""
+        for source in sorted(referrers):
+            heat = skill_heat.get(source, {})
+            invocation_count = int(heat.get("invocation_count_window") or 0)
+            if invocation_count <= 0:
+                continue
+            total_window_invocations += invocation_count
+            invoked_at = str(heat.get("last_invoked_at") or "")
+            if invoked_at > last_referenced_at:
+                last_referenced_at = invoked_at
+            hot_referrers.append(
+                {
+                    "skill": source,
+                    "invocation_count_window": invocation_count,
+                    "last_invoked_at": invoked_at,
+                }
+            )
+        hot_referrers.sort(
+            key=lambda item: (
+                -int(item["invocation_count_window"]),
+                str(item["skill"]),
+            )
+        )
+        composition[target] = {
+            "incoming_ref_count": len(referrers),
+            "hot_referrer_count": len(hot_referrers),
+            "window_referrer_invocations": total_window_invocations,
+            "last_referenced_at": last_referenced_at,
+            "top_referrers": hot_referrers[:5],
+        }
+    return composition
+
+
+def maintenance_burden_signal(row: dict[str, Any]) -> dict[str, Any]:
+    findings: list[str] = []
+    if row.get("source", "local") == "local":
+        if not row.get("eval"):
+            findings.append("missing_eval")
+        if not row.get("qa_checklist"):
+            findings.append("missing_qa_checklist")
+    if row.get("skill_template_status") == "stale":
+        findings.append("stale_template")
+
+    if len(findings) >= 2:
+        status = "high"
+    elif findings:
+        status = "moderate"
+    else:
+        status = "low"
+    return {
+        "status": status,
+        "findings": findings,
+        "has_checklist": bool(row.get("has_checklist")),
+        "has_eval": bool(row.get("eval")),
+        "has_qa_checklist": bool(row.get("qa_checklist")),
+        "template_version": str(row.get("skill_template_version") or row.get("version") or ""),
+    }
+
+
+def uniqueness_signal(row: dict[str, Any], composition_heat: dict[str, Any]) -> dict[str, Any]:
+    methods = row.get("methods", [])
+    outgoing_refs = {
+        skill_ref_name(str(ref))
+        for ref in [
+            *row.get("skill_links", []),
+            *row.get("todo_skill_refs", []),
+            *row.get("common_chains", {}).get("after", []),
+        ]
+        if ref
+    }
+    return {
+        "tier": row.get("tier"),
+        "source": row.get("source", "local"),
+        "group": row.get("group", ""),
+        "method_count": len(methods) if isinstance(methods, list) else 0,
+        "outgoing_ref_count": len(outgoing_refs),
+        "incoming_ref_count": int(composition_heat.get("incoming_ref_count") or 0),
+        "has_skill_ui": bool(row.get("skill_ui")),
+    }
+
+
+def maintenance_recommendation(
+    direct_heat: dict[str, Any],
+    composition_heat: dict[str, Any],
+    maintenance_burden: dict[str, Any],
+    uniqueness: dict[str, Any],
+) -> str:
+    direct_count = int(direct_heat.get("invocation_count_window") or 0)
+    composed_count = int(composition_heat.get("window_referrer_invocations") or 0)
+    incoming_refs = int(composition_heat.get("incoming_ref_count") or 0)
+    burden_status = str(maintenance_burden.get("status") or "low")
+    is_unique = (
+        uniqueness.get("tier") == 1
+        or int(uniqueness.get("method_count") or 0) > 0
+        or int(uniqueness.get("outgoing_ref_count") or 0) >= 3
+        or bool(uniqueness.get("has_skill_ui"))
+    )
+
+    if direct_count == 0 and composed_count == 0 and incoming_refs == 0:
+        return "keep" if is_unique else "retire_review"
+    if direct_count == 0 and composed_count == 0 and is_unique:
+        return "keep"
+    if direct_count == 0 and composed_count == 0:
+        return "watch"
+    if burden_status == "high" and (direct_count > 0 or composed_count > 0):
+        return "refine"
+    if burden_status == "moderate" and (direct_count > 0 or composed_count > 0):
+        return "harden"
+    if direct_count > 0 or composed_count > 0 or is_unique:
+        return "keep"
+    return "watch"
+
+
+def build_skill_signals(
+    row: dict[str, Any],
+    heat: dict[str, Any],
+    composition_heat: dict[str, Any],
+) -> dict[str, Any]:
+    direct_heat = direct_heat_signal(heat)
+    maintenance_burden = maintenance_burden_signal(row)
+    uniqueness = uniqueness_signal(row, composition_heat)
+    return {
+        "direct_heat": direct_heat,
+        "composition_heat": composition_heat,
+        "maintenance_burden": maintenance_burden,
+        "uniqueness": uniqueness,
+        "maintenance_recommendation": maintenance_recommendation(
+            direct_heat,
+            composition_heat,
+            maintenance_burden,
+            uniqueness,
+        ),
+    }
 
 
 def build_graph(
@@ -200,27 +350,7 @@ def build_graph(
     skill_heat_config: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     skill_names = {row["name"] for row in rows}
-    nodes = [
-        GraphNode(
-            id=row["name"],
-            label=row["name"],
-            attributes={
-                "tier": row.get("tier"),
-                "source": row.get("source", "local"),
-                "group": row.get("group", ""),
-                "todo_skill_refs": row.get("todo_skill_refs", []),
-                "methods": row.get("methods", []),
-                "has_checklist": bool(row.get("has_checklist")),
-                "eval": row.get("eval", ""),
-                "qa_checklist": row.get("qa_checklist", ""),
-                "skill_ui": row.get("skill_ui", ""),
-                "path": row.get("path", ""),
-                "description": row.get("description", ""),
-                "heat": (skill_heat or {}).get(row["name"], {}),
-            },
-        ).as_dict()
-        for row in rows
-    ]
+    skill_heat = skill_heat or {}
 
     edges: list[dict[str, Any]] = []
     seen: set[tuple[str, str, str, str]] = set()
@@ -264,6 +394,43 @@ def build_graph(
                 f"todo.{order}",
                 {"order": order, "chain_source": "todo_list"},
             )
+
+    composition_heat = build_composition_heat(edges, skill_heat)
+    nodes = [
+        GraphNode(
+            id=row["name"],
+            label=row["name"],
+            attributes={
+                "tier": row.get("tier"),
+                "source": row.get("source", "local"),
+                "group": row.get("group", ""),
+                "todo_skill_refs": row.get("todo_skill_refs", []),
+                "methods": row.get("methods", []),
+                "has_checklist": bool(row.get("has_checklist")),
+                "eval": row.get("eval", ""),
+                "qa_checklist": row.get("qa_checklist", ""),
+                "skill_ui": row.get("skill_ui", ""),
+                "path": row.get("path", ""),
+                "description": row.get("description", ""),
+                "heat": skill_heat.get(row["name"], {}),
+                "signals": build_skill_signals(
+                    row,
+                    skill_heat.get(row["name"], {}),
+                    composition_heat.get(
+                        row["name"],
+                        {
+                            "incoming_ref_count": 0,
+                            "hot_referrer_count": 0,
+                            "window_referrer_invocations": 0,
+                            "last_referenced_at": "",
+                            "top_referrers": [],
+                        },
+                    ),
+                ),
+            },
+        ).as_dict()
+        for row in rows
+    ]
 
     nodes.sort(key=lambda node: (int(node.get("tier") or 9), node["label"]))
     edges.sort(key=lambda edge: (edge["source"], edge["target"], edge["type"], edge["label"]))

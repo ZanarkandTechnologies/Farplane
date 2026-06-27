@@ -1,5 +1,5 @@
 ---
-title: Skill compounding score
+title: Skill signals
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -9,7 +9,7 @@ tags:
   - feature
   - sys-0006
 refs:
-  - docs/features/FEAT-0064-skill-compounding-score.md
+  - docs/features/FEAT-0064-skill-signals.md
   - docs/skills/system.md
   - skills/taste-loop
   - farplane/automations.md
@@ -25,7 +25,7 @@ system_id: SYS-0006
 category: skills
 public: true
 surfaces:
-  - docs/features/FEAT-0064-skill-compounding-score.md
+  - docs/features/FEAT-0064-skill-signals.md
   - docs/skills/system.md
   - skills/taste-loop
   - farplane/automations.md
@@ -40,16 +40,16 @@ evidence_refs:
   - skills/taste-loop/SKILL.md
   - skills/taste-loop/templates/heartbeat-prompt.md
   - skills/taste-loop/eval_task.json
-known_limits: Official ranking contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
+known_limits: Official signal contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
 metrics:
-  - skill_compounding_score_traceability_pass
-  - taste_loop_score_breakdown_pass
+  - skill_signal_contract_traceability_pass
+  - taste_loop_signal_breakdown_pass
   - skill_registry_validation_pass
 last_verified: 2026-06-26
 ---
-# Skill compounding score
+# Skill signals
 
-Skill compounding score exists to prioritize skill upkeep without hiding raw
+Skill signals exist to prioritize skill upkeep without hiding raw
 evidence inside a brittle mega-score. It belongs to
 [Skill System](../systems/skill-system.md) and keeps `FEAT-0064` as a stable
 capability handle because the behavior has an owner, proof path, and
@@ -94,13 +94,13 @@ deserve hardening, refinement, merging, watching, or retirement review first.
 
 ## User Stories
 
-- As a maintainer, I can choose the next skill upgrade based on compounding value.
+- As a maintainer, I can choose the next skill upgrade from clear evidence.
 - As an operator, I can see why a boring workflow skill deserves investment.
 - As a reviewer, I can challenge upgrades that add complexity without leverage.
 
 ## Operating Contract
 
-Compounding score is a recommendation contract, not a skill tier or quality
+Skill signals are a recommendation contract, not a skill tier or quality
 grade.
 
 - Reports expose the raw signal values before any recommendation.
@@ -135,7 +135,7 @@ retire_review = heat is low, composition_heat is low, uniqueness is low,
 
 Owner surfaces:
 
-- `docs/features/FEAT-0064-skill-compounding-score.md`
+- `docs/features/FEAT-0064-skill-signals.md`
 - `docs/skills/system.md`
 - `skills/taste-loop`
 - `farplane/automations.md`
@@ -187,8 +187,8 @@ Acceptance signals:
 
 ## Metrics
 
-- `skill_compounding_score_traceability_pass`
-- `taste_loop_score_breakdown_pass`
+- `skill_signal_contract_traceability_pass`
+- `taste_loop_signal_breakdown_pass`
 - `skill_registry_validation_pass`
 
 ## Alternatives Considered

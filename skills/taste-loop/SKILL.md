@@ -43,7 +43,7 @@ state: reads(farplane/automations.md automation-config TOML?,
              farplane/products.md,
              farplane/products.md#taste-loop-artifact-workflows,
              docs/skills/registry.jsonl,
-             docs/features/FEAT-0064-skill-compounding-score.md,
+             docs/features/FEAT-0064-skill-signals.md,
              tickets/TASK-*/artifacts/agi-toy-shop-scenario.md?,
              tickets/*/ticket.md?,
              skill graph heat / FARPLANE_SKILL_HEAT_*,
@@ -100,14 +100,14 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Treat manual invocation as explicit operator intent to run one bounded
     beat now, regardless of the configured schedule.
 - [ ] 2. Collect candidate targets.
-  - [ ] Read `docs/features/FEAT-0064-skill-compounding-score.md`.
+  - [ ] Read `docs/features/FEAT-0064-skill-signals.md`.
   - [ ] Read `docs/skills/registry.jsonl`.
   - [ ] Read `farplane/products.md` Work Lanes and Taste Loop Artifact
     Workflows.
   - [ ] Use existing skill heat generated from `.farplane/events/` and
     `FARPLANE_SKILL_HEAT_*` controls when available.
   - [ ] Split heat into direct heat and weaker composition heat from referring
-    skills, matching `docs/features/FEAT-0064-skill-compounding-score.md`.
+    skills, matching `docs/features/FEAT-0064-skill-signals.md`.
   - [ ] Prefer artifact workflows tied to configured target groups and
     product/money-making lanes.
   - [ ] Exclude broad router skills as direct targets. `frontend-craft`,
@@ -236,7 +236,7 @@ automation record.
 ## Scoring Contract
 
 The prompt should consume the FEAT-0064 skill signal contract from
-`docs/features/FEAT-0064-skill-compounding-score.md`, then apply the Taste
+`docs/features/FEAT-0064-skill-signals.md`, then apply the Taste
 Loop-specific artifact workflow gate. Expose readable signals and a
 recommendation rather than hiding a magic ranking:
 
@@ -248,7 +248,7 @@ skill_signals(skill, project_state, lifecycle_refs, now?)
 
 Signal ownership:
 
-- algorithm and component meanings: `docs/features/FEAT-0064-skill-compounding-score.md`
+- algorithm and component meanings: `docs/features/FEAT-0064-skill-signals.md`
 - tier, group, description, links: `docs/skills/registry.jsonl`
 - lifecycle-reference distance: `docs/farplane-framework/lifecycle.md` and
   lifecycle graph data when available
@@ -517,7 +517,8 @@ Return and write:
 - `idea_pass_rate`
 - `execution_pass_rate`
 - `preview_ref` for website, image, video, or visual artifacts
-- `score_breakdown`
+- `skill_signals`
+- `maintenance_recommendation`
 - `action`
 - `skipped_targets`
 - `open_feedback_count`
@@ -586,7 +587,7 @@ Return and write:
   baselines, candidates, and promotion rules.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - Goal Packet and
   heartbeat prompt compilation.
-- `docs/features/FEAT-0064-skill-compounding-score.md` - official score algorithm and
+- `docs/features/FEAT-0064-skill-signals.md` - official signal contract and
   component source ownership.
 - `farplane/automations.md` - reviewed automation prompt source.
 - [templates/taste-proposal.md](templates/taste-proposal.md) - planning

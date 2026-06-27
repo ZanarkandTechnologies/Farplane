@@ -66,7 +66,7 @@ upgrade_priority(skill, evidence) -> rollout_order
 ```
 
 When a loop must rank skills as improvement targets, use the signal contract in
-`docs/features/FEAT-0064-skill-compounding-score.md`: direct heat, composition
+`docs/features/FEAT-0064-skill-signals.md`: direct heat, composition
 heat, maintenance burden, and uniqueness. The output is a maintenance
 recommendation such as `keep`, `harden`, `refine`, `merge`, `watch`, or
 `retire_review`, not a skill tier, eval score, or skill quality grade.
