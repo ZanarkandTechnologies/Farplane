@@ -7,7 +7,6 @@ import argparse
 import json
 import re
 import sys
-from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -15,7 +14,6 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
-TODAY = date.today().isoformat()
 FEATURE_ROOT = ROOT / "docs" / "features"
 SYSTEM_ROOT = ROOT / "docs" / "systems"
 FEATURE_REGISTRY = FEATURE_ROOT / "registry.jsonl"
@@ -620,6 +618,16 @@ def render_system_registry(systems: list[dict[str, Any]]) -> str:
     return render_jsonl(sorted(rows, key=lambda row: row.get("id", "")))
 
 
+def generated_registry_date(*record_groups: list[dict[str, Any]]) -> str:
+    dates = [
+        str(record["last_verified"])
+        for records in record_groups
+        for record in records
+        if isinstance(record.get("last_verified"), str) and DATE_RE.match(str(record["last_verified"]))
+    ]
+    return max(dates, default="1970-01-01")
+
+
 def md_link(path: str, label: str) -> str:
     return f"[{label}](../{path.removeprefix('docs/')})"
 
@@ -628,12 +636,13 @@ def render_feature_registry_doc(
     features: list[dict[str, Any]], system_by_id: dict[str, dict[str, Any]]
 ) -> str:
     rows = sorted(features, key=lambda row: row["id"])
+    generated_at = generated_registry_date(features, list(system_by_id.values()))
     lines = [
         "---",
         'title: "Generated Feature Registry"',
         "status: generated",
         "owner: feature-registry",
-        f"updated_at: {TODAY}",
+        f"updated_at: {generated_at}",
         "refs:",
         "  - docs/features/registry.jsonl",
         "  - docs/features/validate_features.py",
@@ -660,12 +669,13 @@ def render_system_registry_doc(
     systems: list[dict[str, Any]], feature_by_id: dict[str, dict[str, Any]]
 ) -> str:
     rows = sorted(systems, key=lambda row: row["id"])
+    generated_at = generated_registry_date(systems, list(feature_by_id.values()))
     lines = [
         "---",
         'title: "Generated System Registry"',
         "status: generated",
         "owner: system-registry",
-        f"updated_at: {TODAY}",
+        f"updated_at: {generated_at}",
         "refs:",
         "  - docs/systems/registry.jsonl",
         "  - docs/features/registry.jsonl",
