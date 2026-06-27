@@ -61,6 +61,48 @@ created_at: 2026-06-26T21:34:52+08:00
   decision to this progress file, update `feedback.json`, revise the artifact
   if needed, and ask again only when the next artifact is ready.
 
+## 2026-06-26T22:08:42+08:00
+
+- `trigger:` operator correction; local screenshot path was not an adequate
+  phone review surface.
+- `worker_thread:` `019f0424-a832-7712-b952-85b50222a716`.
+- `action:` deployed the static landing-page artifact to Vercel from
+  `tickets/TASK-0236/artifacts/landing-page-offer-v1`.
+- `public_preview_url:` `https://landing-page-offer-v1.vercel.app`.
+- `vercel_deployment_url:` `https://landing-page-offer-v1-qzfd1dsb3-kenjipcxs-projects.vercel.app`.
+- `vercel_inspect_url:` `https://vercel.com/kenjipcxs-projects/landing-page-offer-v1/HsXzDQTxQ6hveBbi46f9E9HWb3ZS`.
+- `verification:` `curl -I https://landing-page-offer-v1.vercel.app`
+  returned HTTP 200; Brave/Chromium mobile smoke confirmed title, H1, CTA, and
+  hero board visible with no console/page errors.
+- `verification_artifact:` `tickets/TASK-0236/artifacts/landing-page-offer-v1/qa-capture.json`.
+- `telegram_request:` resent updated
+  `tickets/TASK-0236/artifacts/landing-page-offer-v1/telegram-message.txt`
+  with the website preview URL using `skills/telegram-message/scripts/send_message.py`.
+- `telegram_status:` sent.
+- `state:` paused waiting for Kenji feedback on keep / revise / reject.
+- `next_action:` revise from feedback in this worker thread; do not ask again
+  until a revised artifact is ready.
+
+## 2026-06-26T22:20:00+08:00
+
+- `trigger:` operator correction; V1 was too basic and ignored available
+  landing-page effects, video-scroll, 3D, and premium patterns.
+- `action:` used `skill-maintenance` to harden the `landing-page` workflow with
+  an Ambition Gate and runtime QA checklist.
+- `changed_skill_files:`
+  - `skills/landing-page/SKILL.md`
+  - `skills/landing-page/qa_checklist.md`
+  - `skills/landing-page/references/planner-executor.md`
+- `new_workflow_artifact:` `tickets/TASK-0236/artifacts/landing-page-offer-v2/STUNNING_WORKFLOW.md`.
+- `decision:` next landing attempt should target `stunning`, not static HTML:
+  primary carrier should be a scroll-driven evidence-packet transformation with
+  generated/layered media or Three.js/WebGL support.
+- `validation:` `python3 skills/skill-maintenance/scripts/check_skills.py
+  --write` passed; registry and generated skill-template intelligence refreshed.
+- `audit:` `skills/landing-page/audits/2026-06-26-ambition-gate-hardening.md`.
+- `state:` workflow hardening complete; next pass should rebuild V2 from the
+  stunning workflow instead of iterating on V1's static cards.
+
 ## 2026-06-26T21:42:00+08:00
 
 - `trigger:` parent pilot dispatcher follow-up.

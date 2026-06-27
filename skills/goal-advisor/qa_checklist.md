@@ -4,7 +4,7 @@ owner: goal-advisor
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-06-23
+updated_at: 2026-06-27
 applies_to:
   - goals
   - goal-prompts
@@ -74,6 +74,15 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
    - Violation: A coding Goal can complete from local files and tests alone
      without a final `Grounding:` source-class line or local-only reason.
 
+10. `critical-path-proof`
+   - Question: For material feature work, does the Goal prompt require the
+     executor to follow the ticket's `Done / Proof` critical-path notes, run
+     smaller sanity checks before claiming a long workflow/lifecycle, and report
+     unrun final-path risk as a blocker or residual risk?
+   - Violation: The Goal can complete from proxy checks while the real claimed
+     workflow, hook lifecycle, user path, or session path was never exercised or
+     explicitly marked as unrun.
+
 ## Evidence Note Template
 
 ```text
@@ -84,6 +93,7 @@ goal_advisor_qa:
   delegated_lanes:
   grounding_evidence_rule:
   final_evidence_rule:
+  critical_path_proof_rule:
   violations:
   fixes_or_deferrals:
 ```

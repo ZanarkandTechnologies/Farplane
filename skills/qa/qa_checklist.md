@@ -4,7 +4,7 @@ owner: qa
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-06-22
+updated_at: 2026-06-27
 applies_to:
   - qa
   - ticket-proof
@@ -31,11 +31,18 @@ Use this for material QA reports and after changing the `qa` skill.
      screenshots/logs/snapshots present or explicitly blocked?
    - Violation: QA passes with only prose or terminal output.
 
-4. `visual-judgment-separated`
+4. `critical-path-reconciled`
+   - Question: For material feature work, did QA reconcile evidence against the
+     ticket's critical-path proof notes in `Done / Proof`, including smaller
+     ordered sanity checks and any unrun full-path risk?
+   - Violation: QA passes proxy checks while the claimed workflow, hook
+     lifecycle, user path, or session path remains implicit or unexercised.
+
+5. `visual-judgment-separated`
    - Question: For UI proof, did `visual-qa` judge captured screenshots?
    - Violation: Browser capture is treated as visual judgment.
 
-5. `best-evidence-named`
+6. `best-evidence-named`
    - Question: Does the QA result name `best_evidence`, preferably an image path
      for UI/user-visible tickets?
    - Violation: Final reporting cannot show the strongest proof.

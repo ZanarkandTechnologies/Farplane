@@ -110,13 +110,14 @@ Use Markdown with YAML front matter and the standard headings `Team`,
 ### `farplane/automations.md`
 
 Human-reviewable Codex automation prompt source. It stores the exact Pulse,
-Daily Interval, Weekly Interval, and optional Active-Hours Taste Loop prompt
-blocks copied into the Codex app automation records.
+Daily Interval, Weekly Interval, optional Monthly Registry Consolidation, and
+optional Active-Hours Taste Loop prompt blocks copied into the Codex app
+automation records.
 
 Skills stay generic and parameterized. Prompts here should configure cadence,
-project root, thread IDs, active-hours availability, and project-specific
-extensions only. Generic loop behavior belongs in `pulse-update`,
-`interval-update`, and `taste-loop`.
+project root, thread IDs, active-hours availability, target registry sets, and
+project-specific extensions only. Generic loop behavior belongs in
+`pulse-update`, `interval-update`, `consolidate`, and `taste-loop`.
 
 The Active-Hours Taste Loop is the official optional framework heartbeat for
 using human taste while the operator is online. It should read

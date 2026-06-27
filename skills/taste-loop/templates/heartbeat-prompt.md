@@ -45,7 +45,7 @@ Stop with a side-effect-free no-op when any hard gate fails:
 - Taste Loop Artifact Workflows are missing from `farplane/products.md`
 - no candidate workflow can create or hand off a reviewable artifact
 - no candidate workflow can create or hand off a reviewable planning artifact
-  such as a concept card
+  such as a TasteProposal
 
 For ordinary no-op beats, do not create worker threads, tickets, artifacts,
 feedback cards, Telegram messages, or `.farplane/reports/taste-loop/` files.
@@ -97,7 +97,8 @@ feedback_key = target_id + "\n" + feedback_question
 Count one open card per key toward
 `max_open_feedback` only when the card is valid product-workflow feedback:
 
-- idea feedback requires `workflow_id`, `product_lane`, and `concept_ref`;
+- idea feedback requires `workflow_id`, `product_lane`, and `proposal_ref` or
+  `concept_ref`;
 - execution feedback requires `workflow_id`, `product_lane`, and `artifact_ref`.
 
 Duplicate open rows for the same key are `duplicate_open_feedback` hygiene
@@ -108,25 +109,32 @@ that target `frontend-craft`, `functional-ui`, `remotion`, `remotion-render`,
 duplicates and invalid legacy cards in the report with their canonical
 target/question.
 
-Select the top `top_n` artifact workflows with the official Skill Compounding
-Score plus the Taste Loop artifact gate. Keep this distinct from eval score or
-review TAS:
+Select the top `top_n` artifact workflows with the FEAT-0064 skill signal
+contract plus the Taste Loop artifact gate. Keep this distinct from eval score
+or review TAS.
 
-- tier leverage from `docs/skills/registry.jsonl`
-- lifecycle-reference fit from `docs/farplane-framework/lifecycle.md` and graph
-  distance when available
-- product-lane fit from `farplane/products.md`
-- observed heat from existing skill graph signals, split into direct heat and
-  weaker related heat from recently invoked referring skills
-- downstream leverage across skills/routes/graphs
-- improvement gap from grounded lessons, troubles, evals, self-improve deltas,
-  review findings, or missing proof
-- feedback fit and proof fit
-- artifact workflow fit from `farplane/products.md`
-- planning-artifact fit from `farplane/products.md`
-- cooldown, open-feedback, ambiguity, fake-metric, and convergence penalties
+Use only these durable skill signals:
 
-Expose a score breakdown in the report:
+- `direct_heat`: observed direct usage or invocation evidence.
+- `composition_heat`: weaker indirect usefulness from deduped incoming refs
+  from recently used skills.
+- `maintenance_burden`: stale template, first-load bloat, missing eval or QA,
+  unclear owner, generated-output drift, or repeated source gaps.
+- `uniqueness`: distinct trigger, workflow, proof surface, or user-facing
+  capability that would be lost if the skill were merged or retired.
+
+Then apply the Taste-specific artifact gate:
+
+- `product_lane_fit`: the workflow belongs to a product lane in
+  `farplane/products.md`.
+- `artifact_workflow_fit`: the workflow can produce or hand off a reviewable
+  artifact end-to-end.
+- `planning_artifact_fit`: the planning artifact is concrete enough to request
+  human feedback.
+- penalties: cooldown, valid open feedback, ambiguity, fake-metric risk, and
+  convergence without useful new output.
+
+Expose signals and recommendation in the report:
 
 ```text
 Product lane:
@@ -135,22 +143,17 @@ Owner:
 Planning artifact:
 Execution artifact:
 Route:
-Score:
-Components:
-  tier_leverage:
-  lifecycle_ref_fit:
+Signals:
+  direct_heat:
+  composition_heat:
+  maintenance_burden:
+  uniqueness:
+Taste gate:
   product_lane_fit:
-  observed_heat_fit:
-    direct_heat_fit:
-    related_heat_fit:
-    top_referring_skills:
-  downstream_leverage_fit:
-  improvement_gap_fit:
-  feedback_fit:
-  proof_fit:
   artifact_workflow_fit:
   planning_artifact_fit:
 Penalties:
+Recommendation: keep | harden | refine | merge | watch | retire_review
 Decision:
 Evidence refs:
 ```
@@ -165,11 +168,11 @@ Use:
   or reuse a ticket-backed Goal Packet first, then create or reuse a dedicated
   Codex worker thread. Reuse or resume the active worker from automation memory
   before considering any new worker. The worker prompt must tell that thread to
-  log a planning experiment, generate concept cards, and then use
-  `$optimize-with-human` with `feedback_channel=telegram` and
+  log a planning experiment, generate TasteProposal planning artifacts, and
+  then use `$optimize-with-human` with `feedback_channel=telegram` and
   `phases=planning,execution`.
-- `idea_feedback` when the worker can produce concept cards now but should wait
-  for planning approval before full execution.
+- `idea_feedback` when the worker can produce TasteProposal artifacts now but
+  should wait for planning approval before full execution.
 - `artifact_feedback` through `optimize-with-human` only when an existing worker
   thread already owns the Telegram reply path or the artifact is intentionally
   local/manual.
@@ -179,22 +182,22 @@ Use:
   ownership, metric provider, or generation feasibility is unclear.
 
 Do not ask for feedback on a skill summary, skill README, or broad skill target.
-Do not create a feedback card without `concept_ref` or `artifact_ref`. Do not
-edit target skills directly from this heartbeat or from a first rejection. Do
-not send Telegram feedback from the parent heartbeat thread when Kenji's reply
-needs to resume the worker. Do not create a local runner, hidden daemon,
+Do not create a feedback card without `proposal_ref`, `concept_ref`, or
+`artifact_ref`. Do not edit target skills directly from this heartbeat or from
+a first rejection. Do not send Telegram feedback from the parent heartbeat
+thread when Kenji's reply needs to resume the worker. Do not create a local runner, hidden daemon,
 unbounded queue, external mutation, deploy, publish, spend, or legacy
 autoresearch session by default.
 
 Before creating a benchmark, harder task suite, or Goal handoff, derive a
-compact metric card:
+compact proof card:
 
 ```text
 Objective:
 Provider:
-Primary metric:
-Guard metrics:
-Anti-metrics:
+Primary signal:
+Guardrails:
+Anti-signals:
 Minimum meaningful delta:
 Measurement method:
 Route hint:
@@ -252,13 +255,17 @@ Task:
 Use $<artifact-owner> to run a Goal-backed phase-aware improvement loop for
 <workflow_id>. Start with the planning phase. Log an experiment proposal in
 progress.md, use AGI Toy Shop as the fixed default scenario unless live context
-is supplied, generate one to three concept cards, then use $optimize-with-human
+is supplied, generate one to three TasteProposal artifacts using
+skills/taste-loop/templates/taste-proposal.md, then use $optimize-with-human
 with target=<workflow_id>, objective=<planning and execution quality>,
 channel=telegram, feedback_policy=ask_when_artifact_ready, and
-phases=planning,execution. When Kenji approves a concept, freeze the approved
-brief, log an execution experiment in progress.md, and execute the artifact.
-When Kenji replies in this thread, append feedback to progress.md and continue
-the right phase. Stop only on keep/approve/convergence/budget/blocker.
+phases=planning,execution. Each TasteProposal must include audience/buyer,
+taste insight, artifact shape, core angle, 5+ execution beats, why it could win,
+cringe risks, references or taste pack, feedback question, and next step if
+approved. When Kenji approves a proposal, freeze the approved brief, log an
+execution experiment in progress.md, and execute the artifact. When Kenji
+replies in this thread, append feedback to progress.md and continue the right
+phase. Stop only on keep/approve/convergence/budget/blocker.
 ```
 
 After the thread is created or found, record `worker_thread_ref` in the ticket,
@@ -277,6 +284,7 @@ active_worker:
   status: planning | waiting_for_idea_feedback | execution |
     waiting_for_execution_feedback | blocked | complete
   approved_brief_ref:
+  proposal_ref:
   concept_ref:
   artifact_ref:
   preview_ref:
@@ -288,7 +296,8 @@ active_worker:
 ```
 
 Use Markdown for human review. A planning feedback artifact must point to a
-concept card. An execution feedback artifact must point to the generated
+TasteProposal or only use a hook/concept card when the artifact itself is just a
+hook. An execution feedback artifact must point to the generated
 artifact path, screenshot, preview, or URL. For website, image, video, or other
 visual artifacts, also create a preview wrapper or manifest under
 `.farplane/automation/taste-loop/preview/` and include a `preview_ref` in the
@@ -324,7 +333,7 @@ Return:
 - status: `no_op`, `artifact_worker_thread`, `artifact_feedback`,
   `idea_feedback`, `artifact_goal_handoff`, or `blocked`
 - report path
-- selected product lane, artifact workflow, score breakdown, and metric provider
+- selected product lane, artifact workflow, skill signals, recommendation, and proof provider
 - worker ticket ref and worker thread ref, if created or reused
 - artifact ref, if generated or handed off
 - concept ref, if planning feedback was requested

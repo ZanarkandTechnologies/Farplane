@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.12
+template_version: 0.2.13
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -139,6 +139,13 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
      completion claims before calling them done.
 - Collapse phases for tiny, reversible, low-risk tasks. Make phases explicit for
   material, ticketed, high-blast-radius, or proof-sensitive work.
+- For material ticketed features, prove the critical path before completion:
+  name the real workflow or lifecycle being claimed, break long end-to-end
+  checks into ordered sanity checks, run the cheapest faithful checks first,
+  and record evidence plus the next review point where state, data, logs, or
+  artifacts should be inspected again. If the full path cannot be run inside
+  the turn, state the substitute checks, residual risk, and blocker instead of
+  claiming full workflow proof.
 - Use `plan`, `review`, `eval`, or other phase-like skills only when that phase
   needs a durable artifact, independent judgment, explicit budget, handoff, or
   proof surface. Otherwise perform the phase inline.
@@ -258,6 +265,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Store detailed proof, review reports, blockers, and follow-up scope in
   ticket-scoped artifacts, `progress.md`, or concise ticket links rather than
   in chat.
+- For material feature tickets, keep critical-path proof inside the existing
+  `Done / Proof` body rather than adding a new schema by default. Use ordinary
+  bullets to show the full claimed path, the smaller sanity checks run in
+  order, expected observations, evidence paths, and any unrun final path or
+  residual risk.
 - Use the repo's ticket template and ticket docs for the full state machine and
   ticket-as-program contract.
 - Do not claim a workflow is shipped until the discoverable package, docs, and

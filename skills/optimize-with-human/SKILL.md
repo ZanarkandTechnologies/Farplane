@@ -52,8 +52,10 @@ routes: goal-advisor | telegram-message | review
 fails: runs its own loop; treats human feedback as completion; asks vague broad
   questions; publishes or spends from feedback alone; sends a Telegram request
   from the wrong thread when replies are expected to resume the worker; edits a
-  target skill from one rejection; runs execution phase without an approved plan
-  unless the artifact is explicitly a tiny planning test
+  target skill from one rejection; asks for planning feedback on a thin
+  hook-only artifact when the planned artifact needs a proposal; runs execution
+  phase without an approved plan unless the artifact is explicitly a tiny
+  planning test
 ```
 
 ## Phase Contract
@@ -87,9 +89,12 @@ inside that thread or pass its `worker_thread_ref`.
 
 Bind the current phase before asking for feedback:
 
-- `planning`: the artifact can be a concept card, offer angle, storyboard
-  premise, draft hook, or other compact plan. This is the default phase for
-  Taste Loop because it is faster and higher signal than full execution.
+- `planning`: the artifact should usually be a proposal card, offer brief,
+  storyboard premise, draft hook batch, or other compact plan. For non-trivial
+  artifacts, require enough detail to judge: audience/buyer, insight, artifact
+  shape, core angle, execution beats, why it could win, cringe risks, references
+  or taste pack, feedback question, and next step if approved. Hook-only cards
+  are valid only when the thing being judged is the hook itself.
 - `execution`: the artifact must implement an approved planning brief. Require
   `approved_plan_ref` unless the artifact is explicitly a tiny planning test.
 
@@ -110,8 +115,8 @@ perturb the local plan or execution attempt; they do not harden source skills.
    - [ ] If yes, read or name `ticket.md`, `program.md`, and `progress.md`.
 - [ ] 3. Bind the phase, reply path, and feedback policy.
    - [ ] Choose `phase=planning` or `phase=execution`.
-   - [ ] For planning, accept concept cards or compact artifact plans as
-     reviewable artifacts.
+   - [ ] For planning, accept proposal cards or compact artifact plans as
+     reviewable artifacts; reject hook-only summaries for non-trivial artifacts.
    - [ ] For execution, require `approved_plan_ref` unless this is a tiny
      planning test.
    - [ ] If Telegram replies should continue the job, confirm the current
@@ -136,6 +141,8 @@ perturb the local plan or execution attempt; they do not harden source skills.
    - [ ] `ranking`: pick best/worst among variants.
 - [ ] 6. Write one short review question.
    - [ ] Ask for the decision Kenji can provide fastest.
+   - [ ] Ensure the artifact has enough proposal detail for that decision; do
+     not make the Telegram question short by hiding the proposal itself.
    - [ ] Avoid broad strategy prompts when a label, score, rank, or keep/revise
      decision is enough.
 - [ ] 7. Define `feedback.json`.
@@ -217,9 +224,26 @@ experiment:
   promotion_decision: keep_local | rerun | harden_skill | discard
 ```
 
-For Taste Loop, planning experiments usually present one to three concept cards
-and execution experiments present the approved concept's generated artifact.
-Use the fixed AGI Toy Shop scenario when no live scenario is supplied.
+For Taste Loop, planning experiments usually present one to three TasteProposal
+artifacts and execution experiments present the approved proposal's generated
+artifact. Use the fixed AGI Toy Shop scenario when no live scenario is supplied.
+
+Minimum TasteProposal shape for non-trivial planning feedback:
+
+```text
+title:
+one_line_bet:
+audience_or_buyer:
+taste_insight:
+artifact_shape:
+core_angle:
+execution_beats:
+why_it_could_win:
+what_would_make_it_cringe:
+references_or_taste_pack:
+feedback_question:
+next_if_approved:
+```
 
 ## Turn Exit Gate
 
@@ -312,6 +336,16 @@ Worker thread:
 Artifact refs:
 - <path or URL>
 
+Proposal summary:
+- audience/buyer:
+- taste insight:
+- artifact shape:
+- core angle:
+- execution beats:
+- why it could win:
+- risk:
+- next if approved:
+
 Question:
 <one short decision, score, label, or ranking request>
 
@@ -326,6 +360,9 @@ Feedback shape:
 
 - Do not make Kenji invent the next prompt from scratch. Present artifacts and
   ask for a small judgment.
+- Do not make Kenji judge a non-trivial plan from only a title, hook, and angle.
+  Planning feedback needs proposal detail; compress it for Telegram but do not
+  erase the reasoning.
 - Do not treat human feedback as permission to publish, spend, contact users,
   or make external promises.
 - Do not send a Telegram feedback request from a parent heartbeat if Kenji's

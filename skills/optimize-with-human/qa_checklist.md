@@ -52,19 +52,27 @@ optimize_with_human_qa(goal_packet, phase, artifact_refs, notification_result)
    - Fail: Kenji is asked to judge a summary, plan, skill name, or local-only
      URL that is not usable on the intended device.
 
-7. `phone_friendly_surface`
+7. `planning_proposal_sufficient`
+   - Pass: non-trivial planning feedback includes audience/buyer, taste insight,
+     artifact shape, core angle, execution beats, why it could win, cringe
+     risks, references or taste pack, feedback question, and next step if
+     approved.
+   - Fail: Kenji is asked to choose from only titles, hooks, or shallow angles
+     when the artifact needs a real proposal.
+
+8. `phone_friendly_surface`
    - Pass: visual or website feedback includes a public/mobile-viewable URL,
      attached screenshot, Farplane UI-ready preview, or explicit fallback.
    - Fail: the only feedback surface is `localhost` or an inaccessible local
      path.
 
-8. `question_is_small`
+9. `question_is_small`
    - Pass: the request asks one compact decision, rating, ranking, label, or
      taste note.
    - Fail: the request asks for broad strategy, multiple unrelated decisions,
      or a prompt Kenji must invent from scratch.
 
-9. `feedback_schema_bound`
+10. `feedback_schema_bound`
    - Pass: the request names how verdict/score/feedback/labels/next instruction
      will be recorded.
    - Fail: the loop cannot tell how to use the feedback after it arrives.

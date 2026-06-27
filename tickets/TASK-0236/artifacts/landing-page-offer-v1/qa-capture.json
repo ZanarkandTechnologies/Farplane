@@ -2,6 +2,19 @@
   "artifact_id": "landing-page-offer-v1",
   "captured_at": "2026-06-26T21:41:14+08:00",
   "capture_url": "http://127.0.0.1:8126/index.html",
+  "public_preview_url": "https://landing-page-offer-v1.vercel.app",
+  "public_preview_status": {
+    "http_status": 200,
+    "mobile_smoke": {
+      "title": "Farplane - The Work Loop Is The Product",
+      "h1": "The work loop is the product.",
+      "h1_visible": true,
+      "cta_visible": true,
+      "hero_board_visible": true,
+      "errors": []
+    },
+    "screenshot": "screenshots/mobile-vercel.png"
+  },
   "browser": {
     "engine": "chromium",
     "executable": "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"

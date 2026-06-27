@@ -6,6 +6,7 @@ tier: 3
 group: frontend-content
 source: local
 allowed-tools: Read, Grep, Glob, Bash
+qa_checklist: qa_checklist.md
 ---
 
 # Landing Page
@@ -22,6 +23,11 @@ when the request earns that depth.
 
 - [ ] Identify the product, category, buyer, and promised transformation in one
   sentence.
+- [ ] Bind the ambition signal and `quality_target`:
+  `stunning | premium | standard | simple`. If the operator supplied visual
+  references, video scroll, 3D/WebGL, generated media, cinematic, Terminal,
+  Apple-style, or "stunning" language, default to `stunning` or `premium`; do
+  not silently downgrade to `simple`.
 - [ ] Collect 3-5 competitor or inspiration references, including the user's
   supplied reference when available.
 - [ ] Use [research-synthesis](./references/research-synthesis.md) to extract
@@ -43,6 +49,10 @@ when the request earns that depth.
 
 - [ ] For each major section, compare complete directions:
   `layout + asset carrier + motion lever + proof payload + fallback + QA`.
+- [ ] Inventory the user's supplied effects, patterns, examples, and asset
+  expectations, then route each to a selected method, an explicit rejection, or
+  a blocker. Do not ignore supplied high-craft ingredients because a static page
+  is easier to produce.
 - [ ] Choose from filesystem-visible methods and levers:
   [landing-recipes](./references/landing-recipes.json),
   [taste-profiles](./references/taste-profiles.json),
@@ -57,7 +67,8 @@ when the request earns that depth.
 ## 4. Specify
 
 - [ ] Write or update `LANDING_SPEC.md` with the section matrix, selected
-  methods, execution packets, asset plan, motion plan, and QA gates.
+  methods, execution packets, asset plan, motion plan, QA gates, quality target,
+  and downgrade contract.
 - [ ] For industrial, physical-economy, hardware, logistics, construction, or
   manufacturing pages, specify the first-viewport reality signal: real or
   generated workplace/product/media that makes the category visible before
@@ -70,6 +81,8 @@ when the request earns that depth.
 
 ## 5. Execute And Prove
 
+- [ ] Before implementation, read [qa_checklist](./qa_checklist.md) and confirm
+  the chosen execution depth matches the quality target.
 - [ ] Hand approved execution packets to [frontend-craft](../frontend-craft/SKILL.md).
 - [ ] Use the native execution phase for proof, writeback, and review.
 - [ ] Run landing QA from [qa](./references/qa.md), plus scroll/media QA when
@@ -82,6 +95,26 @@ Shape one-page frontend experiences that persuade, orient, or create memory.
 This skill owns page story, section architecture, planning gates, visual scenes,
 media, motion intent, and landing-page QA. It does not own GSAP API details or
 app-dashboard workflow design.
+
+## Ambition Gate
+
+```text
+quality_target(task, user_refs, proof_need)
+  -> stunning | premium | standard | simple
+
+stunning requires at least one primary authored carrier:
+  video/scroll scrub | 3D/WebGL object | generated/real media sequence |
+  composed layered animation
+
+downgrade(target, available_assets, blocker)
+  -> allowed only when blocker is explicit, logged, and shown before feedback
+```
+
+When the operator provides rich effects, media patterns, visual references, or
+asks for a "stunning" site, choose a high-craft method first. A basic static
+HTML page is valid only for `simple` targets or as a clearly labeled blocker /
+mechanics prototype; it is not a valid review artifact for a `stunning` or
+`premium` target.
 
 Compact model:
 
@@ -125,6 +158,9 @@ builder until the spec passes the planning gates below.
 ### Planner Stage
 
 1. **Define the offer.** Name the product/person/place/object/category and the literal value proposition.
+1a. **Set the quality target.** Use the Ambition Gate before section planning.
+   If target is `stunning` or `premium`, load `qa_checklist.md` plus the
+   relevant motion/media references before writing the spec.
 2. **Interview with gates.** Ask one high-leverage question at a time when
    audience, narrative, taste, non-goals, or decision boundaries are vague. Use
    `deep-interview` when more than two gates remain unresolved.
@@ -170,6 +206,10 @@ builder until the spec passes the planning gates below.
    sectioned effect layer such as GSAP timeline overlays, WebGL shader/scan
    effects, Three.js product staging, or HTML beat panels driven by the same
    scroll progress.
+   For stunning/premium targets, include at least three complete method
+   directions before choosing: for example video/frame-sequence scrub,
+   Three.js/WebGL object/world, composed generated-layer animation, or a
+   premium real/generated media system. Reject unused directions with reasons.
 10. **Plan product demo media when a product, device, hardware, equipment, or
     physical object is being sold.** The plan must include realistic product
     shots or product photography/renders, in-context use shots, and at least
@@ -212,7 +252,9 @@ builder until the spec passes the planning gates below.
 2. Validate it with `scripts/landing_spec_lint.py` when available.
 3. Generate or collect the named assets before implementation. If assets cannot
    be generated or collected during the run, downgrade the page to a prototype,
-   record the blocker, and do not claim premium/cinematic/Terminal quality.
+   record the blocker in the artifact and progress surface, and do not send the
+   artifact as a `stunning` or `premium` feedback request unless the downgrade
+   is itself the reviewed decision.
    If the spec calls for generated video, use a real video-generation model or
    source video and record video provenance (`videoModel`, `videoProvider`,
    `sourceVideo`, or equivalent) in the asset manifest. Do not count Seedream or
@@ -220,8 +262,8 @@ builder until the spec passes the planning gates below.
    declare that as `frame-sequence` or downgrade to prototype.
 4. Implement the page through `frontend-craft` or `delegate-frontend`.
 5. Run asset-evidence QA, scroll/media QA, section-quality QA,
-   designer-judgment review, mobile, reduced-motion, browser console/error, and
-   source review checks.
+   designer-judgment review, `qa_checklist.md`, mobile, reduced-motion, browser
+   console/error, and source review checks.
 6. Do not claim Terminal/premium parity while any hard gate fails.
 For cinematic, Terminal-style, premium industrial, asset-heavy, or generated-media pages, run the spec-first gate in `references/spec-first-cinematic-industrial.md` before implementation. If the user asks to build in the same turn, still separate the work into spec, assets, implementation, and visual-review phases so each builder pass has a bounded output.
 For modern scroll-scrub or Terminal/Terminus-level work, follow the Important
@@ -243,6 +285,7 @@ media planning, asset conversion, implementation, and QA.
 
 | Landing type | Lead with |
 | --- | --- |
+| Stunning/premium site | authored video/scroll scrub, 3D/WebGL object/world, composed generated media, or an equally inspectable primary carrier |
 | Product/app homepage | actual product state, screenshot, workflow, 3D product/system scene, or demo scene |
 | Brand/portfolio | identity, work, material, and editorial composition |
 | Venue/place/object | real first-viewport signal of the place/object, not generic atmosphere |
@@ -270,6 +313,13 @@ For landing pages with reusable formulas or inspiration references:
   meaningful parts/features that make it worth buying.
 - Do not keep stale local GSAP examples as API truth; route to official GreenSock skills or docs.
 - Do not build before an approved landing spec exists.
+- Do not satisfy a stunning/premium request with a basic static page simply
+  because it is easy to deploy. If the available artifact is basic, label it as
+  a blocker/prototype and ask for feedback on the downgrade, not the landing
+  direction.
+- Do not ignore effect ideas, references, generated assets, video scroll, 3D,
+  or motion patterns the operator supplied. Route each one to adopt, adapt,
+  reject, defer, or blocker in the spec.
 - Do not let a passing hero scroll-scrub score hide blank lower-page sections.
 - Do not accept a section plan that says "canvas", "video", or "GSAP" without
   saying what the user sees and what QA will assert.
@@ -338,6 +388,8 @@ For landing pages with reusable formulas or inspiration references:
 - `references/asset-evidence.md` - generated/real media proof gate.
 - `references/designer-judgment.md` - final 5% premium quality rubric.
 - `references/gotchas.md` - common landing-page mistakes.
+- `qa_checklist.md` - preflight and final guardrails for ambition fit,
+  effect-use, downgrade honesty, and deployed review surface quality.
 - `SKILL.md` Todo List - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
 
 ## Output Contract
@@ -346,6 +398,7 @@ Return a landing brief with:
 
 - `Offer`
 - `Audience`
+- `Quality target and ambition signal`
 - `Reference research`
 - `Best-of-worlds decisions`
 - `Unique take`
@@ -360,6 +413,7 @@ Return a landing brief with:
 - `Motion plan`
 - `Designer judgment plan`
 - `QA plan`
+- `Downgrade/blocker policy`
 - `Implementation handoff`
 
 For executor handoff, prefer a checked-in or ticket-attached `LANDING_SPEC.md`
@@ -369,6 +423,8 @@ with:
 - `approval_source`
 - `Non-goals`
 - `Decision boundaries`
+- `Quality Target`
+- `Ambition Signal`
 - `Reference Research`
 - `Best-of-worlds Decisions`
 - `Unique Take`

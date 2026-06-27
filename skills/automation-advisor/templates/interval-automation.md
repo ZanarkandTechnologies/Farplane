@@ -24,10 +24,11 @@ status = "active"
 workspace = "<project-root>"
 
 [schedule]
-type = "daily | weekly"
+type = "daily | weekly | monthly"
 timezone = "<timezone>"
 time = "05:33"
 days = ["Mon"]
+day_of_month = 1
 ```
 <!-- /farplane:automation-config -->
 
@@ -64,6 +65,67 @@ skill_hardening = <false | "when sources exist" | true>
 skill_refinement = <false | "when sources exist" | true>
 docs_consolidation = <false | "when sources exist" | true>
 priority_planning = <false | "light" | true>
+```
+<!-- /farplane:automation-prompt -->
+````
+
+Monthly registry consolidation example:
+
+````markdown
+<!-- farplane:automation-config id="<project-monthly-registry-consolidation-id>" format="toml" -->
+```toml
+id = "<project-monthly-registry-consolidation-id>"
+name = "Project Monthly Registry Consolidation"
+kind = "cron"
+status = "active"
+workspace = "<project-root>"
+
+[schedule]
+type = "monthly"
+timezone = "<timezone>"
+day_of_month = 1
+time = "06:15"
+```
+<!-- /farplane:automation-config -->
+
+<!-- farplane:automation-prompt id="<project-monthly-registry-consolidation-id>" -->
+```text
+Use $consolidate.
+
+Run the monthly registry consolidation review. This is a report-only registry
+truth and ownership compression pass, not a weekly self-learning loop and not
+a direct artifact rewrite.
+
+Scope:
+target = [
+  "docs/skills/registry.jsonl",
+  "docs/features/registry.jsonl",
+  "docs/systems/registry.jsonl",
+  "docs/templates/registry.jsonl",
+  "docs/sources/registry.jsonl"
+]
+structure = "registry"
+
+Constraints:
+preserve_ids = true
+preserve_evidence = true
+no_delete = true
+owner_boundary = "registry rows only; route underlying artifact edits to owners"
+
+Output:
+Write a dated report under:
+.farplane/reports/consolidation/registry/<YYYY-MM-DDTHHMMSSZ>.md
+
+Do not edit registries or underlying artifacts during this automation run.
+
+Params:
+project_root = "<project-root>"
+review_window = "last_month"
+planning_window = "next_month"
+timezone = "<timezone>"
+
+Config source:
+farplane/automations.md automation-config id="<project-monthly-registry-consolidation-id>"
 ```
 <!-- /farplane:automation-prompt -->
 ````

@@ -106,3 +106,56 @@ skill_refinement = "when sources exist"
 docs_consolidation = "when sources exist"
 priority_planning = true
 ```
+
+## Monthly Registry Consolidation
+
+| Field | Value |
+| --- | --- |
+| Automation id | `<monthly-registry-consolidation-automation-id>` |
+| Name | `Project Monthly Registry Consolidation` |
+| Kind | `cron` |
+| RRULE | `FREQ=MONTHLY;BYMONTHDAY=1;BYHOUR=6;BYMINUTE=15;BYSECOND=0` |
+| Workspace | `<project-root>` |
+
+Use `$consolidate`.
+
+Run the monthly registry consolidation review. This is a report-only registry
+truth and ownership compression pass, not a weekly self-learning loop and not
+a direct artifact rewrite.
+
+Scope:
+
+```text
+target = [
+  "docs/skills/registry.jsonl",
+  "docs/features/registry.jsonl",
+  "docs/systems/registry.jsonl",
+  "docs/templates/registry.jsonl",
+  "docs/sources/registry.jsonl"
+]
+structure = "registry"
+```
+
+Constraints:
+
+```text
+preserve_ids = true
+preserve_evidence = true
+no_delete = true
+owner_boundary = "registry rows only; route underlying artifact edits to owners"
+```
+
+Output:
+
+```text
+.farplane/reports/consolidation/registry/<YYYY-MM-DDTHHMMSSZ>.md
+```
+
+Params:
+
+```text
+project_root = "<project-root>"
+review_window = "last_month"
+planning_window = "next_month"
+timezone = "<timezone>"
+```

@@ -62,7 +62,7 @@ gates: automation_schedule_loaded; feedback_budget_checked; product_lane_selecte
        artifact_workflow_selected; worker_packet_created_or_reused;
        goal_packet_created_or_reused; planning_experiment_logged;
        worker_thread_created_or_reused; optimize_with_human_bound_in_worker;
-       concept_card_or_artifact_ref_visible; artifact_generated_or_goal_handoff;
+       taste_proposal_or_artifact_ref_visible; artifact_generated_or_goal_handoff;
        preview_ref_visible_for_visual_artifacts; open_feedback_deduped;
        legacy_invalid_feedback_excluded_from_budget; no_hidden_scheduler
 routes: landing-page | social-content | video-production |
@@ -77,6 +77,7 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   default; sends Telegram feedback from the parent heartbeat thread when a
   dedicated worker thread is needed; spams more feedback than budget allows;
   creates a separate workers.jsonl ledger instead of reusing automation memory;
+  asks Kenji to judge a thin hook-only card when the artifact needs a proposal;
   writes repo/runtime files for a simple no-op beat; executes full artifacts
   before an idea passes when the artifact is not itself the tiny planning test;
   edits target skills after one rejection instead of logging and rerunning a
@@ -105,7 +106,7 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     Workflows.
   - [ ] Use existing skill heat generated from `.farplane/events/` and
     `FARPLANE_SKILL_HEAT_*` controls when available.
-  - [ ] Split heat into direct heat and weaker related heat from referring
+  - [ ] Split heat into direct heat and weaker composition heat from referring
     skills, matching `docs/features/FEAT-0064-skill-compounding-score.md`.
   - [ ] Prefer artifact workflows tied to configured target groups and
     product/money-making lanes.
@@ -124,8 +125,10 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     `legacy_invalid_feedback` hygiene findings and must not block the impress
     loop.
 - [ ] 3. Score and select top N.
-  - [ ] Use the Skill Compounding Score; expose every component in the report.
-  - [ ] Keep the score distinct from eval score, review TAS, and human
+  - [ ] Use the FEAT-0064 skill signal contract: direct heat, composition heat,
+    maintenance burden, and uniqueness; expose the raw signals and the final
+    recommendation in the report.
+  - [ ] Keep skill signals distinct from eval score, review TAS, and human
     preference labels.
   - [ ] Require `artifact_workflow_fit`: the candidate can create or hand off a
     reviewable artifact end-to-end from `products.md`.
@@ -134,8 +137,10 @@ fails: creates a local runner as the primary surface; runs hidden loops;
 - [ ] 4. Bind the impress loop.
   - [ ] Set reward objective to `impress Kenji enough that he wants the thing
     made`.
-  - [ ] Treat planning artifacts as first-class: concept cards, best-bet
-    briefs, hook batches, storyboard premises, offer angles, or proof angles.
+  - [ ] Treat planning artifacts as first-class TasteProposal objects:
+    best-bet briefs, storyboard premises, offer angles, proof angles, or hook
+    batches with enough audience, insight, beats, risks, and next step detail
+    for Kenji to judge.
   - [ ] Treat execution artifacts as second-stage outputs: landing pages,
     reels, carousels, scripts, proof reports, demos, or shipped proposals.
   - [ ] Use the fixed AGI Toy Shop scenario when no live product context is
@@ -187,8 +192,8 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     preview wrapper or manifest under `.farplane/automation/taste-loop/preview/`
     so Kenji can open a single URL or Farplane UI-ready file without hunting
     through reports.
-  - [ ] Feedback cards must include `concept_ref` or `artifact_ref`; if no
-    planning or execution artifact was produced or handed off, write
+  - [ ] Feedback cards must include `proposal_ref`, `concept_ref`, or
+    `artifact_ref`; if no planning or execution artifact was produced or handed off, write
     `blocked_report` instead of a feedback card.
   - [ ] Keep generated feedback questions short and decision-shaped.
   - [ ] When duplicate open feedback exists, report the canonical card and
@@ -230,14 +235,15 @@ automation record.
 
 ## Scoring Contract
 
-The prompt should consume the official Skill Compounding Score from
-`docs/features/FEAT-0064-skill-compounding-score.md`, then apply the Taste Loop-specific
-artifact workflow gate. Expose a readable score breakdown rather than hiding a
-magic ranking:
+The prompt should consume the FEAT-0064 skill signal contract from
+`docs/features/FEAT-0064-skill-compounding-score.md`, then apply the Taste
+Loop-specific artifact workflow gate. Expose readable signals and a
+recommendation rather than hiding a magic ranking:
 
 ```text
-skill_compounding_score(skill, project_state, lifecycle_refs, now?)
-  -> ranked_target_score + score_breakdown + route_hint
+skill_signals(skill, project_state, lifecycle_refs, now?)
+  -> direct_heat + composition_heat + maintenance_burden + uniqueness
+  -> maintenance_recommendation + route_hint
 ```
 
 Signal ownership:
@@ -277,7 +283,7 @@ Use a two-stage loop:
 ```text
 planning_phase:
   taste pack + product goal + fixed scenario + best-of-worlds synthesis
-  -> one to three concept cards
+  -> one to three TasteProposal planning artifacts
   -> Kenji approve | revise | reject
 
 execution_phase:
@@ -299,19 +305,40 @@ tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md
 Use live product context instead only when the automation prompt, worker
 ticket, or operator explicitly supplies a better target.
 
-Concept cards are valid first-stage artifacts:
+Taste proposals are the default first-stage artifacts. Hook-only concept cards
+are valid only when the planned artifact itself is a hook, headline, or other
+tiny unit. For normal content, website, video, proof, or campaign workflows,
+planning feedback should expose enough detail for Kenji to judge the idea
+without asking follow-up questions.
 
 ```text
-ConceptCard:
+TasteProposal:
   title:
   one_line_bet:
-  why_it_might_impress:
-  taste_priors:
-  hook:
-  execution_shape:
-  risk:
+  audience_or_buyer:
+  taste_insight:
+  artifact_shape:
+  core_angle:
+  execution_beats:
+    - beat_1:
+    - beat_2:
+    - beat_3:
+    - beat_4:
+    - beat_5:
+  why_it_could_win:
+    - reason_1:
+    - reason_2:
+    - reason_3:
+  what_would_make_it_cringe:
+    - risk_1:
+    - risk_2:
+  references_or_taste_pack:
   feedback_question:
+  next_if_approved:
 ```
+
+Use [templates/taste-proposal.md](templates/taste-proposal.md) for the compact
+proposal shape and Telegram digest.
 
 Keep phase metrics separate:
 
@@ -388,13 +415,16 @@ Files:
 Task:
 Use $<artifact-owner> to run a phase-aware improvement loop for <workflow>.
 First log a planning experiment proposal in progress.md, then create one to
-three concept cards for Kenji. Use $optimize-with-human with target=<workflow>,
-objective=<what should improve>, channel=telegram,
-feedback_policy=ask_when_artifact_ready, and phases=planning,execution.
-When Kenji approves a concept, freeze the approved brief, log an execution
-experiment proposal in progress.md, and execute the artifact. When Kenji
-replies, append feedback to progress.md and continue the right phase. Stop only
-on keep/approve/convergence/budget/blocker.
+three TasteProposal planning artifacts for Kenji. Use $optimize-with-human with
+target=<workflow>, objective=<what should improve>, channel=telegram,
+feedback_policy=ask_when_artifact_ready, and phases=planning,execution. Each
+proposal must include audience/buyer, taste insight, artifact shape, core
+angle, 5+ execution beats, why it could win, cringe risks, references or taste
+pack, feedback question, and next step if approved. When Kenji approves a
+proposal, freeze the approved brief, log an execution experiment proposal in
+progress.md, and execute the artifact. When Kenji replies, append feedback to
+progress.md and continue the right phase. Stop only on
+keep/approve/convergence/budget/blocker.
 ```
 
 For Telegram-routed feedback, the feedback request should point Kenji at the
@@ -421,7 +451,8 @@ rather than creating another duplicate.
 
 Budget eligibility is stricter than open-card detection:
 
-- valid idea feedback has a `workflow_id`, `product_lane`, and `concept_ref`;
+- valid idea feedback has a `workflow_id`, `product_lane`, and `proposal_ref`
+  or `concept_ref`;
 - valid execution feedback has a `workflow_id`, `product_lane`, and
   `artifact_ref`;
 - older broad skill/router cards such as `target_id=frontend-craft`,
@@ -443,7 +474,8 @@ experiment:
   hypothesis:
   skill_delta_candidate:
   rollout_batch:
-    - concept_or_artifact_id:
+    - proposal_or_artifact_id:
+      proposal_ref:
       plan:
       expected_feedback:
   selected_rollout:
@@ -480,6 +512,7 @@ Return and write:
 - `worker_ticket_ref`
 - `worker_thread_ref`
 - `artifact_ref`
+- `proposal_ref`
 - `concept_ref`
 - `idea_pass_rate`
 - `execution_pass_rate`
@@ -506,8 +539,8 @@ Return and write:
   quality target. Ask for feedback on an artifact created by a product workflow.
 - Do not use broad router skills as direct targets. Pick an artifact workflow
   from `farplane/products.md`; use router skills only as supporting routes.
-- Do not create `feedback_card` without `artifact_ref`.
-- Do not create an idea feedback card without `concept_ref`.
+- Do not create execution `feedback_card` without `artifact_ref`.
+- Do not create an idea feedback card without `concept_ref` or `proposal_ref`.
 - Do not skip the Goal Packet for optimize-with-human workers. Worker state
   belongs in `ticket.md`, `program.md`, and `progress.md`.
 - Do not run execution before planning approval unless the execution artifact
@@ -516,7 +549,10 @@ Return and write:
   execution experiments first; harden skills only for repeated same-phase
   failures or proven reusable patterns.
 - Do not make Kenji choose from a giant batch. Use one best bet by default and
-  at most three concept rollouts when fast comparison is useful.
+  at most three TasteProposal rollouts when fast comparison is useful.
+- Do not ask Kenji to judge shallow hook cards for non-hook artifacts. Planning
+  proposals need audience, insight, artifact shape, execution beats, why it
+  could win, risks, and next step.
 - Do not send website feedback without a browser-viewable `preview_ref`, local
   URL, deploy URL, or Farplane UI-ready preview manifest.
 - Do not send phone-facing Telegram feedback with only `localhost`. Include a
@@ -553,3 +589,5 @@ Return and write:
 - `docs/features/FEAT-0064-skill-compounding-score.md` - official score algorithm and
   component source ownership.
 - `farplane/automations.md` - reviewed automation prompt source.
+- [templates/taste-proposal.md](templates/taste-proposal.md) - planning
+  proposal template and phone-friendly digest shape.

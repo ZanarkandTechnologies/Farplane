@@ -118,6 +118,11 @@ its own artifact, independent judgment, or proof surface.
   - [ ] Write or refine `Done / Proof` with done conditions, mechanical checks
     or `Metrics: none mechanical`, manual checks, review rubric/TAS gates, hard
     gates, human gates, and required evidence.
+  - [ ] For material feature work, include critical-path proof in the existing
+    `Done / Proof` body: name the real workflow or lifecycle being claimed,
+    break long end-to-end proof into smaller ordered sanity checks, and require
+    evidence plus the next review point for state, data, logs, artifacts, UI, or
+    session behavior. Do not create a new ticket schema just for this.
   - [ ] For implementation feature work, include `Grounding evidence:` in
     `Done / Proof`: code documentation or maintained implementation evidence
     from Ref MCP, official docs, GitHub code search, maintained examples, or
@@ -169,7 +174,7 @@ approval core is:
 Delta(before, after, why_now, first_principles_basis?)
 Program(vars, ordered_operations, outputs)
 Map(touch, inspect, seams?, typed_flow?)
-DoneProof(done_when, checks, manual, review, evidence)
+DoneProof(done_when, checks, manual, review, evidence, critical_path_notes?)
 GroundingEvidence(source_class, sources_checked, local_only_reason?)
 PlanQA(minimality, reuse, parameters, files_functions, proof_route)
 GoalPacketPreview(files, program, progress, metric, proof_route, drift, native_goal_prompt)
@@ -200,6 +205,9 @@ proof reason.
   they reduce ambiguity or prove a decision.
 - Do not treat tests alone as UI/user-visible proof when screenshots, logs,
   browser state, or visual judgment are required.
+- Do not let material feature plans prove only nearby pieces when the claim is
+  a workflow or lifecycle. If the true path is long, plan smaller faithful
+  checks first, then state what final path remains unrun or blocked.
 
 ## Reference Map
 

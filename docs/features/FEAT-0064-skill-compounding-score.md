@@ -49,13 +49,16 @@ last_verified: 2026-06-26
 ---
 # Skill compounding score
 
-Skill compounding score exists to prioritize skill upgrades by reusable leverage instead
-of recency or loudness. It belongs to [Skill System](../systems/skill-system.md) and
-keeps `FEAT-0064` as a stable capability handle because the behavior has an owner, proof
-path, and maintenance boundary.
+Skill compounding score exists to prioritize skill upkeep without hiding raw
+evidence inside a brittle mega-score. It belongs to
+[Skill System](../systems/skill-system.md) and keeps `FEAT-0064` as a stable
+capability handle because the behavior has an owner, proof path, and
+maintenance boundary.
 
 ```text
-score_skill_compounding(skill, usage_evidence) -> leverage_score + maintenance_priority
+skill_signals(skill, usage_evidence, registry_evidence)
+  -> direct_heat + composition_heat + maintenance_burden + uniqueness
+  -> maintenance_recommendation
 ```
 
 ## At A Glance
@@ -65,21 +68,24 @@ score_skill_compounding(skill, usage_evidence) -> leverage_score + maintenance_p
 - Status: `implemented`
 - Category: `skills`
 - Primary user: skill maintainer and roadmap planner
-- Job: prioritize skill upgrades by reusable leverage instead of recency or loudness.
+- Job: prioritize skill upkeep from a small set of explainable signals instead of one opaque scalar.
 
 ## Problem
 
 Skill maintenance time is limited, and not every skill improvement compounds equally
 across Farplane.
 
-This feature gives maintainers a scoring language for which skills deserve hardening,
-evals, templates, or documentation first.
+This feature gives maintainers a compact signal language for which skills
+deserve hardening, refinement, merging, watching, or retirement review first.
 
 ## What It Does
 
-- Scores skills by reuse, routing centrality, proof leverage, failure cost, and dependency impact.
+- Separates raw skill signals from maintenance recommendations.
+- Uses direct heat, composition heat, maintenance burden, and uniqueness as the
+  durable signal set.
 - Separates tier classification from maintenance priority.
-- Highlights first-load bloat, overlap, stale checklists, and missing evals.
+- Highlights first-load bloat, overlap, stale checklists, missing evals, and
+  source gaps without pretending they are direct usage.
 - Feeds skill-maintenance planning and consolidation decisions.
 - Helps decide when a skill should be split, merged, promoted, or retired.
 - Feeds Taste Loop candidate selection while keeping human taste feedback
@@ -94,17 +100,36 @@ evals, templates, or documentation first.
 
 ## Operating Contract
 
-Compounding score is a prioritization signal, not a skill tier.
+Compounding score is a recommendation contract, not a skill tier or quality
+grade.
 
-- Scores cite evidence such as usage, references, failure patterns, or dependency roles.
-- High score implies stronger QA, eval, and documentation expectations.
-- Low score can justify deferring, merging, or retiring a skill.
-- The score does not override direct user priority or urgent bug fixes.
-- Taste Loop uses compounding score to choose which product-lane workflow to
-  try next. It does not treat idea or execution pass rates as eval score.
+- Reports expose the raw signal values before any recommendation.
+- Direct heat means observed invocation or usage evidence.
+- Composition heat means weaker indirect usefulness from deduped incoming refs
+  from recently used skills.
+- Maintenance burden means cost or risk: stale templates, bloated first-load
+  text, missing evals or QA, unclear owners, or generated-output drift.
+- Uniqueness means whether the skill owns a distinct trigger, workflow, proof
+  surface, or user-facing capability.
+- Recommendations use `keep`, `harden`, `refine`, `merge`, `watch`, or
+  `retire_review`; destructive edits still require owner-specific review.
+- Taste Loop uses these signals to choose which product-lane workflow to try
+  next. It does not treat idea or execution pass rates as eval score.
   Those rates are human-feedback outcomes that can become evidence for future
   maintenance priority only when recorded with a comparable scenario and
   artifact refs.
+
+Default recommendation rules:
+
+```text
+keep = direct_heat or composition_heat is high, or uniqueness is high
+harden = failure evidence exists and a guardrail is missing
+refine = heat is high and maintenance_burden is high
+merge = uniqueness is low and overlap is high
+watch = heat is low but evidence is incomplete
+retire_review = heat is low, composition_heat is low, uniqueness is low,
+                and the same finding survives at least two reviewed reports
+```
 
 ## Surfaces
 
@@ -154,7 +179,10 @@ Acceptance signals:
 - This feature does not auto-rewrite skills.
 - This feature does not make every skill high priority because it is useful once.
 - This feature does not replace skill-maintenance review.
-- Known limit: Official ranking contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
+- Known limit: Official signal and recommendation contract only; the current
+  implementation is prompt-consumed by Taste Loop and generated graph data. No
+  standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation
+  is shipped.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -176,3 +204,5 @@ Acceptance signals:
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-06-27: Simplified from a broad weighted score into direct heat,
+  composition heat, maintenance burden, uniqueness, and recommendations.

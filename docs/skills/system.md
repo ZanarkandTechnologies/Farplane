@@ -65,11 +65,11 @@ todo_link_rules(skill) -> first_load_loading_boundary
 upgrade_priority(skill, evidence) -> rollout_order
 ```
 
-When a loop must rank skills as improvement targets, use the Skill Compounding
-Score in `docs/features/FEAT-0064-skill-compounding-score.md`. That score composes tier
-leverage with lifecycle-reference distance, product-lane fit, observed heat,
-downstream leverage, improvement gap, feedback fit, and proof fit. It is a
-prioritization score, not an eval score or skill quality grade.
+When a loop must rank skills as improvement targets, use the signal contract in
+`docs/features/FEAT-0064-skill-compounding-score.md`: direct heat, composition
+heat, maintenance burden, and uniqueness. The output is a maintenance
+recommendation such as `keep`, `harden`, `refine`, `merge`, `watch`, or
+`retire_review`, not a skill tier, eval score, or skill quality grade.
 
 ## Phase Ownership And Recursion
 

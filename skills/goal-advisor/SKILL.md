@@ -213,6 +213,11 @@ only after the branch is selected:
      implementation evidence through Ref MCP, official docs, GitHub code
      search, maintained examples, or web search unless the ticket is explicitly
      local-only.
+   - [ ] For material feature leaves, require execution to follow the ticket's
+     critical-path proof notes in `Done / Proof`: run the smaller sanity checks
+     in order before claiming a long workflow or lifecycle, record evidence for
+     each checkpoint, and block or revise when the final path remains unrun
+     without an explicit residual-risk note.
    - [ ] For project-goals leaf Goals, list only the selected leaf file set plus
      `farplane/goals.md` when project strategy context is needed; do not include
      sibling tickets as executable work files.
@@ -239,6 +244,10 @@ only after the branch is selected:
      as source of truth instead of restating their full contents.
    - [ ] Include final evidence policy. For UI/user-visible work, completion
      must return best screenshot/image evidence or block with the missing proof.
+   - [ ] Include critical-path proof policy for material feature work:
+     completion must report which ordered sanity checks ran, where evidence
+     lives, and which full-path check remains blocked if the real workflow was
+     not exercised.
    - [ ] For implementation feature work, include a final `Grounding:` evidence
      rule in the prompt: name the source class checked, such as Ref MCP,
      official docs, GitHub code search, maintained examples, or web sources, or

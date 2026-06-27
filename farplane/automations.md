@@ -6,6 +6,7 @@ owner: automation-advisor
 source_of_truth:
   - skills/pulse-update/SKILL.md
   - skills/interval-update/SKILL.md
+  - skills/consolidate/SKILL.md
   - skills/taste-loop/SKILL.md
   - farplane/pm.json
 ---
@@ -155,6 +156,78 @@ priority_planning = true
 ```
 <!-- /farplane:automation-prompt -->
 
+## Monthly Registry Consolidation
+
+<!-- farplane:automation-config id="farplane-monthly-registry-consolidation" format="toml" -->
+```toml
+id = "farplane-monthly-registry-consolidation"
+name = "Farplane Monthly Registry Consolidation"
+kind = "cron"
+status = "active"
+workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+
+[schedule]
+type = "monthly"
+timezone = "Asia/Kuala_Lumpur"
+day_of_month = 1
+time = "06:15"
+
+```
+<!-- /farplane:automation-config -->
+
+<!-- farplane:automation-prompt id="farplane-monthly-registry-consolidation" -->
+```text
+Use $consolidate.
+
+Run the monthly Farplane registry consolidation review. This is a registry
+truth and ownership compression pass, not the weekly self-learning loop and not
+a direct skill/docs rewrite.
+
+Scope:
+target = [
+  "docs/skills/registry.jsonl",
+  "docs/features/registry.jsonl",
+  "docs/systems/registry.jsonl",
+  "docs/templates/registry.jsonl",
+  "docs/sources/registry.jsonl"
+]
+structure = "registry"
+
+Constraints:
+preserve_ids = true
+preserve_evidence = true
+no_delete = true
+owner_boundary = "registry rows only; route underlying artifact edits to their owning skill, doc, generator, or validator"
+
+Output:
+Write a dated report under:
+.farplane/reports/consolidation/registry/<YYYY-MM-DDTHHMMSSZ>.md
+
+The report should include:
+- registry inventory and source freshness
+- duplicate or overlapping row clusters
+- stale, orphaned, generated-output-drift, or wrong-owner rows
+- keep, merge, refactor, retire, or watch recommendations
+- owner-specific handoffs for skill-maintenance, documentation, eval,
+  generated registry validators, or tickets
+- loss check showing IDs, evidence, generated outputs, and owner boundaries were preserved
+
+Do not edit registries or underlying artifacts during this automation run.
+Do not create a metrics registry. Metrics were intentionally removed from this
+monthly workflow until repeated reports prove which measurements deserve a
+separate owner.
+
+Params:
+project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+review_window = "last_month"
+planning_window = "next_month"
+timezone = "Asia/Kuala_Lumpur"
+
+Config source:
+farplane/automations.md automation-config id="farplane-monthly-registry-consolidation"
+```
+<!-- /farplane:automation-prompt -->
+
 ## Active-Hours Taste Loop
 
 <!-- farplane:automation-config id="farplane-active-hours-taste-loop" format="toml" -->
@@ -186,9 +259,13 @@ from farplane/automations.md, use Codex automation memory as the active worker
 ledger, and reuse or resume an active worker before creating any new worker.
 Select product-lane artifact workflows, not broad skill summaries. Run the
 Goal-backed impress loop: log a planning experiment, create one to three
-concept cards, route idea feedback through the worker thread with
-optimize-with-human, then execute only approved concepts and request execution
-feedback from that same worker thread.
+TasteProposal planning artifacts, route idea feedback through the worker
+thread with optimize-with-human, then execute only approved proposals and
+request execution feedback from that same worker thread. TasteProposals must
+include audience/buyer, taste insight, artifact shape, core angle, execution
+beats, why it could win, cringe risks, references or taste pack, feedback
+question, and next step if approved; hook-only cards are valid only when the
+artifact itself is just a hook.
 
 Do not create repo/runtime artifacts, worker threads, feedback cards, or
 Telegram messages for ordinary no-op beats.
@@ -215,7 +292,7 @@ Overrides:
 controller_memory = "Codex automation memory.md"
 worker_state = "reuse active_worker before creating any new worker"
 worker_goal_packet = "ticket.md + program.md + progress.md before worker action"
-phase_policy = "planning concept cards before execution artifacts; track idea_pass_rate and execution_pass_rate separately"
+phase_policy = "TasteProposal planning artifacts before execution artifacts; track idea_pass_rate and execution_pass_rate separately"
 experiment_log = "worker progress.md records planning/execution experiment proposals and results"
 feedback_budget = "count valid product-workflow feedback only; report legacy broad-skill/router feedback as hygiene"
 skill_promotion = "no target-skill hardening from one rejection; harden only repeated same-phase failure or reusable approved pattern"

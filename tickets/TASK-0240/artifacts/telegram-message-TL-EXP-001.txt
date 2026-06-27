@@ -1,0 +1,18 @@
+Taste Loop TASK-0240 feedback request
+
+Target: trust_distribution/social_thread
+Objective: pick the Pocket Intern social-thread concept worth drafting.
+
+Artifact:
+tickets/TASK-0240/artifacts/concept-cards-TL-EXP-001.md
+
+Question:
+Pick A, B, or C for execution, or say revise/reject with the shortest useful reason.
+
+Reply shape:
+verdict=keep|revise|reject|approve
+selected_concept=A|B|C|none
+feedback=<short reason>
+next_instruction=<what the worker should do next>
+
+This is planning only. No external posting.

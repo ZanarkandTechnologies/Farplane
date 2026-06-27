@@ -89,6 +89,10 @@ proof:
     - source Taste Loop and optimize-with-human changes installed
     - focused validators pass or unrelated validator blockers are named
   manual:
+    - Critical-path proof: inspect the path from controller selection ->
+      worker thread creation -> worker prompt with ticket/program/progress ->
+      Telegram feedback request -> progress.md worker-state update before
+      claiming the pilot loop ran.
     - Telegram message sent to Kenji
     - worker thread created in Codex app
   review:

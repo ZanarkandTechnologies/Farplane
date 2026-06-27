@@ -112,9 +112,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
-      "source_commit": "79a4641842e9",
-      "summary": "Add infographic example fixture standard",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-1e8243d5b940.md",
+      "source_commit": "1e8243d5b940",
+      "summary": "working tree current template",
       "version": "0.3.6"
     },
     {
@@ -134,7 +134,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ],
       "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
       "source_commit": "79a4641842e9",
-      "summary": "working tree current template",
+      "summary": "Add infographic example fixture standard",
       "version": "0.3.6"
     }
   ],
@@ -475,7 +475,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "1e8243d5b940",
       "template_version": "0.3.6",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -489,7 +489,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "1e8243d5b940",
       "template_version": "0.3.6",
       "title": "Todo executability",
       "verdict": "pass"
@@ -503,7 +503,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "1e8243d5b940",
       "template_version": "0.3.6",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -517,7 +517,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "1e8243d5b940",
       "template_version": "0.3.6",
       "title": "Proof contract",
       "verdict": "pass"
@@ -531,7 +531,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "79a4641842e9",
+      "source_commit": "1e8243d5b940",
       "template_version": "0.3.6",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -747,7 +747,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-06-27T14:49:03+00:00",
+  "generated_at": "2026-06-27T15:15:31+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -772,6 +772,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "current",
       "template_version": "0.3.6",
       "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/telegram-message/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "telegram-message",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.6",
+      "tier": 1
     },
     {
       "eval": "",
@@ -1388,18 +1400,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "eval": "",
       "has_checklist": true,
-      "path": "skills/telegram-message/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "telegram-message",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 1
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
       "path": "skills/testing/SKILL.md",
       "qa_checklist": "",
       "skill_id": "testing",
@@ -1944,9 +1944,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "local": 96
     },
     "by_status": {
-      "current": 2,
+      "current": 3,
       "external": 3,
-      "missing": 56,
+      "missing": 55,
       "stale": 38
     },
     "by_template_version": {
@@ -1955,8 +1955,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "0.3.0": 6,
       "0.3.2": 7,
       "0.3.5": 1,
-      "0.3.6": 2,
-      "missing": 59
+      "0.3.6": 3,
+      "missing": 58
     },
     "total_skills": 99
   },
@@ -3026,11 +3026,15 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/telegram-message/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": true,
-        "skill": false
+        "skill": true
       },
-      "template_uses": {}
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
+        "skill-qa-checklist": "0.1.0",
+        "skill-template": "0.3.6"
+      }
     },
     {
       "consumer_id": "testing",
@@ -3420,6 +3424,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "telegram-message",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/telegram-message/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
+    },
+    {
       "consumer_id": "agent-qa-test",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3732,6 +3749,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "telegram-message",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0057"
+      ],
+      "path": "skills/telegram-message/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.0"
+    },
+    {
       "consumer_id": "agent-qa-test",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3797,19 +3827,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": ""
     },
     {
-      "consumer_id": "telegram-message",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0057"
-      ],
-      "path": "skills/telegram-message/SKILL.md",
-      "status": "missing",
-      "target_basis": "skills with a qa_checklist.md surface",
-      "template_id": "skill-qa-checklist",
-      "used_version": ""
-    },
-    {
       "consumer_id": "visual-qa",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3847,6 +3864,21 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0057"
       ],
       "path": "skills/infographic/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.6"
+    },
+    {
+      "consumer_id": "telegram-message",
+      "consumer_scope": "skill",
+      "current_version": "0.3.6",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057"
+      ],
+      "path": "skills/telegram-message/SKILL.md",
       "status": "current",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
@@ -4440,10 +4472,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     "skill-eval-task": {
       "by_scope": {
-        "skill": 30
+        "skill": 31
       },
       "by_status": {
-        "current": 18,
+        "current": 19,
         "missing": 12
       },
       "current_version": "0.1.0",
@@ -4451,15 +4483,15 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "target_basis": "skills with an eval_task.json surface",
-      "total_consumers": 30
+      "total_consumers": 31
     },
     "skill-qa-checklist": {
       "by_scope": {
         "skill": 19
       },
       "by_status": {
-        "current": 12,
-        "missing": 7
+        "current": 13,
+        "missing": 6
       },
       "current_version": "0.1.0",
       "feature_refs": [
@@ -4470,10 +4502,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     "skill-template": {
       "by_scope": {
-        "skill": 40
+        "skill": 41
       },
       "by_status": {
-        "current": 2,
+        "current": 3,
         "stale": 38
       },
       "current_version": "0.3.6",
@@ -4483,7 +4515,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0057"
       ],
       "target_basis": "local skills that declare skill-template usage",
-      "total_consumers": 40
+      "total_consumers": 41
     }
   },
   "template_versions": [
@@ -4674,7 +4706,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "introduced_at": "2026-06-27",
       "latest_at": "2026-06-27",
       "latest_commit": "79a4641842e9",
-      "latest_summary": "working tree current template",
+      "latest_summary": "Add infographic example fixture standard",
       "release_count": 2,
       "sections": [
         "Context",
@@ -4691,19 +4723,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "snapshots": [
         {
           "introduced_at": "2026-06-27",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
-          "source_commit": "79a4641842e9",
-          "summary": "Add infographic example fixture standard"
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-1e8243d5b940.md",
+          "source_commit": "1e8243d5b940",
+          "summary": "working tree current template"
         },
         {
           "introduced_at": "2026-06-27",
           "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
           "source_commit": "79a4641842e9",
-          "summary": "working tree current template"
+          "summary": "Add infographic example fixture standard"
         }
       ],
-      "source_commit": "79a4641842e9",
-      "summary": "Add infographic example fixture standard",
+      "source_commit": "1e8243d5b940",
+      "summary": "working tree current template",
       "template_metadata": {
         "feature_refs": [
           "FEAT-0022",

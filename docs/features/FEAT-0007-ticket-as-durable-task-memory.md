@@ -92,6 +92,8 @@ A durable ticket is a small program for the next agent, not a generic task note.
 - `Program` gives the execution shape or pseudocode.
 - `Map` points to the files, docs, skills, or tests that matter.
 - `Done / Proof` is the completion scoreboard.
+- For material features, the same `Done / Proof` body carries critical-path
+  proof notes in ordinary prose or bullets rather than a new required schema.
 - `State` carries current status, blocker, verification, and result.
 - `Links` points to evidence, artifacts, related specs, and handoffs.
 

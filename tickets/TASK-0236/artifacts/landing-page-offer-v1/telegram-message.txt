@@ -2,7 +2,10 @@ Farplane landing-page offer V1 is ready for phone review.
 
 Question: keep, revise, or reject the offer and page direction?
 
-Best mobile review surface is the screenshot evidence in the worker thread, also saved locally at:
+Website preview:
+https://landing-page-offer-v1.vercel.app
+
+Screenshot fallback is saved locally at:
 tickets/TASK-0236/artifacts/landing-page-offer-v1/screenshots/mobile.png
 
 Artifact packet:

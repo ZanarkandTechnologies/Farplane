@@ -4,7 +4,7 @@ owner: impl-plan
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-06-24
+updated_at: 2026-06-27
 applies_to:
   - implementation-plans
   - coding-tickets
@@ -98,8 +98,11 @@ accept_plan(plan)
 
 10. `proof-route-explicit`
    - Question: Does `Done / Proof` name checks, manual evidence, delegated
-     lanes, review gates, and final artifacts?
-   - Violation: The plan says only "run tests" or "verify manually".
+     lanes, review gates, final artifacts, and for material feature work, the
+     critical path being claimed with smaller ordered sanity checks when full
+     end-to-end proof is too long?
+   - Violation: The plan says only "run tests" or "verify manually", or proves
+     nearby pieces while leaving the claimed workflow/lifecycle implicit.
 
 11. `documentation-closeout-route`
    - Question: Does the plan name the final docs/closeout route: `close-ticket`

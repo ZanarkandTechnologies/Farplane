@@ -88,6 +88,10 @@ contract.
 Proof scales with risk, blast radius, and user-facing impact.
 
 - Ticket `Done / Proof` names the expected checks, evidence, review gates, and acceptance signals.
+- For material features, `Done / Proof` also names the critical path in flexible
+  prose or bullets: the real workflow or lifecycle being claimed, smaller
+  ordered sanity checks when a full end-to-end run is long, expected
+  observations, evidence, and any residual risk for unrun final paths.
 - Ticket-local artifacts hold bulky proof and reports.
 - QA owns user-visible and runtime evidence capture.
 - Reviewer owns material judgment of plans, implementations, prompts, evidence, and completion claims.

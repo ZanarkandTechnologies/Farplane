@@ -59,6 +59,11 @@ claim proof to `agent-qa-test`, and final sufficiency to `review`.
   `tickets/TASK-XXXX/artifacts/qa/<timestamp>-<slug>/`.
 - [ ] Capture the relevant evidence: command outputs, screenshots, snapshots,
   console logs, page errors, API responses, traces, or generated artifacts.
+- [ ] For material feature work, reconcile evidence against the ticket's
+  critical-path proof notes inside `Done / Proof`: confirm the claimed workflow
+  or lifecycle is named, the smaller sanity checks ran in order where feasible,
+  and every unrun full-path step is recorded as residual risk, revise, or
+  blocker.
 - [ ] For browser proof, prefer a snapshot before interaction, screenshots for
   important states, and console/page-error logs when the UI is user-visible.
 - [ ] For UI or visual judgment, hand screenshots and context to
@@ -96,6 +101,11 @@ Do not use it when:
   surface when browser evidence is needed; Farplane-specific QA artifact
   policy lives in this skill, not in `agent-browser`.
 - Gather ticket-scoped proof under `tickets/TASK-XXXX/artifacts/qa/`.
+- For material feature work, reconcile the artifacts against the claimed
+  critical path in `Done / Proof`. QA may pass smaller ordered sanity checks
+  instead of a single full end-to-end run only when those checks faithfully
+  cover the path and any skipped final workflow is named as residual risk or a
+  blocker.
 - For UI or user-visible work, use `visual-qa` as a separate judgment pass.
 - If the ticket proof policy includes `agent_qa`, run or hand off to
   `agent-qa-test`; do not treat normal QA as adversarial proof.

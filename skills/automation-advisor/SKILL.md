@@ -49,7 +49,7 @@ kind = "heartbeat | cron"
 status = "active | paused"
 
 [schedule]
-type = "interval | active_hours_interval | daily | weekly"
+type = "interval | active_hours_interval | daily | weekly | monthly"
 ```
 <!-- /farplane:automation-config -->
 
@@ -124,6 +124,9 @@ fails:
   - [ ] Use Pulse for frequent bounded action selection.
   - [ ] Use interval automations for scheduled reporting, drift checks, and
         replanning windows such as daily and weekly.
+  - [ ] Use monthly consolidation automations for low-churn registry or
+        artifact-compression reviews that should not run inside weekly
+        self-learning.
 - [ ] 2. Bind the project surfaces.
   - [ ] Read the Pulse/Interval spec and current `farplane/automations.md`
         when present.
@@ -169,8 +172,8 @@ fails:
         substrate bootstrap.
   - [ ] When activation is requested and Codex app thread/automation tools are
         available, create or update the project loops named in
-        `farplane/automations.md`, commonly Pulse, Daily Interval, and Weekly
-        Interval.
+        `farplane/automations.md`, commonly Pulse, Daily Interval, Weekly
+        Interval, and any explicitly requested monthly consolidation loop.
   - [ ] Create dedicated project threads for loops that need context isolation.
   - [ ] Attach each Codex automation to the matching thread at the named
         cadence.
@@ -220,6 +223,7 @@ activate_farplane_automations(project_root, project_id?, pm_manifest, automation
    - `Project Pulse`
    - `Project Daily Interval`
    - `Project Weekly Interval`
+   - explicitly requested monthly consolidation loops
 3. Create or update `farplane/automations.md` with the exact prompt blocks.
 4. Create or update each Codex automation by copying the matching prompt block
    exactly, attached to the matching thread at the named cadence.

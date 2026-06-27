@@ -27,6 +27,11 @@ these gates are explicit:
   page from becoming a stitched-together competitor clone.
 - `Non-goals`: what the page must not become.
 - `Decision boundaries`: what the agent may decide without asking.
+- `Quality target`: `stunning`, `premium`, `standard`, or `simple`, including
+  the ambition signal from the prompt or ticket.
+- `Supplied effects inventory`: every user-provided visual pattern, effect,
+  reference, asset expectation, video-scroll idea, 3D idea, or motion pattern
+  is marked `adopt`, `adapt`, `reject`, `defer`, or `blocker`.
 - `Section matrix`: every section has a job, visual, asset, motion, proof, and
   QA assertion.
 - `Asset plan`: generated, real, screenshot, video, canvas, SVG, or WebGL
@@ -40,6 +45,9 @@ these gates are explicit:
   provenance, and `assets/asset-manifest.json`.
 - `Motion plan`: effect exists because it reveals meaning, not because motion is
   decorative.
+- `Downgrade contract`: if the worker cannot produce the selected high-craft
+  carrier, the artifact must label the blocker and ask whether to accept the
+  downgrade instead of asking for page-direction feedback.
 - `QA gates`: first viewport, mobile, reduced motion, scroll checkpoints,
   section quality, designer judgment, browser console/errors, source review.
 
@@ -53,7 +61,7 @@ pretending a landing brief is ready.
 status: approved
 approval_source: user|ticket|brief
 landing_type: cinematic-scrolltelling
-quality_target: terminal-level
+quality_target: stunning|premium|standard|simple
 ---
 
 # LANDING_SPEC
@@ -62,6 +70,9 @@ quality_target: terminal-level
 ## Audience
 ## Non-goals
 ## Decision Boundaries
+## Quality Target
+## Ambition Signal
+## Supplied Effects Inventory
 ## Taste References
 ## Reference Research
 ## Best-of-worlds Decisions
@@ -87,6 +98,7 @@ verify when `frontend-craft:composed-scroll-animation` is the correct handoff.
 ## Asset Plan
 ## Product Demo Plan
 ## Motion Plan
+## Downgrade Contract
 ## Proof Plan
 ## Designer Judgment Plan
 ## QA Gates
@@ -98,9 +110,16 @@ verify when `frontend-craft:composed-scroll-animation` is the correct handoff.
 - Run `scripts/landing_spec_lint.py <LANDING_SPEC.md>` before build.
 - Build from the section matrix; do not invent missing sections during
   implementation.
+- Before implementation, run the Ambition Gate from `SKILL.md` and apply
+  `qa_checklist.md` as preflight. For `stunning` or `premium`, a basic static
+  page is a violation unless the artifact is explicitly labeled as a blocker or
+  mechanics prototype.
 - Generate or collect the approved media assets before the final build claim.
   If the run cannot do that, downgrade the quality target to `prototype` and
   record the missing media blocker.
+- Do not ask for keep/revise/reject on the page direction when the artifact
+  does not meet its own quality target. Ask only for downgrade approval or send
+  a blocker/status update.
 - For product pages, fail the plan when the product demo is only a generic
   infographic, dashboard mock, abstract diagram, or short label-changing scrub.
 - Run `scripts/asset_evidence_lint.py <site-dir>` after build. Premium pages

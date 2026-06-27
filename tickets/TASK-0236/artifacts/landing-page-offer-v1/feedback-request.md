@@ -11,6 +11,7 @@ Worker thread:
 `019f0424-a832-7712-b952-85b50222a716` / current worker thread
 
 Artifact refs:
+- Website preview: https://landing-page-offer-v1.vercel.app
 - Spec: `tickets/TASK-0236/artifacts/landing-page-offer-v1/LANDING_SPEC.md`
 - Prototype HTML: `tickets/TASK-0236/artifacts/landing-page-offer-v1/index.html`
 - Mobile screenshot: `tickets/TASK-0236/artifacts/landing-page-offer-v1/screenshots/mobile.png`
