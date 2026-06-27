@@ -85,11 +85,11 @@ Optional sources:
         gotchas, QA checklist gaps, eval-to-QA sync gaps, or registry drift to
         [skill-maintenance](../../../skill-maintenance/SKILL.md) with
         `mode: harden_skill`.
-  - [ ] Route testable behavior claims to [eval](../../eval/SKILL.md).
+  - [ ] Route testable behavior claims to [eval](../../../eval/SKILL.md).
   - [ ] Route broad harness behavior gaps to
-        [optimize-harness](../../optimize-harness/SKILL.md).
+        [optimize-harness](../../../optimize-harness/SKILL.md).
   - [ ] Route unclear owner surfaces to
-        [gap-analysis](../../gap-analysis/SKILL.md) or a ticket delta.
+        [gap-analysis](../../../gap-analysis/SKILL.md) or a ticket delta.
   - [ ] Mark weak, duplicate, already-fixed, or ownerless findings as deferred
         instead of creating work.
 - [ ] 4. Bound the work.

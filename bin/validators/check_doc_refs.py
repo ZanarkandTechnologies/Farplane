@@ -126,6 +126,8 @@ def looks_like_local_ref(raw: str) -> bool:
         return False
     if re.search(r"\b(?:TASK-\d{4}|TASK-XXXX|TASK-\*)\b|tickets/TASK-", raw):
         return False
+    if re.search(r"/(?:FEAT|TASK)-$", raw):
+        return False
     if re.search(r"\b(?:YYYY|MM|DD|HHMM|my-skill|name|example)\b", raw):
         return False
     if raw in {"docs/bootstrap-brief.md"}:

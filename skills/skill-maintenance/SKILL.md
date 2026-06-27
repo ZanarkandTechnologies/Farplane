@@ -27,11 +27,15 @@ holds together.
 `skill-maintenance` owns skill-package mechanics after the owner surface is
 known: `SKILL.md` shape, references, eval/checklist sync, source ownership,
 frontmatter, registry sync, audit records, reinstall checks, and review
-routing. It also owns the weekly learning backpropagation interface:
+routing. Use `consolidate(target = edited_skill, structure = skill, ...)` for
+behavior-preserving compaction decisions; this skill applies the resulting
+owner-local skill edits and proof. It also owns the weekly learning
+backpropagation interface:
 
 ```text
 harden_skill = turn fresh lessons/troubles/progress findings into evals, gotchas, and blockers now
-refine_skill = consolidate older evals/gotchas and shorten the skill later
+refine_skill = call consolidate over older evals/gotchas/first-load text and
+               apply the accepted skill-local patch later
 ```
 
 It does not replace `optimize-harness`, `gap-analysis`, `skill-creator`,
@@ -122,9 +126,11 @@ guardrails, or tickets. Weekly Interval should call this mode through
 `skill_hardening` when a project needs recurring learning backpropagation.
 
 Use `refine_skill` for compaction after hardening has accumulated material:
-merge duplicate evals, collapse overlapping gotchas, move long examples into
-references, shorten first-load text, and preserve behavior with eval/review
-proof.
+bind the target skill package, call `consolidate(target = edited_skill,
+structure = skill, template = docs/skills/templates/SKILL_TEMPLATE.md,
+constraints = { preserve_evidence: true, preserve_required_sections: true })`,
+then apply only the accepted owner-local edits and preserve behavior with
+eval/review proof.
 
 Use `self-improve` only when `harden_skill` or `refine_skill` finds a measured
 search problem: multiple candidate variants, a metric, an experiment program,
@@ -173,6 +179,10 @@ or a Goal-backed experiment loop.
   - [ ] `else if conditional_detail_or_template_changed: edit edited_skill/references/*`.
   - [ ] `else if repeatable_behavior_proof_changed: edit edited_skill/eval_task.json`.
   - [ ] `else if runtime_guardrail_changed: edit edited_skill/qa_checklist.md, a reference, or a validator candidate`.
+  - [ ] `if measurement_or_reward_language_changed: keep skill-local QA as
+    executable checks; route goal/project measurement to metric-advisor; route
+    readiness judgment to review rubrics; do not create metric registries or
+    scalar scores from checklist items by default`.
   - [ ] `if registry_or_frontmatter_changed: regenerate docs/skills/registry.jsonl; never hand-edit generated rows`.
   - [ ] `if template_version_changed: prove the actual headings/todo/signature match the promised template`.
   - [ ] `if installed_copy_differs: import or patch repo source first; reinstall/live-inspect only after source edits are accepted`.
@@ -181,8 +191,9 @@ or a Goal-backed experiment loop.
   - [ ] `if mode == harden_skill: add or propose the smallest immediate evals,
     gotchas, checklist guardrails, or improvement tickets that block repeated
     failures before optimizing prose length`.
-  - [ ] `if mode == refine_skill: consolidate duplicate evals/gotchas and
-    shorten first-load text only after preserving the behavioral guardrails`.
+  - [ ] `if mode == refine_skill: call consolidate(..., structure = skill) for
+    duplicate evals/gotchas and first-load text, then apply only decisions that
+    preserve behavioral guardrails`.
   - [ ] `if mode == qa_checklist_design: create or update
     edited_skill/qa_checklist.md as a preflight plus final-review contract;
     add only a compact first-load pointer in SKILL.md unless a gotcha must be
@@ -229,6 +240,11 @@ or a Goal-backed experiment loop.
   - [ ] If `qa_checklist.md` changed, verify it has prevention value before
     execution and final-review value after execution; do not keep checklist
     items that only restate the todo list or duplicate `## Gotchas`.
+  - [ ] If a change adds scores, metrics, reward language, or ranking, verify
+    the layer is correct: skills learn from checklist/review/eval feedback,
+    goals and projects use `metric-advisor` for measurement contracts, and
+    interval/taste-loop reports synthesize reward signals without collapsing
+    repair context into a scalar.
   - [ ] Reinstall touched local skills and inspect the live copy only when the
     user is judging installed behavior.
 - [ ] 8. Finish with audit/review/writeback.
@@ -285,11 +301,18 @@ inputs:
   evals:
   gotchas:
   usage_results:
-compaction_plan:
+consolidate_call:
+  target:
+  structure: skill
+  template: docs/skills/templates/SKILL_TEMPLATE.md
+  constraints:
+    preserve_evidence: true
+    preserve_required_sections: true
+unit_decisions:
   keep:
   merge:
-  move_to_references:
-  delete_as_duplicate:
+  move:
+  delete:
 proof_required:
 ```
 
@@ -325,6 +348,10 @@ Return TAS verdicts, blockers, and smallest required fixes.
   get evals/gotchas first; compaction can happen in the later weekly pass.
 - Do not use `self-improve` for every skill update. It is for measured search
   or variants, not ordinary lesson/trouble hardening.
+- Do not promote checklist items into metrics or scalar scoring functions just
+  because they look countable. Skill-level learning usually needs failed
+  checks, reasons, evidence, and repair hints; goal/project metrics belong with
+  `metric-advisor`.
 - Do not auto-promote every eval reference point into a checklist. Promote only
   reusable runtime guardrails.
 - Do not bypass `check_skills.py --write`, hand-edit generated registry rows,
@@ -348,8 +375,11 @@ Return TAS verdicts, blockers, and smallest required fixes.
   prose, and other non-operational first-load text.
 - [docs/skills/templates/SKILL_TEMPLATE.md](../../docs/skills/templates/SKILL_TEMPLATE.md)
   - current baseline skill template.
-- [../eval/SKILL.md](../eval/SKILL.md) - create or consolidate runnable
-  regression proof when hardening or refinement touches behavior.
+- [../consolidate/SKILL.md](../consolidate/SKILL.md) - shared
+  value-preserving compaction primitive for skill, eval, gotcha, checklist, and
+  first-load refinement.
+- [../eval/SKILL.md](../eval/SKILL.md) - create or run runnable regression
+  proof when hardening or refinement touches behavior.
 - [../self-improve/SKILL.md](../self-improve/SKILL.md) - use only for measured
   variant/search loops, not default weekly hardening.
 - [templates/skill-audit.md](templates/skill-audit.md) - binary before/after
@@ -366,7 +396,7 @@ Return TAS verdicts, blockers, and smallest required fixes.
   surfaces as selected by `behavior_delta`.
 - Hardening outputs when `mode == harden_skill`: eval candidates, gotchas,
   regression cases, improvement tickets, and processed-state notes.
-- Refinement outputs when `mode == refine_skill`: consolidated evals/gotchas,
+- Refinement outputs when `mode == refine_skill`: `consolidate` unit decisions,
   shortened skill text, moved reference detail, and review notes.
 - Low-value prose outputs when `mode == low_value_prose_scan`: candidate
   sentences plus `keep | rewrite | move | delete` decisions and resulting

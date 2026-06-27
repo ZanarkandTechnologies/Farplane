@@ -1,7 +1,7 @@
 ---
 name: taste-loop
 version: 0.1.0
-description: "Run a Codex-native active-hours heartbeat prompt that creates product-lane artifacts and asks for human taste feedback."
+description: "Run a Codex-native active-hours heartbeat prompt that turns human taste into Goal-backed concept and execution feedback loops."
 tier: 3
 group: self-improvement
 source: local
@@ -17,32 +17,34 @@ eval: eval_task.json
 
 Use this when a Farplane project should convert active human attention into
 structured feedback on product artifacts through the official optional Codex
-automation heartbeat. The heartbeat prompt reads `farplane/products.md`, selects
-one high-compounding artifact workflow from the Taste Loop Artifact Workflows
-table, creates or reuses a dedicated worker Goal Packet and Codex thread, and
-instructs that worker to generate reviewable artifacts through
-`optimize-with-human`.
+automation heartbeat. The loop's reward is to impress Kenji enough that he
+wants the thing made, while spending as few execution steps as possible. The
+heartbeat prompt reads `farplane/products.md`, selects one high-compounding
+artifact workflow, creates or reuses a dedicated worker Goal Packet and Codex
+thread, and instructs that worker to run a phase-aware
+`optimize-with-human` loop.
 
 This skill is a prompt owner, not a script, scheduler, hidden daemon, or
 alternate continuation runtime. Codex automation records own cadence; product
 lanes own what outputs matter; persistent Codex threads own Telegram reply
 routing; worker Goal Packets own durable state; `goal-advisor` compiles the
 packet; `metric-advisor` chooses the honest provider; `optimize-with-human`
-owns the worker's human-feedback protocol; artifact-producing skills own
-end-to-end generation.
+owns the worker's phase-aware human-feedback protocol; artifact-producing
+skills own end-to-end generation after the planning idea passes.
 
 ## Skill Signature
 
 ```text
 taste_loop(project_root, config?, now?)
   -> no_op | artifact_worker_thread_report | artifact_feedback_report |
-     artifact_goal_handoff_report | blocked_report
+     idea_feedback_report | artifact_goal_handoff_report | blocked_report
 state: reads(farplane/automations.md automation-config TOML?,
              Codex automation memory.md?,
              farplane/products.md,
              farplane/products.md#taste-loop-artifact-workflows,
              docs/skills/registry.jsonl,
              docs/features/FEAT-0064-skill-compounding-score.md,
+             tickets/TASK-*/artifacts/agi-toy-shop-scenario.md?,
              tickets/*/ticket.md?,
              skill graph heat / FARPLANE_SKILL_HEAT_*,
              .farplane/automation/taste-loop/*?);
@@ -54,13 +56,15 @@ state: reads(farplane/automations.md automation-config TOML?,
               .farplane/automation/taste-loop/artifacts/*,
               .farplane/automation/taste-loop/feedback/*?,
               .farplane/automation/taste-loop/preview/*?)
-gates: active_hours_checked; feedback_budget_checked; product_lane_selected;
+gates: automation_schedule_loaded; feedback_budget_checked; product_lane_selected;
+       impress_reward_bound; idea_execution_phases_bound;
        controller_memory_checked; active_worker_reused_or_resumed;
        artifact_workflow_selected; worker_packet_created_or_reused;
+       goal_packet_created_or_reused; planning_experiment_logged;
        worker_thread_created_or_reused; optimize_with_human_bound_in_worker;
-       artifact_generated_or_goal_handoff; artifact_ref_visible;
+       concept_card_or_artifact_ref_visible; artifact_generated_or_goal_handoff;
        preview_ref_visible_for_visual_artifacts; open_feedback_deduped;
-       no_hidden_scheduler
+       legacy_invalid_feedback_excluded_from_budget; no_hidden_scheduler
 routes: landing-page | social-content | video-production |
   product-photography | farplane-evidence-content |
   farplane-experiment-report | farplane-ablation-proof |
@@ -73,7 +77,10 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   default; sends Telegram feedback from the parent heartbeat thread when a
   dedicated worker thread is needed; spams more feedback than budget allows;
   creates a separate workers.jsonl ledger instead of reusing automation memory;
-  writes repo/runtime files for a simple no-op beat
+  writes repo/runtime files for a simple no-op beat; executes full artifacts
+  before an idea passes when the artifact is not itself the tiny planning test;
+  edits target skills after one rejection instead of logging and rerunning a
+  phase experiment
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -82,15 +89,15 @@ fails: creates a local runner as the primary surface; runs hidden loops;
 - [ ] 1. Load automation config and controller memory.
   - [ ] Read the `farplane/automations.md` marker-delimited TOML config block
     and prompt block for `farplane-active-hours-taste-loop` when available.
-  - [ ] Treat the Codex automation schedule as the primary active-hours gate;
-    do not wake hourly just to check whether active hours are open.
+  - [ ] Treat the Codex automation schedule as cadence metadata owned by the
+    Codex automation record; do not re-check active hours inside the skill.
   - [ ] Use the prompt block `Params` section for Taste Loop knobs such as
     `top_n`, `max_open_feedback`, target groups, output channels, cooldown,
     convergence, and `log_noop`.
   - [ ] Read the Codex automation `memory.md` when the automation runtime
     provides one.
-  - [ ] Stop with a side-effect-free no-op when a manual run is clearly outside
-    the configured automation schedule.
+  - [ ] Treat manual invocation as explicit operator intent to run one bounded
+    beat now, regardless of the configured schedule.
 - [ ] 2. Collect candidate targets.
   - [ ] Read `docs/features/FEAT-0064-skill-compounding-score.md`.
   - [ ] Read `docs/skills/registry.jsonl`.
@@ -112,6 +119,10 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Normalize open feedback by `target_id + feedback_question` before
     applying the budget gate; duplicate open rows are hygiene findings, not
     extra budget usage.
+  - [ ] Count only valid product-workflow feedback toward `max_open_feedback`.
+    Feedback cards that target broad router skills or skill summaries are
+    `legacy_invalid_feedback` hygiene findings and must not block the impress
+    loop.
 - [ ] 3. Score and select top N.
   - [ ] Use the Skill Compounding Score; expose every component in the report.
   - [ ] Keep the score distinct from eval score, review TAS, and human
@@ -120,7 +131,22 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     reviewable artifact end-to-end from `products.md`.
   - [ ] Penalize unique open feedback, cooldown, ambiguous targets, and fake
     metric risk.
-- [ ] 4. Route exactly one Codex-native bounded action by default.
+- [ ] 4. Bind the impress loop.
+  - [ ] Set reward objective to `impress Kenji enough that he wants the thing
+    made`.
+  - [ ] Treat planning artifacts as first-class: concept cards, best-bet
+    briefs, hook batches, storyboard premises, offer angles, or proof angles.
+  - [ ] Treat execution artifacts as second-stage outputs: landing pages,
+    reels, carousels, scripts, proof reports, demos, or shipped proposals.
+  - [ ] Use the fixed AGI Toy Shop scenario when no live product context is
+    explicitly better.
+  - [ ] Allow a small planning multi-batch, default max 3 concept rollouts, when
+    fast idea feedback is more useful than one polished execution.
+  - [ ] Keep `idea_pass_rate` and `execution_pass_rate` separate in memory and
+    reports.
+  - [ ] Do not edit target skills from first rejection; log the experiment and
+    perturb planning or execution first.
+- [ ] 5. Route exactly one Codex-native bounded action by default.
   - [ ] Ask `metric-advisor` for an honest provider before creating benchmarks,
     harder task suites, or Goal handoffs.
   - [ ] Prefer `artifact_worker_thread` for human-feedback product artifacts:
@@ -128,8 +154,10 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     create or reuse a ticket-backed Goal Packet, then create or reuse a
     dedicated Codex worker thread whose prompt tells the worker to use
     `optimize-with-human`.
-  - [ ] Generate a small artifact immediately when the owning artifact skill can
-    do so inside the worker thread without hidden continuation.
+  - [ ] Generate a small concept artifact immediately when the owning artifact
+    skill can do so inside the worker thread without hidden continuation.
+  - [ ] Start full execution only after planning feedback passes, unless the
+    artifact is tiny enough to be the planning test.
   - [ ] Use `artifact_goal_handoff` when native Goal mode should generate the
     artifact in a bounded continuation.
   - [ ] Use direct `artifact_feedback_report` through `optimize-with-human` only
@@ -138,7 +166,7 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Use `blocked_report` when the target lacks product-lane ownership,
     artifact workflow ownership, proof, config, or generation feasibility.
   - [ ] Do not route to legacy autoresearch unless explicitly configured later.
-- [ ] 5. Write visible state, not hidden runtime output.
+- [ ] 6. Write visible state, not hidden runtime output.
   - [ ] Update Codex automation memory with the active worker ledger when
     available; do not create a separate `workers.jsonl`.
   - [ ] Write a Markdown report under `.farplane/reports/taste-loop/` only for
@@ -147,6 +175,10 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] For `artifact_worker_thread`, write or update `ticket.md`, `program.md`,
     and `progress.md` under `tickets/TASK-*`, and record the worker thread id
     in the ticket links, progress log, and Taste Loop report.
+  - [ ] Ensure `program.md` defines the planning and execution phases, fixed
+    scenario, feedback shape, budget, and skill-promotion rule.
+  - [ ] Ensure `progress.md` logs experiment proposals and results before and
+    after every phase attempt.
   - [ ] Write generated artifacts under
     `.farplane/automation/taste-loop/artifacts/`.
   - [ ] Write feedback-card and Goal-handoff Markdown artifacts under
@@ -155,12 +187,13 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     preview wrapper or manifest under `.farplane/automation/taste-loop/preview/`
     so Kenji can open a single URL or Farplane UI-ready file without hunting
     through reports.
-  - [ ] Feedback cards must include `artifact_ref`; if no artifact was produced
-    or handed off, write `blocked_report` instead of a feedback card.
+  - [ ] Feedback cards must include `concept_ref` or `artifact_ref`; if no
+    planning or execution artifact was produced or handed off, write
+    `blocked_report` instead of a feedback card.
   - [ ] Keep generated feedback questions short and decision-shaped.
   - [ ] When duplicate open feedback exists, report the canonical card and
     duplicate rows; do not create another duplicate for that target/question.
-- [ ] 6. Stop cleanly.
+- [ ] 7. Stop cleanly.
   - [ ] Report the action, skipped targets, report path, and next trigger.
   - [ ] Do not edit target skills directly from this heartbeat.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -184,7 +217,9 @@ interval_minutes = 60
 
 The schedule block compiles to the Codex automation cadence. Taste Loop should
 not duplicate that cadence as environment variables. The prompt block should
-carry the normal Markdown/text `Params` and `Overrides` sections.
+carry the normal Markdown/text `Params` and `Overrides` sections. Once invoked,
+the skill runs one bounded beat; it does not perform an additional active-hours
+check.
 
 ## Heartbeat Prompt
 
@@ -228,6 +263,68 @@ product_lane + workflow_id + owner + artifact_ref
 ```
 
 `feedback_card` is invalid without `artifact_ref`.
+
+## Impress Loop Contract
+
+Taste Loop's human-facing reward is:
+
+```text
+maximize P(Kenji says "that's sick, make that") per unit of attention
+```
+
+Use a two-stage loop:
+
+```text
+planning_phase:
+  taste pack + product goal + fixed scenario + best-of-worlds synthesis
+  -> one to three concept cards
+  -> Kenji approve | revise | reject
+
+execution_phase:
+  approved concept becomes frozen brief
+  -> artifact-producing skill executes
+  -> Kenji approve | revise | reject
+```
+
+Planning feedback is usually cheaper and higher-signal than full artifact
+feedback. Do not spend execution effort until an idea passes, unless the output
+is tiny enough to serve as the idea test.
+
+Default fixed scenario:
+
+```text
+tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md
+```
+
+Use live product context instead only when the automation prompt, worker
+ticket, or operator explicitly supplies a better target.
+
+Concept cards are valid first-stage artifacts:
+
+```text
+ConceptCard:
+  title:
+  one_line_bet:
+  why_it_might_impress:
+  taste_priors:
+  hook:
+  execution_shape:
+  risk:
+  feedback_question:
+```
+
+Keep phase metrics separate:
+
+```text
+idea_pass_rate = planning approvals / planning attempts
+execution_pass_rate = execution approvals / execution attempts
+```
+
+If planning fails, perturb planning: references, best-bet synthesis, hook,
+positioning, scenario angle, or concept batch. If execution fails but the idea
+still passes, perturb execution: artifact skill, brief, layout, copy, media,
+proof, or rendering path. Promote skill changes only after repeated same-phase
+failures or an obviously reusable approved pattern.
 
 ## Worker Thread Contract
 
@@ -286,13 +383,18 @@ Files:
 - tickets/TASK-XXXX/ticket.md
 - tickets/TASK-XXXX/program.md
 - tickets/TASK-XXXX/progress.md
+- tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md when no live scenario is supplied
 
 Task:
-Use $<artifact-owner> to generate one reviewable artifact for the selected
-workflow. Then use $optimize-with-human with target=<workflow>, objective=<what
-should improve>, channel=telegram, and feedback_policy=ask_when_artifact_ready.
-When Kenji replies in this thread, append the feedback to progress.md and
-produce the next revision. Stop only on keep/approve/convergence/budget/blocker.
+Use $<artifact-owner> to run a phase-aware improvement loop for <workflow>.
+First log a planning experiment proposal in progress.md, then create one to
+three concept cards for Kenji. Use $optimize-with-human with target=<workflow>,
+objective=<what should improve>, channel=telegram,
+feedback_policy=ask_when_artifact_ready, and phases=planning,execution.
+When Kenji approves a concept, freeze the approved brief, log an execution
+experiment proposal in progress.md, and execute the artifact. When Kenji
+replies, append feedback to progress.md and continue the right phase. Stop only
+on keep/approve/convergence/budget/blocker.
 ```
 
 For Telegram-routed feedback, the feedback request should point Kenji at the
@@ -317,6 +419,42 @@ new useful work. If the top selected target already has an open canonical card,
 skip it with `open_feedback_and_cooldown` and pick the next eligible target
 rather than creating another duplicate.
 
+Budget eligibility is stricter than open-card detection:
+
+- valid idea feedback has a `workflow_id`, `product_lane`, and `concept_ref`;
+- valid execution feedback has a `workflow_id`, `product_lane`, and
+  `artifact_ref`;
+- older broad skill/router cards such as `target_id=frontend-craft`,
+  `functional-ui`, `remotion`, `remotion-render`, `goal-advisor`,
+  `self-improve`, or `skill-maintenance` are `legacy_invalid_feedback`;
+- `legacy_invalid_feedback` and duplicates are reported as hygiene findings but
+  do not count toward `max_open_feedback`.
+
+## Experiment Log Contract
+
+Taste Loop workers must append experiment proposals and results to their
+`progress.md` before and after every phase attempt:
+
+```text
+experiment:
+  id: TL-EXP-###
+  phase: planning | execution
+  scenario: AGI Toy Shop | live_context
+  hypothesis:
+  skill_delta_candidate:
+  rollout_batch:
+    - concept_or_artifact_id:
+      plan:
+      expected_feedback:
+  selected_rollout:
+  feedback:
+  result: pass | revise | reject | no_reply | blocker
+  promotion_decision: keep_local | rerun | harden_skill | discard
+```
+
+`promotion_decision=harden_skill` requires repeated same-phase failure or an
+operator-approved pattern that clearly belongs in a reusable skill contract.
+
 ## Benchmark And Convergence
 
 Do not create benchmarks by default. Use an existing target-skill eval or
@@ -334,7 +472,7 @@ feedback deltas stay below the configured `minimum_delta` across the configured
 Return and write:
 
 - `status`: `no_op`, `artifact_worker_thread`, `artifact_feedback`,
-  `artifact_goal_handoff`, or `blocked`
+  `idea_feedback`, `artifact_goal_handoff`, or `blocked`
 - `report_path` when an action, blocker, diagnostic, or configured no-op log is
   written
 - `selected_product_lane`
@@ -342,6 +480,9 @@ Return and write:
 - `worker_ticket_ref`
 - `worker_thread_ref`
 - `artifact_ref`
+- `concept_ref`
+- `idea_pass_rate`
+- `execution_pass_rate`
 - `preview_ref` for website, image, video, or visual artifacts
 - `score_breakdown`
 - `action`
@@ -366,6 +507,16 @@ Return and write:
 - Do not use broad router skills as direct targets. Pick an artifact workflow
   from `farplane/products.md`; use router skills only as supporting routes.
 - Do not create `feedback_card` without `artifact_ref`.
+- Do not create an idea feedback card without `concept_ref`.
+- Do not skip the Goal Packet for optimize-with-human workers. Worker state
+  belongs in `ticket.md`, `program.md`, and `progress.md`.
+- Do not run execution before planning approval unless the execution artifact
+  is intentionally tiny enough to be the planning artifact.
+- Do not edit target skills on first rejection. Log and rerun planning or
+  execution experiments first; harden skills only for repeated same-phase
+  failures or proven reusable patterns.
+- Do not make Kenji choose from a giant batch. Use one best bet by default and
+  at most three concept rollouts when fast comparison is useful.
 - Do not send website feedback without a browser-viewable `preview_ref`, local
   URL, deploy URL, or Farplane UI-ready preview manifest.
 - Do not send phone-facing Telegram feedback with only `localhost`. Include a

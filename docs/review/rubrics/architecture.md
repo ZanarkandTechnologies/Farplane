@@ -16,3 +16,27 @@ Frontend review uses multiple lanes:
 
 Keep those lanes separate so agent reviews can be compared instead of averaged
 into one vague UI TAS.
+
+## Quality Signal Layers
+
+Farplane separates inspection, measurement, judgment, and learning so feedback
+stays explainable.
+
+```text
+qa_checklist(artifact) -> checklist_results + violations + evidence_note
+metric_advice(objective, evidence) -> measurement_contract | no_metric_reason
+review(artifact, rubric, evidence) -> TAS + reasons + failed_checks + next_action
+reward_event(output, judgment) -> verdict + evidence + repair_hint
+```
+
+- QA checklists are executable inspection prompts for a skill or artifact.
+- Metrics are optional measurement contracts, usually owned by goals, products,
+  projects, or experiments rather than ordinary skill maintenance.
+- Rubrics are decision policies that classify readiness from evidence.
+- Reward events preserve the verdict, reasons, failed checks, and repair hints
+  so later skill or project updates can learn without collapsing feedback into a
+  scalar score.
+
+Do not promote every checklist item into a metric. Do not treat a metric as a
+review verdict. Use numbers only when they make a decision clearer without
+destroying the repair context.

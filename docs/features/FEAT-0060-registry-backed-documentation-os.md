@@ -7,7 +7,7 @@ updated_at: 2026-06-27
 tags:
   - farplane
   - feature
-  - sys-0009
+  - sys-0011
 refs:
   - docs/features/README.md
   - docs/features/TEMPLATE.md
@@ -22,8 +22,12 @@ refs:
   - bin/validators/sync_template_registry.py
   - templates/global/AGENTS.md
   - docs/skills/templates/SKILL_TEMPLATE.md
+  - docs/systems/documentation-os.md
+  - docs/review/rubrics/documentation-quality.md
+  - skills/documentation/SKILL.md
+  - skills/documentation/eval_task.json
 feature_id: FEAT-0060
-system_id: SYS-0009
+system_id: SYS-0011
 category: context-routing
 public: true
 surfaces:
@@ -40,9 +44,16 @@ surfaces:
   - bin/validators/sync_template_registry.py
   - templates/global/AGENTS.md
   - docs/skills/templates/SKILL_TEMPLATE.md
+  - docs/systems/documentation-os.md
+  - docs/review/rubrics/documentation-quality.md
+  - skills/documentation/SKILL.md
+  - skills/documentation/eval_task.json
 source_refs:
   - docs/features/README.md
   - docs/systems/README.md
+  - docs/systems/documentation-os.md
+  - docs/review/rubrics/documentation-quality.md
+  - skills/documentation/references/feature-system-specs.md
   - docs/templates/registry.jsonl
 external_refs: []
 evidence_refs:
@@ -50,6 +61,7 @@ evidence_refs:
   - bin/validators/test_check_doc_refs.py
   - bin/validators/test_doc_parity.py
   - bin/validators/test_sync_template_registry.py
+  - skills/documentation/eval_task.json
 known_limits: Owns documentation, system, feature, and template registry coherence. It does not preserve retired feature IDs or permanent tracked archive docs just to keep historical noise searchable.
 metrics:
   - feature_registry_validation_pass
@@ -60,9 +72,9 @@ last_verified: 2026-06-27
 # Registry-backed documentation OS
 
 Registry-backed documentation OS exists to make system and feature docs the source of
-truth while registries stay generated outputs. It belongs to [Maintenance And Release
-OS](../systems/maintenance-release-os.md) and keeps `FEAT-0060` as a stable capability
-handle because the behavior has an owner, proof path, and maintenance boundary.
+truth while registries stay generated outputs. It belongs to [Documentation
+OS](../systems/documentation-os.md) and keeps `FEAT-0060` as a stable capability handle
+because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
 doc_registry_update(spec_docs) -> generated_registries + validation_report
@@ -71,7 +83,7 @@ doc_registry_update(spec_docs) -> generated_registries + validation_report
 ## At A Glance
 
 - Feature ID: `FEAT-0060`
-- System: [Maintenance And Release OS](../systems/maintenance-release-os.md)
+- System: [Documentation OS](../systems/documentation-os.md)
 - Status: `implemented`
 - Category: `context-routing`
 - Primary user: maintainer and documentation author
@@ -127,11 +139,21 @@ Owner surfaces:
 - `rules/template-version-watch.toml`
 - `bin/validators/sync_template_registry.py`
 - `templates/global/AGENTS.md`
+- `docs/systems/documentation-os.md`
+- `docs/review/rubrics/documentation-quality.md`
+- `skills/documentation/SKILL.md`
+- `skills/documentation/references/doc-architecture.md`
+- `skills/documentation/references/metadata-and-registries.md`
+- `skills/documentation/references/feature-system-specs.md`
+- `skills/documentation/references/finish-gate.md`
 
 Source context:
 
 - `docs/features/README.md`
 - `docs/systems/README.md`
+- `docs/systems/documentation-os.md`
+- `docs/review/rubrics/documentation-quality.md`
+- `skills/documentation/references/feature-system-specs.md`
 - `docs/templates/registry.jsonl`
 
 Evidence:
@@ -140,6 +162,7 @@ Evidence:
 - `bin/validators/test_check_doc_refs.py`
 - `bin/validators/test_doc_parity.py`
 - `bin/validators/test_sync_template_registry.py`
+- `skills/documentation/eval_task.json`
 
 ## Proof And Quality
 
@@ -148,6 +171,7 @@ Required checks:
 - `python3 docs/features/validate_features.py`
 - `python3 bin/validators/check_doc_refs.py`
 - `python3 bin/validators/check_doc_parity.py`
+- `python3 skills/skill-maintenance/scripts/check_skills.py --write`
 
 Acceptance signals:
 
@@ -160,7 +184,7 @@ Acceptance signals:
 - Update this feature page first when the capability contract changes.
 - Then update owner surfaces and regenerate feature/system registries when metadata changes.
 - Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
-- Maintenance owner: Maintenance And Release OS.
+- Maintenance owner: Documentation OS.
 
 ## Limits And Non-Goals
 

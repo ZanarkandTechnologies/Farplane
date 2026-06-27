@@ -22,22 +22,30 @@ Extract the marker-delimited TOML config block and prompt block for
 `farplane-active-hours-taste-loop` from `farplane/automations.md`. Use the
 TOML `[schedule]` block as the desired Codex automation schedule. Use the
 prompt block's `Params` section as the Taste Loop runtime knobs. The live Codex
-automation schedule is the primary active-hours gate; do not wake hourly just
-to check whether active hours are open.
+automation record owns cadence. Once this prompt is invoked, run one bounded
+beat; do not perform a second active-hours check inside the skill.
 
 Read the Codex automation memory when available. Treat that memory as the
 controller ledger for active Taste Loop workers. Do not create or consult a
 separate `workers.jsonl`.
+
+Load the default fixed scenario when no live product context is explicitly
+better:
+
+```text
+tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md
+```
 
 ## Gate
 
 Stop with a side-effect-free no-op when any hard gate fails:
 
 - disabled
-- manual/off-schedule invocation is clearly outside the configured schedule
-- unique open feedback count is at or above the cap
+- valid unique open feedback count is at or above the cap
 - Taste Loop Artifact Workflows are missing from `farplane/products.md`
 - no candidate workflow can create or hand off a reviewable artifact
+- no candidate workflow can create or hand off a reviewable planning artifact
+  such as a concept card
 
 For ordinary no-op beats, do not create worker threads, tickets, artifacts,
 feedback cards, Telegram messages, or `.farplane/reports/taste-loop/` files.
@@ -70,7 +78,8 @@ Each candidate must include:
 product_lane:
 workflow_id:
 owner:
-reviewable_artifact:
+planning_artifact:
+execution_artifact:
 feedback_question:
 ```
 
@@ -86,9 +95,18 @@ feedback_key = target_id + "\n" + feedback_question
 ```
 
 Count one open card per key toward
-`max_open_feedback`. Duplicate open rows for the same key are
-`duplicate_open_feedback` hygiene findings and do not consume additional budget.
-List duplicates in the report with their canonical target/question.
+`max_open_feedback` only when the card is valid product-workflow feedback:
+
+- idea feedback requires `workflow_id`, `product_lane`, and `concept_ref`;
+- execution feedback requires `workflow_id`, `product_lane`, and `artifact_ref`.
+
+Duplicate open rows for the same key are `duplicate_open_feedback` hygiene
+findings and do not consume additional budget. Legacy broad-skill/router cards
+that target `frontend-craft`, `functional-ui`, `remotion`, `remotion-render`,
+`goal-advisor`, `self-improve`, or `skill-maintenance` are
+`legacy_invalid_feedback` hygiene findings and do not consume budget. List
+duplicates and invalid legacy cards in the report with their canonical
+target/question.
 
 Select the top `top_n` artifact workflows with the official Skill Compounding
 Score plus the Taste Loop artifact gate. Keep this distinct from eval score or
@@ -105,6 +123,7 @@ review TAS:
   review findings, or missing proof
 - feedback fit and proof fit
 - artifact workflow fit from `farplane/products.md`
+- planning-artifact fit from `farplane/products.md`
 - cooldown, open-feedback, ambiguity, fake-metric, and convergence penalties
 
 Expose a score breakdown in the report:
@@ -113,7 +132,8 @@ Expose a score breakdown in the report:
 Product lane:
 Workflow:
 Owner:
-Reviewable artifact:
+Planning artifact:
+Execution artifact:
 Route:
 Score:
 Components:
@@ -129,6 +149,7 @@ Components:
   feedback_fit:
   proof_fit:
   artifact_workflow_fit:
+  planning_artifact_fit:
 Penalties:
 Decision:
 Evidence refs:
@@ -144,8 +165,11 @@ Use:
   or reuse a ticket-backed Goal Packet first, then create or reuse a dedicated
   Codex worker thread. Reuse or resume the active worker from automation memory
   before considering any new worker. The worker prompt must tell that thread to
-  generate the artifact and then use `$optimize-with-human` with
-  `feedback_channel=telegram`.
+  log a planning experiment, generate concept cards, and then use
+  `$optimize-with-human` with `feedback_channel=telegram` and
+  `phases=planning,execution`.
+- `idea_feedback` when the worker can produce concept cards now but should wait
+  for planning approval before full execution.
 - `artifact_feedback` through `optimize-with-human` only when an existing worker
   thread already owns the Telegram reply path or the artifact is intentionally
   local/manual.
@@ -155,11 +179,12 @@ Use:
   ownership, metric provider, or generation feasibility is unclear.
 
 Do not ask for feedback on a skill summary, skill README, or broad skill target.
-Do not create a feedback card without `artifact_ref`. Do not edit target skills
-directly from this heartbeat. Do not send Telegram feedback from the parent
-heartbeat thread when Kenji's reply needs to resume the worker. Do not create a
-local runner, hidden daemon, unbounded queue, external mutation, deploy,
-publish, spend, or legacy autoresearch session by default.
+Do not create a feedback card without `concept_ref` or `artifact_ref`. Do not
+edit target skills directly from this heartbeat or from a first rejection. Do
+not send Telegram feedback from the parent heartbeat thread when Kenji's reply
+needs to resume the worker. Do not create a local runner, hidden daemon,
+unbounded queue, external mutation, deploy, publish, spend, or legacy
+autoresearch session by default.
 
 Before creating a benchmark, harder task suite, or Goal handoff, derive a
 compact metric card:
@@ -179,6 +204,13 @@ Use an existing target-skill eval or benchmark when it exists. Create harder
 tasks only when the metric provider is `eval` or `agent_qa` and `self-improve`
 can define a baseline, rubric, and promotion rule. When the honest signal is
 human taste, use `optimize-with-human` and do not fake a benchmark.
+
+Use phase metrics, not fake taste benchmarks:
+
+```text
+idea_pass_rate = planning approvals / planning attempts
+execution_pass_rate = execution approvals / execution attempts
+```
 
 Convergence means comparable-run convergence: hold or stop when recent
 score/review/feedback deltas remain below
@@ -200,6 +232,7 @@ under:
 tickets/TASK-*/ticket.md
 tickets/TASK-*/program.md
 tickets/TASK-*/progress.md
+tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md
 .farplane/automation/taste-loop/artifacts/
 .farplane/automation/taste-loop/feedback/
 .farplane/automation/taste-loop/preview/
@@ -213,14 +246,19 @@ Files:
 - tickets/TASK-XXXX/ticket.md
 - tickets/TASK-XXXX/program.md
 - tickets/TASK-XXXX/progress.md
+- tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md when no live scenario is supplied
 
 Task:
-Use $<artifact-owner> to generate one reviewable artifact for <workflow_id>.
-Then use $optimize-with-human with target=<workflow_id>,
-objective=<artifact quality objective>, channel=telegram, and
-feedback_policy=ask_when_artifact_ready. When Kenji replies in this thread,
-append the feedback to progress.md and generate the next revision. Stop only on
-keep/approve/convergence/budget/blocker.
+Use $<artifact-owner> to run a Goal-backed phase-aware improvement loop for
+<workflow_id>. Start with the planning phase. Log an experiment proposal in
+progress.md, use AGI Toy Shop as the fixed default scenario unless live context
+is supplied, generate one to three concept cards, then use $optimize-with-human
+with target=<workflow_id>, objective=<planning and execution quality>,
+channel=telegram, feedback_policy=ask_when_artifact_ready, and
+phases=planning,execution. When Kenji approves a concept, freeze the approved
+brief, log an execution experiment in progress.md, and execute the artifact.
+When Kenji replies in this thread, append feedback to progress.md and continue
+the right phase. Stop only on keep/approve/convergence/budget/blocker.
 ```
 
 After the thread is created or found, record `worker_thread_ref` in the ticket,
@@ -236,15 +274,21 @@ active_worker:
   product_lane:
   ticket_ref:
   worker_thread_ref:
-  status:
+  status: planning | waiting_for_idea_feedback | execution |
+    waiting_for_execution_feedback | blocked | complete
+  approved_brief_ref:
+  concept_ref:
   artifact_ref:
   preview_ref:
+  idea_pass_rate:
+  execution_pass_rate:
   last_request_at:
   last_feedback_at:
   next_action:
 ```
 
-Use Markdown for human review. A feedback artifact must point to the generated
+Use Markdown for human review. A planning feedback artifact must point to a
+concept card. An execution feedback artifact must point to the generated
 artifact path, screenshot, preview, or URL. For website, image, video, or other
 visual artifacts, also create a preview wrapper or manifest under
 `.farplane/automation/taste-loop/preview/` and include a `preview_ref` in the
@@ -254,18 +298,40 @@ public/mobile-viewable URL, attached screenshot, or Farplane UI-ready preview
 fallback. Keep feedback questions short enough to answer from Telegram or a
 compact Farplane UI card.
 
+Experiment log row shape for worker `progress.md`:
+
+```text
+experiment:
+  id: TL-EXP-###
+  phase: planning | execution
+  scenario: AGI Toy Shop | live_context
+  hypothesis:
+  skill_delta_candidate:
+  rollout_batch:
+  selected_rollout:
+  feedback:
+  result: pass | revise | reject | no_reply | blocker
+  promotion_decision: keep_local | rerun | harden_skill | discard
+```
+
+Do not promote skill edits from one rejection. Use `harden_skill` only after
+repeated same-phase failure or a reusable operator-approved pattern.
+
 ## Final Output
 
 Return:
 
 - status: `no_op`, `artifact_worker_thread`, `artifact_feedback`,
-  `artifact_goal_handoff`, or `blocked`
+  `idea_feedback`, `artifact_goal_handoff`, or `blocked`
 - report path
 - selected product lane, artifact workflow, score breakdown, and metric provider
 - worker ticket ref and worker thread ref, if created or reused
 - artifact ref, if generated or handed off
+- concept ref, if planning feedback was requested
+- idea pass rate and execution pass rate when known
 - preview ref or deploy URL for visual artifacts
 - action artifact path, if any
 - skipped target reasons
 - unique open feedback count and duplicate open feedback count
+- legacy invalid feedback count
 - next trigger expectation

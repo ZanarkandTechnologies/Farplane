@@ -83,6 +83,9 @@ belongs in Self-Improvement And Learning.
 - Completion claims cite evidence and checks.
 - Material work uses independent QA or review when available.
 - Review outputs name blockers, verdict, evidence checked, and residual risk.
+- QA checklists inspect artifacts, metrics describe optional measured signals,
+  review rubrics classify readiness, and reward events preserve reasons and
+  repair hints for later learning.
 - Proof scales with risk rather than becoming ceremony for every tiny edit.
 - Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
 - Registry data is generated from system and feature docs, not edited by hand.

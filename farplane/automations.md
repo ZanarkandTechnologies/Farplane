@@ -180,12 +180,15 @@ interval_minutes = 60
 ```text
 Use $taste-loop.
 
-Run one scheduled active-hours Taste Loop beat for Farplane. Read the
-UI-editable config from farplane/automations.md, use Codex automation memory as
-the active worker ledger, and reuse or resume an active worker before creating
-any new worker. Select product-lane artifact workflows, not broad skill
-summaries. Create or hand off at most one reviewable artifact workflow, then
-route human feedback through the worker thread and optimize-with-human.
+Run one Taste Loop beat for Farplane when invoked by the scheduled active-hours
+automation or by explicit manual operator request. Read the UI-editable config
+from farplane/automations.md, use Codex automation memory as the active worker
+ledger, and reuse or resume an active worker before creating any new worker.
+Select product-lane artifact workflows, not broad skill summaries. Run the
+Goal-backed impress loop: log a planning experiment, create one to three
+concept cards, route idea feedback through the worker thread with
+optimize-with-human, then execute only approved concepts and request execution
+feedback from that same worker thread.
 
 Do not create repo/runtime artifacts, worker threads, feedback cards, or
 Telegram messages for ordinary no-op beats.
@@ -195,6 +198,9 @@ project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 top_n = 3
 max_actions_per_beat = 1
 max_open_feedback = 3
+impress_mode = true
+max_planning_rollouts = 3
+default_scenario = "tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md"
 target_groups = ["content-social", "content-video", "frontend", "harness", "self-improvement"]
 output_channels = ["local_report", "telegram_ready", "farplane_ui_ready"]
 cooldown_hours = 24
@@ -208,6 +214,11 @@ farplane/automations.md automation-config id="farplane-active-hours-taste-loop"
 Overrides:
 controller_memory = "Codex automation memory.md"
 worker_state = "reuse active_worker before creating any new worker"
+worker_goal_packet = "ticket.md + program.md + progress.md before worker action"
+phase_policy = "planning concept cards before execution artifacts; track idea_pass_rate and execution_pass_rate separately"
+experiment_log = "worker progress.md records planning/execution experiment proposals and results"
+feedback_budget = "count valid product-workflow feedback only; report legacy broad-skill/router feedback as hygiene"
+skill_promotion = "no target-skill hardening from one rejection; harden only repeated same-phase failure or reusable approved pattern"
 noop_policy = "no repo/runtime/thread/artifact/feedback/Telegram side effects unless diagnostic logging is enabled"
 ```
 <!-- /farplane:automation-prompt -->

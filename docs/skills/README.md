@@ -88,6 +88,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | --- | --- | --- | --- |
 | Choose among real options and name a recommendation | `advise` | It starts from first principles, frames 3 viable choices, names one recommendation, and states the accepted tradeoff. | The user already gave a direct execution request. |
 | Make a high-stakes or complex recommendation with independent critique | `deliberative-advice` / `advise:complex` | It escalates advice into a council workflow: independent perspective briefs, critique/ranking, chair synthesis, visible dissent, and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs a concise 3-option recommendation. |
+| Compress an artifact or entity set without losing required value | `consolidate` | It inventories units, finds the owning template or contract, scores value versus fluff/duplication/staleness, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use `summarize`. You need domain-specific skill-package edits; route the final patch through `skill-maintenance`. |
 | Ground a claim in local files, docs, official references, or provided sources | `reference-grounding` | It supplies compact evidence before advice, planning, or review claims. | You need a full research brief or feature synthesis. |
 | Write or revise durable docs so they are clear, consistent, and human-usable | `documentation` | It owns doc-quality checks: reader contract, term consistency, duplicate definitions, stale sections, examples, links, and agent-facing commentary cleanup. | You only need compact evidence or official-doc lookup; use `reference-grounding`. |
 | Diagnose the gap between current and expected behavior | `gap-analysis` | It turns a repeated "what is missing here?" prompt into a grounded gap report with current contract, expected signature, missing inputs, outputs, proof, evals, owner surface, and verification. | You already know the exact edit; use the target surface or `skill-maintenance` directly. |
@@ -234,8 +235,8 @@ fit. Do not confuse that priority score with skill-local eval scores.
 - Tier 3 first-load todos link Tier 2 surfaces such as `research:*`, plus peer
   Tier 3 execution skills when a domain handoff needs one.
 - Tier 3 first-load todos do not link Tier 1 primitives such as `advise`,
-  `reference-grounding`, or `prototyping` directly unless the skill owns that
-  primitive step as part of its first-load contract.
+  `consolidate`, `reference-grounding`, or `prototyping` directly unless the
+  skill owns that primitive step as part of its first-load contract.
 - `plan` is a Tier 2 planning prompt-template for composing skill todos,
   choosing grounding/search budget, and defining proof before costly work.
   Do not introduce it as a mandatory dependency for every skill invocation.

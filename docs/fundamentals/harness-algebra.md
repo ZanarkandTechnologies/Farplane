@@ -384,7 +384,7 @@ Skill tier system:
 
 ```text
 Tier 0 = native phase protocol, inherited by every skill invocation
-Tier 1 = highest-compounding primitives such as advise, grounding, prototyping
+Tier 1 = highest-compounding primitives such as advise, consolidate, grounding, prototyping
 Tier 2 = medium-compounding workflow interfaces such as plan, research, review, eval
 Tier 3 = narrow-compounding domain/application skills such as goal-advisor or optimize-harness
 ```

@@ -180,11 +180,11 @@ skill_hardening(review_window, planning_window)
   ref: references/workflows/skill-hardening.md
 
 skill_refinement(review_window, planning_window)
-  -> refine_skill_handoffs + compaction_candidates + coverage_risks
+  -> consolidate_skill_handoffs + compaction_candidates + coverage_risks
   ref: references/workflows/skill-refinement.md
 
 docs_consolidation(review_window, planning_window)
-  -> docs_consolidation_handoffs + stale_doc_candidates + source_gaps
+  -> consolidate_docs_handoffs + stale_doc_candidates + source_gaps
   ref: references/workflows/docs-consolidation.md
 
 priority_planning(review_window, planning_window)
@@ -230,10 +230,12 @@ priority_planning(review_window, planning_window)
         progress-log findings, and proof failures to
         `skill-maintenance(mode: harden_skill)`.
   - [ ] When `skill_refinement` is enabled, route accumulated older evals,
-        gotchas, and usage results to `skill-maintenance(mode: refine_skill)`.
+        gotchas, and usage results to `consolidate(..., structure = skill)`,
+        then to `skill-maintenance(mode: refine_skill)` for accepted edits.
   - [ ] When `docs_consolidation` is enabled, route broad project context
-        refresh through `update-memory` and substantive doc-quality rewrites
-        through `documentation`.
+        keep/merge/move/delete decisions through `consolidate(..., structure =
+        docs_tree | memory)`, broad context refresh through `update-memory`,
+        and substantive doc-quality rewrites through `documentation`.
 - [ ] 4. Write the report before durable mutations.
   - [ ] Write a date-stamped interval report.
   - [ ] Include source gaps, drift findings, evidence, and the proposed next

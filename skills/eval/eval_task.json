@@ -120,7 +120,7 @@
       "Keeps fresh regression coverage in the owning skills/<skill>/eval_task.json file first",
       "Defines weekly backpropagation as a later consolidation pass over already-landed evals",
       "Uses fetch_evals_edited_since_last_run or equivalent content-hash discovery for changed eval files",
-      "Routes each changed eval file to a bounded consolidate_eval subagent or isolated review lane"
+      "Routes each changed eval file to consolidate(..., structure = eval_suite) or an isolated review lane using the same frame"
     ],
     "tags": [
       "skill",

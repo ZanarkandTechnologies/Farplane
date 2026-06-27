@@ -82,6 +82,9 @@ evals, templates, or documentation first.
 - Highlights first-load bloat, overlap, stale checklists, and missing evals.
 - Feeds skill-maintenance planning and consolidation decisions.
 - Helps decide when a skill should be split, merged, promoted, or retired.
+- Feeds Taste Loop candidate selection while keeping human taste feedback
+  separate as phase outcomes: `idea_pass_rate` for planning artifacts and
+  `execution_pass_rate` for generated artifacts.
 
 ## User Stories
 
@@ -97,6 +100,11 @@ Compounding score is a prioritization signal, not a skill tier.
 - High score implies stronger QA, eval, and documentation expectations.
 - Low score can justify deferring, merging, or retiring a skill.
 - The score does not override direct user priority or urgent bug fixes.
+- Taste Loop uses compounding score to choose which product-lane workflow to
+  try next. It does not treat idea or execution pass rates as eval score.
+  Those rates are human-feedback outcomes that can become evidence for future
+  maintenance priority only when recorded with a comparable scenario and
+  artifact refs.
 
 ## Surfaces
 

@@ -23,9 +23,12 @@ hardening. Fresh lesson/trouble rows that should become evals or gotchas route
 to `skill-maintenance(mode: harden_skill)`.
 
 Do not split docs consolidation into a separate recurring job by default.
-Route substantial prose cleanup through `documentation`, but keep the weekly PM
-job as one context upkeep pass unless the docs have become large enough to need
-a dedicated ticket or cadence.
+When project context surfaces need keep/merge/move/delete decisions, call
+`consolidate(target = docs_or_memory_surface, structure = memory | docs_tree,
+constraints = { preserve_evidence: true })` and then apply only the accepted
+memory/doc deltas. Route substantial prose cleanup through `documentation`, but
+keep the weekly PM job as one context upkeep pass unless the docs have become
+large enough to need a dedicated ticket or cadence.
 
 ## Automation Presets
 
@@ -53,7 +56,7 @@ update_memory(project_root?, readme?, docs?, memory?, history?, lessons?, troubl
    + stale_context_notes
 state: reads(README, docs/**/*.md, docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md, tickets/progress/PM reports); writes docs only when an owning project path and approval are explicit
 gates: source_files_read; docs_owner_identified; no_raw_transcripts; promotion_threshold_named; stale_context_labeled; skill_hardening_routed_out
-routes: documentation | skill-maintenance:harden_skill | review | ticket/spec owner
+routes: consolidate | documentation | skill-maintenance:harden_skill | review | ticket/spec owner
 fails: dumps chat memory into docs; promotes one-off observations; edits skill evals/gotchas directly; rewrites append-only ledgers
 ```
 
@@ -85,6 +88,9 @@ fails: dumps chat memory into docs; promotes one-off observations; edits skill e
   - [ ] Prefer precise patch-sized deltas over large rewritten docs.
   - [ ] Use [documentation](../documentation/SKILL.md) for substantial prose
     cleanup, duplicate-doc consolidation, or docs-folder rewrites.
+  - [ ] Use `consolidate(..., structure = memory | docs_tree)` for docs or
+    memory keep/merge/move/delete decisions before applying broad context
+    deltas.
   - [ ] Create a docs consolidation ticket when the docs need a larger merge,
     split, archive, or owner decision.
   - [ ] Preserve append-only ledgers unless the project contract explicitly
@@ -133,6 +139,9 @@ Memory Update
 
 - [../documentation/SKILL.md](../documentation/SKILL.md) - use for substantial
   doc-quality rewriting.
+- [../consolidate/SKILL.md](../consolidate/SKILL.md) - use for shared
+  docs/memory unit inventory, value scoring, loss check, and patch/handoff
+  decisions.
 - [../skill-maintenance/SKILL.md](../skill-maintenance/SKILL.md) - route
   lesson/trouble-derived evals, gotchas, or skill-package changes.
 - [../review/SKILL.md](../review/SKILL.md) - use for material memory or

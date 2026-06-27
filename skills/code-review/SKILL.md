@@ -39,6 +39,12 @@ routes: review for material TAS-gated review; external heavyweight review when u
 fails: only checking local correctness; missing duplicated logic across commits; approving misplaced modules; treating lightweight review as TAS pass
 ```
 
+Use [consolidate](../consolidate/SKILL.md) only when the branch-level issue is
+an artifact/entity-set consolidation target such as docs, skills, registries,
+eval rows, gotchas, checklists, or memory surfaces. For source-code duplication,
+return a maintainability finding or route to `refactoring` instead of using the
+artifact consolidation primitive.
+
 Review budget is compact:
 
 ```text
@@ -122,6 +128,10 @@ Ask:
 - Would future agents know where to extend this feature from the folder
   structure alone?
 - Is the right fix to consolidate, extract, rename, or move files before push?
+- If the target is docs, skills, registries, eval rows, gotchas, checklists, or
+  memory surfaces, should the finding route through
+  [consolidate](../consolidate/SKILL.md) rather than a bespoke review-local
+  consolidation plan?
 
 When the answer is yes, return a finding with a concrete consolidation plan,
 for example: "move both helpers into `ui/src/modules/runtime/lib/...`, export

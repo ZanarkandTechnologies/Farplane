@@ -61,8 +61,9 @@ leverage classes for upgrade priority, while first-load todo-link rules are the
 loading contract derived from those classes. Tier 0 is the universal phase
 protocol from the global AGENTS template: ground, plan or direct action,
 execute, guardrail, review evidence, and write back. Tier 1 primitives cover
-`advise`, `reference-grounding`, `prototyping`, and skill first-load todo-list
-loading; Tier 2 names generic workflow surfaces such as `brainstorm`,
+`advise`, `consolidate`, `reference-grounding`, `prototyping`, and skill
+first-load todo-list loading; Tier 2 names generic workflow surfaces such as
+`brainstorm`,
 `research:*`, and `harness-advisor`; Tier 3 application skills implement
 concrete domains. `plan` is a planning prompt-template and todo-composition
 interface, not the Tier 0 planning phase itself. `execute` is a deprecated

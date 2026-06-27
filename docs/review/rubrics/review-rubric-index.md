@@ -99,6 +99,8 @@ Default required family verdicts:
 - `ui-quality`: `TAS-A`
 - `frontend-guidelines`: `TAS-A`
 - `user-intent-satisfaction`: `TAS-A`
+- `documentation-quality`: `TAS-A` when selected for canonical, public,
+  cross-surface, or policy-bearing docs
 - `evidence-quality`: `TAS-A`
 - `demo-quality`: `TAS-A` when demo is required, otherwise diagnostic
 - `video-quality`: `TAS-A` when video proof is required, otherwise diagnostic
@@ -133,6 +135,8 @@ Choose rubric families from the ticket context:
   - `evidence-quality`
 - cleanup / runtime / docs / simplification work:
   - `debloatability`
+  - `documentation-quality` when durable docs, public guidance, specs, runbooks,
+    checklists, or reader-facing policy changed
   - `integration-readiness`
   - `evidence-quality` when claims depend on proof
 - UI work:
@@ -220,7 +224,16 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - backend
   - types
 
-### 4. UI Quality
+### 4. Documentation Quality
+- File: `documentation-quality.md`
+- Focus:
+  - reader contract and next action
+  - source-of-truth placement
+  - grounding and metadata
+  - density, terminology, and stale-section removal
+  - avoiding numeric score theater in place of reviewer judgment
+
+### 5. UI Quality
 - File: `ui-quality.md`
 - Focus:
   - originality against strong existing examples
@@ -229,14 +242,14 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - functionality against strong examples
   - fidelity to intent
 
-### 4b. Frontend Guidelines Metric
+### 5b. Frontend Guidelines Metric
 - File: `frontend-guidelines.md`
 - Focus:
   - source-fresh Web Interface Guidelines audit
   - accessibility, focus, forms, navigation, animation, content handling, and web-interface fundamentals
   - comparable metric for aligning agent reviews with an external checklist
 
-### 4c. Frontend Code Maintainability
+### 5c. Frontend Code Maintainability
 - File: `frontend-code-maintainability.md`
 - Focus:
   - React/component modularity, file length, hooks, state ownership, DRY, comments, and testable helper seams
@@ -244,7 +257,7 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - long-file thresholds and extraction cues for dialogs, providers, pages, canvas scenes, and feature modules
   - routing React/Next.js performance-specific review to `vercel-react-best-practices` instead of duplicating that rulebook
 
-### 5. Debloatability
+### 6. Debloatability
 - File: `debloatability.md`
 - Focus:
   - what dead surface was removed
@@ -253,7 +266,7 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - whether clarity improved
   - whether deletion was safe
 
-### 6. Evidence Quality
+### 7. Evidence Quality
 - File: `evidence-quality.md`
 - Focus:
   - sufficiency

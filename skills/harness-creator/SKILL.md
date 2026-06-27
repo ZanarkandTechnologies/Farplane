@@ -236,8 +236,10 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      memory, README/doc deltas, and stale-context notes.
    - [ ] Use `skill-maintenance(mode: harden_skill)` for new evals, gotchas,
      regression cases, and improvement tickets from fresh lessons/troubles.
-   - [ ] Use `skill-maintenance(mode: refine_skill)` to consolidate older
-     evals/gotchas and shorten skill surfaces after hardening exists.
+   - [ ] Use `consolidate(..., structure = skill)` to decide older
+     eval/gotcha/skill-surface compaction, then
+     `skill-maintenance(mode: refine_skill)` to apply accepted edits after
+     hardening exists.
    - [ ] `update_system_gaps`: when no ticket can advance, inspect missing systems,
      weak metrics, stale assumptions, and safe preparation work.
    - [ ] Treat extra metric, memory, or chief-of-staff automations as optional

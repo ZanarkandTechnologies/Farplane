@@ -1,0 +1,60 @@
+[
+  {
+    "id": "consolidate_preserves_template_value_01",
+    "title": "Consolidate preserves template value instead of summarizing",
+    "query": "We have a bloated skill SKILL.md with repeated rationale, a required Todo List, a Skill Signature, and a few rare examples. Use consolidate to make it shorter.",
+    "reference_points": [
+      "Finds or names the owning skill template before rewriting",
+      "Slices the skill into sections or units before deciding actions",
+      "Preserves required first-load behavior such as trigger, signature, todo path, gates, proof, and output",
+      "Classifies units as keep, merge, rewrite, move, delete, promote, demote, or defer",
+      "Moves rare examples or branch-specific detail only when reference routing remains explicit",
+      "Runs or requires a loss check rather than claiming shorter is better",
+      "Routes material skill edits to skill-maintenance checks or review instead of self-approving"
+    ],
+    "tags": [
+      "skill",
+      "consolidate",
+      "template-preservation"
+    ],
+    "notes": "Protects the primitive from becoming a generic summary instruction."
+  },
+  {
+    "id": "consolidate_constraints_vs_value_function_01",
+    "title": "Consolidate separates hard constraints from value judgment",
+    "query": "Consolidate a feature registry to fewer rows, but preserve FEAT IDs and generated-registry compatibility. Can we just sort by usage and delete the bottom half?",
+    "reference_points": [
+      "Treats preserve_ids and generated compatibility as hard constraints",
+      "Rejects deleting solely by low usage or row count",
+      "Names a value function that includes proof, routing, reuse, memory, and user value",
+      "Requires source-owner or consumer checks before retire/delete decisions",
+      "Returns keep/merge/retire or handoff decisions with evidence",
+      "Requires validator or generated-output proof before claiming completion"
+    ],
+    "tags": [
+      "skill",
+      "consolidate",
+      "constraints"
+    ],
+    "notes": "Catches the parameter/value-function split for registry-like targets."
+  },
+  {
+    "id": "consolidate_gotchas_to_checklist_or_eval_01",
+    "title": "Consolidate routes gotchas to the right owner surface",
+    "query": "A skill has twenty gotchas, some are repeated runtime failures, some are stale one-off warnings, and some are examples. Consolidate them.",
+    "reference_points": [
+      "Inventories gotchas as individual units before rewriting",
+      "Promotes repeated runtime failures into qa_checklist.md, eval_task.json, or SKILL.md gates when reusable",
+      "Deletes or demotes stale one-off warnings only after checking loss risk",
+      "Moves examples to references when they are useful but not every-invocation guardrails",
+      "Keeps concise gotchas only when they prevent common wrong behavior",
+      "Includes a loss check and proof or review route for material skill changes"
+    ],
+    "tags": [
+      "skill",
+      "consolidate",
+      "gotchas"
+    ],
+    "notes": "Exercises consolidate across gotchas, checklist, eval, and reference placement."
+  }
+]

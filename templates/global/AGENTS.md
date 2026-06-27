@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.11
+template_version: 0.2.12
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -300,6 +300,8 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   from those classes.
 - Default Tier 1 behavior skills:
   - `advise`: choose among real options and recommend one path.
+  - `consolidate`: compress artifacts into their minimal owner-correct form
+    while preserving required behavior, proof, IDs, and actionability.
   - `reference-grounding`: ground claims in local, official, peer, or supplied
     evidence.
   - `prototyping`: prove a representative sample before broad scale.

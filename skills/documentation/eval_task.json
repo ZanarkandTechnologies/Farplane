@@ -1,0 +1,56 @@
+[
+  {
+    "id": "documentation_system_vs_feature_01",
+    "title": "Documentation routes broad subsystem lore to a system spec",
+    "query": "Our feature page for a docs capability has grown into broad policy for where all docs live, how feature and system specs work, and how generated registries are maintained. Some of that policy also got copied into docs skill references, and I am not sure what should live where or what checks prove the split. How should we reshape it?",
+    "reference_points": [
+      "Recognizes that broad documentation governance is system-shaped rather than only a single feature slice",
+      "Recommends a system spec such as Documentation OS for product-layer boundaries and long-lived documentation architecture",
+      "Keeps the feature doc as a narrower capability slice with behavior, surfaces, proof, limits, and maintenance path",
+      "Explains why a skill reference should own executable branch workflow rather than canonical lore",
+      "Names registry validation or doc reference checks as proof after moving the boundary"
+    ],
+    "tags": [
+      "skill",
+      "documentation",
+      "system-vs-feature"
+    ],
+    "notes": "Covers the FEAT-0060 promotion failure mode that triggered the Documentation OS split."
+  },
+  {
+    "id": "documentation_branch_reference_01",
+    "title": "Documentation loads branch references instead of bloating first load",
+    "query": "I need to update a system spec and a feature page, but I am not sure what front matter and registry sync rules apply. What should the documentation workflow do first?",
+    "reference_points": [
+      "Binds the reader, target surfaces, source of truth, and proof route before editing",
+      "Loads the metadata/registry branch reference because front matter and generated registries are in scope",
+      "Loads the feature/system spec branch reference because both FEAT and SYS boundaries are in scope",
+      "Does not expand every documentation architecture rule into the first-load workflow",
+      "Names generated registries as outputs and says not to hand-edit JSONL rows"
+    ],
+    "tags": [
+      "skill",
+      "documentation",
+      "reference-routing"
+    ],
+    "notes": "Protects the method-reference split and template 0.3.6 progressive disclosure behavior."
+  },
+  {
+    "id": "documentation_no_scalar_score_01",
+    "title": "Documentation finish gate preserves repair context over scalar scores",
+    "query": "I finished a durable docs cleanup. Can we summarize it with a doc quality score and ship if the number is high?",
+    "reference_points": [
+      "Rejects using a scalar documentation quality score as readiness proof",
+      "Treats the QA checklist as inspection evidence with failed checks, fixes, deferrals, and remaining risk",
+      "Routes material readiness to documentation-quality review when a TAS verdict is needed",
+      "Preserves reasons and repair hints instead of collapsing feedback into a number",
+      "Names relevant validators or focused searches only when they match the changed doc surface"
+    ],
+    "tags": [
+      "skill",
+      "documentation",
+      "quality-layer"
+    ],
+    "notes": "Protects the quality signal boundary introduced after the metrics/rubric/checklist discussion."
+  }
+]

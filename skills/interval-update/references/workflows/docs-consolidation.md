@@ -17,9 +17,11 @@ planning and routing workflow for interval reports, not a broad autonomous docs
 rewrite.
 
 Use `update-memory` for whole-project context refresh across README, memory,
-history, lessons, troubles, and docs deltas. Use `documentation` for substantive
-reader-quality rewrites or durable docs-as-code changes. Route stale feature
-rows back to the owning `docs/systems/*.md` metadata source;
+history, lessons, troubles, and docs deltas. Use `consolidate` for
+keep/merge/move/delete decisions over docs and memory surfaces. Use
+`documentation` for substantive reader-quality rewrites or durable docs-as-code
+changes. Route stale feature rows back to the owning `docs/systems/*.md`
+metadata source;
 `docs/systems/registry.jsonl` and `docs/features/registry.jsonl` are generated
 output, not interval write targets.
 
@@ -28,7 +30,7 @@ output, not interval write targets.
 ```text
 docs_consolidation(context_bundle, review_window, planning_window,
                    workflow_findings?, cap?)
-  -> docs_consolidation_handoffs
+  -> consolidate_docs_handoffs
    + stale_doc_candidates
    + duplicate_doc_candidates
    + update_memory_handoffs
@@ -42,8 +44,8 @@ state: reads(context_bundle, README.md?, docs/**/*.md?, docs/MEMORY.md?,
 gates: docs_owner_identified; source_refs_cited; no_append_only_rewrite;
        no_unbounded_doc_cleanup; handoff_before_mutation;
        generated_registry_not_hand_edited
-routes: update-memory | documentation | knowledge-tidier | ticket delta |
-        direct no-change
+routes: consolidate | update-memory | documentation | knowledge-tidier |
+        ticket delta | direct no-change
 fails: rewrites docs from interval context alone; deletes append-only ledgers;
        treats every stale note as a docs task; creates an artifact graveyard;
        hand-edits generated registries
@@ -71,10 +73,14 @@ Default sources from the context bundle:
 - [ ] 2. Classify candidates.
   - [ ] Route broad project memory/context refresh to
         [update-memory](../../../update-memory/SKILL.md).
+  - [ ] Route docs or memory keep/merge/move/delete decisions to
+        [consolidate](../../../consolidate/SKILL.md) with `structure =
+        docs_tree | memory`.
   - [ ] Route substantive durable doc writing, reader-quality cleanup, or docs
         architecture changes to [documentation](../../../documentation/SKILL.md).
-  - [ ] Route bloat or keep/move/delete inventories to
-        [knowledge-tidier](../../../knowledge-tidier/SKILL.md).
+  - [ ] Route bloat or knowledge-specific scoring/rerouting to
+        [knowledge-tidier](../../../knowledge-tidier/SKILL.md), which will call
+        `consolidate` for the shared decision pass.
   - [ ] Route stale or duplicated `FEAT-*` records to the owning
         `docs/systems/*.md` source and regenerate the registry.
   - [ ] Create a ticket delta when the consolidation is too large for the next
@@ -98,7 +104,7 @@ Default sources from the context bundle:
 ## Output
 
 ```text
-docs_consolidation_handoffs:
+consolidate_docs_handoffs:
   - owner_route:
     target_refs:
     evidence_refs:

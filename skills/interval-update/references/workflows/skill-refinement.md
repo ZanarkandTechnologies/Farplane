@@ -18,13 +18,16 @@ any prose-shortening pass.
 
 This workflow selects and routes refinement. It does not edit skills directly
 unless the parent interval explicitly enters a `skill-maintenance` subtask.
+Use `consolidate(target = edited_skill, structure = skill)` to produce the
+unit decisions; use `skill-maintenance(mode: refine_skill)` to apply accepted
+skill-package edits and proof.
 
 ## Workflow Signature
 
 ```text
 skill_refinement(context_bundle, review_window, planning_window,
                  workflow_findings?, cap?)
-  -> refine_skill_handoffs
+  -> consolidate_skill_handoffs
    + compaction_candidates
    + coverage_risks
    + deferred_refinement
@@ -35,7 +38,8 @@ state: reads(context_bundle, skills/**/audits?, edited_skill/eval_task.json?,
        writes(parent_interval_update_report_section)
 gates: hardening_exists_or_deferred; behavior_guardrails_preserved;
        owner_surface_named; coverage_risk_named; cap_respected
-routes: skill-maintenance:refine_skill | eval | review | direct no-change
+routes: consolidate | skill-maintenance:refine_skill | eval | review |
+        direct no-change
 fails: delays urgent hardening; deletes guardrails without proof; treats shorter
        skill text as sufficient evidence; creates unbounded compaction work
 ```
@@ -64,10 +68,12 @@ Default sources from the context bundle:
 - [ ] 3. Route compaction.
   - [ ] Route duplicate evals, overlapping gotchas, long examples, stale
         rationale, or oversized first-load text to
+        [consolidate](../../../consolidate/SKILL.md) with `structure = skill`.
+  - [ ] Route accepted skill-package edits to
         [skill-maintenance](../../../skill-maintenance/SKILL.md) with
         `mode: refine_skill`.
-  - [ ] Route coverage-risk questions to [eval](../../eval/SKILL.md) or
-        [review](../../review/SKILL.md).
+  - [ ] Route coverage-risk questions to [eval](../../../eval/SKILL.md) or
+        [review](../../../review/SKILL.md).
   - [ ] Mark weak, unclear, or low-value candidates as deferred.
 - [ ] 4. Bound the work.
   - [ ] Default cap is 3 refinement handoffs per weekly run.
@@ -79,10 +85,11 @@ Default sources from the context bundle:
 ## Output
 
 ```text
-refine_skill_handoffs:
+consolidate_skill_handoffs:
   - edited_skill:
     evidence_refs:
-    compaction_goal:
+    consolidate_call:
+    unit_decisions:
     proof_required:
 compaction_candidates:
 coverage_risks:

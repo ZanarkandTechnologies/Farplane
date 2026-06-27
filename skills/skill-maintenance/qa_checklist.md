@@ -199,7 +199,15 @@ they are needed on every invocation:
       outputs to an LLM judge, skips evals for prompt-like behavior, or treats
       reviewer prose as behavior proof without a case, artifact, or command.
 
-17. `task_case_quality`
+17. `quality_signal_layer_fit`
+   - Question: Does the change keep QA checklists, metrics, review rubrics, and
+     reward signals in the right layers?
+   - Violation: The skill turns checklist items into default metrics, creates a
+     metric registry for skill-local guardrails, replaces review reasons with a
+     scalar score, or uses goal/project metrics where checklist/review feedback
+     would preserve better repair context.
+
+18. `task_case_quality`
     - Question: When a skill adds tests, evals, examples, or QA scenarios, are
       the cases realistic, distinct, traceable to a risk/source, judgeable, and
       small enough to maintain?
@@ -207,15 +215,15 @@ they are needed on every invocation:
       rows, synthetic cases with no stated coverage gap, or cases whose failure
       would not identify what to fix.
 
-18. `anti_cheat_case_design`
+19. `anti_cheat_case_design`
     - Question: For skill evals and agent behavior cases, does the user-facing
       query avoid leaking the skill name, expected routing, checklist, reference
       points, or desired answer?
-   - Violation: The test prompt teaches the behavior it claims to measure,
-     making the case a memory test of the eval author's wording instead of a
-     behavior test of the skill.
+    - Violation: The test prompt teaches the behavior it claims to measure,
+      making the case a memory test of the eval author's wording instead of a
+      behavior test of the skill.
 
-19. `qa_preflight_loaded`
+20. `qa_preflight_loaded`
    - Question: When a skill has `qa_checklist.md`, does `SKILL.md` tell the
      invoking agent to read it before execution as preflight guardrails?
    - Violation: The checklist is only mentioned as a final cleanup step, so the

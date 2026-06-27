@@ -41,8 +41,9 @@ Use this directory when deciding what Farplane is made of. Use
 | Skill System | `FEAT-0022` | `skill-system.md` |
 | Self-Improvement And Learning | `FEAT-0039` | `self-improvement-learning.md` |
 | Source And Sidecar Systems | `FEAT-0011` | `source-sidecar-systems.md` |
-| Maintenance And Release OS | `FEAT-0060` | `maintenance-release-os.md` |
+| Maintenance And Release OS | `FEAT-0061` | `maintenance-release-os.md` |
 | Domain Skill Families | `FEAT-0014` | `domain-skill-families.md` |
+| Documentation OS | `FEAT-0060` | `documentation-os.md` |
 
 ## Update Flow
 

@@ -31,8 +31,9 @@ Policy:
 - Do not delay or remove immediate lesson/trouble-derived eval creation.
 - Fetch eval files edited since the last accepted eval drain using content
   hashes, not filesystem mtimes alone.
-- For each changed eval file, spawn one bounded consolidate_eval subagent with
-  the eval file, consolidation guide, and eval-writing rubric as context.
+- For each changed eval file, run `consolidate(..., structure = eval_suite)`
+  directly or through one isolated review lane with the eval file,
+  consolidation guide, and eval-writing rubric as context.
 - Each subagent returns keep, merge, rewrite, archive notes, lost coverage
   risks, and apply/revise/defer recommendation.
 - Apply only consolidations that make evals less noisy without losing distinct

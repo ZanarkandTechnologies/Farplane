@@ -3,7 +3,7 @@ kind: project-products
 status: active
 project: Farplane
 created_at: 2026-06-25
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 framework_template_version: "0.2.0"
 owner: harness
 source_of_truth:
@@ -45,21 +45,23 @@ source_of_truth:
 
 ## Taste Loop Artifact Workflows
 
-Taste Loop turns active human attention into feedback on generated artifacts,
-not feedback on skill summaries. Each candidate must name a product lane,
-artifact workflow, owning skill or method, and reviewable output.
+Taste Loop turns active human attention into feedback on product-lane
+artifacts, not feedback on skill summaries. Each candidate must name a product
+lane, artifact workflow, owning skill or method, planning artifact, execution
+artifact, and the compact feedback question. Planning artifacts are first-class:
+they let Kenji reject or approve ideas before Farplane spends execution effort.
 
-| Lane | Workflow ID | Owner | Reviewable Artifact | Feedback Question |
-| --- | --- | --- | --- | --- |
-| trust_distribution | landing_page_offer | `landing-page` | landing page draft, HTML, or screenshot | keep / revise / reject the offer and page direction |
-| trust_distribution | social_thread | `social-content:twitter-thread` | draft thread | keep / revise / reject the hook and argument |
-| trust_distribution | evidence_carousel | `social-content:carousel` | carousel outline or slides | keep / revise / reject the proof story |
-| trust_distribution | explainer_script | `video-production:explainer` | short script or storyboard | keep / revise / reject the explanation |
-| trust_distribution | demo_video_brief | `video-production:marketing` | video concept, shot list, or demo script | keep / revise / reject the demo angle |
-| market_learning | offer_test | `landing-page` | offer variants or landing page section | pick best / revise / reject the offer |
-| experiments | experiment_report | `farplane-experiment-report` | experiment report draft | accept / revise / reject the decision |
-| ablations | ablation_proof | `farplane-ablation-proof` | ablation proof report | accept / revise / reject the proof |
-| productization | productization_handoff | `farplane-productization` | shipped-behavior proposal or handoff | accept / revise / reject the productization move |
+| Lane | Workflow ID | Owner | Planning Artifact | Execution Artifact | Feedback Question |
+| --- | --- | --- | --- | --- | --- |
+| trust_distribution | landing_page_offer | `landing-page` | offer angle, hero premise, or concept card | landing page draft, HTML, screenshot, or preview URL | keep / revise / reject the offer and page direction |
+| trust_distribution | social_thread | `social-content:twitter-thread` | hook and argument concept card | draft thread | keep / revise / reject the hook and argument |
+| trust_distribution | evidence_carousel | `social-content:carousel` | proof story concept card | carousel outline or slides | keep / revise / reject the proof story |
+| trust_distribution | explainer_script | `video-production:explainer` | explanation angle or storyboard premise | short script or storyboard | keep / revise / reject the explanation |
+| trust_distribution | demo_video_brief | `video-production:marketing` | demo angle or shot premise | video concept, shot list, or demo script | keep / revise / reject the demo angle |
+| market_learning | offer_test | `landing-page` | offer hypothesis variants | landing page section or offer test draft | pick best / revise / reject the offer |
+| experiments | experiment_report | `farplane-experiment-report` | experiment decision angle | experiment report draft | accept / revise / reject the decision |
+| ablations | ablation_proof | `farplane-ablation-proof` | proof claim and contrast plan | ablation proof report | accept / revise / reject the proof |
+| productization | productization_handoff | `farplane-productization` | productization bet and user-facing delta | shipped-behavior proposal or handoff | accept / revise / reject the productization move |
 
 ## Constraints
 
@@ -68,7 +70,11 @@ artifact workflow, owning skill or method, and reviewable output.
   product-shaped tickets.
 - Operational planning, refill, and prioritization logic belongs in
   `interval-update`, not this file.
-- Taste Loop feedback cards must point to a generated artifact from a workflow
-  in `Taste Loop Artifact Workflows`; broad router skills such as
+- Taste Loop idea feedback cards must point to a planning artifact from a
+  workflow in `Taste Loop Artifact Workflows`.
+- Taste Loop execution feedback cards must point to an execution artifact from
+  the same workflow after the planning artifact passes, unless the execution
+  artifact is explicitly a tiny planning test.
+- Broad router skills such as
   `frontend-craft`, `functional-ui`, `remotion`, and `remotion-render` can
   support those workflows but are not direct Taste Loop targets.

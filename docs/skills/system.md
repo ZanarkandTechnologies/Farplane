@@ -128,6 +128,8 @@ provider contracts that multiple higher-tier workflows need as base obligations.
 Farplane's current core behavior primitives are:
 
 - `advise`: choose among real options and name the recommendation.
+- `consolidate`: compress artifacts into their minimal owner-correct form while
+  preserving required behavior, proof, IDs, and actionability.
 - `reference-grounding`: ground claims, plans, and recommendations in evidence.
 - `prototyping`: prove a pattern at the smallest honest scale before expanding.
 
@@ -213,8 +215,8 @@ skill import every primitive directly:
 - Tier 3 first-load todos may link peer Tier 3 skills when the domain flow has
   an intentional handoff.
 - Tier 3 first-load todos should not direct-link Tier 1 primitives such as
-  `advise` or `reference-grounding` unless the skill owns that primitive step
-  as part of its first-load contract.
+  `advise`, `consolidate`, `reference-grounding`, or `prototyping` unless the
+  skill owns that primitive step as part of its first-load contract.
 - Tier 0 phase steps do not need skill links. Put the phase shape in the todo
   template or skill `## Phase Contract` instead of linking to `plan` or
   `execute`.

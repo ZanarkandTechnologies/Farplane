@@ -18,7 +18,7 @@ lesson/trouble-derived regression until the weekly drain.
 
 ```text
 lesson_or_trouble -> optimize_harness -> immediate eval_task.json row
-weekly_eval_drain -> fetch changed eval files -> consolidate_eval per file
+weekly_eval_drain -> fetch changed eval files -> consolidate(..., structure = eval_suite) per file
 ```
 
 The eval drain exists to reduce noise after coverage exists. It should produce
@@ -35,8 +35,12 @@ fetch_evals_edited_since_last_run(project_root, processed_state)
   -> changed_eval_files + content_hashes
 
 for each changed_eval_file:
-  spawn_subagent(consolidate_eval(changed_eval_file))
-    -> less_noisy_eval_rows + archive_notes + lost_coverage_risks
+  consolidate(
+    target = changed_eval_file,
+    structure = eval_suite,
+    constraints = { preserve_evidence: true }
+  )
+    -> unit_decisions + less_noisy_eval_rows + archive_notes + lost_coverage_risks
 ```
 
 Run discovery with:
@@ -48,14 +52,36 @@ python3 skills/eval/scripts/fetch_evals_edited_since_last_run.py \
   --pretty
 ```
 
-## Consolidation Criteria
+## Consolidate Binding
 
-For each changed `skills/<skill>/eval_task.json`, classify rows:
+For each changed `skills/<skill>/eval_task.json`, use the shared
+`consolidate` frame with eval-specific bindings:
+
+```text
+target = skills/<skill>/eval_task.json
+structure = eval_suite
+unit = eval_case
+constraints = {
+  preserve_evidence: true,
+  preserve_ids: true,
+  owner_boundary: "owning skill eval_task.json"
+}
+value_function = default consolidate value
+               + distinct_failure_mode
+               + hardcase_value
+               + judgeability
+               - query_noise
+               - duplicate_coverage
+```
+
+Map `consolidate` actions into eval dispositions:
 
 - `keep`: unique failure mode, hardcase, or high-signal boundary case.
 - `merge`: rows test the same behavior with superficial query differences.
 - `rewrite`: row is valuable but noisy, unrealistic, vague, or overfit.
-- `archive`: row is fully covered by a stronger replacement.
+- `move`: row belongs in another skill or workflow eval file.
+- `delete`: row is fully covered by a stronger replacement and archive notes
+  preserve the old ID and failure mode.
 - `defer`: coverage risk is ambiguous and needs human or reviewer judgment.
 
 Prefer the newer eval when it captures a real recent miss and is not merely a
@@ -74,8 +100,8 @@ Context:
 - Rubric: skills/eval/references/eval-writing-rubric.md
 
 Task:
-Run consolidate_eval(<eval file>). Review only this eval file and the listed
-references. Produce a consolidation report with:
+Run consolidate(target = <eval file>, structure = eval_suite). Review only this
+eval file and the listed references. Produce a consolidation report with:
 - keep_ids
 - merge_groups with replacement row drafts
 - rewrite_ids with revised row drafts

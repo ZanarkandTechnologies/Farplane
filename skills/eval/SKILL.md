@@ -64,7 +64,8 @@ Common modes:
   benchmark-worthy, or saleable after sanitization. A hardcase is still a
   runnable eval case, not a separate capture backlog.
 - `consolidate`: run the eval drain. Fetch skill eval files edited since the
-  last drain, spawn one bounded `consolidate_eval` lane per changed file, and
+  last drain, call `consolidate(target = changed_eval_file,
+  structure = eval_suite, constraints = { preserve_evidence: true })`, and
   apply only changes that make evals less noisy without losing distinct
   coverage.
 
@@ -133,8 +134,9 @@ changed skill file.
     Kenji feedback, and accepted lessons there.
   - [ ] 7. If consolidating evals, load
     [eval consolidation](references/eval-consolidation.md), run
-    `fetch_evals_edited_since_last_run`, and hand each changed eval file to a
-    bounded `consolidate_eval` subagent or equivalent isolated review lane.
+    `fetch_evals_edited_since_last_run`, and hand each changed eval file to
+    `consolidate(..., structure = eval_suite)` or an isolated review lane that
+    applies the same frame.
 - [ ] 3. Write eval tasks with the core shape: realistic `query`, shared fixture
   in `config.json` plus `contexts/*`, visible `reference_points`, narrow tags,
   and no live side effects unless the runner owns a sandbox fixture.
@@ -186,8 +188,8 @@ Use `eval:onboarding` for clean-room first eval setup, starter tasks, judge
 prompt guidance, or a minimal smoke workflow.
 
 Use `eval:consolidate` for the weekly eval drain: fetch changed eval files,
-dispatch one `consolidate_eval` lane per file, and reduce noise without
-delaying fresh regression coverage.
+call `consolidate` once per file, and reduce noise without delaying fresh
+regression coverage.
 
 ## Templates
 
@@ -218,7 +220,9 @@ delaying fresh regression coverage.
   reference-point logic.
 - [references/eval-consolidation.md](references/eval-consolidation.md) - load
   when running the weekly eval drain, writing the automation prompt, or
-  dispatching per-file `consolidate_eval` lanes.
+  dispatching per-file `consolidate(..., structure = eval_suite)` lanes.
+- [../consolidate/SKILL.md](../consolidate/SKILL.md) - shared eval-row
+  keep/merge/rewrite/archive/loss-check primitive.
 - [references/automation-prompt.md](references/automation-prompt.md) - use when
   installing or updating a weekly automation that invokes eval consolidation.
 - [self-improve/program.md](self-improve/program.md) - Goal-backed

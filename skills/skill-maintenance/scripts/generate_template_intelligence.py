@@ -27,7 +27,6 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from bin.validators.template_usage import normalize_template_uses, template_target_basis
-CURRENT_TEMPLATE_VERSION = "0.3.4"
 TEMPLATE_PATH = Path("docs/skills/templates/SKILL_TEMPLATE.md")
 DEFAULT_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.json")
 DEFAULT_JS_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.js")
@@ -138,6 +137,10 @@ def parse_template_version(text: str) -> str:
         return template_version
     match = re.search(r"skill_template_version:\s*[\"']?([^\"'\n]+)", body)
     return match.group(1).strip() if match else "unknown"
+
+
+def current_template_version(repo_root: Path) -> str:
+    return parse_template_version((repo_root / TEMPLATE_PATH).read_text(encoding="utf-8"))
 
 
 def template_metadata_summary(text: str) -> dict[str, Any]:
@@ -600,7 +603,8 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
     skill_rows = load_jsonl(repo_root / "docs/skills/registry.jsonl")
     feature_rows = load_jsonl(repo_root / "docs/features/registry.jsonl")
     template_rows = load_jsonl(repo_root / "docs/templates/registry.jsonl")
-    rollout = rollout_rows(skill_rows, CURRENT_TEMPLATE_VERSION)
+    current_version = current_template_version(repo_root)
+    rollout = rollout_rows(skill_rows, current_version)
     template_consumers = [
         *skill_template_consumers(skill_rows),
         *project_template_consumers(repo_root),
@@ -613,7 +617,7 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
     return {
         "schema_version": "1.0.0",
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "current_template_version": CURRENT_TEMPLATE_VERSION,
+        "current_template_version": current_version,
         "source": {
             "repo": str(repo_root),
             "template_path": str(TEMPLATE_PATH),

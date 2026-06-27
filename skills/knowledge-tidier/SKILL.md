@@ -33,6 +33,11 @@ preserve exact source logs when the file is semi-append-only, and route owner
 specific rules to their better home instead of making one bloated knowledge
 file carry everything.
 
+Use `consolidate(target = target_file, structure = memory | docs_tree | file,
+value_function = knowledge_score + default consolidate value function)` for the
+keep/merge/move/delete decision pass. This skill binds knowledge-specific
+archive, factuality, and owner-surface constraints around that primitive.
+
 ## Skill Signature
 
 ```text
@@ -42,7 +47,7 @@ state: reads(target_file, archive_ref, AGENTS.md, relevant specs/skills/docs)
        writes(target_file, archive only when preserving exact source rows)
 gates: source_preserved; scoring_applied; owner_checked; no_data_loss;
        stale_facts_flagged; validators_or_review_run
-routes: documentation | update-memory | skill-maintenance | review
+routes: consolidate | documentation | update-memory | skill-maintenance | review
 fails: deletes exact logs without archive; keeps generic policy; preserves
        stale or non-factual claims; duplicates always-loaded prompts
 ```
@@ -93,14 +98,17 @@ surface. Low-factuality rows become questions, tickets, or archive-only notes.
    - [ ] Mark stale facts, vague claims, generic advice, superseded paths,
      duplicate doctrine, and owner-surface duplicates.
 - [ ] 3. Score and classify each candidate.
-   - [ ] Apply `importance`, `recency`, `factuality`, and `remembrance`.
-   - [ ] Classify as `keep-live`, `consolidate`, `route-owner`,
+   - [ ] Call `consolidate(..., structure = memory | docs_tree | file)` with
+     the adapted `knowledge_score` value function for keep/merge/rewrite/move/delete
+     decisions.
+   - [ ] Classify domain disposition as `keep-live`, `merge`, `route-owner`,
      `archive-only`, `stale`, or `needs-question`.
    - [ ] Prefer factual project-specific constraints over generic agent policy.
 - [ ] 4. Rewrite the live knowledge surface.
    - [ ] Keep a short admission rule or reader contract when useful.
    - [ ] Keep only sections or rows that pass the live threshold.
-   - [ ] Consolidate older passing rows into concise groups with source refs.
+   - [ ] Apply the accepted `consolidate` merge/rewrite decisions to older
+     passing rows, preserving source refs.
    - [ ] Remove or route duplicated `AGENTS.md`, spec, skill, validator,
      ticket-template, and style rules.
 - [ ] 5. Report routed handoffs.
@@ -162,6 +170,8 @@ Knowledge Tidy Report
   rewrites outside memory ranking.
 - [update-memory](../update-memory/SKILL.md) - use for broad project context
   refresh across README, docs, history, lessons, and troubles.
+- [consolidate](../consolidate/SKILL.md) - use for the shared unit inventory,
+  value scoring, merge/move/delete decisions, and loss check.
 - [skill-maintenance](../skill-maintenance/SKILL.md) - use when a knowledge
   item should harden skill behavior through evals, gotchas, or checklist
   changes.
