@@ -1,5 +1,5 @@
 ---
-title: "Symphony-compatible Farplane invocation contract"
+title: Symphony-compatible Farplane invocation contract
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -17,41 +17,30 @@ refs:
   - tickets/archive/TASK-0107/ticket.md
   - tickets/archive/TASK-0107/artifacts/qa/prepare-planning.json
   - tickets/archive/TASK-0107/artifacts/qa/sample-proof-packet.json
-feature_record_json: |
-  {
-    "id": "FEAT-0015",
-    "name": "Symphony-compatible Farplane invocation contract",
-    "status": "implemented",
-    "system_id": "SYS-0004",
-    "category": "execution",
-    "public": true,
-    "surfaces": [
-      "WORKFLOW.md",
-      "skills/farplane-invocation",
-      "bin/farplane_invocation.py",
-      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md"
-    ],
-    "source_refs": [
-      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
-      "docs/HISTORY.md"
-    ],
-    "external_refs": [
-      "Symphony Service Specification draft v1"
-    ],
-    "evidence_refs": [
-      "tickets/archive/TASK-0107/ticket.md",
-      "tickets/archive/TASK-0107/artifacts/qa/prepare-planning.json",
-      "tickets/archive/TASK-0107/artifacts/qa/sample-proof-packet.json"
-    ],
-    "known_limits": "Filesystem ticket adapter and local compute only; no daemon, polling, Linear/Notion adapter, cloud execution, or Codex-launching wrapper.",
-    "metrics": [
-      "runner_contract_conformance",
-      "proof_packet_parse_rate"
-    ],
-    "last_verified": "2026-05-05"
-  }
+feature_id: FEAT-0015
+system_id: SYS-0004
+category: execution
+public: true
+surfaces:
+  - WORKFLOW.md
+  - skills/farplane-invocation
+  - bin/farplane_invocation.py
+  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
+source_refs:
+  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
+  - docs/HISTORY.md
+external_refs:
+  - Symphony Service Specification draft v1
+evidence_refs:
+  - tickets/archive/TASK-0107/ticket.md
+  - tickets/archive/TASK-0107/artifacts/qa/prepare-planning.json
+  - tickets/archive/TASK-0107/artifacts/qa/sample-proof-packet.json
+known_limits: Filesystem ticket adapter and local compute only; no daemon, polling, Linear/Notion adapter, cloud execution, or Codex-launching wrapper.
+metrics:
+  - runner_contract_conformance
+  - proof_packet_parse_rate
+last_verified: 2026-05-05
 ---
-
 # Symphony-compatible Farplane invocation contract
 
 Symphony-compatible Farplane invocation contract is a first-class Farplane feature in [Invocation Runtime](../systems/invocation-runtime.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

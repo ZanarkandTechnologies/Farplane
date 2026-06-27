@@ -1,5 +1,5 @@
 ---
-title: "Lean global agent operating kernel"
+title: Lean global agent operating kernel
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -14,35 +14,26 @@ refs:
   - ARCHITECTURE.md
   - docs/fundamentals/harness-engineering-doctrine.md
   - docs/HISTORY.md
-feature_record_json: |
-  {
-    "id": "FEAT-0042",
-    "name": "Lean global agent operating kernel",
-    "status": "implemented",
-    "system_id": "SYS-0001",
-    "category": "context-routing",
-    "public": true,
-    "surfaces": [
-      "templates/global/AGENTS.md",
-      "skills/init-advisor/references/AGENTS_TEMPLATE.md",
-      "ARCHITECTURE.md"
-    ],
-    "source_refs": [
-      "docs/fundamentals/harness-engineering-doctrine.md",
-      "docs/HISTORY.md"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "templates/global/AGENTS.md",
-      "skills/init-advisor/references/AGENTS_TEMPLATE.md",
-      "docs/HISTORY.md"
-    ],
-    "known_limits": "The global template now owns only every-turn behavior; project-specific coding defaults and detailed workflows must keep living in project AGENTS files, skills, tickets, docs, validators, or subagent prompts.",
-    "metrics": [],
-    "last_verified": "2026-06-07"
-  }
+feature_id: FEAT-0042
+system_id: SYS-0001
+category: context-routing
+public: true
+surfaces:
+  - templates/global/AGENTS.md
+  - skills/init-advisor/references/AGENTS_TEMPLATE.md
+  - ARCHITECTURE.md
+source_refs:
+  - docs/fundamentals/harness-engineering-doctrine.md
+  - docs/HISTORY.md
+external_refs: []
+evidence_refs:
+  - templates/global/AGENTS.md
+  - skills/init-advisor/references/AGENTS_TEMPLATE.md
+  - docs/HISTORY.md
+known_limits: The global template now owns only every-turn behavior; project-specific coding defaults and detailed workflows must keep living in project AGENTS files, skills, tickets, docs, validators, or subagent prompts.
+metrics: []
+last_verified: 2026-06-07
 ---
-
 # Lean global agent operating kernel
 
 Lean global agent operating kernel is a first-class Farplane feature in [Agent Kernel](../systems/agent-kernel.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

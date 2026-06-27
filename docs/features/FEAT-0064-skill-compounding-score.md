@@ -1,5 +1,5 @@
 ---
-title: "Skill compounding score"
+title: Skill compounding score
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -20,43 +20,33 @@ refs:
   - skills/taste-loop/SKILL.md
   - skills/taste-loop/templates/heartbeat-prompt.md
   - skills/taste-loop/eval_task.json
-feature_record_json: |
-  {
-    "id": "FEAT-0064",
-    "name": "Skill compounding score",
-    "status": "implemented",
-    "system_id": "SYS-0006",
-    "category": "skills",
-    "public": true,
-    "surfaces": [
-      "docs/features/FEAT-0064-skill-compounding-score.md",
-      "docs/skills/system.md",
-      "skills/taste-loop",
-      "farplane/automations.md",
-      "docs/skills/registry.jsonl"
-    ],
-    "source_refs": [
-      "docs/farplane-framework/lifecycle.md",
-      "docs/skills/system.md",
-      "farplane/products.md",
-      "skills/skill-maintenance/graph/README.md"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "skills/taste-loop/SKILL.md",
-      "skills/taste-loop/templates/heartbeat-prompt.md",
-      "skills/taste-loop/eval_task.json"
-    ],
-    "known_limits": "Official ranking contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.",
-    "metrics": [
-      "skill_compounding_score_traceability_pass",
-      "taste_loop_score_breakdown_pass",
-      "skill_registry_validation_pass"
-    ],
-    "last_verified": "2026-06-26"
-  }
+feature_id: FEAT-0064
+system_id: SYS-0006
+category: skills
+public: true
+surfaces:
+  - docs/features/FEAT-0064-skill-compounding-score.md
+  - docs/skills/system.md
+  - skills/taste-loop
+  - farplane/automations.md
+  - docs/skills/registry.jsonl
+source_refs:
+  - docs/farplane-framework/lifecycle.md
+  - docs/skills/system.md
+  - farplane/products.md
+  - skills/skill-maintenance/graph/README.md
+external_refs: []
+evidence_refs:
+  - skills/taste-loop/SKILL.md
+  - skills/taste-loop/templates/heartbeat-prompt.md
+  - skills/taste-loop/eval_task.json
+known_limits: Official ranking contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
+metrics:
+  - skill_compounding_score_traceability_pass
+  - taste_loop_score_breakdown_pass
+  - skill_registry_validation_pass
+last_verified: 2026-06-26
 ---
-
 # Skill compounding score
 
 Skill compounding score is a first-class Farplane feature in [Skill System](../systems/skill-system.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

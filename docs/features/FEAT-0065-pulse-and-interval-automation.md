@@ -1,5 +1,5 @@
 ---
-title: "Pulse and interval automation"
+title: Pulse and interval automation
 status: implemented
 owner: feature-registry
 created_at: 2026-06-27
@@ -13,38 +13,29 @@ refs:
   - skills/pulse-update/SKILL.md
   - skills/interval-update/SKILL.md
   - skills/automation-advisor/SKILL.md
-feature_record_json: |
-  {
-    "id": "FEAT-0065",
-    "name": "Pulse and interval automation",
-    "status": "implemented",
-    "system_id": "SYS-0003",
-    "category": "planning",
-    "public": true,
-    "surfaces": [
-      "farplane/automations.md",
-      "skills/pulse-update/SKILL.md",
-      "skills/interval-update/SKILL.md",
-      "skills/automation-advisor/SKILL.md"
-    ],
-    "source_refs": [
-      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "docs/automation-previews/2026-06-15-pm-ticket-update-automation-preview.md",
-      "docs/automation-previews/2026-06-24-life-weekly-interval-preview.md"
-    ],
-    "known_limits": "Automation prompts and previewable loops exist, but Farplane still avoids hidden daemons and requires visible tickets, reports, or automations as state surfaces.",
-    "metrics": [
-      "pulse_action_relevance",
-      "interval_report_usefulness",
-      "ticket_supply_learning"
-    ],
-    "last_verified": "2026-06-27"
-  }
+feature_id: FEAT-0065
+system_id: SYS-0003
+category: planning
+public: true
+surfaces:
+  - farplane/automations.md
+  - skills/pulse-update/SKILL.md
+  - skills/interval-update/SKILL.md
+  - skills/automation-advisor/SKILL.md
+source_refs:
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+external_refs: []
+evidence_refs:
+  - skills/pulse-update/eval_task.json
+  - skills/interval-update/eval_task.json
+  - skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md
+known_limits: Automation prompts and previewable loops exist, but Farplane still avoids hidden daemons and requires visible tickets, reports, or automations as state surfaces.
+metrics:
+  - pulse_action_relevance
+  - interval_report_usefulness
+  - ticket_supply_learning
+last_verified: 2026-06-27
 ---
-
 # Pulse and interval automation
 
 Pulse and interval automation is a first-class Farplane feature in [Horizon Loop](../systems/horizon-loop.md). It owns the recurring loops that keep long-running work moving without turning Farplane into a hidden scheduler.
@@ -111,8 +102,9 @@ Proof gates:
 
 ## Evidence
 
-- `docs/automation-previews/2026-06-15-pm-ticket-update-automation-preview.md`
-- `docs/automation-previews/2026-06-24-life-weekly-interval-preview.md`
+- `skills/pulse-update/eval_task.json`
+- `skills/interval-update/eval_task.json`
+- `skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md`
 
 ## Known Limits
 

@@ -40,10 +40,11 @@ Systems stay in [`docs/systems/`](../systems/README.md). A system explains the p
 
 Do not hand-edit generated registry files.
 
-## Record Shape
+## Spec Shape
 
-Each feature page starts with YAML front matter and a `feature_record_json`
-block:
+Each feature page starts with YAML front matter used directly by the generated
+registries. Do not add a `feature_record_json` block; it duplicates the page
+and makes the human contract harder to read.
 
 ```yaml
 ---
@@ -58,29 +59,44 @@ tags:
   - sys-0003
 refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
-feature_record_json: |
-  {
-    "id": "FEAT-0032",
-    "name": "Goal Advisor execution compilation",
-    "status": "implemented",
-    "system_id": "SYS-0003",
-    "category": "execution",
-    "public": true,
-    "surfaces": ["skills/goal-advisor/SKILL.md"],
-    "source_refs": ["docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md"],
-    "external_refs": [],
-    "evidence_refs": ["skills/goal-advisor/eval_task.json"],
-    "known_limits": "Compiles visible execution prompts; it is not a hidden scheduler.",
-    "metrics": ["goal_prompt_contract_pass"],
-    "last_verified": "2026-06-26"
-  }
+feature_id: FEAT-0032
+system_id: SYS-0003
+category: execution
+public: true
+surfaces:
+  - skills/goal-advisor/SKILL.md
+source_refs:
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+external_refs: []
+evidence_refs:
+  - skills/goal-advisor/eval_task.json
+known_limits: "Compiles visible execution prompts; it is not a hidden scheduler."
+metrics:
+  - goal_prompt_contract_pass
+last_verified: 2026-06-26
 ---
 ```
 
+The body must make the feature understandable before it lists owner paths.
+Start from [`TEMPLATE.md`](TEMPLATE.md), whose shape is adapted from:
+
+- Kubernetes KEPs: summary, motivation, goals, non-goals, risks, test plan,
+  rollout, monitoring, and troubleshooting.
+- Rust RFCs: motivation, guide-level explanation, reference-level explanation,
+  drawbacks, alternatives, prior art, and unresolved questions.
+- Atlassian PRDs: objectives, success metrics, assumptions, options, supporting
+  docs, open questions, and explicit out-of-scope boundaries.
+- GitLab description templates: repo-owned Markdown templates that make the
+  right fields easy to fill at creation time.
+
+Farplane adapts those into a smaller contract: problem, behavior, user stories,
+operating contract, surfaces, proof, rollout, limits, alternatives, and change
+history.
+
 ## Field Contract
 
-- `id`: stable `FEAT-####` identifier for this docs-worthy capability.
-- `name`: short, unique feature name.
+- `feature_id`: stable `FEAT-####` identifier for this docs-worthy capability.
+- `title`: short, unique feature name.
 - `status`: `implemented`, `partial`, `proposed`, `designed`, `deferred`, or
   `retired`.
 - `system_id`: owning `SYS-*` record from `docs/systems/*.md`.

@@ -370,7 +370,7 @@ version rollout, generated skill inventory, local surface fields, and feature
 rows rather than requiring long per-skill migration histories.
 
 Use `skills/harness-advisor/` before skill maintenance when the question is
-broader than skills: it compares root policy, global templates, docs/specs,
+broader than skills: it compares root policy, global templates, feature docs,
 skills, subagents, hooks/scripts, ticket contracts, validators, and registry
 metadata before recommending the owning surface.
 

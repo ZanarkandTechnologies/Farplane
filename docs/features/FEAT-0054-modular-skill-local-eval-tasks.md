@@ -1,5 +1,5 @@
 ---
-title: "Modular skill-local eval tasks"
+title: Modular skill-local eval tasks
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -15,43 +15,33 @@ refs:
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/skills/system.md
   - docs/skills/best-practices.md
-  - docs/MEMORY.md#MEM-0145
+  - "docs/MEMORY.md#MEM-0145"
   - docs/HISTORY.md
   - skills/eval/tests/test_run_evals.py
-feature_record_json: |
-  {
-    "id": "FEAT-0054",
-    "name": "Modular skill-local eval tasks",
-    "status": "implemented",
-    "system_id": "SYS-0006",
-    "category": "skills",
-    "public": true,
-    "surfaces": [
-      "skills/eval/scripts/run_evals.py",
-      "skills/eval/SKILL.md",
-      "skills/eval/eval_task.json",
-      "docs/skills/templates/SKILL_TEMPLATE.md",
-      "docs/skills/system.md",
-      "docs/skills/best-practices.md"
-    ],
-    "source_refs": [
-      "docs/MEMORY.md#MEM-0145",
-      "docs/HISTORY.md"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "skills/eval/eval_task.json",
-      "skills/eval/tests/test_run_evals.py",
-      "docs/HISTORY.md"
-    ],
-    "known_limits": "The runner discovers `skills/*/eval_task.json` as a modular suite, but it does not yet enforce every skill having one or validate skill-local eval coverage quality beyond the existing task JSON schema and judge prompts.",
-    "metrics": [
-      "skill_local_eval_discovery_pass"
-    ],
-    "last_verified": "2026-06-11"
-  }
+feature_id: FEAT-0054
+system_id: SYS-0006
+category: skills
+public: true
+surfaces:
+  - skills/eval/scripts/run_evals.py
+  - skills/eval/SKILL.md
+  - skills/eval/eval_task.json
+  - docs/skills/templates/SKILL_TEMPLATE.md
+  - docs/skills/system.md
+  - docs/skills/best-practices.md
+source_refs:
+  - "docs/MEMORY.md#MEM-0145"
+  - docs/HISTORY.md
+external_refs: []
+evidence_refs:
+  - skills/eval/eval_task.json
+  - skills/eval/tests/test_run_evals.py
+  - docs/HISTORY.md
+known_limits: The runner discovers `skills/*/eval_task.json` as a modular suite, but it does not yet enforce every skill having one or validate skill-local eval coverage quality beyond the existing task JSON schema and judge prompts.
+metrics:
+  - skill_local_eval_discovery_pass
+last_verified: 2026-06-11
 ---
-
 # Modular skill-local eval tasks
 
 Modular skill-local eval tasks is a first-class Farplane feature in [Skill System](../systems/skill-system.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

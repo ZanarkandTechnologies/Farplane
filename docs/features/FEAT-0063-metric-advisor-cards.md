@@ -1,5 +1,5 @@
 ---
-title: "Metric advisor cards"
+title: Metric advisor cards
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -17,40 +17,30 @@ refs:
   - skills/best-of-worlds/references/metric-discovery.md
   - skills/metric-advisor/SKILL.md
   - skills/metric-advisor/eval_task.json
-feature_record_json: |
-  {
-    "id": "FEAT-0063",
-    "name": "Metric advisor cards",
-    "status": "implemented",
-    "system_id": "SYS-0007",
-    "category": "skills",
-    "public": true,
-    "surfaces": [
-      "skills/metric-advisor",
-      "docs/skills/README.md",
-      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-      "docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md"
-    ],
-    "source_refs": [
-      "tickets/TASK-0228/ticket.md",
-      "skills/best-of-worlds/references/metric-discovery.md",
-      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "skills/metric-advisor/SKILL.md",
-      "skills/metric-advisor/eval_task.json",
-      "tickets/TASK-0228/ticket.md"
-    ],
-    "known_limits": "Advisory metric-card contract only; callers still own execution, proof, review, and writeback. It must preserve qualitative `none mechanical` cases instead of forcing fake scores.",
-    "metrics": [
-      "metric_card_traceability_pass",
-      "skill_eval_query_lint_pass"
-    ],
-    "last_verified": "2026-06-26"
-  }
+feature_id: FEAT-0063
+system_id: SYS-0007
+category: skills
+public: true
+surfaces:
+  - skills/metric-advisor
+  - docs/skills/README.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
+  - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
+source_refs:
+  - tickets/TASK-0228/ticket.md
+  - skills/best-of-worlds/references/metric-discovery.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
+external_refs: []
+evidence_refs:
+  - skills/metric-advisor/SKILL.md
+  - skills/metric-advisor/eval_task.json
+  - tickets/TASK-0228/ticket.md
+known_limits: Advisory metric-card contract only; callers still own execution, proof, review, and writeback. It must preserve qualitative `none mechanical` cases instead of forcing fake scores.
+metrics:
+  - metric_card_traceability_pass
+  - skill_eval_query_lint_pass
+last_verified: 2026-06-26
 ---
-
 # Metric advisor cards
 
 Metric advisor cards is a first-class Farplane feature in [Self-Improvement And Learning](../systems/self-improvement-learning.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

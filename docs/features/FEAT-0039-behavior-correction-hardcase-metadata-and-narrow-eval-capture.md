@@ -1,5 +1,5 @@
 ---
-title: "Behavior correction, hardcase metadata, and narrow eval capture"
+title: Behavior correction, hardcase metadata, and narrow eval capture
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -18,56 +18,46 @@ refs:
   - experiments/hardcases
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/HISTORY.md
-  - docs/features/registry.jsonl#FEAT-0031
-  - docs/features/registry.jsonl#FEAT-0063
-feature_record_json: |
-  {
-    "id": "FEAT-0039",
-    "name": "Behavior correction, hardcase metadata, and narrow eval capture",
-    "status": "implemented",
-    "system_id": "SYS-0007",
-    "category": "improvement-loop",
-    "public": true,
-    "surfaces": [
-      "skills/gap-analysis",
-      "skills/harness-advisor",
-      "skills/metric-advisor",
-      "skills/optimize-harness",
-      "skills/eval",
-      "docs/LESSONS.md",
-      "experiments/hardcases",
-      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md"
-    ],
-    "source_refs": [
-      "docs/HISTORY.md",
-      "docs/features/registry.jsonl#FEAT-0031",
-      "docs/features/registry.jsonl#FEAT-0063",
-      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "skills/gap-analysis/SKILL.md",
-      "skills/harness-advisor/SKILL.md",
-      "skills/metric-advisor/SKILL.md",
-      "skills/optimize-harness/SKILL.md",
-      "skills/eval/SKILL.md",
-      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-      "experiments/hardcases/20260607-1917-repent-eval-capture/case.md",
-      "tickets/TASK-0228/ticket.md",
-      "docs/HISTORY.md"
-    ],
-    "known_limits": "Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.",
-    "metrics": [
-      "gap_packet_quality_pass",
-      "harness_placement_quality_pass",
-      "metric_card_traceability_pass",
-      "hardcase_eval_metadata_pass",
-      "narrow_regression_eval_pass"
-    ],
-    "last_verified": "2026-06-26"
-  }
+  - "docs/features/registry.jsonl#FEAT-0031"
+  - "docs/features/registry.jsonl#FEAT-0063"
+feature_id: FEAT-0039
+system_id: SYS-0007
+category: improvement-loop
+public: true
+surfaces:
+  - skills/gap-analysis
+  - skills/harness-advisor
+  - skills/metric-advisor
+  - skills/optimize-harness
+  - skills/eval
+  - docs/LESSONS.md
+  - experiments/hardcases
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
+source_refs:
+  - docs/HISTORY.md
+  - "docs/features/registry.jsonl#FEAT-0031"
+  - "docs/features/registry.jsonl#FEAT-0063"
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
+external_refs: []
+evidence_refs:
+  - skills/gap-analysis/SKILL.md
+  - skills/harness-advisor/SKILL.md
+  - skills/metric-advisor/SKILL.md
+  - skills/optimize-harness/SKILL.md
+  - skills/eval/SKILL.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
+  - experiments/hardcases/20260607-1917-repent-eval-capture/case.md
+  - tickets/TASK-0228/ticket.md
+  - docs/HISTORY.md
+known_limits: Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
+metrics:
+  - gap_packet_quality_pass
+  - harness_placement_quality_pass
+  - metric_card_traceability_pass
+  - hardcase_eval_metadata_pass
+  - narrow_regression_eval_pass
+last_verified: 2026-06-26
 ---
-
 # Behavior correction, hardcase metadata, and narrow eval capture
 
 Behavior correction, hardcase metadata, and narrow eval capture is a first-class Farplane feature in [Self-Improvement And Learning](../systems/self-improvement-learning.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

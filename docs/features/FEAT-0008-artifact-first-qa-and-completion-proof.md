@@ -1,5 +1,5 @@
 ---
-title: "Artifact-first QA and completion proof"
+title: Artifact-first QA and completion proof
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -14,40 +14,31 @@ refs:
   - skills/qa
   - skills/review
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
-  - docs/MEMORY.md#MEM-0048
-  - docs/MEMORY.md#MEM-0064
-  - docs/MEMORY.md#MEM-0148
+  - "docs/MEMORY.md#MEM-0048"
+  - "docs/MEMORY.md#MEM-0064"
+  - "docs/MEMORY.md#MEM-0148"
   - docs/HISTORY.md
-feature_record_json: |
-  {
-    "id": "FEAT-0008",
-    "name": "Artifact-first QA and completion proof",
-    "status": "implemented",
-    "system_id": "SYS-0005",
-    "category": "proof",
-    "public": true,
-    "surfaces": [
-      "tickets/README.md",
-      "tickets/templates/ticket.md",
-      "skills/qa",
-      "skills/review",
-      "docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md"
-    ],
-    "source_refs": [
-      "docs/MEMORY.md#MEM-0048",
-      "docs/MEMORY.md#MEM-0064",
-      "docs/MEMORY.md#MEM-0148"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "docs/HISTORY.md"
-    ],
-    "known_limits": "Depends on compact `Done / Proof` obligations plus linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.",
-    "metrics": [],
-    "last_verified": "2026-06-12"
-  }
+feature_id: FEAT-0008
+system_id: SYS-0005
+category: proof
+public: true
+surfaces:
+  - tickets/README.md
+  - tickets/templates/ticket.md
+  - skills/qa
+  - skills/review
+  - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
+source_refs:
+  - "docs/MEMORY.md#MEM-0048"
+  - "docs/MEMORY.md#MEM-0064"
+  - "docs/MEMORY.md#MEM-0148"
+external_refs: []
+evidence_refs:
+  - docs/HISTORY.md
+known_limits: Depends on compact `Done / Proof` obligations plus linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
+metrics: []
+last_verified: 2026-06-12
 ---
-
 # Artifact-first QA and completion proof
 
 Artifact-first QA and completion proof is a first-class Farplane feature in [Proof And Review](../systems/proof-review.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

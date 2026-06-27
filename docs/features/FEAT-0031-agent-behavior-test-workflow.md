@@ -1,5 +1,5 @@
 ---
-title: "Agent behavior test workflow"
+title: Agent behavior test workflow
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -16,37 +16,27 @@ refs:
   - skills/harness-advisor/references/placement-axes.md
   - skills/agent-behavior-test/references/codex-exec-runner.md
   - docs/HISTORY.md
-feature_record_json: |
-  {
-    "id": "FEAT-0031",
-    "name": "Agent behavior test workflow",
-    "status": "implemented",
-    "system_id": "SYS-0005",
-    "category": "proof",
-    "public": true,
-    "surfaces": [
-      "skills/agent-behavior-test",
-      "skills/agent-behavior-test/scripts/run_codex_exec_behavior_test.py",
-      "docs/skills/registry.jsonl"
-    ],
-    "source_refs": [
-      "docs/fundamentals/harness-engineering-doctrine.md",
-      "skills/harness-advisor/references/placement-axes.md"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "skills/agent-behavior-test/references/codex-exec-runner.md",
-      "skills/agent-behavior-test/scripts/run_codex_exec_behavior_test.py",
-      "docs/HISTORY.md"
-    ],
-    "known_limits": "CLI JSONL runs capture visible messages, command events, final output, and usage, but not hidden chain-of-thought. Native subagent testing still depends on the subagent writing its own report artifact.",
-    "metrics": [
-      "agent_behavior_test_runner_smoke_pass"
-    ],
-    "last_verified": "2026-05-25"
-  }
+feature_id: FEAT-0031
+system_id: SYS-0005
+category: proof
+public: true
+surfaces:
+  - skills/agent-behavior-test
+  - skills/agent-behavior-test/scripts/run_codex_exec_behavior_test.py
+  - docs/skills/registry.jsonl
+source_refs:
+  - docs/fundamentals/harness-engineering-doctrine.md
+  - skills/harness-advisor/references/placement-axes.md
+external_refs: []
+evidence_refs:
+  - skills/agent-behavior-test/references/codex-exec-runner.md
+  - skills/agent-behavior-test/scripts/run_codex_exec_behavior_test.py
+  - docs/HISTORY.md
+known_limits: CLI JSONL runs capture visible messages, command events, final output, and usage, but not hidden chain-of-thought. Native subagent testing still depends on the subagent writing its own report artifact.
+metrics:
+  - agent_behavior_test_runner_smoke_pass
+last_verified: 2026-05-25
 ---
-
 # Agent behavior test workflow
 
 Agent behavior test workflow is a first-class Farplane feature in [Proof And Review](../systems/proof-review.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

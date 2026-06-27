@@ -1,5 +1,5 @@
 ---
-title: "Registry-backed documentation OS"
+title: Registry-backed documentation OS
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -22,51 +22,41 @@ refs:
   - bin/validators/sync_template_registry.py
   - templates/global/AGENTS.md
   - docs/skills/templates/SKILL_TEMPLATE.md
-feature_record_json: |
-  {
-    "id": "FEAT-0060",
-    "name": "Registry-backed documentation OS",
-    "status": "implemented",
-    "system_id": "SYS-0009",
-    "category": "context-routing",
-    "public": true,
-    "surfaces": [
-      "docs/features/README.md",
-      "docs/features/TEMPLATE.md",
-      "docs/features/validate_features.py",
-      "docs/features/registry.jsonl",
-      "docs/systems/README.md",
-      "docs/systems/registry.jsonl",
-      "docs/templates/registry.jsonl",
-      "docs/templates/README.md",
-      "rules/template-registry.toml",
-      "rules/template-version-watch.toml",
-      "bin/validators/sync_template_registry.py",
-      "templates/global/AGENTS.md",
-      "docs/skills/templates/SKILL_TEMPLATE.md"
-    ],
-    "source_refs": [
-      "docs/features/README.md",
-      "docs/systems/README.md",
-      "docs/templates/registry.jsonl"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "docs/features/validate_features.py",
-      "bin/validators/test_check_doc_refs.py",
-      "bin/validators/test_doc_parity.py",
-      "bin/validators/test_sync_template_registry.py"
-    ],
-    "known_limits": "Owns documentation, system, feature, and template registry coherence. It does not preserve retired feature IDs or permanent tracked archive docs just to keep historical noise searchable.",
-    "metrics": [
-      "feature_registry_validation_pass",
-      "template_feature_registry_validation_pass",
-      "doc_reference_validation_pass"
-    ],
-    "last_verified": "2026-06-27"
-  }
+feature_id: FEAT-0060
+system_id: SYS-0009
+category: context-routing
+public: true
+surfaces:
+  - docs/features/README.md
+  - docs/features/TEMPLATE.md
+  - docs/features/validate_features.py
+  - docs/features/registry.jsonl
+  - docs/systems/README.md
+  - docs/systems/registry.jsonl
+  - docs/templates/registry.jsonl
+  - docs/templates/README.md
+  - rules/template-registry.toml
+  - rules/template-version-watch.toml
+  - bin/validators/sync_template_registry.py
+  - templates/global/AGENTS.md
+  - docs/skills/templates/SKILL_TEMPLATE.md
+source_refs:
+  - docs/features/README.md
+  - docs/systems/README.md
+  - docs/templates/registry.jsonl
+external_refs: []
+evidence_refs:
+  - docs/features/validate_features.py
+  - bin/validators/test_check_doc_refs.py
+  - bin/validators/test_doc_parity.py
+  - bin/validators/test_sync_template_registry.py
+known_limits: Owns documentation, system, feature, and template registry coherence. It does not preserve retired feature IDs or permanent tracked archive docs just to keep historical noise searchable.
+metrics:
+  - feature_registry_validation_pass
+  - template_feature_registry_validation_pass
+  - doc_reference_validation_pass
+last_verified: 2026-06-27
 ---
-
 # Registry-backed documentation OS
 
 Registry-backed documentation OS is a first-class Farplane feature in [Maintenance And Release OS](../systems/maintenance-release-os.md). It survives as a `FEAT-*` handle because it owns the way public docs, systems, features, templates, and generated registries stay coherent.

@@ -33,7 +33,7 @@ Rules:
 - Use `skills/skill-maintenance/` for bulk skill tier/source/todo/registry
   upkeep instead of expanding global prompt rules.
 - Use `skills/harness-advisor/` first when the operator is deciding where a
-  Farplane improvement belongs across root policy, global templates, docs/specs,
+  Farplane improvement belongs across root policy, global templates, feature docs,
   skills, subagents, hooks/scripts, ticket contracts, validators, or registries.
 - Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
   skill frontmatter, Markdown links, or first-load todo changes.

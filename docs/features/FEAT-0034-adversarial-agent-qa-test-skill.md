@@ -1,5 +1,5 @@
 ---
-title: "Adversarial agent QA test skill"
+title: Adversarial agent QA test skill
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -12,38 +12,28 @@ refs:
   - skills/agent-qa-test
   - docs/skills/registry.jsonl
   - docs/fundamentals/harness-engineering-doctrine.md
-  - docs/features/registry.jsonl#FEAT-0031
+  - "docs/features/registry.jsonl#FEAT-0031"
   - skills/agent-qa-test/SKILL.md
   - docs/HISTORY.md
-feature_record_json: |
-  {
-    "id": "FEAT-0034",
-    "name": "Adversarial agent QA test skill",
-    "status": "implemented",
-    "system_id": "SYS-0005",
-    "category": "proof",
-    "public": true,
-    "surfaces": [
-      "skills/agent-qa-test",
-      "docs/skills/registry.jsonl"
-    ],
-    "source_refs": [
-      "docs/fundamentals/harness-engineering-doctrine.md",
-      "docs/features/registry.jsonl#FEAT-0031"
-    ],
-    "external_refs": [],
-    "evidence_refs": [
-      "skills/agent-qa-test/SKILL.md",
-      "docs/HISTORY.md"
-    ],
-    "known_limits": "Skill and prompt-template surface only; actual native subagent execution still depends on the invoking agent and available runtime tools.",
-    "metrics": [
-      "agent_qa_test_skill_validation_pass"
-    ],
-    "last_verified": "2026-05-26"
-  }
+feature_id: FEAT-0034
+system_id: SYS-0005
+category: proof
+public: true
+surfaces:
+  - skills/agent-qa-test
+  - docs/skills/registry.jsonl
+source_refs:
+  - docs/fundamentals/harness-engineering-doctrine.md
+  - "docs/features/registry.jsonl#FEAT-0031"
+external_refs: []
+evidence_refs:
+  - skills/agent-qa-test/SKILL.md
+  - docs/HISTORY.md
+known_limits: Skill and prompt-template surface only; actual native subagent execution still depends on the invoking agent and available runtime tools.
+metrics:
+  - agent_qa_test_skill_validation_pass
+last_verified: 2026-05-26
 ---
-
 # Adversarial agent QA test skill
 
 Adversarial agent QA test skill is a first-class Farplane feature in [Proof And Review](../systems/proof-review.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.

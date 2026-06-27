@@ -11,6 +11,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 
 ROOT = Path(__file__).resolve().parents[2]
 TODAY = date.today().isoformat()
@@ -38,6 +40,21 @@ FEATURE_FIELDS = {
     "last_verified",
 }
 GENERATED_FEATURE_FIELDS = FEATURE_FIELDS | {"system_name", "owner_spec"}
+FEATURE_FRONTMATTER_FIELDS = {
+    "feature_id",
+    "title",
+    "status",
+    "system_id",
+    "category",
+    "public",
+    "surfaces",
+    "source_refs",
+    "external_refs",
+    "evidence_refs",
+    "known_limits",
+    "metrics",
+    "last_verified",
+}
 SYSTEM_FIELDS = {
     "id",
     "name",
@@ -146,6 +163,24 @@ def load_json_block(frontmatter: str, path: Path, key: str, errors: list[str]) -
         return None
 
 
+def normalize_frontmatter_value(value: Any) -> Any:
+    if hasattr(value, "isoformat"):
+        return value.isoformat()
+    return value
+
+
+def load_frontmatter(frontmatter: str, path: Path, errors: list[str]) -> dict[str, Any] | None:
+    try:
+        loaded = yaml.safe_load(frontmatter) or {}
+    except yaml.YAMLError as exc:
+        errors.append(f"{path.relative_to(ROOT)}: invalid YAML frontmatter: {exc}")
+        return None
+    if not isinstance(loaded, dict):
+        errors.append(f"{path.relative_to(ROOT)}: YAML frontmatter must be a mapping")
+        return None
+    return {str(key): normalize_frontmatter_value(value) for key, value in loaded.items()}
+
+
 def system_paths(root: Path = SYSTEM_ROOT) -> list[Path]:
     if not root.exists():
         return []
@@ -188,11 +223,33 @@ def load_features(root: Path = ROOT) -> tuple[list[dict[str, Any]], list[str]]:
         frontmatter = extract_frontmatter(text, path, errors)
         if frontmatter is None:
             continue
-        feature = load_json_block(frontmatter, path, "feature_record_json", errors)
-        if not isinstance(feature, dict):
-            errors.append(f"{path.relative_to(root)}: feature_record_json must be an object")
+        data = load_frontmatter(frontmatter, path, errors)
+        if data is None:
             continue
-        row = dict(feature)
+        missing = FEATURE_FRONTMATTER_FIELDS - data.keys()
+        if missing:
+            errors.append(
+                f"{path.relative_to(root)}: missing feature frontmatter fields: {sorted(missing)}"
+            )
+            continue
+        if "feature_record_json" in data:
+            errors.append(f"{path.relative_to(root)}: remove legacy feature_record_json block")
+            continue
+        row = {
+            "id": data.get("feature_id"),
+            "name": data.get("title"),
+            "status": data.get("status"),
+            "system_id": data.get("system_id"),
+            "category": data.get("category"),
+            "public": data.get("public"),
+            "surfaces": data.get("surfaces"),
+            "source_refs": data.get("source_refs"),
+            "external_refs": data.get("external_refs"),
+            "evidence_refs": data.get("evidence_refs"),
+            "known_limits": data.get("known_limits"),
+            "metrics": data.get("metrics"),
+            "last_verified": data.get("last_verified"),
+        }
         row["_owner_spec"] = str(path.relative_to(root))
         row["_source_path"] = str(path.relative_to(root))
         features.append(row)
@@ -438,7 +495,7 @@ def validate() -> list[str]:
     if not systems:
         errors.append("docs/systems: no system_record_json entries found")
     if not features:
-        errors.append("docs/features: no FEAT-*.md feature_record_json entries found")
+        errors.append("docs/features: no FEAT-*.md feature frontmatter entries found")
         return errors
 
     feature_by_id: dict[str, dict[str, Any]] = {}
@@ -541,7 +598,7 @@ def validate_no_active_stale_spec_refs() -> list[str]:
         for line_no, line in enumerate(text.splitlines(), 1):
             if STALE_SPEC_REF_RE.search(line):
                 rel = path.relative_to(ROOT)
-                errors.append(f"{rel}:{line_no}: active docs must not reference deleted docs/specs paths")
+                errors.append(f"{rel}:{line_no}: active docs must not reference deleted spec-folder paths")
     return errors
 
 

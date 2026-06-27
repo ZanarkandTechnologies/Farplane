@@ -1,5 +1,5 @@
 ---
-title: "Inspiration Vault"
+title: Inspiration Vault
 status: proposed
 owner: feature-registry
 created_at: 2026-06-27
@@ -13,34 +13,25 @@ refs:
   - skills/ingest-content/SKILL.md
   - skills/media-ingest/SKILL.md
   - skills/harness-scout/SKILL.md
-feature_record_json: |
-  {
-    "id": "FEAT-0056",
-    "name": "Inspiration Vault",
-    "status": "proposed",
-    "system_id": "SYS-0008",
-    "category": "source-ingestion",
-    "public": true,
-    "surfaces": [
-      "docs/systems/source-sidecar-systems.md",
-      "skills/ingest-content/SKILL.md",
-      "skills/media-ingest/SKILL.md",
-      "skills/harness-scout/SKILL.md"
-    ],
-    "source_refs": [
-      "docs/systems/source-sidecar-systems.md"
-    ],
-    "external_refs": [],
-    "evidence_refs": [],
-    "known_limits": "Proposed product surface. It needs a dedicated implementation ticket and proof path before it can be marked implemented.",
-    "metrics": [
-      "inspiration_recall_quality",
-      "creative_grounding_reuse"
-    ],
-    "last_verified": "2026-06-27"
-  }
+feature_id: FEAT-0056
+system_id: SYS-0008
+category: source-ingestion
+public: true
+surfaces:
+  - docs/systems/source-sidecar-systems.md
+  - skills/ingest-content/SKILL.md
+  - skills/media-ingest/SKILL.md
+  - skills/harness-scout/SKILL.md
+source_refs:
+  - docs/systems/source-sidecar-systems.md
+external_refs: []
+evidence_refs: []
+known_limits: Proposed product surface. It needs a dedicated implementation ticket and proof path before it can be marked implemented.
+metrics:
+  - inspiration_recall_quality
+  - creative_grounding_reuse
+last_verified: 2026-06-27
 ---
-
 # Inspiration Vault
 
 Inspiration Vault is a proposed first-class Farplane feature in [Source And Sidecar Systems](../systems/source-sidecar-systems.md). It survived the purge because it already had enough product shape to deserve a feature spec rather than a stray idea file.

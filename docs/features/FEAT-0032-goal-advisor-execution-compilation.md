@@ -1,5 +1,5 @@
 ---
-title: "Goal Advisor execution compilation"
+title: Goal Advisor execution compilation
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
@@ -17,41 +17,31 @@ refs:
   - tickets/archive/TASK-0196/ticket.md
   - skills/goal-advisor/SKILL.md
   - docs/HISTORY.md
-feature_record_json: |
-  {
-    "id": "FEAT-0032",
-    "name": "Goal Advisor execution compilation",
-    "status": "implemented",
-    "system_id": "SYS-0003",
-    "category": "execution",
-    "public": true,
-    "surfaces": [
-      "skills/goal-advisor",
-      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
-      "docs/features/FEAT-0007-ticket-as-durable-task-memory.md",
-      "tickets/templates/goal-loop/program.md"
-    ],
-    "source_refs": [
-      "skills/goal-advisor",
-      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
-      "tickets/archive/TASK-0196/ticket.md"
-    ],
-    "external_refs": [
-      "https://developers.openai.com/codex/use-cases/follow-goals"
-    ],
-    "evidence_refs": [
-      "skills/goal-advisor/SKILL.md",
-      "docs/HISTORY.md",
-      "tickets/archive/TASK-0196/ticket.md"
-    ],
-    "known_limits": "Skill and docs contract only; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager. Former work, Ralph, and batch-work public skill surfaces are retired into Goal standards.",
-    "metrics": [],
-    "last_verified": "2026-06-13"
-  }
+feature_id: FEAT-0032
+system_id: SYS-0003
+category: execution
+public: true
+surfaces:
+  - skills/goal-advisor
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
+  - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
+  - tickets/templates/goal-loop/program.md
+source_refs:
+  - skills/goal-advisor
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
+  - tickets/archive/TASK-0196/ticket.md
+external_refs:
+  - https://developers.openai.com/codex/use-cases/follow-goals
+evidence_refs:
+  - skills/goal-advisor/SKILL.md
+  - docs/HISTORY.md
+  - tickets/archive/TASK-0196/ticket.md
+known_limits: Skill and docs contract only; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager. Former work, Ralph, and batch-work public skill surfaces are retired into Goal standards.
+metrics: []
+last_verified: 2026-06-13
 ---
-
 # Goal Advisor execution compilation
 
 Goal Advisor execution compilation is a first-class Farplane feature in [Horizon Loop](../systems/horizon-loop.md). It survives as a `FEAT-*` handle because it has owner surfaces, evidence, limits, and a maintenance path.
