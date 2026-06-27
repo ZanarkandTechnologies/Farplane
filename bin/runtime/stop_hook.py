@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 """
-FARPLANE STOP HOOK
+FARPLANE STOP HOOK (LEGACY / QUARANTINED)
 ==================
 Purpose
 
-Decide whether a turn should stop or continue by running an ephemeral
-Codex classification pass against the latest assistant message plus the
-active ticket state.
+Historical Ralph-era ticket orchestration and Stop continuation runtime.
+The live install no longer wires this file into `hooks.json`; Codex native Goal
+mode and ticket-local proof/review steps own continuation and completion.
+Keep this module for archived tests, forensics, and possible future extraction
+of a non-continuing guard.
+
+Historical purpose:
+
+Decide whether a turn should stop or continue by running an ephemeral Codex
+classification pass against the latest assistant message plus the active ticket
+state.
 
 KEY CONCEPTS:
 - Assisted continuation is opt-in via environment flag.

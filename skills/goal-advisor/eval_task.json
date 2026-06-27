@@ -146,5 +146,24 @@
       "proof"
     ],
     "notes": "Regression guard for Goal prompts that claimed UI completion without image evidence."
+  },
+  {
+    "id": "goal_advisor_material_goal_final_checkpoint_01",
+    "title": "Goal advisor requires ticket-local QA evidence and completion review before stop_complete",
+    "query": "Create the native Goal prompt for TASK-2345. It is a material feature ticket with Proof weight: qa + review, Done / Proof critical-path bullets, program.md, and progress.md. The old Stop hook is disabled; keep the prompt compact.",
+    "reference_points": [
+      "Uses an inline Files list with ticket.md, program.md, and progress.md instead of transcript memory",
+      "States that native Goal mode owns continuation and does not rely on a Stop hook",
+      "Requires ordered critical-path sanity checks and evidence writeback before completion",
+      "Requires QA evidence review and completion review before stop_complete",
+      "Requires ticket/progress/artifact writeback plus final Ticket, Verification, Artifacts, Grounding, and Residual risk lines"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "completion-checkpoint",
+      "proof"
+    ],
+    "notes": "Regression guard for material Goals that trusted Stop-hook orchestration or executor self-certification to catch missing QA."
   }
 ]

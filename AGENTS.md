@@ -256,16 +256,14 @@ For harness-design research and external patterns:
   orchestration surfaces; their remaining useful policies live in Goal
   standards.
 - Treat `goal-advisor` as the coding-ticket leaf execution surface once a
-  ticket is ready, with internal `execution_phase` progression through `build`,
-  `qa`, and `demo` when required. Stop-hook should advance those phases
-  mechanically before final completion review. See `MEM-0049`.
-- Final Stop-hook completion in Farplane should remain mechanical and visible:
-  after impl/qa/demo gates pass, request one linked nonce-backed
-  completion-review receipt from the visible reviewer lane instead of hiding
-  the final judgment in a background review pass. Only active ticket-backed
-  Goal loops should receive that nonce, and the next final response must echo
-  it as `COMPLETION_PASSWORD: <nonce>` alongside the matching receipt. See
-  `MEM-0064`, `MEM-0067`.
+  ticket is ready. Native Goal mode owns continuation; ticket `Done / Proof`
+  and `program.md` own the build, QA, demo, evidence, and final completion
+  checkpoint. Do not rely on Stop-hook orchestration to advance phases.
+- Final completion in Farplane should remain mechanical and visible: material
+  Goal prompts must require QA evidence review and completion review before
+  `stop_complete`, then write the receipt and strongest evidence back to the
+  ticket, `progress.md`, and `artifacts/`. Live Stop hooks collect telemetry
+  only; legacy Ralph-era Stop orchestration is quarantined.
 - Material review should run through the native `reviewer` subagent when
   available. Pass the active ticket or task artifact path, changed files,
   evidence artifacts, review focus, caller-declared rubric families, required

@@ -1,6 +1,6 @@
 ---
 name: qa
-description: "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Stop-hook gating."
+description: "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Goal/ticket completion."
 tier: 3
 group: coding
 source: local
@@ -118,7 +118,7 @@ Do not use it when:
   `revise`, `fail`, `blocked`, or `NOT PROVABLE`; name the missing
   `best_evidence` image path as the blocker.
 - Write `result.json` under the QA artifact root and finish with:
-  - `EXECUTION_RESULT: status=qa_complete next=building reason=...`
+  - `QA_RESULT: verdict=<pass|revise|fail|blocked|NOT PROVABLE> evidence=<result.json path> reason=...`
 
 ## Required artifacts
 
@@ -155,6 +155,6 @@ command logs, do not pass.
 }
 ```
 
-The final Stop-hook reviewer may still fail completion even when QA `verdict` is
-`pass` if the proof is too weak, too confusing, or not yet strong enough for an
-internal PM-quality review.
+The final ticket or Goal completion review may still fail completion even when
+QA `verdict` is `pass` if the proof is too weak, too confusing, or not yet
+strong enough for an internal PM-quality review.

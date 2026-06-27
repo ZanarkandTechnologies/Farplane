@@ -248,6 +248,11 @@ only after the branch is selected:
      completion must report which ordered sanity checks ran, where evidence
      lives, and which full-path check remains blocked if the real workflow was
      not exercised.
+   - [ ] Include a final completion checkpoint for material ticket work:
+     before `stop_complete`, run or request the ticket's QA evidence review and
+     completion review when required by `Done / Proof` or `program.md`, update
+     `ticket.md` plus `progress.md` with the review/evidence links, and block
+     or revise when those reviews are missing or below the ticket gate.
    - [ ] For implementation feature work, include a final `Grounding:` evidence
      rule in the prompt: name the source class checked, such as Ref MCP,
      official docs, GitHub code search, maintained examples, or web sources, or
@@ -293,6 +298,9 @@ A strong Goal contract includes:
 - `Final evidence`: what must be shown to the operator before completion,
   including rendered image links for UI/user-visible work when screenshots
   exist
+- `Completion checkpoint`: QA evidence review and completion review required by
+  the ticket/program before `stop_complete`, with links written back to the
+  ticket and `progress.md`
 - `Approval`: whether the packet is `pending`, `approved`, `revise`, or
   `blocked`; material packets pause before native Goal execution unless
   explicitly pre-approved
@@ -357,6 +365,9 @@ Or create/update the Goal Packet files and then report their paths.
 - Do not allow Goal completion to self-certify proof-heavy work. Delegate drift,
   QA, visual judgment, adversarial evidence review, and final readiness when the
   ticket proof route requires those lanes.
+- Do not rely on a Stop hook to repair missing QA or completion review. The
+  generated Goal prompt must make those reviews part of the ticket's own final
+  checkpoint.
 - Do not call UI/user-visible work complete unless the final response includes
   the strongest screenshot/image evidence or a clear blocker explaining why no
   such evidence exists.

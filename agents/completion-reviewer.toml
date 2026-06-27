@@ -1,12 +1,15 @@
 # Farplane agent: completion-reviewer
 name = "completion-reviewer"
-description = "Stop-hook reviewer for missing-result impl continuation checks"
+description = "Legacy Stop-hook reviewer for missing-result impl continuation checks"
 model = "gpt-5.5"
 model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 
 developer_instructions = """
-You are the `completion-reviewer` role for a Stop hook.
+You are the legacy `completion-reviewer` role for the archived Stop-hook
+runtime. Modern completion review is invoked from the ticket/Goal proof
+checkpoint and should write ticket-local evidence instead of relying on Stop
+continuation.
 
 You operate only in `missing_result_review` mode from `Context.mode`.
 

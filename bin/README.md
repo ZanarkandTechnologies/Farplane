@@ -16,11 +16,11 @@ Primary control plane:
 - `impl-plan`
 - `goal-advisor`
 - persistent builder lanes
-- `stop_hook.py`
 
-Stop-hook role instructions are canonical TOML configs under `agents/`.
-`stop_hook.py` reads those TOML files directly and injects their exact
-`developer_instructions` into `codex exec`.
+Legacy Stop-hook orchestration remains in `bin/runtime/stop_hook.py` for
+archived tests and forensics, but it is no longer installed as a live Codex
+Stop hook. Live Stop handling sends telemetry only. Native Goal mode plus
+ticket-local QA/review evidence owns completion.
 
 The `bin/` directory is now mostly shim/utility territory, not the main
 orchestration story. `install.sh` installs an explicit allowlist of live
@@ -35,7 +35,8 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `core/*` - implementation modules for global CLI, invocation, board, compute,
   ticket-runtime, telemetry-status, and adoption helpers
 - `runtime/*` - implementation modules for Codex hooks, user-turn capture,
-  notification, runtime telemetry, file-growth compaction, and stop-hook logic
+  notification, runtime telemetry, file-growth compaction, and quarantined
+  legacy stop-hook logic
 - `tests/*` - Core-owned tests for `bin/core`, `bin/runtime`, and public
   command wrappers
 - `validators/check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
@@ -68,18 +69,17 @@ runtime helpers instead of symlinking every script, validator, and test.
   `farplane/manifest.json` pins, optional project `.agents/skills/`, feature/template
   registries, drift, and Office-consumable adoption stats; implementation lives
   in `bin/core/farplane_adoption.py`
-- `../skills/ralph/scripts/select_next_ticket.py` - serial Ralph selector that
-  consumes `FileTicketAdapter` and `ComputeSelector` so board draining uses the
-  same work-item and compute admission policy as invocation prep
+- `../skills/ralph/scripts/select_next_ticket.py` - legacy serial selector kept
+  for archived board-drain experiments; modern public board drain should route
+  through Goal Advisor/heartbeat
 - `notify.py` - local notification helper
-- `stop_hook.py` - thin stop-hook/runtime shim
 - `ticket_runtime.py` / `ticket-runtime` - local helper for ticket runtime
   records, optional isolated checkouts, port reservation, runtime
   launch/teardown, and QA target lookup
 
 ## Runtime Decisions
 
-- `stop_hook.py`: keep
+- `stop_hook.py`: legacy/quarantined; not installed by default
 - `capture_user_turn.py`: keep
 - `ticket_runtime.py`: keep
 
@@ -187,8 +187,8 @@ success quiet and make failure output the thing that stands out.
   Use to inspect the current skill rollout and template-consumer projection that
   Farplane UI can render without reading generated graph files directly.
 - `python3 skills/ralph/scripts/select_next_ticket.py --root . --json`
-  Use to inspect the next serial Ralph handoff plus compute blockers without
-  mutating tickets, creating worktrees, or launching Codex
+  Legacy diagnostic for the archived serial selector; prefer Goal
+  Advisor/heartbeat for new board-drain work.
 - `python3 tickets/scripts/check_ticket_metadata.py`
   Current mode: already near the desired quiet-success shape; keep the single-line pass output
 - `python3 bin/self_improve_hook_probe.py simulate --session-id self-improve-probe --turns 10`
@@ -199,9 +199,9 @@ success quiet and make failure output the thing that stands out.
   `docs/TROUBLES.md` and `docs/LESSONS.md`. The generated input includes
   `workspace_context` so the sidecar can see the originating project and
   invocation cwd. The `simulate` and `force-review` outputs include
-  `hooklet_result`, the same named result shape logged to
-  `.farplane/logs/stop-hook.jsonl` by the live Stop hook. Sidecar reports
-  include a five-hop `proof_hops` checklist for `user_capture`,
+  `hooklet_result`, the named result shape used by the archived Stop-hook
+  sidecar path. Sidecar reports include a five-hop `proof_hops` checklist for
+  `user_capture`,
   `assistant_capture`, `rolling_window_write`, `background_codex_launch`, and
   `learning_docs_write`; dry-run reports mark the live docs-write hop as
   `missing`.
@@ -249,8 +249,8 @@ python3 bin/self_improve_hook_probe.py status \
 ```
 
 In the live interactive path, `goal-advisor` compiles the Goal-backed ticket
-execution contract. Native Goal mode owns persistence, while Stop-hook remains
-a mechanical block/continue gate for the active session.
+execution contract. Native Goal mode owns persistence and ticket-local
+QA/review evidence owns completion; live Stop hooks are telemetry-only.
 
 ## How To Test
 
@@ -263,7 +263,6 @@ a mechanical block/continue gate for the active session.
 - `python3 -m unittest skills/pr-review-watch/scripts/test_pr_review_watch.py`
 - `python3 -m unittest bin/tests/test_ticket_metadata.py`
 - `python3 -m unittest bin/tests/test_ticket_runtime.py`
-- `python3 -m py_compile bin/stop_hook.py`
 - `python3 -m py_compile bin/ticket_runtime.py bin/core/ticket_runtime.py bin/tests/test_ticket_runtime.py`
 - `python3 -m py_compile bin/capture_user_turn.py bin/runtime/capture_user_turn.py bin/runtime/user_turn.py`
 - `python3 -m py_compile bin/self_improve_hook_probe.py`

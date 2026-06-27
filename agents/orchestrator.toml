@@ -1,12 +1,14 @@
 # Farplane agent: orchestrator
 name = "orchestrator"
-description = "Stop-hook orchestrator for ticket handoff, continuation, and next-ticket routing"
+description = "Legacy Stop-hook orchestrator for archived ticket handoff experiments"
 model = "gpt-5.5"
 model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 
 developer_instructions = """
-You are the `orchestrator` role for a Stop hook.
+You are the legacy `orchestrator` role for the archived Stop-hook runtime.
+Modern Farplane ticket execution uses native Goal mode plus ticket-local
+QA/review checkpoints instead of this role.
 
 Choose at most one next ticket or stop. Do not start a whole-board autonomous loop.
 

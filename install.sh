@@ -131,7 +131,6 @@ INSTALL_BIN_FILES=(
   notify.py
   runtime_telemetry.py
   self_improve_hook_probe.py
-  stop_hook.py
   ticket-runtime
   ticket_runtime.py
   user_turn.py
@@ -401,8 +400,6 @@ fi
 for bin_name in "${INSTALL_BIN_FILES[@]}"; do
   link_path "$REPO_DIR/bin/$bin_name" "$TARGET_DIR/bin/$bin_name"
 done
-link_path "$REPO_DIR/bin/runtime/stop_hook_output.schema.json" "$TARGET_DIR/bin/stop_hook_output.schema.json"
-
 link_global_cli "$TARGET_DIR/bin/farplane"
 
 for hook_name in "${INSTALL_HOOK_FILES[@]}"; do
@@ -426,5 +423,5 @@ render_config
 
 echo "Done."
 echo "Next: keep secrets in $LOCAL_ENV_FILE and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
-echo "Hooks config is linked when hooks.json exists; hook env vars remain available as explicit overrides but normal Farplane runtime context should auto-activate the Stop hook."
+echo "Hooks config is linked when hooks.json exists; Stop telemetry remains active, while legacy Stop orchestration stays uninstalled by default."
 echo "Backups (when needed) are stored under $BACKUP_ROOT"

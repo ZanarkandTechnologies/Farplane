@@ -40,7 +40,8 @@ The run folder must also contain:
 - ordered storyboard-grade frames for relevant user-visible runs
 
 `report.md` must link at least one screenshot and include the exact commands run.
-`result.json` must summarize the QA verdict in machine-readable form for Stop-hook gating.
+`result.json` must summarize the QA verdict in machine-readable form for ticket
+and Goal completion review.
 
 ## Required context
 

@@ -83,6 +83,13 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
      workflow, hook lifecycle, user path, or session path was never exercised or
      explicitly marked as unrun.
 
+11. `final-completion-checkpoint`
+   - Question: For material ticket work, does the prompt require QA evidence
+     review and completion review before `stop_complete`, with writeback to
+     `ticket.md`, `progress.md`, and artifact links?
+   - Violation: The Goal prompt assumes a Stop hook, transcript memory, or the
+     executor's own final summary will catch missing proof.
+
 ## Evidence Note Template
 
 ```text
@@ -94,6 +101,7 @@ goal_advisor_qa:
   grounding_evidence_rule:
   final_evidence_rule:
   critical_path_proof_rule:
+  final_completion_checkpoint:
   violations:
   fixes_or_deferrals:
 ```

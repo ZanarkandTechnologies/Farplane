@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.13
+template_version: 0.2.14
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -258,6 +258,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   and use a Goal Packet: `ticket.md` for the task contract, `program.md` for
   loop configuration, and `progress.md` for append-only turn logs. The Goal
   prompt is generated from those files; it is not the durable source of truth.
+- For material Goal-backed ticket work, put QA evidence review and completion
+  review in the ticket `Done / Proof` or Goal program final checkpoint. Run or
+  request those reviews before claiming `stop_complete`, write receipts and best
+  evidence back to the ticket/progress/artifacts, and block or revise when the
+  checkpoint is missing. Do not assume a Stop hook will repair missing proof.
 - At the start or end of material Goal continuations, compare current progress
   against the ticket and Goal program. Use a read-only drift reviewer when the
   work is high-stakes, long-running, rollout-like, or easy to self-approve.

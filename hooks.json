@@ -23,12 +23,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/bin/stop_hook.py\"",
-            "statusMessage": "Evaluating Ralph stop hook",
-            "timeout": 90
-          },
-          {
-            "type": "command",
             "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
             "statusMessage": "Sending Farplane Console stop heartbeat",
             "timeout": 5

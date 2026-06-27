@@ -51,21 +51,20 @@ For runtime helper scripts:
 - explicit run-state selectors outrank hook `session_id`, which outranks ambient `.farplane/state/current-run.json`
 - run-state files remain runtime-only and lightweight
 - runtime state should group active execution ownership into a lightweight `claim` object instead of scattering claim semantics across multiple ad hoc top-level reads
-- same-ticket `goal-advisor` continuation must require both an explicit
-  session-scoped loop gate and a matching runtime `claim`; legacy
-  `auto_continue` must not be treated as activation truth. See `MEM-0025`.
-- explicit `goal-advisor` control-session turns must seed selected-ticket
-  runtime ownership when ticket resolution is explicit or unambiguous; a
-  session-only control stub is not enough for Stop-hook same-ticket
-  continuation. See `MEM-0032`.
+- native Goal mode owns implementation persistence. Legacy Stop-hook
+  same-ticket continuation, `auto_continue`, and runtime claim routing are
+  quarantined and must not be used as live completion authority.
 - `close-ticket` is the canonical live documenting-phase control skill. Runtime
   parsing may still accept `$docs-closeout` as an alias, but live prompts and
   handoffs should use `$close-ticket`. See `MEM-0043`.
-- on completion-like paths, Stop-hook reviewer judgment is the authority for routing to the orchestrator; the main model's completion claim is candidate-only, and reviewer must fail completion when an obvious in-scope next step still remains. See `MEM-0034`.
+- on completion-like paths, ticket-local QA/review evidence is the authority;
+  the main model's completion claim is candidate-only until the ticket's
+  `Done / Proof`, Goal program, and required delegated reviews are satisfied.
 - delegated workers should keep `worker_name`, `main_artifact_path`, and `grounding_summary` visible in the same runtime contract when available
 - delegated stale-wait reads should stay advisory-first and use explicit checkpoint timing instead of hidden watchdog behavior
 - current-turn user intent should be captured at `UserPromptSubmit` when available; worker-entry capture is fallback-only degraded mode
 - canonical current-turn capture belongs only to control sessions whose first owned prompt explicitly invokes a public control skill; internal or non-owning sessions must not overwrite `.farplane/state/current-run.json`. See `MEM-0029`.
 - native Goal mode owns implementation persistence; stored `session_id` is a recovery hint only. See `MEM-0005`.
-- stop-hook role configs are TOML-backed under `agents/*.toml`; load exact `developer_instructions` from TOML instead of relying on prompt-level agent-name loading. See `MEM-0010`.
-- Stop-hook stdout is machine-only. When `bin/stop_hook.py` handles a `Stop` event, reserve stdout for one valid JSON payload and send notification fallbacks or diagnostics to stderr instead. See `MEM-0056`.
+- legacy stop-hook role configs are TOML-backed under `agents/*.toml` and are
+  not live by default. If this runtime is revived, keep stdout machine-only and
+  reserve diagnostics for stderr. See `MEM-0010` and `MEM-0056`.

@@ -24,10 +24,12 @@ FARPLANE_CONVEX_SITE_URL = "__FARPLANE_CONVEX_SITE_URL__"
 FARPLANE_TELEMETRY_TOKEN = "__FARPLANE_TELEMETRY_TOKEN__"
 FARPLANE_CONSOLE_KEY = "__FARPLANE_CONSOLE_KEY__"
 FARPLANE_ACTIVITY_RECENT_URL = "__FARPLANE_ACTIVITY_RECENT_URL__"
-# Optional hosted telemetry for hook activity. Leave unset until your backend exists.
-# FARPLANE_TELEMETRY_API_URL = "https://your-backend.example.com/api/codex/activity"
-# FARPLANE_TELEMETRY_API_TOKEN = "replace-me"
-# FARPLANE_TELEMETRY_TIMEOUT_SECS = "2.0"
+# Optional explicit Codex hook telemetry endpoint. Normally leave this unset:
+# hooks/farplane_console_ping.py posts to FARPLANE_CONVEX_SITE_URL/telemetry/hooks.
+# Prefer the Farplane UI-managed ~/.farplane/config.toml / secrets.json values;
+# install.sh renders them here only as a compatibility fallback.
+# FARPLANE_TELEMETRY_HOOKS_URL = "https://your-backend.example.com/telemetry/hooks"
+# FARPLANE_TELEMETRY_ACTIVITY_URL = "https://your-backend.example.com/telemetry/activity" # legacy fallback
 # Skill graph heat controls. The generated skill graph reads local
 # `.farplane/events/*.jsonl` and uses these values to decide its default hot
 # skill window and top-N view.
@@ -37,9 +39,9 @@ FARPLANE_SKILL_HEAT_TOP_N = "25"
 # Comma-separated event types counted as skill heat.
 FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,learning_review_launched,skill_requested"
 # Hook-backed skill-opportunity proposer. Captured windows stay local under
-# `.farplane/state/self-improve/`. The Stop hook launches a background
-# fire-and-forget Codex job every interval by default. The job creates Notion
-# approval tasks tagged as agent self-improvement; it does not edit skills.
+# `.farplane/state/self-improve/`. The optional self-improvement probe can
+# launch a background fire-and-forget Codex job every interval. The job creates
+# Notion approval tasks tagged as agent self-improvement; it does not edit skills.
 # Set FARPLANE_SKILL_OPPORTUNITY_APPLY = "0" locally to disable it.
 FARPLANE_SKILL_OPPORTUNITY_APPLY = "1"
 FARPLANE_SKILL_OPPORTUNITY_APPLY_INTERVAL = "10"
@@ -54,10 +56,10 @@ FARPLANE_SKILL_OPPORTUNITY_NOTION_STATUS = "Review"
 # Optional automation settings such as Taste Loop active hours live in
 # `farplane/automations.md` marker-delimited TOML blocks so Farplane UI can
 # render and update them directly before syncing the Codex automation record.
-# Optional explicit force-on for Farplane hook behavior. The Stop hook also
-# auto-activates from clear runtime context such as `.farplane/`, `tickets/`,
-# `IMPL_RESULT`, or explicit ticket selectors.
-# Keep machine-specific hook tuning local if you need non-default behavior.
+# Optional explicit force-on for Farplane hook behavior. Live Codex hooks now
+# capture user turns and Stop telemetry only; legacy Stop orchestration is not
+# installed by default. Keep machine-specific hook tuning local if you need
+# non-default behavior.
 
 [sandbox_workspace_write]
 network_access = false
@@ -110,7 +112,7 @@ description = "Read-only Goal Packet drift reviewer that compares ticket, progra
 config_file = "agents/goal-drift-reviewer.toml"
 
 [agents.orchestrator]
-description = "Stop-hook orchestrator for ticket handoff, continuation, and next-ticket routing."
+description = "Legacy Stop-hook orchestrator for archived ticket handoff experiments; not live in the modern Goal-backed path."
 config_file = "agents/orchestrator.toml"
 
 [agents.documentation-maintainer]
@@ -138,7 +140,7 @@ description = "QA subagent that plans and executes tests. Keeps the agent prompt
 config_file = "agents/qa-tester.toml"
 
 [agents.completion-reviewer]
-description = "Stop-hook reviewer for missing-result impl continuation checks."
+description = "Legacy Stop-hook completion reviewer; modern ticket completion review should be invoked from Goal/ticket proof steps."
 config_file = "agents/completion-reviewer.toml"
 
 [agents.skill-opportunity-applier]

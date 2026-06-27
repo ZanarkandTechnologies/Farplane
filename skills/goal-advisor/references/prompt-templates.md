@@ -68,6 +68,14 @@ ticket's proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
 `demo`, use the delegated lane named by the ticket/program and do not count
 self-certification as proof.
 
+Final checkpoint: Before `stop_complete` on material ticket work, run or
+request the QA evidence review and completion review required by the ticket's
+`Done / Proof`, `Proof route`, or `program.md`. Write the strongest evidence,
+review receipt, command checks, and any residual risk back to the ticket
+`State`/`Links` and the relevant `progress.md`. If QA evidence review or
+completion review is missing, stale, or below the required gate, stop blocked or
+revise instead of claiming completion.
+
 After each turn: Compare progress against the listed files, request <drift
 reviewer> or the delegated QA/review lane when required, continue within the
 current time/budget window if useful, otherwise stop complete, stop blocked, or
@@ -75,6 +83,8 @@ emit the next heartbeat action with attempted paths and one missing input. For
 UI or user-visible changes, stop complete only after the final response can
 include the strongest screenshot/image evidence as a Markdown image link plus
 artifact links, or after recording a clear blocker for missing visual proof.
+The final response must include `Ticket:`, `Verification:`, `Artifacts:`,
+`Grounding:`, and `Residual risk:` lines for material feature work.
 
 Approval: This prompt may be run only after the human has approved the current
 Goal Packet. If the ticket plan changed after this packet was compiled, return
