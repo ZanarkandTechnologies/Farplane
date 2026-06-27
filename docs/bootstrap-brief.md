@@ -85,7 +85,6 @@ source:
 - Codex SDK pre-push diff reviewer policy: optional, ticket-driven.
 - Canonical TAS reviewer route: reviewer lane for material review when
   available.
-- CodeRabbit policy: optional heavyweight PR/pre-push review when useful.
 - Desloppify policy: use only when cleanup is the explicit scope or a ticket
   requires it.
 - Separate CI / deployment gate: no deploy/publish action without explicit

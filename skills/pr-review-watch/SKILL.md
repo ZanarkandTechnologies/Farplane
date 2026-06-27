@@ -7,7 +7,7 @@ group: coding
 source: local
 allowed-tools: Read, Glob, Grep, Bash
 common_chains:
-  after: ["pr-runtime", "coderabbit-review"]
+  after: ["pr-runtime", "review"]
 ---
 
 # PR Review Watch
@@ -32,8 +32,8 @@ common_chains:
   explicitly asks to watch a PR.
 - [ ] Fix only actionable review items and run only project-configured local
   check/review commands.
-- [ ] Use [coderabbit-review](../coderabbit-review/SKILL.md) only when the
-  project memory explicitly includes it as a review command or provider.
+- [ ] Use [review](../review/SKILL.md) or the configured reviewer lane for
+  material review commands; do not invoke external review CLIs from this skill.
 - [ ] Reschedule through a visible Codex automation heartbeat; do not create a
   daemon, background queue, hidden loop, or always-on watcher.
 - [ ] Send pass, blocked, or timeout summaries with the PR URL through the
@@ -52,15 +52,15 @@ This skill composes existing Farplane surfaces:
 
 - [pr-runtime](../pr-runtime/SKILL.md) decides whether the PR branch needs an
   isolated checkout or runtime record.
-- [coderabbit-review](../coderabbit-review/SKILL.md) runs a heavyweight local
-  CodeRabbit pass only when project memory asks for it.
+- [review](../review/SKILL.md) or the configured reviewer lane handles material
+  review findings when project memory asks for review.
 - the native execution phase supplies the proof/writeback shape for ticketed
   implementation and evidence.
 
 ## Trigger Conditions
 
 - "watch this PR every 10 minutes until checks pass"
-- "keep fixing CodeRabbit/Cursor/GitHub review comments on this PR"
+- "keep fixing reviewer/Cursor/GitHub review comments on this PR"
 - "poll PR 123 and message me when it passes or blocks"
 - "run the PR review watcher"
 
@@ -116,8 +116,8 @@ copyable project-local contract.
    - `wait`: create a visible Codex automation heartbeat with the next interval.
    - `actionable`: fix only the listed items, run configured checks, then
      reclassify.
-6. Use `coderabbit-review` only when the config names CodeRabbit as a review
-   command/provider. Do not make it a universal PR gate.
+6. Run only project-configured local checks and Farplane reviewer-agent review
+   commands. Do not make external review CLIs a universal PR gate.
 7. On timeout, summarize the last verdict and notify with the PR URL when
    configured.
 

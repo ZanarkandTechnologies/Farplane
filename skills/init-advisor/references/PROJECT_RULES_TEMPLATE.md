@@ -78,7 +78,7 @@ This file defines the project-specific technical rules, tech stack, and conventi
   - Build: `[command or optional]`
 - **Optional heavy checks**:
   - Desloppify: `[command or disabled]`
-  - CodeRabbit: `coderabbit review --plain --type committed --base [branch]`
+  - Reviewer agent: `[review command or disabled]`
 
 ## 🧹 Maintainability / Refactoring
 - **Smell score target**: optimize changed or high-churn code first, using

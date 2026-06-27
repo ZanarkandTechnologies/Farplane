@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SKILL_LINK_RE = re.compile(r"\[[^\]]+\]\(\.\./(?P<skill>plan|execute)/SKILL\.md\)")
 OLD_REVIEW_PATH_RE = re.compile(
-    re.escape("skills/review" + "/references") + r"|(?<!coderabbit-)review/references/"
+    re.escape("skills/review" + "/references") + r"|review/references/"
 )
 
 

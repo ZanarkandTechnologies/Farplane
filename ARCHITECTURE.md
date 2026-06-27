@@ -104,7 +104,7 @@ flowchart LR
 
   subgraph Proof["Proof + Review"]
     qa["qa-tester<br/>testing<br/>visual-qa<br/>agent-browser"]:::quality
-    review["review<br/>completion-reviewer<br/>coderabbit-review<br/>desloppify"]:::callout
+    review["review<br/>reviewer agents<br/>completion-reviewer<br/>desloppify"]:::callout
   stop["Stop hook<br/>mechanical gates"]:::quality
   end
 

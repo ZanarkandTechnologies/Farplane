@@ -7,7 +7,7 @@ load. It deliberately does not replace Farplane's material TAS reviewer lane:
 
 - local diff review: `skills/code-review/SKILL.md`
 - material TAS review: `skills/review/SKILL.md` plus `agents/reviewer.toml`
-- optional external heavyweight review: `skills/coderabbit-review/`
+- material reviewer-agent escalation: `skills/review/`
 
 ## Proof
 

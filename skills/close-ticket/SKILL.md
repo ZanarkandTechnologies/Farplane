@@ -32,8 +32,8 @@ source: local
   touched surfaces.
 - [ ] Use the [Commit Message](../commit-message/SKILL.md) skill for the commit
   subject.
-- [ ] If heavy explicit pre-push review is needed, use
-  [CodeRabbit Review](../coderabbit-review/SKILL.md).
+- [ ] If heavy final review is needed, route it through [review](../review/SKILL.md)
+  or the configured reviewer lane.
 - [ ] Commit only the intended closeout slice.
 - [ ] Push only when the user or workflow explicitly calls for publishing.
 - [ ] Leave the ticket clearly archive-ready, committed, blocked, or still in
@@ -105,8 +105,8 @@ Related skills:
 - [review](../review/SKILL.md) for final scored review when the packet is stale,
   missing, or invalidated by the closeout delta
 - [commit-message](../commit-message/SKILL.md) for the final subject line
-- [coderabbit-review](../coderabbit-review/SKILL.md) only when a heavy explicit
-  pre-push or PR review is warranted
+- [review](../review/SKILL.md) or the configured reviewer lane when a heavy
+  final review is warranted
 
 ## Required Write-Back
 

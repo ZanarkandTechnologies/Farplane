@@ -44,8 +44,8 @@ chmod +x .githooks/pre-commit
   skill from `~/.codex/skills/code-review/SKILL.md` when available. Run the
   Farplane install script to keep skills and review rubrics linked into
   `~/.codex`.
-- CodeRabbit remains an optional heavier external review pass, not the default
-  local reviewer.
+- Use Farplane reviewer agents for material review instead of external
+  pre-push review CLIs.
 - Utility-sharing warnings should stay advisory by default. Put the real shared
   utility placement convention in `PROJECT_RULES.md`.
 - Remove or rename the hook files if the project should not use them.

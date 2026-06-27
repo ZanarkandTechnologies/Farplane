@@ -88,7 +88,6 @@ finalizing the scaffold.
 - Codex SDK reviewer strictness:
 - Farplane install / code-review skill linked:
 - Canonical TAS reviewer route:
-- CodeRabbit policy:
 - Desloppify policy:
 - Separate CI / deployment gate:
 - TypeScript typecheck policy:

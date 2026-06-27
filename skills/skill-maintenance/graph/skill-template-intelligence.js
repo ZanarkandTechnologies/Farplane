@@ -132,8 +132,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-ca2e9679d98e.md",
-      "source_commit": "ca2e9679d98e",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-cdd48213991e.md",
+      "source_commit": "cdd48213991e",
       "summary": "working tree current template",
       "version": "0.3.6"
     }
@@ -545,7 +545,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "ca2e9679d98e",
+      "source_commit": "cdd48213991e",
       "template_version": "0.3.6",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -559,7 +559,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "ca2e9679d98e",
+      "source_commit": "cdd48213991e",
       "template_version": "0.3.6",
       "title": "Todo executability",
       "verdict": "pass"
@@ -573,7 +573,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "ca2e9679d98e",
+      "source_commit": "cdd48213991e",
       "template_version": "0.3.6",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -587,7 +587,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "ca2e9679d98e",
+      "source_commit": "cdd48213991e",
       "template_version": "0.3.6",
       "title": "Proof contract",
       "verdict": "pass"
@@ -601,7 +601,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "ca2e9679d98e",
+      "source_commit": "cdd48213991e",
       "template_version": "0.3.6",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -747,7 +747,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-06-27T15:29:10+00:00",
+  "generated_at": "2026-06-27T16:00:58+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -923,18 +923,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/codebase-analysis/SKILL.md",
       "qa_checklist": "",
       "skill_id": "codebase-analysis",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 2
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/coderabbit-review/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "coderabbit-review",
       "skill_ui": "",
       "source": "local",
       "status": "missing",
@@ -1941,12 +1929,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 96
+      "local": 95
     },
     "by_status": {
       "current": 3,
       "external": 3,
-      "missing": 55,
+      "missing": 54,
       "stale": 38
     },
     "by_template_version": {
@@ -1956,9 +1944,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "0.3.2": 7,
       "0.3.5": 1,
       "0.3.6": 3,
-      "missing": 58
+      "missing": 57
     },
-    "total_skills": 99
+    "total_skills": 98
   },
   "schema_version": "1.0.0",
   "source": {
@@ -2114,17 +2102,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_id": "codebase-analysis",
       "consumer_scope": "skill",
       "path": "skills/codebase-analysis/SKILL.md",
-      "surfaces": {
-        "eval": false,
-        "qa_checklist": false,
-        "skill": false
-      },
-      "template_uses": {}
-    },
-    {
-      "consumer_id": "coderabbit-review",
-      "consumer_scope": "skill",
-      "path": "skills/coderabbit-review/SKILL.md",
       "surfaces": {
         "eval": false,
         "qa_checklist": false,
@@ -4705,7 +4682,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "introduced_at": "2026-06-27",
       "latest_at": "2026-06-27",
-      "latest_commit": "ca2e9679d98e",
+      "latest_commit": "cdd48213991e",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -4719,7 +4696,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-ca2e9679d98e.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-cdd48213991e.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-27",
@@ -4729,8 +4706,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         },
         {
           "introduced_at": "2026-06-27",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-ca2e9679d98e.md",
-          "source_commit": "ca2e9679d98e",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.6-cdd48213991e.md",
+          "source_commit": "cdd48213991e",
           "summary": "working tree current template"
         }
       ],

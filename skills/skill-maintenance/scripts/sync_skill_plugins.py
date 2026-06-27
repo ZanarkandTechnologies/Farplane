@@ -150,7 +150,6 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
             "self-improve",
             "desloppify",
             "diagramming",
-            "coderabbit-review",
         ),
         "keywords": ("harness", "skills", "maintenance"),
     },

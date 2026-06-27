@@ -32,8 +32,8 @@ Before finalizing the scaffold, run a bootstrap intake with the same discipline
 as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
 That intake should explicitly answer whether local hooks should be enabled, what
 belongs in `pre-push` or `pre-commit`, whether the Codex SDK diff reviewer
-should be advisory or strict, which heavy local checks such as `desloppify` or
-CodeRabbit are desired, and whether a separate CI/deployment gate exists. It
+should be advisory or strict, which heavy local checks such as `desloppify` are
+desired, and whether a separate CI/deployment gate exists. It
 should also name the canonical app-only run path, canonical full QA or
 evidence-capture path, required services such as DB or orchestration tools, and
 any port or environment-variable assumptions. When the user wants app code
@@ -147,8 +147,8 @@ Then add package scripts:
 
 The local diff reviewer reads the installed
 `~/.codex/skills/code-review/SKILL.md` contract when the Farplane install script
-has linked the skill package. CodeRabbit remains an optional heavier external
-review pass when installed and explicitly configured.
+has linked the skill package. Material review should route through Farplane
+reviewer agents and the `review` skill.
 
 ### 2. Do not ticketize the whole backlog
 

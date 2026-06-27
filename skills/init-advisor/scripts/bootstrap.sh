@@ -188,7 +188,6 @@ echo "  - Fill in scripts/pre_push_check.sh with the repo's lint, typecheck, tes
 echo "  - For Node projects, add @openai/codex-sdk + tsx and package scripts review:agent / review:prepush to enable the default Codex SDK diff reviewer."
 echo "  - Optional: enable .githooks with 'git config core.hooksPath .githooks' and prefer pre-push over pre-commit."
 echo "  - Optional: run the Farplane install script so ~/.codex/skills/code-review/SKILL.md, reviewer agents, and review rubrics are linked."
-echo "  - Optional: install coderabbit when an external heavyweight PR/pre-push review is useful."
 echo "  - If the idea is still open-ended, start with brainstorm."
 echo "  - For bootstrap ambiguity, run deep-interview in bootstrap mode and keep the answers in docs/bootstrap-brief.md."
 echo "  - Then use prd + spec-to-ticket to author docs/specs and create tickets/*.md."
