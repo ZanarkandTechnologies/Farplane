@@ -89,7 +89,7 @@ automation_advisor(intent, project_refs, current_automation?, activate?)
    + proof_checklist
 
 state:
-  reads(docs/specs/steer-pulse-automation.md,
+  reads(docs/features/FEAT-0065-pulse-and-interval-automation.md,
         farplane/automations.md?,
         farplane/pm.json?,
         skills/automation-advisor/qa_checklist.md?,
@@ -253,4 +253,4 @@ Risk guards:
 - [templates/pulse-automation.md](templates/pulse-automation.md)
 - [qa_checklist.md](qa_checklist.md) - prompt minimality, config hygiene,
   state-boundary, and no-legacy checks.
-- [../../docs/specs/steer-pulse-automation.md](../../docs/specs/steer-pulse-automation.md)
+- [../../docs/features/FEAT-0065-pulse-and-interval-automation.md](../../docs/features/FEAT-0065-pulse-and-interval-automation.md)

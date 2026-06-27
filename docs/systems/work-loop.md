@@ -10,9 +10,8 @@ tags:
   - work-loop
 refs:
   - tickets/README.md
-  - docs/specs/spec-first-execution-loop.md
-  - docs/specs/spec-authoring-contract.md
-  - docs/specs/first-principles-planning.md
+  - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
+  - docs/features/FEAT-0042-lean-global-agent-operating-kernel.md
 system_record_json: |
   {
     "id": "SYS-0002",
@@ -26,9 +25,8 @@ system_record_json: |
     ],
     "refs": [
       "tickets/README.md",
-      "docs/specs/spec-first-execution-loop.md",
-      "docs/specs/spec-authoring-contract.md",
-      "docs/specs/first-principles-planning.md"
+      "docs/features/FEAT-0007-ticket-as-durable-task-memory.md",
+      "docs/features/FEAT-0042-lean-global-agent-operating-kernel.md"
     ],
     "last_verified": "2026-06-26"
   }

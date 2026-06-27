@@ -190,7 +190,7 @@ needed; use [summarize](../summarize/SKILL.md) directly.
     guardrails, metrics, architecture claims, and operational practices.
 11. **Dedupe locally:** search `docs/systems/*.md`,
    `docs/systems/registry.jsonl`, `docs/features/registry.jsonl`,
-   `docs/specs/harness-techniques.md`, `README.md`, `ARCHITECTURE.md`,
+   `docs/features/README.md`, `README.md`, `ARCHITECTURE.md`,
    `skills/*`, `docs/MEMORY.md`, `docs/TROUBLES.md`, `docs/LESSONS.md`, and tickets. Use
    [codebase-analysis](../codebase-analysis/SKILL.md) when the local match
    depends on code or cross-file behavior.

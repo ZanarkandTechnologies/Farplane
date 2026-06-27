@@ -213,7 +213,7 @@ def node_kind(node_id: str) -> str:
     path = node_id.removeprefix("file:").removeprefix("skill:")
     if node_id.startswith("skill:"):
         return "skill"
-    if path.startswith("docs/specs/"):
+    if path.startswith("docs/features/"):
         return "spec"
     if path.startswith("docs/skills/"):
         return "skill-doc"
@@ -409,7 +409,7 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
     skill_inbound = skill_doc_counts(graph)
     doc_paths = local_doc_paths(repo_root)
     unreferenced = [path for path in doc_paths if inbound[path] == 0]
-    spec_paths = [path for path in doc_paths if path.startswith("docs/specs/") and path.endswith(".md")]
+    spec_paths = [path for path in doc_paths if path.startswith("docs/features/") and path.endswith(".md")]
     generated_at = graph["generated_at"]
     harness_math = "docs/fundamentals/harness-algebra.md"
 
@@ -425,14 +425,14 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
     for path in [
         "docs/fundamentals/harness-algebra.md",
         "docs/fundamentals/harness-engineering-doctrine.md",
-        "docs/specs/self-improvement-contracts.md",
-        "docs/specs/invocation-and-adapters.md",
+        "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
+        "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
         "docs/skills/README.md",
         "docs/skills/system.md",
         "docs/skills/best-practices.md",
         "docs/review/rubrics/review-rubric-index.md",
         "docs/review/rubrics/reviewer-handoff.md",
-        "docs/specs/filesystem-lifecycle.md",
+        "docs/features/FEAT-0060-registry-backed-documentation-os.md",
     ]:
         global_bundle.append([f"`{path}`", "high leverage for installed skills or harness placement"])
 

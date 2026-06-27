@@ -109,7 +109,7 @@ Ticket bodies should stay compact and program-shaped: `Summary`, `Scope`,
 `progress.md`, and bulky proof/review outputs under `artifacts/`.
 Use `harness-advisor` for Farplane improvement placement decisions before
 expanding root policy, global templates, skills, subagents, hooks/scripts,
-ticket contracts, docs/specs, validators, or registries. It reads the feature
+ticket contracts, feature specs, validators, or registries. It reads the feature
 and skill registries plus the harness doctrine, then recommends the primary
 owning surface. See `MEM-0106`.
 
@@ -142,9 +142,9 @@ See `MEM-0072`, `MEM-0076` through `MEM-0085`, and `MEM-0088` through
 `MEM-0096`.
 For Farplane invocation, compute selection, board adapters, and future
 Symphony/Codex Cloud handoff work, use `farplane-invocation`,
-`pr-runtime`, `docs/specs/invocation-and-adapters.md`,
-`docs/specs/invocation-and-adapters.md`, and
-`docs/specs/invocation-and-adapters.md`. Keep Farplane as an
+`pr-runtime`, `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`,
+`docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`, and
+`docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`. Keep Farplane as an
 explicit invocation and proof layer; do not expand it into a daemon, hosted
 control plane, scheduler, or hidden cloud wrapper without a new ticketed need.
 See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
@@ -155,7 +155,7 @@ See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
 - `agents/`: subagent role configs and prompt contracts
 - `bin/`: live hook/runtime shims and shared repo commands
 - `bin/validators/`: repo-wide validation and generated-registry checks
-- `docs/`: durable specs, history, memory, troubles, lessons, and research
+- `docs/`: durable feature specs, history, memory, troubles, lessons, and research
 - `docs/fundamentals/`: harness theory, doctrine, and cross-surface best practices
 - `experiments/`: smoke runs, eval outputs, and prototype evidence
 - `qa/`: reusable browser-QA runbooks, shortcuts, and deterministic test-entry guides
@@ -172,7 +172,7 @@ For general repo orientation:
 
 - `README.md`
 - `ARCHITECTURE.md`
-- `docs/specs/README.md`
+- `docs/features/README.md`
 - active ticket under `tickets/`
 - `docs/MEMORY.md`
 - `docs/TROUBLES.md`
@@ -181,10 +181,10 @@ For general repo orientation:
 For harness tuning and repo-shape changes:
 
 - `docs/fundamentals/harness-engineering-doctrine.md`
-- `docs/specs/harness-techniques.md`
-- `docs/specs/spec-first-execution-loop.md`
-- `docs/specs/review-gates.md`
-- `docs/specs/invocation-and-adapters.md`
+- `docs/features/README.md`
+- `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
+- `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 
 For install and bootstrap work:
 
@@ -197,18 +197,18 @@ For install and bootstrap work:
 For harness-design research and external patterns:
 
 - `docs/sources/registry.jsonl`
-- `docs/specs/feature-catalog.md`
+- `docs/features/README.md`
 - `docs/features/registry.jsonl`
 
 ## Local Operating Rules
 
-- No blind edits. Read the relevant spec, ticket, and nearby module docs first.
+- No blind edits. Read the relevant feature spec, ticket, and nearby module docs first.
 - Tickets and docs are the source of truth; do not hide state in chat.
 - Prefer modular ownership over artifact-type scattering. A high-level package
   such as `skills/<name>/` should own its skill-local docs, scripts, templates,
   tests, and examples when those files only matter to that package. Use
   `docs/fundamentals/` for cross-surface theory and best practices,
-  `docs/specs/` for concrete system contracts, `bin/validators/` for shared
+  feature docs in `docs/features/` for concrete feature specs, `bin/validators/` for shared
   repo-wide checks, and top-level `bin/` only for live runtime shims or commands
   intentionally shared across packages.
 - Before adding or moving a top-level `bin/*` file, apply the bin placement
@@ -291,7 +291,7 @@ For harness-design research and external patterns:
   progress artifact, or thread-handoff ledger. Use native subagents for bounded
   specialist work whose output should collapse back into the current thread,
   such as review, QA, research, or focused implementation evidence.
-- Once specs are already decomposed into modular tickets, treat the selected
+- Once feature specs are already decomposed into modular tickets, treat the selected
   ticket as the default planning, build, and review unit. `impl-plan` should
   plan the whole ticket, `goal-advisor` should try to land the whole ticket,
   and `review` should judge the whole ticket unless a real blocker, proof

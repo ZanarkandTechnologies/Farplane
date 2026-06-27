@@ -16,13 +16,13 @@
 
 - User request / context
 - `docs/bootstrap-brief.md` and its project profile when present
-- Existing `docs/specs/*` (if any)
+- Existing feature specs in `docs/features/` (if any)
 - Existing product constraints (if any)
 
 ### Outputs
 
 - `docs/prd.md` (recommended for product work)
-- Updated/created `docs/specs/*.md` with acceptance criteria
+- Updated or created feature spec in `docs/features/` with acceptance criteria
 
 ### PRD checklist (must be answerable)
 

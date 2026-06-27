@@ -12,7 +12,7 @@ proof_artifacts:
   - skills/deliberative-advice/SKILL.md
   - skills/deliberative-advice/references/llm-council-model.md
   - skills/deliberative-advice/eval_task.json
-  - docs/specs/context-and-handoff-policy.md
+  - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
 eval_required: yes
 ---
 

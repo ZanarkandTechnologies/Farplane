@@ -9,7 +9,7 @@ tags:
   - systems
   - proof-and-review
 refs:
-  - docs/specs/review-gates.md
+  - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - skills/qa/SKILL.md
   - skills/review/SKILL.md
   - docs/review/rubrics
@@ -28,7 +28,7 @@ system_record_json: |
       "FEAT-0043"
     ],
     "refs": [
-      "docs/specs/review-gates.md",
+      "docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md",
       "skills/qa/SKILL.md",
       "skills/review/SKILL.md",
       "docs/review/rubrics"

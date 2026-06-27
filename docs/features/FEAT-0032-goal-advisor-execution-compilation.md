@@ -10,9 +10,9 @@ tags:
   - sys-0003
 refs:
   - skills/goal-advisor
-  - docs/specs/goal-loop-contract.md
-  - docs/specs/invocation-and-adapters.md
-  - docs/specs/spec-first-execution-loop.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
+  - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - tickets/templates/goal-loop/program.md
   - tickets/archive/TASK-0196/ticket.md
   - skills/goal-advisor/SKILL.md
@@ -27,15 +27,15 @@ feature_record_json: |
     "public": true,
     "surfaces": [
       "skills/goal-advisor",
-      "docs/specs/goal-loop-contract.md",
-      "docs/specs/invocation-and-adapters.md",
-      "docs/specs/spec-first-execution-loop.md",
+      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
+      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
+      "docs/features/FEAT-0007-ticket-as-durable-task-memory.md",
       "tickets/templates/goal-loop/program.md"
     ],
     "source_refs": [
       "skills/goal-advisor",
-      "docs/specs/goal-loop-contract.md",
-      "docs/specs/invocation-and-adapters.md",
+      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
+      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
       "tickets/archive/TASK-0196/ticket.md"
     ],
     "external_refs": [
@@ -74,16 +74,16 @@ This feature owns the behavior implemented, specified, or enforced by its owner 
 ## Owner Surfaces
 
 - `skills/goal-advisor`
-- `docs/specs/goal-loop-contract.md`
-- `docs/specs/invocation-and-adapters.md`
-- `docs/specs/spec-first-execution-loop.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
+- `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - `tickets/templates/goal-loop/program.md`
 
 ## Source Context
 
 - `skills/goal-advisor`
-- `docs/specs/goal-loop-contract.md`
-- `docs/specs/invocation-and-adapters.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 - `tickets/archive/TASK-0196/ticket.md`
 
 ## Evidence

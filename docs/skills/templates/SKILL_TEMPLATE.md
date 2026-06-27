@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.3.4"
+template_version: "0.3.5"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -21,7 +21,7 @@ description: "[TODO: Verb input/context into output/artifact when call-condition
 tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
-  skill-template: "0.3.4"
+  skill-template: "0.3.5"
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---
@@ -63,7 +63,7 @@ only when it adds non-duplicated durable shape.]
 [TODO: Keep this when it clarifies callable behavior, required inputs, state,
 gates, routes, or failure modes. Delete it only for tiny skills where the todo
 list already makes composition obvious. See
-`docs/specs/self-improvement-contracts.md`.]
+`docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`.]
 
 ```text
 {skill_function}(input_text, state?) -> primary_output + evidence?

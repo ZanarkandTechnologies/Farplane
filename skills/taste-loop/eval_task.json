@@ -9,7 +9,7 @@
       "No-ops for manual/off-schedule invocations or when unique open feedback exceeds the cap",
       "Keeps ordinary no-op beats side-effect-free: no worker, ticket, artifact, feedback, Telegram, or runtime report unless diagnostic logging is enabled",
       "Dedupes open feedback by target_id plus feedback_question before applying the budget gate and reports duplicate open rows as hygiene",
-      "Reads farplane/products.md Taste Loop Artifact Workflows and docs/specs/skill-compounding-score.md",
+      "Reads farplane/products.md Taste Loop Artifact Workflows and docs/features/FEAT-0064-skill-compounding-score.md",
       "Reads Codex automation memory as the active worker ledger and does not create a separate workers.jsonl",
       "Does not restore FARPLANE_TASTE_LOOP_* env vars as the normal active-hours settings",
       "Selects top N product-lane artifact workflows, not broad router skills or skill summaries",

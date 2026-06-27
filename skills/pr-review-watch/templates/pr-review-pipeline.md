@@ -8,7 +8,7 @@ safe to run repeatedly.
 
 `poll_interval_minutes` is the fixed-cadence compatibility field. New projects
 should treat it as the maximum normal heartbeat interval and use adaptive
-backoff from `docs/specs/adaptive-backoff.md` when a watcher has repeated
+backoff from `docs/features/FEAT-0065-pulse-and-interval-automation.md` when a watcher has repeated
 unchanged wait states.
 
 ```json

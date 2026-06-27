@@ -21,7 +21,7 @@ proposal, and handing implementation to the right owner.
   not external video understanding.
 - `frontend-craft`, `landing-page`, and `visual-qa` are the right downstream
   owners if the operator later wants the portal page rebuilt.
-- `docs/specs/harness-engineering-doctrine.md` says to prefer the smallest
+- `docs/features/harness-engineering-doctrine.md` says to prefer the smallest
   surface that fixes the failure and use skills for procedural consistency.
 
 ## Existing Feature/Skill Match

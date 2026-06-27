@@ -124,7 +124,7 @@ write_file_if_missing "${TARGET_DIR}/.farplane/README.md" "# .farplane\n\nIgnore
 write_file_if_missing "${TARGET_DIR}/.farplane/state/run-ledger.json" "{\n  \"runs\": []\n}\n"
 
 mkdir -p "${TARGET_DIR}/docs/specs"
-copy_file "${REF_DIR}/SPECS_README_TEMPLATE.md" "${TARGET_DIR}/docs/specs/README.md"
+copy_file "${REF_DIR}/SPECS_README_TEMPLATE.md" "${TARGET_DIR}/docs/features/README.md"
 copy_file "${REF_DIR}/BOOTSTRAP_BRIEF_TEMPLATE.md" "${TARGET_DIR}/docs/bootstrap-brief.md"
 copy_file "${REF_DIR}/CODE_REVIEW_TEMPLATE.md" "${TARGET_DIR}/docs/code_review.md"
 copy_file "${REF_DIR}/REVIEW_AGENT_TEMPLATE.md" "${TARGET_DIR}/docs/review-agent.md"

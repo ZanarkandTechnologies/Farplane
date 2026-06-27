@@ -1,6 +1,6 @@
 # Spec Template
 
-Use this template to convert `docs/prd.md` into `docs/specs/*.md`.
+Use this template to convert `docs/prd.md` into one concrete feature spec under `docs/features/`.
 
 ## Core Rules
 

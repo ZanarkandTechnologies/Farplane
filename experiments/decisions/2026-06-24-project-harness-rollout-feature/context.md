@@ -93,7 +93,7 @@ Farplane should make it easy to:
 - `skills/skill-maintenance/graph/README.md`
 - `tickets/TASK-0216/ticket.md`
 - Future owner candidates:
-  - `docs/specs/*`
+  - `docs/features/FEAT-*.md`
   - `farplane/manifest.json`
   - `skills/skill-maintenance/**`
   - `skills/deep-init-project/**`

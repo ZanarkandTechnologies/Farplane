@@ -3,7 +3,7 @@ title: "Symphony-compatible Farplane invocation contract"
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
@@ -12,7 +12,7 @@ refs:
   - WORKFLOW.md
   - skills/farplane-invocation
   - bin/farplane_invocation.py
-  - docs/specs/invocation-and-adapters.md
+  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
   - docs/HISTORY.md
   - tickets/archive/TASK-0107/ticket.md
   - tickets/archive/TASK-0107/artifacts/qa/prepare-planning.json
@@ -29,10 +29,10 @@ feature_record_json: |
       "WORKFLOW.md",
       "skills/farplane-invocation",
       "bin/farplane_invocation.py",
-      "docs/specs/invocation-and-adapters.md"
+      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md"
     ],
     "source_refs": [
-      "docs/specs/invocation-and-adapters.md",
+      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
       "docs/HISTORY.md"
     ],
     "external_refs": [
@@ -67,20 +67,47 @@ feature(FEAT-0015, repo_state?) -> behavior + evidence + maintenance_signal
 - Status: `implemented`
 - Category: `execution`
 
-## Owned Behavior
+## Feature Spec
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+This feature owns the explicit invocation boundary. Farplane starts from a visible invocation, board item, Goal Packet, or compatible external runner envelope; it does not become a hidden daemon or scheduler.
+
+```text
+invoke_farplane(trigger, board?, compute_policy?) -> run_envelope + proof_packet
+```
+
+The invocation contract folds the adapter/runtime spec into this feature:
+
+- `InvocationTrigger` records why work starts: local conversation, goal heartbeat, board adapter, or future worker envelope.
+- `BoardAdapter` translates external boards into Farplane work items without making board state the source of truth.
+- `WorkItem` binds scope, owner surface, proof obligations, and status.
+- `ComputeTarget` and `ComputeDecision` keep local Codex, future Codex Cloud, or Symphony-style workers explicit.
+- `FarplaneRunEnvelope` carries the executable context packet.
+- `ProofPacket` carries evidence, status, and handoff back to the caller.
+
+Non-goals:
+
+- No hidden scheduler.
+- No automatic hosted control plane.
+- No start-work trigger based only on a ticket existing somewhere.
+
+Proof gates:
+
+- Every external or board-backed run has a visible envelope and proof packet.
+- Runtime state stays in `.farplane/` or the owning ticket, not in chat.
+- Public docs should describe `.farplane/` as the canonical live runtime root.
+- There is no separate public retired execution surface anymore.
+- Future worker compatibility does not weaken local proof requirements.
 
 ## Owner Surfaces
 
 - `WORKFLOW.md`
 - `skills/farplane-invocation`
 - `bin/farplane_invocation.py`
-- `docs/specs/invocation-and-adapters.md`
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 
 ## Source Context
 
-- `docs/specs/invocation-and-adapters.md`
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 - `docs/HISTORY.md`
 
 ## Evidence

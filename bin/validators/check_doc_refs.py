@@ -32,7 +32,7 @@ DEFAULT_SCAN_PREFIXES = (
     "docs/review/",
     "docs/skills/",
     "docs/sources/",
-    "docs/specs/",
+    "docs/systems/",
 )
 SKIP_FILE_PREFIXES = (
     ".git/",

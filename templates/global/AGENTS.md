@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.10
+template_version: 0.2.11
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -58,7 +58,7 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   checkpoint.
 - Verify before claiming completion.
 - Prefer visible artifacts over transcript memory.
-- Keep global context lean. Put detailed procedures in skills, specs, tickets,
+- Keep global context lean. Put detailed procedures in skills, feature specs, tickets,
   docs, scripts, validators, or subagent prompts.
 
 ## Thinking And Decisions
@@ -194,7 +194,7 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - When creating durable Markdown artifacts, start with YAML front matter for
   machine-readable metadata and keep the main body for the human contract,
   analysis, or narrative. Follow the project lifecycle spec when present; in
-  Farplane, use `docs/specs/filesystem-lifecycle.md`.
+  Farplane, use `docs/features/FEAT-0060-registry-backed-documentation-os.md`.
 - When summarizing completed changes to policy, prompts, docs, skills,
   workflows, UX, APIs, or behavior, include a compact `Before:` / `After:` /
   `Example:` delta unless the change is truly tiny or the user asked for a
@@ -219,10 +219,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 ## Context And Project Memory
 
 - Before edits, read the nearest project `AGENTS.md`.
-- Read the smallest relevant docs, specs, ticket, interfaces, tests, configs,
+- Read the smallest relevant docs, feature specs, ticket, interfaces, tests, configs,
   and nearby implementation files.
 - Search existing patterns before inventing new ones.
-- Use project-specific `README.md`, `ARCHITECTURE.md`, `docs/specs/*`,
+- Use project-specific `README.md`, `ARCHITECTURE.md`, concrete feature specs
+  under `docs/features/`,
   `tickets/README.md`, and module docs as deeper sources of truth when they
   exist.
 - Use project memory files when present:

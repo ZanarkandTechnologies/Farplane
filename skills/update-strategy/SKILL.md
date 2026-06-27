@@ -121,7 +121,7 @@ Strategy Update
   routes.
 - [../review/SKILL.md](../review/SKILL.md) - use for material readiness or
   evidence-quality judgment.
-- [../../docs/specs/program-notation.md](../../docs/specs/program-notation.md)
+- [../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
   - shared project harness and PM heartbeat vocabulary.
 
 ## Output

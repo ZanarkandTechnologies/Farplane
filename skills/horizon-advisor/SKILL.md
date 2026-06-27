@@ -180,7 +180,7 @@ goal_advisor(
   writing or materially changing a long-horizon project goal map.
 - [../../docs/fundamentals/harness-algebra.md](../../docs/fundamentals/harness-algebra.md)
   - shared harness objective function and optimization terms.
-- [../../docs/specs/goal-loop-contract.md](../../docs/specs/goal-loop-contract.md)
+- [../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
   - project goals, Goal Packet, ticket/program/progress boundary.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - handoff target for
   selected frontier execution compilation.

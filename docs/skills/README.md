@@ -226,7 +226,7 @@ classes. Tier 0 phase steps are not skill links; they are inherited from
 skill when useful.
 
 When ranking which skill to improve next, use
-[`docs/specs/skill-compounding-score.md`](../specs/skill-compounding-score.md).
+[`docs/features/FEAT-0064-skill-compounding-score.md`](../features/FEAT-0064-skill-compounding-score.md).
 It combines tier leverage, lifecycle-reference distance, product-lane fit,
 observed heat, downstream leverage, improvement gap, feedback fit, and proof
 fit. Do not confuse that priority score with skill-local eval scores.
@@ -308,7 +308,7 @@ dropping sidecar `todos.md` files. After import, review the `description`,
 
 Skill repair starts from a grounded failure packet and then uses existing
 surfaces instead of creating hidden repair work. The canonical contract lives in
-[`docs/specs/self-improvement-contracts.md`](../specs/self-improvement-contracts.md).
+[`docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md).
 
 - repo-owned skill capability fixtures live under `skills/<skill>/tests/`
 - installed or external skill mirrors live under `tests/<skill>/`

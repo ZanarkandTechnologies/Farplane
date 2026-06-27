@@ -85,7 +85,7 @@ model = "gpt-5.5"
 developer_instructions = "review"
 """,
         )
-        write_file(root / "docs/specs/invocation-and-adapters.md", INVOCATION_AND_ADAPTERS_TEXT)
+        write_file(root / "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md", INVOCATION_AND_ADAPTERS_TEXT)
         write_file(root / "bin/README.md", BIN_README_TEXT)
         write_file(root / "tickets/README.md", TICKETS_README_TEXT)
         write_file(root / "tickets/templates/ticket.md", TICKET_TEMPLATE_TEXT)
@@ -129,7 +129,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "docs/specs/invocation-and-adapters.md",
+                root / "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
                 INVOCATION_AND_ADAPTERS_TEXT + "\nLegacy note: `.ralph/state/current-run.json`\n",
             )
             result = self.run_validator(root)

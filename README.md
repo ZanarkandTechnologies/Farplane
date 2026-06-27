@@ -29,7 +29,7 @@ Farplane is for developers who want Codex to do serious work without turning
 their repo into a haze of prompts, chat memory, and unverifiable claims.
 
 1. **A local control plane for agent work.** Farplane keeps plans, tickets,
-   runtime state, memories, specs, and proof in files that developers can diff,
+   runtime state, memories, feature specs, and proof in files that developers can diff,
    review, and repair.
 2. **Goal loops that do not drift.** Project goals live in
    `farplane/goals.md`; Goal Packets give selected long-running work a
@@ -176,7 +176,7 @@ Farplane turns each material request into a visible loop:
 ask -> ground -> choose the owner -> act -> prove -> learn
 ```
 
-The global prompt stays lean; durable behavior lives in skills, specs, tickets,
+The global prompt stays lean; durable behavior lives in skills, feature specs, tickets,
 validators, subagents, evals, and review gates. When work fails, the correction
 can become a lesson, hardcase, eval row, skill update, or harness-placement
 decision instead of disappearing into chat history.
@@ -209,15 +209,14 @@ flowchart LR
 | `assets/` | Repo-level media and generated assets. |
 | `bin/` | Hooks, runtime helpers, compatibility validator wrappers, launchers, and sync scripts. |
 | `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, tiers, and registries. |
-| `docs/` | Systems, specs, generated registries, history, memory, troubles, lessons, and durable research. |
+| `docs/` | Systems, feature specs, generated registries, history, memory, troubles, lessons, and durable research. |
 | `docs/systems/` | Authored public system docs plus generated system registry. |
-| `docs/features/` | Authored first-class feature docs plus generated feature registry output. |
+| `docs/features/` | Authored first-class feature specs plus generated feature registry output. |
 | `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |
-| `docs/specs/` | Buildable behavior contracts, lifecycle specs, runtime adapters, and proof gates. |
 | `experiments/` | Smoke runs, eval artifacts, prototypes, and temporary proof. |
 | `.farplane/` | Ignored project-local runtime, generated, event, and product state. |
 | `qa/` | QA cookbook, browser proof paths, and reusable test-entry guidance. |
-| `rules/` | Machine-readable local rule files. Durable best-practice docs live under `docs/specs/`. |
+| `rules/` | Machine-readable local rule files. Durable best-practice docs live under `docs/features/`. |
 | `skills/` | Farplane skill packages, references, scripts, and templates. |
 | `templates/` | Install-time global Codex templates and config scaffolding. |
 | `tickets/` | Active task board, ticket template, artifacts, and archive. |
@@ -228,11 +227,10 @@ flowchart LR
 - Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 - Fundamentals: [docs/fundamentals/README.md](docs/fundamentals/README.md)
 - Systems stack: [docs/systems/README.md](docs/systems/README.md)
-- Specs index: [docs/specs/README.md](docs/specs/README.md)
+- Feature spec index: [docs/features/README.md](docs/features/README.md)
 - Harness algebra: [docs/fundamentals/harness-algebra.md](docs/fundamentals/harness-algebra.md)
 - Prompt engineering: [docs/fundamentals/prompt-engineering.md](docs/fundamentals/prompt-engineering.md)
-- Self-growing harness map: [docs/specs/harness-techniques.md](docs/specs/harness-techniques.md#self-growing-harness-map)
-- Feature inventory: [harness-techniques.md](docs/specs/harness-techniques.md)
+- Feature/spec registry: [docs/features/README.md](docs/features/README.md)
 - System source: [docs/systems/README.md](docs/systems/README.md)
 - Generated system registry data: [docs/systems/registry.jsonl](docs/systems/registry.jsonl)
 - Feature docs and registry contract: [docs/features/README.md](docs/features/README.md)
@@ -240,7 +238,7 @@ flowchart LR
 - Skill guide: [docs/skills/README.md](docs/skills/README.md)
 - Skill best practices: [docs/skills/best-practices.md](docs/skills/best-practices.md)
 - Ticket contract: [tickets/README.md](tickets/README.md)
-- Goal loop contract: [docs/specs/goal-loop-contract.md](docs/specs/goal-loop-contract.md)
+- Goal loop contract: [docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
 - QA cookbook surface: [qa/README.md](qa/README.md)
 - Review scoring: [skills/review/README.md](skills/review/README.md)
 - Maintainability code review: [skills/code-review/README.md](skills/code-review/README.md)

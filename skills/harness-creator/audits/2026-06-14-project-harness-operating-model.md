@@ -9,7 +9,7 @@ before_ref: skills/harness-creator/SKILL.md
 after_ref: skills/harness-creator/SKILL.md
 reasoning_basis: deliberative_advice
 proof_artifacts:
-  - docs/specs/program-notation.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/harness-creator/references/harness-il.md
   - skills/harness-creator/templates/project-harness.md
 eval_required: no

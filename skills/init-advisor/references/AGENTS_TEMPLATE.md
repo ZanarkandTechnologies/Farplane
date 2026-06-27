@@ -19,8 +19,8 @@ This file is loaded every loop. Keep it operational and project-specific.
 
 - Architecture: `ARCHITECTURE.md`
 - PRD: `docs/prd.md`
-- Specs index: `docs/specs/README.md`
-- Specs: `docs/specs/*`
+- Specs index: `docs/features/README.md`
+- Specs: `docs/features/FEAT-*.md`
 - History: `docs/HISTORY.md`
 - Memory: `docs/MEMORY.md`
 - Troubles: `docs/TROUBLES.md`

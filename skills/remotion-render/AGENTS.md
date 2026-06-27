@@ -9,6 +9,6 @@ Use `remotion` for authoring and improving Remotion code. Use this skill only fo
 For long-running or batched renders, require saved `input.json`, `result.json`,
 task IDs, and `jobs.md` before continuing in parallel or handing polling to
 another lane permitted by the current harness policy. Use adaptive backoff from
-`docs/specs/adaptive-backoff.md` for next-check timing.
+`docs/features/FEAT-0065-pulse-and-interval-automation.md` for next-check timing.
 
 Do not hide complex Remotion code inside shell one-liners. Prefer workspace files or clearly escaped JSON inputs, then render through `belt` only after capability and spend gates are clear.

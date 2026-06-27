@@ -3,7 +3,7 @@ title: "Behavior correction, hardcase metadata, and narrow eval capture"
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
@@ -16,7 +16,7 @@ refs:
   - skills/eval
   - docs/LESSONS.md
   - experiments/hardcases
-  - docs/specs/self-improvement-contracts.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/HISTORY.md
   - docs/features/registry.jsonl#FEAT-0031
   - docs/features/registry.jsonl#FEAT-0063
@@ -36,13 +36,13 @@ feature_record_json: |
       "skills/eval",
       "docs/LESSONS.md",
       "experiments/hardcases",
-      "docs/specs/self-improvement-contracts.md"
+      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md"
     ],
     "source_refs": [
       "docs/HISTORY.md",
       "docs/features/registry.jsonl#FEAT-0031",
       "docs/features/registry.jsonl#FEAT-0063",
-      "docs/specs/self-improvement-contracts.md"
+      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md"
     ],
     "external_refs": [],
     "evidence_refs": [
@@ -51,7 +51,7 @@ feature_record_json: |
       "skills/metric-advisor/SKILL.md",
       "skills/optimize-harness/SKILL.md",
       "skills/eval/SKILL.md",
-      "docs/specs/self-improvement-contracts.md",
+      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
       "experiments/hardcases/20260607-1917-repent-eval-capture/case.md",
       "tickets/TASK-0228/ticket.md",
       "docs/HISTORY.md"
@@ -83,9 +83,28 @@ feature(FEAT-0039, repo_state?) -> behavior + evidence + maintenance_signal
 - Status: `implemented`
 - Category: `improvement-loop`
 
-## Owned Behavior
+## Feature Spec
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+This feature owns the self-improvement correction loop: behavior gaps become hardcases, eval rows, skill patches, lessons, or harness changes instead of vanishing into chat.
+
+```text
+behavior_fix(gap, evidence, owner_surface) -> hardcase? + patch? + eval? + lesson?
+```
+
+The former self-improvement contracts fold into this feature:
+
+- Minimal behavior-fix SOP: identify the gap, bind it to an owner surface, make the smallest durable correction, and prove it on a representative case.
+- Core skill signatures describe how gap-analysis, harness-advisor, eval, skill-maintenance, self-improve, and optimize-harness cooperate.
+- Hardcases should capture task input, expected behavior, observed failure, owner, tags, proof artifacts, and promotion status.
+- Skill self-healing patches local Farplane wrappers, fixtures, registries, or evals; it does not mutate external installed skills unless explicitly requested.
+
+Non-goal: self-improvement is not a generic memory dump. It must land in an owner: feature doc, skill, eval, lesson, ticket, or source registry.
+
+Proof gates:
+
+- Repeated misses get a visible prevention surface.
+- Hardcases are narrow enough to rerun or reason about.
+- The correction route is named: skill, prompt, eval, doc, hook, validator, or ticket.
 
 ## Owner Surfaces
 
@@ -96,14 +115,14 @@ This feature owns the behavior implemented, specified, or enforced by its owner 
 - `skills/eval`
 - `docs/LESSONS.md`
 - `experiments/hardcases`
-- `docs/specs/self-improvement-contracts.md`
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
 ## Source Context
 
 - `docs/HISTORY.md`
 - `docs/features/registry.jsonl#FEAT-0031`
 - `docs/features/registry.jsonl#FEAT-0063`
-- `docs/specs/self-improvement-contracts.md`
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
 ## Evidence
 
@@ -112,7 +131,7 @@ This feature owns the behavior implemented, specified, or enforced by its owner 
 - `skills/metric-advisor/SKILL.md`
 - `skills/optimize-harness/SKILL.md`
 - `skills/eval/SKILL.md`
-- `docs/specs/self-improvement-contracts.md`
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 - `experiments/hardcases/20260607-1917-repent-eval-capture/case.md`
 - `tickets/TASK-0228/ticket.md`
 - `docs/HISTORY.md`

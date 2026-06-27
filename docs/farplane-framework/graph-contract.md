@@ -13,8 +13,8 @@ tags:
 refs:
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/hooks-and-runtime.md
-  - docs/specs/steer-pulse-automation.md
-  - docs/specs/goal-loop-contract.md
+  - docs/features/FEAT-0065-pulse-and-interval-automation.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/skill-maintenance/scripts/farplane_lifecycle_graph.py
   - skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py
   - skills/skill-maintenance/graph/farplane-lifecycle-graph.json

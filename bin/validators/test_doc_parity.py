@@ -19,7 +19,7 @@ README_TEXT = """\
 # Farplane
 
 - Architecture map: [ARCHITECTURE.md](/abs/ARCHITECTURE.md)
-- Feature inventory: [harness-techniques.md](/abs/docs/specs/harness-techniques.md)
+- Feature/spec registry: [docs/features/README.md](/abs/docs/features/README.md)
 - Review scoring: [skills/review/README.md](/abs/skills/review/README.md)
 - Active queue: [tickets](/abs/tickets) is the live board; do not rely on hardcoded queue summaries here
 """
@@ -34,49 +34,33 @@ ARCHITECTURE_TEXT = """\
 - `docs/review/rubrics/review-rubric-index.md`
 """
 
-SPECS_README_TEXT = """\
-# Specs
+FEATURES_README_TEXT = """\
+# Feature Docs
 
-- [`ARCHITECTURE.md`](/abs/ARCHITECTURE.md) - top-level system map and canonical surface guide
-- `doc-governance.md` - structural versus narrative doc-audit policy
-- `harness-techniques.md` - current-state feature and technique inventory
+Farplane feature docs are the spec files for first-class capabilities.
+This folder is the authored source for feature specs and generated feature records.
+Do not create a second spec-folder truth shelf for feature behavior.
 
-## Doc Gardening Loop
+Run:
 
-1. Run `python3 tickets/scripts/check_ticket_metadata.py`.
-2. Run `python3 bin/validators/check_doc_parity.py`.
-3. Use `codex exec` for narrative doc audits.
+```bash
+python3 docs/features/validate_features.py --write
+```
+
+Delete a `FEAT-*` handle when it no longer earns a feature spec page.
+Do not keep a retired alias just to preserve noise.
 """
 
-TECHNIQUES_TEXT = """\
-# Harness Techniques
+REGISTRY_OS_TEXT = """\
+# Registry-backed documentation OS
 
-This document is the repo's current-state feature inventory first. It is not a
-generic harness wishlist.
+Feature docs are the spec files.
 
-## Audit Basis
+Run `python3 bin/validators/check_doc_parity.py`.
 
-- `ARCHITECTURE.md`
-- `tickets/README.md`
+No parallel spec-folder truth shelf.
 
-## Implemented Techniques
-
-| Technique | Status | Main surfaces | Why it matters | Current limit |
-| --- | --- | --- | --- | --- |
-| Mechanical knowledge-base entrypoint checks | Implemented | `bin/validators/check_doc_parity.py`, `docs/specs/doc-governance.md`, `README.md`, `ARCHITECTURE.md`, `docs/specs/README.md`, `tickets/README.md` | Keeps the top-level knowledge-base entry surfaces linked and catches stale queue claims without over-linting all prose | intentionally narrow; it does not replace narrative document review |
-| Doc-governance workflow for narrative drift | Implemented | `docs/specs/doc-governance.md`, `docs/specs/README.md` | Gives flexible docs a repeatable audit path without requiring brittle substring validators for every story change | still depends on humans running the audit loop; no recurring maintainer agent yet |
-"""
-
-DOC_GOVERNANCE_TEXT = """\
-# Doc Governance
-
-## Structural Checks
-
-- `python3 bin/validators/check_doc_parity.py`
-
-## Narrative Audit
-
-Use `codex exec` when the question is about the quality of the story rather than a required link.
+No compatibility feature rows for capabilities that do not earn their own feature spec.
 """
 
 TICKETS_README_TEXT = """\
@@ -112,9 +96,8 @@ class CheckDocParityTest(unittest.TestCase):
     def build_repo(self, root: Path) -> None:
         write_file(root / "README.md", README_TEXT)
         write_file(root / "ARCHITECTURE.md", ARCHITECTURE_TEXT)
-        write_file(root / "docs/specs/README.md", SPECS_README_TEXT)
-        write_file(root / "docs/specs/harness-techniques.md", TECHNIQUES_TEXT)
-        write_file(root / "docs/specs/doc-governance.md", DOC_GOVERNANCE_TEXT)
+        write_file(root / "docs/features/README.md", FEATURES_README_TEXT)
+        write_file(root / "docs/features/FEAT-0060-registry-backed-documentation-os.md", REGISTRY_OS_TEXT)
         write_file(root / "tickets/README.md", TICKETS_README_TEXT)
 
     def run_validator(self, root: Path) -> subprocess.CompletedProcess[str]:
@@ -160,7 +143,7 @@ class CheckDocParityTest(unittest.TestCase):
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("Feature inventory", result.stdout)
+            self.assertIn("Feature/spec registry", result.stdout)
 
 
 if __name__ == "__main__":

@@ -52,7 +52,7 @@ KNOWN_LINKED_KINDS = {
 
 DIRECT_FILE_PREFIXES = (
     "docs/farplane-framework/",
-    "docs/specs/",
+    "docs/features/",
     "farplane/",
 )
 

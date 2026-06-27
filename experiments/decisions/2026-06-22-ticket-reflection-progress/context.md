@@ -101,14 +101,14 @@ Store decision records or refs in ticket frontmatter for machine parsing.
 ## Evidence Refs
 
 - `tickets/README.md`
-- `docs/specs/goal-loop-contract.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - active ticket scan showing many `program.md`, `progress.md`, and
   `artifacts/` directories, but no `decisions.md`
 
 ## Relevant Files
 
 - `tickets/README.md`
-- `docs/specs/goal-loop-contract.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `tickets/templates/goal-loop/program.md`
 - `tickets/templates/goal-loop/progress.md`
 
@@ -165,7 +165,7 @@ Chair synthesis should compare exactly three final options and recommend one.
 ## Proof / Next Owner
 
 Likely next owner is a ticket/spec cleanup that updates `tickets/README.md`,
-`docs/specs/goal-loop-contract.md`, and templates to clarify:
+`docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`, and templates to clarify:
 
 - proof belongs under `tickets/TASK-XXXX/artifacts/` by default;
 - `progress.md` is the default reflection/log surface;

@@ -46,7 +46,7 @@ Present the findings clearly, grouping by document type and noting the dates/rel
 ## Directory Structure
 
 ```
-docs/specs/
+docs/features/
 ├── code-reviews/          # Historical review research
 └── web-research/          # Archived external comparison notes
 ```

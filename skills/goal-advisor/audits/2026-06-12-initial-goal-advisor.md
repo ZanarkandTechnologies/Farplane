@@ -24,6 +24,6 @@ compilation from the same Goal Packet.
 
 ## Proof
 
-- `docs/specs/goal-loop-contract.md` defines the canonical model.
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` defines the canonical model.
 - `skills/goal-advisor/SKILL.md` follows the template `0.2.0` structure.
 - `skills/goal-advisor/eval_task.json` adds two focused behavior cases.

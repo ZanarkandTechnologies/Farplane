@@ -14,7 +14,7 @@ Describe what this repo is for and what the main moving parts are.
 - `AGENTS.md`: operational map loaded every loop
 - `ARCHITECTURE.md`: top-level system map
 - `README.md`: product story and setup
-- `docs/specs/README.md`: index of deeper behavior specs
+- `docs/features/README.md`: index of deeper behavior specs
 - `tickets/README.md`: execution contract and ticket lifecycle
 
 ## Main Surfaces
@@ -30,7 +30,7 @@ Describe what this repo is for and what the main moving parts are.
 1. `AGENTS.md`
 2. `ARCHITECTURE.md`
 3. `README.md`
-4. `docs/specs/README.md`
+4. `docs/features/README.md`
 5. active ticket and `tickets/README.md`
 
 ## Current Limits

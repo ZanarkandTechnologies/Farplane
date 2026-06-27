@@ -3,13 +3,13 @@ title: "Skill compounding score"
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
   - sys-0006
 refs:
-  - docs/specs/skill-compounding-score.md
+  - docs/features/FEAT-0064-skill-compounding-score.md
   - docs/skills/system.md
   - skills/taste-loop
   - farplane/automations.md
@@ -29,7 +29,7 @@ feature_record_json: |
     "category": "skills",
     "public": true,
     "surfaces": [
-      "docs/specs/skill-compounding-score.md",
+      "docs/features/FEAT-0064-skill-compounding-score.md",
       "docs/skills/system.md",
       "skills/taste-loop",
       "farplane/automations.md",
@@ -72,13 +72,49 @@ feature(FEAT-0064, repo_state?) -> behavior + evidence + maintenance_signal
 - Status: `implemented`
 - Category: `skills`
 
-## Owned Behavior
+## Feature Spec
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+This feature owns the official ranking function for deciding which skill improvement target is likely to compound most from one more improvement beat.
+
+```text
+skill_compounding_score(candidate, evidence) -> ranked_scorecard + caveats
+```
+
+The folded score contract is a reward-shaped prioritization function. The real objective is:
+
+```text
+one more improvement beat should increase the chance that Farplane creates
+better product artifacts, proof, or reusable skill leverage
+```
+
+Component signals are shaping terms, not the objective itself. Normalize and cap them before weighting; report evidence and source gaps; penalize proxy-gaming paths such as hot but non-artifact targets, feedback without an artifact, fake metrics, ambiguous ownership, and open feedback spam.
+
+Canonical components:
+
+- tier leverage
+- lifecycle reference fit
+- product lane fit
+- observed heat fit, split into direct heat and related heat
+- downstream leverage fit
+- improvement gap fit
+- feedback fit
+- proof fit
+
+Observed heat uses direct invocation/ticket/thread signals plus weaker related heat from referencing skills. Related heat is a shaping potential, not proof of demand, and must never override the artifact-workflow gate.
+
+Taste Loop is the first official consumer. It ranks product-lane artifact workflows using skill registry data, product lanes, direct/related heat, lifecycle refs, and controller memory.
+
+Non-goal: this score is not an eval quality score and not a universal skill value judgment. It is a prioritization aid.
+
+Proof gates:
+
+- Scorecards name direct evidence and source gaps.
+- Proxy-gaming paths are penalized.
+- The selected target has an artifact workflow, not just heat.
 
 ## Owner Surfaces
 
-- `docs/specs/skill-compounding-score.md`
+- `docs/features/FEAT-0064-skill-compounding-score.md`
 - `docs/skills/system.md`
 - `skills/taste-loop`
 - `farplane/automations.md`

@@ -20,6 +20,6 @@ Use the `SKILL.md` Todo List for selecting references.
 For long-running or batched media jobs, require saved `input.json`,
 `result.json`, task IDs, and `jobs.md` before continuing in parallel or handing
 polling to another lane permitted by the current harness policy. Use adaptive
-backoff from `docs/specs/adaptive-backoff.md` for next-check timing.
+backoff from `docs/features/FEAT-0065-pulse-and-interval-automation.md` for next-check timing.
 
 Keep `remotion` and `remotion-render` separate. Model-native generation, Remotion authoring, and code-to-video rendering have different inputs, failure modes, and QA expectations.

@@ -16,7 +16,7 @@ per-ticket planning.
 ## Minimal Example
 
 ```text
-$agent-testability-plan docs/specs/my-system.md
+$agent-testability-plan docs/features/my-system.md
 ```
 
 ## How To Test

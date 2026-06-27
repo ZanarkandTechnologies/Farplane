@@ -7,7 +7,7 @@ machine-checkable outputs.
 ## Strategy
 
 - Update an existing owner before creating a new doc.
-- Put current behavior contracts in `docs/specs/`.
+- Put current behavior contracts in `docs/features/FEAT-*.md`.
 - Put reusable theory, doctrine, and background in `docs/fundamentals/`.
 - Put public framework narrative in `docs/farplane-framework/`.
 - Put generated or machine-readable inventories behind their owning source

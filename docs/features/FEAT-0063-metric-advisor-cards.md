@@ -11,8 +11,8 @@ tags:
 refs:
   - skills/metric-advisor
   - docs/skills/README.md
-  - docs/specs/self-improvement-contracts.md
-  - docs/specs/review-gates.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
+  - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - tickets/TASK-0228/ticket.md
   - skills/best-of-worlds/references/metric-discovery.md
   - skills/metric-advisor/SKILL.md
@@ -28,13 +28,13 @@ feature_record_json: |
     "surfaces": [
       "skills/metric-advisor",
       "docs/skills/README.md",
-      "docs/specs/self-improvement-contracts.md",
-      "docs/specs/review-gates.md"
+      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
+      "docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md"
     ],
     "source_refs": [
       "tickets/TASK-0228/ticket.md",
       "skills/best-of-worlds/references/metric-discovery.md",
-      "docs/specs/self-improvement-contracts.md"
+      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md"
     ],
     "external_refs": [],
     "evidence_refs": [
@@ -74,14 +74,14 @@ This feature owns the behavior implemented, specified, or enforced by its owner 
 
 - `skills/metric-advisor`
 - `docs/skills/README.md`
-- `docs/specs/self-improvement-contracts.md`
-- `docs/specs/review-gates.md`
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
+- `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
 
 ## Source Context
 
 - `tickets/TASK-0228/ticket.md`
 - `skills/best-of-worlds/references/metric-discovery.md`
-- `docs/specs/self-improvement-contracts.md`
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
 ## Evidence
 

@@ -137,7 +137,7 @@ Memory Update
   lesson/trouble-derived evals, gotchas, or skill-package changes.
 - [../review/SKILL.md](../review/SKILL.md) - use for material memory or
   evidence-quality judgment.
-- [../../docs/specs/program-notation.md](../../docs/specs/program-notation.md)
+- [../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
   - shared project harness and PM heartbeat vocabulary.
 
 ## Output

@@ -20,7 +20,7 @@ runtime.
 - `docs/sources/registry.jsonl`: source identity, provenance, and dedupe
 - system/feature metadata and generated registries: dedupe and local
   baseline
-- `docs/specs/harness-techniques.md`: human-readable current inventory
+- `docs/features/README.md`: human-readable current inventory
 - [codebase-analysis](../../codebase-analysis/SKILL.md): checks local behavior
   when registry/docs search is inconclusive
 - [external-patterns](../../external-patterns/SKILL.md): checks source repos or

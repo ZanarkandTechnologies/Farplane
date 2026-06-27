@@ -116,7 +116,7 @@ reference so it is loaded only after selection.
 - Put a compact `## Skill Signature` after `## Context` when the skill needs
   callable behavior, state reads/writes, gates, routes, failure modes, or
   composition boundaries. Follow
-  [`docs/specs/self-improvement-contracts.md`](../specs/self-improvement-contracts.md)
+  [`docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md)
   and do not add a verbose schema when a compact signature is enough.
 - Treat the signature as a parameter contract. If the user invokes a skill
   without required inputs, the agent should resolve those inputs from files,

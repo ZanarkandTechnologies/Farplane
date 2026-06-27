@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Grep
 ## Todo List
 
 - [ ] Read the current UI/product context first: active ticket, `docs/prd.md`,
-  `docs/specs/`, screenshots if present, nearby UI code, and existing taste or
+  `docs/features/`, screenshots if present, nearby UI code, and existing taste or
   design notes.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to ground
   observed UI facts and avoid asking the user for discoverable context.

@@ -3,16 +3,14 @@ title: "Horizon Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - systems
   - horizon-loop
 refs:
-  - docs/specs/goal-loop-contract.md
-  - docs/specs/minimal-autonomy-loop.md
-  - docs/specs/steer-pulse-automation.md
-  - docs/specs/nested-pm-projects.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0065-pulse-and-interval-automation.md
 system_record_json: |
   {
     "id": "SYS-0003",
@@ -23,15 +21,14 @@ system_record_json: |
     "primary_feature_ref": "FEAT-0029",
     "feature_refs": [
       "FEAT-0029",
-      "FEAT-0032"
+      "FEAT-0032",
+      "FEAT-0065"
     ],
     "refs": [
-      "docs/specs/goal-loop-contract.md",
-      "docs/specs/minimal-autonomy-loop.md",
-      "docs/specs/steer-pulse-automation.md",
-      "docs/specs/nested-pm-projects.md"
+      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
+      "docs/features/FEAT-0065-pulse-and-interval-automation.md"
     ],
-    "last_verified": "2026-06-26"
+    "last_verified": "2026-06-27"
   }
 ---
 
@@ -55,6 +52,7 @@ Single-ticket build contracts stay in Work Loop; validators and release registri
 
 - [FEAT-0029 Goal Packet architecture for native Codex goals](../features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
 - [FEAT-0032 Goal Advisor execution compilation](../features/FEAT-0032-goal-advisor-execution-compilation.md)
+- [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md)
 
 ## Maintenance
 

@@ -72,8 +72,28 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.4-3db2e3b64738.md",
-      "source_commit": "3db2e3b64738",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.4-60be77718277.md",
+      "source_commit": "60be77718277",
+      "summary": "Make feature registry doc-backed",
+      "version": "0.3.4"
+    },
+    {
+      "changed_sections": [],
+      "introduced_at": "2026-06-27",
+      "section_count": 9,
+      "sections": [
+        "Context",
+        "Skill Signature",
+        "Phase Contract",
+        "Phase Boundary",
+        "Todo List",
+        "Templates",
+        "Gotchas",
+        "Reference Map",
+        "Output"
+      ],
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.4-ae0a244cb7e8.md",
+      "source_commit": "ae0a244cb7e8",
       "summary": "working tree current template",
       "version": "0.3.4"
     }
@@ -275,7 +295,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "3db2e3b64738",
+      "source_commit": "60be77718277",
       "template_version": "0.3.4",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -289,7 +309,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "3db2e3b64738",
+      "source_commit": "60be77718277",
       "template_version": "0.3.4",
       "title": "Todo executability",
       "verdict": "pass"
@@ -303,7 +323,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "3db2e3b64738",
+      "source_commit": "60be77718277",
       "template_version": "0.3.4",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -317,7 +337,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "3db2e3b64738",
+      "source_commit": "60be77718277",
       "template_version": "0.3.4",
       "title": "Proof contract",
       "verdict": "pass"
@@ -331,7 +351,77 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "3db2e3b64738",
+      "source_commit": "60be77718277",
+      "template_version": "0.3.4",
+      "title": "Eval / QA sync",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "routing",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "routing_clarity",
+      "expected_signals": [
+        "description uses verb/input/output/call-condition guidance",
+        "trigger catalogs stay out of frontmatter"
+      ],
+      "missing_signals": [],
+      "source_commit": "ae0a244cb7e8",
+      "template_version": "0.3.4",
+      "title": "Routing clarity",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "todo_executability",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "todo_executability",
+      "expected_signals": [
+        "top-level todos use visible numbered checkbox actions",
+        "policy prose is not treated as a top-level todo"
+      ],
+      "missing_signals": [],
+      "source_commit": "ae0a244cb7e8",
+      "template_version": "0.3.4",
+      "title": "Todo executability",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "phase_boundary",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "phase_boundary",
+      "expected_signals": [
+        "phase-like skills are externalized only when their artifact is needed",
+        "same-scope recursion is forbidden"
+      ],
+      "missing_signals": [],
+      "source_commit": "ae0a244cb7e8",
+      "template_version": "0.3.4",
+      "title": "Phase boundary",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "proof_contract",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "proof_contract",
+      "expected_signals": [
+        "the finish gate names proof, blockers, or evidence",
+        "output contract is explicit"
+      ],
+      "missing_signals": [],
+      "source_commit": "ae0a244cb7e8",
+      "template_version": "0.3.4",
+      "title": "Proof contract",
+      "verdict": "pass"
+    },
+    {
+      "behavior": "eval_qa_sync",
+      "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
+      "eval_id": "eval_qa_sync",
+      "expected_signals": [
+        "eval_task.json is a first-class special file",
+        "qa_checklist.md is a repeatable runtime guardrail only when warranted"
+      ],
+      "missing_signals": [],
+      "source_commit": "ae0a244cb7e8",
       "template_version": "0.3.4",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -448,8 +538,8 @@
       "surfaces": [
         "skills/metric-advisor",
         "docs/skills/README.md",
-        "docs/specs/self-improvement-contracts.md",
-        "docs/specs/review-gates.md"
+        "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
+        "docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md"
       ]
     },
     {
@@ -469,7 +559,7 @@
       "name": "Skill compounding score",
       "status": "implemented",
       "surfaces": [
-        "docs/specs/skill-compounding-score.md",
+        "docs/features/FEAT-0064-skill-compounding-score.md",
         "docs/skills/system.md",
         "skills/taste-loop",
         "farplane/automations.md",
@@ -477,7 +567,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-26T13:37:47+00:00",
+  "generated_at": "2026-06-27T04:32:55+00:00",
   "rollout": [
     {
       "eval": "",
@@ -879,7 +969,7 @@
       "eval": "",
       "has_checklist": true,
       "path": "skills/landing-page/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "landing-page",
       "skill_ui": "",
       "source": "local",
@@ -1467,7 +1557,7 @@
       "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/optimize-with-human/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "optimize-with-human",
       "skill_ui": "",
       "source": "local",
@@ -2269,7 +2359,7 @@
       "path": "skills/landing-page/SKILL.md",
       "surfaces": {
         "eval": false,
-        "qa_checklist": false,
+        "qa_checklist": true,
         "skill": false
       },
       "template_uses": {}
@@ -2355,7 +2445,7 @@
       "path": "skills/optimize-with-human/SKILL.md",
       "surfaces": {
         "eval": true,
-        "qa_checklist": false,
+        "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
@@ -3379,6 +3469,32 @@
       "used_version": ""
     },
     {
+      "consumer_id": "landing-page",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0057"
+      ],
+      "path": "skills/landing-page/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "optimize-with-human",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0057"
+      ],
+      "path": "skills/optimize-with-human/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
       "consumer_id": "qa",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -4020,18 +4136,18 @@
     },
     "skill-qa-checklist": {
       "by_scope": {
-        "skill": 16
+        "skill": 18
       },
       "by_status": {
         "current": 11,
-        "missing": 5
+        "missing": 7
       },
       "current_version": "0.1.0",
       "feature_refs": [
         "FEAT-0057"
       ],
       "target_basis": "skills with a qa_checklist.md surface",
-      "total_consumers": 16
+      "total_consumers": 18
     },
     "skill-template": {
       "by_scope": {
@@ -4146,10 +4262,10 @@
     },
     {
       "introduced_at": "2026-06-26",
-      "latest_at": "2026-06-26",
-      "latest_commit": "3db2e3b64738",
+      "latest_at": "2026-06-27",
+      "latest_commit": "ae0a244cb7e8",
       "latest_summary": "working tree current template",
-      "release_count": 1,
+      "release_count": 2,
       "sections": [
         "Context",
         "Skill Signature",
@@ -4161,17 +4277,23 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.4-3db2e3b64738.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.4-ae0a244cb7e8.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-26",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.4-3db2e3b64738.md",
-          "source_commit": "3db2e3b64738",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.4-60be77718277.md",
+          "source_commit": "60be77718277",
+          "summary": "Make feature registry doc-backed"
+        },
+        {
+          "introduced_at": "2026-06-27",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.4-ae0a244cb7e8.md",
+          "source_commit": "ae0a244cb7e8",
           "summary": "working tree current template"
         }
       ],
-      "source_commit": "3db2e3b64738",
-      "summary": "working tree current template",
+      "source_commit": "60be77718277",
+      "summary": "Make feature registry doc-backed",
       "template_metadata": {
         "feature_refs": [
           "FEAT-0022",

@@ -5,7 +5,7 @@ status: complete
 created_at: 2026-06-26
 change_type: skill-contract
 refs:
-  - docs/specs/skill-compounding-score.md
+  - docs/features/FEAT-0064-skill-compounding-score.md
   - skills/taste-loop/SKILL.md
   - skills/taste-loop/templates/heartbeat-prompt.md
 ---
@@ -28,7 +28,7 @@ local ad hoc score formula.
 
 ## After
 
-- `docs/specs/skill-compounding-score.md` owns the official algorithm,
+- `docs/features/FEAT-0064-skill-compounding-score.md` owns the official algorithm,
   component meanings, and source owners.
 - Taste Loop reads that spec and reports the score breakdown as a consumer.
 - The score is explicitly not an eval score, review TAS, template-health score,

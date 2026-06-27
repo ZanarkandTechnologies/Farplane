@@ -156,7 +156,7 @@ Knowledge Tidy Report
 
 ## Reference Map
 
-- [filesystem lifecycle](../../docs/specs/filesystem-lifecycle.md) - read for
+- [filesystem lifecycle](../../docs/features/FEAT-0060-registry-backed-documentation-os.md) - read for
   artifact roles, read defaults, drain rules, and archive/delete boundaries.
 - [documentation](../documentation/SKILL.md) - use for durable doc-quality
   rewrites outside memory ranking.

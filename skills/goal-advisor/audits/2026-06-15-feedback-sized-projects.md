@@ -7,7 +7,7 @@ owner: goal-advisor
 refs:
   - ../../horizon-advisor/references/project-goals.md
   - ../../../farplane/goals.md
-  - ../../../docs/specs/program-notation.md
+  - ../../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - ../../../farplane/goals.md
 ---
 

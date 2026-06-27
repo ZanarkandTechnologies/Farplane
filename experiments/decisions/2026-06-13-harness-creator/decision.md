@@ -34,7 +34,7 @@ evidence exists.
   belong in skills, long-horizon work belongs in portfolios plus child Goal
   Packets, current external truth belongs in tools/search, and root/global
   prompts are last.
-- `docs/specs/goal-loop-contract.md` says native Goal is for the selected
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` says native Goal is for the selected
   executable leaf; portfolio heartbeat/manual resume owns parent orchestration.
 - `skills/goal-advisor/SKILL.md` owns Goal architecture and prompt
   compilation, not domain discovery.

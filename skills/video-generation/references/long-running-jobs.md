@@ -25,7 +25,7 @@ Use this when video generation, image-to-video, avatar rendering, upscaling, or 
 
 - Do not depend on terminal scrollback for task IDs or result URLs.
 - If the CLI returns a task ID but not a local result, write the task ID into `jobs.md` immediately.
-- Use adaptive backoff from `docs/specs/adaptive-backoff.md`: start around
+- Use adaptive backoff from `docs/features/FEAT-0065-pulse-and-interval-automation.md`: start around
   `30s` for images and short clips, around `2m` for longer videos or upscales,
   widen unchanged pending checks up to a practical cap, and reset or shorten
   the delay when a job shows progress.

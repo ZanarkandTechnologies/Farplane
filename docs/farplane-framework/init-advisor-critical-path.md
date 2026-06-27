@@ -17,7 +17,7 @@ refs:
   - skills/horizon-advisor/SKILL.md
   - skills/goal-advisor/SKILL.md
   - skills/automation-advisor/SKILL.md
-  - docs/specs/steer-pulse-automation.md
+  - docs/features/FEAT-0065-pulse-and-interval-automation.md
   - docs/farplane-framework/README.md
   - docs/farplane-framework/project-files.md
 ---
@@ -109,7 +109,7 @@ ARCHITECTURE.md
 README.md
 docs/bootstrap-brief.md
 docs/prd.md
-docs/specs/README.md
+docs/features/README.md
 docs/HISTORY.md
 docs/MEMORY.md
 docs/TASTE.md

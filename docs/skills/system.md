@@ -66,7 +66,7 @@ upgrade_priority(skill, evidence) -> rollout_order
 ```
 
 When a loop must rank skills as improvement targets, use the Skill Compounding
-Score in `docs/specs/skill-compounding-score.md`. That score composes tier
+Score in `docs/features/FEAT-0064-skill-compounding-score.md`. That score composes tier
 leverage with lifecycle-reference distance, product-lane fit, observed heat,
 downstream leverage, improvement gap, feedback fit, and proof fit. It is a
 prioritization score, not an eval score or skill quality grade.
@@ -388,7 +388,7 @@ routes: next-skill | next-skill:method | direct-answer
 fails: known bad behavior
 ```
 
-Use `docs/specs/self-improvement-contracts.md` for the full grammar and the
+Use `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` for the full grammar and the
 self-improvement workflow contracts.
 
 Agents should treat skill signatures like callable contracts. When invoking a

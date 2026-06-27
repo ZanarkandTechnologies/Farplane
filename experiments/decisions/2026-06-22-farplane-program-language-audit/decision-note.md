@@ -14,7 +14,7 @@ skill: deliberative-advice
 Farplane should standardize on one semantic kernel with multiple thin
 projections, not one syntax everywhere.
 
-The canonical kernel should be owned by `docs/specs/program-notation.md` and
+The canonical kernel should be owned by `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` and
 should remain close to:
 
 ```text
@@ -43,11 +43,11 @@ Farplane's useful ownership boundaries.
 
 Current repo evidence shows real dialect diversity:
 
-- `docs/specs/program-notation.md` already names the problem and defines a
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` already names the problem and defines a
   common intermediate notation.
-- `docs/specs/goal-loop-contract.md` preserves separate ownership for
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` preserves separate ownership for
   `ticket.md`, `program.md`, and `progress.md`.
-- `docs/specs/invocation-and-adapters.md` uses TypeScript-like contracts for
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md` uses TypeScript-like contracts for
   `FarplaneRunEnvelope`, `BoardAdapter`, `WorkItem`, `ComputeDecision`, and
   `ProofPacket`.
 - `docs/fundamentals/harness-algebra.md` uses compact function notation such as
@@ -99,7 +99,7 @@ come from stale docs, weak tickets, or missing validators.
 
 ### Systems Fit
 
-Recommendation: `docs/specs/program-notation.md` owns the shared semantic
+Recommendation: `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` owns the shared semantic
 vocabulary; each existing surface owns its projection.
 
 Strongest reason: a single syntax everywhere would blur boundaries Farplane
@@ -275,12 +275,12 @@ fields it does expose.
 
 ### Projection Ownership
 
-- `docs/specs/program-notation.md`: canonical semantic vocabulary and
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`: canonical semantic vocabulary and
   projection conformance rules.
 - `docs/skills/system.md`: skill signatures, Todo Lists, and skill projection.
 - `tickets/README.md`: ticket frontmatter/body projection.
-- `docs/specs/goal-loop-contract.md`: Goal Packet boundaries and projection.
-- `docs/specs/invocation-and-adapters.md`: envelope, adapter, compute, and
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`: Goal Packet boundaries and projection.
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`: envelope, adapter, compute, and
   proof schemas.
 - Python/Pydantic or JSON Schema validators: normalized validation and drift
   detection.

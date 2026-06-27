@@ -6,8 +6,8 @@ created_at: 2026-04-24
 updated_at: 2026-06-13
 refs:
   - docs/fundamentals/harness-algebra.md
-  - docs/specs/goal-loop-contract.md
-  - docs/specs/filesystem-lifecycle.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - docs/skills/README.md
 ---
 
@@ -138,7 +138,7 @@ For material harness changes, compare these surfaces:
 
 1. repo-local `AGENTS.md`
 2. `templates/global/AGENTS.md`
-3. `docs/fundamentals/*` or `docs/specs/*`
+3. `docs/fundamentals/*` or feature docs under `docs/features/`
 4. `skills/*`
 5. `agents/*.toml`
 6. hooks, validators, or `bin/*`

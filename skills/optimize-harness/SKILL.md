@@ -257,7 +257,7 @@ material harness behavior gap -> optimize-harness
   for applied changes.
 - [docs/fundamentals/harness-engineering-doctrine.md](../../docs/fundamentals/harness-engineering-doctrine.md) -
   Farplane placement doctrine.
-- [docs/specs/self-improvement-contracts.md](../../docs/specs/self-improvement-contracts.md) -
+- [docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md](../../docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md) -
   compact signatures and target self-improvement workflow.
 
 ## Output

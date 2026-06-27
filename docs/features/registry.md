@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -10,7 +10,7 @@ refs:
 
 # Generated Feature Registry
 
-This file is generated. Edit the feature pages in `docs/features/` instead.
+This file is generated. Edit the feature specs in `docs/features/` instead.
 
 | Feature | System | Status | Category |
 | --- | --- | --- | --- |
@@ -30,8 +30,10 @@ This file is generated. Edit the feature pages in `docs/features/` instead.
 | [FEAT-0042 Lean global agent operating kernel](../features/FEAT-0042-lean-global-agent-operating-kernel.md) | [Agent Kernel](../systems/agent-kernel.md) | `implemented` | `context-routing` |
 | [FEAT-0043 Project-level system prompt eval suite](../features/FEAT-0043-project-level-system-prompt-eval-suite.md) | [Proof And Review](../systems/proof-review.md) | `implemented` | `proof` |
 | [FEAT-0054 Modular skill-local eval tasks](../features/FEAT-0054-modular-skill-local-eval-tasks.md) | [Skill System](../systems/skill-system.md) | `implemented` | `skills` |
+| [FEAT-0056 Inspiration Vault](../features/FEAT-0056-inspiration-vault.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `proposed` | `source-ingestion` |
 | [FEAT-0057 Skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md) | [Skill System](../systems/skill-system.md) | `implemented` | `skills` |
-| [FEAT-0060 High-impact template feature registry](../features/FEAT-0060-high-impact-template-feature-registry.md) | [Maintenance And Release OS](../systems/maintenance-release-os.md) | `implemented` | `context-routing` |
+| [FEAT-0060 Registry-backed documentation OS](../features/FEAT-0060-registry-backed-documentation-os.md) | [Maintenance And Release OS](../systems/maintenance-release-os.md) | `implemented` | `context-routing` |
 | [FEAT-0061 Farplane adoption tracker CLI](../features/FEAT-0061-farplane-adoption-tracker-cli.md) | [Maintenance And Release OS](../systems/maintenance-release-os.md) | `implemented` | `proof` |
 | [FEAT-0063 Metric advisor cards](../features/FEAT-0063-metric-advisor-cards.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `implemented` | `skills` |
 | [FEAT-0064 Skill compounding score](../features/FEAT-0064-skill-compounding-score.md) | [Skill System](../systems/skill-system.md) | `implemented` | `skills` |
+| [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `planning` |

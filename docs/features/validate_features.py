@@ -7,11 +7,13 @@ import argparse
 import json
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
+TODAY = date.today().isoformat()
 FEATURE_ROOT = ROOT / "docs" / "features"
 SYSTEM_ROOT = ROOT / "docs" / "systems"
 FEATURE_REGISTRY = FEATURE_ROOT / "registry.jsonl"
@@ -59,6 +61,25 @@ FEATURE_ID_RE = re.compile(r"^FEAT-\d{4}$")
 SYSTEM_ID_RE = re.compile(r"^SYS-\d{4}$")
 SOURCE_ID_RE = re.compile(r"^SRC-\d{4}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+SYSTEM_FEATURE_LINK_RE = re.compile(r"\.\./features/(FEAT-\d{4})-[^)\s]+\.md")
+STALE_SPEC_REF_RE = re.compile(r"(docs/" r"specs/|\.\./specs/|@docs/" r"specs)")
+
+ACTIVE_SPEC_REF_SCAN_PATHS = [
+    ROOT / "AGENTS.md",
+    ROOT / "README.md",
+    ROOT / "ARCHITECTURE.md",
+    ROOT / "templates" / "global" / "AGENTS.md",
+    ROOT / "tickets" / "README.md",
+    ROOT / "tickets" / "templates",
+    ROOT / "agents",
+    ROOT / "skills",
+    ROOT / "docs" / "features",
+    ROOT / "docs" / "systems",
+    ROOT / "docs" / "skills",
+    ROOT / "docs" / "farplane-framework",
+    ROOT / "farplane",
+]
+ACTIVE_SCAN_SKIP_PARTS = {"archive", "audits", "graph", "__pycache__"}
 
 
 def is_url(value: str) -> bool:
@@ -199,6 +220,55 @@ def require_string_list(
     return value
 
 
+def validate_no_duplicates(record_id: str, field: str, values: list[str], errors: list[str]) -> None:
+    seen: set[str] = set()
+    duplicates: list[str] = []
+    for value in values:
+        if value in seen and value not in duplicates:
+            duplicates.append(value)
+        seen.add(value)
+    if duplicates:
+        errors.append(f"{record_id}: {field} contains duplicate refs: {duplicates}")
+
+
+def section_text(text: str, heading: str) -> str | None:
+    marker = f"\n## {heading}\n"
+    start = text.find(marker)
+    if start == -1:
+        if text.startswith(f"## {heading}\n"):
+            start = 0
+        else:
+            return None
+    else:
+        start += 1
+    next_heading = text.find("\n## ", start + len(f"## {heading}\n"))
+    if next_heading == -1:
+        return text[start:]
+    return text[start:next_heading]
+
+
+def validate_system_feature_doc_links(
+    system_id: str, source_path: str, feature_refs: list[str], errors: list[str]
+) -> None:
+    path = ROOT / source_path
+    if not path.exists():
+        return
+    feature_docs = section_text(path.read_text(encoding="utf-8"), "Feature Docs")
+    if feature_docs is None:
+        errors.append(f"{system_id}: missing ## Feature Docs section in {source_path}")
+        return
+    linked = SYSTEM_FEATURE_LINK_RE.findall(feature_docs)
+    linked_set = set(linked)
+    expected = set(feature_refs)
+    missing = sorted(expected - linked_set)
+    extra = sorted(linked_set - expected)
+    if missing or extra:
+        errors.append(
+            f"{system_id}: Feature Docs links must match feature_refs "
+            f"(missing={missing}, extra={extra})"
+        )
+
+
 def validate_local_refs(
     record_id: str, field: str, refs: list[str], source_ids: set[str], errors: list[str]
 ) -> None:
@@ -241,6 +311,8 @@ def validate_system(
 
     feature_refs = require_string_list(system, "feature_refs", system_id, errors)
     refs = require_string_list(system, "refs", system_id, errors)
+    validate_no_duplicates(system_id, "feature_refs", feature_refs, errors)
+    validate_no_duplicates(system_id, "refs", refs, errors)
 
     owner_spec = system.get("owner_spec")
     if isinstance(owner_spec, str) and not local_ref_exists(owner_spec):
@@ -261,6 +333,9 @@ def validate_system(
             continue
         if feature.get("system_id") != system_id:
             errors.append(f"{system_id}: feature_ref {feature_id} belongs to {feature.get('system_id')}")
+
+    if isinstance(source_path, str):
+        validate_system_feature_doc_links(system_id, source_path, feature_refs, errors)
 
 
 def validate_feature_source(
@@ -396,6 +471,8 @@ def validate() -> list[str]:
         if feature_id not in system.get("feature_refs", []):
             errors.append(f"{feature_id}: owning system {system.get('id')} does not list feature_ref")
 
+    errors.extend(validate_no_active_stale_spec_refs())
+
     rendered_features = render_feature_registry(features, system_by_id)
     if FEATURE_REGISTRY.exists():
         if FEATURE_REGISTRY.read_text(encoding="utf-8") != rendered_features:
@@ -439,6 +516,35 @@ def validate() -> list[str]:
     return errors
 
 
+def iter_active_scan_files() -> list[Path]:
+    files: list[Path] = []
+    for root in ACTIVE_SPEC_REF_SCAN_PATHS:
+        if not root.exists():
+            continue
+        if root.is_file():
+            files.append(root)
+            continue
+        for path in root.rglob("*"):
+            if not path.is_file():
+                continue
+            if ACTIVE_SCAN_SKIP_PARTS & set(path.relative_to(ROOT).parts):
+                continue
+            if path.suffix.lower() in {".md", ".json", ".jsonl", ".toml", ".py", ".txt"}:
+                files.append(path)
+    return sorted(set(files))
+
+
+def validate_no_active_stale_spec_refs() -> list[str]:
+    errors: list[str] = []
+    for path in iter_active_scan_files():
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        for line_no, line in enumerate(text.splitlines(), 1):
+            if STALE_SPEC_REF_RE.search(line):
+                rel = path.relative_to(ROOT)
+                errors.append(f"{rel}:{line_no}: active docs must not reference deleted docs/specs paths")
+    return errors
+
+
 def render_jsonl(rows: list[dict[str, Any]]) -> str:
     return "".join(
         json.dumps(row, separators=(",", ":"), ensure_ascii=False) + "\n" for row in rows
@@ -470,7 +576,7 @@ def render_feature_registry_doc(
         'title: "Generated Feature Registry"',
         "status: generated",
         "owner: feature-registry",
-        "updated_at: 2026-06-26",
+        f"updated_at: {TODAY}",
         "refs:",
         "  - docs/features/registry.jsonl",
         "  - docs/features/validate_features.py",
@@ -478,7 +584,7 @@ def render_feature_registry_doc(
         "",
         "# Generated Feature Registry",
         "",
-        "This file is generated. Edit the feature pages in `docs/features/` instead.",
+        "This file is generated. Edit the feature specs in `docs/features/` instead.",
         "",
         "| Feature | System | Status | Category |",
         "| --- | --- | --- | --- |",
@@ -502,7 +608,7 @@ def render_system_registry_doc(
         'title: "Generated System Registry"',
         "status: generated",
         "owner: system-registry",
-        "updated_at: 2026-06-26",
+        f"updated_at: {TODAY}",
         "refs:",
         "  - docs/systems/registry.jsonl",
         "  - docs/features/registry.jsonl",
@@ -511,7 +617,7 @@ def render_system_registry_doc(
         "",
         "# Generated System Registry",
         "",
-        "This file is generated. Edit system pages in `docs/systems/` and feature pages in `docs/features/` instead.",
+        "This file is generated. Edit system pages in `docs/systems/` and feature specs in `docs/features/` instead.",
         "",
         "| System | Primary Feature | Feature Docs |",
         "| --- | --- | --- |",

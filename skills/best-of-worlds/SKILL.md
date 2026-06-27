@@ -98,7 +98,7 @@ For bigger comparisons, scaffold a durable synthesis workspace:
 python3 skills/best-of-worlds/scripts/init_synthesis.py \
   --name skill-improvement-suite \
   --target "Farplane skill self-improvement workflow" \
-  --source docs/specs/self-improvement-contracts.md \
+  --source docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md \
   --source skills/self-improve/SKILL.md
 ```
 

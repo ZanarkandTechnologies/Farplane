@@ -8,7 +8,7 @@ operator supplies another vault:
 - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/AGENTS.md`
 - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/schema.ts`
 - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/validators.ts`
-- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/docs/specs/FP03-taste-bank-and-tasty-packs.md`
+- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/docs/features/FP03-taste-bank-and-tasty-packs.md`
 
 ## Current Tables
 

@@ -12,7 +12,7 @@ tags:
 refs:
   - skills/skill-maintenance/SKILL.md
   - skills/optimize-harness/SKILL.md
-  - docs/specs/self-improvement-contracts.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/skills/best-practices.md
   - skills/skill-maintenance/qa_checklist.md
 ---
@@ -204,7 +204,7 @@ Relevant files:
 - `skills/skill-maintenance/eval_task.json`
 - `skills/skill-maintenance/qa_checklist.md`
 - `skills/optimize-harness/SKILL.md`
-- `docs/specs/self-improvement-contracts.md`
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 - `docs/skills/best-practices.md`
 - `skills/skill-maintenance/scripts/check_skills.py`
 
@@ -225,7 +225,7 @@ Each lane should read at least:
 
 - `skills/skill-maintenance/SKILL.md`
 - `skills/optimize-harness/SKILL.md`
-- `docs/specs/self-improvement-contracts.md`
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 - `docs/skills/best-practices.md`
 
 Lanes focused on evidence or safety should also read:

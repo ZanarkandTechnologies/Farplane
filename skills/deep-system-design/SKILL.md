@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Grep
 ## Todo List
 
 - [ ] Read product and technical context first: active ticket, `docs/prd.md`,
-  `docs/specs/`, nearby schemas/handlers/jobs/config, `docs/MEMORY.md`, and
+  `docs/features/`, nearby schemas/handlers/jobs/config, `docs/MEMORY.md`, and
   `docs/LESSONS.md`.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to separate
   observed local architecture from assumptions.
@@ -334,7 +334,7 @@ When threshold is met (or the user exits with warning / hard cap):
    - the active ticket `Working Notes` / `Handoff` when a ticket already exists
    - otherwise the current response as a compact `Deep-System-Design Summary`
 2. Write the execution-ready system-design artifact to:
-   - `docs/specs/<slug>.md` when the project has a specs surface and the design is spec-level
+   - `docs/features/<slug>.md` when the project has a specs surface and the design is spec-level
    - otherwise the active ticket when one already exists
    - otherwise the current response handoff plus the next canonical artifact owner, usually `agent-testability-plan`, `impl-plan`, or `spec-to-ticket`
 
@@ -342,7 +342,7 @@ When threshold is met (or the user exits with warning / hard cap):
 
 When the project has been bootstrapped with `init-advisor`, durable system design should live on normal Farplane surfaces:
 
-- spec-level reusable architecture doctrine -> `docs/specs/<slug>.md`
+- spec-level reusable architecture doctrine -> `docs/features/<slug>.md`
 - ticket-local implementation-oriented design summary -> active ticket
 - chat-only fallback -> current response when no durable project surface exists
 
@@ -380,7 +380,7 @@ The `System Design Brief` should include:
 When the design is reusable across tickets or has runtime/service traits such
 as queues, schedulers, retries, adapters, external runners, workspaces,
 credentials, or observability, choose a `SpecDepth` from
-`docs/specs/spec-authoring-contract.md` and write the resulting spec with the
+`docs/features/FEAT-0007-ticket-as-durable-task-memory.md` and write the resulting spec with the
 matching depth. Use `service-runtime` for orchestration systems that need
 domain model, config, state machines, failure/recovery, observability, and a
 conformance matrix.

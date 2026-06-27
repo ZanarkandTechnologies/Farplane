@@ -14,8 +14,8 @@ refs:
   - hooks.json
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/project-files.md
-  - docs/specs/filesystem-lifecycle.md
-  - docs/specs/steer-pulse-automation.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
+  - docs/features/FEAT-0065-pulse-and-interval-automation.md
 ---
 
 # Farplane Hooks and Runtime

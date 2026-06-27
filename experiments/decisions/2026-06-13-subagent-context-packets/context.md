@@ -9,7 +9,7 @@ tags:
   - context
   - deliberative-advice
 refs:
-  - docs/specs/context-and-handoff-policy.md
+  - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - skills/deliberative-advice/SKILL.md
   - templates/global/AGENTS.md
 ---
@@ -62,7 +62,7 @@ review/QA/planning/documentation/hardcase agents.
 
 ## Evidence Refs
 
-- `docs/specs/context-and-handoff-policy.md`
+- `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - `templates/global/AGENTS.md`
 - `AGENTS.md`
 - `skills/deliberative-advice/SKILL.md`
@@ -80,7 +80,7 @@ review/QA/planning/documentation/hardcase agents.
 ## Relevant Files
 
 - Changed policy/spec surfaces:
-  - `docs/specs/context-and-handoff-policy.md`
+  - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
   - `templates/global/AGENTS.md`
   - `AGENTS.md`
   - `docs/fundamentals/prompt-engineering.md`

@@ -22,8 +22,8 @@ source_of_truth:
   - farplane/bindings.md
   - farplane/hooks.json
   - farplane/pm.json
-  - docs/specs/steer-pulse-automation.md
-  - docs/specs/program-notation.md
+  - docs/features/FEAT-0065-pulse-and-interval-automation.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/init-advisor/SKILL.md
   - skills/harness-creator/SKILL.md
 ---
@@ -62,7 +62,7 @@ template registries, skill OS checks, template rollout, project adoption, graph
 projections, evals, doc tracking, and CLI/UI payloads.
 
 Use the Farplane UI product model in
-[`../Farplane-UI/docs/specs/FP02-harness-product-model.md`](../../../Farplane-UI/docs/specs/FP02-harness-product-model.md)
+[`../Farplane-UI/docs/features/FP02-harness-product-model.md`](../../../Farplane-UI/docs/features/FP02-harness-product-model.md)
 when deciding whether a surface belongs in a global harness entrypoint or a
 project/company panel.
 
@@ -107,7 +107,7 @@ PROJECT_ROOT/
     HISTORY.md
     LESSONS.md
     TROUBLES.md
-    specs/
+    features/
     fundamentals/
 
   qa/
@@ -197,7 +197,7 @@ cadence. They call `interval-update`, write date-stamped reports, check drift,
 and produce Pulse guidance or Goal Advisor handoffs. They may propose static
 charter deltas in reports, but must not silently apply them.
 
-The full contract lives in [Pulse and Interval Automation](../specs/steer-pulse-automation.md).
+The full contract lives in [Pulse and Interval Automation](../features/FEAT-0065-pulse-and-interval-automation.md).
 
 ## Automation Authoring
 

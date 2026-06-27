@@ -64,7 +64,7 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
      dependencies.
 - [ ] 4. Compare realistic owner surfaces.
    - [ ] Consider repo `AGENTS.md`, `templates/global/AGENTS.md`, generated
-     project templates, `docs/fundamentals/*`, `docs/specs/*`, `skills/*`,
+     project templates, `docs/fundamentals/*`, `docs/features/FEAT-*.md`, `skills/*`,
      `agents/*.toml`, hooks or scripts under `bin/`, ticket contracts,
      validators, system/feature registries, skill registry, and generated
      harness-map metadata.

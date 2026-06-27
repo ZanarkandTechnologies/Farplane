@@ -3,7 +3,7 @@ title: "Ticket as durable task memory"
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
@@ -13,8 +13,8 @@ refs:
   - tickets/templates/ticket.md
   - skills/impl-plan
   - skills/spec-to-ticket
-  - docs/specs/context-and-handoff-policy.md
-  - docs/specs/harness-techniques.md
+  - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
+  - docs/features/README.md
   - docs/MEMORY.md#MEM-0058
   - docs/MEMORY.md#MEM-0148
   - docs/HISTORY.md
@@ -31,10 +31,10 @@ feature_record_json: |
       "tickets/templates/ticket.md",
       "skills/impl-plan",
       "skills/spec-to-ticket",
-      "docs/specs/context-and-handoff-policy.md"
+      "docs/features/FEAT-0007-ticket-as-durable-task-memory.md"
     ],
     "source_refs": [
-      "docs/specs/harness-techniques.md",
+      "docs/features/README.md",
       "docs/MEMORY.md#MEM-0058",
       "docs/MEMORY.md#MEM-0148"
     ],
@@ -63,9 +63,30 @@ feature(FEAT-0007, repo_state?) -> behavior + evidence + maintenance_signal
 - Status: `implemented`
 - Category: `memory`
 
-## Owned Behavior
+## Feature Spec
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+This feature owns the spec-to-ticket work loop. A durable ticket is the smallest reusable execution memory for a bounded unit of work. It carries scope, program, map, Done / Proof, state, links, and sparse notes so an agent can resume without relying on chat transcript memory.
+
+```text
+work_loop(intent, evidence?) -> ticket_contract + execution_program + proof_obligations
+```
+
+The contract folded the former spec-first execution, handoff, context, and spec-authoring rules into one feature:
+
+- Discovery produces the smallest useful feature/spec owner, then a ticket slice with explicit proof gates.
+- Agent-testability planning identifies controls, probes, coordination views, and evidence before build work begins.
+- Work packaging keeps `ticket.md` compact and moves bulky proof to ticket artifacts.
+- Build proceeds through focused implementation, QA, review, and closeout against the ticket `Done / Proof` scoreboard.
+- Handoffs name the current state, next step, blockers, exact files, and evidence instead of relying on transcript memory.
+- Reset/resume decisions prefer visible ticket state, `program.md`, `progress.md`, and artifact links over hidden process state.
+
+Non-goal: this feature is not a general project-management app. It is the durable execution substrate for Farplane-controlled work.
+
+Proof gates:
+
+- A new work item can be reconstructed from filesystem artifacts alone.
+- The ticket says what is in scope, how to verify it, and where evidence belongs.
+- Stale plans, broad specs, or chat-only decisions are folded into the owning feature/system/ticket or deleted.
 
 ## Owner Surfaces
 
@@ -73,11 +94,11 @@ This feature owns the behavior implemented, specified, or enforced by its owner 
 - `tickets/templates/ticket.md`
 - `skills/impl-plan`
 - `skills/spec-to-ticket`
-- `docs/specs/context-and-handoff-policy.md`
+- `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 
 ## Source Context
 
-- `docs/specs/harness-techniques.md`
+- `docs/features/README.md`
 - `docs/MEMORY.md#MEM-0058`
 - `docs/MEMORY.md#MEM-0148`
 

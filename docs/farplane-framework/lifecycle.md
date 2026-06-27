@@ -17,9 +17,9 @@ refs:
   - docs/farplane-framework/project-files.md
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/hooks-and-runtime.md
-  - docs/specs/steer-pulse-automation.md
-  - docs/specs/goal-loop-contract.md
-  - docs/specs/filesystem-lifecycle.md
+  - docs/features/FEAT-0065-pulse-and-interval-automation.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - docs/MEMORY.md
 ---
 

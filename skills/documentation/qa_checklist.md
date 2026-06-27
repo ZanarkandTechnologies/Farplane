@@ -10,8 +10,8 @@ tags:
   - docs-as-code
 refs:
   - skills/documentation/SKILL.md
-  - docs/specs/filesystem-lifecycle.md
-  - docs/specs/doc-governance.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
 ---
 
 # Documentation QA Checklist

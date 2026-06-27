@@ -5,7 +5,7 @@ Copy and paste this into a new session to start a coding implementation planning
 ---
 
 0a. Study `@docs/prd.md` to understand audience, outcomes, and constraints.
-0b. Study `@docs/specs/*` to learn the application specifications.
+0b. Study `@docs/features/FEAT-*.md` to learn the application specifications.
 0c. Study the active ticket in `@tickets/*.md`, preferring `status: review`.
 0d. Study `@docs/MEMORY.md` for durable technical constraints.
 0e. Study `@docs/TROUBLES.md` for repeated failure patterns and `@docs/LESSONS.md` for distilled prevention rules that should be avoided in this slice.

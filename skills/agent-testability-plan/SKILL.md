@@ -97,7 +97,7 @@ covering:
 5. Set explicit `Non-Goals` and `Decision Boundaries`, especially the existing
    no-autonomous publish/deploy/spend boundary.
 6. Write a visible `Agent Testability Brief` to:
-   - `docs/specs/<slug>-agent-testability.md` when the brief is spec-level and reusable
+   - `docs/features/<slug>-agent-testability.md` when the brief is spec-level and reusable
    - otherwise the active ticket when the guidance is ticket-local
 7. Add consumer guidance for `spec-to-ticket`, `impl-plan`, and `$ralph` so later planning
    surfaces know how to use the brief.
@@ -241,7 +241,7 @@ Keep the brief compact and directly reusable.
 ## References
 
 - [references/review.md](references/review.md)
-- [docs/specs/agent-testability-surfaces.md](/Users/kenjipcx/coding-harness/Farplane/docs/specs/agent-testability-surfaces.md)
+- [docs/features/FEAT-0031-agent-behavior-test-workflow.md](/Users/kenjipcx/coding-harness/Farplane/docs/features/FEAT-0031-agent-behavior-test-workflow.md)
 - [skills/deep-system-design/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/deep-system-design/SKILL.md)
 - [skills/spec-to-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/spec-to-ticket/SKILL.md)
 - [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/impl-plan/SKILL.md)

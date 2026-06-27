@@ -45,13 +45,13 @@ Return a clear `pass|revise|block|invalid` verdict grounded in the provided evid
 - `sed -n '1,120p' skills/review/SKILL.md`
   and expect a marker-delimited `## Todo List` with natural-language
   review steps
-- `rg -n "reviewer-handoff|rubric_families|desloppify|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md docs/review/rubrics agents/reviewer.toml docs/specs/review-gates.md tickets/templates/ticket.md`
+- `rg -n "reviewer-handoff|rubric_families|desloppify|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md docs/review/rubrics agents/reviewer.toml docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md tickets/templates/ticket.md`
   and expect live matches in the updated review surfaces
 - Run a stale numeric-review-contract scan over `skills/review`,
-  `agents/reviewer.toml`, and `docs/specs/review-gates.md`; expect no live
+  `agents/reviewer.toml`, and `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`; expect no live
   review-contract matches outside historical notes or unrelated schema versions.
 - Manually verify that examples and TAS gates in `SKILL.md`,
   `docs/review/rubrics/review-rubric-index.md`,
   `docs/review/rubrics/desloppify.md`, and
-  `docs/specs/review-gates.md` all use the same explicit TAS contract and
+  `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` all use the same explicit TAS contract and
   search/output expectations

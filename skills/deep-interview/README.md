@@ -22,4 +22,4 @@ $deep-interview --bootstrap "clarify repo topology, stack, and push gates for a 
 ## How To Test
 
 - `rg -n 'hidden sidecar' skills/deep-interview/SKILL.md`
-- re-read `skills/deep-interview/SKILL.md` against `tickets/README.md` and `docs/specs/context-and-handoff-policy.md`
+- re-read `skills/deep-interview/SKILL.md` against `tickets/README.md` and `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`

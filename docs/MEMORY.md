@@ -9,7 +9,7 @@ tags:
   - memory
   - promoted-decisions
 refs:
-  - docs/specs/filesystem-lifecycle.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - skills/knowledge-tidier/SKILL.md
   - docs/HISTORY.md
   - docs/TROUBLES.md
@@ -198,7 +198,7 @@ MEM-0135, MEM-0136, MEM-0137.
   factual, important, and worth remembering outside the owner surface.
 - `docs/TROUBLES.md` is the raw pain log. `docs/LESSONS.md` is the distilled
   prevention log. Keep them separate.
-- Active `docs/specs/` files should map to one current feature, contract, or
+- Active `docs/features/` files should map to one current feature, contract, or
   doctrine surface. Completed migration plans and superseded milestone notes
   belong in archives or owning skill surfaces.
 - Durable Markdown artifacts should use compact YAML front matter for routing

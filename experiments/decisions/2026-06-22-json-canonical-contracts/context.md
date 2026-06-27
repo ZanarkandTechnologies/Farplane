@@ -58,12 +58,12 @@ Farplane currently has mixed source formats:
 
 The confusing surfaces include:
 
-- `docs/specs/program-notation.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `tickets/README.md` and ticket `Program`
 - Goal Packet `ticket.md`, `program.md`, `progress.md`
-- `docs/specs/goal-loop-contract.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - skill `Skill Signature` and `Todo List`
-- `docs/specs/invocation-and-adapters.md`
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 - `docs/fundamentals/harness-algebra.md`
 
 ## Expected Behavior
@@ -116,9 +116,9 @@ validation.
 ## Relevant Local Files
 
 - `experiments/decisions/2026-06-22-farplane-program-language-audit/decision-note.md`
-- `docs/specs/program-notation.md`
-- `docs/specs/goal-loop-contract.md`
-- `docs/specs/invocation-and-adapters.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 - `docs/skills/system.md`
 - `tickets/README.md`
 - `templates/global/AGENTS.md`

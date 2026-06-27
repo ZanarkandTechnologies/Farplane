@@ -3,7 +3,7 @@
 <!-- Unified ticket-planning prompt. -->
 
 0a. Study `@docs/prd.md`.
-0b. Study `@docs/specs/*`, including any `Agent Testability Brief` when present.
+0b. Study `@docs/features/FEAT-*.md`, including any `Agent Testability Brief` when present.
 0c. Study the active ticket in `@tickets/*`; if none exists, inspect
 `@tickets/*`.
 0d. Study `@docs/MEMORY.md`.

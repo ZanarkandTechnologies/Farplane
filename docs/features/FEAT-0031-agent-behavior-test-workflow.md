@@ -3,7 +3,7 @@ title: "Agent behavior test workflow"
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
@@ -62,9 +62,29 @@ feature(FEAT-0031, repo_state?) -> behavior + evidence + maintenance_signal
 - Status: `implemented`
 - Category: `proof`
 
-## Owned Behavior
+## Feature Spec
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+This feature owns isolated behavior probes for agents, prompts, skills, and workflow claims. It folds the agent-testability surface contract into the behavior-test workflow.
+
+```text
+behavior_test(claim, controls, state_probe, evidence_path) -> scored_run_report
+```
+
+A testable agent workflow should expose:
+
+- control accelerators: fixtures, deterministic inputs, shortcuts, seeded state, or bounded prompts that make the behavior reachable;
+- state probes: logs, artifacts, DOM snapshots, command outputs, ticket state, generated files, or structured reports;
+- coordination views: visible ownership boundaries, handoff packets, and progress surfaces for multi-agent behavior.
+
+Agent Testability Briefs should name the behavior claim, setup state, control move, observable state, failure mode, evidence path, and expected report shape.
+
+Non-goal: this feature does not replace product QA. It captures one representative agent behavior with enough structure to learn from it.
+
+Proof gates:
+
+- The run can be inspected after the fact.
+- The score is tied to evidence, not vibes.
+- Any hardcase can be promoted to an eval, QA checklist, skill patch, or follow-up ticket.
 
 ## Owner Surfaces
 

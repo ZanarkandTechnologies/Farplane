@@ -10,7 +10,7 @@ argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea
 ## Todo List
 
 - [ ] Read available context before asking: active ticket, `docs/prd.md`,
-  `docs/specs/`, project README/AGENTS, and relevant local files.
+  `docs/features/`, project README/AGENTS, and relevant local files.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for local
   baseline facts instead of asking the user for discoverable project context.
 - [ ] Ask one question per round and target the weakest clarity dimension.

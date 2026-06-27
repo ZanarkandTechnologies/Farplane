@@ -354,7 +354,7 @@ Or create/update the Goal Packet files and then report their paths.
 
 ## Reference Map
 
-- [docs/specs/goal-loop-contract.md](../../docs/specs/goal-loop-contract.md) -
+- [docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md) -
   canonical Goal Packet, heartbeat, feedback, drift, and rollout model.
 - [references/prompt-templates.md](references/prompt-templates.md) - load only
   when emitting native Goal, heartbeat, setup, or skill-improvement prompt text.

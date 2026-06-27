@@ -2,7 +2,7 @@
 
 `taste-loop` is the official optional active-hours human-feedback heartbeat for
 Farplane. It selects high-compounding skills with the official Skill
-Compounding Score from `docs/specs/skill-compounding-score.md`; uses the
+Compounding Score from `docs/features/FEAT-0064-skill-compounding-score.md`; uses the
 Codex automation schedule plus the `farplane/automations.md` TOML block for
 active hours and feedback budget; and asks Codex to write local feedback cards
 or Goal Advisor handoffs.

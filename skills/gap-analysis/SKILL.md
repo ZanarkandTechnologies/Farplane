@@ -120,7 +120,7 @@ Verification: ...
   rules, source ownership, and feature tracking.
 - [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
   first-load contract quality, skill signatures, and reference placement.
-- [docs/specs/self-improvement-contracts.md](../../docs/specs/self-improvement-contracts.md) -
+- [docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md](../../docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md) -
   compact signature grammar and self-improvement workflow contracts.
 - [reference-grounding](../reference-grounding/SKILL.md) - required evidence
   primitive for local files.

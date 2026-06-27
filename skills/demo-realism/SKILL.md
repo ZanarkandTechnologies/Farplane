@@ -12,7 +12,7 @@ source: local
 ## Todo List
 
 - [ ] Read existing product context first: `docs/prd.md`, active ticket,
-  `docs/specs/`, user stories, customer notes, and current demo data.
+  `docs/features/`, user stories, customer notes, and current demo data.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
   when user groups, jobs, operating contexts, friction, or success signals are
   not already clear.

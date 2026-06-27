@@ -11,8 +11,8 @@ tags:
 refs:
   - skills/documentation/SKILL.md
   - skills/documentation/qa_checklist.md
-  - docs/specs/filesystem-lifecycle.md
-  - docs/specs/doc-governance.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
 ---
 
 # Documentation Skill Governance Refresh
@@ -26,11 +26,11 @@ review routing.
 
 ## Local Grounding
 
-- `docs/specs/filesystem-lifecycle.md` defines the default durable Markdown
+- `docs/features/FEAT-0060-registry-backed-documentation-os.md` defines the default durable Markdown
   front matter schema and says surface-specific schemas may add fields such as
   `template_version`, `feature_refs`, `source_refs`, `supersedes`, and
   `last_verified`.
-- `docs/specs/doc-governance.md` defines canonical doc surfaces, document
+- `docs/features/FEAT-0060-registry-backed-documentation-os.md` defines canonical doc surfaces, document
   architecture, structural checks, narrative audits, and the gardening loop.
 - Existing docs use mixed schemas. The skill should preserve local schemas
   instead of inventing one universal version field.
@@ -54,7 +54,7 @@ review routing.
   `advise`, `review`, and `close-ticket`.
 - Promoted checklist work into a root checklist with metadata/versioning,
   placement, split/merge, density, grounding, and local validator gates.
-- Added a documentation architecture policy to `docs/specs/doc-governance.md`
+- Added a documentation architecture policy to `docs/features/FEAT-0060-registry-backed-documentation-os.md`
   for new-file decisions, merge decisions, split triggers, density by surface,
   and task-evidence cleanup.
 - Removed the old reference checklist path so `qa_checklist.md` is the single

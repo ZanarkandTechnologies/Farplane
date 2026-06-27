@@ -12,7 +12,7 @@ proof_artifacts:
   - skills/harness-creator/references/harness-il.md
   - skills/harness-creator/templates/project-harness.md
   - skills/harness-creator/examples/faceless-ai-channel.md
-  - docs/specs/program-notation.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
 eval_required: no
 ---
 

@@ -9,7 +9,7 @@ tags:
   - systems
   - self-improvement-and-learning
 refs:
-  - docs/specs/self-improvement-contracts.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/LESSONS.md
   - docs/TROUBLES.md
   - skills/metric-advisor/SKILL.md
@@ -26,7 +26,7 @@ system_record_json: |
       "FEAT-0063"
     ],
     "refs": [
-      "docs/specs/self-improvement-contracts.md",
+      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
       "docs/LESSONS.md",
       "docs/TROUBLES.md",
       "skills/metric-advisor/SKILL.md"

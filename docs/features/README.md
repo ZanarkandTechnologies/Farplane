@@ -3,7 +3,7 @@ title: "Feature Docs"
 status: active
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - features
@@ -18,12 +18,11 @@ refs:
 
 # Feature Docs
 
-Farplane features are first-class capabilities with their own Markdown owner
-file. If a `FEAT-*` handle is too small, stale, or implementation-detail-shaped
+Farplane feature docs are the spec files for first-class capabilities. Each feature has one Markdown owner file. If a `FEAT-*` handle is too small, stale, or implementation-detail-shaped
 to deserve a page here, delete the handle and remove its template, source, and
 ticket references.
 
-This folder is the authored source for feature records:
+This folder is the authored source for feature specs and generated feature records:
 
 ```text
 feature pages in docs/features/
@@ -31,9 +30,7 @@ feature pages in docs/features/
   -> docs/features/registry.md
 ```
 
-Systems stay in [`docs/systems/`](../systems/README.md). A system explains the
-product layer; its `feature_refs` point to the feature docs that are worth
-maintaining as named capabilities.
+Systems stay in [`docs/systems/`](../systems/README.md). A system explains the product layer; its `feature_refs` point to feature specs that are worth maintaining as named capabilities. Do not create a second spec-folder truth shelf for feature behavior.
 
 ## Current Outputs
 
@@ -60,7 +57,7 @@ tags:
   - feature
   - sys-0003
 refs:
-  - docs/specs/goal-loop-contract.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
 feature_record_json: |
   {
     "id": "FEAT-0032",
@@ -70,7 +67,7 @@ feature_record_json: |
     "category": "execution",
     "public": true,
     "surfaces": ["skills/goal-advisor/SKILL.md"],
-    "source_refs": ["docs/specs/goal-loop-contract.md"],
+    "source_refs": ["docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md"],
     "external_refs": [],
     "evidence_refs": ["skills/goal-advisor/eval_task.json"],
     "known_limits": "Compiles visible execution prompts; it is not a hidden scheduler.",
@@ -92,8 +89,8 @@ feature_record_json: |
 - `public`: must be `true`. A feature file is a public/maintainable capability
   owner, not a private alias row.
 - `surfaces`: repo paths that own the live behavior.
-- `source_refs`: `SRC-*` records, local docs, tickets, memories, or specs that
-  explain why the feature exists.
+- `source_refs`: `SRC-*` records, local docs, tickets, memories, or feature
+  specs that explain why the feature exists.
 - `external_refs`: outside URLs, repos, videos, or standards that influenced
   the feature.
 - `evidence_refs`: tickets, artifacts, commands, evals, or experiment outputs
@@ -120,8 +117,8 @@ Generated rows add `system_name` and `owner_spec`.
 
 ## Deletion Rule
 
-Delete a `FEAT-*` handle when it no longer earns a feature page. Before
-deleting, move any current truth into the owning system doc, spec, skill,
+Delete a `FEAT-*` handle when it no longer earns a feature spec page. Before
+deleting, move any current truth into the owning system doc, feature spec, skill,
 template, source record, or ticket. Then remove all active references to the
 deleted ID and regenerate the registries.
 

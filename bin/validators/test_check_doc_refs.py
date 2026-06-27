@@ -63,7 +63,7 @@ class CheckDocRefsTest(unittest.TestCase):
                 """\
 # Fixture
 
-- [Old prompt doc](docs/specs/prompt-engineering.md)
+- [Old prompt doc](docs/features/prompt-engineering.md)
 """,
             )
             init_git(root)
@@ -71,17 +71,17 @@ class CheckDocRefsTest(unittest.TestCase):
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("missing local ref", result.stdout)
-            self.assertIn("docs/specs/prompt-engineering.md", result.stdout)
+            self.assertIn("docs/features/prompt-engineering.md", result.stdout)
 
     def test_validator_fails_for_missing_backticked_path(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
-            write_file(root / "docs/specs/README.md", "See `docs/specs/missing.md`.\n")
+            write_file(root / "docs/features/README.md", "See `docs/features/missing.md`.\n")
             init_git(root)
 
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("docs/specs/missing.md", result.stdout)
+            self.assertIn("docs/features/missing.md", result.stdout)
 
     def test_validator_ignores_external_urls_and_globs(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

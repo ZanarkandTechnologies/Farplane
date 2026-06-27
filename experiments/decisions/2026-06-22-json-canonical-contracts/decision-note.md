@@ -150,7 +150,7 @@ Markdown/YAML canonical
 - `program.md` while it remains operator-readable Goal loop configuration
 - `progress.md` while it remains compact narrative execution history
 - `SKILL.md` instructions, Todo Lists, and long-form references
-- `docs/specs/*`
+- `docs/features/FEAT-*.md`
 - `docs/fundamentals/*`
 - `README.md`
 - `ARCHITECTURE.md`

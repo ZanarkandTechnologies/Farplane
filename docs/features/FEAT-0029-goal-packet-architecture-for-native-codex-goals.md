@@ -3,20 +3,20 @@ title: "Goal Packet architecture for native Codex goals"
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - feature
   - sys-0003
 refs:
-  - docs/specs/goal-loop-contract.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/goal-advisor
   - skills/horizon-advisor
   - farplane/goals.md
   - tickets/templates/goal-loop/program.md
   - tickets/templates/goal-loop/progress.md
   - agents/goal-drift-reviewer.toml
-  - docs/specs/harness-techniques.md
+  - docs/features/README.md
   - README.md
   - https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex
   - docs/HISTORY.md
@@ -30,19 +30,19 @@ feature_record_json: |
     "category": "planning",
     "public": true,
     "surfaces": [
-      "docs/specs/goal-loop-contract.md",
+      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "skills/goal-advisor",
       "skills/horizon-advisor",
       "farplane/goals.md",
       "tickets/templates/goal-loop/program.md",
       "tickets/templates/goal-loop/progress.md",
       "agents/goal-drift-reviewer.toml",
-      "docs/specs/harness-techniques.md",
+      "docs/features/README.md",
       "README.md"
     ],
     "source_refs": [
       "https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex",
-      "docs/specs/goal-loop-contract.md"
+      "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md"
     ],
     "external_refs": [
       "https://developers.openai.com/codex/use-cases/follow-goals"
@@ -76,26 +76,52 @@ feature(FEAT-0029, repo_state?) -> behavior + evidence + maintenance_signal
 - Status: `implemented`
 - Category: `planning`
 
-## Owned Behavior
+## Feature Spec
 
-This feature owns the behavior implemented, specified, or enforced by its owner surfaces. Keep the details in those surfaces; keep this page focused on the stable feature contract and registry metadata.
+This feature owns long-horizon Goal Packets: the visible state around native Codex Goals, parent project goals, program notation, nested PM projects, and continuation policy.
+
+```text
+goal_packet(ticket, program, progress, horizon_state?) -> native_goal_prompt + drift_review_surface
+```
+
+The folded contract combines the former goal-loop, program-notation, and nested-PM specs:
+
+- `ticket.md` remains the task contract and proof scoreboard.
+- `program.md` stores loop configuration: trigger mode, skills, gates, budget, evidence, metrics, and handoff rules.
+- `progress.md` is append-only turn memory for resumability and drift checks.
+- `farplane/goals.md` or a project-level horizon file stores parent goals and ticket supply signals.
+- Native Codex Goal mode owns leaf continuation; Farplane owns visible state, packet compilation, and proof routing around it.
+- Parent/child PM projects only exist when a child loop has its own artifact stream, proof gates, and promotion rule.
+- Program notation is a compact projection format, not a second runtime.
+
+Non-goals:
+
+- No hidden Goal manager.
+- No automatic Notion sync.
+- No one-PM-per-skill sprawl before a child project earns its own state and proof surface.
+
+Proof gates:
+
+- A Goal can resume from packet files without transcript context.
+- Drift review can compare current work to the ticket/program/progress contract.
+- Parent horizon updates create ticket supply or calibration changes, not vague strategy prose.
 
 ## Owner Surfaces
 
-- `docs/specs/goal-loop-contract.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `skills/goal-advisor`
 - `skills/horizon-advisor`
 - `farplane/goals.md`
 - `tickets/templates/goal-loop/program.md`
 - `tickets/templates/goal-loop/progress.md`
 - `agents/goal-drift-reviewer.toml`
-- `docs/specs/harness-techniques.md`
+- `docs/features/README.md`
 - `README.md`
 
 ## Source Context
 
 - `https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex`
-- `docs/specs/goal-loop-contract.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 
 ## Evidence
 

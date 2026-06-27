@@ -3,7 +3,7 @@ title: "Source And Sidecar Systems"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - systems
@@ -12,7 +12,7 @@ refs:
   - docs/sources/registry.jsonl
   - skills/harness-scout/SKILL.md
   - skills/feed-scout/SKILL.md
-  - docs/specs/inspiration-vault.md
+  - docs/features/FEAT-0056-inspiration-vault.md
 system_record_json: |
   {
     "id": "SYS-0008",
@@ -23,15 +23,16 @@ system_record_json: |
     "primary_feature_ref": "FEAT-0011",
     "feature_refs": [
       "FEAT-0011",
-      "FEAT-0025"
+      "FEAT-0025",
+      "FEAT-0056"
     ],
     "refs": [
       "docs/sources/registry.jsonl",
       "skills/harness-scout/SKILL.md",
       "skills/feed-scout/SKILL.md",
-      "docs/specs/inspiration-vault.md"
+      "docs/features/FEAT-0056-inspiration-vault.md"
     ],
-    "last_verified": "2026-06-26"
+    "last_verified": "2026-06-27"
   }
 ---
 
@@ -55,6 +56,7 @@ Accepted core behavior moves to the owning system; raw research and bulky media 
 
 - [FEAT-0011 Harness scout source ingestion](../features/FEAT-0011-harness-scout-source-ingestion.md)
 - [FEAT-0025 Video-to-skill source reconstruction](../features/FEAT-0025-video-to-skill-source-reconstruction.md)
+- [FEAT-0056 Inspiration vault](../features/FEAT-0056-inspiration-vault.md)
 
 ## Maintenance
 

@@ -21,7 +21,7 @@ common_chains:
   scope depends on local baseline, examples, official behavior, peer norms, or
   implementation patterns.
 - [ ] Carry the
-  [first-principles-planning](../../docs/specs/first-principles-planning.md)
+  [first-principles-planning](../../docs/features/FEAT-0042-lean-global-agent-operating-kernel.md)
   basis into ticket boundaries: objective, need, assumptions, root cause,
   constraints, first viable slice, proof/falsification, tradeoffs, and
   non-goals.
@@ -65,7 +65,7 @@ It should front-load testability and proof requirements so build and QA do not h
 
 ## Job
 
-Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionable raw ticket files under `tickets/`.
+Given one concrete feature spec in `docs/features/`, pick exactly one SLC slice and convert it into actionable raw ticket files under `tickets/`.
 
 ## Rules
 
@@ -107,11 +107,11 @@ Given `docs/specs/*.md`, pick exactly one SLC slice and convert it into actionab
 
 ## Inputs
 
-- `docs/specs/*.md`
-- optionally `docs/specs/*-agent-testability.md` or `docs/specs/agent-testability-surfaces.md`
+- one concrete feature spec in `docs/features/`
+- optionally an agent-testability brief or `docs/features/FEAT-0031-agent-behavior-test-workflow.md`
 - optionally `docs/bootstrap-brief.md`
 - optionally `docs/prd.md` for slice intent
-- optionally `docs/specs/first-principles-planning.md` when shaping material
+- optionally `docs/features/FEAT-0042-lean-global-agent-operating-kernel.md` when shaping material
   ticket boundaries or preserving PRD/spec basis
 - optionally `skills/init-advisor/references/project-profiles.md` when a
   bootstrap or PRD profile is present
@@ -196,10 +196,10 @@ The core planning loop here is:
 pick one slice, keep the largest coherent feature ticket you can, add proof/testability, then write real ticket files into tickets/.
 -->
 
-1. Read `docs/specs/*.md` and pick exactly one SLC slice.
+1. Read one concrete feature spec in `docs/features/` and pick exactly one SLC slice.
 2. Read the `Agent Testability Brief` when one exists and note the required control accelerators, state probes, coordination views, and proof surfaces for the chosen slice.
 2a. When the source spec includes a conformance matrix from
-    `docs/specs/spec-authoring-contract.md`, slice tickets around proofable
+    `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`, slice tickets around proofable
     requirements and carry the relevant `Profile`, `Proof`, and `Ticket` rows
     into the ticket's acceptance criteria and verification plan.
 3. If there is no richer testability brief yet, read `docs/bootstrap-brief.md`
@@ -289,7 +289,7 @@ Split when one of the explicit hard triggers makes the work stop being one coher
 
 ## Templates
 
-- Complex spec structure: `../../docs/specs/spec-authoring-contract.md`
+- Complex spec structure: `../../docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - Spec structure: `references/spec-template.md`
 - Ticket structure: `references/ticket-template.md`
 - SLC framing: `references/story-map-slc.md`

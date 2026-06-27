@@ -187,7 +187,7 @@ Create `decisions.md` only when one is true:
 If accepted, create a cleanup ticket to update:
 
 - `tickets/README.md`
-- `docs/specs/goal-loop-contract.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `tickets/templates/goal-loop/progress.md`
 - any proof path defaults that still point to global `.farplane/results` as
   durable proof rather than runtime output.

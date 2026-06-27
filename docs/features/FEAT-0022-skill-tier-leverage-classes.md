@@ -45,7 +45,7 @@ feature_record_json: |
     ],
     "source_refs": [
       "docs/MEMORY.md#MEM-0098",
-      "docs/specs/harness-techniques.md"
+      "docs/features/README.md"
     ],
     "external_refs": [],
     "evidence_refs": [
@@ -94,7 +94,7 @@ This feature owns the behavior implemented, specified, or enforced by its owner 
 ## Source Context
 
 - `docs/MEMORY.md#MEM-0098`
-- `docs/specs/harness-techniques.md`
+- `docs/features/README.md`
 
 ## Evidence
 

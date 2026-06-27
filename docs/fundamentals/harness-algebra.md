@@ -7,8 +7,8 @@ updated_at: 2026-06-13
 refs:
   - docs/fundamentals/harness-engineering-doctrine.md
   - docs/fundamentals/prompt-engineering.md
-  - docs/specs/filesystem-lifecycle.md
-  - docs/specs/goal-loop-contract.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/skills/README.md
   - templates/global/AGENTS.md
   - agents/skill-opportunity-applier.toml
@@ -642,7 +642,7 @@ Core Farplane state variables:
 README.md                  = public routing variable
 ARCHITECTURE.md            = whole-system map
 docs/fundamentals/*.md     = conceptual model and doctrine
-docs/specs/*.md            = buildable contracts
+docs/features/FEAT-*.md               = buildable contracts
 docs/MEMORY.md             = durable invariants
 docs/TROUBLES.md           = repeated raw misses
 docs/LESSONS.md            = distilled prevention rules

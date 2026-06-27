@@ -13,7 +13,7 @@ refs:
   - skills/harness-creator/SKILL.md
   - skills/harness-creator/references/harness-il.md
   - skills/harness-creator/templates/project-harness.md
-  - docs/specs/program-notation.md
+  - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/harness-creator/audits/2026-06-14-project-harness-operating-model.md
 ---
 

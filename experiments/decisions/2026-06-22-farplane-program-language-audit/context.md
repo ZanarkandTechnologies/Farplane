@@ -59,7 +59,7 @@ Farplane currently uses multiple related dialects:
 - Mermaid diagrams for human workflow maps.
 - Python scripts and validators for live implementation.
 
-`docs/specs/program-notation.md` already proposes a common intermediate
+`docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` already proposes a common intermediate
 notation:
 
 ```text
@@ -111,11 +111,11 @@ program language across Farplane.
 
 ## Known Evidence
 
-- `docs/specs/program-notation.md` already names dialect sprawl and proposes a
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` already names dialect sprawl and proposes a
   common intermediate notation.
-- `docs/specs/goal-loop-contract.md` defines `GoalPacket`, `ticket.md`,
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` defines `GoalPacket`, `ticket.md`,
   `program.md`, and `progress.md` ownership.
-- `docs/specs/invocation-and-adapters.md` defines TypeScript-like runtime
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md` defines TypeScript-like runtime
   contracts for invocation, adapters, compute, and proof.
 - `docs/fundamentals/harness-algebra.md` defines the core harness function
   `H(task, state) -> output + evidence + state_delta` and mini-harness
@@ -131,9 +131,9 @@ program language across Farplane.
 
 ## Relevant Files
 
-- `docs/specs/program-notation.md`
-- `docs/specs/goal-loop-contract.md`
-- `docs/specs/invocation-and-adapters.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 - `docs/fundamentals/harness-algebra.md`
 - `docs/skills/system.md`
 - `tickets/README.md`

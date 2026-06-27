@@ -159,7 +159,7 @@ Create an implementation ticket for a Farplane Adoption Tracker.
 
 Owner surfaces:
 
-- `docs/specs/`: adoption tracker and manifest pin contract.
+- `docs/features/`: adoption tracker and manifest pin contract.
 - `farplane/manifest.json`: global/forward-facing manifest source.
 - `docs/features/registry.jsonl`: feature adoption dimension.
 - `docs/templates/registry.jsonl`: template version adoption dimension.

@@ -4,7 +4,7 @@
 
 ### Inputs
 - `docs/prd.md` (recommended)
-- `docs/specs/*` (activities / topics)
+- `docs/features/FEAT-*.md` (activities / topics)
 - Existing codebase (what already exists)
 
 ### Outputs

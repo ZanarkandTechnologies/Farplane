@@ -46,7 +46,7 @@ RULES: tuple[HarnessRule, ...] = (
         ),
     ),
     HarnessRule(
-        relative_path="docs/specs/invocation-and-adapters.md",
+        relative_path="docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
         required_substrings=(
             "Public docs should describe `.farplane/` as the canonical live runtime root.",
             "There is no separate public retired execution surface anymore.",

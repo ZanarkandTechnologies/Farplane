@@ -22,7 +22,7 @@ source: local
 - [ ] Update durable docs that changed in the final pass: `docs/HISTORY.md`,
   `docs/MEMORY.md`, `docs/LESSONS.md`, README, or the nearest `AGENTS.md`.
 - [ ] Run the feature closeout consistency sweep for relevant surfaces:
-  `README.md`, `ARCHITECTURE.md`, `docs/specs/README.md`,
+  `README.md`, `ARCHITECTURE.md`, `docs/features/README.md`,
   `docs/skills/README.md`, `docs/skills/registry.jsonl`,
   `docs/features/registry.jsonl`, and nearest module `README.md`/`AGENTS.md`.
 - [ ] If the final proof or linked review artifact is stale, re-enter the
@@ -130,7 +130,7 @@ Run a feature closeout consistency sweep before commit:
 
 - `README.md` and `ARCHITECTURE.md` when the top-level product or workflow map
   changed
-- `docs/specs/README.md` when a spec is added, moved, renamed, or retired
+- `docs/features/README.md` when a spec is added, moved, renamed, or retired
 - `docs/skills/README.md` and `docs/skills/registry.jsonl` when skills,
   skill metadata, method addresses, direct todo lists, or skill docs changed
 - `docs/features/registry.jsonl` when a shipped capability is added, renamed,

@@ -15,7 +15,7 @@ common_chains:
 ## Todo List
 
 - [ ] Read the current project surfaces before asking: `docs/prd.md`, active
-  ticket, `docs/specs/`, `docs/MEMORY.md`, and `docs/LESSONS.md` when present.
+  ticket, `docs/features/`, `docs/MEMORY.md`, and `docs/LESSONS.md` when present.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
   when audiences, jobs, user stories, contexts, friction, or success criteria
   are not already grounded.
@@ -23,7 +23,7 @@ common_chains:
   [research:competitor](../research/SKILL.md#researchcompetitor) when product
   expectations, peer workflows, or market examples should shape the PRD.
 - [ ] Use
-  [first-principles-planning](../../docs/specs/first-principles-planning.md)
+  [first-principles-planning](../../docs/features/FEAT-0042-lean-global-agent-operating-kernel.md)
   to reduce the request to objective, need, constraints, assumptions, root
   cause, first viable slice, proof/falsification, tradeoffs, and non-goals.
 - [ ] Fill the PRD by section: audience, JTBD, user stories, constraints,
@@ -63,7 +63,7 @@ Use this as the first session in the Farplane workflow.
 
 - Ask 6-10 high-signal questions (audience, JTBD, slice, non-goals, constraints, risks).
 - Keep questions tied to implementation decisions.
-- Use `docs/specs/first-principles-planning.md` to reduce the request to
+- Use `docs/features/FEAT-0042-lean-global-agent-operating-kernel.md` to reduce the request to
   objective, user/system need, assumptions, root cause, constraints, first
   viable slice, proof/falsification, tradeoffs, and non-goals.
 - Confirm the first SLC slice boundary.

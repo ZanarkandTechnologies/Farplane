@@ -177,7 +177,7 @@ Output:
   heartbeat, rollout, batch, and native `/goal` prompt architecture.
 - [../goal-advisor/references/goal-shapes.md](../goal-advisor/references/goal-shapes.md) -
   load when rollout, batch, heartbeat, or portfolio shape needs more detail.
-- [../../docs/specs/goal-loop-contract.md](../../docs/specs/goal-loop-contract.md) -
+- [../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md) -
   load when the rollout contract itself needs spec-level grounding.
 
 ## Output

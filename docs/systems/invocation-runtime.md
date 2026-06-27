@@ -9,7 +9,7 @@ tags:
   - systems
   - invocation-runtime
 refs:
-  - docs/specs/invocation-and-adapters.md
+  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
   - skills/farplane-invocation/SKILL.md
   - bin/farplane_invocation.py
 system_record_json: |
@@ -24,7 +24,7 @@ system_record_json: |
       "FEAT-0015"
     ],
     "refs": [
-      "docs/specs/invocation-and-adapters.md",
+      "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
       "skills/farplane-invocation/SKILL.md",
       "bin/farplane_invocation.py"
     ],

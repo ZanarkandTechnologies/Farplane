@@ -6,7 +6,7 @@ owner: skill-maintenance
 status: pass
 review_route: self_check
 before_ref: skills/work/SKILL.md; skills/ralph/SKILL.md; skills/batch-work/SKILL.md; skills/goal-advisor/SKILL.md
-after_ref: skills/goal-advisor/SKILL.md; docs/specs/goal-loop-contract.md; tickets/templates/goal-loop/program.md
+after_ref: skills/goal-advisor/SKILL.md; docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md; tickets/templates/goal-loop/program.md
 reasoning_basis: deliberative_advice
 proof_artifacts:
   - tickets/TASK-0196/ticket.md

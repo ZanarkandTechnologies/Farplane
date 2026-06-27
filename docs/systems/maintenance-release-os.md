@@ -3,14 +3,13 @@ title: "Maintenance And Release OS"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-06-27
 tags:
   - farplane
   - systems
   - maintenance-and-release-os
 refs:
-  - docs/specs/doc-governance.md
-  - docs/specs/filesystem-lifecycle.md
+  - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - docs/farplane-framework/harness-maintenance.md
   - docs/templates/registry.jsonl
 system_record_json: |
@@ -26,12 +25,11 @@ system_record_json: |
       "FEAT-0061"
     ],
     "refs": [
-      "docs/specs/doc-governance.md",
-      "docs/specs/filesystem-lifecycle.md",
+      "docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "docs/farplane-framework/harness-maintenance.md",
       "docs/templates/registry.jsonl"
     ],
-    "last_verified": "2026-06-26"
+    "last_verified": "2026-06-27"
   }
 ---
 
@@ -53,7 +51,7 @@ Feature behavior belongs to the feature doc; system narrative belongs to docs/sy
 
 ## Feature Docs
 
-- [FEAT-0060 High-impact template feature registry](../features/FEAT-0060-high-impact-template-feature-registry.md)
+- [FEAT-0060 Registry-backed documentation OS](../features/FEAT-0060-registry-backed-documentation-os.md)
 - [FEAT-0061 Farplane adoption tracker CLI](../features/FEAT-0061-farplane-adoption-tracker-cli.md)
 
 ## Maintenance

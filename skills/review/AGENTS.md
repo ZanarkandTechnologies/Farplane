@@ -32,4 +32,4 @@ Own the thin callable review wrapper for Farplane's docs-owned rubric contract.
 - Keep `docs/review/rubrics/desloppify.md` cross-cutting rather than turning it into a second public review skill.
 - Each family file should stay skimmable while still including required checks,
   blocker checks, evidence checks, and finding cues.
-- If the review contract changes, update `docs/specs/review-gates.md` and the ticket/evidence artifact contract in the same change.
+- If the review contract changes, update `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` and the ticket/evidence artifact contract in the same change.

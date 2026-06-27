@@ -91,7 +91,7 @@ If the repo already exists, do the smallest migration first.
 
 ```bash
 mkdir -p docs/specs tickets tickets/archive tickets/templates
-touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md docs/LESSONS.md docs/specs/README.md
+touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md docs/LESSONS.md docs/features/README.md
 ```
 
 Then copy in:
@@ -223,11 +223,11 @@ Those can come after one clean ticket run.
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
 - [ ] `.farplane/state/run-ledger.json`, `.farplane/reports/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local runtime state
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
-- [ ] `docs/prd.md`, `docs/specs/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
+- [ ] `docs/prd.md`, `docs/features/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
 - [ ] `docs/code_review.md`, `docs/review-agent.md`, and review helper scripts exist
 - [ ] one QA cookbook page records the evidence-capture launch path and expected targets
-- [ ] `docs/specs/README.md` exists
+- [ ] `docs/features/README.md` exists
 - [ ] `tickets/` structure exists
 - [ ] `tickets/archive/` exists for completed tickets
 - [ ] `tickets/TASK-0001/ticket.md` exists as the initial PRD handoff

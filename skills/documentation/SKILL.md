@@ -16,7 +16,7 @@ qa_checklist: qa_checklist.md
 ## Context
 
 `documentation` owns durable repo doc writing and doc-quality review. Use it
-for human-facing docs such as `README.md`, `ARCHITECTURE.md`, `docs/specs/*`,
+for human-facing docs such as `README.md`, `ARCHITECTURE.md`, `docs/features/FEAT-*.md`,
 `docs/fundamentals/*`, `docs/skills/*`, runbooks, templates, and public
 guidance. Use `close-ticket` for routine final ticket writeback; call this
 skill only when the work includes substantive durable doc writing or revision.
@@ -30,7 +30,7 @@ the right metadata, reader contract, and verification.
 Farplane docs follow docs-as-code habits: durable Markdown normally has YAML
 front matter, ownership/version/status fields where relevant, semantic links to
 canonical sources, and validator-backed reference checks. Use
-`docs/specs/filesystem-lifecycle.md` for artifact-first writing and front matter
+`docs/features/FEAT-0060-registry-backed-documentation-os.md` for artifact-first writing and front matter
 standards.
 
 Farplane's docs strategy is minimal surface area with high reader quality.
@@ -46,8 +46,8 @@ default destination for new work.
 documentation(doc_task, target_file?, evidence?, doc_type?) -> doc_delta + doc_quality_result + review_route?
 
 state:
-  reads(target doc, nearest README/AGENTS, docs/specs/filesystem-lifecycle.md,
-        docs/specs/doc-governance.md, relevant canonical docs,
+  reads(target doc, nearest README/AGENTS, docs/features/FEAT-0060-registry-backed-documentation-os.md,
+        docs/features/FEAT-0060-registry-backed-documentation-os.md, relevant canonical docs,
         source/evidence refs, qa_checklist.md)
   writes(target doc, optional doc-quality note, updated links/metadata)
 
@@ -85,9 +85,9 @@ cross-surface policy, or a completion claim that needs independent judgment.
   - [ ] Ask only for blocking missing inputs such as audience, owner, canonical
     source, or publication/review gate.
 - [ ] 2. Run the doc architecture gate before writing.
-  - [ ] Read `docs/specs/filesystem-lifecycle.md` for durable artifact and YAML
+  - [ ] Read `docs/features/FEAT-0060-registry-backed-documentation-os.md` for durable artifact and YAML
     front matter rules.
-  - [ ] Read `docs/specs/doc-governance.md` when placement, split/merge,
+  - [ ] Read `docs/features/FEAT-0060-registry-backed-documentation-os.md` when placement, split/merge,
     density, lifecycle, archive, duplication, or canonical ownership is in
     question.
   - [ ] Read the nearest index or owner file: top-level `README.md`,
@@ -193,9 +193,9 @@ Use local schemas when they exist, for example `template_version`,
 
 - [qa_checklist.md](qa_checklist.md) - run for durable, canonical, public, or
   material documentation changes.
-- [docs/specs/filesystem-lifecycle.md](../../docs/specs/filesystem-lifecycle.md)
+- [docs/features/FEAT-0060-registry-backed-documentation-os.md](../../docs/features/FEAT-0060-registry-backed-documentation-os.md)
   - front matter, artifact-first writing, lifecycle, keep/delete rules.
-- [docs/specs/doc-governance.md](../../docs/specs/doc-governance.md) - load
+- [docs/features/FEAT-0060-registry-backed-documentation-os.md](../../docs/features/FEAT-0060-registry-backed-documentation-os.md) - load
   when placement, archive, duplication, or docs ownership is the question.
 - [../reference-grounding/SKILL.md](../reference-grounding/SKILL.md) - use for
   compact local, official-doc, current-source, or peer evidence.

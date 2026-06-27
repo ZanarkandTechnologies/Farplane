@@ -43,7 +43,7 @@ eval_required: no
 | `reference_load_precision` | pass | Branch references are listed in the Reference Map and named from routing steps. |
 | `missing_context_rate` | pass | Required routing and completion gates remain in first load. |
 | `noisy_context_rate` | pass | The duplicate `Core Workflow` prose and first-load `Top Gotchas` block were removed; long QA checks remain in `qa_checklist.md`; detailed playbooks remain in references. |
-| `duplicated_instruction_count` | pass | The executable workflow is represented once as `Todo List` steps, matching `docs/specs/program-notation.md`; high-risk gotchas are either step conditions or deferred reference detail. |
+| `duplicated_instruction_count` | pass | The executable workflow is represented once as `Todo List` steps, matching `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`; high-risk gotchas are either step conditions or deferred reference detail. |
 | `prompt_size_tokens` | pass | First-load stays under the checklist's rough 250-line warning threshold. |
 | `maintenance_locality` | pass | Router identity lives in `SKILL.md`; niche checks live in owner references or downstream skills. |
 | `composition_clarity` | pass | Signature names inputs, outputs, state, routes, and failure modes. |

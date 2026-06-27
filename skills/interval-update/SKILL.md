@@ -269,4 +269,4 @@ priority_planning(review_window, planning_window)
   interval report.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - honest metric
   cards for interval snapshots and compounding reward signals.
-- [../../docs/specs/steer-pulse-automation.md](../../docs/specs/steer-pulse-automation.md)
+- [../../docs/features/FEAT-0065-pulse-and-interval-automation.md](../../docs/features/FEAT-0065-pulse-and-interval-automation.md)
