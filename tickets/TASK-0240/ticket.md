@@ -3,8 +3,8 @@ template_id: ticket-template
 template_version: "0.1.1"
 ticket_id: TASK-0240
 title: Taste Loop social thread proposal worker
-phase: active
-status: waiting_for_feedback
+phase: building
+status: building
 owner: codex
 claimed_by: codex-taste-loop-controller
 priority: medium
@@ -16,7 +16,7 @@ approval_required: false
 requires_qa: true
 requires_demo: false
 created_at: 2026-06-27T22:50:30+08:00
-updated_at: 2026-06-27T23:49:39+08:00
+updated_at: 2026-06-27T23:51:01+08:00
 next_action: wait for Kenji's TL-EXP-002 planning feedback; do not draft the social thread until a proposal is approved
 last_verification: TL-EXP-002 TasteProposal Telegram digest sent from replacement worker thread 019f09c4-ecda-7423-a80c-7ab5a8e53788
 ---
