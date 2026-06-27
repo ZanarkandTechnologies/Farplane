@@ -203,7 +203,7 @@ def hooks_doctor(target: Path | None = None) -> dict[str, Any]:
             issues.append("config_missing_farplane_convex_site_url")
         if OLD_CONVEX_SITE_URL in config_text:
             issues.append("config_uses_old_convex_site_url")
-            hints.append("update config.local.env and rerun `farplane install`")
+            hints.append("update ~/.farplane/config.toml and rerun `farplane install`")
 
     return {
         "ok": not issues,

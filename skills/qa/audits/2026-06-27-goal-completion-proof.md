@@ -16,16 +16,15 @@ eval_required: no
 
 ## Change
 
-- Before: `qa` described its structured result as Stop-hook gating and ended
+- Before: `qa` described its structured result as hook-coupled gating and ended
   with `EXECUTION_RESULT`.
 - After: `qa` describes its output as ticket/Goal completion proof and ends
   with `QA_RESULT`, while preserving `result.json`, report, artifacts, and
   ticket writeback.
-- Why: QA should be a durable evidence producer, not a coupling point to the
-  retired Stop-hook orchestration loop.
-- Tradeoff accepted: Legacy consumers that expected `EXECUTION_RESULT` must use
-  archived runtime compatibility, while modern Goal prompts read `result.json`
-  and ticket links directly.
+- Why: QA should be a durable evidence producer, not a coupling point to hook
+  orchestration.
+- Tradeoff accepted: Consumers that expected `EXECUTION_RESULT` must update to
+  read `result.json` and ticket links directly.
 
 ## First-Principles Reasoning
 

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import sys
 import tempfile
 import unittest
@@ -14,13 +13,8 @@ if str(CORE_DIR) not in sys.path:
 import runtime_config
 
 
-def write_json(path: Path, value: object) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-
-
 class RuntimeConfigTests(unittest.TestCase):
-    def test_farplane_config_toml_overrides_rendered_toml_json_and_legacy_env_file(self) -> None:
+    def test_farplane_config_toml_overrides_rendered_toml_and_process_env(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane_home = root / "farplane"
@@ -59,36 +53,13 @@ class RuntimeConfigTests(unittest.TestCase):
                 + "\n",
                 encoding="utf-8",
             )
-            local_env = root / "config.local.env"
-            local_env.write_text(
-                "\n".join(
-                    [
-                        "FARPLANE_CONVEX_SITE_URL=https://legacy.convex.site",
-                        "FARPLANE_TELEMETRY_TOKEN=legacy-token",
-                        "NOTION_TOKEN=legacy-notion",
-                    ]
-                )
-                + "\n",
-                encoding="utf-8",
-            )
-            write_json(
-                farplane_home / "config.json",
-                {"env": {"FARPLANE_CONVEX_SITE_URL": "https://saved.convex.site"}},
-            )
-            write_json(
-                farplane_home / "secrets.json",
-                {
-                    "env": {"FARPLANE_TELEMETRY_TOKEN": "saved-token"},
-                    "integrations": {"notionApiKey": "saved-notion"},
-                },
-            )
 
             env = runtime_config.load_runtime_env(
                 {
                     "CODEX_HOME": str(codex_home),
                     "FARPLANE_STATE_DIR": str(farplane_home),
-                },
-                local_env,
+                    "FARPLANE_CONVEX_SITE_URL": "https://process.convex.site",
+                }
             )
 
         self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://canonical.convex.site")
@@ -97,7 +68,7 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertEqual(env["CODEX_APP_SERVER_URL"], "ws://127.0.0.1:9999")
         self.assertEqual(env["FARPLANE_STATE_BASE"], "http://127.0.0.1:5173")
 
-    def test_rendered_config_toml_env_is_loaded_before_legacy_env_file(self) -> None:
+    def test_rendered_config_toml_env_is_loaded_when_farplane_config_is_absent(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             codex_home = root / "codex"
@@ -112,28 +83,24 @@ class RuntimeConfigTests(unittest.TestCase):
                 + "\n",
                 encoding="utf-8",
             )
-            local_env = root / "config.local.env"
-            local_env.write_text(
-                "FARPLANE_CONVEX_SITE_URL=https://legacy.convex.site\n",
-                encoding="utf-8",
-            )
 
             env = runtime_config.load_runtime_env(
                 {
                     "CODEX_HOME": str(codex_home),
                     "FARPLANE_STATE_DIR": str(root / "farplane"),
-                },
-                local_env,
+                }
             )
 
         self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://rendered.convex.site")
 
-    def test_disable_flag_uses_process_or_legacy_values_only(self) -> None:
+    def test_disable_flag_uses_process_values_only(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_json(
-                root / "farplane" / "config.json",
-                {"env": {"FARPLANE_CONVEX_SITE_URL": "https://saved.convex.site"}},
+            farplane_home = root / "farplane"
+            farplane_home.mkdir()
+            (farplane_home / "config.toml").write_text(
+                "[env]\nFARPLANE_CONVEX_SITE_URL = \"https://canonical.convex.site\"\n",
+                encoding="utf-8",
             )
 
             env = runtime_config.load_runtime_env(

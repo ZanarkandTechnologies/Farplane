@@ -2,7 +2,6 @@
 # Do not put machine-local secrets or trust entries here.
 # `install.sh` renders this template using values from:
 #   - ~/.farplane/config.toml
-#   - ~/.codex/config.local.env
 #   - ~/.codex/config.local.toml (optional, appended verbatim)
 
 model = "gpt-5.5"
@@ -23,13 +22,11 @@ FARPLANE_IMPL_HOOK = "1"
 FARPLANE_CONVEX_SITE_URL = "__FARPLANE_CONVEX_SITE_URL__"
 FARPLANE_TELEMETRY_TOKEN = "__FARPLANE_TELEMETRY_TOKEN__"
 FARPLANE_CONSOLE_KEY = "__FARPLANE_CONSOLE_KEY__"
-FARPLANE_ACTIVITY_RECENT_URL = "__FARPLANE_ACTIVITY_RECENT_URL__"
 # Optional explicit Codex hook telemetry endpoint. Normally leave this unset:
 # hooks/farplane_console_ping.py posts to FARPLANE_CONVEX_SITE_URL/telemetry/hooks.
-# Prefer the Farplane UI-managed ~/.farplane/config.toml / secrets.json values;
-# install.sh renders them here only as a compatibility fallback.
+# Prefer the Farplane UI-managed ~/.farplane/config.toml values; install.sh
+# renders them here as Codex adapter config.
 # FARPLANE_TELEMETRY_HOOKS_URL = "https://your-backend.example.com/telemetry/hooks"
-# FARPLANE_TELEMETRY_ACTIVITY_URL = "https://your-backend.example.com/telemetry/activity" # legacy fallback
 # Skill graph heat controls. The generated skill graph reads local
 # `.farplane/events/*.jsonl` and uses these values to decide its default hot
 # skill window and top-N view.
@@ -38,28 +35,11 @@ FARPLANE_SKILL_HEAT_RECENT_DAYS = "7"
 FARPLANE_SKILL_HEAT_TOP_N = "25"
 # Comma-separated event types counted as skill heat.
 FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,learning_review_launched,skill_requested"
-# Hook-backed skill-opportunity proposer. Captured windows stay local under
-# `.farplane/state/self-improve/`. The optional self-improvement probe can
-# launch a background fire-and-forget Codex job every interval. The job creates
-# Notion approval tasks tagged as agent self-improvement; it does not edit skills.
-# Set FARPLANE_SKILL_OPPORTUNITY_APPLY = "0" locally to disable it.
-FARPLANE_SKILL_OPPORTUNITY_APPLY = "1"
-FARPLANE_SKILL_OPPORTUNITY_APPLY_INTERVAL = "10"
-FARPLANE_SKILL_OPPORTUNITY_MAX_EXCHANGES = "10"
-FARPLANE_SKILL_OPPORTUNITY_RECENT_SESSIONS = "5"
-# Set this locally from ~/.codex/private/docs/notion.md when Notion task
-# proposals should be enabled.
-# FARPLANE_SKILL_OPPORTUNITY_NOTION_TASKS_DATA_SOURCE = "collection://your-tasks-data-source"
-FARPLANE_SKILL_OPPORTUNITY_NOTION_TAG = "agent self improvement"
-FARPLANE_SKILL_OPPORTUNITY_NOTION_STATUS = "Review"
-# FARPLANE_SKILL_OPPORTUNITY_APPLY_DRY_RUN = "1"
 # Optional automation settings such as Taste Loop active hours live in
 # `farplane/automations.md` marker-delimited TOML blocks so Farplane UI can
 # render and update them directly before syncing the Codex automation record.
 # Optional explicit force-on for Farplane hook behavior. Live Codex hooks now
-# capture user turns and Stop telemetry only; legacy Stop orchestration is not
-# installed by default. Keep machine-specific hook tuning local if you need
-# non-default behavior.
+# capture user turns and Stop telemetry only.
 
 [sandbox_workspace_write]
 network_access = false
@@ -111,10 +91,6 @@ config_file = "agents/reviewer.toml"
 description = "Read-only Goal Packet drift reviewer that compares ticket, program, progress, and the current continuation claim."
 config_file = "agents/goal-drift-reviewer.toml"
 
-[agents.orchestrator]
-description = "Legacy Stop-hook orchestrator for archived ticket handoff experiments; not live in the modern Goal-backed path."
-config_file = "agents/orchestrator.toml"
-
 [agents.documentation-maintainer]
 description = "Meta-agent responsible for keeping the system's documentation (README, CHANGELOG) accurate and up-to-date by synthesizing recent research and project progress."
 config_file = "agents/documentation-maintainer.toml"
@@ -138,10 +114,6 @@ config_file = "agents/librarian.toml"
 [agents.qa-tester]
 description = "QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, cinematic landing testing)."
 config_file = "agents/qa-tester.toml"
-
-[agents.completion-reviewer]
-description = "Legacy Stop-hook completion reviewer; modern ticket completion review should be invoked from Goal/ticket proof steps."
-config_file = "agents/completion-reviewer.toml"
 
 [agents.skill-opportunity-applier]
 description = "Hook sidecar that turns recent conversation windows into Notion approval tasks for agent self-improvement."

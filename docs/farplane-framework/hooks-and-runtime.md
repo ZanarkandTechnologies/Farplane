@@ -66,23 +66,21 @@ Tracked framework config stays under `farplane/`. The important separation is:
 
 ## Telemetry Config
 
-Codex lifecycle telemetry is defined by the installed Codex hook config, not by
-the legacy Stop-hook runtime. `hooks.json` calls
-`hooks/farplane_console_ping.py` on `UserPromptSubmit` and `Stop`.
+Codex lifecycle telemetry is defined by the installed Codex hook config.
+`hooks.json` calls `hooks/farplane_console_ping.py` on `UserPromptSubmit` and
+`Stop`.
 
 `farplane_console_ping.py` loads config through Farplane Core runtime config in
 this order:
 
-1. process env and rendered `~/.codex/config.toml`
+1. process env
 2. UI-managed `~/.farplane/config.toml`
-3. legacy `~/.farplane/config.json` and `~/.farplane/secrets.json`
-4. legacy `~/.codex/config.local.env`
+3. rendered `~/.codex/config.toml`
 
 Endpoint selection:
 
 1. `FARPLANE_TELEMETRY_HOOKS_URL` when explicitly set
 2. `FARPLANE_CONVEX_SITE_URL` plus `/telemetry/hooks`
-3. legacy `FARPLANE_TELEMETRY_ACTIVITY_URL`
 
 The Farplane UI or its setup flow may own the `~/.farplane/*` values; the
 Codex install path owns symlinking `hooks.json` and
@@ -97,6 +95,9 @@ Codex install path owns symlinking `hooks.json` and
   durable write.
 - Route judgment-heavy work to skills, tickets, reviewers, or drains.
 - Never auto-rewrite durable memory/context files from a hook.
+- Do not use Stop hooks for completion review. Put QA evidence review and
+  reviewer-lane completion review in the ticket `Done / Proof` block or Goal
+  program final checkpoint.
 
 This rule exists because durable memory cleanup needs source preservation,
 retention scoring, proposal evidence, and review. A hook can notice growth or

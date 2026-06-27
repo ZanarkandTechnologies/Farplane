@@ -37,8 +37,8 @@ their repo into a haze of prompts, chat memory, and unverifiable claims.
    multi-agent loop can keep a longer horizon without becoming one giant
    prompt.
 3. **Completion that requires evidence.** QA, reviewer lanes, browser proof,
-   maintainability review, Stop-hook checks, and Done / Proof contracts make
-   "done" inspectable instead of self-reported.
+   maintainability review, and Done / Proof contracts make "done" inspectable
+   instead of self-reported.
 4. **Skills that improve like software.** Farplane skills carry checklists,
    references, examples, evals, registries, validators, and maintenance scripts,
    so repeated workflows get better without bloating the global prompt.
@@ -207,7 +207,7 @@ flowchart LR
 | `ARCHITECTURE.md` | Deeper system map, ownership boundaries, and read order. |
 | `agents/` | Bounded specialist role configs. |
 | `assets/` | Repo-level media and generated assets. |
-| `bin/` | Hooks, runtime helpers, compatibility validator wrappers, launchers, and sync scripts. |
+| `bin/` | Hooks, runtime helpers, validator wrappers, launchers, and sync scripts. |
 | `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, tiers, and registries. |
 | `docs/` | Systems, feature specs, generated registries, history, memory, troubles, lessons, and durable research. |
 | `docs/systems/` | Authored public system docs plus generated system registry. |
@@ -281,9 +281,7 @@ Farplane UI is linked. The UI writes local settings and API keys there, and
 Farplane Core reads it for delegated commands, Codex lifecycle hooks, and
 `install.sh` rendering. `config.toml.example` still renders the installed
 `~/.codex/config.toml`, but that file is a Codex adapter output rather than the
-Farplane source of truth. Legacy `~/.farplane/config.json`,
-`~/.farplane/secrets.json`, and `~/.codex/config.local.env` files remain
-fallbacks for older installs.
+Farplane source of truth.
 
 Override the linked UI checkout for one shell with `FARPLANE_UI_REPO=/path/to/Farplane-UI`.
 Use `FARPLANE_CLI_LINK_DIR=/custom/bin bash install.sh` if your preferred

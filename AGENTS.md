@@ -252,18 +252,16 @@ For harness-design research and external patterns:
 - Treat `goal-advisor` as the canonical execution compiler for material
   Farplane work: it turns listed ticket/program/progress/spec/board files,
   trigger mode, and budget into native Goal, heartbeat, rollout, feedback, or
-  direct-route prompts. `$work`, `$ralph`, and `batch-work` are retired public
-  orchestration surfaces; their remaining useful policies live in Goal
-  standards.
+  direct-route prompts.
 - Treat `goal-advisor` as the coding-ticket leaf execution surface once a
   ticket is ready. Native Goal mode owns continuation; ticket `Done / Proof`
   and `program.md` own the build, QA, demo, evidence, and final completion
-  checkpoint. Do not rely on Stop-hook orchestration to advance phases.
+  checkpoint. Do not rely on hooks to advance phases.
 - Final completion in Farplane should remain mechanical and visible: material
-  Goal prompts must require QA evidence review and completion review before
-  `stop_complete`, then write the receipt and strongest evidence back to the
-  ticket, `progress.md`, and `artifacts/`. Live Stop hooks collect telemetry
-  only; legacy Ralph-era Stop orchestration is quarantined.
+  Goal prompts must require QA evidence review and reviewer-lane completion
+  review before `stop_complete`, then write the receipt and strongest evidence
+  back to the ticket, `progress.md`, and `artifacts/`. Live Stop hooks collect
+  telemetry only and do not own completion routing.
 - Material review should run through the native `reviewer` subagent when
   available. Pass the active ticket or task artifact path, changed files,
   evidence artifacts, review focus, caller-declared rubric families, required

@@ -78,9 +78,9 @@ class CheckHarnessInvariantsTest(unittest.TestCase):
     def build_repo(self, root: Path) -> None:
         write_file(root / "AGENTS.md", ROOT_AGENTS_TEXT)
         write_file(
-            root / "agents" / "completion-reviewer.toml",
+            root / "agents" / "reviewer.toml",
             """\
-name = "completion-reviewer"
+name = "reviewer"
 model = "gpt-5.5"
 developer_instructions = "review"
 """,
@@ -162,7 +162,7 @@ This file is generic instructions.
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "agents" / "completion-reviewer.toml",
+                root / "agents" / "reviewer.toml",
                 """\
 model = "gpt-5.5"
 developer_instructions = "review"
@@ -170,7 +170,7 @@ developer_instructions = "review"
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("agents/completion-reviewer.toml", result.stdout)
+            self.assertIn("agents/reviewer.toml", result.stdout)
             self.assertIn("missing non-empty `name`", result.stdout)
 
     def test_validator_fails_when_agent_role_name_does_not_match_filename(self) -> None:
@@ -178,16 +178,16 @@ developer_instructions = "review"
             root = Path(tmpdir)
             self.build_repo(root)
             write_file(
-                root / "agents" / "completion-reviewer.toml",
+                root / "agents" / "reviewer.toml",
                 """\
-name = "not-completion-reviewer"
+name = "not-reviewer"
 model = "gpt-5.5"
 developer_instructions = "review"
 """,
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("agents/completion-reviewer.toml", result.stdout)
+            self.assertIn("agents/reviewer.toml", result.stdout)
             self.assertIn("name` must match filename stem", result.stdout)
 
 

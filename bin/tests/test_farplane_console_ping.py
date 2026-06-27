@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import os
 import tempfile
 import unittest
@@ -38,8 +37,8 @@ class FarplaneConsolePingTests(unittest.TestCase):
             root = Path(tmp)
             farplane_home = root / "farplane"
             farplane_home.mkdir()
-            (farplane_home / "config.json").write_text(
-                json.dumps({"env": {"FARPLANE_CONVEX_SITE_URL": "https://saved.convex.site"}}),
+            (farplane_home / "config.toml").write_text(
+                "[env]\nFARPLANE_CONVEX_SITE_URL = \"https://saved.convex.site\"\n",
                 encoding="utf-8",
             )
             with patch.dict(os.environ, {"FARPLANE_STATE_DIR": str(farplane_home)}, clear=True):

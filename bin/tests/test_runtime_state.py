@@ -111,34 +111,6 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(normalized["intent_mode"], "documenting")
         self.assertEqual(normalized["requested_outcome"], "docs_update")
 
-    def test_normalize_user_turn_detects_ralph_control_surface_without_goal_execution_loop(self) -> None:
-        normalized = normalize_user_turn(
-            "$ralph max_loops=5",
-            turn_id="turn-ralph",
-            source="test",
-            captured_at="2026-05-04T00:00:00Z",
-        )
-
-        self.assertEqual(normalized["control_surface"], "ralph")
-        self.assertEqual(normalized["intent_mode"], "building")
-        self.assertEqual(normalized["requested_outcome"], "code_change")
-        self.assertEqual(normalized["requested_execution_phase"], "")
-        self.assertFalse(normalized["explicit_goal_execution_requested"])
-
-    def test_normalize_user_turn_detects_work_control_surface_without_goal_execution_loop(self) -> None:
-        normalized = normalize_user_turn(
-            "$work TASK-0178",
-            turn_id="turn-work",
-            source="test",
-            captured_at="2026-05-25T00:00:00Z",
-        )
-
-        self.assertEqual(normalized["control_surface"], "work")
-        self.assertEqual(normalized["intent_mode"], "building")
-        self.assertEqual(normalized["requested_outcome"], "code_change")
-        self.assertEqual(normalized["requested_execution_phase"], "")
-        self.assertFalse(normalized["explicit_goal_execution_requested"])
-
     def test_extract_control_surfaces_lists_unique_skill_mentions(self) -> None:
         text = "First $impl-plan TASK-0160, then $qa and $docs-closeout. Please do not double count $qa."
 
@@ -632,54 +604,6 @@ linked_docs: []
         self.assertEqual(current_run["ticket_id"], "TASK-0016")
         self.assertEqual(current_run["claim"]["ticket_id"], "TASK-0016")
         self.assertEqual(current_run["claim"]["session_id"], "sess-seed")
-
-    def test_capture_user_turn_ralph_stays_control_without_activating_goal_execution_loop(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
-
-            captured = capture_user_turn(
-                project_root=project_root,
-                raw_text="$ralph max_loops=3",
-                turn_id="turn-ralph-seed",
-                source="test",
-                session_id="sess-ralph",
-            )
-
-            session_payload = json.loads(session_state_path(project_root, "sess-ralph").read_text(encoding="utf-8"))
-            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
-
-        self.assertIsNotNone(captured)
-        assert captured is not None
-        self.assertEqual(captured["control_surface"], "ralph")
-        self.assertEqual(session_payload["session_origin"], "control")
-        self.assertFalse(session_payload["execution_loop_active"])
-        self.assertFalse(current_run["execution_loop_active"])
-        self.assertNotIn("claim", current_run)
-
-    def test_capture_user_turn_work_stays_control_without_activating_goal_execution_loop(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
-
-            captured = capture_user_turn(
-                project_root=project_root,
-                raw_text="$work TASK-0178",
-                turn_id="turn-work-seed",
-                source="test",
-                session_id="sess-work",
-            )
-
-            session_payload = json.loads(session_state_path(project_root, "sess-work").read_text(encoding="utf-8"))
-            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
-
-        self.assertIsNotNone(captured)
-        assert captured is not None
-        self.assertEqual(captured["control_surface"], "work")
-        self.assertEqual(session_payload["session_origin"], "control")
-        self.assertFalse(session_payload["execution_loop_active"])
-        self.assertFalse(current_run["execution_loop_active"])
-        self.assertNotIn("claim", current_run)
 
     def test_capture_user_turn_ignores_non_control_session_without_existing_origin(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

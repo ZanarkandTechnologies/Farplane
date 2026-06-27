@@ -80,14 +80,9 @@ def telemetry_endpoint() -> str | None:
     if explicit:
         return explicit
 
-    site_url = (
-        clean_text(read_config_value("FARPLANE_CONVEX_SITE_URL"), 500)
-        or clean_text(read_config_value("CONVEX_SITE_URL"), 500)
-        or clean_text(read_config_value("FARPLANE_CONVEX_URL"), 500)
-    )
+    site_url = clean_text(read_config_value("FARPLANE_CONVEX_SITE_URL"), 500)
     if not site_url:
-        legacy_activity = clean_text(read_config_value("FARPLANE_TELEMETRY_ACTIVITY_URL"), 500)
-        return legacy_activity
+        return None
     return urljoin(site_url.rstrip("/") + "/", "telemetry/hooks")
 
 
@@ -186,7 +181,7 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
 
 
 def main() -> int:
-    hydrate_process_env(Path.home() / ".codex" / "config.local.env")
+    hydrate_process_env()
     event = read_payload()
     if not event:
         return 0

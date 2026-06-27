@@ -10,7 +10,7 @@ from typing import Mapping
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|goal-advisor|qa|demo|work|ralph|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
+    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|goal-advisor|qa|demo|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
     re.IGNORECASE,
 )
 CONTROL_SURFACE_ALIASES = {
@@ -113,29 +113,15 @@ def session_state_path(project_root: Path, session_id: str) -> Path:
 
 
 def self_improvement_state_dir(project_root: Path) -> Path:
-    # Backward-compatible name for callers; new state lives under flatter
-    # message-window / learning-review directories.
     return runtime_dir(project_root) / "state"
-
-
-def legacy_self_improvement_state_dir(project_root: Path) -> Path:
-    return runtime_dir(project_root) / "state" / "self-improve"
 
 
 def conversation_window_dir(project_root: Path) -> Path:
     return runtime_dir(project_root) / "state" / "message-windows"
 
 
-def legacy_conversation_window_dir(project_root: Path) -> Path:
-    return legacy_self_improvement_state_dir(project_root) / "windows"
-
-
 def skill_opportunity_application_dir(project_root: Path) -> Path:
     return runtime_dir(project_root) / "state" / "learning-reviews"
-
-
-def legacy_skill_opportunity_application_dir(project_root: Path) -> Path:
-    return legacy_self_improvement_state_dir(project_root) / "applications"
 
 
 def ensure_self_improvement_state_setup(project_root: Path) -> None:
@@ -145,10 +131,6 @@ def ensure_self_improvement_state_setup(project_root: Path) -> None:
 
 def conversation_window_path(project_root: Path, session_id: str) -> Path:
     return conversation_window_dir(project_root) / session_state_filename(session_id)
-
-
-def legacy_conversation_window_path(project_root: Path, session_id: str) -> Path:
-    return legacy_conversation_window_dir(project_root) / session_state_filename(session_id)
 
 
 def load_json_dict(path: Path) -> dict[str, object]:
@@ -182,8 +164,6 @@ def load_conversation_window(project_root: Path, session_id: str) -> dict[str, o
     normalized_session_id = normalize_session_id(session_id)
     ensure_self_improvement_state_setup(project_root)
     payload = load_json_dict(conversation_window_path(project_root, normalized_session_id))
-    if not payload:
-        payload = load_json_dict(legacy_conversation_window_path(project_root, normalized_session_id))
     if not payload:
         return {
             "schema_version": SELF_IMPROVEMENT_WINDOW_SCHEMA_VERSION,
@@ -236,14 +216,9 @@ def recent_conversation_windows(
     ensure_self_improvement_state_setup(project_root)
     normalized_current = normalize_session_id(current_session_id)
     windows: list[dict[str, object]] = []
-    seen_paths: set[Path] = set()
-    for directory in (conversation_window_dir(project_root), legacy_conversation_window_dir(project_root)):
-        if not directory.exists():
-            continue
+    directory = conversation_window_dir(project_root)
+    if directory.exists():
         for path in directory.glob("*.json"):
-            if path in seen_paths:
-                continue
-            seen_paths.add(path)
             payload = load_json_dict(path)
             if not payload:
                 continue
@@ -342,7 +317,7 @@ def append_conversation_assistant_response(
     response: str,
     *,
     captured_at: str | None = None,
-    source: str = "stop_hook",
+    source: str = "assistant_response_capture",
 ) -> dict[str, object]:
     normalized_session_id = normalize_session_id(session_id)
     if not normalized_session_id:
@@ -644,10 +619,9 @@ def current_session_id(payload: Mapping[str, object] | None) -> str:
 
 def explicit_run_state_selector(payload: Mapping[str, object] | None = None) -> str:
     if payload is not None:
-        for key in ("run_state", "ralph_run_state"):
-            value = payload.get(key)
-            if isinstance(value, str) and value.strip():
-                return value.strip()
+        value = payload.get("run_state")
+        if isinstance(value, str) and value.strip():
+            return value.strip()
     raw = os.environ.get("FARPLANE_RUN_STATE", "").strip()
     if raw:
         return raw
@@ -724,18 +698,16 @@ def load_current_run(
             else None
         )
 
-    session_payload_fallback: dict[str, object] | None = None
     if normalized_session_id:
         payload = load_json_dict(session_state_path(project_root, normalized_session_id))
         if payload:
             session_payload = _with_runtime_metadata(payload, session_id=normalized_session_id)
             if has_runtime_ownership(session_payload):
                 return session_payload
-            session_payload_fallback = session_payload
 
     current_payload = load_json_dict(current_run_state_path(project_root))
     if not current_payload:
-        return session_payload_fallback
+        return None
 
     current_with_metadata = _with_runtime_metadata(current_payload, session_id=normalized_session_id)
     if _matches_session(current_with_metadata, normalized_session_id) and has_runtime_ownership(current_with_metadata):
@@ -747,8 +719,6 @@ def load_current_run(
         if nested and _matches_session(nested, normalized_session_id):
             return _with_runtime_metadata(nested, session_id=normalized_session_id, explicit_run_state=run_state.strip())
 
-    if session_payload_fallback is not None:
-        return session_payload_fallback
     if _matches_session(current_with_metadata, normalized_session_id):
         return current_with_metadata
     return None
@@ -1242,12 +1212,6 @@ def classify_intent_mode(raw_text: str) -> str:
         return "building"
 
     if control_surface == "demo":
-        return "building"
-
-    if control_surface == "work":
-        return "building"
-
-    if control_surface == "ralph":
         return "building"
 
     if control_surface == "close-ticket":

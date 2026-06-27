@@ -1,6 +1,6 @@
 ---
 name: demo
-description: "Turn passing QA artifacts for one ticket into demo-ready outputs and a structured demo result for Stop-hook gating."
+description: "Turn passing QA artifacts for one ticket into demo-ready outputs and a structured demo result for ticket completion review."
 tier: 3
 group: coding
 source: local
@@ -77,6 +77,6 @@ Do not use it when:
 }
 ```
 
-The final Stop-hook reviewer may still fail completion even when demo `verdict`
-is `pass` if the output is not presentation-ready enough to show upward to a PM
-or CEO.
+The final reviewer-lane completion check may still fail completion even when
+demo `verdict` is `pass` if the output is not presentation-ready enough to show
+upward to a PM or CEO.

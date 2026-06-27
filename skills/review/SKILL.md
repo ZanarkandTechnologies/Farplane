@@ -166,15 +166,11 @@ near miss, not a pass. `TAS-D` means review cannot proceed without more context.
 
 ## Completion Receipt
 
-When the Stop hook requests visible completion review with a nonce, write a
+When a ticket or Goal program requests final completion review, write a
 ticket-scoped completion receipt under
 `tickets/TASK-XXXX/artifacts/review/<timestamp>-completion-receipt.json`, link
-it from ticket `Links` or `State`, and tell the calling lane to echo the same
-nonce as:
-
-```text
-COMPLETION_PASSWORD: <nonce>
-```
+it from ticket `Links` or `State`, and return a `pass`, `revise`, `block`, or
+`invalid` verdict with the evidence-quality and completion-readiness rationale.
 
 ## Output
 
@@ -197,8 +193,7 @@ Return or write:
 
 - [docs/review/rubrics/reviewer-handoff.md](../../docs/review/rubrics/reviewer-handoff.md) -
   use when a caller needs a durable reviewer handoff.
-- `Completion Receipt` above - use only for Stop-hook nonce-backed completion
-  review.
+- `Completion Receipt` above - use for ticket or Goal final completion review.
 
 ## Guardrails
 

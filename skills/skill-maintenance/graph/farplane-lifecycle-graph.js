@@ -2,30 +2,30 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
   "counts": {
     "edge_confidence": {
       "curated": 43,
-      "explicit": 6,
-      "parsed": 180
+      "explicit": 5,
+      "parsed": 182
     },
     "edge_types": {
       "consumes": 4,
       "contains": 2,
       "reads": 51,
-      "routes_to": 122,
-      "triggers": 15,
+      "routes_to": 124,
+      "triggers": 14,
       "updates": 4,
       "writes": 31
     },
-    "edges": 229,
+    "edges": 230,
     "fsa_projections": 5,
     "node_kinds": {
       "automation": 3,
-      "command": 3,
+      "command": 2,
       "doc": 11,
       "file": 19,
       "hook": 2,
       "report": 2,
       "route": 4,
       "runtime": 1,
-      "skill": 40,
+      "skill": 41,
       "state": 6,
       "ticket": 6
     },
@@ -35,77 +35,77 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
   "edges": [
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "automation:daily-interval",
       "target": "skill:interval-update",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "automation:pulse",
       "target": "skill:pulse-update",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "automation:weekly-interval",
       "target": "skill:interval-update",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/minimal-autonomy-loop.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "doc:docs/LESSONS.md",
       "target": "skill:skill-maintenance",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/minimal-autonomy-loop.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "doc:docs/TROUBLES.md",
       "target": "skill:skill-maintenance",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "file:farplane/automations.md",
       "target": "automation:daily-interval",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "file:farplane/automations.md",
       "target": "automation:pulse",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "file:farplane/automations.md",
       "target": "automation:weekly-interval",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/goal-loop-contract.md",
+      "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "file:farplane/goals.md",
       "target": "skill:goal-advisor",
       "type": "triggers"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/minimal-autonomy-loop.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "file:farplane/products.md",
       "target": "skill:interval-update",
       "type": "consumes"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/minimal-autonomy-loop.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "file:farplane/products.md",
       "target": "skill:pulse-update",
       "type": "consumes"
@@ -123,14 +123,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "file:hooks.json",
       "target": "hook:UserPromptSubmit",
       "type": "contains"
-    },
-    {
-      "confidence": "explicit",
-      "evidence_ref": "hooks.json",
-      "label": "Evaluating Ralph stop hook",
-      "source": "hook:Stop",
-      "target": "command:python3-home/.codex/bin/stop_hook.py",
-      "type": "triggers"
     },
     {
       "confidence": "explicit",
@@ -158,7 +150,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
       "target": "skill:horizon-advisor",
       "type": "routes_to"
@@ -172,28 +164,28 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
       "target": "skill:pulse-update",
       "type": "consumes"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "report:.farplane/reports/pulse/<timestamp>.md",
       "target": "skill:interval-update",
       "type": "consumes"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/goal-loop-contract.md",
+      "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "runtime:native-codex-goal",
       "target": "ticket:tickets/TASK-*/artifacts/",
       "type": "writes"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/goal-loop-contract.md",
+      "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "runtime:native-codex-goal",
       "target": "ticket:tickets/TASK-*/progress.md",
       "type": "writes"
@@ -201,9 +193,9 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "docs/specs/steer-pulse-automation.md",
+      "label": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "skill:automation-advisor",
-      "target": "doc:docs/specs/steer-pulse-automation.md",
+      "target": "doc:docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "type": "reads"
     },
     {
@@ -432,14 +424,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/goal-loop-contract.md",
+      "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "skill:goal-advisor",
       "target": "ticket:tickets/TASK-*/program.md",
       "type": "writes"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/goal-loop-contract.md",
+      "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "skill:goal-advisor",
       "target": "ticket:tickets/TASK-*/progress.md",
       "type": "writes"
@@ -454,7 +446,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/goal-loop-contract.md",
+      "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "skill:goal-advisor",
       "target": "ticket:tickets/TASK-*/ticket.md",
       "type": "writes"
@@ -918,7 +910,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "skill:interval-update",
       "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
       "type": "writes"
@@ -1025,6 +1017,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "skill:knowledge-tidier",
       "target": "file:AGENTS.md",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/knowledge-tidier/SKILL.md",
+      "label": "consolidate",
+      "source": "skill:knowledge-tidier",
+      "target": "skill:consolidate",
+      "type": "routes_to"
     },
     {
       "confidence": "parsed",
@@ -1387,7 +1387,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "skill:pulse-update",
       "target": "report:.farplane/reports/pulse/<timestamp>.md",
       "type": "writes"
@@ -1466,7 +1466,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/steer-pulse-automation.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "skill:pulse-update",
       "target": "state:.farplane/automation/decisions.jsonl",
       "type": "writes"
@@ -1761,7 +1761,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/filesystem-lifecycle.md",
+      "evidence_ref": "docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "source": "skill:update-memory",
       "target": "doc:docs/MEMORY.md",
       "type": "updates"
@@ -1780,6 +1780,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "label": "ticket/spec owner",
       "source": "skill:update-memory",
       "target": "route:ticket/spec-owner",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "consolidate",
+      "source": "skill:update-memory",
+      "target": "skill:consolidate",
       "type": "routes_to"
     },
     {
@@ -1808,7 +1816,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/specs/goal-loop-contract.md",
+      "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "ticket:tickets/TASK-*/program.md",
       "target": "runtime:native-codex-goal",
       "type": "triggers"
@@ -2203,7 +2211,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     }
   ],
-  "generated_at": "2026-06-26T09:15:15+00:00",
+  "generated_at": "2026-06-27T16:32:58+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",
@@ -2236,20 +2244,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "metadata": {
         "statusMessage": "Capturing current-turn user intent",
         "timeout": 30
-      },
-      "path": "hooks.json",
-      "tags": [
-        "command",
-        "hook"
-      ]
-    },
-    {
-      "id": "command:python3-home/.codex/bin/stop_hook.py",
-      "kind": "command",
-      "label": "python3 \"$HOME/.codex/bin/stop_hook.py\"",
-      "metadata": {
-        "statusMessage": "Evaluating Ralph stop hook",
-        "timeout": 90
       },
       "path": "hooks.json",
       "tags": [
@@ -2353,6 +2347,15 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
+      "id": "doc:docs/features/FEAT-0065-pulse-and-interval-automation.md",
+      "kind": "doc",
+      "label": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
+      "path": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
+      "tags": [
+        "parsed"
+      ]
+    },
+    {
       "id": "doc:docs/review/rubrics selected rubrics",
       "kind": "doc",
       "label": "docs/review/rubrics selected rubrics",
@@ -2366,15 +2369,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "kind": "doc",
       "label": "docs/skills/registry.jsonl",
       "path": "docs/skills/registry.jsonl",
-      "tags": [
-        "parsed"
-      ]
-    },
-    {
-      "id": "doc:docs/specs/steer-pulse-automation.md",
-      "kind": "doc",
-      "label": "docs/specs/steer-pulse-automation.md",
-      "path": "docs/specs/steer-pulse-automation.md",
       "tags": [
         "parsed"
       ]
@@ -2699,6 +2693,16 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
+      "id": "skill:consolidate",
+      "kind": "skill",
+      "label": "consolidate",
+      "path": "skills/consolidate/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
       "id": "skill:deep-interview",
       "kind": "skill",
       "label": "deep-interview",
@@ -3010,7 +3014,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "kind": "skill",
       "label": "qa",
       "metadata": {
-        "description": "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Stop-hook gating.",
+        "description": "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Goal/ticket completion.",
         "source": "local",
         "tier": 3
       },

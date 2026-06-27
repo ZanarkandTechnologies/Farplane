@@ -116,7 +116,6 @@ done
 
 STAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_ROOT="${TARGET_DIR}/.install-backups/${STAMP}"
-LOCAL_ENV_FILE="${TARGET_DIR}/config.local.env"
 LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
 LOCAL_TOML_MARKER="# Machine-local config appended from config.local.toml"
 INSTALL_BIN_FILES=(
@@ -130,7 +129,6 @@ INSTALL_BIN_FILES=(
   file_growth_hook.py
   notify.py
   runtime_telemetry.py
-  self_improve_hook_probe.py
   ticket-runtime
   ticket_runtime.py
   user_turn.py
@@ -150,29 +148,7 @@ if [ "$SKILLS_ONLY" -eq 1 ]; then
   exit 0
 fi
 
-ensure_local_env() {
-  if [ ! -e "$LOCAL_ENV_FILE" ]; then
-    cp "$REPO_DIR/config.local.env.example" "$LOCAL_ENV_FILE"
-    if command -v python3 >/dev/null 2>&1; then
-      python3 - "$LOCAL_ENV_FILE" "$TARGET_DIR" <<'PY'
-from pathlib import Path
-import sys
-
-path = Path(sys.argv[1])
-target_dir = sys.argv[2]
-text = path.read_text()
-text = text.replace("__CODEX_HOME__", target_dir)
-path.write_text(text)
-PY
-    fi
-    echo "Created $LOCAL_ENV_FILE from config.local.env.example"
-    echo "Edit it before relying on secret-backed MCPs."
-  fi
-}
-
 render_config() {
-  ensure_local_env
-
   if [ -e "$TARGET_DIR/config.toml" ]; then
     python3 - "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$LOCAL_TOML_MARKER" <<'PY'
 from pathlib import Path
@@ -241,7 +217,7 @@ PY
     cp "$TARGET_DIR/config.toml" "$BACKUP_ROOT/config.toml"
   fi
 
-  python3 - "$REPO_DIR/config.toml.example" "$TARGET_DIR/config.toml" "$LOCAL_ENV_FILE" "$LOCAL_TOML_FILE" "$TARGET_DIR" <<'PY'
+  python3 - "$REPO_DIR/config.toml.example" "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$TARGET_DIR" <<'PY'
 from pathlib import Path
 import os
 import re
@@ -249,9 +225,8 @@ import sys
 
 template_path = Path(sys.argv[1])
 output_path = Path(sys.argv[2])
-env_path = Path(sys.argv[3])
-local_toml_path = Path(sys.argv[4])
-target_dir = sys.argv[5]
+local_toml_path = Path(sys.argv[3])
+target_dir = sys.argv[4]
 repo_dir = template_path.parent
 core_dir = repo_dir / "bin" / "core"
 if str(core_dir) not in sys.path:
@@ -259,13 +234,14 @@ if str(core_dir) not in sys.path:
 
 from runtime_config import load_runtime_env
 
-env = load_runtime_env({"CODEX_HOME": target_dir, **os.environ}, env_path)
+env = load_runtime_env({"CODEX_HOME": target_dir, **os.environ})
 
 required = ["CODEX_HOME", "REF_API_KEY", "NOTION_TOKEN"]
 missing = [key for key in required if not env.get(key) or env[key].startswith("YOUR_") or env[key].startswith("__")]
 if missing:
     raise SystemExit(
-        f"Missing required values in {env_path}: {', '.join(missing)}"
+        "Missing required values in process env or ~/.farplane/config.toml: "
+        + ", ".join(missing)
     )
 
 text = template_path.read_text()
@@ -276,7 +252,6 @@ replacements = {
     "__FARPLANE_CONVEX_SITE_URL__": env.get("FARPLANE_CONVEX_SITE_URL", ""),
     "__FARPLANE_TELEMETRY_TOKEN__": env.get("FARPLANE_TELEMETRY_TOKEN", ""),
     "__FARPLANE_CONSOLE_KEY__": env.get("FARPLANE_CONSOLE_KEY", ""),
-    "__FARPLANE_ACTIVITY_RECENT_URL__": env.get("FARPLANE_ACTIVITY_RECENT_URL", ""),
 }
 for needle, value in replacements.items():
     text = text.replace(needle, value)
@@ -386,7 +361,7 @@ if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   link_global_cli "$TARGET_DIR/bin/farplane"
 
   echo "Done."
-  echo "Next: keep secrets in $LOCAL_ENV_FILE and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
+  echo "Next: keep secrets in ~/.farplane/config.toml and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
   exit 0
 fi
 
@@ -422,6 +397,6 @@ done
 render_config
 
 echo "Done."
-echo "Next: keep secrets in $LOCAL_ENV_FILE and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
-echo "Hooks config is linked when hooks.json exists; Stop telemetry remains active, while legacy Stop orchestration stays uninstalled by default."
+echo "Next: keep secrets in ~/.farplane/config.toml and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
+echo "Hooks config is linked when hooks.json exists; Stop telemetry remains active. Ticket-local QA/review owns completion."
 echo "Backups (when needed) are stored under $BACKUP_ROOT"
