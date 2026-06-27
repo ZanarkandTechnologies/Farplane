@@ -5,6 +5,7 @@ tier: 2
 source: local
 template_uses:
   skill-template: "0.2.0"
+  skill-surface-budget: "0.1.0"
 
 ---
 

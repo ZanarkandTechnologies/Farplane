@@ -159,6 +159,9 @@ Manual fields:
 - `methods`: optional list for method addresses owned by the skill
 - `common_chains`: optional Tier 3 one-way adjacency hints
 - `upstream_url`: optional for `source: external`
+- `template_uses.skill-surface-budget`: optional opt-in marker for
+  `FEAT-0062` capped skill surfaces; subscribed skills must fit 10 top-level
+  todos, 5 QA checklist items, and 5 eval tasks
 
 Generated fields:
 
@@ -184,6 +187,16 @@ group: coding
 common_chains:
   after: ["goal-advisor"]
 ```
+
+Use capped skill surfaces only after a skill fits the budget:
+
+```yaml
+template_uses:
+  skill-surface-budget: "0.1.0"
+```
+
+If a skill is over budget, run `skill-maintenance.refine_skill` with
+`consolidate(..., structure = skill)` before enrolling it.
 
 Do not add `before`; reverse lookups should be derived by tooling.
 

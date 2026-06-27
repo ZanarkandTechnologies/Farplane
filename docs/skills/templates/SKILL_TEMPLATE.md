@@ -1,10 +1,11 @@
 ---
 template_id: skill-template
-template_version: "0.3.6"
+template_version: "0.3.7"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
   - FEAT-0057
+  - FEAT-0062
 consumer_scope: skill
 applies_to:
   - skills/*/SKILL.md
@@ -21,7 +22,10 @@ description: "[TODO: Verb input/context into output/artifact when call-condition
 tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
-  skill-template: "0.3.6"
+  skill-template: "0.3.7"
+  # Add only after the skill fits 10 top-level todos, 5 QA checklist items,
+  # and 5 eval tasks.
+  # skill-surface-budget: "0.1.0"
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---
@@ -54,6 +58,10 @@ runner or renderer needs stricter structure.]
 [TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` as
 visible task labels like `- [ ] 1. ...`, and use a specific contract section
 only when it adds non-duplicated durable shape.]
+
+[TODO: For skills enrolled in `skill-surface-budget`, keep this first-load todo
+list to 10 top-level items or fewer. Use `consolidate(..., structure = skill)`
+through `skill-maintenance.refine_skill` before adding item 11.]
 
 [TODO: Paths in this skill are relative to this skill package. Use
 `scripts/foo.py` and `references/foo.md` for nearby files.]

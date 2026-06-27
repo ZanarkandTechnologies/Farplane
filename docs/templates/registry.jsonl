@@ -4,6 +4,6 @@
 {"feature_refs":["FEAT-0007"],"kind":"harness-creator-worksheet","path":"skills/harness-creator/templates/project-harness.md","template_id":"project-harness","template_version":"0.3.3"}
 {"applies_to":["skills/*/eval_task.json"],"consumer_scope":"skill","feature_refs":["FEAT-0054"],"path":"skills/skill-creator/references/EVAL_TASK_TEMPLATE.json","template_id":"skill-eval-task","template_version":"0.1.0"}
 {"applies_to":["skills/*/references/*.md"],"consumer_scope":"skill-reference","feature_refs":["FEAT-0057"],"path":"docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md","template_id":"skill-method-reference","template_version":"0.1.0"}
-{"applies_to":["skills/*/qa_checklist.md"],"consumer_scope":"skill","feature_refs":["FEAT-0057"],"path":"docs/skills/templates/QA_CHECKLIST_TEMPLATE.md","template_id":"skill-qa-checklist","template_version":"0.1.0"}
-{"applies_to":["skills/*/SKILL.md"],"consumer_scope":"skill","feature_refs":["FEAT-0022","FEAT-0054","FEAT-0057"],"path":"docs/skills/templates/SKILL_TEMPLATE.md","template_id":"skill-template","template_version":"0.3.6"}
+{"applies_to":["skills/*/qa_checklist.md"],"consumer_scope":"skill","feature_refs":["FEAT-0057","FEAT-0062"],"path":"docs/skills/templates/QA_CHECKLIST_TEMPLATE.md","template_id":"skill-qa-checklist","template_version":"0.1.1"}
+{"applies_to":["skills/*/SKILL.md"],"consumer_scope":"skill","feature_refs":["FEAT-0022","FEAT-0054","FEAT-0057","FEAT-0062"],"path":"docs/skills/templates/SKILL_TEMPLATE.md","template_id":"skill-template","template_version":"0.3.7"}
 {"feature_refs":["FEAT-0007","FEAT-0008"],"path":"tickets/templates/ticket.md","template_id":"ticket-template","template_version":"0.1.1"}

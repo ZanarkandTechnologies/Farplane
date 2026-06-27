@@ -7,6 +7,7 @@ source: local
 template_uses:
   skill-template: "0.1.0"
   skill-qa-checklist: "0.1.0"
+  skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep
 qa_checklist: qa_checklist.md
 
@@ -46,8 +47,8 @@ supports it.
 - [ ] 8. Define the evidence that forces revision, simplification, or stopping.
 - [ ] 9. Label prototype-only shortcuts so they do not masquerade as production
   readiness.
-- [ ] 10. Return a `Prototype Note` to the active workflow before broadening scope.
-- [ ] 11. Review that the slice is representative before scale.
+- [ ] 10. Return a reviewed `Prototype Note` to the active workflow before
+  broadening scope.
   - [ ] Apply `qa_checklist.md` again for material prototype decisions and
     delegate independent review before broad rollout.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

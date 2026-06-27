@@ -6,6 +6,7 @@ source: local
 template_uses:
   skill-template: "0.1.0"
   skill-qa-checklist: "0.1.0"
+  skill-surface-budget: "0.1.0"
 qa_checklist: qa_checklist.md
 
 ---

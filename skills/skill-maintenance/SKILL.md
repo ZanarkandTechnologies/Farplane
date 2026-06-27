@@ -29,7 +29,11 @@ known: `SKILL.md` shape, references, eval/checklist sync, source ownership,
 frontmatter, registry sync, audit records, reinstall checks, and review
 routing. Use `consolidate(target = edited_skill, structure = skill, ...)` for
 behavior-preserving compaction decisions; this skill applies the resulting
-owner-local skill edits and proof. It also owns the weekly learning
+owner-local skill edits and proof. It also owns capped skill-surface rollout:
+only enroll skills in `template_uses.skill-surface-budget` after they fit the
+10 todo / 5 QA / 5 eval budget, and use
+`scripts/minimize_skill_surface.py` as the advisory worksheet before adding
+item N+1. It also owns the weekly learning
 backpropagation interface:
 
 ```text
@@ -91,7 +95,8 @@ modes:
 gates:
   behavior_delta_named; owner_surface_clear; source_owner_preserved;
   first_load_executable; template_version_truthful; registry_synced;
-  eval_guardrails_synced_or_skipped; audit_or_skip_recorded;
+  eval_guardrails_synced_or_skipped; surface_budget_preserved_when_enrolled;
+  audit_or_skip_recorded;
   check_skills_passed; reviewer_routed_when_material
 
 routes:
@@ -184,6 +189,9 @@ or a Goal-backed experiment loop.
     readiness judgment to review rubrics; do not create metric registries or
     scalar scores from checklist items by default`.
   - [ ] `if registry_or_frontmatter_changed: regenerate docs/skills/registry.jsonl; never hand-edit generated rows`.
+  - [ ] `if template_uses.skill-surface-budget changed or an enrolled skill adds
+    todos, QA items, or eval rows: run check_skill_surface_budget.py and use
+    scripts/minimize_skill_surface.py before exceeding 10 / 5 / 5`.
   - [ ] `if template_version_changed: prove the actual headings/todo/signature match the promised template`.
   - [ ] `if installed_copy_differs: import or patch repo source first; reinstall/live-inspect only after source edits are accepted`.
   - [ ] `if bulk_rollout: use sandbox/sample proof before scaling and keep one audit/proof row per affected class`.
@@ -389,6 +397,9 @@ Return TAS verdicts, blockers, and smallest required fixes.
   skill tree.
 - [scripts/check_skills.py](scripts/check_skills.py) - standard validation,
   registry sync, todo checks, doc refs, and template-version report.
+- [scripts/minimize_skill_surface.py](scripts/minimize_skill_surface.py) -
+  advisory worksheet for keeping enrolled skill todos, QA checklists, and evals
+  within the capped surface budget.
 
 ## Output
 

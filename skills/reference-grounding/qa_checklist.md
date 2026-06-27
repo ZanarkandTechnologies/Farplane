@@ -19,27 +19,19 @@ grounding_check(claim, source_need, sources_checked, local_impact)
   -> pass | violation | deferral
 ```
 
-## Preflight
+## Checklist
 
-- [ ] One claim, decision, expectation, or comparison is in scope.
-- [ ] Local baseline needs are identified when repo context matters.
+- [ ] One claim, decision, expectation, or comparison is in scope, with local
+  baseline needs identified when repo context matters.
 - [ ] Source need is classified before searching: local-only, official/current,
   maintained implementation, peer/product, standards, or user-provided source.
-- [ ] Primary sources and real implementations are preferred over commentary.
-- [ ] The task has not silently expanded into a full research brief.
-
-## Final Review
-
-- [ ] The Grounding Note states source class used and sources actually checked.
-- [ ] Claims do not rely on sources that were only searched but not opened or
-  inspected.
+- [ ] Primary sources and real implementations are preferred, and claims rely
+  only on sources that were opened or inspected.
 - [ ] Local-only evidence is not used for current facts, best practice, latest
   behavior, law, pricing, external API behavior, or peer expectations.
-- [ ] Evidence, confidence, and local impact are explicit.
-- [ ] Any unresolved evidence gap is routed to the caller or to the right
-  `research:*` method.
-- [ ] The answer does not keep collecting sources after the active decision is
-  sufficiently grounded.
+- [ ] The Grounding Note states source class, sources checked, evidence,
+  confidence, local impact, and any routed evidence gap without expanding into
+  a full research brief.
 
 ## Reviewer Prompt
 

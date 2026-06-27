@@ -6,6 +6,8 @@ group: coding
 source: local
 eval: eval_task.json
 qa_checklist: qa_checklist.md
+template_uses:
+  skill-surface-budget: "0.1.0"
 common_chains:
   after: ["demo", "close-ticket"]
 ---

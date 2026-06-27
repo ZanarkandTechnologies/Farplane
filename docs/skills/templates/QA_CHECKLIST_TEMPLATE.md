@@ -1,8 +1,9 @@
 ---
 template_id: skill-qa-checklist
-template_version: "0.1.0"
+template_version: "0.1.1"
 feature_refs:
   - FEAT-0057
+  - FEAT-0062
 consumer_scope: skill
 applies_to:
   - skills/*/qa_checklist.md
@@ -12,6 +13,10 @@ applies_to:
 
 Use this file only when a skill has repeatable runtime guardrails that should be
 read before execution and checked again before completion.
+
+For skills enrolled in `skill-surface-budget`, keep this checklist to the top 5
+runtime guardrails. Use `consolidate(..., structure = skill)` through
+`skill-maintenance.refine_skill` before adding item 6.
 
 ## Checklist
 

@@ -8,6 +8,7 @@ eval: eval_task.json
 template_uses:
   skill-template: "0.3.2"
   skill-qa-checklist: "0.1.0"
+  skill-surface-budget: "0.1.0"
 qa_checklist: qa_checklist.md
 license: Complete terms in LICENSE.txt
 allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, Glob

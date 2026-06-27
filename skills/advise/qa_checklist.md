@@ -19,29 +19,19 @@ advise_check(decision, options, recommendation, evidence?)
   -> pass | violation | deferral
 ```
 
-## Preflight
+## Checklist
 
 - [ ] The request is a real decision among viable paths, not an obvious direct
-  action disguised as advice.
-- [ ] The decision is stated in one sentence before options are compared.
-- [ ] Evaluation criteria are explicit and relevant to the user's goal,
-  constraints, and risk.
-- [ ] Evidence needs are known: local-only, supplied evidence, official/current
-  source, peer norm, or higher-tier research.
-- [ ] The expected output needs a recommendation, not a neutral menu.
-
-## Final Review
-
+  action, and the expected output needs a recommendation rather than a neutral
+  menu.
+- [ ] The decision and evaluation criteria are stated before comparing options.
+- [ ] Evidence needs are known and any gaps are surfaced instead of hidden
+  behind confident prose.
 - [ ] The answer compares exactly three viable options when three realistic
-  options exist.
-- [ ] The recommendation is explicit and appears before or with the tradeoff,
-  not buried as a weak preference.
-- [ ] The accepted tradeoff is named plainly.
-- [ ] Evidence gaps are surfaced instead of hidden behind confident prose.
-- [ ] The answer routes the direct next owner or next step without ending in a
-  vague offer to help.
-- [ ] The advice does not invent options, delay an obvious reversible action, or
-  perform research synthesis that belongs to a higher-tier workflow.
+  options exist, then recommends one clearly and names the accepted tradeoff.
+- [ ] The answer routes the direct next owner or next step without inventing
+  options, delaying an obvious reversible action, or performing higher-tier
+  research synthesis.
 
 ## Reviewer Prompt
 

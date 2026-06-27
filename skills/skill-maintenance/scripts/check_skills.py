@@ -461,6 +461,7 @@ def main() -> int:
         tier_command.append("--hardcase-on-failure")
         run(tier_command)
         run(["python3", "bin/validators/check_tier0_phase_protocol.py"])
+        run(["python3", "bin/validators/check_skill_surface_budget.py"])
         run(["python3", "bin/validators/check_skill_capabilities.py", "validate"])
         run(["python3", "skills/eval/scripts/check_eval_queries.py", "--root", "."])
         run(["python3", "bin/validators/check_doc_refs.py"])
@@ -484,8 +485,10 @@ def main() -> int:
                 "bin/validators/check_doc_refs.py",
                 "bin/validators/check_skill_todo_tiers.py",
                 "bin/validators/check_tier0_phase_protocol.py",
+                "bin/validators/check_skill_surface_budget.py",
                 "bin/validators/check_skill_capabilities.py",
                 "skills/skill-maintenance/scripts/check_skills.py",
+                "skills/skill-maintenance/scripts/minimize_skill_surface.py",
                 "skills/skill-maintenance/scripts/sync_skill_checklists.py",
                 "skills/skill-maintenance/scripts/generate_template_intelligence.py",
                 "skills/eval/scripts/check_eval_queries.py",

@@ -261,6 +261,22 @@ Structural feature IDs belong to the versioned skill template metadata, not
 per-skill frontmatter. Derive generated fields from source files instead of
 duplicating them in frontmatter.
 
+Skills that opt into capped surface enforcement declare the structural marker in
+`template_uses`, not raw `feature_refs`:
+
+```yaml
+template_uses:
+  skill-surface-budget: "0.1.0"
+```
+
+This marker is backed by `FEAT-0062` and checked by
+`bin/validators/check_skill_surface_budget.py`. Subscribed skills must fit the
+default `10 / 5 / 5` budget: 10 top-level `SKILL.md` todos, 5
+`qa_checklist.md` items, and 5 skill-local eval tasks. Before adding item N+1,
+run `skill-maintenance.refine_skill` with
+`consolidate(target = edited_skill, structure = skill)` and keep, merge, move,
+or delete units by value rather than appending by default.
+
 ## Source Ownership
 
 - `source: local` means Farplane owns the skill package and may edit its body,
@@ -295,6 +311,10 @@ duplicating them in frontmatter.
 generic reference. Use it when a skill has reusable real-time checks that
 should be read before execution as preflight guardrails, applied after material
 changes, and applied again before claiming an output is ready.
+
+For skills enrolled in `skill-surface-budget`, keep the checklist to the top 5
+runtime guardrails. Merge overlapping preflight/final-review items and move
+rare branch-specific detail to references with an explicit load condition.
 
 ```text
 skill_qa_checklist(skill_package, changed_files, claim, budget?)

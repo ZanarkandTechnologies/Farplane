@@ -7,6 +7,7 @@ source: local
 template_uses:
   skill-template: "0.1.0"
   skill-qa-checklist: "0.1.0"
+  skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
 qa_checklist: qa_checklist.md
 
