@@ -93,6 +93,16 @@ def stage_config(config: dict[str, Any], stage: str) -> dict[str, Any]:
     return value
 
 
+def check_table(config: dict[str, Any], check_name: str) -> dict[str, Any]:
+    checks = config.get("checks", {})
+    if not isinstance(checks, dict) or check_name not in checks:
+        raise SystemExit(f"{check_name}: no [checks.{check_name}] entry")
+    check = checks[check_name]
+    if not isinstance(check, dict):
+        raise SystemExit(f"{check_name}: expected check table")
+    return check
+
+
 def format_argv(argv: list[str], *, base: str) -> list[str]:
     return [part.replace("{base}", base) for part in argv]
 
@@ -110,12 +120,7 @@ def check_mode(config: dict[str, Any], stage: dict[str, Any], check_name: str) -
 
 
 def configured_argv(config: dict[str, Any], check_name: str, *, base: str) -> list[str]:
-    checks = config.get("checks", {})
-    if not isinstance(checks, dict) or check_name not in checks:
-        raise SystemExit(f"{check_name}: no [checks.{check_name}] entry")
-    check = checks[check_name]
-    if not isinstance(check, dict):
-        raise SystemExit(f"{check_name}: expected check table")
+    check = check_table(config, check_name)
     argv = as_string_list(check.get("argv"), label=f"{check_name}.argv")
     return format_argv(argv, base=base)
 
@@ -123,8 +128,19 @@ def configured_argv(config: dict[str, Any], check_name: str, *, base: str) -> li
 def skip_env(config: dict[str, Any], check_name: str) -> str | None:
     checks = config.get("checks", {})
     check = checks.get(check_name, {}) if isinstance(checks, dict) else {}
-    value = check.get("skip_env") if isinstance(check, dict) else None
+    if not isinstance(check, dict):
+        return None
+    value = check.get("skip_env")
     return value if isinstance(value, str) and value else None
+
+
+def int_setting(check: dict[str, Any], name: str) -> int | None:
+    value = check.get(name)
+    if value is None:
+        return None
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise SystemExit(f"{name} must be a positive integer")
+    return value
 
 
 def path_matches(path: str, patterns: list[str]) -> bool:
@@ -176,6 +192,88 @@ def large_file_errors(config: dict[str, Any], paths: list[str]) -> list[str]:
     return errors
 
 
+def shard_dirs_for_paths(
+    paths: list[str],
+    shard_dirs: list[str],
+) -> tuple[list[tuple[str, int]], list[str]]:
+    matched: list[tuple[str, int]] = []
+    covered: set[str] = set()
+    for raw_dir in shard_dirs:
+        review_dir = normalize_path(raw_dir).rstrip("/")
+        if not review_dir or review_dir == ".":
+            raise SystemExit("coderabbit shard_dirs must name concrete directories, not '.'")
+        prefix = f"{review_dir}/"
+        dir_paths = [
+            path for path in paths if path == review_dir or path.startswith(prefix)
+        ]
+        if dir_paths:
+            matched.append((review_dir, len(dir_paths)))
+            covered.update(dir_paths)
+    uncovered = [path for path in paths if path not in covered]
+    return matched, uncovered
+
+
+def run_sharded_coderabbit(
+    config: dict[str, Any],
+    check_name: str,
+    *,
+    base: str,
+    paths: list[str],
+    dry_run: bool,
+) -> int | None:
+    check = check_table(config, check_name)
+    threshold = int_setting(check, "shard_when_path_count_exceeds")
+    if threshold is None or len(paths) <= threshold:
+        return None
+
+    shard_dirs = as_string_list(
+        check.get("shard_dirs", []),
+        label=f"{check_name}.shard_dirs",
+    )
+    if not shard_dirs:
+        return None
+
+    matched_dirs, uncovered = shard_dirs_for_paths(paths, shard_dirs)
+    if not matched_dirs:
+        print(
+            f"[shard] {check_name}: {len(paths)} paths exceeds {threshold}, "
+            "but none match configured shard_dirs; falling back to branch-wide review",
+            flush=True,
+        )
+        return None
+
+    print(
+        f"[shard] {check_name}: {len(paths)} paths exceeds {threshold}; "
+        f"reviewing {len(matched_dirs)} configured dirs",
+        flush=True,
+    )
+    argv = configured_argv(config, check_name, base=base)
+    returncode = 0
+    for review_dir, count in matched_dirs:
+        shard_argv = [*argv, "--dir", review_dir]
+        print(f"[shard:{check_name}] {review_dir} ({count} paths)", flush=True)
+        if dry_run:
+            print("  " + " ".join(shard_argv), flush=True)
+            continue
+        shard_returncode = run_streaming(shard_argv)
+        if shard_returncode != 0:
+            returncode = shard_returncode
+
+    if uncovered:
+        print(
+            f"[shard] {check_name}: {len(uncovered)} paths did not match shard_dirs "
+            "and were not CodeRabbit-reviewed; marking check failed:",
+            flush=True,
+        )
+        for path in uncovered[:20]:
+            print(f"  {path}", flush=True)
+        if len(uncovered) > 20:
+            print(f"  ... {len(uncovered) - 20} more", flush=True)
+        if returncode == 0:
+            returncode = 1
+    return returncode
+
+
 def run_check(
     config: dict[str, Any],
     stage: dict[str, Any],
@@ -202,6 +300,17 @@ def run_check(
             return CommandResult(check_name, mode, 1)
         print("large file guard OK", flush=True)
         return CommandResult(check_name, mode, 0)
+
+    if check_name == "coderabbit_pre_push":
+        sharded_returncode = run_sharded_coderabbit(
+            config,
+            check_name,
+            base=base,
+            paths=paths,
+            dry_run=dry_run,
+        )
+        if sharded_returncode is not None:
+            return CommandResult(check_name, mode, sharded_returncode)
 
     argv = configured_argv(config, check_name, base=base)
     if dry_run:

@@ -56,6 +56,11 @@ def parse_args() -> argparse.Namespace:
         help="Additional CodeRabbit config/instruction files to pass with --config.",
     )
     parser.add_argument(
+        "--dir",
+        dest="review_dir",
+        help="Limit CodeRabbit to git changes inside this directory.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Print the resolved command without executing it.",
@@ -198,6 +203,9 @@ def build_command(args: argparse.Namespace) -> list[str]:
 
     for config_path in args.config:
         command.extend(["--config", config_path])
+
+    if args.review_dir:
+        command.extend(["--dir", args.review_dir])
 
     return command
 

@@ -84,3 +84,19 @@ argv = ["python3", "skills/coderabbit-review/scripts/run_review.py", "--stage", 
 # to "block" locally or in a future ticket when the team wants a hard gate.
 mode = "warn"
 skip_env = "FARPLANE_SKIP_CODERABBIT"
+# Free/local CodeRabbit runs currently cap large reviews by file count. Keep the
+# normal whole-branch review for small branches, then split oversized solo-dev
+# stacks by ownership directories so at least the changed feature areas get
+# review pressure.
+shard_when_path_count_exceeds = 140
+shard_dirs = [
+  ".githooks",
+  "agents",
+  "bin",
+  "docs",
+  "farplane",
+  "rules",
+  "skills",
+  "templates",
+  "tickets",
+]
