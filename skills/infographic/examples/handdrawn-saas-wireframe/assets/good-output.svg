@@ -1,0 +1,274 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024">
+  <defs>
+    <style>
+      .paper { fill: #fbfaf7; }
+      .ink { stroke: #111; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .thin { stroke: #111; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .dash { stroke: #111; stroke-width: 1.7; fill: none; stroke-dasharray: 8 7; stroke-linecap: round; stroke-linejoin: round; }
+      .fill { fill: #f1f0ec; stroke: #111; stroke-width: 2; }
+      .soft { fill: #f7f6f2; stroke: #111; stroke-width: 1.8; }
+      .txt { font-family: "Comic Sans MS", "Bradley Hand", "Marker Felt", sans-serif; fill: #111; font-size: 16px; }
+      .small { font-size: 12px; }
+      .tiny { font-size: 10px; }
+      .mid { font-size: 19px; }
+      .title { font-size: 25px; font-weight: 700; }
+      .num { font-size: 22px; font-weight: 700; }
+      .metric { font-size: 31px; font-weight: 700; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L8,3 z" fill="#111"/></marker>
+  </defs>
+  <rect class="paper" x="0" y="0" width="1536" height="1024"/>
+
+  <g transform="translate(8 8)">
+    <rect class="ink" x="0" y="0" width="752" height="492" rx="14"/>
+    <line class="ink" x1="114" y1="0" x2="114" y2="492"/>
+    <rect class="thin" x="28" y="16" width="62" height="42" rx="0"/>
+<text class="txt small" x="45" y="42">LOGO</text>
+<rect class="fill" x="14" y="77" width="88" height="34" rx="5"/>
+<text class="txt small" x="39" y="100">Brief</text>
+<text class="txt small" x="39" y="144">Skill</text>
+<text class="txt small" x="39" y="188">Goal</text>
+<text class="txt small" x="39" y="232">Proof</text>
+<text class="txt small" x="39" y="276">Assets</text>
+<text class="txt small" x="39" y="320">Review</text>
+    <circle class="ink" cx="150" cy="28" r="16"/><text class="txt num" x="144" y="36">1</text>
+    <text class="txt title" x="182" y="37">REQUEST - Style Brief</text>
+    <rect class="soft" x="136" y="64" width="148" height="96" rx="7"/>
+<text class="txt small" x="150" y="88">Briefs</text>
+<rect class="thin" x="224" y="74" width="44" height="24" rx="8"/><text class="txt tiny" x="236" y="90">in</text>
+<text class="txt metric" x="150" y="122">3</text>
+<path class="thin" d="M150 142 L168 134 L186 138 L204 129 L222 136 L240 126"/>
+<text class="txt tiny" x="150" y="154">new today</text>
+<rect class="soft" x="300" y="64" width="148" height="96" rx="7"/>
+<text class="txt small" x="314" y="88">Copy</text>
+<rect class="thin" x="388" y="74" width="44" height="24" rx="8"/><text class="txt tiny" x="400" y="90">ok</text>
+<text class="txt metric" x="314" y="122">42</text>
+<path class="thin" d="M314 142 L332 134 L350 138 L368 129 L386 136 L404 126"/>
+<text class="txt tiny" x="314" y="154">labels locked</text>
+<rect class="soft" x="464" y="64" width="148" height="96" rx="7"/>
+<text class="txt small" x="478" y="88">Risk</text>
+<rect class="thin" x="552" y="74" width="44" height="24" rx="8"/><text class="txt tiny" x="564" y="90">warn</text>
+<text class="txt metric" x="478" y="122">7</text>
+<path class="thin" d="M478 142 L496 134 L514 138 L532 129 L550 136 L568 126"/>
+<text class="txt tiny" x="478" y="154">text-heavy</text>
+<text class="txt mid" x="136" y="186">Incoming creative request</text>
+<rect class="soft" x="136" y="206" width="330" height="158" rx="7"/>
+<line class="thin" x1="136" y1="238" x2="466" y2="238"/>
+<text class="txt tiny" x="150" y="228">Input</text>
+<text class="txt tiny" x="260" y="228">Signal</text>
+<text class="txt tiny" x="370" y="228">Decision</text>
+<text class="txt tiny" x="150" y="260">Style ref</text>
+<text class="txt tiny" x="260" y="260">hand-drawn</text>
+<text class="txt tiny" x="370" y="260">required</text>
+<line class="dash" x1="146" y1="271" x2="456" y2="271"/>
+<text class="txt tiny" x="150" y="291">Output</text>
+<text class="txt tiny" x="260" y="291">infographic</text>
+<text class="txt tiny" x="370" y="291">image</text>
+<line class="dash" x1="146" y1="302" x2="456" y2="302"/>
+<text class="txt tiny" x="150" y="322">Text</text>
+<text class="txt tiny" x="260" y="322">exact labels</text>
+<text class="txt tiny" x="370" y="322">renderer</text>
+<line class="dash" x1="146" y1="333" x2="456" y2="333"/>
+<text class="txt tiny" x="150" y="353">Proof</text>
+<text class="txt tiny" x="260" y="353">visual artifact</text>
+<text class="txt tiny" x="370" y="353">needed</text>
+<rect class="soft" x="486" y="206" width="130" height="154" rx="7"/>
+<text class="txt small" x="504" y="232">Decision Queue</text>
+<text class="txt tiny" x="504" y="258">1. Use skill</text>
+<text class="txt tiny" x="504" y="282">2. Make image</text>
+<text class="txt tiny" x="504" y="306">3. Patch density</text>
+<text class="txt tiny" x="504" y="330">4. Verify PNG</text>
+<text class="txt small" x="632" y="132">State:</text>
+<text class="txt tiny" x="632" y="154">Requests must</text>
+<text class="txt tiny" x="632" y="172">become copy +</text>
+<text class="txt tiny" x="632" y="190">layout before art.</text>
+<path class="thin" d="M626 175 C590 190, 560 210, 540 236" marker-end="url(#arrow)"/>
+<text class="txt small" x="628" y="286">Density note:</text>
+<text class="txt tiny" x="628" y="308">Sparse panels fail</text>
+<text class="txt tiny" x="628" y="326">the reference.</text>
+  </g>
+
+  <g transform="translate(776 8)">
+    <rect class="ink" x="0" y="0" width="752" height="492" rx="14"/>
+    <line class="ink" x1="114" y1="0" x2="114" y2="492"/>
+    <rect class="thin" x="28" y="16" width="62" height="42" rx="0"/>
+<text class="txt small" x="45" y="42">LOGO</text>
+<text class="txt small" x="39" y="100">Brief</text>
+<rect class="fill" x="14" y="121" width="88" height="34" rx="5"/>
+<text class="txt small" x="39" y="144">Skill</text>
+<text class="txt small" x="39" y="188">Goal</text>
+<text class="txt small" x="39" y="232">Proof</text>
+<text class="txt small" x="39" y="276">Assets</text>
+<text class="txt small" x="39" y="320">Review</text>
+    <circle class="ink" cx="150" cy="28" r="16"/><text class="txt num" x="144" y="36">2</text>
+    <text class="txt title" x="182" y="37">SKILL - Infographic Package</text>
+    <rect class="thin" x="136" y="66" width="86" height="24" rx="8"/><text class="txt tiny" x="148" y="82">Packet</text>
+<rect class="thin" x="232" y="66" width="88" height="24" rx="8"/><text class="txt tiny" x="244" y="82">Method</text>
+<rect class="thin" x="330" y="66" width="70" height="24" rx="8"/><text class="txt tiny" x="342" y="82">QA</text>
+<rect class="thin" x="410" y="66" width="70" height="24" rx="8"/><text class="txt tiny" x="422" y="82">Eval</text>
+<rect class="thin" x="500" y="66" width="86" height="24" rx="8"/><text class="txt tiny" x="512" y="82">Assets</text>
+<rect class="soft" x="136" y="110" width="152" height="126" rx="7"/>
+<text class="txt mid" x="154" y="136">SKILL.md</text>
+<text class="txt tiny" x="154" y="164">Signature</text>
+<text class="txt tiny" x="154" y="186">Todo path</text>
+<text class="txt tiny" x="154" y="208">Output</text>
+<rect class="soft" x="306" y="110" width="152" height="126" rx="7"/>
+<text class="txt mid" x="324" y="136">Method ref</text>
+<text class="txt tiny" x="324" y="164">2x2 panels</text>
+<text class="txt tiny" x="324" y="186">Density target</text>
+<text class="txt tiny" x="324" y="208">No gradients</text>
+<rect class="soft" x="476" y="110" width="140" height="126" rx="7"/>
+<text class="txt mid" x="494" y="136">QA gates</text>
+<text class="txt tiny" x="494" y="164">copy inventory</text>
+<text class="txt tiny" x="494" y="186">density match</text>
+<text class="txt tiny" x="494" y="208">text fidelity</text>
+<text class="txt mid" x="136" y="266">Skill package contents</text>
+<rect class="soft" x="136" y="286" width="480" height="158" rx="7"/>
+<line class="thin" x1="136" y1="318" x2="616" y2="318"/>
+<text class="txt tiny" x="150" y="308">File</text>
+<text class="txt tiny" x="310" y="308">Role</text>
+<text class="txt tiny" x="470" y="308">Status</text>
+<text class="txt tiny" x="150" y="340">SKILL.md</text>
+<text class="txt tiny" x="310" y="340">first-load path</text>
+<text class="txt tiny" x="470" y="340">created</text>
+<line class="dash" x1="146" y1="351" x2="606" y2="351"/>
+<text class="txt tiny" x="150" y="371">reference.md</text>
+<text class="txt tiny" x="310" y="371">style method</text>
+<text class="txt tiny" x="470" y="371">patched</text>
+<line class="dash" x1="146" y1="382" x2="606" y2="382"/>
+<text class="txt tiny" x="150" y="402">packet.md</text>
+<text class="txt tiny" x="310" y="402">sample spec</text>
+<text class="txt tiny" x="470" y="402">created</text>
+<line class="dash" x1="146" y1="413" x2="606" y2="413"/>
+<text class="txt tiny" x="150" y="433">SVG/PNG</text>
+<text class="txt tiny" x="310" y="433">visible proof</text>
+<text class="txt tiny" x="470" y="433">created</text>
+<text class="txt small" x="632" y="162">State:</text>
+<text class="txt tiny" x="632" y="184">Skill now has</text>
+<text class="txt tiny" x="632" y="202">a density gate.</text>
+<path class="thin" d="M630 196 C602 200, 582 204, 558 214" marker-end="url(#arrow)"/>
+<text class="txt tiny" x="632" y="330">Renderer keeps</text>
+<text class="txt tiny" x="632" y="348">small text readable.</text>
+  </g>
+
+  <g transform="translate(8 516)">
+    <rect class="ink" x="0" y="0" width="752" height="492" rx="14"/>
+    <line class="ink" x1="114" y1="0" x2="114" y2="492"/>
+    <rect class="thin" x="28" y="16" width="62" height="42" rx="0"/>
+<text class="txt small" x="45" y="42">LOGO</text>
+<text class="txt small" x="39" y="100">Brief</text>
+<text class="txt small" x="39" y="144">Skill</text>
+<rect class="fill" x="14" y="165" width="88" height="34" rx="5"/>
+<text class="txt small" x="39" y="188">Goal</text>
+<text class="txt small" x="39" y="232">Proof</text>
+<text class="txt small" x="39" y="276">Assets</text>
+<text class="txt small" x="39" y="320">Review</text>
+    <circle class="ink" cx="150" cy="28" r="16"/><text class="txt num" x="144" y="36">3</text>
+    <text class="txt title" x="182" y="37">GOAL - Sample + Improve</text>
+    <text class="txt mid" x="136" y="76">TASK-0238 Goal Loop</text>
+<rect class="soft" x="136" y="96" width="230" height="150" rx="7"/>
+<text class="txt mid" x="154" y="126">Program</text>
+<rect class="thin" x="154" y="146" width="128" height="24" rx="8"/><text class="txt tiny" x="166" y="162">skill_improvement</text>
+<rect class="thin" x="154" y="180" width="118" height="24" rx="8"/><text class="txt tiny" x="166" y="196">hybrid metric</text>
+<rect class="thin" x="154" y="214" width="108" height="24" rx="8"/><text class="txt tiny" x="166" y="230">review proof</text>
+<rect class="soft" x="386" y="96" width="230" height="150" rx="7"/>
+<text class="txt mid" x="404" y="126">Sample Runs</text>
+<text class="txt tiny" x="404" y="154">A: sparse SVG -&gt; revise</text>
+<text class="txt tiny" x="404" y="178">B: dense SVG -&gt; current</text>
+<text class="txt tiny" x="404" y="202">C: user concept -&gt; next</text>
+<text class="txt mid" x="136" y="282">Goal progress ledger</text>
+<rect class="soft" x="136" y="302" width="480" height="158" rx="7"/>
+<line class="thin" x1="136" y1="334" x2="616" y2="334"/>
+<text class="txt tiny" x="150" y="324">Step</text>
+<text class="txt tiny" x="310" y="324">Evidence</text>
+<text class="txt tiny" x="470" y="324">State</text>
+<text class="txt tiny" x="150" y="356">setup</text>
+<text class="txt tiny" x="310" y="356">skill + packet</text>
+<text class="txt tiny" x="470" y="356">done</text>
+<line class="dash" x1="146" y1="367" x2="606" y2="367"/>
+<text class="txt tiny" x="150" y="387">sample A</text>
+<text class="txt tiny" x="310" y="387">image exists</text>
+<text class="txt tiny" x="470" y="387">too sparse</text>
+<line class="dash" x1="146" y1="398" x2="606" y2="398"/>
+<text class="txt tiny" x="150" y="418">density patch</text>
+<text class="txt tiny" x="310" y="418">method + QA</text>
+<text class="txt tiny" x="470" y="418">done</text>
+<line class="dash" x1="146" y1="429" x2="606" y2="429"/>
+<text class="txt tiny" x="150" y="449">sample B</text>
+<text class="txt tiny" x="310" y="449">dense render</text>
+<text class="txt tiny" x="470" y="449">done</text>
+<text class="txt small" x="632" y="142">State:</text>
+<text class="txt tiny" x="632" y="164">Goal should use</text>
+<text class="txt tiny" x="632" y="182">the skill, then</text>
+<text class="txt tiny" x="632" y="200">improve it.</text>
+<path class="thin" d="M626 184 C600 178, 582 168, 558 154" marker-end="url(#arrow)"/>
+<text class="txt small" x="632" y="332">Next:</text>
+<text class="txt tiny" x="632" y="354">try a non-meta</text>
+<text class="txt tiny" x="632" y="372">user topic.</text>
+  </g>
+
+  <g transform="translate(776 516)">
+    <rect class="ink" x="0" y="0" width="752" height="492" rx="14"/>
+    <line class="ink" x1="114" y1="0" x2="114" y2="492"/>
+    <rect class="thin" x="28" y="16" width="62" height="42" rx="0"/>
+<text class="txt small" x="45" y="42">LOGO</text>
+<text class="txt small" x="39" y="100">Brief</text>
+<text class="txt small" x="39" y="144">Skill</text>
+<text class="txt small" x="39" y="188">Goal</text>
+<rect class="fill" x="14" y="209" width="88" height="34" rx="5"/>
+<text class="txt small" x="39" y="232">Proof</text>
+<text class="txt small" x="39" y="276">Assets</text>
+<text class="txt small" x="39" y="320">Review</text>
+    <circle class="ink" cx="150" cy="28" r="16"/><text class="txt num" x="144" y="36">4</text>
+    <text class="txt title" x="182" y="37">PROOF - Output Evidence</text>
+    <rect class="soft" x="136" y="78" width="150" height="120" rx="7"/>
+<text class="txt mid" x="154" y="108">Artifacts</text>
+<text class="txt tiny" x="154" y="136">packet.md</text>
+<text class="txt tiny" x="154" y="158">dense SVG</text>
+<text class="txt tiny" x="154" y="180">dense PNG</text>
+<rect class="soft" x="306" y="78" width="150" height="120" rx="7"/>
+<text class="txt mid" x="324" y="108">Checklist</text>
+<text class="txt tiny" x="324" y="136">message clear</text>
+<text class="txt tiny" x="324" y="158">density match</text>
+<text class="txt tiny" x="324" y="180">text fidelity</text>
+<rect class="soft" x="476" y="78" width="140" height="120" rx="7"/>
+<text class="txt mid" x="494" y="108">Review</text>
+<text class="txt tiny" x="494" y="136">pending</text>
+<text class="txt tiny" x="494" y="158">style QA</text>
+<text class="txt tiny" x="494" y="180">skill fit</text>
+<text class="txt mid" x="136" y="236">Source health</text>
+<rect class="soft" x="136" y="256" width="480" height="158" rx="7"/>
+<line class="thin" x1="136" y1="288" x2="616" y2="288"/>
+<text class="txt tiny" x="150" y="278">Source</text>
+<text class="txt tiny" x="310" y="278">Freshness</text>
+<text class="txt tiny" x="470" y="278">Used by</text>
+<text class="txt tiny" x="150" y="310">Reference image</text>
+<text class="txt tiny" x="310" y="310">Fresh</text>
+<text class="txt tiny" x="470" y="310">style + density</text>
+<line class="dash" x1="146" y1="321" x2="606" y2="321"/>
+<text class="txt tiny" x="150" y="341">Skill docs</text>
+<text class="txt tiny" x="310" y="341">Fresh</text>
+<text class="txt tiny" x="470" y="341">packet + gates</text>
+<line class="dash" x1="146" y1="352" x2="606" y2="352"/>
+<text class="txt tiny" x="150" y="372">Sample A</text>
+<text class="txt tiny" x="310" y="372">Weak</text>
+<text class="txt tiny" x="470" y="372">found gap</text>
+<line class="dash" x1="146" y1="383" x2="606" y2="383"/>
+<text class="txt tiny" x="150" y="403">Sample B</text>
+<text class="txt tiny" x="310" y="403">Fresh</text>
+<text class="txt tiny" x="470" y="403">visible proof</text>
+<rect class="soft" x="136" y="414" width="148" height="42" rx="7"/>
+<text class="txt small" x="154" y="440">PNG 1536x1024</text>
+<rect class="soft" x="304" y="414" width="128" height="42" rx="7"/>
+<text class="txt small" x="322" y="440">SVG source</text>
+<rect class="soft" x="452" y="414" width="128" height="42" rx="7"/>
+<text class="txt small" x="470" y="440">Packet</text>
+<text class="txt small" x="632" y="280">State:</text>
+<text class="txt tiny" x="632" y="302">Completion must</text>
+<text class="txt tiny" x="632" y="320">show artifact</text>
+<text class="txt tiny" x="632" y="338">and proof.</text>
+<path class="thin" d="M626 318 C598 318, 575 330, 548 354" marker-end="url(#arrow)"/>
+<text class="txt tiny" x="632" y="408">Reviewer still</text>
+<text class="txt tiny" x="632" y="426">needed for final.</text>
+  </g>
+</svg>

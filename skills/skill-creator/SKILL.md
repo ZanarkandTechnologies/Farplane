@@ -92,8 +92,10 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      every skill create/update invocation; use a compact pass for tiny
      mechanical edits, but still record pass, violation, or not-applicable for
      changed surfaces.
-   - [ ] For quality-dependent skills, add or link one good positive example
-     before optimizing checklist prose.
+   - [ ] For quality-dependent skills, add one good positive example before
+     optimizing checklist prose; use `examples/<slug>/example.md` plus
+     optional `assets/` when reference media, accepted outputs, provenance, or
+     comparison gates matter.
 - [ ] 5. Move non-first-load material to the right supporting surface.
    - [ ] Keep every-invocation rules in `SKILL.md`.
    - [ ] Move conditional branches, examples, templates, long rubrics, model
@@ -135,8 +137,10 @@ fails: creates duplicate skills; hides required logic in references; omits proof
    - [ ] No duplicated first-load logic.
    - [ ] Actor-prompt versus skill-contract boundaries are clean.
    - [ ] Explicit proof commands or blockers are recorded.
-   - [ ] Quality-dependent skills have at least one transferable example, or an
-     explicit blocker explains why the example cannot be produced yet.
+   - [ ] Quality-dependent skills have at least one transferable example,
+     preferably an `examples/<slug>/example.md` fixture when assets or
+     comparison gates matter, or an explicit blocker explains why the example
+     cannot be produced yet.
    - [ ] Native `reviewer` subagent used for material skill-system changes when
      available.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

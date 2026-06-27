@@ -1,0 +1,18 @@
+[
+  {
+    "id": "handdrawn-saas-wireframe-routing",
+    "query": "Make a monochrome hand-sketched infographic that explains four states of our AI operations dashboard: today pulse, worker team, worker detail, and integrations. It needs lots of readable UI labels and callout arrows.",
+    "expected_behavior": "Routes to infographic:handdrawn-saas-wireframe, asks for or invents only clearly marked placeholder copy, creates an Infographic Packet with copy inventory, 2x2 layout spec, shared shell, production route, and proof plan.",
+    "reference_points": [
+      "Selects the handdrawn SaaS wireframe method or explicitly loads references/handdrawn-saas-wireframe.md",
+      "Names text fidelity risk and prefers deterministic render or mixed deterministic-plus-texture route",
+      "Produces copy inventory before image prompt",
+      "Includes style constraints: monochrome, hand-drawn, dense SaaS UI, callout arrows, no gradients or photorealism"
+    ],
+    "anti_patterns": [
+      "Immediately calls image generation with vague prompt and no copy inventory",
+      "Invents factual metrics without marking them illustrative",
+      "Treats the reference as a generic dashboard instead of a multi-state product storyboard"
+    ]
+  }
+]

@@ -279,6 +279,13 @@ duplicating them in frontmatter.
   `qa_checklist.md` when the skill repeatedly needs the same preflight checks,
   final checks, reviewer prompts, or eval-derived guardrails. Keep the file
   Markdown until a runner or renderer needs stricter structure.
+- Put skill-specific example fixtures beside the source skill as
+  `examples/<slug>/example.md`, with optional local support files under
+  `examples/<slug>/assets/`. Use this shape when a quality-dependent skill
+  needs reference media, accepted outputs, comparison gates, or provenance that
+  must travel with the package. Keep broad reusable eval examples under
+  `skills/eval/examples`; do not add a skill frontmatter field just to list
+  examples.
 
 ## Skill-Local QA Checklists
 

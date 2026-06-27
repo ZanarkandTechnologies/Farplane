@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.3.5"
+template_version: "0.3.6"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -21,7 +21,7 @@ description: "[TODO: Verb input/context into output/artifact when call-condition
 tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
-  skill-template: "0.3.5"
+  skill-template: "0.3.6"
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---
@@ -165,8 +165,11 @@ Do not call phase-like skills recursively at the same scope.
 
 ## Templates
 
-- [TODO: Inline one short positive example, or link to `templates/*` /
-  `prompts/*` when examples are too long.]
+- [TODO: Inline one short positive example. For quality-dependent skills with
+  reference assets, accepted outputs, or comparison gates, add
+  `examples/<slug>/example.md` plus optional `examples/<slug>/assets/*`.
+  Use `templates/*` or `prompts/*` when the reusable asset is a prompt,
+  packet, or generated artifact shape.]
 - [TODO: If this skill needs a focused behavioral eval, add
   `eval_task.json` at the skill package root using the eval task JSON-list
   schema.]

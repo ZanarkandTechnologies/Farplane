@@ -247,16 +247,50 @@ creative direction, or human preference rather than a deterministic command.
 ```text
 example_required(skill) -> true when quality_depends_on_style_or_judgment
 good_example(input, output, why_it_works?) -> repeatable_pattern
+skill_example_fixture(skill, slug) -> example_md + optional_assets + comparison_gates
 ```
 
 For those skills, include at least one positive example before trying to
 optimize the checklist. The example can be:
 
 - inline in `SKILL.md` when it is short enough to improve first-load behavior;
-- a linked `references/examples.md` when the example is longer than a few
-  paragraphs, includes artifacts, or has several variants;
+- a linked `examples/<slug>/example.md` fixture when the example is longer than
+  a few paragraphs, includes assets, or needs comparison gates;
+- a linked `references/examples.md` when several variants need one narrative
+  reference and no local assets are needed;
 - a `templates/*` or `prompts/*` example when the reusable asset is a prompt,
   output packet, or generated artifact shape.
+
+Use a skill-local example fixture for quality-dependent examples that need
+reference media, accepted outputs, keyframes, transcripts, shot lists, datasets,
+or side-by-side comparison criteria:
+
+```text
+skills/<skill>/examples/<slug>/example.md
+skills/<skill>/examples/<slug>/assets/*
+```
+
+`example.md` is the owner of meaning. Keep the fixture lean and include only
+the sections needed to make the example repeatable:
+
+- `Use When`: the invocation shape or style/method this example represents.
+- `Input Brief`: the prompt, task, source state, or representative input.
+- `Reference`: source assets, URLs, timecodes, frames, data, or taste anchors.
+- `Good Output`: accepted local output, output excerpt, or expected artifact
+  shape.
+- `Comparison Gates`: what must match, what may vary, and what would fail the
+  example.
+- `Provenance / Rights`: whether local assets are user-supplied, generated,
+  public links, excerpts, or placeholders.
+
+Store full media only when it is small, safe to keep in git, and materially
+needed for the skill to run standalone. For video examples, default to
+`Reference` entries with URL, timecodes, representative keyframes, transcript
+excerpts, shot lists, or motion notes under `assets/`; avoid committing large
+video binaries unless the repo explicitly owns them. Skill examples are the
+standalone baseline. Taste Packs can add stronger project-specific taste
+examples, but a quality-dependent skill should still have at least one local
+example when its core behavior depends on style or judgment.
 
 A good example should show:
 
