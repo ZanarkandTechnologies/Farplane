@@ -8,6 +8,7 @@ template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"
 eval: eval_task.json
+qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash
 
 ---
@@ -44,7 +45,7 @@ state: reads(operator intent, target skill/artifacts, ticket/program/progress?,
              progress entry?)
 gates: target_named; objective_named; feedback_policy_named;
        artifact_refs_visible_or_generation_step_named; goal_advisor_owns_loop;
-       telegram_reply_path_bound_when_needed
+       telegram_reply_path_bound_when_needed; turn_exit_gate_satisfied
 routes: goal-advisor | telegram-message | review
 fails: runs its own loop; treats human feedback as completion; asks vague broad
   questions; publishes or spends from feedback alone; sends a Telegram request
@@ -115,7 +116,14 @@ inside that thread or pass its `worker_thread_ref`.
    owning Goal Packet path.
 - [ ] 8. Notify via `telegram-message` when configured; otherwise report the
    local feedback request path.
-- [ ] 9. Stop or pause cleanly while waiting for feedback; do not pretend the
+- [ ] 9. Apply the turn exit gate.
+   - [ ] If waiting for human feedback, prove the Telegram send succeeded or
+     report the fallback path/blocker.
+   - [ ] If fresh human feedback was processed and the loop is not terminal,
+     send the next artifact feedback request or a blocker before stopping.
+   - [ ] If the loop is terminal, record keep/approve/convergence/budget/blocker
+     in `progress.md`.
+- [ ] 10. Stop or pause cleanly while waiting for feedback; do not pretend the
    feedback signal exists yet.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -144,6 +152,31 @@ feedback_policy: ask_when_artifact_ready
 resume_policy: Telegram replies land in worker_thread_ref; worker appends
   feedback to progress.md and generates the next artifact revision.
 ```
+
+## Turn Exit Gate
+
+Before every stop, satisfy exactly one of these exits:
+
+```text
+waiting_for_feedback:
+  telegram_message_sent == true
+  or fallback_feedback_request_ref is visible
+  or blocker_ref explains why Telegram could not be sent
+
+feedback_processed_non_terminal:
+  next_artifact_ref is visible
+  and next_feedback_request_sent == true
+  or blocker_ref explains why the next artifact/request cannot be produced
+
+terminal:
+  terminal_reason in [keep, approve, convergence, budget, blocker]
+  and progress.md records the decision
+```
+
+This is the guard against worker threads going quiet after Kenji replies. If
+the worker changes a skill, workflow, prompt, or artifact in response to
+feedback, it must either send the next review request through Telegram or send
+a blocker that tells Kenji what is needed next.
 
 ## Feedback Schema
 
@@ -174,6 +207,7 @@ Return or write:
 - `feedback_schema`
 - `pause_or_resume_policy`
 - `notification_status`
+- `turn_exit_gate_status`
 
 ## Templates
 
@@ -230,11 +264,15 @@ Feedback shape:
 - Do not call this for tasks where a deterministic command is the honest metric.
 - Do not bypass `goal-advisor` when the loop architecture or Goal Packet does
   not exist yet.
+- Do not stop after processing non-terminal feedback without sending the next
+  Telegram review request or an explicit blocker.
 
 ## Reference Map
 
-- [docs/specs/goal-loop-contract.md](../../docs/specs/goal-loop-contract.md) -
+- [docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md) -
   Goal Packet and feedback-provider model.
+- [qa_checklist.md](qa_checklist.md) - Telegram/request exit gate and phone
+  feedback proof checklist.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - owns Goal
   architecture, packet setup, and native `/goal` prompt compilation.
 - [../telegram-message/SKILL.md](../telegram-message/SKILL.md) - optional

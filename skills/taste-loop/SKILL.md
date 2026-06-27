@@ -37,14 +37,17 @@ end-to-end generation.
 taste_loop(project_root, config?, now?)
   -> no_op | artifact_worker_thread_report | artifact_feedback_report |
      artifact_goal_handoff_report | blocked_report
-state: reads(config env, farplane/products.md,
+state: reads(farplane/automations.md automation-config TOML?,
+             Codex automation memory.md?,
+             farplane/products.md,
              farplane/products.md#taste-loop-artifact-workflows,
              docs/skills/registry.jsonl,
              docs/specs/skill-compounding-score.md,
              tickets/*/ticket.md?,
              skill graph heat / FARPLANE_SKILL_HEAT_*,
              .farplane/automation/taste-loop/*?);
-       writes(.farplane/reports/taste-loop/*.md,
+       writes(Codex automation memory.md?,
+              .farplane/reports/taste-loop/*.md?,
               tickets/TASK-*/ticket.md?,
               tickets/TASK-*/program.md?,
               tickets/TASK-*/progress.md?,
@@ -52,6 +55,7 @@ state: reads(config env, farplane/products.md,
               .farplane/automation/taste-loop/feedback/*?,
               .farplane/automation/taste-loop/preview/*?)
 gates: active_hours_checked; feedback_budget_checked; product_lane_selected;
+       controller_memory_checked; active_worker_reused_or_resumed;
        artifact_workflow_selected; worker_packet_created_or_reused;
        worker_thread_created_or_reused; optimize_with_human_bound_in_worker;
        artifact_generated_or_goal_handoff; artifact_ref_visible;
@@ -67,16 +71,26 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   targets; creates a feedback card without an artifact; optimizes generic skill
   quality instead of a products.md output; routes to retired autoresearch by
   default; sends Telegram feedback from the parent heartbeat thread when a
-  dedicated worker thread is needed; spams more feedback than budget allows
+  dedicated worker thread is needed; spams more feedback than budget allows;
+  creates a separate workers.jsonl ledger instead of reusing automation memory;
+  writes repo/runtime files for a simple no-op beat
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Load active-hours and budget config in the Codex heartbeat turn.
-  - [ ] Read `FARPLANE_TASTE_LOOP_*` values from the rendered Codex config or
-    environment available to the automation.
-  - [ ] Stop with a no-op report when disabled or outside active hours.
+- [ ] 1. Load automation config and controller memory.
+  - [ ] Read the `farplane/automations.md` marker-delimited TOML config block
+    and prompt block for `farplane-active-hours-taste-loop` when available.
+  - [ ] Treat the Codex automation schedule as the primary active-hours gate;
+    do not wake hourly just to check whether active hours are open.
+  - [ ] Use the prompt block `Params` section for Taste Loop knobs such as
+    `top_n`, `max_open_feedback`, target groups, output channels, cooldown,
+    convergence, and `log_noop`.
+  - [ ] Read the Codex automation `memory.md` when the automation runtime
+    provides one.
+  - [ ] Stop with a side-effect-free no-op when a manual run is clearly outside
+    the configured automation schedule.
 - [ ] 2. Collect candidate targets.
   - [ ] Read `docs/specs/skill-compounding-score.md`.
   - [ ] Read `docs/skills/registry.jsonl`.
@@ -84,6 +98,8 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     Workflows.
   - [ ] Use existing skill heat generated from `.farplane/events/` and
     `FARPLANE_SKILL_HEAT_*` controls when available.
+  - [ ] Split heat into direct heat and weaker related heat from referring
+    skills, matching `docs/specs/skill-compounding-score.md`.
   - [ ] Prefer artifact workflows tied to configured target groups and
     product/money-making lanes.
   - [ ] Exclude broad router skills as direct targets. `frontend-craft`,
@@ -91,6 +107,8 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     `self-improve`, and `skill-maintenance` can support a workflow but should
     not be the thing Kenji is asked to judge.
   - [ ] Include existing open feedback and cooldown state.
+  - [ ] Include active worker, waiting feedback, and last action state from
+    automation memory before reading legacy Taste Loop runtime files.
   - [ ] Normalize open feedback by `target_id + feedback_question` before
     applying the budget gate; duplicate open rows are hygiene findings, not
     extra budget usage.
@@ -106,6 +124,7 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Ask `metric-advisor` for an honest provider before creating benchmarks,
     harder task suites, or Goal handoffs.
   - [ ] Prefer `artifact_worker_thread` for human-feedback product artifacts:
+    first reuse or resume an active worker from automation memory; otherwise
     create or reuse a ticket-backed Goal Packet, then create or reuse a
     dedicated Codex worker thread whose prompt tells the worker to use
     `optimize-with-human`.
@@ -120,7 +139,11 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     artifact workflow ownership, proof, config, or generation feasibility.
   - [ ] Do not route to legacy autoresearch unless explicitly configured later.
 - [ ] 5. Write visible state, not hidden runtime output.
-  - [ ] Write a Markdown report under `.farplane/reports/taste-loop/`.
+  - [ ] Update Codex automation memory with the active worker ledger when
+    available; do not create a separate `workers.jsonl`.
+  - [ ] Write a Markdown report under `.farplane/reports/taste-loop/` only for
+    emitted actions, blockers, diagnostics, or when
+    `FARPLANE_TASTE_LOOP_LOG_NOOP=1`.
   - [ ] For `artifact_worker_thread`, write or update `ticket.md`, `program.md`,
     and `progress.md` under `tickets/TASK-*`, and record the worker thread id
     in the ticket links, progress log, and Taste Loop report.
@@ -142,25 +165,26 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Do not edit target skills directly from this heartbeat.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## Config
+## Automation Config
 
-The install template provides non-secret defaults:
+Project-specific automation metadata lives in `farplane/automations.md` as a
+marker-delimited TOML block. Skill invocation params live in the adjacent
+prompt block because they are part of the Codex instruction, not scheduler
+metadata.
 
-```text
-FARPLANE_TASTE_LOOP_ENABLED=1
-FARPLANE_TASTE_LOOP_TIMEZONE=Asia/Kuala_Lumpur
-FARPLANE_TASTE_LOOP_ACTIVE_DAYS=Mon,Tue,Wed,Thu,Fri
-FARPLANE_TASTE_LOOP_ACTIVE_START=10:00
-FARPLANE_TASTE_LOOP_ACTIVE_END=18:00
-FARPLANE_TASTE_LOOP_TOP_N=3
-FARPLANE_TASTE_LOOP_MAX_ACTIONS_PER_BEAT=1
-FARPLANE_TASTE_LOOP_MAX_OPEN_FEEDBACK=3
-FARPLANE_TASTE_LOOP_TARGET_GROUPS=content-social,content-video,frontend,harness,self-improvement
-FARPLANE_TASTE_LOOP_OUTPUT_CHANNELS=local_report,telegram_ready,farplane_ui_ready
-FARPLANE_TASTE_LOOP_COOLDOWN_HOURS=24
-FARPLANE_TASTE_LOOP_CONVERGENCE_WINDOW=5
-FARPLANE_TASTE_LOOP_MINIMUM_DELTA=qualitative_threshold
+```toml
+[schedule]
+type = "active_hours_interval"
+timezone = "Asia/Kuala_Lumpur"
+days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
+start = "10:00"
+end = "18:00"
+interval_minutes = 60
 ```
+
+The schedule block compiles to the Codex automation cadence. Taste Loop should
+not duplicate that cadence as environment variables. The prompt block should
+carry the normal Markdown/text `Params` and `Overrides` sections.
 
 ## Heartbeat Prompt
 
@@ -191,7 +215,9 @@ Signal ownership:
   `FARPLANE_SKILL_HEAT_*`
 - product lane: `farplane/products.md`
 - artifact workflow fit: `farplane/products.md` Taste Loop Artifact Workflows
-- feedback budget and cooldown: `.farplane/automation/taste-loop/`
+- schedule and params: `farplane/automations.md` TOML automation config
+- feedback budget and cooldown: automation config plus controller memory
+- active worker state: Codex automation `memory.md`
 - metric route: `metric-advisor`
 
 Taste Loop may use broad skills as support routes, but the selected target is
@@ -215,6 +241,43 @@ artifact_worker_thread(product_lane, workflow_id, owner, feedback_question)
 The parent heartbeat selects and dispatches. It does not own artifact iteration.
 The worker thread prompt must name the Goal Packet files inline and instruct the
 worker to use `optimize-with-human` after creating a reviewable artifact.
+
+## Controller Memory Contract
+
+Use the Codex automation's own memory as the controller ledger when available.
+Do not add a tracked or ignored `workers.jsonl` just to remember active Taste
+Loop workers.
+
+Each action beat should append or update a compact memory row with:
+
+```text
+active_worker:
+  workflow_id:
+  product_lane:
+  ticket_ref:
+  worker_thread_ref:
+  status: active | waiting_for_feedback | revising | blocked | complete
+  artifact_ref:
+  preview_ref:
+  last_request_at:
+  last_feedback_at:
+  next_action:
+```
+
+On every heartbeat, read memory before creating work:
+
+```text
+if active_worker.status in [active, waiting_for_feedback, revising]:
+  inspect or resume that worker
+  do not create a new worker
+else:
+  score candidates and dispatch at most one new worker
+```
+
+Simple no-op beats should be side-effect free: no worker thread, ticket,
+artifact, preview, feedback card, Telegram message, or repo/runtime report.
+Only write a no-op report when explicitly diagnosing with `log_noop = true`;
+otherwise the Codex automation run and memory surface are enough.
 
 Required worker prompt shape:
 
@@ -247,8 +310,8 @@ Normalize each open feedback row by:
 feedback_key = target_id + "\n" + feedback_question
 ```
 
-Only one open row for a key counts toward
-`FARPLANE_TASTE_LOOP_MAX_OPEN_FEEDBACK`. Additional open rows with the same key
+Only one open row for a key counts toward the configured `max_open_feedback`.
+Additional open rows with the same key
 must be listed in the report as `duplicate_open_feedback` and should not block
 new useful work. If the top selected target already has an open canonical card,
 skip it with `open_feedback_and_cooldown` and pick the next eligible target
@@ -263,8 +326,8 @@ promotion rule. When human taste is the honest signal, use
 `optimize-with-human` instead of pretending a benchmark exists.
 
 Convergence is comparable-run based: hold or stop when recent score, review, or
-feedback deltas stay below `FARPLANE_TASTE_LOOP_MINIMUM_DELTA` across
-`FARPLANE_TASTE_LOOP_CONVERGENCE_WINDOW` comparable runs.
+feedback deltas stay below the configured `minimum_delta` across the configured
+`convergence_window` comparable runs.
 
 ## Output
 
@@ -272,7 +335,8 @@ Return and write:
 
 - `status`: `no_op`, `artifact_worker_thread`, `artifact_feedback`,
   `artifact_goal_handoff`, or `blocked`
-- `report_path`
+- `report_path` when an action, blocker, diagnostic, or configured no-op log is
+  written
 - `selected_product_lane`
 - `selected_artifact_workflow`
 - `worker_ticket_ref`
@@ -314,6 +378,16 @@ Return and write:
   accept/revise/reject when that is the honest signal.
 - Do not invent a second heat, product, or benchmark system. Reuse the skill
   graph, `products.md`, `metric-advisor`, and target skill evals first.
+- Do not create a new worker when automation memory shows an active or waiting
+  worker. Resume, steer, or block that worker first.
+- Do not create tracked or ignored worker ledgers. The Codex automation memory
+  is the Taste Loop controller state.
+- Do not write `.farplane/reports/taste-loop/` files for ordinary no-op beats.
+  No-op means no worker, no artifact, no feedback, no Telegram, and no runtime
+  report unless diagnostic logging is explicitly enabled.
+- Do not restore `FARPLANE_TASTE_LOOP_*` as the normal active-hours settings.
+  Active-hours belong in the Codex automation schedule and the
+  `farplane/automations.md` TOML config block.
 
 ## Reference Map
 

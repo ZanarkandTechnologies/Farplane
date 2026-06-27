@@ -31,14 +31,31 @@ automation_prompt_qa(automation_prompt, called_skill, project_context)
      copies the skill signature into the automation record.
 
 3. `minimal_project_config`
-   - Pass: the prompt includes only information that cannot live in the called
-     skill: cadence identity, project root, interval windows, project-specific
-     read/write refs, enabled workflows, project-specific sources, and
-     side-effect gates.
+   - Pass: the marker-delimited TOML block includes only user-editable Codex
+     automation metadata: schedule, kind, status, workspace/thread target, and
+     activation fields.
    - Fail: the prompt restates default Farplane paths, generic report shapes,
      default ticket board rules, or skill-owned implementation details.
 
-3. `read_write_contract`
+3. `toml_block_contract`
+   - Pass: each automation has one
+     `<!-- farplane:automation-config id="..." format="toml" -->` block with a
+     fenced `toml` payload that parses and can be replaced without touching
+     surrounding prose; the TOML payload is scheduler/automation metadata only.
+   - Fail: config is stored as custom XML/HTML, prose-only tables, duplicated
+     env vars, invalid TOML, or skill invocation params mixed into scheduler
+     metadata.
+
+4. `prompt_block_contract`
+   - Pass: each automation has one
+     `<!-- farplane:automation-prompt id="..." -->` block with a fenced `text`
+     payload that contains the actual human-authored Codex prompt, including
+     skill params and skill-specific overrides when needed.
+   - Fail: the prompt is generated only from TOML, collapsed to a bare skill
+     call when real instruction is needed, or stored only in prose outside a
+     parseable block.
+
+5. `read_write_contract`
    - Pass: interval automation prompts describe project-specific sources and
      side effects as `Call`, `Reads`, `Writes`, `Runs`, and `Gates`
      instructions that visually match skill signatures.
@@ -46,68 +63,72 @@ automation_prompt_qa(automation_prompt, called_skill, project_context)
      `context_refs.workflow_refs` arrays when plain read/write instructions
      would be clearer.
 
-4. `config_ownership`
-   - Pass: config key names, defaults, fallback order, and validation rules live
-     in the called skill, config template, or runtime config source. The
-     automation record only names explicit overrides.
-   - Fail: `farplane/automations.md` lists every env/config key, duplicates
-     defaults from `config.toml.example`, or becomes a second config reference.
+6. `config_ownership`
+   - Pass: user-editable automation metadata lives in `farplane/automations.md`
+     TOML blocks and syncs to the Codex automation record; skill params live in
+     the prompt block; machine-local, secret, or non-automation config lives
+     outside this file.
+   - Fail: active-hours schedule or automation params are duplicated as
+     `FARPLANE_*` env vars, or runtime state is stored in the tracked TOML.
 
-5. `skill_contract_duplication`
+7. `skill_contract_duplication`
    - Pass: scoring, selection, proof, benchmark, output-shape, and generic
      safety behavior live in the called skill or skill references.
    - Fail: the automation prompt restates the called skill's normal checklist,
      scoring formula, generic gates, benchmark rules, or output contract.
 
-6. `context_ref_fit`
+8. `context_ref_fit`
    - Pass: cross-interval dependencies, private docs, external source refs, and
      optional telemetry refs are described in the `Reads` block with clear
      source-gap behavior.
    - Fail: the prompt tells the skill to infer cadence-specific parent context
      or bakes source paths into a generic skill.
 
-7. `workflow_flag_fit`
+9. `workflow_flag_fit`
    - Pass: optional analysis work is expressed under `Runs`.
    - Fail: optional workflows are described as always-on skill behavior or as a
      separate hidden scheduler.
 
-8. `prompt_size`
+10. `prompt_size`
    - Pass: the prompt is short enough to review and edit in the Codex app.
    - Fail: the prompt contains long background, rationale, duplicated docs, or
      exhaustive operational prose better owned by a skill reference.
 
-9. `runtime_state_boundary`
-   - Pass: cadence lives in the Codex automation record, runtime logs live in
-     ignored `.farplane/`, reports are dated files, and `pm.json` is only UI
-     thread grouping glue.
+11. `runtime_state_boundary`
+   - Pass: desired cadence lives in the TOML block, live cadence is synced to
+     the Codex automation record, runtime logs live in ignored `.farplane/`,
+     reports are dated files, and `pm.json` is only UI thread grouping glue.
    - Fail: tracked config stores mutable last-run state or automation runtime
      IDs.
 
-10. `side_effect_gates`
+12. `side_effect_gates`
    - Pass: the prompt names project-specific external side-effect gates only
      when they matter.
    - Fail: the prompt permits push, deploy, publish, spend, account mutation,
      destructive cleanup, or external mutation without explicit operator
      policy.
 
-11. `no_legacy_orchestrator`
+13. `no_legacy_orchestrator`
    - Pass: no Steer scheduler, cadence alias skill, lane compiler, or
      automation JSON manifest is reintroduced.
    - Fail: the prompt calls retired compatibility surfaces or creates a hidden
      orchestration layer.
 
-12. `copyability`
-   - Pass: the prompt block in `farplane/automations.md` can be copied into the
-     Codex app record with only schedule/workspace metadata supplied by the app.
-   - Fail: the file and live automation prompt diverge in behavior.
+14. `syncability`
+   - Pass: the TOML block contains enough structured data to compile the Codex
+     automation schedule/target/status update, and the prompt block contains
+     the exact prompt to copy into the live automation.
+   - Fail: the file requires humans or agents to interpret prose tables before
+     updating the live automation, or the live prompt diverges from the prompt
+     block.
 
-13. `review_route`
+15. `review_route`
    - Pass: automations that can create tickets, change goals, spawn workers, or
      use external sources get review or source-gap handling.
    - Fail: material automation behavior self-approves without evidence or a
      review handoff.
 
-14. `workflow_source_routing`
+16. `workflow_source_routing`
    - Pass: optional workflows that need telemetry, feedback, opportunity,
      metric, or status inputs receive explicit source refs in the `Reads` block
      or record source gaps.

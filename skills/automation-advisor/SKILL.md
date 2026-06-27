@@ -38,17 +38,44 @@ operator-facing invocation over function-signature prose. Function signatures
 belong in `SKILL.md`; automation records should stay close to the operator
 instruction the Codex app actually runs.
 
-Current prompt template shape is `framework_template_version: "0.4.1"`:
+Current automation template shape is `framework_template_version: "0.5.0"`:
 
+````markdown
+<!-- farplane:automation-config id="<automation-id>" format="toml" -->
+```toml
+id = "<automation-id>"
+name = "<human name>"
+kind = "heartbeat | cron"
+status = "active | paused"
+
+[schedule]
+type = "interval | active_hours_interval | daily | weekly"
+```
+<!-- /farplane:automation-config -->
+
+<!-- farplane:automation-prompt id="<automation-id>" -->
 ```text
-Use `$skill-name`.
+Use $<skill-name>.
+
+Write the human-authored automation instruction here. Keep it flexible enough
+to explain cadence-specific intent, source gaps, side-effect boundaries, and
+expected output. Keep mechanical schedule and UI-editable params in the TOML
+block above.
 
 Params:
 project_root = "<project-root>"
 
-Overrides:
-only values this automation intentionally changes
+Config source:
+farplane/automations.md automation-config id="<automation-id>"
 ```
+<!-- /farplane:automation-prompt -->
+````
+
+The TOML block owns Codex automation metadata: schedule, kind, status, workspace,
+and thread target. The prompt block owns the skill call, skill params, and
+skill-specific overrides. Do not put skill params in TOML just because TOML is
+easy to parse; that makes scheduler config and prompt config look like the same
+kind of state.
 
 ## Skill Signature
 
@@ -74,7 +101,8 @@ state:
 
 gates:
   loop_choice_made; cadence_named; prompt_calls_skill_plainly;
-  config_source_owned_by_skill; no_skill_contract_duplication;
+  config_block_parseable; prompt_block_present;
+  schedule_owned_by_codex_automation; no_skill_contract_duplication;
   side_effect_gates_named; dated_report_path_used; no_lane_manifest_required;
   no_hidden_scheduler_config
 
@@ -84,7 +112,7 @@ routes:
 fails:
   creating another automation manifest compiler; mixing logs into tracked
   config; making Pulse own drift review; inventing a Steer scheduler thread;
-  using latest.md as the canonical report
+  using latest.md as the canonical report; duplicating schedule in env vars
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -105,10 +133,17 @@ fails:
 - [ ] 3. Keep prompts reviewable and runtime state untracked.
   - [ ] Put project-specific automation prompt text in
         `farplane/automations.md`.
-  - [ ] Let Codex automation records own cadence.
-  - [ ] Let the called skill own its config contract and defaults; do not list
-        every env/config key in `farplane/automations.md` unless that specific
-        automation overrides a value.
+  - [ ] Let Codex automation records own live cadence and
+        `farplane/automations.md` marker-delimited TOML blocks own desired
+        cadence and automation metadata for review and UI editing.
+  - [ ] Keep a separate marker-delimited prompt block for human-authored
+        instructions, skill params, and skill-specific overrides; do not hide
+        intent inside config only.
+  - [ ] Put user-editable automation metadata in the TOML block, not in
+        `config.toml.example` env vars, unless the value is machine-local,
+        secret, or not tied to a Codex automation.
+  - [ ] Keep skill invocation params in the Markdown prompt block unless a
+        future UI explicitly defines a structured skill-param editor.
   - [ ] Do not add a tracked scheduler config or runtime run ledger unless a
         separate ticket proves the need.
   - [ ] Do not enumerate auto-resolved canonical paths unless they are real
@@ -119,7 +154,13 @@ fails:
         preferably `$skill-name` when the skill is directly invocable,
         with only project-specific context refs, workflow flags, policies, or
         side-effect gates that humans should edit.
-  - [ ] Use the `Params` / `Overrides` layout from automation template `0.4.1`.
+  - [ ] Use marker-delimited fenced `toml` blocks from automation template
+        `0.5.0`.
+  - [ ] Use marker-delimited fenced `text` prompt blocks for the actual Codex
+        automation prompt, including `Params` and `Overrides` sections when
+        the called skill needs them.
+  - [ ] Ensure the prompt uses `$skill-name` but includes the cadence-specific
+        instruction text that would be useful to a human reviewer.
   - [ ] Reject prompt prose that restates the called skill's scoring,
         selection, proof, benchmark, output-shape, or safety contract.
   - [ ] Name side-effect gates and final state/report writebacks.
@@ -140,6 +181,9 @@ fails:
 - [ ] 6. Check the proof surface.
   - [ ] Apply [qa_checklist.md](qa_checklist.md) to the prompt or live
         automation delta.
+  - [ ] Confirm TOML blocks parse and can round-trip without touching prose.
+  - [ ] Confirm prompt blocks exist and are the text copied to the live Codex
+        automation records.
   - [ ] Confirm interval report paths are date-stamped.
   - [ ] Confirm `farplane/automations.md` is the reviewable prompt source and
         no `farplane/automations.json`, `farplane/steer.config.toml`, or

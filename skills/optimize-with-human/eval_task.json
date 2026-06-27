@@ -9,7 +9,9 @@
       "Requires or points to a ticket-backed Goal Packet with ticket.md, program.md, and progress.md",
       "Asks one short review question Kenji can answer quickly",
       "Includes artifact references and a concrete feedback.json shape",
-      "Defines how the parent Goal should pause and resume from the feedback"
+      "Defines how the parent Goal should pause and resume from the feedback",
+      "Applies the turn exit gate before stopping: waiting turns must send Telegram or a fallback/blocker; non-terminal feedback turns must send the next artifact request or blocker",
+      "Records terminal reasons as keep, approve, convergence, budget, or blocker"
     ],
     "tags": [
       "skill",

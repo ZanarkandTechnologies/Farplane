@@ -1,7 +1,7 @@
 ---
 kind: project-automations
-framework_template_version: "0.4.1"
-updated_at: 2026-06-26
+framework_template_version: "0.5.0"
+updated_at: 2026-06-27
 owner: automation-advisor
 source_of_truth:
   - skills/pulse-update/SKILL.md
@@ -12,92 +12,133 @@ source_of_truth:
 
 # Farplane Automations
 
-This file stores the exact prompt blocks copied into Codex automation records.
-Prompts should configure cadence metadata, the target `$skill`, visible
-`Params`, and intentional `Overrides` only. Reusable config contracts,
-defaults, gates, report shapes, and workflow behavior live in the called skill.
+This file stores reviewable desired-state config and prompts for Codex
+automation records. Each automation keeps:
+
+- a marker-delimited TOML config block for Codex automation metadata only:
+  kind, status, workspace/thread target, and schedule.
+- a marker-delimited prompt block for the human-authored Codex instruction,
+  including skill call, skill params, and skill-specific overrides.
+
+The TOML block syncs to Codex automation settings. The prompt block is copied
+to the Codex automation prompt. Reusable gates, report shapes, and workflow
+behavior live in the called skill.
 
 ## Pulse
 
-| Field | Value |
-| --- | --- |
-| Automation id | `farplane-ticket-update` |
-| Name | `Farplane Pulse` |
-| Kind | `heartbeat` |
-| RRULE | `FREQ=MINUTELY;INTERVAL=30` |
-| Target thread | `019ed47a-3182-73f3-879f-a53797759b2a` |
+<!-- farplane:automation-config id="farplane-ticket-update" format="toml" -->
+```toml
+id = "farplane-ticket-update"
+name = "Farplane Pulse"
+kind = "heartbeat"
+status = "active"
+target_thread_id = "019ed47a-3182-73f3-879f-a53797759b2a"
 
-Use `$pulse-update`.
+[schedule]
+type = "interval"
+interval_minutes = 30
+
+```
+<!-- /farplane:automation-config -->
+
+<!-- farplane:automation-prompt id="farplane-ticket-update" -->
+```text
+Use $pulse-update.
+
+Run one bounded Farplane Pulse beat for the project. Reconcile recent outcomes,
+select at most the configured ready work, and write the normal Pulse report or
+blocker through the skill contract.
 
 Params:
-
-```text
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-```
 
-Overrides:
-
-```text
-none
+Config source:
+farplane/automations.md automation-config id="farplane-ticket-update"
 ```
+<!-- /farplane:automation-prompt -->
 
 ## Daily Interval
 
-| Field | Value |
-| --- | --- |
-| Automation id | `farplane-daily-interval` |
-| Name | `Farplane Daily Interval` |
-| Kind | `cron` |
-| RRULE | `FREQ=DAILY;BYHOUR=5;BYMINUTE=33;BYSECOND=0` |
-| Workspace | `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane` |
+<!-- farplane:automation-config id="farplane-daily-interval" format="toml" -->
+```toml
+id = "farplane-daily-interval"
+name = "Farplane Daily Interval"
+kind = "cron"
+status = "active"
+workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 
-Use `$interval-update`.
+[schedule]
+type = "daily"
+timezone = "Asia/Kuala_Lumpur"
+time = "05:33"
+
+```
+<!-- /farplane:automation-config -->
+
+<!-- farplane:automation-prompt id="farplane-daily-interval" -->
+```text
+Use $interval-update.
+
+Run the daily Farplane interval. Review the last 24 hours, produce the
+date-stamped interval report, and plan the next 24 hours without executing
+ticket work directly.
 
 Params:
-
-```text
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "daily_interval"
 review_window = "last_24h"
 planning_window = "next_24h"
 timezone = "Asia/Kuala_Lumpur"
-```
+
+Config source:
+farplane/automations.md automation-config id="farplane-daily-interval"
 
 Overrides:
-
-```text
 read_parent_interval = "latest weekly_interval report when present"
 plan_progress = "light"
 goal_drift = "light"
 ticket_board_drift = "light"
 ```
-```
+<!-- /farplane:automation-prompt -->
 
 ## Weekly Interval
 
-| Field | Value |
-| --- | --- |
-| Automation id | `farplane-weekly-interval` |
-| Name | `Farplane Weekly Interval` |
-| Kind | `cron` |
-| RRULE | `FREQ=WEEKLY;BYDAY=MO;BYHOUR=5;BYMINUTE=45;BYSECOND=0` |
-| Workspace | `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane` |
+<!-- farplane:automation-config id="farplane-weekly-interval" format="toml" -->
+```toml
+id = "farplane-weekly-interval"
+name = "Farplane Weekly Interval"
+kind = "cron"
+status = "active"
+workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 
-Use `$interval-update`.
+[schedule]
+type = "weekly"
+timezone = "Asia/Kuala_Lumpur"
+days = ["Mon"]
+time = "05:45"
+
+```
+<!-- /farplane:automation-config -->
+
+<!-- farplane:automation-prompt id="farplane-weekly-interval" -->
+```text
+Use $interval-update.
+
+Run the weekly Farplane interval. Review the last week, read child daily
+intervals when present, update the week-scale plan, and emit Pulse or Goal
+Advisor guidance rather than doing ticket implementation directly.
 
 Params:
-
-```text
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "weekly_interval"
 review_window = "last_week"
 planning_window = "next_week"
 timezone = "Asia/Kuala_Lumpur"
-```
+
+Config source:
+farplane/automations.md automation-config id="farplane-weekly-interval"
 
 Overrides:
-
-```text
 read_child_intervals = "all daily_interval reports inside last_week"
 plan_progress = true
 codex_attention_drift = true
@@ -112,28 +153,61 @@ skill_refinement = "when sources exist"
 docs_consolidation = "when sources exist"
 priority_planning = true
 ```
+<!-- /farplane:automation-prompt -->
 
 ## Active-Hours Taste Loop
 
-| Field | Value |
-| --- | --- |
-| Automation id | `farplane-active-hours-taste-loop` |
-| Name | `Farplane Active-Hours Taste Loop` |
-| Kind | `cron` |
-| RRULE | `FREQ=HOURLY;INTERVAL=1` |
-| Workspace | `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane` |
-| Status | `active in Codex app; gated by active-hours config` |
+<!-- farplane:automation-config id="farplane-active-hours-taste-loop" format="toml" -->
+```toml
+id = "farplane-active-hours-taste-loop"
+name = "Farplane Active-Hours Taste Loop"
+kind = "heartbeat"
+status = "active"
+target_thread_id = "019effea-bb95-7333-81df-935820114877"
 
-Use `$taste-loop`.
+[schedule]
+type = "active_hours_interval"
+timezone = "Asia/Kuala_Lumpur"
+days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
+start = "10:00"
+end = "18:00"
+interval_minutes = 60
+
+```
+<!-- /farplane:automation-config -->
+
+<!-- farplane:automation-prompt id="farplane-active-hours-taste-loop" -->
+```text
+Use $taste-loop.
+
+Run one scheduled active-hours Taste Loop beat for Farplane. Read the
+UI-editable config from farplane/automations.md, use Codex automation memory as
+the active worker ledger, and reuse or resume an active worker before creating
+any new worker. Select product-lane artifact workflows, not broad skill
+summaries. Create or hand off at most one reviewable artifact workflow, then
+route human feedback through the worker thread and optimize-with-human.
+
+Do not create repo/runtime artifacts, worker threads, feedback cards, or
+Telegram messages for ordinary no-op beats.
 
 Params:
-
-```text
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-```
+top_n = 3
+max_actions_per_beat = 1
+max_open_feedback = 3
+target_groups = ["content-social", "content-video", "frontend", "harness", "self-improvement"]
+output_channels = ["local_report", "telegram_ready", "farplane_ui_ready"]
+cooldown_hours = 24
+convergence_window = 5
+minimum_delta = "qualitative_threshold"
+log_noop = false
+
+Config source:
+farplane/automations.md automation-config id="farplane-active-hours-taste-loop"
 
 Overrides:
-
-```text
-none
+controller_memory = "Codex automation memory.md"
+worker_state = "reuse active_worker before creating any new worker"
+noop_policy = "no repo/runtime/thread/artifact/feedback/Telegram side effects unless diagnostic logging is enabled"
 ```
+<!-- /farplane:automation-prompt -->
