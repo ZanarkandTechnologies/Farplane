@@ -1,0 +1,10 @@
+{
+  "artifact_id": "TL-EXP-003",
+  "score": null,
+  "verdict": null,
+  "selected_proposal": null,
+  "feedback": null,
+  "labels": ["idea", "social_thread", "planning", "customer_pitch"],
+  "next_instruction": null,
+  "status": "awaiting_feedback"
+}

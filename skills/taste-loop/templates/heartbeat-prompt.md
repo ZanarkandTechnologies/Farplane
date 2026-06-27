@@ -260,9 +260,13 @@ skills/taste-loop/templates/taste-proposal.md, then use $optimize-with-human
 with target=<workflow_id>, objective=<planning and execution quality>,
 channel=telegram, feedback_policy=ask_when_artifact_ready, and
 phases=planning,execution. Each TasteProposal must include audience/buyer,
-taste insight, artifact shape, core angle, 5+ execution beats, why it could win,
-cringe risks, references or taste pack, feedback question, and next step if
-approved. When Kenji approves a proposal, freeze the approved brief, log an
+taste insight, artifact shape, core angle, 5+ execution beats, why it could
+win, cringe risks, references or taste pack, feedback question, and next step
+if approved. Before the options, frame the Telegram-facing proposal like a
+customer pitch: what we are trying to make, the bigger problem, the proposed
+solution, why the idea should feel desirable, and exactly what taste decision
+Kenji is making. Do not send an internal planning table as the primary review
+surface. When Kenji approves a proposal, freeze the approved brief, log an
 execution experiment in progress.md, and execute the artifact. When Kenji
 replies in this thread, append feedback to progress.md and continue the right
 phase. Stop only on keep/approve/convergence/budget/blocker.

@@ -1,0 +1,35 @@
+Taste Loop TASK-0240: Pocket Intern social thread, revised pitch
+
+Context: We are trying to make the first AGI Toy Shop social thread for Pocket Intern: a tiny wind-up office assistant that stamps "ship it" on sticky notes and comes with a fake employee badge. We are not drafting or posting the thread yet. We are choosing the premise worth turning into the thread.
+
+Bigger problem: people do not need another productivity framework. They need a funny, physical way to end the endless almost-shipping loop: rewrite the post, rename the project, tweak the launch note, and never get the tiny win out the door.
+
+Proposed solution: Pocket Intern becomes the fake coworker that makes shipping physical. You write the thing on a sticky note, wind up the intern, stamp "ship it," and turn a vague intention into a desk ritual you can photograph, send to a friend, or use as a tiny public commitment.
+
+Why you should care: the idea should make a buyer think, "That is funny and weirdly useful. I want to show someone." If this premise does not make you feel the product, we should revise before wasting effort on a thread.
+
+What you are judging: does this customer-facing premise feel strong enough to draft the social thread?
+
+Best bet: Imagine The Fake Intern Who Makes Shipping Physical
+
+Pitch: Imagine the fake intern who makes shipping physical. It cannot write your launch plan, join Slack, or fix your life. It can do one perfect thing: stamp "ship it" on the note you have been avoiding until your brain accepts the bit and sends the thing.
+
+Why it might work: Pocket Intern stops being novelty merch and becomes a tiny finishing ritual. The badge makes it feel like a fake employee; the stamp makes the moment of shipping feel real; the whole thing is absurd enough to lower the stakes.
+
+How it shows up in the thread:
+1. Open with: "Imagine the fake intern who makes shipping physical."
+2. Name the pain: everything is almost ready, but "almost" has no satisfying finish line.
+3. Reveal Pocket Intern: tiny wind-up employee, fake badge, one sacred workplace power: the "ship it" stamp.
+4. Show the ritual: write one scary or stuck task on a sticky note, wind the intern, stamp it, ship before the bit wears off.
+5. Make it giftable: for the friend with 47 ideas, the founder with too many tabs, or the student who needs a ridiculous desk boss.
+
+Best moment: "Pocket Intern. Under $40. Zero equity. One job: stamp the thing into the world."
+
+Risk: if this gets too self-help or founder-productivity coded, the joke flattens. It has to feel like a toy people want, not a framework.
+
+Reply with: approve, revise, or reject + one short reason.
+
+Desktop refs only:
+- tickets/TASK-0240/artifacts/taste-proposal-TL-EXP-003.md
+
+Planning only. No social thread execution or external posting yet.

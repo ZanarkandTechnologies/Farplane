@@ -78,6 +78,8 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   dedicated worker thread is needed; spams more feedback than budget allows;
   creates a separate workers.jsonl ledger instead of reusing automation memory;
   asks Kenji to judge a thin hook-only card when the artifact needs a proposal;
+  asks Kenji to judge internal planning metadata instead of a customer-facing
+  pitch with context, problem, solution, and the exact decision;
   writes repo/runtime files for a simple no-op beat; executes full artifacts
   before an idea passes when the artifact is not itself the tiny planning test;
   edits target skills after one rejection instead of logging and rerunning a
@@ -141,6 +143,9 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     best-bet briefs, storyboard premises, offer angles, proof angles, or hook
     batches with enough audience, insight, beats, risks, and next step detail
     for Kenji to judge.
+  - [ ] Make planning feedback customer-facing before it is evaluative:
+    explain the task context, bigger problem, proposed solution, what Kenji is
+    judging, and a vivid marketing pitch that makes the idea feel desirable.
   - [ ] Treat execution artifacts as second-stage outputs: landing pages,
     reels, carousels, scripts, proof reports, demos, or shipped proposals.
   - [ ] Use the fixed AGI Toy Shop scenario when no live product context is
@@ -313,6 +318,10 @@ without asking follow-up questions.
 
 ```text
 TasteProposal:
+  task_context:
+  bigger_problem:
+  proposed_solution:
+  customer_pitch:
   title:
   one_line_bet:
   audience_or_buyer:
@@ -418,12 +427,15 @@ First log a planning experiment proposal in progress.md, then create one to
 three TasteProposal planning artifacts for Kenji. Use $optimize-with-human with
 target=<workflow>, objective=<what should improve>, channel=telegram,
 feedback_policy=ask_when_artifact_ready, and phases=planning,execution. Each
-proposal must include audience/buyer, taste insight, artifact shape, core
-angle, 5+ execution beats, why it could win, cringe risks, references or taste
-pack, feedback question, and next step if approved. When Kenji approves a
-proposal, freeze the approved brief, log an execution experiment proposal in
-progress.md, and execute the artifact. When Kenji replies, append feedback to
-progress.md and continue the right phase. Stop only on
+proposal must first sell the idea like a customer-facing pitch: task context,
+bigger problem, proposed solution, what Kenji is judging, and vivid marketing
+language that makes the concept feel desirable. Then include audience/buyer,
+taste insight, artifact shape, core angle, 5+ execution beats, why it could
+win, cringe risks, references or taste pack, feedback question, and next step
+if approved. When Kenji approves a proposal, freeze the approved brief, log an
+execution experiment proposal in progress.md, and execute the artifact. When
+Kenji replies, append feedback to progress.md and continue the right phase.
+Stop only on
 keep/approve/convergence/budget/blocker.
 ```
 
@@ -554,6 +566,9 @@ Return and write:
 - Do not ask Kenji to judge shallow hook cards for non-hook artifacts. Planning
   proposals need audience, insight, artifact shape, execution beats, why it
   could win, risks, and next step.
+- Do not ask Kenji to judge an internal option sheet. Make the first screen
+  customer-facing: what are we making, what bigger problem does it solve, why
+  should he care, and what exact taste decision should he make?
 - Do not send website feedback without a browser-viewable `preview_ref`, local
   URL, deploy URL, or Farplane UI-ready preview manifest.
 - Do not send phone-facing Telegram feedback with only `localhost`. Include a

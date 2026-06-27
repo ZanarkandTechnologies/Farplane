@@ -8,11 +8,17 @@ kind: planning-artifact-template
 # Taste Proposal
 
 Use this for Taste Loop planning feedback when Kenji needs enough detail to
-judge whether an artifact is worth executing. A hook-only card is not enough
-unless the artifact itself is only a hook.
+judge whether an artifact is worth executing. Treat Kenji like a customer or
+first buyer whose taste reaction is the signal, not like an internal reviewer
+grading a plan. A hook-only card is not enough unless the artifact itself is
+only a hook.
 
 ```text
 TasteProposal:
+  task_context:
+  bigger_problem:
+  proposed_solution:
+  customer_pitch:
   title:
   one_line_bet:
   audience_or_buyer:
@@ -40,11 +46,21 @@ TasteProposal:
 Telegram digest shape:
 
 ```text
+Context: <what we are trying to make and for whom>
+Problem: <the bigger painful or funny customer problem>
+Solution: <how this product/artifact solves it>
+What you are judging: <one clear decision Kenji should make>
+
 A. <title>
-Bet: <one_line_bet>
-Audience: <audience_or_buyer>
-Story: <3-5 compressed execution beats>
+Pitch: Imagine <customer-facing version of the idea in vivid marketing language>
+Why it might work: <customer desire, taste insight, or conversion reason>
+How it shows up: <3-5 compressed execution beats>
 Best moment: <specific line, visual, scene, or mechanic>
 Risk: <what could make it cringe>
 If approved: <next execution artifact>
 ```
+
+The first screen should answer "what are we making?", "what problem are we
+solving?", and "why should I care?" before listing options. The option copy
+should feel like a pitch someone could get excited about, not a row from a
+planning spreadsheet.

@@ -16,9 +16,9 @@ approval_required: false
 requires_qa: true
 requires_demo: false
 created_at: 2026-06-27T22:50:30+08:00
-updated_at: 2026-06-27T23:51:01+08:00
-next_action: wait for Kenji's TL-EXP-002 planning feedback; do not draft the social thread until a proposal is approved
-last_verification: TL-EXP-002 TasteProposal Telegram digest sent from replacement worker thread 019f09c4-ecda-7423-a80c-7ab5a8e53788
+updated_at: 2026-06-28T00:13:54+08:00
+next_action: wait for Kenji's TL-EXP-003 planning feedback; do not draft the social thread until the customer-facing premise is approved
+last_verification: TL-EXP-003 customer-facing TasteProposal Telegram digest sent from worker thread 019f09c4-ecda-7423-a80c-7ab5a8e53788
 ---
 
 # TASK-0240: Taste Loop social thread proposal worker
@@ -107,7 +107,7 @@ worker:
 - `selected_at:` 2026-06-27T22:50:30+08:00
 - `valid_open_feedback_count:` 1
 - `legacy_invalid_feedback_count:` 4
-- `status:` waiting_for_tl_exp_002_planning_feedback
+- `status:` waiting_for_tl_exp_003_planning_feedback
 
 ## Links
 

@@ -180,3 +180,75 @@ experiment:
 - `publish_boundary:` planning only; no social thread execution or external posting.
 - `next_action:` wait for Kenji's TL-EXP-002 planning feedback; do not draft
   the execution thread until a planning proposal is approved.
+
+## 2026-06-28T00:12:30+08:00
+
+- `operator_feedback_processed:` true
+- `feedback_for:` `TL-EXP-002`
+- `verdict:` revise
+- `selected_proposal:` none
+- `feedback:` The way the idea was pitched is boring. Do not make Kenji judge
+  internal planning metadata. Treat him like a customer / first buyer whose
+  taste and ideas we want. He wants to feel the marketing in the feedback
+  request. The message needs context about what we are trying to make and the
+  original task. Propose the bigger problem and how the product/artifact solves
+  it. Use language like: "Imagine the fake intern who makes shipping physical!"
+- `result:` revise
+- `promotion_decision:` keep_local
+- `feedback_artifact:` `tickets/TASK-0240/artifacts/feedback-TL-EXP-002.json`
+- `supersedes_request:` `tickets/TASK-0240/artifacts/feedback-request-TL-EXP-002.md`
+- `next_action:` create TL-EXP-003 with the updated customer-facing
+  TasteProposal contract; do not execute the social thread.
+
+```yaml
+experiment:
+  id: TL-EXP-003
+  phase: planning
+  target: trust_distribution/social_thread
+  scenario: tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md
+  approved_plan_ref: null
+  hypothesis: >
+    A single best-bet customer-facing TasteProposal that opens with context,
+    bigger problem, proposed solution, buyer-facing pitch, and the exact taste
+    decision will make Kenji feel the marketing and decide whether the social
+    thread should be drafted.
+  skill_delta_candidate: >
+    keep_local: Use the updated TasteProposal contract to replace internal
+    option sheets with customer-facing pitch framing for Telegram feedback.
+  rollout_batch:
+    - proposal_or_artifact_id: TL-EXP-003-taste-proposal
+      proposal_ref: tickets/TASK-0240/artifacts/taste-proposal-TL-EXP-003.md
+      plan: Best-bet customer-facing premise for Pocket Intern as the fake intern who makes shipping physical.
+      expected_feedback: Approve, revise, or reject with one short reason.
+  selected_rollout: pending
+  feedback: pending
+  result: pending
+  promotion_decision: keep_local
+```
+
+- `proposal_refs:`
+  - `tickets/TASK-0240/artifacts/taste-proposal-TL-EXP-003.md`
+  - `tickets/TASK-0240/artifacts/telegram-message-TL-EXP-003.txt`
+  - `tickets/TASK-0240/artifacts/feedback-request-TL-EXP-003.md`
+  - `tickets/TASK-0240/artifacts/feedback-schema-TL-EXP-003.json`
+  - `tickets/TASK-0240/artifacts/feedback-TL-EXP-003.json`
+- `status:` TL-EXP-003 customer-facing proposal generated; Telegram send pending.
+
+## 2026-06-28T00:13:54+08:00
+
+- `worker_thread:` `019f09c4-ecda-7423-a80c-7ab5a8e53788`
+- `skill:` `telegram-message`
+- `feedback_request:` `tickets/TASK-0240/artifacts/feedback-request-TL-EXP-003.md`
+- `telegram_message:` `tickets/TASK-0240/artifacts/telegram-message-TL-EXP-003.txt`
+- `notification_status:` Telegram message sent.
+- `parse_mode:` none
+- `view_mode:` inline_summary
+- `reply_action:` Kenji can reply with `approve`, `revise`, or `reject` plus
+  one short reason from Telegram without opening the local artifact.
+- `feedback_schema:` `tickets/TASK-0240/artifacts/feedback-schema-TL-EXP-003.json`
+- `feedback_target:` `tickets/TASK-0240/artifacts/feedback-TL-EXP-003.json`
+- `turn_exit_gate:` waiting_for_feedback
+- `waiting_for_feedback:` true
+- `publish_boundary:` planning only; no social thread execution or external posting.
+- `next_action:` wait for Kenji's TL-EXP-003 planning feedback; do not draft
+  the execution thread until the customer-facing premise is approved.

@@ -7,9 +7,11 @@ target: trust_distribution/social_thread
 channel: telegram
 feedback_policy: ask_when_artifact_ready
 created_at: 2026-06-27T23:47:27+08:00
-status: sent_waiting_for_feedback
+status: revised_superseded_by_tl_exp_003
 sent_at: 2026-06-27T23:49:39+08:00
 worker_thread: 019f09c4-ecda-7423-a80c-7ab5a8e53788
+feedback_at: 2026-06-28T00:12:30+08:00
+result: revise
 ---
 
 # Feedback Request
@@ -59,3 +61,8 @@ Feedback shape:
 Pause policy:
 Wait for planning approval before drafting the social thread. Do not publish
 externally.
+
+Result:
+Superseded by `tickets/TASK-0240/artifacts/feedback-request-TL-EXP-003.md`
+after Kenji asked for customer-facing marketing context instead of internal
+planning metadata.
