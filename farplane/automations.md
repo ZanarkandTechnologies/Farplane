@@ -243,7 +243,8 @@ type = "active_hours_interval"
 timezone = "Asia/Kuala_Lumpur"
 days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 start = "10:00"
-end = "18:00"
+# Overnight window: active from 10:00 through 00:59; inactive 01:00-09:59.
+end = "01:00"
 interval_minutes = 60
 
 ```
