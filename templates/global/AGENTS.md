@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.15
+template_version: 0.2.16
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -51,11 +51,6 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   materially branching decisions. Explore and recommend a path, but ask for
   explicit confirmation before implementing or locking the direction unless the
   user, active ticket, or controlling spec has already chosen it.
-- Treat low-confidence user phrasing such as "I think", "maybe", "not sure",
-  "low confidence", or "what do you think" as an invitation to discuss,
-  pressure-test, or advise. Do not silently convert it into an implementation
-  mandate; respond with the right level of pushback, options, or a recommended
-  checkpoint.
 - Verify before claiming completion.
 - Prefer visible artifacts over transcript memory.
 - Keep global context lean. Put detailed procedures in skills, feature specs, tickets,
@@ -200,8 +195,12 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   generating more material.
 - When creating durable Markdown artifacts, start with YAML front matter for
   machine-readable metadata and keep the main body for the human contract,
-  analysis, or narrative. Follow the project lifecycle spec when present; in
-  Farplane, use `docs/features/FEAT-0060-registry-backed-documentation-os.md`.
+  analysis, or narrative. Follow the project lifecycle or documentation spec
+  when present.
+- When proposing policy, prompt, workflow, UX, or architecture changes, preview
+  the concrete delta before editing: show `Before`, `After`, and at least one
+  realistic `Example` using representative data, wording, or workflow state.
+  Keep it concise, but make the behavioral change inspectable.
 - When summarizing completed changes to policy, prompts, docs, skills,
   workflows, UX, APIs, or behavior, include a compact `Before:` / `After:` /
   `Example:` delta unless the change is truly tiny or the user asked for a
@@ -258,6 +257,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   and use a Goal Packet: `ticket.md` for the task contract, `program.md` for
   loop configuration, and `progress.md` for append-only turn logs. The Goal
   prompt is generated from those files; it is not the durable source of truth.
+- When the operator asks to implement or `impl` a specific ready ticket and the
+  project provides `goal-advisor`, treat that as approved Goal execution:
+  invoke `goal-advisor` to create or update the Goal Packet and native Goal
+  prompt, then start and run the compiled Goal route unless execution inputs,
+  approval gates, or destructive/external side effects are genuinely blocking.
 - For material Goal-backed ticket work, put QA evidence review and
   reviewer-lane completion review in the ticket `Done / Proof` or Goal program
   final checkpoint. Run or request those reviews before claiming
@@ -271,6 +275,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Store detailed proof, review reports, blockers, and follow-up scope in
   ticket-scoped artifacts, `progress.md`, or concise ticket links rather than
   in chat.
+- When converting a discussion into a ticket, preserve the concrete examples,
+  accepted and rejected options, and decision rationale. Do not compress away
+  the details that made the plan reviewable in chat; put bulky examples in a
+  ticket artifact and link them from the ticket when needed.
 - For material feature tickets, keep critical-path proof inside the existing
   `Done / Proof` body rather than adding a new schema by default. Use ordinary
   bullets to show the full claimed path, the smaller sanity checks run in
@@ -313,36 +321,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   has planning or execution phases. Codex native work phases usually own that
   behavior; use explicit planning or execution skills only when their package is
   the best owner for the artifact or workflow.
-- Treat numeric skill tiers as compounding leverage classes for upgrade
-  priority. Treat first-load todo links as the separate loading contract derived
-  from those classes.
-- Default Tier 1 behavior skills:
-  - `advise`: choose among real options and recommend one path.
-  - `consolidate`: compress artifacts into their minimal owner-correct form
-    while preserving required behavior, proof, IDs, and actionability.
-  - `reference-grounding`: ground claims in local, official, peer, or supplied
-    evidence.
-  - `prototyping`: prove a representative sample before broad scale.
-- Common Tier 2 workflow skills:
-  - `plan`: compose active skill todos, grounding/search budget, proof target,
-    and handoff when planning can reduce wasted work.
-  - `research:*`: gather parity, gap, official-docs, code-pattern, competitor,
-    user-grounding, or source-synthesis evidence.
-  - `review`: callable TAS wrapper over docs-owned review rubrics for material
-    plans, implementations, evidence, prompts, skills, docs, and completion
-    claims.
-  - `bash-efficiency`: use shell-heavy workflows safely, quickly, and
-    reproducibly.
-- Meta and harness skills:
-  - `harness-advisor`: decide where a Farplane harness improvement belongs.
-  - `skill-maintenance`: maintain skill frontmatter, checklists, registry
-    metadata, and skill-system docs.
-  - `init-advisor`: bootstrap a project with docs-first operating files,
-    commands, runtime, QA paths, and reusable planning/build prompts.
-  - `agent-behavior-test`: capture one isolated child-agent behavior probe.
-  - `agent-qa-test`: run adversarial readiness tests for apps, prompts, skills,
-    or workflows.
-  - `eval`: run or scaffold repeatable harness-native evals.
+- Keep detailed skill taxonomy, tiers, registries, and project-specific skill
+  inventories in project skill docs or project `AGENTS.md`. The global rule is
+  the loading protocol: choose the relevant skill, read it fully, bind its
+  signature, load only relevant references or linked skills, apply its checklist
+  when present, and preserve visible todos for active long-running work.
 - Delegate when independent judgment, context isolation, or parallel evidence
   materially improves the outcome.
 - Treat persistent Codex threads and native subagents as different delegation
@@ -361,14 +344,13 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   such as review, QA, research, or focused implementation evidence.
 - Use reviewer lanes for plans, implementations, prompts, evidence bundles,
   skill changes, and completion claims.
-- Use QA lanes for browser/user-visible proof, test runs, screenshots, traces,
-  and artifact capture.
-- For browser/user-visible proof, prefer `agent-browser` or the repo's
-  `qa-tester` lane first because it operates the page directly and captures
-  screenshots, snapshots, console logs, and errors with less harness overhead.
-  Use Playwright when the flow is already understood and the task needs a
-  durable regression test, explicit scripted coverage, or an existing
-  Playwright suite repair.
+- For material proof, use the ticket `Done / Proof` block or Goal program as
+  the scoreboard. Delegate QA or review when independent evidence matters, and
+  link the resulting artifacts instead of self-certifying.
+- For browser/user-visible proof, use the project's browser-operation or QA
+  lane for screenshots, snapshots, console logs, and page errors. Use Playwright
+  when the flow needs durable scripted regression coverage or an existing suite
+  already owns the path.
 - Use agent testing lanes when the behavior of another agent, prompt, skill, or
   workflow is the thing being tested.
 - Before spawning a nontrivial subagent, write or identify a durable

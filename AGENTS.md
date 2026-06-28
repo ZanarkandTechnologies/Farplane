@@ -118,6 +118,10 @@ When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
 structured outputs, eval prompts, or agent instruction prompts, load
 `docs/fundamentals/prompt-engineering.md` as the shared prompt design reference.
 
+When creating durable Farplane Markdown artifacts, follow
+`docs/features/FEAT-0060-registry-backed-documentation-os.md` for lifecycle,
+metadata, registry, and documentation-system expectations.
+
 When the operator explicitly wants audit-then-fix recovery after a likely
 assistant miss, use the current correction surfaces: fix same-scope misses
 first, then route durable learning to `gap-analysis`, `optimize-harness`,

@@ -2,13 +2,17 @@
 title: Template Registry
 status: active
 owner: Farplane
-updated_at: 2026-06-16
+updated_at: 2026-06-28
 ---
 
 # Template Registry
 
 `docs/templates/registry.jsonl` tracks high-impact templates whose structure can
 materially change harness behavior or framework rollout.
+
+Use `docs/templates/global-agents-qa-checklist.md` before changing
+`templates/global/AGENTS.md`. It is a companion process doc, not a tracked
+template row, unless it later becomes a reusable template with consumers.
 
 ## Current Scope
 
