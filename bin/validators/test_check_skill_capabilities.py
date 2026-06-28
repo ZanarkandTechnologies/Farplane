@@ -16,8 +16,8 @@ import check_skill_capabilities as csc
 
 def valid_fixture(**overrides: object) -> dict[str, object]:
     fixture: dict[str, object] = {
-        "skill": "notion-context",
-        "operation": "tasks_this_week",
+        "skill": "notion-task-field-fill",
+        "operation": "compact_task_context",
         "kind": "mcp_query",
         "expected": "normalized_task_rows_or_connector_unavailable",
         "observed_failure": "notion-query-data-sources not found",
@@ -82,7 +82,7 @@ class SkillCapabilityTests(unittest.TestCase):
             fixture = csc.validate_capability(valid_fixture(), path)
             packet = csc.failure_packet(fixture, "scheduled_automation")
             ticket = csc.render_repair_ticket("TASK-9999", packet)
-            self.assertIn("skill=notion-context; operation=tasks_this_week", ticket)
+            self.assertIn("skill=notion-task-field-fill; operation=compact_task_context", ticket)
             self.assertIn("connector_contract_mismatch", ticket)
 
     def test_repair_ticket_dedupes_existing_ticket(self) -> None:
@@ -102,7 +102,7 @@ class SkillCapabilityTests(unittest.TestCase):
             "goal_ref": "planner",
             "repeated_failure_count": 2,
             "blocked_workflows": ["planning"],
-            "affected_skills": ["notion-context"],
+            "affected_skills": ["notion-task-field-fill"],
             "manual_intervention_cost": "high",
             "confidence": "high",
             "expected_action_policy": "auto_ticket",

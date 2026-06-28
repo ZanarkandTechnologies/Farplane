@@ -1,5 +1,5 @@
 {
-  "skill": "notion-context",
+  "skill": "notion-task-field-fill",
   "operation": "pinned_tasks_read_check",
   "kind": "mcp_query",
   "expected": "pinned_task_pages_read_before_task_ranking",
@@ -24,6 +24,6 @@
   "evidence_refs": [
     "skills/notion-task-field-fill/scripts/notion_pinned_read_check.py",
     "skills/notion-task-field-fill/scripts/test_notion_pinned_read_check.py",
-    "/Users/kenjipcx/.codex/skills/notion-context/SKILL.md"
+    "skills/notion-task-field-fill/SKILL.md"
   ]
 }

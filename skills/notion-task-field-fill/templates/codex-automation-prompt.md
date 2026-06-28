@@ -19,8 +19,8 @@ Steps:
    - At most 1 Tasks candidate query, `page_size <= 25`.
    - Always pass `filter_properties`; never query Tasks, Projects, or Goals
      broadly in this automation.
-   - Do not use `notion-context` or search for initial Task candidates in this
-     scheduled mode; wrappers may hide broad queries.
+   - Do not use a separate Notion wrapper skill or search for initial Task
+     candidates in this scheduled mode; wrappers may hide broad queries.
    - Do not repeat an equivalent data-source query. If compact querying fails,
      record `context_gap: compact_query_failed` and stop instead of retrying
      broadly.

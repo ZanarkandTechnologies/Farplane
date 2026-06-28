@@ -415,7 +415,7 @@ Run:
 ```bash
 python3 bin/validators/check_skill_capabilities.py validate
 python3 bin/validators/check_skill_capabilities.py list
-python3 bin/validators/check_skill_capabilities.py score --skill notion-context --operation tasks_this_week
+python3 bin/validators/check_skill_capabilities.py score --skill notion-task-field-fill --operation compact_task_context
 ```
 
 Capability fixtures are discovery and repair inputs. The generated skill

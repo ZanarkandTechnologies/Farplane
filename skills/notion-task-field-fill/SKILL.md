@@ -4,6 +4,8 @@ description: "Turn incomplete Notion Tasks into field proposals, safe high-confi
 tier: 3
 group: personal-ops
 source: local
+template_uses:
+  skill-template: "0.3.7"
 common_chains:
   after: ["interval-update"]
 allowed-tools: Read, Glob, Grep, Bash
@@ -15,50 +17,76 @@ Use this skill when Kenji asks to fill missing Notion Task fields, run a task
 hygiene automation, review newly created unfilled tasks, or prepare a weekly
 strategy `Task Hygiene` preflight.
 
-This is a proposal-first workflow. It reads Notion context through MCP-backed
-Notion skills and private named handles, writes a local proposal artifact, and
-only applies live Notion property updates from typed high-confidence proposals.
+This is a proposal-first workflow. It reads private Notion handles and compact
+query recipes from `/Users/kenjipcx/.codex/private/docs/notion.md`, queries
+Notion only through MCP, writes a local proposal artifact, and only applies live
+Notion property updates from typed high-confidence proposals.
+
+## Skill Signature
+
+```text
+notion_task_field_fill(run_envelope, private_context?, mcp_tools?)
+  -> proposal_artifacts + optional_typed_writes + readback_receipts
+
+state:
+  reads(/Users/kenjipcx/.codex/private/TOOLS.md,
+        /Users/kenjipcx/.codex/private/docs/notion.md,
+        Notion MCP Tasks/Projects/Goals rows?, Telegram config?)
+  writes(.farplane/state/notion-task-field-fill/runs/<run-id>/*,
+         optional high-confidence Notion field updates,
+         optional Telegram review request)
+
+gates:
+  private_handles_loaded; compact_query_contract_honored;
+  rows_normalized_before_reasoning; no_raw_private_ids_in_artifacts;
+  high_confidence_only_live_writes; readback_verified_for_live_writes
+
+routes:
+  telegram-message | interval-update | review
+
+fails:
+  uses a separate Notion wrapper skill; broad Notion page dump; semantic-search task
+  discovery; public Notion API fallback; writes medium/low-confidence fields;
+  stores private URLs, IDs, or tokens in tracked artifacts
+```
+
+## Phase Boundary
+
+This skill follows Tier 0 phases inline. Call `review` only when changing this
+skill, adding a live-write path, or judging a material proof bundle. Do not call
+a separate Notion wrapper skill at runtime; the private Notion doc plus MCP
+tools are the dependency boundary.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Load the request, mode, run window, target fields, and destination before
-      fetching Notion rows.
-- [ ] 2. Load private tool context from `/Users/kenjipcx/.codex/private/TOOLS.md`
-      and `/Users/kenjipcx/.codex/private/docs/notion.md`; use named handles
-      only in tracked artifacts.
-- [ ] 3. Enforce the compact-query contract before the first Notion MCP call:
-      bounded call budget, `filter_properties`, small page sizes, no repeated
-      equivalent broad queries, and no raw page dumps.
-- [ ] 4. In scheduled `notify` mode, do not use `notion-context` or search for
-      initial Task candidate discovery; use exactly one explicit compact
-      Notion MCP Tasks query, then normalize before any context fetch.
-- [ ] 5. Use `notion-context` only after candidate discovery, for latest pinned
-      `Plan Week`, recent pinned planning pages, not-done Projects, active
-      Goals, and project/area context when those sources are needed.
-- [ ] 6. Query recent candidate Tasks in Asia/Kuala_Lumpur time: default to the
-      last `N` hours for scheduled runs, or this week when the user asks for a
-      weekly cleanup sample.
-- [ ] 7. Keep only incomplete or planning-relevant Tasks with at least one missing
-      target field: `Act Time`, `Project`, `Areas`, `Attention Required`, or
-      `Tags`.
-- [ ] 8. Normalize rows before reasoning; never pass raw Notion rows or formula
-      URLs into the proposal artifact.
-- [ ] 9. Infer fields independently: a high-confidence `Attention Required` patch
-      can be proposed even when `Project` or `Areas` abstain.
-- [ ] 10. Prefer existing `Project` relations over title-only matching; use project
-      context to inherit `Areas` when the mapping is unambiguous.
-- [ ] 11. Default `Act Time` to today's local date only when task content does not
-      name another date, due date, meeting, deadline, or scheduling constraint.
-- [ ] 12. Abstain from any field whose evidence conflicts, especially project/area
-      mismatches; record the exact abstention reason.
-- [ ] 13. Mark low-confidence fields as `needs_kenji`; send a concise Telegram
-      review request when Telegram is configured, and keep the local message
-      artifact when it is not.
-- [ ] 14. In live mode, apply only high-confidence typed patches and verify readback;
-      keep medium/low-confidence fields out of Notion writes.
-- [ ] 15. Use the native execution phase for proof/writeback/review before
-      claiming a new automation, skill change, or live-write path is ready.
+- [ ] 1. Bind inputs.
+      Resolve `mode`, run window, target fields, candidate statuses, artifact
+      directory, and live-write allowance before fetching Notion rows.
+- [ ] 2. Load private context.
+      Read `/Users/kenjipcx/.codex/private/TOOLS.md` and
+      `/Users/kenjipcx/.codex/private/docs/notion.md`; use named handles only
+      in tracked artifacts.
+- [ ] 3. Discover candidates.
+      Run one compact MCP Tasks query with bounded page size,
+      `filter_properties`, no repeated equivalent query, and no raw page dump.
+- [ ] 4. Normalize or stop.
+      Normalize and filter candidate rows before reasoning; record
+      `private_context_missing`, `unexpected_task_properties`,
+      `compact_query_failed`, or `connector_unavailable` when the source path
+      is unsafe.
+- [ ] 5. Enrich only as needed.
+      Fetch Plan Week, pinned pages, Projects, Goals, and area mappings through
+      compact MCP queries only when candidates need that context.
+- [ ] 6. Decide fields independently.
+      Produce per-field decisions for `Act Time`, `Project`, `Areas`,
+      `Attention Required`, and `Tags`; abstain on conflicting evidence.
+- [ ] 7. Escalate or write safely.
+      Queue Telegram/local review for low-confidence or conflicted fields; in
+      live mode write only high-confidence typed patches and verify readback.
+- [ ] 8. Finish with proof.
+      Write proposal artifacts, query ledger, source gaps, Telegram fallback,
+      live receipts, and any blocker before claiming the run is complete.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Job
@@ -96,7 +124,7 @@ Accept a compact run envelope:
   "timezone": "Asia/Kuala_Lumpur",
   "fields": ["Act Time", "Project", "Areas", "Attention Required", "Tags"],
   "candidate_statuses": ["Not started", "In progress", "Review"],
-  "artifact_dir": ".harness/state/notion-task-field-fill/runs/<run-id>"
+  "artifact_dir": ".farplane/state/notion-task-field-fill/runs/<run-id>"
 }
 ```
 
@@ -106,10 +134,12 @@ Asia/Kuala_Lumpur.
 
 ## Context Sources
 
-Load these through Notion MCP and `notion-context` where available.
-Scheduled `notify` mode has a stricter order: candidate Tasks must come from
-the explicit compact Tasks query in the next section, not from a broad wrapper
-or search result.
+Load private handles, schema notes, compact property IDs, project/area mappings,
+and task-creation defaults from
+`/Users/kenjipcx/.codex/private/docs/notion.md`. Query the live workspace
+through Notion MCP only. Scheduled `notify` mode has a strict order: candidate
+Tasks must come from the explicit compact Tasks query in the next section, not
+from a broad wrapper or search result.
 
 - recent candidate Tasks from the private handle `notion.tasks.source`
 - latest pinned `Plan Week` page body

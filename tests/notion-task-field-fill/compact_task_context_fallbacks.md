@@ -1,30 +1,30 @@
-# notion-context tasks_this_week fallback recipe
+# notion-task-field-fill compact_task_context fallback recipe
 
-This mirror documents how `notion-context.tasks_this_week` should behave when
-two different Notion MCP surfaces are available at different times.
+This mirror documents how `notion-task-field-fill.compact_task_context` should
+behave when different Notion MCP surfaces are available at different times.
 
 ## Goal
 
-Return normalized task rows for the canonical weekly Tasks view when possible.
-When exact enumeration is unavailable, report connector state and continue with
-a safe local fallback for Farplane automation. Do not use semantic search to
-approximate task rows.
+Return normalized task context from compact Tasks/Projects/Goals queries when
+possible. When exact enumeration is unavailable, report connector state and
+continue with safe local artifacts for Farplane automation. Do not use semantic
+search to approximate task rows.
 
 ## Canonical Inputs
 
-- Weekly Tasks view:
-  private handle `notion.tasks.this_week_view`
-- Weekly Tasks data source recovered by fetching the canonical URL:
+- Tasks data source:
   private handle `notion.tasks.source`
 - Not-done Projects view:
-  `view://35cd43a2-3942-81aa-95fd-000c1396f17d`
+  private handle `notion.projects.not_done_view`
+- Compact property IDs, schema caches, page examples, and project/area mappings:
+  `/Users/kenjipcx/.codex/private/docs/notion.md`
 
 ## Fallback Ladder
 
 1. `exact_view_query`
    - Use when a strong Notion MCP exposes a saved-view/database-view query
      tool.
-   - Query the canonical view directly.
+   - Query the canonical private view handle directly when available.
    - Page through results until the operation has enough rows for the requested
      task, or until the view is exhausted.
    - Normalize rows immediately; drop formula fields.
@@ -32,11 +32,8 @@ approximate task rows.
 2. `mcp_data_source_query`
    - Use when the app connector can fetch database/data-source metadata and
      query a data source, but cannot query a saved view.
-   - Fetch the canonical weekly Tasks URL to recover the database/data-source
-     identifier and schema.
-   - In the current Tasks database, the recovered source is private handle
-     `notion.tasks.source`.
-   - Query the recovered data source with the closest available SQL/filter:
+   - Resolve the Tasks data-source handle from the private Notion doc.
+   - Query the recovered data source with the closest available compact filter:
      keep `Status != Done` for active planning, include `Backlog`, `Not started`,
      `In Progress`, and `Review`, and prefer rows with `Act Time` in the current
      visible weekly window when the date property is queryable.
@@ -57,7 +54,7 @@ approximate task rows.
    - This is still an MCP path. It should expose `API-query-data-source`,
      `API-retrieve-a-page`, and related `API-*` tools.
    - Query the same Tasks data source with read-only filters:
-     `Act Time` in the requested window and `Status != Done`.
+     `Act Time` or `created_time` in the requested window and `Status != Done`.
    - Do not call Notion's public API directly from custom scripts for this
      wrapper; the API token belongs inside the local MCP server config.
 

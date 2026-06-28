@@ -215,9 +215,10 @@ Source rows: MEM-0110, MEM-0111, MEM-0112, MEM-0120, MEM-0123.
 - User-specific tool handles, database IDs, private URLs, device names, and
   personal workspace conventions belong in local private context, not tracked
   shared artifacts.
-- Notion context wrappers are MCP-only for task, project, goal, and pinned-task
-  context. Do not call Notion's public API directly from ad hoc scripts unless
-  a new ticket explicitly changes that boundary.
+- Notion task planning context is MCP-only for task, project, goal, and
+  pinned-task context. `notion-task-field-fill` reads private handles from
+  `~/.codex/private/docs/notion.md`; do not call Notion's public API directly
+  from ad hoc scripts unless a new ticket explicitly changes that boundary.
 - Prefer a local token-backed MCP server over remote OAuth MCP for unattended
   automation when that local server is available.
 - Notion planning automation must read recent pinned task rows through

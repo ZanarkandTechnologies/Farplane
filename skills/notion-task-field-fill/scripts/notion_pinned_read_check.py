@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_STATE_PATH = Path(".farplane/state/notion-context/pinned-tasks-read-state.json")
+DEFAULT_STATE_PATH = Path(".farplane/state/notion-task-field-fill/pinned-tasks-read-state.json")
 
 
 class ReadCheckError(ValueError):

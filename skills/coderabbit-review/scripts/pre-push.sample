@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+python3 "$ROOT/skills/coderabbit-review/scripts/run_review.py" --stage pre-push

@@ -32,16 +32,17 @@ workspace notes.
 
 `TOOLS.md` is the table of contents. Tool-specific files own the actual handles.
 
-For example, Notion context belongs in `~/.codex/private/docs/notion.md`:
+For example, private Notion context belongs in `~/.codex/private/docs/notion.md`:
 
 - Tasks, Projects, and Goals data source handles
 - canonical saved view handles
 - private schema notes needed for planning
 - page creation defaults and project/area mappings
 
-The reusable `notion-context` skill should say how to query, normalize, and
-fall back safely. It should refer to private handles such as
-`notion.tasks.source` instead of hard-coding the underlying collection URL.
+Reusable Notion skills such as `notion-task-field-fill` should say how to
+query, normalize, and fall back safely. They should refer to private handles
+such as `notion.tasks.source` instead of hard-coding the underlying collection
+URL.
 
 ## What Goes Where
 
