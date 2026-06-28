@@ -15,6 +15,11 @@ Every initialized project is a Farplane project by default. Use
 `init_mode=substrate` for substrate-only migrations, and `init_mode=full` when
 the operator also wants the project operating model shaped during setup.
 
+Framework manifest changes are tracked in
+[FRAMEWORK_CHANGELOG.md](references/FRAMEWORK_CHANGELOG.md). Read it before
+bumping `farplane/manifest.json` or migrating a project between
+`farplane-framework` versions.
+
 ## Use Cases
 
 - **Greenfield**: start a new repo with the full scaffold
@@ -90,8 +95,8 @@ If the repo already exists, do the smallest migration first.
 ### 1. Add the harness structure
 
 ```bash
-mkdir -p docs/specs tickets tickets/archive tickets/templates
-touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md docs/LESSONS.md docs/features/README.md
+mkdir -p docs/features docs/systems tickets tickets/archive tickets/templates
+touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md docs/LESSONS.md docs/features/README.md docs/systems/README.md
 ```
 
 Then copy in:
@@ -211,6 +216,8 @@ Those can come after one clean ticket run.
 - [ ] `PROJECT_RULES.md` names the authoritative app-only and QA/evidence launch commands
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists
+- [ ] `docs/features/README.md` exists as the feature-spec home
+- [ ] `docs/systems/README.md` exists as the system/product grouping home
 - [ ] `farplane/README.md` exists
 - [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
 - [ ] `farplane/harness.md` exists or `init_mode=substrate` has a recorded readiness gap

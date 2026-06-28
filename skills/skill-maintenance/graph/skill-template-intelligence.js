@@ -152,8 +152,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-9dd051f1d18c.md",
-      "source_commit": "9dd051f1d18c",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-2f120ffea10d.md",
+      "source_commit": "2f120ffea10d",
       "summary": "working tree current template",
       "version": "0.3.7"
     }
@@ -635,7 +635,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "9dd051f1d18c",
+      "source_commit": "2f120ffea10d",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -649,7 +649,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "9dd051f1d18c",
+      "source_commit": "2f120ffea10d",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -663,7 +663,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "9dd051f1d18c",
+      "source_commit": "2f120ffea10d",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -677,7 +677,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "9dd051f1d18c",
+      "source_commit": "2f120ffea10d",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -691,7 +691,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "9dd051f1d18c",
+      "source_commit": "2f120ffea10d",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -861,7 +861,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-06-28T08:11:23+00:00",
+  "generated_at": "2026-06-28T12:49:58+00:00",
   "rollout": [
     {
       "eval": "",
@@ -3273,7 +3273,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.6.1"
+        "farplane-framework": "1.6.4"
       }
     },
     {
@@ -3284,7 +3284,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.6.1"
+        "farplane-framework": "1.6.3"
       }
     }
   ],
@@ -3292,20 +3292,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.6.3",
+      "current_version": "1.6.4",
       "feature_refs": [
         "FEAT-0060"
       ],
       "path": "farplane/manifest.json",
-      "status": "stale",
+      "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.6.1"
+      "used_version": "1.6.4"
     },
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.6.3",
+      "current_version": "1.6.4",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3313,7 +3313,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "stale",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.6.1"
+      "used_version": "1.6.3"
     },
     {
       "consumer_id": "budget-advisor",
@@ -4663,9 +4663,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": 2
       },
       "by_status": {
-        "stale": 2
+        "current": 1,
+        "stale": 1
       },
-      "current_version": "1.6.3",
+      "current_version": "1.6.4",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -4954,7 +4955,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "introduced_at": "2026-06-28",
       "latest_at": "2026-06-28",
-      "latest_commit": "9dd051f1d18c",
+      "latest_commit": "2f120ffea10d",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -4968,7 +4969,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-9dd051f1d18c.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-2f120ffea10d.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-28",
@@ -4978,8 +4979,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         },
         {
           "introduced_at": "2026-06-28",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-9dd051f1d18c.md",
-          "source_commit": "9dd051f1d18c",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-2f120ffea10d.md",
+          "source_commit": "2f120ffea10d",
           "summary": "working tree current template"
         }
       ],

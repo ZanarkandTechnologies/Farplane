@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "1.6.1",
+  "spec_version": "1.6.4",
   "template_uses": {
-    "farplane-framework": "1.6.1"
+    "farplane-framework": "1.6.4"
   },
   "project": {
     "name": "Farplane",
@@ -12,6 +12,7 @@
   "standard": {
     "tracked": [
       "AGENTS.md",
+      ".gitignore",
       "PROJECT_RULES.md",
       "ARCHITECTURE.md",
       "farplane/README.md",
@@ -26,6 +27,7 @@
       "docs/bootstrap-brief.md",
       "docs/prd.md",
       "docs/features/README.md",
+      "docs/systems/README.md",
       "docs/HISTORY.md",
       "docs/MEMORY.md",
       "docs/TASTE.md",

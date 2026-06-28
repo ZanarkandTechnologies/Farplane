@@ -212,9 +212,16 @@ setup_project_operating_model(bootstrap_brief, project_context,
   when recording the bootstrap route and next lifecycle phase.
 - [references/MANIFEST_TEMPLATE.json](references/MANIFEST_TEMPLATE.json) -
   copied to `farplane/manifest.json` for the Farplane project spec instance.
+- [references/FRAMEWORK_CHANGELOG.md](references/FRAMEWORK_CHANGELOG.md) -
+  load before bumping `farplane-framework` versions or migrating projects
+  between framework spec versions.
 - [references/GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) - appended to
   `.gitignore` so generated local runtime state and active ticket work stay out
   of commits while shared ticket and local-skill scaffold remains trackable.
+- [references/FEATURES_README_TEMPLATE.md](references/FEATURES_README_TEMPLATE.md)
+  - copied to `docs/features/README.md` for feature-spec guidance.
+- [references/SYSTEMS_README_TEMPLATE.md](references/SYSTEMS_README_TEMPLATE.md)
+  - copied to `docs/systems/README.md` for system/product grouping guidance.
 - [references/FARPLANE_PRODUCTS_TEMPLATE.md](references/FARPLANE_PRODUCTS_TEMPLATE.md)
   - copied to `farplane/products.md` for the project product catalog.
 - [references/AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md) -
