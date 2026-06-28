@@ -11,8 +11,8 @@
 
 - Keep this skill focused on end-of-ticket closeout, not fresh implementation.
 - Keep `close-ticket` as the canonical live name.
-- Keep `$docs-closeout` as compatibility-only wording in runtime-facing surfaces
-  that still need to accept older prompts.
+- Treat the old docs-closeout alias as retired wording; runtime-facing surfaces
+  should use `$close-ticket`.
 - Keep push/publish explicit; do not imply automatic external side effects.
 
 ## Conventions

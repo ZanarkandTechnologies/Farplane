@@ -52,8 +52,8 @@ For runtime helper scripts:
 - native Goal mode owns implementation persistence. Stop hooks are telemetry
   boundaries and must not be used as live completion authority.
 - `close-ticket` is the canonical live documenting-phase control skill. Runtime
-  parsing may still accept `$docs-closeout` as an alias, but live prompts and
-  handoffs should use `$close-ticket`. See `MEM-0043`.
+  parsing does not accept the retired docs-closeout alias; live prompts and
+  handoffs should use `$close-ticket`.
 - on completion-like paths, ticket-local QA/review evidence is the authority;
   the main model's completion claim is candidate-only until the ticket's
   `Done / Proof`, Goal program, and required delegated reviews are satisfied.

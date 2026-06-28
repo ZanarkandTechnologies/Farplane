@@ -90,7 +90,7 @@ eval_required: yes
 
 ## Followups
 
-- Adopt `consolidate` in `skill-maintenance`, `documentation`,
+- Adopt `consolidate` in `skill-maintenance`, `doc-advisor`,
   `knowledge-tidier`, and `update-memory` on contact.
 - Revisit whether TASK-0232 should reference `consolidate` directly after it is
   implemented.

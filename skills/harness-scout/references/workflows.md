@@ -14,7 +14,7 @@
    [codebase-analysis](../../codebase-analysis/SKILL.md) when the match depends
    on local implementation behavior.
 8. Use [external-patterns](../../external-patterns/SKILL.md) or
-   [documentation](../../documentation/SKILL.md) only when source claims need
+   [doc-advisor](../../doc-advisor/SKILL.md) only when source claims need
    code or official-doc verification.
 9. Score each candidate.
 10. Write `decision-matrix.md`.

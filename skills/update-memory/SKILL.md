@@ -26,7 +26,7 @@ Do not split docs consolidation into a separate recurring job by default.
 When project context surfaces need keep/merge/move/delete decisions, call
 `consolidate(target = docs_or_memory_surface, structure = memory | docs_tree,
 constraints = { preserve_evidence: true })` and then apply only the accepted
-memory/doc deltas. Route substantial prose cleanup through `documentation`, but
+memory/doc deltas. Route substantial prose cleanup through `doc-advisor`, but
 keep the weekly PM job as one context upkeep pass unless the docs have become
 large enough to need a dedicated ticket or cadence.
 
@@ -86,7 +86,7 @@ fails: dumps chat memory into docs; promotes one-off observations; edits skill e
     handoff rather than editing those surfaces here.
 - [ ] 4. Produce compact deltas.
   - [ ] Prefer precise patch-sized deltas over large rewritten docs.
-  - [ ] Use [documentation](../documentation/SKILL.md) for substantial prose
+  - [ ] Use [doc-advisor](../doc-advisor/SKILL.md) for substantial prose
     cleanup, duplicate-doc consolidation, or docs-folder rewrites.
   - [ ] Use `consolidate(..., structure = memory | docs_tree)` for docs or
     memory keep/merge/move/delete decisions before applying broad context
@@ -99,7 +99,7 @@ fails: dumps chat memory into docs; promotes one-off observations; edits skill e
 - [ ] 5. Finish with proof and next route.
   - [ ] Report files read, proposed deltas, skipped promotions, stale notes,
     and routed hardening handoffs.
-  - [ ] Use [documentation](../documentation/SKILL.md) for substantial prose
+  - [ ] Use [doc-advisor](../doc-advisor/SKILL.md) for substantial prose
     cleanup and [review](../review/SKILL.md) for material memory changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -127,7 +127,7 @@ Memory Update
 - Do not turn memory refresh into strategy planning; use `update-strategy` for
   bets, priorities, experiments, and tickets.
 - Do not create a separate docs heartbeat by default; route substantial docs
-  work through `documentation` inside this context update or create a focused
+  work through `doc-advisor` inside this context update or create a focused
   ticket when it is too large.
 - Do not promote one-off observations into durable memory.
 - Do not rewrite append-only logs to mark processing complete; use processed
@@ -137,7 +137,7 @@ Memory Update
 
 ## Reference Map
 
-- [../documentation/SKILL.md](../documentation/SKILL.md) - use for substantial
+- [../doc-advisor/SKILL.md](../doc-advisor/SKILL.md) - use for substantial
   doc-quality rewriting.
 - [../consolidate/SKILL.md](../consolidate/SKILL.md) - use for shared
   docs/memory unit inventory, value scoring, loss check, and patch/handoff

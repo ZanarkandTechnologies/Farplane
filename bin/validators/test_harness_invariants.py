@@ -59,11 +59,13 @@ claimed_by:
 
 ## Summary
 
-## Program
+## Change Plan
 
-## Done / Proof
+## Done
 
-## State
+## QA Strategy
+
+## Links
 
 - Do not store raw `session_id` values in ticket frontmatter.
 """
@@ -146,11 +148,13 @@ This file is generic instructions.
                 """\
 ## Summary
 
-## Program
+## Change Plan
 
-## Done / Proof
+## Done
 
-## State
+## QA Strategy
+
+## Links
 """,
             )
             result = self.run_validator(root)

@@ -150,7 +150,7 @@ merge shape.
    usage results, and compaction risks to
    `skill-maintenance(mode: refine_skill)`.
 10. For enabled `docs_consolidation`, route whole-project context refresh to
-   `update-memory` and substantive durable doc cleanup to `documentation`.
+   `update-memory` and substantive durable doc cleanup to `doc-advisor`.
 11. Review the past window against the static harness charter, goals, and
    configured parent contexts.
 12. Write [interval-report.md](../templates/interval-report.md) before any
@@ -210,6 +210,6 @@ horizon review.
   prevention work.
 - Docs consolidation is a separate optional workflow from memory refresh.
   Intervals should produce handoffs or compact deltas first, then let
-  `update-memory` or `documentation` own the actual doc edits when warranted.
+  `update-memory` or `doc-advisor` own the actual doc edits when warranted.
 - Urgent leverage escalation is allowed only for high-confidence evidence with
   a source ref, explicit loss term, review-by date, and next owner route.

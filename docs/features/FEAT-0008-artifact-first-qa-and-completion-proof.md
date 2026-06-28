@@ -3,7 +3,7 @@ title: Artifact-first QA and completion proof
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-06-28
 tags:
   - farplane
   - feature
@@ -35,7 +35,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - docs/HISTORY.md
-known_limits: Depends on compact `Done / Proof` obligations plus linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
+known_limits: Depends on compact `Done` conditions, `QA Strategy`, linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
 metrics: []
 last_verified: 2026-06-12
 ---
@@ -71,7 +71,7 @@ contract.
 
 ## What It Does
 
-- Reads the ticket `Done / Proof` block as the scoreboard for checks, evidence, and review gates.
+- Reads ticket `Done` conditions and `QA Strategy` as the scoreboard for checks, evidence, and review gates.
 - Produces or links command output, screenshots, traces, console logs, failure captures, review reports, and QA notes.
 - Routes material plans, implementations, prompts, evidence bundles, and completion claims through reviewer judgment when required.
 - Keeps Goal-backed completion mechanical and visible: implementation, QA, demo when required, and final completion review receipt.
@@ -87,8 +87,9 @@ contract.
 
 Proof scales with risk, blast radius, and user-facing impact.
 
-- Ticket `Done / Proof` names the expected checks, evidence, review gates, and acceptance signals.
-- For material features, `Done / Proof` also names the critical path in flexible
+- Ticket `Done` names completion conditions.
+- Ticket `QA Strategy` names the expected checks, evidence, review gates, and acceptance signals.
+- For material features, `QA Strategy` also names the critical path in flexible
   prose or bullets: the real workflow or lifecycle being claimed, smaller
   ordered sanity checks when a full end-to-end run is long, expected
   observations, evidence, and any residual risk for unrun final paths.
@@ -142,7 +143,7 @@ Acceptance signals:
 - This feature does not make every task heavyweight.
 - This feature does not require proof to live inside the ticket body.
 - This feature does not replace ticket scope, specs, or review rubrics.
-- Known limit: Depends on compact `Done / Proof` obligations plus linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
+- Known limit: Depends on compact `Done` conditions, `QA Strategy`, linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -162,3 +163,4 @@ Acceptance signals:
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-06-28: Split completion obligations into `Done` conditions and `QA Strategy`.

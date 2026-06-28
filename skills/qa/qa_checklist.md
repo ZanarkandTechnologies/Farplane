@@ -17,7 +17,7 @@ Use this for material QA reports and after changing the `qa` skill.
 ## Checks
 
 1. `ticket-proof-read`
-   - Question: Did QA read the selected ticket, `Done / Proof`, proof weight,
+   - Question: Did QA read the selected ticket, `Done`, `QA Strategy`, proof weight,
      and any design baseline before collecting evidence?
    - Violation: QA improvises a flow from chat or route intuition.
 
@@ -33,7 +33,7 @@ Use this for material QA reports and after changing the `qa` skill.
 
 4. `critical-path-reconciled`
    - Question: For material feature work, did QA reconcile evidence against the
-     ticket's critical-path proof notes in `Done / Proof`, including smaller
+     ticket's critical-path proof notes in `QA Strategy`, including smaller
      ordered sanity checks and any unrun full-path risk?
    - Violation: QA passes proxy checks while the claimed workflow, hook
      lifecycle, user path, or session path remains implicit or unexercised.

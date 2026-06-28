@@ -40,7 +40,7 @@ any port or environment-variable assumptions. When the user wants app code
 created during init, select the stack scaffold before running commands.
 
 That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.md`,
-`farplane/goals.md`, `farplane/automations.md`, `farplane/bindings.md`,
+`farplane/goals.md`, `farplane/products.md`, `farplane/automations.md`, `farplane/bindings.md`,
 `farplane/hooks.json`, `.agents/skills/README.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
@@ -103,6 +103,7 @@ Then copy in:
 - `farplane/manifest.json`
 - `farplane/harness.md`
 - `farplane/goals.md`
+- `farplane/products.md`
 - `farplane/automations.md`
 - `farplane/bindings.md`
 - `farplane/hooks.json`
@@ -214,6 +215,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
 - [ ] `farplane/harness.md` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `farplane/goals.md` exists or `init_mode=substrate` has a recorded readiness gap
+- [ ] `farplane/products.md` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `farplane/automations.md` exists and contains the exact Pulse, Daily Interval, and Weekly Interval prompt blocks to copy into Codex automations
 - [ ] `farplane/bindings.md` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `farplane/hooks.json` exists or `init_mode=substrate` has a recorded readiness gap

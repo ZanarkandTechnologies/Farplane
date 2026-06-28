@@ -74,7 +74,7 @@ Discover what research already exists on a topic.
 |---------------|-----------------|
 | "Where is X in codebase?" | current code plus `docs/MEMORY.md` / tickets |
 | "How do others implement X?" | `research:code-patterns` or `external-patterns`; archive only for historical context |
-| "What do the docs say?" | `documentation` / `research:official-docs`; archive only for historical context |
+| "What do the docs say?" | `doc-advisor` / `research:official-docs`; archive only for historical context |
 | "What are best practices?" | `research:parity` or archived source notes |
 | "What was the plan for X?" | tickets, `docs/HISTORY.md`, and relevant specs |
 | "What did tests find?" | ticket-local `tickets/TASK-XXXX/artifacts/` first, then experiments |

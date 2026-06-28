@@ -24,8 +24,8 @@ refs:
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/systems/documentation-os.md
   - docs/review/rubrics/documentation-quality.md
-  - skills/documentation/SKILL.md
-  - skills/documentation/eval_task.json
+  - skills/doc-advisor/SKILL.md
+  - skills/doc-advisor/eval_task.json
 feature_id: FEAT-0060
 system_id: SYS-0011
 category: context-routing
@@ -46,14 +46,14 @@ surfaces:
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/systems/documentation-os.md
   - docs/review/rubrics/documentation-quality.md
-  - skills/documentation/SKILL.md
-  - skills/documentation/eval_task.json
+  - skills/doc-advisor/SKILL.md
+  - skills/doc-advisor/eval_task.json
 source_refs:
   - docs/features/README.md
   - docs/systems/README.md
   - docs/systems/documentation-os.md
   - docs/review/rubrics/documentation-quality.md
-  - skills/documentation/references/feature-system-specs.md
+  - skills/doc-advisor/references/feature-system-specs.md
   - docs/templates/registry.jsonl
 external_refs: []
 evidence_refs:
@@ -61,7 +61,7 @@ evidence_refs:
   - bin/validators/test_check_doc_refs.py
   - bin/validators/test_doc_parity.py
   - bin/validators/test_sync_template_registry.py
-  - skills/documentation/eval_task.json
+  - skills/doc-advisor/eval_task.json
 known_limits: Owns documentation, system, feature, and template registry coherence. It does not preserve retired feature IDs or permanent tracked archive docs just to keep historical noise searchable.
 metrics:
   - feature_registry_validation_pass
@@ -141,11 +141,11 @@ Owner surfaces:
 - `templates/global/AGENTS.md`
 - `docs/systems/documentation-os.md`
 - `docs/review/rubrics/documentation-quality.md`
-- `skills/documentation/SKILL.md`
-- `skills/documentation/references/doc-architecture.md`
-- `skills/documentation/references/metadata-and-registries.md`
-- `skills/documentation/references/feature-system-specs.md`
-- `skills/documentation/references/finish-gate.md`
+- `skills/doc-advisor/SKILL.md`
+- `skills/doc-advisor/references/doc-architecture.md`
+- `skills/doc-advisor/references/metadata-and-registries.md`
+- `skills/doc-advisor/references/feature-system-specs.md`
+- `skills/doc-advisor/references/finish-gate.md`
 
 Source context:
 
@@ -153,7 +153,7 @@ Source context:
 - `docs/systems/README.md`
 - `docs/systems/documentation-os.md`
 - `docs/review/rubrics/documentation-quality.md`
-- `skills/documentation/references/feature-system-specs.md`
+- `skills/doc-advisor/references/feature-system-specs.md`
 - `docs/templates/registry.jsonl`
 
 Evidence:
@@ -162,7 +162,7 @@ Evidence:
 - `bin/validators/test_check_doc_refs.py`
 - `bin/validators/test_doc_parity.py`
 - `bin/validators/test_sync_template_registry.py`
-- `skills/documentation/eval_task.json`
+- `skills/doc-advisor/eval_task.json`
 
 ## Proof And Quality
 

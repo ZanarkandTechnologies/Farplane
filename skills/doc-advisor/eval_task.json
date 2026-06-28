@@ -1,7 +1,7 @@
 [
   {
-    "id": "documentation_system_vs_feature_01",
-    "title": "Documentation routes broad subsystem lore to a system spec",
+    "id": "doc_advisor_system_vs_feature_01",
+    "title": "Doc Advisor routes broad subsystem lore to a system spec",
     "query": "Our feature page for a docs capability has grown into broad policy for where all docs live, how feature and system specs work, and how generated registries are maintained. Some of that policy also got copied into docs skill references, and I am not sure what should live where or what checks prove the split. How should we reshape it?",
     "reference_points": [
       "Recognizes that broad documentation governance is system-shaped rather than only a single feature slice",
@@ -12,14 +12,14 @@
     ],
     "tags": [
       "skill",
-      "documentation",
+      "doc-advisor",
       "system-vs-feature"
     ],
     "notes": "Covers the FEAT-0060 promotion failure mode that triggered the Documentation OS split."
   },
   {
-    "id": "documentation_branch_reference_01",
-    "title": "Documentation loads branch references instead of bloating first load",
+    "id": "doc_advisor_branch_reference_01",
+    "title": "Doc Advisor loads branch references instead of bloating first load",
     "query": "I need to update a system spec and a feature page, but I am not sure what front matter and registry sync rules apply. What should the documentation workflow do first?",
     "reference_points": [
       "Binds the reader, target surfaces, source of truth, and proof route before editing",
@@ -30,14 +30,14 @@
     ],
     "tags": [
       "skill",
-      "documentation",
+      "doc-advisor",
       "reference-routing"
     ],
     "notes": "Protects the method-reference split and template 0.3.6 progressive disclosure behavior."
   },
   {
-    "id": "documentation_no_scalar_score_01",
-    "title": "Documentation finish gate preserves repair context over scalar scores",
+    "id": "doc_advisor_no_scalar_score_01",
+    "title": "Doc Advisor finish gate preserves repair context over scalar scores",
     "query": "I finished a durable docs cleanup. Can we summarize it with a doc quality score and ship if the number is high?",
     "reference_points": [
       "Rejects using a scalar documentation quality score as readiness proof",
@@ -48,9 +48,27 @@
     ],
     "tags": [
       "skill",
-      "documentation",
+      "doc-advisor",
       "quality-layer"
     ],
     "notes": "Protects the quality signal boundary introduced after the metrics/rubric/checklist discussion."
+  },
+  {
+    "id": "doc_advisor_strategy_no_docs_01",
+    "title": "Doc Advisor returns a compact no-docs strategy",
+    "query": "I am planning a material ticket that only renames an internal test fixture and does not touch README, feature specs, user docs, or public workflow behavior. What docs section should the ticket carry?",
+    "reference_points": [
+      "Returns a Docs Strategy block rather than a Documentation / Closeout block",
+      "Uses outcome no_docs when no durable docs should change",
+      "Includes a concrete no_docs_reason tied to the absence of public, canonical, or workflow-facing doc changes",
+      "Does not add close_ticket or documentation_skill fields",
+      "Names validation such as focused grep, tests, or no public surface touched"
+    ],
+    "tags": [
+      "skill",
+      "doc-advisor",
+      "docs-strategy"
+    ],
+    "notes": "Protects TASK-0241's docs strategy contract and prevents closeout ceremony from returning."
   }
 ]

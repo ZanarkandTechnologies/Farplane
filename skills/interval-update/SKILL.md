@@ -235,7 +235,7 @@ priority_planning(review_window, planning_window)
   - [ ] When `docs_consolidation` is enabled, route broad project context
         keep/merge/move/delete decisions through `consolidate(..., structure =
         docs_tree | memory)`, broad context refresh through `update-memory`,
-        and substantive doc-quality rewrites through `documentation`.
+        and substantive doc-quality rewrites through `doc-advisor`.
 - [ ] 4. Write the report before durable mutations.
   - [ ] Write a date-stamped interval report.
   - [ ] Include source gaps, drift findings, evidence, and the proposed next

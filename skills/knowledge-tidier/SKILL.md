@@ -23,7 +23,7 @@ strategy notes, and other files whose value depends on what future agents or
 humans should actually remember.
 
 This skill is not a prose-polishing pass. Use
-[documentation](../documentation/SKILL.md) when the main job is reader-quality
+[doc-advisor](../doc-advisor/SKILL.md) when the main job is reader-quality
 writing, examples, terminology, or doc architecture. Use
 [update-memory](../update-memory/SKILL.md) for whole-project context refresh.
 
@@ -112,7 +112,7 @@ surface. Low-factuality rows become questions, tickets, or archive-only notes.
    - [ ] Remove or route duplicated `AGENTS.md`, spec, skill, validator,
      ticket-template, and style rules.
 - [ ] 5. Report routed handoffs.
-   - [ ] Send doc-quality rewrites to [documentation](../documentation/SKILL.md).
+   - [ ] Send doc-quality rewrites to [doc-advisor](../doc-advisor/SKILL.md).
    - [ ] Send skill behavior hardening to
      [skill-maintenance](../skill-maintenance/SKILL.md).
    - [ ] Send broad project refresh to [update-memory](../update-memory/SKILL.md).
@@ -166,7 +166,7 @@ Knowledge Tidy Report
 
 - [filesystem lifecycle](../../docs/features/FEAT-0060-registry-backed-documentation-os.md) - read for
   artifact roles, read defaults, drain rules, and archive/delete boundaries.
-- [documentation](../documentation/SKILL.md) - use for durable doc-quality
+- [doc-advisor](../doc-advisor/SKILL.md) - use for durable doc-quality
   rewrites outside memory ranking.
 - [update-memory](../update-memory/SKILL.md) - use for broad project context
   refresh across README, docs, history, lessons, and troubles.

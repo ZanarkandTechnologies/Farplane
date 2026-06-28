@@ -88,9 +88,10 @@ RULES: tuple[HarnessRule, ...] = (
         required_substrings=(
             "claimed_by:",
             "## Summary",
-            "## Program",
-            "## Done / Proof",
-            "## State",
+            "## Change Plan",
+            "## Done",
+            "## QA Strategy",
+            "## Links",
         ),
         remediation=(
             "keep the ticket template aligned with the ticket/runtime identity "

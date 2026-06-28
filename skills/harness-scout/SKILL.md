@@ -80,7 +80,7 @@ so future dependency tooling can discover the composition graph:
   search does not settle whether Farplane already has a behavior
 - [external-patterns](../external-patterns/SKILL.md) when a source points to a
   repo or implementation pattern that should be checked in real code
-- [documentation](../documentation/SKILL.md) when a candidate depends on
+- [doc-advisor](../doc-advisor/SKILL.md) when a candidate depends on
   official API, library, or platform behavior
 - [reference-grounding](../reference-grounding/SKILL.md) for compact evidence
   checks before scoring source claims
@@ -119,7 +119,7 @@ every skill on every run.
 | Workflow optioning | [brainstorm](../brainstorm/SKILL.md) | The operator wants alternate scout workflows, scorecard shapes, or ticket-splitting approaches before committing. |
 | Local baseline search | [codebase-analysis](../codebase-analysis/SKILL.md) | Registry/docs search is not enough to decide whether Farplane already implements the behavior. |
 | Source implementation check | [external-patterns](../external-patterns/SKILL.md) | The source is a repo or makes a code-level implementation claim. |
-| Official behavior check | [documentation](../documentation/SKILL.md) | The candidate depends on current official docs, APIs, standards, or platform behavior. |
+| Official behavior check | [doc-advisor](../doc-advisor/SKILL.md) | The candidate depends on current official docs, APIs, standards, or platform behavior. |
 | Reference grounding | [reference-grounding](../reference-grounding/SKILL.md) | A source claim needs compact evidence before scoring. |
 | External convergence | [research:parity](../research/SKILL.md#researchparity) | The source claims a broad "state of the art" or peer-product norm. |
 | Local missing-scope check | [research:gap](../research/SKILL.md#researchgap) | A candidate is absent or partial locally and needs production-grade scope before ticketing. |

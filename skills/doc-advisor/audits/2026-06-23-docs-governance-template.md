@@ -1,7 +1,7 @@
 ---
 title: "Documentation Skill Governance Refresh"
 status: active
-owner: documentation
+owner: doc-advisor
 created_at: 2026-06-23
 updated_at: 2026-06-23
 tags:
@@ -9,8 +9,8 @@ tags:
   - skill-maintenance
   - docs-governance
 refs:
-  - skills/documentation/SKILL.md
-  - skills/documentation/qa_checklist.md
+  - skills/doc-advisor/SKILL.md
+  - skills/doc-advisor/qa_checklist.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
 ---
@@ -19,7 +19,7 @@ refs:
 
 ## Scope
 
-Refresh `documentation` from a broad doc-writing helper into a docs-as-code
+Refresh `doc-advisor` from a broad doc-writing helper into a docs-as-code
 workflow that checks reader contract, placement, split/merge decisions, density
 policy, source of truth, front matter, versioning metadata, grounding, and
 review routing.
@@ -63,4 +63,4 @@ review routing.
 ## Proof
 
 - Run `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
-- Reinstall the live `documentation` skill after validation.
+- Reinstall the live `doc-advisor` skill after validation.

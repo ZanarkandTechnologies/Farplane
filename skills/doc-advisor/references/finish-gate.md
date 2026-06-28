@@ -33,7 +33,7 @@ input_packet:
     validator_output:
     review_required:
   source_refs:
-    - skills/documentation/qa_checklist.md
+    - skills/doc-advisor/qa_checklist.md
     - docs/review/rubrics/documentation-quality.md
 ```
 

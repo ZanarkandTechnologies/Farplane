@@ -61,7 +61,7 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
    - Violation: The native `/goal` prompt still reflects an older plan.
 
 8. `blocking-questions-resolved`
-   - Question: Were missing files, budget, metric, proof route, drift policy,
+   - Question: Were missing files, budget, metric, QA Strategy, drift policy,
      human gates, or destructive/deploy/spend boundaries resolved or asked
      before compiling the packet?
    - Violation: The Goal Packet guesses at execution-safety inputs.
@@ -76,7 +76,7 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
 
 10. `critical-path-proof`
    - Question: For material feature work, does the Goal prompt require the
-     executor to follow the ticket's `Done / Proof` critical-path notes, run
+     executor to follow the ticket's `QA Strategy` critical-path notes, run
      smaller sanity checks before claiming a long workflow/lifecycle, and report
      unrun final-path risk as a blocker or residual risk?
    - Violation: The Goal can complete from proxy checks while the real claimed

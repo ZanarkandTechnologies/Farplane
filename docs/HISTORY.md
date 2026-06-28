@@ -322,3 +322,5 @@
 2026-06-26 00:00 +0800 | FEAT | add `taste-loop` as a Codex-native active-hours heartbeat prompt for selecting high-compounding skills and emitting local feedback cards or Goal Advisor handoffs from `FARPLANE_TASTE_LOOP_*` config
 2026-06-26 00:00 +0800 | DOCS | promote `taste-loop` into the official optional Farplane framework heartbeat preset with score-breakdown, existing skill-heat/product-lane reuse, metric-advisor routing, and no-fake-benchmark guardrails
 2026-06-26 17:14 +0800 | DOCS | make Skill Compounding Score the official skill-prioritization contract and route Taste Loop ranking through it
+2026-06-28 00:00 +0800 | DOCS | merge ticket `Program` and `Map` into modular `Change Plan`, remove default body `State` and Goal Packet preview sections, and make `goal-advisor(ticket)` own post-approval sidecars
+2026-06-28 00:00 +0800 | DOCS | split ticket completion planning into compact `Done` conditions plus `QA Strategy` as the proof route, evidence, final checkpoint, and goal-advisor input surface

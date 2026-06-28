@@ -34,19 +34,19 @@ material plan.
 ## Skill Signature
 
 ```text
-impl_plan(ticket_or_request, proof_weight?) -> ticket_plan + goal_packet_preview + proof_contract
+impl_plan(ticket_or_request, proof_weight?) -> ticket_plan + qa_strategy + goal_advisor_readiness
 
 state:
   reads(active ticket, linked PRD/specs/docs, relevant code,
         docs/MEMORY.md?, docs/TROUBLES.md?, docs/LESSONS.md?,
         optional design.md or Agent Testability Brief)
   writes(ticket.md updates, optional design.md recommendation,
-         proof route, approval handoff)
+         QA strategy, approval handoff)
 
 gates:
   missing_inputs_resolved_or_asked; ticket_surface_exists; code_context_read;
-  done_proof_concrete; minimal_plan_challenge_passed; proof_route_named;
-  goal_packet_preview_compiled; approval_before_goal_run
+  done_conditions_concrete; qa_strategy_concrete; change_plan_units_local;
+  proof_route_named; goal_advisor_ready_after_approval
 
 routes:
   research:gap | research:parity | deep-system-design |
@@ -55,22 +55,23 @@ routes:
 fails:
   chat-only material plan; hidden architecture invention; vague "run tests";
   over-scoped new files/functions/parameters without reuse proof;
-  self-certified QA/review for material work; Goal Packet hidden until after approval;
+  self-certified QA/review for material work; transcript-dependent Goal setup;
   implementation before approval
 ```
 
 ## Phase Boundary
 
 This skill owns approval planning only. It may shape `Summary`, `Scope`,
-`Delta`, `Program`, `Map`, `Done / Proof`, `State`, `Links`, `Notes`,
-`Agent Contract`, `Run Hints`, and a Goal Packet preview, but implementation,
-QA, visual judgment, adversarial testing, demo, and final review are delegated
+`Delta`, `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, `Links`,
+`Notes`, `Agent Contract`, and `Run Hints`, but implementation, QA, visual judgment,
+adversarial testing, demo, final review, and Goal Packet sidecars are delegated
 to owner surfaces.
 
-Call `goal-advisor` after the ticket plan is concrete enough to compile a
-Goal Packet preview. The preview is part of the approval surface, not a separate
-post-approval surprise. If the human requests a plan change, revise the ticket
-plan and call `goal-advisor` again to regenerate the packet before execution.
+Call `goal-advisor` after the ticket plan is approved and ready to become a
+Goal Packet. `goal-advisor(ticket)` creates or updates `program.md`,
+`progress.md`, and the native `/goal` prompt, then links those sidecars from
+the ticket. If the ticket plan changes after approval, rerun this skill first
+and then regenerate the Goal Packet.
 Call `research:*`, `deep-system-design`, `review`, or other workflow skills only
 when the child scope is narrower than the selected ticket and the phase needs
 its own artifact, independent judgment, or proof surface.
@@ -83,7 +84,7 @@ its own artifact, independent judgment, or proof surface.
     acceptance criteria, constraints, target files, proof weight, permissions,
     human gates, or destructive/deploy/spend boundaries.
   - [ ] Ask up to 3 clarifying questions only when the missing input is
-    blocking or materially changes the plan/Goal Packet; otherwise state the
+    blocking or materially changes the plan or later Goal Packet; otherwise state the
     assumption in the ticket and continue.
 - [ ] 2. Bind or create the ticket surface.
   - [ ] For material work with no selected ticket, create or update
@@ -109,43 +110,51 @@ its own artifact, independent judgment, or proof surface.
   - [ ] Keep the selected coherent ticket whole unless proof, reuse, blocker
     risk, external dependency, safety, or runtime ownership forces a split.
   - [ ] Use the canonical ticket-body shape: `Summary`, `Scope`, `Delta`,
-    `Program`, `Map`, `Done / Proof`, `State`, `Links`, and sparse `Notes`.
-  - [ ] Make `Delta`, `Program`, `Map`, and `Done / Proof` concrete enough that
-    a builder can execute without inventing the order.
+    `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, `Links`, and sparse
+    `Notes`.
+  - [ ] Make `Delta`, `Change Plan`, `Done`, and `QA Strategy` concrete enough
+    that a builder can execute without inventing the order or proof route.
+  - [ ] Use `Change Plan` units as the merged program and file map: each unit
+    carries local before/after, read/write paths, operation, type or signature
+    impact when useful, routes, QA expectations, and real failure modes.
+  - [ ] Split `Change Plan` into one heading and one fenced block per coherent
+    change. Use `fixes:` in plain language instead of synthetic labels
+    unless many-to-many traceability truly needs stable anchors.
   - [ ] Include options only when a real material fork exists, then recommend
     one path and name the accepted tradeoff.
-- [ ] 6. Make proof and test strategy observable.
-  - [ ] Write or refine `Done / Proof` with done conditions, mechanical checks
-    or `Metrics: none mechanical`, manual checks, review rubric/TAS gates, hard
-    gates, human gates, and required evidence.
-  - [ ] For material feature work, include critical-path proof in the existing
-    `Done / Proof` body: name the real workflow or lifecycle being claimed,
+- [ ] 6. Make QA Strategy observable.
+  - [ ] Write or refine `Done` with concrete completion conditions.
+  - [ ] Write or refine `QA Strategy` with proof weight, mechanical checks or
+    `Metrics: none mechanical`, manual checks, delegated lanes, review
+    rubric/TAS gates, hard gates, human gates, required evidence, final
+    checkpoint, and residual risk.
+  - [ ] For material feature work, include critical-path proof in
+    `QA Strategy`: name the real workflow or lifecycle being claimed,
     break long end-to-end proof into smaller ordered sanity checks, and require
     evidence plus the next review point for state, data, logs, artifacts, UI, or
-    session behavior. Do not create a new ticket schema just for this.
+    session behavior.
   - [ ] For implementation feature work, include `Grounding evidence:` in
-    `Done / Proof`: code documentation or maintained implementation evidence
+    `QA Strategy` or `Notes`: code documentation or maintained implementation evidence
     from Ref MCP, official docs, GitHub code search, maintained examples, or
     web sources before finalizing, unless the ticket is explicitly local-only.
   - [ ] If the metric or provider is unclear, derive a metric card before
-    writing `Done / Proof` or the Goal Packet preview.
-  - [ ] Name `Proof weight:` and `Delegated lanes:` for material work when QA,
-    visual judgment, agent QA, demo, or reviewer evidence is required.
+    writing `QA Strategy` or Goal-ready run hints.
+  - [ ] Name `QA Strategy.goal_advisor_inputs.proof_route`,
+    `final_evidence`, and `final_checkpoint` for material work when QA, visual
+    judgment, agent QA, demo, or reviewer evidence is required.
   - [ ] For UI/user-visible work, name the design baseline, key screens/states,
     expected screenshots, runtime entry path, capture lane, visual judgment lane,
     and final image evidence rule.
-  - [ ] Name the documentation/closeout route: `close-ticket` for final ticket
-    writeback and durable docs that changed; [documentation](../documentation/SKILL.md)
-    only when the ticket includes substantive durable doc writing or revision.
-- [ ] 7. Compile the Goal Packet preview with `goal-advisor`.
-  - [ ] Create or update the ticket's Goal Packet fields and draft
-    `program.md`, `progress.md`, and native `/goal` prompt preview when the
-    work is Goal-backed.
-  - [ ] Keep the Goal Packet preview aligned with the current ticket plan:
-    `Files`, `Budget`, `Metric`, `Proof Route`, `Drift Policy`,
-    `Final Evidence`, and `Native Goal Prompt`.
-  - [ ] If the plan changes after human feedback, rerun `goal-advisor` and
-    replace the preview before asking for approval again.
+  - [ ] Name `Docs Strategy` by calling or applying
+    [doc-advisor](../doc-advisor/SKILL.md): `update_docs` with targets and
+    validation, or `no_docs` with a concrete reason.
+- [ ] 7. Leave the ticket ready for `goal-advisor`.
+  - [ ] Set up the approved ticket contract so `goal-advisor(ticket)` can infer
+    task, files, budget hints, QA Strategy inputs, and sidecar needs without
+    transcript memory.
+  - [ ] Do not duplicate Goal Packet sidecar content in the ticket body.
+  - [ ] If an active Goal Packet already exists, keep `Links` pointing to
+    `program.md`, `progress.md`, and any generated prompt artifact.
 - [ ] 8. Run the minimality and quality gates.
   - [ ] Run [qa_checklist.md](qa_checklist.md) against material plans before
     accepting them, especially minimal version, reuse, least parameters,
@@ -154,15 +163,14 @@ its own artifact, independent judgment, or proof surface.
     record explicit `revise` or `block` only when the issue cannot be resolved
     inside planning.
 - [ ] 9. Handoff for one-shot approval, not implementation.
-  - [ ] Present the ticket plan and Goal Packet preview together so the human
-    can approve the execution contract in one shot.
-  - [ ] Leave material tickets in `review` until the plan and Goal Packet are
-    approved.
-  - [ ] Include the final docs/closeout owner in the approval handoff so the
-    Goal does not silently skip documentation or over-call it.
+  - [ ] Present the ticket plan as the approval contract that
+    `goal-advisor(ticket)` will compile after approval.
+  - [ ] Leave material tickets in `review` until the ticket plan is approved.
+  - [ ] Include the final `Docs Strategy` in the approval handoff so the Goal
+    does not silently skip durable docs or invent closeout ceremony.
   - [ ] End with the decisive readiness call, remaining blocker if any, and the
     next owner surface such as `goal-advisor`, `qa`, `visual-qa`,
-    `agent-qa-test`, `documentation`, `close-ticket`, or `review`.
+    `agent-qa-test`, `doc-advisor`, `close-ticket`, or `review`.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -171,14 +179,13 @@ Use [references/template.md](references/template.md) for the ticket body. The
 approval core is:
 
 ```text
-Delta(before, after, why_now, first_principles_basis?)
-Program(vars, ordered_operations, outputs)
-Map(touch, inspect, seams?, typed_flow?)
-DoneProof(done_when, checks, manual, review, evidence, critical_path_notes?)
+Delta(overall_before, overall_after, why_now, problems?)
+ChangePlan(change_units(read, write, operation, routes, qa, failure_modes))
+Done(done_when)
+QAStrategy(proof_weight, checks, manual, delegated_lanes, review, evidence, goal_advisor_inputs, residual_risk)
 GroundingEvidence(source_class, sources_checked, local_only_reason?)
 PlanQA(minimality, reuse, parameters, files_functions, proof_route)
-GoalPacketPreview(files, program, progress, metric, proof_route, drift, native_goal_prompt)
-CloseoutRoute(close_ticket, documentation_if_substantive_docs, docs_changed?)
+DocsStrategy(outcome, doc_targets, no_docs_reason, validation)
 ```
 
 For UI/user-visible proof, include this line in the plan:
@@ -198,8 +205,9 @@ proof reason.
   or runtime boundary.
 - Do not invent new files, functions, abstractions, parameters, or config knobs
   without proving reuse was checked and the new surface is required.
-- Do not bury the key code seams in prose when a compact map or signature list
-  would prove understanding faster.
+- Do not bury the key code seams in prose when `Change Plan` read/write paths,
+  operation lines, or a compact optional system map would prove understanding
+  faster.
 - Do not add optional ticket sections as decoration. `Gap Analysis`, `Run
   Hints`, `Agent Contract`, sidecar `plan.md`, and citations appear only when
   they reduce ambiguity or prove a decision.
@@ -228,15 +236,17 @@ proof reason.
 ## Output
 
 - Updated or proposed `tickets/TASK-XXXX/ticket.md` in canonical ticket-body
-  shape, plus Goal Packet preview when the work is Goal-backed.
-- Concrete test strategy and `Done / Proof` contract with proof weight,
-  delegated lanes, and required evidence.
-- Draft `program.md`, `progress.md`, and native `/goal` prompt preview from
-  `goal-advisor`, or a clear reason direct work is better than Goal mode.
-- Documentation/closeout route naming whether `close-ticket` alone is enough or
-  whether [documentation](../documentation/SKILL.md) must own a substantive doc
-  writing/revision step.
+  shape, ready for approval and later `goal-advisor(ticket)` compilation when
+  the work is Goal-backed.
+- Concrete `Done` conditions and `QA Strategy` with proof weight, delegated
+  lanes, goal-advisor inputs, final checkpoint, and required evidence.
+- Run hints and links that let `goal-advisor(ticket)` create `program.md`,
+  `progress.md`, and the native `/goal` prompt after approval, or a clear
+  reason direct work is better than Goal mode.
+- `Docs Strategy` naming whether durable docs change, which docs are targeted,
+  why no docs are needed when applicable, and which validation proves the
+  decision.
 - `plan_qa` readiness note for material plans, or a blocker naming the missing
   objective, architecture boundary, code context, or proof route.
 - One-shot approval handoff that keeps planning separate from implementation
-  while exposing the Goal Packet before execution.
+  and names `goal-advisor` as the next owner when Goal execution is warranted.

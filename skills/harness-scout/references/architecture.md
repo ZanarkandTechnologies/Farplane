@@ -25,7 +25,7 @@ runtime.
   when registry/docs search is inconclusive
 - [external-patterns](../../external-patterns/SKILL.md): checks source repos or
   real implementation patterns
-- [documentation](../../documentation/SKILL.md): checks official docs for
+- [doc-advisor](../../doc-advisor/SKILL.md): checks official docs for
   platform, API, or standard claims
 - [brainstorm](../../brainstorm/SKILL.md): explores alternate scout workflows
   when the operator asks for options

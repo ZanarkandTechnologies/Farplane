@@ -83,7 +83,7 @@ prompt scaffolding, and uses `skill-maintenance` for accepted writeback into
 
 - Ask when the answer changes safety, scope, verification, spend, destructive
   boundaries, or irreversible external side effects.
-- Do not ask for fields already present in the ticket body, `Done / Proof`,
+- Do not ask for fields already present in the ticket body, `Done`, `QA Strategy`,
   linked plan, or operator message.
 - Do not ask broad interview questions just because the Goal could be richer.
 - If more than 3 fields are missing, ask the 3 that affect execution safety

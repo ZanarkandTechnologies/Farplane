@@ -14,12 +14,16 @@
 - Keep repo rules in root `AGENTS.md`; keep planning mechanics in this skill.
 - Keep the plan detailed enough that a builder can execute it without
   inventing missing steps, while still staying skimmable from the top.
-- Center the output on `Delta`, `Program`, `Map`, `Done / Proof`, `State`,
-  `Links`, and sparse `Notes`; keep bulky evidence, review reports,
-  `Options considered`, and `Run Hints` conditional or sidecar-owned.
-- Use the map as the primary visual approval surface for material work when it
-  makes the before/after flow, changed seams, or typed data path easier to
-  understand. See `MEM-0030`.
+- Center the output on `Delta`, `Change Plan`, `Done`, `QA Strategy`,
+  `Docs Strategy`, `Links`, and sparse `Notes`; keep bulky evidence, review
+  reports, `Options considered`, `Agent Contract`, and `Run Hints` conditional
+  or sidecar-owned.
+- Use `Change Plan` units as the primary approval surface for material work.
+  Each unit should carry local before/after, read/write surface, operation,
+  routes, QA expectations, and failure modes.
+- Use an optional visual map inside `Change Plan` only when it makes ownership,
+  before/after flow, changed seams, or typed data path easier to understand.
+  See `MEM-0030`.
 - Keep `impl-plan` aligned with the canonical ticket template instead of
   inventing a parallel `Human` / `Agent` contract. See `MEM-0031`.
 - When an `Agent Testability Brief` exists, preserve its proof/testability
@@ -32,16 +36,16 @@
 
 ## Conventions
 
-- Lead with one top-level delta map when it makes flow, ownership, changed
-  seams, or typed data path easier to understand.
-- Require an explicit `Program` when the ticket is material enough that the
-  builder should not have to infer sequencing.
-- Put compact callable seams in the map first when trust depends on seeing code
-  seams, interfaces, ownership boundaries, or changed handlers.
-- Put typed flow in the map first when trust depends on seeing structs,
-  objects, payloads, or typed state evolve across boundaries.
-- Add fallback `Signature delta`, `Type sketch`, or `Typed flow` blocks only
-  when the map would become crowded or ambiguous.
+- Lead with brief `Delta`, then make `Change Plan` the executable structure.
+- Require explicit `Change Plan` units when the ticket is material enough that
+  the builder should not have to infer sequencing, file ownership, or QA.
+- Put compact callable seams in `signature_or_type_impact` when trust depends
+  on seeing code seams, interfaces, ownership boundaries, or changed handlers.
+- Put typed flow in `signature_or_type_impact` or the optional visual map when
+  trust depends on seeing structs, objects, payloads, or typed state evolve
+  across boundaries.
+- Add a linked `plan.md` only when `Change Plan` would become crowded or
+  independently valuable.
 - Keep the recommendation above the fold and phrased as a decisive action, not
   a tentative suggestion.
 - When diagrams are needed, reference `skills/diagramming/SKILL.md` and
@@ -61,17 +65,18 @@
 ## Checks
 
 - The output matches the canonical ticket-body shape.
-- `Map` is present when a material or cross-module plan is easier to understand
-  visually.
-- Changed callable seams are visible in the map or compact fallback signature
-  list when interface shape matters.
-- Typed flow is visible in the map or compact fallback flow when data movement
-  matters.
-- `Program` is present when sequencing is non-trivial.
+- `Change Plan` is present and locally executable when sequencing is
+  non-trivial.
+- Optional visual maps appear only when material or cross-module work is easier
+  to understand visually.
+- Changed callable seams are visible in `signature_or_type_impact` or the
+  optional visual map when interface shape matters.
+- Typed flow is visible in `signature_or_type_impact` or the optional visual
+  map when data movement matters.
 - The recommendation is decisive and action-oriented when the ticket involves a
   material choice.
 - Split rule remains explicit.
-- Proof remains concrete.
+- QA Strategy remains concrete.
 - The applicability rule is explicit.
 - Template and prompt match `SKILL.md`.
 
@@ -79,9 +84,9 @@
 
 - Re-read `SKILL.md` once and confirm the contract is executable without references.
 - Compare prompt/template/example against `SKILL.md` for drift.
-- Confirm the map-first approval surface can be skimmed without an appendix.
-- Confirm callable seams and typed flow prove real code understanding without
-  becoming a type dump.
+- Confirm the Change Plan approval surface can be skimmed without an appendix.
+- Confirm callable seams and typed flow prove real code understanding inside
+  the relevant change unit without becoming a type dump.
 - Confirm any `Agent Testability Brief` is reflected in proof/testability planning.
 - Confirm options, refs, autonomy, evidence, and gap sections appear only when
   they reduce ambiguity.

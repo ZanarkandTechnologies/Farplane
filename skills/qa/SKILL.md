@@ -1,6 +1,6 @@
 ---
 name: qa
-description: "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Goal/ticket completion."
+description: "Turn one selected ticket into proof artifacts, reconciled Done and QA Strategy obligations, and a structured QA result for Goal/ticket completion."
 tier: 3
 group: coding
 source: local
@@ -17,7 +17,7 @@ common_chains:
 ## Context
 
 `qa` is the ticket-scoped proof aggregator. It reconciles a selected ticket's
-`Done / Proof` and proof policy against concrete artifacts. Browser operation
+`Done`, `QA Strategy`, and proof policy against concrete artifacts. Browser operation
 belongs to `qa-tester`; visual judgment belongs to `visual-qa`; adversarial
 claim testing belongs to `agent-qa-test`; sufficiency review belongs to
 `reviewer`.
@@ -41,7 +41,7 @@ claim proof to `agent-qa-test`, and final sufficiency to `review`.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] Read the selected ticket, `Done / Proof` block, linked specs/docs, and
+- [ ] Read the selected ticket, `Done`, `QA Strategy`, linked specs/docs, and
   any runtime target handoff.
 - [ ] Start the QA result with a `Ticket / Proof Policy` line naming the
   selected ticket and proof policy that were read or checked. If either is
@@ -62,7 +62,7 @@ claim proof to `agent-qa-test`, and final sufficiency to `review`.
 - [ ] Capture the relevant evidence: command outputs, screenshots, snapshots,
   console logs, page errors, API responses, traces, or generated artifacts.
 - [ ] For material feature work, reconcile evidence against the ticket's
-  critical-path proof notes inside `Done / Proof`: confirm the claimed workflow
+  critical-path proof notes inside `QA Strategy`: confirm the claimed workflow
   or lifecycle is named, the smaller sanity checks ran in order where feasible,
   and every unrun full-path step is recorded as residual risk, revise, or
   blocker.
@@ -104,7 +104,7 @@ Do not use it when:
   policy lives in this skill, not in `agent-browser`.
 - Gather ticket-scoped proof under `tickets/TASK-XXXX/artifacts/qa/`.
 - For material feature work, reconcile the artifacts against the claimed
-  critical path in `Done / Proof`. QA may pass smaller ordered sanity checks
+  critical path in `QA Strategy`. QA may pass smaller ordered sanity checks
   instead of a single full end-to-end run only when those checks faithfully
   cover the path and any skipped final workflow is named as residual risk or a
   blocker.

@@ -1,16 +1,16 @@
 ---
-skill: documentation
+skill: doc-advisor
 date: 2026-06-13
 change_type: behavior
 owner: skill-maintenance
 status: pass
 review_route: advise
-before_ref: skills/documentation/SKILL.md
-after_ref: skills/documentation/SKILL.md
+before_ref: skills/doc-advisor/SKILL.md
+after_ref: skills/doc-advisor/SKILL.md
 reasoning_basis: advise
 proof_artifacts:
-  - skills/documentation/SKILL.md
-  - skills/documentation/qa_checklist.md
+  - skills/doc-advisor/SKILL.md
+  - skills/doc-advisor/qa_checklist.md
   - docs/skills/README.md
   - docs/skills/registry.jsonl
 eval_required: no
@@ -20,9 +20,9 @@ eval_required: no
 
 ## Change
 
-- Before: `documentation` mixed official-doc fetching, source synthesis, durable
+- Before: `doc-advisor` mixed official-doc fetching, source synthesis, durable
   doc writing, and review checks in one workflow.
-- After: `documentation` owns durable doc writing and doc-quality review;
+- After: `doc-advisor` owns durable doc writing and doc-quality review;
   compact official-doc lookup and evidence gathering route through
   `reference-grounding`, and detailed finish-pass checks live in a lazy-loaded
   reference.
@@ -36,11 +36,11 @@ eval_required: no
 
 - Objective: Prevent noisy docs with duplicate definitions, stale sections, and
   agent-facing commentary.
-- Placement logic: `documentation` is Tier 2 because it composes grounding,
+- Placement logic: `doc-advisor` is Tier 2 because it composes grounding,
   writing, check passes, advice, and review. The Tier 1 evidence move remains
   `reference-grounding`.
 - Expected behavior delta: Agents use `reference-grounding` to gather evidence,
-  then use `documentation` to write or revise durable docs with reader-contract,
+  then use `doc-advisor` to write or revise durable docs with reader-contract,
   consistency, and review checks.
 - Proof needed: Registry sync, doc-reference validation, and targeted content
   inspection.
@@ -57,7 +57,7 @@ eval_required: no
 | `prompt_size_tokens` | pass | Skill body is focused on doc-quality workflow rather than mixed docs-fetch guide. |
 | `task_success_rate` | unknown | No behavioral eval run. |
 | `review_tas_rate` | unknown | No reviewer lane used for this local skill rewrite. |
-| `maintenance_locality` | pass | Changes stayed in `skills/documentation`, generated registry, and selection guide. |
+| `maintenance_locality` | pass | Changes stayed in `skills/doc-advisor`, generated registry, and selection guide. |
 | `composition_clarity` | pass | Boundary is explicit: grounding first, documentation second, review for material docs. |
 
 ## Proof Artifacts
@@ -84,4 +84,4 @@ eval_required: no
 ## Followups
 
 - Add a small skill eval if future agents keep routing simple docs lookup to
-  `documentation` instead of `reference-grounding`.
+  `doc-advisor` instead of `reference-grounding`.

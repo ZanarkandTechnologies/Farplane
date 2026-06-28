@@ -13,7 +13,7 @@ Own the thin callable review wrapper for Farplane's docs-owned rubric contract.
   results. See `MEM-0131`.
 - `evidence-quality` and `integration-readiness` are hard gates: if either
   required family is below `TAS-A`, the overall verdict cannot be `pass`.
-- Caller skills or ticket `Done / Proof` own rubric routing.
+- Caller skills or ticket `QA Strategy` own rubric routing.
   `docs/review/rubrics/*` owns TAS meanings, family definitions, hard gates,
   and rubric bodies. This module owns the callable wrapper and output shape.
   See `MEM-0129`.

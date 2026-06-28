@@ -31,7 +31,7 @@ accept_plan(plan)
        and proof_route_observable
        and new_surface_justified
   -> revise when a smaller existing seam can satisfy the ticket
-  -> block when the objective, architecture boundary, or proof route is still unknown
+  -> block when the objective, architecture boundary, or QA Strategy route is still unknown
 ```
 
 ## Checks
@@ -80,13 +80,13 @@ accept_plan(plan)
    - Violation: The plan splits only because the work feels large, spans
      multiple commits, or a smaller slice feels more comfortable.
 
-8. `goal-packet-preview`
-   - Question: For Goal-backed work, does the approval surface include the
-     Goal Packet preview: `ticket.md`, `program.md`, `progress.md`, `Files`,
-     `Budget`, `Metric`, `Proof Route`, `Drift Policy`, `Final Evidence`, and
-     native `/goal` prompt?
-   - Violation: The human approves only the ticket plan, while the Goal Packet
-     is compiled later without review.
+8. `goal-advisor-ready`
+   - Question: For Goal-backed work, does the approved ticket contain enough
+     structure for `goal-advisor(ticket)` to create `program.md`,
+     `progress.md`, and the native `/goal` prompt without transcript memory?
+   - Violation: The plan requires hidden chat context, unnamed files, unstated
+     budget/proof/metric policy, or a post-approval planning decision before
+     `goal-advisor` can compile the Goal Packet.
 
 9. `clarifying-questions`
    - Question: Did the planner ask up to 3 blocking clarifying questions when
@@ -96,52 +96,65 @@ accept_plan(plan)
    - Violation: The plan guesses at a materially branching input without
      asking or recording a safe assumption.
 
-10. `proof-route-explicit`
-   - Question: Does `Done / Proof` name checks, manual evidence, delegated
-     lanes, review gates, final artifacts, and for material feature work, the
-     critical path being claimed with smaller ordered sanity checks when full
-     end-to-end proof is too long?
+10. `change-plan-locality`
+   - Question: Does each material `Change Plan` unit carry its own
+     before/after, `read`, `write`, `operation`, routes, and QA expectation so the reader
+     does not cross-map Delta, Program, and Map?
+   - Violation: The plan puts implementation order, touched files, signatures,
+     or QA in separate sections that must be manually reconciled.
+
+11. `change-plan-blocks`
+   - Question: Is each material change represented as its own heading plus
+     fenced block with plain `fixes:` text instead of synthetic labels?
+   - Violation: The plan puts all changes into one large code block, or uses
+     address labels that readers must resolve manually.
+
+12. `qa-strategy-explicit`
+   - Question: Does `QA Strategy` name proof weight, checks, manual evidence,
+     delegated lanes, review gates, goal-advisor inputs, final artifacts, and
+     for material feature work, the critical path being claimed with smaller
+     ordered sanity checks when full end-to-end proof is too long?
    - Violation: The plan says only "run tests" or "verify manually", or proves
      nearby pieces while leaving the claimed workflow/lifecycle implicit.
 
-11. `documentation-closeout-route`
-   - Question: Does the plan name the final docs/closeout route: `close-ticket`
-     for ticket writeback and durable docs changed, plus `documentation` only
-     when substantive durable doc writing or revision is in scope?
-   - Violation: The plan omits docs closeout entirely, or calls
-     `documentation` for routine ticket writeback that `close-ticket` owns.
+13. `docs-strategy`
+   - Question: Does the plan include `Docs Strategy` with `outcome`,
+     `doc_targets`, `no_docs_reason`, and `validation`, using `doc-advisor`
+     when the decision is nontrivial?
+   - Violation: The plan omits docs strategy, preserves `close_ticket` or
+     `documentation_skill` fields, or uses `no_docs` without a concrete reason.
 
-12. `ui-design-baseline`
+14. `ui-design-baseline`
    - Question: For UI/design work, does the ticket reference `design.md` or a
      clear no-design-needed reason?
    - Violation: Visual proof depends on unstated taste or layout assumptions.
 
-13. `subagent-proof`
+15. `subagent-proof`
    - Question: Are QA, visual judgment, adversarial proof, and review assigned
      to their owner lanes when material?
    - Violation: The implementation executor can self-approve those claims.
 
-14. `final-evidence`
+16. `final-evidence`
    - Question: Does UI/user-visible proof require final image evidence or an
      explicit blocker?
    - Violation: The final report can pass without showing the UI state.
 
-15. `minimal-impl-plan-claim`
+17. `minimal-impl-plan-claim`
    - Question: Does the plan explicitly state that this is the minimal
      implementation plan that satisfies the selected ticket?
    - Violation: The plan includes future-proofing, optional artifacts, broad
      cleanup, or unneeded new surfaces without saying why they are required
      now.
 
-16. `existing-service-fit`
+18. `existing-service-fit`
    - Question: For every proposed new function, helper, service, or module, did
      the planner prove it cannot belong to an existing service, module, helper,
      or owner surface?
    - Violation: The plan defines a new function or service-shaped surface
      without checking nearby owners first.
 
-17. `grounding-evidence`
-   - Question: For implementation feature work, does `Done / Proof` require code
+19. `grounding-evidence`
+   - Question: For implementation feature work, does `QA Strategy` or `Notes` require code
      documentation or maintained implementation evidence before finalizing, using
      Ref MCP, official docs, GitHub code search, maintained examples, or web
      sources unless the ticket is explicitly local-only?
@@ -150,8 +163,8 @@ accept_plan(plan)
 
 ## Finish Gate
 
-For material plans, include a compact readiness note in the ticket `State` or
-handoff:
+For material plans, include a compact readiness note in the ticket handoff or
+`Notes` when it needs to remain durable:
 
 ```text
 plan_qa:
@@ -161,10 +174,11 @@ plan_qa:
   new_files_functions_justified: pass | revise | block
   minimal_impl_plan_claim: pass | revise | block
   existing_service_fit: pass | revise | block
-  goal_packet_preview: pass | revise | block | not_applicable
+  goal_advisor_ready: pass | revise | block | not_applicable
   clarifying_questions: pass | revise | block
-  proof_route_explicit: pass | revise | block
-  documentation_closeout_route: pass | revise | block
+  change_plan_locality: pass | revise | block
+  qa_strategy_explicit: pass | revise | block
+  docs_strategy: pass | revise | block
   grounding_evidence: pass | revise | block | local_only
   highest_risk:
   fix_or_deferral:

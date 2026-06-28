@@ -3,7 +3,7 @@ title: Harness Algebra
 status: active
 owner: harness-advisor
 created_at: 2026-06-09
-updated_at: 2026-06-13
+updated_at: 2026-06-28
 refs:
   - docs/fundamentals/harness-engineering-doctrine.md
   - docs/fundamentals/prompt-engineering.md
@@ -661,18 +661,20 @@ TicketProgram :=
   Summary
 + Scope
 + Delta
-+ Program
-+ Map
-+ DoneProof
-+ State
++ ChangePlan
++ Done
++ QAStrategy
++ DocsStrategy
++ AgentContract
++ RunHints
 + Links
 ```
 
 Ticket execution:
 
 ```text
-ticket.md + skill_contract + implementation_files
-  -> artifact + evidence + ticket_state_delta
+ticket_change_plan(delta, change_units, qa_strategy)
+  -> artifact_delta + evidence + ticket_state_delta
 ```
 
 Context pollution:
@@ -850,7 +852,7 @@ agent-qa-test or reviewer owns:
   adversarial or independent application of the checklist to real behavior
 
 qa owns:
-  ticket-scoped proof artifacts and Done / Proof reconciliation
+  ticket-scoped proof artifacts and QA Strategy reconciliation
 
 benchmark owns:
   aggregate comparison across eval cases, agents, variants, or releases
@@ -1013,7 +1015,7 @@ Long-term goal hierarchy:
 goal -> project[] -> task[]
 
 farplane/goals.md = long-horizon goal graph + current_milestone
-ticket.md = executable leaf contract + Done / Proof
+ticket.md = executable leaf contract + Done + QA Strategy
 program.md = loop configuration + metric + stop policy
 progress.md = append-only observed execution
 artifacts/ = evidence

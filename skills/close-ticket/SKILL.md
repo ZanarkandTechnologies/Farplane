@@ -47,8 +47,8 @@ to close it cleanly instead of doing more implementation.
 the native execution phase proof/writeback shape but keeps Farplane-specific
 ticket, docs, commit, and archive rules here.
 
-This is the canonical public closeout surface. `$docs-closeout` is a backward
-compatible alias, not the preferred live name.
+This is the canonical public closeout surface. The old docs-closeout alias is
+retired; live prompts should use `$close-ticket`.
 
 ## Contract
 

@@ -131,7 +131,7 @@
   {
     "id": "goal_advisor_ui_goal_delegated_proof_01",
     "title": "Goal advisor requires delegated visual proof for UI Goal completion",
-    "query": "Create a native Goal prompt for TASK-1234, a UI ticket with Proof weight: visual_qa, a design.md baseline, and required final screenshot evidence. Keep the prompt compact.",
+    "query": "Create a native Goal prompt for TASK-1234, a UI ticket with QA Strategy proof_weight: visual_qa, a design.md baseline, and required final screenshot evidence. Keep the prompt compact.",
     "reference_points": [
       "Uses an inline Files list that includes ticket.md, program.md, progress.md, and design.md without restating their full contents",
       "Names delegated proof lanes such as qa-tester, visual-qa, and reviewer instead of self-certification",
@@ -150,7 +150,7 @@
   {
     "id": "goal_advisor_material_goal_final_checkpoint_01",
     "title": "Goal advisor requires ticket-local QA evidence and completion review before stop_complete",
-    "query": "Create the native Goal prompt for TASK-2345. It is a material feature ticket with Proof weight: qa + review, Done / Proof critical-path bullets, program.md, and progress.md. The old Stop hook is disabled; keep the prompt compact.",
+    "query": "Create the native Goal prompt for TASK-2345. It is a material feature ticket with QA Strategy proof_weight: qa + review, critical-path bullets, program.md, and progress.md. The old Stop hook is disabled; keep the prompt compact.",
     "reference_points": [
       "Uses an inline Files list with ticket.md, program.md, and progress.md instead of transcript memory",
       "States that native Goal mode owns continuation and does not rely on a Stop hook",

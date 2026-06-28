@@ -1,7 +1,7 @@
 ---
-title: "Documentation QA Checklist"
+title: "Doc Advisor QA Checklist"
 status: active
-owner: documentation
+owner: doc-advisor
 created_at: 2026-06-23
 updated_at: 2026-06-23
 tags:
@@ -9,12 +9,12 @@ tags:
   - qa
   - docs-as-code
 refs:
-  - skills/documentation/SKILL.md
+  - skills/doc-advisor/SKILL.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
 ---
 
-# Documentation QA Checklist
+# Doc Advisor QA Checklist
 
 Use this checklist after the draft or edit pass, before claiming a durable doc
 is ready. Keep the check proportional: tiny typo fixes may only need the
@@ -34,6 +34,12 @@ and cross-surface policy need the full gate.
 
 ## Placement And Ownership
 
+- Ticket or implementation planning returns `Docs Strategy` with `outcome`,
+  `doc_targets`, `no_docs_reason`, and `validation`.
+- `no_docs` outcomes include a concrete reason tied to the absence of durable,
+  public, canonical, workflow-facing, or user-facing doc changes.
+- Docs strategy blocks do not include `close_ticket`, `documentation_skill`, or
+  other routine ticket-closeout fields.
 - The owning surface is the smallest durable place that should carry this truth.
 - The nearest index, README, registry, or owner doc has been checked when the
   edit changes discoverability.

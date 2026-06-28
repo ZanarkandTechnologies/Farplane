@@ -3,7 +3,7 @@ title: Ticket as durable task memory
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-06-28
 tags:
   - farplane
   - feature
@@ -35,7 +35,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - docs/HISTORY.md
-known_limits: Only works when agents keep the compact ticket-as-program body, ticket State/Links, progress logs, and artifact pointers current instead of hiding state in chat.
+known_limits: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
 metrics: []
 last_verified: 2026-06-12
 ---
@@ -71,7 +71,7 @@ Chat can steer the work, but the ticket owns the durable contract.
 ## What It Does
 
 - Creates or updates a `ticket.md` for each material unit of work.
-- Keeps scope, delta, program, file map, `Done / Proof`, state, links, and notes in predictable sections.
+- Keeps scope, delta, change plan, `Done`, `QA Strategy`, docs strategy, links, and notes in predictable sections.
 - Moves bulky proof into `tickets/TASK-*/artifacts/` and links it from the ticket.
 - Lets `impl-plan`, `spec-to-ticket`, Goal Packets, QA, review, and closeout all read the same task contract.
 - Preserves resume state through `program.md`, `progress.md`, and artifact links when a work loop needs more than one turn.
@@ -80,7 +80,8 @@ Chat can steer the work, but the ticket owns the durable contract.
 
 - As an operator, I can open one ticket and see what the agent is trying to do, what is in scope, what proof is required, and what is blocked.
 - As a coding agent, I can resume a ticket without relying on hidden transcript memory.
-- As a reviewer, I can judge completion against the ticket's `Done / Proof` block and linked artifacts.
+- As a reviewer, I can judge completion against the ticket's `Done`,
+  `QA Strategy`, and linked artifacts.
 
 ## Operating Contract
 
@@ -88,14 +89,14 @@ A durable ticket is a small program for the next agent, not a generic task note.
 
 - `Summary` says the job in one compact paragraph.
 - `Scope` states what is in and out.
-- `Delta` describes the intended behavior change.
-- `Program` gives the execution shape or pseudocode.
-- `Map` points to the files, docs, skills, or tests that matter.
-- `Done / Proof` is the completion scoreboard.
-- For material features, the same `Done / Proof` body carries critical-path
-  proof notes in ordinary prose or bullets rather than a new required schema.
-- `State` carries current status, blocker, verification, and result.
-- `Links` points to evidence, artifacts, related specs, and handoffs.
+- `Delta` briefly describes the intended behavior change and problem deltas.
+- `Change Plan` groups the executable program, read/write file map, operation,
+  routes, proof, and failure modes by coherent change unit.
+- `Done` is the completion scoreboard.
+- `QA Strategy` carries proof weight, checks, delegated lanes, review gates,
+  evidence, goal-advisor inputs, final checkpoint, and residual risk.
+- Frontmatter carries queue state, next action, and last verification.
+- `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
 
 ## Surfaces
 
@@ -142,7 +143,7 @@ Acceptance signals:
 - This feature is not a project-management app.
 - This feature does not make ticket existence an invocation trigger.
 - This feature does not replace feature specs, system specs, review rubrics, or bulky proof artifacts.
-- Known limit: Only works when agents keep the compact ticket-as-program body, ticket State/Links, progress logs, and artifact pointers current instead of hiding state in chat.
+- Known limit: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -162,3 +163,5 @@ Acceptance signals:
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-06-28: Merged Program and Map into `Change Plan` and moved body state
+  duties to frontmatter, Links, and Goal progress logs.

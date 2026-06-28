@@ -40,7 +40,7 @@ GoalFiles := [ticket.md | program.md | progress.md | spec.md | board.md | artifa
 Generated prompts must name source files inline under `Files:`. Do not expose a
 new abstraction such as `refs[]` to the operator.
 
-`ticket.md` owns the task contract and proof. `program.md` owns loop config,
+`ticket.md` owns the task contract, `Done`, and `QA Strategy`. `program.md` owns loop config,
 metric, budget, heartbeat, drift, and stop policy. `progress.md` owns compact
 append-only observations. `farplane/goals.md` is project-level strategy context
 when a selected frontier comes from a long-horizon goal graph.
@@ -126,7 +126,7 @@ only after the branch is selected:
 
 - [ ] 1. Bind the intent and decide whether this is material enough for Goal.
    - [ ] Ask up to 3 clarifying questions only when missing execution inputs
-     are blocking or materially change files, budget, metric, proof route,
+     are blocking or materially change files, budget, metric, QA Strategy,
      drift policy, human gates, or destructive/deploy/spend boundaries.
    - [ ] If the task is tiny or one-turn, recommend direct work instead of Goal.
    - [ ] If native Goal or heartbeat is warranted, require listed source files
@@ -214,7 +214,7 @@ only after the branch is selected:
      search, maintained examples, or web search unless the ticket is explicitly
      local-only.
    - [ ] For material feature leaves, require execution to follow the ticket's
-     critical-path proof notes in `Done / Proof`: run the smaller sanity checks
+     critical-path proof notes in `QA Strategy`: run the smaller sanity checks
      in order before claiming a long workflow or lifecycle, record evidence for
      each checkpoint, and block or revise when the final path remains unrun
      without an explicit residual-risk note.
@@ -231,7 +231,7 @@ only after the branch is selected:
    - [ ] Use `goal-drift-reviewer` for material, long-running, strategic,
      rollout, or self-approval-prone loops.
    - [ ] Use delegated reviewer or QA lanes for material coding leaves when
-     the ticket proof route is judgment-heavy, user-visible, or UI-affecting.
+     the ticket QA Strategy is judgment-heavy, user-visible, or UI-affecting.
    - [ ] Drift review is read-only and compares the listed files plus recent
      progress; it does not plan or implement.
 - [ ] 8. Craft the native `/goal` or heartbeat prompt when Goal mode is warranted.
@@ -250,7 +250,7 @@ only after the branch is selected:
      not exercised.
    - [ ] Include a final completion checkpoint for material ticket work:
      before `stop_complete`, run or request the ticket's QA evidence review and
-     completion review when required by `Done / Proof` or `program.md`, update
+     completion review when required by `QA Strategy` or `program.md`, update
      `ticket.md` plus `progress.md` with the review/evidence links, and block
      or revise when those reviews are missing or below the ticket gate.
    - [ ] For implementation feature work, include a final `Grounding:` evidence
@@ -293,14 +293,15 @@ A strong Goal contract includes:
 - `Metric`: how progress is judged, from `program.md`
 - `After each turn`: how to drift-check, continue, wait, complete, or block
 - `Budget`: optional time/token/model/compute/subagent/review/QA/spend limit
-- `Proof route`: which delegated lane owns QA, visual QA, adversarial QA,
-  review, demo, or human feedback
-- `Final evidence`: what must be shown to the operator before completion,
-  including rendered image links for UI/user-visible work when screenshots
-  exist
+- `QA proof route`: copied from `QA Strategy.goal_advisor_inputs.proof_route`;
+  names which delegated lane owns QA, visual QA, adversarial QA, review, demo,
+  or human feedback
+- `Final evidence`: copied from `QA Strategy.goal_advisor_inputs.final_evidence`;
+  names what must be shown to the operator before completion, including
+  rendered image links for UI/user-visible work when screenshots exist
 - `Completion checkpoint`: QA evidence review and completion review required by
-  the ticket/program before `stop_complete`, with links written back to the
-  ticket and `progress.md`
+  `QA Strategy.goal_advisor_inputs.final_checkpoint` or `program.md` before
+  `stop_complete`, with links written back to the ticket and `progress.md`
 - `Approval`: whether the packet is `pending`, `approved`, `revise`, or
   `blocked`; material packets pause before native Goal execution unless
   explicitly pre-approved
@@ -309,7 +310,7 @@ For UI or user-visible work with `visual_qa` proof weight, the Goal prompt must
 spell out the concrete lane chain instead of generic "visual proof" language:
 
 ```text
-Proof route: qa-tester captures screenshots/logs/result.json -> visual-qa judges screenshots against design.md -> reviewer judges final evidence sufficiency.
+QA proof route: qa-tester captures screenshots/logs/result.json -> visual-qa judges screenshots against design.md -> reviewer judges final evidence sufficiency.
 Self-certification: forbidden for QA, visual judgment, and final completion.
 Final evidence: final response includes ![best evidence](ABSOLUTE_SCREENSHOT_PATH), or blocks/revises with the exact missing screenshot proof.
 ```
@@ -329,7 +330,8 @@ Trigger:
 Budget:
 Metric / Feedback Provider:
 Drift Policy:
-Proof Route:
+QA Strategy:
+QA Proof Route:
 Final Evidence:
 Approval:
 Heartbeat Prompt:
@@ -364,7 +366,7 @@ Or create/update the Goal Packet files and then report their paths.
   compact execution contract over listed files, not a rewritten ticket.
 - Do not allow Goal completion to self-certify proof-heavy work. Delegate drift,
   QA, visual judgment, adversarial evidence review, and final readiness when the
-  ticket proof route requires those lanes.
+  ticket QA Strategy requires those lanes.
 - Do not rely on a Stop hook to repair missing QA or completion review. The
   generated Goal prompt must make those reviews part of the ticket's own final
   checkpoint.

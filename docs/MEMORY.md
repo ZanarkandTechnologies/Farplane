@@ -80,11 +80,14 @@ MEM-0148.
 - The active ticket is the task-local memory and proof contract. Keep scope,
   decisions, state, blockers, proof, and links in ticket files rather than chat.
 - Farplane tickets use the compact ticket-as-program shape:
-  `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`, `State`,
-  `Links`, and sparse `Notes`.
-- `Done / Proof` is the scoreboard for done conditions, checks, review gates,
-  mechanical metrics, and evidence obligations. Do not revive parallel
-  acceptance/proof sections for new tickets.
+  `Summary`, `Scope`, `Delta`, `Change Plan`, `Done`, `QA Strategy`,
+  `Docs Strategy`, `Agent Contract`, `Run Hints`, `Links`, and sparse `Notes`.
+- `Change Plan` owns the local before/after, read/write surface, operation,
+  route, QA expectation, and failure-mode details that used to be split across
+  `Program` and `Map`.
+- `Done` is the scoreboard for done conditions. `QA Strategy` owns checks,
+  review gates, mechanical metrics, evidence obligations, goal-advisor proof
+  route, final evidence, final checkpoint, and residual risk.
 - Goal-backed work uses a Goal Packet: `ticket.md` owns the task contract,
   `program.md` owns loop configuration, `progress.md` owns append-only observed
   execution, and `artifacts/` owns bulky proof.
@@ -247,7 +250,7 @@ archive.
 
 2026-06-12 16:30 +0800 | farplane,goals,loops,tickets,drift,feedback | Native Codex Goal mode is the only formal semantic continuation loop. Material Goal work should create or attach to a ticket-backed Goal Packet: `ticket.md` owns the task contract, `program.md` owns loop configuration, `progress.md` owns append-only observed execution, and `goal-advisor` chooses active Goal, heartbeat, rollout, feedback, skill-improvement, business-loop, or direct-work shape before compiling the native `/goal` prompt. Heartbeats are delayed triggers over the same Goal Packet, rollout is a staged parent/child ticket pattern, `human_feedback` is the abstract feedback provider signal, and `optimize-with-human` is the Telegram-first optimization preset rather than a separate loop runtime. Drift review is read-only and compares ticket, program, progress, and current continuation claim before recommending align, recover, block, or complete-candidate.
 
-2026-06-12 11:16 +0800 | farplane,tickets,programs,proof,planning | Farplane ticket bodies should use the compact ticket-as-program shape: `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`, `State`, `Links`, and sparse `Notes`. `Delta` owns before/after and first-principles basis; `Program` owns variables and operations in `operation(input) -> output` form; `Map` owns touched files, inspected files, callable seams, type sketch, typed flow, and optional diagram; `Done / Proof` collapses old `Acceptance Criteria`, `Verification`, and `Proof Contract` sections into done conditions, checks, review/TAS gates, and evidence obligations. Use `program.md` for long-running Goal/heartbeat/rollout/skill-improvement policy, `progress.md` for append-only logs, and `artifacts/` for bulky proof and review output.
+2026-06-28 00:00 +0800 | farplane,tickets,programs,proof,planning | Farplane ticket bodies should use the compact ticket-as-program shape: `Summary`, `Scope`, `Delta`, `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, `Agent Contract`, `Run Hints`, `Links`, and sparse `Notes`. `Delta` owns brief overall and problem-level before/after framing; `Change Plan` owns modular change units with local before/after, read/write surface, operation, routes, QA expectations, and failure modes; `Done` owns completion conditions; `QA Strategy` owns proof weight, checks, delegated lanes, review/TAS gates, evidence, goal-advisor proof route, final evidence, final checkpoint, and residual risk. Use `program.md` for long-running Goal/heartbeat/rollout/skill-improvement policy after `goal-advisor(ticket)`, `progress.md` for append-only logs, and `artifacts/` for bulky proof and review output.
 
 2026-06-13 00:00 +0800 | farplane,skills,qa,evals,checklists | Skill-local runtime QA guardrails should live as optional first-class `skills/<skill-name>/qa_checklist.md` files at the skill package root, not as ordinary `references/` prose. `eval_task.json` discovers and pressures expected behavior; `qa_checklist.md` applies settled reusable guardrails during real work. After editing a skill eval, skill-maintenance should decide whether changed reference points promote into `qa_checklist.md`, `SKILL.md`, a reference, or a validator, and record skipped rare or benchmark-only points in the audit.
 

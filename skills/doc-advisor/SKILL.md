@@ -1,6 +1,6 @@
 ---
-name: documentation
-description: "Turn durable doc-writing or doc-revision work into grounded, metadata-aware, human-usable docs with doc-quality checks."
+name: doc-advisor
+description: "Turn ticket, plan, or durable doc changes into a docs strategy or grounded doc update with doc-quality checks."
 tier: 2
 source: local
 template_uses:
@@ -8,22 +8,28 @@ template_uses:
   skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.1.0"
 methods:
-  - documentation:doc-architecture
-  - documentation:metadata
-  - documentation:feature-system-spec
-  - documentation:finish-gate
+  - doc-advisor:strategy
+  - doc-advisor:doc-architecture
+  - doc-advisor:metadata
+  - doc-advisor:feature-system-spec
+  - doc-advisor:finish-gate
 eval: eval_task.json
 qa_checklist: qa_checklist.md
 ---
 
-# Documentation Skill
+# Doc Advisor Skill
 
 ## Context
 
-`documentation` owns durable repo doc writing and doc-quality review. Use it for
+`doc-advisor` owns docs strategy, durable repo doc writing, and doc-quality
+review. Use it for material tickets that need an explicit docs decision, and for
 substantive Markdown docs, feature specs, system specs, runbooks, templates,
-registry companions, and public guidance. Do not use it for routine final ticket
-writeback; `close-ticket` owns that path.
+registry companions, and public guidance.
+
+For material ticket planning, return a compact `Docs Strategy` decision:
+`update_docs` with target docs and validation, or `no_docs` with a concrete
+reason. Do not model routine ticket closure as a field; closing tickets remains
+the lifecycle invariant owned by `close-ticket`.
 
 Ground source claims through [reference-grounding](../reference-grounding/SKILL.md)
 when they depend on local canonical files, official behavior, current facts, peer
@@ -36,11 +42,11 @@ This skill owns the executable workflow and branch-loaded references.
 ## Skill Signature
 
 ```text
-documentation(doc_task, target_file?, evidence?, doc_type?) -> doc_delta + doc_quality_result + review_route?
-state: reads(target doc, nearest owner/index, source/evidence refs, qa_checklist.md, selected references); writes(target doc, optional audit/proof notes)
-gates: reader_contract_bound; owner_surface_chosen; claims_grounded; metadata_checked; checklist_applied; material_review_routed_or_skipped
+doc_advisor(doc_task, target_file?, evidence?, doc_type?) -> docs_strategy | doc_delta + doc_quality_result + review_route?
+state: reads(ticket/plan/diff?, target doc?, nearest owner/index, source/evidence refs, qa_checklist.md, selected references); writes(Docs Strategy block, target doc, optional audit/proof notes)
+gates: docs_strategy_decided; reader_contract_bound_when_writing; owner_surface_chosen; claims_grounded; metadata_checked; checklist_applied; material_review_routed_or_skipped
 routes: reference-grounding | advise | review
-fails: stale or ungrounded docs; duplicate source-of-truth; wrong feature/system boundary; agent-facing prose in human docs; routine closeout expansion
+fails: stale or ungrounded docs; duplicate source-of-truth; wrong feature/system boundary; agent-facing prose in human docs; routine closeout expansion; no-docs decision without reason
 ```
 
 ## Phase Boundary
@@ -55,15 +61,18 @@ feature-vs-system classification has real tradeoffs.
 ## Todo List
 
 - [ ] 1. Bind the reader, surface, and branch.
-  - [ ] Name audience, doc type, owning file, source of truth, intended next
-    action, canonical terms, and proof surface.
+  - [ ] If the task is ticket or implementation planning, first produce
+    `Docs Strategy` with `outcome`, `doc_targets`, `no_docs_reason`, and
+    `validation`.
+  - [ ] For durable doc writing, name audience, doc type, owning file, source
+    of truth, intended next action, canonical terms, and proof surface.
   - [ ] If `qa_checklist.md` exists, read it now as preflight guardrails.
   - [ ] Choose exactly the needed branch references:
     [doc architecture](references/doc-architecture.md) for placement,
     [metadata](references/metadata-and-registries.md) for front matter or
     registries, [feature/system specs](references/feature-system-specs.md) for
     `FEAT-*` or `SYS-*` decisions, and [finish gate](references/finish-gate.md)
-    before material closeout.
+    before material doc closeout.
 - [ ] 2. Ground claims.
   - [ ] Use `reference-grounding` for local, official, current, peer, or
     standard-dependent claims.
@@ -90,6 +99,15 @@ feature-vs-system classification has real tradeoffs.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
+
+```text
+docs_strategy = {
+  outcome: update_docs | no_docs,
+  doc_targets,
+  no_docs_reason,
+  validation
+}
+```
 
 ```text
 doc_contract = {
@@ -149,6 +167,8 @@ doc_contract = {
 
 - Updated doc with reader contract, current examples, links, and metadata aligned
   to the owner surface.
+- `docs_strategy` for ticket or implementation planning, including a no-docs
+  reason when docs do not change.
 - `doc_quality_result` with checks run, violations fixed or deferred, and review
   route, including remaining risk.
 - Optional review handoff for material docs.

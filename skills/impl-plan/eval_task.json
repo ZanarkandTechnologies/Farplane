@@ -6,7 +6,7 @@
     "reference_points": [
       "Does not return a chat-only material implementation plan",
       "Creates or requests a selected tickets/TASK-XXXX/ticket.md surface before treating the plan as ready",
-      "Writes or proposes Done / Proof with concrete checks and evidence",
+      "Writes or proposes Done and QA Strategy with concrete checks and evidence",
       "Names proof weight and delegated proof lanes",
       "Leaves implementation gated until the ticket plan is approved"
     ],

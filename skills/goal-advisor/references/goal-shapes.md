@@ -60,13 +60,13 @@ batch_goal(files[], budget, proof_policy)
 
 Use when one Goal should complete or advance several listed files in the same
 time/budget window. The batch passes only when every listed ticket satisfies
-its own `Done / Proof`; batch or integration proof is additional, not a
+its own `Done` and `QA Strategy`; batch or integration proof is additional, not a
 replacement.
 
 Batch rules:
 
 - list every ticket/program/progress file inline in the generated prompt;
-- preserve each ticket's `Done / Proof`, blockers, and stop conditions;
+- preserve each ticket's `Done`, `QA Strategy`, blockers, and stop conditions;
 - require one proof row per ticket;
 - treat batch/integration proof as additional;
 - stop or split when attribution becomes unclear.

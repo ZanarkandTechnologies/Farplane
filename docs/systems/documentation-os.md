@@ -10,7 +10,7 @@ tags:
   - documentation-os
 refs:
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
-  - skills/documentation/SKILL.md
+  - skills/doc-advisor/SKILL.md
   - docs/review/rubrics/documentation-quality.md
   - docs/features/README.md
   - docs/systems/README.md
@@ -19,7 +19,7 @@ system_record_json: |
     "id": "SYS-0011",
     "name": "Documentation OS",
     "status": "implemented",
-    "summary": "The documentation architecture, feature/system specs, registries, doc lifecycle, and documentation skill surfaces that keep Farplane's durable written truth human-readable and machine-indexable.",
+    "summary": "The documentation architecture, feature/system specs, registries, doc lifecycle, and doc-advisor surfaces that keep Farplane's durable written truth human-readable and machine-indexable.",
     "owner_spec": "docs/systems/documentation-os.md",
     "primary_feature_ref": "FEAT-0060",
     "feature_refs": [
@@ -27,7 +27,7 @@ system_record_json: |
     ],
     "refs": [
       "docs/features/FEAT-0060-registry-backed-documentation-os.md",
-      "skills/documentation/SKILL.md",
+      "skills/doc-advisor/SKILL.md",
       "docs/review/rubrics/documentation-quality.md",
       "docs/features/README.md",
       "docs/systems/README.md"
@@ -40,7 +40,7 @@ system_record_json: |
 Documentation OS owns how Farplane turns durable written truth into human-readable
 docs and generated machine inventories. It is the system boundary for doc
 architecture, feature and system specs, documentation lifecycle, registry-backed docs,
-and the operational documentation skill.
+and the operational `doc-advisor` skill.
 
 ```text
 documentation_os(doc_delta, repo_state)
@@ -69,7 +69,7 @@ the result is usable.
 
 Reader-first feature specs, system specs, documentation placement policy, doc
 split/merge/delete decisions, generated doc registries, feature/system metadata,
-documentation lifecycle rules, and the `documentation` skill's operating
+documentation lifecycle rules, and the `doc-advisor` skill's operating
 contract.
 
 ## What Belongs Elsewhere
@@ -84,7 +84,7 @@ artifacts until distilled.
 - Durable docs optimize for reader action first and generated registry use second.
 - Feature docs own capability behavior, surfaces, evidence, limits, and metrics.
 - System docs own product-layer grouping, boundaries, and feature membership.
-- Documentation skills and references own operational workflow, not canonical lore.
+- `doc-advisor` and its references own operational workflow, not canonical lore.
 - Generated JSONL and Markdown registries are derived from docs, not edited by hand.
 - Stale documentation is folded into an active owner or deleted; tracked archives are
   not the default cleanup move.
@@ -114,9 +114,9 @@ doc_scope_decision(change)
 ## Surfaces
 
 - `docs/features/FEAT-0060-registry-backed-documentation-os.md`
-- `skills/documentation/SKILL.md`
-- `skills/documentation/references/*.md`
-- `skills/documentation/qa_checklist.md`
+- `skills/doc-advisor/SKILL.md`
+- `skills/doc-advisor/references/*.md`
+- `skills/doc-advisor/qa_checklist.md`
 - `docs/review/rubrics/documentation-quality.md`
 - `docs/features/README.md`
 - `docs/systems/README.md`
@@ -126,7 +126,7 @@ doc_scope_decision(change)
 - Registry proof: `python3 docs/features/validate_features.py`.
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
 - Skill proof: `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
-- Eval proof: documentation skill eval rows under `skills/documentation/eval_task.json`.
+- Eval proof: `doc-advisor` eval rows under `skills/doc-advisor/eval_task.json`.
 - Update this system page when documentation architecture or feature/system boundaries
   change.
 

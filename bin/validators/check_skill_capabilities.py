@@ -343,35 +343,53 @@ The observed failure was `{packet.observed}`.
 - `Blast radius:` skill callers and automations that depend on this operation.
 - `Risks:` masking external connector outages as local skill success.
 
-## Program
+## Change Plan
+
+### Change 1: repair the failing skill capability
 
 ```text
-vars:
-  packet = SkillFailurePacket({packet.skill}, {packet.operation})
-  verify = python3 bin/validators/check_skill_capabilities.py score --skill {packet.skill} --operation {packet.operation}
-
-program:
-  ground(packet.refs) -> failing_behavior
-  repair(failing_behavior) -> skill_delta
-  verify(skill_delta, verify) -> capability_evidence
-  review(capability_evidence, integration-readiness + evidence-quality) -> verdict
+fixes:
+  - The skill operation fails or lacks a documented fallback.
+before:
+  - The skill operation fails or lacks a documented fallback.
+after:
+  - The skill operation succeeds or returns an explicit fallback/escalation.
+read:
+  - path: evidence refs below
+    reason: reproduce the failing behavior
+  - path: owning skill files
+    reason: find the smallest repair owner
+write:
+  - path: owning skill files, matching tests, and registry/docs if needed
+    change: repair behavior or document fallback/escalation
+operation:
+  - ground(packet.refs) -> failing_behavior
+  - repair(failing_behavior) -> skill_delta
+  - verify(skill_delta, verify) -> capability_evidence
+  - review(capability_evidence, integration-readiness + evidence-quality) -> verdict
+signature_or_type_impact:
+  - to be filled by impl-plan when seams change
+routes:
+  docs: doc-advisor | no_docs
+  qa: tests
+  review: reviewer | inline
+qa:
+  - python3 bin/validators/check_skill_capabilities.py score --skill {packet.skill} --operation {packet.operation}
+failure_modes:
+  - masking external connector outages as local skill success
 ```
 
-## Map
-- `Touch:` owning skill files, matching tests, and registry/docs if needed.
-- `Inspect:` evidence refs below and the current skill implementation.
-- `Signature delta:` to be filled by `impl-plan`.
-- `Type Sketch:` to be filled by `impl-plan`.
-- `Typed flow example:` to be filled by `impl-plan`.
-
-## Done / Proof
+## Done
 - `Done when:`
   - [ ] The skill operation either succeeds or returns a documented fallback/escalation.
   - [ ] The matching skill capability fixture passes.
   - [ ] The repair does not perform forbidden actions.
+
+## QA Strategy
 - `Checks:`
   - `python3 bin/validators/check_skill_capabilities.py score --skill {packet.skill} --operation {packet.operation}`
   - inspect fallback and forbidden-action handling.
+- `Delegated lanes:` reviewer when behavior is material; inline otherwise.
 - `Metrics:`
   - `Primary metric:` skill_capability_sanity_pass_rate
   - `Direction:` higher
@@ -379,6 +397,10 @@ program:
 - `Review Rubrics:`
   - `integration-readiness >= 4.0`
   - `evidence-quality >= 4.0`
+- `Goal advisor inputs:`
+  - `proof_route:` tests plus reviewer when material
+  - `final_evidence:` validator output and review receipt when required
+  - `final_checkpoint:` reviewer gate when material, otherwise none
 - `Required Evidence:`
   - capability checker output
   - review result
@@ -387,11 +409,6 @@ program:
 
 ## Links
 {refs}
-
-## State
-- `Artifacts:`
-- `Commands:`
-- `Result summary:`
 
 ## Notes
 - none

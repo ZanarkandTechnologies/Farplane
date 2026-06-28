@@ -99,20 +99,20 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(normalized["intent_mode"], "documenting")
         self.assertEqual(normalized["requested_outcome"], "docs_update")
 
-    def test_normalize_user_turn_maps_docs_closeout_alias_to_close_ticket(self) -> None:
+    def test_normalize_user_turn_does_not_accept_docs_closeout_alias(self) -> None:
         normalized = normalize_user_turn(
             "$docs-closeout TASK-0061",
-            turn_id="turn-close-alias",
+            turn_id="turn-close-legacy",
             source="test",
             captured_at="2026-04-13T00:00:00Z",
         )
 
-        self.assertEqual(normalized["control_surface"], "close-ticket")
-        self.assertEqual(normalized["intent_mode"], "documenting")
-        self.assertEqual(normalized["requested_outcome"], "docs_update")
+        self.assertEqual(normalized["control_surface"], "")
+        self.assertEqual(normalized["intent_mode"], "unknown")
+        self.assertEqual(normalized["requested_outcome"], "unknown")
 
     def test_extract_control_surfaces_lists_unique_skill_mentions(self) -> None:
-        text = "First $impl-plan TASK-0160, then $qa and $docs-closeout. Please do not double count $qa."
+        text = "First $impl-plan TASK-0160, then $qa and $close-ticket. Please do not double count $qa."
 
         self.assertEqual(extract_control_surfaces(text), ["impl-plan", "qa", "close-ticket"])
         self.assertEqual(extract_skill_mentions(text), ["impl-plan", "qa", "close-ticket"])

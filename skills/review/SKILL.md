@@ -103,7 +103,7 @@ call `plan` to re-plan the same parent task scope.
 
 ## Rubric Family Catalog
 
-The calling skill, workflow, or ticket `Done / Proof` owns rubric routing.
+The calling skill, workflow, or ticket `QA Strategy` owns rubric routing.
 The review docs own the available families, TAS meanings, and hard gates. Use
 `docs/review/rubrics/reviewer-handoff.md` when creating a durable reviewer
 handoff.

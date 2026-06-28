@@ -75,8 +75,8 @@ RULES: tuple[FileRule, ...] = (
     FileRule(
         relative_path="tickets/README.md",
         required_substrings=(
-            "task_program(vars, operations, proof) -> artifact + evidence + state_delta",
-            "`Done / Proof`",
+            "ticket_change_plan(delta, change_units, qa_strategy) -> artifact_delta + evidence + state_delta",
+            "`QA Strategy`",
             "Store ticket artifacts under `tickets/TASK-XXXX/artifacts/`.",
             "python3 tickets/scripts/check_ticket_metadata.py",
             "the ticket is the canonical durable progress surface",

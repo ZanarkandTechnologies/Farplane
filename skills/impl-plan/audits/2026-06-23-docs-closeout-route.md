@@ -22,11 +22,11 @@ eval_required: no
 
 - Before: material `impl-plan` output named proof and Goal Packet preview, but
   did not explicitly name the documentation/closeout owner.
-- After: material plans include a `Documentation / Closeout` route: default to
-  `close-ticket` for final writeback and durable docs changed; call
-  `documentation` only for substantive durable doc writing or revision.
+- After: superseded by TASK-0241. Material plans include a `Docs Strategy`
+  block: default to `update_docs` only for substantive durable docs changes and
+  record a `no_docs` reason otherwise.
 - Why: docs can be silently skipped if closeout is omitted, while calling
-  `documentation` for routine writeback adds needless ceremony.
+  `doc-advisor` for routine writeback adds needless ceremony.
 - Tradeoff accepted: one compact plan block instead of making documentation a
   mandatory Goal completion step.
 
@@ -34,7 +34,7 @@ eval_required: no
 
 - Objective: make documentation ownership visible before approval.
 - Placement logic: `impl-plan` names the route; `close-ticket` owns final
-  writeback; `documentation` owns substantive durable doc-writing quality.
+  writeback; `doc-advisor` owns substantive durable doc-writing quality.
 - Expected behavior delta: plans now show whether docs are not required,
   closeout-only, or a real documentation task.
 - Proof needed: checklist entry, prompt/template update, validator, live
@@ -45,10 +45,10 @@ eval_required: no
 | Check | Verdict | Evidence |
 | --- | --- | --- |
 | `first_load_sufficiency` | pass | `SKILL.md` Todo List requires naming the documentation/closeout route. |
-| `reference_load_precision` | pass | `references/template.md` owns the detailed `Documentation / Closeout` block. |
-| `missing_context_rate` | pass | Output contract says whether `close-ticket` alone is enough or `documentation` is required. |
+| `reference_load_precision` | pass | `references/template.md` owns the detailed `Docs Strategy` block. |
+| `missing_context_rate` | pass | Output contract says whether `close-ticket` alone is enough or `doc-advisor` is required. |
 | `noisy_context_rate` | pass | Detailed doc closeout fields stay in the template reference. |
-| `duplicated_instruction_count` | pass | `impl-plan` names the route; `close-ticket` and `documentation` keep their owner responsibilities. |
+| `duplicated_instruction_count` | pass | `impl-plan` names the route; `close-ticket` and `doc-advisor` keep their owner responsibilities. |
 | `prompt_size_tokens` | pass | Added compact first-load route without expanding into documentation rules. |
 | `task_success_rate` | unknown | No live plan generated after the change. |
 | `review_tas_rate` | unknown | No reviewer receipt for this targeted contract edit. |
@@ -72,9 +72,9 @@ eval_required: no
 ## After Behavior
 
 - The end of the plan names `close-ticket` and, when warranted,
-  `documentation` before approval.
+  `doc-advisor` before approval.
 
 ## Followups
 
-- Consider migrating `documentation` itself to template `0.3.0` and a root
+- Consider migrating `doc-advisor` itself to template `0.3.0` and a root
   `qa_checklist.md`.

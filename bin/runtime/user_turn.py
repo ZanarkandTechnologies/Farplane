@@ -10,12 +10,14 @@ from typing import Mapping
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|goal-advisor|qa|demo|close-ticket|docs-closeout)(?=$|[\s.,:;!?()\[\]{}\"'`])",
+    r"(?<!\S)\$(?P<skill>brainstorm|deep-interview|impl-plan|goal-advisor|qa|demo|close-ticket)(?=$|[\s.,:;!?()\[\]{}\"'`])",
     re.IGNORECASE,
 )
-CONTROL_SURFACE_ALIASES = {
-    "docs-closeout": "close-ticket",
-}
+CONTROL_SURFACE_ALIASES: dict[str, str] = {}
+RETIRED_DOCS_CLOSEOUT_ALIAS_PATTERN = re.compile(
+    r"(?<!\S)\$docs-closeout(?=$|[\s.,:;!?()\[\]{}\"'`])",
+    re.IGNORECASE,
+)
 APPROVAL_REVIEW_PROMPT_PREFIX = (
     "The following is the Codex agent history whose request action you are assessing."
 )
@@ -1199,7 +1201,7 @@ def _contains_any(text: str, patterns: tuple[str, ...]) -> bool:
 
 
 def classify_intent_mode(raw_text: str) -> str:
-    lowered = raw_text.lower()
+    lowered = RETIRED_DOCS_CLOSEOUT_ALIAS_PATTERN.sub("", raw_text).lower()
     control_surface = extract_control_surface(raw_text)
 
     if control_surface == "impl-plan":
@@ -1294,7 +1296,7 @@ def classify_intent_mode(raw_text: str) -> str:
 
 
 def classify_requested_outcome(raw_text: str, intent_mode: str) -> str:
-    lowered = raw_text.lower()
+    lowered = RETIRED_DOCS_CLOSEOUT_ALIAS_PATTERN.sub("", raw_text).lower()
 
     if intent_mode == "documenting" or _contains_any(
         lowered,

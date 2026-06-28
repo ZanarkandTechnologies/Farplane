@@ -27,8 +27,8 @@ Rules:
 4. Do not rewrite the selected ticket into a smaller "first slice" unless the ticket itself declares phased delivery or a real blocker forces it.
 5. Keep one public planning artifact aligned with the canonical ticket body.
 6. Make the ticket skim quickly from the top without inventing a parallel reviewer-versus-implementer document.
-7. Organize the plan around before/after `Delta`, compact `Program`, visual
-   `Map`, concrete `Done / Proof`, `State`, `Links`, and sparse `Notes`.
+7. Organize the plan around brief before/after `Delta`, modular `Change Plan`,
+   concrete `Done`, `QA Strategy`, `Docs Strategy`, `Links`, and sparse `Notes`.
 8. If the user did not provide a take on a real material choice, act like a consultant: compare real options and recommend one decisively. Omit options when there is no real fork.
 9. If `--consensus` is active, run Planner -> Architect -> Critic before final handoff.
 10. Add appendix detail only if risk or novelty justifies it.
@@ -40,37 +40,42 @@ Rules:
      implementation plan that satisfies the ticket, and every proposed new
      function, helper, service, or module must justify why it cannot live inside
      an existing owner surface.
-11b. For Goal-backed work, call `goal-advisor` to compile the Goal Packet
-     preview before asking for approval. The human approves the plan and Goal
-     Packet together; if the plan changes, rerun `goal-advisor` and refresh the
-     packet before execution.
-11c. Include `Documentation / Closeout` near the end of material plans. Use
-     `close-ticket` for final writeback and durable docs that changed; route to
-     `documentation` only when the ticket includes substantive durable doc
-     writing or revision.
-12. For material, cross-module, or architecture-facing work, add one Mermaid
-    delta map when it makes flow, ownership, changed seams, or typed data path
+11b. For Goal-backed work, make the ticket ready for `goal-advisor(ticket)`
+     after approval. The human approves the ticket plan first; then
+     `goal-advisor` creates or updates `program.md`, `progress.md`, and the
+     native `/goal` prompt from the approved ticket.
+11c. Include `Docs Strategy` near the end of material plans. Use
+     `doc-advisor` to decide `update_docs` with targets and validation or
+     `no_docs` with a concrete reason. Do not add `close_ticket` or
+     `documentation_skill` fields.
+12. Use `Change Plan` units as the merged program and file map. Split the
+    section into one heading and one fenced block per coherent change. Each
+    material unit should include `fixes`, local before/after, `read`, `write`,
+    `operation`, `signature_or_type_impact` when useful, `routes`, `qa`, and
+    real `failure_modes`.
+13. Add one optional Mermaid system map inside `Change Plan` only when
+    topology, ownership boundaries, changed seams, or typed data path are
     easier to understand visually.
-13. Put explicit callable seams inside the `Map` when interface shape,
-    ownership boundaries, or changed handlers/files matter to trust. Use
-    `module / symbol(input): output` in nodes or edge labels where readable.
-14. Put typed data movement inside the `Map` when structs, objects, payloads,
-    or state evolve across boundaries. Use numbered edges or compact node
-    labels instead of a separate prose example when possible.
-15. Add separate `Signature delta`, `Type sketch`, or `Typed flow` fallback
-    detail only when the map would become crowded or ambiguous without it.
-16. Require a compact `Program` whenever the implementation has more than one non-trivial step.
+14. Put explicit callable seams inside `signature_or_type_impact` when
+    interface shape, ownership boundaries, or changed handlers/files matter to
+    trust. Use `module / symbol(input): output`.
+15. Put typed data movement in `signature_or_type_impact` only when structs,
+    objects, payloads, or state evolve across boundaries. Keep it to the fields
+    that matter.
+16. Require a compact `Change Plan` whenever the implementation has more than
+    one non-trivial step.
 17. Use decisive action language. Do not hedge core execution steps or the recommendation with "maybe", "might", or "could".
 18. When diagrams are used, follow `skills/diagramming/SKILL.md` for
     compactness, delta coloring, inline signatures, and anti-bloat rules.
 19. If an `Agent Testability Brief` exists, preserve its proof/testability surfaces instead of re-deriving them ad hoc.
-20. For material tickets, write a compact `Done / Proof` block that separates
-    done conditions, mechanical checks, caller-declared rubric families,
-    required TAS gates, hard gates, and required proof. Use `none mechanical`
-    rather than inventing fake metrics.
+20. For material tickets, write compact `Done` conditions plus a `QA Strategy`
+    that separates proof weight, mechanical checks, manual checks, delegated
+    lanes, caller-declared rubric families, required TAS gates, hard gates,
+    required evidence, goal-advisor inputs, and residual risk. Use
+    `none mechanical` rather than inventing fake metrics.
 21. Keep execution evidence out of the impl plan unless the user explicitly
     asks for audit detail. Evidence is stored in artifacts, `progress.md`, or
-    concise ticket `State` / `Links` pointers after execution.
+    concise ticket `Links` after execution.
 22. Use citations inline or in a compact `Citations` line only when references
     ground a claim, decision, or external expectation.
 23. If the plan still depends on invented entities, storage ownership, or runtime boundaries, stop and use `deep-system-design` first.
@@ -84,41 +89,35 @@ Output shape:
   - `After`
   - `Why now`
   - `First-principles basis` when material
-- `Program`
-  - `signature`
-  - `vars`
-  - `program` operations in `operation(input) -> output` form
-- `Goal Packet Preview` when Goal-backed
-  - `ticket`
-  - `program`
-  - `progress`
-  - `files`
-  - `budget`
-  - `metric`
-  - `proof_route`
-  - `drift_policy`
-  - `final_evidence`
-  - `native_goal_prompt`
-  - `approval`
-- `Map`
-  - Mermaid delta map when visually useful
-  - `Touch` / `Inspect`
-  - inline signatures when seams matter
-  - numbered typed flow when data movement matters
-  - optional fallback `Signature delta`, `Type sketch`, or `Typed flow`
-- `Done / Proof`
+- `Change Plan`
+  - one heading and fenced block per change
+  - `fixes`
+  - `before`
+  - `after`
+  - `read`
+  - `write`
+  - `operation`
+  - `signature_or_type_impact`
+  - `routes`
+  - `qa`
+  - `failure_modes`
+  - optional Mermaid system map when visually useful
+- `Done`
   - `done_when`
-  - `proof.checks`
-  - `proof.manual`
-  - `proof.review`
-  - `proof.evidence`
-- `Documentation / Closeout`
-  - `close_ticket`
-  - `documentation_skill`
-  - `docs_changed`
-  - `documentation_reason`
-  - `final_writeback`
-- `State`
+- `QA Strategy`
+  - `proof_weight`
+  - `checks`
+  - `manual`
+  - `delegated_lanes`
+  - `review`
+  - `evidence`
+  - `goal_advisor_inputs`
+  - `residual_risk`
+- `Docs Strategy`
+  - `outcome`
+  - `doc_targets`
+  - `no_docs_reason`
+  - `validation`
 - `Links`
 - `Notes`
   - risks, blast radius, rollback, follow-ups, citations, blockers only when real
@@ -133,41 +132,45 @@ Requirements:
 - The plan should solve the full selected ticket's acceptance criteria unless
   the ticket itself declares phased delivery or a real blocker forces narrower
   scope.
-- `Program` should give a builder an explicit ordered path, not just a list of
-  topics.
-- Goal-backed plans should expose the Goal Packet before execution so approval
-  covers the ticket plan, `program.md`, `progress.md`, and native `/goal`
-  prompt together.
-- Material plans should name the final docs/closeout route so the Goal does not
-  silently skip documentation or call `documentation` when `close-ticket`
-  writeback is sufficient.
+- `Change Plan` should give a builder an explicit ordered path, not just a list
+  of topics, and should avoid forcing a reader to match files from another
+  section.
+- Do not use synthetic delta labels by default. Use `fixes:` in each change
+  block; add stable anchors only when many-to-many traceability genuinely earns
+  the extra notation.
+- Goal-backed plans should leave enough ticket structure for
+  `goal-advisor(ticket)` to compile `program.md`, `progress.md`, and native
+  `/goal` prompt after approval without transcript memory.
+- Material plans should include a final `Docs Strategy` so the Goal does not
+  silently skip durable docs or invent closeout ceremony.
 - The recommendation must name the chosen path directly when a real decision
   exists.
 - The recommendation and build steps should use strong action language, not
   timid caveats.
-- `Map` is expected for material or cross-module work when it makes flow,
-  ownership, changed seams, or typed data path easier to understand.
+- Optional system maps are expected only when they make flow, ownership,
+  changed seams, or typed data path easier to understand than the change units.
 - Use one legend-backed delta map instead of separate before/after diagrams
   unless the split is clearly simpler.
 - Follow `diagramming` for compact node labels, color/legend use, and
   inline-signature practice.
-- Callable seams should appear in the map or a compact fallback list, usually
-  3-7 real seams in the form `module / symbol(input): output`.
-- Typed data flow should appear in the map or a compact fallback flow using
-  only the fields that matter to the plan.
-- Proof must use concrete checks, not generic test categories.
+- Callable seams should appear in `signature_or_type_impact`, usually 3-7 real
+  seams in the form `module / symbol(input): output`.
+- Typed data flow should appear in `signature_or_type_impact` using only the
+  fields that matter to the plan.
+- QA Strategy must use concrete checks, not generic test categories.
 - New files, functions, parameters, config knobs, routes, or abstractions must
   justify reuse checked, ownership, testability, or blast-radius reduction.
 - Material plans must state that they are the minimal implementation plan for
   the selected ticket, and proposed new functions, helpers, services, or modules
   must prove why an existing owner surface cannot carry them.
-- `Done / Proof` should be compact by default: done conditions, metric or
-  `none mechanical`, optional metric-card rationale, review rubrics/TAS gates,
-  hard gates, and required proof.
-- If the work is a trivial localized fix, `Map`, typed flow, and other deeper
-  detail may be intentionally short or omitted.
+- `Done` should be compact by default: done conditions only.
+- `QA Strategy` should carry metric or `none mechanical`, optional metric-card
+  rationale, review rubrics/TAS gates, hard gates, required evidence,
+  proof route, final evidence, and final checkpoint.
+- If the work is a trivial localized fix, typed flow, system maps, and other
+  deeper detail may be intentionally short or omitted.
 - `Options considered` must appear only for real material choices, with compact
   pros, cons, and why the chosen path won.
-- End with a clear readiness call in `State` or `Notes`, not a full
+- End with a clear readiness call in `Notes`, not a full
   planning `Evidence` report.
 - Include a compact `plan_qa` readiness note for material plans.

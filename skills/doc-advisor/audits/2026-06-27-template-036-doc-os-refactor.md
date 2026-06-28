@@ -1,20 +1,20 @@
 ---
-skill: documentation
+skill: doc-advisor
 date: 2026-06-27
 change_type: structure
 owner: skill-maintenance
 status: pass
 review_route: self_check
-before_ref: skills/documentation/SKILL.md
-after_ref: skills/documentation/SKILL.md
+before_ref: skills/doc-advisor/SKILL.md
+after_ref: skills/doc-advisor/SKILL.md
 reasoning_basis: proof_advisor
 proof_artifacts:
   - docs/systems/documentation-os.md
-  - skills/documentation/eval_task.json
-  - skills/documentation/references/doc-architecture.md
-  - skills/documentation/references/metadata-and-registries.md
-  - skills/documentation/references/feature-system-specs.md
-  - skills/documentation/references/finish-gate.md
+  - skills/doc-advisor/eval_task.json
+  - skills/doc-advisor/references/doc-architecture.md
+  - skills/doc-advisor/references/metadata-and-registries.md
+  - skills/doc-advisor/references/feature-system-specs.md
+  - skills/doc-advisor/references/finish-gate.md
 eval_required: yes
 ---
 
@@ -22,10 +22,10 @@ eval_required: yes
 
 ## Change
 
-- Before: `documentation` used `skill-template: "0.3.0"`, declared one method
+- Before: `doc-advisor` used `skill-template: "0.3.0"`, declared one method
   without a method reference, and carried feature/system/metadata/doc architecture
   detail in first load.
-- After: `documentation` uses `skill-template: "0.3.6"`, exposes four branch
+- After: `doc-advisor` uses `skill-template: "0.3.6"`, exposes four branch
   method references, and points durable documentation architecture to
   `docs/systems/documentation-os.md`.
 - Why: normal documentation invocation should load the executable workflow first
@@ -35,7 +35,7 @@ eval_required: yes
 
 ## First-Principles Reasoning
 
-- Objective: keep the documentation skill executable while preserving docs-as-code
+- Objective: keep `doc-advisor` executable while preserving docs-as-code
   governance.
 - Placement logic: system-level lore belongs in Documentation OS; skill
   references own conditional methods; `SKILL.md` owns trigger, routing, gates,
@@ -60,7 +60,7 @@ eval_required: yes
 
 ## Proof Artifacts
 
-- Skill-local evals: `skills/documentation/eval_task.json`.
+- Skill-local evals: `skills/doc-advisor/eval_task.json`.
 - Structure evals: static eval rows added for future harness use.
 - Reviewer receipt: not requested for this local refactor.
 - Validators: passed `python3 docs/features/validate_features.py --write`,

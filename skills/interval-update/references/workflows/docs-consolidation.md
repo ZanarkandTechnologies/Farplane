@@ -19,7 +19,7 @@ rewrite.
 Use `update-memory` for whole-project context refresh across README, memory,
 history, lessons, troubles, and docs deltas. Use `consolidate` for
 keep/merge/move/delete decisions over docs and memory surfaces. Use
-`documentation` for substantive reader-quality rewrites or durable docs-as-code
+`doc-advisor` for substantive reader-quality rewrites or durable docs-as-code
 changes. Route stale feature rows back to the owning `docs/systems/*.md`
 metadata source;
 `docs/systems/registry.jsonl` and `docs/features/registry.jsonl` are generated
@@ -77,7 +77,7 @@ Default sources from the context bundle:
         [consolidate](../../../consolidate/SKILL.md) with `structure =
         docs_tree | memory`.
   - [ ] Route substantive durable doc writing, reader-quality cleanup, or docs
-        architecture changes to [documentation](../../../documentation/SKILL.md).
+        architecture changes to [doc-advisor](../../../doc-advisor/SKILL.md).
   - [ ] Route bloat or knowledge-specific scoring/rerouting to
         [knowledge-tidier](../../../knowledge-tidier/SKILL.md), which will call
         `consolidate` for the shared decision pass.

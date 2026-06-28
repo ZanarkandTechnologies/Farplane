@@ -18,120 +18,103 @@ the decisive path.
   constraints, first viable slice, proof/falsification, tradeoff, and non-goals
   when material
 
-## Map
+## Change Plan
 
-Use one Mermaid delta map when the work is material, cross-module, or easier to
-understand visually. Put changed signatures and typed flow in the map when that
-keeps the plan clearer.
+Use change units as the merged implementation program and file map. Group by
+coherent fix, not by artifact type. Each unit should carry the local
+before/after, read/write files, operation, type or signature impact when useful,
+routes, and QA expectations so builders do not cross-map separate sections.
 
-- `Touch:`
-- `Inspect:`
-- `Legend:` keep | change | add | remove
+Repeat one heading and fenced block per coherent change:
 
-```mermaid
-flowchart LR
-  %% Prefer one compact visual before/after map.
-  %% Put inline signatures in nodes or edges when seams matter.
-  %% Number typed-flow edges when payload/state movement matters.
-```
-
-Optional fallback detail when the map would become crowded:
-
-- `Signature delta:` `module / symbol(input): output`
-- `Type sketch:` `TypeName { field: Type }`
-- `Typed flow:` one representative object or payload path
-
-## Program
+### Change 1: short label
 
 ```text
-signature:
-  task(input, state?) -> artifact + evidence + state_delta
-
-vars:
-  target =
-  owner =
-
-program:
-  ground(vars) -> current_state
-  change(current_state) -> artifact_delta
-  verify(done_when, proof) -> evidence
+fixes:
+  - plain-language problem or delta this change resolves
+before:
+  -
+after:
+  -
+read:
+  - path:
+    reason:
+write:
+  - path:
+    change:
+operation:
+  -
+signature_or_type_impact:
+  -
+routes:
+  docs: doc-advisor | no_docs
+  qa: tests | qa-tester | visual-qa | agent-qa-test | none
+  review: reviewer | inline | none
+qa:
+  -
+failure_modes:
+  -
 ```
 
 Include `Recommendation:` only when it changes the build path. Include
 `Options considered:` only when there is a real material fork.
 
-## Goal Packet Preview
+Optional visual system map only when topology, ownership boundaries, or typed
+flow are easier to understand as a diagram:
 
-Include this for material Goal-backed work. This preview is compiled through
-`goal-advisor` and is reviewed with the plan before native Goal execution.
-
-```text
-goal_packet:
-  ticket: tickets/TASK-XXXX/ticket.md
-  program: tickets/TASK-XXXX/program.md
-  progress: tickets/TASK-XXXX/progress.md
-  files:
-    -
-  budget:
-  metric:
-  proof_route:
-  drift_policy:
-  final_evidence:
-  native_goal_prompt: |
-    /goal ...
-  approval:
-    status: pending | approved | revise | blocked
-    rule: approve plan and Goal Packet together before run
+```mermaid
+flowchart LR
+  %% Optional. Omit for localized tickets.
 ```
 
-If the ticket plan changes after review, rerun `goal-advisor` and replace this
-preview before asking for approval again.
-
-## Done / Proof
+## Done
 
 ```text
 done_when:
   -
+```
 
-proof:
+## QA Strategy
+
+```text
+qa_strategy:
+  proof_weight: smoke | tests | qa | visual_qa | review | agent_qa | demo
   checks:
     -
   manual:
+    -
+  delegated_lanes:
     -
   review:
     - rubric: none
       required_tas: none
   evidence:
     -
+  goal_advisor_inputs:
+    proof_route:
+    final_evidence:
+    final_checkpoint:
+  residual_risk:
+    -
 ```
 
-## Documentation / Closeout
+## Docs Strategy
 
 ```text
-docs_closeout:
-  close_ticket: required
-  documentation_skill: not_required | required
-  docs_changed:
+docs_strategy:
+  outcome: update_docs | no_docs
+  doc_targets:
     -
-  documentation_reason: substantive durable doc writing/revision | none
-  final_writeback:
-    - ticket evidence and linked docs
-    - durable docs changed in final pass
-    - validators/checks matched to touched surfaces
+  no_docs_reason:
+  validation:
+    -
 ```
 
-Use `close-ticket` for final ticket writeback and durable-doc consistency.
-Use `documentation` only when the ticket itself includes substantive durable doc
-writing or revision that needs reader contract, grounding, and doc-quality
-checks.
-
-## State
-
-- `next_action:`
-- `blocked:`
-- `latest_verification:`
-- `plan_qa:` include `minimal_impl_plan_claim` and `existing_service_fit` for
-  material plans
+Use `doc-advisor` to decide whether durable docs change. Use `update_docs` when
+README, feature/system specs, runbooks, templates, public guidance, or other
+durable docs need edits. Use `no_docs` only with a concrete reason, such as
+internal-only implementation, generated-only output, test fixture changes, or
+proof that no public/canonical/workflow-facing surface changed.
 
 ## Links
 
@@ -164,4 +147,4 @@ checks.
 Use only when the ticket is intended for `$ralph`, unattended work, external
 services, hard-to-QA UI/motion/simulation, or deploy/spend/destructive
 boundaries. Otherwise keep readiness in the spec or ticket and reflect only the
-testability or human gate in `Done / Proof`.
+testability or human gate in `QA Strategy`.

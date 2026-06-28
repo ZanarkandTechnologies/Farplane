@@ -1,12 +1,12 @@
 ---
-skill: documentation
+skill: doc-advisor
 date: 2026-06-27
 change_type: maintenance
 owner: skill-maintenance
 status: pass
 review_route: self_check
-before_ref: skills/documentation/qa_checklist.md
-after_ref: skills/documentation/qa_checklist.md
+before_ref: skills/doc-advisor/qa_checklist.md
+after_ref: skills/doc-advisor/qa_checklist.md
 reasoning_basis: deliberative_advice
 proof_artifacts:
   - docs/review/rubrics/documentation-quality.md
@@ -31,7 +31,7 @@ eval_required: no
 | Check | Verdict | Evidence |
 | --- | --- | --- |
 | `maintenance_locality` | pass | Checklist and rubric now have distinct jobs. |
-| `composition_clarity` | pass | `documentation` routes material readiness to the review rubric. |
+| `composition_clarity` | pass | `doc-advisor` routes material readiness to the review rubric. |
 | `proof_surface_fit` | pass | Review verdicts, not metrics, classify documentation readiness. |
 | `quality_signal_layer_fit` | pass | Metrics language was removed from the skill-local checklist. |
 
