@@ -241,7 +241,7 @@ target_thread_id = "019f0774-76d7-77d3-b7e5-0e9bb48e232f"
 [schedule]
 type = "active_hours_interval"
 timezone = "Asia/Kuala_Lumpur"
-days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
+days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 start = "10:00"
 end = "18:00"
 interval_minutes = 60
