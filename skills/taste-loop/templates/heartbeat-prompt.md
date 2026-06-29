@@ -56,6 +56,35 @@ Before scoring candidates, inspect controller memory. If it contains an
 `active`, `waiting_for_feedback`, or `revising` worker, resume, inspect, or
 block that worker in this beat instead of creating a new worker.
 
+If the active worker is waiting for feedback, first verify that its
+`worker_thread_ref` is discoverable in the Codex app thread list or by its
+searchable title. If the worker cannot be found, write a blocked report and
+update the ticket/progress; do not claim it is waiting and do not create another
+replacement worker with an unverified id.
+
+If the visible worker is waiting for feedback and the configured reminder
+interval has elapsed, send exactly one phone-viewable reminder from that worker
+thread using `telegram-message`. The reminder must first label the review
+object with `Review artifact`, `Skill/workflow`, `Product`, `Stage`, and
+`Not judging`, then include the proposal or artifact summary and the one reply
+action inside Telegram itself. Prefer simple Telegram Markdown for controlled
+Taste Loop feedback/reminder bodies; use raw text only when the body contains
+arbitrary code, JSON, dense paths, or generated text that could break Markdown
+parsing. Record `last_reminder_at`, `reminder_count`, and send/fallback status
+in `progress.md` and automation memory, then stop the beat.
+
+When no active worker is present, reuse an existing active ticket and Goal
+Packet for the same `product_lane + workflow_id` before creating a new ticket.
+Taste Loop tickets are workflow containers: append timestamped hypothesis
+cycles to the same `progress.md` until that workflow reaches `complete`,
+`blocked`, `discarded`, `closed`, `budget_exhausted`, or explicit operator
+closeout. `revise`, `reject`, no-reply, and reminder states are not terminal.
+When a ticket declares `progress_unit = hypothesis_cycle`, run
+`python3 skills/taste-loop/scripts/check_progress_hypothesis_cycles.py
+<program.md> <progress.md>` before recording a waiting or terminal state. If it
+fails, update the ticket/progress with a blocker instead of sending another
+feedback request.
+
 ## Select
 
 Read:
@@ -241,8 +270,11 @@ tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md
 .farplane/automation/taste-loop/preview/
 ```
 
-For `artifact_worker_thread`, write or update the ticket Goal Packet before
-creating the Codex thread. The worker thread prompt must include:
+For `artifact_worker_thread`, find and reuse the active ticket Goal Packet for
+the same `product_lane + workflow_id`; create a new ticket only when no active
+workflow ticket exists or the prior ticket is terminal. Write or update that
+Goal Packet before creating the Codex thread. The worker thread prompt must
+include:
 
 ```text
 Files:
@@ -252,30 +284,48 @@ Files:
 - tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md when no live scenario is supplied
 
 Task:
-Use $<artifact-owner> to run a Goal-backed phase-aware improvement loop for
-<workflow_id>. Start with the planning phase. Log an experiment proposal in
+Use $<artifact-owner> to run a Goal-backed phase-aware founder loop for
+<workflow_id>. Start with the planning phase. Log a hypothesis cycle in
 progress.md, use AGI Toy Shop as the fixed default scenario unless live context
 is supplied, generate one to three TasteProposal artifacts using
 skills/taste-loop/templates/taste-proposal.md, then use $optimize-with-human
-with target=<workflow_id>, objective=<planning and execution quality>,
-channel=telegram, feedback_policy=ask_when_artifact_ready, and
-phases=planning,execution. Each TasteProposal must include audience/buyer,
-taste insight, artifact shape, core angle, 5+ execution beats, why it could
-win, cringe risks, references or taste pack, feedback question, and next step
-if approved. Before the options, frame the Telegram-facing proposal like a
-customer pitch: what we are trying to make, the bigger problem, the proposed
-solution, why the idea should feel desirable, and exactly what taste decision
-Kenji is making. Do not send an internal planning table as the primary review
-surface. When Kenji approves a proposal, freeze the approved brief, log an
-execution experiment in progress.md, and execute the artifact. When Kenji
-replies in this thread, append feedback to progress.md and continue the right
-phase. Stop only on keep/approve/convergence/budget/blocker.
+with target=<workflow_id>, objective=<founder conviction that the bet is worth
+making/selling/testing>, channel=telegram,
+feedback_policy=ask_when_artifact_ready, phases=planning,execution, and
+founder_lens=true. Each TasteProposal must include customer/buyer, problem,
+wedge, offer/artifact, distribution angle, validation question, next bet if
+approved, pivot trigger if rejected, taste insight, artifact shape, core angle,
+5+ execution beats, why it could win, cringe risks, references or taste pack,
+feedback question, and next step. Before the options, frame the
+Telegram-facing proposal like a founder/customer pitch: what we are trying to
+make, the bigger problem, the proposed solution, why the idea should feel
+desirable, what distribution or buyer reaction it is trying to earn, and
+exactly what founder decision Kenji is making. Do not send an internal planning
+table as the primary review surface. When Kenji approves a proposal, freeze
+the approved brief, append an execution hypothesis cycle in progress.md, and
+execute the artifact. When Kenji replies in this thread, append feedback,
+learning, and the next hypothesis to progress.md and continue the right phase
+in the same workflow ticket. If Kenji replies with
+revise or reject, restate the clarified review object, then either ask for the
+next instruction or send the next revised review request. Do not stop after
+only acknowledging the feedback, and do not create a fresh TL ticket for a
+non-terminal revision or a fresh named TL-EXP item for each update. Stop only
+on keep/approve/convergence/budget/blocker.
 ```
 
 After the thread is created or found, record `worker_thread_ref` in the ticket,
 `progress.md`, the Taste Loop report when one is written, and the Codex
-automation memory. Set the thread title to a readable workflow name when the
-tool is available.
+automation memory. Set the thread title to a searchable name when the tool is
+available:
+
+```text
+Taste Loop Worker: TASK-XXXX <workflow_id>
+```
+
+Do not write `waiting_for_feedback` until the worker thread is visible by id or
+title, the Telegram send or fallback proof is recorded, and the hypothesis
+cycle validator passes when `program.md` opts into `progress_unit =
+hypothesis_cycle`.
 
 Automation memory row shape:
 
@@ -283,6 +333,7 @@ Automation memory row shape:
 active_worker:
   workflow_id:
   product_lane:
+  ticket_key:
   ticket_ref:
   worker_thread_ref:
   status: planning | waiting_for_idea_feedback | execution |
@@ -295,6 +346,8 @@ active_worker:
   idea_pass_rate:
   execution_pass_rate:
   last_request_at:
+  last_reminder_at:
+  reminder_count:
   last_feedback_at:
   next_action:
 ```
@@ -311,19 +364,21 @@ public/mobile-viewable URL, attached screenshot, or Farplane UI-ready preview
 fallback. Keep feedback questions short enough to answer from Telegram or a
 compact Farplane UI card.
 
-Experiment log row shape for worker `progress.md`:
+Hypothesis cycle row shape for worker `progress.md`:
 
 ```text
-experiment:
-  id: TL-EXP-###
+hypothesis_cycle:
   phase: planning | execution
   scenario: AGI Toy Shop | live_context
-  hypothesis:
+  current_hypothesis:
+  planned_attempt:
+  artifact_refs:
+  human_question:
+  expected_signal:
   skill_delta_candidate:
-  rollout_batch:
-  selected_rollout:
-  feedback:
-  result: pass | revise | reject | no_reply | blocker
+  human_signal:
+  learning:
+  next_hypothesis:
   promotion_decision: keep_local | rerun | harden_skill | discard
 ```
 
@@ -335,7 +390,7 @@ repeated same-phase failure or a reusable operator-approved pattern.
 Return:
 
 - status: `no_op`, `artifact_worker_thread`, `artifact_feedback`,
-  `idea_feedback`, `artifact_goal_handoff`, or `blocked`
+  `idea_feedback`, `feedback_reminder`, `artifact_goal_handoff`, or `blocked`
 - report path
 - selected product lane, artifact workflow, skill signals, recommendation, and proof provider
 - worker ticket ref and worker thread ref, if created or reused
@@ -343,6 +398,7 @@ Return:
 - concept ref, if planning feedback was requested
 - idea pass rate and execution pass rate when known
 - preview ref or deploy URL for visual artifacts
+- reminder status if a waiting feedback item was nudged or blocked
 - action artifact path, if any
 - skipped target reasons
 - unique open feedback count and duplicate open feedback count

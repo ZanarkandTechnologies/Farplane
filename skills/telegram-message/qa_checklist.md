@@ -29,6 +29,10 @@ telegram_message_check(message, recipient, send_path, artifacts?, fallback?)
   automation status, blocker, artifact ready, or review request.
 - [ ] The required user action is a single clear reply action, such as
   `pick A/B/C`, `approve`, `revise`, or `reject with one reason`.
+- [ ] If the message is acknowledging fresh feedback, it includes the next
+  operator-facing action: a revised review request, a concrete follow-up
+  question, or a named blocker. Acknowledgement-only responses are allowed only
+  for terminal keep/approve/convergence/budget/blocker states.
 - [ ] The message will be readable on a phone inside Telegram:
   - [ ] If asking for artifact feedback, the message includes the reviewable
     excerpt, options, or summary needed to decide.
@@ -53,6 +57,9 @@ telegram_message_check(message, recipient, send_path, artifacts?, fallback?)
   a phone-openable link, or a generated summary.
 - [ ] The first screen of the Telegram message explains what this is, why it
   matters, and exactly how Kenji should reply.
+- [ ] For `revise` or `reject` feedback, the response restates the corrected
+  artifact/workflow/product/stage and asks what to do next when the next step
+  is not already determined.
 - [ ] `TELEGRAM_CHAT_ID` is configured, and a token is available from
   environment or the configured Keychain path before attempting to send.
 - [ ] The message is sent through `scripts/send_message.py` with

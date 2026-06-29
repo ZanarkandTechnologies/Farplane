@@ -119,7 +119,7 @@
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-06-28",
+      "introduced_at": "2026-06-29",
       "section_count": 9,
       "sections": [
         "Context",
@@ -132,14 +132,14 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-18f4793de826.md",
-      "source_commit": "18f4793de826",
-      "summary": "Add opt-in skill surface budget scanner",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-88c72a789c91.md",
+      "source_commit": "88c72a789c91",
+      "summary": "working tree current template",
       "version": "0.3.7"
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-06-28",
+      "introduced_at": "2026-06-29",
       "section_count": 9,
       "sections": [
         "Context",
@@ -152,9 +152,9 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-2f120ffea10d.md",
-      "source_commit": "2f120ffea10d",
-      "summary": "working tree current template",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-a4724e232c9e.md",
+      "source_commit": "a4724e232c9e",
+      "summary": "Add opt-in skill surface budget scanner",
       "version": "0.3.7"
     }
   ],
@@ -565,7 +565,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "18f4793de826",
+      "source_commit": "88c72a789c91",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -579,7 +579,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "18f4793de826",
+      "source_commit": "88c72a789c91",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -593,7 +593,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "18f4793de826",
+      "source_commit": "88c72a789c91",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -607,7 +607,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "18f4793de826",
+      "source_commit": "88c72a789c91",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -621,7 +621,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "18f4793de826",
+      "source_commit": "88c72a789c91",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -635,7 +635,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "2f120ffea10d",
+      "source_commit": "a4724e232c9e",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -649,7 +649,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "2f120ffea10d",
+      "source_commit": "a4724e232c9e",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -663,7 +663,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "2f120ffea10d",
+      "source_commit": "a4724e232c9e",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -677,7 +677,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "2f120ffea10d",
+      "source_commit": "a4724e232c9e",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -691,7 +691,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "2f120ffea10d",
+      "source_commit": "a4724e232c9e",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -861,7 +861,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-28T12:49:58+00:00",
+  "generated_at": "2026-06-29T14:45:38+00:00",
   "rollout": [
     {
       "eval": "",
@@ -3284,7 +3284,7 @@
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.6.3"
+        "farplane-framework": "1.6.4"
       }
     }
   ],
@@ -3310,10 +3310,10 @@
         "FEAT-0060"
       ],
       "path": "../Farplane-UI/farplane/manifest.json",
-      "status": "stale",
+      "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.6.3"
+      "used_version": "1.6.4"
     },
     {
       "consumer_id": "budget-advisor",
@@ -4663,8 +4663,7 @@
         "project": 2
       },
       "by_status": {
-        "current": 1,
-        "stale": 1
+        "current": 2
       },
       "current_version": "1.6.4",
       "feature_refs": [
@@ -4953,10 +4952,10 @@
       "version": "0.3.6"
     },
     {
-      "introduced_at": "2026-06-28",
-      "latest_at": "2026-06-28",
-      "latest_commit": "2f120ffea10d",
-      "latest_summary": "working tree current template",
+      "introduced_at": "2026-06-29",
+      "latest_at": "2026-06-29",
+      "latest_commit": "a4724e232c9e",
+      "latest_summary": "Add opt-in skill surface budget scanner",
       "release_count": 2,
       "sections": [
         "Context",
@@ -4969,23 +4968,23 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-2f120ffea10d.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-a4724e232c9e.md",
       "snapshots": [
         {
-          "introduced_at": "2026-06-28",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-18f4793de826.md",
-          "source_commit": "18f4793de826",
-          "summary": "Add opt-in skill surface budget scanner"
+          "introduced_at": "2026-06-29",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-88c72a789c91.md",
+          "source_commit": "88c72a789c91",
+          "summary": "working tree current template"
         },
         {
-          "introduced_at": "2026-06-28",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-2f120ffea10d.md",
-          "source_commit": "2f120ffea10d",
-          "summary": "working tree current template"
+          "introduced_at": "2026-06-29",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-a4724e232c9e.md",
+          "source_commit": "a4724e232c9e",
+          "summary": "Add opt-in skill surface budget scanner"
         }
       ],
-      "source_commit": "18f4793de826",
-      "summary": "Add opt-in skill surface budget scanner",
+      "source_commit": "88c72a789c91",
+      "summary": "working tree current template",
       "template_metadata": {
         "feature_refs": [
           "FEAT-0022",

@@ -38,9 +38,9 @@ chat, `review`, `qa`, or `telegram-message` directly instead of this preset.
 ```text
 optimize_with_human(target, objective, artifacts?, budget?, channel=telegram,
                     worker_thread_ref?, phase=planning|execution,
-                    approved_plan_ref?)
+                    approved_plan_ref?, founder_lens=false?)
   -> goal_advisor_params + feedback_protocol + goal_packet_ref +
-     experiment_log_ref + feedback_request_ref
+     progress_log_ref + feedback_request_ref
 state: reads(operator intent, target skill/artifacts, ticket/program/progress?,
              worker_thread_ref?); writes(feedback-request.md? feedback.json?
              progress entry?)
@@ -98,8 +98,15 @@ Bind the current phase before asking for feedback:
 - `execution`: the artifact must implement an approved planning brief. Require
   `approved_plan_ref` unless the artifact is explicitly a tiny planning test.
 
-Before a feedback request is sent, append an experiment proposal to
-`progress.md`. After feedback arrives, append the result and promotion decision.
+When `founder_lens=true`, the worker should behave like a founder validating a
+commercial bet, not like an internal reviewer collecting preferences. The
+feedback request must name the customer, problem, wedge, offer/artifact,
+distribution angle, validation question, and what feedback would change the
+next bet. The objective is not merely "impress Kenji"; it is to earn Kenji's
+conviction that this bet is worth making, selling, or testing.
+
+Before a feedback request is sent, append a hypothesis cycle to `progress.md`.
+After feedback arrives, append the human signal, learning, and next hypothesis.
 Promote a skill, prompt, workflow, or template change only after repeated
 same-phase failure or a reusable operator-approved pattern. First rejections
 perturb the local plan or execution attempt; they do not harden source skills.
@@ -110,6 +117,9 @@ perturb the local plan or execution attempt; they do not harden source skills.
 - [ ] 1. Bind the optimization target and objective.
    - [ ] Name the target skill, workflow, artifact set, or strategy surface.
    - [ ] Name what should improve and what should not change.
+   - [ ] When the artifact is product, content, distribution, or offer work,
+     bind `founder_lens=true` unless the caller explicitly wants a narrower
+     artifact review.
 - [ ] 2. Decide whether a Goal Packet already exists.
    - [ ] If not, route to `goal-advisor` with human-feedback parameters.
    - [ ] If yes, read or name `ticket.md`, `program.md`, and `progress.md`.
@@ -128,10 +138,13 @@ perturb the local plan or execution attempt; they do not harden source skills.
    - [ ] Default pause policy: ask when reviewable artifacts exist, then wait.
    - [ ] Fall back to a local `feedback-request.md` path when Telegram is not
      configured.
-- [ ] 4. Log the experiment proposal in `progress.md`.
-   - [ ] Include `experiment_id`, `phase`, `hypothesis`,
-     `skill_delta_candidate`, `scenario`, `rollout_batch`, and
-     `expected_feedback`.
+- [ ] 4. Log the hypothesis cycle in `progress.md`.
+   - [ ] Include `phase`, `current_hypothesis`, `planned_attempt`,
+     `artifact_refs`, `human_question`, `expected_signal`, and
+     `skill_delta_candidate`.
+   - [ ] If `founder_lens=true`, include the customer, problem, wedge,
+     offer/artifact, distribution angle, validation question, and what feedback
+     would change the next bet.
    - [ ] Keep `skill_delta_candidate` as a candidate until repeated feedback
      proves it should be hardened.
 - [ ] 5. Choose the feedback type.
@@ -158,6 +171,10 @@ perturb the local plan or execution attempt; they do not harden source skills.
      report the fallback path/blocker.
    - [ ] If fresh human feedback was processed and the loop is not terminal,
      send the next artifact feedback request or a blocker before stopping.
+   - [ ] If the fresh feedback is `revise` or `reject`, acknowledge the
+     feedback, restate the corrected artifact/workflow/product/stage, and ask
+     for the next instruction or present the next revised review request. Do
+     not stop after only saying the feedback was recorded.
    - [ ] If the loop is terminal, record keep/approve/convergence/budget/blocker
      in `progress.md`.
 - [ ] 11. Record the experiment result.
@@ -201,31 +218,38 @@ resume_policy: Telegram replies land in worker_thread_ref; worker appends
   feedback to progress.md and generates the next artifact revision.
 ```
 
-## Experiment Log Contract
+## Progress Log Contract
 
-Append this shape to the owning `progress.md` before feedback is requested, then
-fill the feedback and result fields after the reply:
+Append this shape to the owning `progress.md` before feedback is requested,
+then append the feedback result and next hypothesis after the reply. The cycle
+does not need a fresh named experiment id; timestamped `progress.md` headings
+are enough unless the caller needs a stable artifact handle.
 
 ```text
-experiment:
-  id: OWH-EXP-###
+hypothesis_cycle:
   phase: planning | execution
   target:
   scenario:
   approved_plan_ref:
-  hypothesis:
+  current_hypothesis:
+  planned_attempt:
+  artifact_refs:
+    - path:
+      role:
+  human_question:
+  expected_signal:
   skill_delta_candidate:
-  rollout_batch:
-    - artifact_id:
-      artifact_ref:
-      expected_feedback:
-  feedback:
-  result: pass | revise | reject | no_reply | blocker
+  human_signal:
+    verdict:
+    feedback:
+    labels:
+  learning:
+  next_hypothesis:
   promotion_decision: keep_local | rerun | harden_skill | discard
 ```
 
 For Taste Loop, planning experiments usually present one to three TasteProposal
-artifacts and execution experiments present the approved proposal's generated
+artifacts and execution hypothesis cycles present the approved proposal's generated
 artifact. Use the fixed AGI Toy Shop scenario when no live scenario is supplied.
 
 Minimum TasteProposal shape for non-trivial planning feedback:
@@ -269,6 +293,10 @@ This is the guard against worker threads going quiet after Kenji replies. If
 the worker changes a skill, workflow, prompt, or artifact in response to
 feedback, it must either send the next review request through Telegram or send
 a blocker that tells Kenji what is needed next.
+For `revise` or `reject` feedback, a valid acknowledgement must include the
+updated understanding and the next operator-facing action. It should ask a
+concrete follow-up such as "Do you want me to revise this into X, switch to Y,
+or stop this experiment?" when the next action is ambiguous.
 
 ## Feedback Schema
 
@@ -287,6 +315,30 @@ Default shape:
 
 Use `score: null` when the feedback type is qualitative only.
 
+## Founder Lens Contract
+
+Use the founder lens for product, content, distribution, offer, and market
+learning artifacts where Kenji's taste is standing in for early founder
+judgment:
+
+```text
+founder_lens(target, market_context, phase, human_feedback?)
+  -> customer
+   + problem
+   + wedge
+   + offer_or_artifact
+   + distribution_angle
+   + validation_question
+   + next_bet_if_approved
+   + pivot_trigger_if_rejected
+```
+
+The founder lens changes framing, not ownership. `optimize-with-human` still
+owns the feedback protocol, Telegram request, pause/resume contract, and
+progress logging. The artifact skill still owns generation. The worker should
+ask Kenji questions like "Would this make you want to build, sell, or test
+this?" instead of "Is this artifact good?" when the bet is still being shaped.
+
 ## Output
 
 Return or write:
@@ -295,7 +347,7 @@ Return or write:
 - `goal_packet_ref`
 - `phase`
 - `approved_plan_ref`
-- `experiment_log_ref`
+- `progress_log_ref`
 - `feedback_request_path`
 - `artifact_refs`
 - `review_question`
@@ -360,6 +412,9 @@ Feedback shape:
 
 - Do not make Kenji invent the next prompt from scratch. Present artifacts and
   ask for a small judgment.
+- Do not reduce founder-mode feedback to "do you like this?" Name the customer,
+  problem, wedge, validation question, and next bet so Kenji can judge founder
+  conviction.
 - Do not make Kenji judge a non-trivial plan from only a title, hook, and angle.
   Planning feedback needs proposal detail; compress it for Telegram but do not
   erase the reasoning.

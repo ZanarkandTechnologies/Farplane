@@ -90,6 +90,9 @@ material, automated, sensitive, or repeated notification failures.
   - [ ] If only a local path exists, include the essential excerpt or do not
     send; report a fallback/blocker instead.
   - [ ] Ask one concrete reply action Kenji can answer in one Telegram reply.
+  - [ ] For Taste Loop feedback requests and reminders, prefer simple Telegram
+    Markdown headings and emphasis so the decision is easier to scan on a
+    phone.
   - [ ] Keep secrets, tokens, credentials, and sensitive private data out.
 - [ ] 4. Send or fallback.
   - [ ] Resolve `thread_id := caller thread/session id || CODEX_THREAD_ID`.
@@ -100,8 +103,9 @@ material, automated, sensitive, or repeated notification failures.
     thread/session route row.
   - [ ] Use `TELEGRAM_CHAT_ID` from environment or `~/.farplane/config.json`,
     and `TELEGRAM_BOT_TOKEN` from environment, Keychain, or gateway config.
-  - [ ] Use `--parse-mode Markdown` only for simple Markdown; use
-    `--parse-mode none` for raw text.
+  - [ ] Use `--parse-mode Markdown` for simple, controlled Markdown such as
+    Taste Loop feedback requests; use `--parse-mode none` for raw text or
+    unsafe artifact excerpts.
   - [ ] If Telegram is not configured, report the fallback artifact path instead
     of blocking unrelated workflow progress.
 - [ ] 5. Finish gate.
@@ -116,18 +120,42 @@ material, automated, sensitive, or repeated notification failures.
 Artifact-review message shape:
 
 ```text
-{short title}
+*{short title}*
 
-Why this matters: {one sentence}
+*Why this matters:* {one sentence}
 
-Options:
+*Options:*
 A. {self-contained option}
 B. {self-contained option}
 C. {self-contained option}
 
-Reply with: A, B, C, revise, or reject + one short reason.
+*Reply with:* A, B, C, revise, or reject + one short reason.
 
-Ref: {phone-openable URL or local desktop path marked "desktop-only"}
+_Desktop ref:_ {local desktop path marked "desktop-only"}
+```
+
+Taste Loop feedback/reminder shape:
+
+```text
+*Taste Loop {ticket}: {short decision title}*
+
+*Review artifact:* {artifact type, e.g. social-thread premise / customer-facing idea}
+*Skill/workflow:* {owner skill -> concrete workflow, e.g. social-content -> Twitter/X thread planning}
+*Product:* {product or lane, e.g. AGI Toy Shop / Pocket Intern}
+*Stage:* {planning | execution | revision}; {publish/build boundary}
+*Not judging:* {common confusions, e.g. video, product build, final copy, external posting}
+
+*Context:* {one sentence}
+
+*Premise:* {customer-facing premise}
+
+*Why it might work:* {one compact reason}
+
+*Question:* {the exact decision Kenji is making}
+
+*Reply with:* approve, revise, or reject + one short reason.
+
+_Desktop ref:_ {local path, desktop-only}
 ```
 
 Send inline text:
@@ -138,7 +166,7 @@ python3 scripts/send_message.py \
   --thread-id "${CODEX_THREAD_ID:?CODEX_THREAD_ID required for reply routing}" \
   --text "Review needed: paste the short choices here, not only a local path." \
   --title "Review needed" \
-  --parse-mode none
+  --parse-mode Markdown
 ```
 
 Send a prepared file:
@@ -150,13 +178,18 @@ python3 scripts/send_message.py \
   --thread-id "${CODEX_THREAD_ID:?CODEX_THREAD_ID required for reply routing}" \
   --file "$MESSAGE_FILE" \
   --title "Feedback request" \
-  --parse-mode none
+  --parse-mode Markdown
 ```
 
 ## Gotchas
 
 - A path like `tickets/TASK-0240/artifacts/foo.md` is not phone-viewable. Send
   the content needed to decide, a phone-openable URL, or a fallback/blocker.
+- Telegram Markdown is not GitHub Markdown. Keep formatting simple: `*bold*`,
+  `_italic_`, short bullets, and plain local paths. If a message includes
+  arbitrary code, JSON, dense file paths, or generated text with lots of
+  underscores/asterisks/brackets, send raw text with `--parse-mode none`
+  instead.
 - Do not send giant reports; compress to the smallest reviewable decision plus
   the one reply action.
 - Sending Telegram does not imply permission to publish, message customers,

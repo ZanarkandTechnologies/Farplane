@@ -23,6 +23,7 @@ phases = planning, execution
 primary_metric = idea_pass_rate
 secondary_metric = execution_pass_rate
 default_scenario = tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md
+progress_unit = hypothesis_cycle
 ```
 
 ## Inputs
@@ -39,14 +40,14 @@ default_scenario = tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md
 
 ```text
 planning_phase:
-  log TL-EXP-001 in progress.md before asking for feedback
-  create 1-3 ConceptCard items for AGI Toy Shop / Pocket Intern
-  ask one compact keep/revise/reject or pick-best question from the worker thread
-  record feedback result in progress.md
+  append a timestamped hypothesis_cycle in progress.md before asking for feedback
+  create 1-3 TasteProposal items for AGI Toy Shop / Pocket Intern
+  ask one compact founder decision from the worker thread
+  record human_signal, learning, and next_hypothesis in progress.md
 
 execution_phase:
   require an approved concept or brief
-  log execution experiment proposal in progress.md
+  append an execution hypothesis_cycle in progress.md
   draft the social thread through social-content:twitter-thread
   ask for execution feedback from the worker thread
 ```
@@ -60,12 +61,16 @@ execution_phase:
   rejection.
 - Use `promotion_decision=keep_local`, `rerun`, `harden_skill`, or `discard`
   when feedback is recorded.
+- Do not create fresh TL experiment labels as the unit of progress. Keep this
+  ticket as the workflow container and append hypothesis cycles to
+  `progress.md` until approval, convergence, blocker, budget exhaustion, or
+  operator closeout.
 
 ## Feedback Shape
 
 ```json
 {
-  "artifact_id": "TL-EXP-001",
+  "artifact_id": "current planning artifact",
   "score": null,
   "verdict": "keep | revise | reject | approve",
   "feedback": "Short reason.",
