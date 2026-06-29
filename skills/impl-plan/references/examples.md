@@ -11,7 +11,7 @@ loop configuration after approval.
 
 ## Scope
 - `In:` `skills/impl-plan/SKILL.md`, `prompts/plan.md`,
-  `references/template.md`, `references/review.md`, `references/examples.md`,
+  `references/template.md`, `references/examples.md`,
   `tickets/templates/ticket.md`, `tickets/README.md`
 - `Out:` changing Goal runtime behavior, adding parser syntax, or migrating
   archived tickets
@@ -27,6 +27,23 @@ loop configuration after approval.
   memory.
 
 ## Change Plan
+
+```text
+architecture_signatures:
+  module_level:
+    - tickets.template / change_plan(delta, architecture_signatures, units):
+      executable_ticket_plan
+    - skills.impl_plan / impl_plan(ticket): ticket_plan + reviewer_receipt
+  main_flow:
+    - draft_ticket_plan(ticket, code_context): ticket.md
+    - apply_plan_qa(ticket.md): plan_qa
+    - request_reviewer_plan_review(ticket.md): review_receipt
+  data_flow:
+    - Delta -> architecture_signatures -> Change Plan units -> QA Strategy
+  builder_freeform_boundary:
+    - Implementation below the named ticket/skill seams is builder-owned unless
+      it changes planning ownership, proof routing, or reviewability.
+```
 
 ### Change 1: Merge execution detail
 
@@ -52,7 +69,7 @@ write:
 operation:
   - Update template, README, prompt, checklist, and validators together.
 signature_or_type_impact:
-  - ticket_change_plan(delta, change_units, qa_strategy) ->
+  - tickets.template / change_unit(read, write, operation, qa):
     artifact_delta + evidence + state_delta
 routes:
   docs: doc-advisor
@@ -97,7 +114,7 @@ We should improve the plan a bit and maybe add some more detail about types late
 Why bad:
 
 - no before/after delta
-- no local change units or code seams
+- no architecture signatures, local change units, or code seams
 - no executable task program
 - no concrete done/proof
 - no rationale for optional sections

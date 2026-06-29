@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.16
+template_version: 0.2.17
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -144,6 +144,9 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Use `plan`, `review`, `eval`, or other phase-like skills only when that phase
   needs a durable artifact, independent judgment, explicit budget, handoff, or
   proof surface. Otherwise perform the phase inline.
+- Treat `qa_checklist.md` as a self/preflight/repair guardrail. Treat reviewer
+  or QA lanes as independent readiness gates for material claims; do not force
+  subagents for tiny local checks.
 - Do not call phase-like skills recursively at the same scope. Each
   externalized phase call must shrink or specialize the parent task.
 - Keep edits scoped to the requested behavior and nearby ownership boundary.

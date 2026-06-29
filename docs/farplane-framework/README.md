@@ -3,10 +3,12 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-26
+updated_at: 2026-06-29
 framework_template_version: "0.2.0"
 source_of_truth:
   - docs/farplane-framework/lifecycle.md
+  - docs/farplane-framework/ticket-execution-loop.md
+  - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/harness-maintenance.md
   - docs/farplane-framework/hooks-and-runtime.md
@@ -48,9 +50,18 @@ This framework is the bridge between the two main product surfaces:
 
 ## Start Here
 
-Use [Lifecycle](lifecycle.md) as the friendly end-to-end surface. It explains
+Use [Lifecycle](lifecycle.md) as the friendly end-to-end overview. It explains
 how a project moves from initialization into Horizon, Goal Advisor, ticketed
-Goal execution, Pulse/Interval automations, hooks, drains, and memory compression.
+Goal execution, Pulse/Interval automations, hooks, drains, and memory
+compression.
+
+Use [Ticket Execution Loop](ticket-execution-loop.md) when the question is how
+human shaping, ticket fields, `impl-plan`, `goal-advisor`, autonomous Goal
+execution, QA/proof, reviewer gates, and closeout work together.
+
+Use [Pulse And Interval Loop](pulse-and-interval-loop.md) when the question is
+how Pulse, Daily Interval, Weekly Interval, advisor routing, reward signals,
+and urgent leverage escalation coordinate higher-level work.
 
 Use [Graph Contract](graph-contract.md) when the lifecycle needs to be consumed
 by tools or the Farplane UI. It defines the node, edge, confidence, and finite

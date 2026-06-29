@@ -117,49 +117,70 @@ accept_plan(plan)
    - Violation: The plan says only "run tests" or "verify manually", or proves
      nearby pieces while leaving the claimed workflow/lifecycle implicit.
 
-13. `docs-strategy`
+13. `architecture-signatures`
+   - Question: Does each material plan expose compact top-level
+     `architecture_signatures` with module-level seams, main-flow signatures,
+     relevant typed data movement, and the builder-owned freeform boundary?
+   - Violation: The plan only describes files or prose, omits top-level seams,
+     or uses `not_applicable` for work that changes architecture, ownership,
+     data flow, proof, or reviewability.
+
+14. `change-plan-signature-linkage`
+   - Question: Do the Change Plan units connect to the proposed architecture
+     signatures while keeping `signature_or_type_impact` local to each unit?
+   - Violation: The architecture block and change units tell separate stories,
+     or every change unit duplicates the full architecture map.
+
+15. `docs-strategy`
    - Question: Does the plan include `Docs Strategy` with `outcome`,
      `doc_targets`, `no_docs_reason`, and `validation`, using `doc-advisor`
      when the decision is nontrivial?
    - Violation: The plan omits docs strategy, preserves `close_ticket` or
      `documentation_skill` fields, or uses `no_docs` without a concrete reason.
 
-14. `ui-design-baseline`
+16. `ui-design-baseline`
    - Question: For UI/design work, does the ticket reference `design.md` or a
      clear no-design-needed reason?
    - Violation: Visual proof depends on unstated taste or layout assumptions.
 
-15. `subagent-proof`
+17. `subagent-proof`
    - Question: Are QA, visual judgment, adversarial proof, and review assigned
      to their owner lanes when material?
    - Violation: The implementation executor can self-approve those claims.
 
-16. `final-evidence`
+18. `final-evidence`
    - Question: Does UI/user-visible proof require final image evidence or an
      explicit blocker?
    - Violation: The final report can pass without showing the UI state.
 
-17. `minimal-impl-plan-claim`
+19. `minimal-impl-plan-claim`
    - Question: Does the plan explicitly state that this is the minimal
      implementation plan that satisfies the selected ticket?
    - Violation: The plan includes future-proofing, optional artifacts, broad
      cleanup, or unneeded new surfaces without saying why they are required
      now.
 
-18. `existing-service-fit`
+20. `existing-service-fit`
    - Question: For every proposed new function, helper, service, or module, did
      the planner prove it cannot belong to an existing service, module, helper,
      or owner surface?
    - Violation: The plan defines a new function or service-shaped surface
      without checking nearby owners first.
 
-19. `grounding-evidence`
+21. `grounding-evidence`
    - Question: For implementation feature work, does `QA Strategy` or `Notes` require code
      documentation or maintained implementation evidence before finalizing, using
      Ref MCP, official docs, GitHub code search, maintained examples, or web
      sources unless the ticket is explicitly local-only?
    - Violation: The plan can be completed from local intuition and tests alone
      without naming current source evidence or a local-only reason.
+
+22. `independent-plan-review`
+   - Question: Did a material plan request or attach a native `reviewer` lane
+     review against declared rubrics before claiming approval-ready state?
+   - Violation: The planner self-approves a material plan, relies on a
+     skill-local review note as the final gate, or omits the reviewer receipt
+     or explicit revise/block status.
 
 ## Finish Gate
 
@@ -176,9 +197,12 @@ plan_qa:
   existing_service_fit: pass | revise | block
   goal_advisor_ready: pass | revise | block | not_applicable
   clarifying_questions: pass | revise | block
+  architecture_signatures: pass | revise | block | not_applicable
+  change_plan_signature_linkage: pass | revise | block
   change_plan_locality: pass | revise | block
   qa_strategy_explicit: pass | revise | block
   docs_strategy: pass | revise | block
+  independent_plan_review: pass | revise | block
   grounding_evidence: pass | revise | block | local_only
   highest_risk:
   fix_or_deferral:

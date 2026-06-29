@@ -22,8 +22,29 @@ the decisive path.
 
 Use change units as the merged implementation program and file map. Group by
 coherent fix, not by artifact type. Each unit should carry the local
-before/after, read/write files, operation, type or signature impact when useful,
+before/after, read/write files, operation, local type or signature impact,
 routes, and QA expectations so builders do not cross-map separate sections.
+For material plans, start with compact architecture signatures so reviewers can
+scan the top-level code shape before reading change-unit detail:
+
+```text
+architecture_signatures:
+  module_level:
+    - path_or_module / owner_seam(input): output
+  main_flow:
+    - function_or_handler(input): output
+  data_flow:
+    - source.field -> boundary.field -> result.field
+  builder_freeform_boundary:
+    - Implementation below this level is builder-owned unless it changes
+      ownership, public contracts, data flow, proof, or reviewability.
+```
+
+For tiny localized fixes, use:
+
+```text
+architecture_signatures: not_applicable - localized same-surface fix because <reason>
+```
 
 Repeat one heading and fenced block per coherent change:
 
@@ -58,6 +79,8 @@ failure_modes:
 
 Include `Recommendation:` only when it changes the build path. Include
 `Options considered:` only when there is a real material fork.
+Use `signature_or_type_impact` for local deltas inside the change unit; do not
+duplicate the full `architecture_signatures` map in every unit.
 
 Optional visual system map only when topology, ownership boundaries, or typed
 flow are easier to understand as a diagram:

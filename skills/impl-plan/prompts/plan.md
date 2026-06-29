@@ -36,10 +36,11 @@ Rules:
 11a. Run `skills/impl-plan/qa_checklist.md` for material plans. Revise or
      block when the plan fails minimal required version, reuse before new
      surface, least parameters, function/file necessity, split boundary, or
-     proof-route checks. Material plans must declare themselves the minimal
-     implementation plan that satisfies the ticket, and every proposed new
-     function, helper, service, or module must justify why it cannot live inside
-     an existing owner surface.
+     architecture-signature, independent-review, or proof-route checks.
+     Material plans must declare themselves the minimal implementation plan
+     that satisfies the ticket, and every proposed new function, helper,
+     service, or module must justify why it cannot live inside an existing
+     owner surface.
 11b. For Goal-backed work, make the ticket ready for `goal-advisor(ticket)`
      after approval. The human approves the ticket plan first; then
      `goal-advisor` creates or updates `program.md`, `progress.md`, and the
@@ -51,34 +52,42 @@ Rules:
 12. Use `Change Plan` units as the merged program and file map. Split the
     section into one heading and one fenced block per coherent change. Each
     material unit should include `fixes`, local before/after, `read`, `write`,
-    `operation`, `signature_or_type_impact` when useful, `routes`, `qa`, and
+    `operation`, local `signature_or_type_impact`, `routes`, `qa`, and
     real `failure_modes`.
-13. Add one optional Mermaid system map inside `Change Plan` only when
+13. For material plans, put compact `architecture_signatures` at the top of
+    `Change Plan`: module-level seams, main-flow signatures, relevant typed
+    data movement, and the builder-owned freeform boundary. Use
+    `not_applicable` only for tiny localized fixes with a concrete reason.
+14. Add one optional Mermaid system map inside `Change Plan` only when
     topology, ownership boundaries, changed seams, or typed data path are
     easier to understand visually.
-14. Put explicit callable seams inside `signature_or_type_impact` when
-    interface shape, ownership boundaries, or changed handlers/files matter to
-    trust. Use `module / symbol(input): output`.
-15. Put typed data movement in `signature_or_type_impact` only when structs,
-    objects, payloads, or state evolve across boundaries. Keep it to the fields
-    that matter.
-16. Require a compact `Change Plan` whenever the implementation has more than
+15. Put explicit local callable seams inside `signature_or_type_impact` when
+    one change unit modifies interface shape, ownership boundaries, or changed
+    handlers/files. Use `module / symbol(input): output`.
+16. Put typed data movement in `signature_or_type_impact` only when that
+    change unit evolves structs, objects, payloads, or state across boundaries.
+    Keep it to the fields that matter.
+17. Require a compact `Change Plan` whenever the implementation has more than
     one non-trivial step.
-17. Use decisive action language. Do not hedge core execution steps or the recommendation with "maybe", "might", or "could".
-18. When diagrams are used, follow `skills/diagramming/SKILL.md` for
+18. Use decisive action language. Do not hedge core execution steps or the recommendation with "maybe", "might", or "could".
+19. When diagrams are used, follow `skills/diagramming/SKILL.md` for
     compactness, delta coloring, inline signatures, and anti-bloat rules.
-19. If an `Agent Testability Brief` exists, preserve its proof/testability surfaces instead of re-deriving them ad hoc.
-20. For material tickets, write compact `Done` conditions plus a `QA Strategy`
+20. If an `Agent Testability Brief` exists, preserve its proof/testability surfaces instead of re-deriving them ad hoc.
+21. For material tickets, write compact `Done` conditions plus a `QA Strategy`
     that separates proof weight, mechanical checks, manual checks, delegated
     lanes, caller-declared rubric families, required TAS gates, hard gates,
     required evidence, goal-advisor inputs, and residual risk. Use
     `none mechanical` rather than inventing fake metrics.
-21. Keep execution evidence out of the impl plan unless the user explicitly
+22. For material plans, request a native reviewer lane before approval-ready
+    handoff using `implementation-plan`, `architecture`, and
+    `evidence-quality` unless the ticket declares a stronger route. Reconcile
+    revise findings in the ticket; block on block/invalid.
+23. Keep execution evidence out of the impl plan unless the user explicitly
     asks for audit detail. Evidence is stored in artifacts, `progress.md`, or
     concise ticket `Links` after execution.
-22. Use citations inline or in a compact `Citations` line only when references
+24. Use citations inline or in a compact `Citations` line only when references
     ground a claim, decision, or external expectation.
-23. If the plan still depends on invented entities, storage ownership, or runtime boundaries, stop and use `deep-system-design` first.
+25. If the plan still depends on invented entities, storage ownership, or runtime boundaries, stop and use `deep-system-design` first.
 
 Output shape:
 
@@ -90,6 +99,7 @@ Output shape:
   - `Why now`
   - `First-principles basis` when material
 - `Change Plan`
+  - `architecture_signatures` for material plans, or concrete `not_applicable`
   - one heading and fenced block per change
   - `fixes`
   - `before`
@@ -154,9 +164,10 @@ Requirements:
 - Follow `diagramming` for compact node labels, color/legend use, and
   inline-signature practice.
 - Callable seams should appear in `signature_or_type_impact`, usually 3-7 real
-  seams in the form `module / symbol(input): output`.
-- Typed data flow should appear in `signature_or_type_impact` using only the
-  fields that matter to the plan.
+  local seams in the form `module / symbol(input): output`; top-level seams
+  belong in `architecture_signatures`.
+- Typed data flow should appear in `architecture_signatures` or local
+  `signature_or_type_impact` using only the fields that matter to the plan.
 - QA Strategy must use concrete checks, not generic test categories.
 - New files, functions, parameters, config knobs, routes, or abstractions must
   justify reuse checked, ownership, testability, or blast-radius reduction.
@@ -174,3 +185,5 @@ Requirements:
 - End with a clear readiness call in `Notes`, not a full
   planning `Evidence` report.
 - Include a compact `plan_qa` readiness note for material plans.
+- Include reviewer handoff or receipt status for material plans; a planner
+  self-check is not enough for approval-ready status.

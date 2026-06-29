@@ -145,6 +145,11 @@ MEM-0129, MEM-0131, MEM-0149, MEM-0150.
   explanation, but the caller/ticket owns the route.
 - Review families use modular binary checklist groups and one TAS verdict per
   selected family. Do not average dimensions or invent numeric thresholds.
+- `qa_checklist.md` is the self/preflight/repair guardrail; reviewer or QA
+  lanes are independent readiness gates for material claims. Tiny local checks
+  can stay inline, but material plans, skill changes, prompts, evidence bundles,
+  and completion claims should not self-approve when a reviewer lane is
+  available.
 - Required evidence-quality and integration-readiness gates cannot pass when
   required evidence or integration checks are missing.
 - QA and completion proof are artifact-first. Link screenshots, logs, review
@@ -177,6 +182,9 @@ MEM-0133, MEM-0134, MEM-0145, MEM-0146, MEM-0150.
   `skills/<skill-name>/qa_checklist.md` files. `eval_task.json` pressures
   expected behavior; `qa_checklist.md` applies settled guardrails during real
   work.
+- Material implementation plans expose compact `architecture_signatures` before
+  per-change detail. Per-change `signature_or_type_impact` is for local deltas;
+  reviewer lanes judge material plan readiness through canonical review rubrics.
 - Numeric skill tiers are leverage classes, not lifecycle phases. Tier 0 phases
   are inline capabilities; call phase-like skills such as `plan`, `review`, and
   `eval` only when that phase needs its own artifact, budget, handoff,
@@ -258,3 +266,5 @@ archive.
 2026-06-24 00:00 +0800 | farplane,automations,pulse,intervals | Farplane projects use explicit Codex automation loops for autonomous operation: `pulse-update` for frequent one-action idle/actor decisions, Daily Interval for last-24h reporting and next-24h planning, and Weekly Interval for last-week drift review and next-week planning. Active interval planning lives in `interval-update`; Codex automation records own cadence. Do not restore the old `steer-update`, `farplane/steer.config.toml`, `.farplane/state/steer-scheduler.json`, or cadence compatibility alias packages.
 
 2026-06-23 00:00 +0800 | farplane,knowledge,tidying | Live project memory and other knowledge artifacts should be ranked by importance, recency, factuality, and remembrance value. Keep only important, factual, current-enough knowledge that the target file is the best owner for; route generic policy to `AGENTS.md`, specs, skills, validators, or ticket templates, and preserve exact historical rows in archives before compacting semi-append-only sources.
+
+2026-06-29 16:40 +0800 | farplane,impl-plan,review,skills,tickets | Material `impl-plan` tickets should expose compact `architecture_signatures` before per-change units: module-level seams, main-flow signatures, relevant typed data movement, and builder-owned freeform boundary. `signature_or_type_impact` stays local to each change unit. `qa_checklist.md` is the planner self/preflight/repair guardrail, while native reviewer lanes are the independent readiness gate for material plan, skill, prompt, evidence, and completion claims. Tiny local checks do not need subagent ceremony.

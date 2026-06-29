@@ -20,7 +20,8 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 - `prompts/plan.md`: operator prompt
 - `references/template.md`: merged plan template
 - `references/examples.md`: good/bad examples
-- `qa_checklist.md`: material plan minimality and proof-route checks
+- `qa_checklist.md`: material plan minimality, architecture-signature,
+  reviewer-gate, and proof-route checks
 - `AGENTS.md`: maintenance rules
 
 ## Minimal Example
@@ -33,9 +34,13 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 5. Output one detailed ticket plan with `Summary`, `Scope`, `Delta`,
    `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, `Links`, and sparse
    `Notes`, plus optional `Agent Contract` or `Run Hints` when warranted.
-6. Run `qa_checklist.md` before accepting a material plan.
-7. Put callable seams and typed data movement in the relevant Change Plan unit;
-   add an optional visual map only when topology or ownership is clearer that
+6. For material plans, put compact `architecture_signatures` at the top of
+   `Change Plan`; use `signature_or_type_impact` inside units only for local
+   deltas.
+7. Run `qa_checklist.md` before accepting a material plan.
+8. Request a native reviewer lane for material plan readiness and reconcile its
+   verdict before calling the plan approval-ready.
+9. Add an optional visual map only when topology or ownership is clearer that
    way.
 
 ## How to Test
@@ -45,16 +50,19 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
   smaller internal "first slice" without a real boundary.
 - Confirm `Change Plan` makes the next build steps, file surfaces, routes, and
   unit-level QA expectations explicit when sequencing matters.
+- Confirm material plans expose top-level `architecture_signatures` or a
+  concrete localized-fix exemption.
 - Confirm optional maps appear only when material work is easier to understand
   visually.
-- Confirm callable seams appear in the relevant Change Plan unit when
-  interfaces matter.
+- Confirm callable seams appear in `architecture_signatures` for the top-level
+  architecture and in the relevant Change Plan unit for local deltas.
 - Confirm typed flow appears in the relevant Change Plan unit for material,
   stateful, or interface-heavy work.
 - Confirm the `SKILL.md` Todo List reinforces planning gates without becoming a
   second template.
 - Confirm `plan_qa` records minimality, reuse, least-parameter, file/function,
-  split-boundary, and proof-route results for material plans.
+  split-boundary, architecture-signature, reviewer-gate, and proof-route
+  results for material plans.
 - Confirm the recommendation appears only when a real decision exists.
 - Confirm optional sections are required only when the applicability rule says
   they should be.

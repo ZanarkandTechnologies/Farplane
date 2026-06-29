@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.3"
+template_version: "0.1.4"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -67,7 +67,30 @@ first_principles_basis:
 ## Change Plan
 Filled by `impl-plan(ticket)`. This is the executable task-local program and
 file map. Group by coherent change unit so each unit carries its own problem
-delta, reads, writes, operation, type or signature impact, QA, and route.
+delta, reads, writes, operation, local type or signature impact, QA, and route.
+
+For material work, start with compact architecture signatures so humans and
+reviewer lanes can scan the top-level code shape before reading change-unit
+detail:
+
+```text
+architecture_signatures:
+  module_level:
+    - path_or_module / owner_seam(input): output
+  main_flow:
+    - function_or_handler(input): output
+  data_flow:
+    - source.field -> boundary.field -> result.field
+  builder_freeform_boundary:
+    - Implementation below this level is builder-owned unless it changes
+      ownership, public contracts, data flow, proof, or reviewability.
+```
+
+For tiny localized fixes, use:
+
+```text
+architecture_signatures: not_applicable - localized same-surface fix because <reason>
+```
 
 Repeat one heading and fenced block per coherent change:
 
@@ -99,6 +122,9 @@ qa:
 failure_modes:
   -
 ```
+
+Use `signature_or_type_impact` for local deltas inside the change unit; do not
+duplicate the full `architecture_signatures` map in every unit.
 
 Optional visual system map only when topology, ownership boundaries, or typed
 flow are easier to understand as a diagram:

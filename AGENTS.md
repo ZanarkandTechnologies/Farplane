@@ -266,6 +266,11 @@ For harness-design research and external patterns:
   review before `stop_complete`, then write the receipt and strongest evidence
   back to the ticket, `progress.md`, and `artifacts/`. Live Stop hooks collect
   telemetry only and do not own completion routing.
+- In Farplane, `qa_checklist.md` is the self/preflight/repair guardrail and the
+  native `reviewer` lane is the independent readiness gate for material claims.
+  Do not make every tiny checklist a subagent job; do not let material plans,
+  skill changes, prompts, evidence bundles, or completion claims self-approve
+  when a reviewer lane is available.
 - Material review should run through the native `reviewer` subagent when
   available. Pass the active ticket or task artifact path, changed files,
   evidence artifacts, review focus, caller-declared rubric families, required

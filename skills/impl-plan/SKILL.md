@@ -28,13 +28,14 @@ ticketization before planning.
 
 Keep first load small. `SKILL.md` owns trigger, inputs, gates, routes, stop
 conditions, and the finish contract. Detailed ticket shape, examples, and plan
-review checks live in references and load only when drafting or checking a
-material plan.
+self-checks live in references or `qa_checklist.md` and load only when drafting
+or checking a material plan. Material plan readiness is reviewed by the native
+`reviewer` lane, not by a skill-local review note.
 
 ## Skill Signature
 
 ```text
-impl_plan(ticket_or_request, proof_weight?) -> ticket_plan + qa_strategy + goal_advisor_readiness
+impl_plan(ticket_or_request, proof_weight?) -> ticket_plan + architecture_signatures + qa_strategy + reviewer_receipt + goal_advisor_readiness
 
 state:
   reads(active ticket, linked PRD/specs/docs, relevant code,
@@ -45,8 +46,10 @@ state:
 
 gates:
   missing_inputs_resolved_or_asked; ticket_surface_exists; code_context_read;
-  done_conditions_concrete; qa_strategy_concrete; change_plan_units_local;
-  proof_route_named; goal_advisor_ready_after_approval
+  architecture_signatures_present_or_not_applicable; done_conditions_concrete;
+  qa_strategy_concrete; change_plan_units_local; proof_route_named;
+  material_reviewer_gate_passed_or_reconciled;
+  goal_advisor_ready_after_approval
 
 routes:
   research:gap | research:parity | deep-system-design |
@@ -55,8 +58,8 @@ routes:
 fails:
   chat-only material plan; hidden architecture invention; vague "run tests";
   over-scoped new files/functions/parameters without reuse proof;
-  self-certified QA/review for material work; transcript-dependent Goal setup;
-  implementation before approval
+  missing material architecture signatures; self-certified QA/review for
+  material work; transcript-dependent Goal setup; implementation before approval
 ```
 
 ## Phase Boundary
@@ -97,7 +100,6 @@ its own artifact, independent judgment, or proof surface.
     movement; do not plan from intuition.
   - [ ] Load [references/template.md](references/template.md) when drafting or
     rewriting the ticket body.
-  - [ ] Load [references/review.md](references/review.md) before handoff.
 - [ ] 4. Route unresolved scope.
   - [ ] Use [research:gap](../research/SKILL.md#researchgap) for missing or
     partial feature work whose production expectation is unclear.
@@ -114,9 +116,13 @@ its own artifact, independent judgment, or proof surface.
     `Notes`.
   - [ ] Make `Delta`, `Change Plan`, `Done`, and `QA Strategy` concrete enough
     that a builder can execute without inventing the order or proof route.
+  - [ ] For material plans, add `architecture_signatures` at the top of
+    `Change Plan`: module-level seams, main flow signatures, typed data
+    movement when relevant, and the builder-owned freeform boundary. Use
+    `not_applicable` only for tiny localized fixes with a concrete reason.
   - [ ] Use `Change Plan` units as the merged program and file map: each unit
-    carries local before/after, read/write paths, operation, type or signature
-    impact when useful, routes, QA expectations, and real failure modes.
+    carries local before/after, read/write paths, operation, local type or
+    signature impact, routes, QA expectations, and real failure modes.
   - [ ] Split `Change Plan` into one heading and one fenced block per coherent
     change. Use `fixes:` in plain language instead of synthetic labels
     unless many-to-many traceability truly needs stable anchors.
@@ -158,7 +164,13 @@ its own artifact, independent judgment, or proof surface.
 - [ ] 8. Run the minimality and quality gates.
   - [ ] Run [qa_checklist.md](qa_checklist.md) against material plans before
     accepting them, especially minimal version, reuse, least parameters,
-    function/file necessity, split boundary, and proof-route checks.
+    function/file necessity, split boundary, architecture-signature, and
+    proof-route checks.
+  - [ ] For material plans, request a native `reviewer` lane using
+    `docs/review/rubrics/reviewer-handoff.md` with `implementation-plan`,
+    `architecture`, and `evidence-quality` unless the ticket declares a
+    stronger review route. Reconcile `revise` findings in the ticket before
+    calling the plan approval-ready; block on `block` or `invalid`.
   - [ ] Tighten any failed checklist or review item before presenting the plan;
     record explicit `revise` or `block` only when the issue cannot be resolved
     inside planning.
@@ -180,11 +192,13 @@ approval core is:
 
 ```text
 Delta(overall_before, overall_after, why_now, problems?)
-ChangePlan(change_units(read, write, operation, routes, qa, failure_modes))
+ArchitectureSignatures(module_level, main_flow, data_flow?, builder_freeform_boundary)
+ChangePlan(change_units(read, write, operation, local_signature_or_type_impact, routes, qa, failure_modes))
 Done(done_when)
 QAStrategy(proof_weight, checks, manual, delegated_lanes, review, evidence, goal_advisor_inputs, residual_risk)
 GroundingEvidence(source_class, sources_checked, local_only_reason?)
 PlanQA(minimality, reuse, parameters, files_functions, proof_route)
+ReviewerGate(task_path, rubric_families, required_tas, hard_gates, receipt)
 DocsStrategy(outcome, doc_targets, no_docs_reason, validation)
 ```
 
@@ -205,9 +219,9 @@ proof reason.
   or runtime boundary.
 - Do not invent new files, functions, abstractions, parameters, or config knobs
   without proving reuse was checked and the new surface is required.
-- Do not bury the key code seams in prose when `Change Plan` read/write paths,
-  operation lines, or a compact optional system map would prove understanding
-  faster.
+- Do not bury the key code seams in prose. Material plans must expose compact
+  `architecture_signatures` before the per-change units; change-unit
+  `signature_or_type_impact` is only for local deltas.
 - Do not add optional ticket sections as decoration. `Gap Analysis`, `Run
   Hints`, `Agent Contract`, sidecar `plan.md`, and citations appear only when
   they reduce ambiguity or prove a decision.
@@ -221,8 +235,6 @@ proof reason.
 
 - [references/template.md](references/template.md) - load when drafting or
   rewriting the ticket body.
-- [references/review.md](references/review.md) - load before handoff to tighten
-  the plan.
 - [qa_checklist.md](qa_checklist.md) - run against material plans and against
   changes to this skill's planning behavior.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - metric cards for
@@ -238,6 +250,8 @@ proof reason.
 - Updated or proposed `tickets/TASK-XXXX/ticket.md` in canonical ticket-body
   shape, ready for approval and later `goal-advisor(ticket)` compilation when
   the work is Goal-backed.
+- Compact `architecture_signatures` for material work, or a concrete
+  `not_applicable` reason for tiny localized fixes.
 - Concrete `Done` conditions and `QA Strategy` with proof weight, delegated
   lanes, goal-advisor inputs, final checkpoint, and required evidence.
 - Run hints and links that let `goal-advisor(ticket)` create `program.md`,
@@ -246,6 +260,8 @@ proof reason.
 - `Docs Strategy` naming whether durable docs change, which docs are targeted,
   why no docs are needed when applicable, and which validation proves the
   decision.
+- Reviewer handoff or receipt for material plans, using the native `reviewer`
+  lane and canonical review rubrics instead of a skill-local self-review note.
 - `plan_qa` readiness note for material plans, or a blocker naming the missing
   objective, architecture boundary, code context, or proof route.
 - One-shot approval handoff that keeps planning separate from implementation
