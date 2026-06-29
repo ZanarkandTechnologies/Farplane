@@ -37,6 +37,9 @@ Create or update:
 - tickets/TASK-XXXX/progress.md from tickets/templates/goal-loop/progress.md
 
 Then generate the native `/goal` prompt from the same packet.
+Record the ticket `updated_at` used for compilation in `program.md` or the
+prompt artifact, plus the approval state and generated prompt path when a
+prompt artifact exists.
 Set `approval: pending` for material packets unless the operator explicitly
 pre-approved auto-run. Do not run the native Goal until the packet is approved.
 ```
@@ -51,30 +54,36 @@ Files:
 - <progress.md>
 - <optional additional ticket/program/progress/spec/board/artifact files>
 
-Task: Complete the desired outcomes defined across the listed files. Preserve
-each ticket's scope, constraints, Done, QA Strategy, budget, blocker policy, and stop
-conditions. Do not flatten or rewrite requirements; treat the listed files as
-the source of truth. Keep this Goal prompt compact: do not restate long ticket,
-program, design, or progress content that is already in the listed files.
+Task: Complete only the primary ticket's `Scope: In` and `Done` conditions.
+Use `program.md`, `progress.md`, specs, designs, boards, and artifacts as loop
+settings, constraints, evidence, and context; they do not expand executable
+scope unless `ticket.md` says so. Preserve each ticket's Scope, Delta, Change
+Plan, Done, QA Strategy, Docs Strategy, Agent Contract, Run Hints, budget,
+blocker policy, and stop conditions. `Scope: Out` wins unless the ticket is
+updated and this packet is regenerated. Do not flatten or rewrite requirements;
+keep this Goal prompt compact and treat the listed files as the source of
+truth.
 
 Logging: Before ending each turn, append a compact structured entry to every
 listed `progress.md` whose ticket state changed. If the work coordinates
 multiple files, also append a coordination note to the primary progress file.
 
-Metric: Satisfy the Done conditions, QA Strategy, and metric provider declared
-in the listed `ticket.md` and `program.md` files. For multi-ticket goals, each
-ticket must have its own QA result; batch or integration proof is additional.
-If a ticket's QA Strategy proof weight includes `qa`, `visual_qa`, `agent_qa`,
-`review`, or `demo`, use the delegated lane named by the ticket/program and do
-not count self-certification as proof.
+Metric: Satisfy the Done conditions, QA Strategy, Docs Strategy, and metric
+provider declared in the listed `ticket.md` and `program.md` files. For
+multi-ticket goals, each ticket must have its own QA result; batch or
+integration proof is additional. If ticket and program proof policies conflict,
+the ticket `QA Strategy` wins and the packet should be revised. If a ticket's
+QA Strategy proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
+`demo`, use the delegated lane named by the ticket/program and do not count
+self-certification as proof.
 
 Final checkpoint: Before `stop_complete` on material ticket work, run or
 request the QA evidence review and completion review required by the ticket's
 `QA Strategy.goal_advisor_inputs`, or `program.md`. Write the strongest evidence,
-review receipt, command checks, and any residual risk back to the ticket
-`Links` and the relevant `progress.md`. If QA evidence review or
-completion review is missing, stale, or below the required gate, stop blocked or
-revise instead of claiming completion.
+review receipt, command checks, docs validation, and any residual risk back to
+the ticket `Links` and the relevant `progress.md`. If QA evidence review,
+completion review, docs validation, or packet freshness is missing, stale, or
+below the required gate, stop blocked or revise instead of claiming completion.
 
 After each turn: Compare progress against the listed files, request <drift
 reviewer> or the delegated QA/review lane when required, continue within the
@@ -102,8 +111,8 @@ Files:
 - <optional ticket/program/progress files>
 
 Task: Choose exactly one next action: start_goal, resume_goal, request_feedback,
-replan, no_op, or stop_complete. For board drain, fetch proceedable tickets,
-skip blocked/gated/claimed/dependency-blocked work, and select the next
+replan, blocked, or no_op. For board drain, fetch proceedable tickets, skip
+blocked/gated/claimed/dependency-blocked work, and select the next
 time/budget-bounded file set.
 
 Logging: Append a compact heartbeat entry to the listed progress file before
@@ -112,7 +121,8 @@ ending, including no-op reasons when nothing useful can happen yet.
 Metric: Preserve the listed files' Done, QA Strategy, budget, and stop policies.
 
 After each turn: If an executable file set is selected, output its native Goal
-prompt with an inline `Files:` list. Do not create hidden automation or a
+prompt with an inline `Files:` list. Use `blocked` when required inputs,
+approval, evidence, or tools are missing. Do not create hidden automation or a
 competing scheduler.
 ```
 

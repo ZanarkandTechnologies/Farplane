@@ -159,10 +159,10 @@ only after the branch is selected:
      paused child when its blocker clears, `request_feedback` asks for missing
      human/reviewer input, `replan` revises the frontier when the current one is
      exhausted or invalid, and `no_op` logs that nothing useful can advance.
-   - [ ] For non-parent heartbeat answers, still name `resume`, `blocked`, and
-     `no_op`: resume when a paused Goal can continue, blocked when required
-     input/approval/evidence is missing, and no-op when no useful eligible work
-     can advance.
+   - [ ] For non-parent heartbeat answers, still name `resume_goal`,
+     `blocked`, and `no_op`: `resume_goal` when a paused Goal can continue,
+     `blocked` when required input/approval/evidence is missing, and `no_op`
+     when no useful eligible work can advance.
    - [ ] Any heartbeat prompt's `Action vocabulary` must include:
      `start_goal`, `resume_goal`, `request_feedback`, `replan`, `blocked`, and
      `no_op`, with one-line meanings.
@@ -305,6 +305,41 @@ A strong Goal contract includes:
 - `Approval`: whether the packet is `pending`, `approved`, `revise`, or
   `blocked`; material packets pause before native Goal execution unless
   explicitly pre-approved
+
+When compiling from an `impl-plan`-filled ticket, read ticket sections by
+owner rather than treating the ticket as undifferentiated prose:
+
+```text
+ticket_to_goal_packet(ticket.md)
+  intent_and_boundaries <- Summary + Scope + Delta
+  execution_units <- Change Plan
+  completion_scoreboard <- Done
+  proof_policy <- QA Strategy
+  proof_route/final_evidence/final_checkpoint <- QA Strategy.goal_advisor_inputs
+  docs_runtime_human_gates <- Docs Strategy + Agent Contract + Run Hints
+  sidecars_and_artifacts <- Links
+```
+
+This is an extraction guide, not a second ticket schema. Do not copy these
+sections wholesale into `program.md` or the Goal prompt; cite the files and
+compile only compact loop settings. For material Goal-backed work, prefer
+`QA Strategy.goal_advisor_inputs`; if those fields are missing, block, revise,
+or ask instead of inferring proof route, final evidence, or final checkpoint
+from vague prose. For older active tickets, fallback sources such as `Done /
+Proof`, `Run Hints`, `Goal Packet Preview`, or existing `program.md` may be
+used only when conflicts are reported and the ticket remains the winning source
+for scope and proof.
+
+Compile the `Files:` manifest from the ticket, not transcript memory. Include
+`ticket.md`, `program.md`, and `progress.md`, then add required design/spec,
+board, artifact, or context files named by `Change Plan` read/write paths,
+`QA Strategy`, `Agent Contract`, `Docs Strategy`, and `Links`. If a required
+file cannot be resolved, block or ask before emitting the native Goal prompt.
+
+Packet freshness is part of approval. Record the ticket `updated_at` value used
+to compile the packet in `program.md` or the prompt artifact. If `ticket.md`
+changes after compilation, regenerate `program.md`, `progress.md` if needed,
+and the native `/goal` prompt before execution.
 
 For UI or user-visible work with `visual_qa` proof weight, the Goal prompt must
 spell out the concrete lane chain instead of generic "visual proof" language:
