@@ -32,7 +32,7 @@ DEFAULT_CODEX_HOME = Path.home() / ".codex"
 DEFAULT_FARPLANE_HOME = Path.home() / ".farplane"
 CONFIG_PATH = DEFAULT_FARPLANE_HOME / "farplane-cli.json"
 UI_ENV = "FARPLANE_UI_REPO"
-DELEGATED_COMMANDS = {"agent", "onboarding", "office", "status", "team", "whoami"}
+DELEGATED_COMMANDS = {"agent", "gateway", "onboarding", "office", "status", "team", "whoami"}
 OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 
 
