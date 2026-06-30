@@ -383,7 +383,14 @@ def skill_event_match(event: Any, target_skill: str) -> bool:
     if not target:
         return False
     lowered = [text.lower() for text in strings_in_json(event)]
-    has_target = any(text == target or text.endswith(f"/{target}") or f'"{target}"' in text for text in lowered)
+    has_target = any(
+        text == target
+        or text.endswith(f"/{target}")
+        or f'"{target}"' in text
+        or f"name: {target}" in text
+        or f"/skills/{target}/skill.md" in text
+        for text in lowered
+    )
     has_skill_marker = any("skill" in text for text in lowered)
     return has_target and has_skill_marker
 

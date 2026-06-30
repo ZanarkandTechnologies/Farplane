@@ -585,6 +585,33 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertFalse(detail["baseline"]["skipped"] if "skipped" in detail["baseline"] else False)
             self.assertNotIn("Should not be inlined", candidate_prompt)
 
+    def test_detect_skill_triggered_matches_real_codex_skill_file_read(self) -> None:
+        raw_stdout = "\n".join(
+            [
+                json.dumps({"type": "thread.started", "thread_id": "example"}),
+                json.dumps(
+                    {
+                        "type": "item.completed",
+                        "item": {
+                            "type": "agent_message",
+                            "text": "I’ll use the `eval` skill for this evaluation task.",
+                        },
+                    }
+                ),
+                json.dumps(
+                    {
+                        "type": "item.started",
+                        "item": {
+                            "type": "command_execution",
+                            "command": "/bin/zsh -lc \"sed -n '1,240p' /Users/test/.codex/skills/eval/SKILL.md\"",
+                        },
+                    }
+                ),
+            ]
+        )
+
+        self.assertTrue(runner.detect_skill_triggered(raw_stdout, "eval"))
+
     def test_compare_baseline_skips_baseline_when_skill_does_not_trigger(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
